@@ -4,6 +4,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     Dir.mkdir(api_maker_root_path)
     Dir.mkdir(api_maker_root_path.join("models"))
 
+    copy_base_model
     models = ApiMaker::ModelsFinderService.execute!.result
 
     models.each do |model|
@@ -21,7 +22,19 @@ private
     Rails.root.join("app", "javascript", "api_maker")
   end
 
+  def copy_base_model
+    base_model_source_path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "BaseModel.js")
+    base_model_target_path = api_maker_root_path.join("models", "BaseModel.js")
+
+    FileUtils.copy(base_model_source_path, base_model_target_path)
+  end
+
   def model_content
-    "stub!"
+    erb = ERB.new(File.read(model_template_path))
+    erb.result(binding)
+  end
+
+  def model_template_path
+    File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "ModelTemplate.js.erb")
   end
 end

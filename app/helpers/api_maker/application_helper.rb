@@ -1,2 +1,0 @@
-module ApiMaker::ApplicationHelper
-end
