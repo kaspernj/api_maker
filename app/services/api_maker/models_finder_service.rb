@@ -26,7 +26,7 @@ private
     @scanned[clazz.name] = true
 
     clazz.subclasses.each do |subclass|
-      blk.call subclass
+      yield subclass
       find_subclasses(subclass, &blk)
     end
   end
@@ -44,7 +44,7 @@ private
     Dir.glob("#{root}/app/models/**/*.rb") do |model_path|
       begin
         require model_path
-      rescue
+      rescue StandardError # rubocop:disable Lint/HandleExceptions
         # Ignore
       end
     end

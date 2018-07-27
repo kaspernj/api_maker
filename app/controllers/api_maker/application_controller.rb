@@ -1,5 +1,3 @@
-module ApiMaker
-  class ApplicationController < ActionController::Base
-    protect_from_forgery with: :exception
-  end
+class ApiMaker::ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception
 end

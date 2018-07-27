@@ -1,0 +1,5 @@
+script:
+  - bundle exec rails db:schema:load
+  - bundle exec rspec
+  - bundle exec rubocop
+  - bundle exec rails_best_practices

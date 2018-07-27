@@ -1,4 +1,4 @@
-$:.push File.expand_path("lib", __dir__)
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 
 # Maintain your gem's version:
 require "api_maker/version"
@@ -21,5 +21,10 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "ransack"
   s.add_runtime_dependency "service_pattern"
 
+  s.add_development_dependency "best_practice_project"
+  s.add_development_dependency "factory_bot_rails"
+  s.add_development_dependency "rails_best_practices"
+  s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "rubocop"
   s.add_development_dependency "sqlite3"
 end

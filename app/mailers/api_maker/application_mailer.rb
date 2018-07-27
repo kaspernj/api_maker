@@ -1,6 +1,4 @@
-module ApiMaker
-  class ApplicationMailer < ActionMailer::Base
-    default from: 'from@example.com'
-    layout 'mailer'
-  end
+class ApiMaker::ApplicationMailer < ActionMailer::Base
+  default from: "from@example.com"
+  layout "mailer"
 end

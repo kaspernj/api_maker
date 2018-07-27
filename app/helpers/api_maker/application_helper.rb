@@ -1,4 +1,2 @@
-module ApiMaker
-  module ApplicationHelper
-  end
+module ApiMaker::ApplicationHelper
 end

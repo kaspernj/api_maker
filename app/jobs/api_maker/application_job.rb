@@ -1,4 +1,2 @@
-module ApiMaker
-  class ApplicationJob < ActiveJob::Base
-  end
+class ApiMaker::ApplicationJob < ActiveJob::Base
 end
