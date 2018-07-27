@@ -9,14 +9,15 @@ Gem::Specification.new do |s|
   s.version     = ApiMaker::VERSION
   s.authors     = ["kjabtion"]
   s.email       = ["kj@abtion.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of ApiMaker."
-  s.description = "TODO: Description of ApiMaker."
+  s.homepage    = "https://github.com/kaspernj/api_maker"
+  s.summary     = "A Rails gem for generating a JavaScript API automatically based on your ActiveRecord models."
+  s.description = "A Rails gem for generating a JavaScript API automatically based on your ActiveRecord models."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   s.add_dependency "rails", "~> 5.2.0"
+  s.add_runtime_dependency "service_pattern"
 
   s.add_development_dependency "sqlite3"
 end

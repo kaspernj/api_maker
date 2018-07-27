@@ -1,4 +1,5 @@
-# desc "Explaining what the task does"
-# task :api_maker do
-#   # Task goes here
-# end
+namespace :api_maker do
+  task "generate_models" => :environment do
+    ApiMaker::ModelsGeneratorService.execute!
+  end
+end
