@@ -1,4 +1,29 @@
 import BaseModel from "./BaseModel"
+import Collection from "./Collection"
 
 export default class extends BaseModel {
+  <% model.reflections.each do |key, reflection| %>
+    <% if reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection) %>
+      <%= js_attribute_name(reflection.name) %>() {
+        // Belongs to reflection
+      }
+    <% elsif reflection.is_a?(ActiveRecord::Reflection::HasManyReflection) %>
+      <%= js_attribute_name(reflection.name) %>() {
+        // Has many reflection
+      }
+    <% elsif reflection.is_a?(ActiveRecord::Reflection::HasOneReflection) %>
+      <%= js_attribute_name(reflection.name) %>() {
+        // Has one reflection
+      }
+    <% end %>
+
+    <% puts "Key: #{key.inspect}" %>
+    <% puts "Reflection: #{reflection.inspect}" %>
+  <% end %>
+
+  <% model.attribute_names.each do |attribute_name| %>
+    <%= js_attribute_name(attribute_name) %>() {
+      this.modelData.<%= attribute_name %>
+    }
+  <% end %>
 }
