@@ -36,7 +36,7 @@ private
   def reflections
     result = []
     serializer._reflections.each_key do |name|
-      reflection = model.reflections.values.find { |reflection| reflection.name == name }
+      reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
       next unless reflection
       result << reflection
     end
