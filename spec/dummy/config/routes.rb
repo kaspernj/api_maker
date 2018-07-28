@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  mount ApiMaker::Engine => "/api_maker"
+  namespace :models do
+    get :find
+  end
 end

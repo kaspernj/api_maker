@@ -23,11 +23,18 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "service_pattern"
 
   s.add_development_dependency "best_practice_project"
+  s.add_development_dependency "capybara"
+  s.add_development_dependency "database_cleaner"
+  s.add_development_dependency "devise"
   s.add_development_dependency "factory_bot_rails"
   s.add_development_dependency "pry-rails"
+  s.add_development_dependency "puma"
   s.add_development_dependency "rails_best_practices"
   s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "rspec-retry"
   s.add_development_dependency "rubocop"
+  s.add_development_dependency "selenium-webdriver"
   s.add_development_dependency "sqlite3"
+  s.add_development_dependency "waitutil"
   s.add_development_dependency "webpacker"
 end
