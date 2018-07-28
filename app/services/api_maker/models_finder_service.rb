@@ -1,4 +1,4 @@
-class ApiMaker::ModelsFinderService < ApplicationService
+class ApiMaker::ModelsFinderService < ApiMaker::ApplicationService
   def execute!
     load_models
 
