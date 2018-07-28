@@ -2,7 +2,7 @@ import BaseModel from "./BaseModel"
 import Collection from "./Collection"
 
 export default class extends BaseModel {
-  <% model.reflections.each do |key, reflection| %>
+  <% reflections.each do |reflection| %>
     <% if reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection) %>
       <%= js_attribute_name(reflection.name) %>() {
         // Belongs to reflection
@@ -16,9 +16,6 @@ export default class extends BaseModel {
         // Has one reflection
       }
     <% end %>
-
-    <% puts "Key: #{key.inspect}" %>
-    <% puts "Reflection: #{reflection.inspect}" %>
   <% end %>
 
   <% attribute_names.each do |attribute_name| %>

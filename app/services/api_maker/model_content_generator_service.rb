@@ -6,13 +6,16 @@ class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
   end
 
   def execute!
-    ServicePattern::Response.new(result: model_content)
+    if serializer
+      ServicePattern::Response.new(result: model_content)
+    else
+      ServicePattern::Response.new(errors: ["No serializer defined for #{model.name}"])
+    end
   end
 
 private
 
   def attribute_names
-    serializer = ActiveModel::Serializer.get_serializer_for(@model)
     serializer._attributes
   end
 
@@ -28,5 +31,20 @@ private
 
   def model_template_path
     File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "ModelTemplate.js.erb")
+  end
+
+  def reflections
+    result = []
+    serializer._reflections.each_key do |name|
+      reflection = model.reflections.values.find { |reflection| reflection.name == name }
+      next unless reflection
+      result << reflection
+    end
+
+    result
+  end
+
+  def serializer
+    @serializer ||= ActiveModel::Serializer.get_serializer_for(@model)
   end
 end
