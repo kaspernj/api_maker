@@ -17,7 +17,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 private
 
   def api_maker_root_path
-    Rails.root.join("app", "javascript", "api_maker")
+    Rails.root.join("app", "javascript", "ApiMaker")
   end
 
   def controller_content(model)
@@ -29,7 +29,7 @@ private
   end
 
   def copy_base_model
-    files = ["BaseModel", "Collection"]
+    files = %w[BaseModel Collection]
     files.each do |file|
       base_model_source_path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "#{file}.js")
       base_model_target_path = api_maker_root_path.join("models", "#{file}.js")
@@ -39,8 +39,7 @@ private
 
   def create_base_structure
     FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
-    Dir.mkdir(api_maker_root_path)
-    Dir.mkdir(api_maker_root_path.join("models"))
+    FileUtils.mkdir_p(api_maker_root_path.join("models"))
     FileUtils.mkdir_p(controller_path) unless File.exist?(controller_path)
   end
 
