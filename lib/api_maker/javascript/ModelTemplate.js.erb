@@ -21,7 +21,7 @@ export default class extends BaseModel {
     <% puts "Reflection: #{reflection.inspect}" %>
   <% end %>
 
-  <% model.attribute_names.each do |attribute_name| %>
+  <% attribute_names.each do |attribute_name| %>
     <%= js_attribute_name(attribute_name) %>() {
       this.modelData.<%= attribute_name %>
     }
