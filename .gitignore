@@ -1,5 +1,6 @@
 .bundle/
 log/*.log
+node_modules
 pkg/
 spec/dummy/db/*.sqlite3
 spec/dummy/db/*.sqlite3-journal
