@@ -2,18 +2,23 @@ import BaseModel from "./BaseModel"
 import Collection from "./Collection"
 
 export default class extends BaseModel {
+  static modelClassData() {
+    return <%= {"name" => model.name, "path" => "/api_maker/#{model.model_name.route_key}"}.to_json %>
+  }
+
   <% reflections.each do |reflection| %>
     <% if reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection) %>
       <%= js_attribute_name(reflection.name) %>() {
-        // Belongs to reflection
+        return this.readBelongsToReflection(<%= {name: reflection.name}.to_json %>)
       }
     <% elsif reflection.is_a?(ActiveRecord::Reflection::HasManyReflection) %>
       <%= js_attribute_name(reflection.name) %>() {
-        // Has many reflection
+        var id = this.<%= reflection.active_record.primary_key %>()
+        return new Collection(<%= api_maker_json("modelName" => reflection.name, "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
       }
     <% elsif reflection.is_a?(ActiveRecord::Reflection::HasOneReflection) %>
       <%= js_attribute_name(reflection.name) %>() {
-        // Has one reflection
+        return this.readHasOneReflection(<%= {name: reflection.name}.to_json %>)
       }
     <% end %>
   <% end %>
