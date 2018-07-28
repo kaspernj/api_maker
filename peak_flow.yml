@@ -1,5 +1,5 @@
 script:
-  - cd spec/dummy; yarn
+  - cd spec/dummy; yarn; bundle exec rake api_maker:generate_models; bundle exec rake assets:precompile
   - bundle exec rails db:schema:load
   - bundle exec rspec
   - bundle exec rubocop

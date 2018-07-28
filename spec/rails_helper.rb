@@ -9,6 +9,7 @@ require "rspec/rails"
 
 require "database_cleaner"
 require "devise"
+require "factory_bot_rails"
 require "pry-rails"
 require "puma"
 require "webpacker"
@@ -52,8 +53,10 @@ Capybara.javascript_driver = :headless_chrome
 Capybara.server = :puma, {Silent: true}
 
 RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
+  config.include Warden::Test::Helpers
+
   config.backtrace_exclusion_patterns << /\/\.rvm\//
-  config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
 
@@ -63,7 +66,7 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean_with(:truncation, except: %w(ar_internal_metadata))
     Warden.test_mode!
   end
 
