@@ -259,6 +259,7 @@ DEPENDENCIES
   pry-rails
   puma
   rails_best_practices
+  rake
   rspec-rails
   rspec-retry
   rubocop
