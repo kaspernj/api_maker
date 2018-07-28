@@ -11,6 +11,11 @@ class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
 
 private
 
+  def attribute_names
+    serializer = ActiveModel::Serializer.get_serializer_for(@model)
+    serializer._attributes
+  end
+
   def js_attribute_name(name)
     camelized = name.to_s.camelize
     "#{camelized[0..0].downcase}#{camelized[1..camelized.length]}"
