@@ -7,11 +7,13 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
+require "cancancan"
 require "database_cleaner"
 require "devise"
 require "factory_bot_rails"
 require "pry-rails"
 require "puma"
+require "waitutil"
 require "webpacker"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -27,11 +29,11 @@ require "webpacker"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[File.join(__dir__, "support", "**", "*.rb")].each { |f| puts "F: #{f}"; require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
-ActiveRecord::Migration.maintain_test_schema!
+# ActiveRecord::Migration.maintain_test_schema!
 
 require "selenium/webdriver"
 
@@ -41,7 +43,8 @@ end
 
 Capybara.register_driver :headless_chrome do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: {args: %w[disable-gpu headless no-sandbox window-size=1920,1200]}
+    chromeOptions: {args: %w[disable-gpu headless no-sandbox window-size=1920,1200]},
+    loggingPrefs: {browser: "ALL"}
   )
 
   Capybara::Selenium::Driver.new app,
@@ -53,6 +56,7 @@ Capybara.javascript_driver = :headless_chrome
 Capybara.server = :puma, {Silent: true}
 
 RSpec.configure do |config|
+  config.include ChromeHelper
   config.include FactoryBot::Syntax::Methods
   config.include Warden::Test::Helpers
 
@@ -62,7 +66,7 @@ RSpec.configure do |config|
 
   config.after do
     path = Rails.root.join("app", "javascript", "ApiMaker")
-    FileUtils.rm_rf(path) if path.exist?
+    # FileUtils.rm_rf(path) if path.exist?
   end
 
   config.before(:suite) do

@@ -6,8 +6,10 @@ describe "model find" do
   it "finds the model", :js do
     visit models_find_path(project_id: project.id)
 
-    puts page.html
-
     expect(current_path).to eq models_find_path
+
+    WaitUtil.wait_for_condition("project element to appear") { page.has_selector?(".project") }
+
+    expect(find(".project")["data-project-name"]).to eq project.name
   end
 end
