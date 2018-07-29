@@ -19,7 +19,7 @@ rake api_maker:generate_models
 
 ```js
 var task = new Task()
-task.setAttributes({name: "New task"})
+task.assignAttributes({name: "New task"})
 task.create().then((created) => {
   if (created) {
     console.log("Task was created")
