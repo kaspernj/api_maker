@@ -25,7 +25,7 @@ export default class extends BaseModel {
 
   <% attribute_names.each do |attribute_name| %>
     <%= js_attribute_name(attribute_name) %>() {
-      return this.modelData.<%= attribute_name %>
+      return this.getAttribute("<%= attribute_name %>")
     }
   <% end %>
 }
