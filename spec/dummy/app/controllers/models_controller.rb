@@ -1,4 +1,6 @@
 class ModelsController < ApplicationController
+  def create; end
+
   def destroy
     @project = Project.find(params[:project_id])
   end

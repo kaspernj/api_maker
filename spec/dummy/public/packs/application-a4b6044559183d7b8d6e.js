@@ -159,7 +159,7 @@ var _class = function () {
           url: urlToUse,
           success: function success(response) {
             var modelClass = __webpack_require__("./app/javascript/ApiMaker/Models sync recursive ^\\.\\/.*$")("./" + _this.modelClassData().name).default;
-            var model = new modelClass({ "modelData": response.model });
+            var model = new modelClass(response.model);
             resolve(model);
           }
         });
@@ -183,7 +183,7 @@ var _class = function () {
             for (var key in response.collection) {
               var modelClass = __webpack_require__("./app/javascript/ApiMaker/Models sync recursive ^\\.\\/.*$")("./" + _this2.modelClassData().name).default;
               var modelData = response.collection[key];
-              var model = new modelClass({ "modelData": modelData });
+              var model = new modelClass(modelData);
               result.push(model);
             }
 
@@ -194,12 +194,14 @@ var _class = function () {
     }
   }]);
 
-  function _class(args) {
+  function _class() {
+    var modelData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     _classCallCheck(this, _class);
 
     this.changes = {};
-    this.modelData = args.modelData;
     this.relationshipsCache = {};
+    this.modelData = modelData;
   }
 
   _createClass(_class, [{
@@ -224,25 +226,38 @@ var _class = function () {
   }, {
     key: "create",
     value: function create() {
+      var _this3 = this;
+
       return new Promise(function (resolve, reject) {
-        var _this3 = this;
+        var paramKey = _this3.constructor.modelClassData().paramKey;
+        var urlToUse = _this3.constructor.modelClassData().path;
+        var modelData = Object.assign({}, _this3.modelData, _this3.changes);
+        var dataToUse = {};
+        dataToUse[paramKey] = modelData;
 
-        var urlToUse = this.constructor.modelClassData().path;
-        var modelData = Object.extend({}, this.modelData, this.changes);
-        var dataToUse = { modelName: modelData };
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", urlToUse);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("X-CSRF-Token", _this3._token());
+        xhr.onload = function () {
+          if (xhr.status == 200) {
+            var response = JSON.parse(xhr.responseText);
 
-        Rails.ajax({ type: "GET", url: urlToUse, data: dataToUse, success: function success(response) {
             if (response.model) {
               _this3.modelData = response.model;
               _this3.changes = {};
             }
 
             if (response.success) {
-              resolve(response);
+              resolve({ "model": _this3, "response": response });
             } else {
-              reject(response);
+              reject({ "model": _this3, "response": response });
             }
-          } });
+          } else {
+            reject({ "model": _this3, "responseText": xhr.responseText });
+          }
+        };
+        xhr.send(JSON.stringify(dataToUse));
       });
     }
   }, {
@@ -461,7 +476,7 @@ var Collection = function () {
             var array = [];
             for (var modelDataKey in response.collection) {
               var modelData = response.collection[modelDataKey];
-              var modelInstance = new modelClass({ "modelData": modelData });
+              var modelInstance = new modelClass(modelData);
               array.push(modelInstance);
             }
 
@@ -617,6 +632,7 @@ var _class = function (_BaseModel) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
+	"./models/create_controller.js": "./app/javascript/controllers/models/create_controller.js",
 	"./models/destroy_controller.js": "./app/javascript/controllers/models/destroy_controller.js",
 	"./models/find_controller.js": "./app/javascript/controllers/models/find_controller.js",
 	"./models/update_controller.js": "./app/javascript/controllers/models/update_controller.js"
@@ -642,6 +658,58 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = "./app/javascript/controllers sync recursive .js$";
+
+/***/ }),
+
+/***/ "./app/javascript/controllers/models/create_controller.js":
+/*!****************************************************************!*\
+  !*** ./app/javascript/controllers/models/create_controller.js ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var stimulus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! stimulus */ "./node_modules/stimulus/index.js");
+/* harmony import */ var ApiMaker_Models_Project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ApiMaker/Models/Project */ "./app/javascript/ApiMaker/Models/Project.js");
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+var _class = function (_Controller) {
+  _inherits(_class, _Controller);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: "connect",
+    value: function connect() {
+      var _this2 = this;
+
+      var project = new ApiMaker_Models_Project__WEBPACK_IMPORTED_MODULE_1__["default"]();
+      project.assignAttributes({ name: "test-create-project" });
+      project.create().then(function (data) {
+        _this2.element.dataset.createCompleted = true;
+        _this2.element.dataset.projectName = data.model.name();
+      });
+    }
+  }]);
+
+  return _class;
+}(stimulus__WEBPACK_IMPORTED_MODULE_0__["Controller"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (_class);
 
 /***/ }),
 
@@ -2689,4 +2757,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 /******/ });
-//# sourceMappingURL=application-f5259a9cbb424f6be471.js.map
+//# sourceMappingURL=application-a4b6044559183d7b8d6e.js.map

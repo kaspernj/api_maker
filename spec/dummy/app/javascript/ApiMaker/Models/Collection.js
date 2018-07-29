@@ -21,7 +21,7 @@ export default class Collection {
         var array = []
         for(var modelDataKey in response.collection) {
           var modelData = response.collection[modelDataKey]
-          var modelInstance = new modelClass({"modelData": modelData})
+          var modelInstance = new modelClass(modelData)
           array.push(modelInstance)
         }
 
