@@ -8,7 +8,7 @@ describe "model find" do
 
     expect(current_path).to eq models_update_path
 
-    WaitUtil.wait_for_condition("project to be updated") { puts page.html; puts chrome_logs; find("[data-controller='models--update']", visible: false)["data-update-completed"] == "true" }
+    WaitUtil.wait_for_condition("project to be updated") { find("[data-controller='models--update']", visible: false)["data-update-completed"] == "true" }
 
     expect(project.reload.name).to eq "test-update-project"
   end
