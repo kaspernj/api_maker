@@ -1,8 +1,5 @@
 script:
   - cd spec/dummy && yarn
-  - cd spec/dummy && bundle exec rake api_maker:generate_models
-  - ls spec/dummy/public/
-  - ls spec/dummy/public/packs-test/
   - bundle exec rails db:schema:load
   - bundle exec rspec
   - bundle exec rubocop
