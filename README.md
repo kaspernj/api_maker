@@ -117,6 +117,41 @@ Task.ransack({name_cont: "something"}).then((tasks) => {
 })
 ```
 
+### Attributes
+
+Each attribute is defined as a method on each model. So if you have an attribute called `name` on the `Task`-model, then it be read by doing this: `task.name()`.
+
+### Relationships
+
+#### Has many
+
+A `has many` relationship will return a collection the queries the sub models.
+
+```js
+project.tasks().toArray().then((tasks) => {
+  console.log("Project " + project.id() + " has " + tasks.length + " tasks")
+  
+  for(var key in tasks) {
+    var task = tasks[key]
+    console.log("Task " + task.id() + " is named: " + task.name())
+  }
+})
+```
+
+#### Belongs to
+
+A `belongs to` relationship will return a promise that will get that model:
+
+```js
+task.project().then((project) => {
+  console.log("Task " + task.id() + " belongs to a project called: " + project.name())
+})
+```
+
+#### Has one
+
+A `has one` relationship will also return a promise that will get that model like a `belongs to` relationship.
+
 ## Contributing
 Contribution directions go here.
 
