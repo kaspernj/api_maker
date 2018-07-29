@@ -114,7 +114,7 @@ task.destroy().then((status) => {
 ApiModels uses [Ransack](https://github.com/activerecord-hackery/ransack) to expose a huge amount of options to query data.
 
 ```js
-Task.ransack({name_cont: "something"}).then((tasks) => {
+Task.ransack({name_cont: "something"}).toArray().then((tasks) => {
   console.log("Found: " + tasks.length + " tasks")
 })
 ```
