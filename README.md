@@ -1,6 +1,6 @@
 # ApiMaker
 
-Generates a Rails API endpoints, JavaScript API files for Webpack and more by inspecting your models and serializers.
+Generates Rails API endpoints and JavaScript API files for Webpack and more by inspecting your models and serializers.
 
 ## Installation
 Add this line to your application's Gemfile:
