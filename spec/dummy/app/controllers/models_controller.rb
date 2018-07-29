@@ -9,6 +9,8 @@ class ModelsController < ApplicationController
     @project = Project.find(params[:project_id])
   end
 
+  def ransack; end
+
   def update
     @project = Project.find(params[:project_id])
     @project.update!(name: "not-renamed")

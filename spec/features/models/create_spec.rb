@@ -1,7 +1,7 @@
 require "rails_helper"
 
-describe "model destroy" do
-  it "updates the model", :js do
+describe "model create" do
+  it "creates a model", :js do
     visit models_create_path
 
     expect(current_path).to eq models_create_path

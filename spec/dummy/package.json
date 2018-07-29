@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@rails/webpacker": "4.0.0-pre.2",
+    "qs": "^6.5.2",
     "stimulus": "^1.0.1"
   },
   "devDependencies": {

@@ -15,6 +15,8 @@ require "sprockets/railtie"
 
 Bundler.require(*Rails.groups)
 require "api_maker"
+require "cancancan"
+require "will_paginate"
 
 module Dummy; end
 

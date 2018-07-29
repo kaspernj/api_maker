@@ -3,7 +3,7 @@ require "rails_helper"
 describe "model destroy" do
   let!(:project) { create :project }
 
-  it "updates the model", :js do
+  it "destroys the model", :js do
     visit models_destroy_path(project_id: project.id)
 
     expect(current_path).to eq models_destroy_path

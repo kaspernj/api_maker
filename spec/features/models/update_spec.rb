@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "model destroy" do
+describe "model update" do
   let!(:project) { create :project }
 
   it "updates the model", :js do
