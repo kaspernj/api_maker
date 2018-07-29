@@ -4,6 +4,7 @@ describe ApiMaker::ModelsGeneratorService do
   describe "#execute!" do
     it "creates various dirs" do
       path_to_create = Rails.root.join("app", "javascript", "ApiMaker")
+      FileUtils.rm_rf(path_to_create) if path_to_create.exist?
 
       expect(File.exist?(path_to_create)).to eq false
 
