@@ -9,7 +9,7 @@ Add this line to your application's Gemfile:
 gem "api_maker"
 ```
 
-Make a file where you define access in `app/models/api_maker_ability.rb` containing something like this:
+ApiMaker makes use of CanCanCan to keep track of, what models a given user should have access to. Make a file where you define access in `app/models/api_maker_ability.rb` containing something like this:
 ```ruby
 class ApiMakerAbility
   include CanCan::Ability
@@ -26,11 +26,27 @@ class ApiMakerAbility
 end
 ```
 
-## Usage
+ApiMaker will only create models and endpoints for ActiveRecord models that has serializers. So be sure to add ActiveModelSerializers for your models first.
 
+ApiMaker uses that to keep track of, what you what data and relationships you want exposed through the API.
+
+Its now time to generate models and controllers like this:
 ```bash
 rake api_maker:generate_models
 ```
+
+If you want to be able to create and update models, then you should go into each generated controller and create a params method to define, which attributes can be written on each model like this:
+```ruby
+class ApiMaker::ProjectsController < ApiMaker::ModelController
+private
+
+  def project_params
+    params.require(:project).permit(:name)
+  end
+end
+```
+
+## Usage
 
 ### Creating a new model from JavaScript
 
@@ -90,6 +106,8 @@ task.destroy().then((status) => {
 ```
 
 ### Query models
+
+ApiModels uses [Ransack](https://github.com/activerecord-hackery/ransack) to expose a huge amount of options to query data.
 
 ```js
 Task.ransack({name_cont: "something"}).then((tasks) => {
