@@ -1,5 +1,5 @@
 script:
-  - rm spec/dummy/public/packs-test/ || true
+  - rm spec/dummy/public/packs-test || true
   - cd spec/dummy && yarn
   - cd spec/dummy && bundle exec rake api_maker:generate_models
   - cd spec/dummy && bundle exec rails webpacker:compile RAILS_ENV=test NODE_ENV=test
