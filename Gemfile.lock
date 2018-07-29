@@ -265,7 +265,7 @@ DEPENDENCIES
   selenium-webdriver
   sqlite3
   waitutil
-  webpacker (= 4.0.0.pre.pre.2)
+  webpacker
 
 BUNDLED WITH
    1.16.2

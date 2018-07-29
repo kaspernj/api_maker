@@ -36,5 +36,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "selenium-webdriver"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "waitutil"
-  # s.add_development_dependency "webpacker"
+  s.add_development_dependency "webpacker"
 end
