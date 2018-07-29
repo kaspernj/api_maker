@@ -7,5 +7,6 @@ Rails.application.routes.draw do
 
   namespace :models do
     get :find
+    get :update
   end
 end
