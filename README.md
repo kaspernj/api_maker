@@ -28,7 +28,7 @@ end
 
 ApiMaker will only create models and endpoints for ActiveRecord models that has serializers. So be sure to add ActiveModelSerializers for your models first.
 
-ApiMaker uses that to keep track of, what you what data and relationships you want exposed through the API.
+ApiMaker uses that to keep track of, what data and relationships you want exposed through the API.
 
 Its now time to generate models and controllers like this:
 ```bash
