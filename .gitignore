@@ -11,5 +11,3 @@ spec/dummy/storage/
 spec/dummy/tmp/
 spec/dummy/app/javascript/
 spec/dummy/app/controllers/api_maker/
-spec/dummy/public/assets/
-spec/dummy/public/packs/

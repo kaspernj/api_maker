@@ -2,7 +2,7 @@ source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 group :development, :test do
-  gem "webpacker"
+  gem "webpacker", "4.0.0.pre.pre.2"
 end
 
 # Declare your gem's dependencies in api_maker.gemspec.
