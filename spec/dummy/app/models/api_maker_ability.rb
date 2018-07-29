@@ -3,7 +3,7 @@ class ApiMakerAbility
 
   CRUD = [:create, :read, :update, :destroy].freeze
 
-  def initialize(_controller:)
+  def initialize(controller:) # rubocop:disable Lint/UnusedMethodArgument
     can CRUD, Project
     can CRUD, Task
     can CRUD, User
