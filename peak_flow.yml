@@ -1,6 +1,8 @@
 script:
   - bundle
   - cd spec/dummy; yarn; bundle exec rake api_maker:generate_models; bundle exec rake assets:precompile
+  - cat spec/dummy/public/packs-test/manifest.json
+  - ln -s spec/dummy/public/packs/ spec/dummy/public/packs-test/
   - bundle exec rails db:schema:load
   - bundle exec rspec
   - bundle exec rubocop
