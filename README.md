@@ -68,7 +68,7 @@ task.create().then((status) => {
 
 ```js
 Task.find(5).then((task) => {
-  console.log("Task found: " + task.name)
+  console.log("Task found: " + task.name())
 })
 ```
 
