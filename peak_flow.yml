@@ -2,6 +2,7 @@ script:
   - rm spec/dummy/public/packs-test/
   - cd spec/dummy && yarn
   - cd spec/dummy && bundle exec rake api_maker:generate_models
+  - cd spec/dummy && bundle exec rails webpacker:compile
   - cd spec/dummy && bundle exec rake assets:precompile RAILS_ENV=test NODE_ENV=test
   - ls spec/dummy/public/
   - ls spec/dummy/public/packs-test/
