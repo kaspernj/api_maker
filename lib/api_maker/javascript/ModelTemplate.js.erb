@@ -3,7 +3,7 @@ import Collection from "./Collection"
 
 export default class extends BaseModel {
   static modelClassData() {
-    return <%= {"name" => model.name, "path" => "/api_maker/#{model.model_name.route_key}"}.to_json %>
+    return <%= {name: model.model_name.name, paramKey: model.model_name.param_key, path: "/api_maker/#{model.model_name.route_key}"}.to_json %>
   }
 
   <% reflections.each do |reflection| %>
