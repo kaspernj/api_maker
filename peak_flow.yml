@@ -1,7 +1,7 @@
 script:
   - cd spec/dummy && yarn
   - cd spec/dummy && bundle exec rake api_maker:generate_models
-  - cd spec/dummy && bundle exec rake assets:precompile RAILS_ENV=development
+  - cd spec/dummy && bundle exec rake assets:precompile RAILS_ENV=development NODE_ENV=development
   - ls spec/dummy/public/
   - ls spec/dummy/public/packs-test/
   - bundle exec rails db:schema:load
