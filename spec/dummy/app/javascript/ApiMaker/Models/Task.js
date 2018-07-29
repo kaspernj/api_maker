@@ -3,7 +3,7 @@ import Collection from "./Collection"
 
 export default class extends BaseModel {
   static modelClassData() {
-    return {"name":"Task","path":"/api_maker/tasks"}
+    return {"name":"Task","paramKey":"task","path":"/api_maker/tasks"}
   }
 
   

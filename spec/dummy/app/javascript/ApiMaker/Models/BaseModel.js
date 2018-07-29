@@ -79,7 +79,11 @@ export default class {
           this.changes = {}
         }
 
-        resolve(response)
+        if (response.success) {
+          resolve(response)
+        } else {
+          reject(response)
+        }
       }})
     })
   }
@@ -94,7 +98,11 @@ export default class {
           this.changes = {}
         }
 
-        resolve(response)
+        if (response.success) {
+          resolve(response)
+        } else {
+          reject(response)
+        }
       }})
     })
   }
@@ -153,7 +161,7 @@ export default class {
 
   reload() {
     return new Promise((resolve, reject) => {
-      var urlToUse = this.constructor.modelClassData().path + "/" + id
+      var urlToUse = this.constructor.modelClassData().path + "/" + this.id()
 
       Rails.ajax({
         type: "GET",
@@ -182,21 +190,48 @@ export default class {
     if (newAttributes)
       this.assignAttributes(newAttributes)
 
-    return new Promise(function(resolve, reject) {
-      var urlToUse = this.modelClassData().path + "/" + id
+    return new Promise((resolve, reject) => {
+      if (this.changes.length == 0)
+        return resolve({model: this})
 
-      Rails.ajax({type: "GET", url: urlToUse, data: this.changes, success: (response) => {
-        if (response.model) {
-          this.modelData = response.model
-          this.changes = {}
+      var paramKey = this.constructor.modelClassData().paramKey
+      var urlToUse = this.constructor.modelClassData().path + "/" + this.id()
+      var dataToUse = {}
+      dataToUse[paramKey] = this.changes
+
+      var xhr = new XMLHttpRequest()
+      xhr.open("PATCH", urlToUse)
+      xhr.setRequestHeader("Content-Type", "application/json")
+      xhr.setRequestHeader("X-CSRF-Token", this._token())
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          var response = JSON.parse(xhr.responseText)
+
+          if (response.model) {
+            this.modelData = response.model
+            this.changes = {}
+          }
+
+          if (response.success) {
+            resolve({"model": this, "response": response})
+          } else {
+            reject({"model": this, "response": response})
+          }
+        } else {
+          reject({"model": this, "responseText": xhr.responseText})
         }
-
-        resolve(response)
-      }})
+      }
+      xhr.send(JSON.stringify(dataToUse))
     })
   }
 
   isValid() {
     throw "Not implemented yet"
+  }
+
+  _token() {
+    var csrfTokenElement = document.querySelector("meta[name='csrf-token']")
+    if (csrfTokenElement)
+      return csrfTokenElement.getAttribute("content")
   }
 }

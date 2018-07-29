@@ -87,9 +87,16 @@ private
 
   def resource_instance
     @resource_instance ||= proc do
-      variable_name = resource_instance_class_name.parameterize
-      instance_variable_get("@#{variable_name}")
+      instance_variable_get("@#{resource_variable_name}")
     end.call
+  end
+
+  def resource_variable_name
+    @resource_variable_name ||= resource_instance_class_name.parameterize
+  end
+
+  def sanitize_parameters
+    __send__("#{resource_variable_name}_params")
   end
 
   def serializer
