@@ -1,4 +1,5 @@
 script:
+  - cd spec/dummy && yarn
   - bundle exec rails db:schema:load
   - bundle exec rspec
   - bundle exec rubocop

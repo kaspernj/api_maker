@@ -29,8 +29,7 @@ RemoveUnusedMethodsInControllersCheck: {
     "ApiMaker::ModelController#show",
     "ApiMaker::ModelController#create",
     "ApiMaker::ModelController#edit",
-    "ApiMaker::ApplicationController#current_ability"
-
+    "ApiMaker::BaseController#current_ability"
   ]
 }
 RemoveUnusedMethodsInHelpersCheck: { except_methods: [] }

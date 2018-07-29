@@ -7,10 +7,14 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
       next if ignore_model?(model)
 
       controller_file = controller_path.join("#{model.name.underscore.pluralize}_controller.rb")
-      model_file = api_maker_root_path.join("models", "#{model.name}.js")
+      model_file = api_maker_root_path.join("Models", "#{model.name}.js")
 
-      File.open(model_file, "w") { |fp| fp.write(model_content(model)) }
-      File.open(controller_file, "w") { |fp| fp.write(controller_content(model)) } # unless File.exist?(controller_file)
+      model_content_response = ApiMaker::ModelContentGeneratorService.(model: model)
+
+      if model_content_response.success?
+        File.open(model_file, "w") { |fp| fp.write(model_content_response.result) }
+        File.open(controller_file, "w") { |fp| fp.write(controller_content(model)) } # unless File.exist?(controller_file)
+      end
     end
   end
 
@@ -32,14 +36,14 @@ private
     files = %w[BaseModel Collection]
     files.each do |file|
       base_model_source_path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "#{file}.js")
-      base_model_target_path = api_maker_root_path.join("models", "#{file}.js")
+      base_model_target_path = api_maker_root_path.join("Models", "#{file}.js")
       FileUtils.copy(base_model_source_path, base_model_target_path)
     end
   end
 
   def create_base_structure
     FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
-    FileUtils.mkdir_p(api_maker_root_path.join("models"))
+    FileUtils.mkdir_p(api_maker_root_path.join("Models"))
     FileUtils.mkdir_p(controller_path) unless File.exist?(controller_path)
   end
 
@@ -47,10 +51,6 @@ private
     model.name.end_with?("::Translation") ||
       model.name.start_with?("ActiveStorage::") ||
       model.name.end_with?("::ApplicationRecord")
-  end
-
-  def model_content(model)
-    ApiMaker::ModelContentGeneratorService.execute!(model: model).result
   end
 
   def models
