@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-group :test do
+group :development, :test do
   gem "webpacker"
 end
 
