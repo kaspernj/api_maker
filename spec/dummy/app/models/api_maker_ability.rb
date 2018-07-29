@@ -3,7 +3,7 @@ class ApiMakerAbility
 
   CRUD = [:create, :read, :update, :destroy].freeze
 
-  def initialize(controller:)
+  def initialize(_controller:)
     can CRUD, Project
     can CRUD, Task
     can CRUD, User

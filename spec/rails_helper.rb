@@ -64,13 +64,8 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
 
-  config.after do
-    path = Rails.root.join("app", "javascript", "ApiMaker")
-    # FileUtils.rm_rf(path) if path.exist?
-  end
-
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation, except: %w(ar_internal_metadata))
+    DatabaseCleaner.clean_with(:truncation, except: %w[ar_internal_metadata])
     Warden.test_mode!
   end
 
