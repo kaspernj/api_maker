@@ -6,3 +6,4 @@ Rails.application.initialize!
 
 require "cancancan"
 require "webpacker"
+require "will_paginate"

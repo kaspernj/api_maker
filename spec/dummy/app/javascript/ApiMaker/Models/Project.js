@@ -10,7 +10,7 @@ export default class extends BaseModel {
     
       tasks() {
         var id = this.id()
-        return new Collection({"modelName":"Task","targetPathName":"tasks","ransack":{"project_id_eq":id}})
+        return new Collection({"modelName":"Task","targetPathName":this.constructor.modelClassData().path,"ransack":{"project_id_eq":id}})
       }
     
   
