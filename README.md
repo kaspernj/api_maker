@@ -9,6 +9,8 @@ Add this line to your application's Gemfile:
 gem "api_maker"
 ```
 
+ApiMaker requires Webpacker, so make sure you have that set up as well.
+
 ApiMaker makes use of CanCanCan to keep track of, what models a given user should have access to. Make a file where you define access in `app/models/api_maker_ability.rb` containing something like this:
 ```ruby
 class ApiMakerAbility
