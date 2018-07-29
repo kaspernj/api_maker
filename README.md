@@ -9,6 +9,23 @@ Add this line to your application's Gemfile:
 gem "api_maker"
 ```
 
+Make a file where you define access in `app/models/api_maker_ability.rb` containing something like this:
+```ruby
+class ApiMakerAbility
+  include CanCan::Ability
+
+  def initialize(controller:)
+    user = controller.current_user
+    
+    if user
+      can :manage, Project, user_id: user.id
+      can :manage, Task, project: {user_id: user.id}
+      can :manage, User, id: user.id
+    end
+  end
+end
+```
+
 ## Usage
 
 ```bash
@@ -26,6 +43,57 @@ task.create().then((created) => {
   } else {
     console.log("Task wasnt created")
   }
+})
+```
+
+### Finding an existing model
+
+```js
+Task.find(5).then((task) => {
+  console.log("Task found: " + task.name)
+})
+```
+
+### Updating a model
+
+```js
+task.assignAttributes({name: "New name"})
+task.save().then((succeeded) => {
+  if (succeeded) {
+    console.log("Task was updated")
+  } else {
+    console.log("Task wasnt updated")
+  }
+})
+```
+
+```js
+task.update({name: "New name"}).then((succeeded) => {
+  if (succeeded) {
+    console.log("Task was updated")
+  } else {
+    console.log("Task wasnt updated")
+  }
+})
+```
+
+### Deleting a model
+
+```js
+task.destroy().then((succeeded) => {
+  if (succeeded) {
+    console.log("Task was destroyed")
+  } else {
+    console.log("Task wasnt destroyed")
+  }
+})
+```
+
+### Query models
+
+```js
+Task.ransack({name_cont: "something"}).then((tasks) => {
+  console.log("Found: " + tasks.length + " tasks")
 })
 ```
 
