@@ -9,7 +9,6 @@ describe "model destroy" do
     expect do
       WaitUtil.wait_for_condition("project to be created") { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
       sleep 2
-      # binding.pry
     end.to change(Project, :count).by(1)
 
     created_project = Project.last
