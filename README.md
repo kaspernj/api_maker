@@ -51,6 +51,8 @@ end
 ### Creating a new model from JavaScript
 
 ```js
+import Task from "ApiMaker/Models/Task"
+
 var task = new Task()
 task.assignAttributes({name: "New task"})
 task.create().then((status) => {
