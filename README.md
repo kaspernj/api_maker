@@ -37,8 +37,8 @@ rake api_maker:generate_models
 ```js
 var task = new Task()
 task.assignAttributes({name: "New task"})
-task.create().then((created) => {
-  if (created) {
+task.create().then((status) => {
+  if (status.success) {
     console.log("Task was created")
   } else {
     console.log("Task wasnt created")
@@ -58,8 +58,8 @@ Task.find(5).then((task) => {
 
 ```js
 task.assignAttributes({name: "New name"})
-task.save().then((succeeded) => {
-  if (succeeded) {
+task.save().then((status) => {
+  if (status.success) {
     console.log("Task was updated")
   } else {
     console.log("Task wasnt updated")
@@ -68,8 +68,8 @@ task.save().then((succeeded) => {
 ```
 
 ```js
-task.update({name: "New name"}).then((succeeded) => {
-  if (succeeded) {
+task.update({name: "New name"}).then((status) => {
+  if (status.success) {
     console.log("Task was updated")
   } else {
     console.log("Task wasnt updated")
@@ -80,8 +80,8 @@ task.update({name: "New name"}).then((succeeded) => {
 ### Deleting a model
 
 ```js
-task.destroy().then((succeeded) => {
-  if (succeeded) {
+task.destroy().then((status) => {
+  if (status.success) {
     console.log("Task was destroyed")
   } else {
     console.log("Task wasnt destroyed")
