@@ -9,9 +9,9 @@ Add this line to your application's Gemfile:
 gem "api_maker"
 ```
 
-ApiMaker requires Webpacker, so make sure you have that set up as well.
+ApiMaker requires [Webpacker](https://github.com/rails/webpacker), so make sure you have that set up as well. I also uses an extension called [qs](https://www.npmjs.com/package/qs), that you should add to your packages, but that is probally already there by default.
 
-ApiMaker makes use of CanCanCan to keep track of, what models a given user should have access to. Make a file where you define access in `app/models/api_maker_ability.rb` containing something like this:
+ApiMaker makes use of [CanCanCan](https://github.com/CanCanCommunity/cancancan) to keep track of, what models a given user should have access to. Make a file where you define access in `app/models/api_maker_ability.rb` containing something like this:
 ```ruby
 class ApiMakerAbility
   include CanCan::Ability
@@ -28,7 +28,7 @@ class ApiMakerAbility
 end
 ```
 
-ApiMaker will only create models and endpoints for ActiveRecord models that has serializers. So be sure to add ActiveModelSerializers for your models first.
+ApiMaker will only create models and endpoints for ActiveRecord models that has serializers. So be sure to add [ActiveModelSerializers](https://github.com/rails-api/active_model_serializers) for your models first.
 
 ApiMaker uses that to keep track of, what data and relationships you want exposed through the API.
 
