@@ -57,7 +57,7 @@ var task = new Task()
 task.assignAttributes({name: "New task"})
 task.create().then((status) => {
   if (status.success) {
-    console.log("Task was created")
+    console.log("Task was created with ID: " + task.id())
   } else {
     console.log("Task wasnt created")
   }
@@ -78,7 +78,7 @@ Task.find(5).then((task) => {
 task.assignAttributes({name: "New name"})
 task.save().then((status) => {
   if (status.success) {
-    console.log("Task was updated")
+    console.log("Task was updated and name is now: " + task.name())
   } else {
     console.log("Task wasnt updated")
   }
@@ -88,7 +88,7 @@ task.save().then((status) => {
 ```js
 task.update({name: "New name"}).then((status) => {
   if (status.success) {
-    console.log("Task was updated")
+    console.log("Task was updated and name is now: " + task.name())
   } else {
     console.log("Task wasnt updated")
   }
