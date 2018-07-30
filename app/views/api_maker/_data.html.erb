@@ -1,1 +1,13 @@
-<div class="api-maker-data"<% Devise.mappings.each do |scope| %> data-current-<%= scope[0] %>-id="<%= __send__("current_#{scope[0]}")&.id %>"<% end %>></div>
+<div class="api-maker-data"<%
+
+Devise.mappings.each do |scope|
+  model = __send__("current_#{scope[0]}")
+  next unless model
+
+  serializer = ActiveModel::Serializer.get_serializer_for(model.class)
+  next unless serializer
+
+  %> data-current-<%= scope[0] %>-id="<%= model.id %>"<%
+end
+
+%>></div>
