@@ -11,8 +11,8 @@ describe "model belongs to relationships" do
 
     WaitUtil.wait_for_condition("model to be found") { find("[data-controller='models--belongs-to']", visible: false)["data-belongs-to-completed"] == "true" }
 
-    ids = JSON.parse(find("[data-controller='models--belongs-to']", visible: false)["data-project"])
+    project_data = JSON.parse(find("[data-controller='models--belongs-to']", visible: false)["data-project"])
 
-    expect(ids).to eq("id" => project.id, "name" => project.name)
+    expect(project_data).to eq("id" => project.id, "name" => project.name)
   end
 end
