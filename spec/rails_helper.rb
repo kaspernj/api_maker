@@ -13,6 +13,7 @@ require "devise"
 require "factory_bot_rails"
 require "pry-rails"
 require "puma"
+require "rspec/retry" if ENV["CI"]
 require "waitutil"
 require "webpacker"
 
@@ -63,6 +64,23 @@ RSpec.configure do |config|
   config.backtrace_exclusion_patterns << /\/\.rvm\//
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
+  config.use_transactional_fixtures = false
+
+  if ENV["CI"]
+    # RSpec retry
+    config.display_try_failure_messages = true
+    config.verbose_retry = true
+
+    config.around :each, :retry do |example|
+      example.run_with_retry retry: 3
+    end
+
+    # Callback to be run between retries
+    config.retry_callback = proc do |ex|
+      # Run some additional clean up task - can be filtered by example metadata
+      Capybara.reset! if ex.metadata[:js]
+    end
+  end
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation, except: %w[ar_internal_metadata])

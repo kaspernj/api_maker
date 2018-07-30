@@ -85,7 +85,7 @@ export default class {
 
   destroy() {
     return new Promise((resolve, reject) => {
-      var urlToUse = this.constructor.modelClassData().path + "/" + this.id()
+      var urlToUse = this.constructor.modelClassData().path + "/" + this._primaryKey()
 
       Rails.ajax({type: "DELETE", url: urlToUse, success: (response) => {
         if (response.model) {
@@ -114,9 +114,9 @@ export default class {
 
   isNewRecord() {
     if ("id" in this.modelData) {
-      return true
-    } else {
       return false
+    } else {
+      return true
     }
   }
 
@@ -126,7 +126,7 @@ export default class {
 
   reload() {
     return new Promise((resolve, reject) => {
-      var urlToUse = this.constructor.modelClassData().path + "/" + this.id()
+      var urlToUse = this.constructor.modelClassData().path + "/" + this._primaryKey()
 
       Rails.ajax({
         type: "GET",
@@ -160,7 +160,7 @@ export default class {
         return resolve({model: this})
 
       var paramKey = this.constructor.modelClassData().paramKey
-      var urlToUse = this.constructor.modelClassData().path + "/" + this.id()
+      var urlToUse = this.constructor.modelClassData().path + "/" + this._primaryKey()
       var dataToUse = {}
       dataToUse[paramKey] = this.changes
 
@@ -212,6 +212,10 @@ export default class {
       var collection = new Collection(args)
       collection.first().then((model) => { resolve(model) })
     })
+  }
+
+  _primaryKey() {
+    return this.getAttribute(this.constructor.modelClassData().primaryKey)
   }
 
   _token() {

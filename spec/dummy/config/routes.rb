@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   devise_for :users
 
   namespace :api_maker do
-    resources :projects, :tasks
+    resources :projects, :tasks, :users
+  end
+
+  namespace :devise_specs do
+    get :current_user_spec
   end
 
   namespace :models do

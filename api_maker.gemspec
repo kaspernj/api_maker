@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "service_pattern"
 
   s.add_development_dependency "best_practice_project"
+  s.add_development_dependency "bootsnap"
   s.add_development_dependency "capybara"
   s.add_development_dependency "database_cleaner"
   s.add_development_dependency "devise"

@@ -18,6 +18,7 @@ Bundler.require(*Rails.groups)
 require "active_record_query_fixer"
 require "api_maker"
 require "cancancan"
+require "devise"
 require "will_paginate"
 
 module Dummy; end

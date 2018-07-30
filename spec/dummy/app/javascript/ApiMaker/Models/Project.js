@@ -1,9 +1,9 @@
-import BaseModel from "./BaseModel"
-import Collection from "./Collection"
+import BaseModel from "../BaseModel"
+import Collection from "../Collection"
 
 export default class extends BaseModel {
   static modelClassData() {
-    return {"name":"Project","paramKey":"project","path":"/api_maker/projects"}
+    return {"name":"Project","paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
   }
 
   
