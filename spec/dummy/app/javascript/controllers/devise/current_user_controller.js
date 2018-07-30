@@ -9,7 +9,7 @@ export default class extends Controller {
         "email": user.email()
       }
 
-      this.element.dataset.currentUserResult = result
+      this.element.dataset.currentUserResult = JSON.stringify(result)
       this.element.dataset.currentUserCompleted = true
     })
   }
