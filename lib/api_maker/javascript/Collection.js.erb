@@ -1,3 +1,4 @@
+import BaseModel from "./BaseModel"
 import qs from "qs"
 
 export default class Collection {
@@ -30,19 +31,29 @@ export default class Collection {
   toArray() {
     return new Promise((resolve, reject) => {
       var modelClass = require("ApiMaker/Models/" + this.args.modelName).default
-      var useToUse = this.args.targetPathName
       var dataToUse = qs.stringify({"q": this.ransack})
+      var urlToUse = this.args.targetPathName + "?" + dataToUse
 
-      Rails.ajax({type: "GET", url: useToUse, data: dataToUse, success: (response) => {
-        var array = []
-        for(var modelDataKey in response.collection) {
-          var modelData = response.collection[modelDataKey]
-          var modelInstance = new modelClass(modelData)
-          array.push(modelInstance)
+      var xhr = new XMLHttpRequest()
+      xhr.open("GET", urlToUse)
+      xhr.setRequestHeader("X-CSRF-Token", BaseModel._token())
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          var response = JSON.parse(xhr.responseText)
+
+          var array = []
+          for(var modelDataKey in response.collection) {
+            var modelData = response.collection[modelDataKey]
+            var modelInstance = new modelClass(modelData)
+            array.push(modelInstance)
+          }
+
+          resolve(array)
+        } else {
+          reject({"responseText": xhr.responseText})
         }
-
-        resolve(array)
-      }})
+      }
+      xhr.send()
     })
   }
 }
