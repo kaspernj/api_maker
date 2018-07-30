@@ -4,8 +4,9 @@ class ApiMaker::ModelController < ApiMaker::BaseController
   def index
     ransack = resource_collection.ransack(params[:q])
     query = ransack.result.page(params[:page])
-    collection = query.map do |model|
-      serialized_resource(model)
+
+    collection = query.distinct.fix.map do |model|
+      serialized_resource(model).to_hash
     end
 
     render json: {collection: collection}

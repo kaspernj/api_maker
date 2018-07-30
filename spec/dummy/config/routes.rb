@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get :create
     get :destroy
     get :find
+    get :has_many
     get :ransack
     get :update
   end
