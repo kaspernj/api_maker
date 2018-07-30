@@ -9,15 +9,21 @@ export default class {
     return new Promise((resolve, reject) => {
       var urlToUse = this.modelClassData().path + "/" + id
 
-      Rails.ajax({
-        type: "GET",
-        url: urlToUse,
-        success: (response) => {
+      var xhr = new XMLHttpRequest()
+      xhr.open("GET", urlToUse)
+      xhr.setRequestHeader("X-CSRF-Token", this._token())
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          var response = JSON.parse(xhr.responseText)
+
           var modelClass = require("ApiMaker/Models/" + this.modelClassData().name).default
           var model = new modelClass(response.model)
           resolve(model)
+        } else {
+          reject({"responseText": xhr.responseText})
         }
-      })
+      }
+      xhr.send()
     })
   }
 
@@ -60,7 +66,7 @@ export default class {
       var xhr = new XMLHttpRequest()
       xhr.open("POST", urlToUse)
       xhr.setRequestHeader("Content-Type", "application/json")
-      xhr.setRequestHeader("X-CSRF-Token", this._token())
+      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
       xhr.onload = () => {
         if (xhr.status == 200) {
           var response = JSON.parse(xhr.responseText)
@@ -87,18 +93,27 @@ export default class {
     return new Promise((resolve, reject) => {
       var urlToUse = this.constructor.modelClassData().path + "/" + this._primaryKey()
 
-      Rails.ajax({type: "DELETE", url: urlToUse, success: (response) => {
-        if (response.model) {
-          this.modelData = response.model
-          this.changes = {}
-        }
+      var xhr = new XMLHttpRequest()
+      xhr.open("DELETE", urlToUse)
+      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          var response = JSON.parse(xhr.responseText)
+          if (response.model) {
+            this.modelData = response.model
+            this.changes = {}
+          }
 
-        if (response.success) {
-          resolve(response)
+          if (response.success) {
+            resolve(response)
+          } else {
+            reject(response)
+          }
         } else {
-          reject(response)
+          reject({"model": this, "responseText": xhr.responseText})
         }
-      }})
+      }
+      xhr.send()
     })
   }
 
@@ -128,18 +143,24 @@ export default class {
     return new Promise((resolve, reject) => {
       var urlToUse = this.constructor.modelClassData().path + "/" + this._primaryKey()
 
-      Rails.ajax({
-        type: "GET",
-        url: urlToUse,
-        success: (response) => {
+      var xhr = new XMLHttpRequest()
+      xhr.open("GET", urlToUse)
+      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          var response = JSON.parse(xhr.responseText)
+
           if (response.model) {
             this.modelData = response.model
             this.changes = {}
           }
 
           resolve(response)
+        } else {
+          reject({"model": this, "responseText": xhr.responseText})
         }
-      })
+      }
+      xhr.send()
     })
   }
 
@@ -167,7 +188,7 @@ export default class {
       var xhr = new XMLHttpRequest()
       xhr.open("PATCH", urlToUse)
       xhr.setRequestHeader("Content-Type", "application/json")
-      xhr.setRequestHeader("X-CSRF-Token", this._token())
+      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
       xhr.onload = () => {
         if (xhr.status == 200) {
           var response = JSON.parse(xhr.responseText)
@@ -218,7 +239,7 @@ export default class {
     return this.getAttribute(this.constructor.modelClassData().primaryKey)
   }
 
-  _token() {
+  static _token() {
     var csrfTokenElement = document.querySelector("meta[name='csrf-token']")
     if (csrfTokenElement)
       return csrfTokenElement.getAttribute("content")
