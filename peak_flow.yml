@@ -1,6 +1,7 @@
 script:
   - cd spec/dummy && yarn
-  - bundle exec rails db:schema:load
+  - cd spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
+  - cd spec/dummy && bundle exec rails db:schema:load
   - bundle exec rspec
   - bundle exec rubocop
   - bundle exec rails_best_practices
