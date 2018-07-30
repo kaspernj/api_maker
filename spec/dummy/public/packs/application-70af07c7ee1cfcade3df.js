@@ -289,40 +289,6 @@ var _class = function () {
       return !this.isNewRecord();
     }
   }, {
-    key: "readBelongsToReflection",
-    value: function readBelongsToReflection(args) {
-      return new Promise(function (resolve, reject) {
-        if (this.relationshipsCache[args.name]) return resolve(this.relationshipsCache[args.name]);
-
-        var ransackKey = args.primaryKey + "_eq";
-        var ransackArgs = {
-          ransackKey: this.id()
-        };
-
-        var collection = new _Collection__WEBPACK_IMPORTED_MODULE_0__["default"]({ "modelName": args.modelName, "ransack": ransackArgs });
-        collection.first().then(function (model) {
-          resolve(model);
-        });
-      });
-    }
-  }, {
-    key: "readHasOneReflection",
-    value: function readHasOneReflection(args) {
-      return new Promise(function (resolve, reject) {
-        if (this.relationshipsCache[args.name]) return resolve(this.relationshipsCache[args.name]);
-
-        var ransackKey = args.primaryKey + "_eq";
-        var ransackArgs = {
-          ransackKey: this.id()
-        };
-
-        var collection = new _Collection__WEBPACK_IMPORTED_MODULE_0__["default"]({ "modelName": args.modelName, "ransack": ransackArgs });
-        collection.first().then(function (model) {
-          resolve(model);
-        });
-      });
-    }
-  }, {
     key: "reload",
     value: function reload() {
       var _this4 = this;
@@ -401,6 +367,39 @@ var _class = function () {
       throw "Not implemented yet";
     }
   }, {
+    key: "_readBelongsToReflection",
+    value: function _readBelongsToReflection(args) {
+      var _this6 = this;
+
+      return new Promise(function (resolve, reject) {
+        if (_this6.relationshipsCache[args.name]) return resolve(_this6.relationshipsCache[args.name]);
+
+        var collection = new _Collection__WEBPACK_IMPORTED_MODULE_0__["default"](args);
+        collection.first().then(function (model) {
+          resolve(model);
+        });
+      });
+    }
+  }, {
+    key: "_readHasOneReflection",
+    value: function _readHasOneReflection(args) {
+      var _this7 = this;
+
+      return new Promise(function (resolve, reject) {
+        if (_this7.relationshipsCache[args.name]) return resolve(_this7.relationshipsCache[args.name]);
+
+        var ransackKey = args.primaryKey + "_eq";
+        var ransackArgs = {
+          ransackKey: _this7.id()
+        };
+
+        var collection = new _Collection__WEBPACK_IMPORTED_MODULE_0__["default"]({ "modelName": args.modelName, "ransack": ransackArgs });
+        collection.first().then(function (model) {
+          resolve(model);
+        });
+      });
+    }
+  }, {
     key: "_token",
     value: function _token() {
       var csrfTokenElement = document.querySelector("meta[name='csrf-token']");
@@ -455,14 +454,25 @@ var Collection = function () {
       });
     }
   }, {
-    key: "toArray",
-    value: function toArray() {
+    key: "first",
+    value: function first() {
       var _this = this;
 
       return new Promise(function (resolve, reject) {
-        var modelClass = __webpack_require__("./app/javascript/ApiMaker/Models sync recursive ^\\.\\/.*$")("./" + _this.args.modelName).default;
-        var useToUse = _this.args.targetPathName;
-        var dataToUse = qs__WEBPACK_IMPORTED_MODULE_0___default.a.stringify({ "q": _this.ransack });
+        _this.toArray().then(function (models) {
+          resolve(models[0]);
+        });
+      });
+    }
+  }, {
+    key: "toArray",
+    value: function toArray() {
+      var _this2 = this;
+
+      return new Promise(function (resolve, reject) {
+        var modelClass = __webpack_require__("./app/javascript/ApiMaker/Models sync recursive ^\\.\\/.*$")("./" + _this2.args.modelName).default;
+        var useToUse = _this2.args.targetPathName;
+        var dataToUse = qs__WEBPACK_IMPORTED_MODULE_0___default.a.stringify({ "q": _this2.ransack });
 
         Rails.ajax({ type: "GET", url: useToUse, data: dataToUse, success: function success(response) {
             var array = [];
@@ -585,7 +595,8 @@ var _class = function (_BaseModel) {
   _createClass(_class, [{
     key: "project",
     value: function project() {
-      return this.readBelongsToReflection({ "name": "project" });
+      var id = this.projectId();
+      return this._readBelongsToReflection({ "modelName": "Project", "targetPathName": "/api_maker/projects", "ransack": { "id_eq": id } });
     }
   }, {
     key: "id",
@@ -596,6 +607,11 @@ var _class = function (_BaseModel) {
     key: "name",
     value: function name() {
       return this.getAttribute("name");
+    }
+  }, {
+    key: "projectId",
+    value: function projectId() {
+      return this.getAttribute("project_id");
     }
   }, {
     key: "createdAt",
@@ -624,6 +640,7 @@ var _class = function (_BaseModel) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
+	"./models/belongs_to_controller.js": "./app/javascript/controllers/models/belongs_to_controller.js",
 	"./models/create_controller.js": "./app/javascript/controllers/models/create_controller.js",
 	"./models/destroy_controller.js": "./app/javascript/controllers/models/destroy_controller.js",
 	"./models/find_controller.js": "./app/javascript/controllers/models/find_controller.js",
@@ -652,6 +669,60 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = "./app/javascript/controllers sync recursive .js$";
+
+/***/ }),
+
+/***/ "./app/javascript/controllers/models/belongs_to_controller.js":
+/*!********************************************************************!*\
+  !*** ./app/javascript/controllers/models/belongs_to_controller.js ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var stimulus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! stimulus */ "./node_modules/stimulus/index.js");
+/* harmony import */ var ApiMaker_Models_Task__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ApiMaker/Models/Task */ "./app/javascript/ApiMaker/Models/Task.js");
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+var _class = function (_Controller) {
+  _inherits(_class, _Controller);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: "connect",
+    value: function connect() {
+      var _this2 = this;
+
+      ApiMaker_Models_Task__WEBPACK_IMPORTED_MODULE_1__["default"].find(this.element.dataset.taskId).then(function (task) {
+        task.project().then(function (project) {
+          var result = { "id": project.id(), "name": project.name() };
+
+          _this2.element.dataset.project = JSON.stringify(result);
+          _this2.element.dataset.belongsToCompleted = true;
+        });
+      });
+    }
+  }]);
+
+  return _class;
+}(stimulus__WEBPACK_IMPORTED_MODULE_0__["Controller"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (_class);
 
 /***/ }),
 
@@ -3551,4 +3622,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 /******/ });
-//# sourceMappingURL=application-f88477955c8e86e1c3e9.js.map
+//# sourceMappingURL=application-70af07c7ee1cfcade3df.js.map

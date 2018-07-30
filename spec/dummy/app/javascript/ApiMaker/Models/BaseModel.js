@@ -124,36 +124,6 @@ export default class {
     return !this.isNewRecord()
   }
 
-  readBelongsToReflection(args) {
-    return new Promise(function(resolve, reject) {
-      if (this.relationshipsCache[args.name])
-        return resolve(this.relationshipsCache[args.name])
-
-      var ransackKey = args.primaryKey + "_eq"
-      var ransackArgs = {
-        ransackKey: this.id()
-      }
-
-      var collection = new Collection({"modelName": args.modelName, "ransack": ransackArgs})
-      collection.first().then((model) => { resolve(model) })
-    })
-  }
-
-  readHasOneReflection(args) {
-    return new Promise(function(resolve, reject) {
-      if (this.relationshipsCache[args.name])
-        return resolve(this.relationshipsCache[args.name])
-
-      var ransackKey = args.primaryKey + "_eq"
-      var ransackArgs = {
-        ransackKey: this.id()
-      }
-
-      var collection = new Collection({"modelName": args.modelName, "ransack": ransackArgs})
-      collection.first().then((model) => { resolve(model) })
-    })
-  }
-
   reload() {
     return new Promise((resolve, reject) => {
       var urlToUse = this.constructor.modelClassData().path + "/" + this.id()
@@ -222,6 +192,31 @@ export default class {
 
   isValid() {
     throw "Not implemented yet"
+  }
+
+  _readBelongsToReflection(args) {
+    return new Promise((resolve, reject) => {
+      if (this.relationshipsCache[args.name])
+        return resolve(this.relationshipsCache[args.name])
+
+      var collection = new Collection(args)
+      collection.first().then((model) => { resolve(model) })
+    })
+  }
+
+  _readHasOneReflection(args) {
+    return new Promise((resolve, reject) => {
+      if (this.relationshipsCache[args.name])
+        return resolve(this.relationshipsCache[args.name])
+
+      var ransackKey = args.primaryKey + "_eq"
+      var ransackArgs = {
+        ransackKey: this.id()
+      }
+
+      var collection = new Collection({"modelName": args.modelName, "ransack": ransackArgs})
+      collection.first().then((model) => { resolve(model) })
+    })
   }
 
   _token() {

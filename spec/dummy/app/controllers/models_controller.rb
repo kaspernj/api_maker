@@ -1,4 +1,6 @@
 class ModelsController < ApplicationController
+  def belongs_to; end
+
   def create; end
 
   def destroy
@@ -8,6 +10,8 @@ class ModelsController < ApplicationController
   def find
     @project = Project.find(params[:project_id])
   end
+
+  def has_many; end
 
   def ransack; end
 
