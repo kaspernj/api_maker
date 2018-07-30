@@ -6,7 +6,7 @@ export default class Collection {
         var keyName = "current<%= scope[1].class_name %>Id"
         var scopeId = apiMakerDataElement.dataset[keyName]
 
-        var modelClass = require("ApiMaker/<%= scope[1].class_name %>").default
+        var modelClass = require("ApiMaker/Models/<%= scope[1].class_name %>").default
         modelClass.find(scopeId).then((scopeInstance) => {
           resolve(scopeInstance)
         })

@@ -63,6 +63,7 @@ RSpec.configure do |config|
   config.backtrace_exclusion_patterns << /\/\.rvm\//
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
+  config.use_transactional_fixtures = false
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation, except: %w[ar_internal_metadata])
