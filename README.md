@@ -11,7 +11,7 @@ gem "api_maker"
 
 ApiMaker requires [Webpacker](https://github.com/rails/webpacker), so make sure you have that set up as well. It also uses an extension called [qs](https://www.npmjs.com/package/qs), that you should add to your packages, but that is probally already there by default.
 
-ApiMaker makes use of [CanCanCan](https://github.com/CanCanCommunity/cancancan) to keep track of, what models a given user should have access to. Make a file where you define access in `app/models/api_maker_ability.rb` containing something like this:
+ApiMaker makes use of [CanCanCan](https://github.com/CanCanCommunity/cancancan) to keep track of what models a given user should have access to. Make a file where you define access in `app/models/api_maker_ability.rb` containing something like this:
 ```ruby
 class ApiMakerAbility
   include CanCan::Ability
