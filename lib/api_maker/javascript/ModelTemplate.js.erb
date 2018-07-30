@@ -9,7 +9,8 @@ export default class extends BaseModel {
   <% reflections.each do |reflection| %>
     <% if reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection) %>
       <%= js_attribute_name(reflection.name) %>() {
-        return this.readBelongsToReflection(<%= {name: reflection.name}.to_json %>)
+        var id = this.<%= js_attribute_name(reflection.foreign_key) %>()
+        return this._readBelongsToReflection(<%= api_maker_json("modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.klass.primary_key}_eq" => "{{id}}"}) %>)
       }
     <% elsif reflection.is_a?(ActiveRecord::Reflection::HasManyReflection) %>
       <%= js_attribute_name(reflection.name) %>() {
@@ -18,7 +19,7 @@ export default class extends BaseModel {
       }
     <% elsif reflection.is_a?(ActiveRecord::Reflection::HasOneReflection) %>
       <%= js_attribute_name(reflection.name) %>() {
-        return this.readHasOneReflection(<%= {name: reflection.name}.to_json %>)
+        return this._readHasOneReflection(<%= {name: reflection.name}.to_json %>)
       }
     <% end %>
   <% end %>
