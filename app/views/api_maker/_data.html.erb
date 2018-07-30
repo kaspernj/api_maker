@@ -1,0 +1,2 @@
+<div class="api-maker-data"<% Devise.mappings.each do |scope| %> data-current-<%= scope[0] %>-id="<%= __send__("current_#{scope[0]}")&.id %>"<% end %>></div>
+Test: <%= current_user&.id %>

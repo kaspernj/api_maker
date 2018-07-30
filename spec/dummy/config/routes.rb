@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     resources :projects, :tasks
   end
 
+  namespace :devise do
+    get :current_user
+  end
+
   namespace :models do
     get :belongs_to
     get :create

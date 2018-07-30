@@ -86,57 +86,16 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./app/javascript/ApiMaker/Models sync recursive ^\\.\\/.*$":
-/*!******************************************************!*\
-  !*** ./app/javascript/ApiMaker/Models sync ^\.\/.*$ ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./BaseModel": "./app/javascript/ApiMaker/Models/BaseModel.js",
-	"./BaseModel.js": "./app/javascript/ApiMaker/Models/BaseModel.js",
-	"./Collection": "./app/javascript/ApiMaker/Models/Collection.js",
-	"./Collection.js": "./app/javascript/ApiMaker/Models/Collection.js",
-	"./Project": "./app/javascript/ApiMaker/Models/Project.js",
-	"./Project.js": "./app/javascript/ApiMaker/Models/Project.js",
-	"./Task": "./app/javascript/ApiMaker/Models/Task.js",
-	"./Task.js": "./app/javascript/ApiMaker/Models/Task.js"
-};
-
-
-function webpackContext(req) {
-	var id = webpackContextResolve(req);
-	return __webpack_require__(id);
-}
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) { // check for number or string
-		var e = new Error("Cannot find module '" + req + "'");
-		e.code = 'MODULE_NOT_FOUND';
-		throw e;
-	}
-	return id;
-}
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = "./app/javascript/ApiMaker/Models sync recursive ^\\.\\/.*$";
-
-/***/ }),
-
-/***/ "./app/javascript/ApiMaker/Models/BaseModel.js":
-/*!*****************************************************!*\
-  !*** ./app/javascript/ApiMaker/Models/BaseModel.js ***!
-  \*****************************************************/
+/***/ "./app/javascript/ApiMaker/BaseModel.js":
+/*!**********************************************!*\
+  !*** ./app/javascript/ApiMaker/BaseModel.js ***!
+  \**********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Collection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Collection */ "./app/javascript/ApiMaker/Models/Collection.js");
+/* harmony import */ var _Collection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Collection */ "./app/javascript/ApiMaker/Collection.js");
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -247,7 +206,7 @@ var _class = function () {
       var _this3 = this;
 
       return new Promise(function (resolve, reject) {
-        var urlToUse = _this3.constructor.modelClassData().path + "/" + _this3.id();
+        var urlToUse = _this3.constructor.modelClassData().path + "/" + _this3._primaryKey();
 
         Rails.ajax({ type: "DELETE", url: urlToUse, success: function success(response) {
             if (response.model) {
@@ -278,9 +237,9 @@ var _class = function () {
     key: "isNewRecord",
     value: function isNewRecord() {
       if ("id" in this.modelData) {
-        return true;
-      } else {
         return false;
+      } else {
+        return true;
       }
     }
   }, {
@@ -294,7 +253,7 @@ var _class = function () {
       var _this4 = this;
 
       return new Promise(function (resolve, reject) {
-        var urlToUse = _this4.constructor.modelClassData().path + "/" + _this4.id();
+        var urlToUse = _this4.constructor.modelClassData().path + "/" + _this4._primaryKey();
 
         Rails.ajax({
           type: "GET",
@@ -332,7 +291,7 @@ var _class = function () {
         if (_this5.changes.length == 0) return resolve({ model: _this5 });
 
         var paramKey = _this5.constructor.modelClassData().paramKey;
-        var urlToUse = _this5.constructor.modelClassData().path + "/" + _this5.id();
+        var urlToUse = _this5.constructor.modelClassData().path + "/" + _this5._primaryKey();
         var dataToUse = {};
         dataToUse[paramKey] = _this5.changes;
 
@@ -395,6 +354,11 @@ var _class = function () {
       });
     }
   }, {
+    key: "_primaryKey",
+    value: function _primaryKey() {
+      return this.getAttribute(this.constructor.modelClassData().primaryKey);
+    }
+  }, {
     key: "_token",
     value: function _token() {
       var csrfTokenElement = document.querySelector("meta[name='csrf-token']");
@@ -409,10 +373,10 @@ var _class = function () {
 
 /***/ }),
 
-/***/ "./app/javascript/ApiMaker/Models/Collection.js":
-/*!******************************************************!*\
-  !*** ./app/javascript/ApiMaker/Models/Collection.js ***!
-  \******************************************************/
+/***/ "./app/javascript/ApiMaker/Collection.js":
+/*!***********************************************!*\
+  !*** ./app/javascript/ApiMaker/Collection.js ***!
+  \***********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -490,6 +454,43 @@ var Collection = function () {
 
 /***/ }),
 
+/***/ "./app/javascript/ApiMaker/Models sync recursive ^\\.\\/.*$":
+/*!******************************************************!*\
+  !*** ./app/javascript/ApiMaker/Models sync ^\.\/.*$ ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./Project": "./app/javascript/ApiMaker/Models/Project.js",
+	"./Project.js": "./app/javascript/ApiMaker/Models/Project.js",
+	"./Task": "./app/javascript/ApiMaker/Models/Task.js",
+	"./Task.js": "./app/javascript/ApiMaker/Models/Task.js"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) { // check for number or string
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return id;
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./app/javascript/ApiMaker/Models sync recursive ^\\.\\/.*$";
+
+/***/ }),
+
 /***/ "./app/javascript/ApiMaker/Models/Project.js":
 /*!***************************************************!*\
   !*** ./app/javascript/ApiMaker/Models/Project.js ***!
@@ -499,8 +500,8 @@ var Collection = function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _BaseModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseModel */ "./app/javascript/ApiMaker/Models/BaseModel.js");
-/* harmony import */ var _Collection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Collection */ "./app/javascript/ApiMaker/Models/Collection.js");
+/* harmony import */ var _BaseModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../BaseModel */ "./app/javascript/ApiMaker/BaseModel.js");
+/* harmony import */ var _Collection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Collection */ "./app/javascript/ApiMaker/Collection.js");
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -551,7 +552,7 @@ var _class = function (_BaseModel) {
   }], [{
     key: "modelClassData",
     value: function modelClassData() {
-      return { "name": "Project", "paramKey": "project", "path": "/api_maker/projects" };
+      return { "name": "Project", "paramKey": "project", "path": "/api_maker/projects", "primaryKey": "id" };
     }
   }]);
 
@@ -571,8 +572,8 @@ var _class = function (_BaseModel) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _BaseModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BaseModel */ "./app/javascript/ApiMaker/Models/BaseModel.js");
-/* harmony import */ var _Collection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Collection */ "./app/javascript/ApiMaker/Models/Collection.js");
+/* harmony import */ var _BaseModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../BaseModel */ "./app/javascript/ApiMaker/BaseModel.js");
+/* harmony import */ var _Collection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Collection */ "./app/javascript/ApiMaker/Collection.js");
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -622,7 +623,7 @@ var _class = function (_BaseModel) {
   }], [{
     key: "modelClassData",
     value: function modelClassData() {
-      return { "name": "Task", "paramKey": "task", "path": "/api_maker/tasks" };
+      return { "name": "Task", "paramKey": "task", "path": "/api_maker/tasks", "primaryKey": "id" };
     }
   }]);
 
@@ -3678,4 +3679,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 /******/ });
-//# sourceMappingURL=application-823b1e9202440985e48b.js.map
+//# sourceMappingURL=application-814483e371dd3e408c01.js.map
