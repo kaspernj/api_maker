@@ -520,7 +520,7 @@ var _class = function (_BaseModel) {
     key: "tasks",
     value: function tasks() {
       var id = this.id();
-      return new _Collection__WEBPACK_IMPORTED_MODULE_1__["default"]({ "modelName": "Task", "targetPathName": this.constructor.modelClassData().path, "ransack": { "project_id_eq": id } });
+      return new _Collection__WEBPACK_IMPORTED_MODULE_1__["default"]({ "modelName": "Task", "targetPathName": "/api_maker/tasks", "ransack": { "project_id_eq": id } });
     }
   }, {
     key: "id",
@@ -627,6 +627,7 @@ var map = {
 	"./models/create_controller.js": "./app/javascript/controllers/models/create_controller.js",
 	"./models/destroy_controller.js": "./app/javascript/controllers/models/destroy_controller.js",
 	"./models/find_controller.js": "./app/javascript/controllers/models/find_controller.js",
+	"./models/has_many_controller.js": "./app/javascript/controllers/models/has_many_controller.js",
 	"./models/ransack_controller.js": "./app/javascript/controllers/models/ransack_controller.js",
 	"./models/update_controller.js": "./app/javascript/controllers/models/update_controller.js"
 };
@@ -800,6 +801,64 @@ var _class = function (_Controller) {
         projectElement.innerText = "Hello world";
 
         _this2.element.append(projectElement);
+      });
+    }
+  }]);
+
+  return _class;
+}(stimulus__WEBPACK_IMPORTED_MODULE_0__["Controller"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (_class);
+
+/***/ }),
+
+/***/ "./app/javascript/controllers/models/has_many_controller.js":
+/*!******************************************************************!*\
+  !*** ./app/javascript/controllers/models/has_many_controller.js ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var stimulus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! stimulus */ "./node_modules/stimulus/index.js");
+/* harmony import */ var ApiMaker_Models_Project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ApiMaker/Models/Project */ "./app/javascript/ApiMaker/Models/Project.js");
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+var _class = function (_Controller) {
+  _inherits(_class, _Controller);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: "connect",
+    value: function connect() {
+      var _this2 = this;
+
+      ApiMaker_Models_Project__WEBPACK_IMPORTED_MODULE_1__["default"].find(this.element.dataset.projectId).then(function (project) {
+        project.tasks().toArray().then(function (tasks) {
+          var result = [];
+          for (var key in tasks) {
+            var task = tasks[key];
+            result.push({ "id": task.id(), "name": task.name() });
+          }
+
+          _this2.element.dataset.tasks = JSON.stringify(result);
+          _this2.element.dataset.hasManyCompleted = true;
+        });
       });
     }
   }]);
@@ -3492,4 +3551,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 /******/ });
-//# sourceMappingURL=application-a40aa6e8c5af21e5687e.js.map
+//# sourceMappingURL=application-f88477955c8e86e1c3e9.js.map

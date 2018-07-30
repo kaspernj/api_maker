@@ -14,6 +14,8 @@ require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
 Bundler.require(*Rails.groups)
+
+require "active_record_query_fixer"
 require "api_maker"
 require "cancancan"
 require "will_paginate"
