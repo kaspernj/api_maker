@@ -19,7 +19,8 @@ export default class extends BaseModel {
       }
     <% elsif reflection.is_a?(ActiveRecord::Reflection::HasOneReflection) %>
       <%= js_attribute_name(reflection.name) %>() {
-        return this._readHasOneReflection(<%= {name: reflection.name}.to_json %>)
+        var id = this.<%= reflection.active_record.primary_key %>()
+        return this._readHasOneReflection(<%= api_maker_json("modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
       }
     <% end %>
   <% end %>

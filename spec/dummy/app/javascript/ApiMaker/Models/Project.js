@@ -14,6 +14,13 @@ export default class extends BaseModel {
       }
     
   
+    
+      task() {
+        var id = this.id()
+        return this._readHasOneReflection({"modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
+      }
+    
+  
 
   
     id() {
