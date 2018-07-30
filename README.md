@@ -154,6 +154,23 @@ task.project().then((project) => {
 
 A `has one` relationship will also return a promise that will get that model like a `belongs to` relationship.
 
+#### Getting the current user
+
+First include this in your layout, so JS can know which user is signed in:
+```erb
+<body>
+  <%= render "/api_maker/data" %>
+```
+
+Then you can do like this in JS:
+```js
+import Devise from "ApiMaker/Devise"
+
+Devise.currentUser().then((user) => {
+  console.log("The current user has this email: " + user.email())
+})
+```
+
 ## Contributing
 Contribution directions go here.
 
