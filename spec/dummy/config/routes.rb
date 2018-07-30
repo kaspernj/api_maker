@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get :destroy
     get :find
     get :has_many
+    get :has_one
     get :ransack
     get :update
   end

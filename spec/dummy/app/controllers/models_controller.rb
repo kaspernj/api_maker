@@ -13,6 +13,8 @@ class ModelsController < ApplicationController
 
   def has_many; end
 
+  def has_one; end
+
   def ransack; end
 
   def update
