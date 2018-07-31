@@ -9,7 +9,7 @@ describe "model find" do
 
     expect(current_path).to eq models_find_path
 
-    WaitUtil.wait_for_condition("project element to appear") { puts page.html; puts chrome_logs; find("[data-controller='models--find']", visible: false)["data-find-completed"] == "true" }
+    WaitUtil.wait_for_condition("project element to appear") { find("[data-controller='models--find']", visible: false)["data-find-completed"] == "true" }
 
     project_data = JSON.parse(find("[data-controller='models--find']", visible: false)["data-project-data"])
 
