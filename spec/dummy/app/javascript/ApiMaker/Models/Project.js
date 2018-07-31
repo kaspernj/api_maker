@@ -10,14 +10,14 @@ export default class extends BaseModel {
     
       tasks() {
         var id = this.id()
-        return new Collection({"modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
+        return new Collection({"reflectionName":"tasks","modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
       }
     
   
     
       task() {
         var id = this.id()
-        return this._readHasOneReflection({"model":this,"reflectionName":"task","modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
+        return this._readHasOneReflection({"reflectionName":"task","modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
       }
     
   

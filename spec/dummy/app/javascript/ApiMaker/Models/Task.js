@@ -10,7 +10,7 @@ export default class extends BaseModel {
     
       project() {
         var id = this.projectId()
-        return this._readBelongsToReflection({"model":this,"reflectionName":"project","modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
+        return this._readBelongsToReflection({"reflectionName":"project","modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
       }
     
   

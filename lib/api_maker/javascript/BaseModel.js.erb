@@ -251,8 +251,8 @@ export default class {
 
   _readBelongsToReflection(args) {
     return new Promise((resolve, reject) => {
-      if (this.relationshipsCache[args.name])
-        return resolve(this.relationshipsCache[args.name])
+      if (this.relationshipsCache[args.reflectionName])
+        return resolve(this.relationshipsCache[args.reflectionName])
 
       var collection = new Collection(args)
       collection.first().then((model) => {
@@ -264,8 +264,8 @@ export default class {
 
   _readHasOneReflection(args) {
     return new Promise((resolve, reject) => {
-      if (this.relationshipsCache[args.name])
-        return resolve(this.relationshipsCache[args.name])
+      if (this.relationshipsCache[args.reflectionName])
+        return resolve(this.relationshipsCache[args.reflectionName])
 
       var collection = new Collection(args)
       collection.first().then((model) => {
