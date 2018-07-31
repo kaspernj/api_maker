@@ -16,6 +16,10 @@ export default class Collection {
     })
   }
 
+  limit(amount) {
+    this.limit = amount
+  }
+
   preload(args) {
     this.includes = args
     return this
@@ -73,11 +77,14 @@ export default class Collection {
     if (this.ransack)
       params["q"] = this.ransack
 
-    if (this.page)
-      params["page"] = this.page
+    if (this.limit)
+      params["limit"] = this.limit
 
     if (this.includes)
       params["include"] = this.includes
+
+    if (this.page)
+      params["page"] = this.page
 
     return params
   }
