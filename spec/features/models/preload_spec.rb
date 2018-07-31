@@ -18,4 +18,3 @@ describe "model preload" do
     expect(task_without_preload.fetch("modelData")).to_not have_key "project"
   end
 end
-
