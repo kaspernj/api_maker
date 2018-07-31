@@ -3,14 +3,13 @@ import Project from "ApiMaker/Models/Project"
 
 export default class extends Controller {
   connect() {
-    Project.ransack({name_cont: "test-ransack"}).toArray().then((array) => {
-      var ids = []
-      for(var key in array) {
-        var model = array[key]
-        ids.push(model.id())
-      }
-
-      this.element.innerText = JSON.stringify(ids)
+    var promiseWithoutPreload = Project.ransack({name_cont: "test-ransack"}).toArray().then((projects) => {
+      this.element.dataset.projectsWithoutPreload = JSON.stringify(projects)
+    })
+    var promiseWithPreload = Project.ransack({name_cont: "test-ransack"}).preload("tasks").toArray().then((projects) => {
+      this.element.dataset.projectsWithPreload = JSON.stringify(projects)
+    })
+    Promise.all([promiseWithoutPreload, promiseWithPreload]).then(() => {
       this.element.dataset.ransackCompleted = true
     })
   }

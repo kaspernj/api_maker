@@ -3,33 +3,33 @@ import Collection from "../Collection"
 
 export default class extends BaseModel {
   static modelClassData() {
-    return {"name":"Task","paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
+    return {"name":"Task","relationships":[{"className":"Project","name":"project","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
   }
 
   
     
       project() {
         var id = this.projectId()
-        return this._readBelongsToReflection({"modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
+        return this._readBelongsToReflection({"model":this,"reflectionName":"project","modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
       }
     
   
 
   
     id() {
-      return this.getAttribute("id")
+      return this._getAttribute("id")
     }
   
     name() {
-      return this.getAttribute("name")
+      return this._getAttribute("name")
     }
   
     projectId() {
-      return this.getAttribute("project_id")
+      return this._getAttribute("project_id")
     }
   
     createdAt() {
-      return this.getAttribute("created_at")
+      return this._getAttribute("created_at")
     }
   
 }

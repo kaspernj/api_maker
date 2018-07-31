@@ -2,35 +2,35 @@ class ApiMaker::ModelController < ApiMaker::BaseController
   load_and_authorize_resource
 
   def index
-    ransack = resource_collection.ransack(params[:q])
-    query = ransack.result.page(params[:page])
+    query = resource_collection.ransack(params[:q]).result
+    query = query.limit(params[:limit]) if params[:limit].present?
+    query = query.page(params[:page]) if params[:page].present?
+    query = query.distinct.fix
 
-    collection = query.distinct.fix.map do |model|
-      serialized_resource(model).to_hash
-    end
-
-    render json: {collection: collection}
+    render json: {collection: query}, include: include_param
   end
 
   def show
-    render json: {model: serialized_resource(resource_instance)}
+    render json: {model: serialized_resource(resource_instance)}, include: include_param
   end
 
   def new
-    render json: {model: serialized_resource(resource_instance)}
+    render json: {model: serialized_resource(resource_instance)}, include: include_param
   end
 
   def create
     if resource_instance.save
       render json: {
         model: serialized_resource(resource_instance),
-        success: true
+        success: true,
+        include: include_param
       }
     else
       render json: {
         model: serialized_resource(resource_instance),
         success: false,
-        errors: resource_instance.errors.full_messages
+        errors: resource_instance.errors.full_messages,
+        include: include_param
       }
     end
   end
@@ -43,13 +43,15 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     if resource_instance.update(sanitize_parameters)
       render json: {
         model: serialized_resource(resource_instance),
-        success: true
+        success: true,
+        include: include_param
       }
     else
       render json: {
         model: serialized_resource(resource_instance),
         success: false,
-        errors: resource_instance.errors.full_messages
+        errors: resource_instance.errors.full_messages,
+        include: include_param
       }
     end
   end
@@ -58,18 +60,30 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     if resource_instance.destroy
       render json: {
         model: serialized_resource(resource_instance),
-        success: true
+        success: true,
+        include: include_param
       }
     else
       render json: {
         model: serialized_resource(resource_instance),
         success: false,
-        errors: resource_instance.errors.full_messages
+        errors: resource_instance.errors.full_messages,
+        include: include_param
       }
     end
   end
 
 private
+
+  def include_param
+    return params[:include] if params[:include].present?
+
+    if action_name == "index"
+      return false
+    else
+      return " "
+    end
+  end
 
   def resource_collection
     @resource_collection ||= proc do
@@ -105,6 +119,6 @@ private
   end
 
   def serialized_resource(model)
-    @serialized_resource ||= serializer.new(model)
+    serializer.new(model)
   end
 end

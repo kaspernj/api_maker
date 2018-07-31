@@ -3,22 +3,22 @@ import Collection from "../Collection"
 
 export default class extends BaseModel {
   static modelClassData() {
-    return {"name":"User","paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
+    return {"name":"User","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
   }
 
   
 
   
     id() {
-      return this.getAttribute("id")
+      return this._getAttribute("id")
     }
   
     email() {
-      return this.getAttribute("email")
+      return this._getAttribute("email")
     }
   
     createdAt() {
-      return this.getAttribute("created_at")
+      return this._getAttribute("created_at")
     }
   
 }
