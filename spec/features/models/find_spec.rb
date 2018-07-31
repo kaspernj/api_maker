@@ -16,5 +16,6 @@ describe "model find" do
     expect(project_data.fetch("modelData").fetch("name")).to eq project.name
     expect(project_data.fetch("modelData")).to_not have_key "tasks"
     expect(project_data.fetch("modelData")).to_not have_key "task"
+    expect(project_data.fetch("modelData")).to_not have_key "updated_at"
   end
 end

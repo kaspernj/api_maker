@@ -17,10 +17,14 @@ describe "model ransack" do
 
     expect(projects_without_preload.fetch(0).fetch("modelData").fetch("name")).to eq "test-ransack-kasper"
     expect(projects_without_preload.fetch(0).fetch("relationshipsCache")).to eq({})
-    expect(projects_with_preload.fetch(0).fetch("modelData")).to_not have_key "tasks"
+    expect(projects_without_preload.fetch(0).fetch("modelData")).to_not have_key "tasks"
+    expect(projects_without_preload.fetch(0).fetch("modelData")).to_not have_key "updated_at"
 
+    expect(projects_with_preload.fetch(0).fetch("modelData")).to_not have_key "tasks"
     expect(projects_with_preload.fetch(0).fetch("relationshipsCache").fetch("tasks").fetch(0).fetch("modelData").fetch("name")).to eq "test-project-task"
+    expect(projects_with_preload.fetch(0).fetch("relationshipsCache").fetch("tasks").fetch(0).fetch("modelData")).to_not have_key "updated_at"
     expect(projects_with_preload.fetch(0).fetch("modelData").fetch("name")).to eq "test-ransack-kasper"
     expect(projects_with_preload.fetch(0).fetch("modelData")).to_not have_key "tasks"
+    expect(projects_with_preload.fetch(0).fetch("modelData")).to_not have_key "updated_at"
   end
 end

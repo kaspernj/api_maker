@@ -7,7 +7,9 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     query = query.page(params[:page]) if params[:page].present?
     query = query.distinct.fix
 
-    render json: {collection: query}, include: include_param
+    collection = ActiveModel::Serializer::CollectionSerializer.new(query)
+
+    render json: {collection: collection}, include: include_param
   end
 
   def show
@@ -77,12 +79,7 @@ private
 
   def include_param
     return params[:include] if params[:include].present?
-
-    if action_name == "index"
-      return false
-    else
-      return " "
-    end
+    return "nothing"
   end
 
   def resource_collection
