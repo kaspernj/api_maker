@@ -34,14 +34,26 @@ private
   end
 
   def reflections
-    result = []
-    serializer._reflections.each_key do |name|
-      reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
-      next unless reflection
-      result << reflection
-    end
+    @reflections ||= proc do
+      result = []
+      serializer._reflections.each_key do |name|
+        reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
+        next unless reflection
+        result << reflection
+      end
 
-    result
+      result
+    end.call
+  end
+
+  def reflections_for_model_class_data
+    @reflections_for_model_class_data ||= reflections.map do |reflection|
+      {
+        className: reflection.class_name,
+        name: reflection.name,
+        macro: reflection.macro
+      }
+    end
   end
 
   def serializer

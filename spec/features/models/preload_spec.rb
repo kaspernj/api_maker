@@ -14,7 +14,8 @@ describe "model preload" do
     task_with_preload = JSON.parse(find("[data-controller='models--preload']", visible: false)["data-task-with-preload"])
     task_without_preload = JSON.parse(find("[data-controller='models--preload']", visible: false)["data-task-without-preload"])
 
-    expect(task_with_preload.fetch("modelData").fetch("project").fetch("name")).to eq "test-project"
+    expect(task_with_preload.fetch("modelData")).to_not have_key "project"
+    expect(task_with_preload.dig("relationshipsCache", "project", "modelData", "name")).to eq "test-project"
     expect(task_without_preload.fetch("modelData")).to_not have_key "project"
   end
 end

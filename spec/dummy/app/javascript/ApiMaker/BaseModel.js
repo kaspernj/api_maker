@@ -35,6 +35,7 @@ export default class {
     this.changes = {}
     this.relationshipsCache = {}
     this.modelData = modelData
+    this._preloadRelationships()
   }
 
   assignAttributes(newAttributes) {
@@ -115,16 +116,6 @@ export default class {
       }
       xhr.send()
     })
-  }
-
-  getAttribute(attributeName) {
-    if (attributeName in this.changes) {
-      return this.changes[attributeName]
-    } else if (attributeName in this.modelData) {
-      return this.modelData[attributeName]
-    } else {
-      throw "No such attribute: " + attributeName
-    }
   }
 
   isNewRecord() {
@@ -215,13 +206,59 @@ export default class {
     throw "Not implemented yet"
   }
 
+  _getAttribute(attributeName) {
+    if (attributeName in this.changes) {
+      return this.changes[attributeName]
+    } else if (attributeName in this.modelData) {
+      return this.modelData[attributeName]
+    } else {
+      throw "No such attribute: " + attributeName
+    }
+  }
+
+  _preloadRelationships() {
+    var modelClassData = this.constructor.modelClassData()
+    var thisModelData = this.modelData
+
+    for(var key in modelClassData.relationships) {
+      var relationship = modelClassData.relationships[key]
+      var preloadedData = this.modelData[relationship.name]
+
+      if (!preloadedData)
+        continue
+
+      var modelClass = require("ApiMaker/Models/" + relationship.className).default
+
+      if (relationship.macro == "belongs_to" || relationship.macro == "has_one") {
+        var modelInstance = new modelClass(preloadedData)
+        this.relationshipsCache[relationship.name] = modelInstance
+        delete this.modelData[relationship.name]
+      } else if(relationship.macro == "has_many") {
+        var preloadedModels = []
+        for(var key in preloadedData) {
+          var modelData = preloadedData[key]
+          var modelInstance = new modelClass(modelData)
+          preloadedModels.push(modelInstance)
+        }
+
+        this.relationshipsCache[relationship.name] = preloadedModels
+        delete this.modelData[relationship.name]
+      } else {
+        console.log("Cannot preload this type of relationship yet: " + relationship.name + " - " + relationship.macro)
+      }
+    }
+  }
+
   _readBelongsToReflection(args) {
     return new Promise((resolve, reject) => {
       if (this.relationshipsCache[args.name])
         return resolve(this.relationshipsCache[args.name])
 
       var collection = new Collection(args)
-      collection.first().then((model) => { resolve(model) })
+      collection.first().then((model) => {
+        this.relationshipsCache[args.reflectionName] = model
+        resolve(model)
+      })
     })
   }
 
@@ -231,12 +268,15 @@ export default class {
         return resolve(this.relationshipsCache[args.name])
 
       var collection = new Collection(args)
-      collection.first().then((model) => { resolve(model) })
+      collection.first().then((model) => {
+        this.relationshipsCache[args.reflectionName] = model
+        resolve(model)
+      })
     })
   }
 
   _primaryKey() {
-    return this.getAttribute(this.constructor.modelClassData().primaryKey)
+    return this._getAttribute(this.constructor.modelClassData().primaryKey)
   }
 
   static _token() {

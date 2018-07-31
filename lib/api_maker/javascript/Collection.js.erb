@@ -5,7 +5,7 @@ export default class Collection {
   constructor(args) {
     this.args = args
     this.includes = args.includes
-    this.ransack = args.ransack
+    this.ransackOptions = args.ransack
   }
 
   each(callback) {
@@ -31,7 +31,7 @@ export default class Collection {
   }
 
   ransack(params) {
-    this.ransack = Object.assign(this.ransack, params)
+    this.ransackOptions = Object.assign(this.ransackOptions, params)
     return this
   }
 
@@ -74,8 +74,8 @@ export default class Collection {
 
   _params() {
     var params = {}
-    if (this.ransack)
-      params["q"] = this.ransack
+    if (this.ransackOptions)
+      params["q"] = this.ransackOptions
 
     if (this.limit)
       params["limit"] = this.limit
