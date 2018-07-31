@@ -18,6 +18,7 @@ export default class Collection {
 
   limit(amount) {
     this.limit = amount
+    return this
   }
 
   preload(args) {
