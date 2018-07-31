@@ -2,9 +2,7 @@ class ApiMaker::ModelController < ApiMaker::BaseController
   load_and_authorize_resource
 
   def index
-    ransack = resource_collection.ransack(params[:q])
-
-    query = ransack.result
+    query = resource_collection.ransack(params[:q]).ransack.result
     query = query.limit(params[:limit]) if params[:limit].present?
     query = query.page(params[:page]) if params[:page].present?
     query = query.distinct.fix
