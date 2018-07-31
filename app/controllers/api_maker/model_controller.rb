@@ -3,7 +3,8 @@ class ApiMaker::ModelController < ApiMaker::BaseController
 
   def index
     ransack = resource_collection.ransack(params[:q])
-    query = ransack.result.page(params[:page])
+    query = ransack.result
+    query = query.page(params[:page]) if params[:page].present?
 
     collection = query.distinct.fix.map do |model|
       serialized_resource(model).to_hash
@@ -105,6 +106,6 @@ private
   end
 
   def serialized_resource(model)
-    @serialized_resource ||= serializer.new(model)
+    serializer.new(model)
   end
 end

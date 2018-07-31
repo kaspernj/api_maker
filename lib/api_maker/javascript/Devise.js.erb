@@ -1,16 +1,22 @@
 export default class Collection {
   <% Devise.mappings.each do |scope| %>
-    static current<%= scope[1].class_name %>() {
-      return new Promise((resolve, reject) => {
-        var apiMakerDataElement = document.querySelector(".api-maker-data")
-        var keyName = "current<%= scope[1].class_name %>Id"
-        var scopeId = apiMakerDataElement.dataset[keyName]
+    <%
+      klass = scope[1].class_name.constantize
+      serializer = ActiveModel::Serializer.get_serializer_for(klass)
+    %>
+    <% if serializer %>
+      static current<%= scope[1].class_name %>() {
+        return new Promise((resolve, reject) => {
+          var apiMakerDataElement = document.querySelector(".api-maker-data")
+          var keyName = "current<%= scope[1].class_name %>Id"
+          var scopeId = apiMakerDataElement.dataset[keyName]
 
-        var modelClass = require("ApiMaker/Models/<%= scope[1].class_name %>").default
-        modelClass.find(scopeId).then((scopeInstance) => {
-          resolve(scopeInstance)
+          var modelClass = require("ApiMaker/Models/<%= scope[1].class_name %>").default
+          modelClass.find(scopeId).then((scopeInstance) => {
+            resolve(scopeInstance)
+          })
         })
-      })
-    }
+      }
+    <% end %>
   <% end %>
 }

@@ -418,12 +418,8 @@ var Collection = function () {
     _classCallCheck(this, Collection);
 
     this.args = args;
-
-    if (args.ransack) {
-      this.ransack = args.ransack;
-    } else {
-      this.ransack = {};
-    }
+    this.includes = args.includes;
+    this.ransack = args.ransack;
   }
 
   _createClass(Collection, [{
@@ -434,6 +430,24 @@ var Collection = function () {
           callback.apply(model);
         }
       });
+    }
+  }, {
+    key: "preload",
+    value: function preload(args) {
+      this.includes = args;
+      return this;
+    }
+  }, {
+    key: "page",
+    value: function page(pageNumber) {
+      this.page = pageNumber;
+      return this;
+    }
+  }, {
+    key: "ransack",
+    value: function ransack(params) {
+      this.ransack = Object.assign(this.ransack, params);
+      return this;
     }
   }, {
     key: "first",
@@ -453,7 +467,7 @@ var Collection = function () {
 
       return new Promise(function (resolve, reject) {
         var modelClass = __webpack_require__("./app/javascript/ApiMaker/Models sync recursive ^\\.\\/.*$")("./" + _this2.args.modelName).default;
-        var dataToUse = qs__WEBPACK_IMPORTED_MODULE_1___default.a.stringify({ "q": _this2.ransack });
+        var dataToUse = qs__WEBPACK_IMPORTED_MODULE_1___default.a.stringify(_this2._params());
         var urlToUse = _this2.args.targetPathName + "?" + dataToUse;
 
         var xhr = new XMLHttpRequest();
@@ -477,6 +491,18 @@ var Collection = function () {
         };
         xhr.send();
       });
+    }
+  }, {
+    key: "_params",
+    value: function _params() {
+      var params = {};
+      if (this.ransack) params["q"] = this.ransack;
+
+      if (this.page) params["page"] = this.page;
+
+      if (this.includes) params["include"] = this.includes;
+
+      return params;
     }
   }]);
 
@@ -785,6 +811,7 @@ var map = {
 	"./models/find_controller.js": "./app/javascript/controllers/models/find_controller.js",
 	"./models/has_many_controller.js": "./app/javascript/controllers/models/has_many_controller.js",
 	"./models/has_one_controller.js": "./app/javascript/controllers/models/has_one_controller.js",
+	"./models/preload_controller.js": "./app/javascript/controllers/models/preload_controller.js",
 	"./models/ransack_controller.js": "./app/javascript/controllers/models/ransack_controller.js",
 	"./models/update_controller.js": "./app/javascript/controllers/models/update_controller.js"
 };
@@ -1179,6 +1206,56 @@ var _class = function (_Controller) {
           _this2.element.dataset.task = JSON.stringify(result);
           _this2.element.dataset.hasOneCompleted = true;
         });
+      });
+    }
+  }]);
+
+  return _class;
+}(stimulus__WEBPACK_IMPORTED_MODULE_0__["Controller"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (_class);
+
+/***/ }),
+
+/***/ "./app/javascript/controllers/models/preload_controller.js":
+/*!*****************************************************************!*\
+  !*** ./app/javascript/controllers/models/preload_controller.js ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var stimulus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! stimulus */ "./node_modules/stimulus/index.js");
+/* harmony import */ var ApiMaker_Models_Task__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ApiMaker/Models/Task */ "./app/javascript/ApiMaker/Models/Task.js");
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+var _class = function (_Controller) {
+  _inherits(_class, _Controller);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: "connect",
+    value: function connect() {
+      var _this2 = this;
+
+      ApiMaker_Models_Task__WEBPACK_IMPORTED_MODULE_1__["default"].ransack({ "id_eq": this.element.taskId }).preload("project").first().then(function (task) {
+        _this2.element.dataset.taskJson = JSON.stringify(task);
+        _this2.element.dataset.preloadCompleted = true;
       });
     }
   }]);
@@ -3871,4 +3948,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 /******/ });
-//# sourceMappingURL=application-9c3368102abd92ae5a65.js.map
+//# sourceMappingURL=application-fb7f34679ecef6676e53.js.map

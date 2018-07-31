@@ -4,12 +4,8 @@ import qs from "qs"
 export default class Collection {
   constructor(args) {
     this.args = args
-
-    if (args.ransack) {
-      this.ransack = args.ransack
-    } else {
-      this.ransack = {}
-    }
+    this.includes = args.includes
+    this.ransack = args.ransack
   }
 
   each(callback) {
@@ -18,6 +14,21 @@ export default class Collection {
         callback.apply(model)
       }
     })
+  }
+
+  preload(args) {
+    this.includes = args
+    return this
+  }
+
+  page(pageNumber) {
+    this.page = pageNumber
+    return this
+  }
+
+  ransack(params) {
+    this.ransack = Object.assign(this.ransack, params)
+    return this
   }
 
   first() {
@@ -31,7 +42,7 @@ export default class Collection {
   toArray() {
     return new Promise((resolve, reject) => {
       var modelClass = require("ApiMaker/Models/" + this.args.modelName).default
-      var dataToUse = qs.stringify({"q": this.ransack})
+      var dataToUse = qs.stringify(this._params())
       var urlToUse = this.args.targetPathName + "?" + dataToUse
 
       var xhr = new XMLHttpRequest()
@@ -55,5 +66,19 @@ export default class Collection {
       }
       xhr.send()
     })
+  }
+
+  _params() {
+    var params = {}
+    if (this.ransack)
+      params["q"] = this.ransack
+
+    if (this.page)
+      params["page"] = this.page
+
+    if (this.includes)
+      params["include"] = this.includes
+
+    return params
   }
 }

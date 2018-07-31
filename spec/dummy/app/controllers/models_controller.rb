@@ -15,6 +15,8 @@ class ModelsController < ApplicationController
 
   def has_one; end
 
+  def preload; end
+
   def ransack; end
 
   def update
