@@ -3,7 +3,7 @@ import Collection from "../Collection"
 
 export default class extends BaseModel {
   static modelClassData() {
-    return {"name":"Project","relationships":[{"className":"Task","name":"tasks","macro":"has_many"},{"className":"Task","name":"task","macro":"has_one"}],"paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
+    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"created_at","type":"datetime"}],"name":"Project","relationships":[{"className":"Task","name":"tasks","macro":"has_many"},{"className":"Task","name":"task","macro":"has_one"}],"paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
   }
 
   
@@ -24,15 +24,24 @@ export default class extends BaseModel {
 
   
     id() {
-      return this._getAttribute("id")
+      // integer
+      
+        return this._getAttribute("id")
+      
     }
   
     name() {
-      return this._getAttribute("name")
+      // string
+      
+        return this._getAttribute("name")
+      
     }
   
     createdAt() {
-      return this._getAttribute("created_at")
+      // datetime
+      
+        return this._getAttributeDateTime("created_at")
+      
     }
   
 }

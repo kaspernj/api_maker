@@ -79,7 +79,7 @@ private
 
   def include_param
     return params[:include] if params[:include].present?
-    return "nothing"
+    "nothing"
   end
 
   def resource_collection

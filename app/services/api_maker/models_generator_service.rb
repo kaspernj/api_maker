@@ -6,14 +6,11 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     models.each do |model|
       next if ignore_model?(model)
 
-      controller_file = controller_path.join("#{model.name.underscore.pluralize}_controller.rb")
-      model_file = api_maker_root_path.join("Models", "#{model.name}.js")
-
       model_content_response = ApiMaker::ModelContentGeneratorService.(model: model)
 
       if model_content_response.success?
-        File.open(model_file, "w") { |fp| fp.write(model_content_response.result) }
-        File.open(controller_file, "w") { |fp| fp.write(controller_content(model)) } unless File.exist?(controller_file)
+        File.open(model_file(model), "w") { |fp| fp.write(model_content_response.result) }
+        File.open(controller_file(model), "w") { |fp| fp.write(controller_content(model)) } unless File.exist?(controller_file(model))
       else
         puts model_content_response.errors.join(". ")
       end
@@ -28,6 +25,10 @@ private
 
   def controller_content(model)
     ApiMaker::ControllerContentGeneratorService.execute!(model: model).result
+  end
+
+  def controller_file(model)
+    controller_path.join("#{model.name.underscore.pluralize}_controller.rb")
   end
 
   def controller_path
@@ -63,5 +64,9 @@ private
 
   def models
     ApiMaker::ModelsFinderService.execute!.result
+  end
+
+  def model_file(model)
+    api_maker_root_path.join("Models", "#{model.name}.js")
   end
 end
