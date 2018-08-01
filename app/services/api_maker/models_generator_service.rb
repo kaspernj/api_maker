@@ -14,6 +14,8 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
       if model_content_response.success?
         File.open(model_file, "w") { |fp| fp.write(model_content_response.result) }
         File.open(controller_file, "w") { |fp| fp.write(controller_content(model)) } unless File.exist?(controller_file)
+      else
+        puts model_content_response.errors.join(". ")
       end
     end
   end

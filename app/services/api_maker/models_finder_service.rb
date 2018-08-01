@@ -9,6 +9,7 @@ class ApiMaker::ModelsFinderService < ApiMaker::ApplicationService
 
     find_subclasses(ActiveRecord::Base) do |sub_class|
       next if !sub_class.name || skip.include?(sub_class.name)
+      puts "Subclass: #{sub_class.name}"
       result << sub_class
     end
 
@@ -44,8 +45,8 @@ private
     Dir.glob("#{root}/app/models/**/*.rb") do |model_path|
       begin
         require model_path
-      rescue StandardError # rubocop:disable Lint/HandleExceptions
-        # Ignore
+      rescue StandardError => e # rubocop:disable Lint/HandleExceptions
+        puts e.inspect
       end
     end
   end

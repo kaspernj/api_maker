@@ -4,6 +4,7 @@ import Collection from "../Collection"
 export default class extends BaseModel {
   static modelClassData() {
     return <%= {
+      attributes: attributes,
       name: model.model_name.name,
       relationships: reflections_for_model_class_data,
       paramKey: model.model_name.param_key,
@@ -31,9 +32,14 @@ export default class extends BaseModel {
     <% end %>
   <% end %>
 
-  <% attribute_names.each do |attribute_name| %>
-    <%= js_attribute_name(attribute_name) %>() {
-      return this._getAttribute("<%= attribute_name %>")
+  <% attributes.each do |attribute_data| %>
+    <%= js_attribute_name(attribute_data.fetch(:name)) %>() {
+      // <%= attribute_data.fetch(:type) %>
+      <% if attribute_data.fetch(:type) == :datetime %>
+        return this._getAttributeDateTime("<%= attribute_data.fetch(:name) %>")
+      <% else %>
+        return this._getAttribute("<%= attribute_data.fetch(:name) %>")
+      <% end %>
     }
   <% end %>
 }
