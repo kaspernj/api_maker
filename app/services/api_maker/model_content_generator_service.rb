@@ -15,8 +15,10 @@ class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
 
 private
 
-  def attribute_names
-    serializer._attributes
+  def attributes
+    serializer._attributes.map do |attribute_name|
+      {name: attribute_name, type: model.columns_hash[attribute_name.to_s]&.type || :unknown}
+    end
   end
 
   def js_attribute_name(name)

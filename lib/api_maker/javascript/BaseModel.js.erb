@@ -216,6 +216,21 @@ export default class {
     }
   }
 
+  _getAttributeDateTime(attributeName) {
+    var value = this._getAttribute(attributeName)
+    if (!value)
+      return value
+
+    // Format is 2018-07-22T06:17:08.297Z
+    var match = value.match(/^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)\.(\d+)Z$/)
+
+    if (match.length > 0) {
+      return new Date(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]), parseInt(match[4]), parseInt(match[5]), parseInt(match[6]))
+    } else {
+      throw "Could not read datetime: " + value
+    }
+  }
+
   _preloadRelationships() {
     var modelClassData = this.constructor.modelClassData()
     var thisModelData = this.modelData

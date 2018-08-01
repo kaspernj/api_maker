@@ -44,8 +44,8 @@ private
     Dir.glob("#{root}/app/models/**/*.rb") do |model_path|
       begin
         require model_path
-      rescue StandardError # rubocop:disable Lint/HandleExceptions
-        # Ignore
+      rescue StandardError => e
+        puts e.inspect
       end
     end
   end
