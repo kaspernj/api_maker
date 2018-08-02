@@ -9,7 +9,10 @@ class ApiMaker::ModelController < ApiMaker::BaseController
 
     collection = ActiveModel::Serializer::CollectionSerializer.new(query)
 
-    render json: {collection: collection}, include: include_param
+    response = {collection: collection}
+    include_pagination_data(response, query)
+
+    render json: response, include: include_param
   end
 
   def show
@@ -80,6 +83,12 @@ private
   def include_param
     return params[:include] if params[:include].present?
     "nothing"
+  end
+
+  def include_pagination_data(response, query)
+    return if params[:page].blank?
+    response[:total_count] = query.total_count
+    response[:total_pages] = query.total_pages
   end
 
   def resource_collection
