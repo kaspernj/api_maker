@@ -10,12 +10,7 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     collection = ActiveModel::Serializer::CollectionSerializer.new(query)
 
     response = {collection: collection}
-    if include_pagination_data?
-      response.merge!(
-        total_count: query.total_count,
-        total_pages: query.total_pages
-      )
-    end
+    include_pagination_data(response, query)
 
     render json: response, include: include_param
   end
@@ -90,8 +85,10 @@ private
     "nothing"
   end
 
-  def include_pagination_data?
-    params[:page].present?
+  def include_pagination_data(response, query)
+    return if params[:page].blank?
+    response[:total_count] = query.total_count
+    response[:total_pages] = query.total_pages
   end
 
   def resource_collection
