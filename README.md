@@ -119,6 +119,12 @@ Task.ransack({name_cont: "something"}).toArray().then((tasks) => {
 })
 ```
 
+### Sorting models
+
+```js
+Task.ransack({s: "id desc"})
+```
+
 ### Attributes
 
 Each attribute is defined as a method on each model. So if you have an attribute called `name` on the `Task`-model, then it be read by doing this: `task.name()`.
