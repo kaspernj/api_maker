@@ -1,5 +1,6 @@
 import BaseModel from "./BaseModel"
 import qs from "qs"
+import Result from "./Result"
 
 export default class Collection {
   constructor(args) {
@@ -46,7 +47,28 @@ export default class Collection {
 
   toArray() {
     return new Promise((resolve, reject) => {
-      var modelClass = require("ApiMaker/Models/" + this.args.modelName).default
+      this._response().then((response) => {
+        var models = this._responseToModels(response)
+        resolve(models)
+      })
+    })
+  }
+
+  result() {
+    return new Promise((resolve, reject) => {
+      this._response().then((response) => {
+        var models = this._responseToModels(response)
+        var result = new Result({
+          "models": models,
+          "response": response
+        })
+        resolve(result)
+      })
+    })
+  }
+
+  _response() {
+    return new Promise((resolve, reject) => {
       var dataToUse = qs.stringify(this._params())
       var urlToUse = this.args.targetPathName + "?" + dataToUse
 
@@ -56,21 +78,24 @@ export default class Collection {
       xhr.onload = () => {
         if (xhr.status == 200) {
           var response = JSON.parse(xhr.responseText)
-
-          var array = []
-          for(var modelDataKey in response.collection) {
-            var modelData = response.collection[modelDataKey]
-            var modelInstance = new modelClass(modelData)
-            array.push(modelInstance)
-          }
-
-          resolve(array)
+          resolve(response)
         } else {
           reject({"responseText": xhr.responseText})
         }
       }
       xhr.send()
     })
+  }
+
+  _responseToModels(response) {
+    var modelClass = require("ApiMaker/Models/" + this.args.modelName).default
+    var array = []
+    for(var modelDataKey in response.collection) {
+      var modelData = response.collection[modelDataKey]
+      var modelInstance = new modelClass(modelData)
+      array.push(modelInstance)
+    }
+    return array
   }
 
   _params() {
