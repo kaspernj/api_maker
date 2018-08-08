@@ -7,7 +7,7 @@ Devise.mappings.each do |scope|
   serializer = ActiveModel::Serializer.get_serializer_for(model.class)
   next unless serializer
 
-  %> data-current-<%= scope[0] %>-id="<%= model.id %>"<%
+  %> data-current-<%= scope[0].to_s.dasherize %>-id="<%= model.id %>"<%
 end
 
 %>></div>
