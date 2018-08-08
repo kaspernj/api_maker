@@ -21,11 +21,6 @@ private
     end
   end
 
-  def js_attribute_name(name)
-    camelized = name.to_s.camelize
-    "#{camelized[0..0].downcase}#{camelized[1..camelized.length]}"
-  end
-
   def model_content
     erb = ERB.new(File.read(model_template_path))
     erb.result(binding)

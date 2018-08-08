@@ -15,17 +15,17 @@ export default class extends BaseModel {
 
   <% reflections.each do |reflection| %>
     <% if reflection.macro == :belongs_to %>
-      <%= js_attribute_name(reflection.name) %>() {
+      <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         var id = this.<%= js_attribute_name(reflection.foreign_key) %>()
         return this._readBelongsToReflection(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.klass.primary_key}_eq" => "{{id}}"}) %>)
       }
     <% elsif reflection.macro == :has_many %>
-      <%= js_attribute_name(reflection.name) %>() {
+      <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         var id = this.<%= reflection.active_record.primary_key %>()
         return new Collection(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
       }
     <% elsif reflection.macro == :has_one %>
-      <%= js_attribute_name(reflection.name) %>() {
+      <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         var id = this.<%= reflection.active_record.primary_key %>()
         return this._readHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
       }
@@ -33,7 +33,7 @@ export default class extends BaseModel {
   <% end %>
 
   <% attributes.each do |attribute_data| %>
-    <%= js_attribute_name(attribute_data.fetch(:name)) %>() {
+    <%= ApiMaker::JsMethodNamerService.execute!(name: attribute_data.fetch(:name)).result %>() {
       // <%= attribute_data.fetch(:type) %>
       <% if attribute_data.fetch(:type) == :datetime %>
         return this._getAttributeDateTime("<%= attribute_data.fetch(:name) %>")

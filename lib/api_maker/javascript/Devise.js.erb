@@ -5,6 +5,18 @@ export default class Collection {
       serializer = ActiveModel::Serializer.get_serializer_for(klass)
     %>
     <% if serializer %>
+      static <%= ApiMaker::JsMethodNamerService.execute!(name: "is_#{scope[0]}_signed_in").result %>() {
+        var apiMakerDataElement = document.querySelector(".api-maker-data")
+        var keyName = "current<%= scope[1].class_name %>Id"
+        var scopeId = apiMakerDataElement.dataset[keyName]
+
+        if (scopeId) {
+          return true
+        }
+
+        return false
+      }
+
       static current<%= scope[1].class_name %>() {
         return new Promise((resolve, reject) => {
           var apiMakerDataElement = document.querySelector(".api-maker-data")
