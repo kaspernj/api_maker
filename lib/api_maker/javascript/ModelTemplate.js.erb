@@ -37,6 +37,8 @@ export default class extends BaseModel {
       // <%= attribute_data.fetch(:type) %>
       <% if attribute_data.fetch(:type) == :datetime %>
         return this._getAttributeDateTime("<%= attribute_data.fetch(:name) %>")
+      <% elsif attribute_data.fetch(:type) == :money %>
+        return this._getAttributeMoney("<%= attribute_data.fetch(:name) %>")
       <% else %>
         return this._getAttribute("<%= attribute_data.fetch(:name) %>")
       <% end %>

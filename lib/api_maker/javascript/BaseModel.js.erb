@@ -1,4 +1,5 @@
 import Collection from "./Collection"
+import Money from "js-money"
 
 export default class {
   static modelClassData() {
@@ -229,6 +230,14 @@ export default class {
     } else {
       throw "Could not read datetime: " + value
     }
+  }
+
+  _getAttributeMoney(attributeName) {
+    var value = this._getAttribute(attributeName)
+    var cents = parseFloat(value.fractional)
+    var currency = value.currency.iso_code
+    var money = Money.fromInteger(cents, currency)
+    return money
   }
 
   _preloadRelationships() {

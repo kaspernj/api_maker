@@ -17,7 +17,7 @@ private
 
   def attributes
     serializer._attributes.map do |attribute_name|
-      {name: attribute_name, type: model.columns_hash[attribute_name.to_s]&.type || :unknown}
+      {name: attribute_name, type: model_type(attribute_name)}
     end
   end
 
@@ -28,6 +28,17 @@ private
 
   def model_template_path
     File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "ModelTemplate.js.erb")
+  end
+
+  def model_type(attribute_name)
+    model_type = model.columns_hash[attribute_name.to_s]&.type
+    model_type = :money if monetized_attributes.include?(attribute_name.to_s)
+    model_type ||= :unknown
+    model_type
+  end
+
+  def monetized_attributes
+    @monetized_attributes ||= @model.monetized_attributes.map { |attribute| attribute[0] }
   end
 
   def reflections
