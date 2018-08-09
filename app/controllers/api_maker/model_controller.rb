@@ -113,7 +113,7 @@ private
   end
 
   def resource_variable_name
-    @resource_variable_name ||= resource_instance_class_name.parameterize
+    @resource_variable_name ||= resource_instance_class_name.underscore.parameterize
   end
 
   def sanitize_parameters
