@@ -38,7 +38,7 @@ private
   end
 
   def monetized_attributes
-    @monetized_attributes ||= @model.monetized_attributes.map { |attribute| attribute[0] }
+    @monetized_attributes ||= @model.try(:monetized_attributes).try(:map) { |attribute| attribute[0] } || []
   end
 
   def reflections
