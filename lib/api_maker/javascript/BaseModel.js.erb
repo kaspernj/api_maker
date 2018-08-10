@@ -232,6 +232,16 @@ export default class {
     }
   }
 
+  _isPresent(value) {
+    if (!value) {
+      return false
+    } else if (value.match(/^\s*$/)) {
+      return false
+    }
+
+    return true
+  }
+
   _getAttributeMoney(attributeName) {
     var value = this._getAttribute(attributeName)
     var cents = parseFloat(value.fractional)
