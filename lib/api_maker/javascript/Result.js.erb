@@ -3,6 +3,10 @@ export default class Collection {
     this.data = data
   }
 
+  currentPage() {
+    return this.data.response.current_page
+  }
+
   models() {
     return this.data.models
   }
