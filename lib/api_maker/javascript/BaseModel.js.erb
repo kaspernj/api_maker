@@ -28,7 +28,7 @@ export default class {
     })
   }
 
-  static ransack(query) {
+  static ransack(query = {}) {
     return new Collection({"modelName": this.modelClassData().name, "ransack": query, "targetPathName": this.modelClassData().path})
   }
 
