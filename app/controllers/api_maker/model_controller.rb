@@ -87,6 +87,7 @@ private
 
   def include_pagination_data(response, query)
     return if params[:page].blank?
+    response[:current_page] = query.current_page
     response[:total_count] = query.try(:total_count) || query.try(:total_entries)
     response[:total_pages] = query.total_pages
   end
