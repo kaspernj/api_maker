@@ -28,8 +28,15 @@ export default class Collection {
   }
 
   page(pageNumber) {
+    if (!pageNumber)
+      pageNumber = 1
+
     this.page = pageNumber
     return this
+  }
+
+  sort(sortBy) {
+    this.ransackOptions["s"] = sortBy
   }
 
   ransack(params) {
