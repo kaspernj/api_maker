@@ -36,7 +36,7 @@ private
   end
 
   def copy_base_model
-    files = %w[BaseModel Collection Devise Result]
+    files = %w[Devise]
     files.each do |file|
       base_model_source_path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "#{file}.js.erb")
       base_model_target_path = api_maker_root_path.join("#{file}.js")
