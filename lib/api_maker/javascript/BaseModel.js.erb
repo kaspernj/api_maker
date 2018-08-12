@@ -119,6 +119,11 @@ export default class {
     })
   }
 
+  static humanAttributeName(attributeName) {
+    var keyName = this.modelClassData().paramKey
+    return I18n.t(`activerecord.attributes.${keyName}.${attributeName}`)
+  }
+
   isNewRecord() {
     if ("id" in this.modelData) {
       return false
