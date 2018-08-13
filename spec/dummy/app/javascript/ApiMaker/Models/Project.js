@@ -15,6 +15,11 @@ export default class extends BaseModel {
     
   
     
+      loadTask() {
+        var id = this.id()
+        return this._loadHasOneReflection({"reflectionName":"task","modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
+      }
+
       task() {
         var id = this.id()
         return this._readHasOneReflection({"reflectionName":"task","modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
@@ -23,25 +28,43 @@ export default class extends BaseModel {
   
 
   
+    
     id() {
       // integer
       
         return this._getAttribute("id")
       
     }
+
+    hasId() {
+      var value = this.id()
+      return this._isPresent(value)
+    }
   
+    
     name() {
       // string
       
         return this._getAttribute("name")
       
     }
+
+    hasName() {
+      var value = this.name()
+      return this._isPresent(value)
+    }
   
+    
     createdAt() {
       // datetime
       
         return this._getAttributeDateTime("created_at")
       
+    }
+
+    hasCreatedAt() {
+      var value = this.createdAt()
+      return this._isPresent(value)
     }
   
 }

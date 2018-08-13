@@ -28,7 +28,7 @@ export default class {
     })
   }
 
-  static ransack(query) {
+  static ransack(query = {}) {
     return new Collection({"modelName": this.modelClassData().name, "ransack": query, "targetPathName": this.modelClassData().path})
   }
 
@@ -117,6 +117,12 @@ export default class {
       }
       xhr.send()
     })
+  }
+
+  static humanAttributeName(attributeName) {
+    var changeCase = require("change-case")
+    var keyName = this.modelClassData().paramKey
+    return I18n.t(`activerecord.attributes.${keyName}.${changeCase.snakeCase(attributeName)}`)
   }
 
   isNewRecord() {
@@ -225,11 +231,25 @@ export default class {
     // Format is 2018-07-22T06:17:08.297Z
     var match = value.match(/^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)\.(\d+)Z$/)
 
+    // Sometimes format is 2018-06-17T09:19:12.576+02:00
+    if (!match)
+      match = value.match(/^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)\.(\d+)\+(\d+):(\d+)$/)
+
     if (match.length > 0) {
-      return new Date(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]), parseInt(match[4]), parseInt(match[5]), parseInt(match[6]))
+      return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]), parseInt(match[4]), parseInt(match[5]), parseInt(match[6]))
     } else {
       throw "Could not read datetime: " + value
     }
+  }
+
+  _isPresent(value) {
+    if (!value) {
+      return false
+    } else if (value.match(/^\s*$/)) {
+      return false
+    }
+
+    return true
   }
 
   _getAttributeMoney(attributeName) {
@@ -273,7 +293,27 @@ export default class {
     }
   }
 
+  _loadBelongsToReflection(args) {
+    return new Promise((resolve, reject) => {
+      if (this.relationshipsCache[args.reflectionName])
+        return resolve(this.relationshipsCache[args.reflectionName])
+
+      var collection = new Collection(args)
+      collection.first().then((model) => {
+        this.relationshipsCache[args.reflectionName] = model
+        resolve(model)
+      })
+    })
+  }
+
   _readBelongsToReflection(args) {
+    if (!this.relationshipsCache[args.reflectionName])
+      throw `${args.reflectionName} hasnt been loaded yet`
+
+    return this.relationshipsCache[args.reflectionName]
+  }
+
+  _loadHasOneReflection(args) {
     return new Promise((resolve, reject) => {
       if (this.relationshipsCache[args.reflectionName])
         return resolve(this.relationshipsCache[args.reflectionName])
@@ -287,16 +327,10 @@ export default class {
   }
 
   _readHasOneReflection(args) {
-    return new Promise((resolve, reject) => {
-      if (this.relationshipsCache[args.reflectionName])
-        return resolve(this.relationshipsCache[args.reflectionName])
+    if (!this.relationshipsCache[args.reflectionName])
+      throw `${args.reflectionName} hasnt been loaded yet`
 
-      var collection = new Collection(args)
-      collection.first().then((model) => {
-        this.relationshipsCache[args.reflectionName] = model
-        resolve(model)
-      })
-    })
+    return this.relationshipsCache[args.reflectionName]
   }
 
   _primaryKey() {

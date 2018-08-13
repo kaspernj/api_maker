@@ -76,7 +76,7 @@ export default class Collection {
 
   _response() {
     return new Promise((resolve, reject) => {
-      var dataToUse = qs.stringify(this._params())
+      var dataToUse = qs.stringify(this._params(), {"arrayFormat": "brackets"})
       var urlToUse = this.args.targetPathName + "?" + dataToUse
 
       var xhr = new XMLHttpRequest()

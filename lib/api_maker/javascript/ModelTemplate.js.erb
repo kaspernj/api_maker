@@ -15,6 +15,11 @@ export default class extends BaseModel {
 
   <% reflections.each do |reflection| %>
     <% if reflection.macro == :belongs_to %>
+      <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}").result %>() {
+        var id = this.<%= ApiMaker::JsMethodNamerService.execute!(name: reflection.foreign_key).result %>()
+        return this._loadBelongsToReflection(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.klass.primary_key}_eq" => "{{id}}"}) %>)
+      }
+
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         var id = this.<%= ApiMaker::JsMethodNamerService.execute!(name: reflection.foreign_key).result %>()
         return this._readBelongsToReflection(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.klass.primary_key}_eq" => "{{id}}"}) %>)
@@ -25,6 +30,11 @@ export default class extends BaseModel {
         return new Collection(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
       }
     <% elsif reflection.macro == :has_one %>
+      <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}").result %>() {
+        var id = this.<%= reflection.active_record.primary_key %>()
+        return this._loadHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
+      }
+
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         var id = this.<%= reflection.active_record.primary_key %>()
         return this._readHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)

@@ -28,8 +28,15 @@ export default class Collection {
   }
 
   page(pageNumber) {
+    if (!pageNumber)
+      pageNumber = 1
+
     this.page = pageNumber
     return this
+  }
+
+  sort(sortBy) {
+    this.ransackOptions["s"] = sortBy
   }
 
   ransack(params) {
@@ -69,7 +76,7 @@ export default class Collection {
 
   _response() {
     return new Promise((resolve, reject) => {
-      var dataToUse = qs.stringify(this._params())
+      var dataToUse = qs.stringify(this._params(), {"arrayFormat": "brackets"})
       var urlToUse = this.args.targetPathName + "?" + dataToUse
 
       var xhr = new XMLHttpRequest()

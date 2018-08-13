@@ -8,6 +8,11 @@ export default class extends BaseModel {
 
   
     
+      loadProject() {
+        var id = this.projectId()
+        return this._loadRelationship({"reflectionName":"project","modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
+      }
+
       project() {
         var id = this.projectId()
         return this._readBelongsToReflection({"reflectionName":"project","modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
@@ -16,32 +21,56 @@ export default class extends BaseModel {
   
 
   
+    
     id() {
       // integer
       
         return this._getAttribute("id")
       
     }
+
+    hasId() {
+      var value = this.id()
+      return this._isPresent(value)
+    }
   
+    
     name() {
       // string
       
         return this._getAttribute("name")
       
     }
+
+    hasName() {
+      var value = this.name()
+      return this._isPresent(value)
+    }
   
+    
     projectId() {
       // integer
       
         return this._getAttribute("project_id")
       
     }
+
+    hasProjectId() {
+      var value = this.projectId()
+      return this._isPresent(value)
+    }
   
+    
     createdAt() {
       // datetime
       
         return this._getAttributeDateTime("created_at")
       
+    }
+
+    hasCreatedAt() {
+      var value = this.createdAt()
+      return this._isPresent(value)
     }
   
 }
