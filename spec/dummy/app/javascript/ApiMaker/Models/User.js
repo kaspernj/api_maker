@@ -9,25 +9,43 @@ export default class extends BaseModel {
   
 
   
+    
     id() {
       // integer
       
         return this._getAttribute("id")
       
     }
+
+    hasId() {
+      var value = this.id()
+      return this._isPresent(value)
+    }
   
+    
     email() {
       // string
       
         return this._getAttribute("email")
       
     }
+
+    hasEmail() {
+      var value = this.email()
+      return this._isPresent(value)
+    }
   
+    
     createdAt() {
       // datetime
       
         return this._getAttributeDateTime("created_at")
       
+    }
+
+    hasCreatedAt() {
+      var value = this.createdAt()
+      return this._isPresent(value)
     }
   
 }

@@ -120,8 +120,9 @@ export default class {
   }
 
   static humanAttributeName(attributeName) {
+    var changeCase = require("change-case")
     var keyName = this.modelClassData().paramKey
-    return I18n.t(`activerecord.attributes.${keyName}.${attributeName}`)
+    return I18n.t(`activerecord.attributes.${keyName}.${changeCase.snakeCase(attributeName)}`)
   }
 
   isNewRecord() {
