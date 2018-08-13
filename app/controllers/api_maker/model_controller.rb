@@ -94,7 +94,7 @@ private
 
   def resource_collection
     @resource_collection ||= proc do
-      variable_name = self.class.name.split("::").last.gsub(/Controller$/, "").parameterize
+      variable_name = self.class.name.split("::").last.gsub(/Controller$/, "").underscore.parameterize
       instance_variable_get("@#{variable_name}")
     end.call
   end
