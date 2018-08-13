@@ -81,13 +81,8 @@ class ApiMaker::ModelController < ApiMaker::BaseController
 private
 
   def include_param
-    if params[:include].blank?
-      "nothing"
-    elsif params[:include].is_a?(ActionController::Parameters)
-      params[:include].values
-    else
-      params[:include]
-    end
+    return "nothing" if params[:include].blank?
+    params[:include]
   end
 
   def include_pagination_data(response, query)
