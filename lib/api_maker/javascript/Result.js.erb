@@ -1,4 +1,4 @@
-export default class Collection {
+export default class Result {
   constructor(data) {
     this.data = data
   }
