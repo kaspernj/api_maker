@@ -17,7 +17,7 @@ export default class extends BaseModel {
     <% if reflection.macro == :belongs_to %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}").result %>() {
         var id = this.<%= ApiMaker::JsMethodNamerService.execute!(name: reflection.foreign_key).result %>()
-        return this._loadRelationship(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.klass.primary_key}_eq" => "{{id}}"}) %>)
+        return this._loadBelongsToReflection(<%= api_maker_json("reflectionName" => reflection.name, "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.klass.primary_key}_eq" => "{{id}}"}) %>)
       }
 
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
