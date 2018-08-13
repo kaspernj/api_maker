@@ -119,6 +119,11 @@ export default class {
     })
   }
 
+  static humanAttributeName(attributeName) {
+    var keyName = this.modelClassData().paramKey
+    return I18n.t(`activerecord.attributes.${keyName}.${attributeName}`)
+  }
+
   isNewRecord() {
     if ("id" in this.modelData) {
       return false
@@ -287,7 +292,27 @@ export default class {
     }
   }
 
+  _loadBelongsToReflection(args) {
+    return new Promise((resolve, reject) => {
+      if (this.relationshipsCache[args.reflectionName])
+        return resolve(this.relationshipsCache[args.reflectionName])
+
+      var collection = new Collection(args)
+      collection.first().then((model) => {
+        this.relationshipsCache[args.reflectionName] = model
+        resolve(model)
+      })
+    })
+  }
+
   _readBelongsToReflection(args) {
+    if (!this.relationshipsCache[args.reflectionName])
+      throw `${args.reflectionName} hasnt been loaded yet`
+
+    return this.relationshipsCache[args.reflectionName]
+  }
+
+  _loadHasOneReflection(args) {
     return new Promise((resolve, reject) => {
       if (this.relationshipsCache[args.reflectionName])
         return resolve(this.relationshipsCache[args.reflectionName])
@@ -301,16 +326,10 @@ export default class {
   }
 
   _readHasOneReflection(args) {
-    return new Promise((resolve, reject) => {
-      if (this.relationshipsCache[args.reflectionName])
-        return resolve(this.relationshipsCache[args.reflectionName])
+    if (!this.relationshipsCache[args.reflectionName])
+      throw `${args.reflectionName} hasnt been loaded yet`
 
-      var collection = new Collection(args)
-      collection.first().then((model) => {
-        this.relationshipsCache[args.reflectionName] = model
-        resolve(model)
-      })
-    })
+    return this.relationshipsCache[args.reflectionName]
   }
 
   _primaryKey() {
