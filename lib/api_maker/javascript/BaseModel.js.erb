@@ -268,8 +268,13 @@ export default class {
       var relationship = modelClassData.relationships[key]
       var preloadedData = this.modelData[relationship.name]
 
-      if (!preloadedData)
+      if (!(relationship.name in this.modelData))
         continue
+
+      if (!preloadedData) {
+        this.relationshipsCache[relationship.name] = null
+        continue
+      }
 
       var modelClass = require("ApiMaker/Models/" + relationship.className).default
 
@@ -295,19 +300,20 @@ export default class {
 
   _loadBelongsToReflection(args) {
     return new Promise((resolve, reject) => {
-      if (this.relationshipsCache[args.reflectionName])
-        return resolve(this.relationshipsCache[args.reflectionName])
-
-      var collection = new Collection(args)
-      collection.first().then((model) => {
-        this.relationshipsCache[args.reflectionName] = model
-        resolve(model)
-      })
+      if (args.reflectionName in this.relationshipsCache) {
+        resolve(this.relationshipsCache[args.reflectionName])
+      } else {
+        var collection = new Collection(args)
+        collection.first().then((model) => {
+          this.relationshipsCache[args.reflectionName] = model
+          resolve(model)
+        })
+      }
     })
   }
 
   _readBelongsToReflection(args) {
-    if (!this.relationshipsCache[args.reflectionName])
+    if (!(args.reflectionName in this.relationshipsCache))
       throw `${args.reflectionName} hasnt been loaded yet`
 
     return this.relationshipsCache[args.reflectionName]
@@ -315,19 +321,20 @@ export default class {
 
   _loadHasOneReflection(args) {
     return new Promise((resolve, reject) => {
-      if (this.relationshipsCache[args.reflectionName])
-        return resolve(this.relationshipsCache[args.reflectionName])
-
-      var collection = new Collection(args)
-      collection.first().then((model) => {
-        this.relationshipsCache[args.reflectionName] = model
-        resolve(model)
-      })
+      if (args.reflectionName in this.relationshipsCache) {
+        resolve(this.relationshipsCache[args.reflectionName])
+      } else {
+        var collection = new Collection(args)
+        collection.first().then((model) => {
+          this.relationshipsCache[args.reflectionName] = model
+          resolve(model)
+        })
+      }
     })
   }
 
   _readHasOneReflection(args) {
-    if (!this.relationshipsCache[args.reflectionName])
+    if (!(args.reflectionName in this.relationshipsCache))
       throw `${args.reflectionName} hasnt been loaded yet`
 
     return this.relationshipsCache[args.reflectionName]
