@@ -1,7 +1,7 @@
 import BaseModel from "../BaseModel"
 import Collection from "../Collection"
 
-export default class extends BaseModel {
+export default class <%= model.name.gsub("::", "") %> extends BaseModel {
   static modelClassData() {
     return <%= {
       attributes: attributes,
