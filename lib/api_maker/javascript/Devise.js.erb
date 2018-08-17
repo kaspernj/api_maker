@@ -1,4 +1,4 @@
-export default class Collection {
+export default class Devise {
   <% Devise.mappings.each do |scope| %>
     <%
       klass = scope[1].class_name.constantize
@@ -10,9 +10,8 @@ export default class Collection {
         var keyName = "current<%= scope[1].class_name %>Id"
         var scopeId = apiMakerDataElement.dataset[keyName]
 
-        if (scopeId) {
+        if (scopeId)
           return true
-        }
 
         return false
       }
@@ -22,6 +21,9 @@ export default class Collection {
           var apiMakerDataElement = document.querySelector(".api-maker-data")
           var keyName = "current<%= scope[1].class_name %>Id"
           var scopeId = apiMakerDataElement.dataset[keyName]
+
+          if (!scopeId)
+            return reject("Not signed in")
 
           var modelClass = require("ApiMaker/Models/<%= scope[1].class_name %>").default
           modelClass.find(scopeId).then((scopeInstance) => {
