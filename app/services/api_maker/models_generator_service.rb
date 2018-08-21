@@ -51,7 +51,9 @@ private
   end
 
   def create_base_structure
-    FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
+    # Dont remove all the files. It messes up running Webpack Dev Servers which forces you to restart all the time.
+    # FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
+
     FileUtils.mkdir_p(api_maker_root_path.join("Models"))
     FileUtils.mkdir_p(controller_path) unless File.exist?(controller_path)
   end
