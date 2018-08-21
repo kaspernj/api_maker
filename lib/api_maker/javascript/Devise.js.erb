@@ -31,43 +31,46 @@ export default class Devise {
         var modelInstance = new modelClass(JSON.parse(scopeData))
         return modelInstance
       }
-
-      static signIn(username, password, args = {}) {
-        if (!args.scope)
-          args.scope = "user"
-
-        return new Promise((resolve, reject) => {
-          var postData = {"username": username, "password": password, "args": args}
-          Api.post("/api_maker/devise/do_sign_in", postData)
-            .then((response) => {
-              var apiMakerDataElement = document.querySelector(".api-maker-data")
-              var keyName = `current${changeCase.pascalCase(args.scope)}`
-              apiMakerDataElement.dataset[keyName] = JSON.stringify(response.model_data)
-
-              resolve({"response": response})
-            }, (response) => {
-              reject(response)
-            })
-        })
-      }
-
-      static signOut(args = {}) {
-        if (!args.scope)
-          args.scope = "user"
-
-        return new Promise((resolve, reject) => {
-          Api.post("/api_maker/devise/do_sign_out")
-            .then((response) => {
-              var apiMakerDataElement = document.querySelector(".api-maker-data")
-              var keyName = `current${changeCase.pascalCase(args.scope)}`
-              delete apiMakerDataElement.dataset[keyName]
-
-              resolve(response)
-            }, (response) => {
-              reject(response)
-            })
-        })
-      }
     <% end %>
   <% end %>
+
+  static signIn(username, password, args = {}) {
+    if (!args.scope)
+      args.scope = "user"
+
+    return new Promise((resolve, reject) => {
+      var postData = {"username": username, "password": password, "args": args}
+      Api.post("/api_maker/devise/do_sign_in", postData)
+        .then((response) => {
+          var apiMakerDataElement = document.querySelector(".api-maker-data")
+          var keyName = `current${changeCase.pascalCase(args.scope)}`
+          apiMakerDataElement.dataset[keyName] = JSON.stringify(response.model_data)
+
+          resolve({"response": response})
+          window.dispatchEvent(new Event("devise-signed", {"args": args}))
+        }, (response) => {
+          reject(response)
+        })
+    })
+  }
+
+  static signOut(args = {}) {
+    if (!args.scope)
+      args.scope = "user"
+
+    return new Promise((resolve, reject) => {
+      var postData = {"args": args}
+      Api.post("/api_maker/devise/do_sign_out", postData)
+        .then((response) => {
+          var apiMakerDataElement = document.querySelector(".api-maker-data")
+          var keyName = `current${changeCase.pascalCase(args.scope)}`
+          delete apiMakerDataElement.dataset[keyName]
+
+          resolve(response)
+          window.dispatchEvent(new Event("devise-signed", {"args": args}))
+        }, (response) => {
+          reject(response)
+        })
+    })
+  }
 }
