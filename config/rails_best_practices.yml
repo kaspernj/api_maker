@@ -25,11 +25,12 @@ RemoveEmptyHelpersCheck: { }
 RemoveTrailingWhitespaceCheck: { }
 RemoveUnusedMethodsInControllersCheck: {
   except_methods: [
+    "ApiMaker::BaseController#current_ability",
     "ApiMaker::ModelController#index",
     "ApiMaker::ModelController#show",
     "ApiMaker::ModelController#create",
     "ApiMaker::ModelController#edit",
-    "ApiMaker::BaseController#current_ability"
+    "ApiMaker::ModelController#validate"
   ]
 }
 RemoveUnusedMethodsInHelpersCheck: { except_methods: [] }
