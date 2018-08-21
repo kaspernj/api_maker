@@ -1,7 +1,7 @@
 import BaseModel from "../BaseModel"
 import Collection from "../Collection"
 
-export default class extends BaseModel {
+export default class Task extends BaseModel {
   static modelClassData() {
     return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"created_at","type":"datetime"}],"name":"Task","relationships":[{"className":"Project","name":"project","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
   }
@@ -10,7 +10,7 @@ export default class extends BaseModel {
     
       loadProject() {
         var id = this.projectId()
-        return this._loadRelationship({"reflectionName":"project","modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
+        return this._loadBelongsToReflection({"reflectionName":"project","modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
       }
 
       project() {
