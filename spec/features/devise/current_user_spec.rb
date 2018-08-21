@@ -4,7 +4,7 @@ describe "model belongs to relationships" do
   let!(:user) { create :user }
 
   it "finds the parent model", :js do
-    login_as user
+    login_as user, scope: :user
 
     visit devise_specs_current_user_spec_path
 

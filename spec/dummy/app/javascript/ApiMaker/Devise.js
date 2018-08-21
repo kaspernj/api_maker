@@ -22,7 +22,7 @@ export default class Devise {
         var scopeData = apiMakerDataElement.dataset[keyName]
 
         if (!scopeData)
-          return reject("Not signed in")
+          return null
 
         var modelClass = require("ApiMaker/Models/User").default
         var modelInstance = new modelClass(JSON.parse(scopeData))
