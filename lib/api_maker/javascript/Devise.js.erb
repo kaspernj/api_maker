@@ -24,7 +24,7 @@ export default class Devise {
         var keyName = "current<%= scope[1].class_name %>"
         var scopeData = apiMakerDataElement.dataset[keyName]
 
-        if (!scopeId)
+        if (!scopeData)
           return reject("Not signed in")
 
         var modelClass = require("ApiMaker/Models/<%= scope[1].class_name %>").default
