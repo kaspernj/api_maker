@@ -8,7 +8,7 @@ describe ApiMaker::ModelContentGeneratorService do
 
   describe "#model_content" do
     it "generates the right class for the model" do
-      expect(content_task).to include "export default class extends BaseModel"
+      expect(content_task).to include "export default class Task extends BaseModel"
     end
 
     it "includes attributes defined in the serializer" do
