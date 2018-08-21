@@ -61,7 +61,7 @@ export default class {
     return new Promise((resolve, reject) => {
       var paramKey = this.constructor.modelClassData().paramKey
       var urlToUse = this.constructor.modelClassData().path
-      var modelData = Object.assign({}, this.modelData, this.changes)
+      var modelData = this._saveData()
       var dataToUse = {}
       dataToUse[paramKey] = modelData
 
@@ -179,7 +179,7 @@ export default class {
         return resolve({model: this})
 
       var paramKey = this.constructor.modelClassData().paramKey
-      var urlToUse = this.constructor.modelClassData().path + "/" + this._primaryKey()
+      var urlToUse = `${this.constructor.modelClassData().path}/${this._primaryKey()}`
       var dataToUse = {}
       dataToUse[paramKey] = this.changes
 
@@ -211,6 +211,30 @@ export default class {
 
   isValid() {
     throw "Not implemented yet"
+  }
+
+  isValidOnServer() {
+    return new Promise((resolve, reject) => {
+      var paramKey = this.constructor.modelClassData().paramKey
+      var urlToUse = `${this.constructor.modelClassData().path}/validate`
+      var modelData = this._saveData()
+      var dataToUse = {}
+      dataToUse[paramKey] = modelData
+
+      var xhr = new XMLHttpRequest()
+      xhr.open("POST", urlToUse)
+      xhr.setRequestHeader("Content-Type", "application/json")
+      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          var response = JSON.parse(xhr.responseText)
+          resolve({"valid": response.valid, "errors": response.errors})
+        } else {
+          reject({"model": this, "responseText": xhr.responseText})
+        }
+      }
+      xhr.send(JSON.stringify(dataToUse))
+    })
   }
 
   _getAttribute(attributeName) {
@@ -268,8 +292,13 @@ export default class {
       var relationship = modelClassData.relationships[key]
       var preloadedData = this.modelData[relationship.name]
 
-      if (!preloadedData)
+      if (!(relationship.name in this.modelData))
         continue
+
+      if (!preloadedData) {
+        this.relationshipsCache[relationship.name] = null
+        continue
+      }
 
       var modelClass = require("ApiMaker/Models/" + relationship.className).default
 
@@ -295,19 +324,20 @@ export default class {
 
   _loadBelongsToReflection(args) {
     return new Promise((resolve, reject) => {
-      if (this.relationshipsCache[args.reflectionName])
-        return resolve(this.relationshipsCache[args.reflectionName])
-
-      var collection = new Collection(args)
-      collection.first().then((model) => {
-        this.relationshipsCache[args.reflectionName] = model
-        resolve(model)
-      })
+      if (args.reflectionName in this.relationshipsCache) {
+        resolve(this.relationshipsCache[args.reflectionName])
+      } else {
+        var collection = new Collection(args)
+        collection.first().then((model) => {
+          this.relationshipsCache[args.reflectionName] = model
+          resolve(model)
+        })
+      }
     })
   }
 
   _readBelongsToReflection(args) {
-    if (!this.relationshipsCache[args.reflectionName])
+    if (!(args.reflectionName in this.relationshipsCache))
       throw `${args.reflectionName} hasnt been loaded yet`
 
     return this.relationshipsCache[args.reflectionName]
@@ -315,19 +345,20 @@ export default class {
 
   _loadHasOneReflection(args) {
     return new Promise((resolve, reject) => {
-      if (this.relationshipsCache[args.reflectionName])
-        return resolve(this.relationshipsCache[args.reflectionName])
-
-      var collection = new Collection(args)
-      collection.first().then((model) => {
-        this.relationshipsCache[args.reflectionName] = model
-        resolve(model)
-      })
+      if (args.reflectionName in this.relationshipsCache) {
+        resolve(this.relationshipsCache[args.reflectionName])
+      } else {
+        var collection = new Collection(args)
+        collection.first().then((model) => {
+          this.relationshipsCache[args.reflectionName] = model
+          resolve(model)
+        })
+      }
     })
   }
 
   _readHasOneReflection(args) {
-    if (!this.relationshipsCache[args.reflectionName])
+    if (!(args.reflectionName in this.relationshipsCache))
       throw `${args.reflectionName} hasnt been loaded yet`
 
     return this.relationshipsCache[args.reflectionName]
@@ -335,6 +366,10 @@ export default class {
 
   _primaryKey() {
     return this._getAttribute(this.constructor.modelClassData().primaryKey)
+  }
+
+  _saveData() {
+    return Object.assign({}, this.modelData, this.changes)
   }
 
   static _token() {
