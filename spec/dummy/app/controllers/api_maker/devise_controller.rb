@@ -9,7 +9,9 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
     serializer = ActiveModel::Serializer.get_serializer_for(model.class)
     return render json: {success: false}, status: :unprocessable_entity unless serializer
 
-    if model.valid_password?(params[:password])
+    if !model.active_for_authentication?
+      render json: {success: false, errors: [model.inactive_message]}, status: :unprocessable_entity
+    elsif model.valid_password?(params[:password])
       sign_in(model, scope: scope)
       render json: {success: true, model_data: serializer.new(model)}
     else
