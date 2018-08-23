@@ -78,6 +78,17 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     end
   end
 
+  def validate
+    if sanitize_parameters[:id]
+      instance = resource_instance_class.find(sanitize_parameters[:id])
+      instance.assign_attributes(sanitize_parameters)
+    else
+      instance = resource_instance_class.new(sanitize_parameters)
+    end
+
+    render json: {valid: instance.valid?, errors: instance.errors.full_messages}
+  end
+
 private
 
   def include_param
@@ -118,7 +129,7 @@ private
   end
 
   def sanitize_parameters
-    __send__("#{resource_variable_name}_params")
+    @sanitize_parameters ||= __send__("#{resource_variable_name}_params")
   end
 
   def serializer

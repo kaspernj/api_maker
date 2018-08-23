@@ -1,7 +1,7 @@
 import BaseModel from "../BaseModel"
 import Collection from "../Collection"
 
-export default class extends BaseModel {
+export default class Project extends BaseModel {
   static modelClassData() {
     return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"created_at","type":"datetime"}],"name":"Project","relationships":[{"className":"Task","name":"tasks","macro":"has_many"},{"className":"Task","name":"task","macro":"has_one"}],"paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
   }

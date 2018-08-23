@@ -2,6 +2,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
   def execute!
     create_base_structure
     copy_base_model
+    copy_base_controllers
 
     models.each do |model|
       next if ignore_model?(model)
@@ -35,14 +36,37 @@ private
     Rails.root.join("app", "controllers", "api_maker")
   end
 
+  def copy_base_controllers
+    files = %w[devise_controller]
+    path = File.join(__dir__, "..", "..", "controllers", "api_maker")
+    ext = ".rb"
+    target_path = Rails.root.join("app", "controllers", "api_maker")
+
+    copy_base_files(files, path, ext, target_path)
+  end
+
   def copy_base_model
     files = %w[Api BaseModel Collection Devise Result]
-    files.each do |file|
-      base_model_source_path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "#{file}.js.erb")
-      base_model_target_path = api_maker_root_path.join("#{file}.js")
+    path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
+    ext = ".js"
+    target_path = api_maker_root_path
 
-      erb = ERB.new(File.read(base_model_source_path))
-      content = erb.result(binding)
+    copy_base_files(files, path, ext, target_path)
+  end
+
+  def copy_base_files(files, path, ext, target_path)
+    files.each do |file|
+      base_model_source_path = File.join(path, "#{file}#{ext}")
+
+      if File.exist?(base_model_source_path)
+        content = File.read(base_model_source_path)
+      else
+        base_model_source_path << ".erb"
+        erb = ERB.new(File.read(base_model_source_path))
+        content = erb.result(binding)
+      end
+
+      base_model_target_path = File.join(target_path, "#{file}#{ext}")
 
       File.open(base_model_target_path, "w") do |fp|
         fp.write(content)
@@ -51,7 +75,9 @@ private
   end
 
   def create_base_structure
-    FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
+    # Dont remove all the files. It messes up running Webpack Dev Servers which forces you to restart all the time.
+    # FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
+
     FileUtils.mkdir_p(api_maker_root_path.join("Models"))
     FileUtils.mkdir_p(controller_path) unless File.exist?(controller_path)
   end
