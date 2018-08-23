@@ -54,7 +54,7 @@ export default class {
   static _parseResponse(xhr) {
     var responseType = xhr.getResponseHeader("content-type")
 
-    if (responseType.startsWith("application/json")) {
+    if (responseType && responseType.startsWith("application/json")) {
       return JSON.parse(xhr.responseText)
     } else {
       return xhr.responseText
