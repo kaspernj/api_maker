@@ -30,6 +30,8 @@ class ApiMaker::ModelController < ApiMaker::BaseController
         success: true,
         include: include_param
       }
+
+      after_create
     else
       render json: {
         model: serialized_resource(resource_instance),
@@ -51,6 +53,8 @@ class ApiMaker::ModelController < ApiMaker::BaseController
         success: true,
         include: include_param
       }
+
+      after_update
     else
       render json: {
         model: serialized_resource(resource_instance),
@@ -68,6 +72,7 @@ class ApiMaker::ModelController < ApiMaker::BaseController
         success: true,
         include: include_param
       }
+      after_destroy
     else
       render json: {
         model: serialized_resource(resource_instance),
@@ -90,6 +95,12 @@ class ApiMaker::ModelController < ApiMaker::BaseController
   end
 
 private
+
+  def after_create; end
+
+  def after_update; end
+
+  def after_destroy; end
 
   def include_param
     return "nothing" if params[:include].blank?
