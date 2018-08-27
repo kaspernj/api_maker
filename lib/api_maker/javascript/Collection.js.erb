@@ -17,9 +17,24 @@ export default class Collection {
     })
   }
 
+  first() {
+    return new Promise((resolve, reject) => {
+      this.toArray().then((models) => {
+        resolve(models[0])
+      })
+    })
+  }
+
   limit(amount) {
     this.limit = amount
     return this
+  }
+
+  loaded() {
+    if (!(this.args.reflectionName in this.args.model.relationshipsCache))
+      throw `${this.args.reflectionName} hasnt been loaded yet`
+
+    return this.args.model.relationshipsCache[this.args.reflectionName]
   }
 
   preload(args) {
@@ -35,30 +50,9 @@ export default class Collection {
     return this
   }
 
-  sort(sortBy) {
-    this.ransackOptions["s"] = sortBy
-  }
-
   ransack(params) {
     this.ransackOptions = Object.assign(this.ransackOptions, params)
     return this
-  }
-
-  first() {
-    return new Promise((resolve, reject) => {
-      this.toArray().then((models) => {
-        resolve(models[0])
-      })
-    })
-  }
-
-  toArray() {
-    return new Promise((resolve, reject) => {
-      this._response().then((response) => {
-        var models = this._responseToModels(response)
-        resolve(models)
-      })
-    })
   }
 
   result() {
@@ -70,6 +64,19 @@ export default class Collection {
           "response": response
         })
         resolve(result)
+      })
+    })
+  }
+
+  sort(sortBy) {
+    this.ransackOptions["s"] = sortBy
+  }
+
+  toArray() {
+    return new Promise((resolve, reject) => {
+      this._response().then((response) => {
+        var models = this._responseToModels(response)
+        resolve(models)
       })
     })
   }
@@ -95,7 +102,7 @@ export default class Collection {
   }
 
   _responseToModels(response) {
-    var modelClass = require("ApiMaker/Models/" + this.args.modelName).default
+    var modelClass = require(`ApiMaker/Models/${this.args.modelName}`).default
     var array = []
     for(var modelDataKey in response.collection) {
       var modelData = response.collection[modelDataKey]
