@@ -242,9 +242,18 @@ export default class {
       return this.changes[attributeName]
     } else if (attributeName in this.modelData) {
       return this.modelData[attributeName]
-    } else {
-      throw "No such attribute: " + attributeName
+    } else if (this.isNewRecord()) {
+      // Return null if this is a new record and the attribute name is a recognized attribute
+      var attributes = this.constructor.modelClassData().attributes
+      for(var key in attributes) {
+        var attribute = attributes[key]
+
+        if (attribute.name == attributeName)
+          return null
+      }
     }
+
+    throw "No such attribute: " + attributeName
   }
 
   _getAttributeDateTime(attributeName) {
