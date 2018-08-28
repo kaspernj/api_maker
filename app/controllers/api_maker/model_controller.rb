@@ -25,20 +25,10 @@ class ApiMaker::ModelController < ApiMaker::BaseController
 
   def create
     if resource_instance.save
-      render json: {
-        model: serialized_resource(resource_instance),
-        success: true,
-        include: include_param
-      }
-
+      success_response
       after_create
     else
-      render json: {
-        model: serialized_resource(resource_instance),
-        success: false,
-        errors: resource_instance.errors.full_messages,
-        include: include_param
-      }
+      failure_response
     end
   end
 
@@ -48,38 +38,19 @@ class ApiMaker::ModelController < ApiMaker::BaseController
 
   def update
     if resource_instance.update(sanitize_parameters)
-      render json: {
-        model: serialized_resource(resource_instance),
-        success: true,
-        include: include_param
-      }
-
+      success_response
       after_update
     else
-      render json: {
-        model: serialized_resource(resource_instance),
-        success: false,
-        errors: resource_instance.errors.full_messages,
-        include: include_param
-      }
+      failure_response
     end
   end
 
   def destroy
     if resource_instance.destroy
-      render json: {
-        model: serialized_resource(resource_instance),
-        success: true,
-        include: include_param
-      }
+      success_response
       after_destroy
     else
-      render json: {
-        model: serialized_resource(resource_instance),
-        success: false,
-        errors: resource_instance.errors.full_messages,
-        include: include_param
-      }
+      failure_response
     end
   end
 
@@ -101,6 +72,15 @@ private
   def after_update; end
 
   def after_destroy; end
+
+  def failure_response
+    render json: {
+      model: serialized_resource(resource_instance),
+      success: false,
+      errors: resource_instance.errors.full_messages,
+      include: include_param
+    }
+  end
 
   def include_param
     return "nothing" if params[:include].blank?
@@ -149,5 +129,13 @@ private
 
   def serialized_resource(model)
     serializer.new(model)
+  end
+
+  def success_response
+    render json: {
+      model: serialized_resource(resource_instance),
+      success: true,
+      include: include_param
+    }
   end
 end
