@@ -183,6 +183,9 @@ export default class {
       var dataToUse = {}
       dataToUse[paramKey] = this.changes
 
+      if (Object.keys(dataToUse[paramKey]).length == 0)
+        return resolve(resolve({"model": this}))
+
       var xhr = new XMLHttpRequest()
       xhr.open("PATCH", urlToUse)
       xhr.setRequestHeader("Content-Type", "application/json")
