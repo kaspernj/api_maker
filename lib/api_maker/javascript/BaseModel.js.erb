@@ -291,6 +291,10 @@ export default class {
 
   _getAttributeMoney(attributeName) {
     var value = this._getAttribute(attributeName)
+
+    if (!value)
+      return null
+
     var cents = parseFloat(value.fractional)
     var currency = value.currency.iso_code
     var money = Money.fromInteger(cents, currency)
