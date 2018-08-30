@@ -7,7 +7,7 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     query = query.page(params[:page]) if params[:page].present?
     query = query.distinct.fix
 
-    collection = ActiveModel::Serializer::CollectionSerializer.new(query)
+    collection = ActiveModel::Serializer::CollectionSerializer.new(query, scope: self)
 
     response = {collection: collection}
     include_pagination_data(response, query)
@@ -128,7 +128,7 @@ private
   end
 
   def serialized_resource(model)
-    serializer.new(model)
+    serializer.new(model, scope: self)
   end
 
   def success_response
