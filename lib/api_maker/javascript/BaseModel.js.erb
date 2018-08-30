@@ -349,8 +349,12 @@ export default class {
   }
 
   _readBelongsToReflection(args) {
-    if (!(args.reflectionName in this.relationshipsCache))
+    if (!(args.reflectionName in this.relationshipsCache)) {
+      if (this.isNewRecord())
+        return null
+
       throw `${args.reflectionName} hasnt been loaded yet`
+    }
 
     return this.relationshipsCache[args.reflectionName]
   }
@@ -370,8 +374,12 @@ export default class {
   }
 
   _readHasOneReflection(args) {
-    if (!(args.reflectionName in this.relationshipsCache))
+    if (!(args.reflectionName in this.relationshipsCache)) {
+      if (this.isNewRecord())
+        return null
+
       throw `${args.reflectionName} hasnt been loaded yet`
+    }
 
     return this.relationshipsCache[args.reflectionName]
   }
