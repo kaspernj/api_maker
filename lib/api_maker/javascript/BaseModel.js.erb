@@ -73,12 +73,12 @@ export default class {
         if (xhr.status == 200) {
           var response = JSON.parse(xhr.responseText)
 
-          if (response.model) {
-            this.modelData = response.model
-            this.changes = {}
-          }
-
           if (response.success) {
+            if (response.model) {
+              this.modelData = response.model
+              this.changes = {}
+            }
+
             resolve({"model": this, "response": response})
           } else {
             reject({"model": this, "response": response})
@@ -101,12 +101,13 @@ export default class {
       xhr.onload = () => {
         if (xhr.status == 200) {
           var response = JSON.parse(xhr.responseText)
-          if (response.model) {
-            this.modelData = response.model
-            this.changes = {}
-          }
 
           if (response.success) {
+            if (response.model) {
+              this.modelData = response.model
+              this.changes = {}
+            }
+
             resolve(response)
           } else {
             reject(response)
@@ -126,7 +127,7 @@ export default class {
   }
 
   isNewRecord() {
-    if ("id" in this.modelData) {
+    if ("id" in this.modelData && this.modelData.id) {
       return false
     } else {
       return true
@@ -194,12 +195,12 @@ export default class {
         if (xhr.status == 200) {
           var response = JSON.parse(xhr.responseText)
 
-          if (response.model) {
-            this.modelData = response.model
-            this.changes = {}
-          }
-
           if (response.success) {
+            if (response.model) {
+              this.modelData = response.model
+              this.changes = {}
+            }
+
             resolve({"model": this, "response": response})
           } else {
             reject({"model": this, "response": response})
