@@ -2,16 +2,35 @@ import qs from "qs"
 
 export default class {
   static get(path, data = null) {
-    if (data) {
-      var pathParamsString = qs.stringify(data, {"arrayFormat": "brackets"})
+    return this.requestLocal({"path": path, "pathParams": data, "method": "GET"})
+  }
+
+  static patch(path, data = {}) {
+    return this.requestLocal({"path": path, "data": data, "method": "PATCH"})
+  }
+
+  static post(path, data = {}) {
+    return this.requestLocal({"path": path, "data": data, "method": "POST"})
+  }
+
+  static request(args) {
+    var path = args.path
+
+    if (args.pathParams) {
+      var pathParamsString = qs.stringify(args.pathParams, {"arrayFormat": "brackets"})
       path += `?${pathParamsString}`
     }
 
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest()
-      xhr.open("GET", path)
-      xhr.setRequestHeader("Content-Type", "application/json")
-      xhr.setRequestHeader("X-CSRF-Token", this._token())
+      xhr.open(args.method, path)
+
+      if (args.headers) {
+        for(var headerName in args.headers) {
+          xhr.setRequestHeader(headerName, args.headers[headerName])
+        }
+      }
+
       xhr.onload = () => {
         var response = this._parseResponse(xhr)
 
@@ -21,20 +40,26 @@ export default class {
           reject(response)
         }
       }
-      xhr.send()
+
+      xhr.send(args.data)
     })
   }
 
-  static patch(path, data = {}) {
-    return this._request({"path": path, "data": data, "method": "PATCH"})
-  }
+  static requestLocal(args) {
+    if (!args.headers)
+      args["headers"] = {}
 
-  static post(path, data = {}) {
-    return this._request({"path": path, "data": data, "method": "POST"})
+    args["headers"]["Content-Type"] = "application/json"
+    args["headers"]["X-CSRF-Token"] = this._token()
+
+    if (args.data)
+      args["data"] = JSON.stringify(args.data)
+
+    return this.request(args)
   }
 
   static put(path, data = {}) {
-    return this._request({"path": path, "data": data, "method": "PUT"})
+    return this.requestLocal({"path": path, "data": data, "method": "PUT"})
   }
 
   static _token() {
@@ -52,24 +77,5 @@ export default class {
     } else {
       return xhr.responseText
     }
-  }
-
-  static _request(args) {
-    return new Promise((resolve, reject) => {
-      var xhr = new XMLHttpRequest()
-      xhr.open(args.method, args.path)
-      xhr.setRequestHeader("Content-Type", "application/json")
-      xhr.setRequestHeader("X-CSRF-Token", this._token())
-      xhr.onload = () => {
-        var response = this._parseResponse(xhr)
-
-        if (xhr.status == 200) {
-          resolve(response)
-        } else {
-          reject(response)
-        }
-      }
-      xhr.send(JSON.stringify(args.data))
-    })
   }
 }
