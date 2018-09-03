@@ -43,18 +43,12 @@ export default class {
     var modelClassData = this.constructor.modelClassData()
     var modelName = modelClassData.name
     var callbackData = {"connect_model": {}}
-    callbackData["connect_model"][modelName] = {eventName: [this._primaryKey()]}
-
-    ModelUpdates.debug("Connecting: " + JSON.stringify(callbackData))
+    callbackData["connect_model"][modelName] = {}
+    callbackData["connect_model"][modelName][eventName] = [this._primaryKey()]
 
     return App.cable.subscriptions.create(
       {channel: "ModelUpdates::EventsChannel", callback_data: callbackData},
-      {
-        received: function(json) {
-          ModelUpdates.debug("Incoming event: " + JSON.stringify(json))
-          callback(json)
-        }
-      }
+      {received: callback}
     )
   }
 
