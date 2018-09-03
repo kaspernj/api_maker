@@ -5,7 +5,7 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     query = resource_collection.ransack(params[:q]).result
     query = query.limit(params[:limit]) if params[:limit].present?
     query = query.page(params[:page]) if params[:page].present?
-    query = query.distinct.fix
+    query = query.distinct.group(:id).fix
 
     collection = ActiveModel::Serializer::CollectionSerializer.new(query, scope: self)
 
