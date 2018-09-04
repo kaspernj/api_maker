@@ -254,6 +254,18 @@ export default class {
     })
   }
 
+  uniqueKey() {
+    if (!this.uniqueKeyValue) {
+      if (this.isNewRecord()) {
+        this.uniqueKeyValue = Math.random() * Math.random() * Math.random() * Math.random()
+      } else {
+        this.uniqueKeyValue = `${this.constructor.modelClassData().name}-${this.id()}`
+      }
+    }
+
+    return this.uniqueKeyValue
+  }
+
   _getAttribute(attributeName) {
     if (attributeName in this.changes) {
       return this.changes[attributeName]
