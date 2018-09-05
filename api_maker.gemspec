@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   s.add_dependency "rails", "~> 5.2.0"
+
   s.add_runtime_dependency "active_model_serializers"
   s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.4"
   s.add_runtime_dependency "cancancan"

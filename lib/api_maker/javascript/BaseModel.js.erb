@@ -199,7 +199,7 @@ export default class {
         resolve({"valid": response.valid, "errors": response.errors})
       }, (response) => {
         reject({"model": this, "response": response})
-      }
+      })
     })
   }
 
