@@ -5,6 +5,10 @@ export default class {
     return this.requestLocal({"path": path, "pathParams": data, "method": "GET"})
   }
 
+  static delete(path, data = null) {
+    return this.requestLocal({"path": path, "pathParams": data, "method": "DELETE"})
+  }
+
   static patch(path, data = {}) {
     return this.requestLocal({"path": path, "data": data, "method": "PATCH"})
   }
