@@ -1,3 +1,4 @@
+import Api from "./Api"
 import Collection from "./Collection"
 import Money from "js-money"
 
@@ -8,23 +9,15 @@ export default class {
 
   static find(id) {
     return new Promise((resolve, reject) => {
-      var urlToUse = this.modelClassData().path + "/" + id
+      var urlToUse = `${this.modelClassData().path}/${id}`
 
-      var xhr = new XMLHttpRequest()
-      xhr.open("GET", urlToUse)
-      xhr.setRequestHeader("X-CSRF-Token", this._token())
-      xhr.onload = () => {
-        if (xhr.status == 200) {
-          var response = JSON.parse(xhr.responseText)
-
-          var modelClass = require("ApiMaker/Models/" + this.modelClassData().name).default
-          var model = new modelClass(response.model)
-          resolve(model)
-        } else {
-          reject({"responseText": xhr.responseText})
-        }
-      }
-      xhr.send()
+      Api.get(urlToUse).then((response) => {
+        var modelClass = require(`ApiMaker/Models/${this.modelClassData().name}`).default
+        var model = new modelClass(response.model)
+        resolve(model)
+      }, (error) => {
+        reject(error)
+      })
     })
   }
 
@@ -37,6 +30,19 @@ export default class {
     this.relationshipsCache = {}
     this.modelData = modelData
     this._preloadRelationships()
+  }
+
+  connect(eventName, callback) {
+    var modelClassData = this.constructor.modelClassData()
+    var modelName = modelClassData.name
+    var callbackData = {"connect_model": {}}
+    callbackData["connect_model"][modelName] = {}
+    callbackData["connect_model"][modelName][eventName] = [this._primaryKey()]
+
+    return App.cable.subscriptions.create(
+      {channel: "ModelUpdates::EventsChannel", callback_data: callbackData},
+      {received: callback}
+    )
   }
 
   assignAttributes(newAttributes) {
@@ -65,57 +71,41 @@ export default class {
       var dataToUse = {}
       dataToUse[paramKey] = modelData
 
-      var xhr = new XMLHttpRequest()
-      xhr.open("POST", urlToUse)
-      xhr.setRequestHeader("Content-Type", "application/json")
-      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
-      xhr.onload = () => {
-        if (xhr.status == 200) {
-          var response = JSON.parse(xhr.responseText)
-
+      Api.post(urlToUse, dataToUse).then((response) => {
+        if (response.success) {
           if (response.model) {
             this.modelData = response.model
             this.changes = {}
           }
 
-          if (response.success) {
-            resolve({"model": this, "response": response})
-          } else {
-            reject({"model": this, "response": response})
-          }
+          resolve({"model": this, "response": response})
         } else {
-          reject({"model": this, "responseText": xhr.responseText})
+          reject({"model": this, "response": response})
         }
-      }
-      xhr.send(JSON.stringify(dataToUse))
+      }, (response) => {
+        reject({"model": this, "response": response})
+      })
     })
   }
 
   destroy() {
     return new Promise((resolve, reject) => {
-      var urlToUse = this.constructor.modelClassData().path + "/" + this._primaryKey()
+      var urlToUse = `${this.constructor.modelClassData().path}/${this._primaryKey()}`
 
-      var xhr = new XMLHttpRequest()
-      xhr.open("DELETE", urlToUse)
-      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
-      xhr.onload = () => {
-        if (xhr.status == 200) {
-          var response = JSON.parse(xhr.responseText)
+      Api.delete(urlToUse).then((response) => {
+        if (response.success) {
           if (response.model) {
             this.modelData = response.model
             this.changes = {}
           }
 
-          if (response.success) {
-            resolve(response)
-          } else {
-            reject(response)
-          }
+          resolve(response)
         } else {
-          reject({"model": this, "responseText": xhr.responseText})
+          reject(response)
         }
-      }
-      xhr.send()
+      }, (response) => {
+        reject({"model": this, "response": response})
+      })
     })
   }
 
@@ -126,7 +116,7 @@ export default class {
   }
 
   isNewRecord() {
-    if ("id" in this.modelData) {
+    if ("id" in this.modelData && this.modelData.id) {
       return false
     } else {
       return true
@@ -139,26 +129,18 @@ export default class {
 
   reload() {
     return new Promise((resolve, reject) => {
-      var urlToUse = this.constructor.modelClassData().path + "/" + this._primaryKey()
+      var urlToUse = `${this.constructor.modelClassData().path}/${this._primaryKey()}`
 
-      var xhr = new XMLHttpRequest()
-      xhr.open("GET", urlToUse)
-      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
-      xhr.onload = () => {
-        if (xhr.status == 200) {
-          var response = JSON.parse(xhr.responseText)
-
-          if (response.model) {
-            this.modelData = response.model
-            this.changes = {}
-          }
-
-          resolve(response)
-        } else {
-          reject({"model": this, "responseText": xhr.responseText})
+      Api.get(urlToUse).then((response) => {
+        if (response.model) {
+          this.modelData = response.model
+          this.changes = {}
         }
-      }
-      xhr.send()
+
+        resolve(response)
+      }, (response) => {
+        reject({"model": this, "response": response})
+      })
     })
   }
 
@@ -183,29 +165,21 @@ export default class {
       var dataToUse = {}
       dataToUse[paramKey] = this.changes
 
-      var xhr = new XMLHttpRequest()
-      xhr.open("PATCH", urlToUse)
-      xhr.setRequestHeader("Content-Type", "application/json")
-      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
-      xhr.onload = () => {
-        if (xhr.status == 200) {
-          var response = JSON.parse(xhr.responseText)
+      if (Object.keys(dataToUse[paramKey]).length == 0)
+        return resolve(resolve({"model": this}))
 
+      Api.patch(urlToUse, dataToUse).then((response) => {
+        if (response.success) {
           if (response.model) {
             this.modelData = response.model
             this.changes = {}
           }
 
-          if (response.success) {
-            resolve({"model": this, "response": response})
-          } else {
-            reject({"model": this, "response": response})
-          }
-        } else {
-          reject({"model": this, "responseText": xhr.responseText})
+          resolve({"model": this, "response": response})
         }
-      }
-      xhr.send(JSON.stringify(dataToUse))
+      }, (response) => {
+        reject({"model": this, "response": response})
+      })
     })
   }
 
@@ -221,20 +195,24 @@ export default class {
       var dataToUse = {}
       dataToUse[paramKey] = modelData
 
-      var xhr = new XMLHttpRequest()
-      xhr.open("POST", urlToUse)
-      xhr.setRequestHeader("Content-Type", "application/json")
-      xhr.setRequestHeader("X-CSRF-Token", this.constructor._token())
-      xhr.onload = () => {
-        if (xhr.status == 200) {
-          var response = JSON.parse(xhr.responseText)
-          resolve({"valid": response.valid, "errors": response.errors})
-        } else {
-          reject({"model": this, "responseText": xhr.responseText})
-        }
+      Api.post(urlToUse, dataToUse).then((response) => {
+        resolve({"valid": response.valid, "errors": response.errors})
+      }, (response) => {
+        reject({"model": this, "response": response})
       }
-      xhr.send(JSON.stringify(dataToUse))
     })
+  }
+
+  uniqueKey() {
+    if (!this.uniqueKeyValue) {
+      if (this.isNewRecord()) {
+        this.uniqueKeyValue = Math.random() * Math.random() * Math.random() * Math.random()
+      } else {
+        this.uniqueKeyValue = `${this.constructor.modelClassData().name}-${this.id()}`
+      }
+    }
+
+    return this.uniqueKeyValue
   }
 
   _getAttribute(attributeName) {
@@ -242,9 +220,18 @@ export default class {
       return this.changes[attributeName]
     } else if (attributeName in this.modelData) {
       return this.modelData[attributeName]
-    } else {
-      throw "No such attribute: " + attributeName
+    } else if (this.isNewRecord()) {
+      // Return null if this is a new record and the attribute name is a recognized attribute
+      var attributes = this.constructor.modelClassData().attributes
+      for(var key in attributes) {
+        var attribute = attributes[key]
+
+        if (attribute.name == attributeName)
+          return null
+      }
     }
+
+    throw `No such attribute: ${attributeName}`
   }
 
   _getAttributeDateTime(attributeName) {
@@ -262,7 +249,7 @@ export default class {
     if (match.length > 0) {
       return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]), parseInt(match[4]), parseInt(match[5]), parseInt(match[6]))
     } else {
-      throw "Could not read datetime: " + value
+      throw `Could not read datetime: ${value}`
     }
   }
 
@@ -278,6 +265,10 @@ export default class {
 
   _getAttributeMoney(attributeName) {
     var value = this._getAttribute(attributeName)
+
+    if (!value)
+      return null
+
     var cents = parseFloat(value.fractional)
     var currency = value.currency.iso_code
     var money = Money.fromInteger(cents, currency)
@@ -300,7 +291,7 @@ export default class {
         continue
       }
 
-      var modelClass = require("ApiMaker/Models/" + relationship.className).default
+      var modelClass = require(`ApiMaker/Models/${relationship.className}`).default
 
       if (relationship.macro == "belongs_to" || relationship.macro == "has_one") {
         var modelInstance = new modelClass(preloadedData)
@@ -317,7 +308,7 @@ export default class {
         this.relationshipsCache[relationship.name] = preloadedModels
         delete this.modelData[relationship.name]
       } else {
-        console.log("Cannot preload this type of relationship yet: " + relationship.name + " - " + relationship.macro)
+        console.log(`Cannot preload this type of relationship yet: ${relationship.name} - ${relationship.macro}`)
       }
     }
   }
@@ -337,8 +328,12 @@ export default class {
   }
 
   _readBelongsToReflection(args) {
-    if (!(args.reflectionName in this.relationshipsCache))
+    if (!(args.reflectionName in this.relationshipsCache)) {
+      if (this.isNewRecord())
+        return null
+
       throw `${args.reflectionName} hasnt been loaded yet`
+    }
 
     return this.relationshipsCache[args.reflectionName]
   }
@@ -358,8 +353,12 @@ export default class {
   }
 
   _readHasOneReflection(args) {
-    if (!(args.reflectionName in this.relationshipsCache))
+    if (!(args.reflectionName in this.relationshipsCache)) {
+      if (this.isNewRecord())
+        return null
+
       throw `${args.reflectionName} hasnt been loaded yet`
+    }
 
     return this.relationshipsCache[args.reflectionName]
   }

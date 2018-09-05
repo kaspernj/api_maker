@@ -44,7 +44,9 @@ export default class Devise {
           apiMakerDataElement.dataset[keyName] = JSON.stringify(response.model_data)
 
           resolve({"response": response})
-          window.dispatchEvent(new Event("devise-signed", {"args": args}))
+          var event = document.createEvent("Event")
+          event.initEvent("devise-signed", false, true)
+          window.dispatchEvent(event, {"args": args})
         }, (response) => {
           reject(response)
         })
@@ -64,7 +66,9 @@ export default class Devise {
           delete apiMakerDataElement.dataset[keyName]
 
           resolve(response)
-          window.dispatchEvent(new Event("devise-signed", {"args": args}))
+          var event = document.createEvent("Event")
+          event.initEvent("devise-signed", false, true)
+          window.dispatchEvent(event, {"args": args})
         }, (response) => {
           reject(response)
         })
