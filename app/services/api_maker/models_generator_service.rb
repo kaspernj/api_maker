@@ -37,26 +37,24 @@ private
   end
 
   def copy_base_controllers
-    files = %w[devise_controller]
+    files = %w[devise_controller.rb]
     path = File.join(__dir__, "..", "..", "controllers", "api_maker")
-    ext = ".rb"
     target_path = Rails.root.join("app", "controllers", "api_maker")
 
-    copy_base_files(files, path, ext, target_path)
+    copy_base_files(files, path, target_path)
   end
 
   def copy_base_model
-    files = %w[Api BaseModel Collection Devise Result]
+    files = %w[Api.js BaseModel.js Collection.js Devise.js Paginate.jsx SortLink.jsx Result.js]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
-    ext = ".js"
     target_path = api_maker_root_path
 
-    copy_base_files(files, path, ext, target_path)
+    copy_base_files(files, path, target_path)
   end
 
-  def copy_base_files(files, path, ext, target_path)
+  def copy_base_files(files, path, target_path)
     files.each do |file|
-      base_model_source_path = File.join(path, "#{file}#{ext}")
+      base_model_source_path = File.join(path, file)
 
       if File.exist?(base_model_source_path)
         content = File.read(base_model_source_path)
@@ -66,7 +64,7 @@ private
         content = erb.result(binding)
       end
 
-      base_model_target_path = File.join(target_path, "#{file}#{ext}")
+      base_model_target_path = File.join(target_path, file)
 
       File.open(base_model_target_path, "w") do |fp|
         fp.write(content)
