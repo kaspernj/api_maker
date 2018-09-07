@@ -309,7 +309,7 @@ export default class {
   _isPresent(value) {
     if (!value) {
       return false
-    } else if (value.match(/^\s*$/)) {
+    } else if (typeof value == "string" && value.match(/^\s*$/)) {
       return false
     }
 
