@@ -206,6 +206,8 @@ export default class {
           }
 
           resolve({"model": this, "response": response})
+        } else {
+          reject({"model": this, "response": response})
         }
       }, (response) => {
         reject({"model": this, "response": response})
@@ -226,6 +228,8 @@ export default class {
           }
 
           resolve({"model": this, "response": response})
+        } else {
+          reject({"model": this, "response": response})
         }
       }, (response) => {
         reject({"model": this, "response": response})
