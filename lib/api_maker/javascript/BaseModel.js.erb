@@ -206,6 +206,8 @@ export default class {
           }
 
           resolve({"model": this, "response": response})
+        } else {
+          reject({"model": this, "response": response})
         }
       }, (response) => {
         reject({"model": this, "response": response})
@@ -215,9 +217,6 @@ export default class {
 
   updateRaw(data) {
     return new Promise((resolve, reject) => {
-      if (this.changes.length == 0)
-        return resolve({model: this})
-
       var paramKey = this.constructor.modelClassData().paramKey
       var urlToUse = `${this.constructor.modelClassData().path}/${this._primaryKey()}`
 
@@ -229,6 +228,8 @@ export default class {
           }
 
           resolve({"model": this, "response": response})
+        } else {
+          reject({"model": this, "response": response})
         }
       }, (response) => {
         reject({"model": this, "response": response})
