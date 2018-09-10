@@ -259,11 +259,10 @@ export default class {
 
   uniqueKey() {
     if (!this.uniqueKeyValue) {
-      if (this.isNewRecord()) {
-        this.uniqueKeyValue = Math.random() * Math.random() * Math.random() * Math.random()
-      } else {
-        this.uniqueKeyValue = `${this.constructor.modelClassData().name}-${this.id()}`
-      }
+      var min = 500000000000000000
+      var max = 999999999999999999
+      var randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
+      this.uniqueKeyValue = randomBetween
     }
 
     return this.uniqueKeyValue
