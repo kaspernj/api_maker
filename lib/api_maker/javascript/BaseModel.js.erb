@@ -2,7 +2,7 @@ import Api from "./Api"
 import Collection from "./Collection"
 import Money from "js-money"
 
-export default class {
+export default class BaseModel {
   static modelClassData() {
     throw "modelClassData should be overriden by child"
   }
@@ -132,9 +132,13 @@ export default class {
   }
 
   static humanAttributeName(attributeName) {
-    var changeCase = require("change-case")
     var keyName = this.modelClassData().paramKey
-    return I18n.t(`activerecord.attributes.${keyName}.${changeCase.snakeCase(attributeName)}`)
+    return I18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`)
+  }
+
+  static snakeCase(string) {
+    var changeCase = require("change-case")
+    return changeCase.snakeCase(string).replace(/\d+/, "_$&")
   }
 
   isNewRecord() {
