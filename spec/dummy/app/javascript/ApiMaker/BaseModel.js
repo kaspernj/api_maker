@@ -2,7 +2,7 @@ import Api from "./Api"
 import Collection from "./Collection"
 import Money from "js-money"
 
-export default class {
+export default class BaseModel {
   static modelClassData() {
     throw "modelClassData should be overriden by child"
   }
@@ -88,6 +88,28 @@ export default class {
     })
   }
 
+  createRaw(data) {
+    return new Promise((resolve, reject) => {
+      var paramKey = this.constructor.modelClassData().paramKey
+      var urlToUse = this.constructor.modelClassData().path
+
+      Api.requestLocal({path: urlToUse, method: "POST", rawData: data}).then((response) => {
+        if (response.success) {
+          if (response.model) {
+            this.modelData = response.model
+            this.changes = {}
+          }
+
+          resolve({"model": this, "response": response})
+        } else {
+          reject({"model": this, "response": response})
+        }
+      }, (response) => {
+        reject({"model": this, "response": response})
+      })
+    })
+  }
+
   destroy() {
     return new Promise((resolve, reject) => {
       var urlToUse = `${this.constructor.modelClassData().path}/${this._primaryKey()}`
@@ -110,9 +132,13 @@ export default class {
   }
 
   static humanAttributeName(attributeName) {
-    var changeCase = require("change-case")
     var keyName = this.modelClassData().paramKey
-    return I18n.t(`activerecord.attributes.${keyName}.${changeCase.snakeCase(attributeName)}`)
+    return I18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`)
+  }
+
+  static snakeCase(string) {
+    var changeCase = require("change-case")
+    return changeCase.snakeCase(string).replace(/\d+/, "_$&")
   }
 
   isNewRecord() {
@@ -152,6 +178,14 @@ export default class {
     }
   }
 
+  saveRaw(rawData) {
+    if (this.isNewRecord()) {
+      return this.createRaw(rawData)
+    } else {
+      return this.updateRaw(rawData)
+    }
+  }
+
   update(newAttributes = null) {
     if (newAttributes)
       this.assignAttributes(newAttributes)
@@ -176,6 +210,30 @@ export default class {
           }
 
           resolve({"model": this, "response": response})
+        } else {
+          reject({"model": this, "response": response})
+        }
+      }, (response) => {
+        reject({"model": this, "response": response})
+      })
+    })
+  }
+
+  updateRaw(data) {
+    return new Promise((resolve, reject) => {
+      var paramKey = this.constructor.modelClassData().paramKey
+      var urlToUse = `${this.constructor.modelClassData().path}/${this._primaryKey()}`
+
+      Api.requestLocal({path: urlToUse, method: "PATCH", rawData: data}).then((response) => {
+        if (response.success) {
+          if (response.model) {
+            this.modelData = response.model
+            this.changes = {}
+          }
+
+          resolve({"model": this, "response": response})
+        } else {
+          reject({"model": this, "response": response})
         }
       }, (response) => {
         reject({"model": this, "response": response})
@@ -205,11 +263,10 @@ export default class {
 
   uniqueKey() {
     if (!this.uniqueKeyValue) {
-      if (this.isNewRecord()) {
-        this.uniqueKeyValue = Math.random() * Math.random() * Math.random() * Math.random()
-      } else {
-        this.uniqueKeyValue = `${this.constructor.modelClassData().name}-${this.id()}`
-      }
+      var min = 500000000000000000
+      var max = 999999999999999999
+      var randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
+      this.uniqueKeyValue = randomBetween
     }
 
     return this.uniqueKeyValue
@@ -256,7 +313,7 @@ export default class {
   _isPresent(value) {
     if (!value) {
       return false
-    } else if (value.match(/^\s*$/)) {
+    } else if (typeof value == "string" && value.match(/^\s*$/)) {
       return false
     }
 

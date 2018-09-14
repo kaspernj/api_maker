@@ -5,6 +5,10 @@ export default class {
     return this.requestLocal({"path": path, "pathParams": data, "method": "GET"})
   }
 
+  static delete(path, data = null) {
+    return this.requestLocal({"path": path, "pathParams": data, "method": "DELETE"})
+  }
+
   static patch(path, data = {}) {
     return this.requestLocal({"path": path, "data": data, "method": "PATCH"})
   }
@@ -23,7 +27,7 @@ export default class {
 
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest()
-      xhr.open(args.method, path)
+      xhr.open(args.method, path, true)
 
       if (args.headers) {
         for(var headerName in args.headers) {
@@ -49,11 +53,17 @@ export default class {
     if (!args.headers)
       args["headers"] = {}
 
-    args["headers"]["Content-Type"] = "application/json"
-    args["headers"]["X-CSRF-Token"] = this._token()
+    var token = this._token()
+    if (token)
+      args["headers"]["X-CSRF-Token"] = token
 
-    if (args.data)
+    if (args.data) {
+      args["headers"]["Content-Type"] = "application/json"
       args["data"] = JSON.stringify(args.data)
+    }
+
+    if (args.rawData)
+      args["data"] = args.rawData
 
     return this.request(args)
   }
