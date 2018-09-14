@@ -1,16 +1,10 @@
 class ApiMaker::DeviseController < ApiMaker::BaseController
   include Devise::Controllers::Rememberable
 
+  before_action :check_model_exists, only: :do_sign_in
+  before_action :check_serializer_exists, only: :do_sign_in
+
   def do_sign_in
-    scope = params.dig(:args, :scope).presence || "user"
-    class_name = scope.camelize
-    class_instance = class_name.constantize
-
-    model = class_instance.find_for_authentication(email: params[:username])
-    return render json: {success: false}, status: :unprocessable_entity unless model
-    serializer = ActiveModel::Serializer.get_serializer_for(model.class)
-    return render json: {success: false}, status: :unprocessable_entity unless serializer
-
     if !model.active_for_authentication?
       render json: {success: false, errors: [model.inactive_message]}, status: :unprocessable_entity
     elsif model.valid_password?(params[:password])
@@ -27,5 +21,31 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
     current_model = __send__("current_#{scope}")
     sign_out current_model
     render json: {success: true}
+  end
+
+private
+
+  def check_model_exists
+    render json: {success: false}, status: :unprocessable_entity unless model
+  end
+
+  def check_serializer_exists
+    render json: {success: false}, status: :unprocessable_entity unless serializer
+  end
+
+  def model
+    @model ||= proc do
+      class_name = scope.camelize
+      class_instance = class_name.constantize
+      class_instance.find_for_authentication(email: params[:username])
+    end.call
+  end
+
+  def scope
+    @scope ||= params.dig(:args, :scope).presence || "user"
+  end
+
+  def serializer
+    @serializer ||= ActiveModel::Serializer.get_serializer_for(model.class)
   end
 end
