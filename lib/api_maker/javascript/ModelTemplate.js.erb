@@ -6,6 +6,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
     return <%= {
       attributes: attributes,
       name: model.model_name.name,
+      pluralName: model.model_name.plural,
       relationships: reflections_for_model_class_data,
       paramKey: model.model_name.param_key,
       path: "/api_maker/#{model.model_name.route_key}",

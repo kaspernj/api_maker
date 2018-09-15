@@ -6,7 +6,6 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 
     models.each do |model|
       next if ignore_model?(model)
-
       model_content_response = ApiMaker::ModelContentGeneratorService.(model: model)
 
       if model_content_response.success?
@@ -45,7 +44,7 @@ private
   end
 
   def copy_base_model
-    files = %w[Api.js BaseModel.js Collection.js Devise.js Paginate.jsx SortLink.jsx Result.js]
+    files = %w[Api.js BaseModel.js Collection.js Devise.js ModelName.js Paginate.jsx SortLink.jsx Result.js]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path
 
