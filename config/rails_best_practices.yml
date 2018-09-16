@@ -28,6 +28,7 @@ RemoveUnusedMethodsInControllersCheck: {
     "ApiMaker::BaseController#current_ability",
     "ApiMaker::DeviseController#do_sign_in",
     "ApiMaker::DeviseController#do_sign_out",
+    "ApiMaker::MemberActionsController#create",
     "ApiMaker::ModelController#index",
     "ApiMaker::ModelController#show",
     "ApiMaker::ModelController#create",
