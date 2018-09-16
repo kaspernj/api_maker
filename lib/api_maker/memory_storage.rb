@@ -18,6 +18,7 @@ class ApiMaker::MemoryStorage
   end
 
   def add_resource(klass:)
+    return if klass.name == "ApplicationResource"
     @resources << {klass: klass}
   end
 end

@@ -6,7 +6,11 @@ class ApiMaker::Loader
     puts "Files: #{files}"
 
     files.each do |file|
+      puts "Require file: #{file}"
       require file
+      puts "After require file: #{file}"
     end
+
+    puts "Files loaded"
   end
 end

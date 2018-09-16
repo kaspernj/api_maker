@@ -14,26 +14,21 @@ class ApiMaker::Routing
 
     storage = ApiMaker::MemoryStorage.current
 
-    puts "Calling namespace"
-    @routes.namespace(:api_maker) do
-      puts "Inside namespace: #{storage.resources}"
+    storage.resources.each do |resource|
+      puts "Adding resource in api maker routes: #{resource}"
+      klass = resource.fetch(:klass)
+      member_methods = storage.member_methods.select { |data| data.fetch(:klass) == klass }
 
-      storage.resources.each do |resource|
-        puts "Adding resource in api maker routes: #{resource}"
-        klass = resource.fetch(:klass)
-        member_methods = storage.member_methods.select { |data| data.fetch(:klass) == klass }
+      @routes.resources(klass.model_class.model_name.plural) do
+        puts "Inside resources for: #{klass.model_class.model_name.plural}"
+        puts "MemberMethods: #{member_methods}"
 
-        @routes.resources(klass.model_class.model_name.plural) do
-          puts "Inside resources for: #{klass.model_class.model_name.plural}"
-          puts "MemberMethods: #{member_methods}"
+        member_methods.each do |member_method_data|
+          puts "MemberMethod: #{member_method_data.fetch(:member_method)}"
 
-          member_methods.each do |member_method_data|
-            puts "MemberMethod: #{member_method_data.fetch(:member_method)}"
+          endpoint_name = member_method_data.fetch(:member_method)
 
-            endpoint_name = member_method_data.fetch(:member_method)
-
-            @routes.post(endpoint_name, on: :member)
-          end
+          @routes.post(endpoint_name, on: :member)
         end
       end
     end
