@@ -13,7 +13,7 @@ class ApiMaker::BaseResource
   end
 
   def self.model_class
-    model_class_name = self.name.gsub(/Resource$/, "")
+    model_class_name = name.gsub(/Resource$/, "")
     model_class_name.constantize
   end
 end
