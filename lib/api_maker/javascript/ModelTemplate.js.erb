@@ -61,4 +61,14 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
       return this._isPresent(value)
     }
   <% end %>
+
+  <% member_methods.each do |member_method_data| %>
+    <%= ApiMaker::JsMethodNamerService.execute!(name: member_method_data.fetch(:member_method)).result %>(args) {
+      return this._callMemberMethod({
+        args: args,
+        memberMethod: "<%= member_method_data.fetch(:member_method) %>",
+        model: this
+      })
+    }
+  <% end %>
 }

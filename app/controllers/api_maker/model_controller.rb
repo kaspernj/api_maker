@@ -1,8 +1,4 @@
 class ApiMaker::ModelController < ApiMaker::BaseController
-  def self.extended(base)
-    puts "ModelController extended: #{base}"
-  end
-
   load_and_authorize_resource
 
   def index

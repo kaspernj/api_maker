@@ -21,6 +21,12 @@ private
     end
   end
 
+  def member_methods
+    ApiMaker::Loader.load_everything
+    storage = ApiMaker::MemoryStorage.current
+    storage.member_methods.select { |data| data.fetch(:klass).model_class == @model }
+  end
+
   def model_content
     erb = ERB.new(File.read(model_template_path))
     erb.result(binding)

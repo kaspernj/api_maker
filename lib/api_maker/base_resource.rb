@@ -1,12 +1,9 @@
 class ApiMaker::BaseResource
   def self.inherited(base)
-    puts "Extended: #{base}"
     ApiMaker::MemoryStorage.current.add_resource(klass: base) unless ApiMaker::MemoryStorage.current.resources.include?(base)
   end
 
   def self.member_commands(list)
-    puts "List: #{list}"
-
     list.each do |member_method|
       ApiMaker::MemoryStorage.current.add_member_method(
         klass: self,
@@ -17,8 +14,6 @@ class ApiMaker::BaseResource
 
   def self.model_class
     model_class_name = self.name.gsub(/Resource$/, "")
-
-    puts "Model class name: #{model_class_name}"
     model_class_name.constantize
   end
 end
