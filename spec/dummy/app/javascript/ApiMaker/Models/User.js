@@ -3,7 +3,7 @@ import Collection from "../Collection"
 
 export default class User extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"email","type":"string"},{"name":"created_at","type":"datetime"}],"name":"User","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
+    return {"attributes":[{"name":"id","type":"integer"},{"name":"email","type":"string"},{"name":"created_at","type":"datetime"}],"name":"User","pluralName":"users","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
   }
 
   
@@ -47,5 +47,7 @@ export default class User extends BaseModel {
       var value = this.createdAt()
       return this._isPresent(value)
     }
+  
+
   
 }
