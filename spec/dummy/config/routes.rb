@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :users
+  mount ApiMaker::Engine => "/api_maker"
 
-  namespace :api_maker do
-    resources :projects, :tasks, :users
-  end
+  devise_for :users
 
   namespace :devise_specs do
     get :current_user_spec
+    get :sign_in
+    get :sign_out
   end
 
   namespace :models do

@@ -286,9 +286,20 @@ export default class BaseModel {
   }
 
   _callMemberMethod(args) {
+    console.log({ args })
+
     return new Promise((resolve, reject) => {
-      Api.post().then((response) => {
-        console.log({ response })
+      var url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model.id()}/${args.memberMethod}`
+      var postData = {
+        args: args.args,
+        plural_name: args.model.modelClassData().pluralName,
+        member_method: args.memberMethod
+      }
+
+      Api.post(url, postData).then((response) => {
+        resolve(response)
+      }, (response) => {
+        reject(response)
       })
     })
   }
