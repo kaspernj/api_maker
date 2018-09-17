@@ -1,5 +1,6 @@
 import Api from "./Api"
-import changeCase from "change-case"
+
+var changeCase = require("change-case")
 
 export default class Devise {
   <% Devise.mappings.each do |scope| %>
@@ -42,9 +43,9 @@ export default class Devise {
       var postData = {"username": username, "password": password, "args": args}
       Api.post("/api_maker/devise/do_sign_in", postData)
         .then((response) => {
-          var apiMakerDataElement = document.querySelector(".api-maker-data")
-          var keyName = `current${changeCase.pascalCase(args.scope)}`
-          apiMakerDataElement.dataset[keyName] = JSON.stringify(response.model_data)
+          var modelClass = require(`ApiMaker/Models/${changeCase.pascalCase(args.scope)}`).default
+          var modelInstance = new modelClass(response.model_data)
+          Devise.updateSession(modelInstance)
 
           resolve({"response": response})
           var event = document.createEvent("Event")
@@ -54,6 +55,12 @@ export default class Devise {
           reject(response)
         })
     })
+  }
+
+  static updateSession(model) {
+    var apiMakerDataElement = document.querySelector(".api-maker-data")
+    var keyName = `current${model.modelClassData().name}`
+    apiMakerDataElement.dataset[keyName] = JSON.stringify(model.modelData)
   }
 
   static signOut(args = {}) {
