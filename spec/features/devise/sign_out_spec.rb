@@ -11,7 +11,7 @@ describe "Devise sign in", :js do
     click_on "Sign out"
 
     WaitUtil.wait_for_condition("user to be signed out") do
-      find("[data-controller='devise--sign-out']", visible: false)["data-success-response"] != nil
+      find("[data-controller='devise--sign-out']", visible: false)["data-success-response"].present?
     end
 
     response = JSON.parse(find("[data-controller='devise--sign-out']", visible: false)["data-success-response"])
