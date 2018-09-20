@@ -358,10 +358,9 @@ export default class BaseModel {
     if (!value)
       return null
 
-    var cents = parseFloat(value.fractional)
+    var cents = parseInt(value.fractional)
     var currency = value.currency.iso_code
-    var money = Money.fromInteger(cents, currency)
-    return money
+    return Money.fromInteger(cents, currency)
   }
 
   _preloadRelationships() {
