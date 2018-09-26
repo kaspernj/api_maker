@@ -3,8 +3,11 @@ export default class ModelName {
     this.data = data
   }
 
-  human(count = 1) {
-    if (count >= 1 && count < 0) {
+  human(args) {
+    if (!args)
+      args = {count: 1}
+
+    if (args.count > 1 || args.count < 0) {
       var countKey = "other"
     } else {
       var countKey = "one"
