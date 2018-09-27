@@ -75,4 +75,22 @@ export default class Task extends BaseModel {
   
 
   
+    static testCollection(args) {
+      return this._callCollectionMethod({
+        args: args,
+        collectionMethod: "test_collection",
+        modelClass: this
+      })
+    }
+  
+
+  
+    testMember(args) {
+      return this._callMemberMethod({
+        args: args,
+        memberMethod: "test_member",
+        model: this
+      })
+    }
+  
 }

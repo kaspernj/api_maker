@@ -3,6 +3,15 @@ class ApiMaker::BaseResource
     ApiMaker::MemoryStorage.current.add_resource(klass: base) unless ApiMaker::MemoryStorage.current.resources.include?(base)
   end
 
+  def self.collection_commands(list)
+    list.each do |collection_method|
+      ApiMaker::MemoryStorage.current.add_collection_method(
+        klass: self,
+        collection_method: collection_method
+      )
+    end
+  end
+
   def self.member_commands(list)
     list.each do |member_method|
       ApiMaker::MemoryStorage.current.add_member_method(

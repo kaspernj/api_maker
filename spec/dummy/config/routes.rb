@@ -3,6 +3,11 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  namespace :commands do
+    get :collection_command
+    get :member_command
+  end
+
   namespace :devise_specs do
     get :current_user_spec
     get :sign_in

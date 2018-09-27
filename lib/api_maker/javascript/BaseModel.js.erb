@@ -285,9 +285,24 @@ export default class BaseModel {
     return this.uniqueKeyValue
   }
 
-  _callMemberMethod(args) {
-    console.log({ args })
+  static _callCollectionMethod(args) {
+    return new Promise((resolve, reject) => {
+      var url = `/api_maker/${args.modelClass.modelClassData().pluralName}/${args.collectionMethod}`
+      var postData = {
+        args: args.args,
+        plural_name: args.modelClass.modelClassData().pluralName,
+        collection_method: args.collectionMethod
+      }
 
+      Api.post(url, postData).then((response) => {
+        resolve(response)
+      }, (response) => {
+        reject(response)
+      })
+    })
+  }
+
+  _callMemberMethod(args) {
     return new Promise((resolve, reject) => {
       var url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model.id()}/${args.memberMethod}`
       var postData = {

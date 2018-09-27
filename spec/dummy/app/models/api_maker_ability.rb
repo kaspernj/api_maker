@@ -5,7 +5,7 @@ class ApiMakerAbility
 
   def initialize(controller:) # rubocop:disable Lint/UnusedMethodArgument
     can CRUD, Project
-    can CRUD, Task
+    can CRUD + [:test_collection, :test_member], Task
     can CRUD, User
   end
 end
