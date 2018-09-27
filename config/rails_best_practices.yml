@@ -26,6 +26,7 @@ RemoveTrailingWhitespaceCheck: { }
 RemoveUnusedMethodsInControllersCheck: {
   except_methods: [
     "ApiMaker::BaseController#current_ability",
+    "ApiMaker::CommandsController#create",
     "ApiMaker::DeviseController#do_sign_in",
     "ApiMaker::DeviseController#do_sign_out",
     "ApiMaker::MemberActionsController#create",
