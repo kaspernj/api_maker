@@ -21,6 +21,12 @@ private
     end
   end
 
+  def collection_methods
+    ApiMaker::Loader.load_everything
+    storage = ApiMaker::MemoryStorage.current
+    storage.collection_methods.select { |data| data.fetch(:klass).model_class == @model }
+  end
+
   def member_methods
     ApiMaker::Loader.load_everything
     storage = ApiMaker::MemoryStorage.current

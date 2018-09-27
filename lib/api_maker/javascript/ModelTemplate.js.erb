@@ -62,6 +62,16 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
     }
   <% end %>
 
+  <% collection_methods.each do |collection_method_data| %>
+    static <%= ApiMaker::JsMethodNamerService.execute!(name: collection_method_data.fetch(:collection_method)).result %>(args) {
+      return this._callCollectionMethod({
+        args: args,
+        collectionMethod: "<%= collection_method_data.fetch(:collection_method) %>",
+        modelClass: this
+      })
+    }
+  <% end %>
+
   <% member_methods.each do |member_method_data| %>
     <%= ApiMaker::JsMethodNamerService.execute!(name: member_method_data.fetch(:member_method)).result %>(args) {
       return this._callMemberMethod({
