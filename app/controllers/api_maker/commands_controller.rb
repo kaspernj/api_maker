@@ -7,10 +7,7 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
       authorize!(params[:member_method].to_sym, model)
     end
 
-    instance = constant.new(
-      args: params[:args],
-      controller: self
-    )
+    instance = constant.new(args: params[:args], controller: self, model: model)
     instance.execute!
   end
 
