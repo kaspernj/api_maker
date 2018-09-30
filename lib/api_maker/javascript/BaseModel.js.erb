@@ -274,6 +274,10 @@ export default class BaseModel {
     return this.constructor
   }
 
+  preloadRelationship(relationshipName, model) {
+    this.relationshipsCache[BaseModel.snakeCase(relationshipName)] = model
+  }
+
   uniqueKey() {
     if (!this.uniqueKeyValue) {
       var min = 500000000000000000
@@ -398,7 +402,7 @@ export default class BaseModel {
 
       if (relationship.macro == "belongs_to" || relationship.macro == "has_one") {
         var modelInstance = new modelClass(preloadedData)
-        this.relationshipsCache[relationship.name] = modelInstance
+        this.preloadRelationship(relationship.name, modelInstance)
         delete this.modelData[relationship.name]
       } else if(relationship.macro == "has_many") {
         var preloadedModels = []
@@ -408,7 +412,7 @@ export default class BaseModel {
           preloadedModels.push(modelInstance)
         }
 
-        this.relationshipsCache[relationship.name] = preloadedModels
+        this.preloadRelationship(relationship.name, preloadedModels)
         delete this.modelData[relationship.name]
       } else {
         console.log(`Cannot preload this type of relationship yet: ${relationship.name} - ${relationship.macro}`)
