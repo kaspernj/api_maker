@@ -19,6 +19,8 @@ class ApiMaker::Routing
       member_methods = storage.member_methods.select { |data| data.fetch(:klass) == klass }
 
       @routes.resources(klass.model_class.model_name.plural) do
+        @routes.post :validate, on: :collection
+
         collection_methods.each do |collection_method_data|
           endpoint_name = collection_method_data.fetch(:collection_method)
           @routes.post(endpoint_name, on: :collection, controller: "commands", action: "create")
