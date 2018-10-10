@@ -356,12 +356,18 @@ export default class BaseModel {
     if (!value)
       return value
 
+    if (value instanceof Date)
+      return value
+
     // Format is 2018-07-22T06:17:08.297Z
     var match = value.match(/^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)\.(\d+)Z$/)
 
     // Sometimes format is 2018-06-17T09:19:12.576+02:00
     if (!match)
       match = value.match(/^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)\.(\d+)\+(\d+):(\d+)$/)
+
+    if (!match)
+      match = value.match(/^(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)$/)
 
     if (match.length > 0) {
       return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]), parseInt(match[4]), parseInt(match[5]), parseInt(match[6]))
