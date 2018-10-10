@@ -148,7 +148,8 @@ export default class BaseModel {
 
   isChanged() {
     var length = Object.keys(this.changes)
-     if (length > 0) {
+
+    if (length > 0) {
       return true
     } else {
       return false
