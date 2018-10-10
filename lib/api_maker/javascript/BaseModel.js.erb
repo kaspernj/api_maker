@@ -146,6 +146,15 @@ export default class BaseModel {
     return changeCase.snakeCase(string).replace(/\d+/, "_$&")
   }
 
+  isChanged() {
+    var length = Object.keys(this.changes)
+     if (length > 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   isNewRecord() {
     if ("id" in this.modelData && this.modelData.id) {
       return false
