@@ -34,8 +34,18 @@ export default class extends React.Component {
   }
 
   render() {
+    var LinkComponent = this.linkComponent()
+
     return (
-      <Link to={this.href()}>{this.props.title}</Link>
+      <LinkComponent to={this.href()}>{this.props.title}</LinkComponent>
     )
+  }
+
+  linkComponent() {
+    if (this.props.linkComponent) {
+      return this.props.linkComponent
+    } else {
+      return Link
+    }
   }
 }
