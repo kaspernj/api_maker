@@ -32,6 +32,8 @@ private
   end
 
   def load_models
+    Rails.application.eager_load!
+
     load_models_for(Rails.root)
     engines.each do |engine|
       load_models_for(engine.root)
@@ -42,11 +44,11 @@ private
 
   def load_models_for(root)
     Dir.glob("#{root}/app/models/**/*.rb") do |model_path|
-      begin
-        require model_path
-      rescue StandardError => e
-        puts e.inspect
-      end
+      next unless model_path.start_with?(Rails.root.to_s)
+      path_name = model_path.gsub(/\A#{Regexp.escape(Rails.root.to_s)}\/app\/models\//, "").gsub(/\.rb\Z/, "")
+      model_class = path_name.classify.constantize
+      next if !model_class.respond_to?(:abstract_class) || model_class.abstract_class?
+      model_class.attribute_names # This should load the model in ActiveRecord
     end
   end
 end
