@@ -46,7 +46,13 @@ private
     Dir.glob("#{root}/app/models/**/*.rb") do |model_path|
       next unless model_path.start_with?(Rails.root.to_s)
       path_name = model_path.gsub(/\A#{Regexp.escape(Rails.root.to_s)}\/app\/models\//, "").gsub(/\.rb\Z/, "")
-      model_class = path_name.classify.constantize
+
+      begin
+        model_class = path_name.classify.constantize
+      rescue LoadError
+        puts "Couldnt autoload: #{path_name.classify}"
+      end
+
       next if !model_class.respond_to?(:abstract_class) || model_class.abstract_class?
       model_class.attribute_names # This should load the model in ActiveRecord
     end
