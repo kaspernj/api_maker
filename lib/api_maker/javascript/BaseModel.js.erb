@@ -60,6 +60,23 @@ export default class BaseModel {
     }
   }
 
+  cacheKey() {
+    if (this.isPersisted()) {
+      var keyParts = [
+        this.modelClassData().paramKey,
+        this._primaryKey()
+      ]
+
+      if ("updated_at" in this.modelData) {
+        keyParts.push(`updatedAt-${this.updatedAt().getTime()}`)
+      }
+
+      return keyParts.join("-")
+    } else {
+      return this.uniqueKey()
+    }
+  }
+
   hasChanged() {
     if (this.changes.length > 0) {
       return true
