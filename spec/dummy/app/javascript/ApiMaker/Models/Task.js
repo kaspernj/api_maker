@@ -3,7 +3,7 @@ import Collection from "../Collection"
 
 export default class Task extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"created_at","type":"datetime"}],"name":"Task","pluralName":"tasks","relationships":[{"className":"Project","name":"project","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
+    return {"attributes":[{"name":"created_at","type":"datetime"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"user_id","type":"integer"}],"name":"Task","pluralName":"tasks","relationships":[{"className":"Project","name":"project","macro":"belongs_to"},{"className":"User","name":"user","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
   }
 
   
@@ -19,7 +19,32 @@ export default class Task extends BaseModel {
       }
     
   
+    
+      loadUser() {
+        var id = this.userId()
+        return this._loadBelongsToReflection({"reflectionName":"user","model":this,"modelName":"User","targetPathName":"/api_maker/users","ransack":{"id_eq":id}})
+      }
 
+      user() {
+        var id = this.userId()
+        return this._readBelongsToReflection({"reflectionName":"user","model":this,"modelName":"User","targetPathName":"/api_maker/users","ransack":{"id_eq":id}})
+      }
+    
+  
+
+  
+    
+    createdAt() {
+      // datetime
+      
+        return this._getAttributeDateTime("created_at")
+      
+    }
+
+    hasCreatedAt() {
+      var value = this.createdAt()
+      return this._isPresent(value)
+    }
   
     
     id() {
@@ -61,15 +86,15 @@ export default class Task extends BaseModel {
     }
   
     
-    createdAt() {
-      // datetime
+    userId() {
+      // integer
       
-        return this._getAttributeDateTime("created_at")
+        return this._getAttribute("user_id")
       
     }
 
-    hasCreatedAt() {
-      var value = this.createdAt()
+    hasUserId() {
+      var value = this.userId()
       return this._isPresent(value)
     }
   
@@ -83,7 +108,23 @@ export default class Task extends BaseModel {
       })
     }
   
+    static testCollection(args) {
+      return this._callCollectionMethod({
+        args: args,
+        collectionMethod: "test_collection",
+        modelClass: this
+      })
+    }
+  
 
+  
+    testMember(args) {
+      return this._callMemberMethod({
+        args: args,
+        memberMethod: "test_member",
+        model: this
+      })
+    }
   
     testMember(args) {
       return this._callMemberMethod({

@@ -60,6 +60,23 @@ export default class BaseModel {
     }
   }
 
+  cacheKey() {
+    if (this.isPersisted()) {
+      var keyParts = [
+        this.modelClassData().paramKey,
+        this._primaryKey()
+      ]
+
+      if ("updated_at" in this.modelData) {
+        keyParts.push(`updatedAt-${this.updatedAt().getTime()}`)
+      }
+
+      return keyParts.join("-")
+    } else {
+      return this.uniqueKey()
+    }
+  }
+
   hasChanged() {
     if (this.changes.length > 0) {
       return true
@@ -144,6 +161,16 @@ export default class BaseModel {
   static snakeCase(string) {
     var changeCase = require("change-case")
     return changeCase.snakeCase(string).replace(/\d+/, "_$&")
+  }
+
+  isChanged() {
+    var length = Object.keys(this.changes)
+
+    if (length > 0) {
+      return true
+    } else {
+      return false
+    }
   }
 
   isNewRecord() {
@@ -347,12 +374,18 @@ export default class BaseModel {
     if (!value)
       return value
 
+    if (value instanceof Date)
+      return value
+
     // Format is 2018-07-22T06:17:08.297Z
     var match = value.match(/^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)\.(\d+)Z$/)
 
     // Sometimes format is 2018-06-17T09:19:12.576+02:00
     if (!match)
       match = value.match(/^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)\.(\d+)\+(\d+):(\d+)$/)
+
+    if (!match)
+      match = value.match(/^(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)$/)
 
     if (match.length > 0) {
       return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]), parseInt(match[4]), parseInt(match[5]), parseInt(match[6]))
