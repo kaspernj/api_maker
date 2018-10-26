@@ -7,8 +7,6 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     query = query.page(params[:page]) if params[:page].present?
     query = query.distinct.group(:id).fix
 
-    binding.pry if params[:through]
-
     collection = ActiveModel::Serializer::CollectionSerializer.new(query, scope: self)
 
     response = {collection: collection}
