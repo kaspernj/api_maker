@@ -26,9 +26,10 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
         return this._readBelongsToReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.klass.primary_key}_eq" => "{{id}}"}) %>)
       }
     <% elsif reflection.macro == :has_many %>
+      <% binding.pry if reflection.name.to_s == "listing_periods" && model.name == "User" %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         var id = this.<%= reflection.active_record.primary_key %>()
-        return new Collection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
+        return new Collection(<%= api_maker_json(reflection_has_many_parameters(reflection)) %>)
       }
     <% elsif reflection.macro == :has_one %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}").result %>() {

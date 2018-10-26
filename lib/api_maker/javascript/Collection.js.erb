@@ -6,7 +6,8 @@ export default class Collection {
   constructor(args) {
     this.args = args
     this.includes = args.includes
-    this.ransackOptions = args.ransack
+    this.params = args.params
+    this.ransackOptions = args.ransack || {}
   }
 
   each(callback) {
@@ -114,6 +115,10 @@ export default class Collection {
 
   _params() {
     var params = {}
+
+    if (this.params)
+      params = Object.assign(params, this.params)
+
     if (this.ransackOptions)
       params["q"] = this.ransackOptions
 
