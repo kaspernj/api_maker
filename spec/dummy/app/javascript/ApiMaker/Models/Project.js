@@ -8,6 +8,7 @@ export default class Project extends BaseModel {
 
   
     
+      
       tasks() {
         var id = this.id()
         return new Collection({"reflectionName":"tasks","model":this,"modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})

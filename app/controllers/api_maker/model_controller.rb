@@ -94,11 +94,23 @@ private
     response[:total_pages] = query.total_pages
   end
 
+  def manage_through_relationship
+    return if params[:through].blank?
+
+    through_model = params[:through][:model].constantize.accessible_by(current_ability).find(params[:through][:id])
+    relationship = through_model.__send__(params[:through][:reflection]).accessible_by(current_ability)
+    instance_variable_set("@#{resource_collection_variable_name}", relationship)
+  end
+
   def resource_collection
     @resource_collection ||= proc do
-      variable_name = self.class.name.split("::").last.gsub(/Controller$/, "").underscore.parameterize
-      instance_variable_get("@#{variable_name}")
+      manage_through_relationship
+      instance_variable_get("@#{resource_collection_variable_name}")
     end.call
+  end
+
+  def resource_collection_variable_name
+    @resource_collection_variable_name ||= self.class.name.split("::").last.gsub(/Controller$/, "").underscore.parameterize
   end
 
   def resource_instance_class_name
