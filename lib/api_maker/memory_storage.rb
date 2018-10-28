@@ -12,7 +12,9 @@ class ApiMaker::MemoryStorage
   end
 
   def add_collection_method(klass:, collection_method:)
-    return if @collection_methods.any? { |collection_method_i| collection_method_i.fetch(:klass) == klass && collection_method_i.fetch(:collection_method) == collection_method }
+    return if @collection_methods.any? do |collection_method_i|
+      collection_method_i.fetch(:klass) == klass && collection_method_i.fetch(:collection_method) == collection_method
+    end
 
     @collection_methods << {
       klass: klass,
@@ -21,7 +23,9 @@ class ApiMaker::MemoryStorage
   end
 
   def add_member_method(klass:, member_method:)
-    return if @member_methods.any? { |member_method_i| member_method_i.fetch(:klass) == klass && member_method_i.fetch(:member_method) == member_method }
+    return if @member_methods.any? do |member_method_i|
+      member_method_i.fetch(:klass) == klass && member_method_i.fetch(:member_method) == member_method
+    end
 
     @member_methods << {
       klass: klass,
