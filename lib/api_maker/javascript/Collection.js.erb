@@ -82,6 +82,10 @@ export default class Collection {
     })
   }
 
+  modelClass() {
+    return require(`ApiMaker/Models/${this.args.modelName}`).default
+  }
+
   _response() {
     return new Promise((resolve, reject) => {
       var dataToUse = qs.stringify(this._params(), {"arrayFormat": "brackets"})
@@ -103,7 +107,7 @@ export default class Collection {
   }
 
   _responseToModels(response) {
-    var modelClass = require(`ApiMaker/Models/${this.args.modelName}`).default
+    var modelClass = this.modelClass()
     var array = []
     for(var modelDataKey in response.collection) {
       var modelData = response.collection[modelDataKey]
