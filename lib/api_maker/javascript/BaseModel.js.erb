@@ -52,11 +52,17 @@ export default class BaseModel {
 
   assignAttributes(newAttributes) {
     for(var key in newAttributes) {
-      var oldValue = this.modelData[key]
+      var oldValue = this._getAttribute(key)
+      var originalValue = this.modelData[key]
       var newValue = newAttributes[key]
 
-      if (oldValue != newValue)
-        this.changes[key] = newValue
+      if (newValue != oldValue) {
+        if (newValue == originalValue) {
+          delete this.changes[key]
+        } else {
+          this.changes[key] = newValue
+        }
+      }
     }
   }
 
@@ -74,14 +80,6 @@ export default class BaseModel {
       return keyParts.join("-")
     } else {
       return this.uniqueKey()
-    }
-  }
-
-  hasChanged() {
-    if (this.changes.length > 0) {
-      return true
-    } else {
-      return false
     }
   }
 
@@ -164,9 +162,9 @@ export default class BaseModel {
   }
 
   isChanged() {
-    var length = Object.keys(this.changes)
+    var keys = Object.keys(this.changes)
 
-    if (length > 0) {
+    if (keys.length > 0) {
       return true
     } else {
       return false

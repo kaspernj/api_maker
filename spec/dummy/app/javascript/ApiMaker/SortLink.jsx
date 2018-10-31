@@ -37,7 +37,9 @@ export default class extends React.Component {
     var LinkComponent = this.linkComponent()
 
     return (
-      <LinkComponent to={this.href()}>{this.props.title}</LinkComponent>
+      <LinkComponent to={this.href()}>
+        {this.title()}
+      </LinkComponent>
     )
   }
 
@@ -47,5 +49,12 @@ export default class extends React.Component {
     } else {
       return Link
     }
+  }
+
+  title() {
+    if (this.props.title)
+      return this.props.title
+
+    return this.props.query.modelClass().humanAttributeName(this.props.attribute)
   }
 }
