@@ -8,7 +8,7 @@ describe "member command" do
 
     expect(current_path).to eq commands_member_command_path
 
-    WaitUtil.wait_for_condition("command to be called") { find("[data-controller='commands--member']", visible: false)["data-test-member-response"].present? }
+    wait_for_chrome { find("[data-controller='commands--member']", visible: false)["data-test-member-response"].present? }
 
     response = JSON.parse(find("[data-controller='commands--member']", visible: false)["data-test-member-response"])
 

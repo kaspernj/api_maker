@@ -3,10 +3,22 @@ class ApiMaker::BaseController < ActionController::Base
 
   before_action :set_locale
 
+  rescue_from Exception, with: :render_error
+
 private
 
   def current_ability
     @current_ability ||= ::ApiMakerAbility.new(controller: self)
+  end
+
+  def render_error(error)
+    puts error.inspect
+    puts error.backtrace
+
+    logger.error error.inspect
+    logger.error error.backtrace.join("\n")
+
+    raise error
   end
 
   def set_locale

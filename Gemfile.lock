@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     api_maker (0.1.0)
-      active_model_serializers
       active_record_query_fixer (>= 0.0.4)
       cancancan
       rails (~> 5.2.1)
@@ -35,11 +34,6 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active_model_serializers (0.10.7)
-      actionpack (>= 4.1, < 6)
-      activemodel (>= 4.1, < 6)
-      case_transform (>= 0.2)
-      jsonapi-renderer (>= 0.1.1.beta1, < 0.3)
     active_record_query_fixer (0.0.4)
     activejob (5.2.1)
       activesupport (= 5.2.1)
@@ -79,8 +73,6 @@ GEM
       rack (>= 1.6.0)
       rack-test (>= 0.6.3)
       xpath (~> 3.0)
-    case_transform (0.2)
-      activesupport
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     code_analyzer (0.4.8)
@@ -110,7 +102,6 @@ GEM
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.1)
     json (2.1.0)
-    jsonapi-renderer (0.2.0)
     loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -178,7 +169,7 @@ GEM
       thor (>= 0.19.0, < 2.0)
     rainbow (3.0.0)
     rake (12.3.1)
-    ransack (2.0.1)
+    ransack (2.1.0)
       actionpack (>= 5.0)
       activerecord (>= 5.0)
       activesupport (>= 5.0)

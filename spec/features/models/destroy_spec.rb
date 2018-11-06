@@ -8,7 +8,7 @@ describe "model destroy" do
 
     expect(current_path).to eq models_destroy_path
 
-    WaitUtil.wait_for_condition("project to be destroyed") { find("[data-controller='models--destroy']", visible: false)["data-destroy-completed"] == "true" }
+    wait_for_chrome { find("[data-controller='models--destroy']", visible: false)["data-destroy-completed"] == "true" }
 
     expect { project.reload }.to raise_error(ActiveRecord::RecordNotFound)
   end

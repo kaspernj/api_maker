@@ -4,10 +4,10 @@ Devise.mappings.each do |scope|
   model = __send__("current_#{scope[0]}")
   next unless model
 
-  serializer_class = ActiveModel::Serializer.get_serializer_for(model.class)
-  next unless serializer_class
+  resource_class = ApiMaker::Serializer.resource_for(model.class)
+  next unless resource_class
 
-  serializer = serializer_class.new(model) if model
+  serializer = ApiMaker::Serializer.new(model: model, controller: controller) if model
 
   %> data-current-<%= scope[0].to_s.dasherize %>="<%= model ? serializer.to_json : null %>"<%
 end

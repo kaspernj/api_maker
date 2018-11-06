@@ -10,9 +10,7 @@ describe "Devise sign in", :js do
     fill_in "password", with: "password.123"
     click_on "Sign in"
 
-    WaitUtil.wait_for_condition("user to be signed in") do
-      find("[data-controller='devise--sign-in']", visible: false)["data-success-response"].present?
-    end
+    wait_for_chrome { find("[data-controller='devise--sign-in']", visible: false)["data-success-response"].present? }
 
     response = JSON.parse(find("[data-controller='devise--sign-in']", visible: false)["data-success-response"])
 

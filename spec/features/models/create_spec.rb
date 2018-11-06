@@ -6,8 +6,8 @@ describe "model create" do
 
     expect(current_path).to eq models_create_path
 
-    WaitUtil.wait_for_condition("project to be created") { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
-    WaitUtil.wait_for_condition("project to appear in database") { Project.count > 0 }
+    wait_for_chrome { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
+    wait_for_chrome { Project.count > 0 }
 
     created_project = Project.last
     element = find("[data-controller='models--create']", visible: false)

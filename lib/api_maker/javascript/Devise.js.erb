@@ -6,9 +6,9 @@ export default class Devise {
   <% Devise.mappings.each do |scope| %>
     <%
       klass = scope[1].class_name.constantize
-      serializer = ActiveModel::Serializer.get_serializer_for(klass)
+      resource = ApiMaker::Serializer.resource_for(klass)
     %>
-    <% if serializer %>
+    <% if resource %>
       static <%= ApiMaker::JsMethodNamerService.execute!(name: "is_#{scope[0]}_signed_in").result %>() {
         var apiMakerDataElement = document.querySelector(".api-maker-data")
         var keyName = "current<%= scope[1].class_name %>"

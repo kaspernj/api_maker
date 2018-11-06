@@ -9,7 +9,7 @@ describe "model belongs to relationships" do
 
     expect(current_path).to eq models_has_one_path
 
-    WaitUtil.wait_for_condition("model to be found") { find("[data-controller='models--has-one']", visible: false)["data-has-one-completed"] == "true" }
+    wait_for_chrome { find("[data-controller='models--has-one']", visible: false)["data-has-one-completed"] == "true" }
 
     task_data = JSON.parse(find("[data-controller='models--has-one']", visible: false)["data-task"])
 

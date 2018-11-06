@@ -10,7 +10,7 @@ describe "model ransack" do
 
     expect(current_path).to eq models_ransack_path
 
-    WaitUtil.wait_for_condition("ransack to complete") { find("[data-controller='models--ransack']", visible: false)["data-ransack-completed"] == "true" }
+    wait_for_chrome { find("[data-controller='models--ransack']", visible: false)["data-ransack-completed"] == "true" }
 
     projects_without_preload = JSON.parse(find("[data-controller='models--ransack']", visible: false)["data-projects-without-preload"])
     projects_with_preload = JSON.parse(find("[data-controller='models--ransack']", visible: false)["data-projects-with-preload"])

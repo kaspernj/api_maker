@@ -10,7 +10,7 @@ describe "model has many relationships" do
 
     expect(current_path).to eq models_has_many_path
 
-    WaitUtil.wait_for_condition("query to complete") { find("[data-controller='models--has-many']", visible: false)["data-has-many-completed"] == "true" }
+    wait_for_chrome { find("[data-controller='models--has-many']", visible: false)["data-has-many-completed"] == "true" }
 
     ids = JSON.parse(find("[data-controller='models--has-many']", visible: false)["data-tasks"])
 

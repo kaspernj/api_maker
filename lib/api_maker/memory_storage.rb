@@ -1,14 +1,27 @@
 class ApiMaker::MemoryStorage
-  attr_reader :collection_methods, :member_methods, :resources
+  attr_reader :attributes, :collection_methods, :member_methods, :relationships, :resources
 
   def self.current
     @current ||= ApiMaker::MemoryStorage.new
   end
 
   def initialize
+    @attributes = []
     @collection_methods = []
     @member_methods = []
+    @relationships = []
     @resources = []
+  end
+
+  def add_attribute(klass:, attribute:)
+    return if @attributes.any? do |attribute_i|
+      attribute_i.fetch(:klass) == klass && attribute_i.fetch(:attribute) == attribute
+    end
+
+    @attributes << {
+      klass: klass,
+      attribute: attribute
+    }
   end
 
   def add_collection_method(klass:, collection_method:)
@@ -30,6 +43,17 @@ class ApiMaker::MemoryStorage
     @member_methods << {
       klass: klass,
       member_method: member_method
+    }
+  end
+
+  def add_relationship(klass:, relationship:)
+    return if @relationships.any? do |relationship_i|
+      relationship_i.fetch(:klass) == klass && relationship_i.fetch(:relationship) == relationship
+    end
+
+    @relationships << {
+      klass: klass,
+      relationship: relationship
     }
   end
 
