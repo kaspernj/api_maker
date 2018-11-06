@@ -20,6 +20,10 @@ class ApiMaker::Serializer
     result
   end
 
+  def current_ability
+    @controller&.__send__(:current_ability)
+  end
+
   def resource
     @resource ||= ApiMaker::Serializer.resource_for(@model.class)
   end
@@ -36,7 +40,12 @@ class ApiMaker::Serializer
 
       if query.is_a?(ActiveRecord::Base)
         serializer = ApiMaker::Serializer.new(model: query, controller: @controller, include_param: value)
-        result[key] = serializer.result
+
+        if !@controller || current_ability.can?(:read, query)
+          result[key] = serializer.result
+        else
+          result[key] = nil
+        end
       else
         collection_serializer = ApiMaker::CollectionSerializer.new(collection: query, controller: @controller, include_param: value)
         result[key] = collection_serializer.result
