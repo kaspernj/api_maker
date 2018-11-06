@@ -10,7 +10,7 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
     elsif model.valid_password?(params[:password])
       sign_in(model, scope: scope)
       remember_me(model) if params.dig(:args, :rememberMe)
-      render json: {success: true, model_data: serializer.new(model)}
+      render json: {success: true, model_data: resource.new(model).result}
     else
       render json: {success: false}, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ private
   end
 
   def check_serializer_exists
-    render json: {success: false}, status: :unprocessable_entity unless serializer
+    render json: {success: false}, status: :unprocessable_entity unless resource
   end
 
   def model
@@ -45,7 +45,7 @@ private
     @scope ||= params.dig(:args, :scope).presence || "user"
   end
 
-  def serializer
-    @serializer ||= ActiveModel::Serializer.get_serializer_for(model.class)
+  def resource
+    @resource ||= ApiMaker::Serializer.resource_for(model: model.class, controller: self)
   end
 end

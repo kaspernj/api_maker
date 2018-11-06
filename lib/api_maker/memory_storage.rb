@@ -6,9 +6,18 @@ class ApiMaker::MemoryStorage
   end
 
   def initialize
+    @attributes = []
     @collection_methods = []
     @member_methods = []
+    @relationships = []
     @resources = []
+  end
+
+  def add_attribute(klass:, attribute:)
+    @attributes << {
+      klass: klass,
+      attribute: attribute
+    }
   end
 
   def add_collection_method(klass:, collection_method:)
@@ -30,6 +39,13 @@ class ApiMaker::MemoryStorage
     @member_methods << {
       klass: klass,
       member_method: member_method
+    }
+  end
+
+  def add_relationship(klass:, relationship:)
+    @relationships << {
+      klass: klass,
+      relationship: relationship
     }
   end
 

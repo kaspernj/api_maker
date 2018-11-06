@@ -135,17 +135,17 @@ private
     @sanitize_parameters ||= __send__("#{resource_variable_name}_params")
   end
 
-  def serializer
-    @serializer ||= ActiveModel::Serializer.get_serializer_for(resource_instance_class)
+  def resource
+    @serializer ||= ApiMaker::Serializer.resource_for(resource_instance_class)
   end
 
   def serialized_resource(model)
-    serializer.new(model, scope: self)
+    resource.new(model, scope: self)
   end
 
   def success_response
     render json: {
-      model: serialized_resource(resource_instance),
+      model: serialized_resource(model: resource_instance, controller: self),
       success: true,
       include: include_param
     }

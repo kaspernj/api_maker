@@ -18,7 +18,7 @@ class ApiMakerAbility
 
   def initialize(controller:)
     user = controller.current_user
-    
+
     if user
       can :manage, Project, user_id: user.id
       can :manage, Task, project: {user_id: user.id}
@@ -28,7 +28,7 @@ class ApiMakerAbility
 end
 ```
 
-ApiMaker will only create models and endpoints for ActiveRecord models that has serializers. So be sure to add [ActiveModelSerializers](https://github.com/rails-api/active_model_serializers) for your models first.
+ApiMaker will only create models and endpoints for ActiveRecord models that are defined as resources. So be sure to add resources under `app/api_maker/resources` for your models first.
 
 ApiMaker uses that to keep track of what data and relationships you want exposed through the API.
 
@@ -138,7 +138,7 @@ A `has many` relationship will return a collection the queries the sub models.
 ```js
 project.tasks().toArray().then((tasks) => {
   console.log("Project " + project.id() + " has " + tasks.length + " tasks")
-  
+
   for(var key in tasks) {
     var task = tasks[key]
     console.log("Task " + task.id() + " is named: " + task.name())

@@ -6,17 +6,17 @@ class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
   end
 
   def execute!
-    if serializer
+    if resource
       ServicePattern::Response.new(result: model_content)
     else
-      ServicePattern::Response.new(errors: ["No serializer defined for #{model.name}"])
+      ServicePattern::Response.new(errors: ["No resource defined for #{model.name}"])
     end
   end
 
 private
 
   def attributes
-    serializer._attributes.map do |attribute_name|
+    resource._attributes.map do |attribute_name|
       {name: attribute_name, type: model_type(attribute_name)}
     end
   end
@@ -56,7 +56,7 @@ private
   def reflections
     @reflections ||= proc do
       result = []
-      serializer._reflections.each_key do |name|
+      resource._reflections.each_key do |name|
         reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
         next unless reflection
         result << reflection
@@ -101,7 +101,7 @@ private
     end
   end
 
-  def serializer
-    @serializer ||= ActiveModel::Serializer.get_serializer_for(@model)
+  def resource
+    @resource ||= ApiMaker::Serializer.resource_for(model: @model)
   end
 end
