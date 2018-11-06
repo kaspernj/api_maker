@@ -21,7 +21,20 @@ class ApiMaker::RelationshipIncluder
   def self.parse_array(include_param)
     result = {}
     include_param.each do |include_param_i|
-      result.deep_merge!(ApiMaker::RelationshipIncluder.parse(include_param_i))
+      parsed = ApiMaker::RelationshipIncluder.parse(include_param_i)
+      parsed.each do |key, value|
+        if result.key?(key)
+          if result[key].is_a?(String)
+            result[key] = [result[key], value]
+          elsif result[key].is_a?(Array)
+            result[key] << value
+          else
+            raise "Unknown object: #{result[key].class.name}"
+          end
+        else
+          result[key] = value
+        end
+      end
     end
 
     result
