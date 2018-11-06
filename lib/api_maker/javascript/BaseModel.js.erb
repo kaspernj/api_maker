@@ -320,7 +320,7 @@ export default class BaseModel {
       var postData = {
         args: args.args,
         plural_name: args.modelClass.modelClassData().pluralName,
-        collection_method: args.collectionMethod
+        collection_command: args.collectionMethod
       }
 
       Api.post(url, postData).then((response) => {
@@ -337,7 +337,7 @@ export default class BaseModel {
       var postData = {
         args: args.args,
         plural_name: args.model.modelClassData().pluralName,
-        member_method: args.memberMethod
+        member_command: args.memberMethod
       }
 
       Api.post(url, postData).then((response) => {

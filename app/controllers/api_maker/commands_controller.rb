@@ -1,10 +1,10 @@
 class ApiMaker::CommandsController < ApiMaker::BaseController
   def create
-    if params[:collection_method]
-      authorize!(params[:collection_method].to_sym, klass)
+    if params[:collection_command]
+      authorize!(params[:collection_command].to_sym, klass)
     else
       model = klass.find(params[:id])
-      authorize!(params[:member_method].to_sym, model)
+      authorize!(params[:member_command].to_sym, model)
     end
 
     instance = constant.new(args: params[:args], controller: self, model: model)
@@ -15,7 +15,7 @@ private
 
   def constant
     @constant ||= proc do
-      command = params[:collection_method]&.camelize || params[:member_method].camelize
+      command = params[:collection_command]&.camelize || params[:member_command].camelize
       "Commands::#{namespace}::#{command}".constantize
     end.call
   end
