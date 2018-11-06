@@ -15,20 +15,18 @@ class ApiMaker::Routing
     storage.resources.each do |resource|
       klass = resource.fetch(:klass)
 
-      collection_methods = storage.collection_methods.select { |data| data.fetch(:klass) == klass }
-      member_methods = storage.member_methods.select { |data| data.fetch(:klass) == klass }
+      collection_commands = storage.storage_for(klass, :collection_commands)
+      member_commands = storage.storage_for(klass, :member_commands)
 
       @routes.resources(klass.model_class.model_name.plural) do
         @routes.post :validate, on: :collection
 
-        collection_methods.each do |collection_method_data|
-          endpoint_name = collection_method_data.fetch(:collection_method)
-          @routes.post(endpoint_name, on: :collection, controller: "commands", action: "create")
+        collection_commands.each do |collection_command|
+          @routes.post(collection_command, on: :collection, controller: "commands", action: "create")
         end
 
-        member_methods.each do |member_method_data|
-          endpoint_name = member_method_data.fetch(:member_method)
-          @routes.post(endpoint_name, on: :member, controller: "commands", action: "create")
+        member_commands.each do |member_command|
+          @routes.post(member_command, on: :member, controller: "commands", action: "create")
         end
       end
     end

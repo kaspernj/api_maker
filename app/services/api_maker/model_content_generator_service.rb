@@ -21,16 +21,14 @@ private
     end
   end
 
-  def collection_methods
+  def collection_commands
     ApiMaker::Loader.load_everything
-    storage = ApiMaker::MemoryStorage.current
-    storage.collection_methods.select { |data| data.fetch(:klass).model_class == @model }
+    ApiMaker::MemoryStorage.current.storage_for(resource, :collection_commands)
   end
 
-  def member_methods
+  def member_commands
     ApiMaker::Loader.load_everything
-    storage = ApiMaker::MemoryStorage.current
-    storage.member_methods.select { |data| data.fetch(:klass).model_class == @model }
+    ApiMaker::MemoryStorage.current.storage_for(resource, :member_commands)
   end
 
   def model_content
@@ -55,8 +53,7 @@ private
 
   def reflections
     @reflections ||= proc do
-      resource._relationships.map do |data|
-        name = data.fetch(:relationship)
+      resource._relationships.map do |name|
         reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
         raise "Couldnt find reflection by that name: #{name}" unless reflection
         reflection

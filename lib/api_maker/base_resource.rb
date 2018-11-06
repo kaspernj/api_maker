@@ -3,38 +3,27 @@ class ApiMaker::BaseResource
 
   def self.attributes(*attributes)
     attributes.each do |attribute|
-      ApiMaker::MemoryStorage.current.add_attribute(
-        klass: self,
-        attribute: attribute
-      )
+      ApiMaker::MemoryStorage.current.add(self, :attributes, attribute)
     end
   end
 
   def self._attributes
-    ApiMaker::MemoryStorage.current.attributes
-      .select { |attribute_data| attribute_data.fetch(:klass) == self }
-      .map { |attribute_data| attribute_data.fetch(:attribute) }
+    ApiMaker::MemoryStorage.current.storage_for(self, :attributes)
   end
 
   def self.inherited(base)
-    ApiMaker::MemoryStorage.current.add_resource(klass: base) unless ApiMaker::MemoryStorage.current.resources.include?(base)
+    ApiMaker::MemoryStorage.current.add_resource(base) unless ApiMaker::MemoryStorage.current.resources.include?(base)
   end
 
   def self.collection_commands(*list)
-    list.each do |collection_method|
-      ApiMaker::MemoryStorage.current.add_collection_method(
-        klass: self,
-        collection_method: collection_method
-      )
+    list.each do |collection_command|
+      ApiMaker::MemoryStorage.current.add(self, :collection_commands, collection_command)
     end
   end
 
   def self.member_commands(*list)
-    list.each do |member_method|
-      ApiMaker::MemoryStorage.current.add_member_method(
-        klass: self,
-        member_method: member_method
-      )
+    list.each do |member_command|
+      ApiMaker::MemoryStorage.current.add(self, :member_commands, member_command)
     end
   end
 
@@ -46,15 +35,12 @@ class ApiMaker::BaseResource
 
   def self.relationships(*relationships)
     relationships.each do |relationship|
-      ApiMaker::MemoryStorage.current.add_relationship(
-        klass: self,
-        relationship: relationship
-      )
+      ApiMaker::MemoryStorage.current.add(self, :relationships, relationship)
     end
   end
 
   def self._relationships
-    ApiMaker::MemoryStorage.current.relationships.select { |relationship_data| relationship_data.fetch(:klass) == self }
+    ApiMaker::MemoryStorage.current.storage_for(self, :relationships)
   end
 
   def initialize(model:, controller:, include_param:)

@@ -15,9 +15,9 @@ class ApiMaker::Serializer
     result = {}
     resource._attributes.each do |attribute|
       if resource_instance.respond_to?(attribute)
-        result[attribute.to_s] = resource_instance.__send__(attribute)
+        result[attribute] = resource_instance.__send__(attribute)
       else
-        result[attribute.to_s] = @model.__send__(attribute)
+        result[attribute] = @model.__send__(attribute)
       end
     end
 
@@ -44,6 +44,7 @@ class ApiMaker::Serializer
     parsed.each do |key, value|
       next unless key
 
+      key = key.to_sym
       query = @model.__send__(key)
 
       if query.is_a?(ActiveRecord::Base)
