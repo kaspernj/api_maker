@@ -14,6 +14,10 @@ class ApiMaker::MemoryStorage
   end
 
   def add_attribute(klass:, attribute:)
+    return if @attributes.any? do |attribute_i|
+      attribute_i.fetch(:klass) == klass && attribute_i.fetch(:attribute) == attribute
+    end
+
     @attributes << {
       klass: klass,
       attribute: attribute
@@ -43,6 +47,10 @@ class ApiMaker::MemoryStorage
   end
 
   def add_relationship(klass:, relationship:)
+    return if @relationships.any? do |relationship_i|
+      relationship_i.fetch(:klass) == klass && relationship_i.fetch(:relationship) == relationship
+    end
+
     @relationships << {
       klass: klass,
       relationship: relationship
