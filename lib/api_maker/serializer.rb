@@ -54,9 +54,11 @@ class ApiMaker::Serializer
         else
           result[key] = nil
         end
-      else
+      elsif query
         collection_serializer = ApiMaker::CollectionSerializer.new(collection: query, controller: @controller, include_param: value)
         result[key] = collection_serializer.result
+      else
+        result[key] = nil
       end
     end
 
