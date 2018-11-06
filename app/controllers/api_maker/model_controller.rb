@@ -7,7 +7,7 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     query = query.page(params[:page]) if params[:page].present?
     query = query.distinct.group(:id).fix
 
-    collection = ApiMaker::SerializedCollection.new(collection: query, controller: self, include_param: include_param).result
+    collection = ApiMaker::CollectionSerializer.new(collection: query, controller: self, include_param: include_param).result
 
     response = {collection: collection}
     include_pagination_data(response, query)

@@ -1,4 +1,4 @@
-class ApiMaker::SerializedCollection
+class ApiMaker::CollectionSerializer
   def initialize(collection:, controller:, include_param:)
     @collection = collection
     @controller = controller
