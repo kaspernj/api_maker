@@ -7,20 +7,20 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     query = query.page(params[:page]) if params[:page].present?
     query = query.distinct.group(:id).fix
 
-    collection = ActiveModel::Serializer::CollectionSerializer.new(query, scope: self)
+    collection = ApiMaker::SerializedCollection.new(collection: query, controller: self, include_param: include_param).result
 
     response = {collection: collection}
     include_pagination_data(response, query)
 
-    render json: response, include: include_param
+    render json: response
   end
 
   def show
-    render json: {model: serialized_resource(resource_instance)}, include: include_param
+    render json: {model: serialized_resource(resource_instance).result}
   end
 
   def new
-    render json: {model: serialized_resource(resource_instance)}, include: include_param
+    render json: {model: serialized_resource(resource_instance).result}
   end
 
   def create
@@ -33,7 +33,7 @@ class ApiMaker::ModelController < ApiMaker::BaseController
   end
 
   def edit
-    render json: {model: serialized_resource(resource_instance)}
+    render json: {model: serialized_resource(resource_instance).result}
   end
 
   def update
@@ -75,15 +75,13 @@ private
 
   def failure_response
     render json: {
-      model: serialized_resource(resource_instance),
+      model: serialized_resource(resource_instance).result,
       success: false,
-      errors: resource_instance.errors.full_messages,
-      include: include_param
+      errors: resource_instance.errors.full_messages
     }
   end
 
   def include_param
-    return "nothing" if params[:include].blank?
     params[:include]
   end
 
@@ -135,19 +133,14 @@ private
     @sanitize_parameters ||= __send__("#{resource_variable_name}_params")
   end
 
-  def resource
-    @serializer ||= ApiMaker::Serializer.resource_for(resource_instance_class)
-  end
-
   def serialized_resource(model)
-    resource.new(model, scope: self)
+    ApiMaker::Serializer.new(model: model, controller: self, include_param: include_param)
   end
 
   def success_response
     render json: {
-      model: serialized_resource(model: resource_instance, controller: self),
-      success: true,
-      include: include_param
+      model: serialized_resource(resource_instance).result,
+      success: true
     }
   end
 end

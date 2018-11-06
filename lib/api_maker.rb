@@ -13,4 +13,5 @@ module ApiMaker
   autoload :MemoryStorage, "#{dir}/memory_storage"
   autoload :Routing, "#{dir}/routing"
   autoload :Serializer, "#{dir}/serializer"
+  autoload :SerializedCollection, "#{dir}/serialized_collection"
 end

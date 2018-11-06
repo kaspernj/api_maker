@@ -5,14 +5,15 @@ class ApiMaker::Serializer
     nil
   end
 
-  def initialize(model:, controller:)
+  def initialize(model:, controller:, include_param:)
     @model = model
     @controller = controller
+    @include_param = include_param
   end
 
   def attributes
     result = {}
-    resource.attributes.each do |attribute|
+    resource._attributes.each do |attribute|
       result[attribute] = @model.__send__(attribute)
     end
 
@@ -20,12 +21,11 @@ class ApiMaker::Serializer
   end
 
   def resource
-    @resource ||= ApiMaker::Serializer.resource_for(self.class)
+    @resource ||= ApiMaker::Serializer.resource_for(@model.class)
   end
 
   def result
-    result = {}.merge(attributes)
-    result
+    attributes
   end
 
   def to_json
