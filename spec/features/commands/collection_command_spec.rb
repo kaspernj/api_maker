@@ -6,7 +6,7 @@ describe "collection command" do
 
     expect(current_path).to eq commands_collection_command_path
 
-    WaitUtil.wait_for_condition("command to be called") do
+    wait_for_chrome do
       find("[data-controller='commands--collection']", visible: false)["data-test-collection-response"].present?
     end
 

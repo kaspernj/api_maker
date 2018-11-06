@@ -6,7 +6,7 @@ describe "model validate" do
 
     expect(current_path).to eq models_validate_path
 
-    WaitUtil.wait_for_condition("project to be validated") { find("[data-controller='models--validate']", visible: false)["data-validate-response"].present? }
+    wait_for_chrome { find("[data-controller='models--validate']", visible: false)["data-validate-response"].present? }
 
     response = JSON.parse(find("[data-controller='models--validate']", visible: false)["data-validate-response"])
 
