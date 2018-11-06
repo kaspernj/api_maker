@@ -314,13 +314,13 @@ export default class BaseModel {
     return this.uniqueKeyValue
   }
 
-  static _callCollectionMethod(args) {
+  static _callcollectionCommand(args) {
     return new Promise((resolve, reject) => {
-      var url = `/api_maker/${args.modelClass.modelClassData().pluralName}/${args.collectionMethod}`
+      var url = `/api_maker/${args.modelClass.modelClassData().pluralName}/${args.collectionCommand}`
       var postData = {
         args: args.args,
         plural_name: args.modelClass.modelClassData().pluralName,
-        collection_command: args.collectionMethod
+        collection_command: args.collectionCommand
       }
 
       Api.post(url, postData).then((response) => {
@@ -331,13 +331,13 @@ export default class BaseModel {
     })
   }
 
-  _callMemberMethod(args) {
+  _callmemberCommand(args) {
     return new Promise((resolve, reject) => {
-      var url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model.id()}/${args.memberMethod}`
+      var url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model.id()}/${args.memberCommand}`
       var postData = {
         args: args.args,
         plural_name: args.model.modelClassData().pluralName,
-        member_command: args.memberMethod
+        member_command: args.memberCommand
       }
 
       Api.post(url, postData).then((response) => {

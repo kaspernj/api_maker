@@ -114,9 +114,9 @@ export default class Task extends BaseModel {
 
   
     static testCollection(args) {
-      return this._callCollectionMethod({
+      return this._callcollectionCommand({
         args: args,
-        collectionMethod: "test_collection",
+        collectionCommand: "test_collection",
         modelClass: this
       })
     }
@@ -124,9 +124,9 @@ export default class Task extends BaseModel {
 
   
     testMember(args) {
-      return this._callMemberMethod({
+      return this._callmemberCommand({
         args: args,
-        memberMethod: "test_member",
+        memberCommand: "test_member",
         model: this
       })
     }
