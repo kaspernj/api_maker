@@ -8,6 +8,10 @@ class ApiMaker::BaseResource
     end
   end
 
+  def self._attributes
+    ApiMaker::MemoryStorage.current.attributes.select { |attribute_data| attribute_data.fetch(:klass) == self }.map { |attribute_data| attribute_data.fetch(:attribute) }
+  end
+
   def self.inherited(base)
     ApiMaker::MemoryStorage.current.add_resource(klass: base) unless ApiMaker::MemoryStorage.current.resources.include?(base)
   end
@@ -43,5 +47,9 @@ class ApiMaker::BaseResource
         relationship: relationship
       )
     end
+  end
+
+  def self._relationships
+    ApiMaker::MemoryStorage.current.relationships.select { |relationship_data| relationship_data.fetch(:klass) == self }
   end
 end

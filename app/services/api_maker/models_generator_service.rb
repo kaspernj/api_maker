@@ -6,7 +6,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 
     models.each do |model|
       next if ignore_model?(model)
-      model_content_response = ApiMaker::ModelContentGeneratorService.(model: model)
+      model_content_response = ApiMaker::ModelContentGeneratorService.execute!(model: model)
 
       if model_content_response.success?
         File.open(model_file(model), "w") { |fp| fp.write(model_content_response.result) }

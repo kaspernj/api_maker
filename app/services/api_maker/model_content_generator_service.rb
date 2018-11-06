@@ -55,14 +55,12 @@ private
 
   def reflections
     @reflections ||= proc do
-      result = []
-      resource._reflections.each_key do |name|
+      resource._relationships.map do |data|
+        name = data.fetch(:relationship)
         reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
-        next unless reflection
-        result << reflection
+        raise "Couldnt find reflection by that name: #{name}" unless reflection
+        reflection
       end
-
-      result
     end.call
   end
 
@@ -102,6 +100,6 @@ private
   end
 
   def resource
-    @resource ||= ApiMaker::Serializer.resource_for(model: @model)
+    @resource ||= ApiMaker::Serializer.resource_for(@model)
   end
 end

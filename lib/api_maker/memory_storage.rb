@@ -1,5 +1,5 @@
 class ApiMaker::MemoryStorage
-  attr_reader :collection_methods, :member_methods, :resources
+  attr_reader :attributes, :collection_methods, :member_methods, :relationships, :resources
 
   def self.current
     @current ||= ApiMaker::MemoryStorage.new
