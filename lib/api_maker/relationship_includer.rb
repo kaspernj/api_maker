@@ -15,10 +15,7 @@ class ApiMaker::RelationshipIncluder
     splitted = include_param.split(".")
     initial = splitted.shift
     rest = splitted.join(".")
-
-    return {
-      initial => rest
-    }
+    {initial => rest}
   end
 
   def self.parse_array(include_param)
@@ -28,10 +25,5 @@ class ApiMaker::RelationshipIncluder
     end
 
     result
-  end
-
-  def initialize(model:, include_param:)
-    @model = model
-    @include_param
   end
 end

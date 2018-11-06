@@ -9,7 +9,9 @@ class ApiMaker::BaseResource
   end
 
   def self._attributes
-    ApiMaker::MemoryStorage.current.attributes.select { |attribute_data| attribute_data.fetch(:klass) == self }.map { |attribute_data| attribute_data.fetch(:attribute) }
+    ApiMaker::MemoryStorage.current.attributes
+      .select { |attribute_data| attribute_data.fetch(:klass) == self }
+      .map { |attribute_data| attribute_data.fetch(:attribute) }
   end
 
   def self.inherited(base)

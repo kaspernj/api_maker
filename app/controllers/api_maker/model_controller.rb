@@ -7,7 +7,7 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     query = query.page(params[:page]) if params[:page].present?
     query = query.distinct.group(:id).fix
 
-    collection = ApiMaker::CollectionSerializer.new(collection: query, controller: self, include_param: include_param).result
+    collection = collection_from_query(query)
 
     response = {collection: collection}
     include_pagination_data(response, query)
@@ -72,6 +72,10 @@ private
   def after_update; end
 
   def after_destroy; end
+
+  def collection_from_query(query)
+    ApiMaker::CollectionSerializer.new(collection: query, controller: self, include_param: include_param).result
+  end
 
   def failure_response
     render json: {
