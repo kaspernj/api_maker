@@ -3,7 +3,7 @@ import Collection from "../Collection"
 
 export default class Task extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"created_at","type":"datetime"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"user_id","type":"integer"}],"name":"Task","pluralName":"tasks","relationships":[{"className":"Project","name":"project","macro":"belongs_to"},{"className":"User","name":"user","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
+    return {"attributes":[{"name":"created_at","type":"datetime"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"user_id","type":"integer"},{"name":"custom_id","type":"unknown"}],"name":"Task","pluralName":"tasks","relationships":[{"className":"Project","name":"project","macro":"belongs_to"},{"className":"User","name":"user","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
   }
 
   
@@ -95,6 +95,19 @@ export default class Task extends BaseModel {
 
     hasUserId() {
       var value = this.userId()
+      return this._isPresent(value)
+    }
+  
+    
+    customId() {
+      // unknown
+      
+        return this._getAttribute("custom_id")
+      
+    }
+
+    hasCustomId() {
+      var value = this.customId()
       return this._isPresent(value)
     }
   

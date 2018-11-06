@@ -14,7 +14,11 @@ class ApiMaker::Serializer
   def attributes
     result = {}
     resource._attributes.each do |attribute|
-      result[attribute.to_s] = @model.__send__(attribute)
+      if @model.respond_to?(attribute)
+        result[attribute.to_s] = @model.__send__(attribute)
+      else
+        result[attribute.to_s] = resource_instance.__send__(attribute)
+      end
     end
 
     result
@@ -26,6 +30,10 @@ class ApiMaker::Serializer
 
   def resource
     @resource ||= ApiMaker::Serializer.resource_for(@model.class)
+  end
+
+  def resource_instance
+    @resource_instance ||= resource.new(model: @model, controller: @controller, include_param: @include_param)
   end
 
   def relationships

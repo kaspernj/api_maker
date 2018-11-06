@@ -1,4 +1,6 @@
 class ApiMaker::BaseResource
+  attr_reader :model, :controller, :include_param
+
   def self.attributes(*attributes)
     attributes.each do |attribute|
       ApiMaker::MemoryStorage.current.add_attribute(
@@ -53,5 +55,11 @@ class ApiMaker::BaseResource
 
   def self._relationships
     ApiMaker::MemoryStorage.current.relationships.select { |relationship_data| relationship_data.fetch(:klass) == self }
+  end
+
+  def initialize(model:, controller:, include_param:)
+    @model = model
+    @controller = controller
+    @include_param = include_param
   end
 end

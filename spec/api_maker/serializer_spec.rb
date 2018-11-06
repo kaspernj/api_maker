@@ -11,4 +11,11 @@ describe ApiMaker::Serializer do
 
     expect(result.fetch("tasks").first.fetch("project").fetch("id")).to eq project.id
   end
+
+  it "serializes custom attributes" do
+    serializer = ApiMaker::Serializer.new(model: task)
+    result = serializer.result
+
+    expect(result.fetch("custom_id")).to eq "custom-#{task.id}"
+  end
 end
