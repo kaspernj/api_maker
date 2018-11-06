@@ -14,10 +14,10 @@ class ApiMaker::Serializer
   def attributes
     result = {}
     resource._attributes.each do |attribute|
-      if @model.respond_to?(attribute)
-        result[attribute.to_s] = @model.__send__(attribute)
-      else
+      if resource_instance.respond_to?(attribute)
         result[attribute.to_s] = resource_instance.__send__(attribute)
+      else
+        result[attribute.to_s] = @model.__send__(attribute)
       end
     end
 
