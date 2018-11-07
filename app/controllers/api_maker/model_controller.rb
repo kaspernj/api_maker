@@ -138,7 +138,7 @@ private
   end
 
   def serialized_resource(model)
-    ApiMaker::Serializer.new(ability: current_ability, model: model, include_param: include_param)
+    ApiMaker::Serializer.new(ability: current_ability, args: api_maker_args, model: model, include_param: include_param)
   end
 
   def success_response
