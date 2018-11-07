@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
 private
 
   def api_maker_args
-    @api_marker_args ||= {current_user: current_user}
+    @api_maker_args ||= {current_user: current_user}
   end
 
   def current_ability
