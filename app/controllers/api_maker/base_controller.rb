@@ -1,4 +1,4 @@
-class ApiMaker::BaseController < ActionController::Base
+class ApiMaker::BaseController < ApplicationController
   protect_from_forgery with: :exception
 
   before_action :set_locale
@@ -8,7 +8,7 @@ class ApiMaker::BaseController < ActionController::Base
 private
 
   def current_ability
-    @current_ability ||= ::ApiMakerAbility.new(controller: self)
+    @current_ability ||= ::ApiMakerAbility.new(args: api_maker_args)
   end
 
   def render_error(error)
