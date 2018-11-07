@@ -5,7 +5,7 @@ class ApiMaker::Serializer
     nil
   end
 
-  def initialize(ability: nil, args: nil, model:, include_param: nil)
+  def initialize(ability: nil, args: {}, model:, include_param: nil)
     @args = args
     @model = model
     @ability = ability
