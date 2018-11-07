@@ -1,9 +1,10 @@
 require "rails_helper"
 
 describe "models" do
+  let!(:another_task) { create :task, user: user }
+  let!(:project) { create :project }
+  let!(:task) { create :task, project: project, user: user }
   let!(:user) { create :user }
-  let!(:task) { create :task, user: user }
-  let!(:another_task) { create :task }
 
   describe "#index" do
     it "finds all tasks" do
@@ -19,7 +20,7 @@ describe "models" do
     it "handels has many through relationships" do
       login_as user
 
-      get "/api_maker/tasks/?through[model]=User&through[id]=#{user.id}&through[reflection]=tasks"
+      get "/api_maker/tasks/?through[model]=Project&through[id]=#{project.id}&through[reflection]=tasks"
 
       parsed = JSON.parse(response.body)
 

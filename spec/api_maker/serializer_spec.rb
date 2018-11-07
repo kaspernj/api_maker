@@ -9,8 +9,6 @@ describe ApiMaker::Serializer do
     serializer = ApiMaker::Serializer.new(model: user, include_param: "tasks.project")
     result = serializer.result
 
-    puts "Result: #{result}"
-
     expect(result.fetch(:tasks).first.fetch(:project).fetch(:id)).to eq project.id
   end
 
