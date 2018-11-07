@@ -1,27 +1,14 @@
 class ApiMaker::CollectionSerializer
-  def initialize(collection:, controller:, include_param:)
+  def initialize(ability:, args:, collection:, include_param:)
+    @ability = ability
+    @args = args
     @collection = collection
-    @controller = controller
     @include_param = include_param
   end
 
-  def accessible_collection
-    return @collection.accessible_by(current_ability) if @controller
-    @collection
-  end
-
-  def current_ability
-    @controller&.__send__(:current_ability)
-  end
-
   def result
-    array = []
-
-    accessible_collection.each do |model|
-      serializer = ApiMaker::Serializer.new(model: model, controller: @controller, include_param: @include_param)
-      array << serializer.result
+    @collection.map do |model|
+      ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, include_param: @include_param).result
     end
-
-    array
   end
 end

@@ -50,6 +50,6 @@ private
   end
 
   def serializer
-    @serializer ||= ApiMaker::Serializer.new(model: model, controller: self)
+    @serializer ||= ApiMaker::Serializer.new(ability: current_ability, model: model)
   end
 end

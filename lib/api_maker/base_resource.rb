@@ -43,9 +43,10 @@ class ApiMaker::BaseResource
     ApiMaker::MemoryStorage.current.storage_for(self, :relationships)
   end
 
-  def initialize(model:, controller:, include_param:)
+  def initialize(ability:, args:, model:, include_param:)
+    @ability = ability
+    @args = args
     @model = model
-    @controller = controller
     @include_param = include_param
   end
 end
