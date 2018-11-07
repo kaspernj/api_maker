@@ -16,8 +16,8 @@ ApiMaker makes use of [CanCanCan](https://github.com/CanCanCommunity/cancancan) 
 class ApiMakerAbility
   include CanCan::Ability
 
-  def initialize(controller:)
-    user = controller.current_user
+  def initialize(args:)
+    user = args.fetch(:current_user)
 
     if user
       can :manage, Project, user_id: user.id
@@ -28,11 +28,39 @@ class ApiMakerAbility
 end
 ```
 
-ApiMaker will only create models and endpoints for ActiveRecord models that are defined as resources. So be sure to add resources under `app/api_maker/resources` for your models first.
+Add an `api_maker_args` method to your application controller. This controls what arguments will be passed to the CanCan ability and the serializers:
+```ruby
+class ApplicationController
+private
 
-ApiMaker uses that to keep track of what data and relationships you want exposed through the API.
+  def api_maker_args
+    {current_user: current_user}
+  end
+end
+```
 
-Its now time to generate models and controllers like this:
+ApiMaker will only create models, endpoints and serializers for ActiveRecord models that are defined as resources. So be sure to add resources under `app/api_maker/resources` for your models first.
+```ruby
+class Resources::ApplicationResource < ApiMaker::BaseResource
+end
+```
+
+```ruby
+class Resources::UserResources < Resources::ApplicationResource
+  attributes :id, :email, :custom_attribute
+  collection_commands :count_users
+  member_commands :calculate_age
+  relationships :account, :tasks
+
+  def custom_attribute
+    "Hello world! Current user is: #{args.fetch(:current_user).email}"
+  end
+end
+```
+
+ApiMaker uses that to keep track of what attributes, relationships and commands you want exposed through the API.
+
+Its now time to generate everything like this:
 ```bash
 rake api_maker:generate_models
 ```
