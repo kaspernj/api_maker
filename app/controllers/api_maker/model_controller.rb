@@ -74,7 +74,7 @@ private
   def after_destroy; end
 
   def collection_from_query(query)
-    ApiMaker::CollectionSerializer.new(collection: query, controller: self, include_param: include_param).result
+    ApiMaker::CollectionSerializer.new(ability: current_ability, args: api_maker_args, collection: query, include_param: include_param).result
   end
 
   def failure_response
@@ -138,7 +138,7 @@ private
   end
 
   def serialized_resource(model)
-    ApiMaker::Serializer.new(model: model, controller: self, include_param: include_param)
+    ApiMaker::Serializer.new(ability: current_ability, model: model, include_param: include_param)
   end
 
   def success_response

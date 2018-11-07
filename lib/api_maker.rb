@@ -4,6 +4,8 @@ require "active_record_query_fixer"
 require "ransack"
 require "service_pattern"
 
+require_relative "api_maker/action_controller_base_extensions"
+
 module ApiMaker
   dir = "#{__dir__}/api_maker"
 

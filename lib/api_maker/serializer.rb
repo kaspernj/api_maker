@@ -5,9 +5,10 @@ class ApiMaker::Serializer
     nil
   end
 
-  def initialize(model:, controller: nil, include_param: nil)
+  def initialize(ability: nil, args: {}, model:, include_param: nil)
+    @args = args
     @model = model
-    @controller = controller
+    @ability = ability
     @include_param = include_param
   end
 
@@ -33,7 +34,7 @@ class ApiMaker::Serializer
   end
 
   def resource_instance
-    @resource_instance ||= resource.new(model: @model, controller: @controller, include_param: @include_param)
+    @resource_instance ||= resource.new(ability: current_ability, args: @args, model: @model, include_param: @include_param)
   end
 
   def relationships
@@ -45,21 +46,22 @@ class ApiMaker::Serializer
       next unless key
 
       key = key.to_sym
-      query = @model.__send__(key)
+      association = @model.association(key)
+      scope = association.association_scope
+      scope = scope.accessible_by(current_ability) if current_ability
 
-      if query.is_a?(ActiveRecord::Base)
-        serializer = ApiMaker::Serializer.new(model: query, controller: @controller, include_param: value)
+      if association.is_a?(ActiveRecord::Associations::BelongsToAssociation) || association.is_a?(ActiveRecord::Associations::HasOneAssociation)
+        model = scope.first
 
-        if !@controller || current_ability.can?(:read, query)
+        if model
+          serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, include_param: value)
           result[key] = serializer.result
         else
           result[key] = nil
         end
-      elsif query
-        collection_serializer = ApiMaker::CollectionSerializer.new(collection: query, controller: @controller, include_param: value)
-        result[key] = collection_serializer.result
       else
-        result[key] = nil
+        collection_serializer = ApiMaker::CollectionSerializer.new(ability: @ability, args: @args, collection: scope, include_param: value)
+        result[key] = collection_serializer.result
       end
     end
 

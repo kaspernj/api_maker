@@ -6,18 +6,17 @@ describe ApiMaker::Serializer do
   let!(:user) { create :user }
 
   it "preloads relationships" do
-    serializer = ApiMaker::Serializer.new(model: user, include_param: "tasks.project")
-    result = serializer.result
-
-    puts "Result: #{result}"
-
+    result = ApiMaker::Serializer.new(model: user, include_param: "tasks.project").result
     expect(result.fetch(:tasks).first.fetch(:project).fetch(:id)).to eq project.id
   end
 
   it "serializes custom attributes" do
-    serializer = ApiMaker::Serializer.new(model: task)
-    result = serializer.result
-
+    result = ApiMaker::Serializer.new(model: task).result
     expect(result.fetch(:custom_id)).to eq "custom-#{task.id}"
+  end
+
+  it "includes given arguments" do
+    result = ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).result
+    expect(result.fetch(:custom_attribute)).to eq "CustomAttribute - Test arg: Test"
   end
 end
