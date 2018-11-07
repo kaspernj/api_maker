@@ -1,5 +1,5 @@
 class ApiMaker::BaseResource
-  attr_reader :model, :controller, :include_param
+  attr_reader :ability, :args, :model, :include_param
 
   def self.attributes(*attributes)
     attributes.each do |attribute|
