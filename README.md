@@ -39,6 +39,13 @@ private
 end
 ```
 
+Insert this mount into `config/routes.rb`:
+```ruby
+Rails.application.routes.draw do
+  mount ApiMaker::Engine => "/api_maker"
+end
+```
+
 ApiMaker will only create models, endpoints and serializers for ActiveRecord models that are defined as resources. So be sure to add resources under `app/api_maker/resources` for your models first.
 ```ruby
 class Resources::ApplicationResource < ApiMaker::BaseResource
