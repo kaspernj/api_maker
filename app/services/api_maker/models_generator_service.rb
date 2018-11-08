@@ -44,7 +44,10 @@ private
   end
 
   def copy_base_model
-    files = %w[Api.js BaseModel.js Collection.js Devise.js ModelName.js Paginate.jsx SortLink.jsx Result.js]
+    files = %w[
+      Api.js BaseModel.js Collection.js Devise.js ModelName.js Paginate.jsx SortLink.jsx Result.js
+      Bootstrap/Checkbox.jsx Bootstrap/MoneyInput.jsx Bootstrap/RadioButtons.jsx Bootstrap/Select.jsx Bootstrap/StringInput.jsx
+    ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path
 
@@ -54,6 +57,10 @@ private
   def copy_base_files(files, path, target_path)
     files.each do |file|
       base_model_source_path = File.join(path, file)
+      base_model_target_path = File.join(target_path, file)
+
+      base_model_target_dir = File.dirname(base_model_target_path)
+      FileUtils.mkdir_p(base_model_target_dir) unless File.exist?(base_model_target_dir)
 
       if File.exist?(base_model_source_path)
         content = File.read(base_model_source_path)
