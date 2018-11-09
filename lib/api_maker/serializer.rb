@@ -5,6 +5,10 @@ class ApiMaker::Serializer
     nil
   end
 
+  def self.resource_for!(klass)
+    "Resources::#{klass.name}Resource".constantize
+  end
+
   def initialize(ability: nil, args: {}, model:, include_param: nil)
     @args = args
     @model = model
@@ -30,7 +34,7 @@ class ApiMaker::Serializer
   end
 
   def resource
-    @resource ||= ApiMaker::Serializer.resource_for(@model.class)
+    @resource ||= ApiMaker::Serializer.resource_for!(@model.class)
   end
 
   def resource_instance
