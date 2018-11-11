@@ -11,7 +11,7 @@ class ApiMaker::MemoryStorage
   end
 
   def storage_for(klass, mode)
-    @storage.dig(klass, mode) || []
+    @storage.dig(klass, mode) || {}
   end
 
   def add(klass, mode, data, args = {})

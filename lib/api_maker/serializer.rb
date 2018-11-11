@@ -18,11 +18,9 @@ class ApiMaker::Serializer
 
   def attributes
     result = {}
-    resource._attributes.each do |attribute_data|
-      attribute = attribute_data.fetch(:data)
-
-      if attribute_data.dig(:args, :if).present?
-        condition_result = attribute_value(attribute_data.fetch(:args).fetch(:if))
+    resource._attributes.each do |attribute, data|
+      if data.dig(:args, :if).present?
+        condition_result = attribute_value(data.fetch(:args).fetch(:if))
         next unless condition_result
       end
 

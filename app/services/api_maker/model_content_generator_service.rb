@@ -16,8 +16,8 @@ class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
 private
 
   def attributes
-    resource._attributes.map do |attribute_name|
-      {name: attribute_name, type: model_type(attribute_name)}
+    resource._attributes.map do |attribute, data|
+      {name: attribute, type: model_type(attribute)}
     end
   end
 
@@ -53,7 +53,7 @@ private
 
   def reflections
     @reflections ||= proc do
-      resource._relationships.map do |name|
+      resource._relationships.map do |name, data|
         reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
         raise "Couldnt find reflection by that name: #{name}" unless reflection
         reflection
