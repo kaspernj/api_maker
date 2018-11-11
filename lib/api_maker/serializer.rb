@@ -18,15 +18,24 @@ class ApiMaker::Serializer
 
   def attributes
     result = {}
-    resource._attributes.each do |attribute|
-      if resource_instance.respond_to?(attribute)
-        result[attribute] = resource_instance.__send__(attribute)
-      else
-        result[attribute] = @model.__send__(attribute)
+    resource._attributes.each do |attribute, data|
+      if data.dig(:args, :if).present?
+        condition_result = attribute_value(data.fetch(:args).fetch(:if))
+        next unless condition_result
       end
+
+      result[attribute] = attribute_value(attribute)
     end
 
     result
+  end
+
+  def attribute_value(attribute)
+    if resource_instance.respond_to?(attribute)
+      resource_instance.__send__(attribute)
+    else
+      @model.__send__(attribute)
+    end
   end
 
   def current_ability

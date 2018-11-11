@@ -3,7 +3,7 @@ import Collection from "../Collection"
 
 export default class User extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"email","type":"string"},{"name":"created_at","type":"datetime"},{"name":"custom_attribute","type":"unknown"}],"name":"User","pluralName":"users","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
+    return {"attributes":[{"name":"id","type":"integer"},{"name":"email","type":"string"},{"name":"created_at","type":"datetime"},{"name":"custom_attribute","type":"unknown"},{"name":"updated_at","type":"datetime"}],"name":"User","pluralName":"users","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
   }
 
   
@@ -58,6 +58,19 @@ export default class User extends BaseModel {
 
     hasCustomAttribute() {
       var value = this.customAttribute()
+      return this._isPresent(value)
+    }
+  
+    
+    updatedAt() {
+      // datetime
+      
+        return this._getAttributeDateTime("updated_at")
+      
+    }
+
+    hasUpdatedAt() {
+      var value = this.updatedAt()
       return this._isPresent(value)
     }
   

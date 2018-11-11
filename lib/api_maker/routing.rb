@@ -21,11 +21,11 @@ class ApiMaker::Routing
       @routes.resources(klass.model_class.model_name.plural) do
         @routes.post :validate, on: :collection
 
-        collection_commands.each do |collection_command|
+        collection_commands.each_key do |collection_command|
           @routes.post(collection_command, on: :collection, controller: "commands", action: "create")
         end
 
-        member_commands.each do |member_command|
+        member_commands.each_key do |member_command|
           @routes.post(member_command, on: :member, controller: "commands", action: "create")
         end
       end
