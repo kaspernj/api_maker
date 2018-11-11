@@ -14,10 +14,10 @@ class ApiMaker::MemoryStorage
     @storage.dig(klass, mode) || []
   end
 
-  def add(klass, mode, data)
+  def add(klass, mode, data, args = {})
     @storage[klass] ||= {}
-    @storage[klass][mode] ||= []
-    @storage[klass][mode] << data unless @storage[klass][mode].include?(data)
+    @storage[klass][mode] ||= {}
+    @storage[klass][mode][data] = {data: data, args: args} unless @storage[klass][mode].key?(data)
   end
 
   def add_resource(klass)

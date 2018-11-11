@@ -19,4 +19,14 @@ describe ApiMaker::Serializer do
     result = ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).result
     expect(result.fetch(:custom_attribute)).to eq "CustomAttribute - Test arg: Test"
   end
+
+  it "supports conditions for attributes" do
+    result = ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).result
+    expect(result).to_not include :updated_at
+
+    user.email = "kasper@example.com"
+
+    result = ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).result
+    expect(result).to include :updated_at
+  end
 end

@@ -3,61 +3,74 @@ import Collection from "../Collection"
 
 export default class User extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"email","type":"string"},{"name":"created_at","type":"datetime"},{"name":"custom_attribute","type":"unknown"}],"name":"User","pluralName":"users","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
+    return {"attributes":[{"name":{"data":"id","args":{}},"type":"unknown"},{"name":{"data":"email","args":{}},"type":"unknown"},{"name":{"data":"created_at","args":{}},"type":"unknown"},{"name":{"data":"custom_attribute","args":{}},"type":"unknown"},{"name":{"data":"updated_at","args":{"if":"email_kasper?"}},"type":"unknown"}],"name":"User","pluralName":"users","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
   }
 
   
 
   
     
-    id() {
-      // integer
-      
-        return this._getAttribute("id")
-      
-    }
-
-    hasId() {
-      var value = this.id()
-      return this._isPresent(value)
-    }
-  
-    
-    email() {
-      // string
-      
-        return this._getAttribute("email")
-      
-    }
-
-    hasEmail() {
-      var value = this.email()
-      return this._isPresent(value)
-    }
-  
-    
-    createdAt() {
-      // datetime
-      
-        return this._getAttributeDateTime("created_at")
-      
-    }
-
-    hasCreatedAt() {
-      var value = this.createdAt()
-      return this._isPresent(value)
-    }
-  
-    
-    customAttribute() {
+    {:data=>:id, :args=>{}}() {
       // unknown
       
-        return this._getAttribute("custom_attribute")
+        return this._getAttribute("{:data=>:id, :args=>{}}")
       
     }
 
-    hasCustomAttribute() {
-      var value = this.customAttribute()
+    has{:data=>:id, :args=>{}}() {
+      var value = this.{:data=>:id, :args=>{}}()
+      return this._isPresent(value)
+    }
+  
+    
+    {:data=>:email, :args=>{}}() {
+      // unknown
+      
+        return this._getAttribute("{:data=>:email, :args=>{}}")
+      
+    }
+
+    has{:data=>:email, :args=>{}}() {
+      var value = this.{:data=>:email, :args=>{}}()
+      return this._isPresent(value)
+    }
+  
+    
+    {:data=>:createdAt, :args=>{}}() {
+      // unknown
+      
+        return this._getAttribute("{:data=>:created_at, :args=>{}}")
+      
+    }
+
+    has{:data=>:createdAt, :args=>{}}() {
+      var value = this.{:data=>:createdAt, :args=>{}}()
+      return this._isPresent(value)
+    }
+  
+    
+    {:data=>:customAttribute, :args=>{}}() {
+      // unknown
+      
+        return this._getAttribute("{:data=>:custom_attribute, :args=>{}}")
+      
+    }
+
+    has{:data=>:customAttribute, :args=>{}}() {
+      var value = this.{:data=>:customAttribute, :args=>{}}()
+      return this._isPresent(value)
+    }
+  
+    
+    {:data=>:updatedAt, :args=>{:if=>:emailKasper?}}() {
+      // unknown
+      
+        return this._getAttribute("{:data=>:updated_at, :args=>{:if=>:email_kasper?}}")
+      
+    }
+
+    has{:data=>:updatedAt, :args=>{:if=>:emailKasper?}}() {
+      var value = this.{:data=>:updatedAt, :args=>{:if=>:emailKasper?}}()
       return this._isPresent(value)
     }
   

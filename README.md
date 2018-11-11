@@ -212,6 +212,25 @@ Devise.currentUser().then((user) => {
 })
 ```
 
+## Serializing
+
+### Conditional attributes
+
+This will only include the email for users, if the current user signed in is an admin.
+
+```ruby
+class Resources::UserResource < Resources::ApplicationResource
+  attributes :id
+  attributes :email, if: :signed_in_as_admin?
+
+private
+
+  def signed_in_as_admin?
+    args[:current_user]&.admin?
+  end
+end
+```
+
 ## Contributing
 Contribution directions go here.
 

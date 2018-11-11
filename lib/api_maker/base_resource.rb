@@ -1,9 +1,9 @@
 class ApiMaker::BaseResource
   attr_reader :ability, :args, :model, :include_param
 
-  def self.attributes(*attributes)
+  def self.attributes(*attributes, **args)
     attributes.each do |attribute|
-      ApiMaker::MemoryStorage.current.add(self, :attributes, attribute)
+      ApiMaker::MemoryStorage.current.add(self, :attributes, attribute, args)
     end
   end
 
