@@ -14,6 +14,7 @@ module ApiMaker
   autoload :CollectionSerializer, "#{dir}/collection_serializer"
   autoload :Loader, "#{dir}/loader"
   autoload :MemoryStorage, "#{dir}/memory_storage"
+  autoload :ModelExtensions, "#{dir}/model_extensions"
   autoload :RelationshipIncluder, "#{dir}/relationship_includer"
   autoload :Routing, "#{dir}/routing"
   autoload :Serializer, "#{dir}/serializer"
