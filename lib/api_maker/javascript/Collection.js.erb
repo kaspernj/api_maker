@@ -69,8 +69,14 @@ export default class Collection {
     })
   }
 
+  searchKey(searchKey) {
+    this.searchKey = searchKey
+    return this
+  }
+
   sort(sortBy) {
     this.ransackOptions["s"] = sortBy
+    return this
   }
 
   toArray() {

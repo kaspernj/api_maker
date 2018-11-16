@@ -3,6 +3,16 @@ import qs from "qs"
 import React from "react"
 
 export default class extends React.Component {
+  constructor(props) {
+    super(props)
+
+    var searchKey = this.props.query.searchKey
+    if (!searchKey)
+      searchKey = "q"
+
+    this.state = {searchKey: searchKey}
+  }
+
   href() {
     if (this.isSortedByAttribute()) {
       var sortMode = "desc"
@@ -12,10 +22,10 @@ export default class extends React.Component {
 
     var currentParams = qs.parse(window.location.search.substr(1))
 
-    if (!currentParams["q"])
-      currentParams["q"] = {}
+    if (!currentParams[this.state.searchKey])
+      currentParams[this.state.searchKey] = {}
 
-    currentParams["q"]["s"] = `${this.props.attribute} ${sortMode}`
+    currentParams[this.state.searchKey]["s"] = `${this.props.attribute} ${sortMode}`
 
     var newParams = qs.stringify(currentParams)
     var newPath = `${location.pathname}?${newParams}`
