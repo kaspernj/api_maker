@@ -1,5 +1,5 @@
 class ApiMaker::BaseResource
-  attr_reader :ability, :args, :model, :include_param
+  attr_reader :ability, :args, :model
 
   def self.attributes(*attributes, **args)
     attributes.each do |attribute|
@@ -43,10 +43,9 @@ class ApiMaker::BaseResource
     ApiMaker::MemoryStorage.current.storage_for(self, :relationships)
   end
 
-  def initialize(ability: nil, args: {}, model:, include_param:)
+  def initialize(ability: nil, args: {}, model:)
     @ability = ability
     @args = args
     @model = model
-    @include_param = include_param
   end
 end
