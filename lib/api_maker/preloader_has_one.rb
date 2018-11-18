@@ -32,23 +32,61 @@ class ApiMaker::PreloaderHasOne
     if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
       query = @reflection.klass.where("#{@reflection.through_reflection.klass.table_name}.#{@reflection.through_reflection.klass.primary_key}" => @collection.map(&:id))
 
-      current_reflection = @reflection
-      while current_reflection.options[:through].present?
-        inverse_of = current_reflection.inverse_of || current_reflection.options.fetch(:through)
-        target_reflection = current_reflection.active_record.reflections.fetch(inverse_of.to_s)
+      joins = []
 
-        if target_reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection)
-          query = query.joins("LEFT JOIN #{target_reflection.table_name} ON #{target_reflection.table_name}.#{target_reflection.klass.primary_key} = #{target_reflection.active_record.table_name}.#{target_reflection.foreign_key}")
+      current_reflection = @reflection
+      while current_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+        # binding.pry
+
+        if current_reflection.through_reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection)
+          inverse_of = current_reflection.through_reflection.plural_name.to_sym
+          joins << inverse_of
         else
-          raise "Unknown class: #{target_reflection.class.name}"
+          raise "Unknown class: #{current_reflection.through_reflection.class.name}"
         end
 
         current_reflection = current_reflection.through_reflection.klass.reflections.fetch(@reflection.name.to_s)
       end
 
-      query.joins("LEFT JOIN #{@collection.table_name} ON #{@collection.table_name}.#{@collection.primary_key} = (#{@collection.to_sql})")
+      last_reflection = @reflection.through_reflection.inverse_of
+
+      joins.prepend(last_reflection.plural_name.to_sym)
+      joins_hash = joins_array_to_hash(joins)
+
+      puts "JOINS: #{joins}"
+      puts "HASH: #{joins_hash}"
+
+      inverse_of = @reflection.inverse_of || @reflection.options[:through].to_s.pluralize.to_sym
+      query = query.joins(joins_hash).where("#{last_reflection.table_name}.#{last_reflection.klass.primary_key} = (?)", @collection.map(&:id))
+
+      puts "SQL: #{query.to_sql}"
+
+      # binding.pry
+
+      query
     else
       @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
     end
+  end
+
+  def joins_array_to_hash(array)
+    array = array.clone
+
+    result = {}
+    work_result = result
+
+    while array.any?
+      element = array.pop
+
+      if array.length == 1
+        work_result[element] = array.pop
+      else
+        work_result[element] = {}
+      end
+
+      work_result = work_result[element]
+    end
+
+    result
   end
 end
