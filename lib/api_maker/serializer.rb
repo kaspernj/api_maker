@@ -1,4 +1,6 @@
 class ApiMaker::Serializer
+  attr_reader :model, :relationships
+
   def self.resource_for(klass)
     "Resources::#{klass.name}Resource".constantize
   rescue NameError
@@ -13,6 +15,7 @@ class ApiMaker::Serializer
     @args = args
     @model = model
     @ability = ability
+    @relationships = {}
   end
 
   def attributes
@@ -41,6 +44,10 @@ class ApiMaker::Serializer
     @controller&.__send__(:current_ability)
   end
 
+  def fetch(*args, &blk)
+    result.fetch(*args, &blk)
+  end
+
   def resource
     @resource ||= ApiMaker::Serializer.resource_for!(@model.class)
   end
@@ -50,12 +57,16 @@ class ApiMaker::Serializer
   end
 
   def result
-    {
+    @result ||= {
       type: @model.class.model_name.plural,
       id: @model.id,
       attributes: attributes,
-      relationships: {}
+      relationships: relationships
     }
+  end
+
+  def as_json(_options = nil)
+    result
   end
 
   def to_json

@@ -1,21 +1,18 @@
 class ApiMaker::PreloaderHasMany
-  def initialize(ability:, base_data:, data:, reflection:)
-    @base_data = base_data
+  def initialize(ability:, data:, collection:, reflection:, records:)
     @data = data
+    @collection = collection
     @reflection = reflection
+    @records = records
   end
 
   def preload
-    puts "Data: #{@data}"
+    models = @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
+    plural_name = @reflection.active_record.model_name.plural
 
-    found_ids = @data.fetch(:data).map { |record| record.fetch(:id) }
-    puts "Found IDS: #{found_ids}"
-
-    models = @reflection.klass.where(@reflection.klass.primary_key => found_ids)
-
-    models.each do |model|
+    models.find_each do |model|
       origin_id = model.attributes.fetch(@reflection.foreign_key)
-      origin_data = @data.fetch(:data).find { |record| record.fetch(:id) == origin_id }
+      origin_data = @records.find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == origin_id }
 
       origin_data.fetch(:relationships)[@reflection.name] ||= {data: []}
       origin_data.fetch(:relationships)[@reflection.name].fetch(:data) << {
@@ -23,14 +20,11 @@ class ApiMaker::PreloaderHasMany
         id: model.id
       }
 
-      serialized = ApiMaker::Serializer.new(model: model).result
+      serialized = ApiMaker::Serializer.new(model: model)
 
-      @base_data.fetch(:included) << serialized
+      @data.fetch(:included) << serialized
     end
 
-    puts "Models: #{models.to_a}"
-    puts "Data: #{@data}"
-
-    raise "stub"
+    {collection: models}
   end
 end
