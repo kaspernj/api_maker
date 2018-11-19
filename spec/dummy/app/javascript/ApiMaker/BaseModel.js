@@ -1,5 +1,6 @@
 import Api from "./Api"
 import Collection from "./Collection"
+import inflection from "inflection"
 import ModelName from "./ModelName"
 import Money from "js-money"
 
@@ -30,23 +31,45 @@ export default class BaseModel {
     return new Collection({"modelName": this.modelClassData().name, "ransack": query, "targetPathName": this.modelClassData().path})
   }
 
-  constructor(modelData = {}) {
+  constructor(args = {}) {
     this.changes = {}
     this.relationshipsCache = {}
-    this.modelData = modelData
-    this._preloadRelationships()
+
+    if (args && args.data && args.data.attributes) {
+      this._readModelDataFromArgs(args)
+    } else {
+      this.modelData = {}
+    }
   }
 
   connect(eventName, callback) {
-    var modelClassData = this.modelClassData()
-    var modelName = modelClassData.name
-    var callbackData = {"connect_model": {}}
-    callbackData["connect_model"][modelName] = {}
-    callbackData["connect_model"][modelName][eventName] = [this._primaryKey()]
-
     return App.cable.subscriptions.create(
-      {channel: "ModelUpdates::EventsChannel", callback_data: callbackData},
-      {received: callback}
+      {
+        "channel": "ApiMaker::EventsChannel",
+        "id": this._primaryKey(),
+        "model": this.modelClassData().name,
+        "event": eventName
+      },
+      {
+        received: function(json) {
+          callback(json)
+        }
+      }
+    )
+  }
+
+  connectUpdated(callback) {
+    return App.cable.subscriptions.create(
+      {
+        "channel": "ApiMaker::UpdatesChannel",
+        "id": this._primaryKey(),
+        "model": this.modelClassData().name
+      },
+      {
+        received: function(json) {
+          callback(json)
+        }
+      }
     )
   }
 
@@ -333,7 +356,7 @@ export default class BaseModel {
 
   _callmemberCommand(args) {
     return new Promise((resolve, reject) => {
-      var url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model.id()}/${args.memberCommand}`
+      var url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model._primaryKey()}/${args.memberCommand}`
       var postData = {
         args: args.args,
         plural_name: args.model.modelClassData().pluralName,
@@ -461,6 +484,53 @@ export default class BaseModel {
     }
 
     return this.relationshipsCache[args.reflectionName]
+  }
+
+  _readModelDataFromArgs(args) {
+    this.modelData = args.data.attributes
+
+    if (!args.data.relationships)
+      return
+
+    for(var relationshipName in args.data.relationships) {
+      var relationshipData = args.data.relationships[relationshipName]
+
+      if (Array.isArray(relationshipData.data)) {
+        var result = []
+
+        for(var relationshipDataIKey in relationshipData.data) {
+          var relationshipDataI = relationshipData.data[relationshipDataIKey]
+
+          var includedData = args.response.included.find((included) => {
+            return included.type == relationshipDataI.type && included.id == relationshipDataI.id
+          })
+
+          if (!includedData)
+            throw `Couldn't find included data for ${relationshipName}`
+
+          var modelClassName = inflection.classify(inflection.singularize(includedData.type))
+          var modelClass = require(`ApiMaker/Models/${modelClassName}`).default
+          var model = new modelClass({data: includedData, response: args.response})
+
+          result.push(model)
+        }
+
+        this.relationshipsCache[relationshipName] = result
+      } else {
+        var includedData = args.response.included.find((included) => {
+          return included.type == relationshipData.data.type && included.id == relationshipData.data.id
+        })
+
+        if (!includedData)
+          throw `Couldn't find included data for ${relationshipName}`
+
+        var modelClassName = inflection.classify(inflection.singularize(includedData.type))
+        var modelClass = require(`ApiMaker/Models/${modelClassName}`).default
+        var model = new modelClass({data: includedData, response: args.response})
+
+        this.relationshipsCache[relationshipName] = model
+      }
+    }
   }
 
   _primaryKey() {

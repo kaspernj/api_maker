@@ -26,7 +26,7 @@ export default class Devise {
           return null
 
         var modelClass = require("ApiMaker/Models/User").default
-        var modelInstance = new modelClass(JSON.parse(scopeData))
+        var modelInstance = new modelClass({data: JSON.parse(scopeData)})
         return modelInstance
       }
     
