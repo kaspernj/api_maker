@@ -17,7 +17,7 @@ class ApiMaker::CollectionSerializer
         data.fetch(:data) << ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
       end
 
-      preloader = ApiMaker::Preloader.new(ability: @ability, collection: @collection, data: data, include_param: @include_param)
+      preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param)
       preloader.fill_data
 
       data
