@@ -1,4 +1,6 @@
 class ApiMaker::Serializer
+  attr_reader :model, :relationships
+
   def self.resource_for(klass)
     "Resources::#{klass.name}Resource".constantize
   rescue NameError
@@ -9,11 +11,11 @@ class ApiMaker::Serializer
     "Resources::#{klass.name}Resource".constantize
   end
 
-  def initialize(ability: nil, args: {}, model:, include_param: nil)
+  def initialize(ability: nil, args: {}, model:)
     @args = args
     @model = model
     @ability = ability
-    @include_param = include_param
+    @relationships = {}
   end
 
   def attributes
@@ -42,50 +44,32 @@ class ApiMaker::Serializer
     @controller&.__send__(:current_ability)
   end
 
+  def fetch(*args, &blk)
+    result.fetch(*args, &blk)
+  end
+
   def resource
     @resource ||= ApiMaker::Serializer.resource_for!(@model.class)
   end
 
   def resource_instance
-    @resource_instance ||= resource.new(ability: current_ability, args: @args, model: @model, include_param: @include_param)
-  end
-
-  def relationships
-    result = {}
-    return result unless @include_param
-
-    parsed = ApiMaker::RelationshipIncluder.parse(@include_param)
-    parsed.each do |key, value|
-      next unless key
-
-      key = key.to_sym
-      association = @model.association(key)
-      scope = association.association_scope
-      scope = scope.accessible_by(current_ability) if current_ability
-
-      if association.is_a?(ActiveRecord::Associations::BelongsToAssociation) || association.is_a?(ActiveRecord::Associations::HasOneAssociation)
-        model = scope.first
-
-        if model
-          serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, include_param: value)
-          result[key] = serializer.result
-        else
-          result[key] = nil
-        end
-      else
-        collection_serializer = ApiMaker::CollectionSerializer.new(ability: @ability, args: @args, collection: scope, include_param: value)
-        result[key] = collection_serializer.result
-      end
-    end
-
-    result
+    @resource_instance ||= resource.new(ability: current_ability, args: @args, model: @model)
   end
 
   def result
-    attributes.merge(relationships)
+    @result ||= {
+      type: @model.class.model_name.plural,
+      id: @model.id,
+      attributes: attributes,
+      relationships: relationships
+    }
   end
 
-  def to_json
-    result.to_json
+  def as_json(_options = nil)
+    result
+  end
+
+  def to_json(_options = nil)
+    JSON.generate(as_json)
   end
 end

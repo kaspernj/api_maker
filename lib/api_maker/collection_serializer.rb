@@ -7,8 +7,28 @@ class ApiMaker::CollectionSerializer
   end
 
   def result
-    @collection.map do |model|
-      ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, include_param: @include_param).result
-    end
+    @result ||= proc do
+      data = {
+        data: [],
+        included: []
+      }
+
+      @collection.map do |model|
+        data.fetch(:data) << ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+      end
+
+      preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param)
+      preloader.fill_data
+
+      data
+    end.call
+  end
+
+  def as_json(_options = nil)
+    result
+  end
+
+  def to_json(_options = nil)
+    JSON.generate(as_json)
   end
 end

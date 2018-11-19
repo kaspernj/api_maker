@@ -9,7 +9,7 @@ class ApiMaker::ModelController < ApiMaker::BaseController
 
     collection = collection_from_query(query)
 
-    response = {collection: collection}
+    response = collection.as_json
     include_pagination_data(response, query)
 
     render json: response
@@ -91,9 +91,12 @@ private
 
   def include_pagination_data(response, query)
     return if params[:page].blank?
-    response[:current_page] = query.current_page
-    response[:total_count] = query.try(:total_count) || query.try(:total_entries)
-    response[:total_pages] = query.total_pages
+
+    response[:meta] = {
+      currentPage: query.current_page,
+      totalCount: query.try(:total_count) || query.try(:total_entries),
+      totalPages: query.total_pages
+    }
   end
 
   def manage_through_relationship
@@ -138,7 +141,7 @@ private
   end
 
   def serialized_resource(model)
-    ApiMaker::Serializer.new(ability: current_ability, args: api_maker_args, model: model, include_param: include_param)
+    ApiMaker::Serializer.new(ability: current_ability, args: api_maker_args, model: model)
   end
 
   def success_response

@@ -3,26 +3,26 @@ import Collection from "../Collection"
 
 export default class Project extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"created_at","type":"datetime"}],"name":"Project","pluralName":"projects","relationships":[{"className":"Task","name":"tasks","macro":"has_many"},{"className":"Task","name":"task","macro":"has_one"}],"paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
+    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"created_at","type":"datetime"}],"name":"Project","pluralName":"projects","relationships":[{"className":"ProjectDetail","name":"project_detail","macro":"has_one"},{"className":"Task","name":"tasks","macro":"has_many"}],"paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
   }
 
+  
+    
+      loadProjectDetail() {
+        var id = this.id()
+        return this._loadHasOneReflection({"reflectionName":"project_detail","model":this,"modelName":"ProjectDetail","targetPathName":"/api_maker/project_details","ransack":{"project_id_eq":id}})
+      }
+
+      projectDetail() {
+        var id = this.id()
+        return this._readHasOneReflection({"reflectionName":"project_detail","model":this,"modelName":"ProjectDetail","targetPathName":"/api_maker/project_details","ransack":{"project_id_eq":id}})
+      }
+    
   
     
       tasks() {
         var id = this.id()
         return new Collection({"reflectionName":"tasks","model":this,"modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
-      }
-    
-  
-    
-      loadTask() {
-        var id = this.id()
-        return this._loadHasOneReflection({"reflectionName":"task","model":this,"modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
-      }
-
-      task() {
-        var id = this.id()
-        return this._readHasOneReflection({"reflectionName":"task","model":this,"modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
       }
     
   

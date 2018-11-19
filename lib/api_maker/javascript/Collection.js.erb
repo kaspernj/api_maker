@@ -1,4 +1,5 @@
 import BaseModel from "./BaseModel"
+import ModelsResponseReader from "./ModelsResponseReader"
 import qs from "qs"
 import Result from "./Result"
 
@@ -32,8 +33,11 @@ export default class Collection {
   }
 
   loaded() {
-    if (!(this.args.reflectionName in this.args.model.relationshipsCache))
+    if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
+      var model = this.args.model
+      console.log({ model })
       throw `${this.args.reflectionName} hasnt been loaded yet`
+    }
 
     return this.args.model.relationshipsCache[this.args.reflectionName]
   }
@@ -113,14 +117,8 @@ export default class Collection {
   }
 
   _responseToModels(response) {
-    var modelClass = this.modelClass()
-    var array = []
-    for(var modelDataKey in response.collection) {
-      var modelData = response.collection[modelDataKey]
-      var modelInstance = new modelClass(modelData)
-      array.push(modelInstance)
-    }
-    return array
+    var modelsResponseReader = new ModelsResponseReader({response: response})
+    return modelsResponseReader.models()
   }
 
   _params() {
