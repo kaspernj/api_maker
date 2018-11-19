@@ -69,7 +69,7 @@ class ApiMaker::Serializer
     result
   end
 
-  def to_json
-    result.to_json
+  def to_json(_options = nil)
+    JSON.generate(as_json)
   end
 end

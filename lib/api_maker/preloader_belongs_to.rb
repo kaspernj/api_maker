@@ -8,10 +8,7 @@ class ApiMaker::PreloaderBelongsTo
 
   def preload
     plural_name = @reflection.active_record.model_name.plural
-    models = @reflection.klass.where(@reflection.klass.primary_key => @collection.select(@reflection.foreign_key.to_sym))
-
-    puts "SQL: #{models.to_sql}"
-    puts "Count: #{models.count}"
+    models = @reflection.klass.where(@reflection.klass.primary_key => @collection.map(&@reflection.foreign_key.to_sym))
 
     models.each do |model|
       @records.each do |record|

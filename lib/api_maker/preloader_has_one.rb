@@ -4,16 +4,16 @@ class ApiMaker::PreloaderHasOne
     @collection = collection
     @reflection = reflection
     @records = records
+
+    raise "Records was nil" unless records
   end
 
   def preload
     plural_name = @reflection.active_record.model_name.plural
 
-    puts "SQL: #{models.to_sql}"
-
     models.find_each do |model|
-      origin_id = model.attributes.fetch(@reflection.foreign_key)
-      origin_data = @records.find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == origin_id }
+      origin_id = model.attributes.fetch("api_maker_origin_id")
+      origin_data = @records.find { |record| record.model.class == @reflection.active_record && record.model.id == origin_id }
 
       origin_data.fetch(:relationships)[@reflection.name] = {data: {
         type: @reflection.klass.model_name.plural,
@@ -30,8 +30,6 @@ class ApiMaker::PreloaderHasOne
 
   def models
     if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-      query = @reflection.klass.where("#{@reflection.through_reflection.klass.table_name}.#{@reflection.through_reflection.klass.primary_key}" => @collection.map(&:id))
-
       joins = []
 
       current_reflection = @reflection
@@ -53,20 +51,13 @@ class ApiMaker::PreloaderHasOne
       joins.prepend(last_reflection.plural_name.to_sym)
       joins_hash = joins_array_to_hash(joins)
 
-      puts "JOINS: #{joins}"
-      puts "HASH: #{joins_hash}"
-
       inverse_of = @reflection.inverse_of || @reflection.options[:through].to_s.pluralize.to_sym
-      query = query.joins(joins_hash).where("#{last_reflection.table_name}.#{last_reflection.klass.primary_key} = (?)", @collection.map(&:id))
-
-      puts "SQL: #{query.to_sql}"
-
-      # binding.pry
-
-      query
+      query = @reflection.klass.joins(joins_hash).where(last_reflection.table_name => {last_reflection.klass.primary_key => @collection.map(&:id)})
     else
-      @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
+      query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
     end
+
+    query.select(@reflection.klass.arel_table[Arel.star]).select(@reflection.active_record.arel_table[:id].as("api_maker_origin_id"))
   end
 
   def joins_array_to_hash(array)

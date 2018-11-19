@@ -23,4 +23,12 @@ class ApiMaker::CollectionSerializer
       data
     end.call
   end
+
+  def as_json(_options = nil)
+    result
+  end
+
+  def to_json(_options = nil)
+    JSON.generate(as_json)
+  end
 end
