@@ -4,7 +4,7 @@ describe ApiMaker::CollectionSerializer do
   let!(:account) { create :account, customer: customer, id: 1 }
   let!(:customer) { create :customer, id: 5, name: "Test customer" }
   let!(:project) { create :project, account: account, id: 2, name: "Test project" }
-  let!(:task) { create :task, id: 3, project: project, user: user }
+  let!(:task) { create :task, id: 3, name: "Test task", project: project, user: user }
   let!(:user) { create :user, id: 4 }
 
   it "preloads relationships" do
@@ -16,6 +16,16 @@ describe ApiMaker::CollectionSerializer do
     project_include = result.fetch("included").find { |record| record.fetch("type") == "projects" && record.fetch("id") == 2 }
 
     expect(project_include.dig("attributes", "name")).to eq "Test project"
+  end
+
+  it "preloads has one relationships" do
+    collection = Project.where(id: project.id)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["task"]).to_json)
+
+    expect(result.dig("data", 0, "relationships", "task", "data", "id")).to eq 3
+    expect(result.dig("included", 0, "type")).to eq "tasks"
+    expect(result.dig("included", 0, "id")).to eq 3
+    expect(result.dig("included", 0, "attributes", "name")).to eq "Test task"
   end
 
   it "preloads has one through relationships" do
