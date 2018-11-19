@@ -1,4 +1,4 @@
 class Resources::ProjectResource < Resources::ApplicationResource
   attributes :id, :name, :created_at
-  relationships :tasks, :task
+  relationships :project_detail, :tasks, :task
 end

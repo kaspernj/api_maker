@@ -413,44 +413,6 @@ export default class BaseModel {
     return Money.fromInteger(cents, currency)
   }
 
-  _preloadRelationships() {
-    var modelClassData = this.modelClassData()
-    var thisModelData = this.modelData
-
-    for(var key in modelClassData.relationships) {
-      var relationship = modelClassData.relationships[key]
-      var preloadedData = this.modelData[relationship.name]
-
-      if (!(relationship.name in this.modelData))
-        continue
-
-      if (!preloadedData) {
-        this.relationshipsCache[relationship.name] = null
-        continue
-      }
-
-      var modelClass = require(`ApiMaker/Models/${relationship.className}`).default
-
-      if (relationship.macro == "belongs_to" || relationship.macro == "has_one") {
-        var modelInstance = new modelClass(preloadedData)
-        this.preloadRelationship(relationship.name, modelInstance)
-        delete this.modelData[relationship.name]
-      } else if(relationship.macro == "has_many") {
-        var preloadedModels = []
-        for(var key in preloadedData) {
-          var modelData = preloadedData[key]
-          var modelInstance = new modelClass(modelData)
-          preloadedModels.push(modelInstance)
-        }
-
-        this.preloadRelationship(relationship.name, preloadedModels)
-        delete this.modelData[relationship.name]
-      } else {
-        console.log(`Cannot preload this type of relationship yet: ${relationship.name} - ${relationship.macro}`)
-      }
-    }
-  }
-
   _loadBelongsToReflection(args) {
     return new Promise((resolve, reject) => {
       if (args.reflectionName in this.relationshipsCache) {

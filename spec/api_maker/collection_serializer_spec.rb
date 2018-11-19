@@ -41,4 +41,11 @@ describe ApiMaker::CollectionSerializer do
     expect(customer_include.dig("id")).to eq 5
     expect(customer_include.dig("attributes", "name")).to eq "Test customer"
   end
+
+  it "preloads like on commoditreader listing company" do
+    collection = User.where(id: user.id)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks.project_detail"]).to_json)
+
+    pp result
+  end
 end

@@ -13,10 +13,10 @@ class ApiMaker::PreloaderBelongsTo
     models.each do |model|
       @records.each do |record|
         if record.model.class == @reflection.active_record && record.model.attributes.fetch(@reflection.foreign_key) == model.id
-          record.relationships[@reflection.name] = {
+          record.relationships[@reflection.name] = {data: {
             type: @reflection.klass.model_name.plural,
             id: model.id
-          }
+          }}
         end
       end
 
