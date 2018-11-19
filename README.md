@@ -34,7 +34,7 @@ class ApplicationController
 private
 
   def api_maker_args
-    {current_user: current_user}
+    @api_maker_args ||= {current_user: current_user}
   end
 end
 ```
