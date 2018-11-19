@@ -18,13 +18,24 @@ class ApiMaker::Preloader
       reflection = @collection.model.reflections[key]
       raise "Unknown reflection: #{@collection.model.name}##{key}" unless reflection
 
-      preload_class = case reflection.macro
-      when :has_many
-        ApiMaker::PreloaderHasMany
-      when :belongs_to
-        ApiMaker::PreloaderBelongsTo
-      when :has_one
-        ApiMaker::PreloaderHasOne
+      if reflection.macro == :has_many
+        @data.fetch(:data).each do |model|
+          model.relationships[key] ||= {data: []}
+        end
+
+        preload_class = ApiMaker::PreloaderHasMany
+      elsif reflection.macro == :belongs_to
+        @data.fetch(:data).each do |model|
+          model.relationships[key] ||= nil
+        end
+
+        preload_class = ApiMaker::PreloaderBelongsTo
+      elsif reflection.macro == :has_one
+        @data.fetch(:data).each do |model|
+          model.relationships[key] ||= nil
+        end
+
+        preload_class = ApiMaker::PreloaderHasOne
       else
         raise "Unknown macro: #{reflection.macro}"
       end

@@ -65,6 +65,11 @@ class ApiMaker::PreloaderHasOne
     joins = []
 
     loop do
+      # Resolve if the through relationship is through multiple other through relationships
+      while current_reflection.through_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+        current_reflection = current_reflection.through_reflection
+      end
+
       macro = current_reflection.through_reflection.macro
       inverse_name = current_reflection.through_reflection.__send__(:inverse_name)
 
@@ -78,10 +83,12 @@ class ApiMaker::PreloaderHasOne
         raise "Unknown class: #{current_reflection.through_reflection.class.name}"
       end
 
-      current_reflection = current_reflection.through_reflection.klass.reflections.fetch(@reflection.name.to_s)
+      new_reflection = current_reflection.through_reflection.klass.reflections[@reflection.name.to_s]
+      raise "No such reflection: #{current_reflection.through_reflection.klass.name}##{@reflection.name}" unless new_reflection
+      current_reflection = new_reflection
 
       unless current_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-        joins.append(current_reflection.__send__(:inverse_name) || current_reflection.active_record.model_name.plural)
+        joins.append(current_reflection.__send__(:inverse_name) || current_reflection.active_record.model_name.plural.to_sym)
         break
       end
     end

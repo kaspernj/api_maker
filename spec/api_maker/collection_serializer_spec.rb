@@ -29,6 +29,26 @@ describe ApiMaker::CollectionSerializer do
     expect(result.dig("included", 0, "attributes", "details")).to eq "Test project details"
   end
 
+  it "includes an empty relationship if it has been included but doesnt exist for has one" do
+    project_detail.destroy!
+
+    collection = Project.where(id: project.id)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_detail"]).to_json)
+
+    expect(result.dig("data", 0, "relationships")).to have_key "project_detail"
+    expect(result.dig("data", 0, "relationships", "project_detail")).to eq nil
+  end
+
+  it "includes an empty array if it has been included but doesnt exist for has many" do
+    task.destroy!
+
+    collection = Project.where(id: project.id)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks"]).to_json)
+
+    expect(result.dig("data", 0, "relationships")).to have_key "tasks"
+    expect(result.dig("data", 0, "relationships", "tasks")).to eq("data" => [])
+  end
+
   it "preloads has one through relationships" do
     collection = User.where(id: user.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks.customer"]).to_json)
@@ -54,5 +74,15 @@ describe ApiMaker::CollectionSerializer do
 
     expect(task_include.dig("relationships", "project_detail", "data", "id")).to eq 6
     expect(project_detail_include.dig("attributes", "details")).to eq "Test project details"
+  end
+
+  it "preloads a relationship through another relationship on the same model" do
+    collection = Task.where(id: task.id)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["customer"]).to_json)
+
+    customer_include = result.fetch("included").find { |record| record.fetch("type") == "customers" && record.fetch("id") == 5 }
+
+    expect(result.dig("data", 0, "relationships", "customer", "data", "id")).to eq 5
+    expect(customer_include.dig("attributes", "name")).to eq "Test customer"
   end
 end

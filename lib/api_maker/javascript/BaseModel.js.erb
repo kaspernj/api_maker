@@ -497,7 +497,9 @@ export default class BaseModel {
     for(var relationshipName in args.data.relationships) {
       var relationshipData = args.data.relationships[relationshipName]
 
-      if (Array.isArray(relationshipData.data)) {
+      if (!relationshipData) {
+        this.relationshipsCache[relationshipName] = null
+      } else if (Array.isArray(relationshipData.data)) {
         var result = []
 
         for(var relationshipDataIKey in relationshipData.data) {
