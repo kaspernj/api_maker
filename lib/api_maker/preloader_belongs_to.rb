@@ -1,5 +1,6 @@
 class ApiMaker::PreloaderBelongsTo
   def initialize(ability:, data:, collection:, records:, reflection:)
+    @ability = ability
     @data = data
     @collection = collection
     @reflection = reflection
@@ -8,7 +9,9 @@ class ApiMaker::PreloaderBelongsTo
 
   def preload
     plural_name = @reflection.active_record.model_name.plural
+
     models = @reflection.klass.where(@reflection.klass.primary_key => @collection.map(&@reflection.foreign_key.to_sym))
+    models = models.accessible_by(@ability) if @ability
 
     models.each do |model|
       @records.each do |record|

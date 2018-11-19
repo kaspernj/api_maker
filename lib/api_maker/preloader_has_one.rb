@@ -1,5 +1,6 @@
 class ApiMaker::PreloaderHasOne
   def initialize(ability:, data:, collection:, reflection:, records:)
+    @ability = ability
     @data = data
     @collection = collection
     @reflection = reflection
@@ -10,6 +11,9 @@ class ApiMaker::PreloaderHasOne
 
   def preload
     plural_name = @reflection.active_record.model_name.plural
+
+    models = models_query
+    models = models.accessible_by(@ability) if @ability
 
     models.find_each do |model|
       origin_id = model.attributes.fetch("api_maker_origin_id")
@@ -28,7 +32,7 @@ class ApiMaker::PreloaderHasOne
     {collection: models}
   end
 
-  def models
+  def models_query
     if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
       joins = []
 

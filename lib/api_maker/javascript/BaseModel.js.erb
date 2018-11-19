@@ -495,18 +495,41 @@ export default class BaseModel {
     for(var relationshipName in args.data.relationships) {
       var relationshipData = args.data.relationships[relationshipName]
 
-      var includedData = args.response.included.find((included) => {
-        return included.type == relationshipData.data.type && included.id == relationshipData.data.id
-      })
+      if (Array.isArray(relationshipData.data)) {
+        var result = []
 
-      if (!includedData)
-        continue
+        for(var relationshipDataIKey in relationshipData.data) {
+          var relationshipDataI = relationshipData.data[relationshipDataIKey]
 
-      var modelClassName = inflection.classify(inflection.singularize(includedData.type))
-      var modelClass = require(`ApiMaker/Models/${modelClassName}`).default
-      var model = new modelClass({data: includedData, response: args.response})
+          var includedData = args.response.included.find((included) => {
+            return included.type == relationshipDataI.type && included.id == relationshipDataI.id
+          })
 
-      this.relationshipsCache[relationshipName] = model
+          if (!includedData)
+            throw `Couldn't find included data for ${relationshipName}`
+
+          var modelClassName = inflection.classify(inflection.singularize(includedData.type))
+          var modelClass = require(`ApiMaker/Models/${modelClassName}`).default
+          var model = new modelClass({data: includedData, response: args.response})
+
+          result.push(model)
+        }
+
+        this.relationshipsCache[relationshipName] = result
+      } else {
+        var includedData = args.response.included.find((included) => {
+          return included.type == relationshipData.data.type && included.id == relationshipData.data.id
+        })
+
+        if (!includedData)
+          throw `Couldn't find included data for ${relationshipName}`
+
+        var modelClassName = inflection.classify(inflection.singularize(includedData.type))
+        var modelClass = require(`ApiMaker/Models/${modelClassName}`).default
+        var model = new modelClass({data: includedData, response: args.response})
+
+        this.relationshipsCache[relationshipName] = model
+      }
     }
   }
 
