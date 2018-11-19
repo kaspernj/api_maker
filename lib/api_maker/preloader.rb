@@ -8,9 +8,9 @@ class ApiMaker::Preloader
   end
 
   def fill_data
-    return result unless @include_param
-
     parsed = ApiMaker::RelationshipIncluder.parse(@include_param)
+    return unless parsed
+
     parsed.each do |key, value|
       next unless key
 

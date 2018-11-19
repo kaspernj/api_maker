@@ -14,7 +14,19 @@ describe "models" do
 
       parsed = JSON.parse(response.body)
 
-      expect(parsed.fetch("collection").length).to eq 2
+      expect(parsed.fetch("data").length).to eq 2
+    end
+
+    it "includes pagination data" do
+      login_as user
+
+      get "/api_maker/tasks?page=1"
+
+      parsed = JSON.parse(response.body)
+
+      expect(parsed.dig("meta", "currentPage")).to eq 1
+      expect(parsed.dig("meta", "totalPages")).to eq 1
+      expect(parsed.dig("meta", "totalCount")).to eq 2
     end
 
     it "handels has many through relationships" do
@@ -24,8 +36,8 @@ describe "models" do
 
       parsed = JSON.parse(response.body)
 
-      expect(parsed.fetch("collection").length).to eq 1
-      expect(parsed.dig("collection", 0, "user_id")).to eq user.id
+      expect(parsed.fetch("data").length).to eq 1
+      expect(parsed.dig("data", 0, "attributes", "user_id")).to eq user.id
     end
   end
 end
