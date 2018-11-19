@@ -4,6 +4,7 @@ describe ApiMaker::CollectionSerializer do
   let!(:account) { create :account, customer: customer, id: 1 }
   let!(:customer) { create :customer, id: 5, name: "Test customer" }
   let!(:project) { create :project, account: account, id: 2, name: "Test project" }
+  let!(:project_detail) { create :project_detail, project: project, id: 6, details: "Test project details" }
   let!(:task) { create :task, id: 3, name: "Test task", project: project, user: user }
   let!(:user) { create :user, id: 4 }
 
@@ -20,12 +21,12 @@ describe ApiMaker::CollectionSerializer do
 
   it "preloads has one relationships" do
     collection = Project.where(id: project.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["task"]).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_detail"]).to_json)
 
-    expect(result.dig("data", 0, "relationships", "task", "data", "id")).to eq 3
-    expect(result.dig("included", 0, "type")).to eq "tasks"
-    expect(result.dig("included", 0, "id")).to eq 3
-    expect(result.dig("included", 0, "attributes", "name")).to eq "Test task"
+    expect(result.dig("data", 0, "relationships", "project_detail", "data", "id")).to eq 6
+    expect(result.dig("included", 0, "type")).to eq "project_details"
+    expect(result.dig("included", 0, "id")).to eq 6
+    expect(result.dig("included", 0, "attributes", "details")).to eq "Test project details"
   end
 
   it "preloads has one through relationships" do
@@ -46,6 +47,12 @@ describe ApiMaker::CollectionSerializer do
     collection = User.where(id: user.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks.project_detail"]).to_json)
 
-    pp result
+    expect(result.dig("data", 0, "relationships", "tasks", "data", 0, "id")).to eq 3
+
+    task_include = result.fetch("included").find { |record| record.fetch("type") == "tasks" && record.fetch("id") == 3 }
+    project_detail_include = result.fetch("included").find { |record| record.fetch("type") == "project_details" && record.fetch("id") == 6 }
+
+    expect(task_include.dig("relationships", "project_detail", "data", "id")).to eq 6
+    expect(project_detail_include.dig("attributes", "details")).to eq "Test project details"
   end
 end

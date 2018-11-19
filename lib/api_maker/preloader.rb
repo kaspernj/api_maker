@@ -14,7 +14,9 @@ class ApiMaker::Preloader
     parsed.each do |key, value|
       next unless key
 
-      reflection = @collection.model.reflections.fetch(key)
+      reflection = @collection.model.reflections[key]
+      raise "Unknown reflection: #{@collection.model.name}##{key}" unless reflection
+
       scope = reflection.klass
 
       if reflection.macro == :has_many

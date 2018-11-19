@@ -37,18 +37,27 @@ class ApiMaker::PreloaderHasOne
       joins = []
 
       current_reflection = @reflection
-      while current_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-        if current_reflection.__send__(:delegate_reflection).is_a?(ActiveRecord::Reflection::HasOneReflection)
-          inverse_of = current_reflection.through_reflection.name
-          joins << inverse_of
-        elsif current_reflection.through_reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection)
-          inverse_of = current_reflection.through_reflection.plural_name.to_sym
-          joins << inverse_of
+      loop do
+        macro = current_reflection.macro
+
+        # binding.pry
+
+        if current_reflection.through_reflection.__send__(:inverse_name)
+          joins << current_reflection.through_reflection.__send__(:inverse_name)
+        elsif macro == :has_many
+          joins << current_reflection.through_reflection.name
+        elsif macro == :belongs_to || macro == :has_one
+          joins << current_reflection.through_reflection.plural_name.to_sym
         else
           raise "Unknown class: #{current_reflection.through_reflection.class.name}"
         end
 
         current_reflection = current_reflection.through_reflection.klass.reflections.fetch(@reflection.name.to_s)
+
+        unless current_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+          joins << current_reflection.__send__(:inverse_name)
+          break
+        end
       end
 
       last_reflection = @reflection.through_reflection.inverse_of
@@ -56,11 +65,9 @@ class ApiMaker::PreloaderHasOne
       if last_reflection
         table_name = last_reflection.table_name
         primary_key = last_reflection.klass.primary_key
-        joins.prepend(last_reflection.plural_name.to_sym)
       else
         table_name = @reflection.through_reflection.active_record.model_name.plural
         primary_key = @reflection.through_reflection.active_record.primary_key
-        joins.prepend(table_name.to_sym)
       end
 
       joins_hash = joins_array_to_hash(joins)
