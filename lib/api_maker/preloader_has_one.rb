@@ -64,14 +64,15 @@ class ApiMaker::PreloaderHasOne
     joins = []
 
     loop do
-      macro = current_reflection.macro
+      macro = current_reflection.through_reflection.macro
+      inverse_name = current_reflection.through_reflection.__send__(:inverse_name)
 
-      if current_reflection.through_reflection.__send__(:inverse_name)
-        joins << current_reflection.through_reflection.__send__(:inverse_name)
+      if inverse_name
+        joins << inverse_name
       elsif macro == :has_many
         joins << current_reflection.through_reflection.name
       elsif macro == :belongs_to || macro == :has_one
-        joins << current_reflection.through_reflection.plural_name.to_sym
+        joins << current_reflection.through_reflection.active_record.model_name.plural.to_sym
       else
         raise "Unknown class: #{current_reflection.through_reflection.class.name}"
       end
