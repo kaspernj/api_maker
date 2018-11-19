@@ -7,6 +7,7 @@ class ApiMakerAbility
     current_user = args.fetch(:current_user)
 
     can CRUD, Project
+    can CRUD, ProjectDetail
     can CRUD + [:test_collection, :test_member, :validate], Task, user_id: current_user&.id
     can CRUD, User
   end

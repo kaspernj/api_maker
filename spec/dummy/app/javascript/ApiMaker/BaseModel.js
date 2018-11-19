@@ -15,7 +15,7 @@ export default class BaseModel {
 
       Api.get(urlToUse).then((response) => {
         var modelClass = require(`ApiMaker/Models/${this.modelClassData().name}`).default
-        var model = new modelClass(response.model)
+        var model = new modelClass({data: response.model})
         resolve(model)
       }, (error) => {
         reject(error)
@@ -37,6 +37,8 @@ export default class BaseModel {
 
     if (args && args.data && args.data.attributes) {
       this._readModelDataFromArgs(args)
+    } else if(args) {
+      this.modelData = args
     } else {
       this.modelData = {}
     }
@@ -117,7 +119,7 @@ export default class BaseModel {
       Api.post(urlToUse, dataToUse).then((response) => {
         if (response.success) {
           if (response.model) {
-            this.modelData = response.model
+            this.modelData = response.model.attributes
             this.changes = {}
           }
 
