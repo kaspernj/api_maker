@@ -36,7 +36,7 @@ Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
 Metrics/AbcSize:
-  Max: 31
+  Max: 32
 
 Metrics/BlockLength:
   Enabled: false
@@ -52,6 +52,9 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   Max: 50
+
+Metrics/ParameterLists:
+  Enabled: false
 
 Metrics/PerceivedComplexity:
   Max: 10

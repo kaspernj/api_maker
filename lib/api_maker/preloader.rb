@@ -18,27 +18,8 @@ class ApiMaker::Preloader
       reflection = @collection.model.reflections[key]
       raise "Unknown reflection: #{@collection.model.name}##{key}" unless reflection
 
-      if reflection.macro == :has_many
-        @data.fetch(:data).each do |model|
-          model.relationships[key] ||= {data: []}
-        end
-
-        preload_class = ApiMaker::PreloaderHasMany
-      elsif reflection.macro == :belongs_to
-        @data.fetch(:data).each do |model|
-          model.relationships[key] ||= nil
-        end
-
-        preload_class = ApiMaker::PreloaderBelongsTo
-      elsif reflection.macro == :has_one
-        @data.fetch(:data).each do |model|
-          model.relationships[key] ||= nil
-        end
-
-        preload_class = ApiMaker::PreloaderHasOne
-      else
-        raise "Unknown macro: #{reflection.macro}"
-      end
+      fill_empty_relationships_for_key(reflection, key)
+      preload_class = preload_class_for_key(reflection)
 
       preload_result = preload_class.new(
         ability: @ability,
@@ -59,6 +40,40 @@ class ApiMaker::Preloader
         include_param: value,
         records: @data.fetch(:included)
       ).fill_data
+    end
+  end
+
+private
+
+  def fill_empty_relationships_for_key(reflection, key)
+    case reflection.macro
+    when :has_many
+      @data.fetch(:data).each do |model|
+        model.relationships[key] ||= {data: []}
+      end
+    when :belongs_to
+      @data.fetch(:data).each do |model|
+        model.relationships[key] ||= nil
+      end
+    when :has_one
+      @data.fetch(:data).each do |model|
+        model.relationships[key] ||= nil
+      end
+    else
+      raise "Unknown macro: #{reflection.macro}"
+    end
+  end
+
+  def preload_class_for_key(reflection)
+    case reflection.macro
+    when :has_many
+      ApiMaker::PreloaderHasMany
+    when :belongs_to
+      ApiMaker::PreloaderBelongsTo
+    when :has_one
+      ApiMaker::PreloaderHasOne
+    else
+      raise "Unknown macro: #{reflection.macro}"
     end
   end
 end
