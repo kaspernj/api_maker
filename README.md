@@ -65,6 +65,13 @@ class Resources::UserResources < Resources::ApplicationResource
 end
 ```
 
+You should also create an application command here: `app/api_maker/commands/application_command` with content like this:
+```ruby
+class Commands::ApplicationCommand < ApiMaker::BaseCommand
+end
+
+```
+
 ApiMaker uses that to keep track of what attributes, relationships and commands you want exposed through the API.
 
 Its now time to generate everything like this:
