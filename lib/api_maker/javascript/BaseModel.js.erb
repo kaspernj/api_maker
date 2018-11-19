@@ -39,7 +39,6 @@ export default class BaseModel {
       this._readModelDataFromArgs(args)
     } else {
       this.modelData = {}
-      this.relationships = {}
     }
   }
 
@@ -489,7 +488,6 @@ export default class BaseModel {
 
   _readModelDataFromArgs(args) {
     this.modelData = args.data.attributes
-    this.relationships = {}
 
     if (!args.data.relationships)
       return
@@ -508,7 +506,7 @@ export default class BaseModel {
       var modelClass = require(`ApiMaker/Models/${modelClassName}`).default
       var model = new modelClass({data: includedData, response: args.response})
 
-      this.relationships[relationshipName] = model
+      this.relationshipsCache[relationshipName] = model
     }
   }
 
