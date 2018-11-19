@@ -1,6 +1,7 @@
 class ApiMaker::PreloaderHasOne
-  def initialize(ability:, data:, collection:, reflection:, records:)
+  def initialize(ability:, args:, data:, collection:, reflection:, records:)
     @ability = ability
+    @args = args
     @data = data
     @collection = collection
     @reflection = reflection
@@ -19,7 +20,7 @@ class ApiMaker::PreloaderHasOne
         id: model.id
       }}
 
-      serialized = ApiMaker::Serializer.new(model: model)
+      serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
 
       @data.fetch(:included) << serialized
     end
@@ -80,7 +81,7 @@ class ApiMaker::PreloaderHasOne
       current_reflection = current_reflection.through_reflection.klass.reflections.fetch(@reflection.name.to_s)
 
       unless current_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-        joins << current_reflection.__send__(:inverse_name)
+        joins.append(current_reflection.__send__(:inverse_name) || current_reflection.active_record.model_name.plural)
         break
       end
     end
