@@ -1,5 +1,5 @@
 class Project < ApplicationRecord
-  belongs_to :account
+  belongs_to :account, optional: true
 
   has_many :project_secrets, dependent: :destroy
   has_many :tasks, dependent: :destroy, inverse_of: :project
