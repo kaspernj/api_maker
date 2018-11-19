@@ -17,21 +17,34 @@ class ApiMaker::Preloader
       reflection = @collection.model.reflections[key]
       raise "Unknown reflection: #{@collection.model.name}##{key}" unless reflection
 
-      scope = reflection.klass
-
-      if reflection.macro == :has_many
-        preload_result = ApiMaker::PreloaderHasMany.new(ability: @ability, data: @data, records: @records, collection: @collection, reflection: reflection).preload
-      elsif reflection.macro == :belongs_to
-        preload_result = ApiMaker::PreloaderBelongsTo.new(ability: @ability, data: @data, records: @records, collection: @collection, reflection: reflection).preload
-      elsif reflection.macro == :has_one
-        preload_result = ApiMaker::PreloaderHasOne.new(ability: @ability, data: @data, records: @records, collection: @collection, reflection: reflection).preload
+      preload_class = case reflection.macro
+      when :has_many
+        ApiMaker::PreloaderHasMany
+      when :belongs_to
+        ApiMaker::PreloaderBelongsTo
+      when :has_one
+        ApiMaker::PreloaderHasOne
       else
         raise "Unknown macro: #{reflection.macro}"
       end
 
-      if value.present?
-        ApiMaker::Preloader.new(ability: @ability, data: @data, collection: preload_result.fetch(:collection), include_param: value, records: @data.fetch(:included)).fill_data
-      end
+      preload_result = preload_class.new(
+        ability: @ability,
+        data: @data,
+        records: @records,
+        collection: @collection,
+        reflection: reflection
+      ).preload
+
+      next if value.blank?
+
+      ApiMaker::Preloader.new(
+        ability: @ability,
+        data: @data,
+        collection: preload_result.fetch(:collection),
+        include_param: value,
+        records: @data.fetch(:included)
+      ).fill_data
     end
   end
 end

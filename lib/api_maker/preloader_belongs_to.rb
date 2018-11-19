@@ -8,19 +8,15 @@ class ApiMaker::PreloaderBelongsTo
   end
 
   def preload
-    plural_name = @reflection.active_record.model_name.plural
-
-    models = @reflection.klass.where(@reflection.klass.primary_key => @collection.map(&@reflection.foreign_key.to_sym))
-    models = models.accessible_by(@ability) if @ability
-
     models.each do |model|
       @records.each do |record|
-        if record.model.class == @reflection.active_record && record.model.attributes.fetch(@reflection.foreign_key) == model.id
-          record.relationships[@reflection.name] = {data: {
-            type: @reflection.klass.model_name.plural,
-            id: model.id
-          }}
-        end
+        next unless record.model.class == @reflection.active_record
+        next unless record.model.attributes.fetch(@reflection.foreign_key) == model.id
+
+        record.relationships[@reflection.name] = {data: {
+          type: @reflection.klass.model_name.plural,
+          id: model.id
+        }}
       end
 
       serialized = ApiMaker::Serializer.new(model: model)
@@ -29,5 +25,13 @@ class ApiMaker::PreloaderBelongsTo
     end
 
     {collection: models}
+  end
+
+private
+
+  def models
+    models = @reflection.klass.where(@reflection.klass.primary_key => @collection.map(&@reflection.foreign_key.to_sym))
+    models = models.accessible_by(@ability) if @ability
+    models
   end
 end
