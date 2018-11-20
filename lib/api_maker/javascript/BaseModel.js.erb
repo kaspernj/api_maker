@@ -141,7 +141,7 @@ export default class BaseModel {
       Api.requestLocal({path: urlToUse, method: "POST", rawData: data}).then((response) => {
         if (response.success) {
           if (response.model) {
-            this.modelData = response.model
+            this.modelData = response.model.attributes
             this.changes = {}
           }
 
@@ -162,7 +162,7 @@ export default class BaseModel {
       Api.delete(urlToUse).then((response) => {
         if (response.success) {
           if (response.model) {
-            this.modelData = response.model
+            this.modelData = response.model.attributes
             this.changes = {}
           }
 
@@ -218,7 +218,7 @@ export default class BaseModel {
 
       Api.get(urlToUse).then((response) => {
         if (response.model) {
-          this.modelData = response.model
+          this.modelData = response.model.attributes
           this.changes = {}
         }
 
@@ -264,7 +264,7 @@ export default class BaseModel {
       Api.patch(urlToUse, dataToUse).then((response) => {
         if (response.success) {
           if (response.model) {
-            this.modelData = response.model
+            this.modelData = response.model.attributes
             this.changes = {}
           }
 
@@ -286,7 +286,7 @@ export default class BaseModel {
       Api.requestLocal({path: urlToUse, method: "PATCH", rawData: data}).then((response) => {
         if (response.success) {
           if (response.model) {
-            this.modelData = response.model
+            this.modelData = response.model.attributes
             this.changes = {}
           }
 
