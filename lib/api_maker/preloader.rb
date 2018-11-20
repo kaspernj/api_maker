@@ -48,15 +48,15 @@ private
   def fill_empty_relationships_for_key(reflection, key)
     case reflection.macro
     when :has_many
-      @data.fetch(:data).each do |model|
+      @records.each do |model|
         model.relationships[key] ||= {data: []}
       end
     when :belongs_to
-      @data.fetch(:data).each do |model|
+      @records.each do |model|
         model.relationships[key] ||= nil
       end
     when :has_one
-      @data.fetch(:data).each do |model|
+      @records.each do |model|
         model.relationships[key] ||= nil
       end
     else
