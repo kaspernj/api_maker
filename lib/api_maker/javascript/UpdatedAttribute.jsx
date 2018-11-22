@@ -29,8 +29,11 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
 
   setAttribute() {
     if (this.props.onValue) {
-      var newValue = this.props.onValue.apply(null, {model: this.state.model})
+      var newValue = this.props.onValue.apply(null, [{model: this.state.model}])
     } else {
+      if (!this.state.model[this.props.attribute])
+        throw new Error(`No such method: ${this.state.model.modelClassData().name()}#${this.props.attribute}()`)
+
       var newValue = this.state.model[this.props.attribute].apply(this.state.model)
     }
 

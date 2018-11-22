@@ -1,7 +1,5 @@
 class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
   def subscribed
-    puts params
-
     params[:subscription_data].each do |model_name, subscription_types|
       subscription_types["events"]&.each_key do |event_name, models|
         connect_event(model_name, models.keys, event_name)

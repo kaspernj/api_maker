@@ -26,10 +26,20 @@ class ApiMaker::Serializer
         next unless condition_result
       end
 
-      result[attribute] = attribute_value(attribute)
+      result[attribute] = attribute_converted_value(attribute)
     end
 
     result
+  end
+
+  def attribute_converted_value(attribute)
+    value = attribute_value(attribute)
+
+    if value.is_a?(Date) || value.is_a?(Time)
+      value.iso8601
+    else
+      value
+    end
   end
 
   def attribute_value(attribute)
