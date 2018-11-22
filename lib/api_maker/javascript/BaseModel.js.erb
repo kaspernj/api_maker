@@ -1,4 +1,5 @@
 import Api from "./Api"
+import CableConnectionPool from "./CableConnectionPool"
 import Collection from "./Collection"
 import inflection from "inflection"
 import ModelName from "./ModelName"
@@ -47,34 +48,13 @@ export default class BaseModel {
   }
 
   connect(eventName, callback) {
-    return App.cable.subscriptions.create(
-      {
-        "channel": "ApiMaker::EventsChannel",
-        "id": this._primaryKey(),
-        "model": this.modelClassData().name,
-        "event": eventName
-      },
-      {
-        received: function(json) {
-          callback(json)
-        }
-      }
-    )
+    var cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this._primaryKey(), eventName, callback)
+    return cableSubscription
   }
 
   connectUpdated(callback) {
-    return App.cable.subscriptions.create(
-      {
-        "channel": "ApiMaker::UpdatesChannel",
-        "id": this._primaryKey(),
-        "model": this.modelClassData().name
-      },
-      {
-        received: function(json) {
-          callback(json)
-        }
-      }
-    )
+    var cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this._primaryKey(), callback)
+    return cableSubscription
   }
 
   assignAttributes(newAttributes) {
