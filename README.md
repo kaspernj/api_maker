@@ -69,7 +69,13 @@ You should also create an application command here: `app/api_maker/commands/appl
 ```ruby
 class Commands::ApplicationCommand < ApiMaker::BaseCommand
 end
+```
 
+Add this to your application model:
+```ruby
+class ApplicationRecord < ActiveRecord::Base
+  include ApiMaker::ModelExtensions
+end
 ```
 
 ApiMaker uses that to keep track of what attributes, relationships and commands you want exposed through the API.
@@ -217,6 +223,69 @@ import Devise from "ApiMaker/Devise"
 Devise.currentUser().then((user) => {
   console.log("The current user has this email: " + user.email())
 })
+```
+
+## Events from the backend
+
+### Custom events
+
+Add the relevant access to your abilities:
+
+```ruby
+class ApiMakerAbility < ApplicationAbility
+  def initialize(args:)
+    can :event_new_message, User, id: 5
+  end
+end
+```
+
+```ruby
+user = User.find(5)
+user.api_maker_event("new_message", message: "Hello world")
+```
+
+```js
+User.find(5).then((user) => {
+  user.connect("new_message", (args) => {
+    console.log(`New message: ${args.message}`)
+  })
+})
+```
+
+### Update models
+
+Add this to your abilities:
+```ruby
+class ApiMakerAbility < ApplicationAbility
+  def initialize(args:)
+    can :update_events, User, id: 5
+  end
+end
+```
+
+Add this to the model you want to broadcast updates:
+```ruby
+class User < ApplicationRecord
+  api_maker_broadcast_updates
+end
+```
+
+```js
+User.find(5).then((user) => {
+  user.connectUpdated((args) => {
+    console.log(`Model was updated: ${args.model.id()}`)
+  })
+})
+```
+
+You can also use this React component to show a models attribute with automatic updates:
+
+```jsx
+import UpdatedAttribute from "ApiMaker/UpdatedAttribute"
+```
+
+```jsx
+<UpdatedAttribute model={user} attribute="email" />
 ```
 
 ## Serializing
