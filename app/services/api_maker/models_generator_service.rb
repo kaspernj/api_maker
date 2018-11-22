@@ -45,7 +45,9 @@ private
 
   def copy_base_model
     files = %w[
-      Api.js BaseModel.js Collection.js Devise.js ModelName.js ModelsResponseReader.js Paginate.jsx SortLink.jsx Result.js
+      Api.js BaseModel.js CableConnectionPool.js CableSubscription.js CableSubscriptionPool.js
+      Collection.js Devise.js Logger.js ModelName.js ModelsResponseReader.js Result.js
+      Paginate.jsx SortLink.jsx UpdatedAttribute.jsx
       Bootstrap/Checkbox.jsx Bootstrap/MoneyInput.jsx Bootstrap/RadioButtons.jsx Bootstrap/Select.jsx Bootstrap/StringInput.jsx
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
