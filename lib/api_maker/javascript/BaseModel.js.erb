@@ -37,7 +37,9 @@ export default class BaseModel {
 
     if (args && args.data && args.data.attributes) {
       this._readModelDataFromArgs(args)
-    } else if(args) {
+    } else if (args.attributes) {
+      this.modelData = args.attributes
+    } else if (args) {
       this.modelData = args
     } else {
       this.modelData = {}
