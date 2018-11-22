@@ -1,8 +1,8 @@
 class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
   def subscribed
     params[:subscription_data].each do |model_name, subscription_types|
-      subscription_types["events"]&.each_key do |event_name, models|
-        connect_event(model_name, models.keys, event_name)
+      subscription_types["events"]&.each do |event_name, model_ids|
+        connect_event(model_name, model_ids, event_name)
       end
 
       if subscription_types.key?("updates")
