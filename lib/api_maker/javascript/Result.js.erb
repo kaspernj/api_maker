@@ -4,7 +4,7 @@ export default class Result {
   }
 
   currentPage() {
-    return this.data.response.current_page
+    return this.data.response.meta.currentPage
   }
 
   models() {
@@ -12,10 +12,10 @@ export default class Result {
   }
 
   totalCount() {
-    return this.data.response.total_count
+    return this.data.response.meta.totalCount
   }
 
   totalPages() {
-    return this.data.response.total_pages
+    return this.data.response.meta.totalPages
   }
 }
