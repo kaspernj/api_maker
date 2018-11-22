@@ -14,7 +14,7 @@ export default class Collection {
   each(callback) {
     this.toArray().then((array) => {
       for(var model in array) {
-        callback.apply(model)
+        callback.call(model)
       }
     })
   }
