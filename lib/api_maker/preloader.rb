@@ -49,15 +49,15 @@ private
     case reflection.macro
     when :has_many
       @records.each do |model|
-        model.relationships[key] ||= {data: []}
+        model.relationships[key.to_sym] ||= {data: []}
       end
     when :belongs_to
       @records.each do |model|
-        model.relationships[key] ||= nil
+        model.relationships[key.to_sym] ||= nil
       end
     when :has_one
       @records.each do |model|
-        model.relationships[key] ||= nil
+        model.relationships[key.to_sym] ||= nil
       end
     else
       raise "Unknown macro: #{reflection.macro}"
