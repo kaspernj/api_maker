@@ -85,4 +85,11 @@ describe ApiMaker::CollectionSerializer do
     expect(result.dig("data", 0, "relationships", "customer", "data", "id")).to eq 5
     expect(customer_include.dig("attributes", "name")).to eq "Test customer"
   end
+
+  it "preloads has many through relationships that ends in a has one through" do
+    collection = Customer.where(id: customer.id)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_details"]).to_json)
+
+    puts result
+  end
 end
