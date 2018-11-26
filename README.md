@@ -272,10 +272,15 @@ end
 
 ```js
 User.find(5).then((user) => {
-  user.connectUpdated((args) => {
+  let subscription = user.connectUpdated((args) => {
     console.log(`Model was updated: ${args.model.id()}`)
   })
 })
+```
+
+Remember to unsubscrube again:
+```js
+subscription.unsubscribe()
 ```
 
 You can also use this React component to show a models attribute with automatic updates:
@@ -286,6 +291,15 @@ import UpdatedAttribute from "ApiMaker/UpdatedAttribute"
 
 ```jsx
 <UpdatedAttribute model={user} attribute="email" />
+```
+
+You can also use the `EventConnection` React component so you don't need to keep track of your subscription and unsubscribe:
+```jsx
+import EventConnection from "ApiMaker/EventConnection"
+```
+
+```jsx
+<EventConnection model={this.state.user} event="eventName" onCall={(data) => { this.onEvent(data) }} />
 ```
 
 ## Serializing

@@ -1,4 +1,5 @@
 import Api from "./Api"
+import CableConnectionPool from "./CableConnectionPool"
 import Collection from "./Collection"
 import inflection from "inflection"
 import ModelName from "./ModelName"
@@ -37,7 +38,9 @@ export default class BaseModel {
 
     if (args && args.data && args.data.attributes) {
       this._readModelDataFromArgs(args)
-    } else if(args) {
+    } else if (args.attributes) {
+      this.modelData = args.attributes
+    } else if (args) {
       this.modelData = args
     } else {
       this.modelData = {}
@@ -45,34 +48,13 @@ export default class BaseModel {
   }
 
   connect(eventName, callback) {
-    return App.cable.subscriptions.create(
-      {
-        "channel": "ApiMaker::EventsChannel",
-        "id": this._primaryKey(),
-        "model": this.modelClassData().name,
-        "event": eventName
-      },
-      {
-        received: function(json) {
-          callback(json)
-        }
-      }
-    )
+    var cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this._primaryKey(), eventName, callback)
+    return cableSubscription
   }
 
   connectUpdated(callback) {
-    return App.cable.subscriptions.create(
-      {
-        "channel": "ApiMaker::UpdatesChannel",
-        "id": this._primaryKey(),
-        "model": this.modelClassData().name
-      },
-      {
-        received: function(json) {
-          callback(json)
-        }
-      }
-    )
+    var cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this._primaryKey(), callback)
+    return cableSubscription
   }
 
   assignAttributes(newAttributes) {
@@ -141,7 +123,7 @@ export default class BaseModel {
       Api.requestLocal({path: urlToUse, method: "POST", rawData: data}).then((response) => {
         if (response.success) {
           if (response.model) {
-            this.modelData = response.model
+            this.modelData = response.model.attributes
             this.changes = {}
           }
 
@@ -162,7 +144,7 @@ export default class BaseModel {
       Api.delete(urlToUse).then((response) => {
         if (response.success) {
           if (response.model) {
-            this.modelData = response.model
+            this.modelData = response.model.attributes
             this.changes = {}
           }
 
@@ -218,7 +200,7 @@ export default class BaseModel {
 
       Api.get(urlToUse).then((response) => {
         if (response.model) {
-          this.modelData = response.model
+          this.modelData = response.model.attributes
           this.changes = {}
         }
 
@@ -264,7 +246,7 @@ export default class BaseModel {
       Api.patch(urlToUse, dataToUse).then((response) => {
         if (response.success) {
           if (response.model) {
-            this.modelData = response.model
+            this.modelData = response.model.attributes
             this.changes = {}
           }
 
@@ -286,7 +268,7 @@ export default class BaseModel {
       Api.requestLocal({path: urlToUse, method: "PATCH", rawData: data}).then((response) => {
         if (response.success) {
           if (response.model) {
-            this.modelData = response.model
+            this.modelData = response.model.attributes
             this.changes = {}
           }
 
@@ -394,26 +376,13 @@ export default class BaseModel {
 
   _getAttributeDateTime(attributeName) {
     var value = this._getAttribute(attributeName)
-    if (!value)
+
+    if (!value) {
       return value
-
-    if (value instanceof Date)
+    } else if (value instanceof Date) {
       return value
-
-    // Format is 2018-07-22T06:17:08.297Z
-    var match = value.match(/^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)\.(\d+)Z$/)
-
-    // Sometimes format is 2018-06-17T09:19:12.576+02:00
-    if (!match)
-      match = value.match(/^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)\.(\d+)\+(\d+):(\d+)$/)
-
-    if (!match)
-      match = value.match(/^(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)$/)
-
-    if (match.length > 0) {
-      return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]), parseInt(match[4]), parseInt(match[5]), parseInt(match[6]))
     } else {
-      throw `Could not read datetime: ${value}`
+      return new Date(value)
     }
   }
 
