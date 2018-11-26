@@ -14,7 +14,7 @@ export default class Collection {
   each(callback) {
     this.toArray().then((array) => {
       for(var model in array) {
-        callback.apply(model)
+        callback.call(model)
       }
     })
   }
@@ -35,7 +35,6 @@ export default class Collection {
   loaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
       var model = this.args.model
-      console.log({ model })
       throw `${this.args.reflectionName} hasnt been loaded yet`
     }
 

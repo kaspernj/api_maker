@@ -47,7 +47,7 @@ private
     files = %w[
       Api.js BaseModel.js CableConnectionPool.js CableSubscription.js CableSubscriptionPool.js
       Collection.js Devise.js Logger.js ModelName.js ModelsResponseReader.js Result.js
-      Paginate.jsx SortLink.jsx UpdatedAttribute.jsx
+      EventConnection.jsx Paginate.jsx SortLink.jsx UpdatedAttribute.jsx
       Bootstrap/Checkbox.jsx Bootstrap/MoneyInput.jsx Bootstrap/RadioButtons.jsx Bootstrap/Select.jsx Bootstrap/StringInput.jsx
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
