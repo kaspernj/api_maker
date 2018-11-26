@@ -19,6 +19,7 @@ module ApiMaker
   autoload :PreloaderBelongsTo, "#{dir}/preloader_belongs_to"
   autoload :PreloaderHasMany, "#{dir}/preloader_has_many"
   autoload :PreloaderHasOne, "#{dir}/preloader_has_one"
+  autoload :PreloaderThrough, "#{dir}/preloader_through"
   autoload :RelationshipIncluder, "#{dir}/relationship_includer"
   autoload :Routing, "#{dir}/routing"
   autoload :Serializer, "#{dir}/serializer"

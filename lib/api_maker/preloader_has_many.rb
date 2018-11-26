@@ -20,9 +20,15 @@ private
 
   def models
     @models ||= proc do
-      models = @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
-      models = models.accessible_by(@ability) if @ability
-      models
+      if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+        query = ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
+      else
+        query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
+        query = query.select(@reflection.klass.arel_table[Arel.star]).select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
+      end
+
+      query = query.accessible_by(@ability) if @ability
+      query
     end.call
   end
 
@@ -31,9 +37,9 @@ private
   end
 
   def preload_model(model)
-    origin_id = model.attributes.fetch(@reflection.foreign_key)
-    origin_data = @records.find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == origin_id }
+    origin_id = model.attributes.fetch("api_maker_origin_id")
 
+    origin_data = @records.find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == origin_id }
     origin_data.fetch(:relationships)[@reflection.name] ||= {data: []}
     origin_data.fetch(:relationships)[@reflection.name].fetch(:data) << {
       type: @reflection.klass.model_name.plural,
