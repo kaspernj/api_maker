@@ -54,6 +54,11 @@ export default class Collection {
     return this
   }
 
+  pageKey(pageKeyValue) {
+    this.pageKeyValue = pageKeyValue
+    return this
+  }
+
   ransack(params) {
     this.ransackOptions = Object.assign(this.ransackOptions, params)
     return this
@@ -64,6 +69,7 @@ export default class Collection {
       this._response().then((response) => {
         var models = this._responseToModels(response)
         var result = new Result({
+          "collection": this,
           "models": models,
           "response": response
         })

@@ -18,8 +18,12 @@ export default class extends React.Component {
   }
 
   pagePath(pageNumber) {
+    var pageKey = this.props.result.data.collection.pageKeyValue
+    if (!pageKey)
+      pageKey = page
+
     var currentParams = qs.parse(window.location.search.substr(1))
-    currentParams["page"] = pageNumber
+    currentParams[pageKey] = pageNumber
     var newParams = qs.stringify(currentParams)
     var newPath = `${location.pathname}?${newParams}`
 
