@@ -19,10 +19,12 @@ export default class extends React.Component {
   }
 
   href() {
+    let sortMode
+
     if (this.isSortedByAttribute()) {
-      let sortMode = "desc"
+      sortMode = "desc"
     } else {
-      let sortMode = "asc"
+      sortMode = "asc"
     }
 
     let currentParams = qs.parse(window.location.search.substr(1))
