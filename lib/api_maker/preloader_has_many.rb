@@ -37,6 +37,10 @@ private
     @plural_name ||= @reflection.active_record.model_name.plural
   end
 
+  def klass_plural
+    @klass_plural ||= @reflection.klass.model_name.plural
+  end
+
   def preload_model(model)
     origin_id = model.attributes.fetch("api_maker_origin_id")
 
@@ -47,7 +51,7 @@ private
       id: model.id
     }
 
-    exists = @data.fetch(:included).find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == model.id }
+    exists = @data.fetch(:included).find { |record| record.fetch(:type) == klass_plural && record.fetch(:id) == model.id }
     return if exists
 
     serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)

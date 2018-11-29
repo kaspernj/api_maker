@@ -10,6 +10,10 @@ class ApiMaker::PreloaderHasOne
     raise "Records was nil" unless records
   end
 
+  def klass_plural
+    @klass_plural ||= @reflection.klass.model_name.plural
+  end
+
   def preload
     plural_name = @reflection.klass.model_name.plural
 
@@ -22,7 +26,7 @@ class ApiMaker::PreloaderHasOne
         id: model.id
       }}
 
-      exists = @data.fetch(:included).find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == model.id }
+      exists = @data.fetch(:included).find { |record| record.fetch(:type) == klass_plural && record.fetch(:id) == model.id }
       next if exists
 
       serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
