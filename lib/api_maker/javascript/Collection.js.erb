@@ -35,7 +35,7 @@ export default class Collection {
   loaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
       var model = this.args.model
-      throw `${this.args.reflectionName} hasnt been loaded yet`
+      throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
     }
 
     return this.args.model.relationshipsCache[this.args.reflectionName]

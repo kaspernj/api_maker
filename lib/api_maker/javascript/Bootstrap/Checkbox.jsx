@@ -48,7 +48,7 @@ export default class BootstrapCheckbox extends React.Component {
       return this.props.defaultChecked
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
-        throw `No such attribute: ${this.props.attribute}`
+        throw new Error(`No such attribute: ${this.props.attribute}`)
 
       return this.props.model[this.props.attribute]()
     }
