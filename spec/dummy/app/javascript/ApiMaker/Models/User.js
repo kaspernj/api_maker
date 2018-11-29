@@ -18,7 +18,7 @@ export default class User extends BaseModel {
     }
 
     hasId() {
-      var value = this.id()
+      let value = this.id()
       return this._isPresent(value)
     }
   
@@ -31,7 +31,7 @@ export default class User extends BaseModel {
     }
 
     hasEmail() {
-      var value = this.email()
+      let value = this.email()
       return this._isPresent(value)
     }
   
@@ -44,7 +44,7 @@ export default class User extends BaseModel {
     }
 
     hasCreatedAt() {
-      var value = this.createdAt()
+      let value = this.createdAt()
       return this._isPresent(value)
     }
   
@@ -57,7 +57,7 @@ export default class User extends BaseModel {
     }
 
     hasCustomAttribute() {
-      var value = this.customAttribute()
+      let value = this.customAttribute()
       return this._isPresent(value)
     }
   
@@ -70,7 +70,7 @@ export default class User extends BaseModel {
     }
 
     hasUpdatedAt() {
-      var value = this.updatedAt()
+      let value = this.updatedAt()
       return this._isPresent(value)
     }
   

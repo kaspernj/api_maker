@@ -15,7 +15,7 @@ export default class BootstrapRadioButtons extends React.Component {
       return this.props.defaultValue
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
-        throw `No such attribute: ${this.props.attribute}`
+        throw new Error(`No such attribute: ${this.props.attribute}`)
 
       return this.props.model[this.props.attribute]()
     }
@@ -34,7 +34,7 @@ export default class BootstrapRadioButtons extends React.Component {
   }
 
   optionElement(option) {
-    var id = this.generatedId()
+    let id = this.generatedId()
 
     return (
       <div key={`option-${option[1]}`}>

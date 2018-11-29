@@ -13,7 +13,7 @@ export default class Collection {
 
   each(callback) {
     this.toArray().then((array) => {
-      for(var model in array) {
+      for(let model in array) {
         callback.call(model)
       }
     })
@@ -34,8 +34,8 @@ export default class Collection {
 
   loaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
-      var model = this.args.model
-      throw `${this.args.reflectionName} hasnt been loaded yet`
+      let model = this.args.model
+      throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
     }
 
     return this.args.model.relationshipsCache[this.args.reflectionName]
@@ -54,6 +54,11 @@ export default class Collection {
     return this
   }
 
+  pageKey(pageKeyValue) {
+    this.pageKeyValue = pageKeyValue
+    return this
+  }
+
   ransack(params) {
     this.ransackOptions = Object.assign(this.ransackOptions, params)
     return this
@@ -62,8 +67,9 @@ export default class Collection {
   result() {
     return new Promise((resolve, reject) => {
       this._response().then((response) => {
-        var models = this._responseToModels(response)
-        var result = new Result({
+        let models = this._responseToModels(response)
+        let result = new Result({
+          "collection": this,
           "models": models,
           "response": response
         })
@@ -85,7 +91,7 @@ export default class Collection {
   toArray() {
     return new Promise((resolve, reject) => {
       this._response().then((response) => {
-        var models = this._responseToModels(response)
+        let models = this._responseToModels(response)
         resolve(models)
       })
     })
@@ -97,15 +103,15 @@ export default class Collection {
 
   _response() {
     return new Promise((resolve, reject) => {
-      var dataToUse = qs.stringify(this._params(), {"arrayFormat": "brackets"})
-      var urlToUse = this.args.targetPathName + "?" + dataToUse
+      let dataToUse = qs.stringify(this._params(), {"arrayFormat": "brackets"})
+      let urlToUse = this.args.targetPathName + "?" + dataToUse
 
-      var xhr = new XMLHttpRequest()
+      let xhr = new XMLHttpRequest()
       xhr.open("GET", urlToUse)
       xhr.setRequestHeader("X-CSRF-Token", BaseModel._token())
       xhr.onload = () => {
         if (xhr.status == 200) {
-          var response = JSON.parse(xhr.responseText)
+          let response = JSON.parse(xhr.responseText)
           resolve(response)
         } else {
           reject({"responseText": xhr.responseText})
@@ -116,12 +122,12 @@ export default class Collection {
   }
 
   _responseToModels(response) {
-    var modelsResponseReader = new ModelsResponseReader({response: response})
+    let modelsResponseReader = new ModelsResponseReader({response: response})
     return modelsResponseReader.models()
   }
 
   _params() {
-    var params = {}
+    let params = {}
 
     if (this.params)
       params = Object.assign(params, this.params)

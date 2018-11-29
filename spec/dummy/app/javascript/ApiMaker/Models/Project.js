@@ -9,19 +9,19 @@ export default class Project extends BaseModel {
   
     
       loadProjectDetail() {
-        var id = this.id()
+        let id = this.id()
         return this._loadHasOneReflection({"reflectionName":"project_detail","model":this,"modelName":"ProjectDetail","targetPathName":"/api_maker/project_details","ransack":{"project_id_eq":id}})
       }
 
       projectDetail() {
-        var id = this.id()
+        let id = this.id()
         return this._readHasOneReflection({"reflectionName":"project_detail","model":this,"modelName":"ProjectDetail","targetPathName":"/api_maker/project_details","ransack":{"project_id_eq":id}})
       }
     
   
     
       tasks() {
-        var id = this.id()
+        let id = this.id()
         return new Collection({"reflectionName":"tasks","model":this,"modelName":"Task","targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
       }
     
@@ -37,7 +37,7 @@ export default class Project extends BaseModel {
     }
 
     hasId() {
-      var value = this.id()
+      let value = this.id()
       return this._isPresent(value)
     }
   
@@ -50,7 +50,7 @@ export default class Project extends BaseModel {
     }
 
     hasName() {
-      var value = this.name()
+      let value = this.name()
       return this._isPresent(value)
     }
   
@@ -63,7 +63,7 @@ export default class Project extends BaseModel {
     }
 
     hasCreatedAt() {
-      var value = this.createdAt()
+      let value = this.createdAt()
       return this._isPresent(value)
     }
   

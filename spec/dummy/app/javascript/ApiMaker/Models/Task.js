@@ -9,24 +9,24 @@ export default class Task extends BaseModel {
   
     
       loadProject() {
-        var id = this.projectId()
+        let id = this.projectId()
         return this._loadBelongsToReflection({"reflectionName":"project","model":this,"modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
       }
 
       project() {
-        var id = this.projectId()
+        let id = this.projectId()
         return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
       }
     
   
     
       loadUser() {
-        var id = this.userId()
+        let id = this.userId()
         return this._loadBelongsToReflection({"reflectionName":"user","model":this,"modelName":"User","targetPathName":"/api_maker/users","ransack":{"id_eq":id}})
       }
 
       user() {
-        var id = this.userId()
+        let id = this.userId()
         return this._readBelongsToReflection({"reflectionName":"user","model":this,"modelName":"User","targetPathName":"/api_maker/users","ransack":{"id_eq":id}})
       }
     
@@ -42,7 +42,7 @@ export default class Task extends BaseModel {
     }
 
     hasCreatedAt() {
-      var value = this.createdAt()
+      let value = this.createdAt()
       return this._isPresent(value)
     }
   
@@ -55,7 +55,7 @@ export default class Task extends BaseModel {
     }
 
     hasId() {
-      var value = this.id()
+      let value = this.id()
       return this._isPresent(value)
     }
   
@@ -68,7 +68,7 @@ export default class Task extends BaseModel {
     }
 
     hasName() {
-      var value = this.name()
+      let value = this.name()
       return this._isPresent(value)
     }
   
@@ -81,7 +81,7 @@ export default class Task extends BaseModel {
     }
 
     hasProjectId() {
-      var value = this.projectId()
+      let value = this.projectId()
       return this._isPresent(value)
     }
   
@@ -94,7 +94,7 @@ export default class Task extends BaseModel {
     }
 
     hasUserId() {
-      var value = this.userId()
+      let value = this.userId()
       return this._isPresent(value)
     }
   
@@ -107,7 +107,7 @@ export default class Task extends BaseModel {
     }
 
     hasCustomId() {
-      var value = this.customId()
+      let value = this.customId()
       return this._isPresent(value)
     }
   

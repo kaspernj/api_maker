@@ -18,7 +18,7 @@ export default class Customer extends BaseModel {
     }
 
     hasId() {
-      var value = this.id()
+      let value = this.id()
       return this._isPresent(value)
     }
   
@@ -31,7 +31,7 @@ export default class Customer extends BaseModel {
     }
 
     hasName() {
-      var value = this.name()
+      let value = this.name()
       return this._isPresent(value)
     }
   

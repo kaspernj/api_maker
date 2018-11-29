@@ -9,7 +9,7 @@ export default class Account extends BaseModel {
   
     
       projects() {
-        var id = this.id()
+        let id = this.id()
         return new Collection({"reflectionName":"projects","model":this,"modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"account_id_eq":id}})
       }
     
@@ -25,7 +25,7 @@ export default class Account extends BaseModel {
     }
 
     hasId() {
-      var value = this.id()
+      let value = this.id()
       return this._isPresent(value)
     }
   
@@ -38,7 +38,7 @@ export default class Account extends BaseModel {
     }
 
     hasName() {
-      var value = this.name()
+      let value = this.name()
       return this._isPresent(value)
     }
   

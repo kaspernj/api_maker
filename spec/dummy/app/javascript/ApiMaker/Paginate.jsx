@@ -9,8 +9,8 @@ export default class extends React.Component {
   }
 
   pages() {
-    var pages = []
-    for(var i = 0; i < this.props.result.totalPages(); i++) {
+    let pages = []
+    for(let i = 0; i < this.props.result.totalPages(); i++) {
       pages.push(i + 1)
     }
 
@@ -18,29 +18,37 @@ export default class extends React.Component {
   }
 
   pagePath(pageNumber) {
-    var currentParams = qs.parse(window.location.search.substr(1))
-    currentParams["page"] = pageNumber
-    var newParams = qs.stringify(currentParams)
-    var newPath = `${location.pathname}?${newParams}`
+    let pageKey = this.props.result.data.collection.pageKeyValue
+    if (!pageKey)
+      pageKey = "page"
+
+    let currentParams = qs.parse(window.location.search.substr(1))
+    currentParams[pageKey] = pageNumber
+    let newParams = qs.stringify(currentParams)
+    let newPath = `${location.pathname}?${newParams}`
 
     return newPath
   }
 
   previousPagePath() {
+    let previousPage
+
     if (this.props.result.currentPage() > 1) {
-      var previousPage = this.props.result.currentPage() - 1
+      previousPage = this.props.result.currentPage() - 1
     } else {
-      var previousPage = this.props.result.currentPage()
+      previousPage = this.props.result.currentPage()
     }
 
     return this.pagePath(previousPage)
   }
 
   nextPagePath() {
+    let nextPage
+
     if (this.props.result.currentPage() < this.props.result.totalPages()) {
-      var nextPage = this.props.result.currentPage() + 1
+      nextPage = this.props.result.currentPage() + 1
     } else {
-      var nextPage = this.props.result.currentPage()
+      nextPage = this.props.result.currentPage()
     }
 
     return this.pagePath(nextPage)
