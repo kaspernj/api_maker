@@ -7,7 +7,7 @@ import Money from "js-money"
 
 export default class BaseModel {
   static modelClassData() {
-    throw "modelClassData should be overriden by child"
+    throw new Error("modelClassData should be overriden by child")
   }
 
   static find(id) {
@@ -283,7 +283,7 @@ export default class BaseModel {
   }
 
   isValid() {
-    throw "Not implemented yet"
+    throw new Error("Not implemented yet")
   }
 
   isValidOnServer() {
@@ -371,7 +371,7 @@ export default class BaseModel {
       }
     }
 
-    throw `No such attribute: ${attributeName}`
+    throw new Error(`No such attribute: ${attributeName}`)
   }
 
   _getAttributeDateTime(attributeName) {
@@ -426,7 +426,7 @@ export default class BaseModel {
       if (this.isNewRecord())
         return null
 
-      throw `${args.reflectionName} hasnt been loaded yet`
+      throw new Error(`${args.reflectionName} hasnt been loaded yet`)
     }
 
     return this.relationshipsCache[args.reflectionName]
@@ -451,7 +451,7 @@ export default class BaseModel {
       if (this.isNewRecord())
         return null
 
-      throw `${args.reflectionName} hasnt been loaded yet`
+      throw new Error(`${args.reflectionName} hasnt been loaded yet`)
     }
 
     return this.relationshipsCache[args.reflectionName]
@@ -479,7 +479,7 @@ export default class BaseModel {
           })
 
           if (!includedData)
-            throw `Couldn't find included data for ${relationshipName}`
+            throw new Error(`Couldn't find included data for ${relationshipName}`)
 
           var modelClassName = inflection.classify(inflection.singularize(includedData.type))
           var modelClass = require(`ApiMaker/Models/${modelClassName}`).default
@@ -495,7 +495,7 @@ export default class BaseModel {
         })
 
         if (!includedData)
-          throw `Couldn't find included data for ${relationshipName}`
+          throw new Error(`Couldn't find included data for ${relationshipName}`)
 
         var modelClassName = inflection.classify(inflection.singularize(includedData.type))
         var modelClass = require(`ApiMaker/Models/${modelClassName}`).default

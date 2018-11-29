@@ -88,7 +88,7 @@ export default class BootstrapSelect extends React.Component {
       return this.props.selected
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
-        throw `No attribute by that name: ${this.props.attribute}`
+        throw new Error(`No attribute by that name: ${this.props.attribute}`)
 
       return this.props.model[this.props.attribute]()
     }

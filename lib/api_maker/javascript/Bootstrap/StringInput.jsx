@@ -100,7 +100,7 @@ export default class BootstrapStringInput extends React.Component {
       return this.props.defaultValue
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
-        throw `No such attribute: ${this.props.attribute}`
+        throw new Error(`No such attribute: ${this.props.attribute}`)
 
       return this.props.model[this.props.attribute]()
     }
