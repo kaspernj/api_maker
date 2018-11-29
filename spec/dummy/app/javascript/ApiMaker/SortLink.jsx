@@ -7,7 +7,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
 
-    var searchKey = this.props.query.searchKeyValue
+    let searchKey = this.props.query.searchKeyValue
     if (!searchKey)
       searchKey = "q"
 
@@ -20,20 +20,20 @@ export default class extends React.Component {
 
   href() {
     if (this.isSortedByAttribute()) {
-      var sortMode = "desc"
+      let sortMode = "desc"
     } else {
-      var sortMode = "asc"
+      let sortMode = "asc"
     }
 
-    var currentParams = qs.parse(window.location.search.substr(1))
+    let currentParams = qs.parse(window.location.search.substr(1))
 
     if (!currentParams[this.state.searchKey])
       currentParams[this.state.searchKey] = {}
 
     currentParams[this.state.searchKey]["s"] = `${this.attribute()} ${sortMode}`
 
-    var newParams = qs.stringify(currentParams)
-    var newPath = `${location.pathname}?${newParams}`
+    let newParams = qs.stringify(currentParams)
+    let newPath = `${location.pathname}?${newParams}`
 
     return newPath
   }
@@ -49,7 +49,7 @@ export default class extends React.Component {
   }
 
   render() {
-    var LinkComponent = this.linkComponent()
+    let LinkComponent = this.linkComponent()
 
     return (
       <LinkComponent to={this.href()}>

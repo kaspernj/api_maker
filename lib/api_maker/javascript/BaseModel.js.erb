@@ -12,11 +12,11 @@ export default class BaseModel {
 
   static find(id) {
     return new Promise((resolve, reject) => {
-      var urlToUse = `${this.modelClassData().path}/${id}`
+      let urlToUse = `${this.modelClassData().path}/${id}`
 
       Api.get(urlToUse).then((response) => {
-        var modelClass = require(`ApiMaker/Models/${this.modelClassData().name}`).default
-        var model = new modelClass({data: response.model})
+        let modelClass = require(`ApiMaker/Models/${this.modelClassData().name}`).default
+        let model = new modelClass({data: response.model})
         resolve(model)
       }, (error) => {
         reject(error)
@@ -48,20 +48,20 @@ export default class BaseModel {
   }
 
   connect(eventName, callback) {
-    var cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this._primaryKey(), eventName, callback)
+    let cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this._primaryKey(), eventName, callback)
     return cableSubscription
   }
 
   connectUpdated(callback) {
-    var cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this._primaryKey(), callback)
+    let cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this._primaryKey(), callback)
     return cableSubscription
   }
 
   assignAttributes(newAttributes) {
-    for(var key in newAttributes) {
-      var oldValue = this._getAttribute(key)
-      var originalValue = this.modelData[key]
-      var newValue = newAttributes[key]
+    for(let key in newAttributes) {
+      let oldValue = this._getAttribute(key)
+      let originalValue = this.modelData[key]
+      let newValue = newAttributes[key]
 
       if (newValue != oldValue) {
         if (newValue == originalValue) {
@@ -75,7 +75,7 @@ export default class BaseModel {
 
   cacheKey() {
     if (this.isPersisted()) {
-      var keyParts = [
+      let keyParts = [
         this.modelClassData().paramKey,
         this._primaryKey()
       ]
@@ -92,10 +92,10 @@ export default class BaseModel {
 
   create() {
     return new Promise((resolve, reject) => {
-      var paramKey = this.modelClassData().paramKey
-      var urlToUse = this.modelClassData().path
-      var modelData = this._saveData()
-      var dataToUse = {}
+      let paramKey = this.modelClassData().paramKey
+      let urlToUse = this.modelClassData().path
+      let modelData = this._saveData()
+      let dataToUse = {}
       dataToUse[paramKey] = modelData
 
       Api.post(urlToUse, dataToUse).then((response) => {
@@ -117,8 +117,8 @@ export default class BaseModel {
 
   createRaw(data) {
     return new Promise((resolve, reject) => {
-      var paramKey = this.modelClassData().paramKey
-      var urlToUse = this.modelClassData().path
+      let paramKey = this.modelClassData().paramKey
+      let urlToUse = this.modelClassData().path
 
       Api.requestLocal({path: urlToUse, method: "POST", rawData: data}).then((response) => {
         if (response.success) {
@@ -139,7 +139,7 @@ export default class BaseModel {
 
   destroy() {
     return new Promise((resolve, reject) => {
-      var urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
+      let urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
 
       Api.delete(urlToUse).then((response) => {
         if (response.success) {
@@ -159,17 +159,17 @@ export default class BaseModel {
   }
 
   static humanAttributeName(attributeName) {
-    var keyName = this.modelClassData().paramKey
+    let keyName = this.modelClassData().paramKey
     return I18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`)
   }
 
   static snakeCase(string) {
-    var changeCase = require("change-case")
+    let changeCase = require("change-case")
     return changeCase.snakeCase(string).replace(/\d+/, "_$&")
   }
 
   isChanged() {
-    var keys = Object.keys(this.changes)
+    let keys = Object.keys(this.changes)
 
     if (keys.length > 0) {
       return true
@@ -196,7 +196,7 @@ export default class BaseModel {
 
   reload() {
     return new Promise((resolve, reject) => {
-      var urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
+      let urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
 
       Api.get(urlToUse).then((response) => {
         if (response.model) {
@@ -235,9 +235,9 @@ export default class BaseModel {
       if (this.changes.length == 0)
         return resolve({model: this})
 
-      var paramKey = this.modelClassData().paramKey
-      var urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
-      var dataToUse = {}
+      let paramKey = this.modelClassData().paramKey
+      let urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
+      let dataToUse = {}
       dataToUse[paramKey] = this.changes
 
       if (Object.keys(dataToUse[paramKey]).length == 0)
@@ -262,8 +262,8 @@ export default class BaseModel {
 
   updateRaw(data) {
     return new Promise((resolve, reject) => {
-      var paramKey = this.modelClassData().paramKey
-      var urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
+      let paramKey = this.modelClassData().paramKey
+      let urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
 
       Api.requestLocal({path: urlToUse, method: "PATCH", rawData: data}).then((response) => {
         if (response.success) {
@@ -288,10 +288,10 @@ export default class BaseModel {
 
   isValidOnServer() {
     return new Promise((resolve, reject) => {
-      var paramKey = this.modelClassData().paramKey
-      var urlToUse = `${this.modelClassData().path}/validate`
-      var modelData = this._saveData()
-      var dataToUse = {}
+      let paramKey = this.modelClassData().paramKey
+      let urlToUse = `${this.modelClassData().path}/validate`
+      let modelData = this._saveData()
+      let dataToUse = {}
       dataToUse[paramKey] = modelData
 
       Api.post(urlToUse, dataToUse).then((response) => {
@@ -312,9 +312,9 @@ export default class BaseModel {
 
   uniqueKey() {
     if (!this.uniqueKeyValue) {
-      var min = 500000000000000000
-      var max = 999999999999999999
-      var randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
+      let min = 500000000000000000
+      let max = 999999999999999999
+      let randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
       this.uniqueKeyValue = randomBetween
     }
 
@@ -323,8 +323,8 @@ export default class BaseModel {
 
   static _callcollectionCommand(args) {
     return new Promise((resolve, reject) => {
-      var url = `/api_maker/${args.modelClass.modelClassData().pluralName}/${args.collectionCommand}`
-      var postData = {
+      let url = `/api_maker/${args.modelClass.modelClassData().pluralName}/${args.collectionCommand}`
+      let postData = {
         args: args.args,
         plural_name: args.modelClass.modelClassData().pluralName,
         collection_command: args.collectionCommand
@@ -340,8 +340,8 @@ export default class BaseModel {
 
   _callmemberCommand(args) {
     return new Promise((resolve, reject) => {
-      var url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model._primaryKey()}/${args.memberCommand}`
-      var postData = {
+      let url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model._primaryKey()}/${args.memberCommand}`
+      let postData = {
         args: args.args,
         plural_name: args.model.modelClassData().pluralName,
         member_command: args.memberCommand
@@ -362,9 +362,9 @@ export default class BaseModel {
       return this.modelData[attributeName]
     } else if (this.isNewRecord()) {
       // Return null if this is a new record and the attribute name is a recognized attribute
-      var attributes = this.modelClassData().attributes
-      for(var key in attributes) {
-        var attribute = attributes[key]
+      let attributes = this.modelClassData().attributes
+      for(let key in attributes) {
+        let attribute = attributes[key]
 
         if (attribute.name == attributeName)
           return null
@@ -375,7 +375,7 @@ export default class BaseModel {
   }
 
   _getAttributeDateTime(attributeName) {
-    var value = this._getAttribute(attributeName)
+    let value = this._getAttribute(attributeName)
 
     if (!value) {
       return value
@@ -397,13 +397,13 @@ export default class BaseModel {
   }
 
   _getAttributeMoney(attributeName) {
-    var value = this._getAttribute(attributeName)
+    let value = this._getAttribute(attributeName)
 
     if (!value)
       return null
 
-    var cents = parseInt(value.fractional)
-    var currency = value.currency.iso_code
+    let cents = parseInt(value.fractional)
+    let currency = value.currency.iso_code
     return Money.fromInteger(cents, currency)
   }
 
@@ -412,7 +412,7 @@ export default class BaseModel {
       if (args.reflectionName in this.relationshipsCache) {
         resolve(this.relationshipsCache[args.reflectionName])
       } else {
-        var collection = new Collection(args)
+        let collection = new Collection(args)
         collection.first().then((model) => {
           this.relationshipsCache[args.reflectionName] = model
           resolve(model)
@@ -437,7 +437,7 @@ export default class BaseModel {
       if (args.reflectionName in this.relationshipsCache) {
         resolve(this.relationshipsCache[args.reflectionName])
       } else {
-        var collection = new Collection(args)
+        let collection = new Collection(args)
         collection.first().then((model) => {
           this.relationshipsCache[args.reflectionName] = model
           resolve(model)
@@ -463,43 +463,43 @@ export default class BaseModel {
     if (!args.data.relationships)
       return
 
-    for(var relationshipName in args.data.relationships) {
-      var relationshipData = args.data.relationships[relationshipName]
+    for(let relationshipName in args.data.relationships) {
+      let relationshipData = args.data.relationships[relationshipName]
 
       if (!relationshipData) {
         this.relationshipsCache[relationshipName] = null
       } else if (Array.isArray(relationshipData.data)) {
-        var result = []
+        let result = []
 
-        for(var relationshipDataIKey in relationshipData.data) {
-          var relationshipDataI = relationshipData.data[relationshipDataIKey]
+        for(let relationshipDataIKey in relationshipData.data) {
+          let relationshipDataI = relationshipData.data[relationshipDataIKey]
 
-          var includedData = args.response.included.find((included) => {
+          let includedData = args.response.included.find((included) => {
             return included.type == relationshipDataI.type && included.id == relationshipDataI.id
           })
 
           if (!includedData)
             throw new Error(`Couldn't find included data for ${relationshipName}`)
 
-          var modelClassName = inflection.classify(inflection.singularize(includedData.type))
-          var modelClass = require(`ApiMaker/Models/${modelClassName}`).default
-          var model = new modelClass({data: includedData, response: args.response})
+          let modelClassName = inflection.classify(inflection.singularize(includedData.type))
+          let modelClass = require(`ApiMaker/Models/${modelClassName}`).default
+          let model = new modelClass({data: includedData, response: args.response})
 
           result.push(model)
         }
 
         this.relationshipsCache[relationshipName] = result
       } else {
-        var includedData = args.response.included.find((included) => {
+        let includedData = args.response.included.find((included) => {
           return included.type == relationshipData.data.type && included.id == relationshipData.data.id
         })
 
         if (!includedData)
           throw new Error(`Couldn't find included data for ${relationshipName}`)
 
-        var modelClassName = inflection.classify(inflection.singularize(includedData.type))
-        var modelClass = require(`ApiMaker/Models/${modelClassName}`).default
-        var model = new modelClass({data: includedData, response: args.response})
+        let modelClassName = inflection.classify(inflection.singularize(includedData.type))
+        let modelClass = require(`ApiMaker/Models/${modelClassName}`).default
+        let model = new modelClass({data: includedData, response: args.response})
 
         this.relationshipsCache[relationshipName] = model
       }
@@ -515,7 +515,7 @@ export default class BaseModel {
   }
 
   static _token() {
-    var csrfTokenElement = document.querySelector("meta[name='csrf-token']")
+    let csrfTokenElement = document.querySelector("meta[name='csrf-token']")
     if (csrfTokenElement)
       return csrfTokenElement.getAttribute("content")
   }

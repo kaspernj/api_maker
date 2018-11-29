@@ -9,12 +9,12 @@ export default class ProjectDetail extends BaseModel {
   
     
       loadProject() {
-        var id = this.projectId()
+        let id = this.projectId()
         return this._loadBelongsToReflection({"reflectionName":"project","model":this,"modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
       }
 
       project() {
-        var id = this.projectId()
+        let id = this.projectId()
         return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
       }
     
@@ -30,7 +30,7 @@ export default class ProjectDetail extends BaseModel {
     }
 
     hasId() {
-      var value = this.id()
+      let value = this.id()
       return this._isPresent(value)
     }
   
@@ -43,7 +43,7 @@ export default class ProjectDetail extends BaseModel {
     }
 
     hasProjectId() {
-      var value = this.projectId()
+      let value = this.projectId()
       return this._isPresent(value)
     }
   
@@ -56,7 +56,7 @@ export default class ProjectDetail extends BaseModel {
     }
 
     hasDetails() {
-      var value = this.details()
+      let value = this.details()
       return this._isPresent(value)
     }
   

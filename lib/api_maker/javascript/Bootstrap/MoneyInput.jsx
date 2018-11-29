@@ -9,7 +9,7 @@ export default class BootstrapMoneyInput extends React.Component {
     super(props)
     this.state = {}
 
-    var formatOptions = {
+    let formatOptions = {
       decimal: I18n.t("number.currency.format.separator"),
       integerSeparator: I18n.t("number.currency.format.delimiter")
     }
@@ -58,7 +58,7 @@ export default class BootstrapMoneyInput extends React.Component {
   }
 
   inputCurrencyValue() {
-    var value = this.props.model[this.props.attribute]()
+    let value = this.props.model[this.props.attribute]()
 
     if (value) {
       return MoneyFormatter.currencyFromMoney(value).code
@@ -68,7 +68,7 @@ export default class BootstrapMoneyInput extends React.Component {
   }
 
   inputDefaultCentsValue() {
-    var value = this.props.model[this.props.attribute]()
+    let value = this.props.model[this.props.attribute]()
 
     if (this.refs.input)
       return this.refs.input.value
@@ -101,17 +101,17 @@ export default class BootstrapMoneyInput extends React.Component {
     if (!this.refs.input.value && this.refs.input.value == "") {
       this.refs.whole.value = ""
     } else {
-      var cents = parseFloat(this.refs.input.value)
-      var formatted = MoneyFormatter.fromMoney({amount: cents, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
+      let cents = parseFloat(this.refs.input.value)
+      let formatted = MoneyFormatter.fromMoney({amount: cents, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
 
       this.refs.whole.value = formatted
     }
   }
 
   setCents() {
-    var whole = MoneyFormatter.stringToFloat(this.refs.whole.value)
-    var cents = parseInt(whole * 100)
-    var oldCents = parseInt(this.refs.input.value)
+    let whole = MoneyFormatter.stringToFloat(this.refs.whole.value)
+    let cents = parseInt(whole * 100)
+    let oldCents = parseInt(this.refs.input.value)
     this.refs.input.value = cents
 
     if (this.props.onChange && oldCents != cents)

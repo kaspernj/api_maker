@@ -87,7 +87,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   inputClassName() {
-    var classNames = ["form-control"]
+    let classNames = ["form-control"]
 
     if (this.props.className)
       classNames.push(this.props.className)
@@ -100,7 +100,7 @@ export default class BootstrapStringInput extends React.Component {
       return this.props.defaultValue
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
-        throw `No such attribute: ${this.props.attribute}`
+        throw new Error(`No such attribute: ${this.props.attribute}`)
 
       return this.props.model[this.props.attribute]()
     }
@@ -141,7 +141,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   labelClassName() {
-    var classNames = ["font-sm", "bold"]
+    let classNames = ["font-sm", "bold"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
@@ -150,7 +150,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   wrapperClassName() {
-    var classNames = ["form-group", "component-bootstrap-string-input"]
+    let classNames = ["form-group", "component-bootstrap-string-input"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)
