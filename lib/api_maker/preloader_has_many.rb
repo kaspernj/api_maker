@@ -27,8 +27,8 @@ private
         query = query.select(@reflection.klass.arel_table[Arel.star]).select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
       end
 
-      query = query.group(@reflection.klass.arel_table[@reflection.klass.primary_key]) # Group by ID
       query = query.accessible_by(@ability) if @ability
+      query = query.group(@reflection.klass.arel_table[@reflection.klass.primary_key]).fix # Group by ID
       query
     end.call
   end
