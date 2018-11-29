@@ -9,19 +9,23 @@ class ApiMaker::PreloaderBelongsTo
   end
 
   def preload
+    plural_name = @reflection.klass.model_name.plural
+
     models.each do |model|
       @records.each do |record|
         next unless record.model.class == @reflection.active_record
         next unless record.model.attributes.fetch(@reflection.foreign_key) == model.id
 
         record.relationships[@reflection.name] = {data: {
-          type: @reflection.klass.model_name.plural,
+          type: plural_name,
           id: model.id
         }}
       end
 
-      serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+      exists = @data.fetch(:included).find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == model.id }
+      next if exists
 
+      serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
       @data.fetch(:included) << serialized
     end
 

@@ -27,6 +27,7 @@ private
         query = query.select(@reflection.klass.arel_table[Arel.star]).select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
       end
 
+      query = query.group(@reflection.klass.arel_table[@reflection.klass.primary_key]) # Group by ID
       query = query.accessible_by(@ability) if @ability
       query
     end.call
@@ -46,8 +47,10 @@ private
       id: model.id
     }
 
-    serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+    exists = @data.fetch(:included).find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == model.id }
+    return if exists
 
+    serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
     @data.fetch(:included) << serialized
   end
 end

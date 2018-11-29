@@ -11,17 +11,21 @@ class ApiMaker::PreloaderHasOne
   end
 
   def preload
+    plural_name = @reflection.klass.model_name.plural
+
     models.each do |model|
       origin_id = model.attributes.fetch("api_maker_origin_id")
       origin_data = @records.find { |record| record.model.class == @reflection.active_record && record.model.id == origin_id }
 
       origin_data.fetch(:relationships)[@reflection.name] = {data: {
-        type: @reflection.klass.model_name.plural,
+        type: plural_name,
         id: model.id
       }}
 
-      serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+      exists = @data.fetch(:included).find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == model.id }
+      next if exists
 
+      serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
       @data.fetch(:included) << serialized
     end
 
@@ -37,6 +41,7 @@ class ApiMaker::PreloaderHasOne
         query = query.select(@reflection.klass.arel_table[Arel.star]).select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
       end
 
+      query = query.group(@reflection.klass.arel_table[@reflection.klass.primary_key]) # Group by ID
       query = query.accessible_by(@ability) if @ability
       query
     end.call
