@@ -104,7 +104,7 @@ describe ApiMaker::CollectionSerializer do
 
   it "only includes the same relationship once for has one through" do
     collection = Task.where(id: [task.id, task_with_same_project.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["account"]).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["account", "project.account"]).to_json)
 
     expect(result.fetch("data").length).to eq 2
 

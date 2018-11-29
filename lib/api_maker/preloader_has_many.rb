@@ -47,8 +47,10 @@ private
       id: model.id
     }
 
-    serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+    exists = @data.fetch(:included).find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == model.id }
+    return if exists
 
+    serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
     @data.fetch(:included) << serialized
   end
 end
