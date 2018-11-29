@@ -116,13 +116,13 @@ export default class BootstrapSelect extends React.Component {
     } else if (this.props.label) {
       return this.props.label
     } else if (this.props.model) {
-      var attributeMethodName = changeCase.camelCase(this.props.attribute.replace(/_id$/, ""))
+      let attributeMethodName = changeCase.camelCase(this.props.attribute.replace(/_id$/, ""))
       return this.props.model.modelClass().humanAttributeName(attributeMethodName)
     }
   }
 
   labelClassName() {
-    var classNames = ["font-sm", "bold", "form-group-label"]
+    let classNames = ["font-sm", "bold", "form-group-label"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
@@ -131,7 +131,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   wrapperClassName() {
-    var classNames = ["form-group", "component-bootstrap-select"]
+    let classNames = ["form-group", "component-bootstrap-select"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)

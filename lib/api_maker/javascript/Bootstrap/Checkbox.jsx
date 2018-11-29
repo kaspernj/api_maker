@@ -3,7 +3,7 @@ import React from "react"
 
 export default class BootstrapCheckbox extends React.Component {
   render() {
-    var id = this.inputId()
+    let id = this.inputId()
 
     return (
       <div className={this.wrapperClassName()}>
@@ -73,7 +73,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   wrapperClassName() {
-    var classNames = ["component-bootstrap-checkbox"]
+    let classNames = ["component-bootstrap-checkbox"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)
@@ -93,7 +93,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   labelClassName() {
-    var classNames = ["form-check-label", "text-half-muted", "font-smoothing"]
+    let classNames = ["form-check-label", "text-half-muted", "font-smoothing"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)

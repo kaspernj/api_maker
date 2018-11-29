@@ -7,13 +7,15 @@ export default class ModelName {
     if (!args)
       args = {count: 1}
 
+    let countKey
+
     if (args.count > 1 || args.count < 0) {
-      var countKey = "other"
+      countKey = "other"
     } else {
-      var countKey = "one"
+      countKey = "one"
     }
 
-    var key = `activerecord.models.${this.data.modelClassData.paramKey}.${countKey}`
+    let key = `activerecord.models.${this.data.modelClassData.paramKey}.${countKey}`
     return I18n.t(key)
   }
 }

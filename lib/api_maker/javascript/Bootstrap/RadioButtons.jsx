@@ -34,7 +34,7 @@ export default class BootstrapRadioButtons extends React.Component {
   }
 
   optionElement(option) {
-    var id = this.generatedId()
+    let id = this.generatedId()
 
     return (
       <div key={`option-${option[1]}`}>
