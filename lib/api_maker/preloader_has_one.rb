@@ -23,7 +23,7 @@ class ApiMaker::PreloaderHasOne
       }}
 
       exists = @data.fetch(:included).find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == model.id }
-      return if exists
+      next if exists
 
       serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
       @data.fetch(:included) << serialized
