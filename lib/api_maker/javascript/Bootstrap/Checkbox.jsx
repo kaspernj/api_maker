@@ -44,7 +44,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   inputDefaultChecked() {
-    if (this.props.defaultChecked) {
+    if ("defaultChecked" in this.props) {
       return this.props.defaultChecked
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
