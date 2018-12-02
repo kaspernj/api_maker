@@ -4,6 +4,7 @@ import Collection from "./Collection"
 import inflection from "inflection"
 import ModelName from "./ModelName"
 import Money from "js-money"
+import objectToFormData from "object-to-formdata"
 
 export default class BaseModel {
   static modelClassData() {
@@ -324,13 +325,22 @@ export default class BaseModel {
   static _callcollectionCommand(args) {
     return new Promise((resolve, reject) => {
       let url = `/api_maker/${args.modelClass.modelClassData().pluralName}/${args.collectionCommand}`
-      let postData = {
-        args: args.args,
-        plural_name: args.modelClass.modelClassData().pluralName,
-        collection_command: args.collectionCommand
+      let postData
+
+      if (args.args) {
+        if (args.args instanceof FormData) {
+          postData = args.args
+        } else {
+          postData = objectToFormData(args.args, {}, null, "args")
+        }
+      } else {
+        postData = new FormData()
       }
 
-      Api.post(url, postData).then((response) => {
+      postData.append("plural_name", args.modelClass.modelClassData().pluralName)
+      postData.append("collection_command", args.collectionCommand)
+
+      Api.requestLocal({path: url, method: "POST", rawData: postData}).then((response) => {
         resolve(response)
       }, (response) => {
         reject(response)
