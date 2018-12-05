@@ -4,6 +4,7 @@ import Collection from "./Collection"
 import inflection from "inflection"
 import ModelName from "./ModelName"
 import Money from "js-money"
+import objectToFormData from "object-to-formdata"
 
 export default class BaseModel {
   static modelClassData() {
@@ -324,13 +325,12 @@ export default class BaseModel {
   static _callcollectionCommand(args) {
     return new Promise((resolve, reject) => {
       let url = `/api_maker/${args.modelClass.modelClassData().pluralName}/${args.collectionCommand}`
-      let postData = {
-        args: args.args,
-        plural_name: args.modelClass.modelClassData().pluralName,
-        collection_command: args.collectionCommand
-      }
+      let postData = BaseModel._postDataFromArgs(args.args)
 
-      Api.post(url, postData).then((response) => {
+      postData.append("plural_name", args.modelClass.modelClassData().pluralName)
+      postData.append("collection_command", args.collectionCommand)
+
+      Api.requestLocal({path: url, method: "POST", rawData: postData}).then((response) => {
         resolve(response)
       }, (response) => {
         reject(response)
@@ -341,18 +341,33 @@ export default class BaseModel {
   _callmemberCommand(args) {
     return new Promise((resolve, reject) => {
       let url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model._primaryKey()}/${args.memberCommand}`
-      let postData = {
-        args: args.args,
-        plural_name: args.model.modelClassData().pluralName,
-        member_command: args.memberCommand
-      }
+      let postData = BaseModel._postDataFromArgs(args.args)
 
-      Api.post(url, postData).then((response) => {
+      postData.append("plural_name", this.modelClassData().pluralName)
+      postData.append("member_command", args.memberCommand)
+
+      Api.requestLocal({path: url, method: "POST", rawData: postData}).then((response) => {
         resolve(response)
       }, (response) => {
         reject(response)
       })
     })
+  }
+
+  static _postDataFromArgs(args) {
+    let postData
+
+    if (args) {
+      if (args instanceof FormData) {
+        postData = args
+      } else {
+        postData = objectToFormData(args, {}, null, "args")
+      }
+    } else {
+      postData = new FormData()
+    }
+
+    return postData
   }
 
   _getAttribute(attributeName) {

@@ -1,6 +1,11 @@
 import inflection from "inflection"
 
 export default class ModelsResponseReader {
+  static first(response) {
+    let reader = new ModelsResponseReader({response: response})
+    return reader.models()[0]
+  }
+
   constructor(args) {
     this.response = args.response
   }
