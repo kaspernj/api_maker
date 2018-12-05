@@ -4,7 +4,7 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
       authorize!(params[:collection_command].to_sym, klass)
     else
       ability_name = params[:member_command].to_sym
-      model = klass.accessible_by(current_ability).find(params[:id])
+      model = klass.accessible_by(current_ability, ability_name).find(params[:id])
       raise CanCan::AccessDefined.new("Not authorized!", ability_name, klass) unless model
     end
 
