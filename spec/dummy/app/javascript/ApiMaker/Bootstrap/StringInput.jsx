@@ -57,6 +57,7 @@ export default class BootstrapStringInput extends React.Component {
               data-controller={this.props["data-controller"]}
               data-month-picker={this.props["data-month-picker"]}
               data-start-date={this.props["data-start-date"]}
+              data-target={this.props["data-target"]}
               defaultValue={this.inputDefaultValue()}
               disabled={this.props.disabled}
               id={this.inputId()}

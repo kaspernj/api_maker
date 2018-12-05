@@ -10,6 +10,7 @@ export default class BootstrapCheckbox extends React.Component {
         <div className="form-check">
           <input defaultValue="0" name={this.inputName()} type="hidden" type="hidden" />
           <input
+            data-target={this.props["data-target"]}
             defaultChecked={this.inputDefaultChecked()}
             className="form-check-input"
             data-action={this.props["data-action"]}
@@ -44,7 +45,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   inputDefaultChecked() {
-    if (this.props.defaultChecked) {
+    if ("defaultChecked" in this.props) {
       return this.props.defaultChecked
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
