@@ -1,6 +1,7 @@
 class ApiMaker::ModelController < ApiMaker::BaseController
   before_action :set_collection, on: :index
-  before_action :set_instance, except: :index
+  before_action :set_instance, except: [:index, :new, :create]
+  before_action :set_new_instance, only: [:new, :create]
 
   def index
     query = resource_collection.ransack(params[:q]).result
@@ -154,6 +155,12 @@ private
     return if params[:id].blank?
     model = resource_instance_class.accessible_by(current_ability).find(params[:id])
     raise CanCan::AccessDefined.new("Not authorized!", :read, resource_instance_class) unless model
+    instance_variable_set("@#{resource_variable_name}", model)
+  end
+
+  def set_new_instance
+    model = resource_instance_class.new(sanitize_parameters)
+    authorize!(action_name.to_sym, model)
     instance_variable_set("@#{resource_variable_name}", model)
   end
 
