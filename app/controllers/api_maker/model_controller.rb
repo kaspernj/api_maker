@@ -1,5 +1,6 @@
 class ApiMaker::ModelController < ApiMaker::BaseController
-  load_and_authorize_resource
+  before_action :set_collection, on: :index
+  before_action :set_instance, except: :index
 
   def index
     query = resource_collection.ransack(params[:q]).result
@@ -142,6 +143,18 @@ private
 
   def serialized_resource(model)
     ApiMaker::Serializer.new(ability: current_ability, args: api_maker_args, model: model)
+  end
+
+  def set_collection
+    collection = resource_instance_class.accessible_by(current_ability)
+    instance_variable_set("@#{resource_collection_variable_name}", collection)
+  end
+
+  def set_instance
+    return if params[:id].blank?
+    model = resource_instance_class.accessible_by(current_ability).find(params[:id])
+    raise CanCan::AccessDefined.new("Not authorized!", :read, resource_instance_class) unless model
+    instance_variable_set("@#{resource_variable_name}", model)
   end
 
   def success_response
