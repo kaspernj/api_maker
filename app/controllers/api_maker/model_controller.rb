@@ -105,7 +105,7 @@ private
     return if params[:through].blank?
 
     through_model = params[:through][:model].constantize.accessible_by(current_ability).find(params[:through][:id])
-    relationship = through_model.__send__(params[:through][:reflection]).accessible_by(current_ability)
+    relationship = through_model.__send__(params[:through][:reflection]).accessible_by(current_ability, action_name.to_sym)
     instance_variable_set("@#{resource_collection_variable_name}", relationship)
   end
 
@@ -147,13 +147,13 @@ private
   end
 
   def set_collection
-    collection = resource_instance_class.accessible_by(current_ability)
+    collection = resource_instance_class.accessible_by(current_ability, action_name.to_sym)
     instance_variable_set("@#{resource_collection_variable_name}", collection)
   end
 
   def set_instance
     return if params[:id].blank?
-    model = resource_instance_class.accessible_by(current_ability).find(params[:id])
+    model = resource_instance_class.accessible_by(current_ability, action_name.to_sym).find(params[:id])
     raise CanCan::AccessDefined.new("Not authorized!", :read, resource_instance_class) unless model
     instance_variable_set("@#{resource_variable_name}", model)
   end
