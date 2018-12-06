@@ -51,6 +51,10 @@ export default class Collection {
       pageNumber = 1
 
     this.page = pageNumber
+
+    if (!this.ransackOptions.s)
+      this.ransackOptions.s = `${this.args.modelClassData.primaryKey} asc`
+
     return this
   }
 
@@ -98,13 +102,13 @@ export default class Collection {
   }
 
   modelClass() {
-    return require(`ApiMaker/Models/${this.args.modelName}`).default
+    return require(`ApiMaker/Models/${this.args.modelClassData.name}`).default
   }
 
   _response() {
     return new Promise((resolve, reject) => {
       let dataToUse = qs.stringify(this._params(), {"arrayFormat": "brackets"})
-      let urlToUse = this.args.targetPathName + "?" + dataToUse
+      let urlToUse = `${this.args.modelClassData.path}?${dataToUse}`
 
       let xhr = new XMLHttpRequest()
       xhr.open("GET", urlToUse)
