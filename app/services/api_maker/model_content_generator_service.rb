@@ -66,6 +66,7 @@ private
       reflectionName: reflection.name,
       model: "{{this}}",
       modelName: reflection.class_name,
+      modelClassData: "{{modelClass.modelClassData()}}",
       targetPathName: "/api_maker/#{reflection.klass.model_name.route_key}"
     }
 

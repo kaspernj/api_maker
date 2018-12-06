@@ -10,7 +10,8 @@ export default class Account extends BaseModel {
     
       projects() {
         let id = this.id()
-        return new Collection({"reflectionName":"projects","model":this,"modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"account_id_eq":id}})
+        let modelClass = require(`ApiMaker/Models/Project`).default
+        return new Collection({"reflectionName":"projects","model":this,"modelName":"Project","modelClassData":modelClass.modelClassData(),"targetPathName":"/api_maker/projects","ransack":{"account_id_eq":id}})
       }
     
   

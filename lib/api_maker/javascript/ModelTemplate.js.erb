@@ -28,6 +28,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
     <% elsif reflection.macro == :has_many %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         let id = this.<%= reflection.active_record.primary_key %>()
+        let modelClass = require(`ApiMaker/Models/<%= reflection.class_name %>`).default
         return new Collection(<%= api_maker_json(reflection_has_many_parameters(reflection)) %>)
       }
     <% elsif reflection.macro == :has_one %>
