@@ -34,7 +34,8 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
     <% elsif reflection.macro == :has_one %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}").result %>() {
         let id = this.<%= reflection.active_record.primary_key %>()
-        return this._loadHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
+        let modelClass = require(`ApiMaker/Models/<%= reflection.class_name %>`).default
+        return this._loadHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}", "modelName" => reflection.class_name, "targetPathName" => "/api_maker/#{reflection.klass.model_name.route_key}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
       }
 
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {

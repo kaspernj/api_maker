@@ -30,7 +30,7 @@ export default class BaseModel {
   }
 
   static ransack(query = {}) {
-    return new Collection({"ransack": query, "modelClassData": this.modelClassData()})
+    return new Collection({"ransack": query, "modelClass": this})
   }
 
   constructor(args = {}) {
