@@ -154,13 +154,13 @@ private
   def set_instance
     return if params[:id].blank?
     model = resource_instance_class.accessible_by(current_ability, action_name.to_sym).find(params[:id])
-    raise CanCan::AccessDefined.new("Not authorized!", :read, resource_instance_class) unless model
+    raise CanCan::AccessDefined.new(not_authorized_message(action_name, resource_instance_class), :read, resource_instance_class) unless model
     instance_variable_set("@#{resource_variable_name}", model)
   end
 
   def set_new_instance
     model = resource_instance_class.new(sanitize_parameters)
-    authorize!(action_name.to_sym, model)
+    authorize!(action_name.to_sym, model, message: not_authorized_message(action_name, model))
     instance_variable_set("@#{resource_variable_name}", model)
   end
 
@@ -169,5 +169,15 @@ private
       model: serialized_resource(resource_instance).result,
       success: true
     }
+  end
+
+  def not_authorized_message(action, model)
+    if model.is_a?(ActiveRecord::Base)
+      model_name = model.class.name
+    else
+      model_name = model.name
+    end
+
+    "Not authorized to \"#{action}\" on #{model_name}"
   end
 end
