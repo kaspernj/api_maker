@@ -10,12 +10,14 @@ export default class ProjectDetail extends BaseModel {
     
       loadProject() {
         let id = this.projectId()
-        return this._loadBelongsToReflection({"reflectionName":"project","model":this,"modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
+        let modelClass = require(`ApiMaker/Models/Project`).default
+        return this._loadBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass,"ransack":{"id_eq":id}})
       }
 
       project() {
         let id = this.projectId()
-        return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelName":"Project","targetPathName":"/api_maker/projects","ransack":{"id_eq":id}})
+        let modelClass = require(`ApiMaker/Models/Project`).default
+        return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass,"ransack":{"id_eq":id}})
       }
     
   
