@@ -36,7 +36,7 @@ class ApiMaker::Serializer
     value = attribute_value(attribute)
 
     if value.is_a?(Date) || value.is_a?(Time)
-      value.iso8601
+      value.utc.iso8601
     else
       value
     end
