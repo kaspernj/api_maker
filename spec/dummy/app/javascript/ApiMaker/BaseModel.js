@@ -95,7 +95,7 @@ export default class BaseModel {
     return new Promise((resolve, reject) => {
       let paramKey = this.modelClassData().paramKey
       let urlToUse = this.modelClassData().path
-      let modelData = this._saveData()
+      let modelData = this.getAttributes()
       let dataToUse = {}
       dataToUse[paramKey] = modelData
 
@@ -157,6 +157,10 @@ export default class BaseModel {
         reject({"model": this, "response": response})
       })
     })
+  }
+
+  getAttributes() {
+    return Object.assign(this.modelData, this.changes)
   }
 
   static humanAttributeName(attributeName) {
@@ -291,7 +295,7 @@ export default class BaseModel {
     return new Promise((resolve, reject) => {
       let paramKey = this.modelClassData().paramKey
       let urlToUse = `${this.modelClassData().path}/validate`
-      let modelData = this._saveData()
+      let modelData = this.getAttributes()
       let dataToUse = {}
       dataToUse[paramKey] = modelData
 
@@ -523,10 +527,6 @@ export default class BaseModel {
 
   _primaryKey() {
     return this._getAttribute(this.modelClassData().primaryKey)
-  }
-
-  _saveData() {
-    return Object.assign({}, this.modelData, this.changes)
   }
 
   static _token() {
