@@ -20,8 +20,7 @@ class ApiMaker::PreloaderBelongsTo
         }}
       end
 
-      exists = @data.fetch(:included).find { |record| record.fetch(:type) == plural_name && record.fetch(:id) == model.attributes.fetch(look_up_key) }
-      next if exists
+      next if exists?(model)
 
       serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
       @data.fetch(:included) << serialized
@@ -31,6 +30,12 @@ class ApiMaker::PreloaderBelongsTo
   end
 
 private
+
+  def exists?(model)
+    @data.fetch(:included).find do |record|
+      record.fetch(:type) == plural_name && record.fetch(:id) == model.attributes.fetch(look_up_key)
+    end
+  end
 
   def models
     models = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym))
