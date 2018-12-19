@@ -17,7 +17,7 @@ export default class ProjectDetail extends BaseModel {
       project() {
         let id = this.projectId()
         let modelClass = require(`ApiMaker/Models/Project`).default
-        return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass,"ransack":{"id_eq":id}})
+        return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass})
       }
     
   

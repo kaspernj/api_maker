@@ -17,7 +17,7 @@ export default class Task extends BaseModel {
       project() {
         let id = this.projectId()
         let modelClass = require(`ApiMaker/Models/Project`).default
-        return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass,"ransack":{"id_eq":id}})
+        return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass})
       }
     
   
@@ -31,7 +31,7 @@ export default class Task extends BaseModel {
       user() {
         let id = this.userId()
         let modelClass = require(`ApiMaker/Models/User`).default
-        return this._readBelongsToReflection({"reflectionName":"user","model":this,"modelClass":modelClass,"ransack":{"id_eq":id}})
+        return this._readBelongsToReflection({"reflectionName":"user","model":this,"modelClass":modelClass})
       }
     
   
