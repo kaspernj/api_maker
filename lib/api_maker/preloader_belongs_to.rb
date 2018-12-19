@@ -33,7 +33,7 @@ private
 
   def exists?(model)
     @data.fetch(:included).find do |record|
-      record.fetch(:type) == plural_name && record.fetch(:id) == model.attributes.fetch(look_up_key)
+      record.fetch(:type) == plural_name && record.fetch(:id) == model.attributes.fetch(model.class.primary_key)
     end
   end
 
