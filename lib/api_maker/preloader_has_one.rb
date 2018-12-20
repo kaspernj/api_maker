@@ -40,9 +40,11 @@ class ApiMaker::PreloaderHasOne
     @models ||= proc do
       if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
         query = ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
+          .select(@reflection.klass.arel_table[Arel.star])
+          .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
       else
         query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
-        query = query.select(@reflection.klass.arel_table[Arel.star]).select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
+          .select(@reflection.klass.arel_table[Arel.star]).select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
       end
 
       query = query.accessible_by(@ability) if @ability
