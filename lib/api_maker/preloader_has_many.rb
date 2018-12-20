@@ -6,6 +6,8 @@ class ApiMaker::PreloaderHasMany
     @collection = collection
     @reflection = reflection
     @records = records
+
+    raise "No inverse of for #{@reflection.active_record.name}##{@reflection.name}" unless @reflection.inverse_of
   end
 
   def preload
@@ -21,7 +23,7 @@ private
   def models
     @models ||= proc do
       # Group them by subquery to fix Postgres grouping-select issues
-      query = @reflection.klass.where(@reflection.klass.primary_key => ids_query)
+      query = @reflection.klass.where(@reflection.klass.primary_key => ids_query.select(@reflection.klass.primary_key.to_sym))
 
       query = query
         .distinct
