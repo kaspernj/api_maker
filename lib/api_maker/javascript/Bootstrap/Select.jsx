@@ -20,11 +20,11 @@ export default class BootstrapSelect extends React.Component {
     return (
       <div className={this.wrapperClassName()}>
         {this.label() &&
-          <h4 className={this.props.labelContainerClassName ? this.props.labelContainerClassName : null}>
+          <div className={this.props.labelContainerClassName ? this.props.labelContainerClassName : null}>
             <label className={this.labelClassName()} htmlFor={this.inputId()}>
               {this.label()}
             </label>
-          </h4>
+          </div>
         }
         {this.props.description &&
           <div className="mb-4">
@@ -122,7 +122,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   labelClassName() {
-    let classNames = ["font-sm", "bold", "form-group-label"]
+    let classNames = ["form-group-label"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)

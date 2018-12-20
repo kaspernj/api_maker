@@ -94,7 +94,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   labelClassName() {
-    let classNames = ["form-check-label", "text-half-muted", "font-smoothing"]
+    let classNames = ["form-check-label"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
