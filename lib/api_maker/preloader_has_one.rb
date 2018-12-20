@@ -39,17 +39,26 @@ class ApiMaker::PreloaderHasOne
   def models
     @models ||= proc do
       if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-        query = ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
-          .select(@reflection.klass.arel_table[Arel.star])
-          .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
+        query = query_through
       else
-        query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
-          .select(@reflection.klass.arel_table[Arel.star]).select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
+        query = query_normal
       end
 
       query = query.accessible_by(@ability) if @ability
       query = query.group(@reflection.klass.arel_table[@reflection.klass.primary_key]).fix # Group by ID
       query
     end.call
+  end
+
+  def query_through
+    ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
+      .select(@reflection.klass.arel_table[Arel.star])
+      .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
+  end
+
+  def query_normal
+    @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
+      .select(@reflection.klass.arel_table[Arel.star])
+      .select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
   end
 end
