@@ -7,9 +7,7 @@ export default class BootstrapStringInput extends React.Component {
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
         {this.label() &&
-          <h4>
-            <label className={this.labelClassName()} htmlFor={this.inputId()}>{this.label()}</label>
-          </h4>
+          <label className={this.labelClassName()} htmlFor={this.inputId()}>{this.label()}</label>
         }
         {this.props.hint &&
           <span className="form-text text-muted font-smoothing font-xs">
@@ -142,7 +140,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   labelClassName() {
-    let classNames = ["font-sm", "bold"]
+    let classNames = []
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)

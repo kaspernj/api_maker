@@ -4,7 +4,7 @@ import React from "react"
 export default class BootstrapRadioButtons extends React.Component {
   render() {
     return (
-      <div>
+      <div className="component-bootstrap-radio-buttons">
         {this.props.collection.map(option => this.optionElement(option))}
       </div>
     )
