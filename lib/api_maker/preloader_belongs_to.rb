@@ -38,7 +38,7 @@ private
   end
 
   def models
-    models = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym))
+    models = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym).uniq)
     models = models.accessible_by(@ability) if @ability
     models
   end
