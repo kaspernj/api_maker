@@ -27,7 +27,7 @@ class ApiMaker::BaseResource
     end
   end
 
-  def self.model_class=(klass)
+  def self.model_class=(klass) # rubocop:disable Style/TrivialAccessors
     @model_class = klass
   end
 
