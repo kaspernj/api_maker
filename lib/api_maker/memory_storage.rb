@@ -1,5 +1,5 @@
 class ApiMaker::MemoryStorage
-  attr_reader :resources
+  attr_reader :resources, :storage
 
   def self.current
     @current ||= ApiMaker::MemoryStorage.new
@@ -23,5 +23,20 @@ class ApiMaker::MemoryStorage
   def add_resource(klass)
     return if klass.name == "Resources::ApplicationResource"
     @resources << {klass: klass}
+  end
+
+  def resource_for_model(model_class)
+    resource_to_model_classes.fetch(model_class)
+  end
+
+  def resource_to_model_classes
+    @resource_to_model_classes ||= proc do
+      result = {}
+      @resources.each do |klass|
+        result[klass.fetch(:klass).model_class] = klass.fetch(:klass)
+      end
+
+      result
+    end.call
   end
 end

@@ -27,10 +27,16 @@ class ApiMaker::BaseResource
     end
   end
 
+  def self.model_class=(klass)
+    @model_class = klass
+  end
+
   def self.model_class
-    model_class_name = name.gsub(/Resource$/, "")
-    model_class_name = model_class_name.gsub(/^Resources::/, "")
-    model_class_name.constantize
+    @model_class ||= proc do
+      model_class_name = name.gsub(/Resource$/, "")
+      model_class_name = model_class_name.gsub(/^Resources::/, "")
+      model_class_name.constantize
+    end.call
   end
 
   def self.relationships(*relationships)

@@ -98,6 +98,6 @@ private
   end
 
   def resource
-    @resource ||= ApiMaker::Serializer.resource_for(@model)
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@model)
   end
 end
