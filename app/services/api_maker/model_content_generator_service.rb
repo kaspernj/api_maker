@@ -33,6 +33,7 @@ private
 
   def model_content
     erb = ERB.new(File.read(model_template_path))
+    erb.filename = File.realpath(model_template_path)
     erb.result(binding)
   end
 
