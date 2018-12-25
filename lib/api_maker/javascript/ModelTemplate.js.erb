@@ -5,7 +5,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
   static modelClassData() {
     return <%= {
       attributes: attributes,
-      name: model.model_name.name,
+      name: resource.short_name,
       pluralName: model.model_name.plural,
       relationships: reflections_for_model_class_data,
       paramKey: model.model_name.param_key,

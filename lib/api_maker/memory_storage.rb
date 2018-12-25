@@ -26,17 +26,10 @@ class ApiMaker::MemoryStorage
   end
 
   def resource_for_model(model_class)
-    resource_to_model_classes.fetch(model_class)
-  end
+    @resources.each do |klass_data|
+      return klass_data.fetch(:klass) if klass_data.fetch(:klass).model_class == model_class
+    end
 
-  def resource_to_model_classes
-    @resource_to_model_classes ||= proc do
-      result = {}
-      @resources.each do |klass|
-        result[klass.fetch(:klass).model_class] = klass.fetch(:klass)
-      end
-
-      result
-    end.call
+    raise "Couldnt find resource for model: #{model_class.name}"
   end
 end

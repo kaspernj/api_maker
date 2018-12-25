@@ -10,7 +10,7 @@ class ApiMaker::ControllerContentGeneratorService < ApiMaker::ApplicationService
 private
 
   def controller_name
-    "ApiMaker::#{@model.name.underscore.pluralize.camelize}Controller"
+    "ApiMaker::#{resource.short_name.pluralize}Controller"
   end
 
   def content
@@ -18,5 +18,9 @@ private
 
     erb = ERB.new(File.read(template_path))
     erb.result(binding)
+  end
+
+  def resource
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@model)
   end
 end
