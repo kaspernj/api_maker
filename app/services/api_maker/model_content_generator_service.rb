@@ -33,6 +33,7 @@ private
 
   def model_content
     erb = ERB.new(File.read(model_template_path))
+    erb.filename = File.realpath(model_template_path)
     erb.result(binding)
   end
 
@@ -98,6 +99,6 @@ private
   end
 
   def resource
-    @resource ||= ApiMaker::Serializer.resource_for(@model)
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@model)
   end
 end

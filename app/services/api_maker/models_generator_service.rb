@@ -28,7 +28,8 @@ private
   end
 
   def controller_file(model)
-    controller_path.join("#{model.name.underscore.pluralize}_controller.rb")
+    resource_class = ApiMaker::MemoryStorage.current.resource_for_model(model)
+    controller_path.join("#{resource_class.short_name.underscore.pluralize}_controller.rb")
   end
 
   def controller_path
@@ -99,6 +100,7 @@ private
   end
 
   def model_file(model)
-    api_maker_root_path.join("Models", "#{model.name}.js")
+    resource_class = ApiMaker::MemoryStorage.current.resource_for_model(model)
+    api_maker_root_path.join("Models", "#{resource_class.short_name}.js")
   end
 end

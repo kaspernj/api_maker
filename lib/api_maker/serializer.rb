@@ -8,7 +8,7 @@ class ApiMaker::Serializer
   end
 
   def self.resource_for!(klass)
-    "Resources::#{klass.name}Resource".constantize
+    ApiMaker::MemoryStorage.current.resource_for_model(klass)
   end
 
   def initialize(ability: nil, args: {}, model:)

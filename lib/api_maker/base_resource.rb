@@ -27,10 +27,16 @@ class ApiMaker::BaseResource
     end
   end
 
+  def self.model_class=(klass) # rubocop:disable Style/TrivialAccessors
+    @model_class = klass
+  end
+
   def self.model_class
-    model_class_name = name.gsub(/Resource$/, "")
-    model_class_name = model_class_name.gsub(/^Resources::/, "")
-    model_class_name.constantize
+    @model_class ||= proc do
+      model_class_name = name.gsub(/Resource$/, "")
+      model_class_name = model_class_name.gsub(/^Resources::/, "")
+      model_class_name.constantize
+    end.call
   end
 
   def self.relationships(*relationships)
@@ -41,6 +47,10 @@ class ApiMaker::BaseResource
 
   def self._relationships
     ApiMaker::MemoryStorage.current.storage_for(self, :relationships)
+  end
+
+  def self.short_name
+    @short_name ||= name.match(/\AResources::(.+)Resource\Z/)[1]
   end
 
   def initialize(ability: nil, args: {}, model:)

@@ -75,6 +75,14 @@ private
 
   def after_destroy; end
 
+  def api_maker_resource_class
+    @api_maker_resource_class ||= "Resources::#{short_plural_name.singularize}Resource".constantize
+  end
+
+  def short_plural_name
+    self.class.name.match(/\AApiMaker::(.+)Controller\Z/)[1]
+  end
+
   def collection_from_query(query)
     ApiMaker::CollectionSerializer.new(ability: current_ability, args: api_maker_args, collection: query, include_param: include_param).result
   end
@@ -125,7 +133,7 @@ private
   end
 
   def resource_instance_class
-    @resource_instance_class ||= resource_instance_class_name.constantize
+    @resource_instance_class ||= api_maker_resource_class.model_class
   end
 
   def resource_instance
