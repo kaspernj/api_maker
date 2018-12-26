@@ -45,7 +45,7 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
   }
 
   render() {
-    if (!this.state.value)
+    if (this.state.value === undefined)
       return ""
 
     return this.state.value
