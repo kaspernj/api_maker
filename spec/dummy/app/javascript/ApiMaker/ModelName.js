@@ -15,7 +15,7 @@ export default class ModelName {
       countKey = "one"
     }
 
-    let key = `activerecord.models.${this.data.modelClassData.paramKey}.${countKey}`
+    let key = `activerecord.models.${this.data.modelClassData.i18nKey}.${countKey}`
     return I18n.t(key)
   }
 }

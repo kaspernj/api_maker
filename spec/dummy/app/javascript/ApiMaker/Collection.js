@@ -1,4 +1,5 @@
 import BaseModel from "./BaseModel"
+import inflection from "inflection"
 import ModelsResponseReader from "./ModelsResponseReader"
 import qs from "qs"
 import Result from "./Result"
@@ -9,6 +10,11 @@ export default class Collection {
     this.includes = args.includes
     this.params = args.params
     this.ransackOptions = args.ransack || {}
+  }
+
+  accessibleBy(abilityName) {
+    this.accessibleByValue = abilityName
+    return this
   }
 
   each(callback) {
@@ -135,6 +141,10 @@ export default class Collection {
 
     if (this.params)
       params = Object.assign(params, this.params)
+
+    if (this.accessibleByValue) {
+      params["accessible_by"] = inflection.underscore(this.accessibleByValue)
+    }
 
     if (this.ransackOptions)
       params["q"] = this.ransackOptions

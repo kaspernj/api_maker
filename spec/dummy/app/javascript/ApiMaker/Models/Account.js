@@ -3,7 +3,7 @@ import Collection from "../Collection"
 
 export default class Account extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"}],"name":"Account","pluralName":"accounts","relationships":[{"className":"Project","name":"projects","macro":"has_many"}],"paramKey":"account","path":"/api_maker/accounts","primaryKey":"id"}
+    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"}],"i18nKey":"account","name":"Account","pluralName":"accounts","relationships":[{"className":"Project","name":"projects","macro":"has_many"}],"paramKey":"account","path":"/api_maker/accounts","primaryKey":"id"}
   }
 
   
