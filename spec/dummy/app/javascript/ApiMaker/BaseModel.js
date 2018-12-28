@@ -164,7 +164,7 @@ export default class BaseModel {
   }
 
   static humanAttributeName(attributeName) {
-    let keyName = this.modelClassData().paramKey
+    let keyName = this.modelClassData().i18nKey
     return I18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`)
   }
 
