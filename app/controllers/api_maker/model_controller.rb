@@ -79,12 +79,17 @@ private
     @api_maker_resource_class ||= "Resources::#{short_plural_name.singularize}Resource".constantize
   end
 
+  def filter_custom_accessible_by(collection)
+    return collection if params[:accessible_by].blank?
+    collection.accessible_by(current_ability, params[:accessible_by].to_sym)
+  end
+
   def short_plural_name
     self.class.name.match(/\AApiMaker::(.+)Controller\Z/)[1]
   end
 
-  def collection_from_query(query)
-    ApiMaker::CollectionSerializer.new(ability: current_ability, args: api_maker_args, collection: query, include_param: include_param).result
+  def collection_from_query(collection)
+    ApiMaker::CollectionSerializer.new(ability: current_ability, args: api_maker_args, collection: collection, include_param: include_param).result
   end
 
   def failure_response
@@ -99,13 +104,13 @@ private
     params[:include]
   end
 
-  def include_pagination_data(response, query)
+  def include_pagination_data(response, collection)
     return if params[:page].blank?
 
     response[:meta] = {
-      currentPage: query.current_page,
-      totalCount: query.try(:total_count) || query.try(:total_entries),
-      totalPages: query.total_pages
+      currentPage: collection.current_page,
+      totalCount: collection.try(:total_count) || collection.try(:total_entries),
+      totalPages: collection.total_pages
     }
   end
 
@@ -113,8 +118,9 @@ private
     return if params[:through].blank?
 
     through_model = params[:through][:model].constantize.accessible_by(current_ability).find(params[:through][:id])
-    relationship = through_model.__send__(params[:through][:reflection]).accessible_by(current_ability, action_name.to_sym)
-    instance_variable_set("@#{resource_collection_variable_name}", relationship)
+    collection = through_model.__send__(params[:through][:reflection]).accessible_by(current_ability, action_name.to_sym)
+    collection = filter_custom_accessible_by(collection)
+    instance_variable_set("@#{resource_collection_variable_name}", collection)
   end
 
   def resource_collection
@@ -156,6 +162,7 @@ private
 
   def set_collection
     collection = resource_instance_class.accessible_by(current_ability, action_name.to_sym)
+    collection = filter_custom_accessible_by(collection)
     instance_variable_set("@#{resource_collection_variable_name}", collection)
   end
 
