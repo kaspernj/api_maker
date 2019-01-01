@@ -3,7 +3,7 @@ import Collection from "../Collection"
 
 export default class Customer extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"}],"name":"Customer","pluralName":"customers","relationships":[],"paramKey":"customer","path":"/api_maker/customers","primaryKey":"id"}
+    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"}],"i18nKey":"customer","name":"Customer","pluralName":"customers","relationships":[],"paramKey":"customer","path":"/api_maker/customers","primaryKey":"id"}
   }
 
   

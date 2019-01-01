@@ -3,7 +3,7 @@ import Collection from "../Collection"
 
 export default class ProjectDetail extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"project_id","type":"integer"},{"name":"details","type":"string"}],"name":"ProjectDetail","pluralName":"project_details","relationships":[{"className":"Project","name":"project","macro":"belongs_to"}],"paramKey":"project_detail","path":"/api_maker/project_details","primaryKey":"id"}
+    return {"attributes":[{"name":"id","type":"integer"},{"name":"project_id","type":"integer"},{"name":"details","type":"string"}],"i18nKey":"project_detail","name":"ProjectDetail","pluralName":"project_details","relationships":[{"className":"Project","name":"project","macro":"belongs_to"}],"paramKey":"project_detail","path":"/api_maker/project_details","primaryKey":"id"}
   }
 
   
