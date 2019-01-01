@@ -9,9 +9,20 @@ export default class extends React.Component {
   }
 
   pages() {
+    let currentPage = this.props.result.currentPage()
     let pages = []
-    for(let i = 0; i < this.props.result.totalPages(); i++) {
-      pages.push(i + 1)
+    let totalPages = this.props.result.totalPages()
+    let pagesFrom = currentPage - 5
+    let pagesTo = currentPage + 5
+
+    if (pagesFrom < 1)
+      pagesFrom = 1
+
+    if (pagesTo > totalPages)
+      pagesTo = totalPages
+
+    for(let i = pagesFrom; i < pagesTo; i++) {
+      pages.push(i)
     }
 
     return pages
@@ -54,6 +65,19 @@ export default class extends React.Component {
     return this.pagePath(nextPage)
   }
 
+  showBackwardsDots() {
+    let currentPage = this.props.result.currentPage()
+
+    return (currentPage - 5 > 1)
+  }
+
+  showForwardsDots() {
+    let currentPage = this.props.result.currentPage()
+    let totalPages = this.props.result.totalPages()
+
+    return (currentPage + 5 < totalPages)
+  }
+
   render() {
     return (
       <ul className="pagination">
@@ -67,6 +91,13 @@ export default class extends React.Component {
             ←
           </Link>
         </li>
+        {this.showBackwardsDots() &&
+          <li className="page-item">
+            <a className="page-link disabled" href="#">
+              &hellip;
+            </a>
+          </li>
+        }
         {this.pages().map((page) =>
           <li className={`page-item ${this.isPageActiveClass(page)}`} key={`page-${page}`}>
             <Link className="page-link" to={this.pagePath(page)}>
@@ -74,6 +105,13 @@ export default class extends React.Component {
             </Link>
           </li>
         )}
+        {this.showForwardsDots() &&
+          <li className="page-item">
+            <a className="page-link disabled" href="#">
+              &hellip;
+            </a>
+          </li>
+        }
         <li className={`page-item ${this.props.result.currentPage() >= this.props.result.totalPages() ? "disabled" : ""}`} key="page-next">
           <Link className="page-link" to={this.nextPagePath()}>
             →
