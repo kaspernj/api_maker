@@ -7,7 +7,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
 
-    let searchKey = this.props.query.searchKeyValue
+    let searchKey = this.props.query.args.searchKey
     if (!searchKey)
       searchKey = "q"
 
