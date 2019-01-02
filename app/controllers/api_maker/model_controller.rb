@@ -7,9 +7,8 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     query = resource_collection.ransack(params[:q]).result
     query = query.limit(params[:limit]) if params[:limit].present?
     query = query.page(params[:page]) if params[:page].present?
-    query = query.distinct.fix
 
-    collection = collection_from_query(query)
+    collection = collection_from_query(query.fix)
 
     response = collection.as_json
     include_pagination_data(response, query)

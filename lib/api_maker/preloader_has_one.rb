@@ -45,7 +45,7 @@ class ApiMaker::PreloaderHasOne
       end
 
       query = query.accessible_by(@ability) if @ability
-      query = query.group(@reflection.klass.arel_table[@reflection.klass.primary_key]).fix # Group by ID
+      query = query.fix
       query
     end.call
   end
