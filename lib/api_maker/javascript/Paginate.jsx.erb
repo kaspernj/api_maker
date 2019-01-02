@@ -25,6 +25,9 @@ export default class extends React.Component {
       pages.push(i)
     }
 
+    if (pages.length == 0)
+      pages.push(1)
+
     return pages
   }
 

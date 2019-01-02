@@ -108,7 +108,7 @@ export default class Collection {
   }
 
   _clone(args) {
-    return new Collection(objectAssignDeep({}, this.args, args))
+    return new Collection(objectAssignDeep({}, args, this.args))
   }
 
   _response() {
