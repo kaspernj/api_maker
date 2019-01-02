@@ -1,7 +1,7 @@
 import BaseModel from "./BaseModel"
 import inflection from "inflection"
+import merge from "merge"
 import ModelsResponseReader from "./ModelsResponseReader"
-import objectAssignDeep from "object-assign-deep"
 import qs from "qs"
 import Result from "./Result"
 
@@ -108,7 +108,11 @@ export default class Collection {
   }
 
   _clone(args) {
-    return new Collection(objectAssignDeep({}, args, this.args))
+    return new Collection(this._merge(this.args, args))
+  }
+
+  _merge(object1, object2) {
+    return merge.recursive(true, object1, object2)
   }
 
   _response() {
@@ -140,7 +144,7 @@ export default class Collection {
     let params = {}
 
     if (this.args.params)
-      objectAssignDeep(params, this.args.params)
+      params = this._merge(params, this.args.params)
 
     if (this.args.accessibleBy) {
       params.accessible_by = inflection.underscore(this.args.accessibleBy)
