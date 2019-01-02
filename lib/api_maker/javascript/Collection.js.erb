@@ -1,15 +1,17 @@
 import BaseModel from "./BaseModel"
 import inflection from "inflection"
 import ModelsResponseReader from "./ModelsResponseReader"
+import objectAssignDeep from "object-assign-deep"
 import qs from "qs"
 import Result from "./Result"
 
 export default class Collection {
   constructor(args) {
     this.args = args
-    this.includes = args.includes
-    this.params = args.params
-    this.ransackOptions = args.ransack || {}
+  }
+
+  accessibleBy(abilityName) {
+    return this._clone({accessibleBy: abilityName})
   }
 
   accessibleBy(abilityName) {
@@ -34,8 +36,7 @@ export default class Collection {
   }
 
   limit(amount) {
-    this.limit = amount
-    return this
+    return this._clone({limit: amount})
   }
 
   loaded() {
@@ -47,31 +48,26 @@ export default class Collection {
     return this.args.model.relationshipsCache[this.args.reflectionName]
   }
 
-  preload(args) {
-    this.includes = args
-    return this
+  preload(preloadValue) {
+    return this._clone({preload: preloadValue})
   }
 
   page(pageNumber) {
     if (!pageNumber)
       pageNumber = 1
 
-    this.page = pageNumber
-
-    if (!this.ransackOptions.s)
-      this.ransackOptions.s = `${this.args.modelClass.modelClassData().primaryKey} asc`
-
-    return this
+    return this._clone({
+      page: pageNumber,
+      ransackOptions: {s: `${this.args.modelClass.modelClassData().primaryKey} asc`}
+    })
   }
 
   pageKey(pageKeyValue) {
-    this.pageKeyValue = pageKeyValue
-    return this
+    return this._clone({pageKey: pageKeyValue})
   }
 
   ransack(params) {
-    this.ransackOptions = Object.assign(this.ransackOptions, params)
-    return this
+    return this._clone({ransackOptions: params})
   }
 
   result() {
@@ -89,13 +85,11 @@ export default class Collection {
   }
 
   searchKey(searchKey) {
-    this.searchKeyValue = searchKey
-    return this
+    return this._clone({searchKey: searchKey})
   }
 
   sort(sortBy) {
-    this.ransackOptions["s"] = sortBy
-    return this
+    return this._clone({ransack: {s: sortBy}})
   }
 
   toArray() {
@@ -111,9 +105,13 @@ export default class Collection {
     return require(`ApiMaker/Models/${this.args.modelClass.modelClassData().name}`).default
   }
 
+  _clone(args) {
+    return new Collection(objectAssignDeep({}, this.args, args))
+  }
+
   _response() {
     return new Promise((resolve, reject) => {
-      let dataToUse = qs.stringify(this._params(), {"arrayFormat": "brackets"})
+      let dataToUse = qs.stringify(this._params(), {arrayFormat: "brackets"})
       let urlToUse = `${this.args.modelClass.modelClassData().path}?${dataToUse}`
 
       let xhr = new XMLHttpRequest()
@@ -139,24 +137,24 @@ export default class Collection {
   _params() {
     let params = {}
 
-    if (this.params)
-      params = Object.assign(params, this.params)
+    if (this.args.params)
+      params = Object.assign({}, params, this.args.params)
 
-    if (this.accessibleByValue) {
-      params["accessible_by"] = inflection.underscore(this.accessibleByValue)
+    if (this.args.accessibleBy) {
+      params.accessible_by = inflection.underscore(this.args.accessibleBy)
     }
 
-    if (this.ransackOptions)
-      params["q"] = this.ransackOptions
+    if (this.args.ransack)
+      params.q = this.args.ransack
 
-    if (this.limit)
-      params["limit"] = this.limit
+    if (this.args.limit)
+      params.limit = this.args.limit
 
-    if (this.includes)
-      params["include"] = this.includes
+    if (this.args.preload)
+      params.include = this.args.preload
 
-    if (this.page)
-      params["page"] = this.page
+    if (this.args.page)
+      params.page = this.args.page
 
     return params
   }
