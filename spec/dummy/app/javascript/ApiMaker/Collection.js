@@ -56,10 +56,12 @@ export default class Collection {
     if (!pageNumber)
       pageNumber = 1
 
-    return this._clone({
-      page: pageNumber,
-      ransackOptions: {s: `${this.args.modelClass.modelClassData().primaryKey} asc`}
-    })
+    let changes = {page: pageNumber}
+
+    if (!this.args.ransack || !this.args.ransack.s)
+      changes.ransack = {s: `${this.args.modelClass.modelClassData().primaryKey} asc`}
+
+    return this._clone(changes)
   }
 
   pageKey(pageKeyValue) {
@@ -67,7 +69,7 @@ export default class Collection {
   }
 
   ransack(params) {
-    return this._clone({ransackOptions: params})
+    return this._clone({ransack: params})
   }
 
   result() {
@@ -106,7 +108,7 @@ export default class Collection {
   }
 
   _clone(args) {
-    return new Collection(objectAssignDeep({}, this.args, args))
+    return new Collection(objectAssignDeep({}, args, this.args))
   }
 
   _response() {
@@ -138,7 +140,7 @@ export default class Collection {
     let params = {}
 
     if (this.args.params)
-      params = Object.assign({}, params, this.args.params)
+      objectAssignDeep(params, this.args.params)
 
     if (this.args.accessibleBy) {
       params.accessible_by = inflection.underscore(this.args.accessibleBy)

@@ -7,7 +7,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
 
-    let searchKey = this.props.query.searchKeyValue
+    let searchKey = this.props.query.args.searchKey
     if (!searchKey)
       searchKey = "q"
 
@@ -41,10 +41,10 @@ export default class extends React.Component {
   }
 
   isSortedByAttribute() {
-    if (this.props.query.args.ransack.s == this.attribute())
+    if (this.props.query.args.ransack && this.props.query.args.ransack.s == this.attribute())
       return true
 
-    if (this.props.query.args.ransack.s == `${this.attribute()} asc`)
+    if (this.props.query.args.ransack && this.props.query.args.ransack.s == `${this.attribute()} asc`)
       return true
 
     return false

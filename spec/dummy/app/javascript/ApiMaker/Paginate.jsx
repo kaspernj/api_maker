@@ -25,11 +25,14 @@ export default class extends React.Component {
       pages.push(i)
     }
 
+    if (pages.length == 0)
+      pages.push(1)
+
     return pages
   }
 
   pagePath(pageNumber) {
-    let pageKey = this.props.result.data.collection.pageKeyValue
+    let pageKey = this.props.result.data.collection.args.pageKey
     if (!pageKey)
       pageKey = "page"
 

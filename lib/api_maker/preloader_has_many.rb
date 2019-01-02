@@ -26,7 +26,6 @@ private
       query = @reflection.klass.where(@reflection.klass.primary_key => ids_query.select(@reflection.klass.primary_key.to_sym))
 
       query = query
-        .distinct
         .joins(@reflection.inverse_of.name)
         .select(@reflection.klass.arel_table[Arel.star])
         .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
