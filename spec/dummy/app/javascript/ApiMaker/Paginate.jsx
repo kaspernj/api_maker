@@ -21,12 +21,9 @@ export default class extends React.Component {
     if (pagesTo > totalPages)
       pagesTo = totalPages
 
-    for(let i = pagesFrom; i < pagesTo; i++) {
+    for(let i = pagesFrom; i <= pagesTo; i++) {
       pages.push(i)
     }
-
-    if (pages.length == 0)
-      pages.push(1)
 
     return pages
   }
@@ -101,7 +98,7 @@ export default class extends React.Component {
             </a>
           </li>
         }
-        {this.pages().map((page) =>
+        {this.pages().map(page =>
           <li className={`page-item ${this.isPageActiveClass(page)}`} key={`page-${page}`}>
             <Link className="page-link" to={this.pagePath(page)}>
               {page}
