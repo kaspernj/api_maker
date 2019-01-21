@@ -82,4 +82,10 @@ class ApiMaker::Serializer
   def to_json(_options = nil)
     JSON.generate(as_json)
   end
+
+  def inspect
+    "<ApiMaker::Serializer model={#{model.class.name}} id={model.id}>"
+  end
+
+  alias to_s inspect
 end
