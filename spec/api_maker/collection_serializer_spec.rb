@@ -23,8 +23,30 @@ describe ApiMaker::CollectionSerializer do
 
     expect(project_include.dig("attributes", "name")).to eq "Test project"
     expect(project_include.dig("relationships")).to eq("account" => {"data" => {"type" => "accounts", "id" => 1}})
-    expect(task_include.dig("relationships")).to eq("account" => {"data" => {"type" => "accounts", "id" => 1}}, "project" => {"data" => {"type" => "projects", "id" => 2}})
-    expect(account_include).to eq("type" => "accounts", "id" => 1, "attributes"=> {"id" => 1, "name" => "Account 1"}, "relationships" => {})
+    expect(task_include.dig("relationships")).to eq(
+      "account" => {
+        "data" => {
+          "type" =>
+          "accounts",
+          "id" => 1
+        }
+      },
+      "project" => {
+        "data" => {
+          "type" => "projects",
+          "id" => 2
+        }
+      }
+    )
+    expect(account_include).to eq(
+      "type" => "accounts",
+      "id" => 1,
+      "attributes" => {
+        "id" => 1,
+        "name" => "Account 1"
+      },
+      "relationships" => {}
+    )
   end
 
   it "preloads has one relationships" do
