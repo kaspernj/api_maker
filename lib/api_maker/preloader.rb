@@ -46,17 +46,19 @@ class ApiMaker::Preloader
 private
 
   def fill_empty_relationships_for_key(reflection, key)
+    records_to_set = @records.select { |record| record.model.class == reflection.active_record }
+
     case reflection.macro
     when :has_many
-      @records.each do |model|
+      records_to_set.each do |model|
         model.relationships[key.to_sym] ||= {data: []}
       end
     when :belongs_to
-      @records.each do |model|
+      records_to_set.each do |model|
         model.relationships[key.to_sym] ||= nil
       end
     when :has_one
-      @records.each do |model|
+      records_to_set.each do |model|
         model.relationships[key.to_sym] ||= nil
       end
     else
