@@ -14,11 +14,6 @@ export default class Collection {
     return this._clone({accessibleBy: abilityName})
   }
 
-  accessibleBy(abilityName) {
-    this.accessibleByValue = abilityName
-    return this
-  }
-
   each(callback) {
     this.toArray().then((array) => {
       for(let model in array) {

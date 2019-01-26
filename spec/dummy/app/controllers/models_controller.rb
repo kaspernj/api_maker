@@ -1,4 +1,6 @@
 class ModelsController < ApplicationController
+  def accessible_by; end
+
   def belongs_to; end
 
   def create; end

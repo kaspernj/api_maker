@@ -15,10 +15,38 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks.project.account", "tasks.account"]).to_json)
 
     expect(result.dig("data", 0, "relationships", "tasks", "data", 0, "id")).to eq 3
+    expect(result.dig("data", 0, "relationships").length).to eq 1
 
+    account_include = result.fetch("included").find { |record| record.fetch("type") == "accounts" && record.fetch("id") == 1 }
     project_include = result.fetch("included").find { |record| record.fetch("type") == "projects" && record.fetch("id") == 2 }
+    task_include = result.fetch("included").find { |record| record.fetch("type") == "tasks" && record.fetch("id") == 3 }
 
     expect(project_include.dig("attributes", "name")).to eq "Test project"
+    expect(project_include.dig("relationships")).to eq("account" => {"data" => {"type" => "accounts", "id" => 1}})
+    expect(task_include.dig("relationships")).to eq(
+      "account" => {
+        "data" => {
+          "type" =>
+          "accounts",
+          "id" => 1
+        }
+      },
+      "project" => {
+        "data" => {
+          "type" => "projects",
+          "id" => 2
+        }
+      }
+    )
+    expect(account_include).to eq(
+      "type" => "accounts",
+      "id" => 1,
+      "attributes" => {
+        "id" => 1,
+        "name" => "Account 1"
+      },
+      "relationships" => {}
+    )
   end
 
   it "preloads has one relationships" do
