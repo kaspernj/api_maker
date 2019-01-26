@@ -51,10 +51,11 @@ export default class extends React.Component {
   }
 
   render() {
-    let LinkComponent = this.linkComponent()
+    var LinkComponent = this.linkComponent()
+    var { attribute, linkComponent, query, title, ...other } = this.props
 
     return (
-      <LinkComponent to={this.href()}>
+      <LinkComponent {...other} to={this.href()}>
         {this.title()}
       </LinkComponent>
     )
