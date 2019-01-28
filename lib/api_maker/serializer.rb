@@ -37,6 +37,12 @@ class ApiMaker::Serializer
 
     if value.is_a?(Date) || value.is_a?(Time)
       value.utc.iso8601
+    elsif value.class.name == "Money"
+      {
+        amount: value.cents,
+        currency: value.currency.iso_code,
+        type: :money
+      }
     else
       value
     end
