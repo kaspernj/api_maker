@@ -421,8 +421,8 @@ export default class BaseModel {
     if (!value)
       return null
 
-    let cents = parseInt(value.fractional)
-    let currency = value.currency.iso_code
+    let cents = value.amount
+    let currency = value.currency
     return Money.fromInteger(cents, currency)
   }
 
