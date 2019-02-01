@@ -49,7 +49,8 @@ private
       api.js base-model.js cable-connection-pool.js cable-subscription.js cable-subscription-pool.js
       collection.js devise.js logger.js model-name.js models-response-reader.js result.js
       event-connection.jsx paginate.jsx sort-link.jsx updated-attribute.jsx resource-routes.jsx resource-route.jsx
-      bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/checkbox.jsx bootstrap/checkboxes.jsx bootstrap/money-input.jsx bootstrap/radio-buttons.jsx bootstrap/select.jsx bootstrap/string-input.jsx
+      bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/checkbox.jsx bootstrap/checkboxes.jsx
+      bootstrap/money-input.jsx bootstrap/radio-buttons.jsx bootstrap/select.jsx bootstrap/string-input.jsx
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path
