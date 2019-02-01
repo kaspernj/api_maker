@@ -1,4 +1,4 @@
-import inflection from "inflection"
+const inflection = require("inflection")
 import Logger from "./logger"
 
 export default class ApiMakerCableSubscriptionPool {

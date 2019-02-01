@@ -1,5 +1,5 @@
 import Api from "./api"
-import inflection from "inflection"
+const inflection = require("inflection")
 
 export default class Devise {
   

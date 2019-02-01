@@ -1,5 +1,5 @@
 import BaseModel from "./base-model"
-import inflection from "inflection"
+const inflection = require("inflection")
 import merge from "merge"
 import ModelsResponseReader from "./models-response-reader"
 import qs from "qs"
