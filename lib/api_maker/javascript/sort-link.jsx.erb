@@ -1,7 +1,8 @@
-import changeCase from "change-case"
 import { Link } from "react-router-dom"
 import qs from "qs"
 import React from "react"
+
+const inflection = require("inflection")
 
 export default class extends React.Component {
   constructor(props) {
@@ -15,7 +16,7 @@ export default class extends React.Component {
   }
 
   attribute() {
-    return changeCase.snake(this.props.attribute)
+    return inflection.underscore(this.props.attribute)
   }
 
   href() {

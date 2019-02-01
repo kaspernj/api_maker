@@ -1,8 +1,9 @@
 import Api from "api-maker/api"
-import changeCase from "change-case"
 import formatNumber from "format-number"
 import PropTypes from "prop-types"
 import React from "react"
+
+const inflection = require("inflection")
 
 export default class BootstrapMoneyInput extends React.Component {
   constructor(props) {
@@ -54,7 +55,7 @@ export default class BootstrapMoneyInput extends React.Component {
     if (this.props.currencyName)
       return this.props.currencyName
 
-    return `${this.props.model.modelClassData().paramKey}[${changeCase.snakeCase(this.props.attribute)}_currency]`
+    return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}_currency]`
   }
 
   inputCurrencyValue() {
@@ -85,11 +86,11 @@ export default class BootstrapMoneyInput extends React.Component {
     if (this.props.name)
       return this.props.name
 
-    return `${this.props.model.modelClassData().paramKey}[${changeCase.snakeCase(this.props.attribute)}_cents]`
+    return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}_cents]`
   }
 
   inputId() {
-    return `${this.props.model.modelClassData().paramKey}_${changeCase.snakeCase(this.props.attribute)}`
+    return `${this.props.model.modelClassData().paramKey}_${inflection.underscore(this.props.attribute)}`
   }
 
   onCurrencyChanged() {

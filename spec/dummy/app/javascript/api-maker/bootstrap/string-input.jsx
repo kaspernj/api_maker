@@ -1,6 +1,7 @@
-import changeCase from "change-case"
 import MoneyInput from "./money-input"
 import React from "react"
+
+const inflection = require("inflection")
 
 export default class BootstrapStringInput extends React.Component {
   render() {
@@ -109,7 +110,7 @@ export default class BootstrapStringInput extends React.Component {
     if (this.props.id) {
       return this.props.id
     } else if (this.props.model) {
-      return `${this.props.model.modelClassData().paramKey}_${changeCase.snakeCase(this.props.attribute)}`
+      return `${this.props.model.modelClassData().paramKey}_${inflection.underscore(this.props.attribute)}`
     }
   }
 
@@ -117,7 +118,7 @@ export default class BootstrapStringInput extends React.Component {
     if (this.props.name) {
       return this.props.name
     } else if (this.props.model) {
-      return `${this.props.model.modelClassData().paramKey}[${changeCase.snakeCase(this.props.attribute)}]`
+      return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}]`
     }
   }
 

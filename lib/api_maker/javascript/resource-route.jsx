@@ -1,4 +1,4 @@
-import inflection from "inflection"
+const inflection = require("inflection")
 
 export default class ResourceRoute {
   constructor(props) {
@@ -49,7 +49,7 @@ export default class ResourceRoute {
     var { route } = this.props
     var routePathName = inflection.camelize(route.name, true)
     var routePathMethod = Routes[`${routePathName}Path`]
-    var path = routePathMethod(this.findRouteParams(route))
+    var path = routePathMethod.apply(null, this.findRouteParams(route))
     var component = require(`components/${route.component}`).default
 
     if (!routePathMethod)
