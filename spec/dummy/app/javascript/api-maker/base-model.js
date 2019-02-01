@@ -16,7 +16,7 @@ export default class BaseModel {
       let urlToUse = `${this.modelClassData().path}/${id}`
 
       Api.get(urlToUse).then((response) => {
-        let modelClass = require(`api-maker/models/${this.modelClassData().name}`).default
+        let modelClass = require(`api-maker/models/${this.modelClassData().paramKey}`).default
         let model = new modelClass({data: response.model})
         resolve(model)
       }, (error) => {

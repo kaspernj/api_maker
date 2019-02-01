@@ -99,7 +99,7 @@ export default class Collection {
   }
 
   modelClass() {
-    return require(`api-maker/models/${this.args.modelClass.modelClassData().name}`).default
+    return require(`api-maker/models/${this.args.modelClass.modelClassData().paramKey}`).default
   }
 
   _clone(args) {
