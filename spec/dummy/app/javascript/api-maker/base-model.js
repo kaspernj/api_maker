@@ -1,10 +1,11 @@
 import Api from "./api"
 import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
-const inflection = require("inflection")
 import ModelName from "./model-name"
 import Money from "js-money"
 import objectToFormData from "object-to-formdata"
+
+const inflection = require("inflection")
 
 export default class BaseModel {
   static modelClassData() {
@@ -16,7 +17,7 @@ export default class BaseModel {
       let urlToUse = `${this.modelClassData().path}/${id}`
 
       Api.get(urlToUse).then((response) => {
-        let modelClass = require(`api-maker/models/${this.modelClassData().paramKey}`).default
+        let modelClass = require(`api-maker/models/${inflection.dasherize(this.modelClassData().paramKey)}`).default
         let model = new modelClass({data: response.model})
         resolve(model)
       }, (error) => {
