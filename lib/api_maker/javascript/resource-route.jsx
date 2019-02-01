@@ -49,11 +49,12 @@ export default class ResourceRoute {
     var { route } = this.props
     var routePathName = inflection.camelize(route.name, true)
     var routePathMethod = Routes[`${routePathName}Path`]
-    var path = routePathMethod.apply(null, this.findRouteParams(route))
-    var component = require(`components/${route.component}`).default
 
     if (!routePathMethod)
       throw new Error(`No such route could be found: ${routePathName}`)
+
+    var path = routePathMethod.apply(null, this.findRouteParams(route))
+    var component = require(`components/${route.component}`).default
 
     return [{
       path: path,
