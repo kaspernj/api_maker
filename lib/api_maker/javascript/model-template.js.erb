@@ -1,5 +1,5 @@
-import BaseModel from "../BaseModel"
-import Collection from "../Collection"
+import BaseModel from "../base-model"
+import Collection from "../collection"
 
 export default class <%= model.name.gsub("::", "") %> extends BaseModel {
   static modelClassData() {
@@ -19,31 +19,31 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
     <% if reflection.macro == :belongs_to %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}").result %>() {
         let id = this.<%= ApiMaker::JsMethodNamerService.execute!(name: reflection.foreign_key).result %>()
-        let modelClass = require(`ApiMaker/Models/<%= reflection.class_name %>`).default
+        let modelClass = require(`api-maker/models/<%= reflection.class_name.underscore.dasherize %>`).default
         return this._loadBelongsToReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}", "ransack" => {"#{reflection.options[:primary_key] || reflection.klass.primary_key}_eq" => "{{id}}"}) %>)
       }
 
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         let id = this.<%= ApiMaker::JsMethodNamerService.execute!(name: reflection.foreign_key).result %>()
-        let modelClass = require(`ApiMaker/Models/<%= reflection.class_name %>`).default
+        let modelClass = require(`api-maker/models/<%= reflection.class_name.underscore.dasherize %>`).default
         return this._readBelongsToReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>)
       }
     <% elsif reflection.macro == :has_many %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         let id = this.<%= ApiMaker::JsMethodNamerService.execute!(name: reflection.options[:primary_key] || reflection.active_record.primary_key).result %>()
-        let modelClass = require(`ApiMaker/Models/<%= reflection.class_name %>`).default
+        let modelClass = require(`api-maker/models/<%= reflection.class_name.underscore.dasherize %>`).default
         return new Collection(<%= api_maker_json(reflection_has_many_parameters(reflection)) %>)
       }
     <% elsif reflection.macro == :has_one %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}").result %>() {
         let id = this.<%= reflection.active_record.primary_key %>()
-        let modelClass = require(`ApiMaker/Models/<%= reflection.class_name %>`).default
+        let modelClass = require(`api-maker/models/<%= reflection.class_name.underscore.dasherize %>`).default
         return this._loadHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
       }
 
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
         let id = this.<%= reflection.active_record.primary_key %>()
-        let modelClass = require(`ApiMaker/Models/<%= reflection.class_name %>`).default
+        let modelClass = require(`api-maker/models/<%= reflection.class_name.underscore.dasherize %>`).default
         return this._readHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}", "ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
       }
     <% end %>

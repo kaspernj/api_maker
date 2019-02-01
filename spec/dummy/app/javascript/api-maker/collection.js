@@ -1,9 +1,9 @@
-import BaseModel from "./BaseModel"
+import BaseModel from "./base-model"
 import inflection from "inflection"
 import merge from "merge"
-import ModelsResponseReader from "./ModelsResponseReader"
+import ModelsResponseReader from "./models-response-reader"
 import qs from "qs"
-import Result from "./Result"
+import Result from "./result"
 
 export default class Collection {
   constructor(args) {

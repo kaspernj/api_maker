@@ -1,8 +1,8 @@
-import Api from "./Api"
-import CableConnectionPool from "./CableConnectionPool"
-import Collection from "./Collection"
+import Api from "./api"
+import CableConnectionPool from "./cable-connection-pool"
+import Collection from "./collection"
 import inflection from "inflection"
-import ModelName from "./ModelName"
+import ModelName from "./model-name"
 import Money from "js-money"
 import objectToFormData from "object-to-formdata"
 
@@ -169,8 +169,7 @@ export default class BaseModel {
   }
 
   static snakeCase(string) {
-    let changeCase = require("change-case")
-    return changeCase.snakeCase(string).replace(/\d+/, "_$&")
+    return inflection.underscore(string)
   }
 
   isChanged() {
@@ -421,8 +420,8 @@ export default class BaseModel {
     if (!value)
       return null
 
-    let cents = parseInt(value.fractional)
-    let currency = value.currency.iso_code
+    let cents = value.amount
+    let currency = value.currency
     return Money.fromInteger(cents, currency)
   }
 
@@ -500,7 +499,7 @@ export default class BaseModel {
           if (!includedData)
             throw new Error(`Couldn't find included data for ${relationshipName}`)
 
-          let modelClassName = inflection.classify(inflection.singularize(includedData.type))
+          let modelClassName = inflection.dasherize(inflection.singularize(includedData.type))
           let modelClass = require(`api-maker/models/${modelClassName}`).default
           let model = new modelClass({data: includedData, response: args.response})
 
@@ -516,7 +515,7 @@ export default class BaseModel {
         if (!includedData)
           throw new Error(`Couldn't find included data for ${relationshipName}`)
 
-        let modelClassName = inflection.classify(inflection.singularize(includedData.type))
+        let modelClassName = inflection.dasherize(inflection.singularize(includedData.type))
         let modelClass = require(`api-maker/models/${modelClassName}`).default
         let model = new modelClass({data: includedData, response: args.response})
 

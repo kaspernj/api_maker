@@ -20,7 +20,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 private
 
   def api_maker_root_path
-    Rails.root.join("app", "javascript", "ApiMaker")
+    Rails.root.join("app", "javascript", "api-maker")
   end
 
   def controller_content(model)
@@ -46,10 +46,10 @@ private
 
   def copy_base_model
     files = %w[
-      Api.js BaseModel.js CableConnectionPool.js CableSubscription.js CableSubscriptionPool.js
-      Collection.js Devise.js Logger.js ModelName.js ModelsResponseReader.js Result.js
-      EventConnection.jsx Paginate.jsx SortLink.jsx UpdatedAttribute.jsx
-      Bootstrap/Checkbox.jsx Bootstrap/Checkboxes.jsx Bootstrap/MoneyInput.jsx Bootstrap/RadioButtons.jsx Bootstrap/Select.jsx Bootstrap/StringInput.jsx
+      api.js base-model.js cable-connection-pool.js cable-subscription.js cable-subscription-pool.js
+      collection.js devise.js logger.js model-name.js models-response-reader.js result.js
+      event-connection.jsx paginate.jsx sort-link.jsx updated-attribute.jsx resource-routes.js
+      bootstrap/checkbox.jsx bootstrap/checkboxes.jsx bootstrap/money-input.jsx bootstrap/radio-buttons.jsx bootstrap/select.jsx bootstrap/string-input.jsx
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path
@@ -85,7 +85,7 @@ private
     # Dont remove all the files. It messes up running Webpack Dev Servers which forces you to restart all the time.
     # FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
 
-    FileUtils.mkdir_p(api_maker_root_path.join("Models"))
+    FileUtils.mkdir_p(api_maker_root_path.join("models"))
     FileUtils.mkdir_p(controller_path) unless File.exist?(controller_path)
   end
 
@@ -101,6 +101,6 @@ private
 
   def model_file(model)
     resource_class = ApiMaker::MemoryStorage.current.resource_for_model(model)
-    api_maker_root_path.join("Models", "#{resource_class.short_name}.js")
+    api_maker_root_path.join("models", "#{resource_class.short_name.underscore.dasherize}.js")
   end
 end

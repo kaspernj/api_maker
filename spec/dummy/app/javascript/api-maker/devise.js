@@ -1,11 +1,10 @@
-import Api from "./Api"
-
-let changeCase = require("change-case")
+import Api from "./api"
+import inflection from "inflection"
 
 export default class Devise {
-
-
-
+  
+    
+    
       static isUserSignedIn() {
         let apiMakerDataElement = document.querySelector(".api-maker-data")
         let keyName = "currentUser"
@@ -25,12 +24,12 @@ export default class Devise {
         if (!scopeData)
           return null
 
-        let modelClass = require("ApiMaker/Models/User").default
+        let modelClass = require("api-maker/models/user").default
         let modelInstance = new modelClass({data: JSON.parse(scopeData)})
         return modelInstance
       }
-
-
+    
+  
 
   static signIn(username, password, args = {}) {
     if (!args.scope)
@@ -40,7 +39,7 @@ export default class Devise {
       let postData = {"username": username, "password": password, "args": args}
       Api.post("/api_maker/devise/do_sign_in", postData)
         .then((response) => {
-          let modelClass = require(`api-maker/models/${changeCase.pascalCase(args.scope)}`).default
+          let modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
           let modelInstance = new modelClass(response.model_data)
           Devise.updateSession(modelInstance)
 
@@ -69,7 +68,7 @@ export default class Devise {
       Api.post("/api_maker/devise/do_sign_out", postData)
         .then((response) => {
           let apiMakerDataElement = document.querySelector(".api-maker-data")
-          let keyName = `current${changeCase.pascalCase(args.scope)}`
+          let keyName = `current${inflection.camelize(args.scope, true)}`
           delete apiMakerDataElement.dataset[keyName]
 
           resolve(response)

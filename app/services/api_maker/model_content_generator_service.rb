@@ -38,7 +38,7 @@ private
   end
 
   def model_template_path
-    File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "ModelTemplate.js.erb")
+    File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "model-template.js.erb")
   end
 
   def model_type(attribute_name)

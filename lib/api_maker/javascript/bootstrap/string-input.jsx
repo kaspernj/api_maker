@@ -1,5 +1,5 @@
 import changeCase from "change-case"
-import MoneyInput from "./MoneyInput"
+import MoneyInput from "./money-input"
 import React from "react"
 
 export default class BootstrapStringInput extends React.Component {

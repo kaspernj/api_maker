@@ -18,7 +18,7 @@ export default class ModelsResponseReader {
     let models = []
 
     for(let modelData of this.response.data) {
-      let modelClassName = inflection.classify(inflection.singularize(modelData.type))
+      let modelClassName = inflection.dasherize(inflection.singularize(modelData.type))
       let modelClass = require(`api-maker/models/${modelClassName}`).default
       let model = new modelClass({data: modelData, response: this.response})
 

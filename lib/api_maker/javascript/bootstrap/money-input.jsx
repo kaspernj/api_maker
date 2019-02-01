@@ -1,4 +1,4 @@
-import Api from "ApiMaker/Api"
+import Api from "api-maker/api"
 import changeCase from "change-case"
 import formatNumber from "format-number"
 import PropTypes from "prop-types"
