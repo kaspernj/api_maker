@@ -101,7 +101,7 @@ end
 ### Creating a new model from JavaScript
 
 ```js
-import Task from "ApiMaker/Models/Task"
+import Task from "api-maker/models/task"
 
 var task = new Task()
 task.assignAttributes({name: "New task"})
@@ -218,7 +218,7 @@ First include this in your layout, so JS can know which user is signed in:
 
 Then you can do like this in JS:
 ```js
-import Devise from "ApiMaker/Devise"
+import Devise from "api-maker/devise"
 
 Devise.currentUser().then((user) => {
   console.log("The current user has this email: " + user.email())
@@ -286,7 +286,7 @@ subscription.unsubscribe()
 You can also use this React component to show a models attribute with automatic updates:
 
 ```jsx
-import UpdatedAttribute from "ApiMaker/UpdatedAttribute"
+import UpdatedAttribute from "api-maker/updated-attribute"
 ```
 
 ```jsx
@@ -295,7 +295,7 @@ import UpdatedAttribute from "ApiMaker/UpdatedAttribute"
 
 You can also use the `EventConnection` React component so you don't need to keep track of your subscription and unsubscribe:
 ```jsx
-import EventConnection from "ApiMaker/EventConnection"
+import EventConnection from "api-maker/event-connection"
 ```
 
 ```jsx
