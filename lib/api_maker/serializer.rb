@@ -35,7 +35,9 @@ class ApiMaker::Serializer
   def attribute_converted_value(attribute)
     value = attribute_value(attribute)
 
-    if value.is_a?(Date) || value.is_a?(Time)
+    if value.is_a?(Date)
+      value.iso8601
+    elsif value.is_a?(Time)
       value.utc.iso8601
     elsif value.class.name == "Money"
       {
