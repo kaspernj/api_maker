@@ -53,7 +53,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
     <% methodName = ApiMaker::JsMethodNamerService.execute!(name: attribute_data.fetch(:name)).result %>
     <%= methodName %>() {
       // <%= attribute_data.fetch(:type) %>
-      <% if attribute_data.fetch(:type) == :datetime %>
+      <% if attribute_data.fetch(:type) == :datetime || attribute_data.fetch(:type) == :date %>
         return this._getAttributeDateTime("<%= attribute_data.fetch(:name) %>")
       <% elsif attribute_data.fetch(:type) == :money %>
         return this._getAttributeMoney("<%= attribute_data.fetch(:name) %>")
