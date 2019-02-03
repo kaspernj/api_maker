@@ -24,7 +24,8 @@ export default class ApiMakerCableSubscriptionPool {
   onReceived(data) {
     let modelName = inflection.camelize(inflection.singularize(data.model.type))
     let modelId = data.model.id
-    let modelClass = require(`./models/${modelName}`).default
+    let modelFileName = inflection.dasherize(inflection.singularize(data.model.type))
+    let modelClass = require(`./models/${modelFileName}`).default
     let modelInstance = new modelClass(data.model.attributes)
     let subscriptions = this.props.subscriptions
 

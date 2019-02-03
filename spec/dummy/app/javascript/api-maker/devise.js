@@ -68,7 +68,8 @@ export default class Devise {
       Api.post("/api_maker/devise/do_sign_out", postData)
         .then((response) => {
           let apiMakerDataElement = document.querySelector(".api-maker-data")
-          let keyName = `current${inflection.camelize(args.scope, true)}`
+          let keyName = `current${inflection.camelize(args.scope)}`
+
           delete apiMakerDataElement.dataset[keyName]
 
           resolve(response)
