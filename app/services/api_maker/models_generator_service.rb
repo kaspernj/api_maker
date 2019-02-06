@@ -47,7 +47,7 @@ private
   def copy_base_model
     files = %w[
       api.js base-model.js cable-connection-pool.js cable-subscription.js cable-subscription-pool.js
-      collection.js devise.js logger.js model-name.js models-response-reader.js result.js
+      collection.js devise.js event-listener.jsx logger.js model-name.js models-response-reader.js result.js
       event-connection.jsx paginate.jsx sort-link.jsx updated-attribute.jsx resource-routes.jsx resource-route.jsx
       bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/checkbox.jsx bootstrap/checkboxes.jsx
       bootstrap/money-input.jsx bootstrap/radio-buttons.jsx bootstrap/select.jsx bootstrap/string-input.jsx
