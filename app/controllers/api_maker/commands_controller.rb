@@ -1,5 +1,7 @@
 class ApiMaker::CommandsController < ApiMaker::BaseController
   def create
+    return bundeled_command if params[:bundle]
+
     if params[:collection_command]
       authorize!(params[:collection_command].to_sym, klass)
     else
@@ -14,18 +16,21 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
 
 private
 
-  def constant
-    @constant ||= proc do
-      command = params[:collection_command]&.camelize || params[:member_command].camelize
-      "Commands::#{namespace}::#{command}".constantize
-    end.call
-  end
+  def bundeled_command
+    responses = []
 
-  def klass
-    @klass ||= params[:plural_name].singularize.camelize.constantize
-  end
+    params[:bundle].each do |command|
+      if command.fetch(:type) == "collection"
+        responses += ApiMaker::CollectionCommandService.new(command: command)
+      elsif command.fetch(:type == "member"
+        responses += ApiMaker::MemberCommandService.new(command: command)
+      else
+        raise "Unknown type of command: #{command.fetch(:type)}"
+      end
+    end
 
-  def namespace
-    @namespace ||= params[:plural_name].camelize
+    render json: {
+      responses: responses
+    }
   end
 end
