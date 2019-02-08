@@ -70,7 +70,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
 
   <% collection_commands.each do |collection_command, data| %>
     static <%= ApiMaker::JsMethodNamerService.execute!(name: collection_command).result %>(args) {
-      return this._callcollectionCommand({
+      return this._callCollectionCommand({
         args: args,
         collectionCommand: "<%= collection_command %>",
         modelClass: this
@@ -80,10 +80,9 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
 
   <% member_commands.each do |member_command, data| %>
     <%= ApiMaker::JsMethodNamerService.execute!(name: member_command).result %>(args) {
-      return this._callmemberCommand({
+      return this._callMemberCommand({
         args: args,
-        memberCommand: "<%= member_command %>",
-        model: this
+        memberCommand: "<%= member_command %>"
       })
     }
   <% end %>

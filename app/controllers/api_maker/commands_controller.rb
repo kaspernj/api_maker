@@ -1,31 +1,18 @@
 class ApiMaker::CommandsController < ApiMaker::BaseController
   def create
-    return bundeled_command if params[:bundle]
-
-    if params[:collection_command]
-      authorize!(params[:collection_command].to_sym, klass)
-    else
-      ability_name = params[:member_command].to_sym
-      model = klass.accessible_by(current_ability, ability_name).find(params[:id])
-      raise CanCan::AccessDefined.new("Not authorized!", ability_name, klass) unless model
-    end
-
-    instance = constant.new(args: params[:args], controller: self, model: model)
-    instance.execute!
-  end
-
-private
-
-  def bundeled_command
     responses = []
 
-    params[:bundle].each do |command|
-      if command.fetch(:type) == "collection"
-        responses += ApiMaker::CollectionCommandService.new(command: command)
-      elsif command.fetch(:type == "member"
-        responses += ApiMaker::MemberCommandService.new(command: command)
-      else
-        raise "Unknown type of command: #{command.fetch(:type)}"
+    params[:pool].each do |command_type, command_type_data|
+      command_type_data.each do |model_plural_name, command_model_data|
+        command_model_data.each do |command_name, command_data|
+          if command_type == "collection"
+            responses += ApiMaker::CollectionCommandService.execute!(command: command_data, command_name: command_name, model_name: model_plural_name, controller: self).result
+          elsif command_type == "member"
+            responses += ApiMaker::MemberCommandService.execute!(command: command_data, command_name: command_name, model_name: model_plural_name, controller: self).result
+          else
+            raise "Unknown type of command: #{command.fetch(:type)}"
+          end
+        end
       end
     end
 

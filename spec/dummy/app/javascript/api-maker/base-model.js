@@ -326,7 +326,7 @@ export default class BaseModel {
     return this.uniqueKeyValue
   }
 
-  static _callcollectionCommand(args) {
+  static _callCollectionCommand(args) {
     return new Promise((resolve, reject) => {
       let url = `/api_maker/${args.modelClass.modelClassData().pluralName}/${args.collectionCommand}`
       let postData = BaseModel._postDataFromArgs(args.args)
@@ -342,7 +342,7 @@ export default class BaseModel {
     })
   }
 
-  _callmemberCommand(args) {
+  _callMemberCommand(args) {
     return new Promise((resolve, reject) => {
       let url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model._primaryKey()}/${args.memberCommand}`
       let postData = BaseModel._postDataFromArgs(args.args)

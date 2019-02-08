@@ -1,5 +1,11 @@
 class ApiMaker::CommandResponse
-  def render(data)
-    @render = data
+  attr_reader :result
+
+  def initialize
+    @result = {}
+  end
+
+  def result_for_command(id, data)
+    @result[id] = {type: :success, data: data}
   end
 end
