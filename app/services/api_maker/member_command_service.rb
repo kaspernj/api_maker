@@ -11,7 +11,7 @@ class ApiMaker::MemberCommandService < ApiMaker::ApplicationService
     command_response = ApiMaker::CommandResponse.new
 
     ability_name = @command_name.to_sym
-    collection = klass.accessible_by(@ability).where(klass.primary_key => ids)
+    collection = klass.accessible_by(@ability, ability_name).where(klass.primary_key => ids)
 
     instance = constant.new(
       collection: collection,
