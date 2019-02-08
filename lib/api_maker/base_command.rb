@@ -1,12 +1,12 @@
 class ApiMaker::BaseCommand
-  attr_reader :commands, :collection, :controller
+  attr_reader :commands, :command_response, :collection, :controller
 
   delegate :current_user, :params, :signed_in?, to: :controller
 
   def initialize(collection:, commands:, command_response:, controller:)
-    raise "No controller given" if controller.blank?
+    raise "No controller given" unless controller
 
-    @colleciton = collection
+    @collection = collection
     @commands = commands
     @command_response = command_response
     @controller = controller
@@ -18,7 +18,7 @@ class ApiMaker::BaseCommand
         args: command_data[:args],
         collection: @collection,
         id: command_id,
-        model_id: command_data[:model_id],
+        primary_key: command_data[:primary_key],
         response: @command_response
       )
       yield command

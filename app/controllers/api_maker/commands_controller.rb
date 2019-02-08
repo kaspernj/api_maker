@@ -2,8 +2,6 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
   def create
     responses = {}
 
-    puts "PARAMS: #{params}"
-
     params[:pool].each do |command_type, command_type_data|
       command_type_data.each do |model_plural_name, command_model_data|
         command_model_data.each do |command_name, command_data|

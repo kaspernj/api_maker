@@ -3,12 +3,11 @@ class ApiMaker::MemberCommandService < ApiMaker::ApplicationService
     @ability = controller.__send__(:current_ability)
     @command_name = command_name
     @commands = commands
+    @controller = controller
     @model_name = model_name
   end
 
   def execute!
-    puts "COMMANDS: #{@commands}"
-
     command_response = ApiMaker::CommandResponse.new
 
     ability_name = @command_name.to_sym
@@ -18,7 +17,7 @@ class ApiMaker::MemberCommandService < ApiMaker::ApplicationService
       collection: collection,
       commands: @commands,
       command_response: command_response,
-      controller: self
+      controller: @controller
     )
     instance.execute!
 

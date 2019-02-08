@@ -10,8 +10,6 @@ class ApiMaker::CollectionCommandService < ApiMaker::ApplicationService
   end
 
   def execute!
-    puts "COMMANDS: #{@commands}"
-
     authorize!
 
     command_response = ApiMaker::CommandResponse.new
