@@ -340,6 +340,7 @@ export default class BaseModel {
     return CommandsPool.current().addCommand({
       args: args.args,
       command: args.memberCommand,
+      primaryKey: this._primaryKey(),
       pluralName: this.modelClassData().pluralName,
       type: "member"
     })

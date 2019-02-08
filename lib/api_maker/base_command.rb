@@ -1,11 +1,31 @@
 class ApiMaker::BaseCommand
-  attr_reader :args, :controller, :model
+  attr_reader :commands, :collection, :controller
 
-  delegate :current_user, :params, :render, :signed_in?, to: :controller
+  delegate :current_user, :params, :signed_in?, to: :controller
 
-  def initialize(args:, controller:, model:)
-    @args = args
+  def initialize(collection:, commands:, command_response:, controller:)
+    raise "No controller given" if controller.blank?
+
+    @colleciton = collection
+    @commands = commands
+    @command_response = command_response
     @controller = controller
-    @model = model
+  end
+
+  def each_command
+    @commands.each do |command_id, command_data|
+      command = ApiMaker::IndividualCommand.new(
+        args: command_data[:args],
+        collection: @collection,
+        id: command_id,
+        model_id: command_data[:model_id],
+        response: @command_response
+      )
+      yield command
+    end
+  end
+
+  def result_for_command(id, data)
+    @command_response.result_for_command(id, data)
   end
 end

@@ -1,23 +1,49 @@
 class ApiMaker::MemberCommandService < ApiMaker::ApplicationService
-  def initialize(command:, command_name:, model_name:, controller:)
+  def initialize(commands:, command_name:, model_name:, controller:)
     @ability = controller.__send__(:current_ability)
     @command_name = command_name
-    @command = command
+    @commands = commands
     @model_name = model_name
   end
 
   def execute!
+    puts "COMMANDS: #{@commands}"
+
     command_response = ApiMaker::CommandResponse.new
 
-    @command.each do |command_id, command_data|
-      ability_name = params[:member_command].to_sym
-      model = klass.accessible_by(current_ability, ability_name).find(params[:id])
-      raise CanCan::AccessDefined.new("Not authorized!", ability_name, klass) unless model
+    ability_name = @command_name.to_sym
+    collection = klass.accessible_by(@ability).where(klass.primary_key => ids)
 
-      instance = constant.new(args: params[:args], controller: self, model: model)
-      instance.execute!
-    end
+    instance = constant.new(
+      collection: collection,
+      commands: @commands,
+      command_response: command_response,
+      controller: self
+    )
+    instance.execute!
 
     ServicePattern::Response.new(result: command_response.result)
+  end
+
+  def collection
+    klass.where(klass.primary_key => @command.fetch(:ids))
+  end
+
+  def constant
+    @constant ||= proc do
+      "Commands::#{namespace}::#{@command_name.camelize}".constantize
+    end.call
+  end
+
+  def ids
+    @commands.values.map { |command| command.fetch("primary_key") }
+  end
+
+  def namespace
+    @namespace ||= @model_name.camelize
+  end
+
+  def klass
+    @klass ||= @model_name.singularize.camelize.constantize
   end
 end
