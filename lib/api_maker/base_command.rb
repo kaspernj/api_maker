@@ -12,6 +12,14 @@ class ApiMaker::BaseCommand
     @controller = controller
   end
 
+  def api_maker_args
+    @api_maker_args ||= controller.__send__(:api_maker_args)
+  end
+
+  def current_ability
+    @current_ability ||= controller.__send__(:current_ability)
+  end
+
   def each_command
     @commands.each do |command_id, command_data|
       command = ApiMaker::IndividualCommand.new(

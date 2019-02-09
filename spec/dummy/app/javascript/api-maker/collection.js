@@ -1,4 +1,5 @@
 import BaseModel from "./base-model"
+import CommandsPool from "./commands-pool"
 const inflection = require("inflection")
 import merge from "merge"
 import ModelsResponseReader from "./models-response-reader"
@@ -111,23 +112,17 @@ export default class Collection {
   }
 
   _response() {
-    return new Promise((resolve, reject) => {
-      let dataToUse = qs.stringify(this._params(), {arrayFormat: "brackets"})
-      let urlToUse = `${this.args.modelClass.modelClassData().path}?${dataToUse}`
+    var modelClassData = this.args.modelClass.modelClassData()
 
-      let xhr = new XMLHttpRequest()
-      xhr.open("GET", urlToUse)
-      xhr.setRequestHeader("X-CSRF-Token", BaseModel._token())
-      xhr.onload = () => {
-        if (xhr.status == 200) {
-          let response = JSON.parse(xhr.responseText)
-          resolve(response)
-        } else {
-          reject({"responseText": xhr.responseText})
-        }
-      }
-      xhr.send()
-    })
+    return CommandsPool.addCommand(
+      {
+        args: this._params(),
+        command: `${modelClassData.pluralName}-index`,
+        pluralName: modelClassData.pluralName,
+        type: "index"
+      },
+      {}
+    )
   }
 
   _responseToModels(response) {

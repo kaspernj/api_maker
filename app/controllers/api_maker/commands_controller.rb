@@ -12,6 +12,13 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
               model_name: model_plural_name,
               controller: self
             ).result
+          elsif command_type == "index"
+            result = ApiMaker::IndexCommandService.execute!(
+              commands: command_data,
+              command_name: command_name,
+              model_name: model_plural_name,
+              controller: self
+            ).result
           elsif command_type == "member"
             result = ApiMaker::MemberCommandService.execute!(
               commands: command_data,
