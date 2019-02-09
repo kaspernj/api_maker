@@ -15,7 +15,6 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
           elsif command_type == "index"
             result = ApiMaker::IndexCommandService.execute!(
               commands: command_data,
-              command_name: command_name,
               model_name: model_plural_name,
               controller: self
             ).result
