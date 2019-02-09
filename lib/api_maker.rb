@@ -13,6 +13,7 @@ module ApiMaker
   autoload :BaseResource, "#{dir}/base_resource"
   autoload :CollectionSerializer, "#{dir}/collection_serializer"
   autoload :CommandSpecHelper, "#{dir}/command_spec_helper"
+  autoload :Configuration, "#{dir}/configuration"
   autoload :IndividualCommand, "#{dir}/individual_command"
   autoload :Loader, "#{dir}/loader"
   autoload :MemoryStorage, "#{dir}/memory_storage"
