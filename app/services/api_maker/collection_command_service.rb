@@ -26,7 +26,7 @@ class ApiMaker::CollectionCommandService < ApiMaker::ApplicationService
   end
 
   def authorize!
-    @ability.authorize!(@command_name.to_sym, klass)
+    raise CanCan::AccessDenied, "No access to '#{@command_name}' on '#{klass.name}'" unless @ability.can?(@command_name.to_sym, klass)
   end
 
   def constant
