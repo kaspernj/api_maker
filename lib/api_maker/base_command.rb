@@ -34,6 +34,10 @@ class ApiMaker::BaseCommand
         yield command
       rescue => e
         command.fail("Internal server error")
+
+        @controller.logger.error e.message
+        @controller.logger.error e.backtrace.join("\n")
+
         ApiMaker::Configuration.current.report_error(e)
       end
     end
