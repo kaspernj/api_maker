@@ -327,23 +327,12 @@ export default class BaseModel {
     return this.uniqueKeyValue
   }
 
-  static _callCollectionCommand(args) {
-    return CommandsPool.current().addCommand({
-      args: args.args,
-      command: args.collectionCommand,
-      pluralName: args.modelClass.modelClassData().pluralName,
-      type: "collection"
-    })
+  static _callCollectionCommand(args, commandArgs) {
+    return CommandsPool.addCommand(args, commandArgs)
   }
 
-  _callMemberCommand(args) {
-    return CommandsPool.current().addCommand({
-      args: args.args,
-      command: args.memberCommand,
-      primaryKey: this._primaryKey(),
-      pluralName: this.modelClassData().pluralName,
-      type: "member"
-    })
+  _callMemberCommand(args, commandArgs) {
+    return CommandsPool.addCommand(args, commandArgs)
   }
 
   static _postDataFromArgs(args) {

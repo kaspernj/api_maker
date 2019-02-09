@@ -117,21 +117,31 @@ export default class Task extends BaseModel {
   
 
   
-    static testCollection(args) {
-      return this._callCollectionCommand({
-        args: args,
-        collectionCommand: "test_collection",
-        modelClass: this
-      })
+    static testCollection(args, commandArgs = {}) {
+      return this._callCollectionCommand(
+        {
+          args: args,
+          command: "test_collection",
+          pluralName: this.modelClassData().pluralName,
+          type: "collection"
+        },
+        commandArgs
+      )
     }
   
 
   
-    testMember(args) {
-      return this._callMemberCommand({
-        args: args,
-        memberCommand: "test_member"
-      })
+    testMember(args, commandArgs = {}) {
+      return this._callMemberCommand(
+        {
+          args: args,
+          command: "test_member",
+          primaryKey: this._primaryKey(),
+          pluralName: this.modelClassData().pluralName,
+          type: "member"
+        },
+        commandArgs
+      )
     }
   
 }
