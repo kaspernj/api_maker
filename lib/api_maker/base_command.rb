@@ -32,7 +32,7 @@ class ApiMaker::BaseCommand
 
       begin
         yield command
-      rescue => e
+      rescue => e # rubocop:disable Style/RescueStandardError
         command.fail("Internal server error")
 
         @controller.logger.error e.message

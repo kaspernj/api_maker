@@ -1,5 +1,5 @@
 class ApiMaker::IndexCommandService < ApiMaker::ApplicationService
-  def initialize(commands:, command_name:, model_name:, controller:)
+  def initialize(commands:, _command_name:, model_name:, controller:)
     raise "No controller given" if controller.blank?
 
     @ability = controller.__send__(:current_ability)
@@ -14,7 +14,7 @@ class ApiMaker::IndexCommandService < ApiMaker::ApplicationService
       collection: collection,
       commands: @commands,
       command_response: command_response,
-      controller: @controller,
+      controller: @controller
     )
     instance.execute!
 
@@ -22,9 +22,7 @@ class ApiMaker::IndexCommandService < ApiMaker::ApplicationService
   end
 
   def collection
-    @collection ||= proc do
-      collection = klass.accessible_by(@ability)
-    end.call
+    @collection ||= klass.accessible_by(@ability)
   end
 
   def ids
