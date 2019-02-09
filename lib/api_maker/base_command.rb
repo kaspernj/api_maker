@@ -29,7 +29,13 @@ class ApiMaker::BaseCommand
         primary_key: command_data[:primary_key],
         response: @command_response
       )
-      yield command
+
+      begin
+        yield command
+      rescue => e
+        command.fail("Internal server error")
+        ApiMaker::Configuration.current.report_error(e)
+      end
     end
   end
 
