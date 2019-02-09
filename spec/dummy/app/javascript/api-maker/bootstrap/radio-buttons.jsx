@@ -5,7 +5,7 @@ const inflection = require("inflection")
 export default class BootstrapRadioButtons extends React.Component {
   render() {
     return (
-      <div className="component-bootstrap-radio-buttons">
+      <div className={this.wrapperClassName()}>
         {this.props.collection.map(option => this.optionElement(option))}
       </div>
     )
@@ -42,5 +42,14 @@ export default class BootstrapRadioButtons extends React.Component {
         <input defaultChecked={option[1] == this.inputDefaultValue()} id={id} name={this.inputName()} type="radio" value={option[1]} /> <label htmlFor={id}>{option[0]}</label>
       </div>
     )
+  }
+
+  wrapperClassName() {
+    var classNames = ["component-bootstrap-radio-buttons"]
+
+    if (this.props.wrapperClassName)
+      classNames.push(this.props.wrapperClassName)
+
+    return classNames.join(" ")
   }
 }

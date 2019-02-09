@@ -1,20 +1,6 @@
 class ApiMaker::ModelController < ApiMaker::BaseController
-  before_action :set_collection, on: :index
-  before_action :set_instance, except: [:index, :new, :create]
+  before_action :set_instance, except: [:new, :create]
   before_action :set_new_instance, only: [:new, :create]
-
-  def index
-    query = resource_collection.ransack(params[:q]).result
-    query = query.limit(params[:limit]) if params[:limit].present?
-    query = query.page(params[:page]) if params[:page].present?
-
-    collection = collection_from_query(query.fix)
-
-    response = collection.as_json
-    include_pagination_data(response, query)
-
-    render json: response
-  end
 
   def show
     render json: {model: serialized_resource(resource_instance).result}
@@ -78,17 +64,8 @@ private
     @api_maker_resource_class ||= "Resources::#{short_plural_name.singularize}Resource".constantize
   end
 
-  def filter_custom_accessible_by(collection)
-    return collection if params[:accessible_by].blank?
-    collection.accessible_by(current_ability, params[:accessible_by].to_sym)
-  end
-
   def short_plural_name
     self.class.name.match(/\AApiMaker::(.+)Controller\Z/)[1]
-  end
-
-  def collection_from_query(collection)
-    ApiMaker::CollectionSerializer.new(ability: current_ability, args: api_maker_args, collection: collection, include_param: include_param).result
   end
 
   def failure_response
@@ -97,40 +74,6 @@ private
       success: false,
       errors: resource_instance.errors.full_messages
     }
-  end
-
-  def include_param
-    params[:include]
-  end
-
-  def include_pagination_data(response, collection)
-    return if params[:page].blank?
-
-    response[:meta] = {
-      currentPage: collection.current_page,
-      totalCount: collection.try(:total_count) || collection.try(:total_entries),
-      totalPages: collection.total_pages
-    }
-  end
-
-  def manage_through_relationship
-    return if params[:through].blank?
-
-    through_model = params[:through][:model].constantize.accessible_by(current_ability).find(params[:through][:id])
-    collection = through_model.__send__(params[:through][:reflection]).accessible_by(current_ability, action_name.to_sym)
-    collection = filter_custom_accessible_by(collection)
-    instance_variable_set("@#{resource_collection_variable_name}", collection)
-  end
-
-  def resource_collection
-    @resource_collection ||= proc do
-      manage_through_relationship
-      instance_variable_get("@#{resource_collection_variable_name}")
-    end.call
-  end
-
-  def resource_collection_variable_name
-    @resource_collection_variable_name ||= self.class.name.split("::").last.gsub(/Controller$/, "").underscore.parameterize
   end
 
   def resource_instance_class_name
@@ -157,12 +100,6 @@ private
 
   def serialized_resource(model)
     ApiMaker::Serializer.new(ability: current_ability, args: api_maker_args, model: model)
-  end
-
-  def set_collection
-    collection = resource_instance_class.accessible_by(current_ability, action_name.to_sym)
-    collection = filter_custom_accessible_by(collection)
-    instance_variable_set("@#{resource_collection_variable_name}", collection)
   end
 
   def set_instance

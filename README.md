@@ -321,6 +321,20 @@ private
 end
 ```
 
+
+## Reporting errors
+
+Add an intializer with something like this:
+
+```ruby
+ApiMaker::Configuration.configure do |config|
+  config.on_error do |error|
+    ExceptionNotifier.notify_exception(error)
+  end
+end
+```
+
+
 ## Contributing
 Contribution directions go here.
 

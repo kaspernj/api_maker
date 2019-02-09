@@ -14,10 +14,10 @@ export default class ResourceRoute {
   }
 
   findRouteParams(route) {
-    let result = []
-    let parts = route.path.split("/")
+    var result = []
+    var parts = route.path.split("/")
 
-    for(let part of parts) {
+    for(var part of parts) {
       if (part.match(/^:([a-z_]+)$/))
         result.push(part)
     }

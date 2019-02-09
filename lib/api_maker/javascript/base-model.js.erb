@@ -1,6 +1,7 @@
 import Api from "./api"
 import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
+import CommandsPool from "./commands-pool"
 import ModelName from "./model-name"
 import Money from "js-money"
 import objectToFormData from "object-to-formdata"
@@ -326,36 +327,12 @@ export default class BaseModel {
     return this.uniqueKeyValue
   }
 
-  static _callcollectionCommand(args) {
-    return new Promise((resolve, reject) => {
-      let url = `/api_maker/${args.modelClass.modelClassData().pluralName}/${args.collectionCommand}`
-      let postData = BaseModel._postDataFromArgs(args.args)
-
-      postData.append("plural_name", args.modelClass.modelClassData().pluralName)
-      postData.append("collection_command", args.collectionCommand)
-
-      Api.requestLocal({path: url, method: "POST", rawData: postData}).then((response) => {
-        resolve(response)
-      }, (response) => {
-        reject(response)
-      })
-    })
+  static _callCollectionCommand(args, commandArgs) {
+    return CommandsPool.addCommand(args, commandArgs)
   }
 
-  _callmemberCommand(args) {
-    return new Promise((resolve, reject) => {
-      let url = `/api_maker/${args.model.modelClassData().pluralName}/${args.model._primaryKey()}/${args.memberCommand}`
-      let postData = BaseModel._postDataFromArgs(args.args)
-
-      postData.append("plural_name", this.modelClassData().pluralName)
-      postData.append("member_command", args.memberCommand)
-
-      Api.requestLocal({path: url, method: "POST", rawData: postData}).then((response) => {
-        resolve(response)
-      }, (response) => {
-        reject(response)
-      })
-    })
+  _callMemberCommand(args, commandArgs) {
+    return CommandsPool.addCommand(args, commandArgs)
   }
 
   static _postDataFromArgs(args) {
