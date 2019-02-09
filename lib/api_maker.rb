@@ -27,4 +27,5 @@ module ApiMaker
   autoload :ResourceRouting, "#{dir}/resource_routing"
   autoload :Routing, "#{dir}/routing"
   autoload :Serializer, "#{dir}/serializer"
+  autoload :SpecHelper, "#{dir}/spec_helper"
 end
