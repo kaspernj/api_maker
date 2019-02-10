@@ -25,6 +25,12 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
               model_name: model_plural_name,
               controller: self
             ).result
+          elsif command_type == "update"
+            result = ApiMaker::UpdateCommandService.execute!(
+              commands: command_data,
+              model_name: model_plural_name,
+              controller: self
+            ).result
           else
             raise "Unknown type of command: #{command.fetch(:type)}"
           end
