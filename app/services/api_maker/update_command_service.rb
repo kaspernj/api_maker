@@ -10,7 +10,7 @@ class ApiMaker::UpdateCommandService < ApiMaker::ApplicationService
 
   def execute!
     command_response = ApiMaker::CommandResponse.new
-    instance = ApiMaker::IndexCommand.new(
+    instance = ApiMaker::UpdateCommand.new(
       collection: collection,
       commands: @commands,
       command_response: command_response,
@@ -22,7 +22,7 @@ class ApiMaker::UpdateCommandService < ApiMaker::ApplicationService
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability)
+    @collection ||= klass.accessible_by(@ability, :update)
   end
 
   def ids

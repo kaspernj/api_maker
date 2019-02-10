@@ -27,6 +27,10 @@ export default class ApiMakerCommandsPool {
     return window.currentApiMakerCommandsPool
   }
 
+  static flush() {
+    ApiMakerCommandsPool.current().flush()
+  }
+
   constructor() {
     this.pool = {}
     this.poolData = {}
@@ -65,6 +69,8 @@ export default class ApiMakerCommandsPool {
     if (Object.keys(this.pool) == 0)
       return
 
+    this.clearTimeout()
+
     var currentPool = this.pool
     var currentPoolData = this.poolData
 
@@ -88,10 +94,13 @@ export default class ApiMakerCommandsPool {
     })
   }
 
-  setFlushTimeout() {
+  clearTimeout() {
     if (this.flushTimeout)
       clearTimeout(this.flushTimeout)
+  }
 
-    this.flushTimeout = setTimeout(() => { this.flush() }, 100)
+  setFlushTimeout() {
+    this.clearTimeout()
+    this.flushTimeout = setTimeout(() => { this.flush() }, 0)
   }
 }

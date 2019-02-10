@@ -2,6 +2,7 @@ import Api from "./api"
 import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
 import CommandsPool from "./commands-pool"
+import FormDataToObject from "./form-data-to-object"
 import ModelName from "./model-name"
 import Money from "js-money"
 import objectToFormData from "object-to-formdata"
@@ -241,50 +242,43 @@ export default class BaseModel {
       if (this.changes.length == 0)
         return resolve({model: this})
 
-      let paramKey = this.modelClassData().paramKey
-      let urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
-      let dataToUse = {}
-      dataToUse[paramKey] = this.changes
+      CommandsPool.addCommand({args: this.changes, command: `${this.modelClassData().pluralName}-update`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "update"}, {})
+        .then(() => {
+          if (response.success) {
+            if (response.model) {
+              this.modelData = response.model.attributes
+              this.changes = {}
+            }
 
-      if (Object.keys(dataToUse[paramKey]).length == 0)
-        return resolve(resolve({"model": this}))
-
-      Api.patch(urlToUse, dataToUse).then((response) => {
-        if (response.success) {
-          if (response.model) {
-            this.modelData = response.model.attributes
-            this.changes = {}
+            resolve({"model": this, "response": response})
+          } else {
+            reject({"model": this, "response": response})
           }
-
-          resolve({"model": this, "response": response})
-        } else {
-          reject({"model": this, "response": response})
-        }
-      }, (response) => {
-        reject({"model": this, "response": response})
-      })
+        }, (response) => {
+          reject({model: this, response: response})
+        })
     })
   }
 
   updateRaw(data) {
+    var formData = FormDataToObject.toObject(data)
+
     return new Promise((resolve, reject) => {
-      let paramKey = this.modelClassData().paramKey
-      let urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
+      CommandsPool.addCommand({args: formData, command: `${this.modelClassData().pluralName}-update`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "update"}, {})
+        .then((response) => {
+          if (response.success) {
+            if (response.model) {
+              this.modelData = response.model.attributes
+              this.changes = {}
+            }
 
-      Api.requestLocal({path: urlToUse, method: "PATCH", rawData: data}).then((response) => {
-        if (response.success) {
-          if (response.model) {
-            this.modelData = response.model.attributes
-            this.changes = {}
+            resolve({model: this, response: response})
+          } else {
+            reject({model: this, response: response})
           }
-
-          resolve({"model": this, "response": response})
-        } else {
-          reject({"model": this, "response": response})
-        }
-      }, (response) => {
-        reject({"model": this, "response": response})
-      })
+        }, (response) => {
+          reject({model: this, response: response})
+        })
     })
   }
 
