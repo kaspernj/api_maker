@@ -97,47 +97,47 @@ export default class BaseModel {
   create() {
     return new Promise((resolve, reject) => {
       let paramKey = this.modelClassData().paramKey
-      let urlToUse = this.modelClassData().path
       let modelData = this.getAttributes()
       let dataToUse = {}
       dataToUse[paramKey] = modelData
 
-      Api.post(urlToUse, dataToUse).then((response) => {
-        if (response.success) {
-          if (response.model) {
-            this.modelData = response.model.attributes
-            this.changes = {}
-          }
+      CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().pluralName}-create`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "create"}, {})
+        .then(() => {
+          if (response.success) {
+            if (response.model) {
+              this.modelData = response.model.attributes
+              this.changes = {}
+            }
 
-          resolve({"model": this, "response": response})
-        } else {
-          reject({"model": this, "response": response})
-        }
-      }, (response) => {
-        reject({"model": this, "response": response})
-      })
+            resolve({model: this, response: response})
+          } else {
+            reject({model: this, response: response})
+          }
+        }, (response) => {
+          reject({model: this, response: response})
+        })
     })
   }
 
   createRaw(data) {
     return new Promise((resolve, reject) => {
-      let paramKey = this.modelClassData().paramKey
-      let urlToUse = this.modelClassData().path
+      var formData = FormDataToObject.toObject(data)
 
-      Api.requestLocal({path: urlToUse, method: "POST", rawData: data}).then((response) => {
-        if (response.success) {
-          if (response.model) {
-            this.modelData = response.model.attributes
-            this.changes = {}
+      CommandsPool.addCommand({args: formData, command: `${this.modelClassData().pluralName}-create`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "create"}, {})
+        .then((response) => {
+          if (response.success) {
+            if (response.model) {
+              this.modelData = response.model.attributes
+              this.changes = {}
+            }
+
+            resolve({model: this, response: response})
+          } else {
+            reject({model: this, response: response})
           }
-
-          resolve({"model": this, "response": response})
-        } else {
-          reject({"model": this, "response": response})
-        }
-      }, (response) => {
-        reject({"model": this, "response": response})
-      })
+        }, (response) => {
+          reject({model: this, response: response})
+        })
     })
   }
 
@@ -242,7 +242,12 @@ export default class BaseModel {
       if (this.changes.length == 0)
         return resolve({model: this})
 
-      CommandsPool.addCommand({args: this.changes, command: `${this.modelClassData().pluralName}-update`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "update"}, {})
+      let paramKey = this.modelClassData().paramKey
+      let modelData = this.changes
+      let dataToUse = {}
+      dataToUse[paramKey] = modelData
+
+      CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().pluralName}-update`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "update"}, {})
         .then(() => {
           if (response.success) {
             if (response.model) {
@@ -261,9 +266,9 @@ export default class BaseModel {
   }
 
   updateRaw(data) {
-    var formData = FormDataToObject.toObject(data)
-
     return new Promise((resolve, reject) => {
+      var formData = FormDataToObject.toObject(data)
+
       CommandsPool.addCommand({args: formData, command: `${this.modelClassData().pluralName}-update`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "update"}, {})
         .then((response) => {
           if (response.success) {

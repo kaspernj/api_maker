@@ -15,7 +15,7 @@ class ApiMaker::Routing
     storage.resources.each do |resource|
       klass = resource.fetch(:klass)
 
-      @routes.resources(klass.model_class.model_name.plural) do
+      @routes.resources(klass.model_class.model_name.plural, only: :destroy) do
         @routes.post :validate, on: :collection
       end
     end
