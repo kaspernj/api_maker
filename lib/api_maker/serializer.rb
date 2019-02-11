@@ -92,7 +92,7 @@ class ApiMaker::Serializer
   end
 
   def inspect
-    "<ApiMaker::Serializer model={#{model.class.name}} id={#{model.id}}>"
+    "<ApiMaker::Serializer model=\"#{model.class.name}\" id=\"#{model.id}\">"
   end
 
   alias to_s inspect

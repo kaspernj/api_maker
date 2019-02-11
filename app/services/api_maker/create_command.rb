@@ -42,7 +42,7 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
   end
 
   def sanitize_parameters
-    serializer.resource_instance.permitted_params(ApiMaker::PermittedParamsArgument.new(command))
+    serializer.resource_instance.permitted_params(ApiMaker::PermittedParamsArgument.new(command: command, model: model))
   end
 
   def serialized_resource(model)

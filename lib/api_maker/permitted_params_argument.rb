@@ -1,12 +1,9 @@
 class ApiMaker::PermittedParamsArgument
-  attr_reader :command
+  attr_reader :command, :model
 
-  def initialize(command)
+  def initialize(command:, model:)
     @command = command
-  end
-
-  def model
-    command.model
+    @model = model
   end
 
   def params
