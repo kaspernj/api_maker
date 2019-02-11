@@ -10,7 +10,6 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 
       if model_content_response.success?
         File.open(model_file(model), "w") { |fp| fp.write(model_content_response.result) }
-        File.open(controller_file(model), "w") { |fp| fp.write(controller_content(model)) } unless File.exist?(controller_file(model))
       else
         puts model_content_response.errors.join(". ")
       end
@@ -21,15 +20,6 @@ private
 
   def api_maker_root_path
     Rails.root.join("app", "javascript", "api-maker")
-  end
-
-  def controller_content(model)
-    ApiMaker::ControllerContentGeneratorService.execute!(model: model).result
-  end
-
-  def controller_file(model)
-    resource_class = ApiMaker::MemoryStorage.current.resource_for_model(model)
-    controller_path.join("#{resource_class.short_name.underscore.pluralize}_controller.rb")
   end
 
   def controller_path
