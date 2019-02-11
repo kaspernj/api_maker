@@ -5,6 +5,10 @@ class ApiMaker::PermittedParamsArgument
     @command = command
   end
 
+  def model
+    command.model
+  end
+
   def params
     command.args
   end
