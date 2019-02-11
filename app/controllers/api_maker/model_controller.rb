@@ -1,6 +1,6 @@
 class ApiMaker::ModelController < ApiMaker::BaseController
-  before_action :set_instance, except: [:new, :create]
-  before_action :set_new_instance, only: [:new, :create]
+  before_action :set_instance
+  before_action :set_new_instance
 
   def show
     render json: {model: serialized_resource(resource_instance).result}
@@ -10,37 +10,8 @@ class ApiMaker::ModelController < ApiMaker::BaseController
     render json: {model: serialized_resource(resource_instance).result}
   end
 
-  def create
-    if resource_instance.save
-      success_response
-      after_create
-    else
-      failure_response
-    end
-  end
-
   def edit
     render json: {model: serialized_resource(resource_instance).result}
-  end
-
-  def destroy
-    if resource_instance.destroy
-      success_response
-      after_destroy
-    else
-      failure_response
-    end
-  end
-
-  def validate
-    if sanitize_parameters[:id]
-      instance = resource_instance_class.find(sanitize_parameters[:id])
-      instance.assign_attributes(sanitize_parameters)
-    else
-      instance = resource_instance_class.new(sanitize_parameters)
-    end
-
-    render json: {valid: instance.valid?, errors: instance.errors.full_messages}
   end
 
 private

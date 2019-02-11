@@ -12,6 +12,18 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
               model_name: model_plural_name,
               controller: self
             ).result
+          elsif command_type == "create"
+            result = ApiMaker::CreateCommandService.execute!(
+              commands: command_data,
+              model_name: model_plural_name,
+              controller: self
+            ).result
+          elsif command_type == "destroy"
+            result = ApiMaker::DestroyCommandService.execute!(
+              commands: command_data,
+              model_name: model_plural_name,
+              controller: self
+            ).result
           elsif command_type == "index"
             result = ApiMaker::IndexCommandService.execute!(
               commands: command_data,
@@ -31,8 +43,14 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
               model_name: model_plural_name,
               controller: self
             ).result
+          elsif command_type == "valid"
+            result = ApiMaker::ValidCommandService.execute!(
+              commands: command_data,
+              model_name: model_plural_name,
+              controller: self
+            ).result
           else
-            raise "Unknown type of command: #{command.fetch(:type)}"
+            raise "Unknown type of command: #{command_type}"
           end
 
           responses.merge!(result)

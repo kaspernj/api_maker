@@ -1,4 +1,4 @@
-class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
+class ApiMaker::DestroyCommand < ApiMaker::BaseCommand
   attr_reader :command, :model, :params, :serializer
 
   def execute!
@@ -8,7 +8,7 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
       @params = command.args || {}
       @serializer = serialized_resource(model)
 
-      if command.model.update(sanitize_parameters)
+      if command.model.destroy
         success_response
       else
         failure_response
@@ -22,10 +22,6 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
       success: false,
       errors: model.errors.full_messages
     )
-  end
-
-  def sanitize_parameters
-    serializer.resource_instance.permitted_params(params)
   end
 
   def serialized_resource(model)

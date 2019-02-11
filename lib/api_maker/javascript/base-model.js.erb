@@ -1,4 +1,3 @@
-import Api from "./api"
 import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
 import CommandsPool from "./commands-pool"
@@ -16,14 +15,16 @@ export default class BaseModel {
 
   static find(id) {
     return new Promise((resolve, reject) => {
-      let urlToUse = `${this.modelClassData().path}/${id}`
+      var primaryKeyName = this.modelClassData().primaryKey
+      var query = {}
+      query[`${primaryKeyName}_eq`] = id
 
-      Api.get(urlToUse).then((response) => {
-        let modelClass = require(`api-maker/models/${inflection.dasherize(this.modelClassData().paramKey)}`).default
-        let model = new modelClass({data: response.model})
-        resolve(model)
-      }, (error) => {
-        reject(error)
+      this.ransack(query).first().then(model => {
+        if (model) {
+          resolve(model)
+        } else {
+          reject(error)
+        }
       })
     })
   }
@@ -102,7 +103,7 @@ export default class BaseModel {
       dataToUse[paramKey] = modelData
 
       CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().pluralName}-create`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "create"}, {})
-        .then(() => {
+        .then(response => {
           if (response.success) {
             if (response.model) {
               this.modelData = response.model.attributes
@@ -124,7 +125,7 @@ export default class BaseModel {
       var formData = FormDataToObject.toObject(data)
 
       CommandsPool.addCommand({args: formData, command: `${this.modelClassData().pluralName}-create`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "create"}, {})
-        .then((response) => {
+        .then(response => {
           if (response.success) {
             if (response.model) {
               this.modelData = response.model.attributes
@@ -143,22 +144,21 @@ export default class BaseModel {
 
   destroy() {
     return new Promise((resolve, reject) => {
-      let urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
+      CommandsPool.addCommand({command: `${this.modelClassData().pluralName}-destroy`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "destroy"}, {})
+        .then((response) => {
+          if (response.success) {
+            if (response.model) {
+              this.modelData = response.model.attributes
+              this.changes = {}
+            }
 
-      Api.delete(urlToUse).then((response) => {
-        if (response.success) {
-          if (response.model) {
-            this.modelData = response.model.attributes
-            this.changes = {}
+            resolve({model: this, response: response})
+          } else {
+            reject({model: this, response: response})
           }
-
-          resolve(response)
-        } else {
-          reject(response)
-        }
-      }, (response) => {
-        reject({"model": this, "response": response})
-      })
+        }, (response) => {
+          reject({model: this, response: response})
+        })
     })
   }
 
@@ -203,17 +203,13 @@ export default class BaseModel {
 
   reload() {
     return new Promise((resolve, reject) => {
-      let urlToUse = `${this.modelClassData().path}/${this._primaryKey()}`
+      var primaryKeyName = this.modelClassData().primaryKey
+      var query = {}
+      query[`${primaryKeyName}_eq`] = this._primaryKey()
 
-      Api.get(urlToUse).then((response) => {
-        if (response.model) {
-          this.modelData = response.model.attributes
-          this.changes = {}
-        }
-
-        resolve(response)
-      }, (response) => {
-        reject({"model": this, "response": response})
+      this.ransack(query).first().then(model => {
+        this.modelData = response.model.modelData
+        this.changes = {}
       })
     })
   }
@@ -293,17 +289,17 @@ export default class BaseModel {
 
   isValidOnServer() {
     return new Promise((resolve, reject) => {
-      let paramKey = this.modelClassData().paramKey
-      let urlToUse = `${this.modelClassData().path}/validate`
       let modelData = this.getAttributes()
+      let paramKey = this.modelClassData().paramKey
       let dataToUse = {}
       dataToUse[paramKey] = modelData
 
-      Api.post(urlToUse, dataToUse).then((response) => {
-        resolve({"valid": response.valid, "errors": response.errors})
-      }, (response) => {
-        reject({"model": this, "response": response})
-      })
+      CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().pluralName}-valid`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "valid"}, {})
+        .then((response) => {
+          resolve({valid: response.valid, errors: response.errors})
+        }, (response) => {
+          reject({model: this, response: response})
+        })
     })
   }
 
