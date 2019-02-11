@@ -25,6 +25,7 @@ class ApiMaker::BaseCommand
       command = ApiMaker::IndividualCommand.new(
         args: command_data[:args],
         collection: @collection,
+        command: self,
         id: command_id,
         primary_key: command_data[:primary_key],
         response: @command_response
@@ -33,7 +34,7 @@ class ApiMaker::BaseCommand
       begin
         yield command
       rescue => e # rubocop:disable Style/RescueStandardError
-        command.fail("Internal server error")
+        command.fail(success: false, errors: ["Internal server error"])
 
         @controller.logger.error e.message
         @controller.logger.error e.backtrace.join("\n")

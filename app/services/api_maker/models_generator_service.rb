@@ -10,7 +10,6 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 
       if model_content_response.success?
         File.open(model_file(model), "w") { |fp| fp.write(model_content_response.result) }
-        File.open(controller_file(model), "w") { |fp| fp.write(controller_content(model)) } unless File.exist?(controller_file(model))
       else
         puts model_content_response.errors.join(". ")
       end
@@ -21,15 +20,6 @@ private
 
   def api_maker_root_path
     Rails.root.join("app", "javascript", "api-maker")
-  end
-
-  def controller_content(model)
-    ApiMaker::ControllerContentGeneratorService.execute!(model: model).result
-  end
-
-  def controller_file(model)
-    resource_class = ApiMaker::MemoryStorage.current.resource_for_model(model)
-    controller_path.join("#{resource_class.short_name.underscore.pluralize}_controller.rb")
   end
 
   def controller_path
@@ -47,8 +37,9 @@ private
   def copy_base_model
     files = %w[
       api.js base-model.js cable-connection-pool.js cable-subscription.js cable-subscription-pool.js
-      collection.js commands-pool.js devise.js event-listener.jsx logger.js model-name.js models-response-reader.js result.js
-      event-connection.jsx paginate.jsx sort-link.jsx updated-attribute.jsx resource-routes.jsx resource-route.jsx
+      collection.js commands-pool.js devise.js event-listener.jsx form-data-to-object.js logger.js model-name.js
+      models-response-reader.js result.js event-connection.jsx paginate.jsx sort-link.jsx updated-attribute.jsx
+      resource-routes.jsx resource-route.jsx
       bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/checkbox.jsx bootstrap/checkboxes.jsx
       bootstrap/money-input.jsx bootstrap/radio-buttons.jsx bootstrap/select.jsx bootstrap/string-input.jsx
     ]

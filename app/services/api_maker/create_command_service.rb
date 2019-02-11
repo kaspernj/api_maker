@@ -1,4 +1,4 @@
-class ApiMaker::IndexCommandService < ApiMaker::ApplicationService
+class ApiMaker::CreateCommandService < ApiMaker::ApplicationService
   def initialize(commands:, command_name:, model_name:, controller:) # rubocop:disable Lint/UnusedMethodArgument
     raise "No controller given" if controller.blank?
 
@@ -10,7 +10,7 @@ class ApiMaker::IndexCommandService < ApiMaker::ApplicationService
 
   def execute!
     command_response = ApiMaker::CommandResponse.new
-    instance = ApiMaker::IndexCommand.new(
+    instance = ApiMaker::CreateCommand.new(
       collection: collection,
       commands: @commands,
       command_response: command_response,
@@ -22,11 +22,7 @@ class ApiMaker::IndexCommandService < ApiMaker::ApplicationService
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability)
-  end
-
-  def ids
-    @commands.values.map { |command| command.fetch("primary_key") }
+    @collection ||= klass.accessible_by(@ability, :create)
   end
 
   def klass
