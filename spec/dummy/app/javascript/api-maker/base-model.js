@@ -202,14 +202,15 @@ export default class BaseModel {
   }
 
   reload() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       var primaryKeyName = this.modelClassData().primaryKey
       var query = {}
       query[`${primaryKeyName}_eq`] = this._primaryKey()
 
-      this.ransack(query).first().then(model => {
-        this.modelData = response.model.modelData
+      this.constructor.ransack(query).first().then(model => {
+        this.modelData = model.modelData
         this.changes = {}
+        resolve()
       })
     })
   }
