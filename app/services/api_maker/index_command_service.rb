@@ -1,5 +1,5 @@
 class ApiMaker::IndexCommandService < ApiMaker::ApplicationService
-  def initialize(commands:, model_name:, controller:)
+  def initialize(commands:, command_name:, model_name:, controller:) # rubocop:disable Lint/UnusedMethodArgument
     raise "No controller given" if controller.blank?
 
     @ability = controller.__send__(:current_ability)

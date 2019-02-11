@@ -7,4 +7,8 @@ class Resources::TaskResource < Resources::ApplicationResource
   def custom_id
     "custom-#{model.id}"
   end
+
+  def permitted_params(arg)
+    arg.params.require(:task).permit(:task)
+  end
 end

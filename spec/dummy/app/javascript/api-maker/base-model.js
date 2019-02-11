@@ -244,7 +244,7 @@ export default class BaseModel {
       dataToUse[paramKey] = modelData
 
       CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().pluralName}-update`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "update"}, {})
-        .then(() => {
+        .then((response) => {
           if (response.success) {
             if (response.model) {
               this.modelData = response.model.attributes
