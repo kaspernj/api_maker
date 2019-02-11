@@ -4,11 +4,12 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
   def execute!
     each_command do |command|
       @command = command
-      @model = command.model
+      @model = collection.klass.new
       @params = command.args || {}
       @serializer = serialized_resource(model)
+      @model.assign_attributes(sanitize_parameters)
 
-      if command.model.create(sanitize_parameters)
+      if @model.save
         success_response
       else
         failure_response

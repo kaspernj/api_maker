@@ -11,7 +11,7 @@ class ApiMaker::CreateCommandService < ApiMaker::ApplicationService
   def execute!
     command_response = ApiMaker::CommandResponse.new
     instance = ApiMaker::CreateCommand.new(
-      collection: nil,
+      collection: collection,
       commands: @commands,
       command_response: command_response,
       controller: @controller
@@ -19,6 +19,10 @@ class ApiMaker::CreateCommandService < ApiMaker::ApplicationService
     instance.execute!
 
     ServicePattern::Response.new(result: command_response.result)
+  end
+
+  def collection
+    @collection ||= klass.accessible_by(@ability, :create)
   end
 
   def klass
