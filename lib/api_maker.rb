@@ -18,6 +18,7 @@ module ApiMaker
   autoload :Loader, "#{dir}/loader"
   autoload :MemoryStorage, "#{dir}/memory_storage"
   autoload :ModelExtensions, "#{dir}/model_extensions"
+  autoload :PermittedParamsArgument, "#{dir}/permitted_params_argument"
   autoload :Preloader, "#{dir}/preloader"
   autoload :PreloaderBelongsTo, "#{dir}/preloader_belongs_to"
   autoload :PreloaderHasMany, "#{dir}/preloader_has_many"

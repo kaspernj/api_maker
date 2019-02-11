@@ -14,7 +14,7 @@ class ApiMaker::ValidCommandService < ApiMaker::ApplicationService
       collection: collection,
       commands: @commands,
       command_response: command_response,
-      controller: @controller
+      controller: @controller,
     )
     instance.execute!
 
@@ -22,11 +22,7 @@ class ApiMaker::ValidCommandService < ApiMaker::ApplicationService
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability, :update)
-  end
-
-  def ids
-    @commands.values.map { |command| command.fetch("primary_key") }
+    @collection ||= klass.accessible_by(@ability)
   end
 
   def klass

@@ -25,6 +25,7 @@ class ApiMaker::BaseCommand
       command = ApiMaker::IndividualCommand.new(
         args: command_data[:args],
         collection: @collection,
+        command: self,
         id: command_id,
         primary_key: command_data[:primary_key],
         response: @command_response

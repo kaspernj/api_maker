@@ -6,19 +6,25 @@ class ApiMaker::ValidCommand < ApiMaker::BaseCommand
       @command = command
       @params = command.args || {}
 
-      if sanitize_parameters[:id]
-        instance = resource_instance_class.find(sanitize_parameters[:id])
-        instance.assign_attributes(sanitize_parameters)
+      if command.model_id.present?
+        model = resource_instance_class.find(command.model_id)
       else
-        instance = resource_instance_class.new(sanitize_parameters)
+        model = resource_instance_class.new
       end
 
-      render json: {valid: instance.valid?, errors: instance.errors.full_messages}
+      serializer = serialized_resource(model)
+      model.assign_attributes(sanitize_parameters(serializer))
+
+      command.result(valid: model.valid?, errors: model.errors.full_messages)
     end
   end
 
-  def sanitize_parameters
-    serializer.resource_instance.permitted_params(params)
+  def resource_instance_class
+    collection.klass
+  end
+
+  def sanitize_parameters(serializer)
+    serializer.resource_instance.permitted_params(ApiMaker::PermittedParamsArgument.new(command))
   end
 
   def serialized_resource(model)

@@ -1,10 +1,11 @@
 class ApiMaker::IndividualCommand
-  attr_reader :args, :id
+  attr_reader :args, :command, :id
 
-  def initialize(id:, args:, collection:, primary_key: nil, response:)
+  def initialize(id:, args:, collection:, command:, primary_key: nil, response:)
     @id = id
     @args = args
     @collection = collection
+    @command = command
     @primary_key = primary_key
     @response = response
   end
