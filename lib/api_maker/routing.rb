@@ -10,14 +10,6 @@ class ApiMaker::Routing
   end
 
   def install
-    storage = ApiMaker::MemoryStorage.current
-
-    storage.resources.each do |resource|
-      klass = resource.fetch(:klass)
-
-      @routes.resources(klass.model_class.model_name.plural, only: :destroy) do
-        @routes.post :validate, on: :collection
-      end
-    end
+    # For now don't do anything any more
   end
 end
