@@ -106,7 +106,7 @@ export default class BaseModel {
         .then(response => {
           if (response.success) {
             if (response.model) {
-              this.modelData = response.model.attributes
+              this._setNewModelData(response.model.attributes)
               this.changes = {}
             }
 
@@ -128,7 +128,7 @@ export default class BaseModel {
         .then(response => {
           if (response.success) {
             if (response.model) {
-              this.modelData = response.model.attributes
+              this._setNewModelData(response.model.attributes)
               this.changes = {}
             }
 
@@ -148,7 +148,7 @@ export default class BaseModel {
         .then((response) => {
           if (response.success) {
             if (response.model) {
-              this.modelData = response.model.attributes
+              this._setNewModelData(response.model.attributes)
               this.changes = {}
             }
 
@@ -173,6 +173,79 @@ export default class BaseModel {
 
   static snakeCase(string) {
     return inflection.underscore(string)
+  }
+
+  isAttributeChanged(attributeName) {
+    var attributeNameUnderscore = inflection.underscore(attributeName)
+    var attributeData = this.modelClassData().attributes.find(attribute => attribute.name == attributeNameUnderscore)
+
+    if (!attributeData) {
+      var attributeNames = this.modelClassData().attributes.map(attribute => attribute.name)
+      throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
+    }
+
+    if (!(attributeNameUnderscore in this.changes))
+      return false
+
+    var oldValue = this.modelData[attributeNameUnderscore]
+    var newValue = this.changes[attributeNameUnderscore]
+    var changedMethod = this[`_is${inflection.camelize(attributeData.type, true)}Changed`]
+
+    if (!changedMethod)
+      throw new Error(`Don't know how to handle type: ${attributeData.type}`)
+
+    return changedMethod(oldValue, newValue)
+  }
+
+  savedChangeToAttribute(attributeName) {
+    if (!this.previousModelData)
+      return false
+
+    var attributeNameUnderscore = inflection.underscore(attributeName)
+    var attributeData = this.modelClassData().attributes.find(attribute => attribute.name == attributeNameUnderscore)
+
+    if (!attributeData) {
+      var attributeNames = this.modelClassData().attributes.map(attribute => attribute.name)
+      throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
+    }
+
+    if (!(attributeNameUnderscore in this.previousModelData)) {
+      console.log(`Couldn't find ${attributeName} in previous model data: ${JSON.stringify(this.changes)}`)
+      return false
+    }
+
+    var oldValue = this.previousModelData[attributeNameUnderscore]
+    var newValue = this.modelData[attributeNameUnderscore]
+    var changedMethodName = `_is${inflection.camelize(attributeData.type)}Changed`
+    var changedMethod = this[changedMethodName]
+
+    if (!changedMethod)
+      throw new Error(`Don't know how to handle type: ${attributeData.type}`)
+
+    return changedMethod(oldValue, newValue)
+  }
+
+  _setNewModelData(modelData) {
+    this.previousModelData = this.modelData
+    this.modelData = modelData
+  }
+
+  _isDateChanged(oldValue, newValue) {
+    if (Date.parse(oldValue) != Date.parse(newValue))
+      return true
+  }
+
+  _isIntegerChanged(oldValue, newValue) {
+    if (parseInt(oldValue) != parseInt(newValue))
+      return true
+  }
+
+  _isStringChanged(oldValue, newValue) {
+    var oldConvertedValue = `${oldValue}`
+    var newConvertedValue = `${newValue}`
+
+    if (oldConvertedValue != newConvertedValue)
+      return true
   }
 
   isChanged() {
@@ -208,7 +281,7 @@ export default class BaseModel {
       query[`${primaryKeyName}_eq`] = this._primaryKey()
 
       this.constructor.ransack(query).first().then(model => {
-        this.modelData = model.modelData
+        this._setNewModelData(model.modelData)
         this.changes = {}
         resolve()
       })
@@ -248,7 +321,7 @@ export default class BaseModel {
         .then((response) => {
           if (response.success) {
             if (response.model) {
-              this.modelData = response.model.attributes
+              this._setNewModelData(response.model.attributes)
               this.changes = {}
             }
 
@@ -270,7 +343,7 @@ export default class BaseModel {
         .then((response) => {
           if (response.success) {
             if (response.model) {
-              this.modelData = response.model.attributes
+              this._setNewModelData(response.model.attributes)
               this.changes = {}
             }
 
