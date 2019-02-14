@@ -209,10 +209,8 @@ export default class BaseModel {
       throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
     }
 
-    if (!(attributeNameUnderscore in this.previousModelData)) {
-      console.log(`Couldn't find ${attributeName} in previous model data: ${JSON.stringify(this.changes)}`)
-      return false
-    }
+    if (!(attributeNameUnderscore in this.previousModelData))
+      return true
 
     var oldValue = this.previousModelData[attributeNameUnderscore]
     var newValue = this.modelData[attributeNameUnderscore]
