@@ -45,18 +45,18 @@ export default class ApiMakerCommandsPool {
 
       var commandType = data.type
       var commandName = data.command
-      var pluralName = data.pluralName
+      var collectionKey = data.collectionKey
 
       this.pool[id] = {resolve: resolve, reject: reject}
 
       if (!this.poolData[commandType])
         this.poolData[commandType] = {}
 
-      if (!this.poolData[commandType][pluralName])
-        this.poolData[commandType][pluralName] = {}
+      if (!this.poolData[commandType][collectionKey])
+        this.poolData[commandType][collectionKey] = {}
 
-      if (!this.poolData[commandType][pluralName][commandName])
-        this.poolData[commandType][pluralName][commandName] = {}
+      if (!this.poolData[commandType][collectionKey][commandName])
+        this.poolData[commandType][collectionKey][commandName] = {}
 
       if (data.args instanceof FormData) {
         var args = FormDataToObject.toObject(data.args)
@@ -64,7 +64,7 @@ export default class ApiMakerCommandsPool {
         var args = data.args
       }
 
-      this.poolData[commandType][pluralName][commandName][id] = {
+      this.poolData[commandType][collectionKey][commandName][id] = {
         args: args,
         primary_key: data.primaryKey,
         id: id

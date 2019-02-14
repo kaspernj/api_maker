@@ -102,7 +102,7 @@ export default class BaseModel {
       let dataToUse = {}
       dataToUse[paramKey] = modelData
 
-      CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().pluralName}-create`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "create"}, {})
+      CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionKey}-create`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "create"}, {})
         .then(response => {
           if (response.success) {
             if (response.model) {
@@ -124,7 +124,7 @@ export default class BaseModel {
     return new Promise((resolve, reject) => {
       var formData = FormDataToObject.toObject(data)
 
-      CommandsPool.addCommand({args: formData, command: `${this.modelClassData().pluralName}-create`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "create"}, {})
+      CommandsPool.addCommand({args: formData, command: `${this.modelClassData().collectionKey}-create`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "create"}, {})
         .then(response => {
           if (response.success) {
             if (response.model) {
@@ -144,7 +144,7 @@ export default class BaseModel {
 
   destroy() {
     return new Promise((resolve, reject) => {
-      CommandsPool.addCommand({command: `${this.modelClassData().pluralName}-destroy`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "destroy"}, {})
+      CommandsPool.addCommand({command: `${this.modelClassData().collectionKey}-destroy`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "destroy"}, {})
         .then((response) => {
           if (response.success) {
             if (response.model) {
@@ -315,7 +315,7 @@ export default class BaseModel {
       let dataToUse = {}
       dataToUse[paramKey] = modelData
 
-      CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().pluralName}-update`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "update"}, {})
+      CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionKey}-update`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "update"}, {})
         .then((response) => {
           if (response.success) {
             if (response.model) {
@@ -337,7 +337,7 @@ export default class BaseModel {
     return new Promise((resolve, reject) => {
       var formData = FormDataToObject.toObject(data)
 
-      CommandsPool.addCommand({args: formData, command: `${this.modelClassData().pluralName}-update`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "update"}, {})
+      CommandsPool.addCommand({args: formData, command: `${this.modelClassData().collectionKey}-update`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "update"}, {})
         .then((response) => {
           if (response.success) {
             if (response.model) {
@@ -366,7 +366,7 @@ export default class BaseModel {
       let dataToUse = {}
       dataToUse[paramKey] = modelData
 
-      CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().pluralName}-valid`, pluralName: this.modelClassData().pluralName, primaryKey: this._primaryKey(), type: "valid"}, {})
+      CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionKey}-valid`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "valid"}, {})
         .then((response) => {
           resolve({valid: response.valid, errors: response.errors})
         }, (response) => {

@@ -5,6 +5,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
   static modelClassData() {
     return <%= {
       attributes: attributes,
+      collectionKey: model.model_name.collection,
       i18nKey: model.model_name.i18n_key,
       name: resource.short_name,
       pluralName: model.model_name.plural,
@@ -74,7 +75,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
         {
           args: args,
           command: "<%= collection_command %>",
-          pluralName: this.modelClassData().pluralName,
+          collectionKey: this.modelClassData().collectionKey,
           type: "collection"
         },
         commandArgs
@@ -89,7 +90,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
           args: args,
           command: "<%= member_command %>",
           primaryKey: this._primaryKey(),
-          pluralName: this.modelClassData().pluralName,
+          collectionKey: this.modelClassData().collectionKey,
           type: "member"
         },
         commandArgs

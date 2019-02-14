@@ -3,7 +3,7 @@ import Collection from "../collection"
 
 export default class Task extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"created_at","type":"datetime"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"user_id","type":"integer"},{"name":"custom_id","type":"unknown"}],"i18nKey":"task","name":"Task","pluralName":"tasks","relationships":[{"className":"Project","name":"project","macro":"belongs_to"},{"className":"User","name":"user","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
+    return {"attributes":[{"name":"created_at","type":"datetime"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"user_id","type":"integer"},{"name":"custom_id","type":"unknown"}],"collectionKey":"tasks","i18nKey":"task","name":"Task","pluralName":"tasks","relationships":[{"className":"Project","name":"project","macro":"belongs_to"},{"className":"User","name":"user","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
   }
 
   
@@ -122,7 +122,7 @@ export default class Task extends BaseModel {
         {
           args: args,
           command: "test_collection",
-          pluralName: this.modelClassData().pluralName,
+          collectionKey: this.modelClassData().collectionKey,
           type: "collection"
         },
         commandArgs
@@ -137,7 +137,7 @@ export default class Task extends BaseModel {
           args: args,
           command: "test_member",
           primaryKey: this._primaryKey(),
-          pluralName: this.modelClassData().pluralName,
+          collectionKey: this.modelClassData().collectionKey,
           type: "member"
         },
         commandArgs
