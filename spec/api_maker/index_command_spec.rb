@@ -25,7 +25,7 @@ describe ApiMaker::IndexCommand do
     end
 
     it "includes pagination data" do
-      command = helper.add_command(page: 1)
+      command = helper.add_command(args: {page: 1})
       helper.execute!
       parsed = command.result
 
@@ -35,7 +35,7 @@ describe ApiMaker::IndexCommand do
     end
 
     it "handels has many through relationships" do
-      command = helper.add_command(through: {model: "Project", id: project.id, reflection: "tasks"})
+      command = helper.add_command(args: {through: {model: "Project", id: project.id, reflection: "tasks"}})
       helper.execute!
       parsed = command.result
 

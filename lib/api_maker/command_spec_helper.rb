@@ -8,12 +8,13 @@ class ApiMaker::CommandSpecHelper
     @controller = controller || double
   end
 
-  def add_command(args = {})
+  def add_command(args: {}, primary_key: nil)
     id = commands.length + 1
 
     commands[id] = {
-      args: args,
-      id: id
+      args: ActionController::Parameters.new(args),
+      id: id,
+      primary_key: primary_key
     }
 
     AddedCommand.new(id, response)
