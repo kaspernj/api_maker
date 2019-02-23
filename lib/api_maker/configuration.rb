@@ -1,4 +1,6 @@
 class ApiMaker::Configuration
+  attr_accessor :react_native_path
+
   def self.current
     @current ||= ApiMaker::Configuration.new
   end
