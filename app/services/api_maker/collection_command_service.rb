@@ -30,9 +30,7 @@ class ApiMaker::CollectionCommandService < ApiMaker::ApplicationService
   end
 
   def constant
-    @constant ||= proc do
-      "Commands::#{namespace}::#{@command_name.camelize}".constantize
-    end.call
+    @constant ||= "Commands::#{namespace}::#{@command_name.camelize}".constantize
   end
 
   def namespace

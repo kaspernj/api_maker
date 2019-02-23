@@ -34,11 +34,11 @@ private
   end
 
   def model
-    @model ||= proc do
+    @model ||= begin
       class_name = scope.camelize
       class_instance = class_name.constantize
       class_instance.find_for_authentication(email: params[:username])
-    end.call
+    end
   end
 
   def scope
