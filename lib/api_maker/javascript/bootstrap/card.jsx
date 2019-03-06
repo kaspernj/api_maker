@@ -18,7 +18,6 @@ export default class Card extends React.Component {
           {this.props.table &&
             <table className={this.tableClassNames()}>
               {this.props.children}
-
             </table>
           }
           {!this.props.table && this.props.children}
