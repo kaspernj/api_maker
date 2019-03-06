@@ -21,7 +21,7 @@ class ApiMaker::PreloaderHasMany
 private
 
   def models
-    @models ||= proc do
+    @models ||= begin
       # Group them by subquery to fix Postgres grouping-select issues
       query = @reflection.klass.where(@reflection.klass.primary_key => ids_query.select(@reflection.klass.primary_key.to_sym))
 
@@ -31,11 +31,11 @@ private
         .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
 
       query
-    end.call
+    end
   end
 
   def ids_query
-    @ids_query ||= proc do
+    @ids_query ||= begin
       if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
         query = ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
       else
@@ -45,7 +45,7 @@ private
 
       query = query.accessible_by(@ability) if @ability
       query
-    end.call
+    end
   end
 
   def plural_name

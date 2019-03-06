@@ -3,10 +3,29 @@ module ApiMaker::SpecHelper
     page.driver.browser.manage.logs.get(:browser)
   end
 
+  def expect_no_chrome_window_errors
+    sleep 1
+
+    errors = execute_script("if (window.errorLogger) { return window.errorLogger.getErrors() }")
+    return if !errors.is_a?(Array) || errors.empty?
+
+    last_error = errors.last
+
+    custom_trace = last_error.fetch("backtrace").dup + caller
+
+    error = RuntimeError.new("#{last_error.fetch("errorClass")}: #{last_error.fetch("message")}")
+    error.set_backtrace(custom_trace)
+
+    raise error
+  end
+
   def expect_no_chrome_errors
     logs = chrome_logs.map(&:to_s)
     logs = logs.reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
     return if !logs || !logs.join("\n").include?("SEVERE ")
+
+    expect_no_chrome_window_errors
+
     puts logs.join("\n")
     expect(logs).to eq nil
   end

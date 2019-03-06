@@ -37,7 +37,7 @@ class ApiMaker::PreloaderHasOne
   end
 
   def models
-    @models ||= proc do
+    @models ||= begin
       if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
         query = query_through
       else
@@ -47,7 +47,7 @@ class ApiMaker::PreloaderHasOne
       query = query.accessible_by(@ability) if @ability
       query = query.fix
       query
-    end.call
+    end
   end
 
   def query_through
