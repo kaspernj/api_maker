@@ -14,6 +14,8 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
         puts model_content_response.errors.join(". ")
       end
     end
+
+    ApiMaker::GenerateReactNativeApiService.execute! if ApiMaker::Configuration.current.react_native_path.present?
   end
 
 private
