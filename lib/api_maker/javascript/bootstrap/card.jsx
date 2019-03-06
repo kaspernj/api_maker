@@ -4,7 +4,7 @@ export default class Card extends React.Component {
   render() {
     return (
       <div className={this.classNames()}>
-        {this.props.header &&
+        {(this.props.controls || this.props.header) &&
           <div className="card-header">
             {this.props.header}
             {this.props.controls &&
