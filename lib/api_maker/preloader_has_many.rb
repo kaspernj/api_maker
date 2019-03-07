@@ -21,7 +21,7 @@ class ApiMaker::PreloaderHasMany
 private
 
   def models
-    @ids_query ||= begin
+    @models ||= begin
       if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
         query = ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
       else
@@ -48,13 +48,7 @@ private
   end
 
   def preload_model(model)
-    origin_id = model.attributes.fetch("api_maker_origin_id")
-
-    origin_data = @records.find do |record|
-      record.fetch(:type) == plural_name && record.fetch(:id) == origin_id
-    end
-
-    raise "Couldn't find any origin data by that type (#{plural_name}) and ID (#{origin_id})" unless origin_data
+    origin_data = find_origin_data_for_model(model)
 
     origin_data.fetch(:relationships)[@reflection.name] ||= {data: []}
     origin_data.fetch(:relationships)[@reflection.name].fetch(:data) << {
@@ -67,5 +61,17 @@ private
 
     serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
     @data.fetch(:included) << serialized
+  end
+
+  def find_origin_data_for_model(model)
+    origin_id = model.attributes.fetch("api_maker_origin_id")
+
+    origin_data = @records.find do |record|
+      record.fetch(:type) == plural_name && record.fetch(:id) == origin_id
+    end
+
+    raise "Couldn't find any origin data by that type (#{plural_name}) and ID (#{origin_id})" unless origin_data
+
+    origin_data
   end
 end
