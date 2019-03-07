@@ -50,7 +50,7 @@ export default class BootstrapSelect extends React.Component {
           ref="select"
           >
           {this.includeBlank() &&
-            <option></option>
+            <option />
           }
           {this.props.options && this.props.options.map(option => (
             <option key={`select-option-${option[1]}`} value={option[1]}>{option[0]}</option>
@@ -67,7 +67,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   dataController() {
-    if (this.props["data-controller"]) {
+    if ("data-controller" in this.props) {
       return this.props["data-controller"]
     } else if (this.props.select2) {
       return "select2--default"
@@ -83,7 +83,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   inputDefaultValue() {
-    if (this.props.defaultValue) {
+    if ("defaultValue" in this.props) {
       return this.props.defaultValue
     } else if (this.props.selected) {
       return this.props.selected
@@ -96,7 +96,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   inputId() {
-    if (this.props.id) {
+    if ("id" in this.props) {
       return this.props.id
     } else if (this.props.model) {
       return `${this.props.model.modelClassData().paramKey}_${inflection.underscore(this.props.attribute)}`
@@ -104,7 +104,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   inputName() {
-    if (this.props.name) {
+    if ("name" in this.props) {
       return this.props.name
     } else if (this.props.model) {
       return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}]`
@@ -112,7 +112,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   label() {
-    if (this.props.label === false) {
+    if ("label" in this.props) {
       return null
     } else if (this.props.label) {
       return this.props.label
