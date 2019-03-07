@@ -35,7 +35,7 @@ export default class ResourceRoute {
     var path = Path.localized(inflection.camelize(route.name, true), this.findRouteParams(route), {locale: locale})
     var routes = []
 
-    for(var locales of Locales.availableLocales) {
+    for(var locales of Locales.availableLocales()) {
       routes.push({
         path: path,
         component: component
