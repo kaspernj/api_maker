@@ -21,20 +21,6 @@ class ApiMaker::PreloaderHasMany
 private
 
   def models
-    @models ||= begin
-      # Group them by subquery to fix Postgres grouping-select issues
-      query = @reflection.klass.where(@reflection.klass.primary_key => ids_query.select(@reflection.klass.primary_key.to_sym))
-
-      query = query
-        .joins(@reflection.inverse_of.name)
-        .select(@reflection.klass.arel_table[Arel.star])
-        .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
-
-      query
-    end
-  end
-
-  def ids_query
     @ids_query ||= begin
       if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
         query = ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
@@ -42,6 +28,11 @@ private
         primary_key_column = @reflection.options[:primary_key]&.to_sym || @collection.primary_key.to_sym
         query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&primary_key_column))
       end
+
+      query = query
+        .joins(@reflection.inverse_of.name)
+        .select(@reflection.klass.arel_table[Arel.star])
+        .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
 
       query = query.accessible_by(@ability) if @ability
       query
@@ -62,6 +53,8 @@ private
     origin_data = @records.find do |record|
       record.fetch(:type) == plural_name && record.fetch(:id) == origin_id
     end
+
+    raise "Couldn't find any origin data by that type (#{plural_name}) and ID (#{origin_id})" unless origin_data
 
     origin_data.fetch(:relationships)[@reflection.name] ||= {data: []}
     origin_data.fetch(:relationships)[@reflection.name].fetch(:data) << {
