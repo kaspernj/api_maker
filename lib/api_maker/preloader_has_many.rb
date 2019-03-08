@@ -27,10 +27,10 @@ private
       else
         primary_key_column = @reflection.options[:primary_key]&.to_sym || @collection.primary_key.to_sym
         query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&primary_key_column))
+        query = query.joins(@reflection.inverse_of.name)
       end
 
       query = query
-        .joins(@reflection.inverse_of.name)
         .select(@reflection.klass.arel_table[Arel.star])
         .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
 
