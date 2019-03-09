@@ -116,13 +116,6 @@ describe ApiMaker::CollectionSerializer do
     expect(customer_include.dig("attributes", "name")).to eq "Test customer"
   end
 
-  it "preloads has many through relationships that ends in a has one through" do
-    collection = Customer.where(id: customer.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_details"]).to_json)
-
-    puts result
-  end
-
   it "only includes the same relationship once for belongs to relationships" do
     collection = Task.where(id: [task.id, task_with_same_project.id])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project"]).to_json)
