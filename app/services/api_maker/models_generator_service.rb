@@ -18,6 +18,16 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     ApiMaker::GenerateReactNativeApiService.execute! if ApiMaker::Configuration.current.react_native_path.present?
   end
 
+  def ignore_model?(model)
+    model.name.end_with?("::Translation") ||
+      model.name.start_with?("ActiveStorage::") ||
+      model.name.end_with?("::ApplicationRecord")
+  end
+
+  def models
+    ApiMaker::ModelsFinderService.execute!.result
+  end
+
 private
 
   def api_maker_root_path
@@ -81,16 +91,6 @@ private
 
     FileUtils.mkdir_p(api_maker_root_path.join("models"))
     FileUtils.mkdir_p(controller_path) unless File.exist?(controller_path)
-  end
-
-  def ignore_model?(model)
-    model.name.end_with?("::Translation") ||
-      model.name.start_with?("ActiveStorage::") ||
-      model.name.end_with?("::ApplicationRecord")
-  end
-
-  def models
-    ApiMaker::ModelsFinderService.execute!.result
   end
 
   def model_file(model)
