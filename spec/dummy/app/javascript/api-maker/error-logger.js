@@ -14,7 +14,7 @@ export default class ErrorLogger {
         var src = script.getAttribute("src")
         var type = script.getAttribute("type")
 
-        if (src.includes("/packs/") && (type == "text/javascript" || !type)) {
+        if (src && src.includes("/packs/") && (type == "text/javascript" || !type)) {
           var promise = this.loadSourceMapForScript(script)
           promises.push(promise)
         }

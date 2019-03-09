@@ -43,6 +43,7 @@ export default class BootstrapSelect extends React.Component {
           data-placeholder={this.props.placeholder}
           defaultValue={this.inputDefaultValue()}
           className={`form-control ${this.props.className}`}
+          disabled={this.props.disabled}
           id={this.inputId()}
           multiple={this.props.multiple}
           name={this.inputName()}

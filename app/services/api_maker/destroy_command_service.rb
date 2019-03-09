@@ -22,7 +22,7 @@ class ApiMaker::DestroyCommandService < ApiMaker::ApplicationService
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability, :destroy)
+    @collection ||= klass.accessible_by(@ability, :destroy).where(klass.primary_key => ids)
   end
 
   def ids
