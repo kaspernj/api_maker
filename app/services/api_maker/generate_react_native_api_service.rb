@@ -13,6 +13,6 @@ class ApiMaker::GenerateReactNativeApiService < ApiMaker::ApplicationService
   end
 
   def create_root_folder
-    Dir.mkdir(root_folder) unless Dir.exists?(root_folder)
+    Dir.mkdir(root_folder) unless Dir.exist?(root_folder)
   end
 end
