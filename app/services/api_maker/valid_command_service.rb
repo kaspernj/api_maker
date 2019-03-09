@@ -22,7 +22,11 @@ class ApiMaker::ValidCommandService < ApiMaker::ApplicationService
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability)
+    @collection ||= klass.accessible_by(@ability, :valid).where(klass.primary_key => ids)
+  end
+
+  def ids
+    @commands.values.map { |command| command.fetch("primary_key") }
   end
 
   def klass

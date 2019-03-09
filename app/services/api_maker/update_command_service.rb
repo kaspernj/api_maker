@@ -22,7 +22,7 @@ class ApiMaker::UpdateCommandService < ApiMaker::ApplicationService
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability, :update)
+    @collection ||= klass.accessible_by(@ability, :update).where(klass.primary_key => ids)
   end
 
   def ids
