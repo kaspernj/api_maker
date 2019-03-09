@@ -10,25 +10,6 @@ class ApiMaker::Routing
   end
 
   def install
-    storage = ApiMaker::MemoryStorage.current
-
-    storage.resources.each do |resource|
-      klass = resource.fetch(:klass)
-
-      collection_commands = storage.storage_for(klass, :collection_commands)
-      member_commands = storage.storage_for(klass, :member_commands)
-
-      @routes.resources(klass.model_class.model_name.plural) do
-        @routes.post :validate, on: :collection
-
-        collection_commands.each_key do |collection_command|
-          @routes.post(collection_command, on: :collection, controller: "commands", action: "create")
-        end
-
-        member_commands.each_key do |member_command|
-          @routes.post(member_command, on: :member, controller: "commands", action: "create")
-        end
-      end
-    end
+    # For now don't do anything any more
   end
 end

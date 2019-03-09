@@ -1,30 +1,22 @@
 class ApiMaker::CommandsController < ApiMaker::BaseController
   def create
-    if params[:collection_command]
-      authorize!(params[:collection_command].to_sym, klass)
-    else
-      model = klass.find(params[:id])
-      authorize!(params[:member_command].to_sym, model)
+    responses = {}
+
+    params[:pool].each do |command_type, command_type_data|
+      command_type_data.each do |model_plural_name, command_model_data|
+        command_model_data.each do |command_name, command_data|
+          result = ApiMaker.const_get("#{command_type.camelize}CommandService").execute!(
+            commands: command_data,
+            command_name: command_name,
+            model_name: model_plural_name,
+            controller: self
+          ).result
+
+          responses.merge!(result)
+        end
+      end
     end
 
-    instance = constant.new(args: params[:args], controller: self, model: model)
-    instance.execute!
-  end
-
-private
-
-  def constant
-    @constant ||= proc do
-      command = params[:collection_command]&.camelize || params[:member_command].camelize
-      "Commands::#{namespace}::#{command}".constantize
-    end.call
-  end
-
-  def klass
-    @klass ||= params[:plural_name].singularize.camelize.constantize
-  end
-
-  def namespace
-    @namespace ||= params[:plural_name].camelize
+    render json: {responses: responses}
   end
 end

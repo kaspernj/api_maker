@@ -1,5 +1,5 @@
 class Resources::UserResource < Resources::ApplicationResource
-  attributes :id, :email, :created_at, :custom_attribute
+  attributes :birthday_at, :id, :email, :created_at, :custom_attribute
   attributes :updated_at, if: :email_kasper?
 
   def custom_attribute

@@ -19,8 +19,6 @@ class ApiMaker::PreloaderThrough
 
     @reflection.klass.joins(joins_hash)
       .where(table_name => {primary_key => @collection.map(&:id)})
-      .select(@reflection.klass.arel_table[Arel.star])
-      .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
   end
 
   def joins_for_reflection(current_reflection)

@@ -33,11 +33,12 @@ private
 
   def model_content
     erb = ERB.new(File.read(model_template_path))
+    erb.filename = File.realpath(model_template_path)
     erb.result(binding)
   end
 
   def model_template_path
-    File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "ModelTemplate.js.erb")
+    File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "model-template.js.erb")
   end
 
   def model_type(attribute_name)
@@ -52,13 +53,11 @@ private
   end
 
   def reflections
-    @reflections ||= proc do
-      resource._relationships.map do |name, _data|
-        reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
-        raise "Couldnt find reflection by that name: #{name}" unless reflection
-        reflection
-      end
-    end.call
+    @reflections ||= resource._relationships.map do |name, _data|
+      reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
+      raise "Couldnt find reflection by that name: #{name}" unless reflection
+      reflection
+    end
   end
 
   def reflection_has_many_parameters(reflection)
@@ -66,6 +65,7 @@ private
       reflectionName: reflection.name,
       model: "{{this}}",
       modelName: reflection.class_name,
+      modelClass: "{{modelClass}}",
       targetPathName: "/api_maker/#{reflection.klass.model_name.route_key}"
     }
 
@@ -97,6 +97,6 @@ private
   end
 
   def resource
-    @resource ||= ApiMaker::Serializer.resource_for(@model)
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@model)
   end
 end

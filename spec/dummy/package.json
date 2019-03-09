@@ -3,9 +3,10 @@
   "private": true,
   "dependencies": {
     "@rails/webpacker": "4.0.0-pre.2",
-    "change-case": "^3.0.2",
     "inflection": "^1.12.0",
     "js-money": "^0.6.3",
+    "merge": "^1.2.1",
+    "object-to-formdata": "^1.6.2",
     "qs": "^6.5.2",
     "stimulus": "^1.0.1"
   },

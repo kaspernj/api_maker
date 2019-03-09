@@ -8,7 +8,7 @@ class ApiMaker::Serializer
   end
 
   def self.resource_for!(klass)
-    "Resources::#{klass.name}Resource".constantize
+    ApiMaker::MemoryStorage.current.resource_for_model(klass)
   end
 
   def initialize(ability: nil, args: {}, model:)
@@ -35,8 +35,16 @@ class ApiMaker::Serializer
   def attribute_converted_value(attribute)
     value = attribute_value(attribute)
 
-    if value.is_a?(Date) || value.is_a?(Time)
+    if value.is_a?(Date)
       value.iso8601
+    elsif value.is_a?(Time)
+      value.utc.iso8601
+    elsif value.class.name == "Money"
+      {
+        amount: value.cents,
+        currency: value.currency.iso_code,
+        type: :money
+      }
     else
       value
     end
@@ -82,4 +90,10 @@ class ApiMaker::Serializer
   def to_json(_options = nil)
     JSON.generate(as_json)
   end
+
+  def inspect
+    "<ApiMaker::Serializer model=\"#{model.class.name}\" id=\"#{model.id}\">"
+  end
+
+  alias to_s inspect
 end

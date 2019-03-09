@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   end
 
   namespace :models do
+    get :accessible_by
     get :belongs_to
     get :create
     get :destroy

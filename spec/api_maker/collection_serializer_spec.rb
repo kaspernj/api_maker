@@ -8,15 +8,45 @@ describe ApiMaker::CollectionSerializer do
   let!(:task) { create :task, id: 3, name: "Test task", project: project, user: user }
   let!(:user) { create :user, id: 4 }
 
+  let(:task_with_same_project) { create :task, project: project }
+
   it "preloads relationships" do
     collection = User.where(id: user.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks.project.account", "tasks.account"]).to_json)
 
     expect(result.dig("data", 0, "relationships", "tasks", "data", 0, "id")).to eq 3
+    expect(result.dig("data", 0, "relationships").length).to eq 1
 
+    account_include = result.fetch("included").find { |record| record.fetch("type") == "accounts" && record.fetch("id") == 1 }
     project_include = result.fetch("included").find { |record| record.fetch("type") == "projects" && record.fetch("id") == 2 }
+    task_include = result.fetch("included").find { |record| record.fetch("type") == "tasks" && record.fetch("id") == 3 }
 
     expect(project_include.dig("attributes", "name")).to eq "Test project"
+    expect(project_include.dig("relationships")).to eq("account" => {"data" => {"type" => "accounts", "id" => 1}})
+    expect(task_include.dig("relationships")).to eq(
+      "account" => {
+        "data" => {
+          "type" =>
+          "accounts",
+          "id" => 1
+        }
+      },
+      "project" => {
+        "data" => {
+          "type" => "projects",
+          "id" => 2
+        }
+      }
+    )
+    expect(account_include).to eq(
+      "type" => "accounts",
+      "id" => 1,
+      "attributes" => {
+        "id" => 1,
+        "name" => "Account 1"
+      },
+      "relationships" => {}
+    )
   end
 
   it "preloads has one relationships" do
@@ -91,5 +121,33 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_details"]).to_json)
 
     puts result
+  end
+
+  it "only includes the same relationship once for belongs to relationships" do
+    collection = Task.where(id: [task.id, task_with_same_project.id])
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project"]).to_json)
+
+    expect(result.fetch("data").length).to eq 2
+
+    count = 0
+    result.fetch("included").each do |data|
+      count += 1 if data.fetch("type") == "projects" && data.fetch("id") == project.id
+    end
+
+    expect(count).to eq 1
+  end
+
+  it "only includes the same relationship once for has one through" do
+    collection = Task.where(id: [task.id, task_with_same_project.id])
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["account", "project.account"]).to_json)
+
+    expect(result.fetch("data").length).to eq 2
+
+    count = 0
+    result.fetch("included").each do |data|
+      count += 1 if data.fetch("type") == "accounts" && data.fetch("id") == account.id
+    end
+
+    expect(count).to eq 1
   end
 end

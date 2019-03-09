@@ -101,7 +101,7 @@ end
 ### Creating a new model from JavaScript
 
 ```js
-import Task from "ApiMaker/Models/Task"
+import Task from "api-maker/models/task"
 
 var task = new Task()
 task.assignAttributes({name: "New task"})
@@ -218,7 +218,7 @@ First include this in your layout, so JS can know which user is signed in:
 
 Then you can do like this in JS:
 ```js
-import Devise from "ApiMaker/Devise"
+import Devise from "api-maker/devise"
 
 Devise.currentUser().then((user) => {
   console.log("The current user has this email: " + user.email())
@@ -272,20 +272,34 @@ end
 
 ```js
 User.find(5).then((user) => {
-  user.connectUpdated((args) => {
+  let subscription = user.connectUpdated((args) => {
     console.log(`Model was updated: ${args.model.id()}`)
   })
 })
 ```
 
+Remember to unsubscrube again:
+```js
+subscription.unsubscribe()
+```
+
 You can also use this React component to show a models attribute with automatic updates:
 
 ```jsx
-import UpdatedAttribute from "ApiMaker/UpdatedAttribute"
+import UpdatedAttribute from "api-maker/updated-attribute"
 ```
 
 ```jsx
 <UpdatedAttribute model={user} attribute="email" />
+```
+
+You can also use the `EventConnection` React component so you don't need to keep track of your subscription and unsubscribe:
+```jsx
+import EventConnection from "api-maker/event-connection"
+```
+
+```jsx
+<EventConnection model={this.state.user} event="eventName" onCall={(data) => { this.onEvent(data) }} />
 ```
 
 ## Serializing
@@ -306,6 +320,20 @@ private
   end
 end
 ```
+
+
+## Reporting errors
+
+Add an intializer with something like this:
+
+```ruby
+ApiMaker::Configuration.configure do |config|
+  config.on_error do |error|
+    ExceptionNotifier.notify_exception(error)
+  end
+end
+```
+
 
 ## Contributing
 Contribution directions go here.

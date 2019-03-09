@@ -7,7 +7,7 @@ class ApiMaker::CollectionSerializer
   end
 
   def result
-    @result ||= proc do
+    @result ||= begin
       data = {
         data: [],
         included: []
@@ -21,7 +21,7 @@ class ApiMaker::CollectionSerializer
       preloader.fill_data
 
       data
-    end.call
+    end
   end
 
   def as_json(_options = nil)

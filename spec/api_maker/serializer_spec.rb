@@ -24,4 +24,9 @@ describe ApiMaker::Serializer do
     result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
     expect(result.fetch("attributes").keys).to include "updated_at"
   end
+
+  it "supports date types" do
+    result = JSON.parse(ApiMaker::Serializer.new(model: user).to_json)
+    expect(result.fetch("attributes").fetch("birthday_at")).to eq "1985-06-17"
+  end
 end

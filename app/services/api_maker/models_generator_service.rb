@@ -10,7 +10,6 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 
       if model_content_response.success?
         File.open(model_file(model), "w") { |fp| fp.write(model_content_response.result) }
-        File.open(controller_file(model), "w") { |fp| fp.write(controller_content(model)) } unless File.exist?(controller_file(model))
       else
         puts model_content_response.errors.join(". ")
       end
@@ -20,15 +19,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 private
 
   def api_maker_root_path
-    Rails.root.join("app", "javascript", "ApiMaker")
-  end
-
-  def controller_content(model)
-    ApiMaker::ControllerContentGeneratorService.execute!(model: model).result
-  end
-
-  def controller_file(model)
-    controller_path.join("#{model.name.underscore.pluralize}_controller.rb")
+    Rails.root.join("app", "javascript", "api-maker")
   end
 
   def controller_path
@@ -45,10 +36,12 @@ private
 
   def copy_base_model
     files = %w[
-      Api.js BaseModel.js CableConnectionPool.js CableSubscription.js CableSubscriptionPool.js
-      Collection.js Devise.js Logger.js ModelName.js ModelsResponseReader.js Result.js
-      Paginate.jsx SortLink.jsx UpdatedAttribute.jsx
-      Bootstrap/Checkbox.jsx Bootstrap/MoneyInput.jsx Bootstrap/RadioButtons.jsx Bootstrap/Select.jsx Bootstrap/StringInput.jsx
+      api.js base-model.js cable-connection-pool.js cable-subscription.js cable-subscription-pool.js
+      collection.js commands-pool.js devise.js event-listener.jsx error-logger.js form-data-to-object.js logger.js
+      model-name.js models-response-reader.js result.js event-connection.jsx paginate.jsx sort-link.jsx
+      updated-attribute.jsx resource-routes.jsx resource-route.jsx
+      bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/card.jsx bootstrap/checkbox.jsx bootstrap/checkboxes.jsx
+      bootstrap/money-input.jsx bootstrap/radio-buttons.jsx bootstrap/select.jsx bootstrap/string-input.jsx
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path
@@ -84,7 +77,7 @@ private
     # Dont remove all the files. It messes up running Webpack Dev Servers which forces you to restart all the time.
     # FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
 
-    FileUtils.mkdir_p(api_maker_root_path.join("Models"))
+    FileUtils.mkdir_p(api_maker_root_path.join("models"))
     FileUtils.mkdir_p(controller_path) unless File.exist?(controller_path)
   end
 
@@ -99,6 +92,7 @@ private
   end
 
   def model_file(model)
-    api_maker_root_path.join("Models", "#{model.name}.js")
+    resource_class = ApiMaker::MemoryStorage.current.resource_for_model(model)
+    api_maker_root_path.join("models", "#{resource_class.short_name.underscore.dasherize}.js")
   end
 end

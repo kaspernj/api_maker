@@ -8,7 +8,8 @@ class ApiMakerAbility
 
     can CRUD, Project
     can CRUD, ProjectDetail
-    can CRUD + [:test_collection, :test_member, :validate], Task, user_id: current_user&.id
+    can CRUD + [:accessible_by, :test_collection, :test_member, :validate], Task, user_id: current_user&.id
     can CRUD, User
+    can :test_accessible_by, Task, id: 3
   end
 end
