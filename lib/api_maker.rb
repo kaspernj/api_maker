@@ -30,3 +30,5 @@ module ApiMaker
   autoload :Serializer, "#{dir}/serializer"
   autoload :SpecHelper, "#{dir}/spec_helper"
 end
+
+require_relative "api_maker/railtie"
