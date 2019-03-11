@@ -11,7 +11,9 @@ module ApiMaker::SpecHelper
 
     last_error = errors.last
 
-    custom_trace = last_error.fetch("backtrace").dup + caller
+    custom_trace = []
+    custom_trace += last_error.fetch("backtrace") if last_error["backtrace"].is_a?(Array)
+    custom_trace += caller
 
     error = RuntimeError.new("#{last_error.fetch("errorClass")}: #{last_error.fetch("message")}")
     error.set_backtrace(custom_trace)
