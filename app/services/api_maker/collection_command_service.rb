@@ -2,18 +2,13 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
   def execute!
     authorize!
 
-    command_response = ApiMaker::CommandResponse.new
-
-    instance = constant.new(
+    constant.execute_in_thread!(
       ability: ability,
       collection: nil,
       commands: commands,
       command_response: command_response,
       controller: controller
     )
-    instance.execute!
-
-    ServicePattern::Response.new(result: command_response.result)
   end
 
   def authorize!

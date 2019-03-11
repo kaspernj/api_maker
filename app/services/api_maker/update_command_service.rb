@@ -1,7 +1,6 @@
 class ApiMaker::UpdateCommandService < ApiMaker::CommandService
   def execute!
-    command_response = ApiMaker::CommandResponse.new
-    instance = ApiMaker::UpdateCommand.new(
+    ApiMaker::UpdateCommand.execute_in_thread!(
       ability: ability,
       args: args,
       collection: collection,
@@ -9,9 +8,6 @@ class ApiMaker::UpdateCommandService < ApiMaker::CommandService
       command_response: command_response,
       controller: controller
     )
-    instance.execute!
-
-    ServicePattern::Response.new(result: command_response.result)
   end
 
   def collection

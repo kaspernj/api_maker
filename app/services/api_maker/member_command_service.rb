@@ -1,11 +1,9 @@
 class ApiMaker::MemberCommandService < ApiMaker::CommandService
   def execute!
-    command_response = ApiMaker::CommandResponse.new
-
     ability_name = @command_name.to_sym
     collection = klass.accessible_by(@ability, ability_name).where(klass.primary_key => ids)
 
-    instance = constant.new(
+    constant.execute_in_thread!(
       ability: ability,
       args: args,
       collection: collection,
@@ -13,9 +11,6 @@ class ApiMaker::MemberCommandService < ApiMaker::CommandService
       command_response: command_response,
       controller: controller
     )
-    instance.execute!
-
-    ServicePattern::Response.new(result: command_response.result)
   end
 
   def constant

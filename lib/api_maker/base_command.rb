@@ -1,12 +1,8 @@
 class ApiMaker::BaseCommand
   attr_reader :api_maker_args, :commands, :command_response, :collection, :controller, :current_ability
 
-  delegate :current_user, :params, :signed_in?, to: :controller
-
   def initialize(ability:, args:, collection:, commands:, command_response:, controller:)
-    raise "No controller given" unless controller
-
-    @api_marker_args = args
+    @api_maker_args = args
     @current_ability = ability
     @collection = collection
     @commands = commands
@@ -14,26 +10,34 @@ class ApiMaker::BaseCommand
     @controller = controller
   end
 
+  def self.execute_in_thread!(**args)
+    args.fetch(:command_response).with_thread do
+      new(**args).execute!
+    end
+  end
+
   def each_command
     @commands.each do |command_id, command_data|
-      command = ApiMaker::IndividualCommand.new(
-        args: command_data[:args],
-        collection: @collection,
-        command: self,
-        id: command_id,
-        primary_key: command_data[:primary_key],
-        response: command_response
-      )
+      command_response.with_thread do
+        command = ApiMaker::IndividualCommand.new(
+          args: command_data[:args],
+          collection: @collection,
+          command: self,
+          id: command_id,
+          primary_key: command_data[:primary_key],
+          response: command_response
+        )
 
-      begin
-        yield command
-      rescue => e # rubocop:disable Style/RescueStandardError
-        command.fail(success: false, errors: ["Internal server error"])
+        begin
+          yield command
+        rescue => e # rubocop:disable Style/RescueStandardError
+          command.fail(success: false, errors: ["Internal server error"])
 
-        @controller.logger.error e.message
-        @controller.logger.error e.backtrace.join("\n")
+          Rails.logger.error e.message
+          Rails.logger.error e.backtrace.join("\n")
 
-        ApiMaker::Configuration.current.report_error(e)
+          ApiMaker::Configuration.current.report_error(e)
+        end
       end
     end
   end
