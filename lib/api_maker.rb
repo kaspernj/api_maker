@@ -26,6 +26,7 @@ module ApiMaker
   autoload :PreloaderThrough, "#{dir}/preloader_through"
   autoload :RelationshipIncluder, "#{dir}/relationship_includer"
   autoload :ResourceRouting, "#{dir}/resource_routing"
+  autoload :ResultParser, "#{dir}/result_parser"
   autoload :Routing, "#{dir}/routing"
   autoload :Serializer, "#{dir}/serializer"
   autoload :SpecHelper, "#{dir}/spec_helper"
