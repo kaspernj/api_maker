@@ -1,7 +1,8 @@
 class ApiMaker::CommandResponse
-  attr_reader :result
+  attr_reader :locale, :result
 
-  def initialize
+  def initialize(locale:)
+    @locale = locale
     @mutex = Mutex.new
     @result = {}
     @threads = []
@@ -23,7 +24,9 @@ class ApiMaker::CommandResponse
     @threads << Thread.new do
       begin
         Rails.application.executor.wrap do
-          yield
+          I18n.with_locale(locale) do
+            yield
+          end
         end
       rescue => e # rubocop:disable Style/RescueStandardError
         puts e.inspect
