@@ -1,8 +1,8 @@
 class ApiMaker::CommandResponse
   attr_reader :locale, :result
 
-  def initialize(locale:)
-    @locale = locale
+  def initialize
+    @locale = I18n.locale
     @mutex = Mutex.new
     @result = {}
     @threads = []
