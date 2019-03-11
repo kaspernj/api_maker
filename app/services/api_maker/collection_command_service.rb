@@ -4,6 +4,7 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
 
     constant.execute_in_thread!(
       ability: ability,
+      args: args,
       collection: nil,
       commands: commands,
       command_response: command_response,
