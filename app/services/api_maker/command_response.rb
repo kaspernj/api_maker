@@ -25,7 +25,7 @@ class ApiMaker::CommandResponse
         Rails.application.executor.wrap do
           yield
         end
-      rescue => e
+      rescue => e # rubocop:disable Style/RescueStandardError
         puts e.inspect
         puts e.backtrace
 

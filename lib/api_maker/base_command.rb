@@ -3,7 +3,7 @@ class ApiMaker::BaseCommand
 
   # Returns true if the gem "goldiloader" is present in the app
   def self.goldiloader?
-    @goldiloader = Gem::Specification::find_all_by_name("goldiloader").any? if @goldiloader.nil?
+    @goldiloader = Gem::Specification.find_all_by_name("goldiloader").any? if @goldiloader.nil?
     @goldiloader
   end
 
@@ -28,7 +28,7 @@ class ApiMaker::BaseCommand
   def each_command(args = {}, &blk)
     if args[:threadded]
       # Goldiloader doesn't work with threads (loads all relationships for each thread)
-      @collection = @collection.auto_include(false)  if ApiMaker::BaseCommand.goldiloader?
+      @collection = @collection.auto_include(false) if ApiMaker::BaseCommand.goldiloader?
 
       # Load relationship before commands so each command doesn't query on its own
       @collection.load
