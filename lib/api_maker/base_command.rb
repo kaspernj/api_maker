@@ -1,23 +1,17 @@
 class ApiMaker::BaseCommand
-  attr_reader :commands, :command_response, :collection, :controller
+  attr_reader :api_maker_args, :commands, :command_response, :collection, :controller, :current_ability
 
   delegate :current_user, :params, :signed_in?, to: :controller
 
-  def initialize(collection:, commands:, command_response:, controller:)
+  def initialize(ability:, args:, collection:, commands:, command_response:, controller:)
     raise "No controller given" unless controller
 
+    @api_marker_args = args
+    @current_ability = ability
     @collection = collection
     @commands = commands
     @command_response = command_response
     @controller = controller
-  end
-
-  def api_maker_args
-    @api_maker_args ||= controller.__send__(:api_maker_args)
-  end
-
-  def current_ability
-    @current_ability ||= controller.__send__(:current_ability)
   end
 
   def each_command
@@ -28,7 +22,7 @@ class ApiMaker::BaseCommand
         command: self,
         id: command_id,
         primary_key: command_data[:primary_key],
-        response: @command_response
+        response: command_response
       )
 
       begin
@@ -45,6 +39,6 @@ class ApiMaker::BaseCommand
   end
 
   def result_for_command(id, data)
-    @command_response.result_for_command(id, data)
+    command_response.result_for_command(id, data)
   end
 end

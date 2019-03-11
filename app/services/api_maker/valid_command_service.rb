@@ -1,20 +1,13 @@
-class ApiMaker::ValidCommandService < ApiMaker::ApplicationService
-  def initialize(commands:, command_name:, model_name:, controller:) # rubocop:disable Lint/UnusedMethodArgument
-    raise "No controller given" if controller.blank?
-
-    @ability = controller.__send__(:current_ability)
-    @commands = commands
-    @controller = controller
-    @model_name = model_name
-  end
-
+class ApiMaker::ValidCommandService < ApiMaker::CommandService
   def execute!
     command_response = ApiMaker::CommandResponse.new
     instance = ApiMaker::ValidCommand.new(
+      ability: ability,
+      args: args,
       collection: collection,
-      commands: @commands,
+      commands: commands,
       command_response: command_response,
-      controller: @controller
+      controller: controller
     )
     instance.execute!
 

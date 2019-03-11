@@ -1,12 +1,4 @@
-class ApiMaker::MemberCommandService < ApiMaker::ApplicationService
-  def initialize(commands:, command_name:, model_name:, controller:)
-    @ability = controller.__send__(:current_ability)
-    @command_name = command_name
-    @commands = commands
-    @controller = controller
-    @model_name = model_name
-  end
-
+class ApiMaker::MemberCommandService < ApiMaker::CommandService
   def execute!
     command_response = ApiMaker::CommandResponse.new
 
@@ -14,10 +6,12 @@ class ApiMaker::MemberCommandService < ApiMaker::ApplicationService
     collection = klass.accessible_by(@ability, ability_name).where(klass.primary_key => ids)
 
     instance = constant.new(
+      ability: ability,
+      args: args,
       collection: collection,
-      commands: @commands,
+      commands: commands,
       command_response: command_response,
-      controller: @controller
+      controller: controller
     )
     instance.execute!
 
