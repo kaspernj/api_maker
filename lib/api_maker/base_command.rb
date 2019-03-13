@@ -63,13 +63,21 @@ private
 
     begin
       yield command
-    rescue => e # rubocop:disable Style/RescueStandardError
-      command.fail(success: false, errors: ["Internal server error"])
+    rescue => error # rubocop:disable Style/RescueStandardError
+      command.fail(success: false, errors: [command_error_message(error)])
 
-      Rails.logger.error e.message
-      Rails.logger.error e.backtrace.join("\n")
+      Rails.logger.error error.message
+      Rails.logger.error error.backtrace.join("\n")
 
-      ApiMaker::Configuration.current.report_error(e)
+      ApiMaker::Configuration.current.report_error(error)
+    end
+  end
+
+  def command_error_message(error)
+    if Rails.application.config.consider_all_requests_local
+      "#{error.class.name}: #{error.message}"
+    else
+      "Internal server error"
     end
   end
 end
