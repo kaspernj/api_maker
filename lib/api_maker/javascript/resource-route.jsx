@@ -27,15 +27,14 @@ export default class ResourceRoute {
 
   withLocale() {
     var { route } = this.props
-    var pathPath = "shared/path"
-    var localesPath = "shared/locales"
     var component = require(`components/${route.component}`).default
-    var Locales = require(localesPath).default
-    var Path = require(pathPath).default
-    var path = Path.localized(inflection.camelize(route.name, true), this.findRouteParams(route), {locale: locale})
+    var Locales = require("shared/locales").default
+    var Path = require("shared/path").default
     var routes = []
 
-    for(var locales of Locales.availableLocales()) {
+    for(var locale of Locales.availableLocales()) {
+      var path = Path.localized(inflection.camelize(route.name, true), this.findRouteParams(route), {locale: locale})
+
       routes.push({
         path: path,
         component: component
