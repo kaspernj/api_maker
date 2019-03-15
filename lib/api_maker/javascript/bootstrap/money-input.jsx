@@ -67,10 +67,13 @@ export default class BootstrapMoneyInput extends React.Component {
   }
 
   inputDefaultValue() {
-    let amount = this.props.model[this.props.attribute]()
+    let value = this.props.model[this.props.attribute]()
 
-    if (amount)
-      return MoneyFormatter.fromMoney({amount: amount.cents, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
+    if (value) {
+      return MoneyFormatter.fromMoney({amount: value.amount, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
+    } else {
+      return ""
+    }
   }
 
   inputDefaultCentsValue() {
