@@ -21,6 +21,22 @@ class ApiMaker::CommandResponse
   end
 
   def with_thread
+    if Rails.env.test?
+      yield
+    else
+      spawn_thread
+    end
+  end
+
+  def join_threads
+    ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
+      @threads.each(&:join)
+    end
+  end
+
+private
+
+  def spawn_thread
     @threads << Thread.new do
       begin
         Rails.application.executor.wrap do
@@ -37,12 +53,6 @@ class ApiMaker::CommandResponse
 
         ApiMaker::Configuration.current.report_error(e)
       end
-    end
-  end
-
-  def join_threads
-    ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
-      @threads.each(&:join)
     end
   end
 end
