@@ -1,5 +1,5 @@
 class ApiMaker::Serializer
-  attr_reader :model, :relationships
+  attr_reader :ability, :args, :model, :relationships
 
   def self.resource_for(klass)
     "Resources::#{klass.name}Resource".constantize
@@ -54,12 +54,8 @@ class ApiMaker::Serializer
     if resource_instance.respond_to?(attribute)
       resource_instance.__send__(attribute)
     else
-      @model.__send__(attribute)
+      model.__send__(attribute)
     end
-  end
-
-  def current_ability
-    @controller&.__send__(:current_ability)
   end
 
   def fetch(*args, &blk)
@@ -67,17 +63,17 @@ class ApiMaker::Serializer
   end
 
   def resource
-    @resource ||= ApiMaker::Serializer.resource_for!(@model.class)
+    @resource ||= ApiMaker::Serializer.resource_for!(model.class)
   end
 
   def resource_instance
-    @resource_instance ||= resource.new(ability: current_ability, args: @args, model: @model)
+    @resource_instance ||= resource.new(ability: ability, args: args, model: model)
   end
 
   def result
     @result ||= {
-      type: @model.class.model_name.plural,
-      id: @model.id,
+      type: model.class.model_name.plural,
+      id: model.id,
       attributes: attributes,
       relationships: relationships
     }
