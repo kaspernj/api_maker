@@ -20,11 +20,11 @@ class ApiMaker::CommandResponse
     end
   end
 
-  def with_thread
+  def with_thread(&blk)
     if Rails.env.test?
-      yield
+      blk.call
     else
-      spawn_thread
+      spawn_thread(&blk)
     end
   end
 
