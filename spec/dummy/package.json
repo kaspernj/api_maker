@@ -8,6 +8,7 @@
     "merge": "^1.2.1",
     "object-to-formdata": "^1.6.2",
     "qs": "^6.5.2",
+    "retrace": "^1.0.0",
     "stimulus": "^1.0.1"
   },
   "devDependencies": {

@@ -8,7 +8,7 @@ export default class extends Controller {
     e.preventDefault()
 
     Devise.signOut()
-      .then((response) => {
+      .then(response => {
         this.element.dataset["successResponse"] = JSON.stringify(response)
       }, (response) => {
         this.element.dataset["failResponse"] = JSON.stringify(response)
