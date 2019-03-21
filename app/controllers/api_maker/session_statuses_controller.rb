@@ -1,4 +1,4 @@
-class ApiMaker::SessionStatusesController < ApiMaker::BaseController
+class ApiMaker::SessionStatusesController < ActionController::Base
   skip_before_action :verify_authenticity_token
 
   def create
@@ -7,7 +7,6 @@ class ApiMaker::SessionStatusesController < ApiMaker::BaseController
       devise: {
         timeout_in: Devise.timeout_in.to_i
       },
-      csrf_param: request_forgery_protection_token,
       csrf_token: form_authenticity_token,
       scopes: scopes
     }

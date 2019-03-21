@@ -1265,6 +1265,9 @@ Based on Rails routes of Dummy::Application
 // models_validate => /models/validate(.:format)
   // function(options)
   modelsValidatePath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"validate",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
+// new_session => /sessions/new(.:format)
+  // function(options)
+  newSessionPath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"sessions",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
 // new_user_password => /users/password/new(.:format)
   // function(options)
   newUserPasswordPath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"password",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),

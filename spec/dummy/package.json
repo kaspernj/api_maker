@@ -4,6 +4,7 @@
   "dependencies": {
     "@rails/webpacker": "4.0.0-pre.2",
     "babel-preset-react": "^6.24.1",
+    "format-number": "^3.0.0",
     "inflection": "^1.12.0",
     "js-money": "^0.6.3",
     "merge": "^1.2.1",

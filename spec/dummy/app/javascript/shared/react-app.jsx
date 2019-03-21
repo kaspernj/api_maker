@@ -5,16 +5,13 @@ import React from "react"
 import ReactDOM from "react-dom"
 import ResourceRoutes from "api-maker/resource-routes"
 import ScrollToTop from "shared/scroll-to-top"
-import SessionStatusUpdater from "api-maker/session-status-updater"
-
-window.errorLogger = new ErrorLogger()
-window.errorLogger.loadSourceMaps().then(() => {
-  window.errorLogger.enable()
-})
-
-SessionStatusUpdater.current().startTimeout()
 
 document.addEventListener("DOMContentLoaded", () => {
+  window.errorLogger = new ErrorLogger()
+  window.errorLogger.loadSourceMaps().then(() => {
+    window.errorLogger.enable()
+  })
+
   var reactRoot = document.querySelector(".react-root")
   var routes = ResourceRoutes.readRoutes()
 
