@@ -101,6 +101,9 @@ GEM
     i18n (1.1.1)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.1)
+    js-routes (1.4.4)
+      railties (>= 3.2)
+      sprockets-rails
     json (2.1.0)
     loofah (2.2.3)
       crass (~> 1.0.2)
@@ -253,6 +256,7 @@ DEPENDENCIES
   database_cleaner
   devise
   factory_bot_rails
+  js-routes
   pry-rails
   puma
   rails_best_practices
@@ -267,4 +271,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.16.2
+   1.17.1

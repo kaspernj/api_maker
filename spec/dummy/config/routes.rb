@@ -27,4 +27,6 @@ Rails.application.routes.draw do
     get :update
     get :validate
   end
+
+  ApiMaker::ResourceRouting.install_resource_routes(self)
 end

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dummy</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "react", media: "all" %>
+    <%= javascript_include_tag "react" %>
+    <%= javascript_pack_tag "react" %>
+  </head>
+  <body>
+    <%= render "api_maker/data" %>
+    <div class="react-root"></div>
+  </body>
+</html>
