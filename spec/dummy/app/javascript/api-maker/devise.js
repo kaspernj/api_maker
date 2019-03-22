@@ -1,7 +1,19 @@
 import Api from "./api"
+import EventEmitter from "events"
 const inflection = require("inflection")
 
 export default class Devise {
+  static callSignOutEvent(args) {
+    Devise.events().emit("onDeviseSignOut", {args: args})
+  }
+
+  static events() {
+    if (!window.apiMakerDeviseEvents)
+      window.apiMakerDeviseEvents = new EventEmitter()
+
+    return window.apiMakerDeviseEvents
+  }
+
   
     
     
@@ -36,17 +48,15 @@ export default class Devise {
       args.scope = "user"
 
     return new Promise((resolve, reject) => {
-      let postData = {"username": username, "password": password, "args": args}
+      var postData = {"username": username, "password": password, "args": args}
       Api.post("/api_maker/devise/do_sign_in", postData)
         .then((response) => {
-          let modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
-          let modelInstance = new modelClass(response.model_data)
-          Devise.updateSession(modelInstance)
+          var modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
+          var modelInstance = new modelClass(response.model_data)
 
-          resolve({"response": response})
-          let event = document.createEvent("Event")
-          event.initEvent("devise-signed", false, true)
-          window.dispatchEvent(event, {"args": args})
+          Devise.updateSession(modelInstance)
+          resolve({response: response})
+          Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
         }, (response) => {
           reject(response)
         })
@@ -59,6 +69,13 @@ export default class Devise {
     apiMakerDataElement.dataset[keyName] = JSON.stringify({type: model.modelClassData().pluralName, id: model.id(), attributes: model.modelData})
   }
 
+  static setSignedOut(args) {
+    var apiMakerDataElement = document.querySelector(".api-maker-data")
+    var keyName = `current${inflection.camelize(args.scope)}`
+
+    delete apiMakerDataElement.dataset[keyName]
+  }
+
   static signOut(args = {}) {
     if (!args.scope)
       args.scope = "user"
@@ -67,15 +84,9 @@ export default class Devise {
       let postData = {"args": args}
       Api.post("/api_maker/devise/do_sign_out", postData)
         .then((response) => {
-          let apiMakerDataElement = document.querySelector(".api-maker-data")
-          let keyName = `current${inflection.camelize(args.scope)}`
-
-          delete apiMakerDataElement.dataset[keyName]
-
+          Devise.setSignedOut(args)
           resolve(response)
-          let event = document.createEvent("Event")
-          event.initEvent("devise-signed", false, true)
-          window.dispatchEvent(event, {"args": args})
+          Devise.callSignOutEvent(args)
         }, (response) => {
           reject(response)
         })

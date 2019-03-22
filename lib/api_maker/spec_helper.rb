@@ -42,6 +42,7 @@ module ApiMaker::SpecHelper
   end
 
   def pretty_html
+    require "htmlbeautifier"
     HtmlBeautifier.beautify(page.html)
   end
 

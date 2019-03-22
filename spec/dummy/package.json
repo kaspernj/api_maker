@@ -3,12 +3,21 @@
   "private": true,
   "dependencies": {
     "@rails/webpacker": "4.0.0-pre.2",
+    "babel-preset-react": "^6.24.1",
+    "format-number": "^3.0.0",
     "inflection": "^1.12.0",
     "js-money": "^0.6.3",
     "merge": "^1.2.1",
     "object-to-formdata": "^1.6.2",
+    "prop-types": "^15.7.2",
     "qs": "^6.5.2",
-    "stimulus": "^1.0.1"
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "retrace": "^1.0.0",
+    "stimulus": "^1.0.1",
+    "wake-event": "^0.0.1"
   },
   "devDependencies": {
     "webpack-dev-server": "^3.1.5"

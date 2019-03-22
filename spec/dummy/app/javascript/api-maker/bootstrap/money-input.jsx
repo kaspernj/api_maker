@@ -18,14 +18,12 @@ export default class BootstrapMoneyInput extends React.Component {
   }
 
   render() {
-    if (!this.state.currenciesCollection)
-      return ""
-
     return (
       <div className="input-group">
         <input defaultValue={this.inputDefaultCentsValue()} id={this.inputCentsId()} name={this.inputCentsName()} ref="input" type="hidden" />
         <input
           className={this.props.className}
+          defaultValue={this.inputDefaultValue()}
           id={this.inputId()}
           onBlur={() => { this.setAmount() }}
           onChange={() => { this.setCents() }}
@@ -65,6 +63,16 @@ export default class BootstrapMoneyInput extends React.Component {
       return MoneyFormatter.currencyFromMoney(value).code
     } else {
       return "DKK"
+    }
+  }
+
+  inputDefaultValue() {
+    let value = this.props.model[this.props.attribute]()
+
+    if (value) {
+      return MoneyFormatter.fromMoney({amount: value.amount, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
+    } else {
+      return ""
     }
   }
 

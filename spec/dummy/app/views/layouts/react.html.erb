@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dummy</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "react", media: "all" %>
+    <%= javascript_include_tag "react" %>
+    <%= javascript_pack_tag "react" %>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js" integrity="sha256-Wdie7xDu6PuVG6BqNy/dEEYY0jK2JutDYnn0sI19yTw=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.css" integrity="sha256-d0mtrHsQZQe2+DIl6Z+F1rVWLI++ycF3BEXQUWf04xs=" crossorigin="anonymous" />
+  </head>
+  <body>
+    <%= render "api_maker/data" %>
+    <div class="react-root"></div>
+  </body>
+</html>

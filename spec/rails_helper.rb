@@ -57,7 +57,7 @@ Capybara.javascript_driver = :headless_chrome
 Capybara.server = :puma, {Silent: true}
 
 RSpec.configure do |config|
-  config.include ChromeHelper
+  config.include ApiMaker::SpecHelper
   config.include FactoryBot::Syntax::Methods
   config.include Warden::Test::Helpers
 
