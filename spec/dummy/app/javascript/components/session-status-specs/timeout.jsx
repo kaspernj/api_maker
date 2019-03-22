@@ -10,7 +10,7 @@ export default class SessionStatusSpecsTimeout extends React.Component {
   }
 
   componentDidMount() {
-    this.sessionStatusUpdater = new SessionStatusUpdater({timeout: 12000})
+    this.sessionStatusUpdater = new SessionStatusUpdater({debug: false, timeout: 2000})
     this.sessionStatusUpdater.startTimeout()
   }
 

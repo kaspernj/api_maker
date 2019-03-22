@@ -1,6 +1,7 @@
 import Devise from "./devise"
 
 var inflection = require("inflection")
+var wakeEvent = require("wake-event")
 
 export default class ApiMakerSessionStatusUpdater {
   static current() {
@@ -11,9 +12,14 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   constructor(args = {}) {
-    this.debugging = false
+    this.debugging = args.debug || false
     this.events = {}
-    this.timeout = args["timeout"] || 600000
+    this.timeout = args.timeout || 600000
+    this.connectWakeEvent()
+  }
+
+  connectWakeEvent() {
+    wakeEvent(() => { this.updateSessionStatus() })
   }
 
   debug(message) {
@@ -26,7 +32,6 @@ export default class ApiMakerSessionStatusUpdater {
       var xhr = new XMLHttpRequest()
       xhr.open("POST", "/api_maker/session_statuses", true)
       xhr.onload = () => {
-        console.log(xhr.responseText)
         var response = JSON.parse(xhr.responseText)
         resolve(response)
       }
@@ -69,11 +74,15 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   updateMetaElementsFromResult(result) {
+    this.debug("updateMetaElementsFromResult")
     var csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
-    this.debug(`Changing token from "${csrfTokenElement.getAttribute("content")}" to "${result.csrf_token}"`)
-
-    csrfTokenElement.setAttribute("content", result.csrf_token)
+    if (csrfTokenElement) {
+      this.debug(`Changing token from "${csrfTokenElement.getAttribute("content")}" to "${result.csrf_token}"`)
+      csrfTokenElement.setAttribute("content", result.csrf_token)
+    } else {
+      this.debug("csrf token element couldn't be found")
+    }
   }
 
   updateUserSessionsFromResult(result) {

@@ -8452,6 +8452,11 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+wake-event@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/wake-event/-/wake-event-0.0.1.tgz#84ff6f321ddf42e98d1a01a27e33c9853ea668e4"
+  integrity sha1-hP9vMh3fQumNGgGifjPJhT6maOQ=
+
 watchpack@^1.5.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.6.0.tgz#4bc12c2ebe8aa277a71f1d3f14d685c7b446cd00"

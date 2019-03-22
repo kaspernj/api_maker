@@ -13,13 +13,8 @@ describe "session status - timeout", :js do
 
     expect(find(".status-text").text).to eq "isUserSignedIn: Yes"
 
-    browser.manage.delete_all_cookies
     logout(:user)
 
-    sleep 4
-
-    binding.pry
-
-    expect(find(".status-text").text).to eq "isUserSignedIn: No"
+    wait_for_chrome { find(".status-text").text == "isUserSignedIn: No" }
   end
 end
