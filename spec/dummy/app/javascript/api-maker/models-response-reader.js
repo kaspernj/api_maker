@@ -1,3 +1,5 @@
+import Included from "./included"
+
 const inflection = require("inflection")
 
 export default class ModelsResponseReader {
@@ -6,7 +8,7 @@ export default class ModelsResponseReader {
   }
 
   static collection(response) {
-    let reader = new ModelsResponseReader({response: response})
+    var reader = new ModelsResponseReader({response: response})
     return reader.models()
   }
 
@@ -15,13 +17,15 @@ export default class ModelsResponseReader {
   }
 
   models() {
-    let models = []
+    var included = new Included(this.response)
+    var models = []
 
-    for(let modelData of this.response.data) {
-      let modelClassName = inflection.dasherize(inflection.singularize(modelData.type))
-      let modelClass = require(`api-maker/models/${modelClassName}`).default
-      let model = new modelClass({data: modelData, response: this.response})
+    for(var modelData of this.response.data) {
+      var modelClassName = inflection.dasherize(inflection.singularize(modelData.type))
+      var modelClass = require(`api-maker/models/${modelClassName}`).default
+      var model = new modelClass({data: modelData, response: this.response})
 
+      model._readIncludedRelationships(included)
       models.push(model)
     }
 
