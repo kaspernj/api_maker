@@ -26,7 +26,8 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
 private
 
   def check_model_exists
-    render json: {success: false, errors: [t("devise.failure.not_found_in_database", authentication_keys: model_class.authentication_keys.join(", "))]}, status: :unprocessable_entity unless model
+    error_msg = t("devise.failure.not_found_in_database", authentication_keys: model_class.authentication_keys.join(", "))
+    render json: {success: false, errors: [error_msg]}, status: :unprocessable_entity unless model
   end
 
   def check_serializer_exists
