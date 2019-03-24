@@ -26,7 +26,8 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
 private
 
   def check_model_exists
-    render json: {success: false, errors: [t("devise.failure.not_found_in_database")]}, status: :unprocessable_entity unless model
+    error_msg = t("devise.failure.not_found_in_database", authentication_keys: model_class.authentication_keys.join(", "))
+    render json: {success: false, errors: [error_msg]}, status: :unprocessable_entity unless model
   end
 
   def check_serializer_exists
@@ -34,11 +35,11 @@ private
   end
 
   def model
-    @model ||= begin
-      class_name = scope.camelize
-      class_instance = class_name.constantize
-      class_instance.find_for_authentication(email: params[:username])
-    end
+    @model ||= model_class.find_for_authentication(email: params[:username])
+  end
+
+  def model_class
+    @model_class ||= scope.camelize.safe_constantize
   end
 
   def scope
