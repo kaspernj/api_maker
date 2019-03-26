@@ -1,6 +1,4 @@
 class ApiMaker::SessionStatusesController < ActionController::Base
-  skip_before_action :verify_authenticity_token
-
   def create
     scopes = {}
     result = {
