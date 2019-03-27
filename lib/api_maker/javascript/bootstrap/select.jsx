@@ -113,7 +113,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   label() {
-    if ("label" in this.props) {
+    if (!("label" in this.props)) {
       return null
     } else if (this.props.label) {
       return this.props.label
