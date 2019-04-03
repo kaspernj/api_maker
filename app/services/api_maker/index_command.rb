@@ -47,10 +47,9 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
   end
 
   def set_collection
-    @query = collection.ransack(params[:q]).result
-
     manage_through_relationship
 
+    @query ||= collection.ransack(params[:q]).result
     @query = @query.limit(params[:limit]) if params[:limit].present?
     @query = @query.page(params[:page]) if params[:page].present?
     @query = filter_custom_accessible_by(@query)
