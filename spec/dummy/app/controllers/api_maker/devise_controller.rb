@@ -12,7 +12,7 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
       remember_me(model) if params.dig(:args, :rememberMe)
       render json: {success: true, model_data: serializer.result}
     else
-      render json: {success: false, errors: [t("devise.failure.invalid")]}, status: :unprocessable_entity
+      render json: {success: false, errors: [invalid_error_message]}, status: :unprocessable_entity
     end
   end
 
@@ -32,6 +32,10 @@ private
 
   def check_serializer_exists
     render json: {success: false, errors: ["Serializer doesn't exist for #{scope}"]}, status: :unprocessable_entity unless resource
+  end
+
+  def invalid_error_message
+    t("devise.failure.invalid", authentication_keys: model_class.authentication_keys.join(", "))
   end
 
   def model

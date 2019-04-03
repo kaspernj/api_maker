@@ -114,8 +114,6 @@ export default class BootstrapSelect extends React.Component {
 
   label() {
     if ("label" in this.props) {
-      return null
-    } else if (this.props.label) {
       return this.props.label
     } else if (this.props.model) {
       let attributeMethodName = inflection.camelize(this.props.attribute.replace(/_id$/, ""), true)

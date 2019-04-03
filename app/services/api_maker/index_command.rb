@@ -42,14 +42,12 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
     through_model = params[:through][:model].constantize.accessible_by(current_ability).find(params[:through][:id])
     query_through = through_model.__send__(params[:through][:reflection]).accessible_by(current_ability)
     query_through = filter_custom_accessible_by(query_through)
-
-    @query = query_through
+    query_through
   end
 
   def set_collection
-    manage_through_relationship
-
-    @query ||= collection.ransack(params[:q]).result
+    @query ||= manage_through_relationship || collection
+    @query = @query.ransack(params[:q]).result
     @query = @query.limit(params[:limit]) if params[:limit].present?
     @query = @query.page(params[:page]) if params[:page].present?
     @query = filter_custom_accessible_by(@query)
