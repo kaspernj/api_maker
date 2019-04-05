@@ -14,9 +14,8 @@ describe ApiMaker::CollectionSerializer do
     collection = Customer.where(id: customer.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_details"]).to_json)
 
-    expect(result.dig("data", 0, "relationships", "project_details").length).to eq 1
-    expect(result.dig("data", 0, "relationships", "project_details", "data", 0, "id")).to eq project_detail.id
-    expect(result.dig("included", 0, "id")).to eq project_detail.id
+    expect(result.dig("data", "customers", "5", "relationships", "project_details")).to eq [project_detail.id]
+    expect(result.dig("included").fetch("project_details").fetch("6").fetch("attributes").fetch("id")).to eq project_detail.id
     expect(result.dig("included").length).to eq 1
   end
 end

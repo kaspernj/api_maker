@@ -9,26 +9,31 @@ class ApiMaker::CollectionSerializer
   def result
     @result ||= begin
       data = {
-        data: [],
-        included: []
+        data: {},
+        included: {}
       }
 
-      @collection.map do |model|
-        data.fetch(:data) << ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+      ApiMaker::Configuration.profile("CollectionSerializer result collection map") do
+        @collection.map do |model|
+          data.fetch(:data)[model.model_name.collection] ||= {}
+          data.fetch(:data)[model.model_name.collection][model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+        end
       end
 
-      preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param)
-      preloader.fill_data
+      ApiMaker::Configuration.profile("CollectionSerializer result preloading") do
+        preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param)
+        preloader.fill_data
+      end
 
       data
     end
   end
 
-  def as_json(_options = nil)
-    result
+  def as_json(options = nil)
+    result.as_json(options)
   end
 
-  def to_json(_options = nil)
-    JSON.generate(as_json)
+  def to_json(options = nil)
+    JSON.generate(as_json(options))
   end
 end

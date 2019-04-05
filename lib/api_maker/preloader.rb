@@ -21,14 +21,16 @@ class ApiMaker::Preloader
       fill_empty_relationships_for_key(reflection, key)
       preload_class = preload_class_for_key(reflection)
 
-      preload_result = preload_class.new(
-        ability: @ability,
-        args: @args,
-        data: @data,
-        records: @records,
-        collection: @collection,
-        reflection: reflection
-      ).preload
+      preload_result = ApiMaker::Configuration.profile("Preloading #{reflection.klass.name} with #{preload_class.name}") do
+        preload_class.new(
+          ability: @ability,
+          args: @args,
+          collection: @collection,
+          data: @data,
+          records: @records,
+          reflection: reflection
+        ).preload
+      end
 
       next if value.blank?
 
@@ -46,12 +48,16 @@ class ApiMaker::Preloader
 private
 
   def fill_empty_relationships_for_key(reflection, key)
-    records_to_set = @records.select { |record| record.model.class == reflection.active_record }
+    if @records.is_a?(Hash)
+      records_to_set = @records.fetch(reflection.active_record.model_name.collection).values
+    else
+      records_to_set = @records.select { |record| record.model.class == reflection.active_record }
+    end
 
     case reflection.macro
     when :has_many
       records_to_set.each do |model|
-        model.relationships[key.to_sym] ||= {data: []}
+        model.relationships[key.to_sym] ||= []
       end
     when :belongs_to
       records_to_set.each do |model|

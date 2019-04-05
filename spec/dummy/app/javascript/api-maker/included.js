@@ -9,15 +9,18 @@ export default class ApiMakerIncluded {
   loadIncludedModels() {
     this.included = {}
 
-    for(var includedData of this.response.included) {
-      var modelClassName = inflection.dasherize(inflection.singularize(includedData.type))
-      var modelClass = require(`api-maker/models/${modelClassName}`).default
-      var model = new modelClass({data: includedData, response: this.response})
+    for(var includedType in this.response.included) {
+      for(var includedId in this.response.included[includedType]) {
+        var includedData = this.response.included[includedType][includedId]
+        var modelClassName = inflection.dasherize(inflection.singularize(includedType))
+        var modelClass = require(`api-maker/models/${modelClassName}`).default
+        var model = new modelClass({data: includedData, response: this.response})
 
-      if (!this.included[includedData.type])
-        this.included[includedData.type] = {}
+        if (!this.included[includedType])
+          this.included[includedType] = {}
 
-      this.included[includedData.type][includedData.id] = model
+        this.included[includedType][includedId] = model
+      }
     }
 
     for(var modelType in this.included) {

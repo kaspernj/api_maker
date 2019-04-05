@@ -19,34 +19,18 @@ class ApiMaker::Serializer
   end
 
   def attributes
-    result = {}
-    resource._attributes.each do |attribute, data|
-      if data.dig(:args, :if).present?
-        condition_result = attribute_value(data.fetch(:args).fetch(:if))
-        next unless condition_result
+    ApiMaker::Configuration.profile("attributes") do
+      result = {}
+      resource._attributes.each do |attribute, data|
+        if (if_name = data.dig(:args, :if))
+          condition_result = attribute_value(if_name)
+          next unless condition_result
+        end
+
+        result[attribute] = attribute_value(attribute)
       end
 
-      result[attribute] = attribute_converted_value(attribute)
-    end
-
-    result
-  end
-
-  def attribute_converted_value(attribute)
-    value = attribute_value(attribute)
-
-    if value.is_a?(Date)
-      value.iso8601
-    elsif value.is_a?(Time)
-      value.utc.iso8601
-    elsif value.class.name == "Money"
-      {
-        amount: value.cents,
-        currency: value.currency.iso_code,
-        type: :money
-      }
-    else
-      value
+      result
     end
   end
 
@@ -72,8 +56,6 @@ class ApiMaker::Serializer
 
   def result
     @result ||= {
-      type: model.class.model_name.plural,
-      id: model.id,
       attributes: attributes,
       relationships: relationships
     }

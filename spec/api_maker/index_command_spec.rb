@@ -21,7 +21,7 @@ describe ApiMaker::IndexCommand do
       command = helper.add_command
       helper.execute!
 
-      expect(command.result.fetch("data").length).to eq 2
+      expect(command.result.fetch("data").fetch("tasks").length).to eq 2
     end
 
     it "includes pagination data" do
@@ -39,8 +39,7 @@ describe ApiMaker::IndexCommand do
       helper.execute!
       parsed = command.result
 
-      expect(parsed.fetch("data").length).to eq 1
-      expect(parsed.dig("data", 0, :attributes, :user_id)).to eq user.id
+      expect(parsed.dig("data", "tasks", task.id.to_s, :attributes, :user_id)).to eq user.id
     end
   end
 end

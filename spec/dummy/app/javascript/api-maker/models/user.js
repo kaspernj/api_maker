@@ -3,7 +3,7 @@ import Collection from "../collection"
 
 export default class User extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"birthday_at","type":"date"},{"name":"id","type":"integer"},{"name":"email","type":"string"},{"name":"created_at","type":"datetime"},{"name":"custom_attribute","type":"unknown"},{"name":"updated_at","type":"datetime"}],"collectionKey":"users","i18nKey":"user","name":"User","pluralName":"users","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
+    return {"attributes":[{"name":"birthday_at","type":"unknown"},{"name":"id","type":"integer"},{"name":"email","type":"string"},{"name":"created_at","type":"datetime"},{"name":"custom_attribute","type":"unknown"},{"name":"updated_at","type":"datetime"}],"collectionKey":"users","i18nKey":"user","name":"User","pluralName":"users","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
   }
 
   
@@ -11,9 +11,9 @@ export default class User extends BaseModel {
   
     
     birthdayAt() {
-      // date
+      // unknown
       
-        return this._getAttributeDateTime("birthday_at")
+        return this._getAttribute("birthday_at")
       
     }
 
