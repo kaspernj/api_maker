@@ -32,7 +32,7 @@ class ApiMaker::Preloader
         ).preload
       end
 
-      next if value.blank?
+      next if value.blank? || preload_result.fetch(:collection).empty?
 
       ApiMaker::Preloader.new(
         ability: @ability,
