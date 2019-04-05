@@ -20,7 +20,7 @@ class ApiMaker::CollectionSerializer
         end
       end
 
-      preload_collection(data) if @collection.positive?
+      preload_collection(data) if @collection.length.positive?
 
       data
     end
