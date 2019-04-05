@@ -14,8 +14,6 @@ class ApiMaker::ResultParser
 private
 
   def parse_object(object)
-    class_name = object.class.name
-
     if object.is_a?(Hash)
       result = {}
       object.each do |key, value|
