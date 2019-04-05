@@ -19,18 +19,20 @@ class ApiMaker::PreloaderHasOne
 
     models.each do |model|
       origin_id = model.attributes.fetch("api_maker_origin_id")
-      origin_data = @records.find { |record| record.model.class == @reflection.active_record && record.model.id == origin_id }
+
+      if @records.is_a?(Hash)
+        origin_data = @records.fetch(@reflection.active_record.model_name.collection).fetch(origin_id)
+      else
+        origin_data = @records.find { |record| record.model.class == @reflection.active_record && record.model.id == origin_id }
+      end
 
       origin_data.fetch(:relationships)[@reflection.name] = {data: {
         type: plural_name,
         id: model.id
       }}
 
-      exists = @data.fetch(:included).find { |record| record.fetch(:type) == klass_plural && record.fetch(:id) == model.id }
-      next if exists
-
-      serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
-      @data.fetch(:included) << serialized
+      @data.fetch(:included)[model.model_name.collection] ||= {}
+      @data.fetch(:included).fetch(model.model_name.collection)[model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
     end
 
     {collection: models}

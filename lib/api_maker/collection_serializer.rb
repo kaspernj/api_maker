@@ -10,7 +10,7 @@ class ApiMaker::CollectionSerializer
     @result ||= begin
       data = {
         data: [],
-        included: []
+        included: {}
       }
 
       @collection.map do |model|

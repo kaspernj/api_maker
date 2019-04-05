@@ -24,9 +24,9 @@ class ApiMaker::Preloader
       preload_result = preload_class.new(
         ability: @ability,
         args: @args,
+        collection: @collection,
         data: @data,
         records: @records,
-        collection: @collection,
         reflection: reflection
       ).preload
 
@@ -46,7 +46,11 @@ class ApiMaker::Preloader
 private
 
   def fill_empty_relationships_for_key(reflection, key)
-    records_to_set = @records.select { |record| record.model.class == reflection.active_record }
+    if @records.is_a?(Hash)
+      records_to_set = @records.fetch(reflection.active_record.model_name.collection).values
+    else
+      records_to_set = @records.select { |record| record.model.class == reflection.active_record }
+    end
 
     case reflection.macro
     when :has_many

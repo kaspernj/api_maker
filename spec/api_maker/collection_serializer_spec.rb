@@ -17,9 +17,9 @@ describe ApiMaker::CollectionSerializer do
     expect(result.dig("data", 0, "relationships", "tasks", "data", 0, "id")).to eq 3
     expect(result.dig("data", 0, "relationships").length).to eq 1
 
-    account_include = result.fetch("included").find { |record| record.fetch("type") == "accounts" && record.fetch("id") == 1 }
-    project_include = result.fetch("included").find { |record| record.fetch("type") == "projects" && record.fetch("id") == 2 }
-    task_include = result.fetch("included").find { |record| record.fetch("type") == "tasks" && record.fetch("id") == 3 }
+    account_include = result.fetch("included").fetch("accounts").fetch("1")
+    project_include = result.fetch("included").fetch("projects").fetch("2")
+    task_include = result.fetch("included").fetch("tasks").fetch("3")
 
     expect(project_include.dig("attributes", "name")).to eq "Test project"
     expect(project_include.dig("relationships")).to eq("account" => {"data" => {"type" => "accounts", "id" => 1}})
@@ -54,9 +54,9 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_detail"]).to_json)
 
     expect(result.dig("data", 0, "relationships", "project_detail", "data", "id")).to eq 6
-    expect(result.dig("included", 0, "type")).to eq "project_details"
-    expect(result.dig("included", 0, "id")).to eq 6
-    expect(result.dig("included", 0, "attributes", "details")).to eq "Test project details"
+    expect(result.dig("included", "project_details", "6", "type")).to eq "project_details"
+    expect(result.dig("included", "project_details", "6", "id")).to eq 6
+    expect(result.dig("included", "project_details", "6", "attributes", "details")).to eq "Test project details"
   end
 
   it "includes an empty relationship if it has been included but doesnt exist for has one" do
@@ -86,7 +86,7 @@ describe ApiMaker::CollectionSerializer do
     expect(result.dig("data", 0, "type")).to eq "users"
     expect(result.dig("data", 0, "relationships", "tasks", "data", 0, "id")).to eq 3
 
-    customer_include = result.fetch("included").find { |record| record.fetch("type") == "customers" && record.fetch("id") == 5 }
+    customer_include = result.fetch("included").fetch("customers").fetch("5")
 
     expect(customer_include).to be_present
     expect(customer_include.dig("id")).to eq 5
@@ -99,8 +99,8 @@ describe ApiMaker::CollectionSerializer do
 
     expect(result.dig("data", 0, "relationships", "tasks", "data", 0, "id")).to eq 3
 
-    task_include = result.fetch("included").find { |record| record.fetch("type") == "tasks" && record.fetch("id") == 3 }
-    project_detail_include = result.fetch("included").find { |record| record.fetch("type") == "project_details" && record.fetch("id") == 6 }
+    task_include = result.fetch("included").fetch("tasks").fetch("3")
+    project_detail_include = result.fetch("included").fetch("project_details").fetch("6")
 
     expect(task_include.dig("relationships", "project_detail", "data", "id")).to eq 6
     expect(project_detail_include.dig("attributes", "details")).to eq "Test project details"
@@ -110,7 +110,7 @@ describe ApiMaker::CollectionSerializer do
     collection = Task.where(id: task.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["customer"]).to_json)
 
-    customer_include = result.fetch("included").find { |record| record.fetch("type") == "customers" && record.fetch("id") == 5 }
+    customer_include = result.fetch("included").fetch("customers").fetch("5")
 
     expect(result.dig("data", 0, "relationships", "customer", "data", "id")).to eq 5
     expect(customer_include.dig("attributes", "name")).to eq "Test customer"
@@ -121,13 +121,8 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project"]).to_json)
 
     expect(result.fetch("data").length).to eq 2
-
-    count = 0
-    result.fetch("included").each do |data|
-      count += 1 if data.fetch("type") == "projects" && data.fetch("id") == project.id
-    end
-
-    expect(count).to eq 1
+    expect(result.fetch("included").fetch("projects").fetch(project.id.to_s).fetch("id")).to eq project.id
+    expect(result.fetch("included").fetch("projects").length).to eq 1
   end
 
   it "only includes the same relationship once for has one through" do
@@ -135,12 +130,7 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["account", "project.account"]).to_json)
 
     expect(result.fetch("data").length).to eq 2
-
-    count = 0
-    result.fetch("included").each do |data|
-      count += 1 if data.fetch("type") == "accounts" && data.fetch("id") == account.id
-    end
-
-    expect(count).to eq 1
+    expect(result.fetch("included").fetch("accounts").fetch(account.id.to_s).fetch("id")).to eq account.id
+    expect(result.fetch("included").fetch("accounts").length).to eq 1
   end
 end

@@ -10,32 +10,21 @@ class ApiMaker::PreloaderBelongsTo
 
   def preload
     models.each do |model|
-      @records.each do |record|
-        next unless record.model.class == @reflection.active_record
-        next unless record.model.attributes.fetch(@reflection.foreign_key) == model.attributes.fetch(look_up_key)
-
+      records_for_model(model).each do |record|
         record.relationships[@reflection.name] = {data: {
           type: plural_name,
           id: model.id
         }}
       end
 
-      next if exists?(model)
-
-      serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
-      @data.fetch(:included) << serialized
+      @data.fetch(:included)[model.model_name.collection] ||= {}
+      @data.fetch(:included).fetch(model.model_name.collection)[model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
     end
 
     {collection: models}
   end
 
 private
-
-  def exists?(model)
-    @data.fetch(:included).find do |record|
-      record.fetch(:type) == plural_name && record.fetch(:id) == model.attributes.fetch(model.class.primary_key)
-    end
-  end
 
   def models
     @models ||= begin
@@ -51,5 +40,16 @@ private
 
   def plural_name
     @plural_name ||= @reflection.klass.model_name.plural
+  end
+
+  def records_for_model(model)
+    if @records.is_a?(Hash)
+      [@records.fetch(model.model_name.collection).fetch(model.id)]
+    else
+      @records.select do |record|
+        record.model.class == @reflection.active_record &&
+          record.model.attributes.fetch(@reflection.foreign_key) == model.attributes.fetch(look_up_key)
+      end
+    end
   end
 end
