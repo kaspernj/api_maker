@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe ApiMaker::CollectionSerializer do
+describe "preloading - has many through has many through has many" do
   let!(:account) { create :account, customer: customer, id: 1 }
   let!(:customer) { create :customer, id: 5, name: "Test customer" }
   let!(:project) { create :project, account: account, id: 2, name: "Test project" }

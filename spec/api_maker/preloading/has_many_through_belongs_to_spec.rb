@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "preloading has many through belongs to" do
+describe "preloading - has many through belongs to" do
   let!(:account) { create :account }
   let!(:marked_task) { create :account_marked_task, account: account, task: task }
   let!(:task) { create :task }
