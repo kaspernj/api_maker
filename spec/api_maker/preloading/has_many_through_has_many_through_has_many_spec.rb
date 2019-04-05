@@ -16,7 +16,7 @@ describe ApiMaker::CollectionSerializer do
 
     expect(result.dig("data", 0, "relationships", "project_details").length).to eq 1
     expect(result.dig("data", 0, "relationships", "project_details", "data", 0, "id")).to eq project_detail.id
-    expect(result.dig("included", 0, "id")).to eq project_detail.id
+    expect(result.dig("included").fetch("project_details").fetch("6").fetch("id")).to eq project_detail.id
     expect(result.dig("included").length).to eq 1
   end
 end

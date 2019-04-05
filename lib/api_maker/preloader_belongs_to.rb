@@ -44,7 +44,10 @@ private
 
   def records_for_model(model)
     if @records.is_a?(Hash)
-      [@records.fetch(model.model_name.collection).fetch(model.id)]
+      @records
+        .fetch(@reflection.active_record.model_name.collection)
+        .values
+        .select { |record| record.model.attributes.fetch(@reflection.foreign_key) == model.attributes.fetch(look_up_key) }
     else
       @records.select do |record|
         record.model.class == @reflection.active_record &&
