@@ -30,6 +30,6 @@ class ApiMaker::CollectionSerializer
   end
 
   def to_json(options = nil)
-    JSON.generate(as_json)
+    JSON.generate(as_json(options))
   end
 end
