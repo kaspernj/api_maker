@@ -18,11 +18,13 @@ class ApiMaker::PreloaderHasOne
     plural_name = @reflection.klass.model_name.plural
 
     models.each do |model|
-      origin_data = origin_data_for_model(model)
-      origin_data.fetch(:relationships)[@reflection.name] = model.id
+      ApiMaker::Configuration.profile("Preloading #{model.class.name}##{model.id}") do
+        origin_data = origin_data_for_model(model)
+        origin_data.fetch(:relationships)[@reflection.name] = model.id
 
-      @data.fetch(:included)[model.model_name.collection] ||= {}
-      @data.fetch(:included).fetch(plural_name)[model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+        @data.fetch(:included)[model.model_name.collection] ||= {}
+        @data.fetch(:included).fetch(plural_name)[model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+      end
     end
 
     {collection: models}
@@ -38,12 +40,13 @@ class ApiMaker::PreloaderHasOne
 
       query = query.accessible_by(@ability) if @ability
       query = query.fix
+      query.load
       query
     end
   end
 
   def origin_data_for_model(model)
-    origin_id = model.attributes.fetch("api_maker_origin_id")
+    origin_id = model.read_attribute("api_maker_origin_id")
 
     if @records.is_a?(Hash)
       @records.fetch(@reflection.active_record.model_name.collection).fetch(origin_id)

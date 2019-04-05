@@ -21,14 +21,16 @@ class ApiMaker::Preloader
       fill_empty_relationships_for_key(reflection, key)
       preload_class = preload_class_for_key(reflection)
 
-      preload_result = preload_class.new(
-        ability: @ability,
-        args: @args,
-        collection: @collection,
-        data: @data,
-        records: @records,
-        reflection: reflection
-      ).preload
+      preload_result = ApiMaker::Configuration.profile("Preloading #{reflection.klass.name} with #{preload_class.name}") do
+        preload_class.new(
+          ability: @ability,
+          args: @args,
+          collection: @collection,
+          data: @data,
+          records: @records,
+          reflection: reflection
+        ).preload
+      end
 
       next if value.blank?
 

@@ -1,5 +1,5 @@
 class ApiMaker::Configuration
-  attr_accessor :threadding
+  attr_accessor :profiling, :threadding
 
   def self.current
     @current ||= ApiMaker::Configuration.new
@@ -7,6 +7,14 @@ class ApiMaker::Configuration
 
   def self.configure
     yield ApiMaker::Configuration.current
+  end
+
+  def self.profile(name, &blk)
+    if ApiMaker::Configuration.current.profiling
+      Rack::MiniProfiler.step("AM #{name}", &blk)
+    else
+      yield
+    end
   end
 
   def initialize

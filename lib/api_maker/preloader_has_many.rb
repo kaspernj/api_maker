@@ -35,6 +35,7 @@ private
         .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
 
       query = query.accessible_by(@ability) if @ability
+      query.load
       query
     end
   end
@@ -58,7 +59,7 @@ private
   end
 
   def find_origin_data_for_model(model)
-    origin_id = model.attributes.fetch("api_maker_origin_id")
+    origin_id = model.read_attribute("api_maker_origin_id")
     origin_data = @records.fetch(plural_name).fetch(origin_id)
 
     raise "Couldn't find any origin data by that type (#{plural_name}) and ID (#{origin_id})" unless origin_data

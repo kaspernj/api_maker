@@ -2,18 +2,20 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
   attr_reader :params
 
   def execute!
-    each_command do |command|
-      @params = command.args || {}
+    ApiMaker::Configuration.profile("IndexCommand execute") do
+      each_command do |command|
+        @params = command.args || {}
 
-      set_collection
-      @query = filter_custom_accessible_by(@query)
+        set_collection
+        @query = filter_custom_accessible_by(@query)
 
-      collection = collection_from_query(@query.fix)
+        collection = collection_from_query(@query.fix)
 
-      response = collection.as_json
-      include_pagination_data(response, @query)
+        response = collection.as_json
+        include_pagination_data(response, @query)
 
-      command.result(response)
+        command.result(response)
+      end
     end
   end
 
@@ -23,7 +25,9 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
   end
 
   def collection_from_query(collection)
-    ApiMaker::CollectionSerializer.new(ability: current_ability, args: api_maker_args, collection: collection, include_param: params[:include]).result
+    ApiMaker::Configuration.profile("IndexCommand collection_from_query") do
+      ApiMaker::CollectionSerializer.new(ability: current_ability, args: api_maker_args, collection: collection, include_param: params[:include]).result
+    end
   end
 
   def include_pagination_data(response, collection)

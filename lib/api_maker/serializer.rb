@@ -19,17 +19,19 @@ class ApiMaker::Serializer
   end
 
   def attributes
-    result = {}
-    resource._attributes.each do |attribute, data|
-      if (if_name = data.dig(:args, :if))
-        condition_result = attribute_value(if_name)
-        next unless condition_result
+    ApiMaker::Configuration.profile("attributes") do
+      result = {}
+      resource._attributes.each do |attribute, data|
+        if (if_name = data.dig(:args, :if))
+          condition_result = attribute_value(if_name)
+          next unless condition_result
+        end
+
+        result[attribute] = attribute_value(attribute)
       end
 
-      result[attribute] = attribute_value(attribute)
+      result
     end
-
-    result
   end
 
   def attribute_value(attribute)

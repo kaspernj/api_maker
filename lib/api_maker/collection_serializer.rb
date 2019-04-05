@@ -13,13 +13,17 @@ class ApiMaker::CollectionSerializer
         included: {}
       }
 
-      @collection.map do |model|
-        data.fetch(:data)[model.model_name.collection] ||= {}
-        data.fetch(:data)[model.model_name.collection][model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+      ApiMaker::Configuration.profile("CollectionSerializer result collection map") do
+        @collection.map do |model|
+          data.fetch(:data)[model.model_name.collection] ||= {}
+          data.fetch(:data)[model.model_name.collection][model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+        end
       end
 
-      preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param)
-      preloader.fill_data
+      ApiMaker::Configuration.profile("CollectionSerializer result preloading") do
+        preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param)
+        preloader.fill_data
+      end
 
       data
     end
