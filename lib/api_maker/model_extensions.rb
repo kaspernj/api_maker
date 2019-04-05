@@ -12,6 +12,8 @@ module ApiMaker::ModelExtensions
         ActionCable.server.broadcast(
           channel_name,
           model: serializer,
+          model_id: model.id,
+          model_type: model.class.model_name.collection,
           type: :update
         )
       end
@@ -27,6 +29,8 @@ module ApiMaker::ModelExtensions
       args: args,
       event_name: event_name,
       model: serializer,
+      model_id: id,
+      model_type: self.class.model_name.collection,
       type: :event
     )
   end
