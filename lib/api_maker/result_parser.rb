@@ -14,24 +14,23 @@ class ApiMaker::ResultParser
 private
 
   def parse_object(object)
-    class_name = object.class.name
-
-    case class_name
-    when "Hash"
+    if object.is_a?(Hash)
       result = {}
       object.each do |key, value|
         result[key] = parse_object(value)
       end
 
       result
-    when "Array"
+    elsif object.is_a?(Array)
       object.map { |value| parse_object(value) }
-    when "Money"
+    elsif object.class.name == "Money"
       {amount: object.cents, currency: object.currency.iso_code, type: :money}
-    when "Date"
+    elsif object.is_a?(Date)
       object.iso8601
-    when "Time"
+    elsif object.is_a?(Time)
       object.utc.iso8601
+    elsif object.is_a?(ApiMaker::CollectionSerializer) || object.is_a?(ApiMaker::Serializer)
+      parse_object(object.as_json)
     else
       object
     end
