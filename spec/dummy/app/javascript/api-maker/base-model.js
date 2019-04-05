@@ -53,20 +53,20 @@ export default class BaseModel {
   }
 
   connect(eventName, callback) {
-    let cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this._primaryKey(), eventName, callback)
+    var cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this._primaryKey(), eventName, callback)
     return cableSubscription
   }
 
   connectUpdated(callback) {
-    let cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this._primaryKey(), callback)
+    var cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this._primaryKey(), callback)
     return cableSubscription
   }
 
   assignAttributes(newAttributes) {
-    for(let key in newAttributes) {
-      let oldValue = this._getAttribute(key)
-      let originalValue = this.modelData[key]
-      let newValue = newAttributes[key]
+    for(var key in newAttributes) {
+      var oldValue = this._getAttribute(key)
+      var originalValue = this.modelData[key]
+      var newValue = newAttributes[key]
 
       if (newValue != oldValue) {
         if (newValue == originalValue) {
@@ -80,7 +80,7 @@ export default class BaseModel {
 
   cacheKey() {
     if (this.isPersisted()) {
-      let keyParts = [
+      var keyParts = [
         this.modelClassData().paramKey,
         this._primaryKey()
       ]
@@ -97,9 +97,9 @@ export default class BaseModel {
 
   create() {
     return new Promise((resolve, reject) => {
-      let paramKey = this.modelClassData().paramKey
-      let modelData = this.getAttributes()
-      let dataToUse = {}
+      var paramKey = this.modelClassData().paramKey
+      var modelData = this.getAttributes()
+      var dataToUse = {}
       dataToUse[paramKey] = modelData
 
       CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionKey}-create`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "create"}, {})
@@ -167,7 +167,7 @@ export default class BaseModel {
   }
 
   static humanAttributeName(attributeName) {
-    let keyName = this.modelClassData().i18nKey
+    var keyName = this.modelClassData().i18nKey
     return I18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`)
   }
 
@@ -247,7 +247,7 @@ export default class BaseModel {
   }
 
   isChanged() {
-    let keys = Object.keys(this.changes)
+    var keys = Object.keys(this.changes)
 
     if (keys.length > 0) {
       return true
@@ -310,9 +310,9 @@ export default class BaseModel {
       if (this.changes.length == 0)
         return resolve({model: this})
 
-      let paramKey = this.modelClassData().paramKey
-      let modelData = this.changes
-      let dataToUse = {}
+      var paramKey = this.modelClassData().paramKey
+      var modelData = this.changes
+      var dataToUse = {}
       dataToUse[paramKey] = modelData
 
       CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionKey}-update`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "update"}, {})
@@ -361,9 +361,9 @@ export default class BaseModel {
 
   isValidOnServer() {
     return new Promise((resolve, reject) => {
-      let modelData = this.getAttributes()
-      let paramKey = this.modelClassData().paramKey
-      let dataToUse = {}
+      var modelData = this.getAttributes()
+      var paramKey = this.modelClassData().paramKey
+      var dataToUse = {}
       dataToUse[paramKey] = modelData
 
       CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionKey}-valid`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "valid"}, {})
@@ -385,9 +385,9 @@ export default class BaseModel {
 
   uniqueKey() {
     if (!this.uniqueKeyValue) {
-      let min = 500000000000000000
-      let max = 999999999999999999
-      let randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
+      var min = 500000000000000000
+      var max = 999999999999999999
+      var randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
       this.uniqueKeyValue = randomBetween
     }
 
@@ -403,7 +403,7 @@ export default class BaseModel {
   }
 
   static _postDataFromArgs(args) {
-    let postData
+    var postData
 
     if (args) {
       if (args instanceof FormData) {
@@ -425,9 +425,9 @@ export default class BaseModel {
       return this.modelData[attributeName]
     } else if (this.isNewRecord()) {
       // Return null if this is a new record and the attribute name is a recognized attribute
-      let attributes = this.modelClassData().attributes
-      for(let key in attributes) {
-        let attribute = attributes[key]
+      var attributes = this.modelClassData().attributes
+      for(var key in attributes) {
+        var attribute = attributes[key]
 
         if (attribute.name == attributeName)
           return null
@@ -438,7 +438,7 @@ export default class BaseModel {
   }
 
   _getAttributeDateTime(attributeName) {
-    let value = this._getAttribute(attributeName)
+    var value = this._getAttribute(attributeName)
 
     if (!value) {
       return value
@@ -460,13 +460,13 @@ export default class BaseModel {
   }
 
   _getAttributeMoney(attributeName) {
-    let value = this._getAttribute(attributeName)
+    var value = this._getAttribute(attributeName)
 
     if (!value)
       return null
 
-    let cents = value.amount
-    let currency = value.currency
+    var cents = value.amount
+    var currency = value.currency
     return Money.fromInteger(cents, currency)
   }
 
@@ -475,7 +475,7 @@ export default class BaseModel {
       if (args.reflectionName in this.relationshipsCache) {
         resolve(this.relationshipsCache[args.reflectionName])
       } else {
-        let collection = new Collection(args)
+        var collection = new Collection(args)
         collection.first().then((model) => {
           this.relationshipsCache[args.reflectionName] = model
           resolve(model)
@@ -500,7 +500,7 @@ export default class BaseModel {
       if (args.reflectionName in this.relationshipsCache) {
         resolve(this.relationshipsCache[args.reflectionName])
       } else {
-        let collection = new Collection(args)
+        var collection = new Collection(args)
         collection.first().then((model) => {
           this.relationshipsCache[args.reflectionName] = model
           resolve(model)
@@ -531,21 +531,22 @@ export default class BaseModel {
 
     for(var relationshipName in this.includedRelationships) {
       var relationshipData = this.includedRelationships[relationshipName]
+      var relationshipClassData = this.modelClassData().relationships.find(relationship => relationship.name == relationshipName)
+      var relationshipType = inflection.pluralize(inflection.underscore(relationshipClassData.className))
 
       if (!relationshipData) {
         this.relationshipsCache[relationshipName] = null
       } else if (Array.isArray(relationshipData.data)) {
         var result = []
 
-        for(var relationshipDataIKey in relationshipData.data) {
-          var relationshipDataI = relationshipData.data[relationshipDataIKey]
-          var model = included.getModel(relationshipDataI.type, relationshipDataI.id)
+        for(var relationshipId of relationshipData.data) {
+          var model = included.getModel(relationshipType, relationshipId)
           result.push(model)
         }
 
         this.relationshipsCache[relationshipName] = result
       } else {
-        var model = included.getModel(relationshipData.data.type, relationshipData.data.id)
+        var model = included.getModel(relationshipType, relationshipData)
         this.relationshipsCache[relationshipName] = model
       }
     }
@@ -556,7 +557,7 @@ export default class BaseModel {
   }
 
   static _token() {
-    let csrfTokenElement = document.querySelector("meta[name='csrf-token']")
+    var csrfTokenElement = document.querySelector("meta[name='csrf-token']")
     if (csrfTokenElement)
       return csrfTokenElement.getAttribute("content")
   }

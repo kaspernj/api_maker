@@ -1,4 +1,6 @@
 class ApiMaker::Configuration
+  attr_accessor :threadding
+
   def self.current
     @current ||= ApiMaker::Configuration.new
   end
@@ -9,6 +11,7 @@ class ApiMaker::Configuration
 
   def initialize
     @on_error = []
+    @threadding = true
   end
 
   def on_error(&blk)

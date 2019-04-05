@@ -50,11 +50,8 @@ private
   def preload_model(model)
     origin_data = find_origin_data_for_model(model)
 
-    origin_data.fetch(:relationships)[@reflection.name] ||= {data: []}
-    origin_data.fetch(:relationships)[@reflection.name].fetch(:data) << {
-      type: @reflection.klass.model_name.plural,
-      id: model.id
-    }
+    origin_data.fetch(:relationships)[@reflection.name] ||= []
+    origin_data.fetch(:relationships).fetch(@reflection.name) << model.id
 
     @data.fetch(:included)[model.model_name.collection] ||= {}
     @data.fetch(:included).fetch(model.model_name.collection)[model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
@@ -62,10 +59,7 @@ private
 
   def find_origin_data_for_model(model)
     origin_id = model.attributes.fetch("api_maker_origin_id")
-
-    origin_data = @records.find do |record|
-      record.fetch(:type) == plural_name && record.fetch(:id) == origin_id
-    end
+    origin_data = @records.fetch(plural_name).fetch(origin_id)
 
     raise "Couldn't find any origin data by that type (#{plural_name}) and ID (#{origin_id})" unless origin_data
 

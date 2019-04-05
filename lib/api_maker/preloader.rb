@@ -55,7 +55,7 @@ private
     case reflection.macro
     when :has_many
       records_to_set.each do |model|
-        model.relationships[key.to_sym] ||= {data: []}
+        model.relationships[key.to_sym] ||= []
       end
     when :belongs_to
       records_to_set.each do |model|

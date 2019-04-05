@@ -11,10 +11,7 @@ class ApiMaker::PreloaderBelongsTo
   def preload
     models.each do |model|
       records_for_model(model).each do |record|
-        record.relationships[@reflection.name] = {data: {
-          type: plural_name,
-          id: model.id
-        }}
+        record.relationships[@reflection.name] = model.id
       end
 
       @data.fetch(:included)[model.model_name.collection] ||= {}

@@ -19,14 +19,10 @@ class ApiMaker::PreloaderHasOne
 
     models.each do |model|
       origin_data = origin_data_for_model(model)
-
-      origin_data.fetch(:relationships)[@reflection.name] = {data: {
-        type: plural_name,
-        id: model.id
-      }}
+      origin_data.fetch(:relationships)[@reflection.name] = model.id
 
       @data.fetch(:included)[model.model_name.collection] ||= {}
-      @data.fetch(:included).fetch(model.model_name.collection)[model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+      @data.fetch(:included).fetch(plural_name)[model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
     end
 
     {collection: models}

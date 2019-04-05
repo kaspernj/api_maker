@@ -21,7 +21,7 @@ class ApiMaker::CommandResponse
   end
 
   def with_thread(&blk)
-    if Rails.env.test?
+    if Rails.env.test? || !threadding?
       yield
     else
       spawn_thread(&blk)
@@ -32,6 +32,11 @@ class ApiMaker::CommandResponse
     ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
       @threads.each(&:join)
     end
+  end
+
+  def threadding?
+    puts "Threadding: #{ApiMaker::Configuration.current.threadding}"
+    ApiMaker::Configuration.current.threadding
   end
 
 private
