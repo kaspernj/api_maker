@@ -20,10 +20,7 @@ class ApiMaker::CollectionSerializer
         end
       end
 
-      ApiMaker::Configuration.profile("CollectionSerializer result preloading") do
-        preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param)
-        preloader.fill_data
-      end
+      preload_collection(data) if @collection.length > 0
 
       data
     end
@@ -31,6 +28,13 @@ class ApiMaker::CollectionSerializer
 
   def as_json(options = nil)
     result.as_json(options)
+  end
+
+  def preload_collection(data)
+    ApiMaker::Configuration.profile("CollectionSerializer result preloading") do
+      preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param)
+      preloader.fill_data
+    end
   end
 
   def to_json(options = nil)
