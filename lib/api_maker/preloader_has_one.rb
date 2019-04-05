@@ -18,13 +18,7 @@ class ApiMaker::PreloaderHasOne
     plural_name = @reflection.klass.model_name.plural
 
     models.each do |model|
-      origin_id = model.attributes.fetch("api_maker_origin_id")
-
-      if @records.is_a?(Hash)
-        origin_data = @records.fetch(@reflection.active_record.model_name.collection).fetch(origin_id)
-      else
-        origin_data = @records.find { |record| record.model.class == @reflection.active_record && record.model.id == origin_id }
-      end
+      origin_data = origin_data_for_model(model)
 
       origin_data.fetch(:relationships)[@reflection.name] = {data: {
         type: plural_name,
@@ -49,6 +43,16 @@ class ApiMaker::PreloaderHasOne
       query = query.accessible_by(@ability) if @ability
       query = query.fix
       query
+    end
+  end
+
+  def origin_data_for_model(model)
+    origin_id = model.attributes.fetch("api_maker_origin_id")
+
+    if @records.is_a?(Hash)
+      @records.fetch(@reflection.active_record.model_name.collection).fetch(origin_id)
+    else
+      @records.find { |record| record.model.class == @reflection.active_record && record.model.id == origin_id }
     end
   end
 
