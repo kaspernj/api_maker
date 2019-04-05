@@ -536,10 +536,10 @@ export default class BaseModel {
 
       if (!relationshipData) {
         this.relationshipsCache[relationshipName] = null
-      } else if (Array.isArray(relationshipData.data)) {
+      } else if (Array.isArray(relationshipData)) {
         var result = []
 
-        for(var relationshipId of relationshipData.data) {
+        for(var relationshipId of relationshipData) {
           var model = included.getModel(relationshipType, relationshipId)
           result.push(model)
         }
