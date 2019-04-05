@@ -35,7 +35,6 @@ class ApiMaker::CommandResponse
   end
 
   def threadding?
-    puts "Threadding: #{ApiMaker::Configuration.current.threadding}"
     ApiMaker::Configuration.current.threadding
   end
 
