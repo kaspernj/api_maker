@@ -10,4 +10,11 @@ describe "preloading - has one" do
 
     expect(result.dig("data", "projects", project.id.to_s, "relationships", "project_detail")).to eq nil
   end
+
+  it "doesnt crash when trying to preload on an empty collection" do
+    collection = Project.where(id: [project.id + 5])
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_detail.accounts"]).to_json)
+
+    expect(result).to eq("data" => {}, "included" => {})
+  end
 end
