@@ -40,12 +40,8 @@ private
     end
   end
 
-  def plural_name
-    @plural_name ||= @reflection.active_record.model_name.plural
-  end
-
-  def klass_plural
-    @klass_plural ||= @reflection.klass.model_name.plural
+  def collection_name
+    @collection_name = ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
   end
 
   def preload_model(model)
@@ -63,9 +59,9 @@ private
 
   def find_origin_data_for_model(model)
     origin_id = model.read_attribute("api_maker_origin_id")
-    origin_data = @records.fetch(plural_name).fetch(origin_id)
+    origin_data = @records.fetch(collection_name).fetch(origin_id)
 
-    raise "Couldn't find any origin data by that type (#{plural_name}) and ID (#{origin_id})" unless origin_data
+    raise "Couldn't find any origin data by that type (#{collection_name}) and ID (#{origin_id})" unless origin_data
 
     origin_data
   end
