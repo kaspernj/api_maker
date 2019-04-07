@@ -10,8 +10,8 @@ class ApiMaker::PreloaderHasOne
     raise "Records was nil" unless records
   end
 
-  def klass_plural
-    @klass_plural ||= @reflection.klass.model_name.plural
+  def collection_name
+    @collection_name ||= ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
   end
 
   def preload
@@ -50,7 +50,7 @@ class ApiMaker::PreloaderHasOne
     origin_id = model.read_attribute("api_maker_origin_id")
 
     if @records.is_a?(Hash)
-      @records.fetch(@reflection.active_record.model_name.collection).fetch(origin_id)
+      @records.fetch(collection_name).fetch(origin_id)
     else
       @records.find { |record| record.model.class == @reflection.active_record && record.model.id == origin_id }
     end
