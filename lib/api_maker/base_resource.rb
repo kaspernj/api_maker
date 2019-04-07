@@ -35,7 +35,13 @@ class ApiMaker::BaseResource
     @model_class ||= begin
       model_class_name = name.gsub(/Resource$/, "")
       model_class_name = model_class_name.gsub(/^Resources::/, "")
-      model_class_name.constantize
+
+      begin
+        model_class_name.constantize
+      rescue => e
+        binding.pry
+        raise e
+      end
     end
   end
 
@@ -47,6 +53,10 @@ class ApiMaker::BaseResource
 
   def self._relationships
     ApiMaker::MemoryStorage.current.storage_for(self, :relationships)
+  end
+
+  def self.collection_name
+    @collection_name ||= short_name.underscore.pluralize.dasherize
   end
 
   def self.short_name

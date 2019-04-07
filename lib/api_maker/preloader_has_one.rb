@@ -15,15 +15,16 @@ class ApiMaker::PreloaderHasOne
   end
 
   def preload
-    plural_name = @reflection.klass.model_name.plural
-
     models.each do |model|
       ApiMaker::Configuration.profile("Preloading #{model.class.name}##{model.id}") do
         origin_data = origin_data_for_model(model)
         origin_data.fetch(:relationships)[@reflection.name] = model.id
 
-        @data.fetch(:included)[model.model_name.collection] ||= {}
-        @data.fetch(:included).fetch(plural_name)[model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+        serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+        collection_name = serializer.resource.collection_name
+
+        @data.fetch(:included)[collection_name] ||= {}
+        @data.fetch(:included).fetch(collection_name)[model.id] ||= serializer
       end
     end
 

@@ -54,8 +54,11 @@ private
     origin_data.fetch(:relationships)[@reflection.name] ||= []
     origin_data.fetch(:relationships).fetch(@reflection.name) << model.id
 
-    @data.fetch(:included)[model.model_name.collection] ||= {}
-    @data.fetch(:included).fetch(model.model_name.collection)[model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+    serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+    collection_name = serializer.resource.collection_name
+
+    @data.fetch(:included)[collection_name] ||= {}
+    @data.fetch(:included).fetch(collection_name)[model.id] ||= serializer
   end
 
   def find_origin_data_for_model(model)

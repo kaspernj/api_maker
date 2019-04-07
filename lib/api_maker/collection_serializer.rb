@@ -15,8 +15,11 @@ class ApiMaker::CollectionSerializer
 
       ApiMaker::Configuration.profile("CollectionSerializer result collection map") do
         @collection.map do |model|
-          data.fetch(:data)[model.model_name.collection] ||= {}
-          data.fetch(:data)[model.model_name.collection][model.id] ||= ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+          serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+          resource = serializer.resource
+
+          data.fetch(:data)[resource.collection_name] ||= {}
+          data.fetch(:data)[resource.collection_name][model.id] ||= serializer
         end
       end
 

@@ -2,7 +2,7 @@ class ApiMaker::Serializer
   attr_reader :ability, :args, :model, :relationships
 
   def self.resource_for(klass)
-    "Resources::#{klass.name}Resource".constantize
+    ApiMaker::MemoryStorage.current.resource_for_model(klass)
   rescue NameError
     nil
   end
@@ -47,7 +47,7 @@ class ApiMaker::Serializer
   end
 
   def resource
-    @resource ||= ApiMaker::Serializer.resource_for!(model.class)
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(model.class)
   end
 
   def resource_instance

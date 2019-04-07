@@ -90,6 +90,7 @@ private
     @reflections_for_model_class_data ||= reflections.map do |reflection|
       {
         className: reflection.class_name,
+        collectionName: ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).collection_name,
         name: reflection.name,
         macro: reflection.macro
       }

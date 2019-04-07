@@ -42,7 +42,7 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_detail"]).to_json)
 
     expect(result.dig("data", "projects", "2", "relationships", "project_detail")).to eq 6
-    expect(result.dig("included", "project_details", "6", "attributes", "details")).to eq "Test project details"
+    expect(result.dig("included", "project-details", "6", "attributes", "details")).to eq "Test project details"
   end
 
   it "includes an empty relationship if it has been included but doesnt exist for has one" do
@@ -84,7 +84,7 @@ describe ApiMaker::CollectionSerializer do
     expect(result.dig("data", "users", user.id.to_s, "relationships", "tasks")).to eq [3]
 
     task_include = result.fetch("included").fetch("tasks").fetch("3")
-    project_detail_include = result.fetch("included").fetch("project_details").fetch("6")
+    project_detail_include = result.fetch("included").fetch("project-details").fetch("6")
 
     expect(task_include.dig("relationships", "project_detail")).to eq 6
     expect(project_detail_include.dig("attributes", "details")).to eq "Test project details"

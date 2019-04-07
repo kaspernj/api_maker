@@ -7,6 +7,7 @@ class ApiMaker::MemoryStorage
 
   def initialize
     @resources = []
+    @resources_by_model = {}
     @storage = {}
   end
 
@@ -26,11 +27,9 @@ class ApiMaker::MemoryStorage
   end
 
   def resource_for_model(model_class)
-    @resources.each do |klass_data|
-      # Used name to prevent Rails dev reload crash
-      return klass_data.fetch(:klass) if klass_data.fetch(:klass).model_class.name == model_class.name
-    end
+    resource = @resources_by_model[model_class] ||= @resources.detect { |klass_data| klass_data.fetch(:klass).model_class.name == model_class.name }&.fetch(:klass)
+    raise NameError, "Couldnt find resource for model: #{model_class.name}" unless resource
 
-    raise "Couldnt find resource for model: #{model_class.name}"
+    resource
   end
 end

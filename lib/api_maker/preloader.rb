@@ -49,7 +49,8 @@ private
 
   def fill_empty_relationships_for_key(reflection, key)
     if @records.is_a?(Hash)
-      records_to_set = @records.fetch(reflection.active_record.model_name.collection).values
+      collection_name = ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
+      records_to_set = @records.fetch(collection_name).values
     else
       records_to_set = @records.select { |record| record.model.class == reflection.active_record }
     end
