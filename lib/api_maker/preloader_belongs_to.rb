@@ -15,18 +15,26 @@ class ApiMaker::PreloaderBelongsTo
         record.relationships[@reflection_name] = model.id
       end
 
-      serializer = ApiMaker::Configuration.profile("Preloading #{model.class.name}##{model.id} - serializer") do
-        ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
-      end
+      serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+      collection_name = serializer.resource.collection_name
 
-      @data.fetch(:included)[model.model_name.collection] ||= {}
-      @data.fetch(:included).fetch(model.model_name.collection)[model.id] ||= serializer
+      @data.fetch(:included)[collection_name] ||= {}
+      @data.fetch(:included).fetch(collection_name)[model.id] ||= serializer
     end
 
     {collection: models}
   end
 
 private
+
+  def collection_name
+    @collection_name = begin
+      ApiMaker::MemoryStorage
+        .current
+        .resource_for_model(@reflection.active_record)
+        .collection_name
+    end
+  end
 
   def models
     @models ||= begin
@@ -41,14 +49,10 @@ private
     @look_up_key ||= @reflection.options[:primary_key] || @reflection.klass.primary_key
   end
 
-  def plural_name
-    @plural_name ||= @reflection.klass.model_name.plural
-  end
-
   def records_for_model(model)
     if @records.is_a?(Hash)
       @records
-        .fetch(@reflection.active_record.model_name.collection)
+        .fetch(collection_name)
         .values
         .select { |record| record.model.read_attribute(@reflection.foreign_key) == model.read_attribute(look_up_key) }
     else

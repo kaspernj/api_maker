@@ -13,7 +13,7 @@ module ApiMaker::ModelExtensions
           channel_name,
           model: serializer,
           model_id: model.id,
-          model_type: model.class.model_name.collection,
+          model_type: serializer.resource.collection_name,
           type: :update
         )
       end
@@ -30,7 +30,7 @@ module ApiMaker::ModelExtensions
       event_name: event_name,
       model: serializer,
       model_id: id,
-      model_type: self.class.model_name.collection,
+      model_type: serializer.resource.collection_name,
       type: :event
     )
   end

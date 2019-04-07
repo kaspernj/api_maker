@@ -532,7 +532,7 @@ export default class BaseModel {
     for(var relationshipName in this.includedRelationships) {
       var relationshipData = this.includedRelationships[relationshipName]
       var relationshipClassData = this.modelClassData().relationships.find(relationship => relationship.name == relationshipName)
-      var relationshipType = inflection.pluralize(inflection.underscore(relationshipClassData.className))
+      var relationshipType = relationshipClassData.collectionName
 
       if (!relationshipData) {
         this.relationshipsCache[relationshipName] = null

@@ -49,6 +49,10 @@ class ApiMaker::BaseResource
     ApiMaker::MemoryStorage.current.storage_for(self, :relationships)
   end
 
+  def self.collection_name
+    @collection_name ||= short_name.underscore.pluralize.dasherize
+  end
+
   def self.short_name
     @short_name ||= name.match(/\AResources::(.+)Resource\Z/)[1]
   end

@@ -6,6 +6,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
     return <%= {
       attributes: attributes,
       collectionKey: model.model_name.collection,
+      collectionName: resource.collection_name,
       i18nKey: model.model_name.i18n_key,
       name: resource.short_name,
       pluralName: model.model_name.plural,
