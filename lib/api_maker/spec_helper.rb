@@ -53,11 +53,11 @@ module ApiMaker::SpecHelper
     end
   end
 
-  def wait_for_flash_message(expected_message)
+  def wait_for_flash_message(expected_message, timeout_sec: 10)
     received_messages = []
 
     begin
-      WaitUtil.wait_for_condition("wait for flash message", timeout_sec: 10, delay_sec: 0.5) do
+      WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: 0.5) do
         current_message = flash_message_text
         received_messages << current_message
         current_message == expected_message
