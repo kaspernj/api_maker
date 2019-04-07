@@ -157,6 +157,17 @@ task.destroy().then((status) => {
 })
 ```
 
+### Preloading models
+
+```js
+Task.ransack().preload("project.customer").toArray().then(tasks => {
+  for(var task of tasks) {
+    console.log(`Project of task ${task.id()}: ${task.project().name()}`)
+    console.log(`Customer of task ${task.id()}: ${task.project().customer().name()}`)
+  }
+})
+```
+
 ### Query models
 
 ApiModels uses [Ransack](https://github.com/activerecord-hackery/ransack) to expose a huge amount of options to query data.
