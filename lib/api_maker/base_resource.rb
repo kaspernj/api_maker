@@ -35,13 +35,7 @@ class ApiMaker::BaseResource
     @model_class ||= begin
       model_class_name = name.gsub(/Resource$/, "")
       model_class_name = model_class_name.gsub(/^Resources::/, "")
-
-      begin
-        model_class_name.constantize
-      rescue => e
-        binding.pry
-        raise e
-      end
+      model_class_name.constantize
     end
   end
 
