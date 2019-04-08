@@ -1,11 +1,11 @@
 class ApiMaker::Preloader
-  def initialize(ability: nil, args: nil, collection:, data:, include_param:, records: nil)
+  def initialize(ability: nil, args: nil, collection:, data:, include_param:, records:)
     @ability = ability
     @args = args
     @collection = collection
     @data = data
     @include_param = include_param
-    @records = records || @data.fetch(:data)
+    @records = records
   end
 
   def fill_data

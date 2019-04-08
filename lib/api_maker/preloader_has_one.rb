@@ -48,12 +48,7 @@ class ApiMaker::PreloaderHasOne
 
   def origin_data_for_model(model)
     origin_id = model.read_attribute("api_maker_origin_id")
-
-    if @records.is_a?(Hash)
-      @records.fetch(collection_name).fetch(origin_id)
-    else
-      @records.find { |record| record.model.class == @reflection.active_record && record.model.id == origin_id }
-    end
+    @data.fetch(:included).fetch(collection_name).fetch(origin_id)
   end
 
   def query_through

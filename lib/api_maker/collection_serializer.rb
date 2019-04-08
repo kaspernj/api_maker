@@ -13,17 +13,26 @@ class ApiMaker::CollectionSerializer
         included: {}
       }
 
+      records = {}
+
       ApiMaker::Configuration.profile("CollectionSerializer result collection map") do
         @collection.map do |model|
           serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
           resource = serializer.resource
+          collection_name = resource.collection_name
 
-          data.fetch(:data)[resource.collection_name] ||= {}
-          data.fetch(:data)[resource.collection_name][model.id] ||= serializer
+          data.fetch(:included)[collection_name] ||= {}
+          data.fetch(:included)[collection_name][model.id] ||= serializer
+
+          data.fetch(:data)[collection_name] ||= []
+          data.fetch(:data)[collection_name] << model.id
+
+          records[collection_name] ||= {}
+          records[collection_name][model.id] = serializer
         end
       end
 
-      preload_collection(data) if @collection.length.positive?
+      preload_collection(data, records) if @collection.length.positive?
 
       data
     end
@@ -33,9 +42,9 @@ class ApiMaker::CollectionSerializer
     result.as_json(options)
   end
 
-  def preload_collection(data)
+  def preload_collection(data, records)
     ApiMaker::Configuration.profile("CollectionSerializer result preloading") do
-      preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param)
+      preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param, records: records)
       preloader.fill_data
     end
   end
