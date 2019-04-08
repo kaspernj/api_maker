@@ -14,8 +14,9 @@ describe "preloading - has many through has many through has many" do
     collection = Customer.where(id: customer.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_details"]).to_json)
 
-    expect(result.dig("data", "customers", "5", "relationships", "project_details")).to eq [project_detail.id]
+    expect(result.dig("data", "customers")).to eq [5]
+    expect(result.dig("included", "customers", "5", "relationships", "project_details")).to eq [project_detail.id]
     expect(result.dig("included").fetch("project-details").fetch("6").fetch("attributes").fetch("id")).to eq project_detail.id
-    expect(result.dig("included").length).to eq 1
+    expect(result.dig("included").length).to eq 2
   end
 end

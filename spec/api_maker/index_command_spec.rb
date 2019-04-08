@@ -39,7 +39,8 @@ describe ApiMaker::IndexCommand do
       helper.execute!
       parsed = command.result
 
-      expect(parsed.dig("data", "tasks", task.id.to_s, :attributes, :user_id)).to eq user.id
+      expect(parsed.dig("data", "tasks")).to eq [task.id]
+      expect(parsed.dig("included", "tasks", task.id.to_s, :attributes, :user_id)).to eq user.id
     end
   end
 end
