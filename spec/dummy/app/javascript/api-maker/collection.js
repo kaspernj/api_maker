@@ -7,8 +7,9 @@ import qs from "qs"
 import Result from "./result"
 
 export default class Collection {
-  constructor(args) {
-    this.args = args
+  constructor(staticArgs, args = {}) {
+    this.queryArgs = args
+    this.args = staticArgs
   }
 
   accessibleBy(abilityName) {
@@ -54,7 +55,7 @@ export default class Collection {
 
     let changes = {page: pageNumber}
 
-    if (!this.args.ransack || !this.args.ransack.s)
+    if (!this.queryArgs.ransack || !this.queryArgs.ransack.s)
       changes.ransack = {s: `${this.args.modelClass.modelClassData().primaryKey} asc`}
 
     return this._clone(changes)
@@ -104,7 +105,7 @@ export default class Collection {
   }
 
   _clone(args) {
-    return new Collection(this._merge(this.args, args))
+    return new Collection(this.args, this._merge(this.queryArgs, args))
   }
 
   _merge(object1, object2) {
@@ -133,24 +134,24 @@ export default class Collection {
   _params() {
     let params = {}
 
-    if (this.args.params)
-      params = this._merge(params, this.args.params)
+    if (this.queryArgs.params)
+      params = this._merge(params, this.queryArgs.params)
 
-    if (this.args.accessibleBy) {
-      params.accessible_by = inflection.underscore(this.args.accessibleBy)
+    if (this.queryArgs.accessibleBy) {
+      params.accessible_by = inflection.underscore(this.queryArgs.accessibleBy)
     }
 
-    if (this.args.ransack)
-      params.q = this.args.ransack
+    if (this.queryArgs.ransack)
+      params.q = this.queryArgs.ransack
 
-    if (this.args.limit)
-      params.limit = this.args.limit
+    if (this.queryArgs.limit)
+      params.limit = this.queryArgs.limit
 
-    if (this.args.preload)
-      params.include = this.args.preload
+    if (this.queryArgs.preload)
+      params.include = this.queryArgs.preload
 
-    if (this.args.page)
-      params.page = this.args.page
+    if (this.queryArgs.page)
+      params.page = this.queryArgs.page
 
     return params
   }
