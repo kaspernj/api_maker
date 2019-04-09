@@ -11,11 +11,10 @@ export default class Task extends BaseModel {
       loadProject() {
         let id = this.projectId()
         let modelClass = require(`api-maker/models/project`).default
-        return this._loadBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass,"ransack":{"id_eq":id}})
+        return this._loadBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass}, {"ransack":{"id_eq":id}})
       }
 
       project() {
-        let id = this.projectId()
         let modelClass = require(`api-maker/models/project`).default
         return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass})
       }
@@ -25,11 +24,10 @@ export default class Task extends BaseModel {
       loadUser() {
         let id = this.userId()
         let modelClass = require(`api-maker/models/user`).default
-        return this._loadBelongsToReflection({"reflectionName":"user","model":this,"modelClass":modelClass,"ransack":{"id_eq":id}})
+        return this._loadBelongsToReflection({"reflectionName":"user","model":this,"modelClass":modelClass}, {"ransack":{"id_eq":id}})
       }
 
       user() {
-        let id = this.userId()
         let modelClass = require(`api-maker/models/user`).default
         return this._readBelongsToReflection({"reflectionName":"user","model":this,"modelClass":modelClass})
       }
