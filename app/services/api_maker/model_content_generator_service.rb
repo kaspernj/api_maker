@@ -69,21 +69,27 @@ private
       targetPathName: "/api_maker/#{reflection.klass.model_name.route_key}"
     }
 
+    parameters
+  end
+
+  def reflection_has_many_parameters_query(reflection)
     if reflection.options[:through]
-      parameters[:params] = {
-        through: {
-          model: model.name,
-          id: "{{id}}",
-          reflection: reflection.name
+      {
+        params: {
+          through: {
+            model: model.name,
+            id: "{{id}}",
+            reflection: reflection.name
+          }
         }
       }
     else
-      parameters[:ransack] = {
-        "#{reflection.foreign_key}_eq" => "{{id}}"
+      {
+        ransack: {
+          "#{reflection.foreign_key}_eq" => "{{id}}"
+        }
       }
     end
-
-    parameters
   end
 
   def reflections_for_model_class_data
