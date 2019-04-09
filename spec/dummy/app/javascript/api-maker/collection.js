@@ -153,10 +153,6 @@ export default class Collection {
     if (this.queryArgs.page)
       params.page = this.queryArgs.page
 
-    console.log("args", this.args)
-    console.log("queryArgs", this.queryArgs)
-    console.log({ params })
-
     return params
   }
 }
