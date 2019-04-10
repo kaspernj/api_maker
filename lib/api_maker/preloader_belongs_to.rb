@@ -50,16 +50,9 @@ private
   end
 
   def records_for_model(model)
-    if @records.is_a?(Hash)
-      @records
-        .fetch(collection_name)
-        .values
-        .select { |record| record.model.read_attribute(@reflection.foreign_key) == model.read_attribute(look_up_key) }
-    else
-      @records.select do |record|
-        record.model.class.name == @reflection.active_record.name &&
-          record.model.read_attribute(@reflection.foreign_key) == model.read_attribute(look_up_key)
-      end
-    end
+    @records
+      .fetch(collection_name)
+      .values
+      .select { |record| record.model.read_attribute(@reflection.foreign_key) == model.read_attribute(look_up_key) }
   end
 end
