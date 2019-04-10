@@ -20,15 +20,16 @@ class ApiMaker::CollectionSerializer
           serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
           resource = serializer.resource
           collection_name = resource.collection_name
+          id = model.id
 
           data.fetch(:included)[collection_name] ||= {}
-          data.fetch(:included)[collection_name][model.id] ||= serializer
+          data.fetch(:included)[collection_name][id] ||= serializer
 
           data.fetch(:data)[collection_name] ||= []
-          data.fetch(:data)[collection_name] << model.id
+          data.fetch(:data)[collection_name] << id
 
           records[collection_name] ||= {}
-          records[collection_name][model.id] = serializer
+          records[collection_name][id] ||= serializer
         end
       end
 
