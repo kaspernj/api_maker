@@ -7,9 +7,9 @@ import qs from "qs"
 import Result from "./result"
 
 export default class Collection {
-  constructor(staticArgs, args = {}) {
-    this.queryArgs = args
-    this.args = staticArgs
+  constructor(args, queryArgs = {}) {
+    this.queryArgs = queryArgs
+    this.args = args
   }
 
   accessibleBy(abilityName) {

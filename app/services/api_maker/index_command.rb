@@ -42,8 +42,12 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
   def manage_through_relationship
     return if params[:through].blank?
 
-    through_model = params[:through][:model].constantize.accessible_by(current_ability).find(params[:through][:id])
-    query_through = through_model.__send__(params[:through][:reflection]).accessible_by(current_ability)
+    model_class = params[:through][:model].safe_constantize
+    through_model = model_class.accessible_by(current_ability).find(params[:through][:id])
+    association = ActiveRecord::Associations::Association.new(through_model, model_class.reflections.fetch(params[:through][:reflection]))
+
+    query_through = association.scope
+    query_through = query_through.accessible_by(current_ability)
     query_through = filter_custom_accessible_by(query_through)
     query_through
   end

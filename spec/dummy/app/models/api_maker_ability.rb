@@ -6,6 +6,7 @@ class ApiMakerAbility
   def initialize(args:)
     current_user = args.fetch(:current_user)
 
+    can :read, Account
     can CRUD, Project
     can CRUD, ProjectDetail
     can CRUD + [:accessible_by, :test_collection, :test_member, :validate], Task, user_id: current_user&.id
