@@ -11,7 +11,7 @@ export default class Task extends BaseModel {
       loadAccount() {
         let id = this.id()
         let modelClass = require(`api-maker/models/account`).default
-        return this._loadHasOneReflection({"reflectionName":"account","model":this,"modelClass":modelClass}, {"ransack":{"account_id_eq":id}})
+        return this._loadHasOneReflection({"reflectionName":"account","model":this,"modelClass":modelClass}, {"params":{"through":{"model":"Task","id":id,"reflection":"account"}}})
       }
 
       account() {

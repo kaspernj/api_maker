@@ -61,15 +61,13 @@ private
   end
 
   def reflection_has_many_parameters(reflection)
-    parameters = {
+    {
       reflectionName: reflection.name,
       model: "{{this}}",
       modelName: reflection.class_name,
       modelClass: "{{modelClass}}",
       targetPathName: "/api_maker/#{reflection.klass.model_name.route_key}"
     }
-
-    parameters
   end
 
   def reflection_has_many_parameters_query(reflection)
