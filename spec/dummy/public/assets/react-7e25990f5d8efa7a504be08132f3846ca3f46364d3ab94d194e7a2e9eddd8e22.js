@@ -1253,6 +1253,9 @@ Based on Rails routes of Dummy::Application
 // models_has_one => /models/has_one(.:format)
   // function(options)
   modelsHasOnePath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"has_one",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
+// models_load_has_one_through => /models/load-has-one-through/:task_id(.:format)
+  // function(task_id, options)
+  modelsLoadHasOneThroughPath: Utils.route([["task_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"load-has-one-through",false],[2,[7,"/",false],[2,[3,"task_id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
 // models_preload => /models/preload(.:format)
   // function(options)
   modelsPreloadPath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"preload",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),

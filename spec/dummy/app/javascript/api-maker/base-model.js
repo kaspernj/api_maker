@@ -500,7 +500,7 @@ export default class BaseModel {
       if (args.reflectionName in this.relationshipsCache) {
         resolve(this.relationshipsCache[args.reflectionName])
       } else {
-        var collection = new Collection(args)
+        var collection = new Collection(args, queryArgs)
         collection.first().then(model => {
           this.relationshipsCache[args.reflectionName] = model
           resolve(model)

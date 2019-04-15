@@ -35,6 +35,18 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
         let modelClass = require(`api-maker/models/<%= reflection.class_name.underscore.dasherize %>`).default
         return new Collection(<%= api_maker_json(reflection_has_many_parameters(reflection)) %>, <%= api_maker_json(reflection_has_many_parameters_query(reflection)) %>)
       }
+    <% elsif reflection.macro == :has_one && reflection.options[:through] %>
+      <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}").result %>() {
+        let id = this.<%= reflection.active_record.primary_key %>()
+        let modelClass = require(`api-maker/models/<%= reflection.class_name.underscore.dasherize %>`).default
+        return this._loadHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>, <%= api_maker_json("ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
+      }
+
+      <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name).result %>() {
+        let modelClass = require(`api-maker/models/<%= reflection.class_name.underscore.dasherize %>`).default
+        return this._readHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>)
+      }
+    <% end %>
     <% elsif reflection.macro == :has_one %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}").result %>() {
         let id = this.<%= reflection.active_record.primary_key %>()
