@@ -29,7 +29,9 @@ export default class extends React.Component {
   }
 
   pagePath(pageNumber) {
-    let pageKey = this.props.result.data.collection.args.pageKey
+    console.log("Collection queryArgs", this.props.result.data.collection.queryArgs)
+
+    let pageKey = this.props.result.data.collection.queryArgs.pageKey
     if (!pageKey)
       pageKey = "page"
 
