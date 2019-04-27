@@ -27,12 +27,8 @@ class ApiMaker::MemoryStorage
   end
 
   def resource_for_model(model_class)
-    resource = @resources_by_model[model_class] ||= @resources
-      .detect { |klass_data| klass_data.fetch(:klass).model_class.name == model_class.name }
-      &.fetch(:klass)
-
-    raise NameError, "Couldnt find resource for model: #{model_class.name}" unless resource
-
-    resource
+    resource_class = "Resources::#{model_class.name.gsub("::", "")}Resource".safe_constantize
+    raise "Resource couldn't be found from model: #{model_class}" unless resource_class
+    resource_class
   end
 end
