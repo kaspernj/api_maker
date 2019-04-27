@@ -11,10 +11,6 @@ class ApiMaker::BaseResource
     ApiMaker::MemoryStorage.current.storage_for(self, :attributes)
   end
 
-  def self.inherited(base)
-    ApiMaker::MemoryStorage.current.add_resource(base) unless ApiMaker::MemoryStorage.current.resources.include?(base)
-  end
-
   def self.collection_commands(*list)
     list.each do |collection_command|
       ApiMaker::MemoryStorage.current.add(self, :collection_commands, collection_command)
@@ -27,16 +23,18 @@ class ApiMaker::BaseResource
     end
   end
 
-  def self.model_class=(klass) # rubocop:disable Style/TrivialAccessors
-    @model_class = klass
+  def self.model_class=(klass)
+    # Set the name to avoid reloading issues with Rails
+    @model_class_name = klass.name
   end
 
   def self.model_class
-    @model_class ||= begin
-      model_class_name = name.gsub(/Resource$/, "")
-      model_class_name = model_class_name.gsub(/^Resources::/, "")
-      model_class_name.constantize
-    end
+    # Use the name to constantize to avoid reloading issues with Rails
+    model_class_name.constantize
+  end
+
+  def self.model_class_name
+    @model_class_name ||= name.gsub(/Resource$/, "").gsub(/^Resources::/, "")
   end
 
   def self.relationships(*relationships)
