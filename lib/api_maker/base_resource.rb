@@ -23,7 +23,7 @@ class ApiMaker::BaseResource
     end
   end
 
-  def self.model_class=(klass) # rubocop:disable Style/TrivialAccessors
+  def self.model_class=(klass)
     # Set the name to avoid reloading issues with Rails
     @model_class_name = klass.name
   end
