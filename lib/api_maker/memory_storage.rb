@@ -6,6 +6,7 @@ class ApiMaker::MemoryStorage
   end
 
   def initialize
+    @model_class_for = {}
     @storage = {}
   end
 
@@ -19,8 +20,14 @@ class ApiMaker::MemoryStorage
     @storage[klass][mode][data] = {data: data, args: args} unless @storage[klass][mode].key?(data)
   end
 
+  def model_class_for(resource:, klass:)
+    @model_class_for[klass.name] = resource.name
+  end
+
   def resource_for_model(model_class)
-    resource_class = "Resources::#{model_class.name.gsub("::", "")}Resource".safe_constantize
+    class_name = @model_class_for[model_class.name] || "Resources::#{model_class.name.gsub("::", "")}Resource"
+    resource_class = class_name.safe_constantize
+    binding.pry unless resource_class
     raise "Resource couldn't be found from model: #{model_class}" unless resource_class
     resource_class
   end
