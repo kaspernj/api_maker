@@ -13,6 +13,7 @@ require "devise"
 require "factory_bot_rails"
 require "js-routes"
 require "pry-rails"
+require "public_activity"
 require "puma"
 require "rspec/retry" if ENV["CI"]
 require "waitutil"
