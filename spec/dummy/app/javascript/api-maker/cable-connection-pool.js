@@ -75,7 +75,7 @@ export default class ApiMakerCableConnectionPool {
     if (!this.upcomingSubscriptions[modelName]["updates"][modelId])
       this.upcomingSubscriptions[modelName]["updates"][modelId] = []
 
-    let subscription = new CableSubscription({
+    var subscription = new CableSubscription({
       callback: callback,
       modelName: modelName,
       modelId: modelId
@@ -88,14 +88,46 @@ export default class ApiMakerCableConnectionPool {
     return subscription
   }
 
+  connectDestroyed(modelName, modelId, callback) {
+    if (!this.upcomingSubscriptionData[modelName])
+      this.upcomingSubscriptionData[modelName] = {}
+
+    if (!this.upcomingSubscriptionData[modelName]["destroys"])
+      this.upcomingSubscriptionData[modelName]["destroys"] = []
+
+    if (!this.upcomingSubscriptionData[modelName]["destroys"].includes(modelId))
+      this.upcomingSubscriptionData[modelName]["destroys"].push(modelId)
+
+    if (!this.upcomingSubscriptions[modelName])
+      this.upcomingSubscriptions[modelName] = {}
+
+    if (!this.upcomingSubscriptions[modelName]["destroys"])
+      this.upcomingSubscriptions[modelName]["destroys"] = {}
+
+    if (!this.upcomingSubscriptions[modelName]["destroys"][modelId])
+      this.upcomingSubscriptions[modelName]["destroys"][modelId] = []
+
+    var subscription = new CableSubscription({
+      callback: callback,
+      modelName: modelName,
+      modelId: modelId
+    })
+
+    this.upcomingSubscriptions[modelName]["destroys"][modelId].push(subscription)
+
+    this.scheduleConnectUpcoming()
+
+    return subscription
+  }
+
   connectUpcoming() {
-    let subscriptionData = this.upcomingSubscriptionData
-    let subscriptions = this.upcomingSubscriptions
+    var subscriptionData = this.upcomingSubscriptionData
+    var subscriptions = this.upcomingSubscriptions
 
     this.upcomingSubscriptionData = {}
     this.upcomingSubscriptions = {}
 
-    let cableSubscriptionPool = new CableSubscriptionPool({
+    var cableSubscriptionPool = new CableSubscriptionPool({
       subscriptionData: subscriptionData,
       subscriptions: subscriptions
     })
