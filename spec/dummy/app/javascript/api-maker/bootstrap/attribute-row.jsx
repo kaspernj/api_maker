@@ -8,7 +8,7 @@ export default class BootstrapAttributeRow extends React.Component {
           {this.props.label}
         </th>
         <td>
-          {this.props.children}
+          {this.props.value || this.props.children}
         </td>
       </tr>
     )

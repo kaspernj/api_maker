@@ -2,6 +2,12 @@ import PropTypes from "prop-types"
 import React from "react"
 
 export default class ApiMakerUpdatedAttribute extends React.Component {
+  static propTypes = {
+    attribute: PropTypes.string,
+    model: PropTypes.object.isRequired,
+    onValue: PropTypes.func
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -19,16 +25,16 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
   }
 
   connect() {
-    this.connectUpdated = this.props.model.connectUpdated((args) => {
+    this.connectUpdated = this.props.model.connectUpdated(args =>
       this.setState(
         {model: args.model},
-        () => { this.setAttribute() }
+        () => this.setAttribute()
       )
-    })
+    )
   }
 
   setAttribute() {
-    let newValue
+    var newValue
 
     if (this.props.onValue) {
       newValue = this.props.onValue.apply(null, [{model: this.state.model}])
@@ -50,10 +56,4 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
 
     return this.state.value
   }
-}
-
-ApiMakerUpdatedAttribute.propTypes = {
-  attribute: PropTypes.string,
-  model: PropTypes.object.isRequired,
-  onValue: PropTypes.func
 }
