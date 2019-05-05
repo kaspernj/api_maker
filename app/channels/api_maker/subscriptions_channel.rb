@@ -9,6 +9,11 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
         model_ids = subscription_types.fetch("updates")
         connect_updates(model_name, model_ids)
       end
+
+      if subscription_types.key?("destroys")
+        model_ids = subscription_types.fetch("destroys")
+        connect_destroys(model_name, model_ids)
+      end
     end
   end
 
@@ -33,6 +38,18 @@ private
 
     models.each do |model|
       channel_name = "api_maker_updates_#{model_class}_#{model.id}"
+      stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
+        transmit data
+      end
+    end
+  end
+
+  def connect_destroys(model_name, model_ids)
+    model_class = model_name.safe_constantize
+    models = model_class.accessible_by(current_ability, :update_events).where(model_class.primary_key => model_ids)
+
+    models.each do |model|
+      channel_name = "api_maker_destroys_#{model_class}_#{model.id}"
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
