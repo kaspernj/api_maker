@@ -13,6 +13,9 @@ describe "models destroy event", :js do
     wait_for_selector ".task-row[data-task-id='#{task1.id}']"
     wait_for_selector ".task-row[data-task-id='#{task2.id}']"
 
+    # Give some time for ActionCable to connect
+    sleep 1
+
     task1.destroy!
 
     wait_for_chrome { !page.has_selector?(".task-row[data-task-id='#{task1.id}']") }
