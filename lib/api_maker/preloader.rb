@@ -1,11 +1,12 @@
 class ApiMaker::Preloader
-  def initialize(ability: nil, args: nil, collection:, data:, include_param:, records:)
+  def initialize(ability: nil, args: nil, collection:, data:, include_param:, records:, select:)
     @ability = ability
     @args = args
     @collection = collection
     @data = data
     @include_param = include_param
     @records = records
+    @select = select
   end
 
   def fill_data
@@ -28,7 +29,8 @@ class ApiMaker::Preloader
           collection: @collection,
           data: @data,
           records: @records,
-          reflection: reflection
+          reflection: reflection,
+          select: @select
         ).preload
       end
 
@@ -40,7 +42,8 @@ class ApiMaker::Preloader
         data: @data,
         collection: preload_result.fetch(:collection),
         include_param: value,
-        records: @data.fetch(:included)
+        records: @data.fetch(:included),
+        select: @select
       ).fill_data
     end
   end

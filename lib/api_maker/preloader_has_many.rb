@@ -1,11 +1,12 @@
 class ApiMaker::PreloaderHasMany
-  def initialize(ability:, args:, data:, collection:, reflection:, records:)
+  def initialize(ability:, args:, data:, collection:, reflection:, records:, select:)
     @ability = ability
     @args = args
     @data = data
     @collection = collection
     @reflection = reflection
     @records = records
+    @select = select
 
     raise "No inverse of for #{@reflection.active_record.name}##{@reflection.name}" unless @reflection.inverse_of
   end
@@ -50,7 +51,7 @@ private
     origin_data.fetch(:relationships)[@reflection.name] ||= []
     origin_data.fetch(:relationships).fetch(@reflection.name) << model.id
 
-    serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+    serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.class))
     collection_name = serializer.resource.collection_name
 
     @data.fetch(:included)[collection_name] ||= {}

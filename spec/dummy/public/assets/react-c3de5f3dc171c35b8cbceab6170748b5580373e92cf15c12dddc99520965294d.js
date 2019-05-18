@@ -1875,6 +1875,9 @@ Based on Rails routes of Dummy::Application
 // models_ransack => /models/ransack(.:format)
   // function(options)
   modelsRansackPath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"ransack",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
+// models_select => /models/select(.:format)
+  // function(options)
+  modelsSelectPath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"select",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
 // models_update => /models/update(.:format)
   // function(options)
   modelsUpdatePath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"update",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),

@@ -1,5 +1,5 @@
 class ApiMaker::PreloaderBelongsTo
-  def initialize(ability:, args:, data:, collection:, records:, reflection:)
+  def initialize(ability:, args:, data:, collection:, records:, reflection:, select:)
     @ability = ability
     @args = args
     @data = data
@@ -7,6 +7,7 @@ class ApiMaker::PreloaderBelongsTo
     @reflection = reflection
     @reflection_name = @reflection.name
     @records = records
+    @select = select
   end
 
   def preload
@@ -15,7 +16,7 @@ class ApiMaker::PreloaderBelongsTo
         record.relationships[@reflection_name] = model.id
       end
 
-      serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+      serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.class))
       collection_name = serializer.resource.collection_name
 
       @data.fetch(:included)[collection_name] ||= {}
