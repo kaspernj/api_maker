@@ -11,17 +11,18 @@ class ApiMaker::Serializer
     ApiMaker::MemoryStorage.current.resource_for_model(klass)
   end
 
-  def initialize(ability: nil, args: {}, model:)
+  def initialize(ability: nil, args: {}, model:, select: nil)
     @args = args
     @model = model
     @ability = ability
     @relationships = {}
+    @select = select
   end
 
   def attributes
     ApiMaker::Configuration.profile("attributes") do
       result = {}
-      resource._attributes.each do |attribute, data|
+      attributes_to_read.each do |attribute, data|
         if (if_name = data.dig(:args, :if))
           condition_result = attribute_value(if_name)
           next unless condition_result
@@ -31,6 +32,14 @@ class ApiMaker::Serializer
       end
 
       result
+    end
+  end
+
+  def attributes_to_read
+    if @select
+      resource._attributes.select { |key, value| @select.include?(key.to_s) }
+    else
+      resource._attributes
     end
   end
 

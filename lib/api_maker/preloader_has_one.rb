@@ -1,11 +1,12 @@
 class ApiMaker::PreloaderHasOne
-  def initialize(ability:, args:, data:, collection:, reflection:, records:)
+  def initialize(ability:, args:, data:, collection:, reflection:, records:, select: @select)
     @ability = ability
     @args = args
     @data = data
     @collection = collection
     @reflection = reflection
     @records = records
+    @select = select
 
     raise "Records was nil" unless records
   end
@@ -20,7 +21,7 @@ class ApiMaker::PreloaderHasOne
         origin_data = origin_data_for_model(model)
         origin_data.fetch(:relationships)[@reflection.name] = model.id
 
-        serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
+        serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.model_name.collection))
         collection_name = serializer.resource.collection_name
 
         @data.fetch(:included)[collection_name] ||= {}
