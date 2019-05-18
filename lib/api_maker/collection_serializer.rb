@@ -46,7 +46,15 @@ class ApiMaker::CollectionSerializer
 
   def preload_collection(data, records)
     ApiMaker::Configuration.profile("CollectionSerializer result preloading") do
-      preloader = ApiMaker::Preloader.new(ability: @ability, args: @args, collection: @collection, data: data, include_param: @include_param, records: records, select: @select)
+      preloader = ApiMaker::Preloader.new(
+        ability: @ability,
+        args: @args,
+        collection: @collection,
+        data: data,
+        include_param: @include_param,
+        records: records,
+        select: @select
+      )
       preloader.fill_data
     end
   end

@@ -37,7 +37,7 @@ class ApiMaker::Serializer
 
   def attributes_to_read
     if @select
-      resource._attributes.select { |key, value| @select.include?(key.to_s) }
+      resource._attributes.select { |key| @select.include?(key.to_s) }
     else
       resource._attributes
     end

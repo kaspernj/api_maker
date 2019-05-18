@@ -25,7 +25,13 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
 
   def collection_from_query(collection)
     ApiMaker::Configuration.profile("IndexCommand collection_from_query") do
-      ApiMaker::CollectionSerializer.new(ability: current_ability, args: api_maker_args, collection: collection, include_param: params[:include], select: params[:select]).result
+      ApiMaker::CollectionSerializer.new(
+        ability: current_ability,
+        args: api_maker_args,
+        collection: collection,
+        include_param: params[:include],
+        select: params[:select]
+      ).result
     end
   end
 
