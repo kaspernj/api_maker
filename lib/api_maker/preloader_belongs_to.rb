@@ -16,7 +16,7 @@ class ApiMaker::PreloaderBelongsTo
         record.relationships[@reflection_name] = model.id
       end
 
-      serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(collection_name))
+      serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.class))
       collection_name = serializer.resource.collection_name
 
       @data.fetch(:included)[collection_name] ||= {}

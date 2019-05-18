@@ -60,7 +60,7 @@ class ApiMaker::CollectionSerializer
   end
 
   def select_for(model)
-    @select&.dig(model.model_name.collection)
+    @select&.dig(model.class)
   end
 
   def to_json(options = nil)

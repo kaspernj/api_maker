@@ -21,7 +21,7 @@ class ApiMaker::PreloaderHasOne
         origin_data = origin_data_for_model(model)
         origin_data.fetch(:relationships)[@reflection.name] = model.id
 
-        serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.model_name.collection))
+        serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.class))
         collection_name = serializer.resource.collection_name
 
         @data.fetch(:included)[collection_name] ||= {}
