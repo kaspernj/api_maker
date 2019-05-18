@@ -181,7 +181,7 @@ Task.ransack({name_cont: "something"}).toArray().then((tasks) => {
 ### Selecting only specific attributes
 
 ```js
-Task.ransack().select(Task: ["id", "name"]).toArray().then(tasks => this.setState({tasks}))
+Task.ransack().select({Task: ["id", "name"]}).toArray().then(tasks => this.setState({tasks}))
 ```
 
 ### Sorting models
