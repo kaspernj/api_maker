@@ -36,11 +36,7 @@ class ApiMaker::Serializer
   end
 
   def attributes_to_read
-    if @select
-      @select
-    else
-      resource._attributes
-    end
+    @attributes_to_read ||= @select || resource._attributes
   end
 
   def attribute_value(attribute)
