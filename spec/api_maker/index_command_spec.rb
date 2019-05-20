@@ -46,9 +46,7 @@ describe ApiMaker::IndexCommand do
 
   describe "#parse_select" do
     it "parses sub models" do
-      result = helper.command.parse_select({
-        "UserRole" => ["id", "role"]
-      })
+      result = helper.command.parse_select("UserRole" => %w[id role])
 
       expect(result.keys).to include User::Role
       expect(result.fetch(User::Role).keys).to eq [:id, :role]
