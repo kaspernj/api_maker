@@ -14,9 +14,9 @@ export default class Devise {
     return window.apiMakerDeviseEvents
   }
 
-  
-    
-    
+
+
+
       static isUserSignedIn() {
         let apiMakerDataElement = document.querySelector(".api-maker-data")
         let keyName = "currentUser"
@@ -37,11 +37,11 @@ export default class Devise {
           return null
 
         let modelClass = require("api-maker/models/user").default
-        let modelInstance = new modelClass({data: JSON.parse(scopeData)})
+        let modelInstance = new modelClass({data: JSON.parse(scopeData), isNewRecord: false})
         return modelInstance
       }
-    
-  
+
+
 
   static signIn(username, password, args = {}) {
     if (!args.scope)

@@ -27,7 +27,7 @@ export default class ApiMakerCableSubscriptionPool {
     var modelId = data.model_id
     var modelFileName = inflection.dasherize(inflection.singularize(modelType))
     var modelClass = require(`./models/${modelFileName}`).default
-    var modelInstance = new modelClass(data.model.attributes)
+    var modelInstance = new modelClass({attributes: data.model.attributes, isNewRecord: false})
     var subscriptions = this.props.subscriptions
 
     if (data.type == "update") {
