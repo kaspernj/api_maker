@@ -65,12 +65,11 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
     new_select = {}
 
     select.each do |model_collection_name, attributes|
-      model_class = model_collection_name.underscore.singularize.camelize.safe_constantize
-      raise "Model class not found for: #{model_collection_name}" unless model_class
-      resource = ApiMaker::Serializer.resource_for!(model_class)
+      model_class = model_collection_name.underscore.singularize.camelize
+      resource = "Resources::#{model_class}Resource".safe_constantize
+      raise "Resource not found for: #{model_collection_name}" unless resource
       new_attributes = resource._attributes.select { |key| attributes.include?(key.to_s) }
-
-      new_select[model_class] = new_attributes
+      new_select[resource.model_class] = new_attributes
     end
 
     new_select
