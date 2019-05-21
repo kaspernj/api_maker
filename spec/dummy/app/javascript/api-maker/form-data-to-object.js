@@ -60,11 +60,20 @@ export default class FormDataToObject {
         var newResult = []
         result[key] = newResult
       } else {
-        var newResult = {}
-        result[key] = newResult
-      }
+        if (key in result) {
+          var newResult = result[key]
+        } else {
+          if (newRest == "[]") {
+            var newResult = []
+          } else {
+            var newResult = {}
+          }
 
-      this.treatSecond(value, newRest, newResult)
+          result[key] = newResult
+        }
+
+        this.treatSecond(value, newRest, newResult)
+      }
     }
   }
 }
