@@ -1,22 +1,26 @@
 class ApiMaker::CommandsController < ApiMaker::BaseController
   def create
-    responses = {}
+    command_response = ApiMaker::CommandResponse.new
+    controller = self
 
     params[:pool].each do |command_type, command_type_data|
       command_type_data.each do |model_plural_name, command_model_data|
         command_model_data.each do |command_name, command_data|
-          result = ApiMaker.const_get("#{command_type.camelize}CommandService").execute!(
+          ApiMaker.const_get("#{command_type.camelize}CommandService").new(
+            ability: current_ability,
+            args: api_maker_args,
+            command_response: command_response,
             commands: command_data,
             command_name: command_name,
             model_name: model_plural_name,
-            controller: self
-          ).result
-
-          responses.merge!(result)
+            controller: controller
+          ).execute!
         end
       end
     end
 
-    render json: {responses: responses}
+    command_response.join_threads
+
+    render json: {responses: command_response.result}
   end
 end

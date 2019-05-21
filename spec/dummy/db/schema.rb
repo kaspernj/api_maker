@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_07_094938) do
+ActiveRecord::Schema.define(version: 2019_05_20_090942) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -27,6 +27,25 @@ ActiveRecord::Schema.define(version: 2019_03_07_094938) do
     t.datetime "updated_at", null: false
     t.integer "customer_id"
     t.index ["customer_id"], name: "index_accounts_on_customer_id"
+  end
+
+  create_table "activities", force: :cascade do |t|
+    t.string "trackable_type"
+    t.integer "trackable_id"
+    t.string "owner_type"
+    t.integer "owner_id"
+    t.string "key"
+    t.text "parameters"
+    t.string "recipient_type"
+    t.integer "recipient_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type"
+    t.index ["owner_type", "owner_id"], name: "index_activities_on_owner_type_and_owner_id"
+    t.index ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type"
+    t.index ["recipient_type", "recipient_id"], name: "index_activities_on_recipient_type_and_recipient_id"
+    t.index ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type"
+    t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable_type_and_trackable_id"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -68,6 +87,14 @@ ActiveRecord::Schema.define(version: 2019_03_07_094938) do
     t.integer "user_id"
     t.index ["project_id"], name: "index_tasks_on_project_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
+  end
+
+  create_table "user_roles", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

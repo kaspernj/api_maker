@@ -11,7 +11,9 @@ require "cancancan"
 require "database_cleaner"
 require "devise"
 require "factory_bot_rails"
+require "js-routes"
 require "pry-rails"
+require "public_activity"
 require "puma"
 require "rspec/retry" if ENV["CI"]
 require "waitutil"
@@ -57,7 +59,7 @@ Capybara.javascript_driver = :headless_chrome
 Capybara.server = :puma, {Silent: true}
 
 RSpec.configure do |config|
-  config.include ChromeHelper
+  config.include ApiMaker::SpecHelper
   config.include FactoryBot::Syntax::Methods
   config.include Warden::Test::Helpers
 

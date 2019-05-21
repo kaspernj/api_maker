@@ -1,8 +1,8 @@
 class ApiMaker::Serializer
-  attr_reader :model, :relationships
+  attr_reader :ability, :args, :model, :relationships
 
   def self.resource_for(klass)
-    "Resources::#{klass.name}Resource".constantize
+    ApiMaker::MemoryStorage.current.resource_for_model(klass)
   rescue NameError
     nil
   end
@@ -11,55 +11,40 @@ class ApiMaker::Serializer
     ApiMaker::MemoryStorage.current.resource_for_model(klass)
   end
 
-  def initialize(ability: nil, args: {}, model:)
+  def initialize(ability: nil, args: {}, model:, select: nil)
     @args = args
     @model = model
     @ability = ability
     @relationships = {}
+    @select = select
   end
 
   def attributes
-    result = {}
-    resource._attributes.each do |attribute, data|
-      if data.dig(:args, :if).present?
-        condition_result = attribute_value(data.fetch(:args).fetch(:if))
-        next unless condition_result
+    ApiMaker::Configuration.profile("attributes") do
+      result = {}
+      attributes_to_read.each do |attribute, data|
+        if (if_name = data.dig(:args, :if))
+          condition_result = attribute_value(if_name)
+          next unless condition_result
+        end
+
+        result[attribute] = attribute_value(attribute)
       end
 
-      result[attribute] = attribute_converted_value(attribute)
+      result
     end
-
-    result
   end
 
-  def attribute_converted_value(attribute)
-    value = attribute_value(attribute)
-
-    if value.is_a?(Date)
-      value.iso8601
-    elsif value.is_a?(Time)
-      value.utc.iso8601
-    elsif value.class.name == "Money"
-      {
-        amount: value.cents,
-        currency: value.currency.iso_code,
-        type: :money
-      }
-    else
-      value
-    end
+  def attributes_to_read
+    @attributes_to_read ||= @select || resource._attributes
   end
 
   def attribute_value(attribute)
     if resource_instance.respond_to?(attribute)
       resource_instance.__send__(attribute)
     else
-      @model.__send__(attribute)
+      model.__send__(attribute)
     end
-  end
-
-  def current_ability
-    @controller&.__send__(:current_ability)
   end
 
   def fetch(*args, &blk)
@@ -67,17 +52,15 @@ class ApiMaker::Serializer
   end
 
   def resource
-    @resource ||= ApiMaker::Serializer.resource_for!(@model.class)
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(model.class)
   end
 
   def resource_instance
-    @resource_instance ||= resource.new(ability: current_ability, args: @args, model: @model)
+    @resource_instance ||= resource.new(ability: ability, args: args, model: model)
   end
 
   def result
     @result ||= {
-      type: @model.class.model_name.plural,
-      id: @model.id,
       attributes: attributes,
       relationships: relationships
     }
@@ -92,7 +75,7 @@ class ApiMaker::Serializer
   end
 
   def inspect
-    "<ApiMaker::Serializer model=\"#{model.class.name}\" id=\"#{model.id}\">"
+    "<ApiMaker::Serializer id=\"#{model.id}\" model=\"#{model.class.name}\" relationships=\"#{relationships}\">"
   end
 
   alias to_s inspect

@@ -1,11 +1,12 @@
 class ApiMaker::Preloader
-  def initialize(ability: nil, args: nil, collection:, data:, include_param:, records: nil)
+  def initialize(ability: nil, args: nil, collection:, data:, include_param:, records:, select:)
     @ability = ability
     @args = args
     @collection = collection
     @data = data
     @include_param = include_param
-    @records = records || @data.fetch(:data)
+    @records = records
+    @select = select
   end
 
   def fill_data
@@ -21,16 +22,19 @@ class ApiMaker::Preloader
       fill_empty_relationships_for_key(reflection, key)
       preload_class = preload_class_for_key(reflection)
 
-      preload_result = preload_class.new(
-        ability: @ability,
-        args: @args,
-        data: @data,
-        records: @records,
-        collection: @collection,
-        reflection: reflection
-      ).preload
+      preload_result = ApiMaker::Configuration.profile("Preloading #{reflection.klass.name} with #{preload_class.name}") do
+        preload_class.new(
+          ability: @ability,
+          args: @args,
+          collection: @collection,
+          data: @data,
+          records: @records,
+          reflection: reflection,
+          select: @select
+        ).preload
+      end
 
-      next if value.blank?
+      next if value.blank? || preload_result.fetch(:collection).empty?
 
       ApiMaker::Preloader.new(
         ability: @ability,
@@ -38,7 +42,8 @@ class ApiMaker::Preloader
         data: @data,
         collection: preload_result.fetch(:collection),
         include_param: value,
-        records: @data.fetch(:included)
+        records: @data.fetch(:included),
+        select: @select
       ).fill_data
     end
   end
@@ -46,12 +51,17 @@ class ApiMaker::Preloader
 private
 
   def fill_empty_relationships_for_key(reflection, key)
-    records_to_set = @records.select { |record| record.model.class == reflection.active_record }
+    if @records.is_a?(Hash)
+      collection_name = ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
+      records_to_set = @records.fetch(collection_name).values
+    else
+      records_to_set = @records.select { |record| record.model.class == reflection.active_record }
+    end
 
     case reflection.macro
     when :has_many
       records_to_set.each do |model|
-        model.relationships[key.to_sym] ||= {data: []}
+        model.relationships[key.to_sym] ||= []
       end
     when :belongs_to
       records_to_set.each do |model|

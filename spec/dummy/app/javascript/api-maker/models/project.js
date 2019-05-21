@@ -3,7 +3,7 @@ import Collection from "../collection"
 
 export default class Project extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"created_at","type":"datetime"}],"collectionKey":"projects","i18nKey":"project","name":"Project","pluralName":"projects","relationships":[{"className":"ProjectDetail","name":"project_detail","macro":"has_one"},{"className":"Task","name":"tasks","macro":"has_many"}],"paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
+    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"created_at","type":"datetime"}],"collectionKey":"projects","collectionName":"projects","i18nKey":"project","name":"Project","pluralName":"projects","relationships":[{"className":"ProjectDetail","collectionName":"project-details","name":"project_detail","macro":"has_one"},{"className":"Task","collectionName":"tasks","name":"tasks","macro":"has_many"}],"paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
   }
 
   
@@ -11,13 +11,12 @@ export default class Project extends BaseModel {
       loadProjectDetail() {
         let id = this.id()
         let modelClass = require(`api-maker/models/project-detail`).default
-        return this._loadHasOneReflection({"reflectionName":"project_detail","model":this,"modelClass":modelClass,"ransack":{"project_id_eq":id}})
+        return this._loadHasOneReflection({"reflectionName":"project_detail","model":this,"modelClass":modelClass}, {"ransack":{"project_id_eq":id}})
       }
 
       projectDetail() {
-        let id = this.id()
         let modelClass = require(`api-maker/models/project-detail`).default
-        return this._readHasOneReflection({"reflectionName":"project_detail","model":this,"modelClass":modelClass,"ransack":{"project_id_eq":id}})
+        return this._readHasOneReflection({"reflectionName":"project_detail","model":this,"modelClass":modelClass})
       }
     
   
@@ -25,7 +24,7 @@ export default class Project extends BaseModel {
       tasks() {
         let id = this.id()
         let modelClass = require(`api-maker/models/task`).default
-        return new Collection({"reflectionName":"tasks","model":this,"modelName":"Task","modelClass":modelClass,"targetPathName":"/api_maker/tasks","ransack":{"project_id_eq":id}})
+        return new Collection({"reflectionName":"tasks","model":this,"modelName":"Task","modelClass":modelClass,"targetPathName":"/api_maker/tasks"}, {"ransack":{"project_id_eq":id}})
       }
     
   

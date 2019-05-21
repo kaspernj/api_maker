@@ -11,7 +11,9 @@ module ApiMaker::SpecHelper
 
     last_error = errors.last
 
-    custom_trace = last_error.fetch("backtrace").dup + caller
+    custom_trace = []
+    custom_trace += last_error.fetch("backtrace") if last_error["backtrace"].is_a?(Array)
+    custom_trace += caller
 
     error = RuntimeError.new("#{last_error.fetch("errorClass")}: #{last_error.fetch("message")}")
     error.set_backtrace(custom_trace)
@@ -40,6 +42,7 @@ module ApiMaker::SpecHelper
   end
 
   def pretty_html
+    require "htmlbeautifier"
     HtmlBeautifier.beautify(page.html)
   end
 
@@ -50,11 +53,12 @@ module ApiMaker::SpecHelper
     end
   end
 
-  def wait_for_flash_message(expected_message)
+  def wait_for_flash_message(expected_message, timeout_sec: 10)
     received_messages = []
 
     begin
-      WaitUtil.wait_for_condition("wait for flash message", timeout_sec: 10, delay_sec: 0.5) do
+      WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: 0.5) do
+        expect_no_chrome_errors
         current_message = flash_message_text
         received_messages << current_message
         current_message == expected_message

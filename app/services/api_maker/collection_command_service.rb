@@ -1,28 +1,15 @@
-class ApiMaker::CollectionCommandService < ApiMaker::ApplicationService
-  def initialize(commands:, command_name:, model_name:, controller:)
-    raise "No controller given" if controller.blank?
-
-    @ability = controller.__send__(:current_ability)
-    @command_name = command_name
-    @commands = commands
-    @controller = controller
-    @model_name = model_name
-  end
-
+class ApiMaker::CollectionCommandService < ApiMaker::CommandService
   def execute!
     authorize!
 
-    command_response = ApiMaker::CommandResponse.new
-
-    instance = constant.new(
+    constant.execute_in_thread!(
+      ability: ability,
+      args: args,
       collection: nil,
-      commands: @commands,
+      commands: commands,
       command_response: command_response,
-      controller: @controller
+      controller: controller
     )
-    instance.execute!
-
-    ServicePattern::Response.new(result: command_response.result)
   end
 
   def authorize!

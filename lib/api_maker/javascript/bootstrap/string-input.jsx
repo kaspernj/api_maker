@@ -31,6 +31,7 @@ export default class BootstrapStringInput extends React.Component {
         {this.inputType() == "money" &&
           <MoneyInput
             attribute={this.props.attribute}
+            currenciesCollection={this.props.currenciesCollection}
             currencyName={this.props.currencyName}
             model={this.props.model}
             name={this.props.name}

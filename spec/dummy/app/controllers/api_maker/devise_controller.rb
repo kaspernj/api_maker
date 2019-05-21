@@ -12,7 +12,7 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
       remember_me(model) if params.dig(:args, :rememberMe)
       render json: {success: true, model_data: serializer.result}
     else
-      render json: {success: false}, status: :unprocessable_entity
+      render json: {success: false, errors: [invalid_error_message]}, status: :unprocessable_entity
     end
   end
 
@@ -26,19 +26,24 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
 private
 
   def check_model_exists
-    render json: {success: false}, status: :unprocessable_entity unless model
+    error_msg = t("devise.failure.not_found_in_database", authentication_keys: model_class.authentication_keys.join(", "))
+    render json: {success: false, errors: [error_msg]}, status: :unprocessable_entity unless model
   end
 
   def check_serializer_exists
-    render json: {success: false}, status: :unprocessable_entity unless resource
+    render json: {success: false, errors: ["Serializer doesn't exist for #{scope}"]}, status: :unprocessable_entity unless resource
+  end
+
+  def invalid_error_message
+    t("devise.failure.invalid", authentication_keys: model_class.authentication_keys.join(", "))
   end
 
   def model
-    @model ||= begin
-      class_name = scope.camelize
-      class_instance = class_name.constantize
-      class_instance.find_for_authentication(email: params[:username])
-    end
+    @model ||= model_class.find_for_authentication(email: params[:username])
+  end
+
+  def model_class
+    @model_class ||= scope.camelize.safe_constantize
   end
 
   def scope

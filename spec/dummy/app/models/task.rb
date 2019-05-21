@@ -1,4 +1,6 @@
 class Task < ApplicationRecord
+  api_maker_broadcast_updates
+
   belongs_to :project, inverse_of: :tasks
   belongs_to :user, inverse_of: :tasks, optional: true
 

@@ -1,29 +1,26 @@
 class ApiMaker::PreloaderBelongsTo
-  def initialize(ability:, args:, data:, collection:, records:, reflection:)
+  def initialize(ability:, args:, data:, collection:, records:, reflection:, select:)
     @ability = ability
     @args = args
     @data = data
     @collection = collection
     @reflection = reflection
+    @reflection_name = @reflection.name
     @records = records
+    @select = select
   end
 
   def preload
     models.each do |model|
-      @records.each do |record|
-        next unless record.model.class == @reflection.active_record
-        next unless record.model.attributes.fetch(@reflection.foreign_key) == model.attributes.fetch(look_up_key)
-
-        record.relationships[@reflection.name] = {data: {
-          type: plural_name,
-          id: model.id
-        }}
+      records_for_model(model).each do |record|
+        record.relationships[@reflection_name] = model.id
       end
 
-      next if exists?(model)
+      serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.class))
+      collection_name = serializer.resource.collection_name
 
-      serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
-      @data.fetch(:included) << serialized
+      @data.fetch(:included)[collection_name] ||= {}
+      @data.fetch(:included).fetch(collection_name)[model.id] ||= serializer
     end
 
     {collection: models}
@@ -31,9 +28,12 @@ class ApiMaker::PreloaderBelongsTo
 
 private
 
-  def exists?(model)
-    @data.fetch(:included).find do |record|
-      record.fetch(:type) == plural_name && record.fetch(:id) == model.attributes.fetch(model.class.primary_key)
+  def collection_name
+    @collection_name = begin
+      ApiMaker::MemoryStorage
+        .current
+        .resource_for_model(@reflection.active_record)
+        .collection_name
     end
   end
 
@@ -41,6 +41,7 @@ private
     @models ||= begin
       models = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym).uniq)
       models = models.accessible_by(@ability) if @ability
+      models.load
       models
     end
   end
@@ -49,7 +50,10 @@ private
     @look_up_key ||= @reflection.options[:primary_key] || @reflection.klass.primary_key
   end
 
-  def plural_name
-    @plural_name ||= @reflection.klass.model_name.plural
+  def records_for_model(model)
+    @records
+      .fetch(collection_name)
+      .values
+      .select { |record| record.model.read_attribute(@reflection.foreign_key) == model.read_attribute(look_up_key) }
   end
 end

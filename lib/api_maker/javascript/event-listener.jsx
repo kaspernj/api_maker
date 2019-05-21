@@ -8,9 +8,17 @@ export default class ApiMakerEventListener extends React.Component {
     target.dispatchEvent(event, args)
   }
 
+  static propTypes = {
+    event: PropTypes.string.isRequired,
+    onCalled: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props)
     this.onCalled = this.onCalled.bind(this)
+
+    if (!this.props.target)
+      throw new Error("'target' was expected but not given")
   }
 
   componentWillMount() {

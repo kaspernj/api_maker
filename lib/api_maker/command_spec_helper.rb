@@ -22,6 +22,8 @@ class ApiMaker::CommandSpecHelper
 
   def command
     @command ||= command_class.new(
+      ability: controller.__send__(:current_ability),
+      args: controller.__send__(:api_maker_args),
       collection: collection,
       commands: commands,
       command_response: response,

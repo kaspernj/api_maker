@@ -21,7 +21,7 @@ describe ApiMaker::IndexCommand do
       command = helper.add_command
       helper.execute!
 
-      expect(command.result.fetch("data").length).to eq 2
+      expect(command.result.fetch("data").fetch("tasks").length).to eq 2
     end
 
     it "includes pagination data" do
@@ -39,8 +39,17 @@ describe ApiMaker::IndexCommand do
       helper.execute!
       parsed = command.result
 
-      expect(parsed.fetch("data").length).to eq 1
-      expect(parsed.dig("data", 0, :attributes, :user_id)).to eq user.id
+      expect(parsed.dig("data", "tasks")).to eq [task.id]
+      expect(parsed.dig("included", "tasks", task.id.to_s, :attributes, :user_id)).to eq user.id
+    end
+  end
+
+  describe "#parse_select" do
+    it "parses sub models" do
+      result = helper.command.parse_select("UserRole" => %w[id role])
+
+      expect(result.keys).to include User::Role
+      expect(result.fetch(User::Role).keys).to eq [:id, :role]
     end
   end
 end

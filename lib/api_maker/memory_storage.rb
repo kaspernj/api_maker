@@ -1,12 +1,12 @@
 class ApiMaker::MemoryStorage
-  attr_reader :resources, :storage
+  attr_reader :storage
 
   def self.current
     @current ||= ApiMaker::MemoryStorage.new
   end
 
   def initialize
-    @resources = []
+    @model_class_for = {}
     @storage = {}
   end
 
@@ -20,17 +20,14 @@ class ApiMaker::MemoryStorage
     @storage[klass][mode][data] = {data: data, args: args} unless @storage[klass][mode].key?(data)
   end
 
-  def add_resource(klass)
-    return if klass.name == "Resources::ApplicationResource"
-    @resources << {klass: klass}
+  def model_class_for(resource:, klass:)
+    @model_class_for[klass.name] = resource.name
   end
 
   def resource_for_model(model_class)
-    @resources.each do |klass_data|
-      # Used name to prevent Rails dev reload crash
-      return klass_data.fetch(:klass) if klass_data.fetch(:klass).model_class.name == model_class.name
-    end
-
-    raise "Couldnt find resource for model: #{model_class.name}"
+    class_name = @model_class_for[model_class.name] || "Resources::#{model_class.name.gsub("::", "")}Resource"
+    resource_class = class_name.safe_constantize
+    raise "Resource couldn't be found from model: #{model_class}" unless resource_class
+    resource_class
   end
 end

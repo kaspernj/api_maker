@@ -1,36 +1,32 @@
 class ApiMaker::PreloaderHasOne
-  def initialize(ability:, args:, data:, collection:, reflection:, records:)
+  def initialize(ability:, args:, data:, collection:, reflection:, records:, select: @select)
     @ability = ability
     @args = args
     @data = data
     @collection = collection
     @reflection = reflection
     @records = records
+    @select = select
 
     raise "Records was nil" unless records
   end
 
-  def klass_plural
-    @klass_plural ||= @reflection.klass.model_name.plural
+  def collection_name
+    @collection_name ||= ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
   end
 
   def preload
-    plural_name = @reflection.klass.model_name.plural
-
     models.each do |model|
-      origin_id = model.attributes.fetch("api_maker_origin_id")
-      origin_data = @records.find { |record| record.model.class == @reflection.active_record && record.model.id == origin_id }
+      ApiMaker::Configuration.profile("Preloading #{model.class.name}##{model.id}") do
+        origin_data = origin_data_for_model(model)
+        origin_data.fetch(:relationships)[@reflection.name] = model.id
 
-      origin_data.fetch(:relationships)[@reflection.name] = {data: {
-        type: plural_name,
-        id: model.id
-      }}
+        serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.class))
+        collection_name = serializer.resource.collection_name
 
-      exists = @data.fetch(:included).find { |record| record.fetch(:type) == klass_plural && record.fetch(:id) == model.id }
-      next if exists
-
-      serialized = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model)
-      @data.fetch(:included) << serialized
+        @data.fetch(:included)[collection_name] ||= {}
+        @data.fetch(:included).fetch(collection_name)[model.id] ||= serializer
+      end
     end
 
     {collection: models}
@@ -46,8 +42,14 @@ class ApiMaker::PreloaderHasOne
 
       query = query.accessible_by(@ability) if @ability
       query = query.fix
+      query.load
       query
     end
+  end
+
+  def origin_data_for_model(model)
+    origin_id = model.read_attribute("api_maker_origin_id")
+    @data.fetch(:included).fetch(collection_name).fetch(origin_id)
   end
 
   def query_through
