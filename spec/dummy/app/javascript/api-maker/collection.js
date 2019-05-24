@@ -25,11 +25,11 @@ export default class Collection {
   }
 
   first() {
-    return new Promise((resolve, reject) => {
-      this.toArray().then((models) => {
+    return new Promise(resolve =>
+      this.toArray().then(models =>
         resolve(models[0])
-      })
-    })
+      )
+    )
   }
 
   limit(amount) {
@@ -70,7 +70,7 @@ export default class Collection {
   }
 
   result() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this._response().then((response) => {
         let models = this._responseToModels(response)
         let result = new Result({
@@ -111,7 +111,7 @@ export default class Collection {
   }
 
   toArray() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this._response().then((response) => {
         let models = this._responseToModels(response)
         resolve(models)
@@ -120,7 +120,7 @@ export default class Collection {
   }
 
   modelClass() {
-    return require(`api-maker/models/${inflection.dasherize(this.args.modelClass.modelClassData().paramKey)}`).default
+    return require(`api-maker/models/${inflection.dasherize(inflection.singularize(this.args.modelClass.modelClassData().collectionName))}`).default
   }
 
   _clone(args) {

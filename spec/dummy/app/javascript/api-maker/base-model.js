@@ -1,6 +1,7 @@
 import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
 import CommandsPool from "./commands-pool"
+import CustomError from "./custom-error"
 import FormDataToObject from "./form-data-to-object"
 import ModelName from "./model-name"
 import Money from "js-money"
@@ -23,7 +24,7 @@ export default class BaseModel {
         if (model) {
           resolve(model)
         } else {
-          reject(error)
+          reject(new CustomError("Record not found"))
         }
       })
     })
@@ -118,10 +119,10 @@ export default class BaseModel {
 
             resolve({model: this, response: response})
           } else {
-            reject({model: this, response: response})
+            reject(new CustomError("Response wasn't successful", {model: this, response: response}))
           }
         }, (response) => {
-          reject({model: this, response: response})
+          reject(new CustomError("Command failed", {model: this, response: response}))
         })
     })
   }
@@ -140,10 +141,10 @@ export default class BaseModel {
 
             resolve({model: this, response: response})
           } else {
-            reject({model: this, response: response})
+            reject(new CustomError("Response wasn't successful", {model: this, response: response}))
           }
         }, (response) => {
-          reject({model: this, response: response})
+          reject(new CustomError("Command failed", {model: this, response: response}))
         })
     })
   }
@@ -160,10 +161,10 @@ export default class BaseModel {
 
             resolve({model: this, response: response})
           } else {
-            reject({model: this, response: response})
+            reject(new CustomError("Response wasn't successful", {model: this, response: response}))
           }
         }, (response) => {
-          reject({model: this, response: response})
+          reject(new CustomError("Command failed", {model: this, response: response}))
         })
     })
   }
@@ -333,10 +334,10 @@ export default class BaseModel {
 
             resolve({"model": this, "response": response})
           } else {
-            reject({"model": this, "response": response})
+            reject(new CustomError("Response wasn't successful", {"model": this, "response": response}))
           }
         }, (response) => {
-          reject({model: this, response: response})
+          reject(new CustomError("Command failed", {model: this, response: response}))
         })
     })
   }
@@ -355,10 +356,10 @@ export default class BaseModel {
 
             resolve({model: this, response: response})
           } else {
-            reject({model: this, response: response})
+            reject(new CustomError("Response wasn't successful", {"model": this, "response": response}))
           }
         }, (response) => {
-          reject({model: this, response: response})
+          reject(new CustomError("Command failed", {model: this, response: response}))
         })
     })
   }
@@ -378,7 +379,7 @@ export default class BaseModel {
         .then((response) => {
           resolve({valid: response.valid, errors: response.errors})
         }, (response) => {
-          reject({model: this, response: response})
+          reject(new CustomError("Command failed", {model: this, response: response}))
         })
     })
   }
@@ -477,7 +478,7 @@ export default class BaseModel {
   }
 
   _loadBelongsToReflection(args, queryArgs = {}) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       if (args.reflectionName in this.relationshipsCache) {
         resolve(this.relationshipsCache[args.reflectionName])
       } else {
@@ -502,7 +503,7 @@ export default class BaseModel {
   }
 
   _loadHasOneReflection(args, queryArgs = {}) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       if (args.reflectionName in this.relationshipsCache) {
         resolve(this.relationshipsCache[args.reflectionName])
       } else {
@@ -538,6 +539,10 @@ export default class BaseModel {
     for(var relationshipName in this.includedRelationships) {
       var relationshipData = this.includedRelationships[relationshipName]
       var relationshipClassData = this.modelClassData().relationships.find(relationship => relationship.name == relationshipName)
+
+      if (!relationshipClassData)
+        throw new Error(`No relationship on ${this.modelClassData().name} by that name: ${relationshipName}`)
+
       var relationshipType = relationshipClassData.collectionName
 
       if (!relationshipData) {

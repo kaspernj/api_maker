@@ -1,4 +1,5 @@
 import Api from "./api"
+import CustomError from "./custom-error"
 import EventEmitter from "events"
 const inflection = require("inflection")
 
@@ -58,7 +59,7 @@ export default class Devise {
           resolve({response: response})
           Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
         }, (response) => {
-          reject(response)
+          reject(new CustomError("Sign in failed", {response: response}))
         })
     })
   }
@@ -88,7 +89,7 @@ export default class Devise {
           resolve(response)
           Devise.callSignOutEvent(args)
         }, (response) => {
-          reject(response)
+          reject(new CustomError("Sign out failed", {response: response}))
         })
     })
   }
