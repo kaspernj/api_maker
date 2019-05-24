@@ -71,4 +71,10 @@ module ApiMaker::SpecHelper
   def wait_for_selector(selector)
     wait_for_chrome { page.has_selector?(selector) }
   end
+
+  def wait_for_selectors(*selectors)
+    selectors.each do |selector|
+      wait_for_selector(selector)
+    end
+  end
 end
