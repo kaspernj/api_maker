@@ -6,13 +6,13 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
 
   def do_sign_in
     if !model.active_for_authentication?
-      render json: {success: false, errors: [model.inactive_message]}, status: :unprocessable_entity
+      render json: {success: false, errors: [model.inactive_message]}
     elsif model.valid_password?(params[:password])
       sign_in(model, scope: scope)
       remember_me(model) if params.dig(:args, :rememberMe)
       render json: {success: true, model_data: serializer.result}
     else
-      render json: {success: false, errors: [invalid_error_message]}, status: :unprocessable_entity
+      render json: {success: false, errors: [invalid_error_message]}
     end
   end
 
@@ -27,11 +27,11 @@ private
 
   def check_model_exists
     error_msg = t("devise.failure.not_found_in_database", authentication_keys: model_class.authentication_keys.join(", "))
-    render json: {success: false, errors: [error_msg]}, status: :unprocessable_entity unless model
+    render json: {success: false, errors: [error_msg]} unless model
   end
 
   def check_serializer_exists
-    render json: {success: false, errors: ["Serializer doesn't exist for #{scope}"]}, status: :unprocessable_entity unless resource
+    render json: {success: false, errors: ["Serializer doesn't exist for #{scope}"]} unless resource
   end
 
   def invalid_error_message

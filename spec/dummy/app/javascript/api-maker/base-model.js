@@ -121,8 +121,8 @@ export default class BaseModel {
           } else {
             reject(new CustomError("Response wasn't successful", {model: this, response: response}))
           }
-        }, (response) => {
-          reject(new CustomError("Command failed", {model: this, response: response}))
+        }, (error) => {
+          reject(error)
         })
     })
   }
@@ -143,8 +143,8 @@ export default class BaseModel {
           } else {
             reject(new CustomError("Response wasn't successful", {model: this, response: response}))
           }
-        }, (response) => {
-          reject(new CustomError("Command failed", {model: this, response: response}))
+        }, (error) => {
+          reject(response)
         })
     })
   }
@@ -163,8 +163,8 @@ export default class BaseModel {
           } else {
             reject(new CustomError("Response wasn't successful", {model: this, response: response}))
           }
-        }, (response) => {
-          reject(new CustomError("Command failed", {model: this, response: response}))
+        }, (error) => {
+          reject(error)
         })
     })
   }
@@ -336,8 +336,8 @@ export default class BaseModel {
           } else {
             reject(new CustomError("Response wasn't successful", {"model": this, "response": response}))
           }
-        }, (response) => {
-          reject(new CustomError("Command failed", {model: this, response: response}))
+        }, (error) => {
+          reject(error)
         })
     })
   }
@@ -358,8 +358,8 @@ export default class BaseModel {
           } else {
             reject(new CustomError("Response wasn't successful", {"model": this, "response": response}))
           }
-        }, (response) => {
-          reject(new CustomError("Command failed", {model: this, response: response}))
+        }, (error) => {
+          reject(error)
         })
     })
   }
@@ -378,8 +378,8 @@ export default class BaseModel {
       CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionKey}-valid`, collectionKey: this.modelClassData().collectionKey, primaryKey: this._primaryKey(), type: "valid"}, {})
         .then((response) => {
           resolve({valid: response.valid, errors: response.errors})
-        }, (response) => {
-          reject(new CustomError("Command failed", {model: this, response: response}))
+        }, (error) => {
+          reject(error)
         })
     })
   }

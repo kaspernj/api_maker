@@ -55,14 +55,18 @@ export default class Devise {
       var postData = {"username": username, "password": password, "args": args}
       Api.post("/api_maker/devise/do_sign_in", postData)
         .then((response) => {
-          var modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
-          var modelInstance = new modelClass(response.model_data)
+          if (response.success) {
+            var modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
+            var modelInstance = new modelClass(response.model_data)
 
-          Devise.updateSession(modelInstance)
-          resolve({response: response})
-          Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
-        }, (response) => {
-          reject(new CustomError("Sign in failed", {response: response}))
+            Devise.updateSession(modelInstance)
+            resolve({response: response})
+            Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
+          } else {
+            reject(new CustomError("Sign in failed", {response: response}))
+          }
+        }, (error) => {
+          reject(error)
         })
     })
   }
@@ -88,11 +92,15 @@ export default class Devise {
       let postData = {"args": args}
       Api.post("/api_maker/devise/do_sign_out", postData)
         .then((response) => {
-          Devise.setSignedOut(args)
-          resolve(response)
-          Devise.callSignOutEvent(args)
-        }, (response) => {
-          reject(new CustomError("Sign out failed", {response: response}))
+          if (response.success) {
+            Devise.setSignedOut(args)
+            resolve(response)
+            Devise.callSignOutEvent(args)
+          } else {
+            reject(new CustomError("Sign out failed", {response: response}))
+          }
+        }, (error) => {
+          reject(error)
         })
     })
   }
