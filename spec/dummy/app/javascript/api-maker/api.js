@@ -1,3 +1,4 @@
+import CustomError from "./custom-error"
 import qs from "qs"
 
 export default class {
@@ -41,7 +42,7 @@ export default class {
         if (xhr.status == 200) {
           resolve(response)
         } else {
-          reject(response)
+          reject(new CustomError(`Request failed with code: ${xhr.status}`, {response: response}))
         }
       }
 
