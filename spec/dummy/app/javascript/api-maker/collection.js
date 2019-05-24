@@ -87,6 +87,25 @@ export default class Collection {
     return this._clone({searchKey: searchKey})
   }
 
+  select(originalSelect) {
+    var newSelect = {}
+
+    for(var originalModelName in originalSelect) {
+      var newModalName = inflection.dasherize(inflection.underscore(originalModelName))
+      var newValues = []
+      var originalValues = originalSelect[originalModelName]
+
+      for(var originalAttributeName of originalValues) {
+        var newAttributeName = inflection.underscore(originalAttributeName)
+        newValues.push(newAttributeName)
+      }
+
+      newSelect[newModalName] = newValues
+    }
+
+    return this._clone({select: newSelect})
+  }
+
   sort(sortBy) {
     return this._clone({ransack: {s: sortBy}})
   }
@@ -101,7 +120,7 @@ export default class Collection {
   }
 
   modelClass() {
-    return require(`api-maker/models/${inflection.dasherize(this.args.modelClass.modelClassData().paramKey)}`).default
+    return require(`api-maker/models/${inflection.dasherize(inflection.singularize(this.args.modelClass.modelClassData().collectionName))}`).default
   }
 
   _clone(args) {
@@ -152,6 +171,9 @@ export default class Collection {
 
     if (this.queryArgs.page)
       params.page = this.queryArgs.page
+
+    if (this.queryArgs.select)
+      params.select = this.queryArgs.select
 
     return params
   }

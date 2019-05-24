@@ -1,5 +1,5 @@
 class ApiMaker::Configuration
-  attr_accessor :profiling, :threadding
+  attr_accessor :profiling, :react_native_path, :threadding
 
   def self.current
     @current ||= ApiMaker::Configuration.new

@@ -25,7 +25,15 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
 
   def collection_from_query(collection)
     ApiMaker::Configuration.profile("IndexCommand collection_from_query") do
-      ApiMaker::CollectionSerializer.new(ability: current_ability, args: api_maker_args, collection: collection, include_param: params[:include]).result
+      select = parse_select(params[:select]&.permit!&.to_hash) if params[:select]
+
+      ApiMaker::CollectionSerializer.new(
+        ability: current_ability,
+        args: api_maker_args,
+        collection: collection,
+        include_param: params[:include],
+        select: select
+      ).result
     end
   end
 
@@ -50,6 +58,21 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
     query_through = query_through.accessible_by(current_ability)
     query_through = filter_custom_accessible_by(query_through)
     query_through
+  end
+
+  # This converts the list of attributes to a hash that contains the data needed for the serializer (so the serializer doesn't have to do it for each model)
+  def parse_select(select)
+    new_select = {}
+
+    select.each do |model_collection_name, attributes|
+      model_class = model_collection_name.underscore.singularize.camelize
+      resource = "Resources::#{model_class}Resource".safe_constantize
+      raise "Resource not found for: #{model_collection_name}" unless resource
+      new_attributes = resource._attributes.select { |key| attributes.include?(key.to_s) }
+      new_select[resource.model_class] = new_attributes
+    end
+
+    new_select
   end
 
   def set_collection

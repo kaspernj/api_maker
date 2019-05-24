@@ -23,7 +23,7 @@ export default class ApiMakerCableSubscriptionPool {
 
   onReceived(data) {
     var modelType = data.model_type
-    var modelName = inflection.camelize(inflection.singularize(modelType))
+    var modelName = inflection.camelize(inflection.singularize(modelType.replace(/-/, "_")))
     var modelId = data.model_id
     var modelFileName = inflection.dasherize(inflection.singularize(modelType))
     var modelClass = require(`./models/${modelFileName}`).default

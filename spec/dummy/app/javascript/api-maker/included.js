@@ -14,7 +14,7 @@ export default class ApiMakerIncluded {
         var includedData = this.response.included[includedType][includedId]
         var modelClassName = inflection.dasherize(inflection.singularize(includedType))
         var modelClass = require(`api-maker/models/${modelClassName}`).default
-        var model = new modelClass({data: includedData, response: this.response})
+        var model = new modelClass({data: includedData, isNewRecord: false})
 
         if (!this.included[includedType])
           this.included[includedType] = {}

@@ -58,6 +58,7 @@ module ApiMaker::SpecHelper
 
     begin
       WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: 0.5) do
+        expect_no_chrome_errors
         current_message = flash_message_text
         received_messages << current_message
         current_message == expected_message
