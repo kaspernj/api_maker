@@ -74,10 +74,13 @@ class ApiMaker::PreloaderThrough
   end
 
   def next_reflection_for(current_reflection)
-    new_reflection = current_reflection.through_reflection.klass.reflections[@reflection.name.to_s.pluralize]
-    new_reflection ||= current_reflection.through_reflection.klass.reflections[@reflection.name.to_s.singularize]
+    reflection_name = current_reflection.source_reflection_name || @reflection.name
 
-    raise "No such reflection: #{current_reflection.through_reflection.klass.name}##{@reflection.name}" unless new_reflection
+    new_reflection = current_reflection.through_reflection.klass.reflections[reflection_name.to_s.pluralize]
+    new_reflection ||= current_reflection.through_reflection.klass.reflections[reflection_name.to_s.singularize]
+
+    raise "No such reflection: #{current_reflection.through_reflection.klass.name}##{reflection_name}" unless new_reflection
+
     new_reflection
   end
 

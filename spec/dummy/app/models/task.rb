@@ -9,6 +9,7 @@ class Task < ApplicationRecord
 
   has_one :account, through: :project
   has_one :customer, through: :account
+  has_one :account_customer, through: :account, source: :customer
   has_one :project_detail, through: :project
 
   validates :name, presence: true
