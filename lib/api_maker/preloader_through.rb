@@ -44,12 +44,22 @@ class ApiMaker::PreloaderThrough
       current_reflection = next_reflection_for(current_reflection)
 
       unless current_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-        joins.append(current_reflection.__send__(:inverse_name) || current_reflection.active_record.model_name.plural.to_sym)
+        joins.append(append_name_for_current_reflection(current_reflection))
         break
       end
     end
 
     joins
+  end
+
+  def append_name_for_current_reflection(current_reflection)
+    singular_name = current_reflection.__send__(:inverse_name)&.to_s || current_reflection.active_record.model_name.param_key
+    return singular_name.to_sym if @reflection.klass.reflections.key?(singular_name)
+
+    plural_name = singular_name.pluralize
+    return plural_name.to_sym if @reflection.klass.reflections.key?(plural_name)
+
+    raise "Couldn't find a reflection name #{singular_name} or #{plural_name} on #{@reflection.klass.name}"
   end
 
   def joins_array_to_hash(array)
@@ -74,10 +84,10 @@ class ApiMaker::PreloaderThrough
   end
 
   def next_reflection_for(current_reflection)
-    reflection_name = current_reflection.source_reflection_name || @reflection.name
+    reflection_name = (current_reflection.source_reflection_name || @reflection.name).to_s
 
-    new_reflection = current_reflection.through_reflection.klass.reflections[reflection_name.to_s.pluralize]
-    new_reflection ||= current_reflection.through_reflection.klass.reflections[reflection_name.to_s.singularize]
+    new_reflection = current_reflection.through_reflection.klass.reflections[reflection_name.pluralize]
+    new_reflection ||= current_reflection.through_reflection.klass.reflections[reflection_name.singularize]
 
     raise "No such reflection: #{current_reflection.through_reflection.klass.name}##{reflection_name}" unless new_reflection
 
