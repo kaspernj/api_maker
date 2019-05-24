@@ -111,7 +111,7 @@ export default class Collection {
   }
 
   toArray() {
-    return new Promise(reject => {
+    return new Promise(resolve => {
       this._response().then((response) => {
         let models = this._responseToModels(response)
         resolve(models)
