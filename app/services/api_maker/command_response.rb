@@ -8,24 +8,16 @@ class ApiMaker::CommandResponse
     @threads = []
   end
 
+  def error_for_command(id, data)
+    respond_to_command(id, data, :error)
+  end
+
   def fail_for_command(id, data)
-    @mutex.synchronize do
-      @result[id] = {type: :failed, data: data}
-    end
+    respond_to_command(id, data, :failed)
   end
 
   def result_for_command(id, data)
-    @mutex.synchronize do
-      @result[id] = {type: :success, data: data}
-    end
-  end
-
-  def with_thread(&blk)
-    if Rails.env.test? || !threadding?
-      yield
-    else
-      spawn_thread(&blk)
-    end
+    respond_to_command(id, data, :success)
   end
 
   def join_threads
@@ -34,8 +26,22 @@ class ApiMaker::CommandResponse
     end
   end
 
+  def respond_to_command(id, data, type)
+    @mutex.synchronize do
+      @result[id] = {type: type, data: data}
+    end
+  end
+
   def threadding?
     ApiMaker::Configuration.current.threadding
+  end
+
+  def with_thread(&blk)
+    if Rails.env.test? || !threadding?
+      yield
+    else
+      spawn_thread(&blk)
+    end
   end
 
 private

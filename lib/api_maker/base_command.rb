@@ -64,7 +64,7 @@ private
     begin
       yield command
     rescue => error # rubocop:disable Style/RescueStandardError
-      command.fail(success: false, errors: [command_error_message(error)])
+      command.error(success: false, errors: [command_error_message(error)])
 
       Rails.logger.error error.message
       Rails.logger.error error.backtrace.join("\n")

@@ -10,6 +10,10 @@ class ApiMaker::IndividualCommand
     @response = response
   end
 
+  def error(data = nil)
+    @response.error_for_command(@id, data)
+  end
+
   def fail(data = nil)
     @response.fail_for_command(@id, data)
   end
