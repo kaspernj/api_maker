@@ -1,7 +1,8 @@
 class ApiMaker::CommandResponse
-  attr_reader :locale, :result
+  attr_reader :controller, :locale, :result
 
-  def initialize
+  def initialize(controller: nil)
+    @controller = controller
     @locale = I18n.locale
     @mutex = Mutex.new
     @result = {}
@@ -54,14 +55,14 @@ private
             yield
           end
         end
-      rescue => e # rubocop:disable Style/RescueStandardError
-        puts e.inspect
-        puts e.backtrace
+      rescue => error # rubocop:disable Style/RescueStandardError
+        puts error.inspect
+        puts error.backtrace
 
-        Rails.logger.error e.message
-        Rails.logger.error e.backtrace.join("\n")
+        Rails.logger.error error.message
+        Rails.logger.error error.backtrace.join("\n")
 
-        ApiMaker::Configuration.current.report_error(e)
+        ApiMaker::Configuration.current.report_error(controller: controller, error: error)
       end
     end
   end
