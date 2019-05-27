@@ -69,7 +69,7 @@ private
       Rails.logger.error error.message
       Rails.logger.error error.backtrace.join("\n")
 
-      ApiMaker::Configuration.current.report_error(error)
+      ApiMaker::Configuration.current.report_error(controller: controller, error: error)
     end
   end
 
