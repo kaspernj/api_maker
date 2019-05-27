@@ -46,18 +46,18 @@ module ApiMaker::SpecHelper
     HtmlBeautifier.beautify(page.html)
   end
 
-  def wait_for_chrome
-    WaitUtil.wait_for_condition("wait for chrome", timeout_sec: 6, delay_sec: 0.5) do
+  def wait_for_chrome(delay_sec: 0.5, timeout_sec: 6)
+    WaitUtil.wait_for_condition("wait for chrome", timeout_sec: timeout_sec, delay_sec: delay_sec) do
       expect_no_chrome_errors
       yield
     end
   end
 
-  def wait_for_flash_message(expected_message, timeout_sec: 10)
+  def wait_for_flash_message(expected_message, delay_sec: 0.5, timeout_sec: 10)
     received_messages = []
 
     begin
-      WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: 0.5) do
+      WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: delay_sec) do
         expect_no_chrome_errors
         current_message = flash_message_text
         received_messages << current_message
