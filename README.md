@@ -105,9 +105,9 @@ import Task from "api-maker/models/task"
 
 var task = new Task()
 task.assignAttributes({name: "New task"})
-task.create().then((status) => {
+task.create().then(status => {
   if (status.success) {
-    console.log("Task was created with ID: " + task.id())
+    console.log(`Task was created with ID: ${task.id()}`)
   } else {
     console.log("Task wasnt created")
   }
@@ -117,8 +117,8 @@ task.create().then((status) => {
 ### Finding an existing model
 
 ```js
-Task.find(5).then((task) => {
-  console.log("Task found: " + task.name())
+Task.find(5).then(task => {
+  console.log(`Task found: ${task.name()}`)
 })
 ```
 
@@ -126,9 +126,9 @@ Task.find(5).then((task) => {
 
 ```js
 task.assignAttributes({name: "New name"})
-task.save().then((status) => {
+task.save().then(status => {
   if (status.success) {
-    console.log("Task was updated and name is now: " + task.name())
+    console.log(`Task was updated and name is now: ${task.name()}`)
   } else {
     console.log("Task wasnt updated")
   }
@@ -136,9 +136,9 @@ task.save().then((status) => {
 ```
 
 ```js
-task.update({name: "New name"}).then((status) => {
+task.update({name: "New name"}).then(status => {
   if (status.success) {
-    console.log("Task was updated and name is now: " + task.name())
+    console.log(`Task was updated and name is now: ${task.name()}`)
   } else {
     console.log("Task wasnt updated")
   }
@@ -148,7 +148,7 @@ task.update({name: "New name"}).then((status) => {
 ### Deleting a model
 
 ```js
-task.destroy().then((status) => {
+task.destroy().then(status => {
   if (status.success) {
     console.log("Task was destroyed")
   } else {
@@ -173,8 +173,8 @@ Task.ransack().preload("project.customer").toArray().then(tasks => {
 ApiModels uses [Ransack](https://github.com/activerecord-hackery/ransack) to expose a huge amount of options to query data.
 
 ```js
-Task.ransack({name_cont: "something"}).toArray().then((tasks) => {
-  console.log("Found: " + tasks.length + " tasks")
+Task.ransack({name_cont: "something"}).toArray().then(tasks => {
+  console.log(`Found: ${tasks.length} tasks`)
 })
 ```
 
@@ -201,12 +201,12 @@ Each attribute is defined as a method on each model. So if you have an attribute
 A `has many` relationship will return a collection the queries the sub models.
 
 ```js
-project.tasks().toArray().then((tasks) => {
-  console.log("Project " + project.id() + " has " + tasks.length + " tasks")
+project.tasks().toArray().then(tasks => {
+  console.log(`Project ${project.id()} has ${tasks.length} tasks`)
 
   for(var key in tasks) {
     var task = tasks[key]
-    console.log("Task " + task.id() + " is named: " + task.name())
+    console.log(`Task ${task.id()} is named: ${task.name()}`)
   }
 })
 ```
@@ -216,8 +216,8 @@ project.tasks().toArray().then((tasks) => {
 A `belongs to` relationship will return a promise that will get that model:
 
 ```js
-task.project().then((project) => {
-  console.log("Task " + task.id() + " belongs to a project called: " + project.name())
+task.project().then(project => {
+  console.log(`Task ${task.id()} belongs to a project called: ${project.name()}`)
 })
 ```
 
@@ -237,8 +237,8 @@ Then you can do like this in JS:
 ```js
 import Devise from "api-maker/devise"
 
-Devise.currentUser().then((user) => {
-  console.log("The current user has this email: " + user.email())
+Devise.currentUser().then(user => {
+  console.log(`The current user has this email: ${user.email()}`)
 })
 ```
 
@@ -262,8 +262,8 @@ user.api_maker_event("new_message", message: "Hello world")
 ```
 
 ```js
-User.find(5).then((user) => {
-  user.connect("new_message", (args) => {
+User.find(5).then(user => {
+  user.connect("new_message", args => {
     console.log(`New message: ${args.message}`)
   })
 })
@@ -288,8 +288,8 @@ end
 ```
 
 ```js
-User.find(5).then((user) => {
-  let subscription = user.connectUpdated((args) => {
+User.find(5).then(user => {
+  let subscription = user.connectUpdated(args => {
     console.log(`Model was updated: ${args.model.id()}`)
   })
 })
@@ -316,7 +316,7 @@ import EventConnection from "api-maker/event-connection"
 ```
 
 ```jsx
-<EventConnection model={this.state.user} event="eventName" onCall={(data) => { this.onEvent(data) }} />
+<EventConnection model={this.state.user} event="eventName" onCall={(data) => this.onEvent(data)} />
 ```
 
 ## Serializing
