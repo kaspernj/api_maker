@@ -128,6 +128,18 @@ export default class Task extends BaseModel {
   
 
   
+    static commandSerialize(args, commandArgs = {}) {
+      return this._callCollectionCommand(
+        {
+          args: args,
+          command: "command_serialize",
+          collectionKey: this.modelClassData().collectionKey,
+          type: "collection"
+        },
+        commandArgs
+      )
+    }
+  
     static testCollection(args, commandArgs = {}) {
       return this._callCollectionCommand(
         {

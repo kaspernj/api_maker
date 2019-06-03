@@ -144,7 +144,7 @@ export default class BaseModel {
             reject(new CustomError("Response wasn't successful", {model: this, response: response}))
           }
         }, (error) => {
-          reject(response)
+          reject(error)
         })
     })
   }

@@ -1845,6 +1845,9 @@ Based on Rails routes of Dummy::Application
 // models_belongs_to => /models/belongs_to(.:format)
   // function(options)
   modelsBelongsToPath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"belongs_to",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
+// models_command_serialize => /models/command-serialize(.:format)
+  // function(options)
+  modelsCommandSerializePath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"command-serialize",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
 // models_create => /models/create(.:format)
   // function(options)
   modelsCreatePath: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"models",false],[2,[7,"/",false],[2,[6,"create",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),

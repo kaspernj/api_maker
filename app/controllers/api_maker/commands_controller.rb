@@ -1,6 +1,6 @@
 class ApiMaker::CommandsController < ApiMaker::BaseController
   def create
-    command_response = ApiMaker::CommandResponse.new
+    command_response = ApiMaker::CommandResponse.new(controller: self)
     controller = self
 
     params[:pool].each do |command_type, command_type_data|

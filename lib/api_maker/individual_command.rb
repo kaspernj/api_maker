@@ -30,6 +30,6 @@ class ApiMaker::IndividualCommand
   end
 
   def result(data = nil)
-    @response.result_for_command(@id, ApiMaker::ResultParser.parse(data))
+    @response.result_for_command(@id, ApiMaker::ResultParser.parse(data, controller: @response.controller))
   end
 end
