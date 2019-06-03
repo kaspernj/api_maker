@@ -1,5 +1,5 @@
 class ApiMaker::IndividualCommand
-  attr_reader :args, :command, :id, :response
+  attr_reader :args, :command, :id
 
   def initialize(id:, args:, collection:, command:, primary_key: nil, response:)
     @id = id
@@ -30,6 +30,6 @@ class ApiMaker::IndividualCommand
   end
 
   def result(data = nil)
-    @response.result_for_command(@id, ApiMaker::ResultParser.parse(data, controller: response.controller))
+    @response.result_for_command(@id, ApiMaker::ResultParser.parse(data, controller: @response.controller))
   end
 end
