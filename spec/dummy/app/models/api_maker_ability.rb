@@ -3,6 +3,10 @@ class ApiMakerAbility
 
   CRUD = [:create, :read, :update, :destroy].freeze
 
+  def self.for_user(user)
+    ApiMakerAbility.new(args: {current_user: user})
+  end
+
   def initialize(args:)
     current_user = args.fetch(:current_user)
 
