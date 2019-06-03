@@ -4,7 +4,7 @@ describe ApiMaker::UpdateCommandService do
   let(:ability) { ApiMakerAbility.new(args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
   let!(:another_task) { create :task, user: user }
-  let(:command_response) { ApiMaker::CommandResponse.new }
+  let(:command_response) { ApiMaker::CommandResponse.new(controller: controller) }
   let(:controller) { double(api_maker_args: api_maker_args, current_ability: ability, current_user: user) }
   let(:helper) do
     ApiMaker::CommandSpecHelper.new(

@@ -63,7 +63,7 @@ export default class ErrorLogger {
         try {
           this.isHandlingError = true
           this.errors.push({
-            errorClass: event.error ? event.error.name : null,
+            errorClass: event.error ? event.error.name : "No error class",
             file: event.filename,
             message: event.message || "Unknown error",
             url: window.location.href,
