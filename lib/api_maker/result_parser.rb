@@ -15,11 +15,11 @@ class ApiMaker::ResultParser
 private
 
   def api_maker_ability
-    @api_maker_ability ||= @controller.current_ability
+    @api_maker_ability ||= @controller.__send__(:current_ability)
   end
 
   def api_maker_args
-    @api_maker_args ||= @controller.api_maker_args
+    @api_maker_args ||= @controller.__send__(:api_maker_args)
   end
 
   def parse_object(object)

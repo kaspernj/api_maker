@@ -40,7 +40,7 @@ class ApiMaker::CommandSpecHelper
   end
 
   def response
-    @response ||= ApiMaker::CommandResponse.new
+    @response ||= ApiMaker::CommandResponse.new(controller: @controller)
   end
 
   class AddedCommand

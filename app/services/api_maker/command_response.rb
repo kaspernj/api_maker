@@ -1,7 +1,7 @@
 class ApiMaker::CommandResponse
   attr_reader :controller, :locale, :result
 
-  def initialize(controller: nil)
+  def initialize(controller:)
     @controller = controller
     @locale = I18n.locale
     @mutex = Mutex.new
