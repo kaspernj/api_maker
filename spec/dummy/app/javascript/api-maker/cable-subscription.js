@@ -23,7 +23,7 @@ export default class ApiMakerCableSubscription {
 
     Logger.log(`Unsubscribe called: ${this.onUnsubscribeCallbacks.length}`)
 
-    for(let onUnsubscribeCallback of this.onUnsubscribeCallbacks) {
+    for(var onUnsubscribeCallback of this.onUnsubscribeCallbacks) {
       Logger.log("onUnsubscribe called for a callback")
       onUnsubscribeCallback.call()
     }

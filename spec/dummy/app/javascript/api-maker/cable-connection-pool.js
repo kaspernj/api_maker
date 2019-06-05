@@ -43,7 +43,7 @@ export default class ApiMakerCableConnectionPool {
     if (!this.upcomingSubscriptions[modelName]["events"][modelId][eventName])
       this.upcomingSubscriptions[modelName]["events"][modelId][eventName] = []
 
-    let subscription = new CableSubscription({
+    var subscription = new CableSubscription({
       callback: callback,
       modelName: modelName,
       modelId: modelId
