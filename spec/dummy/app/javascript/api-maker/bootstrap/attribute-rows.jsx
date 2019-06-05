@@ -19,6 +19,9 @@ export default class BootstrapAttributeRows extends React.Component {
   }
 
   value(attribute) {
+    if (!(attribute in this.props.model))
+      throw new Error(`Attribute not found: ${this.props.model.modelClassData().name}#${attribute}`)
+
     return this.props.model[attribute]()
   }
 
