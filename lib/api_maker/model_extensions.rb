@@ -39,7 +39,7 @@ module ApiMaker::ModelExtensions
     data_to_broadcast = ApiMaker::ResultParser.parse(
       args: args,
       event_name: event_name,
-      model: model,
+      model: self,
       model_id: id,
       model_type: serializer.resource.collection_name,
       type: :event
