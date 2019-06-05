@@ -1,11 +1,14 @@
 class ApiMaker::ResultParser
+  attr_reader :ability, :args
+
   def self.parse(*args)
     ApiMaker::ResultParser.new(*args).result
   end
 
-  def initialize(object, controller: nil)
-    @controller ||= controller
+  def initialize(object, ability: nil, args: nil, controller: nil)
     @object = object
+    @ability = ability || controller&.__send__(:current_ability)
+    @args = args || controller&.__send__(:api_maker_args)
   end
 
   def result
@@ -13,14 +16,6 @@ class ApiMaker::ResultParser
   end
 
 private
-
-  def api_maker_ability
-    @api_maker_ability ||= @controller.__send__(:current_ability)
-  end
-
-  def api_maker_args
-    @api_maker_args ||= @controller.__send__(:api_maker_args)
-  end
 
   def parse_object(object)
     if object.is_a?(Hash)
@@ -41,7 +36,7 @@ private
     elsif object.is_a?(ApiMaker::CollectionSerializer) || object.is_a?(ApiMaker::Serializer)
       parse_object(object.as_json)
     elsif object.is_a?(ActiveRecord::Base)
-      serializer = ApiMaker::Serializer.new(ability: api_maker_ability, args: api_maker_args, model: object)
+      serializer = ApiMaker::Serializer.new(ability: ability, args: args, model: object)
 
       {
         api_maker_type: :model,
