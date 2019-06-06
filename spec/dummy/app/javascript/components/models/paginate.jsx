@@ -21,12 +21,12 @@ export default class ModelsPaginate extends React.Component {
       this.loadTasks()
   }
 
-  loadTasks() {
+  async loadTasks() {
     this.setState({currentHref: location.href})
 
     var params = Params.parse()
     var query = Task.ransack(params.tasks_q).searchKey("tasks_q").page(params.tasks_page).pageKey("tasks_page")
-    var result await = query.result()
+    var result = await query.result()
 
     this.setState({
       query,

@@ -8,7 +8,7 @@ export default class ModelsDestroyEvent extends React.Component {
     this.state = {}
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     var tasks = await Task.ransack().toArray()
     // console.error(JSON.stringify(tasks))
     this.setState({tasks})
