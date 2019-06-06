@@ -1,3 +1,4 @@
+import React from "react"
 import Task from "api-maker/models/task"
 
 export default class ModelsLoadHasOneThrough extends React.Component {
