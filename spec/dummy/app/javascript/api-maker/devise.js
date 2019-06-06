@@ -19,9 +19,9 @@ export default class Devise {
     
     
       static isUserSignedIn() {
-        let apiMakerDataElement = document.querySelector(".api-maker-data")
-        let keyName = "currentUser"
-        let scopeData = apiMakerDataElement.dataset[keyName]
+        var apiMakerDataElement = document.querySelector(".api-maker-data")
+        var keyName = "currentUser"
+        var scopeData = apiMakerDataElement.dataset[keyName]
 
         if (scopeData)
           return true
@@ -30,47 +30,44 @@ export default class Devise {
       }
 
       static currentUser() {
-        let apiMakerDataElement = document.querySelector(".api-maker-data")
-        let keyName = "currentUser"
-        let scopeData = apiMakerDataElement.dataset[keyName]
+        var apiMakerDataElement = document.querySelector(".api-maker-data")
+        var keyName = "currentUser"
+        var scopeData = apiMakerDataElement.dataset[keyName]
 
         if (!scopeData)
           return null
 
-        let modelClass = require("api-maker/models/user").default
-        let modelInstance = new modelClass({data: JSON.parse(scopeData)})
+        var modelClass = require("api-maker/models/user").default
+        var modelInstance = new modelClass({data: JSON.parse(scopeData)})
+
         return modelInstance
       }
     
   
 
-  static signIn(username, password, args = {}) {
+  static async signIn(username, password, args = {}) {
     if (!args.scope)
       args.scope = "user"
 
-    return new Promise((resolve, reject) => {
-      var postData = {"username": username, "password": password, "args": args}
-      Api.post("/api_maker/devise/do_sign_in", postData)
-        .then((response) => {
-          if (response.success) {
-            var modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
-            var modelInstance = new modelClass(response.model_data)
+    var postData = {"username": username, "password": password, "args": args}
+    var response = await Api.post("/api_maker/devise/do_sign_in", postData)
 
-            Devise.updateSession(modelInstance)
-            resolve({response: response})
-            Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
-          } else {
-            reject(new CustomError("Sign in failed", {response: response}))
-          }
-        }, (error) => {
-          reject(error)
-        })
-    })
+    if (response.success) {
+      var modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
+      var modelInstance = new modelClass(response.model_data)
+
+      Devise.updateSession(modelInstance)
+      Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
+
+      return {response: response}
+    } else {
+      throw new CustomError("Sign in failed", {response: response})
+    }
   }
 
   static updateSession(model) {
-    let apiMakerDataElement = document.querySelector(".api-maker-data")
-    let keyName = `current${model.modelClassData().name}`
+    var apiMakerDataElement = document.querySelector(".api-maker-data")
+    var keyName = `current${model.modelClassData().name}`
     apiMakerDataElement.dataset[keyName] = JSON.stringify({type: model.modelClassData().pluralName, id: model.id(), attributes: model.modelData})
   }
 
@@ -81,24 +78,19 @@ export default class Devise {
     delete apiMakerDataElement.dataset[keyName]
   }
 
-  static signOut(args = {}) {
+  static async signOut(args = {}) {
     if (!args.scope)
       args.scope = "user"
 
-    return new Promise((resolve, reject) => {
-      let postData = {"args": args}
-      Api.post("/api_maker/devise/do_sign_out", postData)
-        .then((response) => {
-          if (response.success) {
-            Devise.setSignedOut(args)
-            resolve(response)
-            Devise.callSignOutEvent(args)
-          } else {
-            reject(new CustomError("Sign out failed", {response: response}))
-          }
-        }, (error) => {
-          reject(error)
-        })
-    })
+    var postData = {"args": args}
+    var response = await Api.post("/api_maker/devise/do_sign_out", postData)
+
+    if (response.success) {
+      Devise.setSignedOut(args)
+      Devise.callSignOutEvent(args)
+      return response
+    } else {
+      throw new CustomError("Sign out failed", {response: response})
+    }
   }
 }
