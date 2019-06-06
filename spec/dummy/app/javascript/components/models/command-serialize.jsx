@@ -10,9 +10,8 @@ export default class ModelsCommandSerialize extends React.Component {
   componentWillMount() {
     var params = Params.parse()
 
-    Task.commandSerialize({task_id: params.task_id}).then(response => {
-      this.setState({task: response.test.task})
-    })
+    var response = await Task.commandSerialize({task_id: params.task_id})
+    this.setState({task: response.test.task})
   }
 
   render() {

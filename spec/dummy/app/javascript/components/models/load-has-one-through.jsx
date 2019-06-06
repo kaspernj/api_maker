@@ -7,13 +7,13 @@ export default class ModelsLoadHasOneThrough extends React.Component {
   }
 
   componentWillMount() {
-    Task.find(this.props.match.params.task_id).then(task => {
-      task.loadAccount().then(() => {
-        this.setState({
-          account: task.account(),
-          task: task
-        })
-      })
+    var task = await Task.find(this.props.match.params.task_id)
+
+    await task.loadAccount()
+
+    this.setState({
+      account: task.account(),
+      task
     })
   }
 

@@ -9,11 +9,11 @@ export default class extends React.Component {
   }
 
   pages() {
-    let currentPage = this.props.result.currentPage()
-    let pages = []
-    let totalPages = this.props.result.totalPages()
-    let pagesFrom = currentPage - 5
-    let pagesTo = currentPage + 5
+    var currentPage = this.props.result.currentPage()
+    var pages = []
+    var totalPages = this.props.result.totalPages()
+    var pagesFrom = currentPage - 5
+    var pagesTo = currentPage + 5
 
     if (pagesFrom < 1)
       pagesFrom = 1
@@ -21,7 +21,7 @@ export default class extends React.Component {
     if (pagesTo > totalPages)
       pagesTo = totalPages
 
-    for(let i = pagesFrom; i <= pagesTo; i++) {
+    for(var i = pagesFrom; i <= pagesTo; i++) {
       pages.push(i)
     }
 
@@ -29,20 +29,20 @@ export default class extends React.Component {
   }
 
   pagePath(pageNumber) {
-    let pageKey = this.props.result.data.collection.queryArgs.pageKey
+    var pageKey = this.props.result.data.collection.queryArgs.pageKey
     if (!pageKey)
       pageKey = "page"
 
-    let currentParams = qs.parse(window.location.search.substr(1))
+    var currentParams = qs.parse(window.location.search.substr(1))
     currentParams[pageKey] = pageNumber
-    let newParams = qs.stringify(currentParams)
-    let newPath = `${location.pathname}?${newParams}`
+    var newParams = qs.stringify(currentParams)
+    var newPath = `${location.pathname}?${newParams}`
 
     return newPath
   }
 
   previousPagePath() {
-    let previousPage
+    var previousPage
 
     if (this.props.result.currentPage() > 1) {
       previousPage = this.props.result.currentPage() - 1
@@ -54,7 +54,7 @@ export default class extends React.Component {
   }
 
   nextPagePath() {
-    let nextPage
+    var nextPage
 
     if (this.props.result.currentPage() < this.props.result.totalPages()) {
       nextPage = this.props.result.currentPage() + 1
@@ -66,14 +66,14 @@ export default class extends React.Component {
   }
 
   showBackwardsDots() {
-    let currentPage = this.props.result.currentPage()
+    var currentPage = this.props.result.currentPage()
 
     return (currentPage - 5 > 1)
   }
 
   showForwardsDots() {
-    let currentPage = this.props.result.currentPage()
-    let totalPages = this.props.result.totalPages()
+    var currentPage = this.props.result.currentPage()
+    var totalPages = this.props.result.totalPages()
 
     return (currentPage + 5 < totalPages)
   }

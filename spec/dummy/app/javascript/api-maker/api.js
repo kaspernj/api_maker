@@ -19,25 +19,25 @@ export default class {
   }
 
   static request(args) {
-    let path = args.path
+    var path = args.path
 
     if (args.pathParams) {
-      let pathParamsString = qs.stringify(args.pathParams, {"arrayFormat": "brackets"})
+      var pathParamsString = qs.stringify(args.pathParams, {"arrayFormat": "brackets"})
       path += `?${pathParamsString}`
     }
 
     return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest()
+      var xhr = new XMLHttpRequest()
       xhr.open(args.method, path, true)
 
       if (args.headers) {
-        for(let headerName in args.headers) {
+        for(var headerName in args.headers) {
           xhr.setRequestHeader(headerName, args.headers[headerName])
         }
       }
 
       xhr.onload = () => {
-        let response = this._parseResponse(xhr)
+        var response = this._parseResponse(xhr)
 
         if (xhr.status == 200) {
           resolve(response)
@@ -54,7 +54,7 @@ export default class {
     if (!args.headers)
       args["headers"] = {}
 
-    let token = this._token()
+    var token = this._token()
     if (token)
       args["headers"]["X-CSRF-Token"] = token
 
@@ -74,14 +74,14 @@ export default class {
   }
 
   static _token() {
-    let tokenElement = document.querySelector("meta[name='csrf-token']")
+    var tokenElement = document.querySelector("meta[name='csrf-token']")
 
     if (tokenElement)
       return tokenElement.getAttribute("content")
   }
 
   static _parseResponse(xhr) {
-    let responseType = xhr.getResponseHeader("content-type")
+    var responseType = xhr.getResponseHeader("content-type")
 
     if (responseType && responseType.startsWith("application/json")) {
       return JSON.parse(xhr.responseText)

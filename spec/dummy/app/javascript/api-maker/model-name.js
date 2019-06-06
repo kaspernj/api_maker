@@ -7,7 +7,7 @@ export default class ModelName {
     if (!args)
       args = {count: 1}
 
-    let countKey
+    var countKey
 
     if (args.count > 1 || args.count < 0) {
       countKey = "other"
@@ -15,7 +15,7 @@ export default class ModelName {
       countKey = "one"
     }
 
-    let key = `activerecord.models.${this.data.modelClassData.i18nKey}.${countKey}`
+    var key = `activerecord.models.${this.data.modelClassData.i18nKey}.${countKey}`
     return I18n.t(key)
   }
 }
