@@ -7,6 +7,10 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
+# Delete cache to force Webpacker to compile
+path = Rails.root.join("tmp", "cache").to_s
+FileUtils.rm_rf(path)
+
 require "cancancan"
 require "database_cleaner"
 require "devise"
@@ -87,6 +91,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation, except: %w[ar_internal_metadata])
     Warden.test_mode!
+    ApiMaker::ModelsGeneratorService.execute!
   end
 
   config.before(:each) do
