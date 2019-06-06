@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "rails", "~> 5.2.1"
+  s.add_dependency "rails", ">= 5.2.0"
 
   s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.4"
   s.add_runtime_dependency "cancancan"
@@ -43,5 +43,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "tzinfo-data"
   s.add_development_dependency "waitutil"
   s.add_development_dependency "webpacker"
-  s.add_development_dependency "will_paginate"
+  s.add_development_dependency "will_paginate", ">= 3.1.7"
 end
