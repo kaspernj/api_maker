@@ -1,6 +1,24 @@
 {
-  "application.js": "/packs-test/application-5d9e7c993afa18e7b892.js",
-  "application.js.map": "/packs-test/application-5d9e7c993afa18e7b892.js.map",
-  "react.js": "/packs-test/react-32231393791de0b0b711.js",
-  "react.js.map": "/packs-test/react-32231393791de0b0b711.js.map"
+  "application.js": "/packs-test/js/application-0461620d882c74c88eb7.js",
+  "application.js.map": "/packs-test/js/application-0461620d882c74c88eb7.js.map",
+  "entrypoints": {
+    "application": {
+      "js": [
+        "/packs-test/js/application-0461620d882c74c88eb7.js"
+      ],
+      "js.map": [
+        "/packs-test/js/application-0461620d882c74c88eb7.js.map"
+      ]
+    },
+    "react": {
+      "js": [
+        "/packs-test/js/react-1b4e7e16120428171992.js"
+      ],
+      "js.map": [
+        "/packs-test/js/react-1b4e7e16120428171992.js.map"
+      ]
+    }
+  },
+  "react.js": "/packs-test/js/react-1b4e7e16120428171992.js",
+  "react.js.map": "/packs-test/js/react-1b4e7e16120428171992.js.map"
 }
