@@ -8,7 +8,7 @@ class ApiMaker::ResultParser
   def initialize(object, ability: nil, args: nil, controller: nil)
     @object = object
     @ability = ability || controller&.__send__(:current_ability)
-    @args = args || controller&.__send__(:api_maker_args)
+    @args = args || controller&.__send__(:api_maker_args) || {}
   end
 
   def result
