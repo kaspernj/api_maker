@@ -32,8 +32,7 @@ describe ApiMaker::CollectionSerializer do
       "a" => {
         "id" => 1,
         "name" => "Account 1"
-      },
-      "r" => {}
+      }
     )
   end
 

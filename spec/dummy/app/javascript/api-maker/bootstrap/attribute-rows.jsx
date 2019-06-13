@@ -3,6 +3,11 @@ import PropTypes from "prop-types"
 import React from "react"
 
 export default class BootstrapAttributeRows extends React.Component {
+  static propTypes = {
+    attributes: PropTypes.array.isRequired,
+    model: PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -34,9 +39,4 @@ export default class BootstrapAttributeRows extends React.Component {
       return this.value(attribute)
     }
   }
-}
-
-BootstrapAttributeRows.propTypes = {
-  attributes: PropTypes.array.isRequired,
-  model: PropTypes.object.isRequired
 }
