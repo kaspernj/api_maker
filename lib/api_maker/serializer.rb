@@ -1,5 +1,5 @@
 class ApiMaker::Serializer
-  attr_reader :ability, :args, :model, :relationships
+  attr_reader :ability, :args, :model
 
   def self.resource_for(klass)
     ApiMaker::MemoryStorage.current.resource_for_model(klass)
@@ -15,7 +15,6 @@ class ApiMaker::Serializer
     @args = args
     @model = model
     @ability = ability
-    @relationships = {}
     @select = select
   end
 
@@ -51,6 +50,10 @@ class ApiMaker::Serializer
     result.fetch(*args, &blk)
   end
 
+  def relationships
+    @relationships ||= {}
+  end
+
   def resource
     @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(model.class)
   end
@@ -60,10 +63,11 @@ class ApiMaker::Serializer
   end
 
   def result
-    @result ||= {
-      attributes: attributes,
-      relationships: relationships
-    }
+    @result ||= begin
+      result = {a: attributes}
+      result[:r] = @relationships if @relationships # Only include relationships if set
+      result
+    end
   end
 
   def as_json(_options = nil)

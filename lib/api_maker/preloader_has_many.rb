@@ -48,8 +48,8 @@ private
   def preload_model(model)
     origin_data = find_origin_data_for_model(model)
 
-    origin_data.fetch(:relationships)[@reflection.name] ||= []
-    origin_data.fetch(:relationships).fetch(@reflection.name) << model.id
+    origin_data.fetch(:r)[@reflection.name] ||= []
+    origin_data.fetch(:r).fetch(@reflection.name) << model.id
 
     serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.class))
     collection_name = serializer.resource.collection_name

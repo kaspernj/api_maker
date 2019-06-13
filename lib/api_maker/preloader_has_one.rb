@@ -19,7 +19,7 @@ class ApiMaker::PreloaderHasOne
     models.each do |model|
       ApiMaker::Configuration.profile("Preloading #{model.class.name}##{model.id}") do
         origin_data = origin_data_for_model(model)
-        origin_data.fetch(:relationships)[@reflection.name] = model.id
+        origin_data.fetch(:r)[@reflection.name] = model.id
 
         serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: @select&.dig(model.class))
         collection_name = serializer.resource.collection_name

@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
 import Devise from "api-maker/devise"
 
-export default class extends Controller {
+export default class DeviseCurrentUserController extends Controller {
   connect() {
     var user = Devise.currentUser()
 

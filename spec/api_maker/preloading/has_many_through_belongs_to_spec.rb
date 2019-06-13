@@ -13,8 +13,8 @@ describe "preloading - has many through belongs to" do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks"]).to_json)
 
     expect(result.dig("data", "accounts")).to eq [account.id, another_account.id]
-    expect(result.dig("included", "accounts", account.id.to_s, "relationships", "tasks")).to eq [task.id]
-    expect(result.dig("included", "accounts", another_account.id.to_s, "relationships", "tasks")).to eq [task.id]
+    expect(result.dig("included", "accounts", account.id.to_s, "r", "tasks")).to eq [task.id]
+    expect(result.dig("included", "accounts", another_account.id.to_s, "r", "tasks")).to eq [task.id]
     expect(result.fetch("included").fetch("tasks").length).to eq 1
   end
 end
