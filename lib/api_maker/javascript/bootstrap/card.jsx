@@ -2,6 +2,13 @@ import PropTypes from "prop-types"
 import React from "react"
 
 export default class Card extends React.Component {
+  static propTypes = {
+    className: PropTypes.string,
+    header: PropTypes.string,
+    striped: PropTypes.bool,
+    table: PropTypes.bool
+  }
+
   render() {
     return (
       <div className={this.classNames()}>
@@ -55,11 +62,4 @@ export default class Card extends React.Component {
 
     return classNames.join(" ")
   }
-}
-
-Card.propTypes = {
-  className: PropTypes.string,
-  header: PropTypes.string,
-  striped: PropTypes.bool,
-  table: PropTypes.bool
 }

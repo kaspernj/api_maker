@@ -11,7 +11,7 @@ describe "preloading - has one" do
     collection = Project.where(id: [project.id])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_detail.accounts"]).to_json)
 
-    expect(result.dig("included", "projects", project.id.to_s, "relationships", "project_detail")).to eq nil
+    expect(result.dig("included", "projects", project.id.to_s, "r", "project_detail")).to eq nil
   end
 
   it "doesnt crash when trying to preload on an empty collection" do
@@ -25,6 +25,6 @@ describe "preloading - has one" do
     collection = Task.where(id: task.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["account_customer"]).to_json)
 
-    expect(result.fetch("included").fetch("tasks").fetch("6").fetch("relationships")).to eq("account_customer" => 8)
+    expect(result.fetch("included").fetch("tasks").fetch("6").fetch("r")).to eq("account_customer" => 8)
   end
 end

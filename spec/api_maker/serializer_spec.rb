@@ -7,26 +7,26 @@ describe ApiMaker::Serializer do
 
   it "serializes custom attributes" do
     result = JSON.parse(ApiMaker::Serializer.new(model: task).to_json)
-    expect(result.dig("attributes", "custom_id")).to eq "custom-#{task.id}"
+    expect(result.dig("a", "custom_id")).to eq "custom-#{task.id}"
   end
 
   it "includes given arguments" do
     result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
-    expect(result.dig("attributes", "custom_attribute")).to eq "CustomAttribute - Test arg: Test"
+    expect(result.dig("a", "custom_attribute")).to eq "CustomAttribute - Test arg: Test"
   end
 
   it "supports conditions for attributes" do
     result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
-    expect(result.fetch("attributes").keys).to_not include "updated_at"
+    expect(result.fetch("a").keys).to_not include "updated_at"
 
     user.email = "kasper@example.com"
 
     result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
-    expect(result.fetch("attributes").keys).to include "updated_at"
+    expect(result.fetch("a").keys).to include "updated_at"
   end
 
   it "supports date types" do
     result = JSON.parse(ApiMaker::Serializer.new(model: user).to_json)
-    expect(result.fetch("attributes").fetch("birthday_at")).to eq "1985-06-17"
+    expect(result.fetch("a").fetch("birthday_at")).to eq "1985-06-17"
   end
 end

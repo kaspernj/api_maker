@@ -11,6 +11,6 @@ describe ApiMaker::ResultParser do
 
     expect(result.fetch(:test).fetch(:user).fetch(:api_maker_type)).to eq :model
     expect(result.fetch(:test).fetch(:user).fetch(:model_name)).to eq "users"
-    expect(result.fetch(:test).fetch(:user).fetch(:serialized).fetch(:attributes).fetch(:id)).to eq user.id
+    expect(result.fetch(:test).fetch(:user).fetch(:serialized).fetch(:a).fetch(:id)).to eq user.id
   end
 end

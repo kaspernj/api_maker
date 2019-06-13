@@ -15,6 +15,6 @@ describe "Devise sign in", :js do
     response = JSON.parse(find("[data-controller='devise--sign-in']", visible: false)["data-success-response"])
 
     expect(response.dig("response", "success")).to eq true
-    expect(response.dig("response", "model_data", "attributes", "email")).to eq user.email
+    expect(response.dig("response", "model_data", "a", "email")).to eq user.email
   end
 end
