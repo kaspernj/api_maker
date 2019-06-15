@@ -68,7 +68,7 @@ export default class Devise {
   static updateSession(model) {
     var apiMakerDataElement = document.querySelector(".api-maker-data")
     var keyName = `current${model.modelClassData().name}`
-    apiMakerDataElement.dataset[keyName] = JSON.stringify({type: model.modelClassData().pluralName, id: model.id(), attributes: model.modelData})
+    apiMakerDataElement.dataset[keyName] = JSON.stringify({type: model.modelClassData().pluralName, id: model.id(), a: model.modelData})
   }
 
   static setSignedOut(args) {
