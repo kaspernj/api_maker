@@ -16,7 +16,8 @@ describe ApiMaker::ResultParser do
 
   it "supports nested money types" do
     result = ApiMaker::ResultParser.parse({test: {project: project}}, controller: fake_controller)
+    price = result.fetch(:test).fetch(:project).fetch(:serialized).fetch(:a).fetch(:price_per_hour)
 
-    expect(result.fetch(:test).fetch(:project).fetch(:serialized).fetch(:a).fetch(:price_per_hour)).to eq(api_maker_type: :money, amount: 10_000, currency: "USD")
+    expect(price).to eq(api_maker_type: :money, amount: 10_000, currency: "USD")
   end
 end
