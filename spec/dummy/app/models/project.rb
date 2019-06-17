@@ -12,5 +12,5 @@ class Project < ApplicationRecord
 
   validates :name, presence: true
 
-  monetize :price_per_hour_cents
+  monetize :price_per_hour_cents, allow_nil: true
 end
