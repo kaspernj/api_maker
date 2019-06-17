@@ -8,4 +8,6 @@ class Project < ApplicationRecord
   has_one :project_detail, dependent: :destroy
 
   validates :name, presence: true
+
+  monetize :price_per_hour_cents
 end

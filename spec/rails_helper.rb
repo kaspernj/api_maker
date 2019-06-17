@@ -11,6 +11,9 @@ require "rspec/rails"
 path = Rails.root.join("tmp", "cache").to_s
 FileUtils.rm_rf(path)
 
+require "money-rails"
+MoneyRails::Hooks.init
+
 require "cancancan"
 require "database_cleaner"
 require "devise"

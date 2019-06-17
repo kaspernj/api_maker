@@ -1,5 +1,5 @@
 class Resources::ProjectResource < Resources::ApplicationResource
-  attributes :id, :name, :created_at
+  attributes :id, :name, :created_at, :price_per_hour
   relationships :project_detail, :tasks
 
   def permitted_params(arg)

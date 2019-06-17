@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_20_090942) do
+ActiveRecord::Schema.define(version: 2019_06_17_123229) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -76,6 +76,8 @@ ActiveRecord::Schema.define(version: 2019_05_20_090942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "account_id"
+    t.integer "price_per_hour_cents"
+    t.string "price_per_hour_currency"
     t.index ["account_id"], name: "index_projects_on_account_id"
   end
 

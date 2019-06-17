@@ -41,7 +41,7 @@ private
       {
         api_maker_type: :model,
         model_name: serializer.resource.collection_name,
-        serialized: serializer.as_json
+        serialized: parse_object(serializer.as_json)
       }
     else
       object
