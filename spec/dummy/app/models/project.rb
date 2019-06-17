@@ -1,3 +1,6 @@
+require "money-rails"
+MoneyRails::Hooks.init
+
 class Project < ApplicationRecord
   belongs_to :account, inverse_of: :projects, optional: true
 
@@ -8,4 +11,6 @@ class Project < ApplicationRecord
   has_one :project_detail, dependent: :destroy
 
   validates :name, presence: true
+
+  monetize :price_per_hour_cents, allow_nil: true
 end
