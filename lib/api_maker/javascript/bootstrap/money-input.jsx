@@ -19,28 +19,31 @@ export default class BootstrapMoneyInput extends React.Component {
 
   render() {
     return (
-      <div className="input-group">
+      <div className="component-api-maker-bootstrap-money-input">
         <input defaultValue={this.inputDefaultCentsValue()} id={this.inputCentsId()} name={this.inputCentsName()} ref="input" type="hidden" />
-        <input
-          className={this.props.className}
-          defaultValue={this.inputDefaultValue()}
-          id={this.inputId()}
-          onBlur={() => { this.setAmount() }}
-          onChange={() => { this.setCents() }}
-          onKeyUp={() => { this.setCents() }}
-          placeholder={this.props.placeholder}
-          ref="whole"
-          type="text"
-          />
-        <select className="component-bootstrap-money-input" defaultValue={this.inputCurrencyValue()} id={this.inputCurrencyId()} name={this.inputCurrencyName()} onChange={() => { this.onCurrencyChanged() }} ref="currency">
-          <option></option>
-          {this.props.currenciesCollection.map(option => (
-            <option key={`select-option-${option[1]}`} value={option[1]}>
-              {this.props.small && option[1]}
-              {!this.props.small && option[0]}
-            </option>
-          ))}
-        </select>
+
+        <div className="input-group">
+          <input
+            className={this.props.className}
+            defaultValue={this.inputDefaultValue()}
+            id={this.inputId()}
+            onBlur={() => this.setAmount()}
+            onChange={() => this.setCents()}
+            onKeyUp={() => this.setCents()}
+            placeholder={this.props.placeholder}
+            ref="whole"
+            type="text"
+            />
+          <select className="component-bootstrap-money-input" defaultValue={this.inputCurrencyValue()} id={this.inputCurrencyId()} name={this.inputCurrencyName()} onChange={() => { this.onCurrencyChanged() }} ref="currency">
+            <option></option>
+            {this.props.currenciesCollection.map(option => (
+              <option key={`select-option-${option[1]}`} value={option[1]}>
+                {this.props.small && option[1]}
+                {!this.props.small && option[0]}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     )
   }
