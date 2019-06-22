@@ -4,7 +4,10 @@ import { Route } from "react-router-dom"
 
 export default class ApiMakerResourceRoutes {
   static readRoutes(args = {}) {
-    var routesJson = require("shared/routes.json")
+    if (!args.routes)
+      throw new Error("Please pass 'routes' to this method")
+
+    var routesJson = args.routes
     var routes = []
 
     for(var route of routesJson.routes) {
