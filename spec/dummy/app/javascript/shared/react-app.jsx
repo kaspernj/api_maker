@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   var reactRoot = document.querySelector(".react-root")
-  var routes = ResourceRoutes.readRoutes()
+  var routesJson = require("shared/routes.json")
+  var routes = ResourceRoutes.readRoutes({routes: routesJson})
 
   ReactDOM.render((
     <Router history={ApplicationHistory}>
