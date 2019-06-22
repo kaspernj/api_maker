@@ -12,8 +12,12 @@ document.addEventListener("DOMContentLoaded", () => {
     window.errorLogger.enable()
   })
 
-  var reactRoot = document.querySelector(".react-root")
-  var routes = ResourceRoutes.readRoutes()
+  const reactRoot = document.querySelector(".react-root")
+  const routes = ResourceRoutes.readRoutes({
+    context: require.context("components", true, /\.jsx$/),
+    path: "components",
+    routes: require("./routes.json")
+  })
 
   ReactDOM.render((
     <Router history={ApplicationHistory}>
