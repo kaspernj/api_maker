@@ -2,11 +2,11 @@ import PropTypes from "prop-types"
 import React from "react"
 
 export default class ApiMakerUpdatedAttribute extends React.Component {
-  static propTypes = {
+  static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     model: PropTypes.object.isRequired,
     onValue: PropTypes.func
-  }
+  })
 
   constructor(props) {
     super(props)
@@ -40,7 +40,7 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
       newValue = this.props.onValue.apply(null, [{model: this.state.model}])
     } else {
       if (!this.state.model[this.props.attribute])
-        throw new Error(`No such method: ${this.state.model.modelClassData().name()}#${this.props.attribute}()`)
+        throw new Error(`No such method: ${this.state.model.modelClassData().name}#${this.props.attribute}()`)
 
       newValue = this.state.model[this.props.attribute].apply(this.state.model)
     }
