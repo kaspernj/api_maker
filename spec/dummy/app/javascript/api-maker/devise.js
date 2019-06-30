@@ -8,6 +8,13 @@ export default class Devise {
     Devise.events().emit("onDeviseSignOut", {args: args})
   }
 
+  static current() {
+    if (!window.currentApiMakerDevise)
+      window.currentApiMakerDevise = new Devise()
+
+    return window.currentApiMakerDevise
+  }
+
   static events() {
     if (!window.apiMakerDeviseEvents)
       window.apiMakerDeviseEvents = new EventEmitter()
@@ -19,28 +26,14 @@ export default class Devise {
     
     
       static isUserSignedIn() {
-        var apiMakerDataElement = document.querySelector(".api-maker-data")
-        var keyName = "currentUser"
-        var scopeData = apiMakerDataElement.dataset[keyName]
-
-        if (scopeData)
+        if (Devise.current().getCurrentScope("User"))
           return true
 
         return false
       }
 
       static currentUser() {
-        var apiMakerDataElement = document.querySelector(".api-maker-data")
-        var keyName = "currentUser"
-        var scopeData = apiMakerDataElement.dataset[keyName]
-
-        if (!scopeData)
-          return null
-
-        var modelClass = require("api-maker/models/user").default
-        var modelInstance = new modelClass({data: JSON.parse(scopeData)})
-
-        return modelInstance
+        return Devise.current().getCurrentScope("User")
       }
     
   
@@ -66,16 +59,12 @@ export default class Devise {
   }
 
   static updateSession(model) {
-    var apiMakerDataElement = document.querySelector(".api-maker-data")
-    var keyName = `current${model.modelClassData().name}`
-    apiMakerDataElement.dataset[keyName] = JSON.stringify({type: model.modelClassData().pluralName, id: model.id(), a: model.modelData})
+    var scope = model.modelClassData().name
+    Devise.current().currents[scope] = model
   }
 
   static setSignedOut(args) {
-    var apiMakerDataElement = document.querySelector(".api-maker-data")
-    var keyName = `current${inflection.camelize(args.scope)}`
-
-    delete apiMakerDataElement.dataset[keyName]
+    Devise.current().currents[inflection.camelize(args.scope)] = null
   }
 
   static async signOut(args = {}) {
@@ -92,5 +81,30 @@ export default class Devise {
     } else {
       throw new CustomError("Sign out failed", {response: response})
     }
+  }
+
+  constructor() {
+    this.currents = {}
+  }
+
+  getCurrentScope(scope) {
+    if (!(scope in this.currents))
+      this.currents[scope] = this.loadCurrentScope(scope)
+
+    return this.currents[scope]
+  }
+
+  loadCurrentScope(scope) {
+    var apiMakerDataElement = document.querySelector(".api-maker-data")
+    var keyName = `current${inflection.camelize(scope)}`
+    var scopeData = apiMakerDataElement.dataset[keyName]
+
+    if (!scopeData)
+      return null
+
+    var modelClass = require(`api-maker/models/${inflection.dasherize(inflection.underscore(scope))}`).default
+    var modelInstance = new modelClass({data: JSON.parse(scopeData)})
+
+    return modelInstance
   }
 }
