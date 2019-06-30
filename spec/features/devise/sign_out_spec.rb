@@ -15,7 +15,8 @@ describe "Devise sign in", :js do
     response = JSON.parse(find("[data-controller='devise--sign-out']", visible: false)["data-success-response"])
     api_maker_element = find(".api-maker-data", visible: false)
 
-    expect(response.dig("success")).to eq true
-    expect(api_maker_element["data-current-user"]).to eq nil
+    expect(response.fetch("deviseSignOutResponse").fetch("success")).to eq true
+    expect(response.fetch("currentUserResult")).to eq nil
+    expect(response.fetch("isUserSignedInResult")).to eq false
   end
 end

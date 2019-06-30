@@ -13,10 +13,10 @@ describe "Devise sign in", :js do
     wait_for_chrome { find("[data-controller='devise--sign-in']", visible: false)["data-success-response"].present? }
 
     response = JSON.parse(find("[data-controller='devise--sign-in']", visible: false)["data-success-response"])
-    current_user_data = JSON.parse(execute_script("return document.querySelector('.api-maker-data').dataset.currentUser"))
 
-    expect(response.dig("response", "success")).to eq true
-    expect(response.dig("response", "model_data", "a", "email")).to eq user.email
-    expect(current_user_data).to match hash_including("type" => "users", "a" => hash_including("email" => "test@example.com"))
+    expect(response.fetch("deviseSignInResponse").fetch("response").fetch("success")).to eq true
+    expect(response.fetch("deviseSignInResponse").fetch("response").fetch("model_data").fetch("a").fetch("email")).to eq user.email
+    expect(response.fetch("currentUserResult").fetch("modelData").fetch("id")).to eq user.id
+    expect(response.fetch("isUserSignedInResult")).to eq true
   end
 end
