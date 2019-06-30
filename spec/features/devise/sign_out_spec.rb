@@ -13,7 +13,6 @@ describe "Devise sign in", :js do
     wait_for_chrome { find("[data-controller='devise--sign-out']", visible: false)["data-success-response"].present? }
 
     response = JSON.parse(find("[data-controller='devise--sign-out']", visible: false)["data-success-response"])
-    api_maker_element = find(".api-maker-data", visible: false)
 
     expect(response.fetch("deviseSignOutResponse").fetch("success")).to eq true
     expect(response.fetch("currentUserResult")).to eq nil
