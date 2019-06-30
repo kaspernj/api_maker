@@ -7,11 +7,17 @@ export default class extends Controller {
   onSignOutClicked(e) {
     e.preventDefault()
 
-    Devise.signOut()
-      .then(response => {
-        this.element.dataset["successResponse"] = JSON.stringify(response)
-      }, (response) => {
-        this.element.dataset["failResponse"] = JSON.stringify(response)
+    Devise.signOut().then(deviseSignOutResponse => {
+      var currentUserResult = Devise.currentUser()
+      var isUserSignedInResult = Devise.isUserSignedIn()
+
+      this.element.dataset["successResponse"] = JSON.stringify({
+        deviseSignOutResponse,
+        currentUserResult,
+        isUserSignedInResult
       })
+    }, (response) => {
+      this.element.dataset["failResponse"] = JSON.stringify(response)
+    })
   }
 }
