@@ -96,6 +96,46 @@ private
 end
 ```
 
+### ActionCable
+
+Your `connection.rb` should look something like this:
+```rb
+class ApplicationCable::Connection < ActionCable::Connection::Base
+  identified_by :current_user
+
+  def connect
+    self.current_user = find_verified_user
+  end
+
+private
+
+  def find_verified_user
+    verified_user = User.find_by(id: cookies.signed["user.id"])
+
+    if verified_user && cookies.signed["user.expires_at"] > Time.zone.now
+      verified_user
+    else
+      reject_unauthorized_connection
+    end
+  end
+end
+```
+
+Your `channel.rb` should look something like this:
+```rb
+class ApplicationCable::Channel < ActionCable::Channel::Base
+private # rubocop:disable Layout/IndentationWidth
+
+  def current_ability
+    @current_ability ||= ApiMakerAbility.for_user(current_user)
+  end
+
+  def current_user
+    @current_user ||= env["warden"].user
+  end
+end
+```
+
 ## Usage
 
 ### Creating a new model from JavaScript
@@ -298,6 +338,21 @@ User.find(5).then(user => {
 Remember to unsubscrube again:
 ```js
 subscription.unsubscribe()
+```
+
+You can also use a React component if you use React and dont want to keep track of when to unsubscribe:
+```jsx
+import EventUpdated from "api-maker/event-updated"
+```
+
+```jsx
+<EventUpdated model={user} onUpdated={(args) => this.onUserUpdated(args)} />
+```
+
+```jsx
+def onUserUpdated(args)
+  this.setState({user: args.model})
+end
 ```
 
 You can also use this React component to show a models attribute with automatic updates:
