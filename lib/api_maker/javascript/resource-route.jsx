@@ -2,7 +2,6 @@ const inflection = require("inflection")
 
 export default class ResourceRoute {
   constructor(args) {
-    console.log({ args })
     this.args = args.args
     this.parsedContext = args.parsedContext
     this.route = args.route
