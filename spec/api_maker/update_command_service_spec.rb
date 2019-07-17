@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ApiMaker::UpdateCommandService do
-  let(:ability) { ApiMakerAbility.new(args: {current_user: user}) }
+  let(:ability) { ApiMaker::Ability.new(args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
   let!(:another_task) { create :task, user: user }
   let(:command_response) { ApiMaker::CommandResponse.new(controller: controller) }

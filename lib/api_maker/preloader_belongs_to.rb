@@ -29,16 +29,17 @@ class ApiMaker::PreloaderBelongsTo
 private
 
   def collection_name
-    @collection_name = begin
-      ApiMaker::MemoryStorage
-        .current
-        .resource_for_model(@reflection.active_record)
-        .collection_name
-    end
+    @collection_name = resource.collection_name
+  end
+
+  def model_class
+    @model_class ||= @reflection.klass
   end
 
   def models
     @models ||= begin
+      @ability.loader.load_resource(resource)
+
       models = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym).uniq)
       models = models.accessible_by(@ability) if @ability
       models.load
@@ -55,5 +56,11 @@ private
       .fetch(collection_name)
       .values
       .select { |record| record.model.read_attribute(@reflection.foreign_key) == model.read_attribute(look_up_key) }
+  end
+
+  def resource
+    @resource ||= ApiMaker::MemoryStorage
+      .current
+      .resource_for_model(@reflection.active_record)
   end
 end

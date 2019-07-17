@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ApiMaker::IndexCommand do
-  let(:ability) { ApiMakerAbility.new(args: {current_user: user}) }
+  let(:ability) { ApiMaker::Ability.new(args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
   let!(:another_task) { create :task, user: user }
   let(:controller) { double(api_maker_args: api_maker_args, current_ability: ability, current_user: user) }
