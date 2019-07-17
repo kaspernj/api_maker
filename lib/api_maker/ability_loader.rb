@@ -9,7 +9,6 @@ class ApiMaker::AbilityLoader
     return if @loaded_resources.key?(resource)
 
     resource.new(ability: @ability, args: @args, model: nil).abilities
-
     @loaded_resources[resource] = true
   end
 end

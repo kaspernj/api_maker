@@ -23,6 +23,8 @@ private
 
   def models
     @models ||= begin
+      @ability.loader.load_resource(resource)
+
       if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
         query = ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
       else
@@ -42,7 +44,7 @@ private
   end
 
   def collection_name
-    @collection_name = ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
+    @collection_name ||= ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
   end
 
   def preload_model(model)
@@ -56,6 +58,10 @@ private
 
     @data.fetch(:included)[collection_name] ||= {}
     @data.fetch(:included).fetch(collection_name)[model.id] ||= serializer
+  end
+
+  def resource
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@reflection.klass)
   end
 
   def find_origin_data_for_model(model)

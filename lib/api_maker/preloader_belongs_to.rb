@@ -29,7 +29,7 @@ class ApiMaker::PreloaderBelongsTo
 private
 
   def collection_name
-    @collection_name = resource.collection_name
+    @collection_name = ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
   end
 
   def model_class
@@ -38,6 +38,7 @@ private
 
   def models
     @models ||= begin
+      puts "Resource in belongs to: #{resource}"
       @ability.loader.load_resource(resource)
 
       models = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym).uniq)
@@ -59,8 +60,6 @@ private
   end
 
   def resource
-    @resource ||= ApiMaker::MemoryStorage
-      .current
-      .resource_for_model(@reflection.active_record)
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(model_class)
   end
 end

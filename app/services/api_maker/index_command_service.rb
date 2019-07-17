@@ -11,7 +11,10 @@ class ApiMaker::IndexCommandService < ApiMaker::CommandService
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability)
+    @collection ||= begin
+      @ability.loader.load_resource(resource)
+      klass.accessible_by(@ability)
+    end
   end
 
   def ids
@@ -20,5 +23,9 @@ class ApiMaker::IndexCommandService < ApiMaker::CommandService
 
   def klass
     @klass ||= @model_name.singularize.camelize.constantize
+  end
+
+  def resource
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@klass)
   end
 end

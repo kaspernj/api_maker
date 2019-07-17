@@ -34,6 +34,8 @@ class ApiMaker::PreloaderHasOne
 
   def models
     @models ||= begin
+      @ability.loader.load_resource(resource)
+
       if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
         query = query_through
       else
@@ -62,5 +64,9 @@ class ApiMaker::PreloaderHasOne
     @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
       .select(@reflection.klass.arel_table[Arel.star])
       .select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
+  end
+
+  def resource
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@reflection.klass)
   end
 end

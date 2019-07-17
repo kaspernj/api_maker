@@ -1,6 +1,10 @@
 class ApiMaker::BaseResource
   attr_reader :ability, :args, :model
 
+  delegate :can, to: :ability
+
+  CRUD = [:create, :read, :update, :destroy].freeze
+
   def self.attributes(*attributes, **args)
     attributes.each do |attribute|
       ApiMaker::MemoryStorage.current.add(self, :attributes, attribute, args)
