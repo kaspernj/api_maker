@@ -3,7 +3,7 @@ require "rails_helper"
 describe "model belongs to relationships" do
   let!(:user) { create :user }
 
-  it "finds the parent model", :js do
+  it "finds the parent model" do
     login_as user, scope: :user
 
     visit devise_specs_current_user_spec_path

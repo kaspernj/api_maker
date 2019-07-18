@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "models - command serialize", :js do
+describe "models - command serialize" do
   let(:task) { create :task, user: user }
   let(:user) { create :user }
 

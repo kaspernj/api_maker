@@ -3,7 +3,7 @@ require "rails_helper"
 describe "collection command" do
   let(:user) { create :user }
 
-  it "calls the correct command and responds", :js do
+  it "calls the correct command and responds" do
     login_as user
 
     visit commands_collection_command_path

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "session status - timeout", :js do
+describe "session status - timeout" do
   let(:browser) { Capybara.current_session.driver.browser }
   let(:user) { create :user }
 

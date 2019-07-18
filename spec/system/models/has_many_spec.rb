@@ -6,7 +6,7 @@ describe "model has many relationships" do
   let!(:task_not_to_find) { create :task, user: user }
   let(:user) { create :user }
 
-  it "finds the sub models", :js do
+  it "finds the sub models" do
     login_as user
 
     visit models_has_many_path(project_id: project.id)

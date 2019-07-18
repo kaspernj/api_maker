@@ -4,7 +4,7 @@ describe "member command" do
   let(:task) { create :task, user: user }
   let(:user) { create :user }
 
-  it "calls the correct command and responds", :js do
+  it "calls the correct command and responds" do
     login_as user
 
     visit commands_member_command_path(task_id: task.id)

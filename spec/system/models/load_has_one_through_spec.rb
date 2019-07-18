@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "models - load has one through", :js do
+describe "models - load has one through" do
   let(:account) { create :account, id: 22 }
   let(:project) { create :project, account: account, id: 23 }
   let(:task) { create :task, id: 24, project: project, user: user }
