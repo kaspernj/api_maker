@@ -4,7 +4,7 @@ describe "model find" do
   let!(:project) { create :project }
   let!(:task) { create :task, project: project }
 
-  it "finds the model", :js do
+  it "finds the model" do
     visit models_find_path(project_id: project.id)
 
     expect(current_path).to eq models_find_path

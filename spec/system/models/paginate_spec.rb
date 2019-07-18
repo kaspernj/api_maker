@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "api maker paginate", :js do
+describe "api maker paginate" do
   let(:user) { create :user }
 
   before do

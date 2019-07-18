@@ -5,7 +5,7 @@ describe "model belongs to relationships" do
   let!(:task) { create :task, project: project, user: user }
   let(:user) { create :user }
 
-  it "finds the parent model", :js do
+  it "finds the parent model" do
     login_as user
 
     visit models_belongs_to_path(task_id: task.id)

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "model validate" do
-  it "validates a model", :js do
+  it "validates a model" do
     visit models_validate_path
 
     expect(current_path).to eq models_validate_path

@@ -4,7 +4,7 @@ describe "model belongs to relationships" do
   let!(:project) { create :project }
   let!(:project_detail) { create :project_detail, project: project }
 
-  it "finds the parent model", :js do
+  it "finds the parent model" do
     visit models_has_one_path(project_id: project.id)
 
     expect(current_path).to eq models_has_one_path

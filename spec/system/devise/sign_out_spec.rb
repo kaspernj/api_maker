@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "Devise sign in", :js do
+describe "Devise sign in" do
   let!(:user) { create :user }
 
   it "works" do

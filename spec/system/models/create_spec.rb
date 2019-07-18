@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "model create" do
-  it "creates a model", :js do
+  it "creates a model" do
     visit models_create_path
 
     expect(current_path).to eq models_create_path

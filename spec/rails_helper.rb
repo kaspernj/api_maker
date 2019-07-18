@@ -15,7 +15,6 @@ require "money-rails"
 MoneyRails::Hooks.init
 
 require "cancancan"
-require "database_cleaner"
 require "devise"
 require "factory_bot_rails"
 require "js-routes"
@@ -48,25 +47,6 @@ Dir[File.join(__dir__, "support", "**", "*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 # ActiveRecord::Migration.maintain_test_schema!
 
-require "selenium/webdriver"
-
-Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
-end
-
-Capybara.register_driver :headless_chrome do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: {args: %w[disable-gpu headless no-sandbox window-size=1920,1200]},
-    loggingPrefs: {browser: "ALL"},
-    useAutomationExtension: false
-  )
-
-  Capybara::Selenium::Driver.new app,
-    browser: :chrome,
-    desired_capabilities: capabilities
-end
-
-Capybara.javascript_driver = :headless_chrome
 Capybara.server = :puma, {Silent: true}
 
 RSpec.configure do |config|
@@ -77,7 +57,7 @@ RSpec.configure do |config|
   config.backtrace_exclusion_patterns << /\/\.rvm\//
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
-  config.use_transactional_fixtures = false
+  config.use_transactional_fixtures = true
 
   if ENV["CI"]
     # RSpec retry
@@ -91,12 +71,20 @@ RSpec.configure do |config|
     # Callback to be run between retries
     config.retry_callback = proc do |ex|
       # Run some additional clean up task - can be filtered by example metadata
-      Capybara.reset! if ex.metadata[:js]
+      Capybara.reset! if ex.metadata[:type] == :system
     end
   end
 
+  config.prepend_before(:each, type: :system) do
+    driven_by :selenium,
+      using: :chrome,
+      options: {
+        args: %w[disable-dev-shm-usage disable-gpu headless no-sandbox]
+      },
+      screen_size: [1920, 1200]
+  end
+
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation, except: %w[ar_internal_metadata])
     Warden.test_mode!
     ApiMaker::ModelsGeneratorService.execute!
   end
@@ -104,18 +92,5 @@ RSpec.configure do |config|
   config.before(:each) do
     Capybara.reset_sessions!
     Warden.test_reset!
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  config.before(:each, :js) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
   end
 end

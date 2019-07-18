@@ -5,7 +5,7 @@ describe "model preload" do
   let!(:project) { create :project, name: "test-project" }
   let(:user) { create :user }
 
-  it "finds the model", :js do
+  it "finds the model" do
     login_as user
 
     visit models_preload_path(task_id: task.id)

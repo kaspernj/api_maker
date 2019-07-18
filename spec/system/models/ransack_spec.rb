@@ -6,7 +6,7 @@ describe "model ransack" do
   let!(:sub_task) { create :task, name: "test-project-task", project: project_to_find, user: user }
   let(:user) { create :user }
 
-  it "finds the model", :js do
+  it "finds the model" do
     login_as user
 
     visit models_ransack_path
