@@ -38,8 +38,6 @@ private
 
   def models
     @models ||= begin
-      @ability.loader.load_resource(resource)
-
       models = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym).uniq)
       models = models.accessible_by(@ability) if @ability
       models.load
@@ -56,9 +54,5 @@ private
       .fetch(collection_name)
       .values
       .select { |record| record.model.read_attribute(@reflection.foreign_key) == model.read_attribute(look_up_key) }
-  end
-
-  def resource
-    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(model_class)
   end
 end

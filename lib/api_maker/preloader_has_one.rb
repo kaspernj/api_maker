@@ -34,8 +34,6 @@ class ApiMaker::PreloaderHasOne
 
   def models
     @models ||= begin
-      @ability.loader.load_resource(resource)
-
       if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
         query = query_through
       else
