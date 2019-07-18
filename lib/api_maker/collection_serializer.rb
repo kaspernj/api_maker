@@ -1,6 +1,6 @@
 class ApiMaker::CollectionSerializer
-  def initialize(ability: ApiMaker::Ability.new, args: {}, collection:, include_param:, select: nil)
-    @ability = ability
+  def initialize(ability: nil, args: {}, collection:, include_param:, select: nil)
+    @ability = ability || ApiMaker::Ability.new(args: args)
     @args = args
     @collection = collection
     @include_param = include_param

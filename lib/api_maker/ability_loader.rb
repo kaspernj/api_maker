@@ -5,6 +5,11 @@ class ApiMaker::AbilityLoader
     @loaded_resources = {}
   end
 
+  def load_model_class(model_class)
+    resource = ApiMaker::MemoryStorage.current.resource_for_model(model_class)
+    load_resource(resource)
+  end
+
   def load_resource(resource)
     return if @loaded_resources.key?(resource)
 

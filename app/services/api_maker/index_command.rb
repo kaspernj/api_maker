@@ -51,6 +51,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
     return if params[:through].blank?
 
     model_class = params[:through][:model].safe_constantize
+    current_ability.loader.load_model_class(model_class)
     through_model = model_class.accessible_by(current_ability).find(params[:through][:id])
     association = ActiveRecord::Associations::Association.new(through_model, model_class.reflections.fetch(params[:through][:reflection]))
 

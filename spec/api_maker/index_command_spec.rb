@@ -4,10 +4,11 @@ describe ApiMaker::IndexCommand do
   let(:ability) { ApiMaker::Ability.new(args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
   let!(:another_task) { create :task, user: user }
+  let(:collection) { Task.accessible_by(ability) }
   let(:controller) { double(api_maker_args: api_maker_args, current_ability: ability, current_user: user) }
   let(:helper) do
     ApiMaker::CommandSpecHelper.new(
-      collection: Task.accessible_by(ability),
+      collection: collection,
       command: ApiMaker::IndexCommand,
       controller: controller
     )

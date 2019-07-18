@@ -38,7 +38,6 @@ private
 
   def models
     @models ||= begin
-      puts "Resource in belongs to: #{resource}"
       @ability.loader.load_resource(resource)
 
       models = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym).uniq)

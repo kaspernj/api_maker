@@ -4,7 +4,7 @@ describe ApiMaker::ResultParser do
   let(:fake_controller) { double(api_maker_args: {current_user: user}, current_ability: user_ability) }
   let(:project) { create :project }
   let(:user) { create :user }
-  let(:user_ability) { ApiMaker::Ability.for_user(args: {current_user: user}) }
+  let(:user_ability) { ApiMaker::Ability.new(args: {current_user: user}) }
 
   it "serializers ActiveRecord objects" do
     result = ApiMaker::ResultParser.parse({test: {user: user}}, controller: fake_controller)

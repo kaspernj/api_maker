@@ -26,6 +26,6 @@ class ApiMaker::IndexCommandService < ApiMaker::CommandService
   end
 
   def resource
-    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@klass)
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(klass)
   end
 end
