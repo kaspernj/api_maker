@@ -9,6 +9,8 @@ require_relative "api_maker/action_controller_base_extensions"
 module ApiMaker
   dir = "#{__dir__}/api_maker"
 
+  autoload :Ability, "#{dir}/ability"
+  autoload :AbilityLoader, "#{dir}/ability_loader"
   autoload :BaseCommand, "#{dir}/base_command"
   autoload :BaseResource, "#{dir}/base_resource"
   autoload :CollectionSerializer, "#{dir}/collection_serializer"

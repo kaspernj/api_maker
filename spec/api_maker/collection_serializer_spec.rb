@@ -7,12 +7,19 @@ describe ApiMaker::CollectionSerializer do
   let!(:project_detail) { create :project_detail, project: project, id: 6, details: "Test project details" }
   let!(:task) { create :task, id: 3, name: "Test task", project: project, user: user }
   let!(:user) { create :user, id: 4 }
+  let(:ability) { ApiMaker::Ability.new(args: args) }
+  let(:args) { {current_user: user} }
 
   let(:task_with_same_project) { create :task, project: project }
 
   it "preloads relationships" do
     collection = User.where(id: user.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks.project.account", "tasks.account"]).to_json)
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      ability: ability,
+      collection: collection,
+      include_param: ["tasks.project.account", "tasks.account"]
+    )
+    result = JSON.parse(collection_serializer.to_json)
 
     expect(result.dig("included", "users", "4", "r", "tasks")).to eq [3]
     expect(result.dig("included", "users", "4", "r").length).to eq 1
@@ -57,14 +64,14 @@ describe ApiMaker::CollectionSerializer do
     task.destroy!
 
     collection = Project.where(id: project.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks"]).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, include_param: ["tasks"]).to_json)
 
     expect(result.dig("included", "projects", "2", "r", "tasks")).to eq []
   end
 
   it "preloads has one through relationships" do
     collection = User.where(id: user.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks.customer"]).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, include_param: ["tasks.customer"]).to_json)
 
     expect(result.dig("included", "users", "4", "a", "id")).to eq 4
     expect(result.dig("included", "users", "4", "r", "tasks")).to eq [3]
@@ -78,7 +85,7 @@ describe ApiMaker::CollectionSerializer do
 
   it "preloads like on commoditrader listing company" do
     collection = User.where(id: user.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["tasks.project_detail"]).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, include_param: ["tasks.project_detail"]).to_json)
 
     expect(result.dig("data", "users")).to eq [user.id]
     expect(result.dig("included", "users", user.id.to_s, "r", "tasks")).to eq [3]

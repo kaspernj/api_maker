@@ -4,6 +4,12 @@ class Resources::TaskResource < Resources::ApplicationResource
   member_commands :test_member
   relationships :account, :project, :user
 
+  def abilities
+    can CRUD + [:accessible_by, :test_collection, :test_member, :validate, :update_events], Task, user_id: current_user.id if current_user
+    can :command_serialize, Task
+    can :test_accessible_by, Task, id: 3
+  end
+
   def custom_id
     "custom-#{model.id}"
   end

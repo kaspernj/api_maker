@@ -43,6 +43,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "tzinfo-data"
   s.add_development_dependency "waitutil"
+  s.add_development_dependency "webdrivers"
   s.add_development_dependency "webpacker"
   s.add_development_dependency "will_paginate", ">= 3.1.7"
 end

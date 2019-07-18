@@ -2,9 +2,12 @@ require "rails_helper"
 
 describe "model belongs to relationships" do
   let!(:project) { create :project }
-  let!(:task) { create :task, project: project }
+  let!(:task) { create :task, project: project, user: user }
+  let(:user) { create :user }
 
   it "finds the parent model", :js do
+    login_as user
+
     visit models_belongs_to_path(task_id: task.id)
 
     expect(current_path).to eq models_belongs_to_path

@@ -8,7 +8,7 @@ class ApiMaker::BaseController < ApplicationController
 private
 
   def current_ability
-    @current_ability ||= ::ApiMakerAbility.new(args: api_maker_args)
+    @current_ability ||= ::ApiMaker::Ability.new(args: api_maker_args)
   end
 
   def render_error(error)
