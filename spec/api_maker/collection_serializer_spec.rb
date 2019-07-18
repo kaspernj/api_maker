@@ -14,7 +14,12 @@ describe ApiMaker::CollectionSerializer do
 
   it "preloads relationships" do
     collection = User.where(id: user.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, include_param: ["tasks.project.account", "tasks.account"]).to_json)
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      ability: ability,
+      collection: collection,
+      include_param: ["tasks.project.account", "tasks.account"]
+    )
+    result = JSON.parse(collection_serializer.to_json)
 
     expect(result.dig("included", "users", "4", "r", "tasks")).to eq [3]
     expect(result.dig("included", "users", "4", "r").length).to eq 1
