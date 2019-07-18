@@ -10,14 +10,29 @@ class ApiMaker::Ability
 
   # Override methods from CanCan::Ability to first load abilities from the given resource
   def can?(*args)
-    model_class = args.second
-    loader.load_model_class(model_class) if model_class < ActiveRecord::Base
+    subject = args.second
+    load_abilities(subject)
     super
   end
 
   def model_adapter(*args)
-    model_class = args.first
-    loader.load_model_class(model_class) if model_class < ActiveRecord::Base
+    subject = args.first
+    load_abilities(subject)
     super
+  end
+
+  def load_abilities(subject)
+    return unless active_record?(subject)
+
+    if subject.class == Class
+      loader.load_model_class(subject)
+    elsif subject.class != Class
+      loader.load_model_class(subject.class)
+    end
+  end
+
+  def active_record?(subject)
+    return subject < ActiveRecord::Base if subject.class == Class
+    subject.is_a?(ActiveRecord::Base)
   end
 end
