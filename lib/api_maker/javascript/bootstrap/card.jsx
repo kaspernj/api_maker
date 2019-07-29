@@ -4,6 +4,8 @@ import React from "react"
 export default class Card extends React.Component {
   static propTypes = PropTypesExact({
     className: PropTypes.string,
+    children: PropTypes.node,
+    controls: PropTypes.node,
     header: PropTypes.string,
     striped: PropTypes.bool,
     table: PropTypes.bool
