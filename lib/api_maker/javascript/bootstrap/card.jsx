@@ -2,12 +2,12 @@ import PropTypes from "prop-types"
 import React from "react"
 
 export default class Card extends React.Component {
-  static propTypes = {
+  static propTypes = PropTypesExact({
     className: PropTypes.string,
     header: PropTypes.string,
     striped: PropTypes.bool,
     table: PropTypes.bool
-  }
+  })
 
   render() {
     return (
@@ -16,7 +16,7 @@ export default class Card extends React.Component {
           <div className="card-header">
             {this.props.header}
             {this.props.controls &&
-              <div className="pull-right">
+              <div className="float-right">
                 {this.props.controls}
               </div>
             }
