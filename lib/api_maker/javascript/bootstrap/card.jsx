@@ -1,5 +1,5 @@
 import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
+import PropTypesExact from "prop-types"
 import React from "react"
 
 export default class Card extends React.Component {
@@ -10,14 +10,15 @@ export default class Card extends React.Component {
     header: PropTypes.string,
     onClick: PropTypes.func,
     striped: PropTypes.bool,
+    style: PropTypes.object,
     table: PropTypes.bool
   })
 
   render() {
-    var { children, controls, header, onClick, table } = this.props
+    var { children, controls, header, onClick, style, table } = this.props
 
     return (
-      <div className={this.classNames()} onClick={onClick}>
+      <div className={this.classNames()} onClick={onClick} style={style}>
         {(controls || header) &&
           <div className="card-header">
             {header}
