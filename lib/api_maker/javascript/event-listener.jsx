@@ -1,4 +1,5 @@
 import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class ApiMakerEventListener extends React.Component {
@@ -8,10 +9,11 @@ export default class ApiMakerEventListener extends React.Component {
     target.dispatchEvent(event, args)
   }
 
-  static propTypes = {
+  static propTypes = PropTypesExact({
     event: PropTypes.string.isRequired,
-    onCalled: PropTypes.func.isRequired
-  }
+    onCalled: PropTypes.func.isRequired,
+    target: PropTypes.object
+  })
 
   constructor(props) {
     super(props)
@@ -30,7 +32,7 @@ export default class ApiMakerEventListener extends React.Component {
   }
 
   onCalled(...args) {
-    this.props.onCalled.apply(null, ...args)
+    this.props.onCalled.apply(null, args)
   }
 
   render() {
