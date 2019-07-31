@@ -18,7 +18,7 @@ export default class Card extends React.Component {
     var { children, controls, header, onClick, style, table } = this.props
 
     return (
-      <div className={this.classNames()} onClick={onClick} style={style}>
+      <div className={this.classNames()} onClick={onClick} ref="card" style={style}>
         {(controls || header) &&
           <div className="card-header">
             {header}
