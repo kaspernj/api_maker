@@ -1,34 +1,40 @@
 import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class Card extends React.Component {
-  static propTypes = {
+  static propTypes = PropTypesExact({
     className: PropTypes.string,
+    children: PropTypes.node,
+    controls: PropTypes.node,
     header: PropTypes.string,
+    onClick: PropTypes.func,
     striped: PropTypes.bool,
     table: PropTypes.bool
-  }
+  })
 
   render() {
+    var { children, controls, header, onClick, table } = this.props
+
     return (
-      <div className={this.classNames()}>
-        {(this.props.controls || this.props.header) &&
+      <div className={this.classNames()} onClick={onClick}>
+        {(controls || header) &&
           <div className="card-header">
-            {this.props.header}
-            {this.props.controls &&
-              <div className="pull-right">
-                {this.props.controls}
+            {header}
+            {controls &&
+              <div className="float-right">
+                {controls}
               </div>
             }
           </div>
         }
         <div className={this.bodyClassNames()}>
-          {this.props.table &&
+          {table &&
             <table className={this.tableClassNames()}>
-              {this.props.children}
+              {children}
             </table>
           }
-          {!this.props.table && this.props.children}
+          {!table && children}
         </div>
       </div>
     )

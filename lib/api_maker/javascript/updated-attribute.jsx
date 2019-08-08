@@ -1,4 +1,5 @@
 import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class ApiMakerUpdatedAttribute extends React.Component {
