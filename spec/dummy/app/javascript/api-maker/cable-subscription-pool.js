@@ -1,3 +1,4 @@
+import CommandsPool from "./commands-pool"
 import Deserializer from "./deserializer"
 import Logger from "./logger"
 
@@ -12,8 +13,10 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   connect() {
+    var globalData = CommandsPool.current().globalRequestData
+
     this.subscription = App.cable.subscriptions.create(
-      {channel: "ApiMaker::SubscriptionsChannel", subscription_data: this.props.subscriptionData},
+      {channel: "ApiMaker::SubscriptionsChannel", global: globalData, subscription_data: this.props.subscriptionData},
       {received: (data) => this.onReceived(data)}
     )
   }

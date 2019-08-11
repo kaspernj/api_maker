@@ -38,6 +38,7 @@ export default class ApiMakerCommandsPool {
     this.pool = {}
     this.poolData = {}
     this.currentId = 1
+    this.globalRequestData = null
   }
 
   addCommand(data) {
@@ -86,7 +87,12 @@ export default class ApiMakerCommandsPool {
     this.pool = {}
     this.poolData = {}
 
-    var formData = objectToFormData({pool: currentPoolData})
+    var objectForFormData = {pool: currentPoolData}
+
+    if (this.globalRequestData)
+      objectForFormData.global = this.globalRequestData
+
+    var formData = objectToFormData(objectForFormData)
     var url = `/api_maker/commands`
     var response = await Api.requestLocal({path: url, method: "POST", rawData: formData})
 

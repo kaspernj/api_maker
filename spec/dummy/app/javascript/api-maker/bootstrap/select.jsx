@@ -1,8 +1,34 @@
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 const inflection = require("inflection")
 
 export default class BootstrapSelect extends React.Component {
+  static propTypes = PropTypesExact({
+    attribute: PropTypes.string,
+    children: PropTypes.node,
+    className: PropTypes.string,
+    "data-controller": PropTypes.string,
+    defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.number, PropTypes.string]),
+    description: PropTypes.node,
+    disabled: PropTypes.bool,
+    id: PropTypes.string,
+    includeBlank: PropTypes.bool,
+    hideSearch: PropTypes.bool,
+    hint: PropTypes.node,
+    hintBottom: PropTypes.node,
+    label: PropTypes.node,
+    labelContainerClassName: PropTypes.string,
+    model: PropTypes.object,
+    multiple: PropTypes.bool,
+    name: PropTypes.string,
+    placeholder: PropTypes.string,
+    onChange: PropTypes.func,
+    options: PropTypes.array,
+    select2: PropTypes.bool,
+    wrapperClassName: PropTypes.string,
+  })
+
   componentDidMount() {
     if (this.props.select2 && this.props.onChange)
       $(this.refs.select).on("change", this.props.onChange)
