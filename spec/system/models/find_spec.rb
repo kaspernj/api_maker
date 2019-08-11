@@ -3,8 +3,11 @@ require "rails_helper"
 describe "model find" do
   let!(:project) { create :project }
   let!(:task) { create :task, project: project }
+  let(:user) { create :user }
 
   it "finds the model" do
+    login_as user
+
     visit models_find_path(project_id: project.id)
 
     expect(current_path).to eq models_find_path
