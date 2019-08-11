@@ -3,7 +3,7 @@ class Resources::ProjectResource < Resources::ApplicationResource
   relationships :project_detail, :tasks
 
   def abilities
-    can CRUD, Project
+    can CRUD, Project if signed_in?
   end
 
   def permitted_params(arg)
