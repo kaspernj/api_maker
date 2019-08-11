@@ -35,6 +35,11 @@ export default class BootstrapAttributeRows extends React.Component {
 
     if (value instanceof Date) {
       return I18n.strftime(value, "%Y-%m-%d %H:%M")
+    } else if (typeof value === "boolean") {
+      if (value)
+        return I18n.t("js.shared.yes")
+
+      return I18n.t("js.shared.no")
     } else {
       return this.value(attribute)
     }

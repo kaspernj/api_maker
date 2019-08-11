@@ -9,10 +9,12 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
       @serializer = serialized_resource(model)
       @model.assign_attributes(sanitize_parameters)
 
-      if @model.save
+      if !current_ability.can?(:create, @model)
+        failure_response(["No access to create that resource"])
+      elsif @model.save
         success_response
       else
-        failure_response
+        failure_response(model.errors.full_messages)
       end
     end
   end
@@ -21,11 +23,11 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
     @api_maker_resource_class ||= "Resources::#{collection.klass.name}Resource".constantize
   end
 
-  def failure_response
+  def failure_response(errors)
     command.fail(
       model: serializer.result,
       success: false,
-      errors: model.errors.full_messages
+      errors: errors
     )
   end
 

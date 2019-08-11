@@ -3,8 +3,11 @@ require "rails_helper"
 describe "model belongs to relationships" do
   let!(:project) { create :project }
   let!(:project_detail) { create :project_detail, project: project }
+  let(:user) { create :user }
 
   it "finds the parent model" do
+    login_as user
+
     visit models_has_one_path(project_id: project.id)
 
     expect(current_path).to eq models_has_one_path

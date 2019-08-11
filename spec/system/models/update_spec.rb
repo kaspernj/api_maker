@@ -2,8 +2,11 @@ require "rails_helper"
 
 describe "model update" do
   let!(:project) { create :project, name: "test-project" }
+  let(:user) { create :user }
 
   it "updates the model" do
+    login_as user
+
     visit models_update_path(project_id: project.id)
 
     expect(current_path).to eq models_update_path

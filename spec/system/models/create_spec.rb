@@ -1,7 +1,11 @@
 require "rails_helper"
 
 describe "model create" do
+  let(:user) { create :user }
+
   it "creates a model" do
+    login_as user
+
     visit models_create_path
 
     expect(current_path).to eq models_create_path
@@ -14,5 +18,16 @@ describe "model create" do
 
     expect(created_project.name).to eq "test-create-project"
     expect(element["data-project-name"]).to eq "test-create-project"
+  end
+
+  it "prevents saving when no access (not signed in)" do
+    visit models_create_path
+
+    visit_action = proc do
+      expect(current_path).to eq models_create_path
+      wait_for_chrome { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
+    end
+
+    expect { visit_action.call }.to raise_error(RuntimeError, "UnhandledRejection: Command failed: No access to create that resource")
   end
 end
