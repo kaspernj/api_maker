@@ -13,6 +13,6 @@ describe "bootstrap - string input" do
 
     input = find("#task_created_at")
 
-    expect(input[:value]).to eq "1985-06-17T12:30:00"
+    expect(input[:value]).to eq "1985-06-17T10:30:00"
   end
 end
