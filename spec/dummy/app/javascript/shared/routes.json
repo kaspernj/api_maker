@@ -1,5 +1,7 @@
 {
   "routes": [
+    {"name": "bootstrap_checkbox_boolean", "path": "/bootstrap/checkbox-boolean", "component": "bootstrap/checkbox-boolean"},
+
     {"name": "models_command_serialize", "path": "/models/command-serialize", "component": "models/command-serialize"},
     {"name": "models_destroy_event", "path": "/models/destroy-event", "component": "models/destroy-event"},
     {"name": "models_load_has_one_through", "path": "/models/load-has-one-through/:task_id", "component": "models/load-has-one-through"},

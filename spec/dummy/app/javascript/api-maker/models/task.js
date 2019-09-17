@@ -3,7 +3,7 @@ import Collection from "../collection"
 
 export default class Task extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"created_at","type":"datetime"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"user_id","type":"integer"},{"name":"custom_id","type":"unknown"}],"collectionKey":"tasks","collectionName":"tasks","i18nKey":"task","name":"Task","pluralName":"tasks","relationships":[{"className":"Account","collectionName":"accounts","name":"account","macro":"has_one"},{"className":"Project","collectionName":"projects","name":"project","macro":"belongs_to"},{"className":"User","collectionName":"users","name":"user","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
+    return {"attributes":[{"name":"created_at","type":"datetime"},{"name":"finished","type":"boolean"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"user_id","type":"integer"},{"name":"custom_id","type":"unknown"}],"collectionKey":"tasks","collectionName":"tasks","i18nKey":"task","name":"Task","pluralName":"tasks","relationships":[{"className":"Account","collectionName":"accounts","name":"account","macro":"has_one"},{"className":"Project","collectionName":"projects","name":"project","macro":"belongs_to"},{"className":"User","collectionName":"users","name":"user","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
   }
 
   
@@ -58,6 +58,19 @@ export default class Task extends BaseModel {
 
     hasCreatedAt() {
       let value = this.createdAt()
+      return this._isPresent(value)
+    }
+  
+    
+    finished() {
+      // boolean
+      
+        return this._getAttribute("finished")
+      
+    }
+
+    hasFinished() {
+      let value = this.finished()
       return this._isPresent(value)
     }
   

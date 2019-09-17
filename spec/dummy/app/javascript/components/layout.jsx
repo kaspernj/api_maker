@@ -21,6 +21,9 @@ export default class Layout extends React.Component {
           <Link to={Routes.sessionStatusSpecsTimeoutPath()}>
             Timeout
           </Link>
+          <Link to={Routes.bootstrapCheckboxBooleanPath()}>
+            Bootstrap checkbox boolean
+          </Link>
 
           {Devise.isUserSignedIn() &&
             <a href="#" onClick={(e) => { this.onSignOutClicked(e) }}>
