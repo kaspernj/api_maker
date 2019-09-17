@@ -42,7 +42,7 @@ export default class SessionsNew extends React.Component {
 
     var email = this.refs.email.refs.input.value
     var password = this.refs.password.refs.input.value
-    var rememberMe = this.refs.rememberMe.checked
+    var rememberMe = this.refs.rememberMe.refs.input.checked
 
     Devise.signIn(email, password, {rememberMe}).then(() => {
       DisplayNotification.success("You were signed in")

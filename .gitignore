@@ -2,6 +2,7 @@
 log/*.log
 node_modules
 pkg/
+spec/dummy/app/assets/javascripts/i18n/
 spec/dummy/db/*.sqlite3
 spec/dummy/db/*.sqlite3-journal
 spec/dummy/log/*.log

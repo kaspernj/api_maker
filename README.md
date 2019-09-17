@@ -120,6 +120,16 @@ I18n.locale = locale
 <% end %>
 ```
 
+Add this to the `<html>`-tag:
+```html
+<html lang="<%= I18n.locale %>">
+```
+
+Add this to `config/application.rb` to ease development:
+```ruby
+config.middleware.use I18n::JS::Middleware
+```
+
 ### ActionCable
 
 Your `connection.rb` should look something like this:

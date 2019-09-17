@@ -10,7 +10,6 @@ export default class BootstrapCheckboxBoolean extends React.Component {
 
   async loadTask() {
     var params = Params.parse()
-    console.log({ params })
     var task = await Task.find(params.task_id)
     this.setState({task})
   }
