@@ -20,6 +20,7 @@ require "api_maker"
 require "cancancan"
 require "devise"
 require "i18n-js"
+require "js-routes"
 require "will_paginate"
 
 module Dummy; end
@@ -38,6 +39,4 @@ class Dummy::Application < Rails::Application
   config.i18n.available_locales = [:da, :en]
   config.i18n.default_locale = :en
   config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.yml").to_s]
-
-  puts "TEST: #{Dir[Rails.root.join("config", "locales", "**", "*.yml").to_s]}"
 end

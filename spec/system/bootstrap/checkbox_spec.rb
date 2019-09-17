@@ -7,7 +7,10 @@ describe "boootstrap - checkbox" do
   it "renders a boolean based checkbox by default" do
     login_as user
 
-    visit bootstrap_checkbox_path(task_id: task.id)
+    visit bootstrap_checkbox_boolean_path(task_id: task.id)
+
+    routes = execute_script "return Routes"
+    expect(routes.keys).to include "bootstrapCheckboxBooleanPath"
 
     wait_for_selector ".content-container"
   end
