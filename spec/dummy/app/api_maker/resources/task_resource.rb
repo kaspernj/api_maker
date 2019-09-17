@@ -1,5 +1,5 @@
 class Resources::TaskResource < Resources::ApplicationResource
-  attributes :created_at, :id, :name, :project_id, :user_id, :custom_id
+  attributes :created_at, :finished, :id, :name, :project_id, :user_id, :custom_id
   collection_commands :command_serialize, :test_collection
   member_commands :test_member
   relationships :account, :project, :user
@@ -15,6 +15,6 @@ class Resources::TaskResource < Resources::ApplicationResource
   end
 
   def permitted_params(arg)
-    arg.params.require(:task).permit(:task)
+    arg.params.require(:task).permit(:finished, :task)
   end
 end

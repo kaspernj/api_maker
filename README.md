@@ -79,15 +79,55 @@ Its now time to generate everything like this:
 rake api_maker:generate_models
 ```
 
-If you want to be able to create and update models, then you should go into each generated controller and create a params method to define, which attributes can be written on each model like this:
+If you want to be able to create and update models, then you should go into each resource and create a params method to define, which attributes can be written on each model like this:
 ```ruby
-class ApiMaker::ProjectsController < ApiMaker::ModelController
-private
-
-  def project_params
-    params.require(:project).permit(:name)
+class Resources::TaskResource < ApiMaker::ModelController
+  def permitted_params(arg)
+    arg.params.require(:project).permit(:name)
   end
 end
+```
+
+### I18n
+
+In order to use the built in text support, you need to add `i18n-js` to your project.
+
+Start by adding to your Gemfile:
+```ruby
+gem "i18n-js"
+```
+
+Then add `config/i18n-js.yml`:
+```yml
+translations:
+  - file: "app/assets/javascripts/i18n/translations.js"
+    only: ["*.activerecord.attributes.*", "*.activerecord.models.*", "*.date.*", "*.js.*", "*.number.currency.*", "*.time.*"]
+```
+
+Then add this to `app/assets/javascript/application.js.erb`:
+```js
+//= require i18n
+//= require i18n/translations
+
+var locale = document.querySelector("html").getAttribute("lang")
+I18n.locale = locale
+
+<% if Rails.env.development? || Rails.env.test? %>
+  I18n.missingTranslation = function(key) {
+    console.error(`No translation for: ${key}`)
+    return `translation missing: ${key}`
+  }
+<% end %>
+```
+
+Add this to the `<html>`-tag:
+```html
+<html lang="<%= I18n.locale %>">
+```
+
+Add this to `config/application.rb` to ease development:
+```ruby
+config.middleware.use I18n::JS::Middleware
 ```
 
 ### ActionCable

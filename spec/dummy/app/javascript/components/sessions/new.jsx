@@ -25,6 +25,7 @@ export default class SessionsNew extends React.Component {
           <form onSubmit={(e) => { this.onSubmit(e) }}>
             <StringInput label="Email" ref="email" />
             <StringInput label="Password" ref="password" type="password" />
+            <Checkbox label="Remember me" ref="rememberMe" />
             <input type="submit" value="Sign in" />
           </form>
         }
@@ -41,8 +42,9 @@ export default class SessionsNew extends React.Component {
 
     var email = this.refs.email.refs.input.value
     var password = this.refs.password.refs.input.value
+    var rememberMe = this.refs.rememberMe.refs.input.checked
 
-    Devise.signIn(email, password).then(() => {
+    Devise.signIn(email, password, {rememberMe}).then(() => {
       DisplayNotification.success("You were signed in")
     }, (response) => {
       DisplayNotification.error(response)
