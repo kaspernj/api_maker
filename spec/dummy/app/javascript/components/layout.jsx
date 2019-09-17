@@ -11,7 +11,20 @@ export default class Layout extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.loadTask()
+  }
+
+  async loadTask() {
+    var tasks = await Task.ransack().toArray()
+    var task = tasks[0]
+
+    this.setState({task})
+  }
+
   render() {
+    var { task } = this.state
+
     return (
       <div className={this.className()}>
         <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={() => { this.onDeviseSigned() }} />
@@ -21,9 +34,11 @@ export default class Layout extends React.Component {
           <Link to={Routes.sessionStatusSpecsTimeoutPath()}>
             Timeout
           </Link>
-          <Link to={Routes.bootstrapCheckboxBooleanPath()}>
-            Bootstrap checkbox boolean
-          </Link>
+          {task &&
+            <Link to={Routes.bootstrapCheckboxBooleanPath({task_id: task.id()})}>
+              Bootstrap checkbox boolean
+            </Link>
+          }
 
           {Devise.isUserSignedIn() &&
             <a href="#" onClick={(e) => { this.onSignOutClicked(e) }}>

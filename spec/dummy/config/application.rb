@@ -19,6 +19,7 @@ require "active_record_query_fixer"
 require "api_maker"
 require "cancancan"
 require "devise"
+require "i18n-js"
 require "will_paginate"
 
 module Dummy; end
