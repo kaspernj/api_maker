@@ -1,6 +1,7 @@
 {
   "routes": [
     {"name": "bootstrap_checkbox_boolean", "path": "/bootstrap/checkbox-boolean", "component": "bootstrap/checkbox-boolean"},
+    {"name": "bootstrap_string_input_datetime_local", "path": "/bootstrap/string-input-datetime-local", "component": "bootstrap/string-input-datetime-local"},
 
     {"name": "models_command_serialize", "path": "/models/command-serialize", "component": "models/command-serialize"},
     {"name": "models_destroy_event", "path": "/models/destroy-event", "component": "models/destroy-event"},
@@ -9,6 +10,8 @@
     {"name": "models_select", "path": "/models/select", "component": "models/select"},
 
     {"name": "session_status_specs_timeout", "path": "/session_status_specs/timeout", "component": "session-status-specs/timeout"},
-    {"name": "new_session", "path": "/sessions/new", "component": "sessions/new"}
+    {"name": "new_session", "path": "/sessions/new", "component": "sessions/new"},
+
+    {"name": "root", "path": "/", "component": "sessions/new"}
   ]
 }

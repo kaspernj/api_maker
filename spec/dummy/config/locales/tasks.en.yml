@@ -2,4 +2,5 @@ en:
   activerecord:
     attributes:
       task:
+        created_at: Created at
         finished: Finished
