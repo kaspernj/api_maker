@@ -34,19 +34,24 @@ export default class Layout extends React.Component {
           <Link to={Routes.sessionStatusSpecsTimeoutPath()}>
             Timeout
           </Link>
-          {task && false &&
-            <Link to={Routes.bootstrapCheckboxBooleanPath({task_id: task.id()})}>
-              Bootstrap checkbox boolean
-            </Link>
+          {task &&
+            <>
+              <Link className="ml-2" to={Routes.bootstrapCheckboxBooleanPath({task_id: task.id()})}>
+                Bootstrap checkbox boolean
+              </Link>
+              <Link className="ml-2" to={Routes.bootstrapStringInputDatetimeLocalPath({task_id: task.id()})}>
+                Bootstrap string input datetime local
+              </Link>
+            </>
           }
 
           {Devise.isUserSignedIn() &&
-            <a href="#" onClick={(e) => this.onSignOutClicked(e)}>
+            <a className="ml-2" href="#" onClick={(e) => this.onSignOutClicked(e)}>
               Sign out
             </a>
           }
           {!Devise.isUserSignedIn() &&
-            <Link to={Routes.newSessionPath()}>
+            <Link className="ml-2" to={Routes.newSessionPath()}>
               Sign in
             </Link>
           }

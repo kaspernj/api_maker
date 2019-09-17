@@ -98,13 +98,21 @@ export default class BootstrapStringInput extends React.Component {
 
   inputDefaultValue() {
     if ("defaultValue" in this.props) {
-      return this.props.defaultValue
+      return this.formatValue(this.props.defaultValue)
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
         throw new Error(`No such attribute: ${this.props.attribute}`)
 
-      return this.props.model[this.props.attribute]()
+      return this.formatValue(this.props.model[this.props.attribute]())
     }
+  }
+
+  formatValue(value) {
+    // We need to use a certain format for datetime-local
+    if (this.inputType() == "datetime-local" && value instanceof Date)
+      return I18n.strftime(value, '%Y-%m-%dT%H:%M:%S')
+
+    return value
   }
 
   inputId() {
