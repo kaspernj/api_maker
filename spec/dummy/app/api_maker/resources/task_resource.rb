@@ -15,6 +15,6 @@ class Resources::TaskResource < Resources::ApplicationResource
   end
 
   def permitted_params(arg)
-    arg.params.require(:task).permit(:task)
+    arg.params.require(:task).permit(:finished, :task)
   end
 end

@@ -25,8 +25,24 @@ export default class BootstrapCheckboxBoolean extends React.Component {
   content() {
     return (
       <div className="content-container">
-        <Checkbox attribute="finished" model={this.state.task} />
+        <form onSubmit={(e) => this.onSubmit(e)} ref="form">
+          <Checkbox attribute="finished" model={this.state.task} />
+          <input type="submit" value="Save" />
+        </form>
       </div>
     )
+  }
+
+  onSubmit(e) {
+    e.preventDefault()
+
+    var formData = new FormData(this.refs.form)
+    var { task } = this.state
+
+    task.saveRaw(formData).then(() => {
+      console.log("Task was saved")
+    }, (response) => {
+      console.error("Task couldnt be saved")
+    })
   }
 }
