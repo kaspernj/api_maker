@@ -12,7 +12,13 @@ export default class Layout extends React.Component {
   }
 
   componentDidMount() {
+    this.loadAccount()
     this.loadTask()
+  }
+
+  async loadAccount() {
+    var account = await Account.ransack().first()
+    this.setState({account})
   }
 
   async loadTask() {
@@ -23,7 +29,7 @@ export default class Layout extends React.Component {
   }
 
   render() {
-    var { task } = this.state
+    var { account, task } = this.state
 
     return (
       <div className={this.className()}>
@@ -43,6 +49,11 @@ export default class Layout extends React.Component {
                 Bootstrap string input datetime local
               </Link>
             </>
+          }
+          {account &&
+            <Link className="ml-2" to={Routes.bootstrapCheckboxesPath({account_id: account.id()})}>
+              Checkboxes
+            </Link>
           }
 
           {Devise.isUserSignedIn() &&

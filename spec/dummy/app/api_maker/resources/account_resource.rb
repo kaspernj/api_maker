@@ -1,8 +1,12 @@
 class Resources::AccountResource < Resources::ApplicationResource
   attributes :id, :name
-  relationships :projects
+  relationships :projects, :tasks
 
   def abilities
-    can :read, Account
+    can CRUD, Account
+  end
+
+  def permitted_params(arg)
+    arg.params.require(:account).permit(task_ids: [])
   end
 end

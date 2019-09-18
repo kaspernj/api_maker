@@ -4,6 +4,16 @@ import React from "react"
 const inflection = require("inflection")
 
 export default class BootstrapRadioButtons extends React.Component {
+  static propTypes = PropTypesExact({
+    attribute: PropTypes.string,
+    defaultValue: PropTypes.array,
+    label: PropTypes.string,
+    labelClassName: PropTypes.string,
+    model: PropTypes.object,
+    name: PropTypes.string,
+    options: PropTypes.array.isRequired
+  })
+
   render() {
     return (
       <div className="component-bootstrap-checkboxes form-group">
@@ -11,7 +21,8 @@ export default class BootstrapRadioButtons extends React.Component {
           {this.label()}
         </label>
 
-        {this.props.options.map(option => this.optionElement(option))}
+        <input name={this.inputName()} type="hidden" value="" />
+        {this.props.options.map((option, index) => this.optionElement(option, index))}
       </div>
     )
   }
@@ -27,7 +38,7 @@ export default class BootstrapRadioButtons extends React.Component {
     }
   }
 
-  inputName(value) {
+  inputName() {
     if (this.props.name) {
       return `${this.props.name}[]`
     } else if (this.props.model) {
@@ -80,11 +91,4 @@ export default class BootstrapRadioButtons extends React.Component {
       </div>
     )
   }
-}
-
-BootstrapRadioButtons.propTypes = {
-  defaultValue: PropTypes.array,
-  model: PropTypes.object,
-  name: PropTypes.string,
-  options: PropTypes.array.isRequired
 }
