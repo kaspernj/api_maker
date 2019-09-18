@@ -5,8 +5,10 @@ const inflection = require("inflection")
 
 export default class BootstrapRadioButtons extends React.Component {
   static propTypes = PropTypesExact({
+    attribute: PropTypes.string,
     defaultValue: PropTypes.array,
     label: PropTypes.string,
+    labelClassName: PropTypes.string,
     model: PropTypes.object,
     name: PropTypes.string,
     options: PropTypes.array.isRequired
