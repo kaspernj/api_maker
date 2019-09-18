@@ -49,21 +49,19 @@ private
 
   def spawn_thread
     @threads << Thread.new do
-      begin
-        Rails.application.executor.wrap do
-          I18n.with_locale(locale) do
-            yield
-          end
+      Rails.application.executor.wrap do
+        I18n.with_locale(locale) do
+          yield
         end
-      rescue => error # rubocop:disable Style/RescueStandardError
-        puts error.inspect
-        puts error.backtrace
-
-        Rails.logger.error error.message
-        Rails.logger.error error.backtrace.join("\n")
-
-        ApiMaker::Configuration.current.report_error(controller: controller, error: error)
       end
+    rescue => error # rubocop:disable Style/RescueStandardError
+      puts error.inspect
+      puts error.backtrace
+
+      Rails.logger.error error.message
+      Rails.logger.error error.backtrace.join("\n")
+
+      ApiMaker::Configuration.current.report_error(controller: controller, error: error)
     end
   end
 end
