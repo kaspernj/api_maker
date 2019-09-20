@@ -52,7 +52,7 @@ export default class Devise {
       Devise.updateSession(modelInstance)
       Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
 
-      return {response: response}
+      return {model: modelInstance, response: response}
     } else {
       throw new CustomError("Sign in failed", {response: response})
     }

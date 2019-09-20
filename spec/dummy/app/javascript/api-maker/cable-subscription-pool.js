@@ -24,21 +24,21 @@ export default class ApiMakerCableSubscriptionPool {
   onReceived(rawData) {
     var data = Deserializer.parse(rawData)
     var modelType = data.model_type
-    var modelName = inflection.camelize(inflection.singularize(modelType.replace(/-/, "_")))
+    var modelName = inflection.camelize(inflection.singularize(modelType.replace(/-/g, "_")))
     var modelId = data.model_id
     var modelInstance = data.model
     var subscriptions = this.props.subscriptions
 
     if (data.type == "update") {
-      for(var subscription of this.props.subscriptions[modelName]["updates"][modelId]) {
+      for(var subscription of subscriptions[modelName]["updates"][modelId]) {
         subscription.onReceived({model: modelInstance})
       }
     } else if (data.type == "destroy") {
-      for(var subscription of this.props.subscriptions[modelName]["destroys"][modelId]) {
+      for(var subscription of subscriptions[modelName]["destroys"][modelId]) {
         subscription.onReceived({model: modelInstance})
       }
     } else if (data.type == "event") {
-      for(var subscription of this.props.subscriptions[modelName]["events"][modelId][data.event_name]) {
+      for(var subscription of subscriptions[modelName]["events"][modelId][data.event_name]) {
         subscription.onReceived({
           args: data.args,
           eventName: data.event_name,
