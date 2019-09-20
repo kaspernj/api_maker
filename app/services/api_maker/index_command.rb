@@ -8,12 +8,18 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
 
         set_collection
 
-        collection = collection_from_query(@query.fix)
+        if params[:count]
+          count = @query.count
+          count = count.length if count.is_a?(Hash)
 
-        response = collection.as_json
-        include_pagination_data(response, @query)
+          command.result(count: count)
+        else
+          collection = collection_from_query(@query.fix)
+          response = collection.as_json
+          include_pagination_data(response, @query)
 
-        command.result(response)
+          command.result(response)
+        end
       end
     end
   end
