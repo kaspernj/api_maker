@@ -1,10 +1,9 @@
-import BaseModel from "./base-model"
 import CommandsPool from "./commands-pool"
-const inflection = require("inflection")
 import merge from "merge"
 import ModelsResponseReader from "./models-response-reader"
-import qs from "qs"
 import Result from "./result"
+
+const inflection = require("inflection")
 
 export default class Collection {
   constructor(args, queryArgs = {}) {
@@ -29,6 +28,11 @@ export default class Collection {
     return models[0]
   }
 
+  async count() {
+    var response = await this._clone({count: true})._response()
+    return response.count
+  }
+
   isLoaded() {
     if (this.args.reflectionName in this.args.model.relationshipsCache)
       return true
@@ -42,7 +46,6 @@ export default class Collection {
 
   loaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
-      var model = this.args.model
       throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
     }
 
@@ -152,6 +155,9 @@ export default class Collection {
     if (this.queryArgs.accessibleBy) {
       params.accessible_by = inflection.underscore(this.queryArgs.accessibleBy)
     }
+
+    if (this.queryArgs.count)
+      params.count = this.queryArgs.count
 
     if (this.queryArgs.ransack)
       params.q = this.queryArgs.ransack

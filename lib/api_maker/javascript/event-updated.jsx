@@ -7,7 +7,7 @@ export default class ApiMakerEventUpdated extends React.Component {
     onUpdated: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.connect()
   }
 

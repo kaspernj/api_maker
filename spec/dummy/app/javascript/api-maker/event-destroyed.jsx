@@ -7,7 +7,7 @@ export default class ApiMakerEventDestroyed extends React.Component {
     onDestroyed: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.connect()
   }
 

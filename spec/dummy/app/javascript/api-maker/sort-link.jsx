@@ -51,13 +51,22 @@ export default class extends React.Component {
 
   render() {
     var LinkComponent = this.linkComponent()
-    var { attribute, linkComponent, query, title, ...other } = this.props
+    var { attribute, className, linkComponent, query, title, ...other } = this.props
 
     return (
-      <LinkComponent {...other} to={this.href()}>
+      <LinkComponent className={this.className()} {...other} to={this.href()}>
         {this.title()}
       </LinkComponent>
     )
+  }
+
+  className() {
+    var classNames = ["component-api-maker-bootstrap-sort-link"]
+
+    if (this.props.className)
+      classNames.push(this.props.className)
+
+    return classNames.join(" ")
   }
 
   linkComponent() {

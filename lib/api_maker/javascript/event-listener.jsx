@@ -23,7 +23,7 @@ export default class ApiMakerEventListener extends React.Component {
       throw new Error("'target' was expected but not given")
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.target.addEventListener(this.props.event, this.onCalled)
   }
 

@@ -8,7 +8,7 @@ export default class ApiMakerEventConnection extends React.Component {
     onCall: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.subscription = this.props.model.connect(this.props.event, this.props.onCall)
   }
 

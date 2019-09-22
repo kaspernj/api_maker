@@ -11,6 +11,10 @@ export default class Result {
     return this.data.models
   }
 
+  modelClass() {
+    return this.data.collection.modelClass()
+  }
+
   totalCount() {
     return this.data.response.meta.totalCount
   }

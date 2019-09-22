@@ -7,7 +7,7 @@ export default class ModelsSelect extends React.Component {
     this.state = {}
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     var tasks = await Task.ransack().select({Task: ["id", "name"]}).toArray()
     this.setState({tasks})
   }
