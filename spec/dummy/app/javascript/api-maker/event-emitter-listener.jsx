@@ -14,7 +14,7 @@ export default class ApiMakerEventEmitterListener extends React.Component {
     this.onCalled = this.onCalled.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.events.addListener(this.props.event, this.onCalled)
   }
 

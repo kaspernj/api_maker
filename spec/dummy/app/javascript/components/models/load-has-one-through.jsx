@@ -7,7 +7,7 @@ export default class ModelsLoadHasOneThrough extends React.Component {
     this.state = {}
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     var task = await Task.find(this.props.match.params.task_id)
 
     await task.loadAccount()

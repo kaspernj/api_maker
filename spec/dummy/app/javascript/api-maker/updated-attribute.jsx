@@ -16,7 +16,7 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.setAttribute()
     this.connect()
   }

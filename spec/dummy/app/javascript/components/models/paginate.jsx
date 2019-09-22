@@ -12,7 +12,7 @@ export default class ModelsPaginate extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.loadTasks()
   }
 
