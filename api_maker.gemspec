@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 5.2.0"
 
-  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.4"
+  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.6"
   s.add_runtime_dependency "cancancan"
   s.add_runtime_dependency "i18n-js"
   s.add_runtime_dependency "ransack"
