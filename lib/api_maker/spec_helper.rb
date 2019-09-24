@@ -46,6 +46,26 @@ module ApiMaker::SpecHelper
     HtmlBeautifier.beautify(page.html)
   end
 
+  def reset_indexeddb
+    execute_script "
+      indexedDB.databases().then(function(databases) {
+        var promises = []
+        for(var database of databases) {
+          promises.push(indexedDB.deleteDatabase(database.name))
+        }
+
+        Promise.all(promises).then(function() {
+          console.error('All databases was deleted')
+        })
+      })
+    "
+
+    wait_for_condition do
+      logs_text = chrome_logs.map(&:message).join("\n")
+      logs_text.include?("\"All databases was deleted\"")
+    end
+  end
+
   def wait_for_chrome(delay_sec: 0.5, timeout_sec: 6)
     WaitUtil.wait_for_condition("wait for chrome", timeout_sec: timeout_sec, delay_sec: delay_sec) do
       expect_no_chrome_errors
