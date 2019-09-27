@@ -5,6 +5,8 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
         connect_event(model_name, model_ids, event_name)
       end
 
+      connect_creates(model_name) if subscription_types.key?("creates")
+
       if subscription_types.key?("updates")
         model_ids = subscription_types.fetch("updates")
         connect_updates(model_name, model_ids)
@@ -18,6 +20,15 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
   end
 
 private
+
+  def connect_creates(model_name)
+    model_class = model_name.safe_constantize
+
+    channel_name = "api_maker_creates_#{model_class}"
+    stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
+      transmit data
+    end
+  end
 
   def connect_event(model_name, model_ids, event_name)
     ability_name = "event_#{event_name}".to_sym
