@@ -57,7 +57,6 @@ private
     models = model_class.accessible_by(current_ability, :update_events).where(model_class.primary_key => model_ids)
     models.each do |model|
       channel_name = "api_maker_destroys_#{model_class}_#{model.id}"
-
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
