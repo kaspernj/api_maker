@@ -34,7 +34,7 @@ module ApiMaker::ModelExtensions
       end
     end
 
-    def api_maker_broadcast_destroyes
+    def api_maker_broadcast_destroys
       after_commit on: :destroy do |model|
         channel_name = "api_maker_destroys_#{model.class.name}_#{model.id}"
         serializer = ApiMaker::Serializer.new(model: model)
