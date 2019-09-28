@@ -10,11 +10,11 @@ module ApiMaker::ModelExtensions
         serializer = ApiMaker::Serializer.new(model: model)
         data_to_broadcast = ApiMaker::ResultParser.parse(
           model: model,
+          model_class_name: model.class.name,
           model_id: model.id,
           model_type: serializer.resource.collection_name,
           type: :create
         )
-
         ActionCable.server.broadcast(channel_name, data_to_broadcast)
       end
     end

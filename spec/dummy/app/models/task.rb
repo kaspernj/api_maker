@@ -1,4 +1,5 @@
 class Task < ApplicationRecord
+  api_maker_broadcast_creates
   api_maker_broadcast_destroys
   api_maker_broadcast_updates
 
