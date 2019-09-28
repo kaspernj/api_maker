@@ -5,6 +5,7 @@
     {"name": "bootstrap_string_input_datetime_local", "path": "/bootstrap/string-input-datetime-local", "component": "bootstrap/string-input-datetime-local"},
 
     {"name": "models_command_serialize", "path": "/models/command-serialize", "component": "models/command-serialize"},
+    {"name": "models_created_event", "path": "/models/created-event", "component": "models/created-event"},
     {"name": "models_destroy_event", "path": "/models/destroy-event", "component": "models/destroy-event"},
     {"name": "models_load_has_one_through", "path": "/models/load-has-one-through/:task_id", "component": "models/load-has-one-through"},
     {"name": "models_paginate", "path": "/models/paginate", "component": "models/paginate"},

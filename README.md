@@ -349,7 +349,7 @@ Add this to your abilities:
 ```ruby
 class ApiMakerAbility < ApplicationAbility
   def initialize(args:)
-    can :update_events, User, id: 5
+    can [:create_events, :destroy_events, :update_events], User, id: 5
   end
 end
 ```
@@ -357,6 +357,8 @@ end
 Add this to the model you want to broadcast updates:
 ```ruby
 class User < ApplicationRecord
+  api_maker_broadcast_creates
+  api_maker_broadcast_destroys
   api_maker_broadcast_updates
 end
 ```
@@ -376,17 +378,29 @@ subscription.unsubscribe()
 
 You can also use a React component if you use React and dont want to keep track of when to unsubscribe:
 ```jsx
+import EventUpdated from "api-maker/event-created"
+import EventUpdated from "api-maker/event-destroyed"
 import EventUpdated from "api-maker/event-updated"
 ```
 
 ```jsx
+<EventCreated modelClass={User} onCreated={(args) => this.onUserCreated(args)} />
+<EventDestroyed model={user} onDestroyed={(args) => this.onUserDestroyed(args)} />
 <EventUpdated model={user} onUpdated={(args) => this.onUserUpdated(args)} />
 ```
 
 ```jsx
-def onUserUpdated(args)
+onUserCreated(args) {
   this.setState({user: args.model})
-end
+}
+
+onUserDestroyed(args) {
+  this.setState({user: args.model})
+}
+
+onUserUpdated(args) {
+  this.setState({user: args.model})
+}
 ```
 
 You can also use this React component to show a models attribute with automatic updates:

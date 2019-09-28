@@ -1,7 +1,9 @@
 export default class ApiMakerLogger {
   static current() {
-    if (!window.apiMakerLogger)
+    if (!window.apiMakerLogger) {
       window.apiMakerLogger = new ApiMakerLogger()
+      // window.apiMakerLogger.setDebug(true)
+    }
 
     return window.apiMakerLogger
   }
@@ -12,7 +14,7 @@ export default class ApiMakerLogger {
 
   log(message) {
     if (this.debug)
-      console.log(`ApiMaker: ${message}`)
+      console.log("ApiMaker", message)
   }
 
   setDebug(value) {

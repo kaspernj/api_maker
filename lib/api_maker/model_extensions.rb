@@ -4,6 +4,21 @@ module ApiMaker::ModelExtensions
   end
 
   module ClassMethods
+    def api_maker_broadcast_creates
+      after_commit on: :create do |model|
+        channel_name = "api_maker_creates_#{model.class.name}"
+        serializer = ApiMaker::Serializer.new(model: model)
+        data_to_broadcast = ApiMaker::ResultParser.parse(
+          model: model,
+          model_class_name: model.class.name,
+          model_id: model.id,
+          model_type: serializer.resource.collection_name,
+          type: :create
+        )
+        ActionCable.server.broadcast(channel_name, data_to_broadcast)
+      end
+    end
+
     def api_maker_broadcast_updates
       after_commit on: :update do |model|
         channel_name = "api_maker_updates_#{model.class.name}_#{model.id}"
@@ -17,7 +32,9 @@ module ApiMaker::ModelExtensions
 
         ActionCable.server.broadcast(channel_name, data_to_broadcast)
       end
+    end
 
+    def api_maker_broadcast_destroys
       after_commit on: :destroy do |model|
         channel_name = "api_maker_destroys_#{model.class.name}_#{model.id}"
         serializer = ApiMaker::Serializer.new(model: model)

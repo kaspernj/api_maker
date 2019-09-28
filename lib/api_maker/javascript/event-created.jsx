@@ -2,10 +2,10 @@ import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
 
-export default class ApiMakerEventDestroyed extends React.Component {
+export default class ApiMakerEventCreated extends React.Component {
   static propTypes = PropTypesExact({
-    model: PropTypes.object.isRequired,
-    onDestroyed: PropTypes.func.isRequired
+    modelClass: PropTypes.func.isRequired,
+    onCreated: PropTypes.func.isRequired
   })
 
   componentDidMount() {
@@ -13,11 +13,11 @@ export default class ApiMakerEventDestroyed extends React.Component {
   }
 
   componentWillUnmount() {
-    this.connectDestroyed.unsubscribe()
+    this.connectCreated.unsubscribe()
   }
 
   connect() {
-    this.connectDestroyed = this.props.model.connectDestroyed(this.props.onDestroyed)
+    this.connectCreated = this.props.modelClass.connectCreated(this.props.onCreated)
   }
 
   render() {
