@@ -1,8 +1,26 @@
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 const inflection = require("inflection")
 
 export default class BootstrapCheckbox extends React.Component {
+  static propTypes = PropTypesExact({
+    attribute: PropTypes.string,
+    className: PropTypes.string,
+    "data-action": PropTypes.string,
+    "data-target": PropTypes.string,
+    defaultChecked: PropTypes.bool,
+    defaultValue: PropTypes.node,
+    hint: PropTypes.node,
+    id: PropTypes.string,
+    label: PropTypes.node,
+    labelClassName: PropTypes.string,
+    model: PropTypes.object,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    wrapperClassName: PropTypes.string
+  })
+
   render() {
     let id = this.inputId()
 
@@ -25,9 +43,6 @@ export default class BootstrapCheckbox extends React.Component {
 
           {this.label() &&
             <label className={this.labelClassName()} htmlFor={id}>
-              {this.props.slider &&
-                <span className="mr-2 slider-container"></span>
-              }
               {this.label()}
             </label>
           }
@@ -79,9 +94,6 @@ export default class BootstrapCheckbox extends React.Component {
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)
-
-    if (this.props.slider)
-      classNames.push("component-bootstrap-checkbox-slider")
 
     return classNames.join(" ")
   }
