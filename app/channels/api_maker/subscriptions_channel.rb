@@ -26,10 +26,10 @@ private
     channel_name = "api_maker_creates_#{model_class}"
     stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
       # We need to look the model up to evaluate if the user has access
-      model = data.fetch("model_class_name").safe_constantize.find(data.fetch("model_id"))
+      model = data.fetch("model_class_name").safe_constantize.accessible_by(current_ability, :create_events).find(data.fetch("model_id"))
 
       # Transmit the data to JS if its allowed
-      transmit data if current_ability.can?(:create_events, model)
+      transmit data if model
     end
   end
 
