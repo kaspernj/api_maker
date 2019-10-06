@@ -1,11 +1,26 @@
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 const inflection = require("inflection")
 
 export default class BootstrapRadioButtons extends React.Component {
+  static propTypes = PropTypesExact({
+    attribute: PropTypes.string,
+    collection: PropTypes.array.isRequired,
+    defaultValue: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
+    ]),
+    id: PropTypes.string,
+    name: PropTypes.string,
+    model: PropTypes.object,
+    wrapperClassName: PropTypes.string
+  })
+
   render() {
     return (
       <div className={this.wrapperClassName()}>
+        <input name={this.inputName()} type="hidden" value="" />
         {this.props.collection.map(option => this.optionElement(option))}
       </div>
     )
