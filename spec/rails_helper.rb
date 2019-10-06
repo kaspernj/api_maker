@@ -26,7 +26,7 @@ require "waitutil"
 require "webdrivers"
 require "webpacker"
 
-Webdrivers::Chromedriver.required_version = "74.0.3729.6"
+Webdrivers::Chromedriver.required_version = "77.0.3865.40"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
