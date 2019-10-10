@@ -21,16 +21,7 @@ module ApiMaker::ModelExtensions
 
     def api_maker_broadcast_updates
       after_commit on: :update do |model|
-        channel_name = "api_maker_updates_#{model.class.name}_#{model.id}"
-        serializer = ApiMaker::Serializer.new(model: model)
-        data_to_broadcast = ApiMaker::ResultParser.parse(
-          model: model,
-          model_id: model.id,
-          model_type: serializer.resource.collection_name,
-          type: :update
-        )
-
-        ActionCable.server.broadcast(channel_name, data_to_broadcast)
+        model.api_maker_broadcast_update
       end
     end
 
@@ -60,6 +51,19 @@ module ApiMaker::ModelExtensions
       model_id: id,
       model_type: serializer.resource.collection_name,
       type: :event
+    )
+
+    ActionCable.server.broadcast(channel_name, data_to_broadcast)
+  end
+
+  def api_maker_broadcast_update
+    channel_name = "api_maker_updates_#{self.class.name}_#{id}"
+    serializer = ApiMaker::Serializer.new(model: self)
+    data_to_broadcast = ApiMaker::ResultParser.parse(
+      model: self,
+      model_id: id,
+      model_type: serializer.resource.collection_name,
+      type: :update
     )
 
     ActionCable.server.broadcast(channel_name, data_to_broadcast)
