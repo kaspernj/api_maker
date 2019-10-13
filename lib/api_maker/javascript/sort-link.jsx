@@ -20,18 +20,12 @@ export default class extends React.Component {
   }
 
   href() {
-    if (this.isSortedByAttribute()) {
-      var sortMode = "desc"
-    } else {
-      var sortMode = "asc"
-    }
-
     var currentParams = qs.parse(window.location.search.substr(1))
 
     if (!currentParams[this.state.searchKey])
       currentParams[this.state.searchKey] = {}
 
-    currentParams[this.state.searchKey]["s"] = `${this.attribute()} ${sortMode}`
+    currentParams[this.state.searchKey]["s"] = `${this.attribute()} ${this.sortMode()}`
 
     var newParams = qs.stringify(currentParams)
     var newPath = `${location.pathname}?${newParams}`
@@ -54,7 +48,7 @@ export default class extends React.Component {
     var { attribute, className, linkComponent, query, title, ...other } = this.props
 
     return (
-      <LinkComponent className={this.className()} {...other} to={this.href()}>
+      <LinkComponent {...other} className={this.className()} data-attribute={attribute} data-sort-mode={this.sortMode()} to={this.href()}>
         {this.title()}
       </LinkComponent>
     )
@@ -74,6 +68,14 @@ export default class extends React.Component {
       return this.props.linkComponent
     } else {
       return Link
+    }
+  }
+
+  sortMode() {
+    if (this.isSortedByAttribute()) {
+      return "desc"
+    } else {
+      return "asc"
     }
   }
 

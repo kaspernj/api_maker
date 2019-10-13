@@ -1,7 +1,8 @@
 require "rails_helper"
 
 describe ApiMaker::Serializer do
-  let!(:project) { create :project }
+  let(:account) { create :account }
+  let!(:project) { create :project, account: account }
   let!(:task) { create :task, project: project, user: user }
   let!(:user) { create :user }
 
@@ -28,5 +29,43 @@ describe ApiMaker::Serializer do
   it "supports date types" do
     result = JSON.parse(ApiMaker::Serializer.new(model: user).to_json)
     expect(result.fetch("a").fetch("birthday_at")).to eq "1985-06-17"
+  end
+
+  describe "#attributes_to_read" do
+    it "returns the default select if none are given" do
+      serializer = ApiMaker::Serializer.new(model: account)
+
+      expect(serializer.attributes_to_read).to eq(
+        id: {args: {}, data: :id},
+        name: {args: {}, data: :name}
+      )
+      expect(serializer.as_json).to eq(
+        a: {
+          id: account.id,
+          name: account.name
+        }
+      )
+    end
+
+    it "returns given select if given" do
+      serializer = ApiMaker::Serializer.new(model: account, select: {
+        id: {args: {}, data: :id},
+        name: {args: {}, data: :name},
+        users_count: {args: {}, data: :users_count}
+      })
+
+      expect(serializer.attributes_to_read).to eq(
+        id: {args: {}, data: :id},
+        name: {args: {}, data: :name},
+        users_count: {args: {}, data: :users_count}
+      )
+      expect(serializer.as_json).to eq(
+        a: {
+          id: account.id,
+          name: account.name,
+          users_count: 0
+        }
+      )
+    end
   end
 end

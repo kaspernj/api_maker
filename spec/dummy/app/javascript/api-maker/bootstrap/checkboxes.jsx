@@ -87,7 +87,7 @@ export default class BootstrapRadioButtons extends React.Component {
     var id = this.generatedId()
 
     return (
-      <div key={`option-${option[1]}`}>
+      <div className="checkboxes-option" key={`option-${option[1]}`}>
         <input defaultChecked={this.isDefaultSelected(option[1])} id={id} name={this.inputName()} type="checkbox" value={option[1]} /> <label htmlFor={id}>{option[0]}</label>
       </div>
     )
