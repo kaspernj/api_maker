@@ -20,7 +20,9 @@ module ApiMaker::ModelExtensions
     end
 
     def api_maker_broadcast_updates
-      after_commit on: :update, &:api_maker_broadcast_update
+      after_commit on: :update do |model| # rubocop:disable Style/SymbolProc
+        model.api_maker_broadcast_update
+      end
     end
 
     def api_maker_broadcast_destroys
