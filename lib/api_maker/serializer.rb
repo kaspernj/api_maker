@@ -35,7 +35,7 @@ class ApiMaker::Serializer
   end
 
   def attributes_to_read
-    @attributes_to_read ||= @select || resource._attributes
+    @attributes_to_read ||= @select || resource.default_select
   end
 
   def attribute_value(attribute)

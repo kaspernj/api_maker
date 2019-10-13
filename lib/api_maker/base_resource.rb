@@ -56,6 +56,12 @@ class ApiMaker::BaseResource
     @collection_name ||= short_name.underscore.pluralize.dasherize
   end
 
+  def self.default_select
+    _attributes.select do |_attribute_name, args|
+      !args.fetch(:args).key?(:selected_by_default) || args.fetch(:args).fetch(:selected_by_default)
+    end
+  end
+
   def self.short_name
     @short_name ||= name.match(/\AResources::(.+)Resource\Z/)[1]
   end
