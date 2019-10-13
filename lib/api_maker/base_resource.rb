@@ -57,7 +57,7 @@ class ApiMaker::BaseResource
   end
 
   def self.default_select
-    result = _attributes.select do |attribute_name, args|
+    _attributes.select do |_attribute_name, args|
       !args.fetch(:args).key?(:selected_by_default) || args.fetch(:args).fetch(:selected_by_default)
     end
   end

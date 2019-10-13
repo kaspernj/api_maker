@@ -20,9 +20,7 @@ module ApiMaker::ModelExtensions
     end
 
     def api_maker_broadcast_updates
-      after_commit on: :update do |model|
-        model.api_maker_broadcast_update
-      end
+      after_commit on: :update, &:api_maker_broadcast_update
     end
 
     def api_maker_broadcast_destroys

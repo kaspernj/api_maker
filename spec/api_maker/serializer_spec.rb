@@ -48,11 +48,14 @@ describe ApiMaker::Serializer do
     end
 
     it "returns given select if given" do
-      serializer = ApiMaker::Serializer.new(model: account, select: {
-        id: {args: {}, data: :id},
-        name: {args: {}, data: :name},
-        users_count: {args: {}, data: :users_count}
-      })
+      serializer = ApiMaker::Serializer.new(
+        model: account,
+        select: {
+          id: {args: {}, data: :id},
+          name: {args: {}, data: :name},
+          users_count: {args: {}, data: :users_count}
+        }
+      )
 
       expect(serializer.attributes_to_read).to eq(
         id: {args: {}, data: :id},
