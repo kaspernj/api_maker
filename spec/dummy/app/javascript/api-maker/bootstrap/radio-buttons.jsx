@@ -54,7 +54,17 @@ export default class BootstrapRadioButtons extends React.Component {
 
     return (
       <div key={`option-${option[1]}`}>
-        <input defaultChecked={option[1] == this.inputDefaultValue()} id={id} name={this.inputName()} type="radio" value={option[1]} /> <label htmlFor={id}>{option[0]}</label>
+        <input
+          data-option-value={option[1]}
+          defaultChecked={option[1] == this.inputDefaultValue()}
+          id={id}
+          name={this.inputName()}
+          type="radio"
+          value={option[1]} />
+
+        <label className="ml-1" htmlFor={id}>
+          {option[0]}
+        </label>
       </div>
     )
   }

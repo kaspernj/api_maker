@@ -4,7 +4,7 @@ import React from "react"
 
 const inflection = require("inflection")
 
-export default class BootstrapRadioButtons extends React.Component {
+export default class BootstrapCheckboxes extends React.Component {
   static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,
@@ -88,7 +88,17 @@ export default class BootstrapRadioButtons extends React.Component {
 
     return (
       <div className="checkboxes-option" key={`option-${option[1]}`}>
-        <input defaultChecked={this.isDefaultSelected(option[1])} id={id} name={this.inputName()} type="checkbox" value={option[1]} /> <label htmlFor={id}>{option[0]}</label>
+        <input
+          data-option-value={option[1]}
+          defaultChecked={this.isDefaultSelected(option[1])}
+          id={id}
+          name={this.inputName()}
+          type="checkbox"
+          value={option[1]} />
+
+        <label className="ml-1" htmlFor={id}>
+          {option[0]}
+        </label>
       </div>
     )
   }
