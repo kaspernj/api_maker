@@ -1,5 +1,5 @@
 class ApiMaker::IndexCommandService < ApiMaker::CommandService
-  def execute!
+  def execute
     ApiMaker::IndexCommand.execute_in_thread!(
       ability: ability,
       args: args,
@@ -8,6 +8,8 @@ class ApiMaker::IndexCommandService < ApiMaker::CommandService
       command_response: command_response,
       controller: controller
     )
+
+    ServicePattern::Response.new(success: true)
   end
 
   def collection

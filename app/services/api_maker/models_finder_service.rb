@@ -1,5 +1,5 @@
 class ApiMaker::ModelsFinderService < ApiMaker::ApplicationService
-  def execute!
+  def execute
     ServicePattern::Response.new(result: models)
   end
 

@@ -28,7 +28,7 @@ export default class Devise {
       resource = ApiMaker::Serializer.resource_for(klass)
     %>
     <% if resource %>
-      static <%= ApiMaker::JsMethodNamerService.execute!(name: "is_#{scope[0]}_signed_in").result %>() {
+      static <%= ApiMaker::JsMethodNamerService.execute!(name: "is_#{scope[0]}_signed_in") %>() {
         if (Devise.current().getCurrentScope("<%= scope[1].class_name %>"))
           return true
 

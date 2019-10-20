@@ -17,6 +17,8 @@ class ApiMaker::ValidCommand < ApiMaker::BaseCommand
 
       command.result(valid: model.valid?, errors: model.errors.full_messages)
     end
+
+    ServicePattern::Response.new(success: true)
   end
 
   def resource_instance_class

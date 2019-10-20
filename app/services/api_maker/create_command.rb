@@ -17,6 +17,8 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
         failure_response(model.errors.full_messages)
       end
     end
+
+    ServicePattern::Response.new(success: true)
   end
 
   def api_maker_resource_class

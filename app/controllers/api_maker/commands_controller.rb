@@ -6,7 +6,7 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
     params[:pool].each do |command_type, command_type_data|
       command_type_data.each do |model_plural_name, command_model_data|
         command_model_data.each do |command_name, command_data|
-          ApiMaker.const_get("#{command_type.camelize}CommandService").new(
+          ApiMaker.const_get("#{command_type.camelize}CommandService").execute!(
             ability: current_ability,
             args: api_maker_args,
             command_response: command_response,
@@ -14,7 +14,7 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
             command_name: command_name,
             model_name: model_plural_name,
             controller: controller
-          ).execute!
+          )
         end
       end
     end
