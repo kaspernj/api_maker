@@ -16,9 +16,9 @@ describe "models select" do
 
     expect(model_data).to have_key "id"
     expect(model_data).to have_key "name"
-    expect(model_data).to_not have_key "created_at"
-    expect(model_data).to_not have_key "project_id"
-    expect(model_data).to_not have_key "user_id"
-    expect(model_data).to_not have_key "custom_id"
+    expect(model_data).not_to have_key "created_at"
+    expect(model_data).not_to have_key "project_id"
+    expect(model_data).not_to have_key "user_id"
+    expect(model_data).not_to have_key "custom_id"
   end
 end

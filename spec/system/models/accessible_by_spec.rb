@@ -11,7 +11,7 @@ describe "model accessible by" do
 
     visit models_accessible_by_path
 
-    expect(current_path).to eq models_accessible_by_path
+    expect(page).to have_current_path models_accessible_by_path, ignore_query: true
 
     wait_for_chrome { find("[data-controller='models--accessible-by']", visible: false)["data-accessible-by-completed"] == "true" }
 

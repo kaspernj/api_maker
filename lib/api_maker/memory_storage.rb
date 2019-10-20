@@ -28,6 +28,7 @@ class ApiMaker::MemoryStorage
     class_name = @model_class_for[model_class.name] || "Resources::#{model_class.name.gsub("::", "")}Resource"
     resource_class = class_name.safe_constantize
     raise "Resource couldn't be found from model: #{model_class}" unless resource_class
+
     resource_class
   end
 end

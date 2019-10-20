@@ -28,6 +28,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
 
   def filter_custom_accessible_by(collection)
     return collection if params[:accessible_by].blank?
+
     collection.accessible_by(current_ability, params[:accessible_by].to_sym)
   end
 
@@ -76,6 +77,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
       model_class = model_collection_name.underscore.singularize.camelize
       resource = "Resources::#{model_class}Resource".safe_constantize
       raise "Resource not found for: #{model_collection_name}" unless resource
+
       new_attributes = resource._attributes.select { |key| attributes.include?(key.to_s) }
       new_select[resource.model_class] = new_attributes
     end

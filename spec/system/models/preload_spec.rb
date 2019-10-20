@@ -10,15 +10,15 @@ describe "model preload" do
 
     visit models_preload_path(task_id: task.id)
 
-    expect(current_path).to eq models_preload_path
+    expect(page).to have_current_path models_preload_path, ignore_query: true
 
     wait_for_chrome { find("[data-controller='models--preload']", visible: false)["data-preload-completed"] == "true" }
 
     task_with_preload = JSON.parse(find("[data-controller='models--preload']", visible: false)["data-task-with-preload"])
     task_without_preload = JSON.parse(find("[data-controller='models--preload']", visible: false)["data-task-without-preload"])
 
-    expect(task_with_preload.fetch("modelData")).to_not have_key "project"
+    expect(task_with_preload.fetch("modelData")).not_to have_key "project"
     expect(task_with_preload.dig("relationshipsCache", "project", "modelData", "name")).to eq "test-project"
-    expect(task_without_preload.fetch("modelData")).to_not have_key "project"
+    expect(task_without_preload.fetch("modelData")).not_to have_key "project"
   end
 end

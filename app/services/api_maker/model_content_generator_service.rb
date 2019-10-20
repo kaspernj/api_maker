@@ -56,6 +56,7 @@ private
     @reflections ||= resource._relationships.map do |name, _data|
       reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
       raise "Couldnt find reflection by that name: #{name}" unless reflection
+
       reflection
     end
   end

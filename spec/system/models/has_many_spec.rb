@@ -11,7 +11,7 @@ describe "model has many relationships" do
 
     visit models_has_many_path(project_id: project.id)
 
-    expect(current_path).to eq models_has_many_path
+    expect(page).to have_current_path models_has_many_path, ignore_query: true
 
     wait_for_chrome { find("[data-controller='models--has-many']", visible: false)["data-has-many-completed"] == "true" }
 

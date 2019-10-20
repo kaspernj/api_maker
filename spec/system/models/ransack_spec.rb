@@ -11,7 +11,7 @@ describe "model ransack" do
 
     visit models_ransack_path
 
-    expect(current_path).to eq models_ransack_path
+    expect(page).to have_current_path models_ransack_path, ignore_query: true
 
     wait_for_chrome { find("[data-controller='models--ransack']", visible: false)["data-ransack-completed"] == "true" }
 
@@ -20,14 +20,14 @@ describe "model ransack" do
 
     expect(projects_without_preload.fetch(0).fetch("modelData").fetch("name")).to eq "test-ransack-kasper"
     expect(projects_without_preload.fetch(0).fetch("relationshipsCache")).to eq({})
-    expect(projects_without_preload.fetch(0).fetch("modelData")).to_not have_key "tasks"
-    expect(projects_without_preload.fetch(0).fetch("modelData")).to_not have_key "updated_at"
+    expect(projects_without_preload.fetch(0).fetch("modelData")).not_to have_key "tasks"
+    expect(projects_without_preload.fetch(0).fetch("modelData")).not_to have_key "updated_at"
 
-    expect(projects_with_preload.fetch(0).fetch("modelData")).to_not have_key "tasks"
+    expect(projects_with_preload.fetch(0).fetch("modelData")).not_to have_key "tasks"
     expect(projects_with_preload.fetch(0).fetch("relationshipsCache").fetch("tasks").fetch(0).fetch("modelData").fetch("name")).to eq "test-project-task"
-    expect(projects_with_preload.fetch(0).fetch("relationshipsCache").fetch("tasks").fetch(0).fetch("modelData")).to_not have_key "updated_at"
+    expect(projects_with_preload.fetch(0).fetch("relationshipsCache").fetch("tasks").fetch(0).fetch("modelData")).not_to have_key "updated_at"
     expect(projects_with_preload.fetch(0).fetch("modelData").fetch("name")).to eq "test-ransack-kasper"
-    expect(projects_with_preload.fetch(0).fetch("modelData")).to_not have_key "tasks"
-    expect(projects_with_preload.fetch(0).fetch("modelData")).to_not have_key "updated_at"
+    expect(projects_with_preload.fetch(0).fetch("modelData")).not_to have_key "tasks"
+    expect(projects_with_preload.fetch(0).fetch("modelData")).not_to have_key "updated_at"
   end
 end

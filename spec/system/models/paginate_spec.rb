@@ -4,9 +4,7 @@ describe "api maker paginate" do
   let(:user) { create :user }
 
   before do
-    80.times do
-      create(:task, user: user)
-    end
+    create_list(:task, 80, user: user)
   end
 
   it "changes page successfully" do
@@ -19,7 +17,7 @@ describe "api maker paginate" do
     expect(page).to have_selector "a[href='/models/paginate?tasks_page=1']"
     expect(page).to have_selector "a[href='/models/paginate?tasks_page=2']"
     expect(page).to have_selector "a[href='/models/paginate?tasks_page=3']"
-    expect(page).to_not have_selector "a[href='/models/paginate?tasks_page=4']"
+    expect(page).not_to have_selector "a[href='/models/paginate?tasks_page=4']"
 
     find("a[href='/models/paginate?tasks_page=2']", match: :first).click
 

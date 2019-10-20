@@ -24,6 +24,7 @@ class ApiMaker::GenerateReactNativeApiService < ApiMaker::ApplicationService
   def create_model_files
     model_generator_service.models.each do |model|
       next if model_generator_service.ignore_model?(model)
+
       model_content_response = ApiMaker::ModelContentGeneratorService.execute!(model: model)
 
       if model_content_response.success?

@@ -8,7 +8,7 @@ describe "model create" do
 
     visit models_create_path
 
-    expect(current_path).to eq models_create_path
+    expect(page).to have_current_path models_create_path, ignore_query: true
 
     wait_for_chrome { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
     wait_for_chrome { Project.count > 0 }
@@ -24,7 +24,7 @@ describe "model create" do
     visit models_create_path
 
     visit_action = proc do
-      expect(current_path).to eq models_create_path
+      expect(page).to have_current_path models_create_path, ignore_query: true
       wait_for_chrome { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
     end
 
