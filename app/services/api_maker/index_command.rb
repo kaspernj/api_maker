@@ -22,6 +22,8 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
         end
       end
     end
+
+    ServicePattern::Response.new(success: true)
   end
 
   def filter_custom_accessible_by(collection)
