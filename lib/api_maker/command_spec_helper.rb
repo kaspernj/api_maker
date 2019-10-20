@@ -35,7 +35,7 @@ class ApiMaker::CommandSpecHelper
     @controller ||= double(current_user: user)
   end
 
-  def execute
+  def execute!
     command.execute!
     ServicePattern::Response.new(success: true)
   end

@@ -1,5 +1,5 @@
 class Commands::Tasks::CommandSerialize < Commands::ApplicationCommand
-  def execute
+  def execute!
     each_command do |command|
       command.result(
         test: {

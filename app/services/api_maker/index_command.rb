@@ -1,7 +1,7 @@
 class ApiMaker::IndexCommand < ApiMaker::BaseCommand
   attr_reader :params
 
-  def execute
+  def execute!
     ApiMaker::Configuration.profile("IndexCommand execute") do
       each_command do |command|
         @params = command.args || {}

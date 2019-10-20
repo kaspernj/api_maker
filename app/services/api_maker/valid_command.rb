@@ -1,7 +1,7 @@
 class ApiMaker::ValidCommand < ApiMaker::BaseCommand
   attr_reader :command, :model, :params, :serializer
 
-  def execute
+  def execute!
     each_command do |command|
       @command = command
       @params = command.args || {}
