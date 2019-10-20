@@ -1,5 +1,5 @@
 class ApiMaker::DestroyCommandService < ApiMaker::CommandService
-  def execute!
+  def execute
     ApiMaker::DestroyCommand.execute_in_thread!(
       ability: ability,
       args: args,
@@ -8,6 +8,8 @@ class ApiMaker::DestroyCommandService < ApiMaker::CommandService
       command_response: command_response,
       controller: controller
     )
+
+    ServicePattern::Response.new(success: true)
   end
 
   def collection

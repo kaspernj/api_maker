@@ -1,7 +1,7 @@
 class ApiMaker::CreateCommand < ApiMaker::BaseCommand
   attr_reader :command, :model, :params, :serializer
 
-  def execute!
+  def execute
     each_command do |command|
       @command = command
       @model = collection.klass.new
@@ -17,6 +17,8 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
         failure_response(model.errors.full_messages)
       end
     end
+
+    ServicePattern::Response.new(success: true)
   end
 
   def api_maker_resource_class

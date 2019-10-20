@@ -1,7 +1,7 @@
 class ApiMaker::IndexCommand < ApiMaker::BaseCommand
   attr_reader :params
 
-  def execute!
+  def execute
     ApiMaker::Configuration.profile("IndexCommand execute") do
       each_command do |command|
         @params = command.args || {}
@@ -22,6 +22,8 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
         end
       end
     end
+
+    ServicePattern::Response.new(success: true)
   end
 
   def filter_custom_accessible_by(collection)

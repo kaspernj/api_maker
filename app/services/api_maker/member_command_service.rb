@@ -1,5 +1,5 @@
 class ApiMaker::MemberCommandService < ApiMaker::CommandService
-  def execute!
+  def execute
     ability_name = @command_name.to_sym
     collection = klass.accessible_by(@ability, ability_name).where(klass.primary_key => ids)
 
@@ -11,6 +11,8 @@ class ApiMaker::MemberCommandService < ApiMaker::CommandService
       command_response: command_response,
       controller: controller
     )
+
+    ServicePattern::Response.new(success: true)
   end
 
   def constant

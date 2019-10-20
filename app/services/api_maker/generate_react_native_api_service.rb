@@ -1,8 +1,10 @@
 class ApiMaker::GenerateReactNativeApiService < ApiMaker::ApplicationService
-  def execute!
+  def execute
     check_if_root_folder_defined
     create_root_folder
     create_model_files
+
+    ServicePattern::Response.new(success: true)
   end
 
   def root_folder

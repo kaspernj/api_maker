@@ -5,7 +5,7 @@ class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
     @model = model
   end
 
-  def execute!
+  def execute
     if resource
       ServicePattern::Response.new(result: model_content)
     else

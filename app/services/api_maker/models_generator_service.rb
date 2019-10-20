@@ -1,12 +1,12 @@
 class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
-  def execute!
+  def execute
     create_base_structure
     copy_base_model
     copy_base_controllers
 
     models.each do |model|
       next if ignore_model?(model)
-      model_content_response = ApiMaker::ModelContentGeneratorService.execute!(model: model)
+      model_content_response = ApiMaker::ModelContentGeneratorService.execute(model: model)
 
       if model_content_response.success?
         File.open(model_file(model), "w") { |fp| fp.write(model_content_response.result) }
@@ -16,6 +16,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     end
 
     ApiMaker::GenerateReactNativeApiService.execute! if ApiMaker::Configuration.current.react_native_path.present?
+    ServicePattern::Response.new(success: true)
   end
 
   def ignore_model?(model)
@@ -25,7 +26,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
   end
 
   def models
-    ApiMaker::ModelsFinderService.execute!.result
+    ApiMaker::ModelsFinderService.execute!
   end
 
 private
@@ -75,6 +76,7 @@ private
       else
         base_model_source_path << ".erb"
         erb = ERB.new(File.read(base_model_source_path))
+        erb.filename = base_model_source_path
         content = erb.result(binding)
       end
 

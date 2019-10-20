@@ -1,7 +1,7 @@
 class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
   attr_reader :command, :model, :params, :serializer
 
-  def execute!
+  def execute
     each_command do |command|
       @command = command
       @model = command.model
@@ -14,6 +14,8 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
         failure_response
       end
     end
+
+    ServicePattern::Response.new(success: true)
   end
 
   def failure_response

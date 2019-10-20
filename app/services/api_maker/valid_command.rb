@@ -1,7 +1,7 @@
 class ApiMaker::ValidCommand < ApiMaker::BaseCommand
   attr_reader :command, :model, :params, :serializer
 
-  def execute!
+  def execute
     each_command do |command|
       @command = command
       @params = command.args || {}
@@ -17,6 +17,8 @@ class ApiMaker::ValidCommand < ApiMaker::BaseCommand
 
       command.result(valid: model.valid?, errors: model.errors.full_messages)
     end
+
+    ServicePattern::Response.new(success: true)
   end
 
   def resource_instance_class
