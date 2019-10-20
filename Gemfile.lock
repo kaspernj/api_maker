@@ -234,7 +234,7 @@ GEM
     selenium-webdriver (3.142.6)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
-    service_pattern (0.0.3)
+    service_pattern (0.0.4)
     sexp_processor (4.13.0)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
