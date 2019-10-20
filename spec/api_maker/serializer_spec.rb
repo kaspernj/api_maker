@@ -18,7 +18,7 @@ describe ApiMaker::Serializer do
 
   it "supports conditions for attributes" do
     result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
-    expect(result.fetch("a").keys).to_not include "updated_at"
+    expect(result.fetch("a").keys).not_to include "updated_at"
 
     user.email = "kasper@example.com"
 

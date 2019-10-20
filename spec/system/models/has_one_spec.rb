@@ -10,7 +10,7 @@ describe "model belongs to relationships" do
 
     visit models_has_one_path(project_id: project.id)
 
-    expect(current_path).to eq models_has_one_path
+    expect(page).to have_current_path models_has_one_path, ignore_query: true
 
     wait_for_chrome { find("[data-controller='models--has-one']", visible: false)["data-has-one-completed"] == "true" }
 

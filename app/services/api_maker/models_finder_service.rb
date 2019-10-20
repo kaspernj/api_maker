@@ -9,6 +9,7 @@ private
     result = []
     Dir.glob(Rails.root.join("app", "api_maker", "resources", "**", "*.rb")) do |model_path|
       next unless model_path.start_with?(Rails.root.to_s)
+
       path_name = model_path.gsub(/\A#{Regexp.escape(Rails.root.to_s)}\/app\/api_maker\/resources\//, "").gsub(/\.rb\Z/, "")
       next if path_name == "application_resource"
 

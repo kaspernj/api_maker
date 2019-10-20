@@ -8,7 +8,7 @@ describe "model belongs to relationships" do
 
     visit devise_specs_current_user_spec_path
 
-    expect(current_path).to eq devise_specs_current_user_spec_path
+    expect(page).to have_current_path devise_specs_current_user_spec_path, ignore_query: true
 
     wait_for_chrome { find("[data-controller='devise--current-user']", visible: false)["data-current-user-completed"] == "true" }
 

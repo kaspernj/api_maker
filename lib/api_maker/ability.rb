@@ -33,6 +33,7 @@ class ApiMaker::Ability
 
   def active_record?(subject)
     return subject < ActiveRecord::Base if subject.class == Class
+
     subject.is_a?(ActiveRecord::Base)
   end
 end

@@ -16,7 +16,7 @@ describe ApiMaker::ModelContentGeneratorService do
     end
 
     it "doesnt include attributes not defined in the serializer" do
-      expect(content_task).to_not include "updatedAt() {"
+      expect(content_task).not_to include "updatedAt() {"
     end
 
     it "includes relationships defined in the serializer" do
@@ -24,7 +24,7 @@ describe ApiMaker::ModelContentGeneratorService do
     end
 
     it "doesnt include relationships not defined in the serializer" do
-      expect(content_project).to_not include "projectSecrets() {"
+      expect(content_project).not_to include "projectSecrets() {"
     end
   end
 end

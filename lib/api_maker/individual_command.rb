@@ -20,8 +20,10 @@ class ApiMaker::IndividualCommand
 
   def model
     raise "Collection wasn't set" unless @collection
+
     @model ||= @collection.find { |model| model.id.to_s == @primary_key.to_s }
     raise "Couldn't find model by that ID: #{@primary_key}" unless @model
+
     @model
   end
 

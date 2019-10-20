@@ -45,9 +45,7 @@ class ApiMaker::BaseCommand
     end
   end
 
-  def result_for_command(id, data)
-    command_response.result_for_command(id, data)
-  end
+  delegate :result_for_command, to: :command_response
 
 private
 
@@ -63,13 +61,13 @@ private
 
     begin
       yield command
-    rescue => error # rubocop:disable Style/RescueStandardError
-      command.error(success: false, errors: [command_error_message(error)])
+    rescue => e # rubocop:disable Style/RescueStandardError
+      command.error(success: false, errors: [command_error_message(e)])
 
-      Rails.logger.error error.message
-      Rails.logger.error error.backtrace.join("\n")
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
 
-      ApiMaker::Configuration.current.report_error(controller: controller, error: error)
+      ApiMaker::Configuration.current.report_error(controller: controller, error: e)
     end
   end
 

@@ -14,7 +14,7 @@ describe "models created event" do
 
     sleep 0.5 # Wait for ActionCable to connect
 
-    expect(page).to_not have_selector ".task-row"
+    expect(page).not_to have_selector ".task-row"
 
     task
     task_from_other_user
@@ -23,6 +23,6 @@ describe "models created event" do
 
     expect(find(".task-row[data-task-id='#{task.id}'] .id-column").text).to eq task.id.to_s
     expect(find(".task-row[data-task-id='#{task.id}'] .name-column").text).to eq "test create task"
-    expect(page).to_not have_selector ".task-row[data-task-id='#{task_from_other_user.id}']"
+    expect(page).not_to have_selector ".task-row[data-task-id='#{task_from_other_user.id}']"
   end
 end

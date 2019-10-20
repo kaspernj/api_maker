@@ -89,7 +89,7 @@ RSpec.configure do |config|
     ApiMaker::ModelsGeneratorService.execute!
   end
 
-  config.before(:each) do
+  config.before do
     Capybara.reset_sessions!
     Warden.test_reset!
   end
