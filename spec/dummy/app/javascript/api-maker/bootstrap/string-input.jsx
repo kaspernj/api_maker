@@ -21,6 +21,7 @@ export default class BootstrapStringInput extends React.Component {
             data-controller={this.props["data-controller"]}
             defaultValue={this.inputDefaultValue()}
             id={this.inputId()}
+            maxLength={this.props.maxLength}
             name={this.inputName()}
             onChange={this.props.onChange}
             onKeyUp={this.props.onKeyUp}
