@@ -7,7 +7,7 @@ PATH
       i18n-js
       rails (>= 5.2.0)
       ransack
-      service_pattern
+      service_pattern (>= 0.0.4)
 
 GEM
   remote: https://rubygems.org/
