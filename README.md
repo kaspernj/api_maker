@@ -252,6 +252,11 @@ Task.ransack({name_cont: "something"}).toArray().then(tasks => {
 })
 ```
 
+Distinct:
+```js
+var tasks = await Task.ransack({relationships_something_eq: "something"}).distinct().toArray()
+```
+
 ### Selecting only specific attributes
 
 ```js
