@@ -13,7 +13,9 @@ describe ApiMaker::IndexCommand do
       controller: controller
     )
   end
-  let!(:project) { create :project }
+
+  let!(:account) { create :account }
+  let!(:project) { create :project, account: account }
   let!(:task) { create :task, project: project, user: user }
   let!(:user) { create :user }
 
@@ -42,6 +44,19 @@ describe ApiMaker::IndexCommand do
 
       expect(parsed.dig("data", "tasks")).to eq [task.id]
       expect(parsed.dig("included", "tasks", task.id.to_s, :a, :user_id)).to eq user.id
+    end
+
+    it "handels the distinct argument" do
+      create :account_marked_task, account: account, task: task
+      create :account_marked_task, account: account, task: task
+
+      command = helper.add_command(args: {distinct: true, q: {account_marked_tasks_account_id_eq: account.id}})
+      helper.execute!
+      parsed = command.result
+      tasks = parsed.fetch("data").fetch("tasks")
+
+      # This would cause two times the same task ID without the distinct
+      expect(tasks).to eq [task.id]
     end
   end
 

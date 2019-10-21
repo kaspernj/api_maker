@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     api_maker (0.1.0)
-      active_record_query_fixer (>= 0.0.6)
+      active_record_query_fixer (>= 0.0.10)
       cancancan
       i18n-js
       rails (>= 5.2.0)
@@ -48,7 +48,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_record_query_fixer (0.0.9)
+    active_record_query_fixer (0.0.10)
       dig_bang
       pg_query
     activejob (6.0.0)

@@ -87,6 +87,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
 
   def set_collection
     @query = manage_through_relationship || collection
+    @query = @query.distinct if params[:distinct]
     @query = @query.ransack(params[:q]).result
     @query = @query.limit(params[:limit]) if params[:limit].present?
     @query = @query.page(params[:page]) if params[:page].present?
