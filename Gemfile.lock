@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     api_maker (0.1.0)
-      active_record_query_fixer (>= 0.0.6)
+      active_record_query_fixer (>= 0.0.9)
       cancancan
       i18n-js
       rails (>= 5.2.0)
