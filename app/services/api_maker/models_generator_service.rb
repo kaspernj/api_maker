@@ -56,7 +56,7 @@ private
       result.js event-connection.jsx paginate.jsx sort-link.jsx updated-attribute.jsx resource-routes.jsx resource-route.jsx
       session-status-updater.js bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/card.jsx
       bootstrap/checkbox.jsx bootstrap/checkboxes.jsx bootstrap/money-input.jsx bootstrap/radio-buttons.jsx
-      bootstrap/select.jsx bootstrap/string-input.jsx
+      bootstrap/select.jsx bootstrap/string-input.jsx live-table/index
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path
