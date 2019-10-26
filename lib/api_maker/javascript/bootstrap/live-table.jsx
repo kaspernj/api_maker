@@ -1,10 +1,15 @@
 import Collection from "api-maker/collection"
+import EventCreated from "api-maker/event-created"
+import EventDestroyed from "api-maker/event-destroyed"
+import Paginate from "api-maker/paginate"
+import Params from "api-maker/params"
 
 const inflection = require("inflection")
 
-export default class SharedTable extends React.Component {
+export default class LiveTable extends React.Component {
   static defaultProps = {
-    preloads: []
+    preloads: [],
+    select: {}
   }
 
   static propTypes = PropTypesExact({
@@ -14,11 +19,12 @@ export default class SharedTable extends React.Component {
     defaultParams: PropTypes.object,
     destroyMessage: PropTypes.string,
     filterContent: PropTypes.func,
+    filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func.isRequired,
     modelClass: PropTypes.func.isRequired,
     preloads: PropTypes.array.isRequired,
     queryName: PropTypes.string.isRequired,
-    select: PropTypes.object.isRequired,
+    select: PropTypes.object
   })
 
   constructor(props) {
@@ -86,7 +92,7 @@ export default class SharedTable extends React.Component {
   }
 
   content() {
-    var { filterContent, modelClass } = this.props
+    var { filterContent, filterSubmitLabel, modelClass } = this.props
     var { qParams, query, result, models } = this.state
 
     return (
@@ -97,7 +103,7 @@ export default class SharedTable extends React.Component {
           <Card className="mb-4">
             <form onSubmit={(e) => this.onFilterFormSubmit(e)} ref="filterForm">
               {filterContent({qParams})}
-              <SubmitButton label={I18n.t("js.global.search")} />
+              <input className="btn btn-primary" label={filterSubmitLabel} type="submit" />
             </form>
           </Card>
         }
@@ -121,7 +127,7 @@ export default class SharedTable extends React.Component {
           </tbody>
         </Card>
 
-        <PaginationContent result={result} />
+        <Paginate result={result} />
       </div>
     )
   }
