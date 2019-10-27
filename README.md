@@ -40,15 +40,24 @@ Rails.application.routes.draw do
 end
 ```
 
-ApiMaker will only create models, endpoints and serializers for ActiveRecord models that are defined as resources. So be sure to add resources under `app/api_maker/resources` for your models first.
+ApiMaker will only create models, endpoints and serializers for ActiveRecord models that are defined as resources. So be sure to add resources under `app/api_maker/resources` for your models first. You can add some helper methods if you want to use in your resources like `current_user` and `signed_in_as_admin?`.
 ```ruby
 class Resources::ApplicationResource < ApiMaker::BaseResource
+  def current_user
+    args&.dig(:current_user)
+  end
+
+  def signed_in_as_admin?
+    current_user&.role == "admin"
+  end
 end
 ```
 
 ```ruby
 class Resources::UserResources < Resources::ApplicationResource
   attributes :id, :email, :custom_attribute
+  attributes :calculated_attribute, selected_by_default: false
+  attributes :secret_attribute, if: :signed_in_as_admin?
   collection_commands :count_users
   member_commands :calculate_age
   relationships :account, :tasks
