@@ -9,7 +9,6 @@ describe ApiMaker::ModelExtensions do
         "api_maker_events_Task_#{task.id}_test-event",
         args: {name: "Kasper"},
         event_name: "test-event",
-        model: hash_including(api_maker_type: :model),
         model_id: task.id,
         model_type: "tasks",
         type: :event
