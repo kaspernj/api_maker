@@ -26,11 +26,36 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
   }
 
   connect() {
-    this.connectUpdated = this.props.model.connectUpdated(args =>
-      this.setState(
-        {model: args.model},
-        () => this.setAttribute()
-      )
+    this.connectUpdated = this.props.model.connectUpdated(args => {
+      if (!this.props.attribute || args.model.isAttributeLoaded(this.props.attribute)) {
+        this.setState(
+          {model: args.model},
+          () => this.setAttribute()
+        )
+      } else {
+        this.loadModelWithAttribute()
+      }
+    })
+  }
+
+  // This loads the model from the backend with the primary key and the attribute and calls setAttribute
+  async loadModelWithAttribute() {
+    var id = this.props.model.primaryKey()
+    var modelClass = this.props.model.modelClass()
+    var modelName = modelClass.modelClassData().name
+    var primaryKey = modelClass.modelClassData().primaryKey
+
+    var args = {}
+    args[`${primaryKey}_eq`] = id
+
+    var select = {}
+    select[modelName] = [primaryKey, this.props.attribute]
+
+    var model = await modelClass.ransack(args).select(select).first()
+
+    this.setState(
+      {model},
+      () => this.setAttribute()
     )
   }
 
