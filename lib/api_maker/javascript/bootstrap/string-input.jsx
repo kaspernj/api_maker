@@ -110,8 +110,11 @@ export default class BootstrapStringInput extends React.Component {
 
   formatValue(value) {
     // We need to use a certain format for datetime-local
-    if (this.inputType() == "datetime-local" && value instanceof Date)
-      return I18n.strftime(value, '%Y-%m-%dT%H:%M:%S')
+    if (this.inputType() == "datetime-local" && value instanceof Date) {
+      return I18n.strftime(value, "%Y-%m-%dT%H:%M:%S")
+    } else if (this.inputType() == "date" && value instanceof Date) {
+      return I18n.strftime(value, "%Y-%m-%d")
+    }
 
     return value
   }
