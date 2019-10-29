@@ -32,7 +32,7 @@ export default class BootstrapCheckbox extends React.Component {
           <input
             data-target={this.props["data-target"]}
             defaultChecked={this.inputDefaultChecked()}
-            className="form-check-input"
+            className={this.className()}
             data-action={this.props["data-action"]}
             defaultValue="1"
             id={id}
@@ -55,6 +55,15 @@ export default class BootstrapCheckbox extends React.Component {
         }
       </div>
     )
+  }
+
+  className() {
+    var classNames = ["form-check-input"]
+
+    if (this.props.className)
+      classNames.push(this.props.className)
+
+    return classNames.join(" ")
   }
 
   generatedId() {
