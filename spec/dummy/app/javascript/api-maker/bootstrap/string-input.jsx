@@ -1,14 +1,44 @@
 import MoneyInput from "./money-input"
+import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 const inflection = require("inflection")
 
 export default class BootstrapStringInput extends React.Component {
+  static propTypes = PropTypesExact({
+    append: PropTypes.node,
+    attribute: PropTypes.string,
+    autoComplete: PropTypes.bool,
+    currenciesCollection: PropTypes.array,
+    currencyName: PropTypes.string,
+    "data-controller": PropTypes.string,
+    defaultValue: PropTypes.node,
+    disabled: PropTypes.bool,
+    hint: PropTypes.node,
+    hintBottom: PropTypes.node,
+    id: PropTypes.string,
+    label: PropTypes.node,
+    labelClassName: PropTypes.string,
+    maxLength: PropTypes.number,
+    model: PropTypes.object,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    onKeyUp: PropTypes.func,
+    placeholder: PropTypes.node,
+    step: PropTypes.number,
+    small: PropTypes.bool,
+    type: PropTypes.string,
+    wrapperClassName: PropTypes.string
+  })
+
   render() {
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
         {this.label() &&
-          <label className={this.labelClassName()} htmlFor={this.inputId()}>{this.label()}</label>
+          <label className={this.labelClassName()} htmlFor={this.inputId()}>
+            {this.label()}
+          </label>
         }
         {this.props.hint &&
           <span className="form-text text-muted font-smoothing font-xs">
@@ -56,9 +86,6 @@ export default class BootstrapStringInput extends React.Component {
               autoComplete={this.props.autoComplete}
               className={this.inputClassName()}
               data-controller={this.props["data-controller"]}
-              data-month-picker={this.props["data-month-picker"]}
-              data-start-date={this.props["data-start-date"]}
-              data-target={this.props["data-target"]}
               defaultValue={this.inputDefaultValue()}
               disabled={this.props.disabled}
               id={this.inputId()}
@@ -89,7 +116,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   inputClassName() {
-    let classNames = ["form-control"]
+    var classNames = ["form-control"]
 
     if (this.props.className)
       classNames.push(this.props.className)
@@ -120,7 +147,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   inputId() {
-    if (this.props.id) {
+    if ("id" in this.props) {
       return this.props.id
     } else if (this.props.model) {
       return `${this.props.model.modelClassData().paramKey}_${inflection.underscore(this.props.attribute)}`
@@ -128,7 +155,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   inputName() {
-    if (this.props.name) {
+    if ("name" in this.props) {
       return this.props.name
     } else if (this.props.model) {
       return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}]`
@@ -154,7 +181,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   labelClassName() {
-    let classNames = []
+    var classNames = []
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
@@ -163,7 +190,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   wrapperClassName() {
-    let classNames = ["form-group", "component-bootstrap-string-input"]
+    var classNames = ["form-group", "component-bootstrap-string-input"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)

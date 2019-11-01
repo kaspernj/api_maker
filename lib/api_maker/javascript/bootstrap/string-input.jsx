@@ -1,11 +1,12 @@
 import MoneyInput from "./money-input"
+import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 const inflection = require("inflection")
 
 export default class BootstrapStringInput extends React.Component {
-  static propTypes = {
+  static propTypes = PropTypesExact({
     append: PropTypes.node,
     attribute: PropTypes.string,
     autoComplete: PropTypes.bool,
@@ -29,7 +30,7 @@ export default class BootstrapStringInput extends React.Component {
     small: PropTypes.bool,
     type: PropTypes.string,
     wrapperClassName: PropTypes.string
-  }
+  })
 
   render() {
     return (
