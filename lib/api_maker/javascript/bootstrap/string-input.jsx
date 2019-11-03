@@ -9,7 +9,7 @@ export default class BootstrapStringInput extends React.Component {
   static propTypes = PropTypesExact({
     append: PropTypes.node,
     attribute: PropTypes.string,
-    autoComplete: PropTypes.bool,
+    autoComplete: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     className: PropTypes.string,
     currenciesCollection: PropTypes.array,
     currencyName: PropTypes.string,
