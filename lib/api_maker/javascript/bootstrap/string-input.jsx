@@ -27,6 +27,7 @@ export default class BootstrapStringInput extends React.Component {
     onChange: PropTypes.func,
     onKeyUp: PropTypes.func,
     placeholder: PropTypes.node,
+    rows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     step: PropTypes.number,
     small: PropTypes.bool,
     type: PropTypes.string,
@@ -58,6 +59,7 @@ export default class BootstrapStringInput extends React.Component {
             onKeyUp={this.props.onKeyUp}
             placeholder={this.props.placeholder}
             ref="input"
+            rows={this.props.rows}
             />
         }
         {this.inputType() == "money" &&
