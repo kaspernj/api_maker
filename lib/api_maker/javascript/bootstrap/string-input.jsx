@@ -10,6 +10,7 @@ export default class BootstrapStringInput extends React.Component {
     append: PropTypes.node,
     attribute: PropTypes.string,
     autoComplete: PropTypes.bool,
+    className: PropTypes.string,
     currenciesCollection: PropTypes.array,
     currencyName: PropTypes.string,
     "data-controller": PropTypes.string,
