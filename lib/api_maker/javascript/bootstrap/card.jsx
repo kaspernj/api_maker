@@ -3,6 +3,9 @@ import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class Card extends React.Component {
+  static defaultProps = {
+    responsiveTable: true
+  }
   static propTypes = PropTypesExact({
     className: PropTypes.string,
     children: PropTypes.node,
