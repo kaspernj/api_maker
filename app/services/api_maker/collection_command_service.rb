@@ -23,7 +23,11 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
   end
 
   def namespace
-    @namespace ||= @model_name.camelize
+    @namespace ||= resource.plural_name
+  end
+
+  def resource
+    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(klass)
   end
 
   def klass
