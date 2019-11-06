@@ -22,8 +22,8 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
 private
 
   def connect_creates(model_name)
-    model_class = model_name.safe_constantize
-    channel_name = "api_maker_creates_#{model_class}"
+    model_class = model_for_resource_name(model_name)
+    channel_name = model_class.api_maker_broadcast_create_channel_name
     stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
       # We need to look the model up to evaluate if the user has access
       model = data.fetch("model_class_name").safe_constantize.accessible_by(current_ability, :create_events).find(data.fetch("model_id"))
@@ -34,10 +34,10 @@ private
   end
 
   def connect_destroys(model_name, model_ids)
-    model_class = model_name.safe_constantize
+    model_class = model_for_resource_name(model_name)
     models = model_class.accessible_by(current_ability, :destroy_events).where(model_class.primary_key => model_ids)
     models.each do |model|
-      channel_name = "api_maker_destroys_#{model_class}_#{model.id}"
+      channel_name = model.api_maker_broadcast_destroy_channel_name
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
@@ -46,10 +46,10 @@ private
 
   def connect_event(model_name, model_ids, event_name)
     ability_name = "event_#{event_name}".to_sym
-    model_class = model_name.safe_constantize
+    model_class = model_for_resource_name(model_name)
     models = model_class.accessible_by(current_ability, ability_name).where(model_class.primary_key => model_ids)
     models.each do |model|
-      channel_name = "api_maker_events_#{model_class}_#{model.id}_#{event_name}"
+      channel_name = model.api_maker_event_channel_name(event_name)
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
@@ -57,13 +57,23 @@ private
   end
 
   def connect_updates(model_name, model_ids)
-    model_class = model_name.safe_constantize
+    model_class = model_for_resource_name(model_name)
     models = model_class.accessible_by(current_ability, :update_events).where(model_class.primary_key => model_ids)
     models.each do |model|
-      channel_name = "api_maker_updates_#{model_class}_#{model.id}"
+      channel_name = model.api_maker_broadcast_update_channel_name
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
     end
+  end
+
+  def model_for_resource_name(resource_name)
+    resource_for_resource_name(resource_name).model_class
+  end
+
+  def resource_for_resource_name(resource_name)
+    resource = "Resources::#{resource_name}Resource".safe_constantize
+    raise "Cannot find resource by resource name: #{resource_name}" unless resource
+    resource
   end
 end

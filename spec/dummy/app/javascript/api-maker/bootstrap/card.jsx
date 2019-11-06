@@ -3,6 +3,9 @@ import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class Card extends React.Component {
+  static defaultProps = {
+    responsiveTable: true
+  }
   static propTypes = PropTypesExact({
     className: PropTypes.string,
     children: PropTypes.node,
@@ -11,6 +14,7 @@ export default class Card extends React.Component {
     onClick: PropTypes.func,
     striped: PropTypes.bool,
     style: PropTypes.object,
+    responsiveTable: PropTypes.bool,
     table: PropTypes.bool
   })
 
@@ -54,7 +58,10 @@ export default class Card extends React.Component {
     var classNames = ["card-body"]
 
     if (this.props.table) {
-      classNames.push("table-responsive")
+      if (this.props.responsiveTable){
+        classNames.push("table-responsive")
+      }
+
       classNames.push("p-0")
     }
 

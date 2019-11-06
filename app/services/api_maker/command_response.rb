@@ -54,14 +54,14 @@ private
           yield
         end
       end
-                rescue => e # rubocop:disable Style/RescueStandardError
-                  puts e.inspect
-                  puts e.backtrace
+    rescue => e # rubocop:disable Style/RescueStandardError
+      puts e.inspect
+      puts e.backtrace
 
-                  Rails.logger.error e.message
-                  Rails.logger.error e.backtrace.join("\n")
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
 
-                  ApiMaker::Configuration.current.report_error(controller: controller, error: e)
+      ApiMaker::Configuration.current.report_error(controller: controller, error: e)
     end
   end
 end
