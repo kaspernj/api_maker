@@ -9,7 +9,8 @@ export default class BootstrapStringInput extends React.Component {
   static propTypes = PropTypesExact({
     append: PropTypes.node,
     attribute: PropTypes.string,
-    autoComplete: PropTypes.bool,
+    autoComplete: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    className: PropTypes.string,
     currenciesCollection: PropTypes.array,
     currencyName: PropTypes.string,
     "data-controller": PropTypes.string,
@@ -26,6 +27,7 @@ export default class BootstrapStringInput extends React.Component {
     onChange: PropTypes.func,
     onKeyUp: PropTypes.func,
     placeholder: PropTypes.node,
+    rows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     step: PropTypes.number,
     small: PropTypes.bool,
     type: PropTypes.string,
@@ -57,6 +59,7 @@ export default class BootstrapStringInput extends React.Component {
             onKeyUp={this.props.onKeyUp}
             placeholder={this.props.placeholder}
             ref="input"
+            rows={this.props.rows}
             />
         }
         {this.inputType() == "money" &&
@@ -129,7 +132,7 @@ export default class BootstrapStringInput extends React.Component {
       return this.formatValue(this.props.defaultValue)
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
-        throw new Error(`No such attribute: ${this.props.attribute}`)
+        throw new Error(`No such attribute: ${this.props.model.modelClassData().name}#${this.props.attribute}`)
 
       return this.formatValue(this.props.model[this.props.attribute]())
     }
