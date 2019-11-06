@@ -53,13 +53,17 @@ class ApiMaker::BaseResource
   end
 
   def self.collection_name
-    @collection_name ||= short_name.underscore.pluralize.dasherize
+    @collection_name ||= plural_name.underscore.dasherize
   end
 
   def self.default_select
     _attributes.select do |_attribute_name, args|
       !args.fetch(:args).key?(:selected_by_default) || args.fetch(:args).fetch(:selected_by_default)
     end
+  end
+
+  def self.plural_name
+    @plural_name ||= short_name.pluralize
   end
 
   def self.short_name
