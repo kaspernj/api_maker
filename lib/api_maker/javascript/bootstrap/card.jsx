@@ -55,9 +55,10 @@ export default class Card extends React.Component {
     var classNames = ["card-body"]
 
     if (this.props.table) {
-      if(this.props.responsiveTable){
+      if (this.props.responsiveTable){
         classNames.push("table-responsive")
       }
+
       classNames.push("p-0")
     }
 
