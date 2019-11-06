@@ -11,6 +11,7 @@ export default class Card extends React.Component {
     onClick: PropTypes.func,
     striped: PropTypes.bool,
     style: PropTypes.object,
+    responsiveTable: PropTypes.bool,
     table: PropTypes.bool
   })
 
@@ -54,7 +55,9 @@ export default class Card extends React.Component {
     var classNames = ["card-body"]
 
     if (this.props.table) {
-      classNames.push("table-responsive")
+      if(this.props.responsiveTable){
+        classNames.push("table-responsive")
+      }
       classNames.push("p-0")
     }
 
