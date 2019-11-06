@@ -42,6 +42,9 @@ Layout/MultilineMethodCallIndentation:
 Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
+Layout/RescueEnsureAlignment:
+  Enabled: false
+
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
