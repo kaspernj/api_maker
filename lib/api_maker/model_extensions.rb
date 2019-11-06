@@ -5,7 +5,7 @@ module ApiMaker::ModelExtensions
 
   module ClassMethods
     def api_maker_broadcast_creates
-      after_commit on: :create do |model|
+      after_commit on: :create do |model| # rubocop:disable Style/SymbolProc
         model.api_maker_broadcast_create
       end
     end
@@ -21,7 +21,7 @@ module ApiMaker::ModelExtensions
     end
 
     def api_maker_broadcast_destroys
-      after_commit on: :destroy do |model|
+      after_commit on: :destroy do |model| # rubocop:disable Style/SymbolProc
         model.api_maker_broadcast_destroy
       end
     end

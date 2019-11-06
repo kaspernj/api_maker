@@ -74,6 +74,7 @@ private
   def resource_for_resource_name(resource_name)
     resource = "Resources::#{resource_name}Resource".safe_constantize
     raise "Cannot find resource by resource name: #{resource_name}" unless resource
+
     resource
   end
 end
