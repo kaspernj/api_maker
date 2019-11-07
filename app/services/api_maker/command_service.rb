@@ -20,6 +20,7 @@ class ApiMaker::CommandService < ApiMaker::ApplicationService
       resource_class_name = "Resources::#{resource_name.underscore.singularize.camelize}Resource"
       resource = resource_class_name.safe_constantize
       raise "Couldnt find resource from resource name: #{resource_class_name}" unless resource
+
       resource
     end
   end
