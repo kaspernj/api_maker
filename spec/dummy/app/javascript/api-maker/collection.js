@@ -137,8 +137,8 @@ export default class Collection {
     return CommandsPool.addCommand(
       {
         args: this._params(),
-        command: `${modelClassData.collectionKey}-index`,
-        collectionKey: modelClassData.collectionKey,
+        command: `${modelClassData.collectionName}-index`,
+        collectionName: modelClassData.collectionName,
         type: "index"
       },
       {}

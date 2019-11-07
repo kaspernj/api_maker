@@ -25,7 +25,7 @@ describe ApiMaker::UpdateCommandService do
         command_name: nil,
         command_response: command_response,
         controller: controller,
-        model_name: "Task",
+        resource_name: "Task",
         commands: {
           0 => {
             "primary_key" => task.id
