@@ -12,7 +12,7 @@ class ApiMaker::CommandService < ApiMaker::ApplicationService
   end
 
   def namespace
-    @namespace ||= resource_name.camelize
+    @namespace ||= resource_name.underscore.camelize
   end
 
   def resource
