@@ -15,7 +15,7 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
   end
 
   def authorize!
-    raise CanCan::AccessDenied, "No access to '#{@command_name}' on '#{klass.name}'" unless @ability.can?(@command_name.to_sym, klass)
+    raise CanCan::AccessDenied, "No access to '#{@command_name}' on '#{model_class.name}'" unless @ability.can?(@command_name.to_sym, model_class)
   end
 
   def constant
@@ -24,13 +24,5 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
 
   def namespace
     @namespace ||= resource.plural_name
-  end
-
-  def resource
-    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(klass)
-  end
-
-  def klass
-    @klass ||= @model_name.singularize.camelize.constantize
   end
 end

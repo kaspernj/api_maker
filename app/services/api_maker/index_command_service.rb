@@ -13,14 +13,10 @@ class ApiMaker::IndexCommandService < ApiMaker::CommandService
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability)
+    @collection ||= model_class.accessible_by(@ability)
   end
 
   def ids
     @ids ||= @commands.values.map { |command| command.fetch("primary_key") }
-  end
-
-  def klass
-    @klass ||= @model_name.singularize.camelize.constantize
   end
 end

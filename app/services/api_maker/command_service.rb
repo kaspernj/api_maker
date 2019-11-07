@@ -10,4 +10,20 @@ class ApiMaker::CommandService < ApiMaker::ApplicationService
     @controller = controller
     @model_name = model_name
   end
+
+  def namespace
+    @namespace ||= @model_name.camelize
+  end
+
+  def resource
+    @resource ||= "Resources::#{resource_name}Resource".safe_constantize
+  end
+
+  def resource_name
+    @resource_name ||= @model_name.underscore.singularize.camelize
+  end
+
+  def model_class
+    @model_class ||= resource.model_class
+  end
 end
