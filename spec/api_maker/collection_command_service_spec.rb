@@ -12,19 +12,32 @@ describe ApiMaker::CollectionCommandService do
       commands: [],
       command_response: command_response,
       controller: fake_controller,
-      resource_name: "activity"
+      resource_name: "activities"
+    )
+  end
+  let(:account_marked_task_service) do
+    ApiMaker::CollectionCommandService.new(
+      ability: ability,
+      args: {},
+      command_name: "asd",
+      commands: [],
+      command_response: command_response,
+      controller: fake_controller,
+      resource_name: "account-marked-tasks"
     )
   end
 
-  describe "#klass" do
+  describe "#model_class" do
     it "returns the correct model class" do
       expect(service.model_class.name).to eq "PublicActivity::Activity"
+      expect(account_marked_task_service.model_class.name).to eq "AccountMarkedTask"
     end
   end
 
   describe "#namespace" do
     it "returns the expected namespace for resources with a custom model class" do
       expect(service.namespace).to eq "Activities"
+      expect(account_marked_task_service.namespace).to eq "AccountMarkedTasks"
     end
   end
 

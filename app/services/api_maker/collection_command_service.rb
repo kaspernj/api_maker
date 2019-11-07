@@ -21,8 +21,4 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
   def constant
     @constant ||= "Commands::#{namespace}::#{@command_name.camelize}".constantize
   end
-
-  def namespace
-    @namespace ||= resource.plural_name
-  end
 end
