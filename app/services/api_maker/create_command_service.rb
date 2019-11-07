@@ -13,10 +13,6 @@ class ApiMaker::CreateCommandService < ApiMaker::CommandService
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability, :create)
-  end
-
-  def klass
-    @klass ||= @model_name.singularize.camelize.constantize
+    @collection ||= model_class.accessible_by(@ability, :create)
   end
 end

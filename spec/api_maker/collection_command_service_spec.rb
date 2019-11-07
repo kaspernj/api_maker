@@ -12,13 +12,13 @@ describe ApiMaker::CollectionCommandService do
       commands: [],
       command_response: command_response,
       controller: fake_controller,
-      model_name: "public_activity/activity"
+      resource_name: "activity"
     )
   end
 
   describe "#klass" do
     it "returns the correct model class" do
-      expect(service.klass.name).to eq "PublicActivity::Activity"
+      expect(service.model_class.name).to eq "PublicActivity::Activity"
     end
   end
 
