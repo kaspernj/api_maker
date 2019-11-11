@@ -1,3 +1,5 @@
+before_install:
+  - gem install bundler -v 2.0.2
 script:
   - cd spec/dummy && yarn
   - cd spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
