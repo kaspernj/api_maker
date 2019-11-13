@@ -60,7 +60,7 @@ module ApiMaker::SpecHelper
       })
     "
 
-    wait_for_condition do
+    WaitUtil.wait_for_condition("databases to be deleted", timeout_sec: 6, delay_sec: 0.5) do
       logs_text = chrome_logs.map(&:message).join("\n")
       logs_text.include?("\"All databases was deleted\"")
     end
