@@ -11,7 +11,7 @@ describe "model ransack" do
 
     visit models_ransack_path
 
-    wait_for_path models_ransack_path, ignore_query: true
+    wait_for_path models_ransack_path
 
     wait_for_chrome { find("[data-controller='models--ransack']", visible: false)["data-ransack-completed"] == "true" }
 

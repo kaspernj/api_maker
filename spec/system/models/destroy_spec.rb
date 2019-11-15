@@ -9,7 +9,7 @@ describe "model destroy" do
 
     visit models_destroy_path(project_id: project.id)
 
-    wait_for_path models_destroy_path, ignore_query: true
+    wait_for_path models_destroy_path
 
     wait_for_chrome { find("[data-controller='models--destroy']", visible: false)["data-destroy-completed"] == "true" }
 

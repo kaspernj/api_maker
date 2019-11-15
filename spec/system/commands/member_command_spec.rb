@@ -9,7 +9,7 @@ describe "member command" do
 
     visit commands_member_command_path(task_id: task.id)
 
-    wait_for_path commands_member_command_path, ignore_query: true
+    wait_for_path commands_member_command_path
 
     wait_for_chrome { find("[data-controller='commands--member']", visible: false)["data-test-member-response"].present? }
 
