@@ -358,6 +358,11 @@ user.connect("new_message", args => {
 })
 ```
 
+Or you can receive the event in React:
+```jsx
+<EventConnection event="new_message" model={user} onCall={args => this.onNewMessage(args)} />
+```
+
 ### Update models
 
 Add this to your abilities:
