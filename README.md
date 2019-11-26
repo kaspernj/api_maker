@@ -334,26 +334,27 @@ Devise.currentUser().then(user => {
 
 ### Custom events
 
-Add the relevant access to your abilities:
+Add the relevant access to your resource:
 
 ```ruby
-class ApiMakerAbility < ApplicationAbility
-  def initialize(args:)
+class Resources::UserResource < ApplicationAbility
+  def abilities
     can :event_new_message, User, id: 5
   end
 end
 ```
 
+Send an event from Ruby:
 ```ruby
 user = User.find(5)
 user.api_maker_event("new_message", message: "Hello world")
 ```
 
+Receive the event in JavaScript:
 ```js
-User.find(5).then(user => {
-  user.connect("new_message", args => {
-    console.log(`New message: ${args.message}`)
-  })
+var user = await User.find(5)
+user.connect("new_message", args => {
+  console.log(`New message: ${args.message}`)
 })
 ```
 
