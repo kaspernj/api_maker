@@ -5,6 +5,10 @@ import React from "react"
 const inflection = require("inflection")
 
 export default class BootstrapCheckbox extends React.Component {
+  static defaultProps = {
+    defaultValue: 1,
+    zeroInput: true
+  }
   static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     className: PropTypes.string,
@@ -19,22 +23,26 @@ export default class BootstrapCheckbox extends React.Component {
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
-    wrapperClassName: PropTypes.string
+    wrapperClassName: PropTypes.string,
+    zeroInput: PropTypes.bool
   })
 
   render() {
-    let id = this.inputId()
+    var { defaultValue, zeroInput } = this.props
+    var id = this.inputId()
 
     return (
       <div className={this.wrapperClassName()}>
         <div className="form-check">
-          <input defaultValue="0" name={this.inputName()} type="hidden" type="hidden" />
+          {zeroInput &&
+            <input defaultValue="0" name={this.inputName()} type="hidden" type="hidden" />
+          }
           <input
             data-target={this.props["data-target"]}
             defaultChecked={this.inputDefaultChecked()}
             className={this.className()}
             data-action={this.props["data-action"]}
-            defaultValue="1"
+            defaultValue={defaultValue}
             id={id}
             name={this.inputName()}
             onChange={this.props.onChange}
@@ -100,7 +108,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   wrapperClassName() {
-    let classNames = ["component-bootstrap-checkbox"]
+    var classNames = ["component-bootstrap-checkbox"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)
@@ -117,7 +125,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   labelClassName() {
-    let classNames = ["form-check-label"]
+    var classNames = ["form-check-label"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
