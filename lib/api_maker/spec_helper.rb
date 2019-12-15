@@ -82,9 +82,9 @@ module ApiMaker::SpecHelper
     end
   end
 
-  def wait_for_and_find(selector)
+  def wait_for_and_find(selector, *args)
     wait_for_selector(selector)
-    find(selector)
+    find(selector, *args)
   end
 
   def wait_for_browser(delay_sec: 0.5, message: "wait for browser", timeout_sec: 6)
@@ -121,5 +121,9 @@ module ApiMaker::SpecHelper
     selectors.each do |selector|
       wait_for_selector(selector)
     end
+  end
+
+  def wait_for_no_selector(selector, *args)
+    wait_for_browser { !page.has_selector?(selector, *args) }
   end
 end
