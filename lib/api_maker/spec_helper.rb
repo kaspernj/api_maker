@@ -1,4 +1,16 @@
 module ApiMaker::SpecHelper
+  def browser_logs
+    if browser_firefox?
+      []
+    else
+      chrome_logs
+    end
+  end
+
+  def browser_firefox?
+    page.driver.browser.capabilities[:browser_name] == "firefox"
+  end
+
   def chrome_logs
     page.driver.browser.manage.logs.get(:browser)
   end
@@ -22,7 +34,7 @@ module ApiMaker::SpecHelper
   end
 
   def expect_no_chrome_errors
-    logs = chrome_logs.map(&:to_s)
+    logs = browser_logs.map(&:to_s)
     logs = logs.reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
     return if !logs || !logs.join("\n").include?("SEVERE ")
 
@@ -47,6 +59,8 @@ module ApiMaker::SpecHelper
   end
 
   def reset_indexeddb
+    return if browser_firefox?
+
     execute_script "
       indexedDB.databases().then(function(databases) {
         var promises = []
@@ -61,7 +75,7 @@ module ApiMaker::SpecHelper
     "
 
     WaitUtil.wait_for_condition("databases to be deleted", timeout_sec: 6, delay_sec: 0.5) do
-      logs_text = chrome_logs.map(&:message).join("\n")
+      logs_text = browser_logs.map(&:message).join("\n")
       logs_text.include?("\"All databases was deleted\"")
     end
   end
