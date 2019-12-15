@@ -6,7 +6,7 @@ describe "model validate" do
 
     wait_for_path models_validate_path
 
-    wait_for_chrome { find("[data-controller='models--validate']", visible: false)["data-validate-response"].present? }
+    wait_for_browser { find("[data-controller='models--validate']", visible: false)["data-validate-response"].present? }
 
     response = JSON.parse(find("[data-controller='models--validate']", visible: false)["data-validate-response"])
 

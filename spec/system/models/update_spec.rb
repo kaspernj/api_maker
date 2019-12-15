@@ -11,8 +11,8 @@ describe "model update" do
 
     wait_for_path models_update_path
 
-    wait_for_chrome { find("[data-controller='models--update']", visible: false)["data-update-completed"] == "true" }
-    wait_for_chrome { find("[data-controller='models--update']", visible: false)["data-result"] }
+    wait_for_browser { find("[data-controller='models--update']", visible: false)["data-update-completed"] == "true" }
+    wait_for_browser { find("[data-controller='models--update']", visible: false)["data-result"] }
 
     expect(project.reload.name).to eq "test-update-project"
 

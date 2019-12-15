@@ -15,9 +15,7 @@ module ApiMaker::SpecHelper
     page.driver.browser.manage.logs.get(:browser)
   end
 
-  def expect_no_chrome_window_errors
-    sleep 1
-
+  def expect_no_browser_window_errors
     errors = execute_script("if (window.errorLogger) { return window.errorLogger.getErrors() }")
     return if !errors.is_a?(Array) || errors.empty?
 
@@ -33,12 +31,12 @@ module ApiMaker::SpecHelper
     raise error
   end
 
-  def expect_no_chrome_errors
+  def expect_no_browser_errors
+    expect_no_browser_window_errors
+
     logs = browser_logs.map(&:to_s)
     logs = logs.reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
     return if !logs || !logs.join("\n").include?("SEVERE ")
-
-    expect_no_chrome_window_errors
 
     puts logs.join("\n")
     expect(logs).to eq nil
@@ -46,7 +44,7 @@ module ApiMaker::SpecHelper
 
   def expect_no_errors
     expect_no_flash_errors
-    expect_no_chrome_errors
+    expect_no_browser_errors
   end
 
   def js_fill_in(element_id, with:)
@@ -80,9 +78,9 @@ module ApiMaker::SpecHelper
     end
   end
 
-  def wait_for_chrome(delay_sec: 0.5, message: "wait for chrome", timeout_sec: 6)
+  def wait_for_browser(delay_sec: 0.5, message: "wait for browser", timeout_sec: 6)
     WaitUtil.wait_for_condition(message, timeout_sec: timeout_sec, delay_sec: delay_sec) do
-      expect_no_chrome_errors
+      expect_no_browser_errors
       yield
     end
   end
@@ -91,7 +89,7 @@ module ApiMaker::SpecHelper
     received_messages = []
 
     WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: delay_sec) do
-      expect_no_chrome_errors
+      expect_no_browser_errors
       current_message = flash_message_text
       received_messages << current_message
       current_message == expected_message
@@ -101,13 +99,13 @@ module ApiMaker::SpecHelper
   end
 
   def wait_for_path(expected_path)
-    wait_for_chrome(message: "wait for path") { current_path == expected_path }
+    wait_for_browser(message: "wait for path") { current_path == expected_path }
   rescue WaitUtil::TimeoutError
     expect(current_path).to eq expected_path
   end
 
   def wait_for_selector(selector)
-    wait_for_chrome { page.has_selector?(selector) }
+    wait_for_browser { page.has_selector?(selector) }
   end
 
   def wait_for_selectors(*selectors)

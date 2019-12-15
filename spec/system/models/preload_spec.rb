@@ -12,7 +12,7 @@ describe "model preload" do
 
     wait_for_path models_preload_path
 
-    wait_for_chrome { find("[data-controller='models--preload']", visible: false)["data-preload-completed"] == "true" }
+    wait_for_browser { find("[data-controller='models--preload']", visible: false)["data-preload-completed"] == "true" }
 
     task_with_preload = JSON.parse(find("[data-controller='models--preload']", visible: false)["data-task-with-preload"])
     task_without_preload = JSON.parse(find("[data-controller='models--preload']", visible: false)["data-task-without-preload"])

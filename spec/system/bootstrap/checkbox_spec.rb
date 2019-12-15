@@ -37,7 +37,7 @@ describe "boootstrap - checkbox" do
 
     find("input[type=submit]").click
 
-    wait_for_chrome { task.reload.finished? }
+    wait_for_browser { task.reload.finished? }
   end
 
   it "unchecks and saves" do
@@ -57,6 +57,6 @@ describe "boootstrap - checkbox" do
 
     find("input[type=submit]").click
 
-    wait_for_chrome { !task.reload.finished? }
+    wait_for_browser { !task.reload.finished? }
   end
 end

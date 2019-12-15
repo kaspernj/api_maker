@@ -11,7 +11,7 @@ describe "member command" do
 
     wait_for_path commands_member_command_path
 
-    wait_for_chrome { find("[data-controller='commands--member']", visible: false)["data-test-member-response"].present? }
+    wait_for_browser { find("[data-controller='commands--member']", visible: false)["data-test-member-response"].present? }
 
     response = JSON.parse(find("[data-controller='commands--member']", visible: false)["data-test-member-response"])
 
