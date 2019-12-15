@@ -108,8 +108,8 @@ module ApiMaker::SpecHelper
     expect(current_path).to eq expected_path
   end
 
-  def wait_for_selector(selector)
-    wait_for_browser { page.has_selector?(selector) }
+  def wait_for_selector(selector, *args)
+    wait_for_browser { page.has_selector?(selector, *args) }
   end
 
   def wait_for_selectors(*selectors)
