@@ -82,6 +82,11 @@ module ApiMaker::SpecHelper
     end
   end
 
+  def wait_for_and_find(selector)
+    wait_for_selector(selector)
+    find(selector)
+  end
+
   def wait_for_browser(delay_sec: 0.5, message: "wait for browser", timeout_sec: 6)
     WaitUtil.wait_for_condition(message, timeout_sec: timeout_sec, delay_sec: delay_sec) do
       expect_no_browser_errors
