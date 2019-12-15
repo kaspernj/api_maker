@@ -76,12 +76,16 @@ RSpec.configure do |config|
   end
 
   config.prepend_before(:each, type: :system) do
-    driven_by :selenium,
-      using: :chrome,
-      options: {
-        args: %w[disable-dev-shm-usage disable-gpu headless no-sandbox]
-      },
-      screen_size: [1920, 1200]
+    if ENV["SELENIUM_DRIVER"] == "firefox"
+      driven_by :selenium, using: :firefox
+    else
+      driven_by :selenium,
+        using: :chrome,
+        options: {
+          args: %w[disable-dev-shm-usage disable-gpu headless no-sandbox]
+        },
+        screen_size: [1920, 1200]
+    end
   end
 
   config.before(:suite) do
