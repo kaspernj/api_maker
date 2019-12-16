@@ -1,4 +1,4 @@
-class ApiMaker::SessionStatusesController < ActionController::Base
+class ApiMaker::SessionStatusesController < ActionController::Base # rubocop:disable Rails/ApplicationController
   skip_before_action :verify_authenticity_token, raise: false
 
   def create

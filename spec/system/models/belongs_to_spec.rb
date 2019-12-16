@@ -12,7 +12,7 @@ describe "model belongs to relationships" do
 
     wait_for_path models_belongs_to_path
 
-    wait_for_chrome { find("[data-controller='models--belongs-to']", visible: false)["data-belongs-to-completed"] == "true" }
+    wait_for_browser { find("[data-controller='models--belongs-to']", visible: false)["data-belongs-to-completed"] == "true" }
 
     project_data = JSON.parse(find("[data-controller='models--belongs-to']", visible: false)["data-project"])
 
