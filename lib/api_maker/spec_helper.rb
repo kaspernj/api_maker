@@ -1,4 +1,7 @@
 module ApiMaker::SpecHelper
+  class SelectorNotFoundError < RuntimeError; end
+  class SelectorFoundError < RuntimeError; end
+
   def browser_logs
     if browser_firefox?
       []
@@ -117,7 +120,7 @@ module ApiMaker::SpecHelper
   def wait_for_selector(selector, *args)
     wait_for_browser { page.has_selector?(selector, *args) }
   rescue WaitUtil::TimeoutError
-    raise "Timed out waiting for selector: #{selector}"
+    raise ApiMaker::SpecHelper::SelectorNotFoundError, "Timed out waiting for selector: #{selector}"
   end
 
   def wait_for_selectors(*selectors)
@@ -129,6 +132,6 @@ module ApiMaker::SpecHelper
   def wait_for_no_selector(selector, *args)
     wait_for_browser { !page.has_selector?(selector, *args) }
   rescue WaitUtil::TimeoutError
-    raise "Timed out waiting for selector to disappear: #{selector}"
+    raise ApiMaker::SpecHelper::SelectorFoundError, "Timed out waiting for selector to disappear: #{selector}"
   end
 end
