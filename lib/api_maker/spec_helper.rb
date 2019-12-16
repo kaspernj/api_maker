@@ -76,7 +76,7 @@ module ApiMaker::SpecHelper
       })
     "
 
-    WaitUtil.wait_for_condition("databases to be deleted", delay_sec: 0.5, timeout_sec: 6) do
+    WaitUtil.wait_for_condition("databases to be deleted", delay_sec: 0.2, timeout_sec: 6) do
       logs_text = browser_logs.map(&:message).join("\n")
       logs_text.include?("\"All databases was deleted\"")
     end
@@ -87,14 +87,14 @@ module ApiMaker::SpecHelper
     find(selector, *args)
   end
 
-  def wait_for_browser(delay_sec: 0.5, message: "wait for browser", timeout_sec: 6)
+  def wait_for_browser(delay_sec: 0.2, message: "wait for browser", timeout_sec: 6)
     WaitUtil.wait_for_condition(message, timeout_sec: timeout_sec, delay_sec: delay_sec) do
       expect_no_browser_errors
       yield
     end
   end
 
-  def wait_for_flash_message(expected_message, delay_sec: 0.5, timeout_sec: 6)
+  def wait_for_flash_message(expected_message, delay_sec: 0.2, timeout_sec: 6)
     received_messages = []
 
     WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: delay_sec) do
