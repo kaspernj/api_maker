@@ -61,6 +61,7 @@ module ApiMaker::SpecHelper
   end
 
   def reset_indexeddb
+    # Firefox doesnt support 'indexedDB.databases()'
     return if browser_firefox?
 
     execute_script "
@@ -115,6 +116,8 @@ module ApiMaker::SpecHelper
 
   def wait_for_selector(selector, *args)
     wait_for_browser { page.has_selector?(selector, *args) }
+  rescue WaitUtil::TimeoutError
+    raise "Timed out waiting for selector: #{selector}"
   end
 
   def wait_for_selectors(*selectors)
@@ -125,5 +128,7 @@ module ApiMaker::SpecHelper
 
   def wait_for_no_selector(selector, *args)
     wait_for_browser { !page.has_selector?(selector, *args) }
+  rescue WaitUtil::TimeoutError
+    raise "Timed out waiting for selector to disappear: #{selector}"
   end
 end
