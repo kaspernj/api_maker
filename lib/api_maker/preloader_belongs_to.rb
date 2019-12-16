@@ -50,9 +50,7 @@ private
   end
 
   def records_for_model(model)
-    @records
-      .fetch(collection_name)
-      .values
-      .select { |record| record.model.read_attribute(@reflection.foreign_key) == model.read_attribute(look_up_key) }
+    # Force to string if one column is an integer and another is a string
+    @records.fetch(collection_name).values.select { |record| record.model.read_attribute(@reflection.foreign_key).to_s == model.read_attribute(look_up_key).to_s }
   end
 end
