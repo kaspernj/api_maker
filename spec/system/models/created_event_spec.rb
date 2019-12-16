@@ -10,7 +10,7 @@ describe "models created event" do
 
     visit models_created_event_path
 
-    wait_for_selector ".tasks-table"
+    wait_for_selector ".tasks-table", visible: false
 
     sleep 0.5 # Wait for ActionCable to connect
 

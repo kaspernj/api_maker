@@ -34,6 +34,13 @@ export default class BootstrapStringInput extends React.Component {
     wrapperClassName: PropTypes.string
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      blankInputName: this.props.type == "file"
+    }
+  }
+
   render() {
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
@@ -93,7 +100,7 @@ export default class BootstrapStringInput extends React.Component {
               disabled={this.props.disabled}
               id={this.inputId()}
               name={this.inputName()}
-              onChange={this.props.onChange}
+              onChange={e => this.onInputChanged(e)}
               onKeyUp={this.props.onKeyUp}
               placeholder={this.props.placeholder}
               ref="input"
@@ -158,6 +165,9 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   inputName() {
+    if (this.state.blankInputName)
+      return ""
+
     if ("name" in this.props) {
       return this.props.name
     } else if (this.props.model) {
@@ -190,6 +200,19 @@ export default class BootstrapStringInput extends React.Component {
       classNames.push(this.props.labelClassName)
 
     return classNames.join(" ")
+  }
+
+  onInputChanged(e) {
+    const { onChange, type } = this.props
+
+    if (type == "file") this.setState({blankInputName: this.getBlankInputName()})
+    if (onChange) onChange(e)
+  }
+
+  // This fixes an issue in Firefox and ActiveStorage, where uploads would be a blank string if a file wasn't chosen
+  getBlankInputName() {
+    const value = this.refs.input.value
+    return (this.props.type == "file" && value == "")
   }
 
   wrapperClassName() {

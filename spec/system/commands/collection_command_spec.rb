@@ -10,7 +10,7 @@ describe "collection command" do
 
     wait_for_path commands_collection_command_path
 
-    wait_for_chrome do
+    wait_for_browser do
       find("[data-controller='commands--collection']", visible: false)["data-test-collection-response"].present?
     end
 

@@ -26,7 +26,7 @@ require "waitutil"
 require "webdrivers"
 require "webpacker"
 
-Webdrivers::Chromedriver.required_version = "77.0.3865.40"
+Webdrivers::Chromedriver.required_version = "78.0.3904.105"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -76,12 +76,16 @@ RSpec.configure do |config|
   end
 
   config.prepend_before(:each, type: :system) do
-    driven_by :selenium,
-      using: :chrome,
-      options: {
-        args: %w[disable-dev-shm-usage disable-gpu headless no-sandbox]
-      },
-      screen_size: [1920, 1200]
+    if ENV["SELENIUM_DRIVER"] == "firefox"
+      driven_by :selenium, using: :firefox
+    else
+      driven_by :selenium,
+        using: :chrome,
+        options: {
+          args: %w[disable-dev-shm-usage disable-gpu headless no-sandbox]
+        },
+        screen_size: [1920, 1200]
+    end
   end
 
   config.before(:suite) do

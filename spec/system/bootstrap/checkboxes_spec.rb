@@ -21,7 +21,7 @@ describe "bootstrap - checkboxes" do
 
     find("input[type=submit]").click
 
-    wait_for_chrome { AccountMarkedTask.where(account: account, task: task1).any? }
+    wait_for_browser { AccountMarkedTask.where(account: account, task: task1).any? }
 
     expect(AccountMarkedTask.where(account: account, task: task2).any?).to eq false
   end
@@ -42,7 +42,7 @@ describe "bootstrap - checkboxes" do
 
     find("input[type=submit]").click
 
-    wait_for_chrome do
+    wait_for_browser do
       account_market_task1.reload
       false
     rescue ActiveRecord::RecordNotFound

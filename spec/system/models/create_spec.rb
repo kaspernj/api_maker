@@ -10,8 +10,8 @@ describe "model create" do
 
     wait_for_path models_create_path
 
-    wait_for_chrome { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
-    wait_for_chrome { Project.count > 0 }
+    wait_for_browser { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
+    wait_for_browser { Project.count > 0 }
 
     created_project = Project.last
     element = find("[data-controller='models--create']", visible: false)
@@ -25,7 +25,7 @@ describe "model create" do
 
     visit_action = proc do
       wait_for_path models_create_path
-      wait_for_chrome { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
+      wait_for_browser { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
     end
 
     expect { visit_action.call }.to raise_error(RuntimeError, "UnhandledRejection: Command failed: No access to create that resource")

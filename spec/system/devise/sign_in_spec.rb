@@ -10,7 +10,7 @@ describe "Devise sign in" do
     fill_in "password", with: "password.123"
     click_on "Sign in"
 
-    wait_for_chrome { find("[data-controller='devise--sign-in']", visible: false)["data-success-response"].present? }
+    wait_for_browser { find("[data-controller='devise--sign-in']", visible: false)["data-success-response"].present? }
 
     response = JSON.parse(find("[data-controller='devise--sign-in']", visible: false)["data-success-response"])
 
