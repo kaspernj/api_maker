@@ -15,6 +15,6 @@ describe "session status - timeout" do
 
     logout(:user)
 
-    wait_for_chrome { find(".status-text").text == "isUserSignedIn: No" }
+    wait_for_browser { find(".status-text").text == "isUserSignedIn: No" }
   end
 end

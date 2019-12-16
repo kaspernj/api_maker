@@ -21,7 +21,7 @@ class ApiMaker::MemoryStorage
   end
 
   def load_all_resources
-    resources_path = Rails.root.join("app", "api_maker", "resources")
+    resources_path = Rails.root.join("app/api_maker/resources")
 
     Dir.foreach(resources_path) do |file|
       match = file.match(/\A((.+)_resource)\.rb\Z/)
