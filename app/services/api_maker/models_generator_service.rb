@@ -33,17 +33,17 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 private
 
   def api_maker_root_path
-    Rails.root.join("app", "javascript", "api-maker")
+    Rails.root.join("app/javascript/api-maker")
   end
 
   def controller_path
-    Rails.root.join("app", "controllers", "api_maker")
+    Rails.root.join("app/controllers/api_maker")
   end
 
   def copy_base_controllers
     files = %w[devise_controller.rb]
     path = File.join(__dir__, "..", "..", "controllers", "api_maker")
-    target_path = Rails.root.join("app", "controllers", "api_maker")
+    target_path = Rails.root.join("app/controllers/api_maker")
 
     copy_base_files(files, path, target_path)
   end
