@@ -18,7 +18,7 @@ describe "models destroy event" do
 
     task1.destroy!
 
-    wait_for_chrome { !page.has_selector?(".task-row[data-task-id='#{task1.id}']") }
+    wait_for_browser { !page.has_selector?(".task-row[data-task-id='#{task1.id}']") }
 
     expect(page).to have_selector ".task-row[data-task-id='#{task2.id}']"
   end

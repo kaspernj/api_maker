@@ -10,7 +10,7 @@ describe "model belongs to relationships" do
 
     wait_for_path devise_specs_current_user_spec_path
 
-    wait_for_chrome { find("[data-controller='devise--current-user']", visible: false)["data-current-user-completed"] == "true" }
+    wait_for_browser { find("[data-controller='devise--current-user']", visible: false)["data-current-user-completed"] == "true" }
 
     project_data = JSON.parse(find("[data-controller='devise--current-user']", visible: false)["data-current-user-result"])
 

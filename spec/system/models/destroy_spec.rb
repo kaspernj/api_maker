@@ -11,7 +11,7 @@ describe "model destroy" do
 
     wait_for_path models_destroy_path
 
-    wait_for_chrome { find("[data-controller='models--destroy']", visible: false)["data-destroy-completed"] == "true" }
+    wait_for_browser { find("[data-controller='models--destroy']", visible: false)["data-destroy-completed"] == "true" }
 
     expect { project.reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
