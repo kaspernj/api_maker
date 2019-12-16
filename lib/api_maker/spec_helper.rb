@@ -11,7 +11,8 @@ module ApiMaker::SpecHelper
   end
 
   def browser_firefox?
-    page.driver.browser.capabilities[:browser_name] == "firefox"
+    capabilities = page.driver.browser.try(:capabilities)
+    capabilities && capabilities[:browser_name] == "firefox"
   end
 
   def chrome_logs
