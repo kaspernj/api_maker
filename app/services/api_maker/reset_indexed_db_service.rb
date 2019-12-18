@@ -9,8 +9,12 @@ class ApiMaker::ResetIndexedDbService < ApiMaker::ApplicationService
 
   def execute
     # Firefox doesnt support 'indexedDB.databases()'
-    return if browser_firefox?
+    reset_indexed_db unless browser_firefox?
 
+    ServicePattern::Response.new(success: true)
+  end
+
+  def reset_indexed_db
     execute_script "
       indexedDB.databases().then(function(databases) {
         var promises = []
@@ -28,7 +32,5 @@ class ApiMaker::ResetIndexedDbService < ApiMaker::ApplicationService
       logs_text = browser_logs.map(&:message).join("\n")
       logs_text.include?("\"All databases was deleted\"")
     end
-
-    ServicePattern::Response.new(success: true)
   end
 end
