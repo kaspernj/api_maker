@@ -28,10 +28,10 @@ export default class ResourceRoute {
   }
 
   requireComponent() {
-    const requireResult = this.parsedContext[`components/${this.route.component}.jsx`]
+    let requireResult = this.parsedContext[`components/${this.route.component}.jsx`]
 
     if (!requireResult)
-      const requireResult = this.parsedContext[`components/${this.route.component}/index.jsx`]
+      requireResult = this.parsedContext[`components/${this.route.component}/index.jsx`]
 
     if (!requireResult)
       throw new Error(`No such require: ${this.route.component}`)

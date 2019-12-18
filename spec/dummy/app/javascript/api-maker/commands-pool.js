@@ -6,10 +6,12 @@ import objectToFormData from "object-to-formdata"
 
 export default class ApiMakerCommandsPool {
   static addCommand(data, args = {}) {
+    let pool
+
     if (args.instant) {
-      const pool = new ApiMakerCommandsPool()
+      pool = new ApiMakerCommandsPool()
     } else {
-      const pool = ApiMakerCommandsPool.current()
+      pool = ApiMakerCommandsPool.current()
     }
 
     const promiseResult = pool.addCommand(data)
