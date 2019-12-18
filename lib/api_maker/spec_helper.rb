@@ -65,26 +65,7 @@ module ApiMaker::SpecHelper
   end
 
   def reset_indexeddb
-    # Firefox doesnt support 'indexedDB.databases()'
-    return if browser_firefox?
-
-    execute_script "
-      indexedDB.databases().then(function(databases) {
-        var promises = []
-        for(var database of databases) {
-          promises.push(indexedDB.deleteDatabase(database.name))
-        }
-
-        Promise.all(promises).then(function() {
-          console.error('All databases was deleted')
-        })
-      })
-    "
-
-    WaitUtil.wait_for_condition("databases to be deleted", delay_sec: 0.2, timeout_sec: 6) do
-      logs_text = browser_logs.map(&:message).join("\n")
-      logs_text.include?("\"All databases was deleted\"")
-    end
+    ApiMaker::ResetIndexedDbService.execute!(context: self)
   end
 
   def wait_for_and_find(selector, *args)
