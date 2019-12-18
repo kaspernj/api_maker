@@ -13,7 +13,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     ServicePattern::Response.new(result: result)
   end
 
-  def inspect_model(model, finder, finder_value)
+  def inspect_model(model, finder, finder_value) # rubocop:disable Metrics/AbcSize
     return if model.errors.empty?
 
     model_name = model.model_name.plural
