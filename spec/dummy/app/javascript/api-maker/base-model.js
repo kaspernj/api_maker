@@ -2,6 +2,7 @@ import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
 import CommandsPool from "./commands-pool"
 import CustomError from "./custom-error"
+import EventEmitter from "events"
 import FormDataToObject from "./form-data-to-object"
 import ModelName from "./model-name"
 import Money from "js-money"
@@ -128,7 +129,18 @@ export default class BaseModel {
 
       return {model: this, response: response}
     } else {
-      throw new new CustomError("Response wasn't successful", {model: this, response: response})
+      this.handleResponseError(response)
+    }
+  }
+
+  handleResponseError(response) {
+    this.parseValidationErrors(response)
+    throw new new CustomError("Response wasn't successful", {model: this, response: response})
+  }
+
+  parseValidationErrors(response) {
+    for(const) {
+
     }
   }
 
@@ -144,8 +156,18 @@ export default class BaseModel {
 
       return {model: this, response: response}
     } else {
-      throw new CustomError("Response wasn't successful", {model: this, response: response})
+      handleResponseError(response)
     }
+  }
+
+  eventEmitter() {
+    if (!this.eventEmitter) this.eventEmitter = new EventEmitter()
+    return this.eventEmitter
+  }
+
+  sendValidationErrorsEvent(response) {
+    const validationErrors = new ValidationErrors({model: this, response: response})
+    this.eventEmitter.emit("validation-errors", validationErrors)
   }
 
   async destroy() {
@@ -159,7 +181,7 @@ export default class BaseModel {
 
       return {model: this, response: response}
     } else {
-      throw new CustomError("Response wasn't successful", {model: this, response: response})
+      handleResponseError(response)
     }
   }
 
@@ -323,7 +345,7 @@ export default class BaseModel {
 
       return {"model": this, "response": response}
     } else {
-      throw new CustomError("Response wasn't successful", {"model": this, "response": response})
+      handleResponseError(response)
     }
   }
 
@@ -339,7 +361,7 @@ export default class BaseModel {
 
       return {model: this, response: response}
     } else {
-      throw new CustomError("Response wasn't successful", {"model": this, "response": response})
+      handleResponseError(response)
     }
   }
 

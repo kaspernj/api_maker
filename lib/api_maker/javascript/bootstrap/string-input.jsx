@@ -23,6 +23,8 @@ export default class BootstrapStringInput extends React.Component {
     labelClassName: PropTypes.string,
     maxLength: PropTypes.number,
     model: PropTypes.object,
+    nestedIndex: PropTypes.number,
+    savingModel: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
     onKeyUp: PropTypes.func,
@@ -44,6 +46,9 @@ export default class BootstrapStringInput extends React.Component {
   render() {
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
+        {this.savingModel() &&
+          <EventEmitterListener events={this.savingModel().eventEmitter()} event="validation-errors" onCalled={validationErrors => this.onValidationErrors(validationErrors)} />
+        }
         {this.label() &&
           <label className={this.labelClassName()} htmlFor={this.inputId()}>
             {this.label()}
@@ -209,10 +214,20 @@ export default class BootstrapStringInput extends React.Component {
     if (onChange) onChange(e)
   }
 
+  savingModel() {
+    return this.props.savingModel || this.props.model
+  }
+
   // This fixes an issue in Firefox and ActiveStorage, where uploads would be a blank string if a file wasn't chosen
   getBlankInputName() {
     const value = this.refs.input.value
     return (this.props.type == "file" && value == "")
+  }
+
+  onValidationErrors(validationErrors) {
+    const { model } = this.props
+    const myValidationErrors = validationErrors.getValidationErrorsForModel({model: model})
+    throw new Error("stub")
   }
 
   wrapperClassName() {

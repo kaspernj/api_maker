@@ -6,6 +6,13 @@ class Resources::UserResource < Resources::ApplicationResource
     can CRUD, User
   end
 
+  def permitted_params(arg)
+    arg.params.require(:user).permit(
+      :email,
+      tasks_attributes: [:name, :project_id]
+    )
+  end
+
   def custom_attribute
     "CustomAttribute - Test arg: #{args[:test_arg]}"
   end

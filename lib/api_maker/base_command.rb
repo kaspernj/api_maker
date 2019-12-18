@@ -19,6 +19,23 @@ class ApiMaker::BaseCommand
     @collection = custom_collection(@collection) if respond_to?(:custom_collection)
   end
 
+  def failure_response(errors:)
+    command.fail(
+      model: serializer.result,
+      success: false,
+      errors: errors.full_messages
+    )
+  end
+
+  def failure_save_response(model:, params:)
+    command.fail(
+      model: serializer.result,
+      success: false,
+      errors: model.errors.full_messages,
+      validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model: model, params: params)
+    )
+  end
+
   def self.execute_in_thread!(**args)
     args.fetch(:command_response).with_thread do
       new(**args).execute!
