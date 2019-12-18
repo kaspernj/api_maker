@@ -1,3 +1,4 @@
+import EventEmitterListener from "api-maker/event-emitter-listener"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -26,9 +27,18 @@ export default class BootstrapSelect extends React.Component {
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     options: PropTypes.array,
+    savingModel: PropTypes.object,
     select2: PropTypes.bool,
     wrapperClassName: PropTypes.string,
+    uniqueKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   })
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      validationErrors: []
+    }
+  }
 
   componentDidMount() {
     if (this.props.select2 && this.props.onChange)
@@ -45,8 +55,13 @@ export default class BootstrapSelect extends React.Component {
   }
 
   render() {
+    const { validationErrors } = this.state
+
     return (
       <div className={this.wrapperClassName()}>
+        {this.savingModel() &&
+          <EventEmitterListener events={this.savingModel().eventEmitter()} event="validation-errors" onCalled={args => this.onValidationErrors(args)} />
+        }
         {this.label() &&
           <div className={this.props.labelContainerClassName ? this.props.labelContainerClassName : null}>
             <label className={this.labelClassName()} htmlFor={this.inputId()}>
@@ -89,6 +104,11 @@ export default class BootstrapSelect extends React.Component {
           <span className="form-text text-muted font-smoothing font-xs">
             {this.props.hintBottom}
           </span>
+        }
+        {validationErrors.length > 0 &&
+          <div className="invalid-feedback">
+            {validationErrors.map(validationError => validationError.message).join(". ")}
+          </div>
         }
       </div>
     )
@@ -143,13 +163,13 @@ export default class BootstrapSelect extends React.Component {
     if ("label" in this.props) {
       return this.props.label
     } else if (this.props.model) {
-      let attributeMethodName = inflection.camelize(this.props.attribute.replace(/_id$/, ""), true)
+      const attributeMethodName = inflection.camelize(this.props.attribute.replace(/_id$/, ""), true)
       return this.props.model.modelClass().humanAttributeName(attributeMethodName)
     }
   }
 
   labelClassName() {
-    let classNames = ["form-group-label"]
+    const classNames = ["form-group-label"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
@@ -157,8 +177,18 @@ export default class BootstrapSelect extends React.Component {
     return classNames.join(" ")
   }
 
+  onValidationErrors(args) {
+    const { attribute, model, uniqueKey } = this.props
+    const validationErrors = args.validationErrors.getValidationErrorsForModel({attribute, model, uniqueKey})
+    this.setState({ validationErrors })
+  }
+
+  savingModel() {
+    return this.props.savingModel || this.props.model
+  }
+
   wrapperClassName() {
-    let classNames = ["form-group", "component-bootstrap-select"]
+    const classNames = ["form-group", "component-bootstrap-select"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)

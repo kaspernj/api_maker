@@ -2,8 +2,17 @@ class Resources::UserResource < Resources::ApplicationResource
   attributes :birthday_at, :id, :email, :created_at, :custom_attribute
   attributes :updated_at, if: :email_kasper?
 
+  relationships :tasks
+
   def abilities
     can CRUD, User
+  end
+
+  def permitted_params(arg)
+    arg.params.require(:user).permit(
+      :email,
+      tasks_attributes: [:id, :name, :project_id]
+    )
   end
 
   def custom_attribute

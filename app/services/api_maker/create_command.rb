@@ -7,14 +7,15 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
       @model = collection.klass.new
       @params = command.args || {}
       @serializer = serialized_resource(model)
-      @model.assign_attributes(sanitize_parameters)
+      sanitized_parameters = sanitize_parameters
+      @model.assign_attributes(sanitized_parameters)
 
       if !current_ability.can?(:create, @model)
-        failure_response(["No access to create that resource"])
+        failure_response(errors: ["No access to create that resource"])
       elsif @model.save
         success_response
       else
-        failure_response(model.errors.full_messages)
+        failure_save_response(model: model, params: sanitized_parameters)
       end
     end
 
@@ -23,14 +24,6 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
 
   def api_maker_resource_class
     @api_maker_resource_class ||= "Resources::#{collection.klass.name}Resource".constantize
-  end
-
-  def failure_response(errors)
-    command.fail(
-      model: serializer.result,
-      success: false,
-      errors: errors
-    )
   end
 
   def resource_instance_class_name

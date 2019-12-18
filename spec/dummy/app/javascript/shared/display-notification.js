@@ -4,12 +4,10 @@ export default class DisplayNotification {
   }
 
   static error(error) {
-    if (error.errors) {
-      DisplayNotification.alert(error.errors.join(". "))
-    } else if (error.response && error.response.errors) {
-      DisplayNotification.alert(error.response.errors.join(". "))
+    if (error.args && error.args.response.errors) {
+      DisplayNotification.alert(error.args.response.errors.join(". "))
     } else {
-      console.error(`Didnt know what to do with: ${JSON.stringify(error)}`)
+      console.error("Didnt know what to do with this", error)
     }
   }
 

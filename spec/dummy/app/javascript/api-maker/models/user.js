@@ -3,9 +3,17 @@ import Collection from "../collection"
 
 export default class User extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"birthday_at","type":"date"},{"name":"id","type":"integer"},{"name":"email","type":"string"},{"name":"created_at","type":"datetime"},{"name":"custom_attribute","type":"unknown"},{"name":"updated_at","type":"datetime"}],"collectionKey":"users","collectionName":"users","i18nKey":"user","name":"User","pluralName":"users","relationships":[],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
+    return {"attributes":[{"name":"birthday_at","type":"date"},{"name":"id","type":"integer"},{"name":"email","type":"string"},{"name":"created_at","type":"datetime"},{"name":"custom_attribute","type":"unknown"},{"name":"updated_at","type":"datetime"}],"collectionKey":"users","collectionName":"users","i18nKey":"user","name":"User","pluralName":"users","relationships":[{"className":"Task","collectionName":"tasks","name":"tasks","macro":"has_many"}],"paramKey":"user","path":"/api_maker/users","primaryKey":"id"}
   }
 
+  
+    
+      tasks() {
+        let id = this.id()
+        let modelClass = require(`api-maker/models/task`).default
+        return new Collection({"reflectionName":"tasks","model":this,"modelName":"Task","modelClass":modelClass,"targetPathName":"/api_maker/tasks"}, {"ransack":{"user_id_eq":id}})
+      }
+    
   
 
   
