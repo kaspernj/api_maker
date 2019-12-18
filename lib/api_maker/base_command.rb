@@ -23,7 +23,7 @@ class ApiMaker::BaseCommand
     command.fail(
       model: serializer.result,
       success: false,
-      errors: errors.full_messages
+      errors: errors
     )
   end
 
