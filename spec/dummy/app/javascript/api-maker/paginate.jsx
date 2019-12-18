@@ -12,8 +12,8 @@ export default class extends React.Component {
     const currentPage = this.props.result.currentPage()
     const pages = []
     const totalPages = this.props.result.totalPages()
-    const pagesFrom = currentPage - 5
-    const pagesTo = currentPage + 5
+    let pagesFrom = currentPage - 5
+    let pagesTo = currentPage + 5
 
     if (pagesFrom < 1)
       pagesFrom = 1
@@ -21,7 +21,7 @@ export default class extends React.Component {
     if (pagesTo > totalPages)
       pagesTo = totalPages
 
-    for(const i = pagesFrom; i <= pagesTo; i++) {
+    for(let i = pagesFrom; i <= pagesTo; i++) {
       pages.push(i)
     }
 
@@ -29,7 +29,7 @@ export default class extends React.Component {
   }
 
   pagePath(pageNumber) {
-    const pageKey = this.props.result.data.collection.queryArgs.pageKey
+    let pageKey = this.props.result.data.collection.queryArgs.pageKey
     if (!pageKey)
       pageKey = "page"
 
