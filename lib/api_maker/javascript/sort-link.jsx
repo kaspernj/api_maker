@@ -7,12 +7,8 @@ const inflection = require("inflection")
 export default class extends React.Component {
   constructor(props) {
     super(props)
-
-    const searchKey = this.props.query.queryArgs.searchKey
-    if (!searchKey)
-      searchKey = "q"
-
-    this.state = {searchKey: searchKey}
+    const searchKey = this.props.query.queryArgs.searchKey || "q"
+    this.state = {searchKey}
   }
 
   attribute() {
