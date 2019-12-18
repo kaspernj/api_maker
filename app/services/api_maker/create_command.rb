@@ -7,14 +7,15 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
       @model = collection.klass.new
       @params = command.args || {}
       @serializer = serialized_resource(model)
-      @model.assign_attributes(sanitize_parameters)
+      sanitized_parameters = sanitize_parameters
+      @model.assign_attributes(sanitized_parameters)
 
       if !current_ability.can?(:create, @model)
         failure_response(errors: ["No access to create that resource"])
       elsif @model.save
         success_response
       else
-        failure_save_response(model: model)
+        failure_save_response(model: model, params: sanitized_parameters)
       end
     end
 

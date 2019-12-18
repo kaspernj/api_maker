@@ -51,6 +51,7 @@ Capybara.server = :puma, {Silent: true}
 
 RSpec.configure do |config|
   config.include ApiMaker::SpecHelper
+  config.include FlashMessagesHelper, type: :system
   config.include FactoryBot::Syntax::Methods
   config.include Warden::Test::Helpers
 

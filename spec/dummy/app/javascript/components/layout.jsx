@@ -1,4 +1,5 @@
 import Devise from "api-maker/devise"
+import DisplayNotification from "shared/display-notification"
 import EventEmitterListener from "api-maker/event-emitter-listener"
 import { Link } from "react-router-dom"
 import React from "react"
@@ -56,10 +57,18 @@ export default class Layout extends React.Component {
             </Link>
           }
 
+          <Link to={Routes.modelsValidationErrorsPath()}>
+            Validation errors (new)
+          </Link>
           {Devise.isUserSignedIn() &&
-            <a className="ml-2" href="#" onClick={(e) => this.onSignOutClicked(e)}>
-              Sign out
-            </a>
+            <>
+              <Link to={Routes.modelsValidationErrorsPath(Devise.currentUser().id())}>
+                Validation errors (edit)
+              </Link>
+              <a className="ml-2" href="#" onClick={(e) => this.onSignOutClicked(e)}>
+                Sign out
+              </a>
+            </>
           }
           {!Devise.isUserSignedIn() &&
             <Link className="ml-2" to={Routes.newSessionPath()}>

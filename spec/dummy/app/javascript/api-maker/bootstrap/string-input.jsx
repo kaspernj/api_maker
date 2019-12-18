@@ -33,7 +33,7 @@ export default class BootstrapStringInput extends React.Component {
     step: PropTypes.number,
     small: PropTypes.bool,
     type: PropTypes.string,
-    uniqueKey: PropTypes.string,
+    uniqueKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     wrapperClassName: PropTypes.string
   })
 
@@ -140,7 +140,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   inputClassName() {
-    var classNames = ["form-control"]
+    const classNames = ["form-control"]
 
     if (this.props.className)
       classNames.push(this.props.className)
@@ -211,7 +211,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   labelClassName() {
-    var classNames = []
+    const classNames = []
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
@@ -239,13 +239,11 @@ export default class BootstrapStringInput extends React.Component {
   onValidationErrors(args) {
     const { attribute, model, uniqueKey } = this.props
     const validationErrors = args.validationErrors.getValidationErrorsForModel({attribute, model, uniqueKey})
-
-    console.log({ validationErrors })
     this.setState({ validationErrors })
   }
 
   wrapperClassName() {
-    var classNames = ["form-group", "component-bootstrap-string-input"]
+    const classNames = ["form-group", "component-bootstrap-string-input"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)
