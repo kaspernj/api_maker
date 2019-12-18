@@ -35,6 +35,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
           model_result ||= {
             finder: finder,
             finder_value: finder_value,
+            id: model.id
           }
           result[model_name] << model_result
         end

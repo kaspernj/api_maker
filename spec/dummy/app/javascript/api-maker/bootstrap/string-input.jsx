@@ -1,3 +1,4 @@
+import EventEmitterListener from "api-maker/event-emitter-listener"
 import MoneyInput from "./money-input"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
@@ -23,7 +24,6 @@ export default class BootstrapStringInput extends React.Component {
     labelClassName: PropTypes.string,
     maxLength: PropTypes.number,
     model: PropTypes.object,
-    nestedIndex: PropTypes.number,
     savingModel: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
@@ -33,21 +33,25 @@ export default class BootstrapStringInput extends React.Component {
     step: PropTypes.number,
     small: PropTypes.bool,
     type: PropTypes.string,
+    uniqueKey: PropTypes.string,
     wrapperClassName: PropTypes.string
   })
 
   constructor(props) {
     super(props)
     this.state = {
-      blankInputName: this.props.type == "file"
+      blankInputName: this.props.type == "file",
+      validationErrors: []
     }
   }
 
   render() {
+    const { validationErrors } = this.state
+
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
         {this.savingModel() &&
-          <EventEmitterListener events={this.savingModel().eventEmitter()} event="validation-errors" onCalled={validationErrors => this.onValidationErrors(validationErrors)} />
+          <EventEmitterListener events={this.savingModel().eventEmitter()} event="validation-errors" onCalled={args => this.onValidationErrors(args)} />
         }
         {this.label() &&
           <label className={this.labelClassName()} htmlFor={this.inputId()}>
@@ -119,6 +123,11 @@ export default class BootstrapStringInput extends React.Component {
                 </span>
               </div>
             }
+            {validationErrors.length > 0 &&
+              <div className="invalid-feedback">
+                {validationErrors.map(validationError => validationError.message).join(". ")}
+              </div>
+            }
           </div>
         }
         {this.props.hintBottom &&
@@ -135,6 +144,9 @@ export default class BootstrapStringInput extends React.Component {
 
     if (this.props.className)
       classNames.push(this.props.className)
+
+    if (this.state.validationErrors.length > 0)
+      classNames.push("is-invalid")
 
     return classNames.join(" ")
   }
@@ -224,10 +236,12 @@ export default class BootstrapStringInput extends React.Component {
     return (this.props.type == "file" && value == "")
   }
 
-  onValidationErrors(validationErrors) {
-    const { model } = this.props
-    const myValidationErrors = validationErrors.getValidationErrorsForModel({model: model})
-    throw new Error("stub")
+  onValidationErrors(args) {
+    const { attribute, model, uniqueKey } = this.props
+    const validationErrors = args.validationErrors.getValidationErrorsForModel({attribute, model, uniqueKey})
+
+    console.log({ validationErrors })
+    this.setState({ validationErrors })
   }
 
   wrapperClassName() {

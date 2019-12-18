@@ -43,6 +43,7 @@ describe ApiMaker::UpdateCommand do
         {
           finder: "unique-key",
           finder_value: "124",
+          id: nil,
           attributes: {
             name: [
               {type: :blank, message: "can't be blank"}
