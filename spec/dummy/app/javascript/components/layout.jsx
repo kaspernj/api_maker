@@ -49,6 +49,9 @@ export default class Layout extends React.Component {
               <Link className="ml-2" to={Routes.bootstrapStringInputDatetimeLocalPath({task_id: task.id()})}>
                 Bootstrap string input datetime local
               </Link>
+              <Link className="ml-2" to={Routes.bootstrapSortLinkPath()}>
+                Bootstrap sort link
+              </Link>
             </>
           }
           {account &&
