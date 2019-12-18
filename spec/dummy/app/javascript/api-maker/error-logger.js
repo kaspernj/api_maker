@@ -7,15 +7,15 @@ export default class ErrorLogger {
 
   loadSourceMaps() {
     return new Promise(resolve => {
-      var scripts = document.querySelectorAll("script")
-      var promises = []
+      const scripts = document.querySelectorAll("script")
+      const promises = []
 
-      for(var script of scripts) {
-        var src = script.getAttribute("src")
-        var type = script.getAttribute("type")
+      for(const script of scripts) {
+        const src = script.getAttribute("src")
+        const type = script.getAttribute("type")
 
         if (src && src.includes("/packs/") && (type == "text/javascript" || !type)) {
-          var promise = this.loadSourceMapForScript(script)
+          const promise = this.loadSourceMapForScript(script)
           promises.push(promise)
         }
       }
@@ -25,13 +25,13 @@ export default class ErrorLogger {
   }
 
   loadSourceMapForScript(script) {
-    var src = script.getAttribute("src")
-    var url = this.loadUrl(src)
-    var originalUrl = `${url.origin}${url.pathname}`
-    var mapUrl = `${url.origin}${url.pathname}.map`
+    const src = script.getAttribute("src")
+    const url = this.loadUrl(src)
+    const originalUrl = `${url.origin}${url.pathname}`
+    const mapUrl = `${url.origin}${url.pathname}.map`
 
     return new Promise(resolve => {
-      var xhr = new XMLHttpRequest()
+      const xhr = new XMLHttpRequest()
       xhr.open("GET", mapUrl, true)
       xhr.onload = () => {
         retrace.register(originalUrl, xhr.responseText)
@@ -42,7 +42,7 @@ export default class ErrorLogger {
   }
 
   loadUrl(url) {
-    var parser = document.createElement("a")
+    const parser = document.createElement("a")
     parser.href = url
 
     return parser

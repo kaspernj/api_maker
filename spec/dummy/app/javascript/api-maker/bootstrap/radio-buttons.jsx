@@ -70,7 +70,7 @@ export default class BootstrapRadioButtons extends React.Component {
   }
 
   wrapperClassName() {
-    var classNames = ["component-bootstrap-radio-buttons"]
+    const classNames = ["component-bootstrap-radio-buttons"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)

@@ -6,13 +6,15 @@ import objectToFormData from "object-to-formdata"
 
 export default class ApiMakerCommandsPool {
   static addCommand(data, args = {}) {
+    let pool
+
     if (args.instant) {
-      var pool = new ApiMakerCommandsPool()
+      pool = new ApiMakerCommandsPool()
     } else {
-      var pool = ApiMakerCommandsPool.current()
+      pool = ApiMakerCommandsPool.current()
     }
 
-    var promiseResult = pool.addCommand(data)
+    const promiseResult = pool.addCommand(data)
 
     if (args.instant) {
       pool.flush()
@@ -43,12 +45,12 @@ export default class ApiMakerCommandsPool {
 
   addCommand(data) {
     return new Promise((resolve, reject) => {
-      var id = this.currentId
+      const id = this.currentId
       this.currentId += 1
 
-      var commandType = data.type
-      var commandName = data.command
-      var collectionName = data.collectionName
+      const commandType = data.type
+      const commandName = data.command
+      const collectionName = data.collectionName
 
       this.pool[id] = {resolve: resolve, reject: reject}
 
@@ -61,10 +63,11 @@ export default class ApiMakerCommandsPool {
       if (!this.poolData[commandType][collectionName][commandName])
         this.poolData[commandType][collectionName][commandName] = {}
 
+      let args
       if (data.args instanceof FormData) {
-        var args = FormDataToObject.toObject(data.args)
+        args = FormDataToObject.toObject(data.args)
       } else {
-        var args = data.args
+        args = data.args
       }
 
       this.poolData[commandType][collectionName][commandName][id] = {
@@ -81,25 +84,25 @@ export default class ApiMakerCommandsPool {
 
     this.clearTimeout()
 
-    var currentPool = this.pool
-    var currentPoolData = this.poolData
+    const currentPool = this.pool
+    const currentPoolData = this.poolData
 
     this.pool = {}
     this.poolData = {}
 
-    var objectForFormData = {pool: currentPoolData}
+    const objectForFormData = {pool: currentPoolData}
 
     if (this.globalRequestData)
       objectForFormData.global = this.globalRequestData
 
-    var formData = objectToFormData(objectForFormData)
-    var url = `/api_maker/commands`
-    var response = await Api.requestLocal({path: url, method: "POST", rawData: formData})
+    const formData = objectToFormData(objectForFormData)
+    const url = `/api_maker/commands`
+    const response = await Api.requestLocal({path: url, method: "POST", rawData: formData})
 
-    for(var commandId in response.responses) {
-      var commandResponse = response.responses[commandId]
-      var commandResponseData = Deserializer.parse(commandResponse.data)
-      var commandData = currentPool[parseInt(commandId)]
+    for(const commandId in response.responses) {
+      const commandResponse = response.responses[commandId]
+      const commandResponseData = Deserializer.parse(commandResponse.data)
+      const commandData = currentPool[parseInt(commandId)]
 
       if (commandResponse.type == "success") {
         commandData.resolve(commandResponseData)

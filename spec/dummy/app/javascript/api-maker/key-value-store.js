@@ -24,14 +24,14 @@ export default class KeyValueStore {
   }
 
   async get(key) {
-    var row = await this.database.keyValues.where("key").equals(key).first()
+    const row = await this.database.keyValues.where("key").equals(key).first()
 
     if (row)
       return row.value
   }
 
   async set(key, value) {
-    var row = await this.database.keyValues.where("key").equals(key).first()
+    const row = await this.database.keyValues.where("key").equals(key).first()
 
     if (row) {
       await this.database.keyValues.update(row.id, {value: value})
