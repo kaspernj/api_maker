@@ -28,5 +28,7 @@ class ApiMaker::ResetIndexedDbService < ApiMaker::ApplicationService
       logs_text = browser_logs.map(&:message).join("\n")
       logs_text.include?("\"All databases was deleted\"")
     end
+
+    ServicePattern::Response.new(success: true)
   end
 end
