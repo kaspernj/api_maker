@@ -28,8 +28,8 @@ export default class BootstrapCheckbox extends React.Component {
   })
 
   render() {
-    var { defaultValue, zeroInput } = this.props
-    var id = this.inputId()
+    const { defaultValue, zeroInput } = this.props
+    const id = this.inputId()
 
     return (
       <div className={this.wrapperClassName()}>
@@ -66,7 +66,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   className() {
-    var classNames = ["form-check-input"]
+    const classNames = ["form-check-input"]
 
     if (this.props.className)
       classNames.push(this.props.className)
@@ -108,7 +108,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   wrapperClassName() {
-    var classNames = ["component-bootstrap-checkbox"]
+    const classNames = ["component-bootstrap-checkbox"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)
@@ -125,7 +125,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   labelClassName() {
-    var classNames = ["form-check-label"]
+    const classNames = ["form-check-label"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)

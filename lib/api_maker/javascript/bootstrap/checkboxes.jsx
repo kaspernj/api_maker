@@ -84,7 +84,7 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   optionElement(option) {
-    var id = this.generatedId()
+    const id = this.generatedId()
 
     return (
       <div className="checkboxes-option" key={`option-${option[1]}`}>

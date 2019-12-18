@@ -17,11 +17,11 @@ export default class BaseModel {
   }
 
   static async find(id) {
-    var primaryKeyName = this.modelClassData().primaryKey
-    var query = {}
+    const primaryKeyName = this.modelClassData().primaryKey
+    const query = {}
     query[`${primaryKeyName}_eq`] = id
 
-    var model = await this.ransack(query).first()
+    const model = await this.ransack(query).first()
 
     if (model) {
       return model
@@ -62,30 +62,30 @@ export default class BaseModel {
   }
 
   connect(eventName, callback) {
-    var cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this._primaryKey(), eventName, callback)
+    const cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this._primaryKey(), eventName, callback)
     return cableSubscription
   }
 
   static connectCreated(callback) {
-    var cableSubscription = CableConnectionPool.current().connectCreated(this.modelClassData().name, callback)
+    const cableSubscription = CableConnectionPool.current().connectCreated(this.modelClassData().name, callback)
     return cableSubscription
   }
 
   connectDestroyed(callback) {
-    var cableSubscription = CableConnectionPool.current().connectDestroyed(this.modelClassData().name, this._primaryKey(), callback)
+    const cableSubscription = CableConnectionPool.current().connectDestroyed(this.modelClassData().name, this._primaryKey(), callback)
     return cableSubscription
   }
 
   connectUpdated(callback) {
-    var cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this._primaryKey(), callback)
+    const cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this._primaryKey(), callback)
     return cableSubscription
   }
 
   assignAttributes(newAttributes) {
-    for(var key in newAttributes) {
-      var oldValue = this._getAttribute(key)
-      var originalValue = this.modelData[key]
-      var newValue = newAttributes[key]
+    for(const key in newAttributes) {
+      const oldValue = this._getAttribute(key)
+      const originalValue = this.modelData[key]
+      const newValue = newAttributes[key]
 
       if (newValue != oldValue) {
         if (newValue == originalValue) {
@@ -99,7 +99,7 @@ export default class BaseModel {
 
   cacheKey() {
     if (this.isPersisted()) {
-      var keyParts = [
+      const keyParts = [
         this.modelClassData().paramKey,
         this._primaryKey()
       ]
@@ -178,7 +178,7 @@ export default class BaseModel {
   }
 
   async destroy() {
-    var response = await CommandsPool.addCommand({command: `${this.modelClassData().collectionName}-destroy`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "destroy"}, {})
+    const response = await CommandsPool.addCommand({command: `${this.modelClassData().collectionName}-destroy`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "destroy"}, {})
 
     if (response.success) {
       if (response.model) {
@@ -197,7 +197,7 @@ export default class BaseModel {
   }
 
   static humanAttributeName(attributeName) {
-    var keyName = this.modelClassData().i18nKey
+    const keyName = this.modelClassData().i18nKey
     return I18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`)
   }
 
@@ -206,20 +206,20 @@ export default class BaseModel {
   }
 
   isAttributeChanged(attributeName) {
-    var attributeNameUnderscore = inflection.underscore(attributeName)
-    var attributeData = this.modelClassData().attributes.find(attribute => attribute.name == attributeNameUnderscore)
+    const attributeNameUnderscore = inflection.underscore(attributeName)
+    const attributeData = this.modelClassData().attributes.find(attribute => attribute.name == attributeNameUnderscore)
 
     if (!attributeData) {
-      var attributeNames = this.modelClassData().attributes.map(attribute => attribute.name)
+      const attributeNames = this.modelClassData().attributes.map(attribute => attribute.name)
       throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
     }
 
     if (!(attributeNameUnderscore in this.changes))
       return false
 
-    var oldValue = this.modelData[attributeNameUnderscore]
-    var newValue = this.changes[attributeNameUnderscore]
-    var changedMethod = this[`_is${inflection.camelize(attributeData.type, true)}Changed`]
+    const oldValue = this.modelData[attributeNameUnderscore]
+    const newValue = this.changes[attributeNameUnderscore]
+    const changedMethod = this[`_is${inflection.camelize(attributeData.type, true)}Changed`]
 
     if (!changedMethod)
       throw new Error(`Don't know how to handle type: ${attributeData.type}`)
@@ -231,21 +231,21 @@ export default class BaseModel {
     if (!this.previousModelData)
       return false
 
-    var attributeNameUnderscore = inflection.underscore(attributeName)
-    var attributeData = this.modelClassData().attributes.find(attribute => attribute.name == attributeNameUnderscore)
+    const attributeNameUnderscore = inflection.underscore(attributeName)
+    const attributeData = this.modelClassData().attributes.find(attribute => attribute.name == attributeNameUnderscore)
 
     if (!attributeData) {
-      var attributeNames = this.modelClassData().attributes.map(attribute => attribute.name)
+      const attributeNames = this.modelClassData().attributes.map(attribute => attribute.name)
       throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
     }
 
     if (!(attributeNameUnderscore in this.previousModelData))
       return true
 
-    var oldValue = this.previousModelData[attributeNameUnderscore]
-    var newValue = this.modelData[attributeNameUnderscore]
-    var changedMethodName = `_is${inflection.camelize(attributeData.type)}Changed`
-    var changedMethod = this[changedMethodName]
+    const oldValue = this.previousModelData[attributeNameUnderscore]
+    const newValue = this.modelData[attributeNameUnderscore]
+    const changedMethodName = `_is${inflection.camelize(attributeData.type)}Changed`
+    const changedMethod = this[changedMethodName]
 
     if (!changedMethod)
       throw new Error(`Don't know how to handle type: ${attributeData.type}`)
@@ -269,15 +269,15 @@ export default class BaseModel {
   }
 
   _isStringChanged(oldValue, newValue) {
-    var oldConvertedValue = `${oldValue}`
-    var newConvertedValue = `${newValue}`
+    const oldConvertedValue = `${oldValue}`
+    const newConvertedValue = `${newValue}`
 
     if (oldConvertedValue != newConvertedValue)
       return true
   }
 
   isChanged() {
-    var keys = Object.keys(this.changes)
+    const keys = Object.keys(this.changes)
 
     if (keys.length > 0) {
       return true
@@ -305,11 +305,11 @@ export default class BaseModel {
   }
 
   async reload() {
-    var primaryKeyName = this.modelClassData().primaryKey
-    var query = {}
+    const primaryKeyName = this.modelClassData().primaryKey
+    const query = {}
     query[`${primaryKeyName}_eq`] = this._primaryKey()
 
-    var model = await this.constructor.ransack(query).first()
+    const model = await this.constructor.ransack(query).first()
     this._setNewModelData(model.modelData)
     this.changes = {}
   }
@@ -386,12 +386,12 @@ export default class BaseModel {
   }
 
   async isValidOnServer() {
-    var modelData = this.getAttributes()
-    var paramKey = this.modelClassData().paramKey
-    var dataToUse = {}
+    const modelData = this.getAttributes()
+    const paramKey = this.modelClassData().paramKey
+    const dataToUse = {}
     dataToUse[paramKey] = modelData
 
-    var response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-valid`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "valid"}, {})
+    const response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-valid`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "valid"}, {})
 
     return {valid: response.valid, errors: response.errors}
   }
@@ -406,9 +406,9 @@ export default class BaseModel {
 
   uniqueKey() {
     if (!this.uniqueKeyValue) {
-      var min = 500000000000000000
-      var max = 999999999999999999
-      var randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
+      const min = 500000000000000000
+      const max = 999999999999999999
+      const randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
       this.uniqueKeyValue = randomBetween
     }
 
@@ -424,7 +424,7 @@ export default class BaseModel {
   }
 
   static _postDataFromArgs(args) {
-    var postData
+    let postData
 
     if (args) {
       if (args instanceof FormData) {
@@ -446,8 +446,8 @@ export default class BaseModel {
       return this.modelData[attributeName]
     } else if (this.isNewRecord()) {
       // Return null if this is a new record and the attribute name is a recognized attribute
-      var attributes = this.modelClassData().attributes
-      for(var attribute of attributes) {
+      const attributes = this.modelClassData().attributes
+      for(const attribute of attributes) {
         if (attribute.name == attributeName)
           return null
       }
@@ -457,7 +457,7 @@ export default class BaseModel {
   }
 
   _getAttributeDateTime(attributeName) {
-    var value = this._getAttribute(attributeName)
+    const value = this._getAttribute(attributeName)
 
     if (!value) {
       return value
@@ -479,13 +479,13 @@ export default class BaseModel {
   }
 
   _getAttributeMoney(attributeName) {
-    var value = this._getAttribute(attributeName)
+    const value = this._getAttribute(attributeName)
 
     if (!value)
       return null
 
-    var cents = value.amount
-    var currency = value.currency
+    const cents = value.amount
+    const currency = value.currency
     return Money.fromInteger(cents, currency)
   }
 
@@ -493,8 +493,8 @@ export default class BaseModel {
     if (args.reflectionName in this.relationshipsCache) {
       return this.relationshipsCache[args.reflectionName]
     } else {
-      var collection = new Collection(args, queryArgs)
-      var model = await collection.first()
+      const collection = new Collection(args, queryArgs)
+      const model = await collection.first()
       this.relationshipsCache[args.reflectionName] = model
       return model
     }
@@ -515,8 +515,8 @@ export default class BaseModel {
     if (args.reflectionName in this.relationshipsCache) {
       return this.relationshipsCache[args.reflectionName]
     } else {
-      var collection = new Collection(args, queryArgs)
-      var model = await collection.first()
+      const collection = new Collection(args, queryArgs)
+      const model = await collection.first()
       this.relationshipsCache[args.reflectionName] = model
       return model
     }
@@ -542,28 +542,28 @@ export default class BaseModel {
     if (!this.includedRelationships)
       return
 
-    for(var relationshipName in this.includedRelationships) {
-      var relationshipData = this.includedRelationships[relationshipName]
-      var relationshipClassData = this.modelClassData().relationships.find(relationship => relationship.name == relationshipName)
+    for(const relationshipName in this.includedRelationships) {
+      const relationshipData = this.includedRelationships[relationshipName]
+      const relationshipClassData = this.modelClassData().relationships.find(relationship => relationship.name == relationshipName)
 
       if (!relationshipClassData)
         throw new Error(`No relationship on ${this.modelClassData().name} by that name: ${relationshipName}`)
 
-      var relationshipType = relationshipClassData.collectionName
+        const relationshipType = relationshipClassData.collectionName
 
       if (!relationshipData) {
         this.relationshipsCache[relationshipName] = null
       } else if (Array.isArray(relationshipData)) {
-        var result = []
+        const result = []
 
-        for(var relationshipId of relationshipData) {
-          var model = included.getModel(relationshipType, relationshipId)
+        for(const relationshipId of relationshipData) {
+          const model = included.getModel(relationshipType, relationshipId)
           result.push(model)
         }
 
         this.relationshipsCache[relationshipName] = result
       } else {
-        var model = included.getModel(relationshipType, relationshipData)
+        const model = included.getModel(relationshipType, relationshipData)
         this.relationshipsCache[relationshipName] = model
       }
     }
@@ -574,7 +574,7 @@ export default class BaseModel {
   }
 
   static _token() {
-    var csrfTokenElement = document.querySelector("meta[name='csrf-token']")
+    const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
     if (csrfTokenElement)
       return csrfTokenElement.getAttribute("content")
   }

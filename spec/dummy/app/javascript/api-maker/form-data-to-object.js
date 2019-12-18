@@ -1,6 +1,6 @@
 export default class FormDataToObject {
   static toObject(formData) {
-    var formDataToObject = new FormDataToObject(formData)
+    const formDataToObject = new FormDataToObject(formData)
     return formDataToObject.toObject()
   }
 
@@ -9,11 +9,11 @@ export default class FormDataToObject {
   }
 
   toObject() {
-    var result = {}
+    const result = {}
 
-    for(var entry of this.formData.entries()) {
-      var key = entry[0]
-      var value = entry[1]
+    for(const entry of this.formData.entries()) {
+      const key = entry[0]
+      const value = entry[1]
 
       this.treatInitial(key, value, result)
     }
@@ -22,19 +22,20 @@ export default class FormDataToObject {
   }
 
   treatInitial(key, value, result) {
-    var firstMatch = key.match(/^(.+?)(\[([\s\S]+$))/)
+    const firstMatch = key.match(/^(.+?)(\[([\s\S]+$))/)
 
     if (firstMatch) {
-      var inputName = firstMatch[1]
-      var rest = firstMatch[2]
+      const inputName = firstMatch[1]
+      const rest = firstMatch[2]
+      let newResult
 
       if (inputName in result) {
-        var newResult = result[inputName]
+        newResult = result[inputName]
       } else if (rest == "[]") {
-        var newResult = []
+        newResult = []
         result[inputName] = newResult
       } else {
-        var newResult = {}
+        newResult = {}
         result[inputName] = newResult
       }
 
@@ -45,9 +46,10 @@ export default class FormDataToObject {
   }
 
   treatSecond(value, rest, result) {
-    var secondMatch = rest.match(/^\[(.*?)\]([\s\S]*)$/)
-    var key = secondMatch[1]
-    var newRest = secondMatch[2]
+    const secondMatch = rest.match(/^\[(.*?)\]([\s\S]*)$/)
+    const key = secondMatch[1]
+    const newRest = secondMatch[2]
+    let newResult
 
     if (rest == "[]") {
       result.push(value)
@@ -55,12 +57,12 @@ export default class FormDataToObject {
       result[key] = value
     } else {
       if (key in result) {
-        var newResult = result[key]
+        newResult = result[key]
       } else if (newRest == "[]") {
-        var newResult = []
+        newResult = []
         result[key] = newResult
       } else {
-        var newResult = {}
+        newResult = {}
         result[key] = newResult
       }
 

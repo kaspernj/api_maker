@@ -8,7 +8,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
 
-    var searchKey = this.props.query.queryArgs.searchKey
+    const searchKey = this.props.query.queryArgs.searchKey
     if (!searchKey)
       searchKey = "q"
 
@@ -20,15 +20,15 @@ export default class extends React.Component {
   }
 
   href() {
-    var currentParams = qs.parse(window.location.search.substr(1))
+    const currentParams = qs.parse(window.location.search.substr(1))
 
     if (!currentParams[this.state.searchKey])
       currentParams[this.state.searchKey] = {}
 
     currentParams[this.state.searchKey]["s"] = `${this.attribute()} ${this.sortMode()}`
 
-    var newParams = qs.stringify(currentParams)
-    var newPath = `${location.pathname}?${newParams}`
+    const newParams = qs.stringify(currentParams)
+    const newPath = `${location.pathname}?${newParams}`
 
     return newPath
   }
@@ -44,8 +44,8 @@ export default class extends React.Component {
   }
 
   render() {
-    var LinkComponent = this.linkComponent()
-    var { attribute, className, linkComponent, query, title, ...other } = this.props
+    const LinkComponent = this.linkComponent()
+    const { attribute, className, linkComponent, query, title, ...other } = this.props
 
     return (
       <LinkComponent {...other} className={this.className()} data-attribute={attribute} data-sort-mode={this.sortMode()} to={this.href()}>
@@ -55,7 +55,7 @@ export default class extends React.Component {
   }
 
   className() {
-    var classNames = ["component-api-maker-bootstrap-sort-link"]
+    const classNames = ["component-api-maker-bootstrap-sort-link"]
 
     if (this.props.className)
       classNames.push(this.props.className)
