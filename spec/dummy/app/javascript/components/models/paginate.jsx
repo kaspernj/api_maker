@@ -24,9 +24,9 @@ export default class ModelsPaginate extends React.Component {
   async loadTasks() {
     this.setState({currentHref: location.href})
 
-    var params = Params.parse()
-    var query = Task.ransack(params.tasks_q).searchKey("tasks_q").page(params.tasks_page).pageKey("tasks_page")
-    var result = await query.result()
+    const params = Params.parse()
+    const query = Task.ransack(params.tasks_q).searchKey("tasks_q").page(params.tasks_page).pageKey("tasks_page")
+    const result = await query.result()
 
     this.setState({
       query,
@@ -44,7 +44,7 @@ export default class ModelsPaginate extends React.Component {
   }
 
   content() {
-    var { query, result, tasks } = this.state
+    const { query, result, tasks } = this.state
 
     return (
       <div className="content-container">

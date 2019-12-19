@@ -9,8 +9,8 @@ export default class DeviseSignInController extends Controller {
 
     Devise.signIn(this.emailTarget.value, this.passwordTarget.value, {rememberMe: this.rememberTarget.checked})
       .then((deviseSignInResponse) => {
-        var currentUserResult = Devise.currentUser()
-        var isUserSignedInResult = Devise.isUserSignedIn()
+        const currentUserResult = Devise.currentUser()
+        const isUserSignedInResult = Devise.isUserSignedIn()
 
         this.element.dataset["successResponse"] = JSON.stringify({
           deviseSignInResponse,

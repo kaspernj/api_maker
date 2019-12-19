@@ -2,7 +2,6 @@ import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
 import CommandsPool from "./commands-pool"
 import CustomError from "./custom-error"
-import EventEmitter from "events"
 import FormDataToObject from "./form-data-to-object"
 import ModelName from "./model-name"
 import Money from "js-money"
@@ -114,7 +113,8 @@ export default class BaseModel {
     }
   }
 
-  async create() {
+  async create(attributes, options) {
+    if (attributes) this.assignAttributes(attributes)
     const paramKey = this.modelClassData().paramKey
     const modelData = this.getAttributes()
     const dataToUse = {}
@@ -124,7 +124,7 @@ export default class BaseModel {
     try {
       response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "create"}, {})
     } catch (error) {
-      this.parseValidationErrors(error)
+      this.parseValidationErrors(error, options)
       throw error
     }
 
@@ -136,14 +136,14 @@ export default class BaseModel {
     return {model: this, response: response}
   }
 
-  async createRaw(data) {
+  async createRaw(data, options) {
     const formData = FormDataToObject.toObject(data)
     let response
 
     try {
       response = await CommandsPool.addCommand({args: formData, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "create"}, {})
     } catch (error) {
-      this.parseValidationErrors(error)
+      this.parseValidationErrors(error, options)
       throw error
     }
 
@@ -153,11 +153,6 @@ export default class BaseModel {
     }
 
     return {model: this, response: response}
-  }
-
-  eventEmitter() {
-    if (!this.eventEmitterInstance) this.eventEmitterInstance = new EventEmitter()
-    return this.eventEmitterInstance
   }
 
   handleResponseError(response) {
@@ -165,16 +160,20 @@ export default class BaseModel {
     throw new new CustomError("Response wasn't successful", {model: this, response: response})
   }
 
-  parseValidationErrors(error) {
+  parseValidationErrors(error, options) {
     if (!(error instanceof CustomError)) return
 
     const validationErrors = error.args.response.validation_errors
-    if (validationErrors) this.sendValidationErrorsEvent(validationErrors)
+    if (validationErrors) this.sendValidationErrorsEvent(validationErrors, options)
   }
 
-  sendValidationErrorsEvent(validationErrors) {
+  sendValidationErrorsEvent(validationErrors, options) {
     const validationErrorsInstance = new ValidationErrors({model: this, validationErrors: validationErrors})
-    this.eventEmitter().emit("validation-errors", [{validationErrors: validationErrorsInstance}])
+
+    if (options && options.form) {
+      const event = new CustomEvent("validation-errors", {detail: validationErrorsInstance})
+      options.form.dispatchEvent(event)
+    }
   }
 
   async destroy() {
@@ -322,15 +321,15 @@ export default class BaseModel {
     }
   }
 
-  saveRaw(rawData) {
+  saveRaw(rawData, options) {
     if (this.isNewRecord()) {
-      return this.createRaw(rawData)
+      return this.createRaw(rawData, options)
     } else {
-      return this.updateRaw(rawData)
+      return this.updateRaw(rawData, options)
     }
   }
 
-  async update(newAttributes = null) {
+  async update(newAttributes, options) {
     if (newAttributes)
       this.assignAttributes(newAttributes)
 
@@ -346,7 +345,7 @@ export default class BaseModel {
     try {
       response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "update"}, {})
     } catch (error) {
-      this.parseValidationErrors(error)
+      this.parseValidationErrors(error, options)
       throw error
     }
 
@@ -356,20 +355,20 @@ export default class BaseModel {
         this.changes = {}
       }
 
-      return {"model": this, "response": response}
+      return {response, model: this}
     } else {
       handleResponseError(response)
     }
   }
 
-  async updateRaw(data) {
+  async updateRaw(data, options) {
     const formData = FormDataToObject.toObject(data)
     let response
 
     try {
       response = await CommandsPool.addCommand({args: formData, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "update"}, {})
     } catch (error) {
-      this.parseValidationErrors(error)
+      this.parseValidationErrors(error, options)
       throw error
     }
 
@@ -378,7 +377,7 @@ export default class BaseModel {
       this.changes = {}
     }
 
-    return {model: this, response: response}
+    return {response, model: this}
   }
 
   isValid() {

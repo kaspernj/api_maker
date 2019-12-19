@@ -19,7 +19,7 @@ export default class DisplayNotification {
     if (!("delay" in args))
       args["delay"] = 3000
 
-    var pnotify = new PNotify(args)
+    const pnotify = new PNotify(args)
     pnotify.get().click(() => {
       pnotify.remove()
     })

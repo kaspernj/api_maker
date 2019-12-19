@@ -17,7 +17,7 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
   }
 
   content() {
-    var { user } = this.state
+    const { user } = this.state
 
     return (
       <div className="content-container">
@@ -32,8 +32,8 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    var formData = new FormData(this.refs.form)
-    var { user } = this.state
+    const formData = new FormData(this.refs.form)
+    const { user } = this.state
 
     user.saveRaw(formData).then(() => {
       console.log("User was saved")

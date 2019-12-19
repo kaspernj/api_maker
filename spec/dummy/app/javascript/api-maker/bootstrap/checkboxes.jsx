@@ -1,3 +1,4 @@
+import EventListener from "api-maker/event-listener"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -15,15 +16,39 @@ export default class BootstrapCheckboxes extends React.Component {
     options: PropTypes.array.isRequired
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      validationErrors: []
+    }
+  }
+
+  componentDidMount() {
+    this.setForm()
+  }
+
+  componentDidUpdate() {
+    this.setForm()
+  }
+
+  setForm() {
+    const form = this.refs.hiddenInput && this.refs.hiddenInput.form
+    if (form != this.state.form) this.setState({form})
+  }
+
   render() {
+    const { form, validationErrors } = this.state
+
     return (
       <div className="component-bootstrap-checkboxes form-group">
+        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         <label className={this.labelClassName()}>
           {this.label()}
         </label>
 
-        <input name={this.inputName()} type="hidden" value="" />
+        <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
         {this.props.options.map((option, index) => this.optionElement(option, index))}
+        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors.map(validationError => validationError.message)} />}
       </div>
     )
   }
@@ -81,6 +106,12 @@ export default class BootstrapCheckboxes extends React.Component {
 
   generatedId() {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+  }
+
+  onValidationErrors(event) {
+    const validationErrors = event.detail
+    const relevantValidationErrors = validationErrors.getValidationErrorsForName(this.props.attribute, this.inputName())
+    this.setState({validationErrors: relevantValidationErrors})
   }
 
   optionElement(option) {

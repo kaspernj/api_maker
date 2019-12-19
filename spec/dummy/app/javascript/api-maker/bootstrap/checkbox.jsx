@@ -1,3 +1,4 @@
+import EventListener from "api-maker/event-listener"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -27,12 +28,34 @@ export default class BootstrapCheckbox extends React.Component {
     zeroInput: PropTypes.bool
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      validationErrors: []
+    }
+  }
+
+  componentDidMount() {
+    this.setForm()
+  }
+
+  componentDidUpdate() {
+    this.setForm()
+  }
+
+  setForm() {
+    const form = this.refs.input && this.refs.input.form
+    if (form != this.state.form) this.setState({form})
+  }
+
   render() {
     const { defaultValue, zeroInput } = this.props
+    const { form, validationErrors } = this.state
     const id = this.inputId()
 
     return (
       <div className={this.wrapperClassName()}>
+        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         <div className="form-check">
           {zeroInput &&
             <input defaultValue="0" name={this.inputName()} type="hidden" type="hidden" />
@@ -61,6 +84,7 @@ export default class BootstrapCheckbox extends React.Component {
             {this.props.hint}
           </p>
         }
+        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors.map(validationError => validationError.message)} />}
       </div>
     )
   }
@@ -107,13 +131,10 @@ export default class BootstrapCheckbox extends React.Component {
     }
   }
 
-  wrapperClassName() {
-    const classNames = ["component-bootstrap-checkbox"]
-
-    if (this.props.wrapperClassName)
-      classNames.push(this.props.wrapperClassName)
-
-    return classNames.join(" ")
+  onValidationErrors(event) {
+    const validationErrors = event.detail
+    const relevantValidationErrors = validationErrors.getValidationErrorsForName(this.props.attribute, this.inputName())
+    this.setState({validationErrors: relevantValidationErrors})
   }
 
   label() {
@@ -129,6 +150,15 @@ export default class BootstrapCheckbox extends React.Component {
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
+
+    return classNames.join(" ")
+  }
+
+  wrapperClassName() {
+    const classNames = ["component-bootstrap-checkbox"]
+
+    if (this.props.wrapperClassName)
+      classNames.push(this.props.wrapperClassName)
 
     return classNames.join(" ")
   }

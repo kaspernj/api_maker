@@ -5,9 +5,9 @@ export default class extends Controller {
   connect() {
     Project.find(this.element.dataset.projectId).then((project) => {
       project.tasks().toArray().then((tasks) => {
-        var result = []
-        for(var key in tasks) {
-          var task = tasks[key]
+        const result = []
+        for(const key in tasks) {
+          const task = tasks[key]
           result.push({"id": task.id(), "name": task.name()})
         }
 

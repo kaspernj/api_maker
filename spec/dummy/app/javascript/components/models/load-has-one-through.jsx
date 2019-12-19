@@ -8,7 +8,7 @@ export default class ModelsLoadHasOneThrough extends React.Component {
   }
 
   async componentDidMount() {
-    var task = await Task.find(this.props.match.params.task_id)
+    const task = await Task.find(this.props.match.params.task_id)
 
     await task.loadAccount()
 
@@ -27,7 +27,7 @@ export default class ModelsLoadHasOneThrough extends React.Component {
   }
 
   content() {
-    var { account, task } = this.state
+    const { account, task } = this.state
 
     return (
       <div className="content-container" data-account-id={account.id()} data-task-id={task.id()}>

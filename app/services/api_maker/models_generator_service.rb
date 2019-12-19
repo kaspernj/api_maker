@@ -55,7 +55,7 @@ private
       event-updated.jsx error-logger.js form-data-to-object.js included.js key-value-store.js logger.js model-name.js models-response-reader.js
       params.js result.js event-connection.jsx paginate.jsx sort-link.jsx updated-attribute.jsx resource-routes.jsx resource-route.jsx
       session-status-updater.js validation-errors.js bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/card.jsx
-      bootstrap/checkbox.jsx bootstrap/checkboxes.jsx bootstrap/money-input.jsx bootstrap/radio-buttons.jsx
+      bootstrap/checkbox.jsx bootstrap/checkboxes.jsx bootstrap/invalid-feedback.jsx bootstrap/money-input.jsx bootstrap/radio-buttons.jsx
       bootstrap/select.jsx bootstrap/string-input.jsx bootstrap/live-table.jsx
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")

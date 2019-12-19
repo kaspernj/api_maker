@@ -18,19 +18,19 @@ export default class Layout extends React.Component {
   }
 
   async loadAccount() {
-    var account = await Account.ransack().first()
+    const account = await Account.ransack().first()
     this.setState({account})
   }
 
   async loadTask() {
-    var tasks = await Task.ransack().toArray()
-    var task = tasks[0]
+    const tasks = await Task.ransack().toArray()
+    const task = tasks[0]
 
     this.setState({task})
   }
 
   render() {
-    var { account, task } = this.state
+    const { account, task } = this.state
 
     return (
       <div className={this.className()}>
@@ -86,7 +86,7 @@ export default class Layout extends React.Component {
   }
 
   className() {
-    var classNames = ["component-layout"]
+    const classNames = ["component-layout"]
 
     if (this.props.className)
       classNames.push(this.props.className)

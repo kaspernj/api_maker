@@ -11,8 +11,8 @@ export default class extends Controller {
     })
 
     // Test changing an attribute and then changing it back to its original value
-    var result = {}
-    var project = new Project({name: "not-renamed"})
+    const result = {}
+    const project = new Project({name: "not-renamed"})
 
     result.initialChanged = project.isChanged()
     result.initialChanges = JSON.parse(JSON.stringify(project.changes))
