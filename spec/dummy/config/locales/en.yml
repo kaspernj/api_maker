@@ -2,9 +2,9 @@ en:
   activerecord:
     attributes:
       project:
-        account: Konto
-        name: Navn
+        account: Account
+        name: Name
       task:
-        name: Navn
+        name: Name
       user:
         email: Email
