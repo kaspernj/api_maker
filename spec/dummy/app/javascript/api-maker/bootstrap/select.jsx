@@ -177,8 +177,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   onValidationErrors(args) {
-    const { attribute, model } = this.props
-    const validationErrors = args.validationErrors.getValidationErrorsForName({name: this.inputName()})
+    const validationErrors = args.validationErrors.getValidationErrorsForName(this.inputName())
     this.setState({ validationErrors })
   }
 
