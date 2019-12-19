@@ -8,12 +8,14 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
   end
 
   def execute
-    inspect_model(model, "root", nil)
-    inspect_params(model, params)
+    path = [model.model_name.singular]
+
+    inspect_model(model, path)
+    inspect_params(model, params, path)
     ServicePattern::Response.new(result: result)
   end
 
-  def inspect_model(model, finder, finder_value) # rubocop:disable Metrics/AbcSize
+  def inspect_model(model, path) # rubocop:disable Metrics/AbcSize
     return if model.errors.empty?
 
     model_name = model.model_name.plural
@@ -23,26 +25,17 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     model.errors.details.each do |attribute_name, errors|
       next if !model_attribute_names.include?(attribute_name.to_s) && !model_reflection_names.include?(attribute_name.to_s)
 
+      attribute_path = path + [attribute_name]
+      input_name = path_to_attribute_name(attribute_path)
+
       errors.each_with_index do |error, error_index|
-        result[model_name] ||= []
-
-        model_result = result[model_name].find do |model_result_i|
-          model_result_i.fetch(:finder) == finder &&
-            model_result_i.fetch(:finder_value) == finder_value
-        end
-
-        unless model_result
-          model_result ||= {
-            finder: finder,
-            finder_value: finder_value,
-            id: model.id
-          }
-          result[model_name] << model_result
-        end
-
-        model_result[:attributes] ||= {}
-        model_result[:attributes][attribute_name] ||= []
-        model_result[:attributes][attribute_name] << {
+        result[input_name] ||= {
+          attribute: attribute_name,
+          id: model.id,
+          model: model_name,
+          errors: []
+        }
+        result[input_name][:errors] << {
           message: model.errors.messages.fetch(attribute_name).fetch(error_index),
           type: error.fetch(:error)
         }
@@ -50,27 +43,56 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     end
   end
 
-  def inspect_params(model, params)
+  def inspect_params(model, params, path)
     params.each do |attribute_name, attribute_value|
       match = attribute_name.match(/\A(.+)_attributes\Z/)
       next unless match
 
       association_name = match[1].to_sym
       association = model.association(association_name)
-      models_up_next = association.target
 
-      if models_up_next.length != attribute_value.keys.length
-        raise "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.keys.length}"
+      path << attribute_name
+
+      if all_keys_numeric?(attribute_value)
+        # This is a has-many relationship where keys are mapped to attributes
+        check_nested_many_models_for_validation_errors(association.target, attribute_value, path)
+      else
+        inspect_model(association.target, path)
       end
 
-      count = 0
-      attribute_value.each do |unique_key, model_attribute_values|
-        model_up_next = models_up_next.fetch(count)
-        count += 1
-
-        inspect_model(model_up_next, "unique-key", unique_key)
-        inspect_params(model_up_next, model_attribute_values)
-      end
+      path.pop
     end
+  end
+
+  def all_keys_numeric?(hash)
+    hash.keys.all? { |key| key.to_s.match?(/\A\d+\Z/) }
+  end
+
+  def check_nested_many_models_for_validation_errors(models_up_next, attribute_value, path)
+    if models_up_next.length != attribute_value.keys.length
+      raise "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.keys.length}"
+    end
+
+    count = 0
+    attribute_value.each do |unique_key, model_attribute_values|
+      model_up_next = models_up_next.fetch(count)
+      count += 1
+
+      path << unique_key
+      inspect_model(model_up_next, path)
+      inspect_params(model_up_next, model_attribute_values, path)
+      path.pop
+    end
+  end
+
+  def path_to_attribute_name(original_attribute_path)
+    attribute_path = original_attribute_path.dup
+    path_string = attribute_path.shift.dup
+
+    attribute_path.each do |path_part|
+      path_string << "[#{path_part}]"
+    end
+
+    path_string
   end
 end

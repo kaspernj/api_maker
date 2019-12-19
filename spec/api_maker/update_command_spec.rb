@@ -39,18 +39,12 @@ describe ApiMaker::UpdateCommand do
     helper.execute!
 
     expect(command.result.fetch(:validation_errors)).to eq(
-      "tasks" => [
-        {
-          finder: "unique-key",
-          finder_value: "124",
-          id: nil,
-          attributes: {
-            name: [
-              {type: :blank, message: "can't be blank"}
-            ]
-          }
-        }
-      ]
+      "user[tasks_attributes][124][name]" => {
+        attribute: :name,
+        errors: [{type: :blank, message: "can't be blank"}],
+        id: nil,
+        model: "tasks"
+      }
     )
   end
 end

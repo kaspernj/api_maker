@@ -3,7 +3,7 @@ import Collection from "../collection"
 
 export default class Project extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"created_at","type":"datetime"},{"name":"price_per_hour","type":"money"}],"collectionKey":"projects","collectionName":"projects","i18nKey":"project","name":"Project","pluralName":"projects","relationships":[{"className":"ProjectDetail","collectionName":"project-details","name":"project_detail","macro":"has_one"},{"className":"Task","collectionName":"tasks","name":"tasks","macro":"has_many"}],"paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
+    return {"attributes":[{"name":"account_id","type":"integer"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"created_at","type":"datetime"},{"name":"price_per_hour","type":"money"}],"collectionKey":"projects","collectionName":"projects","i18nKey":"project","name":"Project","pluralName":"projects","relationships":[{"className":"ProjectDetail","collectionName":"project-details","name":"project_detail","macro":"has_one"},{"className":"Task","collectionName":"tasks","name":"tasks","macro":"has_many"}],"paramKey":"project","path":"/api_maker/projects","primaryKey":"id"}
   }
 
   
@@ -29,6 +29,19 @@ export default class Project extends BaseModel {
     
   
 
+  
+    
+    accountId() {
+      // integer
+      
+        return this._getAttribute("account_id")
+      
+    }
+
+    hasAccountId() {
+      let value = this.accountId()
+      return this._isPresent(value)
+    }
   
     
     id() {

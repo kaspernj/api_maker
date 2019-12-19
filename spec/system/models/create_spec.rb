@@ -1,12 +1,13 @@
 require "rails_helper"
 
 describe "model create" do
+  let(:account) { create :account }
   let(:user) { create :user }
 
   it "creates a model" do
     login_as user
 
-    visit models_create_path
+    visit models_create_path(account_id: account.id)
 
     wait_for_path models_create_path
 

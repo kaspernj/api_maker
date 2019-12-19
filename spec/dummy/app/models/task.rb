@@ -15,4 +15,6 @@ class Task < ApplicationRecord
   has_one :project_detail, through: :project
 
   validates :name, presence: true
+
+  accepts_nested_attributes_for :project
 end
