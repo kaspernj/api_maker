@@ -92,7 +92,7 @@ export default class BootstrapSelect extends React.Component {
           data-hide-search={this.props.hideSearch}
           data-placeholder={this.props.placeholder}
           defaultValue={this.inputDefaultValue()}
-          className={`form-control ${this.props.className}`}
+          className={this.selectClassName()}
           disabled={this.props.disabled}
           id={this.inputId()}
           multiple={this.props.multiple}
@@ -182,8 +182,19 @@ export default class BootstrapSelect extends React.Component {
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrors(this.props.attribute, this.inputName())
+    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
     this.setState({validationErrors})
+  }
+
+  selectClassName() {
+    const classNames = ["form-control"]
+
+    if (this.props.className) classNames.push(this.props.className)
+
+    if (this.state.validationErrors.length > 0)
+      classNames.push("is-invalid")
+
+    return classNames.join(" ")
   }
 
   wrapperClassName() {

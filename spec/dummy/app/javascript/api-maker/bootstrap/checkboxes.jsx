@@ -64,6 +64,15 @@ export default class BootstrapCheckboxes extends React.Component {
     }
   }
 
+  inputCheckboxClassName() {
+    const classNames = []
+
+    if (this.state.validationErrors.length > 0)
+      classNames.push("is-invalid")
+
+    return classNames.join(" ")
+  }
+
   inputName() {
     if (this.props.name) {
       return `${this.props.name}[]`
@@ -109,7 +118,7 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrors(this.props.attribute, this.inputName())
+    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
     this.setState({validationErrors})
   }
 
@@ -119,12 +128,14 @@ export default class BootstrapCheckboxes extends React.Component {
     return (
       <div className="checkboxes-option" key={`option-${option[1]}`}>
         <input
+          className={this.inputCheckboxClassName()}
           data-option-value={option[1]}
           defaultChecked={this.isDefaultSelected(option[1])}
           id={id}
           name={this.inputName()}
           type="checkbox"
-          value={option[1]} />
+          value={option[1]}
+        />
 
         <label className="ml-1" htmlFor={id}>
           {option[0]}
