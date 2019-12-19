@@ -236,7 +236,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   onValidationErrors(args) {
-    const validationErrors = args.validationErrors.getValidationErrorsForName(this.inputName())
+    const validationErrors = args.validationErrors.getValidationErrorsForName(this.props.attribute, this.inputName())
     this.setState({ validationErrors })
   }
 

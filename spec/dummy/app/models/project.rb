@@ -2,7 +2,7 @@ require "money-rails"
 MoneyRails::Hooks.init
 
 class Project < ApplicationRecord
-  belongs_to :account, inverse_of: :projects, optional: true
+  belongs_to :account, inverse_of: :projects
 
   has_many :project_secrets, dependent: :destroy
   has_many :tasks, dependent: :destroy, inverse_of: :project

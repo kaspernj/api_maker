@@ -16,6 +16,7 @@ export default class ModelsValidationErrors extends React.Component {
 
   componentDidMount() {
     const params = Params.parse()
+    this.loadAccounts()
 
     if (params.id) {
       this.loadUser(params)
@@ -33,6 +34,11 @@ export default class ModelsValidationErrors extends React.Component {
     }
   }
 
+  async loadAccounts() {
+    const accounts = await Account.ransack({s: "name"}).toArray()
+    this.setState({accounts})
+  }
+
   async loadUser(params) {
     const user = await User
       .ransack({id_eq: params.id})
@@ -43,11 +49,11 @@ export default class ModelsValidationErrors extends React.Component {
   }
 
   render() {
-    const { tasks, user } = this.state
+    const { accounts, tasks, user } = this.state
 
     return (
       <Layout className="component-models-validation-errors">
-        {tasks && user && this.content()}
+        {accounts && tasks && user && this.content()}
       </Layout>
     )
   }
@@ -90,6 +96,7 @@ export default class ModelsValidationErrors extends React.Component {
   }
 
   projectFieldsForTask(user, task) {
+    const { accounts } = this.state
     let project
 
     if (task.project()) {
@@ -116,6 +123,17 @@ export default class ModelsValidationErrors extends React.Component {
           name={`user[tasks_attributes][${task.uniqueKey()}][project_attributes][name]`}
           savingModel={user}
           wrapperClassName={`project-name-${project.id()}`}
+        />
+        <Select
+          attribute="accountId"
+          id={`project_account_${project.id()}`}
+          includeBlank
+          label="Account"
+          model={project}
+          name={`user[tasks_attributes][${task.uniqueKey()}][project_attributes][account_id]`}
+          options={accounts.map(account => [account.name(), account.id()])}
+          savingModel={user}
+          wrapperClassName={`project-account-${project.id()}`}
         />
       </div>
     )
