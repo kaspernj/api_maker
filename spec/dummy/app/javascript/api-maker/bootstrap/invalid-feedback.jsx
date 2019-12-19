@@ -9,8 +9,6 @@ export default class ApiMakerBootstrapInvalidFeedback extends React.Component {
   render() {
     const { errors } = this.props
 
-    console.log({ errors })
-
     return (
       <div className="invalid-feedback">
         {errors.map(error => error.getErrorMessage()).join(". ")}
