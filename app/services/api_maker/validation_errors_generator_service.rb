@@ -15,10 +15,9 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     ServicePattern::Response.new(result: result)
   end
 
-  def inspect_model(model, path) # rubocop:disable Metrics/AbcSize
+  def inspect_model(model, path)
     return if model.errors.empty?
 
-    model_name = model.model_name.plural
     model_attribute_names = model.attribute_names
     model_reflection_names = model._reflections.keys
 
