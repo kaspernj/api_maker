@@ -83,7 +83,6 @@ export default class ModelsValidationErrors extends React.Component {
                 label="Name"
                 name={`user[tasks_attributes][${task.uniqueKey()}][name]`}
                 model={task}
-                savingModel={user}
                 wrapperClassName={`task-name-${task.id()}`}
               />
               {this.projectFieldsForTask(user, task)}
@@ -121,7 +120,6 @@ export default class ModelsValidationErrors extends React.Component {
           label="Project name"
           model={project}
           name={`user[tasks_attributes][${task.uniqueKey()}][project_attributes][name]`}
-          savingModel={user}
           wrapperClassName={`project-name-${project.id()}`}
         />
         <Select
@@ -132,7 +130,6 @@ export default class ModelsValidationErrors extends React.Component {
           model={project}
           name={`user[tasks_attributes][${task.uniqueKey()}][project_attributes][account_id]`}
           options={accounts.map(account => [account.name(), account.id()])}
-          savingModel={user}
           wrapperClassName={`project-account-${project.id()}`}
         />
       </div>
@@ -146,7 +143,7 @@ export default class ModelsValidationErrors extends React.Component {
     const { user } = this.state
 
     try {
-      await user.saveRaw(formData)
+      await user.saveRaw(formData, {form: e.target})
     } catch(error) {
       DisplayNotification.error(error)
     }

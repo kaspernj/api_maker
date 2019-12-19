@@ -1,3 +1,5 @@
+import EventListener from "api-maker/event-listener"
+import InvalidFeedback from "./invalid-feedback"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
 
@@ -17,11 +19,35 @@ export default class BootstrapRadioButtons extends React.Component {
     wrapperClassName: PropTypes.string
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
+  componentDidMount() {
+    this.setForm()
+  }
+
+  componentDidUpdate() {
+    this.setForm()
+  }
+
+  setForm() {
+    const form = this.refs.hiddenInput && this.refs.hiddenInput.form
+    if (form != this.state.form) this.setState({form})
+  }
+
   render() {
+    const { form, validationErrors } = this.state
+
     return (
       <div className={this.wrapperClassName()}>
-        <input name={this.inputName()} type="hidden" value="" />
+        {form &&
+          <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />
+        }
+        <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
         {this.props.collection.map(option => this.optionElement(option))}
+        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors.map(validationError => validationError.message)} />}
       </div>
     )
   }
@@ -49,8 +75,14 @@ export default class BootstrapRadioButtons extends React.Component {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
   }
 
+  onValidationErrors(event) {
+    const validationErrors = event.detail
+    const relevantValidationErrors = validationErrors.getValidationErrorsForName(this.props.attribute, this.inputName())
+    this.setState({validationErrors: relevantValidationErrors})
+  }
+
   optionElement(option) {
-    let id = this.generatedId()
+    const id = this.generatedId()
 
     return (
       <div key={`option-${option[1]}`}>

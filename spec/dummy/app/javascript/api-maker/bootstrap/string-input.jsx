@@ -1,4 +1,5 @@
-import EventEmitterListener from "api-maker/event-emitter-listener"
+import EventListener from "api-maker/event-listener"
+import InvalidFeedback from "./invalid-feedback"
 import MoneyInput from "./money-input"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
@@ -24,7 +25,6 @@ export default class BootstrapStringInput extends React.Component {
     labelClassName: PropTypes.string,
     maxLength: PropTypes.number,
     model: PropTypes.object,
-    savingModel: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
     onKeyUp: PropTypes.func,
@@ -44,14 +44,25 @@ export default class BootstrapStringInput extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.setForm()
+  }
+
+  componentDidUpdate() {
+    this.setForm()
+  }
+
+  setForm() {
+    const form = this.refs.input && this.refs.input.form
+    if (form != this.state.form) this.setState({form})
+  }
+
   render() {
-    const { validationErrors } = this.state
+    const { form, validationErrors } = this.state
 
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
-        {this.savingModel() &&
-          <EventEmitterListener events={this.savingModel().eventEmitter()} event="validation-errors" onCalled={args => this.onValidationErrors(args)} />
-        }
+        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         {this.label() &&
           <label className={this.labelClassName()} htmlFor={this.inputId()}>
             {this.label()}
@@ -122,11 +133,7 @@ export default class BootstrapStringInput extends React.Component {
                 </span>
               </div>
             }
-            {validationErrors.length > 0 &&
-              <div className="invalid-feedback">
-                {validationErrors.map(validationError => validationError.message).join(". ")}
-              </div>
-            }
+            {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors.map(validationError => validationError.message)} />}
           </div>
         }
         {this.props.hintBottom &&
@@ -225,19 +232,16 @@ export default class BootstrapStringInput extends React.Component {
     if (onChange) onChange(e)
   }
 
-  savingModel() {
-    return this.props.savingModel || this.props.model
-  }
-
   // This fixes an issue in Firefox and ActiveStorage, where uploads would be a blank string if a file wasn't chosen
   getBlankInputName() {
     const value = this.refs.input.value
     return (this.props.type == "file" && value == "")
   }
 
-  onValidationErrors(args) {
-    const validationErrors = args.validationErrors.getValidationErrorsForName(this.props.attribute, this.inputName())
-    this.setState({ validationErrors })
+  onValidationErrors(event) {
+    const validationErrors = event.detail
+    const relevantValidationErrors = validationErrors.getValidationErrorsForName(this.props.attribute, this.inputName())
+    this.setState({validationErrors: relevantValidationErrors})
   }
 
   wrapperClassName() {
