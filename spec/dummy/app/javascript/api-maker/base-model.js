@@ -163,6 +163,7 @@ export default class BaseModel {
 
   parseValidationErrors(error, options) {
     if (!(error instanceof CustomError)) return
+    if (!error.args.response.validation_errors) return
 
     const validationErrors = new ValidationErrors({
       model: this,
