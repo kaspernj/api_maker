@@ -49,9 +49,7 @@ export default class BootstrapCheckboxes extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    const formData = new FormData(this.refs.form)
-
-    this.state.account.saveRaw(formData).then(() => {
+    this.state.account.saveRaw(e.target).then(() => {
       console.log("Account was saved")
     }, (response) => {
       console.log("Account couldnt be saved")
