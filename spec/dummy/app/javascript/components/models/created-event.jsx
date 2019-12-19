@@ -11,7 +11,7 @@ export default class ModelsCreatedEvent extends React.Component {
   }
 
   render() {
-    var { tasks } = this.state
+    const { tasks } = this.state
 
     return (
       <Layout className="component-models-created-event">

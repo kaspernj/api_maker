@@ -9,8 +9,8 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
   }
 
   async loadTask() {
-    var params = Params.parse()
-    var task = await Task.find(params.task_id)
+    const params = Params.parse()
+    const task = await Task.find(params.task_id)
     this.setState({task})
   }
 
@@ -23,7 +23,7 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
   }
 
   content() {
-    var { task } = this.state
+    const { task } = this.state
 
     return (
       <div className="content-container">
@@ -38,8 +38,8 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    var formData = new FormData(this.refs.form)
-    var { task } = this.state
+    const formData = new FormData(this.refs.form)
+    const { task } = this.state
 
     task.saveRaw(formData).then(() => {
       console.log("Task was saved")

@@ -186,7 +186,7 @@ end
 ```js
 import Task from "api-maker/models/task"
 
-var task = new Task()
+const task = new Task()
 task.assignAttributes({name: "New task"})
 task.create().then(status => {
   if (status.success) {
@@ -244,7 +244,7 @@ task.destroy().then(status => {
 
 ```js
 Task.ransack().preload("project.customer").toArray().then(tasks => {
-  for(var task of tasks) {
+  for(const task of tasks) {
     console.log(`Project of task ${task.id()}: ${task.project().name()}`)
     console.log(`Customer of task ${task.id()}: ${task.project().customer().name()}`)
   }
@@ -263,7 +263,7 @@ Task.ransack({name_cont: "something"}).toArray().then(tasks => {
 
 Distinct:
 ```js
-var tasks = await Task.ransack({relationships_something_eq: "something"}).distinct().toArray()
+const tasks = await Task.ransack({relationships_something_eq: "something"}).distinct().toArray()
 ```
 
 ### Selecting only specific attributes
@@ -292,8 +292,8 @@ A `has many` relationship will return a collection the queries the sub models.
 project.tasks().toArray().then(tasks => {
   console.log(`Project ${project.id()} has ${tasks.length} tasks`)
 
-  for(var key in tasks) {
-    var task = tasks[key]
+  for(const key in tasks) {
+    const task = tasks[key]
     console.log(`Task ${task.id()} is named: ${task.name()}`)
   }
 })
@@ -352,7 +352,7 @@ user.api_maker_event("new_message", message: "Hello world")
 
 Receive the event in JavaScript:
 ```js
-var user = await User.find(5)
+const user = await User.find(5)
 user.connect("new_message", args => {
   console.log(`New message: ${args.message}`)
 })

@@ -9,13 +9,12 @@ export default class ModelsDestroyEvent extends React.Component {
   }
 
   async componentDidMount() {
-    var tasks = await Task.ransack().toArray()
-    // console.error(JSON.stringify(tasks))
+    const tasks = await Task.ransack().toArray()
     this.setState({tasks})
   }
 
   render() {
-    var { tasks } = this.state
+    const { tasks } = this.state
 
     return (
       <div className="component-models-destroy-event">

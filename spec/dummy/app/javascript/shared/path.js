@@ -1,13 +1,13 @@
 export default class Path {
   static localized(pathName, params, args = {}) {
     if (args.locale) {
-      var locale = args.locale
+      const locale = args.locale
     } else {
-      var locale = I18n.locale
+      const locale = I18n.locale
     }
 
-    var methodName = `${pathName}${Inflection.camelize(locale)}Path`
-    var method = Routes[methodName]
+    const methodName = `${pathName}${Inflection.camelize(locale)}Path`
+    const method = Routes[methodName]
 
     if (!method)
       throw `No such method: ${methodName}`
@@ -16,9 +16,9 @@ export default class Path {
   }
 
   static localizedUrl(pathName, params) {
-    var locale = document.querySelector("html").getAttribute("lang")
-    var methodName = `${pathName}${Inflection.camelize(locale)}Url`
-    var method = Routes[methodName]
+    const locale = document.querySelector("html").getAttribute("lang")
+    const methodName = `${pathName}${Inflection.camelize(locale)}Url`
+    const method = Routes[methodName]
 
     if (!method)
       throw `No such method: ${methodName}`
