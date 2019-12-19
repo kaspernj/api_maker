@@ -29,7 +29,9 @@ export default class BootstrapCheckbox extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      validationErrors: []
+    }
   }
 
   componentDidMount() {
