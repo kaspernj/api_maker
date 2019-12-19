@@ -139,11 +139,10 @@ export default class ModelsValidationErrors extends React.Component {
   async onSubmit(e) {
     e.preventDefault()
 
-    const formData = new FormData(e.target)
     const { user } = this.state
 
     try {
-      await user.saveRaw(formData, {form: e.target})
+      await user.saveRaw(e.target)
     } catch(error) {
       DisplayNotification.error(error)
     }

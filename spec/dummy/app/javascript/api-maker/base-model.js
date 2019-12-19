@@ -136,12 +136,13 @@ export default class BaseModel {
     return {model: this, response: response}
   }
 
-  async createRaw(data, options) {
-    const formData = FormDataToObject.toObject(data)
+  async createRaw(rawData, options = {}) {
+    const formData = FormDataToObject.formDataFromObject(rawData, options)
+    const objectData = FormDataToObject.toObject(formData)
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: formData, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "create"}, {})
+      response = await CommandsPool.addCommand({args: objectData, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "create"}, {})
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error
@@ -321,7 +322,7 @@ export default class BaseModel {
     }
   }
 
-  saveRaw(rawData, options) {
+  saveRaw(rawData, options = {}) {
     if (this.isNewRecord()) {
       return this.createRaw(rawData, options)
     } else {
@@ -361,12 +362,13 @@ export default class BaseModel {
     }
   }
 
-  async updateRaw(data, options) {
-    const formData = FormDataToObject.toObject(data)
+  async updateRaw(rawData, options = {}) {
+    const formData = FormDataToObject.formDataFromObject(rawData, options)
+    const objectData = FormDataToObject.toObject(formData)
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: formData, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "update"}, {})
+      response = await CommandsPool.addCommand({args: objectData, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "update"}, {})
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error

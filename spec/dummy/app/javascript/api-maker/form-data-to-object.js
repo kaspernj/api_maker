@@ -8,6 +8,17 @@ export default class FormDataToObject {
     this.formData = formData
   }
 
+  static formDataFromObject(object, options) {
+    if (object instanceof FormData) {
+      return object
+    } else if(object.nodeName == "FORM") {
+      if (options) options["form"] = object
+      return new FormData(object)
+    } else {
+      throw new Error("Didnt know how to get form data from that object")
+    }
+  }
+
   toObject() {
     const result = {}
 

@@ -21,7 +21,7 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
 
     return (
       <div className="content-container">
-        <form onSubmit={(e) => this.onSubmit(e)} ref="form">
+        <form onSubmit={(e) => this.onSubmit(e)}>
           <StringInput attribute="birthdayAt" label="Birthday" model={user} type="date" />
           <input type="submit" value="Save" />
         </form>
@@ -32,10 +32,9 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    const formData = new FormData(this.refs.form)
     const { user } = this.state
 
-    user.saveRaw(formData).then(() => {
+    user.saveRaw(e.target).then(() => {
       console.log("User was saved")
     }, (response) => {
       console.log("Error!")
