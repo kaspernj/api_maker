@@ -133,7 +133,7 @@ export default class BootstrapStringInput extends React.Component {
                 </span>
               </div>
             }
-            {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors.map(validationError => validationError.message)} />}
+            {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
           </div>
         }
         {this.props.hintBottom &&
@@ -239,9 +239,8 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail
-    const relevantValidationErrors = validationErrors.getValidationErrorsForName(this.props.attribute, this.inputName())
-    this.setState({validationErrors: relevantValidationErrors})
+    const validationErrors = event.detail.getValidationErrors(this.props.attribute, this.inputName())
+    this.setState({validationErrors})
   }
 
   wrapperClassName() {

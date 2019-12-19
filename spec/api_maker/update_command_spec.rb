@@ -38,13 +38,15 @@ describe ApiMaker::UpdateCommand do
     command = helper.add_command(primary_key: user.id, args: {user: user_params})
     helper.execute!
 
-    expect(command.result.fetch(:validation_errors)).to eq(
-      "user[tasks_attributes][124][name]" => {
-        attribute: :name,
-        errors: [{type: :blank, message: "can't be blank"}],
+    expect(command.result.fetch(:validation_errors)).to eq [
+      {
+        attribute_name: :name,
+        error_message: "can't be blank",
+        error_type: :blank,
+        input_name: "user[tasks_attributes][124][name]",
         id: nil,
-        model: "tasks"
+        model_name: "task"
       }
-    )
+    ]
   end
 end
