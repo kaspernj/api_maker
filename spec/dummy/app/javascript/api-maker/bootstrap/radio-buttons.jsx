@@ -40,7 +40,7 @@ export default class BootstrapRadioButtons extends React.Component {
   }
 
   render() {
-    const { form, validationErrors } = this.state
+    const { form } = this.state
 
     return (
       <div className={this.wrapperClassName()}>
@@ -48,8 +48,7 @@ export default class BootstrapRadioButtons extends React.Component {
           <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />
         }
         <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
-        {this.props.collection.map(option => this.optionElement(option))}
-        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
+        {this.props.collection.map((option, index) => this.optionElement(option, index))}
       </div>
     )
   }
@@ -73,31 +72,48 @@ export default class BootstrapRadioButtons extends React.Component {
     }
   }
 
+  inputRadioClassName() {
+    const classNames = ["form-check-input"]
+
+    if (this.state.validationErrors.length > 0)
+      classNames.push("is-invalid")
+
+    return classNames.join(" ")
+  }
+
   generatedId() {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrors(this.props.attribute, this.inputName())
+    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
     this.setState({validationErrors})
   }
 
-  optionElement(option) {
+  optionElement(option, index) {
+    const { collection } = this.props
+    const { validationErrors } = this.state
     const id = this.generatedId()
 
     return (
-      <div key={`option-${option[1]}`}>
+      <div className="form-check" key={`option-${option[1]}`}>
         <input
+          className={this.inputRadioClassName()}
           data-option-value={option[1]}
           defaultChecked={option[1] == this.inputDefaultValue()}
           id={id}
           name={this.inputName()}
           type="radio"
-          value={option[1]} />
+          value={option[1]}
+        />
 
-        <label className="ml-1" htmlFor={id}>
+        <label className="form-check-label" htmlFor={id}>
           {option[0]}
         </label>
+
+        {(index + 1) == collection.length && validationErrors.length > 0 &&
+          <InvalidFeedback errors={validationErrors} />
+        }
       </div>
     )
   }

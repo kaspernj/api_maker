@@ -182,7 +182,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrors(this.props.attribute, this.inputName())
+    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
     this.setState({validationErrors})
   }
 
