@@ -84,7 +84,7 @@ export default class BootstrapCheckbox extends React.Component {
             {this.props.hint}
           </p>
         }
-        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors.map(validationError => validationError.message)} />}
+        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
       </div>
     )
   }
@@ -132,9 +132,8 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail
-    const relevantValidationErrors = validationErrors.getValidationErrorsForName(this.props.attribute, this.inputName())
-    this.setState({validationErrors: relevantValidationErrors})
+    const validationErrors = event.detail.getValidationErrors(this.props.attribute, this.inputName())
+    this.setState({validationErrors})
   }
 
   label() {

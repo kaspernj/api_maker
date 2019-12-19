@@ -1,11 +1,16 @@
+import { CustomError, ValidationError } from "api-maker/errors"
+
 export default class DisplayNotification {
   static alert(message) {
     new DisplayNotification({type: "alert", text: message})
   }
 
   static error(error) {
-    if (error.args && error.args.response.errors) {
+    if (error instanceof CustomError) {
       DisplayNotification.alert(error.args.response.errors.join(". "))
+    } else if (error instanceof ValidationError) {
+      if (error.hasUnhandledErrors())
+        DisplayNotification.alert(error.message)
     } else {
       console.error("Didnt know what to do with this", error)
     }

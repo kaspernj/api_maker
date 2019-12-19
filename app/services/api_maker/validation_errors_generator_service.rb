@@ -4,7 +4,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
   def initialize(model:, params:)
     @model = model
     @params = params
-    @result = {}
+    @result = []
   end
 
   def execute
@@ -29,15 +29,13 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
       input_name = path_to_attribute_name(attribute_path)
 
       errors.each_with_index do |error, error_index|
-        result[input_name] ||= {
-          attribute: attribute_name,
+        result << {
+          attribute_name: attribute_name,
           id: model.id,
-          model: model_name,
-          errors: []
-        }
-        result[input_name][:errors] << {
-          message: model.errors.messages.fetch(attribute_name).fetch(error_index),
-          type: error.fetch(:error)
+          input_name: input_name,
+          model_name: model.model_name.param_key,
+          error_message: model.errors.messages.fetch(attribute_name).fetch(error_index),
+          error_type: error.fetch(:error)
         }
       end
     end

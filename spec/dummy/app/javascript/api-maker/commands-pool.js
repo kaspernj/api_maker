@@ -1,5 +1,5 @@
 import Api from "./api"
-import CustomError from "./custom-error"
+import { CustomError } from "./errors"
 import Deserializer from "./deserializer"
 import FormDataToObject from "./form-data-to-object"
 import objectToFormData from "object-to-formdata"
