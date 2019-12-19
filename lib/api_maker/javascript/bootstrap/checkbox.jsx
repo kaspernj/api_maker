@@ -137,7 +137,7 @@ export default class BootstrapCheckbox extends React.Component {
   }
 
   label() {
-    if (this.props.label) {
+    if ("label" in this.props) {
       return this.props.label
     } else if (this.props.model) {
       return this.props.model.modelClass().humanAttributeName(this.props.attribute)

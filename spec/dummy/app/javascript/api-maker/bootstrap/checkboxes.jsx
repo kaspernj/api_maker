@@ -37,7 +37,7 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   render() {
-    const { form, validationErrors } = this.state
+    const { form } = this.state
 
     return (
       <div className="component-bootstrap-checkboxes form-group">
@@ -48,19 +48,20 @@ export default class BootstrapCheckboxes extends React.Component {
 
         <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
         {this.props.options.map((option, index) => this.optionElement(option, index))}
-        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
       </div>
     )
   }
 
   inputDefaultValue() {
-    if (this.props.defaultValue) {
-      return this.props.defaultValue
-    } else if (this.props.model) {
-      if (!this.props.model[this.props.attribute])
-        throw `No such attribute: ${this.props.attribute}`
+    const { attribute, defaultValue, model } = this.props
 
-      return this.props.model[this.props.attribute]()
+    if (defaultValue) {
+      return defaultValue
+    } else if (attribute && model) {
+      if (!model[attribute])
+        throw `No such attribute: ${attribute}`
+
+      return this.props.model[attribute]()
     }
   }
 
@@ -95,17 +96,17 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   label() {
-    if (this.props.label === false) {
-      return null
-    } else if (this.props.label) {
-      return this.props.label
-    } else if (this.props.model) {
-      return this.props.model.modelClass().humanAttributeName(this.props.attribute)
+    const { attribute, label, model } = this.props
+
+    if ("label" in this.props) {
+      return label
+    } else if (attribute && model) {
+      return model.modelClass().humanAttributeName(attribute)
     }
   }
 
   labelClassName() {
-    let classNames = []
+    const classNames = []
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
@@ -114,7 +115,10 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   generatedId() {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    if (!this.generatedIdValue)
+      this.generatedIdValue = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+
+    return this.generatedIdValue
   }
 
   onValidationErrors(event) {
@@ -122,8 +126,10 @@ export default class BootstrapCheckboxes extends React.Component {
     this.setState({validationErrors})
   }
 
-  optionElement(option) {
-    const id = this.generatedId()
+  optionElement(option, index) {
+    const { options } = this.props
+    const { validationErrors } = this.state
+    const id = `${this.generatedId()}-${index}`
 
     return (
       <div className="checkboxes-option" key={`option-${option[1]}`}>
@@ -140,6 +146,10 @@ export default class BootstrapCheckboxes extends React.Component {
         <label className="ml-1" htmlFor={id}>
           {option[0]}
         </label>
+
+        {(index + 1) == options.length && validationErrors.length > 0 &&
+          <InvalidFeedback errors={validationErrors} />
+        }
       </div>
     )
   }
