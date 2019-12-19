@@ -33,7 +33,6 @@ export default class BootstrapStringInput extends React.Component {
     step: PropTypes.number,
     small: PropTypes.bool,
     type: PropTypes.string,
-    uniqueKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     wrapperClassName: PropTypes.string
   })
 
@@ -237,8 +236,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   onValidationErrors(args) {
-    const { attribute, model, uniqueKey } = this.props
-    const validationErrors = args.validationErrors.getValidationErrorsForModel({attribute, model, uniqueKey})
+    const validationErrors = args.validationErrors.getValidationErrorsForName(this.inputName())
     this.setState({ validationErrors })
   }
 

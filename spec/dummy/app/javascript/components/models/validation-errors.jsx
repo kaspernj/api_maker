@@ -16,7 +16,6 @@ export default class ModelsValidationErrors extends React.Component {
 
   componentDidMount() {
     const params = Params.parse()
-    this.loadProjects()
 
     if (params.id) {
       this.loadUser(params)
@@ -34,32 +33,27 @@ export default class ModelsValidationErrors extends React.Component {
     }
   }
 
-  async loadProjects() {
-    const projects = await Project.ransack({s: "name"}).toArray()
-    this.setState({projects})
-  }
-
   async loadUser(params) {
     const user = await User
       .ransack({id_eq: params.id})
-      .preload("tasks")
+      .preload("tasks.project")
       .first()
 
     this.setState({user, tasks: user.tasks().loaded()})
   }
 
   render() {
-    var { projects, tasks, user } = this.state
+    const { tasks, user } = this.state
 
     return (
       <Layout className="component-models-validation-errors">
-        {projects && tasks && user && this.content()}
+        {tasks && user && this.content()}
       </Layout>
     )
   }
 
   content() {
-    const { projects, tasks, user } = this.state
+    const { tasks, user } = this.state
 
     return (
       <div className="content-container">
@@ -68,11 +62,13 @@ export default class ModelsValidationErrors extends React.Component {
 
           {tasks.map(task =>
             <div className="my-4" key={task.uniqueKey()}>
-              <input
-                defaultValue={task.id()}
-                name={`user[tasks_attributes][${task.uniqueKey()}][id]`}
-                type="hidden"
-              />
+              {task.isPersisted() &&
+                <input
+                  defaultValue={task.id()}
+                  name={`user[tasks_attributes][${task.uniqueKey()}][id]`}
+                  type="hidden"
+                />
+              }
 
               <h1>Task</h1>
               <StringInput
@@ -82,24 +78,45 @@ export default class ModelsValidationErrors extends React.Component {
                 name={`user[tasks_attributes][${task.uniqueKey()}][name]`}
                 model={task}
                 savingModel={user}
-                uniqueKey={task.uniqueKey()}
                 wrapperClassName={`task-name-${task.id()}`}
               />
-              <Select
-                attribute="projectId"
-                id={`task_project_id_${task.id()}`}
-                includeBlank
-                label="Project"
-                name={`user[tasks_attributes][${task.uniqueKey()}][project_id]`}
-                model={task}
-                options={projects.map(project => [project.name(), project.id()])}
-                savingModel={user}
-                uniqueKey={task.uniqueKey()}
-              />
+              {this.projectFieldsForTask(user, task)}
             </div>
           )}
           <input type="submit" />
         </form>
+      </div>
+    )
+  }
+
+  projectFieldsForTask(user, task) {
+    let project
+
+    if (task.project()) {
+      project = task.project()
+    } else {
+      project = new Project()
+    }
+
+    return (
+      <div className="project-fields-for-task">
+        <h2>Project</h2>
+        {project.isPersisted() &&
+          <input
+            defaultValue={project.id()}
+            name={`user[tasks_attributes][${task.uniqueKey()}][project_attributes][id]`}
+            type="hidden"
+          />
+        }
+        <StringInput
+          attribute="name"
+          id={`project_name_${project.id()}`}
+          label="Project name"
+          model={project}
+          name={`user[tasks_attributes][${task.uniqueKey()}][project_attributes][name]`}
+          savingModel={user}
+          wrapperClassName={`project-name-${project.id()}`}
+        />
       </div>
     )
   }

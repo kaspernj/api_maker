@@ -29,8 +29,7 @@ export default class BootstrapSelect extends React.Component {
     options: PropTypes.array,
     savingModel: PropTypes.object,
     select2: PropTypes.bool,
-    wrapperClassName: PropTypes.string,
-    uniqueKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    wrapperClassName: PropTypes.string
   })
 
   constructor(props) {
@@ -178,8 +177,8 @@ export default class BootstrapSelect extends React.Component {
   }
 
   onValidationErrors(args) {
-    const { attribute, model, uniqueKey } = this.props
-    const validationErrors = args.validationErrors.getValidationErrorsForModel({attribute, model, uniqueKey})
+    const { attribute, model } = this.props
+    const validationErrors = args.validationErrors.getValidationErrorsForName({name: this.inputName()})
     this.setState({ validationErrors })
   }
 

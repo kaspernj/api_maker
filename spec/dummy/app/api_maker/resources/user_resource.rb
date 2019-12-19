@@ -11,7 +11,10 @@ class Resources::UserResource < Resources::ApplicationResource
   def permitted_params(arg)
     arg.params.require(:user).permit(
       :email,
-      tasks_attributes: [:id, :name, :project_id]
+      tasks_attributes: [
+        :id, :name, :project_id,
+        project_attributes: [:id, :name]
+      ]
     )
   end
 
