@@ -7,6 +7,6 @@ class Resources::ProjectResource < Resources::ApplicationResource
   end
 
   def permitted_params(arg)
-    arg.params.require(:project).permit(:name)
+    arg.params.require(:project).permit(:account_id, :name)
   end
 end
