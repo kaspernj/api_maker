@@ -1,4 +1,7 @@
 module ApiMaker::SpecHelper
+  require_relative "spec_helper/wait_for_expect"
+  include WaitForExpect
+
   class SelectorNotFoundError < RuntimeError; end
   class SelectorFoundError < RuntimeError; end
 
@@ -78,22 +81,6 @@ module ApiMaker::SpecHelper
       expect_no_browser_errors
       yield
     end
-  end
-
-  # Waits for an expect to not fail - this is great because it whines
-  def wait_for_expect
-    last_error = nil
-
-    wait_for_browser do
-      yield
-      last_error = nil
-      true
-    rescue RSpec::Expectations::ExpectationNotMetError => error
-      last_error = error
-      false
-    end
-
-    raise last_error if last_error
   end
 
   def wait_for_flash_message(expected_message, delay_sec: 0.2, timeout_sec: 6)
