@@ -7,9 +7,9 @@ class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
 
   def execute
     if resource
-      ServicePattern::Response.new(result: model_content)
+      succeed! model_content
     else
-      ServicePattern::Response.new(errors: ["No resource defined for #{model.name}"])
+      fail! "No resource defined for #{model.name}"
     end
   end
 

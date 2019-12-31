@@ -12,7 +12,7 @@ class ApiMaker::MemberCommandService < ApiMaker::CommandService
       controller: controller
     )
 
-    ServicePattern::Response.new(success: true)
+    succeed!
   end
 
   def constant

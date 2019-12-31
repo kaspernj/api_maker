@@ -15,8 +15,6 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
         failure_save_response(model: command.model, params: sanitized_parameters)
       end
     end
-
-    ServicePattern::Response.new(success: true)
   end
 
   def sanitize_parameters

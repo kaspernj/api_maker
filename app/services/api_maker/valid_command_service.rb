@@ -8,7 +8,7 @@ class ApiMaker::ValidCommandService < ApiMaker::CommandService
       command_response: command_response,
       controller: controller
     )
-    ServicePattern::Response.new(success: true)
+    succeed!
   end
 
   def collection

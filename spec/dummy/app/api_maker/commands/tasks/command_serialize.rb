@@ -7,7 +7,5 @@ class Commands::Tasks::CommandSerialize < Commands::ApplicationCommand
         }
       )
     end
-
-    ServicePattern::Response.new(success: true)
   end
 end

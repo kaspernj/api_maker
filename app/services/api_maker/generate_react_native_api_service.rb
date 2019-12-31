@@ -4,7 +4,7 @@ class ApiMaker::GenerateReactNativeApiService < ApiMaker::ApplicationService
     create_root_folder
     create_model_files
 
-    ServicePattern::Response.new(success: true)
+    succeed!
   end
 
   def root_folder
