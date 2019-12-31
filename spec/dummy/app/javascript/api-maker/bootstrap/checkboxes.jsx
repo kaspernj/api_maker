@@ -13,6 +13,7 @@ export default class BootstrapCheckboxes extends React.Component {
     labelClassName: PropTypes.string,
     model: PropTypes.object,
     name: PropTypes.string,
+    onChange: PropTypes.func,
     options: PropTypes.array.isRequired
   })
 
@@ -127,7 +128,7 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   optionElement(option, index) {
-    const { options } = this.props
+    const { onChange, options } = this.props
     const { validationErrors } = this.state
     const id = `${this.generatedId()}-${index}`
 
@@ -139,6 +140,7 @@ export default class BootstrapCheckboxes extends React.Component {
           defaultChecked={this.isDefaultSelected(option[1])}
           id={id}
           name={this.inputName()}
+          onChange={onChange}
           type="checkbox"
           value={option[1]}
         />

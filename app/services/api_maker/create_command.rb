@@ -18,8 +18,6 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
         failure_save_response(model: model, params: sanitized_parameters)
       end
     end
-
-    ServicePattern::Response.new(success: true)
   end
 
   def api_maker_resource_class

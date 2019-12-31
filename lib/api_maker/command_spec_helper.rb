@@ -37,7 +37,6 @@ class ApiMaker::CommandSpecHelper
 
   def execute!
     command.execute!
-    ServicePattern::Response.new(success: true)
   end
 
   def response

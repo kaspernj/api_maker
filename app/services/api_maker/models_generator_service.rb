@@ -17,7 +17,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     end
 
     ApiMaker::GenerateReactNativeApiService.execute! if ApiMaker::Configuration.current.react_native_path.present?
-    ServicePattern::Response.new(success: true)
+    succeed!
   end
 
   def ignore_model?(model)

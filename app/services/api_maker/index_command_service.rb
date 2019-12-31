@@ -9,7 +9,7 @@ class ApiMaker::IndexCommandService < ApiMaker::CommandService
       controller: controller
     )
 
-    ServicePattern::Response.new(success: true)
+    succeed!
   end
 
   def collection

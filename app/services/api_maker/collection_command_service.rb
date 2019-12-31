@@ -11,7 +11,7 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
       controller: controller
     )
 
-    ServicePattern::Response.new(success: true)
+    succeed!
   end
 
   def authorize!
