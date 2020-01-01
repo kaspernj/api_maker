@@ -255,7 +255,7 @@ GEM
       rubocop (>= 0.68.1)
     ruby-progressbar (1.10.1)
     rubyzip (2.0.0)
-    selenium-webdriver (3.142.6)
+    selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     service_pattern (0.0.5)
