@@ -33,6 +33,9 @@ Layout/EmptyLinesAroundArguments:
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
+Layout/LineLength:
+  Max: 160
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
@@ -59,9 +62,6 @@ Metrics/ClassLength:
 
 Metrics/CyclomaticComplexity:
   Max: 10
-
-Metrics/LineLength:
-  Max: 160
 
 Metrics/MethodLength:
   Max: 50
