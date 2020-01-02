@@ -96,6 +96,8 @@ module ApiMaker::SpecHelper
       received_messages << current_message
       current_message == expected_message
     end
+
+    expect_no_browser_errors
   rescue WaitUtil::TimeoutError
     expect(received_messages.uniq.reject(&:blank?)).to eq include expected_message
   end
