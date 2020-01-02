@@ -99,7 +99,7 @@ module ApiMaker::SpecHelper
   def wait_for_selector(selector, *args)
     expect(page).to have_selector selector, *args
     expect_no_browser_errors
-  rescue Capybara::ElementNotFound
+  rescue RSpec::Expectations::ExpectationNotMetError
     expect_no_browser_errors
     raise ApiMaker::SpecHelper::SelectorNotFoundError, "Timed out waiting for selector: #{selector}"
   end
