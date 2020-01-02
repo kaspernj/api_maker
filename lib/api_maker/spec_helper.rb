@@ -90,8 +90,9 @@ module ApiMaker::SpecHelper
     end
   end
 
-  def wait_for_path(expected_path)
-    expect(current_path).to eq expected_path
+  def wait_for_path(expected_path, **args)
+    args[:ignore_query] = true unless args.key?(:ignore_query)
+    expect(page).to have_current_path(expected_path, args)
     expect_no_browser_errors
   end
 
