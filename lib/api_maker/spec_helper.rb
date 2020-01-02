@@ -39,18 +39,21 @@ module ApiMaker::SpecHelper
   end
 
   def expect_no_browser_errors
+    logs = browser_logs
+      .map(&:to_s)
+      .reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
+      .join("\n")
+
     expect_no_browser_window_errors
 
-    logs = browser_logs.map(&:to_s)
-    logs = logs.reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
-    return if !logs || !logs.join("\n").include?("SEVERE ")
+    return if logs.blank? || !logs.include?("SEVERE ")
 
-    # Lets try one more time - just in case error got registered meanwhile
-    sleep 0.5
+    # Lets try one more time - just in case browser window error got registered meanwhile
+    sleep 0.2
     expect_no_browser_window_errors
 
     # Else just raise with only the message and not the JS stacktrace
-    raise logs.join("\n")
+    raise logs
   end
 
   def expect_no_errors
