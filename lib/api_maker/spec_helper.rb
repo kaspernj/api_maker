@@ -72,8 +72,11 @@ module ApiMaker::SpecHelper
   end
 
   def wait_for_and_find(selector, *args)
-    wait_for_selector(selector)
-    find(selector, *args)
+    element = find(selector, *args)
+    expect_no_browser_errors
+    element
+  rescue Capybara::ElementNotFound
+    expect_no_browser_errors
   end
 
   def wait_for_browser(delay_sec: 0.2, message: "wait for browser", timeout_sec: 6)
@@ -97,14 +100,15 @@ module ApiMaker::SpecHelper
   end
 
   def wait_for_path(expected_path)
-    wait_for_browser(message: "wait for path") { current_path == expected_path }
-  rescue WaitUtil::TimeoutError
     expect(current_path).to eq expected_path
+    expect_no_browser_errors
   end
 
   def wait_for_selector(selector, *args)
-    wait_for_browser { page.has_selector?(selector, *args) }
-  rescue WaitUtil::TimeoutError
+    expect(page).to have_selector selector, *args
+    expect_no_browser_errors
+  rescue Capybara::ElementNotFound
+    expect_no_browser_errors
     raise ApiMaker::SpecHelper::SelectorNotFoundError, "Timed out waiting for selector: #{selector}"
   end
 
@@ -115,8 +119,10 @@ module ApiMaker::SpecHelper
   end
 
   def wait_for_no_selector(selector, *args)
-    wait_for_browser { !page.has_selector?(selector, *args) }
-  rescue WaitUtil::TimeoutError
+    expect(page).to have_no_selector selector, *args
+    expect_no_browser_errors
+  rescue Capybara::ElementNotFound
+    expect_no_browser_errors
     raise ApiMaker::SpecHelper::SelectorFoundError, "Timed out waiting for selector to disappear: #{selector}"
   end
 end
