@@ -1,6 +1,8 @@
 module ApiMaker::SpecHelper
   require_relative "spec_helper/wait_for_expect"
+  require_relative "spec_helper/wait_for_flash_message"
   include WaitForExpect
+  include WaitForFlashMessage
 
   class SelectorNotFoundError < RuntimeError; end
   class SelectorFoundError < RuntimeError; end
@@ -39,18 +41,19 @@ module ApiMaker::SpecHelper
   end
 
   def expect_no_browser_errors
+    logs = browser_logs
+      .map(&:to_s)
+      .reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
+      .join("\n")
+
+    expect_no_browser_window_errors
+    return if logs.blank? || !logs.include?("SEVERE ")
+
+    # Lets try one more time - just in case browser window error got registered meanwhile
+    sleep 0.2
     expect_no_browser_window_errors
 
-    logs = browser_logs.map(&:to_s)
-    logs = logs.reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
-    return if !logs || !logs.join("\n").include?("SEVERE ")
-
-    # Lets try one more time - just in case error got registered meanwhile
-    sleep 0.5
-    expect_no_browser_window_errors
-
-    # Else just raise with only the message and not the JS stacktrace
-    raise logs.join("\n")
+    raise logs
   end
 
   def expect_no_errors
@@ -72,8 +75,12 @@ module ApiMaker::SpecHelper
   end
 
   def wait_for_and_find(selector, *args)
-    wait_for_selector(selector)
-    find(selector, *args)
+    element = find(selector, *args)
+    expect_no_browser_errors
+    element
+  rescue Capybara::ElementNotFound
+    expect_no_browser_errors
+    raise ApiMaker::SpecHelper::SelectorNotFoundError, "Timed out waiting for selector: #{selector}"
   end
 
   def wait_for_browser(delay_sec: 0.2, message: "wait for browser", timeout_sec: 6)
@@ -83,28 +90,16 @@ module ApiMaker::SpecHelper
     end
   end
 
-  def wait_for_flash_message(expected_message, delay_sec: 0.2, timeout_sec: 6)
-    received_messages = []
-
-    WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: delay_sec) do
-      expect_no_browser_errors
-      current_message = flash_message_text
-      received_messages << current_message
-      current_message == expected_message
-    end
-  rescue WaitUtil::TimeoutError
-    expect(received_messages.uniq.reject(&:blank?)).to eq include expected_message
-  end
-
   def wait_for_path(expected_path)
-    wait_for_browser(message: "wait for path") { current_path == expected_path }
-  rescue WaitUtil::TimeoutError
     expect(current_path).to eq expected_path
+    expect_no_browser_errors
   end
 
   def wait_for_selector(selector, *args)
-    wait_for_browser { page.has_selector?(selector, *args) }
-  rescue WaitUtil::TimeoutError
+    expect(page).to have_selector selector, *args
+    expect_no_browser_errors
+  rescue Capybara::ElementNotFound
+    expect_no_browser_errors
     raise ApiMaker::SpecHelper::SelectorNotFoundError, "Timed out waiting for selector: #{selector}"
   end
 
@@ -115,8 +110,10 @@ module ApiMaker::SpecHelper
   end
 
   def wait_for_no_selector(selector, *args)
-    wait_for_browser { !page.has_selector?(selector, *args) }
-  rescue WaitUtil::TimeoutError
+    expect(page).to have_no_selector selector, *args
+    expect_no_browser_errors
+  rescue Capybara::ElementNotFound
+    expect_no_browser_errors
     raise ApiMaker::SpecHelper::SelectorFoundError, "Timed out waiting for selector to disappear: #{selector}"
   end
 end
