@@ -8,7 +8,7 @@ class Project < ApplicationRecord
   has_many :tasks, dependent: :destroy, inverse_of: :project
 
   has_one :customer, through: :account
-  has_one :project_detail, dependent: :destroy
+  has_one :project_detail, -> { where(deleted_at: nil) }, dependent: :destroy
 
   validates :name, presence: true
 
