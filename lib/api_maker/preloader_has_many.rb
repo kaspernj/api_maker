@@ -23,15 +23,7 @@ private
 
   def models
     @models ||= begin
-      if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-        query = ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
-      else
-        primary_key_column = @reflection.options[:primary_key]&.to_sym || @collection.primary_key.to_sym
-        query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&primary_key_column))
-        query = query.joins(@reflection.inverse_of.name)
-      end
-
-      query = query
+      query = models_initial_query
         .select(@reflection.klass.arel_table[Arel.star])
         .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
 
@@ -39,6 +31,16 @@ private
       query = query.accessible_by(@ability) if @ability
       query.load
       query
+    end
+  end
+
+  def models_initial_query
+    if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+      ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
+    else
+      primary_key_column = @reflection.options[:primary_key]&.to_sym || @collection.primary_key.to_sym
+      query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&primary_key_column))
+      query.joins(@reflection.inverse_of.name)
     end
   end
 
