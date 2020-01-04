@@ -125,4 +125,15 @@ describe ApiMaker::CollectionSerializer do
     expect(result.fetch("included").fetch("accounts").fetch(account.id.to_s).fetch("a").fetch("id")).to eq account.id
     expect(result.fetch("included").fetch("accounts").length).to eq 1
   end
+
+  it "applies the scope of the original relationship on belongs-to-relationships" do
+    account = create(:account, deleted_at: 5.minutes.ago)
+    project = create(:project, account: account)
+
+    collection = Project.where(id: [project.id])
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["account"]).to_json)
+
+    expect(result.fetch("data").fetch("projects").length).to eq 1
+    expect(result.fetch("included").fetch("projects").fetch(project.id.to_s).fetch("r").fetch("account")).to eq nil
+  end
 end
