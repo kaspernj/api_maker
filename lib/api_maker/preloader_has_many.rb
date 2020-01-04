@@ -35,6 +35,7 @@ private
         .select(@reflection.klass.arel_table[Arel.star])
         .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
 
+      query = query.instance_eval(&@reflection.scope) if @reflection.scope
       query = query.accessible_by(@ability) if @ability
       query.load
       query

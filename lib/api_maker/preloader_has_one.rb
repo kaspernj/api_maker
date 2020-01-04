@@ -40,6 +40,7 @@ class ApiMaker::PreloaderHasOne
         query = query_normal
       end
 
+      query = query.instance_eval(&@reflection.scope) if @reflection.scope
       query = query.accessible_by(@ability) if @ability
       query = query.fix
       query.load

@@ -38,10 +38,11 @@ private
 
   def models
     @models ||= begin
-      models = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym).uniq)
-      models = models.accessible_by(@ability) if @ability
-      models.load
-      models
+      query = @reflection.klass.where(look_up_key => @collection.map(&@reflection.foreign_key.to_sym))
+      query = query.instance_eval(&@reflection.scope) if @reflection.scope
+      query = query.accessible_by(@ability) if @ability
+      query.load
+      query
     end
   end
 
