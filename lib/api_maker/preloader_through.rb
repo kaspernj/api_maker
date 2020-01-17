@@ -21,12 +21,23 @@ class ApiMaker::PreloaderThrough
       .where(table_name => {primary_key => @collection.map(&:id)})
   end
 
+  def debug_reflection(reflection)
+    puts "Reflection: #{reflection.name}"
+    puts "Klass: #{reflection.klass}"
+    puts "ActiveRecord: #{reflection.active_record}"
+    puts
+  end
+
   def joins_for_reflection(current_reflection)
     joins = []
 
     loop do
+      debug_reflection(current_reflection)
+
       # Resolve if the through relationship is through multiple other through relationships
       current_reflection = resolve_through(current_reflection)
+
+      debug_reflection(current_reflection)
 
       macro = current_reflection.through_reflection.macro
       inverse_name = current_reflection.through_reflection.__send__(:inverse_name)
@@ -42,6 +53,8 @@ class ApiMaker::PreloaderThrough
       end
 
       current_reflection = next_reflection_for(current_reflection)
+      debug_reflection(current_reflection)
+      puts "Joins: #{joins.reverse.join(", ")}"
 
       unless current_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
         joins.append(append_name_for_current_reflection(current_reflection))

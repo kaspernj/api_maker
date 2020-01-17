@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_04_135315) do
+ActiveRecord::Schema.define(version: 2020_01_17_151857) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -48,6 +48,14 @@ ActiveRecord::Schema.define(version: 2020_01_04_135315) do
     t.index ["recipient_type", "recipient_id"], name: "index_activities_on_recipient_type_and_recipient_id"
     t.index ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type"
     t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable_type_and_trackable_id"
+  end
+
+  create_table "customer_relationships", force: :cascade do |t|
+    t.integer "child_id", null: false
+    t.integer "parent_id", null: false
+    t.string "relationship_type", null: false
+    t.index ["child_id"], name: "index_customer_relationships_on_child_id"
+    t.index ["parent_id"], name: "index_customer_relationships_on_parent_id"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -126,6 +134,8 @@ ActiveRecord::Schema.define(version: 2020_01_04_135315) do
 
   add_foreign_key "account_marked_tasks", "accounts"
   add_foreign_key "account_marked_tasks", "tasks"
+  add_foreign_key "customer_relationships", "customers", column: "child_id"
+  add_foreign_key "customer_relationships", "customers", column: "parent_id"
   add_foreign_key "project_secrets", "projects"
   add_foreign_key "tasks", "projects"
   add_foreign_key "user_roles", "users"
