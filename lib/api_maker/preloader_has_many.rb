@@ -16,31 +16,32 @@ class ApiMaker::PreloaderHasMany
       preload_model(model)
     end
 
-    {collection: models}
+    {
+      collection: models,
+      model_class: @reflection.klass
+    }
   end
 
 private
 
-  def models
-    @models ||= begin
-      query = models_initial_query
-        .select(@reflection.klass.arel_table[Arel.star])
-        .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
-
-      query = query.instance_eval(&@reflection.scope) if @reflection.scope
-      query = query.accessible_by(@ability) if @ability
-      query.load
-      query
+  def collection_ids
+    @collection_ids ||= @collection.map do |collection_model|
+      collection_model.read_attribute(@reflection.active_record.primary_key)
     end
   end
 
-  def models_initial_query
-    if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-      ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
-    else
-      primary_key_column = @reflection.options[:primary_key]&.to_sym || @collection.primary_key.to_sym
-      query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&primary_key_column))
-      query.joins(@reflection.inverse_of.name)
+  def models
+    @models ||= begin
+      accessible_query = @reflection.klass.accessible_by(@ability)
+
+      join_query = @reflection.active_record
+        .select(@reflection.klass.arel_table[Arel.star])
+        .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
+        .joins(@reflection.name)
+        .where(@reflection.active_record.primary_key => collection_ids)
+        .where(@reflection.klass.table_name => {@reflection.klass.primary_key => accessible_query})
+
+      @reflection.klass.find_by_sql(join_query.to_sql)
     end
   end
 

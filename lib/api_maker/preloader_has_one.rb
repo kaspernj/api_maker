@@ -29,40 +29,36 @@ class ApiMaker::PreloaderHasOne
       end
     end
 
-    {collection: models}
+    {
+      collection: models,
+      model_class: @reflection.klass
+    }
+  end
+
+  def collection_ids
+    @collection_ids ||= @collection.map do |collection_model|
+      collection_model.read_attribute(@reflection.active_record.primary_key)
+    end
   end
 
   def models
     @models ||= begin
-      if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-        query = query_through
-      else
-        query = query_normal
-      end
+      accessible_query = @reflection.klass.accessible_by(@ability)
 
-      query = query.instance_eval(&@reflection.scope) if @reflection.scope
-      query = query.accessible_by(@ability) if @ability
-      query = query.fix
-      query.load
-      query
+      join_query = @reflection.active_record
+        .select(@reflection.klass.arel_table[Arel.star])
+        .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
+        .joins(@reflection.name)
+        .where(@reflection.active_record.primary_key => collection_ids)
+        .where(@reflection.klass.table_name => {@reflection.klass.primary_key => accessible_query})
+
+      @reflection.klass.find_by_sql(join_query.to_sql)
     end
   end
 
   def origin_data_for_model(model)
     origin_id = model.read_attribute("api_maker_origin_id")
     @data.fetch(:included).fetch(collection_name).fetch(origin_id)
-  end
-
-  def query_through
-    ApiMaker::PreloaderThrough.new(collection: @collection, reflection: @reflection).models_query_through_reflection
-      .select(@reflection.klass.arel_table[Arel.star])
-      .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
-  end
-
-  def query_normal
-    @reflection.klass.where(@reflection.foreign_key => @collection.map(&:id))
-      .select(@reflection.klass.arel_table[Arel.star])
-      .select(@reflection.klass.arel_table[@reflection.foreign_key].as("api_maker_origin_id"))
   end
 
   def resource

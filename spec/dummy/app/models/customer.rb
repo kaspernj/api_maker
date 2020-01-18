@@ -16,8 +16,8 @@ class Customer < ApplicationRecord
     foreign_key: :parent_id,
     inverse_of: :parent
 
-  has_many :children, source: :child, through: :children_relationships
-  has_many :parents, source: :parent, through: :parent_relationships
+  has_many :children, source: :child, inverse_of: :parents, through: :children_relationships
+  has_many :parents, source: :parent, inverse_of: :children, through: :parent_relationships
 
   has_many :commune_for_relationships,
     -> { where(relationship_type: "commune") },

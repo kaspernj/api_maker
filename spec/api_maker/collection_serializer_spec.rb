@@ -87,14 +87,14 @@ describe ApiMaker::CollectionSerializer do
     collection = User.where(id: user.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, include_param: ["tasks.project_detail"]).to_json)
 
-    expect(result.dig("data", "users")).to eq [user.id]
-    expect(result.dig("included", "users", user.id.to_s, "r", "tasks")).to eq [3]
+    expect(result.dig!("data", "users")).to eq [user.id]
+    expect(result.dig!("included", "users", user.id.to_s, "r", "tasks")).to eq [3]
 
-    task_include = result.fetch("included").fetch("tasks").fetch("3")
-    project_detail_include = result.fetch("included").fetch("project-details").fetch("6")
+    task_include = result.dig!("included", "tasks").fetch("3")
+    project_detail_include = result.dig!("included", "project-details", "6")
 
-    expect(task_include.dig("r", "project_detail")).to eq 6
-    expect(project_detail_include.dig("a", "details")).to eq "Test project details"
+    expect(task_include.dig!("r", "project_detail")).to eq 6
+    expect(project_detail_include.dig!("a", "details")).to eq "Test project details"
   end
 
   it "preloads a relationship through another relationship on the same model" do

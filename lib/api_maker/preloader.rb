@@ -1,10 +1,13 @@
 class ApiMaker::Preloader
-  def initialize(ability: nil, args: nil, collection:, data:, include_param:, records:, select:)
+  attr_reader :model_class
+
+  def initialize(ability: nil, args: nil, collection:, data:, include_param:, model_class: nil, records:, select:)
     @ability = ability
     @args = args
     @collection = collection
     @data = data
     @include_param = include_param
+    @model_class = model_class || @collection.model
     @records = records
     @select = select
   end
@@ -16,7 +19,7 @@ class ApiMaker::Preloader
     parsed.each do |key, value|
       next unless key
 
-      reflection = @collection.model.reflections[key]
+      reflection = model_class.reflections[key]
       raise "Unknown reflection: #{@collection.model.name}##{key}" unless reflection
 
       fill_empty_relationships_for_key(reflection, key)
@@ -42,6 +45,7 @@ class ApiMaker::Preloader
         data: @data,
         collection: preload_result.fetch(:collection),
         include_param: value,
+        model_class: preload_result.fetch(:model_class),
         records: @data.fetch(:included),
         select: @select
       ).fill_data

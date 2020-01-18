@@ -25,6 +25,6 @@ describe "preloading - has one" do
     collection = Task.where(id: task.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["account_customer"]).to_json)
 
-    expect(result.fetch("included").fetch("tasks").fetch("6").fetch("r")).to eq("account_customer" => 8)
+    expect(result.dig!("included", "tasks", "6", "r")).to eq("account_customer" => 8)
   end
 end
