@@ -23,10 +23,7 @@ class ApiMaker::PreloaderBelongsTo
       @data.fetch(:included).fetch(collection_name)[model.id] ||= serializer
     end
 
-    {
-      collection: models,
-      model_class: @reflection.klass
-    }
+    models
   end
 
 private

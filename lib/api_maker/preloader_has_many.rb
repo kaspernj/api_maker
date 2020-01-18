@@ -16,10 +16,7 @@ class ApiMaker::PreloaderHasMany
       preload_model(model)
     end
 
-    {
-      collection: models,
-      model_class: @reflection.klass
-    }
+    models
   end
 
 private

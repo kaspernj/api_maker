@@ -29,10 +29,7 @@ class ApiMaker::PreloaderHasOne
       end
     end
 
-    {
-      collection: models,
-      model_class: @reflection.klass
-    }
+    models
   end
 
   def collection_ids

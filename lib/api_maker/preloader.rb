@@ -37,15 +37,15 @@ class ApiMaker::Preloader
         ).preload
       end
 
-      next if value.blank? || preload_result.fetch(:collection).empty?
+      next if value.blank? || preload_result.empty?
 
       ApiMaker::Preloader.new(
         ability: @ability,
         args: @args,
         data: @data,
-        collection: preload_result.fetch(:collection),
+        collection: preload_result,
         include_param: value,
-        model_class: preload_result.fetch(:model_class),
+        model_class: reflection.klass,
         records: @data.fetch(:included),
         select: @select
       ).fill_data
