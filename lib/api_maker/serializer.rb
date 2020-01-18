@@ -44,8 +44,6 @@ class ApiMaker::Serializer
     else
       model.__send__(attribute)
     end
-  #rescue ActiveModel::MissingAttributeError => e
-    #binding.pry
   end
 
   def fetch(*args, &blk)
