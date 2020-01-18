@@ -11,10 +11,6 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
     raise "Records was nil" unless records
   end
 
-  def collection_name
-    @collection_name ||= ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
-  end
-
   def preload
     models.each do |model|
       ApiMaker::Configuration.profile("Preloading #{model.class.name}##{model.id}") do

@@ -21,10 +21,6 @@ class ApiMaker::PreloaderHasMany < ApiMaker::PreloaderBase
 
 private
 
-  def collection_name
-    @collection_name ||= ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
-  end
-
   def preload_model(model)
     origin_data = find_origin_data_for_model(model)
 

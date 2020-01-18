@@ -28,10 +28,6 @@ class ApiMaker::PreloaderBelongsTo < ApiMaker::PreloaderBase
 
 private
 
-  def collection_name
-    @collection_name = ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
-  end
-
   def model_class
     @model_class ||= @reflection.klass
   end
