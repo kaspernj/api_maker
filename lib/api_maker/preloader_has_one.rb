@@ -36,8 +36,4 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
     origin_id = model.read_attribute("api_maker_origin_id")
     @data.fetch(:included).fetch(collection_name).fetch(origin_id)
   end
-
-  def resource
-    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@reflection.klass)
-  end
 end
