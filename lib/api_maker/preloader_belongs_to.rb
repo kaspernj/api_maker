@@ -1,4 +1,4 @@
-class ApiMaker::PreloaderBelongsTo
+class ApiMaker::PreloaderBelongsTo < ApiMaker::PreloaderBase
   def initialize(ability:, args:, data:, collection:, records:, reflection:, select:)
     @ability = ability
     @args = args
@@ -30,27 +30,6 @@ private
 
   def collection_name
     @collection_name = ApiMaker::MemoryStorage.current.resource_for_model(@reflection.active_record).collection_name
-  end
-
-  def collection_ids
-    @collection_ids ||= @collection.map do |collection_model|
-      collection_model.read_attribute(@reflection.active_record.primary_key)
-    end
-  end
-
-  def models
-    @models ||= begin
-      accessible_query = @reflection.klass.accessible_by(@ability)
-
-      join_query = @reflection.active_record
-        .select(@reflection.klass.arel_table[Arel.star])
-        .select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
-        .joins(@reflection.name)
-        .where(@reflection.active_record.primary_key => collection_ids)
-        .where(@reflection.klass.table_name => {@reflection.klass.primary_key => accessible_query})
-
-      @reflection.klass.find_by_sql(join_query.to_sql)
-    end
   end
 
   def model_class
