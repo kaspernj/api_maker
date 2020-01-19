@@ -17,7 +17,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
   end
 
   def origin_data_for_model(model)
-    origin_id = model.read_attribute("api_maker_origin_id")
+    origin_id = model[:api_maker_origin_id]
     data.fetch(:included).fetch(collection_name).fetch(origin_id)
   end
 end

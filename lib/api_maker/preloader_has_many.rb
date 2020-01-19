@@ -23,7 +23,7 @@ private
   end
 
   def find_origin_data_for_model(model)
-    origin_id = model.read_attribute("api_maker_origin_id")
+    origin_id = model[:api_maker_origin_id]
     origin_data = records.fetch(collection_name).fetch(origin_id)
 
     raise "Couldn't find any origin data by that type (#{collection_name}) and ID (#{origin_id})" unless origin_data

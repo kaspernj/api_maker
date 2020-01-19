@@ -30,6 +30,6 @@ private
     records
       .fetch(collection_name)
       .values
-      .select { |record| record.model.read_attribute(reflection.foreign_key).to_s == model.read_attribute(look_up_key).to_s }
+      .select { |record| record.model[reflection.foreign_key].to_s == model[look_up_key].to_s }
   end
 end

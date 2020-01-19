@@ -15,7 +15,7 @@ class ApiMaker::PreloaderBase
 
   def collection_ids
     @collection_ids ||= collection.map do |collection_model|
-      collection_model.read_attribute(reflection.active_record.primary_key)
+      collection_model[reflection.active_record.primary_key]
     end
   end
 
