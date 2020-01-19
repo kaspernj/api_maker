@@ -35,7 +35,7 @@ class ApiMaker::CollectionSerializer
         end
       end
 
-      preload_collection(data, records) if @collection.length.positive?
+      preload_collection(data, records) if parsed_collection.length.positive?
 
       data
     end
@@ -46,7 +46,7 @@ class ApiMaker::CollectionSerializer
   end
 
   def parsed_collection
-    ApiMaker::SelectColumnsOnCollection.execute!(collection: @collection, select_columns: @select_columns)
+    @parsed_collection ||= ApiMaker::SelectColumnsOnCollection.execute!(collection: @collection, select_columns: @select_columns).fix
   end
 
   def preload_collection(data, records)
