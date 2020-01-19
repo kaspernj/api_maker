@@ -14,7 +14,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
 
           command.result(count: count)
         else
-          collection = collection_from_query(@query.fix)
+          collection = collection_from_query(@query)
           response = collection.as_json
           include_pagination_data(response, @query)
 
