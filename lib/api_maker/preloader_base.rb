@@ -1,7 +1,7 @@
 class ApiMaker::PreloaderBase
   attr_reader :ability, :args, :collection, :data, :records, :reflection, :reflection_name, :select
 
-  def initialize(ability:, args:, data:, collection:, records:, reflection:, select:, select_columns:)
+  def initialize(ability:, args:, data:, collection:, records:, reflection:, select:, select_columns:) # rubocop:disable Metrics/ParameterLists
     @ability = ability
     @args = args
     @data = data
