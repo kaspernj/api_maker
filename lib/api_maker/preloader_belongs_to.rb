@@ -1,15 +1,17 @@
 class ApiMaker::PreloaderBelongsTo < ApiMaker::PreloaderBase
   def preload
     models.each do |model|
+      model_id = ApiMaker::PrimaryIdForModel.get(model)
+
       records_for_model(model).each do |record|
-        record.relationships[reflection_name] = model.id
+        record.relationships[reflection_name] = model_id
       end
 
       serializer = ApiMaker::Serializer.new(ability: ability, args: args, model: model, select: select&.dig(model.class))
       collection_name = serializer.resource.collection_name
 
       data.fetch(:included)[collection_name] ||= {}
-      data.fetch(:included).fetch(collection_name)[model.id] ||= serializer
+      data.fetch(:included).fetch(collection_name)[model_id] ||= serializer
     end
 
     models

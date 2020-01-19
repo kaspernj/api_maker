@@ -11,15 +11,16 @@ private
 
   def preload_model(model)
     origin_data = find_origin_data_for_model(model)
+    model_id = ApiMaker::PrimaryIdForModel.get(model)
 
     origin_data.fetch(:r)[reflection.name] ||= []
-    origin_data.fetch(:r).fetch(reflection.name) << model.id
+    origin_data.fetch(:r).fetch(reflection.name) << model_id
 
     serializer = ApiMaker::Serializer.new(ability: ability, args: args, model: model, select: select&.dig(model.class))
     collection_name = serializer.resource.collection_name
 
     data.fetch(:included)[collection_name] ||= {}
-    data.fetch(:included).fetch(collection_name)[model.id] ||= serializer
+    data.fetch(:included).fetch(collection_name)[model_id] ||= serializer
   end
 
   def find_origin_data_for_model(model)

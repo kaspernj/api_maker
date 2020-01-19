@@ -22,7 +22,7 @@ class ApiMaker::CollectionSerializer
           serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: select_for(model))
           resource = serializer.resource
           collection_name = resource.collection_name
-          id = model.id
+          id = ApiMaker::PrimaryIdForModel.get(model)
 
           data.fetch(:included)[collection_name] ||= {}
           data.fetch(:included)[collection_name][id] ||= serializer
