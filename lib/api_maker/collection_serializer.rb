@@ -1,10 +1,11 @@
 class ApiMaker::CollectionSerializer
-  def initialize(ability: nil, args: {}, collection:, include_param:, select: nil)
+  def initialize(ability: nil, args: {}, collection:, include_param:, select: nil, select_columns: nil)
     @ability = ability || ApiMaker::Ability.new(args: args)
     @args = args
     @collection = collection
     @include_param = include_param
     @select = select
+    @select_columns = select_columns
   end
 
   def result
@@ -17,7 +18,7 @@ class ApiMaker::CollectionSerializer
       records = {}
 
       ApiMaker::Configuration.profile("CollectionSerializer result collection map") do
-        @collection.map do |model|
+        parsed_collection.map do |model|
           serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: select_for(model))
           resource = serializer.resource
           collection_name = resource.collection_name
@@ -44,6 +45,10 @@ class ApiMaker::CollectionSerializer
     result.as_json(options)
   end
 
+  def parsed_collection
+    ApiMaker::SelectColumnsOnCollection.execute!(collection: @collection, select_columns: @select_columns)
+  end
+
   def preload_collection(data, records)
     ApiMaker::Configuration.profile("CollectionSerializer result preloading") do
       preloader = ApiMaker::Preloader.new(
@@ -53,7 +58,8 @@ class ApiMaker::CollectionSerializer
         data: data,
         include_param: @include_param,
         records: records,
-        select: @select
+        select: @select,
+        select_columns: @select_columns
       )
       preloader.fill_data
     end

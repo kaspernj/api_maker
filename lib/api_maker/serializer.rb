@@ -42,6 +42,7 @@ class ApiMaker::Serializer
     if resource_instance.respond_to?(attribute)
       resource_instance.__send__(attribute)
     else
+      # puts "Reading #{attribute} from #{model.class.name}"
       model.__send__(attribute)
     end
   end

@@ -39,7 +39,8 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
         args: api_maker_args,
         collection: collection,
         include_param: params[:include],
-        select: select
+        select: select,
+        select_columns: params[:select_columns]
       ).result
     end
   end
