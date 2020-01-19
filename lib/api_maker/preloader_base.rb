@@ -1,7 +1,7 @@
 class ApiMaker::PreloaderBase
   attr_reader :ability, :args, :collection, :data, :records, :reflection, :reflection_name, :select
 
-  def initialize(ability:, args:, data:, collection:, records:, reflection:, select:)
+  def initialize(ability:, args:, data:, collection:, records:, reflection:, select:, select_columns:) # rubocop:disable Metrics/ParameterLists
     @ability = ability
     @args = args
     @data = data
@@ -10,6 +10,7 @@ class ApiMaker::PreloaderBase
     @reflection_name = @reflection.name
     @records = records
     @select = select
+    @select_columns = select_columns
   end
 
   def collection_ids
@@ -37,10 +38,18 @@ class ApiMaker::PreloaderBase
 
   def join_query
     if initial_join_query.to_sql.include?(joined_name)
-      join_query_with_joined_name
+      collection = join_query_with_joined_name
+      table_name = joined_name
     else
-      join_query_with_normal_name
+      collection = join_query_with_normal_name
     end
+
+    ApiMaker::SelectColumnsOnCollection.execute!(
+      collection: collection,
+      model_class: reflection.klass,
+      select_columns: @select_columns,
+      table_name: table_name
+    )
   end
 
   def initial_join_query
@@ -49,7 +58,6 @@ class ApiMaker::PreloaderBase
 
   def join_query_with_joined_name
     initial_join_query
-      .select("#{joined_name}.*")
       .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
       .where(reflection.active_record.primary_key => collection_ids)
       .where(joined_name => {reflection.klass.primary_key => accessible_query})
@@ -57,7 +65,6 @@ class ApiMaker::PreloaderBase
 
   def join_query_with_normal_name
     initial_join_query
-      .select(reflection.klass.arel_table[Arel.star])
       .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
       .where(reflection.active_record.primary_key => collection_ids)
       .where(reflection.klass.table_name => {reflection.klass.primary_key => accessible_query})
