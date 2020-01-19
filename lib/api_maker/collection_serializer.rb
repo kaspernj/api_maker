@@ -54,7 +54,7 @@ class ApiMaker::CollectionSerializer
       preloader = ApiMaker::Preloader.new(
         ability: @ability,
         args: @args,
-        collection: @collection,
+        collection: parsed_collection,
         data: data,
         include_param: @include_param,
         records: records,
