@@ -15,11 +15,10 @@ class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
       selected_columns.each do |column_name|
         new_collection = new_collection.select("#{@table_name}.#{column_name}")
       end
-
-      succeed! new_collection
     else
       new_collection = new_collection.select("#{@table_name}.*")
-      succeed! new_collection
     end
+
+    succeed! new_collection
   end
 end
