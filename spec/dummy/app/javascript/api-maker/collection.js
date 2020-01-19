@@ -110,6 +110,25 @@ export default class Collection {
     return this._clone({select: newSelect})
   }
 
+  selectColumns(originalSelect) {
+    const newSelect = {}
+
+    for(const originalModelName in originalSelect) {
+      const newModalName = inflection.dasherize(inflection.underscore(originalModelName))
+      const newValues = []
+      const originalValues = originalSelect[originalModelName]
+
+      for(const originalAttributeName of originalValues) {
+        const newAttributeName = inflection.underscore(originalAttributeName)
+        newValues.push(newAttributeName)
+      }
+
+      newSelect[newModalName] = newValues
+    }
+
+    return this._clone({selectColumns: newSelect})
+  }
+
   sort(sortBy) {
     return this._clone({ransack: {s: sortBy}})
   }
@@ -153,33 +172,16 @@ export default class Collection {
   _params() {
     let params = {}
 
-    if (this.queryArgs.params)
-      params = this._merge(params, this.queryArgs.params)
-
-    if (this.queryArgs.accessibleBy) {
-      params.accessible_by = inflection.underscore(this.queryArgs.accessibleBy)
-    }
-
-    if (this.queryArgs.count)
-      params.count = this.queryArgs.count
-
-    if (this.queryArgs.distinct)
-      params.distinct = this.queryArgs.distinct
-
-    if (this.queryArgs.ransack)
-      params.q = this.queryArgs.ransack
-
-    if (this.queryArgs.limit)
-      params.limit = this.queryArgs.limit
-
-    if (this.queryArgs.preload)
-      params.include = this.queryArgs.preload
-
-    if (this.queryArgs.page)
-      params.page = this.queryArgs.page
-
-    if (this.queryArgs.select)
-      params.select = this.queryArgs.select
+    if (this.queryArgs.params) params = this._merge(params, this.queryArgs.params)
+    if (this.queryArgs.accessibleBy) params.accessible_by = inflection.underscore(this.queryArgs.accessibleBy)
+    if (this.queryArgs.count) params.count = this.queryArgs.count
+    if (this.queryArgs.distinct) params.distinct = this.queryArgs.distinct
+    if (this.queryArgs.ransack) params.q = this.queryArgs.ransack
+    if (this.queryArgs.limit) params.limit = this.queryArgs.limit
+    if (this.queryArgs.preload) params.include = this.queryArgs.preload
+    if (this.queryArgs.page) params.page = this.queryArgs.page
+    if (this.queryArgs.select) params.select = this.queryArgs.select
+    if (this.queryArgs.selectColumns) params.select_columns = this.queryArgs.selectColumns
 
     return params
   }
