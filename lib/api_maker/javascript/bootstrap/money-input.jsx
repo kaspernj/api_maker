@@ -1,11 +1,23 @@
-import Api from "api-maker/api"
 import formatNumber from "format-number"
 import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 const inflection = require("inflection")
 
 export default class BootstrapMoneyInput extends React.Component {
+  static propTypes = PropTypesExact({
+    attribute: PropTypes.string,
+    className: PropTypes.string,
+    currenciesCollection: PropTypes.array.isRequired,
+    currencyName: PropTypes.string,
+    model: PropTypes.object,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    placeholder: PropTypes.node,
+    small: PropTypes.bool
+  })
+
   constructor(props) {
     super(props)
     this.state = {}
@@ -48,6 +60,11 @@ export default class BootstrapMoneyInput extends React.Component {
     )
   }
 
+  checkAttributeExists() {
+    if (this.props.model && !this.props.model[this.props.attribute])
+      throw new Error(`No such attribute: ${this.props.model.modelClassData().name}#${this.props.attribute}`)
+  }
+
   inputCurrencyId() {
     return `${this.inputId()}_currency`
   }
@@ -60,6 +77,7 @@ export default class BootstrapMoneyInput extends React.Component {
   }
 
   inputCurrencyValue() {
+    this.checkAttributeExists()
     let value = this.props.model[this.props.attribute]()
 
     if (value) {
@@ -70,6 +88,7 @@ export default class BootstrapMoneyInput extends React.Component {
   }
 
   inputDefaultValue() {
+    this.checkAttributeExists()
     let value = this.props.model[this.props.attribute]()
 
     if (value) {
@@ -129,8 +148,4 @@ export default class BootstrapMoneyInput extends React.Component {
     if (this.props.onChange && oldCents != cents)
       this.props.onChange()
   }
-}
-
-BootstrapMoneyInput.propTypes = {
-  currenciesCollection: PropTypes.array.isRequired
 }
