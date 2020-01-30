@@ -60,7 +60,7 @@ export default class LiveTable extends React.Component {
     const params = Params.parse()
     const { modelClass, preloads, select } = this.props
     const { qParams, queryPageName, queryQName } = this.state
-    const query
+    let query
 
     if (this.props.collection) {
       query = this.props.collection
