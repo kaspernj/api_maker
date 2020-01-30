@@ -24,7 +24,7 @@ class ApiMaker::PreloaderBase
   end
 
   def models_with_join
-    @models ||= reflection.klass.find_by_sql(join_query.to_sql)
+    @models_with_join ||= reflection.klass.find_by_sql(join_query.to_sql)
   end
 
   def accessible_query
