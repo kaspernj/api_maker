@@ -5,7 +5,7 @@ import { CustomError, ValidationError } from "./errors"
 import FormDataToObject from "./form-data-to-object"
 import ModelName from "./model-name"
 import Money from "js-money"
-import objectToFormData from "object-to-formdata"
+import { objectToFormData } from "object-to-formdata"
 import { ValidationErrors } from "./validation-errors"
 
 const inflection = require("inflection")
