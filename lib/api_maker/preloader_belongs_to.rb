@@ -19,8 +19,21 @@ class ApiMaker::PreloaderBelongsTo < ApiMaker::PreloaderBase
 
 private
 
-  def model_class
-    @model_class ||= reflection.klass
+  def models
+    @models ||= begin
+      query = reflection.klass.where(look_up_key => collection.map(&reflection.foreign_key.to_sym))
+      query = query.instance_eval(&reflection.scope) if reflection.scope
+      query = query.accessible_by(ability) if ability
+      query = ApiMaker::SelectColumnsOnCollection.execute!(
+        collection: query,
+        model_class: reflection.klass,
+        select_columns: select_columns,
+        table_name: query.klass.table_name
+      )
+
+      query.load
+      query
+    end
   end
 
   def look_up_key
