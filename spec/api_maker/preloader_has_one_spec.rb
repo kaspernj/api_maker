@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "preloading - has one" do
+describe ApiMaker::PreloaderHasOne do
   let(:account) { create :account, customer: customer }
   let(:customer) { create :customer, id: 8 }
   let(:project) { create :project, account: account }
