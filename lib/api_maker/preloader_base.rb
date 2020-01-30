@@ -1,5 +1,5 @@
 class ApiMaker::PreloaderBase
-  attr_reader :ability, :args, :collection, :data, :records, :reflection, :reflection_name, :select
+  attr_reader :ability, :args, :collection, :data, :records, :reflection, :reflection_name, :select, :select_columns
 
   def initialize(ability:, args:, data:, collection:, records:, reflection:, select:, select_columns:) # rubocop:disable Metrics/ParameterLists
     @ability = ability
@@ -23,8 +23,8 @@ class ApiMaker::PreloaderBase
     @collection_name ||= ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
   end
 
-  def models
-    @models ||= reflection.klass.find_by_sql(join_query.to_sql)
+  def models_with_join
+    @models_with_join ||= reflection.klass.find_by_sql(join_query.to_sql)
   end
 
   def accessible_query
