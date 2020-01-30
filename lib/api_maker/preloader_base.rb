@@ -23,7 +23,7 @@ class ApiMaker::PreloaderBase
     @collection_name ||= ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
   end
 
-  def models
+  def models_with_join
     @models ||= reflection.klass.find_by_sql(join_query.to_sql)
   end
 
