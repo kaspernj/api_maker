@@ -26,6 +26,12 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
         query = query_normal
         query = query.instance_eval(&reflection.scope) if reflection.scope
         query = query.accessible_by(ability) if ability
+        query = ApiMaker::SelectColumnsOnCollection.execute!(
+          collection: query,
+          model_class: reflection.klass,
+          select_columns: select_columns,
+          table_name: query.klass.table_name
+        )
         query = query.fix
         query.load
         query
@@ -38,19 +44,8 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
     data.fetch(:included).fetch(collection_name).fetch(origin_id)
   end
 
-  def query_through
-    ApiMaker::PreloaderThrough.new(collection: collection, reflection: reflection).models_query_through_reflection
-      .select(reflection.klass.arel_table[Arel.star])
-      .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
-  end
-
   def query_normal
     reflection.klass.where(reflection.foreign_key => collection.map(&:id))
-      .select(reflection.klass.arel_table[Arel.star])
       .select(reflection.klass.arel_table[reflection.foreign_key].as("api_maker_origin_id"))
-  end
-
-  def resource
-    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass)
   end
 end

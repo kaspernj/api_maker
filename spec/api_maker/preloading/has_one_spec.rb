@@ -27,4 +27,43 @@ describe "preloading - has one" do
 
     expect(result.dig!("included", "tasks", "6", "r")).to eq("account_customer" => 8)
   end
+
+  it "only select the give columns without a through relationship" do
+    project_detail
+    collection = Project.where(id: [project.id])
+
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      collection: collection,
+      include_param: ["project_detail"],
+      select_columns: {
+        "project-detail" => ["id"]
+      }
+    )
+
+    attributes = collection_serializer
+      .result
+      .dig!(:included, "project-details", project_detail.id)
+      .model
+      .attributes
+
+    expect(attributes).to eq("api_maker_origin_id" => project.id, "id" => project_detail.id)
+  end
+
+  it "only select the give columns with a through relationship" do
+    collection = Task.where(id: task.id)
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      collection: collection,
+      include_param: ["account_customer"],
+      select_columns: {
+        "customer" => ["id"]
+      }
+    )
+    attributes = collection_serializer
+      .result
+      .dig!(:included, "customers", customer.id)
+      .model
+      .attributes
+
+    expect(attributes).to eq("api_maker_origin_id" => task.id, "id" => customer.id)
+  end
 end
