@@ -15,6 +15,17 @@ describe "bootstrap - string input" do
     expect(input[:value]).to eq "1985-06-17"
   end
 
+  it "accepts Date object as defaultValue" do
+    login_as user
+
+    visit bootstrap_string_input_date_object_path
+    wait_for_selector ".content-container"
+
+    input = find("#date_object")
+
+    expect(input[:value]).to eq "2020-01-01"
+  end
+
   it "renders a datetime local field as sets the value correctly" do
     login_as user
 
