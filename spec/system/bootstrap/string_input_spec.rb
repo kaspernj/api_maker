@@ -4,7 +4,7 @@ describe "bootstrap - string input" do
   let(:task) { create :task, created_at: "1985-06-17 10:30:00", user: user }
   let(:user) { create :user, birthday_at: "1985-06-17" }
 
-  it "renders a date field as sets the value correctly" do
+  it "renders a date field and sets the value correctly" do
     login_as user
 
     visit bootstrap_string_input_date_path
