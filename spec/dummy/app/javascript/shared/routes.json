@@ -4,6 +4,7 @@
     {"name": "bootstrap_checkboxes", "path": "/bootstrap/checkboxes", "component": "bootstrap/checkboxes"},
     {"name": "bootstrap_sort_link", "path": "/bootstrap/sort-link", "component": "bootstrap/sort-link"},
     {"name": "bootstrap_string_input_date", "path": "/bootstrap/string-input-date", "component": "bootstrap/string-input-date"},
+    {"name": "bootstrap_string_input_date_object", "path": "/bootstrap/string-input-date-object", "component": "bootstrap/string-input-date-object"},
     {"name": "bootstrap_string_input_datetime_local", "path": "/bootstrap/string-input-datetime-local", "component": "bootstrap/string-input-datetime-local"},
     {"name": "bootstrap_string_input_file", "path": "/bootstrap/string-input-file", "component": "bootstrap/string-input-file"},
 

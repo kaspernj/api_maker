@@ -16,7 +16,7 @@ export default class BootstrapStringInput extends React.Component {
     currenciesCollection: PropTypes.array,
     currencyName: PropTypes.string,
     "data-controller": PropTypes.string,
-    defaultValue: PropTypes.node,
+    defaultValue: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.node]),
     disabled: PropTypes.bool,
     hint: PropTypes.node,
     hintBottom: PropTypes.node,
