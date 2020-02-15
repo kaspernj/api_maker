@@ -54,14 +54,12 @@ export default class BaseModel {
   }
 
   isAssociationLoaded(associationName) {
-    if (associationName in this.relationshipsCache)
-      return true
-
+    if (associationName in this.relationshipsCache) return true
     return false
   }
 
   connect(eventName, callback) {
-    const cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this._primaryKey(), eventName, callback)
+    const cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this.primaryKey(), eventName, callback)
     return cableSubscription
   }
 
@@ -71,12 +69,12 @@ export default class BaseModel {
   }
 
   connectDestroyed(callback) {
-    const cableSubscription = CableConnectionPool.current().connectDestroyed(this.modelClassData().name, this._primaryKey(), callback)
+    const cableSubscription = CableConnectionPool.current().connectDestroyed(this.modelClassData().name, this.primaryKey(), callback)
     return cableSubscription
   }
 
   connectUpdated(callback) {
-    const cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this._primaryKey(), callback)
+    const cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this.primaryKey(), callback)
     return cableSubscription
   }
 
@@ -100,7 +98,7 @@ export default class BaseModel {
     if (this.isPersisted()) {
       const keyParts = [
         this.modelClassData().paramKey,
-        this._primaryKey()
+        this.primaryKey()
       ]
 
       if ("updated_at" in this.modelData) {
@@ -122,7 +120,7 @@ export default class BaseModel {
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "create"}, {})
+      response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "create"}, {})
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error
@@ -142,7 +140,7 @@ export default class BaseModel {
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: objectData, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "create"}, {})
+      response = await CommandsPool.addCommand({args: objectData, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "create"}, {})
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error
@@ -182,7 +180,7 @@ export default class BaseModel {
   }
 
   async destroy() {
-    const response = await CommandsPool.addCommand({command: `${this.modelClassData().collectionName}-destroy`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "destroy"}, {})
+    const response = await CommandsPool.addCommand({command: `${this.modelClassData().collectionName}-destroy`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "destroy"}, {})
 
     if (response.success) {
       if (response.model) {
@@ -311,7 +309,7 @@ export default class BaseModel {
   async reload() {
     const primaryKeyName = this.modelClassData().primaryKey
     const query = {}
-    query[`${primaryKeyName}_eq`] = this._primaryKey()
+    query[`${primaryKeyName}_eq`] = this.primaryKey()
 
     const model = await this.constructor.ransack(query).first()
     this._setNewModelData(model.modelData)
@@ -348,7 +346,7 @@ export default class BaseModel {
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "update"}, {})
+      response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "update"}, {})
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error
@@ -372,7 +370,7 @@ export default class BaseModel {
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: objectData, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "update"}, {})
+      response = await CommandsPool.addCommand({args: objectData, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "update"}, {})
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error
@@ -396,7 +394,7 @@ export default class BaseModel {
     const dataToUse = {}
     dataToUse[paramKey] = modelData
 
-    const response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-valid`, collectionName: this.modelClassData().collectionName, primaryKey: this._primaryKey(), type: "valid"}, {})
+    const response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-valid`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "valid"}, {})
 
     return {valid: response.valid, errors: response.errors}
   }
@@ -473,16 +471,6 @@ export default class BaseModel {
     }
   }
 
-  _isPresent(value) {
-    if (!value) {
-      return false
-    } else if (typeof value == "string" && value.match(/^\s*$/)) {
-      return false
-    }
-
-    return true
-  }
-
   _getAttributeMoney(attributeName) {
     const value = this._getAttribute(attributeName)
 
@@ -492,6 +480,22 @@ export default class BaseModel {
     const cents = value.amount
     const currency = value.currency
     return Money.fromInteger(cents, currency)
+  }
+
+  isAttributeLoaded(attributeName) {
+    if (attributeName in this.changes) return true
+    if (attributeName in this.modelData) return true
+    return false
+  }
+
+  _isPresent(value) {
+    if (!value) {
+      return false
+    } else if (typeof value == "string" && value.match(/^\s*$/)) {
+      return false
+    }
+
+    return true
   }
 
   async _loadBelongsToReflection(args, queryArgs = {}) {
@@ -574,7 +578,7 @@ export default class BaseModel {
     }
   }
 
-  _primaryKey() {
+  primaryKey() {
     return this._getAttribute(this.modelClassData().primaryKey)
   }
 

@@ -172,7 +172,7 @@ export default class Task extends BaseModel {
         {
           args: args,
           command: "test_member",
-          primaryKey: this._primaryKey(),
+          primaryKey: this.primaryKey(),
           collectionName: this.modelClassData().collectionName,
           type: "member"
         },
