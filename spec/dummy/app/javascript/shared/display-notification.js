@@ -1,15 +1,18 @@
+import { CustomError, ValidationError } from "api-maker/errors"
+
 export default class DisplayNotification {
   static alert(message) {
     new DisplayNotification({type: "alert", text: message})
   }
 
   static error(error) {
-    if (error.errors) {
-      DisplayNotification.alert(error.errors.join(". "))
-    } else if (error.response && error.response.errors) {
-      DisplayNotification.alert(error.response.errors.join(". "))
+    if (error instanceof CustomError) {
+      DisplayNotification.alert(error.args.response.errors.join(". "))
+    } else if (error instanceof ValidationError) {
+      if (error.hasUnhandledErrors())
+        DisplayNotification.alert(error.message)
     } else {
-      console.error(`Didnt know what to do with: ${JSON.stringify(error)}`)
+      console.error("Didnt know what to do with this", error)
     }
   }
 
@@ -21,7 +24,7 @@ export default class DisplayNotification {
     if (!("delay" in args))
       args["delay"] = 3000
 
-    var pnotify = new PNotify(args)
+    const pnotify = new PNotify(args)
     pnotify.get().click(() => {
       pnotify.remove()
     })

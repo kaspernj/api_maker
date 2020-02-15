@@ -1,3 +1,4 @@
+import EventListener from "api-maker/event-listener"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -5,6 +6,10 @@ import React from "react"
 const inflection = require("inflection")
 
 export default class BootstrapCheckbox extends React.Component {
+  static defaultProps = {
+    defaultValue: 1,
+    zeroInput: true
+  }
   static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     className: PropTypes.string,
@@ -19,22 +24,48 @@ export default class BootstrapCheckbox extends React.Component {
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
-    wrapperClassName: PropTypes.string
+    wrapperClassName: PropTypes.string,
+    zeroInput: PropTypes.bool
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      validationErrors: []
+    }
+  }
+
+  componentDidMount() {
+    this.setForm()
+  }
+
+  componentDidUpdate() {
+    this.setForm()
+  }
+
+  setForm() {
+    const form = this.refs.input && this.refs.input.form
+    if (form != this.state.form) this.setState({form})
+  }
+
   render() {
-    let id = this.inputId()
+    const { defaultValue, zeroInput } = this.props
+    const { form, validationErrors } = this.state
+    const id = this.inputId()
 
     return (
       <div className={this.wrapperClassName()}>
+        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         <div className="form-check">
-          <input defaultValue="0" name={this.inputName()} type="hidden" type="hidden" />
+          {zeroInput &&
+            <input defaultValue="0" name={this.inputName()} type="hidden" type="hidden" />
+          }
           <input
             data-target={this.props["data-target"]}
             defaultChecked={this.inputDefaultChecked()}
-            className="form-check-input"
+            className={this.className()}
             data-action={this.props["data-action"]}
-            defaultValue="1"
+            defaultValue={defaultValue}
             id={id}
             name={this.inputName()}
             onChange={this.props.onChange}
@@ -53,8 +84,18 @@ export default class BootstrapCheckbox extends React.Component {
             {this.props.hint}
           </p>
         }
+        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
       </div>
     )
+  }
+
+  className() {
+    const classNames = ["form-check-input"]
+
+    if (this.props.className)
+      classNames.push(this.props.className)
+
+    return classNames.join(" ")
   }
 
   generatedId() {
@@ -90,28 +131,35 @@ export default class BootstrapCheckbox extends React.Component {
     }
   }
 
-  wrapperClassName() {
-    let classNames = ["component-bootstrap-checkbox"]
-
-    if (this.props.wrapperClassName)
-      classNames.push(this.props.wrapperClassName)
-
-    return classNames.join(" ")
+  onValidationErrors(event) {
+    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
+    this.setState({validationErrors})
   }
 
   label() {
-    if (this.props.label) {
-      return this.props.label
-    } else if (this.props.model) {
-      return this.props.model.modelClass().humanAttributeName(this.props.attribute)
+    const { attribute, label, model } = this.props
+
+    if ("label" in this.props) {
+      return label
+    } else if (attribute && model) {
+      return model.modelClass().humanAttributeName(attribute)
     }
   }
 
   labelClassName() {
-    let classNames = ["form-check-label"]
+    const classNames = ["form-check-label"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
+
+    return classNames.join(" ")
+  }
+
+  wrapperClassName() {
+    const classNames = ["component-bootstrap-checkbox"]
+
+    if (this.props.wrapperClassName)
+      classNames.push(this.props.wrapperClassName)
 
     return classNames.join(" ")
   }

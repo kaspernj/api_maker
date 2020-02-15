@@ -11,9 +11,9 @@ describe "model accessible by" do
 
     visit models_accessible_by_path
 
-    expect(page).to have_current_path models_accessible_by_path, ignore_query: true
+    wait_for_path models_accessible_by_path
 
-    wait_for_chrome { find("[data-controller='models--accessible-by']", visible: false)["data-accessible-by-completed"] == "true" }
+    wait_for_browser { find("[data-controller='models--accessible-by']", visible: false)["data-accessible-by-completed"] == "true" }
 
     project_data = JSON.parse(find("[data-controller='models--accessible-by']", visible: false)["data-result"])
 

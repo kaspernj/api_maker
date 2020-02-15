@@ -8,8 +8,8 @@ export default class extends Controller {
     e.preventDefault()
 
     Devise.signOut().then(deviseSignOutResponse => {
-      var currentUserResult = Devise.currentUser()
-      var isUserSignedInResult = Devise.isUserSignedIn()
+      const currentUserResult = Devise.currentUser()
+      const isUserSignedInResult = Devise.isUserSignedIn()
 
       this.element.dataset["successResponse"] = JSON.stringify({
         deviseSignOutResponse,

@@ -1,3 +1,5 @@
+import EventListener from "api-maker/event-listener"
+import InvalidFeedback from "./invalid-feedback"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -27,10 +29,19 @@ export default class BootstrapSelect extends React.Component {
     onChange: PropTypes.func,
     options: PropTypes.array,
     select2: PropTypes.bool,
-    wrapperClassName: PropTypes.string,
+    wrapperClassName: PropTypes.string
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      validationErrors: []
+    }
+  }
+
   componentDidMount() {
+    this.setForm()
+
     if (this.props.select2 && this.props.onChange)
       $(this.refs.select).on("change", this.props.onChange)
 
@@ -44,9 +55,21 @@ export default class BootstrapSelect extends React.Component {
       $(this.refs.select).off("change", this.props.onChange)
   }
 
+  componentDidUpdate() {
+    this.setForm()
+  }
+
+  setForm() {
+    const form = this.refs.select && this.refs.select.form
+    if (form != this.state.form) this.setState({form})
+  }
+
   render() {
+    const { form, validationErrors } = this.state
+
     return (
       <div className={this.wrapperClassName()}>
+        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         {this.label() &&
           <div className={this.props.labelContainerClassName ? this.props.labelContainerClassName : null}>
             <label className={this.labelClassName()} htmlFor={this.inputId()}>
@@ -69,7 +92,7 @@ export default class BootstrapSelect extends React.Component {
           data-hide-search={this.props.hideSearch}
           data-placeholder={this.props.placeholder}
           defaultValue={this.inputDefaultValue()}
-          className={`form-control ${this.props.className}`}
+          className={this.selectClassName()}
           disabled={this.props.disabled}
           id={this.inputId()}
           multiple={this.props.multiple}
@@ -90,6 +113,7 @@ export default class BootstrapSelect extends React.Component {
             {this.props.hintBottom}
           </span>
         }
+        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
       </div>
     )
   }
@@ -143,13 +167,13 @@ export default class BootstrapSelect extends React.Component {
     if ("label" in this.props) {
       return this.props.label
     } else if (this.props.model) {
-      let attributeMethodName = inflection.camelize(this.props.attribute.replace(/_id$/, ""), true)
+      const attributeMethodName = inflection.camelize(this.props.attribute.replace(/_id$/, ""), true)
       return this.props.model.modelClass().humanAttributeName(attributeMethodName)
     }
   }
 
   labelClassName() {
-    let classNames = ["form-group-label"]
+    const classNames = ["form-group-label"]
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
@@ -157,8 +181,24 @@ export default class BootstrapSelect extends React.Component {
     return classNames.join(" ")
   }
 
+  onValidationErrors(event) {
+    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
+    this.setState({validationErrors})
+  }
+
+  selectClassName() {
+    const classNames = ["form-control"]
+
+    if (this.props.className) classNames.push(this.props.className)
+
+    if (this.state.validationErrors.length > 0)
+      classNames.push("is-invalid")
+
+    return classNames.join(" ")
+  }
+
   wrapperClassName() {
-    let classNames = ["form-group", "component-bootstrap-select"]
+    const classNames = ["form-group", "component-bootstrap-select"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)

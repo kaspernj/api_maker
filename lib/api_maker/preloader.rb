@@ -1,12 +1,16 @@
 class ApiMaker::Preloader
-  def initialize(ability: nil, args: nil, collection:, data:, include_param:, records:, select:)
+  attr_reader :model_class
+
+  def initialize(ability: nil, args: nil, collection:, data:, include_param:, model_class: nil, records:, select:, select_columns:) # rubocop:disable Metrics/ParameterLists
     @ability = ability
     @args = args
     @collection = collection
     @data = data
     @include_param = include_param
+    @model_class = model_class || @collection.model
     @records = records
     @select = select
+    @select_columns = select_columns
   end
 
   def fill_data
@@ -16,7 +20,7 @@ class ApiMaker::Preloader
     parsed.each do |key, value|
       next unless key
 
-      reflection = @collection.model.reflections[key]
+      reflection = model_class.reflections[key]
       raise "Unknown reflection: #{@collection.model.name}##{key}" unless reflection
 
       fill_empty_relationships_for_key(reflection, key)
@@ -30,20 +34,23 @@ class ApiMaker::Preloader
           data: @data,
           records: @records,
           reflection: reflection,
-          select: @select
+          select: @select,
+          select_columns: @select_columns
         ).preload
       end
 
-      next if value.blank? || preload_result.fetch(:collection).empty?
+      next if value.blank? || preload_result.empty?
 
       ApiMaker::Preloader.new(
         ability: @ability,
         args: @args,
         data: @data,
-        collection: preload_result.fetch(:collection),
+        collection: preload_result,
         include_param: value,
+        model_class: reflection.klass,
         records: @data.fetch(:included),
-        select: @select
+        select: @select,
+        select_columns: @select_columns
       ).fill_data
     end
   end

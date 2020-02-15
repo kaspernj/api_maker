@@ -3,6 +3,9 @@ import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class Card extends React.Component {
+  static defaultProps = {
+    responsiveTable: true
+  }
   static propTypes = PropTypesExact({
     className: PropTypes.string,
     children: PropTypes.node,
@@ -11,11 +14,12 @@ export default class Card extends React.Component {
     onClick: PropTypes.func,
     striped: PropTypes.bool,
     style: PropTypes.object,
+    responsiveTable: PropTypes.bool,
     table: PropTypes.bool
   })
 
   render() {
-    var { children, controls, header, onClick, style, table } = this.props
+    const { children, controls, header, onClick, style, table } = this.props
 
     return (
       <div className={this.classNames()} onClick={onClick} ref="card" style={style}>
@@ -42,7 +46,7 @@ export default class Card extends React.Component {
   }
 
   classNames() {
-    var classNames = ["component-bootstrap-card", "card", "card-default"]
+    const classNames = ["component-bootstrap-card", "card", "card-default"]
 
     if (this.props.className)
       classNames.push(this.props.className)
@@ -51,10 +55,13 @@ export default class Card extends React.Component {
   }
 
   bodyClassNames() {
-    var classNames = ["card-body"]
+    const classNames = ["card-body"]
 
     if (this.props.table) {
-      classNames.push("table-responsive")
+      if (this.props.responsiveTable){
+        classNames.push("table-responsive")
+      }
+
       classNames.push("p-0")
     }
 
@@ -62,7 +69,7 @@ export default class Card extends React.Component {
   }
 
   tableClassNames() {
-    var classNames = ["table", "table-hover", "mb-0", "w-100"]
+    const classNames = ["table", "table-hover", "mb-0", "w-100"]
 
     if (this.props.striped)
       classNames.push("table-striped")

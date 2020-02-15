@@ -1,8 +1,29 @@
-script:
+before_install:
+  - gem install bundler -v 2.0.2
+  - sudo apt-get update && sudo apt-get install -y firefox google-chrome-stable
+before_script:
   - cd spec/dummy && yarn
   - cd spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
   - cd spec/dummy && bundle exec rails db:schema:load
   - cd spec/dummy && rake api_maker:generate_models
-  - bundle exec rspec
-  - bundle exec rubocop
-  - bundle exec rails_best_practices
+
+builds:
+  build_1:
+    name: RSpec
+    script:
+      - bundle exec rspec spec/api_maker spec/services
+  build_2:
+    name: Chrome
+    script:
+      - xvfb-run bundle exec rspec spec/system
+  build_3:
+    name: Firefox
+    env:
+      SELENIUM_DRIVER: firefox
+    script:
+      - xvfb-run bundle exec rspec spec/system
+  build_4:
+    name: Linters
+    script:
+      - bundle exec rubocop
+      - bundle exec rails_best_practices

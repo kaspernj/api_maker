@@ -42,25 +42,25 @@ export default class LiveTable extends React.Component {
 
   componentDidUpdate() {
     if (this.state.currentHref != location.href) {
-      var { queryQName } = this.state
-      var params = Params.parse()
-      var qParams = params[queryQName] || {}
+      const { queryQName } = this.state
+      const params = Params.parse()
+      const qParams = params[queryQName] || {}
       Params.setCachedParams(queryQName, qParams)
       this.setState({currentHref: location.href, qParams}, () => this.loadModels())
     }
   }
 
   async loadQParams() {
-    var { queryQName } = this.state
-    var qParams = await Params.getCachedParams(queryQName, {default: this.props.defaultParams || {}})
+    const { queryQName } = this.state
+    const qParams = await Params.getCachedParams(queryQName, {default: this.props.defaultParams || {}})
     return this.setState({qParams})
   }
 
   async loadModels() {
-    var params = Params.parse()
-    var { modelClass, preloads, select } = this.props
-    var { qParams, queryPageName, queryQName } = this.state
-    var query
+    const params = Params.parse()
+    const { modelClass, preloads, select } = this.props
+    const { qParams, queryPageName, queryQName } = this.state
+    let query
 
     if (this.props.collection) {
       query = this.props.collection
@@ -76,13 +76,13 @@ export default class LiveTable extends React.Component {
       .preload(preloads)
       .select(select)
 
-    var result = await query.result()
+      const result = await query.result()
 
     this.setState({query, result, models: result.models()})
   }
 
   render() {
-    var { qParams, query, result, models } = this.state
+    const { qParams, query, result, models } = this.state
 
     return (
       <div className={this.className()}>
@@ -92,8 +92,8 @@ export default class LiveTable extends React.Component {
   }
 
   content() {
-    var { filterContent, filterSubmitLabel, modelClass } = this.props
-    var { qParams, query, result, models } = this.state
+    const { filterContent, filterSubmitLabel, modelClass } = this.props
+    const { qParams, query, result, models } = this.state
 
     return (
       <div className="content-container">
@@ -133,7 +133,7 @@ export default class LiveTable extends React.Component {
   }
 
   className() {
-    var classNames = ["component-api-maker-live-table"]
+    const classNames = ["component-api-maker-live-table"]
 
     if (this.props.className)
       classNames.push(this.props.className)
@@ -144,10 +144,10 @@ export default class LiveTable extends React.Component {
   onFilterFormSubmit(e) {
     e.preventDefault()
 
-    var qParams = Params.serializeForm(this.refs.filterForm)
-    var { queryQName } = this.state
+    const qParams = Params.serializeForm(this.refs.filterForm)
+    const { queryQName } = this.state
 
-    var changeParamsParams = {}
+    const changeParamsParams = {}
     changeParamsParams[queryQName] = qParams
 
     Params.changeParams(changeParamsParams)

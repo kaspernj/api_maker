@@ -10,9 +10,9 @@ describe "model preload" do
 
     visit models_preload_path(task_id: task.id)
 
-    expect(page).to have_current_path models_preload_path, ignore_query: true
+    wait_for_path models_preload_path
 
-    wait_for_chrome { find("[data-controller='models--preload']", visible: false)["data-preload-completed"] == "true" }
+    wait_for_browser { find("[data-controller='models--preload']", visible: false)["data-preload-completed"] == "true" }
 
     task_with_preload = JSON.parse(find("[data-controller='models--preload']", visible: false)["data-task-with-preload"])
     task_without_preload = JSON.parse(find("[data-controller='models--preload']", visible: false)["data-task-without-preload"])

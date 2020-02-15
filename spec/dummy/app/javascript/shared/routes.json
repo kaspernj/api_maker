@@ -2,8 +2,11 @@
   "routes": [
     {"name": "bootstrap_checkbox_boolean", "path": "/bootstrap/checkbox-boolean", "component": "bootstrap/checkbox-boolean"},
     {"name": "bootstrap_checkboxes", "path": "/bootstrap/checkboxes", "component": "bootstrap/checkboxes"},
+    {"name": "bootstrap_sort_link", "path": "/bootstrap/sort-link", "component": "bootstrap/sort-link"},
     {"name": "bootstrap_string_input_date", "path": "/bootstrap/string-input-date", "component": "bootstrap/string-input-date"},
+    {"name": "bootstrap_string_input_date_object", "path": "/bootstrap/string-input-date-object", "component": "bootstrap/string-input-date-object"},
     {"name": "bootstrap_string_input_datetime_local", "path": "/bootstrap/string-input-datetime-local", "component": "bootstrap/string-input-datetime-local"},
+    {"name": "bootstrap_string_input_file", "path": "/bootstrap/string-input-file", "component": "bootstrap/string-input-file"},
 
     {"name": "models_command_serialize", "path": "/models/command-serialize", "component": "models/command-serialize"},
     {"name": "models_created_event", "path": "/models/created-event", "component": "models/created-event"},
@@ -12,6 +15,7 @@
     {"name": "models_load_has_one_through", "path": "/models/load-has-one-through/:task_id", "component": "models/load-has-one-through"},
     {"name": "models_paginate", "path": "/models/paginate", "component": "models/paginate"},
     {"name": "models_select", "path": "/models/select", "component": "models/select"},
+    {"name": "models_validation_errors", "path": "/models/validation-errors", "component": "models/validation-errors"},
 
     {"name": "session_status_specs_timeout", "path": "/session_status_specs/timeout", "component": "session-status-specs/timeout"},
     {"name": "new_session", "path": "/sessions/new", "component": "sessions/new"},

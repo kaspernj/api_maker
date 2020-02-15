@@ -9,9 +9,8 @@ export default class ModelsCommandSerialize extends React.Component {
   }
 
   async componentDidMount() {
-    var params = Params.parse()
-
-    var response = await Task.commandSerialize({task_id: params.task_id})
+    const params = Params.parse()
+    const response = await Task.commandSerialize({task_id: params.task_id})
     this.setState({task: response.test.task})
   }
 

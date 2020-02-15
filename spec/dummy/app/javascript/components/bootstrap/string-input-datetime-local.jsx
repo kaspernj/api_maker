@@ -9,8 +9,8 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
   }
 
   async loadTask() {
-    var params = Params.parse()
-    var task = await Task.find(params.task_id)
+    const params = Params.parse()
+    const task = await Task.find(params.task_id)
     this.setState({task})
   }
 
@@ -23,11 +23,11 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
   }
 
   content() {
-    var { task } = this.state
+    const { task } = this.state
 
     return (
       <div className="content-container">
-        <form onSubmit={(e) => this.onSubmit(e)} ref="form">
+        <form onSubmit={(e) => this.onSubmit(e)}>
           <StringInput attribute="createdAt" model={task} type="datetime-local" />
           <input type="submit" value="Save" />
         </form>
@@ -38,10 +38,9 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    var formData = new FormData(this.refs.form)
-    var { task } = this.state
+    const { task } = this.state
 
-    task.saveRaw(formData).then(() => {
+    task.saveRaw(e.target).then(() => {
       console.log("Task was saved")
     }, (response) => {
       console.log("Error!")

@@ -1,3 +1,4 @@
+import EventListener from "api-maker/event-listener"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -12,31 +13,66 @@ export default class BootstrapCheckboxes extends React.Component {
     labelClassName: PropTypes.string,
     model: PropTypes.object,
     name: PropTypes.string,
+    onChange: PropTypes.func,
     options: PropTypes.array.isRequired
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      validationErrors: []
+    }
+  }
+
+  componentDidMount() {
+    this.setForm()
+  }
+
+  componentDidUpdate() {
+    this.setForm()
+  }
+
+  setForm() {
+    const form = this.refs.hiddenInput && this.refs.hiddenInput.form
+    if (form != this.state.form) this.setState({form})
+  }
+
   render() {
+    const { form } = this.state
+
     return (
       <div className="component-bootstrap-checkboxes form-group">
+        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         <label className={this.labelClassName()}>
           {this.label()}
         </label>
 
-        <input name={this.inputName()} type="hidden" value="" />
+        <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
         {this.props.options.map((option, index) => this.optionElement(option, index))}
       </div>
     )
   }
 
   inputDefaultValue() {
-    if (this.props.defaultValue) {
-      return this.props.defaultValue
-    } else if (this.props.model) {
-      if (!this.props.model[this.props.attribute])
-        throw `No such attribute: ${this.props.attribute}`
+    const { attribute, defaultValue, model } = this.props
 
-      return this.props.model[this.props.attribute]()
+    if (defaultValue) {
+      return defaultValue
+    } else if (attribute && model) {
+      if (!model[attribute])
+        throw `No such attribute: ${attribute}`
+
+      return this.props.model[attribute]()
     }
+  }
+
+  inputCheckboxClassName() {
+    const classNames = []
+
+    if (this.state.validationErrors.length > 0)
+      classNames.push("is-invalid")
+
+    return classNames.join(" ")
   }
 
   inputName() {
@@ -61,17 +97,17 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   label() {
-    if (this.props.label === false) {
-      return null
-    } else if (this.props.label) {
-      return this.props.label
-    } else if (this.props.model) {
-      return this.props.model.modelClass().humanAttributeName(this.props.attribute)
+    const { attribute, label, model } = this.props
+
+    if ("label" in this.props) {
+      return label
+    } else if (attribute && model) {
+      return model.modelClass().humanAttributeName(attribute)
     }
   }
 
   labelClassName() {
-    let classNames = []
+    const classNames = []
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
@@ -80,25 +116,42 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   generatedId() {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    if (!this.generatedIdValue)
+      this.generatedIdValue = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+
+    return this.generatedIdValue
   }
 
-  optionElement(option) {
-    var id = this.generatedId()
+  onValidationErrors(event) {
+    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
+    this.setState({validationErrors})
+  }
+
+  optionElement(option, index) {
+    const { onChange, options } = this.props
+    const { validationErrors } = this.state
+    const id = `${this.generatedId()}-${index}`
 
     return (
       <div className="checkboxes-option" key={`option-${option[1]}`}>
         <input
+          className={this.inputCheckboxClassName()}
           data-option-value={option[1]}
           defaultChecked={this.isDefaultSelected(option[1])}
           id={id}
           name={this.inputName()}
+          onChange={onChange}
           type="checkbox"
-          value={option[1]} />
+          value={option[1]}
+        />
 
         <label className="ml-1" htmlFor={id}>
           {option[0]}
         </label>
+
+        {(index + 1) == options.length && validationErrors.length > 0 &&
+          <InvalidFeedback errors={validationErrors} />
+        }
       </div>
     )
   }

@@ -10,9 +10,9 @@ describe "model find" do
 
     visit models_find_path(project_id: project.id)
 
-    expect(page).to have_current_path models_find_path, ignore_query: true
+    wait_for_path models_find_path
 
-    wait_for_chrome { find("[data-controller='models--find']", visible: false)["data-find-completed"] == "true" }
+    wait_for_browser { find("[data-controller='models--find']", visible: false)["data-find-completed"] == "true" }
 
     project_data = JSON.parse(find("[data-controller='models--find']", visible: false)["data-project-data"])
 

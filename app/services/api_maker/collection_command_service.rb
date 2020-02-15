@@ -11,22 +11,14 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
       controller: controller
     )
 
-    ServicePattern::Response.new(success: true)
+    succeed!
   end
 
   def authorize!
-    raise CanCan::AccessDenied, "No access to '#{@command_name}' on '#{klass.name}'" unless @ability.can?(@command_name.to_sym, klass)
+    raise CanCan::AccessDenied, "No access to '#{@command_name}' on '#{model_class.name}'" unless @ability.can?(@command_name.to_sym, model_class)
   end
 
   def constant
     @constant ||= "Commands::#{namespace}::#{@command_name.camelize}".constantize
-  end
-
-  def namespace
-    @namespace ||= @model_name.camelize
-  end
-
-  def klass
-    @klass ||= @model_name.singularize.camelize.constantize
   end
 end

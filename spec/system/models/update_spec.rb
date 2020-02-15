@@ -9,10 +9,10 @@ describe "model update" do
 
     visit models_update_path(project_id: project.id)
 
-    expect(page).to have_current_path models_update_path, ignore_query: true
+    wait_for_path models_update_path
 
-    wait_for_chrome { find("[data-controller='models--update']", visible: false)["data-update-completed"] == "true" }
-    wait_for_chrome { find("[data-controller='models--update']", visible: false)["data-result"] }
+    wait_for_browser { find("[data-controller='models--update']", visible: false)["data-update-completed"] == "true" }
+    wait_for_browser { find("[data-controller='models--update']", visible: false)["data-result"] }
 
     expect(project.reload.name).to eq "test-update-project"
 

@@ -10,13 +10,13 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   async loadAccount() {
-    var params = Params.parse()
-    var account = await Account.ransack({id_eq: params.account_id}).preload("tasks").first()
+    const params = Params.parse()
+    const account = await Account.ransack({id_eq: params.account_id}).preload("tasks").first()
     this.setState({account})
   }
 
   async loadTasks() {
-    var tasks = await Task.ransack().toArray()
+    const tasks = await Task.ransack().toArray()
     this.setState({tasks})
   }
 
@@ -49,9 +49,7 @@ export default class BootstrapCheckboxes extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    var formData = new FormData(this.refs.form)
-
-    this.state.account.saveRaw(formData).then(() => {
+    this.state.account.saveRaw(e.target).then(() => {
       console.log("Account was saved")
     }, (response) => {
       console.log("Account couldnt be saved")

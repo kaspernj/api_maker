@@ -1,5 +1,5 @@
 import Api from "./api"
-import CustomError from "./custom-error"
+import { CustomError } from "./errors"
 import EventEmitter from "events"
 const inflection = require("inflection")
 
@@ -45,12 +45,12 @@ export default class Devise {
     if (!args.scope)
       args.scope = "user"
 
-    var postData = {"username": username, "password": password, "args": args}
-    var response = await Api.post("/api_maker/devise/do_sign_in", postData)
+    const postData = {"username": username, "password": password, "args": args}
+    const response = await Api.post("/api_maker/devise/do_sign_in", postData)
 
     if (response.success) {
-      var modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
-      var modelInstance = new modelClass(response.model_data)
+      const modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
+      const modelInstance = new modelClass(response.model_data)
 
       Devise.updateSession(modelInstance)
       Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
@@ -62,7 +62,7 @@ export default class Devise {
   }
 
   static updateSession(model) {
-    var scope = model.modelClassData().name
+    const scope = model.modelClassData().name
     Devise.current().currents[scope] = model
   }
 
@@ -74,8 +74,8 @@ export default class Devise {
     if (!args.scope)
       args.scope = "user"
 
-    var postData = {"args": args}
-    var response = await Api.post("/api_maker/devise/do_sign_out", postData)
+    const postData = {"args": args}
+    const response = await Api.post("/api_maker/devise/do_sign_out", postData)
 
     if (response.success) {
       Devise.setSignedOut(args)
@@ -98,15 +98,15 @@ export default class Devise {
   }
 
   loadCurrentScope(scope) {
-    var apiMakerDataElement = document.querySelector(".api-maker-data")
-    var keyName = `current${inflection.camelize(scope)}`
-    var scopeData = apiMakerDataElement.dataset[keyName]
+    const apiMakerDataElement = document.querySelector(".api-maker-data")
+    const keyName = `current${inflection.camelize(scope)}`
+    const scopeData = apiMakerDataElement.dataset[keyName]
 
     if (!scopeData)
       return null
 
-    var modelClass = require(`api-maker/models/${inflection.dasherize(inflection.underscore(scope))}`).default
-    var modelInstance = new modelClass({data: JSON.parse(scopeData)})
+    const modelClass = require(`api-maker/models/${inflection.dasherize(inflection.underscore(scope))}`).default
+    const modelInstance = new modelClass({data: JSON.parse(scopeData)})
 
     return modelInstance
   }

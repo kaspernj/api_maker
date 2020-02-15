@@ -10,15 +10,14 @@ export default class ModelsDestroyEvent extends React.Component {
   }
 
   async componentDidMount() {
-    var params = Params.parse()
-    var accountId = Hash.fetch("account_id", params)
-    var tasks = await Task.ransack({account_marked_tasks_account_id_eq: accountId}).distinct().toArray()
-    // console.error(JSON.stringify(tasks))
+    const params = Params.parse()
+    const accountId = Hash.fetch("account_id", params)
+    const tasks = await Task.ransack({account_marked_tasks_account_id_eq: accountId}).distinct().toArray()
     this.setState({tasks})
   }
 
   render() {
-    var { tasks } = this.state
+    const { tasks } = this.state
 
     return (
       <div className="component-models-index-distinct">

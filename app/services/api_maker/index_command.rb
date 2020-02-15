@@ -14,7 +14,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
 
           command.result(count: count)
         else
-          collection = collection_from_query(@query.fix)
+          collection = collection_from_query(@query)
           response = collection.as_json
           include_pagination_data(response, @query)
 
@@ -22,8 +22,6 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
         end
       end
     end
-
-    ServicePattern::Response.new(success: true)
   end
 
   def filter_custom_accessible_by(collection)
@@ -41,7 +39,8 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
         args: api_maker_args,
         collection: collection,
         include_param: params[:include],
-        select: select
+        select: select,
+        select_columns: params[:select_columns]
       ).result
     end
   end

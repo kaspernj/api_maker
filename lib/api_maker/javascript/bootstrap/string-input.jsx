@@ -1,14 +1,72 @@
+import EventListener from "api-maker/event-listener"
+import InvalidFeedback from "./invalid-feedback"
 import MoneyInput from "./money-input"
+import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 const inflection = require("inflection")
 
 export default class BootstrapStringInput extends React.Component {
+  static propTypes = PropTypesExact({
+    append: PropTypes.node,
+    attribute: PropTypes.string,
+    autoComplete: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    className: PropTypes.string,
+    currenciesCollection: PropTypes.array,
+    currencyName: PropTypes.string,
+    "data-controller": PropTypes.string,
+    defaultValue: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.node]),
+    disabled: PropTypes.bool,
+    hint: PropTypes.node,
+    hintBottom: PropTypes.node,
+    id: PropTypes.string,
+    label: PropTypes.node,
+    labelClassName: PropTypes.string,
+    maxLength: PropTypes.number,
+    model: PropTypes.object,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    onKeyUp: PropTypes.func,
+    placeholder: PropTypes.node,
+    rows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    step: PropTypes.number,
+    small: PropTypes.bool,
+    type: PropTypes.string,
+    wrapperClassName: PropTypes.string
+  })
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      blankInputName: this.props.type == "file",
+      validationErrors: []
+    }
+  }
+
+  componentDidMount() {
+    this.setForm()
+  }
+
+  componentDidUpdate() {
+    this.setForm()
+  }
+
+  setForm() {
+    const form = this.refs.input && this.refs.input.form
+    if (form != this.state.form) this.setState({form})
+  }
+
   render() {
+    const { form, validationErrors } = this.state
+
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
+        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         {this.label() &&
-          <label className={this.labelClassName()} htmlFor={this.inputId()}>{this.label()}</label>
+          <label className={this.labelClassName()} htmlFor={this.inputId()}>
+            {this.label()}
+          </label>
         }
         {this.props.hint &&
           <span className="form-text text-muted font-smoothing font-xs">
@@ -27,6 +85,7 @@ export default class BootstrapStringInput extends React.Component {
             onKeyUp={this.props.onKeyUp}
             placeholder={this.props.placeholder}
             ref="input"
+            rows={this.props.rows}
             />
         }
         {this.inputType() == "money" &&
@@ -56,14 +115,11 @@ export default class BootstrapStringInput extends React.Component {
               autoComplete={this.props.autoComplete}
               className={this.inputClassName()}
               data-controller={this.props["data-controller"]}
-              data-month-picker={this.props["data-month-picker"]}
-              data-start-date={this.props["data-start-date"]}
-              data-target={this.props["data-target"]}
               defaultValue={this.inputDefaultValue()}
               disabled={this.props.disabled}
               id={this.inputId()}
               name={this.inputName()}
-              onChange={this.props.onChange}
+              onChange={e => this.onInputChanged(e)}
               onKeyUp={this.props.onKeyUp}
               placeholder={this.props.placeholder}
               ref="input"
@@ -77,6 +133,7 @@ export default class BootstrapStringInput extends React.Component {
                 </span>
               </div>
             }
+            {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
           </div>
         }
         {this.props.hintBottom &&
@@ -89,10 +146,13 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   inputClassName() {
-    let classNames = ["form-control"]
+    const classNames = ["form-control"]
 
     if (this.props.className)
       classNames.push(this.props.className)
+
+    if (this.state.validationErrors.length > 0)
+      classNames.push("is-invalid")
 
     return classNames.join(" ")
   }
@@ -102,7 +162,7 @@ export default class BootstrapStringInput extends React.Component {
       return this.formatValue(this.props.defaultValue)
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
-        throw new Error(`No such attribute: ${this.props.attribute}`)
+        throw new Error(`No such attribute: ${this.props.model.modelClassData().name}#${this.props.attribute}`)
 
       return this.formatValue(this.props.model[this.props.attribute]())
     }
@@ -120,7 +180,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   inputId() {
-    if (this.props.id) {
+    if ("id" in this.props) {
       return this.props.id
     } else if (this.props.model) {
       return `${this.props.model.modelClassData().paramKey}_${inflection.underscore(this.props.attribute)}`
@@ -128,7 +188,10 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   inputName() {
-    if (this.props.name) {
+    if (this.state.blankInputName)
+      return ""
+
+    if ("name" in this.props) {
       return this.props.name
     } else if (this.props.model) {
       return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}]`
@@ -154,7 +217,7 @@ export default class BootstrapStringInput extends React.Component {
   }
 
   labelClassName() {
-    let classNames = []
+    const classNames = []
 
     if (this.props.labelClassName)
       classNames.push(this.props.labelClassName)
@@ -162,8 +225,26 @@ export default class BootstrapStringInput extends React.Component {
     return classNames.join(" ")
   }
 
+  onInputChanged(e) {
+    const { onChange, type } = this.props
+
+    if (type == "file") this.setState({blankInputName: this.getBlankInputName()})
+    if (onChange) onChange(e)
+  }
+
+  // This fixes an issue in Firefox and ActiveStorage, where uploads would be a blank string if a file wasn't chosen
+  getBlankInputName() {
+    const value = this.refs.input.value
+    return (this.props.type == "file" && value == "")
+  }
+
+  onValidationErrors(event) {
+    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
+    this.setState({validationErrors})
+  }
+
   wrapperClassName() {
-    let classNames = ["form-group", "component-bootstrap-string-input"]
+    const classNames = ["form-group", "component-bootstrap-string-input"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)

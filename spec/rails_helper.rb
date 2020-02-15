@@ -8,7 +8,7 @@ require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Delete cache to force Webpacker to compile
-path = Rails.root.join("tmp", "cache").to_s
+path = Rails.root.join("tmp/cache").to_s
 FileUtils.rm_rf(path)
 
 require "money-rails"
@@ -26,7 +26,7 @@ require "waitutil"
 require "webdrivers"
 require "webpacker"
 
-Webdrivers::Chromedriver.required_version = "77.0.3865.40"
+Webdrivers::Chromedriver.required_version = "80.0.3987.16"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -41,7 +41,7 @@ Webdrivers::Chromedriver.required_version = "77.0.3865.40"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[File.join(__dir__, "support", "**", "*.rb")].each { |f| require f }
+Dir[File.join(__dir__, "support", "**", "*.rb")].sort.each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -51,6 +51,7 @@ Capybara.server = :puma, {Silent: true}
 
 RSpec.configure do |config|
   config.include ApiMaker::SpecHelper
+  config.include FlashMessagesHelper, type: :system
   config.include FactoryBot::Syntax::Methods
   config.include Warden::Test::Helpers
 
@@ -76,12 +77,16 @@ RSpec.configure do |config|
   end
 
   config.prepend_before(:each, type: :system) do
-    driven_by :selenium,
-      using: :chrome,
-      options: {
-        args: %w[disable-dev-shm-usage disable-gpu headless no-sandbox]
-      },
-      screen_size: [1920, 1200]
+    if ENV["SELENIUM_DRIVER"] == "firefox"
+      driven_by :selenium, using: :firefox
+    else
+      driven_by :selenium,
+        using: :chrome,
+        options: {
+          args: %w[disable-dev-shm-usage disable-gpu headless no-sandbox]
+        },
+        screen_size: [1920, 1200]
+    end
   end
 
   config.before(:suite) do

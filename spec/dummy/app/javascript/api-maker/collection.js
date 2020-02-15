@@ -20,20 +20,20 @@ export default class Collection {
   }
 
   async each(callback) {
-    var array = await this.toArray()
+    const array = await this.toArray()
 
-    for(var model in array) {
+    for(const model in array) {
       callback.call(model)
     }
   }
 
   async first() {
-    var models = await this.toArray()
+    const models = await this.toArray()
     return models[0]
   }
 
   async count() {
-    var response = await this._clone({count: true})._response()
+    const response = await this._clone({count: true})._response()
     return response.count
   }
 
@@ -64,7 +64,7 @@ export default class Collection {
     if (!pageNumber)
       pageNumber = 1
 
-    var changes = {page: pageNumber}
+    const changes = {page: pageNumber}
 
     if (!this.queryArgs.ransack || !this.queryArgs.ransack.s)
       changes.ransack = {s: `${this.args.modelClass.modelClassData().primaryKey} asc`}
@@ -81,9 +81,9 @@ export default class Collection {
   }
 
   async result() {
-    var response = await this._response()
-    var models = this._responseToModels(response)
-    var result = new Result({collection: this, models, response})
+    const response = await this._response()
+    const models = this._responseToModels(response)
+    const result = new Result({collection: this, models, response})
     return result
   }
 
@@ -92,15 +92,15 @@ export default class Collection {
   }
 
   select(originalSelect) {
-    var newSelect = {}
+    const newSelect = {}
 
-    for(var originalModelName in originalSelect) {
-      var newModalName = inflection.dasherize(inflection.underscore(originalModelName))
-      var newValues = []
-      var originalValues = originalSelect[originalModelName]
+    for(const originalModelName in originalSelect) {
+      const newModalName = inflection.dasherize(inflection.underscore(originalModelName))
+      const newValues = []
+      const originalValues = originalSelect[originalModelName]
 
-      for(var originalAttributeName of originalValues) {
-        var newAttributeName = inflection.underscore(originalAttributeName)
+      for(const originalAttributeName of originalValues) {
+        const newAttributeName = inflection.underscore(originalAttributeName)
         newValues.push(newAttributeName)
       }
 
@@ -110,12 +110,31 @@ export default class Collection {
     return this._clone({select: newSelect})
   }
 
+  selectColumns(originalSelect) {
+    const newSelect = {}
+
+    for(const originalModelName in originalSelect) {
+      const newModalName = inflection.dasherize(inflection.underscore(originalModelName))
+      const newValues = []
+      const originalValues = originalSelect[originalModelName]
+
+      for(const originalAttributeName of originalValues) {
+        const newAttributeName = inflection.underscore(originalAttributeName)
+        newValues.push(newAttributeName)
+      }
+
+      newSelect[newModalName] = newValues
+    }
+
+    return this._clone({selectColumns: newSelect})
+  }
+
   sort(sortBy) {
     return this._clone({ransack: {s: sortBy}})
   }
 
   async toArray() {
-    var response = await this._response()
+    const response = await this._response()
     return this._responseToModels(response)
   }
 
@@ -132,13 +151,13 @@ export default class Collection {
   }
 
   _response() {
-    var modelClassData = this.args.modelClass.modelClassData()
+    const modelClassData = this.args.modelClass.modelClassData()
 
     return CommandsPool.addCommand(
       {
         args: this._params(),
-        command: `${modelClassData.collectionKey}-index`,
-        collectionKey: modelClassData.collectionKey,
+        command: `${modelClassData.collectionName}-index`,
+        collectionName: modelClassData.collectionName,
         type: "index"
       },
       {}
@@ -146,40 +165,23 @@ export default class Collection {
   }
 
   _responseToModels(response) {
-    var modelsResponseReader = new ModelsResponseReader({response: response})
+    const modelsResponseReader = new ModelsResponseReader({response: response})
     return modelsResponseReader.models()
   }
 
   _params() {
-    var params = {}
+    let params = {}
 
-    if (this.queryArgs.params)
-      params = this._merge(params, this.queryArgs.params)
-
-    if (this.queryArgs.accessibleBy) {
-      params.accessible_by = inflection.underscore(this.queryArgs.accessibleBy)
-    }
-
-    if (this.queryArgs.count)
-      params.count = this.queryArgs.count
-
-    if (this.queryArgs.distinct)
-      params.distinct = this.queryArgs.distinct
-
-    if (this.queryArgs.ransack)
-      params.q = this.queryArgs.ransack
-
-    if (this.queryArgs.limit)
-      params.limit = this.queryArgs.limit
-
-    if (this.queryArgs.preload)
-      params.include = this.queryArgs.preload
-
-    if (this.queryArgs.page)
-      params.page = this.queryArgs.page
-
-    if (this.queryArgs.select)
-      params.select = this.queryArgs.select
+    if (this.queryArgs.params) params = this._merge(params, this.queryArgs.params)
+    if (this.queryArgs.accessibleBy) params.accessible_by = inflection.underscore(this.queryArgs.accessibleBy)
+    if (this.queryArgs.count) params.count = this.queryArgs.count
+    if (this.queryArgs.distinct) params.distinct = this.queryArgs.distinct
+    if (this.queryArgs.ransack) params.q = this.queryArgs.ransack
+    if (this.queryArgs.limit) params.limit = this.queryArgs.limit
+    if (this.queryArgs.preload) params.include = this.queryArgs.preload
+    if (this.queryArgs.page) params.page = this.queryArgs.page
+    if (this.queryArgs.select) params.select = this.queryArgs.select
+    if (this.queryArgs.selectColumns) params.select_columns = this.queryArgs.selectColumns
 
     return params
   }

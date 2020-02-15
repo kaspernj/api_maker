@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_17_130438) do
+ActiveRecord::Schema.define(version: 2020_01_17_151857) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -26,7 +26,9 @@ ActiveRecord::Schema.define(version: 2019_09_17_130438) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "customer_id"
+    t.datetime "deleted_at"
     t.index ["customer_id"], name: "index_accounts_on_customer_id"
+    t.index ["deleted_at"], name: "index_accounts_on_deleted_at"
   end
 
   create_table "activities", force: :cascade do |t|
@@ -48,6 +50,14 @@ ActiveRecord::Schema.define(version: 2019_09_17_130438) do
     t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable_type_and_trackable_id"
   end
 
+  create_table "customer_relationships", force: :cascade do |t|
+    t.integer "child_id", null: false
+    t.integer "parent_id", null: false
+    t.string "relationship_type", null: false
+    t.index ["child_id"], name: "index_customer_relationships_on_child_id"
+    t.index ["parent_id"], name: "index_customer_relationships_on_parent_id"
+  end
+
   create_table "customers", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -59,6 +69,8 @@ ActiveRecord::Schema.define(version: 2019_09_17_130438) do
     t.string "details"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_project_details_on_deleted_at"
     t.index ["project_id"], name: "index_project_details_on_project_id", unique: true
   end
 
@@ -78,7 +90,9 @@ ActiveRecord::Schema.define(version: 2019_09_17_130438) do
     t.integer "account_id"
     t.integer "price_per_hour_cents"
     t.string "price_per_hour_currency"
+    t.datetime "deleted_at"
     t.index ["account_id"], name: "index_projects_on_account_id"
+    t.index ["deleted_at"], name: "index_projects_on_deleted_at"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -120,6 +134,8 @@ ActiveRecord::Schema.define(version: 2019_09_17_130438) do
 
   add_foreign_key "account_marked_tasks", "accounts"
   add_foreign_key "account_marked_tasks", "tasks"
+  add_foreign_key "customer_relationships", "customers", column: "child_id"
+  add_foreign_key "customer_relationships", "customers", column: "parent_id"
   add_foreign_key "project_secrets", "projects"
   add_foreign_key "tasks", "projects"
   add_foreign_key "user_roles", "users"

@@ -7,23 +7,14 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
       @model = command.model
       @params = command.args || {}
       @serializer = serialized_resource(model)
+      sanitized_parameters = sanitize_parameters
 
-      if command.model.update(sanitize_parameters)
+      if command.model.update(sanitized_parameters)
         success_response
       else
-        failure_response
+        failure_save_response(model: command.model, params: sanitized_parameters)
       end
     end
-
-    ServicePattern::Response.new(success: true)
-  end
-
-  def failure_response
-    command.fail(
-      model: serializer.result,
-      success: false,
-      errors: model.errors.full_messages
-    )
   end
 
   def sanitize_parameters

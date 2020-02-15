@@ -1,17 +1,18 @@
 require "rails_helper"
 
 describe "model create" do
+  let(:account) { create :account }
   let(:user) { create :user }
 
   it "creates a model" do
     login_as user
 
-    visit models_create_path
+    visit models_create_path(account_id: account.id)
 
-    expect(page).to have_current_path models_create_path, ignore_query: true
+    wait_for_path models_create_path
 
-    wait_for_chrome { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
-    wait_for_chrome { Project.count > 0 }
+    wait_for_browser { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
+    wait_for_browser { Project.count > 0 }
 
     created_project = Project.last
     element = find("[data-controller='models--create']", visible: false)
@@ -24,8 +25,8 @@ describe "model create" do
     visit models_create_path
 
     visit_action = proc do
-      expect(page).to have_current_path models_create_path, ignore_query: true
-      wait_for_chrome { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
+      wait_for_path models_create_path
+      wait_for_browser { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
     end
 
     expect { visit_action.call }.to raise_error(RuntimeError, "UnhandledRejection: Command failed: No access to create that resource")

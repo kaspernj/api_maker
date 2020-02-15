@@ -1,3 +1,5 @@
+import EventListener from "api-maker/event-listener"
+import InvalidFeedback from "./invalid-feedback"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
 
@@ -17,11 +19,36 @@ export default class BootstrapRadioButtons extends React.Component {
     wrapperClassName: PropTypes.string
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      validationErrors: []
+    }
+  }
+
+  componentDidMount() {
+    this.setForm()
+  }
+
+  componentDidUpdate() {
+    this.setForm()
+  }
+
+  setForm() {
+    const form = this.refs.hiddenInput && this.refs.hiddenInput.form
+    if (form != this.state.form) this.setState({form})
+  }
+
   render() {
+    const { form } = this.state
+
     return (
       <div className={this.wrapperClassName()}>
-        <input name={this.inputName()} type="hidden" value="" />
-        {this.props.collection.map(option => this.optionElement(option))}
+        {form &&
+          <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />
+        }
+        <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
+        {this.props.collection.map((option, index) => this.optionElement(option, index))}
       </div>
     )
   }
@@ -45,32 +72,54 @@ export default class BootstrapRadioButtons extends React.Component {
     }
   }
 
+  inputRadioClassName() {
+    const classNames = ["form-check-input"]
+
+    if (this.state.validationErrors.length > 0)
+      classNames.push("is-invalid")
+
+    return classNames.join(" ")
+  }
+
   generatedId() {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
   }
 
-  optionElement(option) {
-    let id = this.generatedId()
+  onValidationErrors(event) {
+    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
+    this.setState({validationErrors})
+  }
+
+  optionElement(option, index) {
+    const { collection } = this.props
+    const { validationErrors } = this.state
+    const id = this.generatedId()
 
     return (
-      <div key={`option-${option[1]}`}>
+      <div className="form-check" key={`option-${option[1]}`}>
         <input
+          className={this.inputRadioClassName()}
           data-option-value={option[1]}
           defaultChecked={option[1] == this.inputDefaultValue()}
           id={id}
           name={this.inputName()}
           type="radio"
-          value={option[1]} />
+          value={option[1]}
+        />
 
-        <label className="ml-1" htmlFor={id}>
+        <label className="form-check-label" htmlFor={id}>
           {option[0]}
         </label>
+
+        {(index + 1) == collection.length && validationErrors.length > 0 &&
+          <InvalidFeedback errors={validationErrors} />
+        }
       </div>
     )
   }
 
   wrapperClassName() {
-    var classNames = ["component-bootstrap-radio-buttons"]
+    const classNames = ["component-bootstrap-radio-buttons"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)

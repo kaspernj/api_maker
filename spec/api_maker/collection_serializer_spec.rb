@@ -87,14 +87,14 @@ describe ApiMaker::CollectionSerializer do
     collection = User.where(id: user.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, include_param: ["tasks.project_detail"]).to_json)
 
-    expect(result.dig("data", "users")).to eq [user.id]
-    expect(result.dig("included", "users", user.id.to_s, "r", "tasks")).to eq [3]
+    expect(result.dig!("data", "users")).to eq [user.id]
+    expect(result.dig!("included", "users", user.id.to_s, "r", "tasks")).to eq [3]
 
-    task_include = result.fetch("included").fetch("tasks").fetch("3")
-    project_detail_include = result.fetch("included").fetch("project-details").fetch("6")
+    task_include = result.dig!("included", "tasks").fetch("3")
+    project_detail_include = result.dig!("included", "project-details", "6")
 
-    expect(task_include.dig("r", "project_detail")).to eq 6
-    expect(project_detail_include.dig("a", "details")).to eq "Test project details"
+    expect(task_include.dig!("r", "project_detail")).to eq 6
+    expect(project_detail_include.dig!("a", "details")).to eq "Test project details"
   end
 
   it "preloads a relationship through another relationship on the same model" do
@@ -124,5 +124,48 @@ describe ApiMaker::CollectionSerializer do
     expect(result.fetch("data").fetch("tasks").length).to eq 2
     expect(result.fetch("included").fetch("accounts").fetch(account.id.to_s).fetch("a").fetch("id")).to eq account.id
     expect(result.fetch("included").fetch("accounts").length).to eq 1
+  end
+
+  it "applies the scope of the original relationship on has-many-relationships" do
+    account = create(:account)
+    create(:project, account: account, deleted_at: 5.minutes.ago)
+
+    collection = Account.where(id: [account.id])
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["projects"]).to_json)
+
+    expect(result.fetch("data").fetch("accounts").length).to eq 1
+    expect(result.fetch("included").fetch("accounts").fetch(account.id.to_s).fetch("r").fetch("projects")).to eq []
+  end
+
+  it "applies the scope of the original relationship on has-one-relationships" do
+    project = create(:project)
+    create(:project_detail, deleted_at: 5.minutes.ago, project: project)
+
+    collection = Project.where(id: [project.id])
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_detail"]).to_json)
+
+    expect(result.fetch("data").fetch("projects").length).to eq 1
+    expect(result.fetch("included").fetch("projects").fetch(project.id.to_s).fetch("r").fetch("project_detail")).to eq nil
+  end
+
+  it "selects given columns in the database query" do
+    project = create(:project)
+    collection = Project.where(id: [project.id])
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      collection: collection,
+      include_param: nil,
+      select: {
+        Project => {
+          "id" => {}
+        }
+      },
+      select_columns: {"project" => ["id"]}
+    )
+    result = JSON.parse(collection_serializer.to_json)
+    selects = collection_serializer.parsed_collection.values[:select]
+
+    expect(selects.length).to eq 1
+    expect(selects.first.name).to eq "id"
+    expect(result.dig!("included", "projects", project.id.to_s, "a", "id")).to eq project.id
   end
 end

@@ -11,9 +11,9 @@ describe "model has many relationships" do
 
     visit models_has_many_path(project_id: project.id)
 
-    expect(page).to have_current_path models_has_many_path, ignore_query: true
+    wait_for_path models_has_many_path
 
-    wait_for_chrome { find("[data-controller='models--has-many']", visible: false)["data-has-many-completed"] == "true" }
+    wait_for_browser { find("[data-controller='models--has-many']", visible: false)["data-has-many-completed"] == "true" }
 
     tasks_data = JSON.parse(find("[data-controller='models--has-many']", visible: false)["data-tasks"])
 

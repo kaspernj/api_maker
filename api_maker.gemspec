@@ -18,11 +18,11 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 5.2.0"
 
-  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.10"
+  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.11"
   s.add_runtime_dependency "cancancan"
   s.add_runtime_dependency "i18n-js"
   s.add_runtime_dependency "ransack"
-  s.add_runtime_dependency "service_pattern", ">= 0.0.4"
+  s.add_runtime_dependency "service_pattern", ">= 0.0.5"
 
   s.add_development_dependency "best_practice_project"
   s.add_development_dependency "bootsnap"

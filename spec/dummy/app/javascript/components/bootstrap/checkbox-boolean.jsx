@@ -9,8 +9,8 @@ export default class BootstrapCheckboxBoolean extends React.Component {
   }
 
   async loadTask() {
-    var params = Params.parse()
-    var task = await Task.find(params.task_id)
+    const params = Params.parse()
+    const task = await Task.find(params.task_id)
     this.setState({task})
   }
 
@@ -25,7 +25,7 @@ export default class BootstrapCheckboxBoolean extends React.Component {
   content() {
     return (
       <div className="content-container">
-        <form onSubmit={(e) => this.onSubmit(e)} ref="form">
+        <form onSubmit={(e) => this.onSubmit(e)}>
           <Checkbox attribute="finished" model={this.state.task} />
           <input type="submit" value="Save" />
         </form>
@@ -36,10 +36,9 @@ export default class BootstrapCheckboxBoolean extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    var formData = new FormData(this.refs.form)
-    var { task } = this.state
+    const { task } = this.state
 
-    task.saveRaw(formData).then(() => {
+    task.saveRaw(e.target).then(() => {
       console.log("Task was saved")
     }, (response) => {
       console.error("Task couldnt be saved")

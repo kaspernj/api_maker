@@ -14,8 +14,6 @@ class ApiMaker::DestroyCommand < ApiMaker::BaseCommand
         failure_response
       end
     end
-
-    ServicePattern::Response.new(success: true)
   end
 
   def failure_response

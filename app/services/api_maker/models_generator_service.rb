@@ -17,7 +17,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     end
 
     ApiMaker::GenerateReactNativeApiService.execute! if ApiMaker::Configuration.current.react_native_path.present?
-    ServicePattern::Response.new(success: true)
+    succeed!
   end
 
   def ignore_model?(model)
@@ -33,17 +33,17 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 private
 
   def api_maker_root_path
-    Rails.root.join("app", "javascript", "api-maker")
+    Rails.root.join("app/javascript/api-maker")
   end
 
   def controller_path
-    Rails.root.join("app", "controllers", "api_maker")
+    Rails.root.join("app/controllers/api_maker")
   end
 
   def copy_base_controllers
     files = %w[devise_controller.rb]
     path = File.join(__dir__, "..", "..", "controllers", "api_maker")
-    target_path = Rails.root.join("app", "controllers", "api_maker")
+    target_path = Rails.root.join("app/controllers/api_maker")
 
     copy_base_files(files, path, target_path)
   end
@@ -51,11 +51,12 @@ private
   def copy_base_model
     files = %w[
       api.js base-model.js cable-connection-pool.js cable-subscription.js cable-subscription-pool.js collection.js
-      commands-pool.js event-created.jsx custom-error.js deserializer.js devise.js event-destroyed.jsx event-emitter-listener.jsx event-listener.jsx
+      commands-pool.js errors.js event-created.jsx deserializer.js devise.js event-destroyed.jsx event-emitter-listener.jsx event-listener.jsx
       event-updated.jsx error-logger.js form-data-to-object.js included.js key-value-store.js logger.js model-name.js models-response-reader.js
       params.js result.js event-connection.jsx paginate.jsx sort-link.jsx updated-attribute.jsx resource-routes.jsx resource-route.jsx
-      session-status-updater.js bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/card.jsx
-      bootstrap/checkbox.jsx bootstrap/checkboxes.jsx bootstrap/money-input.jsx bootstrap/radio-buttons.jsx
+      session-status-updater.js validation-errors.js
+      bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/card.jsx
+      bootstrap/checkbox.jsx bootstrap/checkboxes.jsx bootstrap/invalid-feedback.jsx bootstrap/money-input.jsx bootstrap/radio-buttons.jsx
       bootstrap/select.jsx bootstrap/string-input.jsx bootstrap/live-table.jsx
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")

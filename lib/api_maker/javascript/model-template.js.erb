@@ -85,7 +85,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
         {
           args: args,
           command: "<%= collection_command %>",
-          collectionKey: this.modelClassData().collectionKey,
+          collectionName: this.modelClassData().collectionName,
           type: "collection"
         },
         commandArgs
@@ -100,7 +100,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
           args: args,
           command: "<%= member_command %>",
           primaryKey: this.primaryKey(),
-          collectionKey: this.modelClassData().collectionKey,
+          collectionName: this.modelClassData().collectionName,
           type: "member"
         },
         commandArgs

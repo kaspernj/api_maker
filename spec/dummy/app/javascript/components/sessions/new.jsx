@@ -40,9 +40,9 @@ export default class SessionsNew extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    var email = this.refs.email.refs.input.value
-    var password = this.refs.password.refs.input.value
-    var rememberMe = this.refs.rememberMe.refs.input.checked
+    const email = this.refs.email.refs.input.value
+    const password = this.refs.password.refs.input.value
+    const rememberMe = this.refs.rememberMe.refs.input.checked
 
     Devise.signIn(email, password, {rememberMe}).then(() => {
       DisplayNotification.success("You were signed in")

@@ -7,14 +7,14 @@ export default class ApiMakerResourceRoutes {
     if (!args.routes)
       throw new Error("Please pass 'routes' to this method")
 
-    var parsedContext = ApiMakerResourceRoutes.parseContext(args)
-    var routesJson = args.routes
-    var routes = []
+    const parsedContext = ApiMakerResourceRoutes.parseContext(args)
+    const routesJson = args.routes
+    const routes = []
 
-    for(var route of routesJson.routes) {
-      var resourceRoute = new ResourceRoute({args, parsedContext, route})
+    for(const route of routesJson.routes) {
+      const resourceRoute = new ResourceRoute({args, parsedContext, route})
 
-      for(var newRoute of resourceRoute.routes()) {
+      for(const newRoute of resourceRoute.routes()) {
         routes.push(
           <Route exact key={`route-${newRoute.path}`} path={newRoute.path} component={newRoute.component} />
         )
@@ -25,9 +25,9 @@ export default class ApiMakerResourceRoutes {
   }
 
   static parseContext(args) {
-    var result = {}
+    const result = {}
     args.context.keys().forEach(key => {
-      var newKey = `${args.path}/${key.substring(2, key.length)}`
+      const newKey = `${args.path}/${key.substring(2, key.length)}`
       result[newKey] = args.context(key)
     })
 

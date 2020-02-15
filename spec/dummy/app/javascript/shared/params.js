@@ -10,9 +10,9 @@ export default class Params {
   }
 
   static changeParams(given) {
-    var params = Params.change(given)
-    var newParams = qs.stringify(params)
-    var newPath = `${location.pathname}?${newParams}`
+    const params = Params.change(given)
+    const newParams = qs.stringify(params)
+    const newPath = `${location.pathname}?${newParams}`
 
     AppHistory.push(newPath)
   }

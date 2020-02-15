@@ -8,7 +8,7 @@ export default class ModelsResponseReader {
   }
 
   static collection(response) {
-    var reader = new ModelsResponseReader({response: response})
+    const reader = new ModelsResponseReader({response: response})
     return reader.models()
   }
 
@@ -17,21 +17,21 @@ export default class ModelsResponseReader {
   }
 
   models() {
-    var included = new Included(this.response)
-    var models = []
+    const included = new Included(this.response)
+    const models = []
 
-    for(var modelType in this.response.data) {
-      var modelClassName = inflection.singularize(modelType)
-      var modelClass = require(`api-maker/models/${modelClassName}`).default
-      var collectionName = inflection.dasherize(modelClass.modelClassData().collectionName)
+    for(const modelType in this.response.data) {
+      const modelClassName = inflection.singularize(modelType)
+      const modelClass = require(`api-maker/models/${modelClassName}`).default
+      const collectionName = inflection.dasherize(modelClass.modelClassData().collectionName)
 
-      for(var modelId of this.response.data[modelType]) {
-        var modelData = this.response.included[collectionName][modelId]
+      for(const modelId of this.response.data[modelType]) {
+        const modelData = this.response.included[collectionName][modelId]
 
         if (!modelData)
           throw new Error(`Couldn't find model data for ${collectionName}(${modelId})`)
 
-        var model = new modelClass({data: modelData, isNewRecord: false, response: this.response})
+        const model = new modelClass({data: modelData, isNewRecord: false, response: this.response})
 
         model._readIncludedRelationships(included)
         models.push(model)

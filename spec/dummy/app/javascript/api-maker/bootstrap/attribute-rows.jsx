@@ -31,7 +31,7 @@ export default class BootstrapAttributeRows extends React.Component {
   }
 
   valueContent(attribute) {
-    var value = this.value(attribute)
+    const value = this.value(attribute)
 
     if (value instanceof Date) {
       return I18n.strftime(value, "%Y-%m-%d %H:%M")

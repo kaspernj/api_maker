@@ -8,18 +8,14 @@ class ApiMaker::ValidCommandService < ApiMaker::CommandService
       command_response: command_response,
       controller: controller
     )
-    ServicePattern::Response.new(success: true)
+    succeed!
   end
 
   def collection
-    @collection ||= klass.accessible_by(@ability, :valid).where(klass.primary_key => ids)
+    @collection ||= model_class.accessible_by(@ability, :valid).where(model_class.primary_key => ids)
   end
 
   def ids
     @commands.values.map { |command| command.fetch("primary_key") }
-  end
-
-  def klass
-    @klass ||= @model_name.singularize.camelize.constantize
   end
 end

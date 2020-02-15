@@ -146,7 +146,7 @@ export default class Task extends BaseModel {
         {
           args: args,
           command: "command_serialize",
-          collectionKey: this.modelClassData().collectionKey,
+          collectionName: this.modelClassData().collectionName,
           type: "collection"
         },
         commandArgs
@@ -158,7 +158,7 @@ export default class Task extends BaseModel {
         {
           args: args,
           command: "test_collection",
-          collectionKey: this.modelClassData().collectionKey,
+          collectionName: this.modelClassData().collectionName,
           type: "collection"
         },
         commandArgs
@@ -173,7 +173,7 @@ export default class Task extends BaseModel {
           args: args,
           command: "test_member",
           primaryKey: this._primaryKey(),
-          collectionKey: this.modelClassData().collectionKey,
+          collectionName: this.modelClassData().collectionName,
           type: "member"
         },
         commandArgs

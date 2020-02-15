@@ -60,7 +60,7 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
   }
 
   setAttribute() {
-    var newValue
+    let newValue
 
     if (this.props.onValue) {
       newValue = this.props.onValue.apply(null, [{model: this.state.model}])
