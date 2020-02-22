@@ -1,9 +1,10 @@
+import React from "react"
+
 const inflection = require("inflection")
 
 export default class ResourceRoute {
   constructor(args) {
     this.args = args.args
-    this.parsedContext = args.parsedContext
     this.route = args.route
   }
 
@@ -28,15 +29,7 @@ export default class ResourceRoute {
   }
 
   requireComponent() {
-    let requireResult = this.parsedContext[`components/${this.route.component}.jsx`]
-
-    if (!requireResult)
-      requireResult = this.parsedContext[`components/${this.route.component}/index.jsx`]
-
-    if (!requireResult)
-      throw new Error(`No such require: ${this.route.component}`)
-
-    return requireResult.default
+    return React.lazy(() => import(`${this.args.path}/${this.route.component}`))
   }
 
   withLocale() {
@@ -68,8 +61,8 @@ export default class ResourceRoute {
     const component = this.requireComponent()
 
     return [{
-      path: path,
-      component: component
+      path,
+      component
     }]
   }
 }
