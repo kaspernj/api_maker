@@ -29,7 +29,7 @@ export default class ResourceRoute {
   }
 
   requireComponent() {
-    return React.lazy(() => import(`${this.args.path}/${this.route.component}`))
+    return React.lazy(() => import(`routes/${this.args.path}/${this.route.component}`))
   }
 
   withLocale() {
