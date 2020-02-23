@@ -15,20 +15,20 @@ class ApiMaker::MoveComponentsToRoutes < ApplicationService
       full_path_with_jsx = "#{full_path}.jsx"
       new_path_with_jsx = "#{new_path}.jsx"
 
-      if !File.exists?(full_path_with_jsx) && File.exists?("#{full_path}/index.jsx")
+      if !File.exist?(full_path_with_jsx) && File.exist?("#{full_path}/index.jsx")
         full_path_with_jsx = "#{full_path}/index.jsx"
         new_path_with_jsx = "#{new_path}/index.jsx"
       end
 
-      if File.exists?(full_path_with_jsx)
+      if File.exist?(full_path_with_jsx)
         new_dir = File.dirname(new_path_with_jsx)
-        FileUtils.mkdir_p(new_dir_with_jsx) unless File.exists?(new_dir)
+        FileUtils.mkdir_p(new_dir_with_jsx) unless File.exist?(new_dir)
         File.rename(full_path_with_jsx, new_path_with_jsx)
       end
 
       old_dir = File.dirname(full_path_with_jsx)
 
-      Dir.unlink(old_dir) if File.exists?(old_dir) && dir_empty?(old_dir)
+      Dir.unlink(old_dir) if File.exist?(old_dir) && dir_empty?(old_dir)
     end
 
     succeed!
@@ -41,6 +41,7 @@ class ApiMaker::MoveComponentsToRoutes < ApplicationService
   def dir_empty?(path)
     Dir.foreach(path) do |file|
       next if file == "." || file == ".."
+
       return false
     end
 
