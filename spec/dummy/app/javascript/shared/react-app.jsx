@@ -5,6 +5,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import ResourceRoutes from "api-maker/resource-routes"
 import ScrollToTop from "shared/scroll-to-top"
+import {Suspense} from "react"
 
 document.addEventListener("DOMContentLoaded", () => {
   window.errorLogger = new ErrorLogger()
@@ -14,16 +15,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const reactRoot = document.querySelector(".react-root")
   const routes = ResourceRoutes.readRoutes({
-    context: require.context("components", true, /\.jsx$/),
-    path: "components",
+    path: "",
     routes: require("./routes.json")
   })
 
   ReactDOM.render((
     <Router history={ApplicationHistory}>
-      <ScrollToTop>
-        {routes}
-      </ScrollToTop>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ScrollToTop>
+          {routes}
+        </ScrollToTop>
+      </Suspense>
     </Router>
   ), reactRoot)
 })

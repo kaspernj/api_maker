@@ -99,7 +99,7 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
         {
           args: args,
           command: "<%= member_command %>",
-          primaryKey: this._primaryKey(),
+          primaryKey: this.primaryKey(),
           collectionName: this.modelClassData().collectionName,
           type: "member"
         },
