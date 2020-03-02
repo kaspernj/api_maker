@@ -3,6 +3,7 @@ import retrace from "retrace"
 export default class ErrorLogger {
   constructor() {
     this.errors = []
+    this.loadedSourceMaps = {}
   }
 
   loadSourceMaps() {
@@ -14,23 +15,25 @@ export default class ErrorLogger {
         const src = script.getAttribute("src")
         const type = script.getAttribute("type")
 
-        if (src && src.includes("/packs/") && (type == "text/javascript" || !type)) {
-          const promise = this.loadSourceMapForScript(script)
+        if (src && src.includes("/packs/") && !this.loadedSourceMaps[src] && (type == "text/javascript" || !type)) {
+          const promise = this.loadSourceMapForSource(src)
           promises.push(promise)
         }
       }
 
-      Promise.all(promises).then(() => { resolve() })
+      Promise.all(promises).then(() => resolve())
     })
   }
 
-  loadSourceMapForScript(script) {
-    const src = script.getAttribute("src")
+  loadSourceMapForSource(src) {
     const url = this.loadUrl(src)
     const originalUrl = `${url.origin}${url.pathname}`
     const mapUrl = `${url.origin}${url.pathname}.map`
+    this.loadedSourceMaps[src] = true
 
     return new Promise(resolve => {
+      console.error(`mapUrl: ${mapUrl}`)
+
       const xhr = new XMLHttpRequest()
       xhr.open("GET", mapUrl, true)
       xhr.onload = () => {
@@ -60,54 +63,61 @@ export default class ErrorLogger {
   connectOnError() {
     window.addEventListener("error", (event) => {
       if (!this.isHandlingError) {
-        try {
-          this.isHandlingError = true
-          this.errors.push({
-            errorClass: event.error ? event.error.name : "No error class",
-            file: event.filename,
-            message: event.message || "Unknown error",
-            url: window.location.href,
-            line: event.lineno,
-            error: event.error
-          })
-        } finally {
+        this.isHandlingError = true
+        this.onError(event).finally(() => {
           this.isHandlingError = false
-        }
+        })
       }
     })
   }
 
   connectUnhandledRejection() {
-    window.addEventListener("unhandledrejection", (event, test) => {
+    window.addEventListener("unhandledrejection", (event) => {
       if (!this.isHandlingError) {
         this.isHandlingError = true
-
-        try {
-          if (event.reason.stack) {
-            retrace.map(event.reason.stack).then(mappedStackTrace => {
-              this.errors.push({
-                errorClass: "UnhandledRejection",
-                file: null,
-                message: event.reason.message || "Unhandled promise rejection",
-                url: window.location.href,
-                line: null,
-                backtrace: mappedStackTrace.split("\n")
-              })
-            })
-          } else {
-            this.errors.push({
-              errorClass: "UnhandledRejection",
-              file: null,
-              message: event.reason.message || "Unhandled promise rejection",
-              url: window.location.href,
-              line: null,
-              backtrace: null
-            })
-          }
-        } finally {
+        this.onUnhandledRejection(event).finally(() => {
           this.isHandlingError = false
-        }
+        })
       }
+    })
+  }
+
+  async onError(event) {
+    await this.loadSourceMaps()
+
+    let stackTrace
+
+    if (event.error && event.error.stack) {
+      stackTrace = await retrace.map(event.error.stack)
+    }
+
+    this.errors.push({
+      errorClass: event.error ? event.error.name : "No error class",
+      file: event.filename,
+      message: event.message || "Unknown error",
+      url: window.location.href,
+      line: event.lineno,
+      error: event.error,
+      backtrace: stackTrace
+    })
+  }
+
+  async onUnhandledRejection(event) {
+    await this.loadSourceMaps()
+
+    let stackTrace
+
+    if (event.reason.stack) {
+      stackTrace = await retrace.map(event.reason.stack)
+    }
+
+    this.errors.push({
+      errorClass: "UnhandledRejection",
+      file: null,
+      message: event.reason.message || "Unhandled promise rejection",
+      url: window.location.href,
+      line: null,
+      backtrace: stackTrace && stackTrace.split("\n")
     })
   }
 

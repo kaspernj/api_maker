@@ -78,6 +78,7 @@ export default class BootstrapStringInput extends React.Component {
             className={this.inputClassName()}
             data-controller={this.props["data-controller"]}
             defaultValue={this.inputDefaultValue()}
+            disabled={this.props.disabled}
             id={this.inputId()}
             maxLength={this.props.maxLength}
             name={this.inputName()}
