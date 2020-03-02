@@ -50,7 +50,7 @@ module ApiMaker::SpecHelper
     return if logs.blank? || !logs.include?("SEVERE ")
 
     # Lets try one more time - just in case browser window error got registered meanwhile
-    sleep 0.2
+    sleep 0.4
     expect_no_browser_window_errors
 
     raise logs
