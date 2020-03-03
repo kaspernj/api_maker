@@ -26,19 +26,19 @@ export default class ErrorLogger {
   }
 
   loadSourceMapForSource(src) {
-    const url = this.loadUrl(src)
-    const originalUrl = `${url.origin}${url.pathname}`
-    const mapUrl = `${url.origin}${url.pathname}.map`
-    this.loadedSourceMaps[src] = true
-
     return new Promise(resolve => {
-      console.error(`mapUrl: ${mapUrl}`)
+      this.loadedSourceMaps[src] = true
 
+      const url = this.loadUrl(src)
+      const originalUrl = `${url.origin}${url.pathname}`
+      const mapUrl = `${url.origin}${url.pathname}.map`
       const xhr = new XMLHttpRequest()
+
       xhr.open("GET", mapUrl, true)
       xhr.onload = () => {
-        retrace.register(originalUrl, xhr.responseText)
-        resolve()
+        retrace.register(originalUrl, xhr.responseText).then(() =>
+          resolve()
+        )
       }
       xhr.send()
     })
