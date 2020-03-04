@@ -17,7 +17,6 @@
     "react-dom": "^16.8.6",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
-    "retrace": "^1.0.0",
     "stimulus": "^1.0.1",
     "wake-event": "^0.0.1"
   },
