@@ -1,54 +1,17 @@
-import retrace from "retrace"
+import SourceMapsLoader from "api-maker/source-maps-loader"
 
 export default class ErrorLogger {
   constructor() {
     this.errors = []
-    this.loadedSourceMaps = {}
-  }
+    this.sourceMapsLoader = new SourceMapsLoader()
+    this.sourceMapsLoader.loadSourceMapsForScriptTags((script) => {
+      const src = script.getAttribute("src")
+      const type = script.getAttribute("type")
 
-  loadSourceMaps() {
-    return new Promise(resolve => {
-      const scripts = document.querySelectorAll("script")
-      const promises = []
-
-      for(const script of scripts) {
-        const src = script.getAttribute("src")
-        const type = script.getAttribute("type")
-
-        if (src && src.includes("/packs/") && !this.loadedSourceMaps[src] && (type == "text/javascript" || !type)) {
-          const promise = this.loadSourceMapForSource(src)
-          promises.push(promise)
-        }
+      if (src && src.includes("/packs/") && (type == "text/javascript" || !type)) {
+        return src
       }
-
-      Promise.all(promises).then(() => resolve())
     })
-  }
-
-  loadSourceMapForSource(src) {
-    return new Promise(resolve => {
-      this.loadedSourceMaps[src] = true
-
-      const url = this.loadUrl(src)
-      const originalUrl = `${url.origin}${url.pathname}`
-      const mapUrl = `${url.origin}${url.pathname}.map`
-      const xhr = new XMLHttpRequest()
-
-      xhr.open("GET", mapUrl, true)
-      xhr.onload = () => {
-        retrace.register(originalUrl, xhr.responseText).then(() =>
-          resolve()
-        )
-      }
-      xhr.send()
-    })
-  }
-
-  loadUrl(url) {
-    const parser = document.createElement("a")
-    parser.href = url
-
-    return parser
   }
 
   enable() {
@@ -83,42 +46,43 @@ export default class ErrorLogger {
   }
 
   async onError(event) {
-    await this.loadSourceMaps()
-
-    let stackTrace
+    await this.sourceMapsLoader.loadSourceMaps()
 
     if (event.error && event.error.stack) {
-      stackTrace = await retrace.map(event.error.stack)
-    }
+      const backtrace = this.sourceMapsLoader.parseStackTrace(event.error.stack)
 
-    this.errors.push({
-      errorClass: event.error ? event.error.name : "No error class",
-      file: event.filename,
-      message: event.message || "Unknown error",
-      url: window.location.href,
-      line: event.lineno,
-      error: event.error,
-      backtrace: stackTrace
-    })
+      this.errors.push({
+        errorClass: event.error ? event.error.name : "No error class",
+        message: event.message || "Unknown error",
+        backtrace
+      })
+    } else {
+      this.errors.push({
+        errorClass: event.error ? event.error.name : "No error class",
+        message: event.message || "Unknown error",
+        backtrace: null
+      })
+    }
   }
 
   async onUnhandledRejection(event) {
-    await this.loadSourceMaps()
-
-    let stackTrace
+    await this.sourceMapsLoader.loadSourceMaps()
 
     if (event.reason.stack) {
-      stackTrace = await retrace.map(event.reason.stack)
-    }
+      const backtrace = this.sourceMapsLoader.parseStackTrace(event.reason.stack)
 
-    this.errors.push({
-      errorClass: "UnhandledRejection",
-      file: null,
-      message: event.reason.message || "Unhandled promise rejection",
-      url: window.location.href,
-      line: null,
-      backtrace: stackTrace && stackTrace.split("\n")
-    })
+      this.errors.push({
+        errorClass: "UnhandledRejection",
+        message: event.reason.message || "Unhandled promise rejection",
+        backtrace: backtrace
+      })
+    } else {
+      this.errors.push({
+        errorClass: "UnhandledRejection",
+        message: event.reason.message || "Unhandled promise rejection",
+        backtrace: null
+      })
+    }
   }
 
   testPromiseError() {

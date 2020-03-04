@@ -9,9 +9,7 @@ import {Suspense} from "react"
 
 document.addEventListener("DOMContentLoaded", () => {
   window.errorLogger = new ErrorLogger()
-  window.errorLogger.loadSourceMaps().then(() => {
-    window.errorLogger.enable()
-  })
+  window.errorLogger.enable()
 
   const reactRoot = document.querySelector(".react-root")
   const routes = ResourceRoutes.readRoutes({
