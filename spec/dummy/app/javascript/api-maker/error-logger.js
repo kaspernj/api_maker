@@ -27,7 +27,6 @@ export default class ErrorLogger {
     window.addEventListener("error", (event) => {
       if (!this.isHandlingError) {
         this.isHandlingError = true
-
         this.onError(event).finally(() => {
           this.isHandlingError = false
         })
@@ -39,7 +38,6 @@ export default class ErrorLogger {
     window.addEventListener("unhandledrejection", (event) => {
       if (!this.isHandlingError) {
         this.isHandlingError = true
-
         this.onUnhandledRejection(event).finally(() => {
           this.isHandlingError = false
         })
