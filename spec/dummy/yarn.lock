@@ -4631,10 +4631,10 @@ object-keys@^1.0.11, object-keys@^1.0.12:
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
   integrity sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
 
-object-to-formdata@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/object-to-formdata/-/object-to-formdata-3.0.3.tgz#f53085434fee91e230a8ac5a8ca18a4eaab50019"
-  integrity sha512-WRlMCPr08H32igU/frBoOuIQFeN1P/z/Um0tHXHdcmUjap9W3fHF0mnaRtG4oFtB575DJr/kLGYJr0hkVVRldQ==
+object-to-formdata@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/object-to-formdata/-/object-to-formdata-3.0.6.tgz#35744a8a7b3fed2396e1cd031cb8d995be0615e3"
+  integrity sha512-Cg1g9GwT2FOjn7NcIclM+/JIbIlDXhXC0cra3AixpGd6jXu/RECxLxA29U3zWpseI08cUeGQtHXegcyDIwgC+g==
 
 object-visit@^1.0.0:
   version "1.0.1"
