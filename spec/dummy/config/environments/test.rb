@@ -46,4 +46,6 @@ Rails.application.configure do
 
   require "webpacker"
   config.webpacker.check_yarn_integrity = false
+
+  config.hosts << "127.0.0.1"
 end

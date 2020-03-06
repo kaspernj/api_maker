@@ -4,6 +4,7 @@ import {SourceMapConsumer} from "source-map"
 export default class SourceMapsLoader {
   constructor() {
     this.sourceMaps = []
+    this.srcLoaded = {}
   }
 
   loadSourceMapsForScriptTags(callback) {
@@ -17,7 +18,9 @@ export default class SourceMapsLoader {
     for(const script of scripts) {
       const src = this.loadSourceMapsForScriptTagsCallback(script)
 
-      if (src && !this.srcExists(src)) {
+      if (src && !this.srcLoaded[src]) {
+        this.srcLoaded[src] = true
+
         const promise = this.loadSourceMapForSource(src)
         promises.push(promise)
       }
@@ -34,6 +37,7 @@ export default class SourceMapsLoader {
 
     xhr.open("GET", mapUrl, true)
     await this.loadXhr(xhr)
+
     const consumer = new SourceMapConsumer(JSON.parse(xhr.responseText))
     this.sourceMaps.push({consumer, originalUrl, src})
   }
@@ -63,15 +67,17 @@ export default class SourceMapsLoader {
 
     for(const trace of stack) {
       const sourceMapData = this.sourceMaps.find((sourceMapData) => sourceMapData.originalUrl == trace.file)
-      let filePath, fileString
+      let filePath, fileString, original
 
       if (sourceMapData) {
         const sourceMapConsumer = sourceMapData.consumer
-        const original = sourceMapConsumer.originalPositionFor({
+        original = sourceMapConsumer.originalPositionFor({
           line: trace.lineNumber,
           column: trace.column
         })
+      }
 
+      if (original && original.source) {
         filePath = original.source.replace(/^webpack:\/\/\//, "")
         fileString = `${filePath}:${original.line}`
 
@@ -95,15 +101,5 @@ export default class SourceMapsLoader {
     }
 
     return newSourceMap
-  }
-
-  srcExists(src) {
-    for(const sourceMapData of this.sourceMaps) {
-      if (sourceMapData.src == src) {
-        return true
-      }
-    }
-
-    return false
   }
 }
