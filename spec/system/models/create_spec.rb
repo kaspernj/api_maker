@@ -30,5 +30,6 @@ describe "model create" do
     end
 
     expect { visit_action.call }.to raise_error(RuntimeError, "UnhandledRejection: Command failed: No access to create that resource")
+    sleep 1 # Some stuff in JS may be going on - give it some time to wrap up
   end
 end
