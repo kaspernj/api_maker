@@ -91,6 +91,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
     @query = @query.ransack(params[:q]).result
     @query = @query.limit(params[:limit]) if params[:limit].present?
     @query = @query.page(params[:page]) if params[:page].present?
+    @query = @query.per_page(params[:per]) if params[:per].present?
     @query = filter_custom_accessible_by(@query)
   end
 end
