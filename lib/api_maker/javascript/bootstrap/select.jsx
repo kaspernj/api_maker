@@ -1,36 +1,29 @@
 import EventListener from "api-maker/event-listener"
 import InvalidFeedback from "./invalid-feedback"
+import InputSelect from "api-maker/inputs/select"
 import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 const inflection = require("inflection")
 
 export default class BootstrapSelect extends React.Component {
-  static propTypes = PropTypesExact({
+  static propTypes = {
     attribute: PropTypes.string,
     children: PropTypes.node,
     className: PropTypes.string,
     "data-controller": PropTypes.string,
     defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.number, PropTypes.string]),
     description: PropTypes.node,
-    disabled: PropTypes.bool,
     id: PropTypes.string,
-    includeBlank: PropTypes.bool,
-    hideSearch: PropTypes.bool,
     hint: PropTypes.node,
     hintBottom: PropTypes.node,
     label: PropTypes.node,
     labelContainerClassName: PropTypes.string,
     model: PropTypes.object,
-    multiple: PropTypes.bool,
     name: PropTypes.string,
-    placeholder: PropTypes.string,
-    onChange: PropTypes.func,
-    options: PropTypes.array,
     select2: PropTypes.bool,
     wrapperClassName: PropTypes.string
-  })
+  }
 
   constructor(props) {
     super(props)
@@ -65,6 +58,22 @@ export default class BootstrapSelect extends React.Component {
   }
 
   render() {
+    const {
+      attribute,
+      className,
+      defaultValue,
+      description,
+      id,
+      hint,
+      hintBottom,
+      label,
+      labelContainerClassname,
+      model,
+      name,
+      select2,
+      wrapperClassName,
+      ...restProps
+    } = this.props
     const { form, validationErrors } = this.state
 
     return (
@@ -87,27 +96,14 @@ export default class BootstrapSelect extends React.Component {
             {this.props.hint}
           </span>
         }
-        <select
+        <InputSelect
+          {...restProps}
           data-controller={this.dataController()}
-          data-hide-search={this.props.hideSearch}
-          data-placeholder={this.props.placeholder}
-          defaultValue={this.inputDefaultValue()}
           className={this.selectClassName()}
-          disabled={this.props.disabled}
           id={this.inputId()}
-          multiple={this.props.multiple}
           name={this.inputName()}
-          onChange={this.props.onChange}
           ref="select"
-          >
-          {this.includeBlank() &&
-            <option />
-          }
-          {this.props.options && this.props.options.map(option => (
-            <option key={`select-option-${option[1]}`} value={option[1]}>{option[0]}</option>
-          ))}
-          {this.props.children}
-        </select>
+        />
         {this.props.hintBottom &&
           <span className="form-text text-muted font-smoothing font-xs">
             {this.props.hintBottom}
@@ -123,27 +119,6 @@ export default class BootstrapSelect extends React.Component {
       return this.props["data-controller"]
     } else if (this.props.select2) {
       return "select2--default"
-    }
-  }
-
-  includeBlank() {
-    if (this.props.includeBlank || (this.props.placeholder && !this.props.multiple)) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  inputDefaultValue() {
-    if ("defaultValue" in this.props) {
-      return this.props.defaultValue
-    } else if (this.props.selected) {
-      return this.props.selected
-    } else if (this.props.model) {
-      if (!this.props.model[this.props.attribute])
-        throw new Error(`No attribute by that name: ${this.props.attribute}`)
-
-      return this.props.model[this.props.attribute]()
     }
   }
 

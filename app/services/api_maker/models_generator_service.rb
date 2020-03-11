@@ -58,6 +58,7 @@ private
       bootstrap/attribute-row.jsx bootstrap/attribute-rows.jsx bootstrap/card.jsx
       bootstrap/checkbox.jsx bootstrap/checkboxes.jsx bootstrap/invalid-feedback.jsx bootstrap/money-input.jsx bootstrap/radio-buttons.jsx
       bootstrap/select.jsx bootstrap/string-input.jsx bootstrap/live-table.jsx
+      inputs/select.jsx
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path
