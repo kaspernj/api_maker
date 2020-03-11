@@ -15,7 +15,6 @@ export default class BootstrapSelect extends React.Component {
     includeBlank: PropTypes.bool,
     model: PropTypes.object,
     name: PropTypes.string,
-    onChange: PropTypes.func,
     options: PropTypes.array
   }
 
@@ -40,7 +39,7 @@ export default class BootstrapSelect extends React.Component {
   }
 
   render() {
-    const { attribute, children, className, defaultValue, id, includeBlank, model, name, placeholder, onChange, options, ...restProps } = this.props
+    const { attribute, children, className, defaultValue, id, includeBlank, model, name, placeholder, options, ...restProps } = this.props
     const { form, validationErrors } = this.state
 
     return (
@@ -52,16 +51,15 @@ export default class BootstrapSelect extends React.Component {
           className={this.selectClassName()}
           id={this.inputId()}
           name={this.inputName()}
-          onChange={this.props.onChange}
           ref="select"
           >
           {this.includeBlank() &&
             <option />
           }
-          {this.props.options && this.props.options.map(option => (
+          {options && this.props.options.map(option => (
             <option key={`select-option-${option[1]}`} value={option[1]}>{option[0]}</option>
           ))}
-          {this.props.children}
+          {children}
         </select>
         {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
       </>
