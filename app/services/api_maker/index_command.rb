@@ -50,6 +50,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
 
     response[:meta] = {
       currentPage: collection.current_page,
+      perPage: collection.per_page,
       totalCount: collection.try(:total_count) || collection.try(:total_entries),
       totalPages: collection.total_pages
     }
