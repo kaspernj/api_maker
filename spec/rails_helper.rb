@@ -98,4 +98,8 @@ RSpec.configure do |config|
     Capybara.reset_sessions!
     Warden.test_reset!
   end
+
+  config.before(:each, system: true) do
+    browser_logs # Clear the logs
+  end
 end
