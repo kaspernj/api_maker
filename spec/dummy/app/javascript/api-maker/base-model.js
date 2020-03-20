@@ -120,7 +120,18 @@ export default class BaseModel {
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "create"}, {})
+      response = await CommandsPool.addCommand(
+        {
+          args: {
+            save: dataToUse
+          },
+          command: `${this.modelClassData().collectionName}-create`,
+          collectionName: this.modelClassData().collectionName,
+          primaryKey: this.primaryKey(),
+          type: "create"
+        },
+        {}
+      )
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error
@@ -140,7 +151,17 @@ export default class BaseModel {
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: objectData, command: `${this.modelClassData().collectionName}-create`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "create"}, {})
+      response = await CommandsPool.addCommand(
+        {
+          args: {
+            save: objectData
+          },
+          command: `${this.modelClassData().collectionName}-create`,
+          collectionName: this.modelClassData().collectionName,
+          primaryKey: this.primaryKey(),
+          type: "create"},
+        {}
+      )
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error
@@ -346,7 +367,18 @@ export default class BaseModel {
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "update"}, {})
+      response = await CommandsPool.addCommand(
+        {
+          args: {
+            save: dataToUse
+          },
+          command: `${this.modelClassData().collectionName}-update`,
+          collectionName: this.modelClassData().collectionName,
+          primaryKey: this.primaryKey(),
+          type: "update"
+        },
+        {}
+      )
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error
@@ -370,7 +402,18 @@ export default class BaseModel {
     let response
 
     try {
-      response = await CommandsPool.addCommand({args: objectData, command: `${this.modelClassData().collectionName}-update`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "update"}, {})
+      response = await CommandsPool.addCommand(
+        {
+          args: {
+            save: objectData
+          },
+          command: `${this.modelClassData().collectionName}-update`,
+          collectionName: this.modelClassData().collectionName,
+          primaryKey: this.primaryKey(),
+          type: "update"
+        },
+        {}
+      )
     } catch (error) {
       this.parseValidationErrors(error, options)
       throw error
@@ -394,7 +437,18 @@ export default class BaseModel {
     const dataToUse = {}
     dataToUse[paramKey] = modelData
 
-    const response = await CommandsPool.addCommand({args: dataToUse, command: `${this.modelClassData().collectionName}-valid`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "valid"}, {})
+    const response = await CommandsPool.addCommand(
+      {
+        args: {
+          save: dataToUse
+        },
+        command: `${this.modelClassData().collectionName}-valid`,
+        collectionName: this.modelClassData().collectionName,
+        primaryKey: this.primaryKey(),
+        type: "valid"
+      },
+      {}
+    )
 
     return {valid: response.valid, errors: response.errors}
   }
