@@ -1,11 +1,13 @@
 class ApiMaker::CollectionSerializer
-  def initialize(ability: nil, args: {}, collection:, include_param:, select: nil, select_columns: nil)
+  def initialize(ability: nil, args: {}, collection:, query_params: {})
+    select = ApiMaker::SelectParser.execute!(select: query_params[:select]) if query_params[:select]
+
     @ability = ability || ApiMaker::Ability.new(args: args)
     @args = args
     @collection = collection
-    @include_param = include_param
+    @include_param = query_params[:include]
     @select = select
-    @select_columns = select_columns
+    @select_columns = query_params[:select_columns]
   end
 
   def result

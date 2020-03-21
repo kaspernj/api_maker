@@ -8,7 +8,7 @@ class Resources::AccountResource < Resources::ApplicationResource
   end
 
   def permitted_params(arg)
-    arg.params.require(:account).permit(task_ids: [])
+    arg.params.require(:account).permit(:name, task_ids: [])
   end
 
   def users_count

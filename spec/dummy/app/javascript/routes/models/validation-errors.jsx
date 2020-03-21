@@ -1,8 +1,6 @@
 import DisplayNotification from "shared/display-notification"
 import Params from "shared/params"
 
-import Project from "api-maker/models/project"
-import Task from "api-maker/models/task"
 import User from "api-maker/models/user"
 
 import Select from "api-maker/bootstrap/select"

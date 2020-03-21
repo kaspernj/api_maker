@@ -184,7 +184,6 @@ end
 ### Creating a new model from JavaScript
 
 ```js
-import Task from "api-maker/models/task"
 
 const task = new Task()
 task.assignAttributes({name: "New task"})

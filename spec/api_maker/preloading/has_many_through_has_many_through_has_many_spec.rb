@@ -12,7 +12,7 @@ describe "preloading - has many through has many through has many" do
 
   it "preloads has many through relationships that ends in a has one through" do
     collection = Customer.where(id: customer.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["project_details"]).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["project_details"]}).to_json)
 
     expect(result.dig("data", "customers")).to eq [5]
     expect(result.dig("included", "customers", "5", "r", "project_details")).to eq [project_detail.id]

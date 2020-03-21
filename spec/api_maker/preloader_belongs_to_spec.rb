@@ -17,7 +17,7 @@ describe ApiMaker::PreloaderBelongsTo do
     project = create(:project, account: account)
 
     collection = Project.where(id: [project.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["account"]).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["account"]}).to_json)
 
     expect(result.fetch("data").fetch("projects").length).to eq 1
     expect(result.fetch("included").fetch("projects").fetch(project.id.to_s).fetch("r").fetch("account")).to eq nil
@@ -28,9 +28,11 @@ describe ApiMaker::PreloaderBelongsTo do
 
     collection_serializer = ApiMaker::CollectionSerializer.new(
       collection: collection,
-      include_param: ["account"],
-      select_columns: {
-        "account" => ["id"]
+      query_params: {
+        include: ["account"],
+        select_columns: {
+          "account" => ["id"]
+        }
       }
     )
 

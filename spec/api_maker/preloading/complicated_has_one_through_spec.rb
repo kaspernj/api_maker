@@ -16,14 +16,14 @@ describe "preloading - complicated has one through" do
 
   it "preloads correctly on the model itself" do
     collection = Customer.where(id: [customer.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["commune"]).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["commune"]}).to_json)
 
     expect(result.dig!("included", "customers", account.id.to_s, "r", "commune")).to eq commune.id
   end
 
   it "preloads correctly on a parent model with through" do
     collection = Account.where(id: [account.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, include_param: ["commune"]).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["commune"]}).to_json)
 
     expect(result.dig!("included", "accounts", account.id.to_s, "r", "commune")).to eq commune.id
   end

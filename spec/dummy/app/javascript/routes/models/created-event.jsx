@@ -1,6 +1,5 @@
 import EventCreated from "api-maker/event-created"
 import React from "react"
-import Task from "api-maker/models/task"
 
 export default class ModelsCreatedEvent extends React.Component {
   constructor(props) {
