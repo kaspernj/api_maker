@@ -33,11 +33,12 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
   end
 
   def serialized_model
-    ApiMaker::CollectionSerializer.new(
+    collection_serializer = ApiMaker::CollectionSerializer.new(
       ability: current_ability,
       args: api_maker_args,
       collection: [model],
       query_params: command.args&.dig(:query_params)
-    ).result
+    )
+    collection_serializer.result.first
   end
 end
