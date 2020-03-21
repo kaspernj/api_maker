@@ -1,11 +1,19 @@
 class ApiMaker::CollectionSerializer
-  def initialize(ability: nil, args: {}, collection:, include_param:, select: nil, select_columns: nil)
+  attr_reader :ability, :args, :collection, :include_param, :model_class, :select, :select_columns
+
+  def initialize(ability: nil, args: {}, collection:, model_class: nil, query_params: nil)
+    raise "No collection was given" unless collection
+
+    query_params ||= {}
+    select = ApiMaker::SelectParser.execute!(select: query_params[:select]) if query_params[:select]
+
     @ability = ability || ApiMaker::Ability.new(args: args)
     @args = args
     @collection = collection
-    @include_param = include_param
+    @include_param = query_params[:include]
+    @model_class = model_class
     @select = select
-    @select_columns = select_columns
+    @select_columns = query_params[:select_columns]
   end
 
   def result
@@ -16,29 +24,34 @@ class ApiMaker::CollectionSerializer
       }
 
       records = {}
-
-      ApiMaker::Configuration.profile("CollectionSerializer result collection map") do
-        parsed_collection.map do |model|
-          serializer = ApiMaker::Serializer.new(ability: @ability, args: @args, model: model, select: select_for(model))
-          resource = serializer.resource
-          collection_name = resource.collection_name
-          id = ApiMaker::PrimaryIdForModel.get(model)
-
-          data.fetch(:included)[collection_name] ||= {}
-          data.fetch(:included)[collection_name][id] ||= serializer
-
-          data.fetch(:data)[collection_name] ||= []
-          data.fetch(:data)[collection_name] << id
-
-          records[collection_name] ||= {}
-          records[collection_name][id] ||= serializer
-        end
+      parsed_collection.map do |model|
+        add_model_to_records(model, data, records)
       end
 
       preload_collection(data, records) if parsed_collection.length.positive?
-
       data
     end
+  end
+
+  def add_model_to_records(model, data, records)
+    serializer = serializer_for_model(model)
+    resource = serializer.resource
+    collection_name = resource.collection_name
+    records[collection_name] ||= {}
+
+    if model.new_record?
+      id = "new-#{records.fetch(collection_name).length}"
+    else
+      id = ApiMaker::PrimaryIdForModel.get(model)
+    end
+
+    data.fetch(:included)[collection_name] ||= {}
+    data.fetch(:included)[collection_name][id] ||= serializer
+
+    data.fetch(:data)[collection_name] ||= []
+    data.fetch(:data)[collection_name] << id
+
+    records[collection_name][id] ||= serializer
   end
 
   def as_json(options = nil)
@@ -46,27 +59,34 @@ class ApiMaker::CollectionSerializer
   end
 
   def parsed_collection
-    @parsed_collection ||= ApiMaker::SelectColumnsOnCollection.execute!(collection: @collection, select_columns: @select_columns).fix
-  end
-
-  def preload_collection(data, records)
-    ApiMaker::Configuration.profile("CollectionSerializer result preloading") do
-      preloader = ApiMaker::Preloader.new(
-        ability: @ability,
-        args: @args,
-        collection: parsed_collection,
-        data: data,
-        include_param: @include_param,
-        records: records,
-        select: @select,
-        select_columns: @select_columns
-      )
-      preloader.fill_data
+    @parsed_collection ||= begin
+      new_collection = ApiMaker::SelectColumnsOnCollection.execute!(collection: collection, model_class: model_class, select_columns: select_columns)
+      new_collection = new_collection.fix unless new_collection.is_a?(Array)
+      new_collection
     end
   end
 
+  def preload_collection(data, records)
+    preloader = ApiMaker::Preloader.new(
+      ability: ability,
+      args: args,
+      collection: parsed_collection,
+      data: data,
+      include_param: include_param,
+      model_class: model_class,
+      records: records,
+      select: select,
+      select_columns: select_columns
+    )
+    preloader.fill_data
+  end
+
   def select_for(model)
-    @select&.dig(model.class)
+    select&.dig(model.class)
+  end
+
+  def serializer_for_model(model)
+    ApiMaker::Serializer.new(ability: ability, args: args, model: model, select: select_for(model))
   end
 
   def to_json(options = nil)

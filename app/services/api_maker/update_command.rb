@@ -12,7 +12,7 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
       if command.model.update(sanitized_parameters)
         success_response
       else
-        failure_save_response(model: command.model, params: sanitized_parameters)
+        failure_save_response(model: model, params: sanitized_parameters)
       end
     end
   end
@@ -21,13 +21,9 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
     serializer.resource_instance.permitted_params(ApiMaker::PermittedParamsArgument.new(command: command, model: model))
   end
 
-  def serialized_resource(model)
-    ApiMaker::Serializer.new(ability: current_ability, args: api_maker_args, model: model)
-  end
-
   def success_response
     command.result(
-      model: serializer.result,
+      model: serialized_model(model),
       success: true
     )
   end

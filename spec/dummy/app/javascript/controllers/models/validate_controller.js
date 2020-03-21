@@ -1,5 +1,4 @@
 import { Controller } from "stimulus"
-import Task from "api-maker/models/task"
 
 export default class extends Controller {
   connect() {

@@ -1,6 +1,5 @@
 import Params from "shared/params"
 import React from "react"
-import Task from "api-maker/models/task"
 
 export default class ModelsCommandSerialize extends React.Component {
   constructor(props) {

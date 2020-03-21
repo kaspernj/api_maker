@@ -24,7 +24,6 @@ Rails.application.routes.draw do
     get :has_one
     get :preload
     get :ransack
-    get :update
     get :validate
   end
 

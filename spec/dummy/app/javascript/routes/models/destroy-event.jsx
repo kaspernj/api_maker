@@ -1,6 +1,5 @@
 import EventDestroyed from "api-maker/event-destroyed"
 import React from "react"
-import Task from "api-maker/models/task"
 
 export default class ModelsDestroyEvent extends React.Component {
   constructor(props) {

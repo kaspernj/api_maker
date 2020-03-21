@@ -1,6 +1,5 @@
 import { Controller } from "stimulus"
 import Params from "shared/params"
-import Project from "api-maker/models/project"
 
 export default class extends Controller {
   connect() {

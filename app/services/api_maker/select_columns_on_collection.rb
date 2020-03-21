@@ -1,5 +1,7 @@
 class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
   def initialize(collection:, model_class: nil, select_columns:, table_name: nil)
+    raise "No collection was given" unless collection
+
     @collection = collection
     @model_class = model_class || collection.model
     @select_columns = select_columns
@@ -8,6 +10,8 @@ class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
 
   def execute
     new_collection = @collection
+    return succeed! new_collection if new_collection.is_a?(Array)
+
     param_name = @model_class.model_name.param_key.dasherize
     selected_columns = @select_columns&.dig(param_name)
     arel_table = Arel::Table.new(@table_name)

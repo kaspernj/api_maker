@@ -35,7 +35,7 @@ describe ApiMaker::UpdateCommand do
       }
     }
 
-    command = helper.add_command(primary_key: user.id, args: {user: user_params})
+    command = helper.add_command(primary_key: user.id, args: {save: {user: user_params}})
     helper.execute!
 
     expect(command.result.fetch(:validation_errors)).to eq [

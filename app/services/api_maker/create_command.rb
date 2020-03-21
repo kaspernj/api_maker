@@ -40,13 +40,9 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
     serializer.resource_instance.permitted_params(ApiMaker::PermittedParamsArgument.new(command: command, model: model))
   end
 
-  def serialized_resource(model)
-    ApiMaker::Serializer.new(ability: current_ability, args: api_maker_args, model: model)
-  end
-
   def success_response
     command.result(
-      model: serializer.result,
+      model: serialized_model(model),
       success: true
     )
   end

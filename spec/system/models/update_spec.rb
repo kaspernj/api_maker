@@ -7,16 +7,16 @@ describe "model update" do
   it "updates the model" do
     login_as user
 
-    visit models_update_path(project_id: project.id)
+    visit models_update_path(project)
 
-    wait_for_path models_update_path
+    wait_for_path models_update_path(project)
 
-    wait_for_browser { find("[data-controller='models--update']", visible: false)["data-update-completed"] == "true" }
-    wait_for_browser { find("[data-controller='models--update']", visible: false)["data-result"] }
+    wait_for_selector ".models-update[data-update-completed='true']", visible: false
+    wait_for_selector ".models-update[data-change-attributes-result]", visible: false
 
     expect(project.reload.name).to eq "test-update-project"
 
-    result = JSON.parse(find("[data-controller='models--update']", visible: false)["data-result"])
+    result = JSON.parse(wait_for_and_find(".models-update", visible: false)["data-change-attributes-result"])
 
     expect(result.fetch("initialChanged")).to eq false
     expect(result.fetch("initialChanges")).to eq({})
