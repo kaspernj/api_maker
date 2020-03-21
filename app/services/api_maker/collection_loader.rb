@@ -36,11 +36,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
       ability: ability,
       args: args,
       collection: collection,
-      query_params: {
-        include_param: params[:include],
-        select: params[:select],
-        select_columns: params[:select_columns]
-      }
+      query_params: params
     ).result
   end
 
