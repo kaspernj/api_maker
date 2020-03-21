@@ -9,7 +9,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   end
 
   def execute
-    set_collection
+    set_query
 
     if params[:count]
       count = @query.count
@@ -64,7 +64,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     query_through
   end
 
-  def set_collection
+  def set_query
     @query = manage_through_relationship || collection
     @query = @query.distinct if params[:distinct]
     @query = @query.ransack(params[:q]).result

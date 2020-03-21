@@ -21,7 +21,7 @@ class ApiMaker::BaseCommand
 
   def failure_response(errors:)
     command.fail(
-      model: serializer.result,
+      model: serialized_model(model),
       success: false,
       errors: errors
     )
@@ -29,7 +29,7 @@ class ApiMaker::BaseCommand
 
   def failure_save_response(model:, params:)
     command.fail(
-      model: serializer.result,
+      model: serialized_model(model),
       success: false,
       errors: model.errors.full_messages,
       validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model: model, params: params)
@@ -94,5 +94,20 @@ private
     else
       "Internal server error"
     end
+  end
+
+  def serialized_model(model)
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      ability: current_ability,
+      args: api_maker_args,
+      collection: [model],
+      model_class: model.class,
+      query_params: command.args&.dig(:query_params)
+    )
+    collection_serializer.result
+  end
+
+  def serialized_resource(model)
+    ApiMaker::Serializer.new(ability: current_ability, args: api_maker_args, model: model)
   end
 end
