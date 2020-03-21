@@ -24,33 +24,34 @@ class ApiMaker::CollectionSerializer
       }
 
       records = {}
-
       parsed_collection.map do |model|
-        serializer = ApiMaker::Serializer.new(ability: ability, args: args, model: model, select: select_for(model))
-        resource = serializer.resource
-        collection_name = resource.collection_name
-        records[collection_name] ||= {}
-
-        if model.new_record?
-          id = "new-#{records.fetch(collection_name).length}"
-        else
-          id = ApiMaker::PrimaryIdForModel.get(model)
-        end
-
-        data.fetch(:included)[collection_name] ||= {}
-        data.fetch(:included)[collection_name][id] ||= serializer
-
-        data.fetch(:data)[collection_name] ||= []
-        data.fetch(:data)[collection_name] << id
-
-
-        records[collection_name][id] ||= serializer
+        add_model_to_records(model, data, records)
       end
 
       preload_collection(data, records) if parsed_collection.length.positive?
-
       data
     end
+  end
+
+  def add_model_to_records(model, data, records)
+    serializer = serializer_for_model(model)
+    resource = serializer.resource
+    collection_name = resource.collection_name
+    records[collection_name] ||= {}
+
+    if model.new_record?
+      id = "new-#{records.fetch(collection_name).length}"
+    else
+      id = ApiMaker::PrimaryIdForModel.get(model)
+    end
+
+    data.fetch(:included)[collection_name] ||= {}
+    data.fetch(:included)[collection_name][id] ||= serializer
+
+    data.fetch(:data)[collection_name] ||= []
+    data.fetch(:data)[collection_name] << id
+
+    records[collection_name][id] ||= serializer
   end
 
   def as_json(options = nil)
@@ -82,6 +83,10 @@ class ApiMaker::CollectionSerializer
 
   def select_for(model)
     select&.dig(model.class)
+  end
+
+  def serializer_for_model(model)
+    ApiMaker::Serializer.new(ability: ability, args: args, model: model, select: select_for(model))
   end
 
   def to_json(options = nil)
