@@ -31,7 +31,6 @@ private
   end
 
   def models_initial_query
-    primary_key_column = @reflection.options[:primary_key]&.to_sym || @collection.primary_key.to_sym
     query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&primary_key_column))
     query.joins(@reflection.inverse_of.name)
   end
@@ -48,6 +47,16 @@ private
 
     data.fetch(:included)[collection_name] ||= {}
     data.fetch(:included).fetch(collection_name)[model_id] ||= serializer
+  end
+
+  def primary_key_column
+    @primary_key_column ||= if @reflection.options[:primary_key]
+      @reflection.options[:primary_key]&.to_sym
+    elsif @collection.is_a?(Array)
+      @collection.first.class.primary_key.to_sym
+    else
+      @collection.primary_key.to_sym
+    end
   end
 
   def find_origin_data_for_model(model)
