@@ -41,7 +41,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
 
   def origin_data_for_model(model)
     origin_id = model[:api_maker_origin_id]
-    data.fetch(:preloaded).fetch(collection_name).fetch(origin_id)
+    data.dig!(:preloaded, collection_name, origin_id)
   end
 
   def query_normal

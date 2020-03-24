@@ -59,7 +59,7 @@ describe ApiMaker::CollectionSerializer do
     collection = Project.where(id: project.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail"]}).to_json)
 
-    expect(result.dig("preloaded").fetch("projects").fetch("2").fetch("r").fetch("project_detail")).to eq nil
+    expect(result.dig!("preloaded", "projects", "2", "r", "project_detail")).to eq nil
   end
 
   it "includes an empty array if it has been preloaded but doesnt exist for has many" do
@@ -103,29 +103,29 @@ describe ApiMaker::CollectionSerializer do
     collection = Task.where(id: task.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["customer"]}).to_json)
 
-    customer_preload = result.fetch("preloaded").fetch("customers").fetch("5")
+    customer_preload = result.dig!("preloaded", "customers").fetch("5")
 
-    expect(result.dig("data", "tasks")).to eq [3]
-    expect(result.dig("preloaded", "tasks", "3", "r", "customer")).to eq 5
-    expect(customer_preload.dig("a", "name")).to eq "Test customer"
+    expect(result.dig!("data", "tasks")).to eq [3]
+    expect(result.dig!("preloaded", "tasks", "3", "r", "customer")).to eq 5
+    expect(customer_preload.dig!("a", "name")).to eq "Test customer"
   end
 
   it "only includes the same relationship once for belongs to relationships" do
     collection = Task.where(id: [task.id, task_with_same_project.id])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(args: args, collection: collection, query_params: {preload: ["project"]}).to_json)
 
-    expect(result.fetch("data").fetch("tasks")).to eq [task.id, task_with_same_project.id]
-    expect(result.fetch("preloaded").fetch("projects").fetch(project.id.to_s).fetch("a").fetch("id")).to eq project.id
-    expect(result.fetch("preloaded").fetch("projects").length).to eq 1
+    expect(result.dig!("data", "tasks")).to eq [task.id, task_with_same_project.id]
+    expect(result.dig!("preloaded", "projects", project.id.to_s, "a", "id")).to eq project.id
+    expect(result.dig!("preloaded", "projects").length).to eq 1
   end
 
   it "only includes the same relationship once for has one through" do
     collection = Task.where(id: [task.id, task_with_same_project.id])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["account", "project.account"]}).to_json)
 
-    expect(result.fetch("data").fetch("tasks").length).to eq 2
-    expect(result.fetch("preloaded").fetch("accounts").fetch(account.id.to_s).fetch("a").fetch("id")).to eq account.id
-    expect(result.fetch("preloaded").fetch("accounts").length).to eq 1
+    expect(result.dig!("data", "tasks").length).to eq 2
+    expect(result.dig!("preloaded", "accounts", account.id.to_s, "a", "id")).to eq account.id
+    expect(result.dig!("preloaded", "accounts").length).to eq 1
   end
 
   it "applies the scope of the original relationship on has-many-relationships" do
@@ -135,8 +135,8 @@ describe ApiMaker::CollectionSerializer do
     collection = Account.where(id: [account.id])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["projects"]}).to_json)
 
-    expect(result.fetch("data").fetch("accounts").length).to eq 1
-    expect(result.fetch("preloaded").fetch("accounts").fetch(account.id.to_s).fetch("r").fetch("projects")).to eq []
+    expect(result.dig!("data", "accounts").length).to eq 1
+    expect(result.dig!("preloaded", "accounts", account.id.to_s, "r", "projects")).to eq []
   end
 
   it "applies the scope of the original relationship on has-one-relationships" do
@@ -146,8 +146,8 @@ describe ApiMaker::CollectionSerializer do
     collection = Project.where(id: [project.id])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail"]}).to_json)
 
-    expect(result.fetch("data").fetch("projects").length).to eq 1
-    expect(result.fetch("preloaded").fetch("projects").fetch(project.id.to_s).fetch("r").fetch("project_detail")).to eq nil
+    expect(result.dig!("data", "projects").length).to eq 1
+    expect(result.dig!("preloaded", "projects", project.id.to_s, "r", "project_detail")).to eq nil
   end
 
   it "selects given columns in the database query" do

@@ -12,7 +12,7 @@ describe "models select" do
     wait_for_selector ".component-models-select .content-container"
 
     result = JSON.parse(find(".content-container").text)
-    model_data = result.fetch(0).fetch("modelData")
+    model_data = result.dig!(0, "modelData")
 
     expect(model_data).to have_key "id"
     expect(model_data).to have_key "name"

@@ -13,8 +13,8 @@ describe "models - command serialize" do
 
     response_data = JSON.parse(find(".content-container").text)
 
-    expect(response_data.fetch("modelData").fetch("id")).to eq task.id
-    expect(response_data.fetch("modelData").fetch("user_id")).to eq user.id
+    expect(response_data.dig!("modelData", "id")).to eq task.id
+    expect(response_data.dig!("modelData", "user_id")).to eq user.id
     expect(response_data.fetch("newRecord")).to eq false
   end
 end

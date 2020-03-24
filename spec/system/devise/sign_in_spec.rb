@@ -14,9 +14,9 @@ describe "Devise sign in" do
 
     response = JSON.parse(find("[data-controller='devise--sign-in']", visible: false)["data-success-response"])
 
-    expect(response.fetch("deviseSignInResponse").fetch("response").fetch("success")).to eq true
-    expect(response.fetch("deviseSignInResponse").fetch("response").fetch("model_data").fetch("a").fetch("email")).to eq user.email
-    expect(response.fetch("currentUserResult").fetch("modelData").fetch("id")).to eq user.id
+    expect(response.dig!("deviseSignInResponse", "response", "success")).to eq true
+    expect(response.dig!("deviseSignInResponse", "response", "model_data", "a", "email")).to eq user.email
+    expect(response.dig!("currentUserResult", "modelData", "id")).to eq user.id
     expect(response.fetch("isUserSignedInResult")).to eq true
   end
 end

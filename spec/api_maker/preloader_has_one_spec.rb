@@ -9,21 +9,21 @@ describe ApiMaker::PreloaderHasOne do
 
   it "sets the relationship to nil and doesnt crash when its preloaded but doesnt exist" do
     collection = Project.where(id: [project.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["project_detail.accounts"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail.accounts"]}).to_json)
 
-    expect(result.dig("preloaded", "projects", project.id.to_s, "r", "project_detail")).to eq nil
+    expect(result.dig!("preloaded", "projects", project.id.to_s, "r", "project_detail")).to eq nil
   end
 
   it "doesnt crash when trying to preload on an empty collection" do
     collection = Project.where(id: [project.id + 5])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["project_detail.accounts"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail.accounts"]}).to_json)
 
     expect(result).to eq("data" => {}, "preloaded" => {})
   end
 
   it "loads relationships through and with source" do
     collection = Task.where(id: task.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["account_customer"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["account_customer"]}).to_json)
 
     expect(result.dig!("preloaded", "tasks", "6", "r")).to eq("account_customer" => 8)
   end
@@ -35,7 +35,7 @@ describe ApiMaker::PreloaderHasOne do
     collection_serializer = ApiMaker::CollectionSerializer.new(
       collection: collection,
       query_params: {
-        include: ["project_detail"],
+        preload: ["project_detail"],
         select_columns: {
           "project-detail" => ["id"]
         }
@@ -56,7 +56,7 @@ describe ApiMaker::PreloaderHasOne do
     collection_serializer = ApiMaker::CollectionSerializer.new(
       collection: collection,
       query_params: {
-        include: ["account_customer"],
+        preload: ["account_customer"],
         select_columns: {
           "customer" => ["id"]
         }
