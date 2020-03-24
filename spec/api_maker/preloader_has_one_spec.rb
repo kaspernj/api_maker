@@ -11,21 +11,21 @@ describe ApiMaker::PreloaderHasOne do
     collection = Project.where(id: [project.id])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["project_detail.accounts"]}).to_json)
 
-    expect(result.dig("included", "projects", project.id.to_s, "r", "project_detail")).to eq nil
+    expect(result.dig("preloaded", "projects", project.id.to_s, "r", "project_detail")).to eq nil
   end
 
   it "doesnt crash when trying to preload on an empty collection" do
     collection = Project.where(id: [project.id + 5])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["project_detail.accounts"]}).to_json)
 
-    expect(result).to eq("data" => {}, "included" => {})
+    expect(result).to eq("data" => {}, "preloaded" => {})
   end
 
   it "loads relationships through and with source" do
     collection = Task.where(id: task.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["account_customer"]}).to_json)
 
-    expect(result.dig!("included", "tasks", "6", "r")).to eq("account_customer" => 8)
+    expect(result.dig!("preloaded", "tasks", "6", "r")).to eq("account_customer" => 8)
   end
 
   it "only select the give columns without a through relationship" do
@@ -44,7 +44,7 @@ describe ApiMaker::PreloaderHasOne do
 
     attributes = collection_serializer
       .result
-      .dig!(:included, "project-details", project_detail.id)
+      .dig!(:preloaded, "project-details", project_detail.id)
       .model
       .attributes
 
@@ -64,7 +64,7 @@ describe ApiMaker::PreloaderHasOne do
     )
     attributes = collection_serializer
       .result
-      .dig!(:included, "customers", customer.id)
+      .dig!(:preloaded, "customers", customer.id)
       .model
       .attributes
 

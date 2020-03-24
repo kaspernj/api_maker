@@ -1,5 +1,5 @@
 class ApiMaker::CollectionSerializer
-  attr_reader :ability, :args, :collection, :include_param, :model_class, :select, :select_columns
+  attr_reader :ability, :args, :collection, :preload_param, :model_class, :select, :select_columns
 
   def initialize(ability: nil, args: {}, collection:, model_class: nil, query_params: nil)
     raise "No collection was given" unless collection
@@ -10,7 +10,7 @@ class ApiMaker::CollectionSerializer
     @ability = ability || ApiMaker::Ability.new(args: args)
     @args = args
     @collection = collection
-    @include_param = query_params[:include]
+    @preload_param = query_params[:preload]
     @model_class = model_class
     @select = select
     @select_columns = query_params[:select_columns]
@@ -20,7 +20,7 @@ class ApiMaker::CollectionSerializer
     @result ||= begin
       data = {
         data: {},
-        included: {}
+        preloaded: {}
       }
 
       records = {}
@@ -45,8 +45,8 @@ class ApiMaker::CollectionSerializer
       id = ApiMaker::PrimaryIdForModel.get(model)
     end
 
-    data.fetch(:included)[collection_name] ||= {}
-    data.fetch(:included)[collection_name][id] ||= serializer
+    data.fetch(:preloaded)[collection_name] ||= {}
+    data.fetch(:preloaded)[collection_name][id] ||= serializer
 
     data.fetch(:data)[collection_name] ||= []
     data.fetch(:data)[collection_name] << id
@@ -72,7 +72,7 @@ class ApiMaker::CollectionSerializer
       args: args,
       collection: parsed_collection,
       data: data,
-      include_param: include_param,
+      preload_param: preload_param,
       model_class: model_class,
       records: records,
       select: select,

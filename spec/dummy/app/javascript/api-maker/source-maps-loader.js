@@ -18,6 +18,8 @@ export default class SourceMapsLoader {
     for(const script of scripts) {
       const src = this.loadSourceMapsForScriptTagsCallback(script)
 
+      console.log(`SCRIPT SRC FOUND: ${src}`)
+
       if (src && !this.srcLoaded[src]) {
         this.srcLoaded[src] = true
 
@@ -37,6 +39,8 @@ export default class SourceMapsLoader {
 
     xhr.open("GET", mapUrl, true)
     await this.loadXhr(xhr)
+
+    console.log(`LOADING SOURCE MAP: ${mapUrl}`)
 
     const consumer = new SourceMapConsumer(JSON.parse(xhr.responseText))
     this.sourceMaps.push({consumer, originalUrl, src})
@@ -66,15 +70,22 @@ export default class SourceMapsLoader {
     const newSourceMap = []
 
     for(const trace of stack) {
-      const sourceMapData = this.sourceMaps.find((sourceMapData) => sourceMapData.originalUrl == trace.file)
+      const sourceMapData = this.sourceMaps.find((sourceMapData) => {
+        console.log({ sourceMapData, trace })
+        return sourceMapData.originalUrl == trace.file
+      })
       let filePath, fileString, original
 
       if (sourceMapData) {
+        console.log("HAS SOURCE MAP DATA")
+
         const sourceMapConsumer = sourceMapData.consumer
         original = sourceMapConsumer.originalPositionFor({
           line: trace.lineNumber,
           column: trace.column
         })
+      } else {
+        console.log("HASNT SOURCE MAP DATA")
       }
 
       if (original && original.source) {
@@ -92,6 +103,8 @@ export default class SourceMapsLoader {
           fileString += `:${trace.column}`
         }
       }
+
+      console.log({ filePath, fileString, trace })
 
       newSourceMap.push({
         filePath,

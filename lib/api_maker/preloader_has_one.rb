@@ -10,8 +10,8 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
         serializer = ApiMaker::Serializer.new(ability: ability, args: args, model: model, select: select&.dig(model.class))
         collection_name = serializer.resource.collection_name
 
-        data.fetch(:included)[collection_name] ||= {}
-        data.fetch(:included).fetch(collection_name)[model_id] ||= serializer
+        data.fetch(:preloaded)[collection_name] ||= {}
+        data.fetch(:preloaded).fetch(collection_name)[model_id] ||= serializer
       end
     end
 
@@ -41,7 +41,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
 
   def origin_data_for_model(model)
     origin_id = model[:api_maker_origin_id]
-    data.fetch(:included).fetch(collection_name).fetch(origin_id)
+    data.fetch(:preloaded).fetch(collection_name).fetch(origin_id)
   end
 
   def query_normal

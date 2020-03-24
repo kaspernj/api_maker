@@ -18,26 +18,26 @@ describe ApiMaker::CollectionSerializer do
       ability: ability,
       collection: collection,
       query_params: {
-        include: ["tasks.project.account", "tasks.account"]
+        preload: ["tasks.project.account", "tasks.account"]
       }
     )
     result = JSON.parse(collection_serializer.to_json)
 
-    expect(result.dig("included", "users", "4", "r", "tasks")).to eq [3]
-    expect(result.dig("included", "users", "4", "r").length).to eq 1
+    expect(result.dig("preloaded", "users", "4", "r", "tasks")).to eq [3]
+    expect(result.dig("preloaded", "users", "4", "r").length).to eq 1
 
-    account_include = result.fetch("included").fetch("accounts").fetch("1")
-    project_include = result.fetch("included").fetch("projects").fetch("2")
-    task_include = result.fetch("included").fetch("tasks").fetch("3")
+    account_preload = result.fetch("preloaded").fetch("accounts").fetch("1")
+    project_preload = result.fetch("preloaded").fetch("projects").fetch("2")
+    task_preload = result.fetch("preloaded").fetch("tasks").fetch("3")
 
-    expect(project_include.dig("a", "name")).to eq "Test project"
-    expect(project_include.dig("r")).to eq("account" => 1)
+    expect(project_preload.dig("a", "name")).to eq "Test project"
+    expect(project_preload.dig("r")).to eq("account" => 1)
 
-    expect(task_include.dig("r")).to eq(
+    expect(task_preload.dig("r")).to eq(
       "account" => 1,
       "project" => 2
     )
-    expect(account_include).to eq(
+    expect(account_preload).to eq(
       "a" => {
         "id" => 1,
         "name" => "Account 1"
@@ -49,40 +49,40 @@ describe ApiMaker::CollectionSerializer do
     collection = Project.where(id: project.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["project_detail"]}).to_json)
 
-    expect(result.dig("included", "projects", "2", "r", "project_detail")).to eq 6
-    expect(result.dig("included", "project-details", "6", "a", "details")).to eq "Test project details"
+    expect(result.dig("preloaded", "projects", "2", "r", "project_detail")).to eq 6
+    expect(result.dig("preloaded", "project-details", "6", "a", "details")).to eq "Test project details"
   end
 
-  it "includes an empty relationship if it has been included but doesnt exist for has one" do
+  it "includes an empty relationship if it has been preloaded but doesnt exist for has one" do
     project_detail.destroy!
 
     collection = Project.where(id: project.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["project_detail"]}).to_json)
 
-    expect(result.dig("included").fetch("projects").fetch("2").fetch("r").fetch("project_detail")).to eq nil
+    expect(result.dig("preloaded").fetch("projects").fetch("2").fetch("r").fetch("project_detail")).to eq nil
   end
 
-  it "includes an empty array if it has been included but doesnt exist for has many" do
+  it "includes an empty array if it has been preloaded but doesnt exist for has many" do
     task.destroy!
 
     collection = Project.where(id: project.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, query_params: {include: ["tasks"]}).to_json)
 
-    expect(result.dig("included", "projects", "2", "r", "tasks")).to eq []
+    expect(result.dig("preloaded", "projects", "2", "r", "tasks")).to eq []
   end
 
   it "preloads has one through relationships" do
     collection = User.where(id: user.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, query_params: {include: ["tasks.customer"]}).to_json)
 
-    expect(result.dig("included", "users", "4", "a", "id")).to eq 4
-    expect(result.dig("included", "users", "4", "r", "tasks")).to eq [3]
+    expect(result.dig("preloaded", "users", "4", "a", "id")).to eq 4
+    expect(result.dig("preloaded", "users", "4", "r", "tasks")).to eq [3]
 
-    customer_include = result.fetch("included").fetch("customers").fetch("5")
+    customer_preload = result.fetch("preloaded").fetch("customers").fetch("5")
 
-    expect(customer_include).to be_present
-    expect(customer_include.dig("a", "id")).to eq 5
-    expect(customer_include.dig("a", "name")).to eq "Test customer"
+    expect(customer_preload).to be_present
+    expect(customer_preload.dig("a", "id")).to eq 5
+    expect(customer_preload.dig("a", "name")).to eq "Test customer"
   end
 
   it "preloads like on commoditrader listing company" do
@@ -90,24 +90,24 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, query_params: {include: ["tasks.project_detail"]}).to_json)
 
     expect(result.dig!("data", "users")).to eq [user.id]
-    expect(result.dig!("included", "users", user.id.to_s, "r", "tasks")).to eq [3]
+    expect(result.dig!("preloaded", "users", user.id.to_s, "r", "tasks")).to eq [3]
 
-    task_include = result.dig!("included", "tasks").fetch("3")
-    project_detail_include = result.dig!("included", "project-details", "6")
+    task_preload = result.dig!("preloaded", "tasks").fetch("3")
+    project_detail_preload = result.dig!("preloaded", "project-details", "6")
 
-    expect(task_include.dig!("r", "project_detail")).to eq 6
-    expect(project_detail_include.dig!("a", "details")).to eq "Test project details"
+    expect(task_preload.dig!("r", "project_detail")).to eq 6
+    expect(project_detail_preload.dig!("a", "details")).to eq "Test project details"
   end
 
   it "preloads a relationship through another relationship on the same model" do
     collection = Task.where(id: task.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["customer"]}).to_json)
 
-    customer_include = result.fetch("included").fetch("customers").fetch("5")
+    customer_preload = result.fetch("preloaded").fetch("customers").fetch("5")
 
     expect(result.dig("data", "tasks")).to eq [3]
-    expect(result.dig("included", "tasks", "3", "r", "customer")).to eq 5
-    expect(customer_include.dig("a", "name")).to eq "Test customer"
+    expect(result.dig("preloaded", "tasks", "3", "r", "customer")).to eq 5
+    expect(customer_preload.dig("a", "name")).to eq "Test customer"
   end
 
   it "only includes the same relationship once for belongs to relationships" do
@@ -115,8 +115,8 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(args: args, collection: collection, query_params: {include: ["project"]}).to_json)
 
     expect(result.fetch("data").fetch("tasks")).to eq [task.id, task_with_same_project.id]
-    expect(result.fetch("included").fetch("projects").fetch(project.id.to_s).fetch("a").fetch("id")).to eq project.id
-    expect(result.fetch("included").fetch("projects").length).to eq 1
+    expect(result.fetch("preloaded").fetch("projects").fetch(project.id.to_s).fetch("a").fetch("id")).to eq project.id
+    expect(result.fetch("preloaded").fetch("projects").length).to eq 1
   end
 
   it "only includes the same relationship once for has one through" do
@@ -124,8 +124,8 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["account", "project.account"]}).to_json)
 
     expect(result.fetch("data").fetch("tasks").length).to eq 2
-    expect(result.fetch("included").fetch("accounts").fetch(account.id.to_s).fetch("a").fetch("id")).to eq account.id
-    expect(result.fetch("included").fetch("accounts").length).to eq 1
+    expect(result.fetch("preloaded").fetch("accounts").fetch(account.id.to_s).fetch("a").fetch("id")).to eq account.id
+    expect(result.fetch("preloaded").fetch("accounts").length).to eq 1
   end
 
   it "applies the scope of the original relationship on has-many-relationships" do
@@ -136,7 +136,7 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["projects"]}).to_json)
 
     expect(result.fetch("data").fetch("accounts").length).to eq 1
-    expect(result.fetch("included").fetch("accounts").fetch(account.id.to_s).fetch("r").fetch("projects")).to eq []
+    expect(result.fetch("preloaded").fetch("accounts").fetch(account.id.to_s).fetch("r").fetch("projects")).to eq []
   end
 
   it "applies the scope of the original relationship on has-one-relationships" do
@@ -147,7 +147,7 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["project_detail"]}).to_json)
 
     expect(result.fetch("data").fetch("projects").length).to eq 1
-    expect(result.fetch("included").fetch("projects").fetch(project.id.to_s).fetch("r").fetch("project_detail")).to eq nil
+    expect(result.fetch("preloaded").fetch("projects").fetch(project.id.to_s).fetch("r").fetch("project_detail")).to eq nil
   end
 
   it "selects given columns in the database query" do
@@ -168,6 +168,6 @@ describe ApiMaker::CollectionSerializer do
 
     expect(selects.length).to eq 1
     expect(selects.first.name).to eq "id"
-    expect(result.dig!("included", "projects", project.id.to_s, "a", "id")).to eq project.id
+    expect(result.dig!("preloaded", "projects", project.id.to_s, "a", "id")).to eq project.id
   end
 end

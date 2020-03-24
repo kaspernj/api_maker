@@ -85,7 +85,7 @@ export default class Collection {
     if (this.queryArgs.distinct) params.distinct = this.queryArgs.distinct
     if (this.queryArgs.ransack) params.q = this.queryArgs.ransack
     if (this.queryArgs.limit) params.limit = this.queryArgs.limit
-    if (this.queryArgs.preload) params.include = this.queryArgs.preload
+    if (this.queryArgs.preload) params.preload = this.queryArgs.preload
     if (this.queryArgs.page) params.page = this.queryArgs.page
     if (this.queryArgs.per) params.per = this.queryArgs.per
     if (this.queryArgs.select) params.select = this.queryArgs.select

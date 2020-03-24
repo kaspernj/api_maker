@@ -45,8 +45,8 @@ private
     serializer = ApiMaker::Serializer.new(ability: ability, args: args, model: model, select: select&.dig(model.class))
     collection_name = serializer.resource.collection_name
 
-    data.fetch(:included)[collection_name] ||= {}
-    data.fetch(:included).fetch(collection_name)[model_id] ||= serializer
+    data.fetch(:preloaded)[collection_name] ||= {}
+    data.fetch(:preloaded).fetch(collection_name)[model_id] ||= serializer
   end
 
   def primary_key_column

@@ -202,7 +202,16 @@ export default class BaseModel {
   }
 
   async destroy() {
-    const response = await CommandsPool.addCommand({command: `${this.modelClassData().collectionName}-destroy`, collectionName: this.modelClassData().collectionName, primaryKey: this.primaryKey(), type: "destroy"}, {})
+    const response = await CommandsPool.addCommand(
+      {
+        args: {query_params: this.collection && this.collection.params()},
+        command: `${this.modelClassData().collectionName}-destroy`,
+        collectionName: this.modelClassData().collectionName,
+        primaryKey: this.primaryKey(),
+        type: "destroy"
+      },
+      {}
+    )
 
     if (response.success) {
       if (response.model) {
@@ -330,11 +339,28 @@ export default class BaseModel {
   }
 
   async reload() {
+    const params = this.collection && this.collection.params()
     const primaryKeyName = this.modelClassData().primaryKey
-    const query = {}
-    query[`${primaryKeyName}_eq`] = this.primaryKey()
+    const ransackParams = {}
+    ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
 
-    const model = await this.constructor.ransack(query).first()
+    let query = this.constructor.ransack(ransackParams)
+
+    if (params) {
+      if (params.preload) {
+        query.queryArgs.preload = params.preload
+      }
+
+      if (params.select) {
+        query.queryArgs.select = params.select
+      }
+
+      if (params.select_columns) {
+        query.queryArgs.selectColumns = params.select_columns
+      }
+    }
+
+    const model = await query.first()
     this._setNewModelData(model)
     this.changes = {}
   }
@@ -413,6 +439,7 @@ export default class BaseModel {
       response = await CommandsPool.addCommand(
         {
           args: {
+            query_params: this.collection && this.collection.params(),
             save: objectData
           },
           command: `${this.modelClassData().collectionName}-update`,
@@ -607,15 +634,15 @@ export default class BaseModel {
   _readModelDataFromArgs(args) {
     this.collection = args.collection
     this.modelData = args.data.a
-    this.includedRelationships = args.data.r
+    this.preloadedRelationships = args.data.r
   }
 
-  _readIncludedRelationships(included) {
-    if (!this.includedRelationships)
+  _readPreloadedRelationships(preloaded) {
+    if (!this.preloadedRelationships)
       return
 
-    for(const relationshipName in this.includedRelationships) {
-      const relationshipData = this.includedRelationships[relationshipName]
+    for(const relationshipName in this.preloadedRelationships) {
+      const relationshipData = this.preloadedRelationships[relationshipName]
       const relationshipClassData = this.modelClassData().relationships.find(relationship => relationship.name == relationshipName)
 
       if (!relationshipClassData)
@@ -629,13 +656,13 @@ export default class BaseModel {
         const result = []
 
         for(const relationshipId of relationshipData) {
-          const model = included.getModel(relationshipType, relationshipId)
+          const model = preloaded.getModel(relationshipType, relationshipId)
           result.push(model)
         }
 
         this.relationshipsCache[relationshipName] = result
       } else {
-        const model = included.getModel(relationshipType, relationshipData)
+        const model = preloaded.getModel(relationshipType, relationshipData)
         this.relationshipsCache[relationshipName] = model
       }
     }

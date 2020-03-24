@@ -20,7 +20,7 @@ describe ApiMaker::PreloaderBelongsTo do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {include: ["account"]}).to_json)
 
     expect(result.fetch("data").fetch("projects").length).to eq 1
-    expect(result.fetch("included").fetch("projects").fetch(project.id.to_s).fetch("r").fetch("account")).to eq nil
+    expect(result.fetch("preloaded").fetch("projects").fetch(project.id.to_s).fetch("r").fetch("account")).to eq nil
   end
 
   it "selects the given database columns" do
@@ -38,7 +38,7 @@ describe ApiMaker::PreloaderBelongsTo do
 
     attributes = collection_serializer
       .result
-      .dig!(:included, "accounts", account.id)
+      .dig!(:preloaded, "accounts", account.id)
       .model
       .attributes
 
