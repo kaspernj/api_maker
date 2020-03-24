@@ -1,5 +1,5 @@
 module ApiMaker::ModelExtensions
-  def self.preloaded(base)
+  def self.included(base)
     base.extend(ClassMethods)
   end
 
