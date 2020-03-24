@@ -18,16 +18,16 @@ describe "model ransack" do
     projects_without_preload = JSON.parse(find("[data-controller='models--ransack']", visible: false)["data-projects-without-preload"])
     projects_with_preload = JSON.parse(find("[data-controller='models--ransack']", visible: false)["data-projects-with-preload"])
 
-    expect(projects_without_preload.fetch(0).fetch("modelData").fetch("name")).to eq "test-ransack-kasper"
-    expect(projects_without_preload.fetch(0).fetch("relationshipsCache")).to eq({})
-    expect(projects_without_preload.fetch(0).fetch("modelData")).not_to have_key "tasks"
-    expect(projects_without_preload.fetch(0).fetch("modelData")).not_to have_key "updated_at"
+    expect(projects_without_preload.dig!(0, "modelData", "name")).to eq "test-ransack-kasper"
+    expect(projects_without_preload.dig!(0, "relationshipsCache")).to eq({})
+    expect(projects_without_preload.dig!(0, "modelData")).not_to have_key "tasks"
+    expect(projects_without_preload.dig!(0, "modelData")).not_to have_key "updated_at"
 
-    expect(projects_with_preload.fetch(0).fetch("modelData")).not_to have_key "tasks"
-    expect(projects_with_preload.fetch(0).fetch("relationshipsCache").fetch("tasks").fetch(0).fetch("modelData").fetch("name")).to eq "test-project-task"
-    expect(projects_with_preload.fetch(0).fetch("relationshipsCache").fetch("tasks").fetch(0).fetch("modelData")).not_to have_key "updated_at"
-    expect(projects_with_preload.fetch(0).fetch("modelData").fetch("name")).to eq "test-ransack-kasper"
-    expect(projects_with_preload.fetch(0).fetch("modelData")).not_to have_key "tasks"
-    expect(projects_with_preload.fetch(0).fetch("modelData")).not_to have_key "updated_at"
+    expect(projects_with_preload.dig!(0, "modelData")).not_to have_key "tasks"
+    expect(projects_with_preload.dig!(0, "relationshipsCache", "tasks", 0, "modelData", "name")).to eq "test-project-task"
+    expect(projects_with_preload.dig!(0, "relationshipsCache", "tasks", 0, "modelData")).not_to have_key "updated_at"
+    expect(projects_with_preload.dig!(0, "modelData", "name")).to eq "test-ransack-kasper"
+    expect(projects_with_preload.dig!(0, "modelData")).not_to have_key "tasks"
+    expect(projects_with_preload.dig!(0, "modelData")).not_to have_key "updated_at"
   end
 end

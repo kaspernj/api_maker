@@ -16,7 +16,7 @@ describe "model find" do
 
     project_data = JSON.parse(find("[data-controller='models--find']", visible: false)["data-project-data"])
 
-    expect(project_data.fetch("modelData").fetch("name")).to eq project.name
+    expect(project_data.dig!("modelData", "name")).to eq project.name
     expect(project_data.fetch("modelData")).not_to have_key "tasks"
     expect(project_data.fetch("modelData")).not_to have_key "task"
     expect(project_data.fetch("modelData")).not_to have_key "updated_at"

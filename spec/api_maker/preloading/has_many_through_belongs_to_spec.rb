@@ -13,11 +13,11 @@ describe "preloading - has many through belongs to" do
 
   it "preloads without messing it up" do
     collection = Account.where(id: [account.id, another_account.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: user_ability, collection: collection, query_params: {include: ["tasks"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: user_ability, collection: collection, query_params: {preload: ["tasks"]}).to_json)
 
-    expect(result.dig("data", "accounts")).to eq [account.id, another_account.id]
-    expect(result.dig("included", "accounts", account.id.to_s, "r", "tasks")).to eq [task.id]
-    expect(result.dig("included", "accounts", another_account.id.to_s, "r", "tasks")).to eq [task.id]
-    expect(result.fetch("included").fetch("tasks").length).to eq 1
+    expect(result.dig!("data", "accounts")).to eq [account.id, another_account.id]
+    expect(result.dig!("preloaded", "accounts", account.id.to_s, "r", "tasks")).to eq [task.id]
+    expect(result.dig!("preloaded", "accounts", another_account.id.to_s, "r", "tasks")).to eq [task.id]
+    expect(result.dig!("preloaded", "tasks").length).to eq 1
   end
 end

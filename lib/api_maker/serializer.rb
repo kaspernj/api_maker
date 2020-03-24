@@ -65,7 +65,7 @@ class ApiMaker::Serializer
   def result
     @result ||= begin
       result = {a: attributes}
-      result[:r] = @relationships if @relationships # Only include relationships if set
+      result[:r] = @relationships if @relationships # Only preload relationships if set
       result
     end
   end
