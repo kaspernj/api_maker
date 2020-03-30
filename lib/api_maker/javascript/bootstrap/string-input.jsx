@@ -9,6 +9,7 @@ const inflection = require("inflection")
 
 export default class BootstrapStringInput extends React.Component {
   static propTypes = PropTypesExact({
+    accept: PropTypes.string,
     append: PropTypes.node,
     attribute: PropTypes.string,
     autoComplete: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
@@ -113,6 +114,7 @@ export default class BootstrapStringInput extends React.Component {
               </div>
             }
             <input
+              accept={this.props.accept}
               autoComplete={this.props.autoComplete}
               className={this.inputClassName()}
               data-controller={this.props["data-controller"]}
