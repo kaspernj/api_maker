@@ -26,6 +26,7 @@ export default class BootstrapStringInput extends React.Component {
     labelClassName: PropTypes.string,
     maxLength: PropTypes.number,
     model: PropTypes.object,
+    multiple: PropTypes.bool,
     name: PropTypes.string,
     onChange: PropTypes.func,
     onKeyUp: PropTypes.func,
@@ -121,6 +122,7 @@ export default class BootstrapStringInput extends React.Component {
               defaultValue={this.inputDefaultValue()}
               disabled={this.props.disabled}
               id={this.inputId()}
+              multiple={this.props.multiple}
               name={this.inputName()}
               onChange={e => this.onInputChanged(e)}
               onKeyUp={this.props.onKeyUp}
