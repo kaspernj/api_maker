@@ -78,7 +78,6 @@ module ApiMaker::ModelExtensions
   def api_maker_broadcast_update
     serializer = ApiMaker::Serializer.new(model: self)
     data_to_broadcast = ApiMaker::ResultParser.parse(
-      model: self,
       model_id: id,
       model_type: serializer.resource.collection_name,
       type: :update

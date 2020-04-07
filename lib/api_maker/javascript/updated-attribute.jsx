@@ -1,3 +1,4 @@
+import Collection from "./collection"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -6,7 +7,8 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
   static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     model: PropTypes.object.isRequired,
-    onValue: PropTypes.func
+    onValue: PropTypes.func,
+    query: PropTypes.instanceOf(Collection)
   })
 
   constructor(props) {
@@ -26,15 +28,18 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
   }
 
   connect() {
-    this.connectUpdated = this.props.model.connectUpdated(args => {
-      if (!this.props.attribute || args.model.isAttributeLoaded(this.props.attribute)) {
-        this.setState(
-          {model: args.model},
-          () => this.setAttribute()
-        )
-      } else {
-        this.loadModelWithAttribute()
-      }
+    this.connectUpdated = this.props.model.connectUpdated({
+      callback: (args) => {
+        if (!this.props.attribute || args.model.isAttributeLoaded(this.props.attribute)) {
+          this.setState(
+            {model: args.model},
+            () => this.setAttribute()
+          )
+        } else {
+          this.loadModelWithAttribute()
+        }
+      },
+      query: this.props.query
     })
   }
 
