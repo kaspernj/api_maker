@@ -8,8 +8,8 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
       connect_creates(model_name) if subscription_types.key?("creates")
 
       if subscription_types.key?("updates")
-        model_ids = subscription_types.fetch("updates")
-        connect_updates(model_name, model_ids)
+        models_data = subscription_types.fetch("updates")
+        connect_updates(model_name, models_data)
       end
 
       if subscription_types.key?("destroys")
@@ -56,7 +56,10 @@ private
     end
   end
 
-  def connect_updates(model_name, model_ids)
+  def connect_updates(model_name, models_data)
+    binding.pry
+
+    model_ids = models_data.keys
     model_class = model_for_resource_name(model_name)
     models = model_class.accessible_by(current_ability, :update_events).where(model_class.primary_key => model_ids)
     models.each do |model|
