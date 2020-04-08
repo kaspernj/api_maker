@@ -2,11 +2,11 @@
   "name": "dummy",
   "private": true,
   "dependencies": {
+    "@babel/preset-react": "^7.0.0",
+    "@rails/webpacker": "4.0.7",
     "api-maker": "https://github.com/kaspernj/api-maker.git",
     "api-maker-bootstrap": "https://github.com/kaspernj/api-maker-bootstrap.git",
     "api-maker-inputs": "https://github.com/kaspernj/api-maker-inputs.git",
-    "@babel/preset-react": "^7.0.0",
-    "@rails/webpacker": "4.0.7",
     "babel-preset-react": "^6.24.1",
     "format-number": "^3.0.0",
     "inflection": "^1.12.0",

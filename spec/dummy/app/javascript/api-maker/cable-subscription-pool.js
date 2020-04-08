@@ -1,6 +1,6 @@
 import CommandsPool from "./commands-pool"
 import Deserializer from "./deserializer"
-import Logger from "./logger"
+import { Logger } from "api-maker"
 
 const inflection = require("inflection")
 

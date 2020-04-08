@@ -1073,11 +1073,17 @@ anymatch@^2.0.0:
 
 "api-maker-bootstrap@https://github.com/kaspernj/api-maker-bootstrap.git":
   version "1.0.0"
-  resolved "https://github.com/kaspernj/api-maker-bootstrap.git#0ee068a6a223bf21050870e19928f85d3cf92805"
+  resolved "https://github.com/kaspernj/api-maker-bootstrap.git#3a55ad274c09597cc0ef527dca1de99f78b87c8d"
+  dependencies:
+    api-maker "https://github.com/kaspernj/api-maker.git"
+    api-maker-inputs "https://github.com/kaspernj/api-maker-inputs.git"
+    prop-types "^15.7.2"
+    prop-types-exact "^1.2.0"
+    react "^16.13.1"
 
 "api-maker-inputs@https://github.com/kaspernj/api-maker-inputs.git":
   version "1.0.0"
-  resolved "https://github.com/kaspernj/api-maker-inputs.git#d111cef2e6c11e483b68a0550849989b0ad9f223"
+  resolved "https://github.com/kaspernj/api-maker-inputs.git#31c4b4f21a38b7b8c79a9ad874f10bba085e92a8"
   dependencies:
     classnames "^2.2.6"
     inflection "^1.12.0"
@@ -1085,7 +1091,7 @@ anymatch@^2.0.0:
 
 "api-maker@https://github.com/kaspernj/api-maker.git":
   version "1.0.0"
-  resolved "https://github.com/kaspernj/api-maker.git#b11012acd3bd93130e68e1555415639679ab6d72"
+  resolved "https://github.com/kaspernj/api-maker.git#83bd520ed5788fb7572c3a53860575bf211494dd"
   dependencies:
     form-serialize "^0.7.2"
     inflection "^1.12.0"
@@ -5878,10 +5884,15 @@ react-dom@^16.8.6:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
-react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
+react-is@^16.6.0, react-is@^16.7.0:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
+
+react-is@^16.8.1:
+  version "16.13.1"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
+  integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
 react-router-dom@^5.0.0:
   version "5.0.1"

@@ -1,4 +1,4 @@
-import { CustomError, ValidationError } from "api-maker/errors"
+import { CustomError, ValidationError } from "api-maker"
 
 export default class DisplayNotification {
   static alert(message) {
