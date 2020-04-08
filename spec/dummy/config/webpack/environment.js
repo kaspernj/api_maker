@@ -1,6 +1,12 @@
 const { environment } = require("@rails/webpacker")
 const webpack = require("webpack")
 
+environment.loaders.append("babel", {
+  test: /\.(js|jsx)$/,
+    loader: "babel-loader"
+  }
+)
+
 environment.plugins.append(
   "ProvidePlugin",
   new webpack.ProvidePlugin({

@@ -22,7 +22,7 @@ export default class BootstrapStringInputDatetimeLocal extends React.Component {
     return (
       <div className="content-container">
         <form onSubmit={(e) => this.onSubmit(e)}>
-          <StringInput attribute="birthdayAt" label="Birthday" model={user} type="date" />
+          <Input attribute="birthdayAt" label="Birthday" model={user} type="date" />
           <input type="submit" value="Save" />
         </form>
       </div>

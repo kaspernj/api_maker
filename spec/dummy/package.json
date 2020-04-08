@@ -1,4 +1,13 @@
 {
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  },
   "name": "dummy",
   "private": true,
   "dependencies": {
@@ -8,6 +17,8 @@
     "api-maker-bootstrap": "https://github.com/kaspernj/api-maker-bootstrap.git",
     "api-maker-inputs": "https://github.com/kaspernj/api-maker-inputs.git",
     "babel-preset-react": "^6.24.1",
+    "classnames": "^2.2.6",
+    "form-serialize": "^0.7.2",
     "format-number": "^3.0.0",
     "inflection": "^1.12.0",
     "js-money": "^0.6.3",

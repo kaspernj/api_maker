@@ -1073,35 +1073,15 @@ anymatch@^2.0.0:
 
 "api-maker-bootstrap@https://github.com/kaspernj/api-maker-bootstrap.git":
   version "1.0.0"
-  resolved "https://github.com/kaspernj/api-maker-bootstrap.git#3a55ad274c09597cc0ef527dca1de99f78b87c8d"
-  dependencies:
-    api-maker "https://github.com/kaspernj/api-maker.git"
-    api-maker-inputs "https://github.com/kaspernj/api-maker-inputs.git"
-    prop-types "^15.7.2"
-    prop-types-exact "^1.2.0"
-    react "^16.13.1"
+  resolved "https://github.com/kaspernj/api-maker-bootstrap.git#78538a2382b02d60d039ad72ef0840f4cfc9d073"
 
 "api-maker-inputs@https://github.com/kaspernj/api-maker-inputs.git":
   version "1.0.0"
-  resolved "https://github.com/kaspernj/api-maker-inputs.git#31c4b4f21a38b7b8c79a9ad874f10bba085e92a8"
-  dependencies:
-    classnames "^2.2.6"
-    inflection "^1.12.0"
-    prop-types "^15.7.2"
+  resolved "https://github.com/kaspernj/api-maker-inputs.git#c135fd3eb135689765f4625212445892484acab4"
 
 "api-maker@https://github.com/kaspernj/api-maker.git":
   version "1.0.0"
-  resolved "https://github.com/kaspernj/api-maker.git#83bd520ed5788fb7572c3a53860575bf211494dd"
-  dependencies:
-    form-serialize "^0.7.2"
-    inflection "^1.12.0"
-    js-money "^0.6.3"
-    merge "^1.2.1"
-    object-to-formdata "^3.0.6"
-    prop-types "^15.7.2"
-    prop-types-exact "^1.2.0"
-    react "^16.13.1"
-    stacktrace-parser "^0.1.9"
+  resolved "https://github.com/kaspernj/api-maker.git#7091628c1206cb8eee5a127d04478ba554e079fc"
 
 aproba@^1.0.3, aproba@^1.1.1:
   version "1.2.0"
@@ -5922,15 +5902,6 @@ react-router@5.0.1, react-router@^5.0.0:
     react-is "^16.6.0"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
-
-react@^16.13.1:
-  version "16.13.1"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
-  integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
 
 react@^16.8.6:
   version "16.8.6"

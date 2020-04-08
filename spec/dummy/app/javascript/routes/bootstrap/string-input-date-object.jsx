@@ -4,7 +4,7 @@ export default class BootstrapStringInputDateObject extends React.Component {
       <Layout>
         <div className="content-container">
           <form>
-            <StringInput defaultValue={new Date(2020, 0, 1)} id="date_object" label="Birthday" type="date" />
+            <Input defaultValue={new Date(2020, 0, 1)} id="date_object" label="Birthday" type="date" />
           </form>
         </div>
       </Layout>
