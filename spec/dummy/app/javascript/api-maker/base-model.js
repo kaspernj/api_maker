@@ -1,13 +1,10 @@
 import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
 import CommandsPool from "./commands-pool"
-import { CustomError, ValidationError } from "./errors"
-import FormDataToObject from "./form-data-to-object"
-import ModelName from "./model-name"
+import { CustomError, FormDataToObject, ModelName, ValidationError, ValidationErrors } from "api-maker"
 import ModelsResponseReader from "./models-response-reader"
 import Money from "js-money"
 import { objectToFormData } from "object-to-formdata"
-import { ValidationErrors } from "./validation-errors"
 
 const inflection = require("inflection")
 

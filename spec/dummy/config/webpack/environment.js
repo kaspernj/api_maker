@@ -5,8 +5,6 @@ environment.plugins.append(
   "ProvidePlugin",
   new webpack.ProvidePlugin({
     Account: ["api-maker/models/account", "default"],
-    Checkbox: ["api-maker/bootstrap/checkbox", "default"],
-    Checkboxes: ["api-maker/bootstrap/checkboxes", "default"],
     Hash: ["shared/hash", "default"],
     Layout: ["components/layout", "default"],
     Params: ["shared/params", "default"],
@@ -14,8 +12,12 @@ environment.plugins.append(
     PropTypesExact: "prop-types-exact",
     React: "react",
     setStateAsync: ["shared/set-state-async", "default"],
-    StringInput: ["api-maker/bootstrap/string-input", "default"],
-    Task: ["api-maker/models/task", "default"]
+    Task: ["api-maker/models/task", "default"],
+
+    Checkbox: ["api-maker-bootstrap", "Checkbox"],
+    Checkboxes: ["api-maker-bootstrap", "Checkboxes"],
+    Input: ["api-maker-bootstrap", "Input"],
+    Select: ["api-maker-bootstrap", "Select"]
   })
 )
 

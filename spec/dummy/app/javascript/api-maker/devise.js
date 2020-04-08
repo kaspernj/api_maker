@@ -1,4 +1,4 @@
-import Api from "./api"
+import { Api } from "api-maker"
 import { CustomError } from "./errors"
 import EventEmitter from "events"
 const inflection = require("inflection")
