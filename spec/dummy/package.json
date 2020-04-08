@@ -2,6 +2,8 @@
   "name": "dummy",
   "private": true,
   "dependencies": {
+    "api-maker-bootstrap": "https://github.com/kaspernj/api-maker-bootstrap.git",
+    "api-maker-inputs": "https://github.com/kaspernj/api-maker-inputs.git",
     "@babel/preset-react": "^7.0.0",
     "@rails/webpacker": "4.0.7",
     "babel-preset-react": "^6.24.1",

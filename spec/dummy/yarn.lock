@@ -1071,6 +1071,18 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
+"api-maker-bootstrap@https://github.com/kaspernj/api-maker-bootstrap.git":
+  version "1.0.0"
+  resolved "https://github.com/kaspernj/api-maker-bootstrap.git#0ee068a6a223bf21050870e19928f85d3cf92805"
+
+"api-maker-inputs@https://github.com/kaspernj/api-maker-inputs.git":
+  version "1.0.0"
+  resolved "https://github.com/kaspernj/api-maker-inputs.git#d111cef2e6c11e483b68a0550849989b0ad9f223"
+  dependencies:
+    classnames "^2.2.6"
+    inflection "^1.12.0"
+    prop-types "^15.7.2"
+
 aproba@^1.0.3, aproba@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
@@ -1743,6 +1755,11 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
+
+classnames@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
 cliui@^3.2.0:
   version "3.2.0"
