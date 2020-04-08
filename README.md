@@ -40,6 +40,8 @@ Rails.application.routes.draw do
 end
 ```
 
+## Resources
+
 ApiMaker will only create models, endpoints and serializers for ActiveRecord models that are defined as resources. So be sure to add resources under `app/api_maker/resources` for your models first. You can add some helper methods if you want to use in your resources like `current_user` and `signed_in_as_admin?`.
 ```ruby
 class Resources::ApplicationResource < ApiMaker::BaseResource
