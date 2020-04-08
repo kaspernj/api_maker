@@ -1,5 +1,5 @@
 import Devise from "api-maker/devise"
-import EventEmitterListener from "api-maker/event-emitter-listener"
+import { EventEmitterListener } from "api-maker"
 import React from "react"
 
 export default class SessionsNew extends React.Component {

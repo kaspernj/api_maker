@@ -1,4 +1,4 @@
-import ErrorLogger from "api-maker/error-logger"
+import { ErrorLogger } from "api-maker"
 
 window.errorLogger = new ErrorLogger()
 window.errorLogger.enable()

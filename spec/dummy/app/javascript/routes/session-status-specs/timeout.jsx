@@ -1,5 +1,5 @@
 import Devise from "api-maker/devise"
-import EventEmitterListener from "api-maker/event-emitter-listener"
+import { EventEmitterListener } from "api-maker"
 import Layout from "components/layout"
 import React from "react"
 import SessionStatusUpdater from "api-maker/session-status-updater"

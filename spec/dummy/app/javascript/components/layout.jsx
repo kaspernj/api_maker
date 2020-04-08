@@ -1,6 +1,6 @@
 import Devise from "api-maker/devise"
 import DisplayNotification from "shared/display-notification"
-import EventEmitterListener from "api-maker/event-emitter-listener"
+import { EventEmitterListener } from "api-maker"
 import { Link } from "react-router-dom"
 import React from "react"
 
