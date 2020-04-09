@@ -1,4 +1,4 @@
-import { EventCreated } from "api-maker"
+import { EventCreated } from "@kaspernj/api-maker"
 import React from "react"
 
 export default class ModelsCreatedEvent extends React.Component {

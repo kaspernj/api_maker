@@ -1,4 +1,4 @@
-import { EventDestroyed } from "api-maker"
+import { EventDestroyed } from "@kaspernj/api-maker"
 import React from "react"
 
 export default class ModelsDestroyEvent extends React.Component {

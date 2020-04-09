@@ -1,8 +1,6 @@
 import Collection from "api-maker/collection"
-import EventCreated from "api-maker/event-created"
-import EventDestroyed from "api-maker/event-destroyed"
-import { Paginate } from "api-maker-bootstrap"
-import Params from "api-maker/params"
+import { Paginate } from "@kaspernj/api-maker-bootstrap"
+import { EventCreated, EventDestroyed, Params } from "@kaspernj/api-maker"
 
 const inflection = require("inflection")
 

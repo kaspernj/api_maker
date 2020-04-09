@@ -398,9 +398,7 @@ subscription.unsubscribe()
 
 You can also use a React component if you use React and dont want to keep track of when to unsubscribe:
 ```jsx
-import EventUpdated from "api-maker/event-created"
-import EventUpdated from "api-maker/event-destroyed"
-import EventUpdated from "api-maker/event-updated"
+import { EventCreated, EventDestroyed, EventUpdated } from "@kaspernj/api-maker"
 ```
 
 ```jsx
@@ -426,7 +424,7 @@ onUserUpdated(args) {
 You can also use this React component to show a models attribute with automatic updates:
 
 ```jsx
-import UpdatedAttribute from "api-maker/updated-attribute"
+import { UpdatedAttribute } from "@kaspernj/api-maker"
 ```
 
 ```jsx
@@ -435,7 +433,7 @@ import UpdatedAttribute from "api-maker/updated-attribute"
 
 You can also use the `EventConnection` React component so you don't need to keep track of your subscription and unsubscribe:
 ```jsx
-import EventConnection from "api-maker/event-connection"
+import { EventConnection } from "@kaspernj/api-maker"
 ```
 
 ```jsx

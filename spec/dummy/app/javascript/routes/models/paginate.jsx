@@ -1,6 +1,6 @@
 import Params from "shared/params"
 import React from "react"
-import { Paginate, SortLink } from "api-maker-bootstrap"
+import { Paginate, SortLink } from "@kaspernj/api-maker-bootstrap"
 
 export default class ModelsPaginate extends React.Component {
   constructor(props) {

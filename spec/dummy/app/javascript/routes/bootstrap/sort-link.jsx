@@ -1,5 +1,5 @@
 import Params from "shared/params"
-import { Card, SortLink } from "api-maker-bootstrap"
+import { Card, SortLink } from "@kaspernj/api-maker-bootstrap"
 
 export default class BootstrapSortLink extends React.Component {
   constructor(props) {
