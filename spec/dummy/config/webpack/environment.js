@@ -2,9 +2,9 @@ const { environment } = require("@rails/webpacker")
 const path = require("path")
 const webpack = require("webpack")
 
-// Fixes issues with resolving linked packages when developing
+// Fixes issues with resolving linked packages with peer dependencies when developing
 environment.config.resolve.modules = [path.resolve("./node_modules")]
-environment.config.resolve.symlinks = false // Enabling this will make webpack-dev-server unable to watch for changes
+// environment.config.resolve.symlinks = false // Enabling this will make webpack-dev-server unable to watch for changes
 
 // For whatever reason suddenly this was required
 environment.loaders.append("babel", {
