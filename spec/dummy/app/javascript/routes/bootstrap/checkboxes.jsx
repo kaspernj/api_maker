@@ -29,8 +29,6 @@ export default class BootstrapCheckboxes extends React.Component {
   }
 
   content() {
-    console.log(this.state.account)
-
     return (
       <div className="content-container">
         <form onSubmit={(e) => this.onSubmit(e)} ref="form">

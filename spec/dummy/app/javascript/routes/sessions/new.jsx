@@ -1,5 +1,6 @@
 import Devise from "api-maker/devise"
-import EventEmitterListener from "api-maker/event-emitter-listener"
+import DisplayNotification from "shared/display-notification"
+import { EventEmitterListener } from "@kaspernj/api-maker"
 import React from "react"
 
 export default class SessionsNew extends React.Component {
@@ -23,8 +24,8 @@ export default class SessionsNew extends React.Component {
         }
         {!Devise.isUserSignedIn() &&
           <form onSubmit={(e) => { this.onSubmit(e) }}>
-            <StringInput label="Email" ref="email" />
-            <StringInput label="Password" ref="password" type="password" />
+            <Input label="Email" ref="email" />
+            <Input label="Password" ref="password" type="password" />
             <Checkbox label="Remember me" ref="rememberMe" />
             <input type="submit" value="Sign in" />
           </form>
@@ -40,9 +41,9 @@ export default class SessionsNew extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    const email = this.refs.email.refs.input.value
-    const password = this.refs.password.refs.input.value
-    const rememberMe = this.refs.rememberMe.refs.input.checked
+    const email = this.refs.email.refs.input.refs.input.value
+    const password = this.refs.password.refs.input.refs.input.value
+    const rememberMe = this.refs.rememberMe.refs.checkbox.refs.input.checked
 
     Devise.signIn(email, password, {rememberMe}).then(() => {
       DisplayNotification.success("You were signed in")

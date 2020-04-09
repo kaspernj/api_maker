@@ -1,4 +1,5 @@
 import Dexie from "dexie"
+import Params from "params"
 
 export default class KeyValueStore {
   static current() {
@@ -14,6 +15,23 @@ export default class KeyValueStore {
 
   static async set(key, value) {
     return await KeyValueStore.current().set(key, value)
+  }
+
+  static async getCachedParams(paramName, args = {}) {
+    const oldQuery = await KeyValueStore.get(paramName)
+    const params = Params.parse()
+
+    if (params && paramName in params) {
+      return params[paramName]
+    } else if (oldQuery) {
+      return oldQuery
+    } else {
+      return args.default || {}
+    }
+  }
+
+  static async setCachedParams(paramName, qParams) {
+    return await KeyValueStore.set(paramName, qParams)
   }
 
   constructor() {

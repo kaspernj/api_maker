@@ -22,7 +22,7 @@ export default class BootstrapStringInputFile extends React.Component {
     return (
       <div className="content-container">
         <form onSubmit={(e) => this.onSubmit(e)}>
-          <StringInput attribute="image" defaultValue={null} label="Image" model={user} type="file" />
+          <Input attribute="image" defaultValue={null} label="Image" model={user} type="file" />
           <input type="submit" value="Save" />
         </form>
       </div>

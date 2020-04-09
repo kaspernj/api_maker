@@ -3,9 +3,6 @@ import Params from "shared/params"
 
 import User from "api-maker/models/user"
 
-import Select from "api-maker/bootstrap/select"
-import StringInput from "api-maker/bootstrap/string-input"
-
 export default class ModelsValidationErrors extends React.Component {
   constructor(props) {
     super(props)
@@ -62,7 +59,7 @@ export default class ModelsValidationErrors extends React.Component {
     return (
       <div className="content-container">
         <form onSubmit={e => this.onSubmit(e)}>
-          <StringInput attribute="email" label="Email" model={user} />
+          <Input attribute="email" label="Email" model={user} />
 
           {tasks.map(task =>
             <div className="my-4" key={task.uniqueKey()}>
@@ -75,7 +72,7 @@ export default class ModelsValidationErrors extends React.Component {
               }
 
               <h1>Task</h1>
-              <StringInput
+              <Input
                 attribute="name"
                 id={`task_name_${task.id()}`}
                 label="Name"
@@ -112,7 +109,7 @@ export default class ModelsValidationErrors extends React.Component {
             type="hidden"
           />
         }
-        <StringInput
+        <Input
           attribute="name"
           id={`project_name_${project.id()}`}
           label="Project name"
