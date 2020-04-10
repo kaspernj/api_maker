@@ -26,6 +26,10 @@ module ApiMaker::ModelExtensions
       end
     end
 
+    def api_maker_model_class_event_name(event_name)
+      "api_maker_model_class_events_#{name}_#{event_name}"
+    end
+
     def api_maker_resource
       @api_maker_resource ||= ApiMaker::MemoryStorage.current.resource_for_model(self)
     end
