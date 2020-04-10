@@ -1,6 +1,10 @@
 class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
   def subscribed
     params[:subscription_data].each do |model_name, subscription_types|
+      subscription_types["model_class_events"]&.each do |event_name|
+        connect_model_class_event(model_name, event_name)
+      end
+
       subscription_types["events"]&.each do |event_name, model_ids|
         connect_event(model_name, model_ids, event_name)
       end
@@ -53,6 +57,20 @@ private
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
+    end
+  end
+
+  def connect_model_class_event(model_name, event_name)
+    ability_name = "model_class_event_#{event_name}".to_sym
+    model_class = model_for_resource_name(model_name)
+    channel_name = model_class.api_maker_model_class_event_name(event_name)
+
+    if current_ability.can?(ability_name, model_class)
+      stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
+        transmit data
+      end
+    else
+      Rails.logger.warn "API maker: No access to model class event #{model_class.name}##{event_name} with ability name: #{ability_name}"
     end
   end
 

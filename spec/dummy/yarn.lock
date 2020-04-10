@@ -725,20 +725,20 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@kaspernj/api-maker-bootstrap@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.0.tgz#bb8c8599ceb9fc2012d8079c7b14f6108fd8f1dd"
-  integrity sha512-b+DnZnyQ2OM+Mer9izlTrbyZ4Q2PIry05sbbMRttf0EL0+xWX2afmhgyGz9/LtUfyd+MFgKrdtNF45NgsKUH4Q==
+"@kaspernj/api-maker-bootstrap@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.2.tgz#0f17fa4916679797d6a5c4891cd84af84895f662"
+  integrity sha512-b074+k2vdMdOgGXTD0EGeGlmqgKVTqwxnbqy61PfWCJSFUNMQzzSu5JxcGbgfHT9MBWlGMaQkVI17+JyyGeTPw==
 
-"@kaspernj/api-maker-inputs@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.0.tgz#cebe5b1c5b7cc22ae0c5903bfe646b5d2b0cafed"
-  integrity sha512-fzwnq344Wsk8H0zqWg1Ej7TITfw11eXS8BH2ohPuT9bmifAZjrhJNuJeZMZBlLkLO+WVPDOSo23hKXwpjD4CSA==
+"@kaspernj/api-maker-inputs@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.1.tgz#9865d15e6bb433f984e39d1591ec1805d1788d55"
+  integrity sha512-+DpsSRLIxYequPm1DXmWUcmorw81/yEQ6vhvkJz28ORFcmzNvK4FXkI5a3bv4YmtD8CxfpTBTmxdqCBDW/XsYw==
 
-"@kaspernj/api-maker@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.0.tgz#7aad0c3c553d5e991ba3bb6d84a3ec6098077f92"
-  integrity sha512-tr53Cao5k/MIzXX+v/73FYtKtjT+Iw5Rz6lbsMnrxpueZwt0wuLCdVAmlOq+NKFjYVcexyAzwJiM7gp6YgTNXA==
+"@kaspernj/api-maker@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2.tgz#6fbe7ff922e960626920e50cee96235560a43387"
+  integrity sha512-RCNmbEs+0I/QC4KHaekml9TXXeE2JXRLha3ylqD9unUdfmJRQ69hwUQnP4o9DP19fi+pPZ87zD7FulXDL5i71g==
 
 "@rails/webpacker@4.0.7":
   version "4.0.7"
