@@ -11,27 +11,29 @@ class ApiMaker::IndividualCommand
   end
 
   def error(data = nil)
-    @response.error_for_command(id, data)
+    response.error_for_command(id, data)
   end
 
   def fail(data = nil)
-    @response.fail_for_command(id, data)
+    response.fail_for_command(id, data)
   end
 
   def model
-    raise "Collection wasn't set" unless collection
+    @model ||= begin
+      raise "Collection wasn't set" unless collection
 
-    @model ||= collection.find { |model| model.id.to_s == primary_key.to_s }
-    raise "Couldn't find model by that ID: #{@primary_key}" unless @model
+      model ||= collection.find { |model_in_collection| model_in_collection.id.to_s == primary_key.to_s }
+      raise "Couldn't find model by that ID: #{@primary_key}" unless model
 
-    @model
+      model
+    end
   end
 
   def model_id
-    @primary_key
+    primary_key
   end
 
   def result(data = nil)
-    @response.result_for_command(id, ApiMaker::ResultParser.parse(data, controller: response.controller))
+    response.result_for_command(id, ApiMaker::ResultParser.parse(data, controller: response.controller))
   end
 end
