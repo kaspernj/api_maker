@@ -113,6 +113,37 @@ export default class ApiMakerCableConnectionPool {
     return subscription
   }
 
+  connectModelClassEvent(modelName, eventName, callback) {
+    if (!(modelName in this.upcomingSubscriptionData))
+      this.upcomingSubscriptionData[modelName] = {}
+
+    if (!("model_class_events" in this.upcomingSubscriptionData[modelName]))
+      this.upcomingSubscriptionData[modelName]["model_class_events"] = []
+
+    if (!this.upcomingSubscriptionData[modelName]["model_class_events"].includes(eventName))
+      this.upcomingSubscriptionData[modelName]["model_class_events"].push(eventName)
+
+    if (!(modelName in this.upcomingSubscriptions))
+      this.upcomingSubscriptions[modelName] = {}
+
+    if (!("model_class_events" in this.upcomingSubscriptions[modelName]))
+      this.upcomingSubscriptions[modelName]["model_class_events"] = {}
+
+    if (!(eventName in this.upcomingSubscriptions[modelName]["model_class_events"]))
+      this.upcomingSubscriptions[modelName]["model_class_events"][eventName] = []
+
+    const subscription = new CableSubscription({
+      callback: callback,
+      modelName: modelName
+    })
+
+    this.upcomingSubscriptions[modelName]["model_class_events"][eventName].push(subscription)
+
+    this.scheduleConnectUpcoming()
+
+    return subscription
+  }
+
   connectUpdate(modelName, modelId, callback) {
     if (!this.upcomingSubscriptionData[modelName])
       this.upcomingSubscriptionData[modelName] = {}
