@@ -14,6 +14,7 @@ FileUtils.rm_rf(path)
 require "money-rails"
 MoneyRails::Hooks.init
 
+require "active_record_better_dependent_error_messages"
 require "cancancan"
 require "devise"
 require "factory_bot_rails"

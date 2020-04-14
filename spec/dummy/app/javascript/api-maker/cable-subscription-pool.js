@@ -49,6 +49,13 @@ export default class ApiMakerCableSubscriptionPool {
           model: modelInstance
         })
       }
+    } else if (data.type == "model_class_event") {
+      for(const subscription of subscriptions[modelName]["model_class_events"][data.event_name]) {
+        subscription.onReceived({
+          args: data.args,
+          eventName: data.event_name
+        })
+      }
     } else {
       throw new Error(`Unknown type: ${data.type}`)
     }
