@@ -9,39 +9,41 @@ export default class Task extends BaseModel {
   
     
       loadAccount() {
-        let id = this.id()
-        let modelClass = require(`api-maker/models/account`).default
+        const id = this.id()
+        const modelClass = require(`api-maker/models/account`).default
         return this._loadHasOneReflection({"reflectionName":"account","model":this,"modelClass":modelClass}, {"params":{"through":{"model":"Task","id":id,"reflection":"account"}}})
       }
 
       account() {
-        let modelClass = require(`api-maker/models/account`).default
+        const modelClass = require(`api-maker/models/account`).default
         return this._readHasOneReflection({"reflectionName":"account","model":this,"modelClass":modelClass})
       }
     
   
     
+      
       loadProject() {
-        let id = this.projectId()
-        let modelClass = require(`api-maker/models/project`).default
+        const id = this.projectId()
+        const modelClass = require(`api-maker/models/project`).default
         return this._loadBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass}, {"ransack":{"id_eq":id}})
       }
 
       project() {
-        let modelClass = require(`api-maker/models/project`).default
+        const modelClass = require(`api-maker/models/project`).default
         return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass})
       }
     
   
     
+      
       loadUser() {
-        let id = this.userId()
-        let modelClass = require(`api-maker/models/user`).default
+        const id = this.userId()
+        const modelClass = require(`api-maker/models/user`).default
         return this._loadBelongsToReflection({"reflectionName":"user","model":this,"modelClass":modelClass}, {"ransack":{"id_eq":id}})
       }
 
       user() {
-        let modelClass = require(`api-maker/models/user`).default
+        const modelClass = require(`api-maker/models/user`).default
         return this._readBelongsToReflection({"reflectionName":"user","model":this,"modelClass":modelClass})
       }
     
@@ -57,7 +59,7 @@ export default class Task extends BaseModel {
     }
 
     hasCreatedAt() {
-      let value = this.createdAt()
+      const value = this.createdAt()
       return this._isPresent(value)
     }
   
@@ -70,7 +72,7 @@ export default class Task extends BaseModel {
     }
 
     hasFinished() {
-      let value = this.finished()
+      const value = this.finished()
       return this._isPresent(value)
     }
   
@@ -83,7 +85,7 @@ export default class Task extends BaseModel {
     }
 
     hasId() {
-      let value = this.id()
+      const value = this.id()
       return this._isPresent(value)
     }
   
@@ -96,7 +98,7 @@ export default class Task extends BaseModel {
     }
 
     hasName() {
-      let value = this.name()
+      const value = this.name()
       return this._isPresent(value)
     }
   
@@ -109,7 +111,7 @@ export default class Task extends BaseModel {
     }
 
     hasProjectId() {
-      let value = this.projectId()
+      const value = this.projectId()
       return this._isPresent(value)
     }
   
@@ -122,7 +124,7 @@ export default class Task extends BaseModel {
     }
 
     hasUserId() {
-      let value = this.userId()
+      const value = this.userId()
       return this._isPresent(value)
     }
   
@@ -135,7 +137,7 @@ export default class Task extends BaseModel {
     }
 
     hasCustomId() {
-      let value = this.customId()
+      const value = this.customId()
       return this._isPresent(value)
     }
   

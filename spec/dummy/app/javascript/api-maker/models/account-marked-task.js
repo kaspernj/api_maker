@@ -18,7 +18,7 @@ export default class AccountMarkedTask extends BaseModel {
     }
 
     hasId() {
-      let value = this.id()
+      const value = this.id()
       return this._isPresent(value)
     }
   

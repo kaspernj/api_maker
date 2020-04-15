@@ -66,6 +66,10 @@ class ApiMaker::BaseResource
     @plural_name ||= short_name.pluralize
   end
 
+  def self.require_name
+    @require_name ||= collection_name.singularize
+  end
+
   def self.short_name
     @short_name ||= name.match(/\AResources::(.+)Resource\Z/)[1]
   end
