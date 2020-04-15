@@ -22,7 +22,6 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
 
   def ignore_model?(model)
     model.name.end_with?("::Translation") ||
-      model.name.start_with?("ActiveStorage::") ||
       model.name.end_with?("::ApplicationRecord")
   end
 
