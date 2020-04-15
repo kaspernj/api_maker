@@ -8,14 +8,15 @@ export default class UserRole extends BaseModel {
 
   
     
+      
       loadUser() {
-        let id = this.userId()
-        let modelClass = require(`api-maker/models/user`).default
+        const id = this.userId()
+        const modelClass = require(`api-maker/models/user`).default
         return this._loadBelongsToReflection({"reflectionName":"user","model":this,"modelClass":modelClass}, {"ransack":{"id_eq":id}})
       }
 
       user() {
-        let modelClass = require(`api-maker/models/user`).default
+        const modelClass = require(`api-maker/models/user`).default
         return this._readBelongsToReflection({"reflectionName":"user","model":this,"modelClass":modelClass})
       }
     
@@ -31,7 +32,7 @@ export default class UserRole extends BaseModel {
     }
 
     hasId() {
-      let value = this.id()
+      const value = this.id()
       return this._isPresent(value)
     }
   
@@ -44,7 +45,7 @@ export default class UserRole extends BaseModel {
     }
 
     hasRole() {
-      let value = this.role()
+      const value = this.role()
       return this._isPresent(value)
     }
   
@@ -57,7 +58,7 @@ export default class UserRole extends BaseModel {
     }
 
     hasUserId() {
-      let value = this.userId()
+      const value = this.userId()
       return this._isPresent(value)
     }
   

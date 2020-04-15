@@ -9,21 +9,21 @@ export default class Project extends BaseModel {
   
     
       loadProjectDetail() {
-        let id = this.id()
-        let modelClass = require(`api-maker/models/project-detail`).default
+        const id = this.id()
+        const modelClass = require(`api-maker/models/project-detail`).default
         return this._loadHasOneReflection({"reflectionName":"project_detail","model":this,"modelClass":modelClass}, {"ransack":{"project_id_eq":id}})
       }
 
       projectDetail() {
-        let modelClass = require(`api-maker/models/project-detail`).default
+        const modelClass = require(`api-maker/models/project-detail`).default
         return this._readHasOneReflection({"reflectionName":"project_detail","model":this,"modelClass":modelClass})
       }
     
   
     
       tasks() {
-        let id = this.id()
-        let modelClass = require(`api-maker/models/task`).default
+        const id = this.id()
+        const modelClass = require(`api-maker/models/task`).default
         return new Collection({"reflectionName":"tasks","model":this,"modelName":"Task","modelClass":modelClass,"targetPathName":"/api_maker/tasks"}, {"ransack":{"project_id_eq":id}})
       }
     
@@ -39,7 +39,7 @@ export default class Project extends BaseModel {
     }
 
     hasAccountId() {
-      let value = this.accountId()
+      const value = this.accountId()
       return this._isPresent(value)
     }
   
@@ -52,7 +52,7 @@ export default class Project extends BaseModel {
     }
 
     hasId() {
-      let value = this.id()
+      const value = this.id()
       return this._isPresent(value)
     }
   
@@ -65,7 +65,7 @@ export default class Project extends BaseModel {
     }
 
     hasName() {
-      let value = this.name()
+      const value = this.name()
       return this._isPresent(value)
     }
   
@@ -78,7 +78,7 @@ export default class Project extends BaseModel {
     }
 
     hasCreatedAt() {
-      let value = this.createdAt()
+      const value = this.createdAt()
       return this._isPresent(value)
     }
   
@@ -91,7 +91,7 @@ export default class Project extends BaseModel {
     }
 
     hasPricePerHour() {
-      let value = this.pricePerHour()
+      const value = this.pricePerHour()
       return this._isPresent(value)
     }
   

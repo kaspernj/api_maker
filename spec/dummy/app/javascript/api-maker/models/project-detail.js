@@ -8,14 +8,15 @@ export default class ProjectDetail extends BaseModel {
 
   
     
+      
       loadProject() {
-        let id = this.projectId()
-        let modelClass = require(`api-maker/models/project`).default
+        const id = this.projectId()
+        const modelClass = require(`api-maker/models/project`).default
         return this._loadBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass}, {"ransack":{"id_eq":id}})
       }
 
       project() {
-        let modelClass = require(`api-maker/models/project`).default
+        const modelClass = require(`api-maker/models/project`).default
         return this._readBelongsToReflection({"reflectionName":"project","model":this,"modelClass":modelClass})
       }
     
@@ -31,7 +32,7 @@ export default class ProjectDetail extends BaseModel {
     }
 
     hasId() {
-      let value = this.id()
+      const value = this.id()
       return this._isPresent(value)
     }
   
@@ -44,7 +45,7 @@ export default class ProjectDetail extends BaseModel {
     }
 
     hasProjectId() {
-      let value = this.projectId()
+      const value = this.projectId()
       return this._isPresent(value)
     }
   
@@ -57,7 +58,7 @@ export default class ProjectDetail extends BaseModel {
     }
 
     hasDetails() {
-      let value = this.details()
+      const value = this.details()
       return this._isPresent(value)
     }
   

@@ -9,8 +9,8 @@ export default class User extends BaseModel {
   
     
       tasks() {
-        let id = this.id()
-        let modelClass = require(`api-maker/models/task`).default
+        const id = this.id()
+        const modelClass = require(`api-maker/models/task`).default
         return new Collection({"reflectionName":"tasks","model":this,"modelName":"Task","modelClass":modelClass,"targetPathName":"/api_maker/tasks"}, {"ransack":{"user_id_eq":id}})
       }
     
@@ -26,7 +26,7 @@ export default class User extends BaseModel {
     }
 
     hasBirthdayAt() {
-      let value = this.birthdayAt()
+      const value = this.birthdayAt()
       return this._isPresent(value)
     }
   
@@ -39,7 +39,7 @@ export default class User extends BaseModel {
     }
 
     hasId() {
-      let value = this.id()
+      const value = this.id()
       return this._isPresent(value)
     }
   
@@ -52,7 +52,7 @@ export default class User extends BaseModel {
     }
 
     hasEmail() {
-      let value = this.email()
+      const value = this.email()
       return this._isPresent(value)
     }
   
@@ -65,7 +65,7 @@ export default class User extends BaseModel {
     }
 
     hasCreatedAt() {
-      let value = this.createdAt()
+      const value = this.createdAt()
       return this._isPresent(value)
     }
   
@@ -78,7 +78,7 @@ export default class User extends BaseModel {
     }
 
     hasCustomAttribute() {
-      let value = this.customAttribute()
+      const value = this.customAttribute()
       return this._isPresent(value)
     }
   
@@ -91,7 +91,7 @@ export default class User extends BaseModel {
     }
 
     hasUpdatedAt() {
-      let value = this.updatedAt()
+      const value = this.updatedAt()
       return this._isPresent(value)
     }
   

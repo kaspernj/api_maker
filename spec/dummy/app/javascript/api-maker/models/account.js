@@ -9,16 +9,16 @@ export default class Account extends BaseModel {
   
     
       projects() {
-        let id = this.id()
-        let modelClass = require(`api-maker/models/project`).default
+        const id = this.id()
+        const modelClass = require(`api-maker/models/project`).default
         return new Collection({"reflectionName":"projects","model":this,"modelName":"Project","modelClass":modelClass,"targetPathName":"/api_maker/projects"}, {"ransack":{"account_id_eq":id}})
       }
     
   
     
       tasks() {
-        let id = this.id()
-        let modelClass = require(`api-maker/models/task`).default
+        const id = this.id()
+        const modelClass = require(`api-maker/models/task`).default
         return new Collection({"reflectionName":"tasks","model":this,"modelName":"Task","modelClass":modelClass,"targetPathName":"/api_maker/tasks"}, {"params":{"through":{"model":"Account","id":id,"reflection":"tasks"}}})
       }
     
@@ -34,7 +34,7 @@ export default class Account extends BaseModel {
     }
 
     hasId() {
-      let value = this.id()
+      const value = this.id()
       return this._isPresent(value)
     }
   
@@ -47,7 +47,7 @@ export default class Account extends BaseModel {
     }
 
     hasName() {
-      let value = this.name()
+      const value = this.name()
       return this._isPresent(value)
     }
   
@@ -60,7 +60,7 @@ export default class Account extends BaseModel {
     }
 
     hasUsersCount() {
-      let value = this.usersCount()
+      const value = this.usersCount()
       return this._isPresent(value)
     }
   
