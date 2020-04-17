@@ -14,6 +14,7 @@ export default class Layout extends React.Component {
 
   componentDidMount() {
     this.loadAccount()
+    this.loadProject()
     this.loadTask()
   }
 
@@ -22,20 +23,23 @@ export default class Layout extends React.Component {
     this.setState({account})
   }
 
-  async loadTask() {
-    const tasks = await Task.ransack().toArray()
-    const task = tasks[0]
+  async loadProject() {
+    const project = await Task.ransack().first()
+    this.setState({project})
+  }
 
+  async loadTask() {
+    const task = await Task.ransack().first()
     this.setState({task})
   }
 
   render() {
-    const { account, task } = this.state
+    const { account, project, task } = this.state
 
     return (
       <div className={this.className()}>
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={() => { this.onDeviseSigned() }} />
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={() => { this.onDeviseSigned() }} />
+        <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={() => this.onDeviseSigned()} />
+        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={() => this.onDeviseSigned()} />
 
         <div>
           <Link to={Routes.sessionStatusSpecsTimeoutPath()}>
@@ -53,6 +57,11 @@ export default class Layout extends React.Component {
                 Bootstrap sort link
               </Link>
             </>
+          }
+          {project &&
+            <Link className="ml-2" to={Routes.bootstrapStringInputMoneyPath({project_id: project.id()})}>
+              Bootstrap string input money
+            </Link>
           }
           {account &&
             <Link className="ml-2" to={Routes.bootstrapCheckboxesPath({account_id: account.id()})}>

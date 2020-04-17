@@ -725,20 +725,27 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@kaspernj/api-maker-bootstrap@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.2.tgz#0f17fa4916679797d6a5c4891cd84af84895f662"
-  integrity sha512-b074+k2vdMdOgGXTD0EGeGlmqgKVTqwxnbqy61PfWCJSFUNMQzzSu5JxcGbgfHT9MBWlGMaQkVI17+JyyGeTPw==
+"@kaspernj/api-maker-bootstrap@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.7.tgz#285620a896efedc1476e1dec4f811b3ed53c9127"
+  integrity sha512-dkz/8rSx/f2MY2IemiypHlfZKBrMszqQQDt9uHCadyIpBUerqKUw0ZKcsb3Var3RcsGgEHxPu+JSlDhrPQqfHw==
+  dependencies:
+    "@kaspernj/object-digger" "^1.0.1"
 
-"@kaspernj/api-maker-inputs@1.0.1":
+"@kaspernj/api-maker-inputs@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.3.tgz#ad562017bd10d444b8ab09f8a263a9824d56a74f"
+  integrity sha512-RAREpMFtbN41t3NdiVSl9FXp1+4XOUjKiR0c2O5jbXcMsXSGdg/fg/n8jaHi9qtYdY6Dk3RpsXI1f6r5kfo2zg==
+
+"@kaspernj/api-maker@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.3.tgz#c2b985cd84c44577865dad4a775973d9eb0e187e"
+  integrity sha512-48SfRAtQzSZw0hZ9BhXzLPAt0BRD0Tb9PjczMZU0vHmtoVhZ0u+RhKdXcqP++L5BYA+vzS1ra5cXZYv+P+LMZg==
+
+"@kaspernj/object-digger@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.1.tgz#9865d15e6bb433f984e39d1591ec1805d1788d55"
-  integrity sha512-+DpsSRLIxYequPm1DXmWUcmorw81/yEQ6vhvkJz28ORFcmzNvK4FXkI5a3bv4YmtD8CxfpTBTmxdqCBDW/XsYw==
-
-"@kaspernj/api-maker@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2.tgz#6fbe7ff922e960626920e50cee96235560a43387"
-  integrity sha512-RCNmbEs+0I/QC4KHaekml9TXXeE2JXRLha3ylqD9unUdfmJRQ69hwUQnP4o9DP19fi+pPZ87zD7FulXDL5i71g==
+  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.1.tgz#d76a787b8fb5e9b48a37fa11c16756f138070895"
+  integrity sha512-kIMqg6Iq0zrYglAZ095n9hMbscYpiqG/xEaX5f/82BMvh0d/ZGvGNPhbdk1EAHnXOdFfA3KfEgZMoPLHdggb8Q==
 
 "@rails/webpacker@4.0.7":
   version "4.0.7"
@@ -6070,6 +6077,11 @@ repeating@^2.0.0:
   integrity sha1-UhTFOpJtNVJwdSf7q0FdvAjQbdo=
   dependencies:
     is-finite "^1.0.0"
+
+replaceall@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/replaceall/-/replaceall-0.1.6.tgz#81d81ac7aeb72d7f5c4942adf2697a3220688d8e"
+  integrity sha1-gdgax663LX9cSUKt8ml6MiBojY4=
 
 request@^2.87.0, request@^2.88.0:
   version "2.88.0"

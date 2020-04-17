@@ -7,6 +7,6 @@ class Resources::ProjectResource < Resources::ApplicationResource
   end
 
   def permitted_params(arg)
-    arg.params.require(:project).permit(:account_id, :name)
+    arg.params.require(:project).permit(:account_id, :name, :price_per_hour_cents, :price_per_hour_currency)
   end
 end
