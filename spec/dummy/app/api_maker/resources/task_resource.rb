@@ -2,7 +2,7 @@ class Resources::TaskResource < Resources::ApplicationResource
   attributes :created_at, :finished, :id, :name, :project_id, :user_id, :custom_id
   collection_commands :command_serialize, :test_collection
   member_commands :test_member
-  relationships :account, :project, :user
+  relationships :account, :comments, :project, :user
 
   USER_TASK_ABILITIES = [
     :accessible_by,

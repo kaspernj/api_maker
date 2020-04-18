@@ -8,6 +8,7 @@ class Task < ApplicationRecord
 
   has_many :account_marked_tasks, dependent: :destroy
   has_many :accounts, through: :account_marked_tasks, inverse_of: :tasks
+  has_many :comments, as: :resource, dependent: :destroy
 
   has_one :account, through: :project
   has_one :customer, through: :account

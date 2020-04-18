@@ -3,7 +3,7 @@ import Collection from "../collection"
 
 export default class Task extends BaseModel {
   static modelClassData() {
-    return {"attributes":[{"name":"created_at","type":"datetime"},{"name":"finished","type":"boolean"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"user_id","type":"integer"},{"name":"custom_id","type":"unknown"}],"collectionKey":"tasks","collectionName":"tasks","i18nKey":"task","name":"Task","pluralName":"tasks","relationships":[{"className":"Account","collectionName":"accounts","name":"account","macro":"has_one"},{"className":"Project","collectionName":"projects","name":"project","macro":"belongs_to"},{"className":"User","collectionName":"users","name":"user","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
+    return {"attributes":[{"name":"created_at","type":"datetime"},{"name":"finished","type":"boolean"},{"name":"id","type":"integer"},{"name":"name","type":"string"},{"name":"project_id","type":"integer"},{"name":"user_id","type":"integer"},{"name":"custom_id","type":"unknown"}],"collectionKey":"tasks","collectionName":"tasks","i18nKey":"task","name":"Task","pluralName":"tasks","relationships":[{"className":"Account","collectionName":"accounts","name":"account","macro":"has_one"},{"className":"Comment","collectionName":"comments","name":"comments","macro":"has_many"},{"className":"Project","collectionName":"projects","name":"project","macro":"belongs_to"},{"className":"User","collectionName":"users","name":"user","macro":"belongs_to"}],"paramKey":"task","path":"/api_maker/tasks","primaryKey":"id"}
   }
 
   
@@ -21,7 +21,14 @@ export default class Task extends BaseModel {
     
   
     
-      
+      comments() {
+        const id = this.id()
+        const modelClass = require(`api-maker/models/comment`).default
+        return new Collection({"reflectionName":"comments","model":this,"modelName":"Comment","modelClass":modelClass,"targetPathName":"/api_maker/comments"}, {"ransack":{"resource_id_eq":id,"resource_type":"Task"}})
+      }
+    
+  
+    
       loadProject() {
         const id = this.projectId()
         const modelClass = require(`api-maker/models/project`).default
@@ -35,7 +42,6 @@ export default class Task extends BaseModel {
     
   
     
-      
       loadUser() {
         const id = this.userId()
         const modelClass = require(`api-maker/models/user`).default

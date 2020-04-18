@@ -11,8 +11,6 @@ private
 
   def models
     @models ||= begin
-      binding.pry if reflection.options[:as].present?
-
       if reflection.is_a?(ActiveRecord::Reflection::ThroughReflection) || reflection.options[:as].present?
         models_with_join
       else
@@ -25,13 +23,6 @@ private
           select_columns: select_columns,
           table_name: query.klass.table_name
         )
-
-        begin
-          query.load
-        rescue => e
-          binding.pry
-        end
-
         query
       end
     end

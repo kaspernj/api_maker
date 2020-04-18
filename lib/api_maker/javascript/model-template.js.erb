@@ -19,7 +19,6 @@ export default class <%= model.name.gsub("::", "") %> extends BaseModel {
 
   <% reflections.each do |reflection| %>
     <% if reflection.macro == :belongs_to %>
-      <% raise "Couldn't find resource for: #{reflection.klass.name}" unless resource %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}") %>() {
         const id = this.<%= ApiMaker::JsMethodNamerService.execute!(name: reflection.foreign_key) %>()
         const modelClass = require(`api-maker/models/<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).require_name %>`).default

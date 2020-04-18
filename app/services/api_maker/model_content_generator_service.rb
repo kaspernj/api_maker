@@ -83,11 +83,9 @@ private
         }
       }
     else
-      {
-        ransack: {
-          "#{reflection.foreign_key}_eq" => "{{id}}"
-        }
-      }
+      ransack = {"#{reflection.foreign_key}_eq" => "{{id}}"}
+      ransack["#{reflection.options[:as]}_type"] = reflection.active_record.name if reflection.options[:as]
+      {ransack: ransack}
     end
   end
 
