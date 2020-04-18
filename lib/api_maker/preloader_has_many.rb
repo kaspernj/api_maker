@@ -11,7 +11,7 @@ private
 
   def models
     @models ||= begin
-      if reflection.is_a?(ActiveRecord::Reflection::ThroughReflection) || reflection.options[:as].present?
+      if use_joined_query?
         models_with_join
       else
         query = models_initial_query.select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
@@ -26,6 +26,10 @@ private
         query
       end
     end
+  end
+
+  def use_joined_query?
+    reflection.is_a?(ActiveRecord::Reflection::ThroughReflection) || reflection.options[:as].present?
   end
 
   def models_initial_query

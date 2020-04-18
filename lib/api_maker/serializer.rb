@@ -42,13 +42,7 @@ class ApiMaker::Serializer
     if resource_instance.respond_to?(attribute)
       resource_instance.__send__(attribute)
     else
-      begin
-        model.__send__(attribute)
-      rescue SystemStackError => e
-        puts "SENDING ATTRIBUTE TO #{model.class.name.upcase}: #{attribute}"
-        binding.pry if attribute.to_s == "content_type"
-        raise "stub"
-      end
+      model.__send__(attribute)
     end
   end
 
