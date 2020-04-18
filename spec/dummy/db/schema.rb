@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_17_151857) do
+ActiveRecord::Schema.define(version: 2020_04_18_155424) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -48,6 +48,17 @@ ActiveRecord::Schema.define(version: 2020_01_17_151857) do
     t.index ["recipient_type", "recipient_id"], name: "index_activities_on_recipient_type_and_recipient_id"
     t.index ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type"
     t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable_type_and_trackable_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer "author_id", null: false
+    t.string "resource_type", null: false
+    t.integer "resource_id", null: false
+    t.text "comment", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_id"], name: "index_comments_on_author_id"
+    t.index ["resource_type", "resource_id"], name: "index_comments_on_resource_type_and_resource_id"
   end
 
   create_table "customer_relationships", force: :cascade do |t|
@@ -134,6 +145,7 @@ ActiveRecord::Schema.define(version: 2020_01_17_151857) do
 
   add_foreign_key "account_marked_tasks", "accounts"
   add_foreign_key "account_marked_tasks", "tasks"
+  add_foreign_key "comments", "users", column: "author_id"
   add_foreign_key "customer_relationships", "customers", column: "child_id"
   add_foreign_key "customer_relationships", "customers", column: "parent_id"
   add_foreign_key "project_secrets", "projects"

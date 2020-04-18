@@ -8,7 +8,6 @@ export default class UserRole extends BaseModel {
 
   
     
-      
       loadUser() {
         const id = this.userId()
         const modelClass = require(`api-maker/models/user`).default

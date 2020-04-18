@@ -8,7 +8,6 @@ export default class ProjectDetail extends BaseModel {
 
   
     
-      
       loadProject() {
         const id = this.projectId()
         const modelClass = require(`api-maker/models/project`).default
