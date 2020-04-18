@@ -11,12 +11,14 @@ private
 
   def models
     @models ||= begin
-      if @reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+      binding.pry if reflection.options[:as].present?
+
+      if reflection.is_a?(ActiveRecord::Reflection::ThroughReflection) || reflection.options[:as].present?
         models_with_join
       else
-        query = models_initial_query.select(@reflection.active_record.arel_table[@reflection.active_record.primary_key].as("api_maker_origin_id"))
-        query = query.instance_eval(&@reflection.scope) if @reflection.scope
-        query = query.accessible_by(@ability) if @ability
+        query = models_initial_query.select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
+        query = query.instance_eval(&reflection.scope) if reflection.scope
+        query = query.accessible_by(ability) if ability
         query = ApiMaker::SelectColumnsOnCollection.execute!(
           collection: query,
           model_class: reflection.klass,
@@ -24,15 +26,20 @@ private
           table_name: query.klass.table_name
         )
 
-        query.load
+        begin
+          query.load
+        rescue => e
+          binding.pry
+        end
+
         query
       end
     end
   end
 
   def models_initial_query
-    query = @reflection.klass.where(@reflection.foreign_key => @collection.map(&primary_key_column))
-    query.joins(@reflection.inverse_of.name)
+    query = reflection.klass.where(reflection.foreign_key => collection.map(&primary_key_column))
+    query.joins(reflection.inverse_of.name)
   end
 
   def preload_model(model)
@@ -50,12 +57,12 @@ private
   end
 
   def primary_key_column
-    @primary_key_column ||= if @reflection.options[:primary_key]
-      @reflection.options[:primary_key]&.to_sym
-    elsif @collection.is_a?(Array)
-      @collection.first.class.primary_key.to_sym
+    @primary_key_column ||= if reflection.options[:primary_key]
+      reflection.options[:primary_key]&.to_sym
+    elsif collection.is_a?(Array)
+      collection.first.class.primary_key.to_sym
     else
-      @collection.primary_key.to_sym
+      collection.primary_key.to_sym
     end
   end
 
