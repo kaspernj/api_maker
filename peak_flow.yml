@@ -19,17 +19,17 @@ builds:
   build_3:
     name: Chrome Kaminari
     script:
-      - xvfb-run bundle exec kaminari will_paginate rspec spec/system
+      - xvfb-run bundle exec appraisal kaminari will_paginate rspec spec/system
   build_4:
     name: Chrome WillPaginate
     script:
-      - xvfb-run bundle exec will_paginate will_paginate rspec spec/system
+      - xvfb-run bundle exec appraisal will_paginate will_paginate rspec spec/system
   build_5:
     name: Firefox Kaminari
     environment:
       SELENIUM_DRIVER: firefox
     script:
-      - xvfb-run bundle exec kaminari will_paginate rspec spec/system
+      - xvfb-run bundle exec appraisal kaminari will_paginate rspec spec/system
   build_6:
     name: Firefox WillPaginate
     environment:
