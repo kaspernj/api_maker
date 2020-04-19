@@ -21,7 +21,12 @@ require "cancancan"
 require "devise"
 require "i18n-js"
 require "js-routes"
-require "will_paginate"
+
+begin
+  require "kaminari"
+rescue LoadError
+  require "will_paginate"
+end
 
 module Dummy; end
 
