@@ -31,12 +31,12 @@ describe "models - validation errors" do
 
     find("input[type=submit]").click
 
-    expect(wait_for_and_find(".project-account-1 .invalid-feedback").text).to eq "must exist"
-    expect(wait_for_and_find(".task-name-2 .invalid-feedback").text).to eq "can't be blank"
-    expect(wait_for_and_find(".project-name-3 .invalid-feedback").text).to eq "can't be blank"
+    wait_for_selector ".project-account-1 .invalid-feedback", text: "must exist"
+    wait_for_selector ".task-name-2 .invalid-feedback", text: "can't be blank"
+    wait_for_selector ".project-name-3 .invalid-feedback", text: "can't be blank"
 
     # All validation errors should have been handled so no message should be shown
-    expect(page).not_to have_selector ".ui-pnotify-text"
+    wait_for_no_selector ".ui-pnotify-text"
 
     wait_for_no_selector ".task-name-1 .invalid-feedback"
     wait_for_no_selector ".task-name-3 .invalid-feedback"
