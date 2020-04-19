@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "ransack"
   s.add_runtime_dependency "service_pattern", ">= 0.0.5"
 
+  s.add_development_dependency "appraisal"
   s.add_development_dependency "best_practice_project"
   s.add_development_dependency "bootsnap"
   s.add_development_dependency "capybara"
@@ -50,5 +51,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency "waitutil"
   s.add_development_dependency "webdrivers"
   s.add_development_dependency "webpacker"
-  s.add_development_dependency "will_paginate", ">= 3.1.7"
 end

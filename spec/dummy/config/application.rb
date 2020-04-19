@@ -21,7 +21,8 @@ require "cancancan"
 require "devise"
 require "i18n-js"
 require "js-routes"
-require "will_paginate"
+require "kaminari" if Gem.loaded_specs["kaminari"]
+require "will_paginate" if Gem.loaded_specs["will_paginate"]
 
 module Dummy; end
 

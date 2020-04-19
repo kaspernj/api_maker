@@ -14,10 +14,10 @@ describe "api maker paginate" do
 
     wait_for_selector ".component-models-paginate .content-container"
 
-    expect(page).to have_selector "a[href='/models/paginate?tasks_page=1']"
-    expect(page).to have_selector "a[href='/models/paginate?tasks_page=2']"
-    expect(page).to have_selector "a[href='/models/paginate?tasks_page=3']"
-    expect(page).not_to have_selector "a[href='/models/paginate?tasks_page=4']"
+    wait_for_selector "a[href='/models/paginate?tasks_page=1']"
+    wait_for_selector "a[href='/models/paginate?tasks_page=2']"
+    wait_for_selector "a[href='/models/paginate?tasks_page=3']"
+    wait_for_no_selector "a[href='/models/paginate?tasks_page=4']"
 
     find("a[href='/models/paginate?tasks_page=2']", match: :first).click
 

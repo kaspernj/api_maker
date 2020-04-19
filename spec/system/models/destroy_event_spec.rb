@@ -20,6 +20,6 @@ describe "models destroy event" do
 
     wait_for_browser { !page.has_selector?(".task-row[data-task-id='#{task1.id}']") }
 
-    expect(page).to have_selector ".task-row[data-task-id='#{task2.id}']"
+    wait_for_selector ".task-row[data-task-id='#{task2.id}']"
   end
 end
