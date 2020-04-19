@@ -24,7 +24,7 @@ require "js-routes"
 
 begin
   require "kaminari"
-rescue LoadError
+rescue Exception
   require "will_paginate"
 end
 
