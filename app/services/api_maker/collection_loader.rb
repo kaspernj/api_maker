@@ -45,8 +45,8 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
 
     response[:meta] = {
       currentPage: collection.current_page,
-      perPage: collection.per_page,
-      totalCount: collection.try(:total_count) || collection.try(:total_entries),
+      perPage: collection.try(:per_page) || collection.limit_value,
+      totalCount: collection.try(:total_count) || collection.total_entries,
       totalPages: collection.total_pages
     }
   end
