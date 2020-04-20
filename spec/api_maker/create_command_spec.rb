@@ -25,33 +25,37 @@ describe ApiMaker::CreateCommand do
     command = helper.add_command(args: {save: {task: task_params}})
     helper.execute!
 
-    expect(command.result).to eq(
-      errors: ["Project must exist"],
-      model: {
-        data: {"tasks" => ["new-0"]},
-        preloaded: {
+    json_result = command.result.to_json
+
+    expect(JSON.parse(json_result)).to eq(
+      "errors" => ["Project must exist"],
+      "model" => {
+        "data" => {"tasks" => ["new-0"]},
+        "preloaded" => {
           "tasks" => {
             "new-0" => {
-              "created_at" => nil,
-              "custom_id" => nil,
-              "finished" => nil,
-              "id" => nil,
-              "name" => "Test task",
-              "project_id" => nil,
-              "user_id" => user.id
+              "a" => {
+                "created_at" => nil,
+                "custom_id" => "custom-",
+                "finished" => false,
+                "id" => nil,
+                "name" => "Test task",
+                "project_id" => nil,
+                "user_id" => user.id
+              }
             }
           }
         }
       },
-      success: false,
-      validation_errors: [
+      "success" => false,
+      "validation_errors" => [
         {
-          attribute_name: :project,
-          error_message: "must exist",
-          error_type: :blank,
-          id: nil,
-          input_name: "task[project]",
-          model_name: "task"
+          "attribute_name" => "project",
+          "error_message" => "must exist",
+          "error_type" => "blank",
+          "id" => nil,
+          "input_name" => "task[project]",
+          "model_name" => "task"
         }
       ]
     )
