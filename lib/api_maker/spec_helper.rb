@@ -113,7 +113,7 @@ module ApiMaker::SpecHelper
   def wait_for_no_selector(selector, *args)
     expect(page).to have_no_selector selector, *args
     expect_no_browser_errors
-  rescue Capybara::ElementNotFound => e
+  rescue RSpec::Expectations::ExpectationNotMetError => e
     expect_no_browser_errors
     raise ApiMaker::SpecHelper::SelectorFoundError, e.message
   end
