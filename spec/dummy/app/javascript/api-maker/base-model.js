@@ -84,16 +84,27 @@ export default class BaseModel {
 
   assignAttributes(newAttributes) {
     for(const key in newAttributes) {
-      const oldValue = this._getAttribute(key)
-      const originalValue = this.modelData[key]
       const newValue = newAttributes[key]
 
-      if (newValue != oldValue) {
-        if (newValue == originalValue) {
-          delete this.changes[key]
-        } else {
-          this.changes[key] = newValue
+      let applyChange = true
+      let deleteChange = false
+
+      if (this.isAttributeLoaded(key)) {
+        const oldValue = this._getAttribute(key)
+        const originalValue = this.modelData[key]
+
+        if (newValue == oldValue) {
+          applyChange = false
+        } else if (newValue == originalValue) {
+          applyChange = false
+          deleteChange = true
         }
+      }
+
+      if (applyChange) {
+        this.changes[key] = newValue
+      } else if (deleteChange) {
+        delete this.changes[key]
       }
     }
   }
