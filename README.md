@@ -6,7 +6,7 @@ Generates Rails API endpoints and JavaScript API files for Webpack and more by i
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "api_maker"
+gem "api_maker", git: "https://github.com/kaspernj/api_maker.git"
 ```
 
 ApiMaker requires [Webpacker](https://github.com/rails/webpacker), so make sure you have that set up as well. It also uses an extension called [qs](https://www.npmjs.com/package/qs), that you should add to your packages, but that is probally already there by default.
