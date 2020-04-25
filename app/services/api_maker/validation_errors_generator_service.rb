@@ -18,11 +18,8 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
   def inspect_model(model, path)
     return if model.errors.empty?
 
-    model_attribute_names = model.attribute_names
-    model_reflection_names = model._reflections.keys
-
     model.errors.details.each do |attribute_name, errors|
-      next if !model_attribute_names.include?(attribute_name.to_s) && !model_reflection_names.include?(attribute_name.to_s)
+      next unless handle_attribute?(model, attribute_name)
 
       attribute_path = path + [attribute_name]
       input_name = path_to_attribute_name(attribute_path)
@@ -38,6 +35,12 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
         }
       end
     end
+  end
+
+  def handle_attribute?(model, attribute_name)
+    model.attribute_names.include?(attribute_name.to_s) ||
+      model._reflections.key?(attribute_name.to_s) ||
+      model.class.try(:monetized_attributes)&.include?(attribute_name.to_s)
   end
 
   def inspect_params(model, params, path)
