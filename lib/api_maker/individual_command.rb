@@ -1,4 +1,6 @@
 class ApiMaker::IndividualCommand
+  class ModelNotFoundOrNoAccess < RuntimeError; end
+
   attr_reader :args, :collection, :command, :id, :primary_key, :response
 
   def initialize(id:, args:, collection:, command:, primary_key: nil, response:)
@@ -40,7 +42,7 @@ class ApiMaker::IndividualCommand
 
     model_name = collection.klass.name
 
-    raise "Couldn't find or no access to #{model_name} #{primary_key} on the #{command_name} command"
+    raise ModelNotFoundOrNoAccess, "Couldn't find or no access to #{model_name} #{primary_key} on the #{command_name} command"
   end
 
   def result(data = nil)

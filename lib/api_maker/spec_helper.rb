@@ -97,11 +97,7 @@ module ApiMaker::SpecHelper
   end
 
   def wait_for_selector(selector, *args)
-    expect(page).to have_selector selector, *args
-    expect_no_browser_errors
-  rescue RSpec::Expectations::ExpectationNotMetError => e
-    expect_no_browser_errors
-    raise ApiMaker::SpecHelper::SelectorNotFoundError, e.message
+    ApiMaker::WaitForSelector.execute!(args: args, context: self, selector: selector)
   end
 
   def wait_for_selectors(*selectors)
