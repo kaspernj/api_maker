@@ -1,6 +1,8 @@
 class ApiMaker::Serializer
   attr_reader :ability, :args, :model
 
+  delegate :id, to: :model
+
   def self.resource_for(klass)
     ApiMaker::MemoryStorage.current.resource_for_model(klass)
   rescue NameError
@@ -12,9 +14,9 @@ class ApiMaker::Serializer
   end
 
   def initialize(ability: nil, args: {}, model:, select: nil)
+    @ability = ability
     @args = args
     @model = model
-    @ability = ability
     @select = select
   end
 
@@ -50,6 +52,11 @@ class ApiMaker::Serializer
     result.fetch(*args, &blk)
   end
 
+  def load_ability(ability_name, value)
+    @abilities ||= {}
+    @abilities[ability_name] = value
+  end
+
   def relationships
     @relationships ||= {}
   end
@@ -65,6 +72,7 @@ class ApiMaker::Serializer
   def result
     @result ||= begin
       result = {a: attributes}
+      result[:b] = @abilities if @abilities # Only use b-key if any abilities was loaded
       result[:r] = @relationships if @relationships # Only preload relationships if set
       result
     end
