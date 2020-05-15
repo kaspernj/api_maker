@@ -10,10 +10,10 @@ class ApiMaker::CollectionSerializer
     @ability = ability || ApiMaker::Ability.new(args: args)
     @args = args
     @collection = collection
-    @preload_param = query_params[:preload]
+    @preload_param = @query_params[:preload]
     @model_class = model_class
-    @select = ApiMaker::SelectParser.execute!(select: query_params[:select]) if query_params[:select]
-    @select_columns = query_params[:select_columns]
+    @select = ApiMaker::SelectParser.execute!(select: query_params[:select]) if @query_params[:select]
+    @select_columns = @query_params[:select_columns]
   end
 
   def abilities
@@ -32,9 +32,9 @@ class ApiMaker::CollectionSerializer
         add_model_to_records(model, data, records)
       end
 
-      serializers = records.fetch(resource.collection_name).values
+      serializers = records[resource.collection_name]&.values
 
-      ApiMaker::AbilitiesLoader.execute!(abilities: abilities, ability: ability, serializers: serializers) if abilities
+      ApiMaker::AbilitiesLoader.execute!(abilities: abilities, ability: ability, serializers: serializers) if abilities && serializers
       preload_collection(data, records) if parsed_collection.length.positive?
       data
     end
@@ -66,11 +66,23 @@ class ApiMaker::CollectionSerializer
   end
 
   def model_class
-    @model_class || resource.model_class
+    @model_class ||= begin
+      if collection.is_a?(Array)
+        collection.first.class
+      else
+        resource.model_class
+      end
+    end
   end
 
   def resource
-    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(collection.klass)
+    @resource ||= begin
+      if collection.is_a?(Array)
+        ApiMaker::MemoryStorage.current.resource_for_model(collection.first.class)
+      else
+        ApiMaker::MemoryStorage.current.resource_for_model(collection.klass)
+      end
+    end
   end
 
   def parsed_collection
