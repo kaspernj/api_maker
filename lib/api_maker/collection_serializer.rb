@@ -1,5 +1,5 @@
 class ApiMaker::CollectionSerializer
-  attr_reader :abilities, :ability, :args, :collection, :preload_param, :model_class, :query_params, :select, :select_columns
+  attr_reader :ability, :args, :collection, :preload_param, :query_params, :select, :select_columns
 
   delegate :require_name, to: :resource
 

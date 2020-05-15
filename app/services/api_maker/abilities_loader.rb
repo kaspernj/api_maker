@@ -8,8 +8,6 @@ class ApiMaker::AbilitiesLoader < ApiMaker::ApplicationService
   end
 
   def execute
-    pp abilities
-
     abilities.each do |ability_name|
       load_ability(ability_name)
     end

@@ -53,8 +53,6 @@ class ApiMaker::Serializer
   end
 
   def load_ability(ability_name, value)
-    puts "LOAD ABILITY: #{ability_name}: #{value}"
-
     @abilities ||= {}
     @abilities[ability_name] = value
   end
