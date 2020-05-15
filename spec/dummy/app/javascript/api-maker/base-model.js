@@ -44,10 +44,13 @@ export default class BaseModel {
     if (args && args.data && args.data.a) {
       this._readModelDataFromArgs(args)
     } else if (args.a) {
+      this.abilities = args.b || {}
       this.modelData = args.a
     } else if (args) {
+      this.abilities = {}
       this.modelData = args
     } else {
+      this.abilities = {}
       this.modelData = {}
     }
   }
@@ -55,6 +58,14 @@ export default class BaseModel {
   isAssociationLoaded(associationName) {
     if (associationName in this.relationshipsCache) return true
     return false
+  }
+
+  can(abilityName) {
+    if (!(abilityName in this.abilities)) {
+      throw new Error(`Ability ${abilityName} hasn't been loaded for ${this.modelClassData().name}`)
+    }
+
+    return this.abilities[abilityName]
   }
 
   connect(eventName, callback) {
@@ -646,6 +657,7 @@ export default class BaseModel {
   }
 
   _readModelDataFromArgs(args) {
+    this.abilities = args.data.b || {}
     this.collection = args.collection
     this.modelData = args.data.a
     this.preloadedRelationships = args.data.r
