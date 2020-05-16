@@ -442,6 +442,24 @@ import { EventConnection } from "@kaspernj/api-maker"
 <EventConnection model={this.state.user} event="eventName" onCall={(data) => this.onEvent(data)} />
 ```
 
+### Loading abilities into the frontend from CanCan
+```jsx
+const tasks = await Task
+  .ransack({name_cont: "something"})
+  .abilities({
+    Task: ["edit"]
+  })
+  .toArray()
+
+const firstTask = tasks[0]
+
+if (firstTask.can("edit")) {
+  console.log(`User can edit task ${task.id()}`)
+} else {
+  console.log(`User cant edit task ${task.id()}`)
+}
+```
+
 ## Serializing
 
 ### Conditional attributes
