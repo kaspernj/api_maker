@@ -17,7 +17,7 @@ class ApiMaker::CollectionSerializer
   end
 
   def abilities
-    @abilities ||= query_params[:abilities][require_name.underscore] if query_params[:abilities]
+    @abilities ||= query_params[:abilities][require_name] if query_params[:abilities]
   end
 
   def result
