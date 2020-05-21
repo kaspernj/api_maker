@@ -17,7 +17,7 @@ class ApiMaker::AbilitiesLoader < ApiMaker::ApplicationService
 
   def load_ability(ability_name)
     model_ids = model_class
-      .accessible_by(ability, ability_name)
+      .accessible_by(ability, ability_name.to_sym)
       .where(id: serializers.map(&:id))
       .pluck(model_class.primary_key)
 
