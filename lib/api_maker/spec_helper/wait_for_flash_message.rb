@@ -6,7 +6,12 @@ module ApiMaker::SpecHelper::WaitForFlashMessage
       expect_no_browser_errors
       current_message = flash_message_text
       received_messages << current_message
-      current_message == expected_message
+
+      if current_message.is_a?(Array)
+        current_message.include?(expected_message)
+      else
+        current_message == expected_message
+      end
     end
 
     expect_no_browser_errors
