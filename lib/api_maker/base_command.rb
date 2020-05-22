@@ -51,7 +51,7 @@ class ApiMaker::BaseCommand
       @collection.load
     end
 
-    @commands.each do |command_id, command_data|
+    commands.each do |command_id, command_data|
       if args[:threadded]
         command_response.with_thread do
           run_command(command_id, command_data, &blk)

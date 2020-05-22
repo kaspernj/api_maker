@@ -38,6 +38,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pry-rails"
   s.add_development_dependency "public_activity"
   s.add_development_dependency "puma"
+  s.add_development_dependency "dotenv-rails"
   s.add_development_dependency "rails_best_practices"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "rspec-retry"

@@ -1,24 +1,36 @@
 class ApiMaker::CollectionCommandService < ApiMaker::CommandService
   def execute
-    authorize!
-
-    constant.execute_in_thread!(
-      ability: ability,
-      args: args,
-      collection: nil,
-      commands: commands,
-      command_response: command_response,
-      controller: controller
-    )
+    if authorized?
+      constant.execute_in_thread!(
+        ability: ability,
+        args: args,
+        collection: nil,
+        commands: commands,
+        command_response: command_response,
+        controller: controller
+      )
+    else
+      fail_with_no_access
+    end
 
     succeed!
   end
 
-  def authorize!
-    raise CanCan::AccessDenied, "No access to '#{@command_name}' on '#{model_class.name}'" unless @ability.can?(@command_name.to_sym, model_class)
+  def authorized?
+    ability.can?(command_name.to_sym, model_class)
   end
 
   def constant
     @constant ||= "Commands::#{namespace}::#{@command_name.camelize}".constantize
+  end
+
+  def fail_with_no_access
+    commands.each do |command|
+      command_response.error_for_command(
+        command.id,
+        success: false,
+        errors: ["No access to '#{@command_name}' on '#{model_class.name}'"]
+      )
+    end
   end
 end
