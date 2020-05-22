@@ -48,6 +48,9 @@ Layout/ParameterAlignment:
 Layout/RescueEnsureAlignment:
   Enabled: false
 
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
@@ -117,6 +120,9 @@ Style/ConditionalAssignment:
 
 Style/Documentation:
   Enabled: false
+
+Style/ExponentialNotation:
+  Enabled: true
 
 Style/FrozenStringLiteralComment:
   Enabled: false
