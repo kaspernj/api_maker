@@ -21,15 +21,15 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
   end
 
   def constant
-    @constant ||= "Commands::#{namespace}::#{@command_name.camelize}".constantize
+    @constant ||= "Commands::#{namespace}::#{command_name.camelize}".constantize
   end
 
   def fail_with_no_access
-    commands.each do |command|
+    commands.each_key do |command_id|
       command_response.error_for_command(
-        command.id,
+        command_id,
         success: false,
-        errors: ["No access to '#{@command_name}' on '#{model_class.name}'"]
+        errors: ["No access to '#{command_name}' on '#{model_class.name}'"]
       )
     end
   end
