@@ -15,6 +15,9 @@ require "sprockets/railtie"
 
 Bundler.require(*Rails.groups)
 
+require "dotenv-rails"
+Dotenv::Railtie.load
+
 require "active_record_query_fixer"
 require "api_maker"
 require "cancancan"
