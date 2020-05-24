@@ -2,43 +2,48 @@ before_install:
   - gem install bundler -v 2.0.2
   - sudo apt-get update && sudo apt-get install -y firefox google-chrome-stable
 before_script:
-  - bundle exec appraisal install
-  - cd spec/dummy && yarn
-  - cd spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
-  - cd spec/dummy && bundle exec rails db:schema:load
-  - cd spec/dummy && rake api_maker:generate_models
+  - cd ruby-gem && bundle exec appraisal install
+  - cd ruby-gem/spec/dummy && yarn
+  - cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
+  - cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
+  - cd ruby-gem/spec/dummy && rake api_maker:generate_models
 builds:
   build_1:
-    name: RSpec Kaminari
+    name: Ruby gem / RSpec Kaminari
     script:
-      - bundle exec appraisal kaminari rspec spec/api_maker spec/services
+      - cd ruby-gem && bundle exec appraisal kaminari rspec spec/api_maker spec/services
   build_2:
-    name: RSpec WillPaginate
+    name: Ruby gem / RSpec WillPaginate
     script:
-      - bundle exec appraisal will_paginate rspec spec/api_maker spec/services
+      - cd ruby-gem && bundle exec appraisal will_paginate rspec spec/api_maker spec/services
   build_3:
-    name: Chrome Kaminari
+    name: Ruby gem / Chrome Kaminari
     script:
-      - xvfb-run bundle exec appraisal kaminari rspec spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec spec/system
   build_4:
-    name: Chrome WillPaginate
+    name: Ruby gem / Chrome WillPaginate
     script:
-      - xvfb-run bundle exec appraisal will_paginate rspec spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec spec/system
   build_5:
-    name: Firefox Kaminari
+    name: Ruby gem / Firefox Kaminari
     environment:
       SELENIUM_DRIVER: firefox
     script:
-      - xvfb-run bundle exec appraisal kaminari rspec spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec spec/system
   build_6:
-    name: Firefox WillPaginate
+    name: Ruby gem / Firefox WillPaginate
     environment:
       SELENIUM_DRIVER: firefox
     script:
-      - xvfb-run bundle exec appraisal will_paginate rspec spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec spec/system
   build_7:
-    name: Linters
+    name: Ruby gem / Linters
     script:
-      - bundle exec rubocop
-      - bundle exec rails_best_practices
+      - cd ruby-gem && bundle exec rubocop
+      - cd ruby-gem && bundle exec rails_best_practices
+  build_8:
+    name: NPM inputs / Jest
+    script:
+      - cd npm-api-maker-inputs && yarn
+      - cd npm-api-maker-inputs && yarn test
 rvm: true
