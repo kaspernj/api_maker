@@ -1,0 +1,38 @@
+{
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  },
+  "name": "@kaspernj/api-maker",
+  "version": "1.0.2",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaspernj/api-maker.git"
+  },
+  "author": "kaspernj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kaspernj/api-maker/issues"
+  },
+  "homepage": "https://github.com/kaspernj/api-maker#readme",
+  "peerDependencies": {
+    "form-serialize": "^0.7.2",
+    "format-number": "^3.0.0",
+    "js-money": "^0.6.3",
+    "merge": "^1.2.1",
+    "prop-types": "^15.7.2",
+    "prop-types-exact": "^1.2.0",
+    "qs": "^6.9.3",
+    "react": "^16.13.1",
+    "replaceall": "^0.1.6",
+    "source-map": "^0.7.3",
+    "stacktrace-parser": "^0.1.9"
+  }
+}
