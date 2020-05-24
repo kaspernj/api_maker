@@ -15,6 +15,18 @@ export default class ApiMakerCanCan {
     this.abilitiesToLoadData = {}
   }
 
+  can(subject, ability) {
+    if (!(subject in this.abilities)) {
+      throw new Error(`Subject wasn't loaded: ${subject}`)
+    }
+
+    if (!(ability in this.abilities[subject])) {
+      throw new Error(`Ability wasn't loaded: ${subject}#${ability}`)
+    }
+
+    return this.abilities[subject][ability]
+  }
+
   async loadAbilities(abilities) {
     return new Promise((resolve) => {
       const promises = []
@@ -67,17 +79,19 @@ export default class ApiMakerCanCan {
     this.abilitiesToLoadData = {}
 
     // Load abilities from backend
-    const response = await Services.current().sendRequest("CanCan::LoadAbilities", {
+    const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
       request: abilitiesToLoadData
     })
 
-    console.log({ response })
-
     // Set the loaded abilities
     const callbacks = []
-    for (const subjectName in response.response) {
-      for (const abilityName of response.response[subjectName]) {
-        this.abilities[subjectName] = abilityName
+    for (const subjectName in result.abilities) {
+      if (!(subjectName in this.abilities)) {
+        this.abilities[subjectName] = {}
+      }
+
+      for (const abilityName in result.abilities[subjectName]) {
+        this.abilities[subjectName][abilityName] = result.abilities[subjectName][abilityName]
 
         for (const abilityData of abilitiesToLoad[subjectName][abilityName]) {
           callbacks.push(abilityData.callback)

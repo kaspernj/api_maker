@@ -12,13 +12,9 @@ class ApiMaker::ServiceCommand < ApiMaker::BaseCommand
       response = service_instance.execute
 
       if response.success?
-        command.result(
-          result: response.result
-        )
+        command.result(response.result)
       else
-        command.fail(
-          errors: response.errors
-        )
+        command.fail(errors: response.errors)
       end
     end
   end
