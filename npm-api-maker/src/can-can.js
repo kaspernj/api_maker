@@ -20,7 +20,7 @@ export default class ApiMakerCanCan {
       const promises = []
 
       for (const subject in abilities) {
-        for (const ability in abilities[subject]) {
+        for (const ability of abilities[subject]) {
           const promise = this.loadAbility(ability, subject)
           promises.push(promise)
         }

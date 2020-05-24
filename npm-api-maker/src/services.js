@@ -17,7 +17,7 @@ export default class ApiMakerServices {
       },
       command: "services",
       collectionName: "calls",
-      type: "service-call"
+      type: "service"
     })
   }
 }
