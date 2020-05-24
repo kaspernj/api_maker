@@ -3,11 +3,11 @@ before_install:
   - sudo apt-get update && sudo apt-get install -y firefox google-chrome-stable
 before_script:
   - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle install --jobs 4 --without production staging
-  - cd ruby-gem && bundle exec appraisal install
+  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec appraisal install
   - cd ruby-gem/spec/dummy && yarn
-  - cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
-  - cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
-  - cd ruby-gem/spec/dummy && rake api_maker:generate_models
+  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
+  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
+  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem/spec/dummy && rake api_maker:generate_models
 builds:
   build_1:
     name: Ruby gem / RSpec Kaminari
