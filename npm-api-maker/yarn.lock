@@ -2,14 +2,3 @@
 # yarn lockfile v1
 
 
-js-money@^0.6.3:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/js-money/-/js-money-0.6.3.tgz#20b8fa9b958dac7f57b98d9027252e408e98d4fd"
-  integrity sha1-ILj6m5WNrH9XuY2QJyUuQI6Y1P0=
-  dependencies:
-    lodash "4.x.x"
-
-lodash@4.x.x:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
