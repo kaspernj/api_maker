@@ -1,4 +1,5 @@
 import Api from "./api"
+import CanCan from "./can-can"
 import { CustomError, ValidationError } from "./errors"
 import ErrorLogger from "./error-logger"
 import EventConnection from "./event-connection"
@@ -14,11 +15,13 @@ import ModelName from "./model-name"
 import MoneyFormatter from "./money-formatter"
 import Params from "./params"
 import Result from "./result"
+import Services from "./services"
 import SourceMapsLoader from "./source-maps-loader"
 import UpdatedAttribute from "./result"
 
 export {
   Api,
+  CanCan,
   CustomError,
   ErrorLogger,
   EventConnection,
@@ -34,6 +37,7 @@ export {
   MoneyFormatter,
   Params,
   Result,
+  Services,
   SourceMapsLoader,
   UpdatedAttribute,
   ValidationError

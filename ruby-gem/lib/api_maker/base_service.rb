@@ -1,0 +1,2 @@
+class ApiMaker::BaseService
+end

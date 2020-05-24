@@ -1,5 +1,6 @@
 export {
   Api,
+  CanCan,
   CustomError,
   ErrorLogger,
   EventConnection,
@@ -15,6 +16,7 @@ export {
   MoneyFormatter,
   Params,
   Result,
+  Services,
   SourceMapsLoader,
   UpdatedAttribute,
   ValidationError
