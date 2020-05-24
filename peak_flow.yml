@@ -46,4 +46,5 @@ builds:
     name: NPM inputs / Jest
     script:
       - cd npm-api-maker-inputs && yarn
+      - cd npm-api-maker-inputs && ls -l
       - cd npm-api-maker-inputs && yarn test
