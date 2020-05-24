@@ -1,0 +1,48 @@
+{
+  "author": "kaspernj",
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/kaspernj/api-maker-inputs/issues"
+  },
+  "description": "",
+  "homepage": "https://github.com/kaspernj/api-maker-inputs#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "name": "@kaspernj/api-maker-inputs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaspernj/api-maker-inputs.git"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "version": "1.0.7",
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-react": "^7.9.4",
+    "classnames": "^2.2.6",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "inflection": "^1.12.0",
+    "jest": "^25.3.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "peerDependencies": {
+    "classnames": "^2.2.6",
+    "format-number": "^3.0.0",
+    "inflection": "^1.12.0",
+    "prop-types": "^15.7.2",
+    "prop-types-exact": "^1.2.0",
+    "react": "^16.13.1"
+  }
+}
