@@ -1,6 +1,4 @@
 class Services::CanCan::LoadAbilities < ApiMaker::BaseService
-  attr_reader :request
-
   def execute
     result = {}
 
