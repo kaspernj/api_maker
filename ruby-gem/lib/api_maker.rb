@@ -13,6 +13,7 @@ module ApiMaker
   autoload :AbilityLoader, "#{dir}/ability_loader"
   autoload :BaseCommand, "#{dir}/base_command"
   autoload :BaseResource, "#{dir}/base_resource"
+  autoload :BaseService, "#{dir}/base_service"
   autoload :CollectionSerializer, "#{dir}/collection_serializer"
   autoload :CommandSpecHelper, "#{dir}/command_spec_helper"
   autoload :Configuration, "#{dir}/configuration"

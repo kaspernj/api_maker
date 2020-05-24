@@ -1,5 +1,5 @@
 class ApiMaker::Configuration
-  attr_accessor :profiling, :react_native_path, :threadding
+  attr_accessor :ability_class_name, :profiling, :react_native_path, :threadding
 
   def self.current
     @current ||= ApiMaker::Configuration.new
@@ -18,8 +18,13 @@ class ApiMaker::Configuration
   end
 
   def initialize
+    @ability_class_name = "ApiMaker::Ability"
     @on_error = []
     @threadding = true
+  end
+
+  def ability_class
+    ability_class_name.constantize
   end
 
   def on_error(&blk)
