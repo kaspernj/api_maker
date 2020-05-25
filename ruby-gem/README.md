@@ -492,6 +492,27 @@ ApiMaker::Configuration.configure do |config|
 end
 ```
 
+# Use your own ability class
+
+You can customise the ability object.
+
+Configure API maker to use your own class:
+```ruby
+ApiMaker::Configuration.configure do |config|
+  config.ability_class_name = "MyAbility"
+end
+```
+
+Then add an ability:
+```ruby
+class MyAbility < ApiMaker::Ability
+  def initialize(args)
+    super
+    your_custom_code
+  end
+end
+```
+
 
 ## Contributing
 Contribution directions go here.
