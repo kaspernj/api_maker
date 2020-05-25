@@ -15,7 +15,7 @@ export default class ApiMakerCanCan {
     this.abilitiesToLoadData = {}
   }
 
-  can(subject, ability) {
+  can(ability, subject) {
     if (!(subject in this.abilities)) {
       throw new Error(`Subject wasn't loaded: ${subject}`)
     }
