@@ -27,6 +27,12 @@ export default class ApiMakerCanCan {
     return this.abilities[subject][ability]
   }
 
+  isAbilityLoaded(ability, subject) {
+    if ((subject in this.abilities) && (ability in this.abilities[subject])) {
+      return true
+    }
+  }
+
   async loadAbilities(abilities) {
     return new Promise((resolve) => {
       const promises = []
@@ -44,22 +50,26 @@ export default class ApiMakerCanCan {
 
   async loadAbility(ability, subject) {
     return new Promise((resolve) => {
-      if (!this.abilitiesToLoad[subject]) {
-        this.abilitiesToLoad[subject] = {}
+      if (this.isAbilityLoaded(ability, subject)) {
+        resolve()
+      } else {
+        if (!this.abilitiesToLoad[subject]) {
+          this.abilitiesToLoad[subject] = {}
+        }
+
+        if (!this.abilitiesToLoad[subject][ability]) {
+          this.abilitiesToLoad[subject][ability] = []
+        }
+
+        if (!this.abilitiesToLoadData[subject]) {
+          this.abilitiesToLoadData[subject] = []
+        }
+
+        this.abilitiesToLoadData[subject].push(ability)
+        this.abilitiesToLoad[subject][ability].push({callback: resolve})
+
+        this.queueAbilitiesRequest()
       }
-
-      if (!this.abilitiesToLoad[subject][ability]) {
-        this.abilitiesToLoad[subject][ability] = []
-      }
-
-      if (!this.abilitiesToLoadData[subject]) {
-        this.abilitiesToLoadData[subject] = []
-      }
-
-      this.abilitiesToLoadData[subject].push(ability)
-      this.abilitiesToLoad[subject][ability].push({callback: resolve})
-
-      this.queueAbilitiesRequest()
     })
   }
 
@@ -69,6 +79,10 @@ export default class ApiMakerCanCan {
     }
 
     this.queueAbilitiesRequestTimeout = setTimeout(() => this.sendAbilitiesRequest(), 0)
+  }
+
+  resetAbilities() {
+    this.abilities = {}
   }
 
   async sendAbilitiesRequest() {
