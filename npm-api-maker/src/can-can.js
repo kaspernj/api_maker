@@ -1,5 +1,7 @@
 import Services from "./services"
 
+const inflection = require("inflection")
+
 export default class ApiMakerCanCan {
   static current() {
     if (!window.currentApiMakerCanCan) {
@@ -16,6 +18,8 @@ export default class ApiMakerCanCan {
   }
 
   can(ability, subject) {
+    ability = inflection.underscore(ability)
+
     if (!(subject in this.abilities)) {
       throw new Error(`Subject wasn't loaded: ${subject}`)
     }
@@ -50,26 +54,28 @@ export default class ApiMakerCanCan {
 
   async loadAbility(ability, subject) {
     return new Promise((resolve) => {
+      ability = inflection.underscore(ability)
+
       if (this.isAbilityLoaded(ability, subject)) {
-        resolve()
-      } else {
-        if (!this.abilitiesToLoad[subject]) {
-          this.abilitiesToLoad[subject] = {}
-        }
-
-        if (!this.abilitiesToLoad[subject][ability]) {
-          this.abilitiesToLoad[subject][ability] = []
-        }
-
-        if (!this.abilitiesToLoadData[subject]) {
-          this.abilitiesToLoadData[subject] = []
-        }
-
-        this.abilitiesToLoadData[subject].push(ability)
-        this.abilitiesToLoad[subject][ability].push({callback: resolve})
-
-        this.queueAbilitiesRequest()
+        return resolve()
       }
+
+      if (!this.abilitiesToLoad[subject]) {
+        this.abilitiesToLoad[subject] = {}
+      }
+
+      if (!this.abilitiesToLoad[subject][ability]) {
+        this.abilitiesToLoad[subject][ability] = []
+      }
+
+      if (!this.abilitiesToLoadData[subject]) {
+        this.abilitiesToLoadData[subject] = []
+      }
+
+      this.abilitiesToLoadData[subject].push(ability)
+      this.abilitiesToLoad[subject][ability].push({callback: resolve})
+
+      this.queueAbilitiesRequest()
     })
   }
 
