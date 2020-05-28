@@ -11,7 +11,7 @@ export default class ApiMakerBootstrapCard extends React.Component {
     className: PropTypes.string,
     children: PropTypes.node,
     controls: PropTypes.node,
-    header: PropTypes.string,
+    header: PropTypes.node,
     onClick: PropTypes.func,
     striped: PropTypes.bool,
     style: PropTypes.object,
