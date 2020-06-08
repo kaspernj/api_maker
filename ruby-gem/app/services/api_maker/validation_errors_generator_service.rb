@@ -58,6 +58,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
         check_nested_many_models_for_validation_errors(association.target, attribute_value, path)
       else
         inspect_model(association.target, path)
+        inspect_params(association.target, attribute_value, path)
       end
 
       path.pop

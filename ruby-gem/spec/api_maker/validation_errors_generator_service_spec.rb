@@ -26,4 +26,37 @@ describe ApiMaker::ValidationErrorsGeneratorService do
       }
     ]
   end
+
+  it "handles deeply nested errors through has one relationships" do
+    params = {
+      name: "Test project",
+      project_detail_attributes: {
+        project_detail_files_attributes: {
+          0 => {
+            filename: " "
+          }
+        }
+      }
+    }
+
+    project.assign_attributes(params)
+
+    expect(project).to be_invalid
+
+    result = ApiMaker::ValidationErrorsGeneratorService.execute!(
+      model: project,
+      params: params
+    )
+
+    expect(result).to eq [
+      {
+        attribute_name: :filename,
+        id: nil,
+        input_name: "project[project_detail_attributes][project_detail_files_attributes][0][filename]",
+        model_name: "project_detail_file",
+        error_message: "can't be blank",
+        error_type: :blank
+      }
+    ]
+  end
 end

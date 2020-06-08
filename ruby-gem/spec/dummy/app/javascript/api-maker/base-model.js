@@ -222,6 +222,37 @@ export default class BaseModel {
     }
   }
 
+  async ensureAbilities(listOfAbilities) {
+    // Populate an array with a list of abilities currently not loaded
+    const abilitiesToLoad = []
+
+    for (const abilityInList of listOfAbilities) {
+      if (!(abilityInList in this.abilities)) {
+        abilitiesToLoad.push(abilityInList)
+      }
+    }
+
+    // Load the missing abilities if any
+    if (abilitiesToLoad.length > 0) {
+      const primaryKeyName = this.modelClassData().primaryKey
+      const ransackParams = {}
+      ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
+
+      const abilitiesParams = {}
+      abilitiesParams[this.modelClassData().name] = abilitiesToLoad
+
+      const anotherModel = await this.constructor
+        .ransack(ransackParams)
+        .abilities(abilitiesParams)
+        .first()
+
+      const newAbilities = anotherModel.abilities
+      for (const newAbility in newAbilities) {
+        this.abilities[newAbility] = newAbilities[newAbility]
+      }
+    }
+  }
+
   getAttributes() {
     return Object.assign(this.modelData, this.changes)
   }
