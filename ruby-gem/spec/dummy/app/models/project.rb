@@ -13,4 +13,6 @@ class Project < ApplicationRecord
   validates :name, presence: true
 
   monetize :price_per_hour_cents, allow_nil: true
+
+  accepts_nested_attributes_for :project_detail
 end

@@ -1,4 +1,4 @@
-import { Api, CustomError } from "@kaspernj/api-maker"
+import { Api, CanCan, CustomError } from "@kaspernj/api-maker"
 import EventEmitter from "events"
 const inflection = require("inflection")
 
@@ -48,6 +48,8 @@ export default class Devise {
       const modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
       const modelInstance = new modelClass(response.model_data)
 
+      CanCan.current().resetAbilities()
+
       Devise.updateSession(modelInstance)
       Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
 
@@ -74,6 +76,7 @@ export default class Devise {
     const response = await Api.post("/api_maker/devise/do_sign_out", postData)
 
     if (response.success) {
+      CanCan.current().resetAbilities()
       Devise.setSignedOut(args)
       Devise.callSignOutEvent(args)
       return response
