@@ -10,7 +10,7 @@ test("shows currency options by default", () => {
     <Money currenciesCollection={["DKK"]} />
   )
 
-  expect(wrapper.find(".component-bootstrap-money-input")).toBeTruthy();
+  expect(wrapper.find(".component-bootstrap-money-input")).toBeTruthy()
 })
 
 test("hides currency options", () => {
@@ -18,5 +18,5 @@ test("hides currency options", () => {
     <Money currenciesCollection={["DKK"]} showCurrencyOptions={false} />
   )
 
-  expect(wrapper.find(".component-bootstrap-money-input").exists()).toBeFalsy();
+  expect(wrapper.find(".component-bootstrap-money-input").exists()).toBeFalsy()
 })
