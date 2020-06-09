@@ -8,6 +8,10 @@ import React from "react"
 const inflection = require("inflection")
 
 export default class ApiMakerInputsMoney extends React.Component {
+  static defaultProps = {
+    showCurrencyOptions: true
+  }
+
   static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     className: PropTypes.string,
@@ -18,6 +22,7 @@ export default class ApiMakerInputsMoney extends React.Component {
     name: PropTypes.string,
     onChange: PropTypes.func,
     placeholder: PropTypes.node,
+    showCurrencyOptions: PropTypes.bool,
     small: PropTypes.bool
   })
 
@@ -33,6 +38,8 @@ export default class ApiMakerInputsMoney extends React.Component {
   }
 
   render() {
+    const {showCurrencyOptions} = this.props
+
     return (
       <div className="component-api-maker-bootstrap-money-input">
         <input defaultValue={this.inputDefaultCentsValue()} id={this.inputCentsId()} name={this.inputCentsName()} ref="input" type="hidden" />
@@ -48,16 +55,18 @@ export default class ApiMakerInputsMoney extends React.Component {
             placeholder={this.props.placeholder}
             ref="whole"
             type="text"
-            />
-          <select className="component-bootstrap-money-input" defaultValue={this.inputCurrencyValue()} id={this.inputCurrencyId()} name={this.inputCurrencyName()} onChange={() => { this.onCurrencyChanged() }} ref="currency">
-            <option></option>
-            {this.props.currenciesCollection.map(option => (
-              <option key={`select-option-${option[1]}`} value={option[1]}>
-                {this.props.small && option[1]}
-                {!this.props.small && option[0]}
-              </option>
-            ))}
-          </select>
+          />
+          {showCurrencyOptions &&
+            <select className="component-bootstrap-money-input" defaultValue={this.inputCurrencyValue()} id={this.inputCurrencyId()} name={this.inputCurrencyName()} onChange={() => { this.onCurrencyChanged() }} ref="currency">
+              <option></option>
+              {this.props.currenciesCollection.map(option => (
+                <option key={`select-option-${option[1]}`} value={option[1]}>
+                  {this.props.small && option[1]}
+                  {!this.props.small && option[0]}
+                </option>
+              ))}
+            </select>
+          }
         </div>
       </div>
     )
