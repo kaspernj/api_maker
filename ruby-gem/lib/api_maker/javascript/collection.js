@@ -34,6 +34,11 @@ export default class Collection {
     return this._clone({accessibleBy: abilityName})
   }
 
+  async count() {
+    const response = await this._clone({count: true})._response()
+    return response.count
+  }
+
   distinct() {
     return this._clone({distinct: true})
   }
@@ -51,9 +56,10 @@ export default class Collection {
     return models[0]
   }
 
-  async count() {
-    const response = await this._clone({count: true})._response()
-    return response.count
+  groupBy(columnName) {
+    return this._clone({
+      groupBy: inflection.underscore(columnName)
+    })
   }
 
   isLoaded() {
@@ -98,6 +104,7 @@ export default class Collection {
     if (this.queryArgs.accessibleBy) params.accessible_by = inflection.underscore(this.queryArgs.accessibleBy)
     if (this.queryArgs.count) params.count = this.queryArgs.count
     if (this.queryArgs.distinct) params.distinct = this.queryArgs.distinct
+    if (this.queryArgs.groupBy) params.group_by = this.queryArgs.groupBy
     if (this.queryArgs.ransack) params.q = this.queryArgs.ransack
     if (this.queryArgs.limit) params.limit = this.queryArgs.limit
     if (this.queryArgs.preload) params.preload = this.queryArgs.preload

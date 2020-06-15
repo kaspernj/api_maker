@@ -40,6 +40,13 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     ).result
   end
 
+  def group_query
+    column_name = params[:group_by].to_s
+    raise "Not a valid column name: #{column_name}" unless collection.klass.column_names.include?(column_name)
+    arel_column = collection.klass.arel_table[column_name]
+    @query = @query.group(arel_column)
+  end
+
   def include_pagination_data(response, collection)
     return if params[:page].blank?
 
@@ -68,6 +75,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
 
   def set_query
     @query = manage_through_relationship || collection
+    group_query if params[:group_by]
     @query = @query.distinct if params[:distinct]
     @query = @query.ransack(params[:q]).result
     @query = @query.limit(params[:limit]) if params[:limit].present?
