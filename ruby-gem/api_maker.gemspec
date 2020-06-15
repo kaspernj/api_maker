@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", ">= 5.2.0"
 
   s.add_runtime_dependency "active_record_better_dependent_error_messages", ">= 0.0.2"
-  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.11"
+  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.12"
   s.add_runtime_dependency "cancancan"
   s.add_runtime_dependency "dig_bang"
   s.add_runtime_dependency "i18n-js"
