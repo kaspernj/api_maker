@@ -43,11 +43,13 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   def include_pagination_data(response, collection)
     return if params[:page].blank?
 
+    countable_collection = collection.except(:distinct).except(:select).except(:order)
+
     response[:meta] = {
       currentPage: collection.current_page,
       perPage: collection.try(:per_page) || collection.limit_value,
-      totalCount: collection.try(:total_count) || collection.total_entries,
-      totalPages: collection.total_pages
+      totalCount: countable_collection.try(:total_count) || countable_collection.total_entries,
+      totalPages: countable_collection.total_pages
     }
   end
 
