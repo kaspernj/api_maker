@@ -1,6 +1,7 @@
 require "api_maker/engine"
 
 require "active_record_query_fixer"
+require "cancancan"
 require "ransack"
 require "service_pattern"
 
