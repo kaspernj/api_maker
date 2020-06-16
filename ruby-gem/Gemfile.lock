@@ -10,6 +10,7 @@ PATH
       rails (>= 5.2.0)
       ransack
       service_pattern (>= 0.0.5)
+      waitutil
 
 GEM
   remote: https://rubygems.org/
@@ -338,7 +339,6 @@ DEPENDENCIES
   selenium-webdriver
   sqlite3
   tzinfo-data
-  waitutil
   webdrivers
   webpacker
 

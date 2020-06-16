@@ -1,3 +1,5 @@
+require "waitutil"
+
 module ApiMaker::SpecHelper
   require_relative "spec_helper/wait_for_expect"
   require_relative "spec_helper/wait_for_flash_message"
