@@ -1,5 +1,6 @@
-import { Collection, EventCreated, EventDestroyed, Params } from "@kaspernj/api-maker"
+import { EventCreated, EventDestroyed, Params } from "@kaspernj/api-maker"
 import { Paginate } from "@kaspernj/api-maker-bootstrap"
+import Collection from "api-maker/collection"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -8,6 +9,7 @@ const inflection = require("inflection")
 
 export default class ApiMakerBootstrapLiveTable extends React.Component {
   static defaultProps = {
+    destroyEnabled: true,
     preloads: [],
     select: {}
   }
@@ -17,6 +19,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     collection: PropTypes.instanceOf(Collection),
     columnsContent: PropTypes.func.isRequired,
     defaultParams: PropTypes.object,
+    destroyEnabled: PropTypes.bool.isRequired,
     destroyMessage: PropTypes.string,
     filterContent: PropTypes.func,
     filterSubmitLabel: PropTypes.node,
@@ -45,14 +48,39 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
       const { queryQName } = this.state
       const params = Params.parse()
       const qParams = params[queryQName] || {}
-      Params.setCachedParams(queryQName, qParams)
       this.setState({currentHref: location.href, qParams}, () => this.loadModels())
     }
   }
 
+  abilitiesToLoad() {
+    const abilitiesToLoad = []
+    const {abilities} = this.props
+
+    if (abilities) {
+      for (const ability of abilities) {
+        abilitiesToLoad.push(ability)
+      }
+    }
+
+    if (this.props.destroyEnabled) {
+      abilitiesToLoad.push("destroy")
+    }
+
+    if (this.props.editModelPath) {
+      abilitiesToLoad.push("edit")
+    }
+
+    if (this.props.viewModelPath) {
+      abilitiesToLoad.push("show")
+    }
+
+    return abilitiesToLoad
+  }
+
   async loadQParams() {
     const { queryQName } = this.state
-    const qParams = await Params.getCachedParams(queryQName, {default: this.props.defaultParams || {}})
+    const params = Params.parse()
+    const qParams = params[queryQName] || this.props.defaultParams || {}
     return this.setState({qParams})
   }
 
@@ -76,7 +104,17 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
       .preload(preloads)
       .select(select)
 
-      const result = await query.result()
+    const abilitiesToLoad = this.abilitiesToLoad()
+
+    if (abilitiesToLoad.length > 0) {
+      const modelClassName = modelClass.modelClassData().name
+      const loadAbilitiesArgument = {}
+
+      loadAbilitiesArgument[modelClassName] = abilitiesToLoad
+      query = query.abilities(loadAbilitiesArgument)
+    }
+
+    const result = await query.result()
 
     this.setState({query, result, models: result.models()})
   }
@@ -92,7 +130,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   content() {
-    const { filterContent, filterSubmitLabel, modelClass } = this.props
+    const { destroyEnabled, editModelPath, filterContent, filterSubmitLabel, modelClass } = this.props
     const { qParams, query, result, models } = this.state
 
     return (
@@ -112,16 +150,29 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
           <EventDestroyed key={`event-destroyed-${model.cacheKey()}`} model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
         )}
 
-        <Card className="mb-4" striped table>
+        <Card className="mb-4" table>
           <thead>
             <tr>
               {this.props.headersContent({query})}
+              <th />
             </tr>
           </thead>
           <tbody>
             {models.map(model =>
               <tr className={`${inflection.singularize(modelClass.modelClassData().collectionName)}-row`} data-model-id={model.id()} key={model.cacheKey()}>
                 {this.props.columnsContent({model})}
+                <td className="actions-column text-nowrap text-right">
+                  {editModelPath && model.can("edit") &&
+                    <Link className="edit-button" to={editModelPath({model})}>
+                      <i className="la la-edit" />
+                    </Link>
+                  }
+                  {destroyEnabled && model.can("destroy") &&
+                    <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
+                      <i className="la la-remove" />
+                    </a>
+                  }
+                </td>
               </tr>
             )}
           </tbody>
@@ -141,6 +192,20 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     return classNames.join(" ")
   }
 
+  async onDestroyClicked(e, model) {
+    e.preventDefault()
+
+    if (!confirm(I18n.t("js.shared.are_you_sure"))) {
+      return
+    }
+
+    try {
+      model.destroy()
+    } catch (error) {
+      Notification.errorResponse(error)
+    }
+  }
+
   onFilterFormSubmit(e) {
     e.preventDefault()
 
@@ -151,7 +216,6 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     changeParamsParams[queryQName] = qParams
 
     Params.changeParams(changeParamsParams)
-    Params.setCachedParams(queryQName, qParams)
 
     this.setState({currentHref: location.href, qParams}, () => this.loadModels())
   }

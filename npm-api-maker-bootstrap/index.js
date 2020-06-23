@@ -5,6 +5,7 @@ export {
   Checkbox,
   Checkboxes,
   Input,
+  LiveTable,
   Paginate,
   RadioButtons,
   Select,
