@@ -21,6 +21,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     defaultParams: PropTypes.object,
     destroyEnabled: PropTypes.bool.isRequired,
     destroyMessage: PropTypes.string,
+    editModelPath: PropTypes.func,
     filterContent: PropTypes.func,
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func.isRequired,
