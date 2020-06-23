@@ -1,5 +1,6 @@
-import { Collection, EventCreated, EventDestroyed, Params } from "@kaspernj/api-maker"
+import { EventCreated, EventDestroyed, Params } from "@kaspernj/api-maker"
 import { Paginate } from "@kaspernj/api-maker-bootstrap"
+import Collection from "api-maker/collection"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -52,7 +53,8 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
   async loadQParams() {
     const { queryQName } = this.state
-    const qParams = await Params.getCachedParams(queryQName, {default: this.props.defaultParams || {}})
+    const params = Params.parse()
+    const qParams = params[queryQName] || this.props.defaultParams || {}
     return this.setState({qParams})
   }
 
@@ -112,7 +114,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
           <EventDestroyed key={`event-destroyed-${model.cacheKey()}`} model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
         )}
 
-        <Card className="mb-4" striped table>
+        <Card className="mb-4" table>
           <thead>
             <tr>
               {this.props.headersContent({query})}
