@@ -1,3 +1,4 @@
+import ChannelsConsumer from "channels/consumer"
 import CommandsPool from "./commands-pool"
 import Deserializer from "./deserializer"
 import { Logger } from "@kaspernj/api-maker"
@@ -15,7 +16,7 @@ export default class ApiMakerCableSubscriptionPool {
   connect() {
     const globalData = CommandsPool.current().globalRequestData
 
-    this.subscription = App.cable.subscriptions.create(
+    this.subscription = ChannelsConsumer.subscriptions.create(
       {channel: "ApiMaker::SubscriptionsChannel", global: globalData, subscription_data: this.props.subscriptionData},
       {received: (data) => this.onReceived(data)}
     )
