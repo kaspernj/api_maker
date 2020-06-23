@@ -25,6 +25,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func.isRequired,
     modelClass: PropTypes.func.isRequired,
+    onModelsLoaded: PropTypes.func,
     preloads: PropTypes.array.isRequired,
     queryName: PropTypes.string.isRequired,
     select: PropTypes.object
@@ -86,7 +87,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
   async loadModels() {
     const params = Params.parse()
-    const { modelClass, preloads, select } = this.props
+    const { modelClass, onModelsLoaded, preloads, select } = this.props
     const { qParams, queryPageName, queryQName } = this.state
     let query
 
@@ -115,6 +116,15 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     }
 
     const result = await query.result()
+
+    if (onModelsLoaded) {
+      onModelsLoaded({
+        models: result.models(),
+        qParams,
+        query,
+        result
+      })
+    }
 
     this.setState({query, result, models: result.models()})
   }
@@ -195,12 +205,18 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   async onDestroyClicked(e, model) {
     e.preventDefault()
 
+    const {destroyMessage} = this.props
+
     if (!confirm(I18n.t("js.shared.are_you_sure"))) {
       return
     }
 
     try {
       model.destroy()
+
+      if (destroyMessage) {
+        Notification.success(destroyMessage)
+      }
     } catch (error) {
       Notification.errorResponse(error)
     }
