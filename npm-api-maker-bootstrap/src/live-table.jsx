@@ -15,6 +15,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   static propTypes = PropTypesExact({
+    actionsContent: PropTypes.func,
     className: PropTypes.string,
     collection: PropTypes.instanceOf(Collection),
     columnsContent: PropTypes.func.isRequired,
@@ -141,7 +142,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   content() {
-    const { destroyEnabled, editModelPath, filterContent, filterSubmitLabel, modelClass } = this.props
+    const { actionsContent, destroyEnabled, editModelPath, filterContent, filterSubmitLabel, modelClass } = this.props
     const { qParams, query, result, models } = this.state
 
     return (
@@ -173,6 +174,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
               <tr className={`${inflection.singularize(modelClass.modelClassData().collectionName)}-row`} data-model-id={model.id()} key={model.cacheKey()}>
                 {this.props.columnsContent({model})}
                 <td className="actions-column text-nowrap text-right">
+                  {actionsContent && actionsContent({model})}
                   {editModelPath && model.can("edit") &&
                     <Link className="edit-button" to={editModelPath({model})}>
                       <i className="la la-edit" />
