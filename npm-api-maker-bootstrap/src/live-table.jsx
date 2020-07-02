@@ -19,6 +19,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     className: PropTypes.string,
     collection: PropTypes.instanceOf(Collection),
     columnsContent: PropTypes.func.isRequired,
+    controls: PropTypes.func,
     defaultParams: PropTypes.object,
     destroyEnabled: PropTypes.bool.isRequired,
     destroyMessage: PropTypes.string,
@@ -26,6 +27,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     filterContent: PropTypes.func,
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func.isRequired,
+    header: PropTypes.func,
     modelClass: PropTypes.func.isRequired,
     onModelsLoaded: PropTypes.func,
     preloads: PropTypes.array.isRequired,
@@ -142,8 +144,18 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   content() {
-    const { actionsContent, destroyEnabled, editModelPath, filterContent, filterSubmitLabel, modelClass } = this.props
+    const { actionsContent, controls, destroyEnabled, editModelPath, filterContent, filterSubmitLabel, header, modelClass } = this.props
     const { qParams, query, result, models } = this.state
+
+    let controlsContent, headerContent
+
+    if (controls) {
+      controlsContent = controls({models, qParams, query, result})
+    }
+
+    if (header) {
+      headerContent = header({models, qParams, query, result})
+    }
 
     return (
       <div className="content-container">
@@ -162,7 +174,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
           <EventDestroyed key={`event-destroyed-${model.cacheKey()}`} model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
         )}
 
-        <Card className="mb-4" table>
+        <Card className="mb-4" controls={controlsContent} header={headerContent} table>
           <thead>
             <tr>
               {this.props.headersContent({query})}
