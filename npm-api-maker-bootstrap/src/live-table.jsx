@@ -31,16 +31,24 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     modelClass: PropTypes.func.isRequired,
     onModelsLoaded: PropTypes.func,
     preloads: PropTypes.array.isRequired,
-    queryName: PropTypes.string.isRequired,
+    queryName: PropTypes.string,
     select: PropTypes.object
   })
 
   constructor(props) {
     super(props)
+
+    let queryName = props.queryName
+
+    if (!queryName) {
+      queryName = digg(props.modelClass.modelClassData(), "collectionKey")
+    }
+
     this.state = {
       currentHref: location.href,
-      queryQName: `${this.props.queryName}_q`,
-      queryPageName: `${this.props.queryName}_page`
+      queryName,
+      queryQName: `${queryName}_q`,
+      queryPageName: `${queryName}_page`
     }
   }
 
