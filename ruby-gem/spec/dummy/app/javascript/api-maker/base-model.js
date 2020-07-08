@@ -4,7 +4,7 @@ import CommandsPool from "./commands-pool"
 import { CustomError, FormDataToObject, ModelName, ValidationError } from "@kaspernj/api-maker"
 import ModelsResponseReader from "./models-response-reader"
 import Money from "js-money"
-import { objectToFormData } from "object-to-formdata"
+const objectToFormData = require("object-to-formdata").serialize
 import { ValidationErrors } from "./validation-errors"
 
 const inflection = require("inflection")
