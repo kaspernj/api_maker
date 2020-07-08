@@ -1,6 +1,6 @@
 import { Api, CustomError, FormDataToObject } from "@kaspernj/api-maker"
 import Deserializer from "./deserializer"
-import { objectToFormData } from "object-to-formdata"
+const objectToFormData = require("object-to-formdata").serialize
 
 export default class ApiMakerCommandsPool {
   static addCommand(data, args = {}) {
