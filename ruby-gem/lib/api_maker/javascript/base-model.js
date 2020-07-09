@@ -630,8 +630,10 @@ export default class BaseModel {
   }
 
   isAttributeLoaded(attributeName) {
-    if (attributeName in this.changes) return true
-    if (attributeName in this.modelData) return true
+    const attributeNameUnderscore = inflection.underscore(attributeName)
+
+    if (attributeNameUnderscore in this.changes) return true
+    if (attributeNameUnderscore in this.modelData) return true
     return false
   }
 
