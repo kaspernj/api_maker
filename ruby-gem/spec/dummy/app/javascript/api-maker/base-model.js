@@ -4,10 +4,10 @@ import CommandsPool from "./commands-pool"
 import { CustomError, FormDataToObject, ModelName, ValidationError } from "@kaspernj/api-maker"
 import ModelsResponseReader from "./models-response-reader"
 import Money from "js-money"
-const objectToFormData = require("object-to-formdata").serialize
 import { ValidationErrors } from "./validation-errors"
 
 const inflection = require("inflection")
+const objectToFormData = require("object-to-formdata").serialize
 
 export default class BaseModel {
   static modelClassData() {
@@ -630,8 +630,10 @@ export default class BaseModel {
   }
 
   isAttributeLoaded(attributeName) {
-    if (attributeName in this.changes) return true
-    if (attributeName in this.modelData) return true
+    const attributeNameUnderscore = inflection.underscore(attributeName)
+
+    if (attributeNameUnderscore in this.changes) return true
+    if (attributeNameUnderscore in this.modelData) return true
     return false
   }
 
