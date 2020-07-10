@@ -1,8 +1,28 @@
 import { Link } from "react-router-dom"
+import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import qs from "qs"
 import React from "react"
+import { Result } from "@kaspernj/api-maker"
 
 export default class ApiMakerBootstrapPaginate extends React.Component {
+  static propTypes = PropTypesExact({
+    result: PropTypes.instanceOf(Result).isRequired
+  })
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      pages: this.pages()
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.result != this.props.result) {
+      this.setState({pages: this.pages()})
+    }
+  }
+
   isPageActiveClass(pageNumber) {
     if (this.props.result.currentPage() == pageNumber)
       return "active"
@@ -30,6 +50,7 @@ export default class ApiMakerBootstrapPaginate extends React.Component {
 
   pagePath(pageNumber) {
     let pageKey = this.props.result.data.collection.queryArgs.pageKey
+
     if (!pageKey)
       pageKey = "page"
 
@@ -77,14 +98,17 @@ export default class ApiMakerBootstrapPaginate extends React.Component {
   }
 
   render() {
+    const {result} = this.props
+    const {pages} = this.state
+
     return (
-      <ul className="pagination">
-        <li className={`page-item ${this.props.result.currentPage() <= 1 ? "disabled" : ""}`} key="page-first">
+      <ul className="pagination" data-pages-length={pages.length}>
+        <li className={`page-item ${result.currentPage() <= 1 ? "disabled" : ""}`} key="page-first">
           <Link className="page-link" to={this.pagePath(1)}>
             ⇤
           </Link>
         </li>
-        <li className={`page-item ${this.props.result.currentPage() <= 1 ? "disabled" : ""}`} key="page-previous">
+        <li className={`page-item ${result.currentPage() <= 1 ? "disabled" : ""}`} key="page-previous">
           <Link className="page-link" to={this.previousPagePath()}>
             ←
           </Link>
@@ -96,7 +120,7 @@ export default class ApiMakerBootstrapPaginate extends React.Component {
             </a>
           </li>
         }
-        {this.pages().map(page =>
+        {pages.map(page =>
           <li className={`page-item ${this.isPageActiveClass(page)}`} key={`page-${page}`}>
             <Link className="page-link" to={this.pagePath(page)}>
               {page}
@@ -110,13 +134,13 @@ export default class ApiMakerBootstrapPaginate extends React.Component {
             </a>
           </li>
         }
-        <li className={`page-item ${this.props.result.currentPage() >= this.props.result.totalPages() ? "disabled" : ""}`} key="page-next">
+        <li className={`page-item ${result.currentPage() >= result.totalPages() ? "disabled" : ""}`} key="page-next">
           <Link className="page-link" to={this.nextPagePath()}>
             →
           </Link>
         </li>
-        <li className={`page-item ${this.props.result.currentPage() >= this.props.result.totalPages() ? "disabled" : ""}`} key="page-last">
-          <Link className="page-link" to={this.pagePath(this.props.result.totalPages())}>
+        <li className={`page-item ${result.currentPage() >= result.totalPages() ? "disabled" : ""}`} key="page-last">
+          <Link className="page-link" to={this.pagePath(result.totalPages())}>
             ⇥
           </Link>
         </li>
