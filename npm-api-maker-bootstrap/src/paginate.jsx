@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import qs from "qs"
 import React from "react"
