@@ -80,9 +80,9 @@ module ApiMaker::SpecHelper
     element = find(selector, *args)
     expect_no_browser_errors
     element
-  rescue Capybara::ElementNotFound
+  rescue Capybara::ElementNotFound => e
     expect_no_browser_errors
-    raise ApiMaker::SpecHelper::SelectorNotFoundError, "Timed out waiting for selector: #{selector}"
+    raise ApiMaker::SpecHelper::SelectorNotFoundError, e.message
   end
 
   def wait_for_browser(delay_sec: 0.2, message: "wait for browser", timeout_sec: 6)
