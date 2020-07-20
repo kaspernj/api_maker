@@ -36,8 +36,8 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     return (
       <select
         defaultValue={this.inputDefaultValue()}
-        id={this.inputId()}
-        name={this.inputName()}
+        id={idForComponent(this)}
+        name={nameForComponent(this)}
         ref="select"
         {...restProps}
       >
@@ -65,19 +65,11 @@ export default class ApiMakerBootstrapSelect extends React.Component {
   inputDefaultValue() {
     if ("defaultValue" in this.props) {
       return this.props.defaultValue
-    } else if (this.props.model) {
+    } else if (this.props.attribute && this.props.model) {
       if (!this.props.model[this.props.attribute])
         throw new Error(`No attribute by that name: ${this.props.attribute}`)
 
       return this.props.model[this.props.attribute]()
     }
-  }
-
-  inputId() {
-    return idForComponent(this)
-  }
-
-  inputName() {
-    return nameForComponent(this)
   }
 }
