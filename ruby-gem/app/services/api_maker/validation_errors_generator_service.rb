@@ -53,7 +53,9 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
 
       path << attribute_name
 
-      if all_keys_numeric?(attribute_value)
+      if attribute_value.is_a?(Array)
+        check_nested_many_models_for_validation_errors_on_array(association.target, attribute_value, path)
+      elsif all_keys_numeric?(attribute_value)
         # This is a has-many relationship where keys are mapped to attributes
         check_nested_many_models_for_validation_errors(association.target, attribute_value, path)
       else
@@ -76,6 +78,23 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
 
     count = 0
     attribute_value.each do |unique_key, model_attribute_values|
+      model_up_next = models_up_next.fetch(count)
+      count += 1
+
+      path << unique_key
+      inspect_model(model_up_next, path)
+      inspect_params(model_up_next, model_attribute_values, path)
+      path.pop
+    end
+  end
+
+  def check_nested_many_models_for_validation_errors_on_array(models_up_next, attribute_value, path)
+    if models_up_next.length != attribute_value.length
+      raise "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.length}"
+    end
+
+    count = 0
+    attribute_value.each_with_index do |model_attribute_values, unique_key|
       model_up_next = models_up_next.fetch(count)
       count += 1
 
