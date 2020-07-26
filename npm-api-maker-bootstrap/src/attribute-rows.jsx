@@ -4,8 +4,13 @@ import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class ApiMakerBootstrapAttributeRows extends React.Component {
+  static defaultProps = {
+    checkIfAttributeLoaded: false
+  }
+
   static propTypes = PropTypesExact({
     attributes: PropTypes.array.isRequired,
+    checkIfAttributeLoaded: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired
   })
 
@@ -28,6 +33,9 @@ export default class ApiMakerBootstrapAttributeRows extends React.Component {
     if (!(attribute in this.props.model))
       throw new Error(`Attribute not found: ${this.props.model.modelClassData().name}#${attribute}`)
 
+    if (this.props.checkIfAttributeLoaded && !this.props.model.isAttributeLoaded(attribute))
+      return ""
+
     return this.props.model[attribute]()
   }
 
@@ -42,7 +50,7 @@ export default class ApiMakerBootstrapAttributeRows extends React.Component {
 
       return I18n.t("js.shared.no")
     } else {
-      return this.value(attribute)
+      return value
     }
   }
 }
