@@ -1,5 +1,6 @@
 {
   "routes": [
+    {"name": "bootstrap_attribute_rows", "path": "/bootstrap/attribute-rows", "component": "bootstrap/attribute-rows"},
     {"name": "bootstrap_checkbox_boolean", "path": "/bootstrap/checkbox-boolean", "component": "bootstrap/checkbox-boolean"},
     {"name": "bootstrap_checkboxes", "path": "/bootstrap/checkboxes", "component": "bootstrap/checkboxes"},
     {"name": "bootstrap_sort_link", "path": "/bootstrap/sort-link", "component": "bootstrap/sort-link"},
