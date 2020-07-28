@@ -1,10 +1,11 @@
 class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
-  attr_reader :ability, :args, :collection, :params
+  attr_reader :ability, :args, :collection, :locals, :params
 
-  def initialize(args:, ability:, collection:, params: {})
+  def initialize(args:, ability:, collection:, locals: nil, params: {})
     @ability = ability
     @args = args
     @collection = collection
+    @locals = locals || args[:locals] || {}
     @params = params
   end
 
@@ -36,6 +37,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
       ability: ability,
       args: args,
       collection: collection,
+      locals: locals,
       query_params: params
     ).result
   end
@@ -75,7 +77,9 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     return if params[:through].blank?
 
     model_class = params[:through][:model].safe_constantize
-    through_model = model_class.accessible_by(ability).find(params[:through][:id])
+    through_model = model_class.accessible_by(ability).find_by(id: params[:through][:id])
+    binding.pry unless through_model
+    raise "Through model not found" unless through_model
     association = ActiveRecord::Associations::Association.new(through_model, model_class.reflections.fetch(params[:through][:reflection]))
 
     query_through = association.scope

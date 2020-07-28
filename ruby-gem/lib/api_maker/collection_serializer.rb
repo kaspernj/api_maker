@@ -100,6 +100,7 @@ class ApiMaker::CollectionSerializer
       args: args,
       collection: parsed_collection,
       data: data,
+      locals: locals,
       preload_param: preload_param,
       model_class: model_class,
       records: records,

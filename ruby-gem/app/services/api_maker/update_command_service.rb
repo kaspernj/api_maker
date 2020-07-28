@@ -6,8 +6,7 @@ class ApiMaker::UpdateCommandService < ApiMaker::CommandService
       collection: collection,
       commands: commands,
       command_response: command_response,
-      controller: controller,
-      locals: locals
+      controller: controller
     )
     succeed!
   end

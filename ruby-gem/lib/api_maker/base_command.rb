@@ -1,5 +1,5 @@
 class ApiMaker::BaseCommand
-  attr_reader :api_maker_args, :commands, :command_response, :collection, :controller, :current_ability, :locals
+  attr_reader :api_maker_args, :commands, :command_response, :collection, :controller, :current_ability
 
   # Returns true if the gem "goldiloader" is present in the app
   def self.goldiloader?
@@ -7,17 +7,20 @@ class ApiMaker::BaseCommand
     @goldiloader
   end
 
-  def initialize(ability:, args:, collection:, commands:, command_response:, controller:, locals:)
+  def initialize(ability:, args:, collection:, commands:, command_response:, controller:)
     @api_maker_args = args
     @current_ability = ability
     @collection = collection
     @commands = commands
     @command_response = command_response
     @controller = controller
-    @locals = locals
 
     # Make it possible to do custom preloads (useful in threadded mode that doesnt support Goldiloader)
     @collection = custom_collection(@collection) if respond_to?(:custom_collection)
+  end
+
+  def locals
+    @locals ||= ApiMaker::LocalsFromController.execute!(controller: controller)
   end
 
   def failure_response(errors:)

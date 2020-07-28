@@ -13,7 +13,6 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
             commands: command_data,
             command_name: command_name,
             controller: controller,
-            locals: locals,
             resource_name: resource_plural_name
           )
         end

@@ -1,7 +1,7 @@
 class ApiMaker::Preloader
   attr_reader :model_class
 
-  def initialize(ability: nil, args: nil, collection:, data:, preload_param:, model_class: nil, records:, select:, select_columns:) # rubocop:disable Metrics/ParameterLists
+  def initialize(ability: nil, args: nil, collection:, data:, locals:, preload_param:, model_class: nil, records:, select:, select_columns:) # rubocop:disable Metrics/ParameterLists
     @ability = ability
     @args = args
     @collection = collection
@@ -32,6 +32,7 @@ class ApiMaker::Preloader
           args: @args,
           collection: @collection,
           data: @data,
+          locals: locals,
           records: @records,
           reflection: reflection,
           select: @select,
@@ -46,6 +47,7 @@ class ApiMaker::Preloader
         args: @args,
         data: @data,
         collection: preload_result,
+        locals: locals,
         preload_param: value,
         model_class: reflection.klass,
         records: @data.fetch(:preloaded),
