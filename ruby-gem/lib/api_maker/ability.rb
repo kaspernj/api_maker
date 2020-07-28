@@ -3,9 +3,9 @@ class ApiMaker::Ability
 
   attr_reader :loader
 
-  def initialize(args: nil, locals:)
-    @args = args
-    @locals = locals
+  def initialize(args: nil, locals: nil)
+    @args = args || {}
+    @locals = locals || @args[:locals] || {}
     @loader = ApiMaker::AbilityLoader.new(ability: self, locals: locals, args: args)
   end
 

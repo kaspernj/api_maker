@@ -1,11 +1,12 @@
 class ApiMaker::Preloader
-  attr_reader :model_class
+  attr_reader :locals, :model_class
 
   def initialize(ability: nil, args: nil, collection:, data:, locals:, preload_param:, model_class: nil, records:, select:, select_columns:) # rubocop:disable Metrics/ParameterLists
     @ability = ability
     @args = args
     @collection = collection
     @data = data
+    @locals = locals
     @preload_param = preload_param
     @model_class = model_class || @collection.model
     @records = records
