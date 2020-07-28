@@ -16,6 +16,8 @@ class ApiMaker::AbilitiesLoader < ApiMaker::ApplicationService
   end
 
   def load_ability(ability_name)
+    Rails.logger.debug "API maker: Loading ability: #{ability_name}, #{model_class}"
+
     model_ids = model_class
       .accessible_by(ability, ability_name.to_sym)
       .where(id: serializers.map(&:id))
