@@ -77,9 +77,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     return if params[:through].blank?
 
     model_class = params[:through][:model].safe_constantize
-    through_model = model_class.accessible_by(ability).find_by(id: params[:through][:id])
-    binding.pry unless through_model
-    raise "Through model not found" unless through_model
+    through_model = model_class.accessible_by(ability).find(params[:through][:id])
     association = ActiveRecord::Associations::Association.new(through_model, model_class.reflections.fetch(params[:through][:reflection]))
 
     query_through = association.scope
