@@ -6,7 +6,8 @@ class ApiMaker::ServiceCommandService < ApiMaker::CommandService
       collection: nil,
       commands: commands,
       command_response: command_response,
-      controller: controller
+      controller: controller,
+      locals: locals
     )
 
     succeed!

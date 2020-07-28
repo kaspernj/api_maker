@@ -1,5 +1,5 @@
 class ApiMaker::Serializer
-  attr_reader :ability, :args, :model
+  attr_reader :ability, :args, :locals, :model
 
   delegate :id, to: :model
 
@@ -13,9 +13,10 @@ class ApiMaker::Serializer
     ApiMaker::MemoryStorage.current.resource_for_model(klass)
   end
 
-  def initialize(ability: nil, args: {}, model:, select: nil)
+  def initialize(ability: nil, args: {}, locals: nil, model:, select: nil)
     @ability = ability
     @args = args
+    @locals = locals || args[:locals] || {}
     @model = model
     @select = select
   end
@@ -66,7 +67,7 @@ class ApiMaker::Serializer
   end
 
   def resource_instance
-    @resource_instance ||= resource.new(ability: ability, args: args, model: model)
+    @resource_instance ||= resource.new(ability: ability, args: args, locals: locals, model: model)
   end
 
   def result

@@ -12,8 +12,9 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
             command_response: command_response,
             commands: command_data,
             command_name: command_name,
-            resource_name: resource_plural_name,
-            controller: controller
+            controller: controller,
+            locals: locals,
+            resource_name: resource_plural_name
           )
         end
       end
@@ -22,5 +23,9 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
     command_response.join_threads
 
     render json: {responses: command_response.result}
+  end
+
+  def locals
+    @locals ||= {}
   end
 end

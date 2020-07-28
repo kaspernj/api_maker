@@ -1,5 +1,5 @@
 class ApiMaker::BaseResource
-  attr_reader :ability, :args, :model
+  attr_reader :ability, :args, :locals, :model
 
   delegate :can, to: :ability
 
@@ -74,9 +74,10 @@ class ApiMaker::BaseResource
     @short_name ||= name.match(/\AResources::(.+)Resource\Z/)[1]
   end
 
-  def initialize(ability: nil, args: {}, model:)
+  def initialize(ability: nil, args: {}, locals:, model:)
     @ability = ability
     @args = args
+    @locals = locals || args[:locals] || {}
     @model = model
   end
 end

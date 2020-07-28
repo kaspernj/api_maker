@@ -3,9 +3,10 @@ class ApiMaker::Ability
 
   attr_reader :loader
 
-  def initialize(args: nil)
+  def initialize(args: nil, locals:)
     @args = args
-    @loader = ApiMaker::AbilityLoader.new(ability: self, args: args)
+    @locals = locals
+    @loader = ApiMaker::AbilityLoader.new(ability: self, locals: locals, args: args)
   end
 
   # Override methods from CanCan::Ability to first load abilities from the given resource

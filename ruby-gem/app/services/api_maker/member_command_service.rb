@@ -9,7 +9,8 @@ class ApiMaker::MemberCommandService < ApiMaker::CommandService
       collection: collection,
       commands: commands,
       command_response: command_response,
-      controller: controller
+      controller: controller,
+      locals: locals
     )
 
     succeed!

@@ -7,7 +7,8 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
         collection: nil,
         commands: commands,
         command_response: command_response,
-        controller: controller
+        controller: controller,
+        locals: locals
       )
     else
       fail_with_no_access
