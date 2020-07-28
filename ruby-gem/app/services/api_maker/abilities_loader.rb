@@ -54,7 +54,7 @@ class ApiMaker::AbilitiesLoader < ApiMaker::ApplicationService
       next if ability_data.fetch(:rule_with_no_conditions)
 
       # If no rules have been defined, then we can safely assume no access without doing a query elsewhere
-      if ability_data.fetch(:rules_count) == 0
+      if ability_data.fetch(:rules_count).zero?
         abilities_with_no_rules << ability_name
       else
         identifier = ability_data[:combined_conditions].join("___")
