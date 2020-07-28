@@ -33,10 +33,8 @@ class ApiMaker::AbilitiesLoader < ApiMaker::ApplicationService
         rule_with_no_conditions: false
       }
 
-      ability.__send__(:rules).each do |can_can_rule|
-        next if can_can_rule.subjects.exclude?(model_class)
-        next if can_can_rule.actions.exclude?(ability_name)
-
+      relevant_rules = ability.__send__(:relevant_rules, ability_name, model_class)
+      relevant_rules.each do |can_can_rule|
         abilities_data[ability_name][:combined_conditions] << can_can_rule.conditions.to_s
         abilities_data[ability_name][:rules_count] += 1
 
