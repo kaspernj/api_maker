@@ -8,7 +8,11 @@ class ApiMaker::BaseController < ApplicationController
 private
 
   def current_ability
-    @current_ability ||= ApiMaker::Configuration.current.ability_class.new(args: api_maker_args)
+    @current_ability ||= ApiMaker::Configuration.current.ability_class.new(args: api_maker_args, locals: api_maker_locals)
+  end
+
+  def api_maker_locals
+    @api_maker_locals ||= {}
   end
 
   def render_error(error)

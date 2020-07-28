@@ -1,10 +1,11 @@
 class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
-  attr_reader :ability, :args, :collection, :params
+  attr_reader :ability, :args, :collection, :locals, :params
 
-  def initialize(args:, ability:, collection:, params: {})
+  def initialize(args:, ability:, collection:, locals: nil, params: {})
     @ability = ability
     @args = args
     @collection = collection
+    @locals = locals || args[:locals] || {}
     @params = params
   end
 
@@ -36,6 +37,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
       ability: ability,
       args: args,
       collection: collection,
+      locals: locals,
       query_params: params
     ).result
   end

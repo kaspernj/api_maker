@@ -19,6 +19,10 @@ class ApiMaker::BaseCommand
     @collection = custom_collection(@collection) if respond_to?(:custom_collection)
   end
 
+  def locals
+    @locals ||= ApiMaker::LocalsFromController.execute!(controller: controller)
+  end
+
   def failure_response(errors:)
     command.fail(
       model: serialized_model(model),

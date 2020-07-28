@@ -1,15 +1,16 @@
 class ApiMaker::CollectionSerializer
-  attr_reader :ability, :args, :collection, :preload_param, :query_params, :select, :select_columns
+  attr_reader :ability, :args, :collection, :locals, :preload_param, :query_params, :select, :select_columns
 
   delegate :require_name, to: :resource
 
-  def initialize(ability: nil, args: {}, collection:, model_class: nil, query_params: nil)
+  def initialize(ability: nil, args: {}, collection:, locals: nil, model_class: nil, query_params: nil)
     raise "No collection was given" unless collection
 
     @query_params = query_params || {}
     @ability = ability || ApiMaker::Ability.new(args: args)
     @args = args
     @collection = collection
+    @locals = locals || args[:locals] || {}
     @preload_param = @query_params[:preload]
     @model_class = model_class
     @select = ApiMaker::SelectParser.execute!(select: query_params[:select]) if @query_params[:select]
@@ -99,6 +100,7 @@ class ApiMaker::CollectionSerializer
       args: args,
       collection: parsed_collection,
       data: data,
+      locals: locals,
       preload_param: preload_param,
       model_class: model_class,
       records: records,
@@ -113,7 +115,7 @@ class ApiMaker::CollectionSerializer
   end
 
   def serializer_for_model(model)
-    ApiMaker::Serializer.new(ability: ability, args: args, model: model, select: select_for(model))
+    ApiMaker::Serializer.new(ability: ability, args: args, locals: locals, model: model, select: select_for(model))
   end
 
   def to_json(options = nil)

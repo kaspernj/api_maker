@@ -1,11 +1,12 @@
 class ApiMaker::Preloader
-  attr_reader :model_class
+  attr_reader :locals, :model_class, :preload_param
 
-  def initialize(ability: nil, args: nil, collection:, data:, preload_param:, model_class: nil, records:, select:, select_columns:) # rubocop:disable Metrics/ParameterLists
+  def initialize(ability: nil, args: nil, collection:, data:, locals:, preload_param:, model_class: nil, records:, select:, select_columns:) # rubocop:disable Metrics/ParameterLists
     @ability = ability
     @args = args
     @collection = collection
     @data = data
+    @locals = locals
     @preload_param = preload_param
     @model_class = model_class || @collection.model
     @records = records
@@ -14,7 +15,7 @@ class ApiMaker::Preloader
   end
 
   def fill_data
-    parsed = ApiMaker::RelationshipPreloader.parse(@preload_param)
+    parsed = ApiMaker::RelationshipPreloader.parse(preload_param)
     return unless parsed
 
     parsed.each do |key, value|
@@ -26,12 +27,15 @@ class ApiMaker::Preloader
       fill_empty_relationships_for_key(reflection, key)
       preload_class = preload_class_for_key(reflection)
 
+      Rails.logger.debug "API maker: Preloading: #{model_class}.#{key}"
+
       preload_result = ApiMaker::Configuration.profile("Preloading #{reflection.klass.name} with #{preload_class.name}") do
         preload_class.new(
           ability: @ability,
           args: @args,
           collection: @collection,
           data: @data,
+          locals: locals,
           records: @records,
           reflection: reflection,
           select: @select,
@@ -46,6 +50,7 @@ class ApiMaker::Preloader
         args: @args,
         data: @data,
         collection: preload_result,
+        locals: locals,
         preload_param: value,
         model_class: reflection.klass,
         records: @data.fetch(:preloaded),
