@@ -23,8 +23,4 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
 
     render json: {responses: command_response.result}
   end
-
-  def locals
-    @locals ||= {}
-  end
 end
