@@ -27,8 +27,6 @@ class ApiMaker::CollectionSerializer
         add_model_to_records(model, data, records)
       end
 
-      serializers = records[resource.collection_name]&.values
-
       preload_collection(data, records) if parsed_collection.length.positive?
       load_abilities(data) if query_params[:abilities]
 
@@ -37,7 +35,7 @@ class ApiMaker::CollectionSerializer
   end
 
   def load_abilities(data)
-    data.fetch(:preloaded).each do |model_name, models|
+    data.fetch(:preloaded).each_value do |models|
       next if models.empty?
 
       serializers = models.values
