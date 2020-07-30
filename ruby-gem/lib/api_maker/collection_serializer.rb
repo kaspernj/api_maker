@@ -1,8 +1,6 @@
 class ApiMaker::CollectionSerializer
   attr_reader :ability, :args, :collection, :locals, :preload_param, :query_params, :select, :select_columns
 
-  delegate :require_name, to: :resource
-
   def initialize(ability: nil, args: {}, collection:, locals: nil, model_class: nil, query_params: nil)
     raise "No collection was given" unless collection
 
@@ -17,10 +15,6 @@ class ApiMaker::CollectionSerializer
     @select_columns = @query_params[:select_columns]
   end
 
-  def abilities
-    @abilities ||= query_params[:abilities][require_name] if query_params[:abilities]
-  end
-
   def result
     @result ||= begin
       data = {
@@ -33,11 +27,22 @@ class ApiMaker::CollectionSerializer
         add_model_to_records(model, data, records)
       end
 
-      serializers = records[resource.collection_name]&.values
+      preload_collection(data, records) if parsed_collection.length.positive?
+      load_abilities(data) if query_params[:abilities]
+
+      data
+    end
+  end
+
+  def load_abilities(data)
+    data.fetch(:preloaded).each_value do |models|
+      next if models.empty?
+
+      serializers = models.values
+      serializer = models.values.first
+      abilities = query_params.dig(:abilities, serializer.resource.require_name)
 
       ApiMaker::AbilitiesLoader.execute!(abilities: abilities, ability: ability, serializers: serializers) if abilities && serializers
-      preload_collection(data, records) if parsed_collection.length.positive?
-      data
     end
   end
 
