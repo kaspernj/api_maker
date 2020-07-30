@@ -71,12 +71,10 @@ class ApiMaker::Serializer
   end
 
   def result
-    @result ||= begin
-      result = {a: attributes}
-      result[:b] = @abilities if @abilities # Only use b-key if any abilities was loaded
-      result[:r] = @relationships if @relationships # Only preload relationships if set
-      result
-    end
+    result = {a: attributes}
+    result[:b] = @abilities if @abilities # Only use b-key if any abilities was loaded
+    result[:r] = @relationships if @relationships # Only preload relationships if set
+    result
   end
 
   def as_json(_options = nil)
