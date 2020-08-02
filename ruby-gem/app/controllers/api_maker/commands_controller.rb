@@ -12,8 +12,8 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
             command_response: command_response,
             commands: command_data,
             command_name: command_name,
-            resource_name: resource_plural_name,
-            controller: controller
+            controller: controller,
+            resource_name: resource_plural_name
           )
         end
       end

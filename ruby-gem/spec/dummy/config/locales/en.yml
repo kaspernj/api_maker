@@ -8,3 +8,4 @@ en:
         name: Name
       user:
         email: Email
+        updated_at: Updated at

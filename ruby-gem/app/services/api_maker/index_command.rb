@@ -6,6 +6,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
           ability: current_ability,
           args: api_maker_args,
           collection: collection,
+          locals: locals,
           params: command.args || {}
         )
         command.result(result)
