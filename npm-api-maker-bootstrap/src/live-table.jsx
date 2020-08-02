@@ -1,5 +1,5 @@
 import { EventCreated, EventDestroyed, Params } from "@kaspernj/api-maker"
-import { Paginate } from "@kaspernj/api-maker-bootstrap"
+import { Card, Paginate } from "@kaspernj/api-maker-bootstrap"
 import Collection from "api-maker/collection"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
