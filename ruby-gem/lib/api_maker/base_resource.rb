@@ -77,7 +77,7 @@ class ApiMaker::BaseResource
   def initialize(ability: nil, args: {}, locals:, model:)
     @ability = ability
     @args = args
-    @locals = locals || args[:locals] || {}
+    @locals = locals || args&.dig(:locals) || {}
     @model = model
   end
 end
