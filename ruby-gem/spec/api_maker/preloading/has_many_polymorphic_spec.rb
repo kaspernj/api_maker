@@ -17,6 +17,6 @@ describe "preloading - has many polymorphic" do
 
   it "adds a special type argument to the ransack for the models load method" do
     task_model = File.read(Rails.root.join("app/javascript/api-maker/models/task.js"))
-    expect(task_model).to include '{"ransack":{"resource_id_eq":id,"resource_type":"Task"}}'
+    expect(task_model).to include '{"ransack":{"resource_id_eq":id,"resource_type_eq":"Task"}}'
   end
 end
