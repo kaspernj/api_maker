@@ -17,7 +17,7 @@ import Params from "./params"
 import Result from "./result"
 import Services from "./services"
 import SourceMapsLoader from "./source-maps-loader"
-import UpdatedAttribute from "./result"
+import UpdatedAttribute from "./updated-attribute"
 
 export {
   Api,
