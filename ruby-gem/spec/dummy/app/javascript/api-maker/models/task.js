@@ -24,7 +24,7 @@ export default class Task extends BaseModel {
       comments() {
         const id = this.id()
         const modelClass = require(`api-maker/models/comment`).default
-        return new Collection({"reflectionName":"comments","model":this,"modelName":"Comment","modelClass":modelClass,"targetPathName":"/api_maker/comments"}, {"ransack":{"resource_id_eq":id,"resource_type":"Task"}})
+        return new Collection({"reflectionName":"comments","model":this,"modelName":"Comment","modelClass":modelClass,"targetPathName":"/api_maker/comments"}, {"ransack":{"resource_id_eq":id,"resource_type_eq":"Task"}})
       }
     
   
