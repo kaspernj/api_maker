@@ -82,8 +82,8 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
 
     query_through = association.scope
     query_through = query_through.accessible_by(ability)
-    query_through = filter_custom_accessible_by(query_through)
-    query_through
+
+    filter_custom_accessible_by(query_through)
   end
 
   def set_query
