@@ -22,7 +22,7 @@ describe "bootstrap - sort link" do
 
     wait_for_browser do
       task_row_ids = all(".task-row").map { |element| element["data-task-id"] }
-      expect(task_row_ids).to eq %w[5 4 3 2 1]
+      task_row_ids == %w[5 4 3 2 1]
     end
   end
 end
