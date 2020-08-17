@@ -20,31 +20,31 @@ builds:
   build_1:
     name: Ruby gem / RSpec Kaminari
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec appraisal kaminari rspec spec/api_maker spec/services
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec appraisal kaminari rspec --format documentation spec/api_maker spec/services
   build_2:
     name: Ruby gem / RSpec WillPaginate
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec appraisal will_paginate rspec spec/api_maker spec/services
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec appraisal will_paginate rspec --format documentation spec/api_maker spec/services
   build_3:
     name: Ruby gem / Chrome Kaminari
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec spec/system
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
   build_4:
     name: Ruby gem / Chrome WillPaginate
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec spec/system
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_5:
     name: Ruby gem / Firefox Kaminari
     environment:
       SELENIUM_DRIVER: firefox
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec spec/system
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
   build_6:
     name: Ruby gem / Firefox WillPaginate
     environment:
       SELENIUM_DRIVER: firefox
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec spec/system
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_7:
     name: Ruby gem / Linters
     script:
