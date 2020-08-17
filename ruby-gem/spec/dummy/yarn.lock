@@ -725,22 +725,22 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@kaspernj/api-maker-bootstrap@1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.8.tgz#0e71a0ca3106982d38570884ebace89b15817610"
-  integrity sha512-vu/+9MPL2gjtYTuE9M5lg1ZcF9maNCnA92khSUNRU+fEYofyyo11ogXjKrV8qY529zxEbyd+s725RHXyZKgRZw==
+"@kaspernj/api-maker-bootstrap@1.0.18":
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.18.tgz#3d59401b0a54375565114131008b2882e21035dd"
+  integrity sha512-piad3j7mh71EYiV7fxAVl03DtLd9xGK/dfP1JI2hsYltxdFS7idejsHW1hzo30XJlbD2ZMxA1dUDszYTCcKo+g==
   dependencies:
     "@kaspernj/object-digger" "^1.0.1"
 
-"@kaspernj/api-maker-inputs@1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.7.tgz#c4923d1c38630248cd2e720906b835a583214ddf"
-  integrity sha512-+Pp7TjWaX7xFeaYjWZCe9i28w3WLtiilXfAuBLIme/hrwa4na/ekbBIY1fY/Qqs8bzyROOYyE7gFgBmxK93uvg==
+"@kaspernj/api-maker-inputs@1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.9.tgz#0bb5cfa448aaba85ab4d643966c94b2b98990ee6"
+  integrity sha512-CHnYIk6D2bQmmYDB2Hj/txoxO+WYCGfTXCrfKG9m8bY4uguu8YGKqCPjhpXhzNP3sEYJcdpG/soO5UEmI2nXDA==
 
-"@kaspernj/api-maker@1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.7.tgz#00cb62a3a3e54d87c5f7a5493ccc63adf11ff2e4"
-  integrity sha512-YdSZ+O5KTw7kfq6Q1scZJyRzH3O9TWhQcATId834EFiQS6HahxaA+MfRiD3VgyXqyr3sUGrUP/DY7615dL0ftw==
+"@kaspernj/api-maker@1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.8.tgz#00c199f25f9f5fe1a7a2e6032a8ba75f9a26db35"
+  integrity sha512-t4HzT6I85EdYPMQxvlX5afm/8F97J7K4Vm4O7YNc+yecVkj2GTKK3iojaeSROrRid68/gGti+BdZ2TZ6YPmj8A==
 
 "@kaspernj/object-digger@^1.0.1":
   version "1.0.1"
