@@ -3,7 +3,7 @@
   import Collection from "../collection"
 <% end %>
 
-<%= "export default " if export_default? %> class <%= resource.short_name %> extends BaseModel {
+<%= "export default" if export_default? %> class <%= resource.short_name %> extends BaseModel {
   static modelClassData() {
     return <%= {
       attributes: attributes,

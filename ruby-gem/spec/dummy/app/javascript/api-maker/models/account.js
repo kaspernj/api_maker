@@ -1,5 +1,7 @@
-import BaseModel from "../base-model"
-import Collection from "../collection"
+
+  import BaseModel from "../base-model"
+  import Collection from "../collection"
+
 
 export default class Account extends BaseModel {
   static modelClassData() {
