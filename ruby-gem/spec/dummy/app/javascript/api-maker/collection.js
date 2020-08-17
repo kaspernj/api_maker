@@ -1,3 +1,4 @@
+import {digg} from "@kaspernj/object-digger"
 import CommandsPool from "./commands-pool"
 import merge from "merge"
 import ModelsResponseReader from "./models-response-reader"
@@ -187,7 +188,9 @@ export default class Collection {
   }
 
   modelClass() {
-    return require("api-maker/models")[this.args.modelClass.modelClassData().name]
+    const modelName = this.args.modelClass.modelClassData().name
+
+    return digg(require("api-maker/models"), modelName)
   }
 
   _clone(args) {

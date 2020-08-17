@@ -75,6 +75,13 @@ RSpec.configure do |config|
       # Run some additional clean up task - can be filtered by example metadata
       Capybara.reset! if ex.metadata[:type] == :system
     end
+
+    # Timeout after some time to avoid freezes
+    config.around do |example|
+      Timeout.timeout(30) do
+        example.run
+      end
+    end
   end
 
   config.prepend_before(:each, type: :system) do
@@ -87,13 +94,6 @@ RSpec.configure do |config|
           args: %w[disable-dev-shm-usage disable-gpu headless no-sandbox]
         },
         screen_size: [1920, 1200]
-    end
-  end
-
-  # Timeout after some time to avoid freezes
-  config.around do |example|
-    Timeout.timeout(30) do
-      example.run
     end
   end
 
