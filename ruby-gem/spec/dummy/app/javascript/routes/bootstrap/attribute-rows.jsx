@@ -1,5 +1,5 @@
 import {AttributeRows, Card} from "@kaspernj/api-maker-bootstrap"
-import User from "api-maker/models/user"
+import {User} from "api-maker/models"
 
 export default class RouteBootstrapAttributeRows extends React.Component {
   constructor(props) {

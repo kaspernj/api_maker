@@ -49,8 +49,7 @@ export class ValidationError {
   }
 
   getModelClass() {
-    const modelFileName = inflection.dasherize(this.modelName)
-    const modelClass = require(`api-maker/models/${modelFileName}`).default
+    const modelClass = require("api-maker/models")[this.modelName]
     return modelClass
   }
 

@@ -187,7 +187,7 @@ export default class Collection {
   }
 
   modelClass() {
-    return require(`api-maker/models/${inflection.dasherize(inflection.singularize(this.args.modelClass.modelClassData().collectionName))}`).default
+    return require("api-maker/models")[this.args.modelClass.modelClassData().name]
   }
 
   _clone(args) {

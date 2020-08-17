@@ -21,20 +21,6 @@ class ApiMaker::GenerateReactNativeApiService < ApiMaker::ApplicationService
     Dir.mkdir(root_folder) unless Dir.exist?(root_folder)
   end
 
-  def create_model_files
-    model_generator_service.models.each do |model|
-      next if model_generator_service.ignore_model?(model)
-
-      model_content_response = ApiMaker::ModelContentGeneratorService.execute!(model: model)
-
-      if model_content_response.success?
-        File.open(model_file(model), "w") { |fp| fp.write(model_content_response.result) }
-      else
-        puts model_content_response.errors.join(". ")
-      end
-    end
-  end
-
   def model_generator_service
     @model_generator_service ||= ApiMaker::ModelsGeneratorService.new
   end

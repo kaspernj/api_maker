@@ -1,7 +1,6 @@
 import DisplayNotification from "shared/display-notification"
 import Params from "shared/params"
-
-import User from "api-maker/models/user"
+import {User} from "api-maker/models"
 
 export default class ModelsValidationErrors extends React.Component {
   constructor(props) {

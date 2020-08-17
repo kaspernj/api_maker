@@ -15,8 +15,6 @@ class ApiMaker::ModelClassesJavaScriptGeneratorService < ApiMaker::ApplicationSe
 
     javascript_code << "export {#{resource_names.sort.join(", ")}}\n"
 
-    Rails.logger.info "GENERATED JAVASCRIPT CODE:\n\n#{javascript_code}\n\n"
-
     succeed! javascript_code
   end
 

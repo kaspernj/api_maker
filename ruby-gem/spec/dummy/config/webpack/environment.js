@@ -1,4 +1,5 @@
 const { environment } = require("@rails/webpacker")
+const erb = require('./loaders/erb')
 const path = require("path")
 const webpack = require("webpack")
 
@@ -17,15 +18,15 @@ environment.loaders.append("babel", {
 environment.plugins.append(
   "ProvidePlugin",
   new webpack.ProvidePlugin({
-    Account: ["api-maker/models/account", "default"],
+    Account: ["api-maker/models", "Account"],
     Hash: ["shared/hash", "default"],
     Layout: ["components/layout", "default"],
     Params: ["shared/params", "default"],
-    Project: ["api-maker/models/project", "default"],
+    Project: ["api-maker/models", "Project"],
     PropTypesExact: "prop-types-exact",
     React: "react",
     setStateAsync: ["shared/set-state-async", "default"],
-    Task: ["api-maker/models/task", "default"],
+    Task: ["api-maker/models", "Task"],
 
     Checkbox: ["@kaspernj/api-maker-bootstrap", "Checkbox"],
     Checkboxes: ["@kaspernj/api-maker-bootstrap", "Checkboxes"],
@@ -34,4 +35,5 @@ environment.plugins.append(
   })
 )
 
+environment.loaders.prepend('erb', erb)
 module.exports = environment

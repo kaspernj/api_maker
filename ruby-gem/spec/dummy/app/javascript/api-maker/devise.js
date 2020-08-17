@@ -45,7 +45,7 @@ export default class Devise {
     const response = await Api.post("/api_maker/devise/do_sign_in", postData)
 
     if (response.success) {
-      const modelClass = require(`api-maker/models/${inflection.dasherize(args.scope)}`).default
+      const modelClass = require("api-maker/models")[inflection.camelize(args.scope)]
       const modelInstance = new modelClass(response.model_data)
 
       CanCan.current().resetAbilities()
@@ -104,7 +104,7 @@ export default class Devise {
     if (!scopeData)
       return null
 
-    const modelClass = require(`api-maker/models/${inflection.dasherize(inflection.underscore(scope))}`).default
+    const modelClass = require("api-maker/models")[inflection.camelize(scope)]
     const modelInstance = new modelClass({data: JSON.parse(scopeData)})
 
     return modelInstance

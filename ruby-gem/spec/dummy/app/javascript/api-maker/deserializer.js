@@ -14,7 +14,7 @@ export default class ApiMakerDeserializer {
         return Money.fromInteger(cents, currency)
       } else if (object.api_maker_type == "model") {
         const modelClassName = inflection.singularize(object.model_name)
-        const modelClass = require(`api-maker/models/${modelClassName}`).default
+        const modelClass = require("api-maker/models")[modelClassName]
         const model = new modelClass({data: object.serialized, isNewRecord: false})
 
         return model
