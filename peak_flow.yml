@@ -32,7 +32,7 @@ builds:
   build_4:
     name: Ruby gem / Chrome WillPaginate
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation pec/system
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_5:
     name: Ruby gem / Firefox Kaminari
     environment:
