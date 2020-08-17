@@ -90,6 +90,13 @@ RSpec.configure do |config|
     end
   end
 
+  # Timeout after 15 seconds
+  config.around :each do |example|
+    Timeout.timeout(15) do
+      example.run
+    end
+  end
+
   config.before(:suite) do
     Warden.test_mode!
     ApiMaker::ModelsGeneratorService.execute!
