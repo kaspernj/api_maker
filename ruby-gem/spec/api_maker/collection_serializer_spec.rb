@@ -30,10 +30,10 @@ describe ApiMaker::CollectionSerializer do
     project_preload = result.fetch("preloaded").fetch("projects").fetch("2")
     task_preload = result.fetch("preloaded").fetch("tasks").fetch("3")
 
-    expect(project_preload.dig("a", "name")).to eq "Test project"
-    expect(project_preload.dig("r")).to eq("account" => 1)
+    expect(project_preload.dig!("a", "name")).to eq "Test project"
+    expect(project_preload.fetch("r")).to eq("account" => 1)
 
-    expect(task_preload.dig("r")).to eq(
+    expect(task_preload.fetch("r")).to eq(
       "account" => 1,
       "project" => 2
     )

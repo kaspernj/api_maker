@@ -49,7 +49,7 @@ module ApiMaker::SpecHelper
       .join("\n")
 
     expect_no_browser_window_errors
-    return if logs.blank? || !logs.include?("SEVERE ")
+    return if logs.blank? || logs.exclude?("SEVERE ")
 
     # Lets try one more time - just in case browser window error got registered meanwhile
     sleep 0.4

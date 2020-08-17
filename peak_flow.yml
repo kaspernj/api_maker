@@ -10,46 +10,46 @@ before_script:
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-bootstrap
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-inputs
-  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle install --jobs 4 --without production staging
-  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec appraisal install
+  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle install --jobs 4 --without production staging
+  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec appraisal install
   - cd ruby-gem/spec/dummy && yarn
-  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
-  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
-  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem/spec/dummy && rake api_maker:generate_models
+  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
+  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
+  - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem/spec/dummy && rake api_maker:generate_models
 builds:
   build_1:
     name: Ruby gem / RSpec Kaminari
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec appraisal kaminari rspec --format documentation spec/api_maker spec/services
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec appraisal kaminari rspec --format documentation spec/api_maker spec/services
   build_2:
     name: Ruby gem / RSpec WillPaginate
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec appraisal will_paginate rspec --format documentation spec/api_maker spec/services
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec appraisal will_paginate rspec --format documentation spec/api_maker spec/services
   build_3:
     name: Ruby gem / Chrome Kaminari
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
   build_4:
     name: Ruby gem / Chrome WillPaginate
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation pec/system
   build_5:
     name: Ruby gem / Firefox Kaminari
     environment:
       SELENIUM_DRIVER: firefox
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
   build_6:
     name: Ruby gem / Firefox WillPaginate
     environment:
       SELENIUM_DRIVER: firefox
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_7:
     name: Ruby gem / Linters
     script:
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec rubocop
-      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.5.7 && cd ruby-gem && bundle exec rails_best_practices
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec rubocop
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec rails_best_practices
   build_8:
     name: NPM inputs / Jest
     script:
