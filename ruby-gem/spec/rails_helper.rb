@@ -90,9 +90,9 @@ RSpec.configure do |config|
     end
   end
 
-  # Timeout after 15 seconds
+  # Timeout after some time to avoid freezes
   config.around :each do |example|
-    Timeout.timeout(15) do
+    Timeout.timeout(30) do
       example.run
     end
   end
