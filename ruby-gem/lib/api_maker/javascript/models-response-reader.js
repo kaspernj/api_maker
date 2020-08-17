@@ -22,7 +22,7 @@ export default class ModelsResponseReader {
     const models = []
 
     for(const modelType in this.response.data) {
-      const modelClassName = inflection.camelize(inflection.singularize(modelType))
+      const modelClassName = inflection.classify(modelType.replace(/-/, "_"))
       const modelClass = require("api-maker/models")[modelClassName]
       const collectionName = inflection.dasherize(modelClass.modelClassData().collectionName)
 
