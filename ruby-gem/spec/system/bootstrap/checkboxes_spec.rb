@@ -19,7 +19,7 @@ describe "bootstrap - checkboxes" do
 
     check task1.name
 
-    find("input[type=submit]").click
+    wait_for_and_find("input[type=submit]").click
 
     wait_for_browser { AccountMarkedTask.where(account: account, task: task1).any? }
 
