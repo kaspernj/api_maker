@@ -91,7 +91,7 @@ RSpec.configure do |config|
   end
 
   # Timeout after some time to avoid freezes
-  config.around :each do |example|
+  config.around do |example|
     Timeout.timeout(30) do
       example.run
     end
