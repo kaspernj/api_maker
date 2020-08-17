@@ -47,12 +47,10 @@ class ApiMaker::CommandResponse
 
 private
 
-  def spawn_thread
+  def spawn_thread(&blk)
     @threads << Thread.new do
       Rails.application.executor.wrap do
-        I18n.with_locale(locale) do
-          yield
-        end
+        I18n.with_locale(locale, &blk)
       end
     rescue => e # rubocop:disable Style/RescueStandardError
       puts e.inspect

@@ -35,7 +35,7 @@ class ApiMaker::IndividualCommand
 
   def raise_model_not_found_or_no_access
     command_name = command.class.name
-      .gsub(/\ACommands::/, "")
+      .delete_prefix("Commands::")
       .gsub(/Command\Z/, "")
 
     model_name = collection.klass.name

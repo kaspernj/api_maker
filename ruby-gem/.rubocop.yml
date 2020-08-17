@@ -9,6 +9,8 @@ AllCops:
     - node_modules/**/*
     - spec/dummy/db/schema.rb
     - spec/dummy/node_modules/**/*
+  NewCops: enable
+  TargetRubyVersion: 2.6
 
 require:
   - rubocop-performance
@@ -54,6 +56,9 @@ Layout/SpaceAroundMethodCallOperator:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Lint/MissingSuper:
+  Enabled: false
+
 Lint/RaiseException:
   Enabled: true
 
@@ -70,19 +75,22 @@ Metrics/ClassLength:
   Max: 250
 
 Metrics/CyclomaticComplexity:
-  Max: 10
+  Max: 12
 
 Metrics/MethodLength:
   Max: 50
 
 Metrics/PerceivedComplexity:
-  Max: 10
+  Max: 12
 
 # .find_each is not the same as .each
 Rails/FindEach:
   Enabled: false
 
 RSpec/AnyInstance:
+  Enabled: false
+
+Style/CaseLikeIf:
   Enabled: false
 
 RSpec/ContextWording:
@@ -106,6 +114,9 @@ RSpec/MessageSpies:
 RSpec/MultipleExpectations:
   Enabled: false
 
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
 RSpec/NamedSubject:
   Enabled: false
 
@@ -125,6 +136,9 @@ Style/ExponentialNotation:
   Enabled: true
 
 Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/HashAsLastArrayItem:
   Enabled: false
 
 Style/HashEachMethods:

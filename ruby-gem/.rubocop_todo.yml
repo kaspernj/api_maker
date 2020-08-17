@@ -8,7 +8,7 @@
 
 # Offense count: 5
 Metrics/AbcSize:
-  Max: 31
+  Max: 32
 
 # Offense count: 7
 # Configuration parameters: CountKeywordArgs.

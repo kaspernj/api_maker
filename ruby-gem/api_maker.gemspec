@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "A Rails gem for generating a JavaScript API automatically based on your ActiveRecord models."
   s.description = "A Rails gem for generating a JavaScript API automatically based on your ActiveRecord models."
   s.license     = "MIT"
+  s.required_ruby_version = ">= 2.6.0"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
