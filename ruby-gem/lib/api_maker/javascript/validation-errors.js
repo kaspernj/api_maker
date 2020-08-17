@@ -51,7 +51,9 @@ export class ValidationError {
   }
 
   getModelClass() {
-    return digg(require("api-maker/models"), digg(this, "modelName"))
+    const modelName = inflection.classify(digg(this, "modelName"))
+
+    return digg(require("api-maker/models"), modelName)
   }
 
   setHandled() {

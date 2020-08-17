@@ -188,7 +188,7 @@ export default class Collection {
   }
 
   modelClass() {
-    const modelName = this.args.modelClass.modelClassData().name
+    const modelName = digg(this.args.modelClass.modelClassData(), "name")
 
     return digg(require("api-maker/models"), modelName)
   }
