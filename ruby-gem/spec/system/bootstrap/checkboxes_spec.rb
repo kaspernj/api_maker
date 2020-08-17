@@ -11,42 +11,63 @@ describe "bootstrap - checkboxes" do
     task1
     task2
 
+    puts "SIGN IN"
     login_as user
 
+    puts "VISIT"
     visit bootstrap_checkboxes_path(account_id: account.id)
 
+    puts "WAIT FOR CONTENT"
     wait_for_selector ".content-container"
 
+    puts "CHECK"
     check task1.name
 
+    puts "SUBMIT"
     wait_for_and_find("input[type=submit]").click
 
+    puts "WAIT FOR SUBMIT"
     wait_for_browser { AccountMarkedTask.where(account: account, task: task1).any? }
 
+    puts "EXPECT"
     expect(AccountMarkedTask.where(account: account, task: task2).any?).to eq false
+
+    puts "DONE"
   end
 
   it "deletes the last relationship" do
     account_market_task1
 
+    puts "LOGIN"
     login_as user
 
+    puts "VISIT"
     visit bootstrap_checkboxes_path(account_id: account.id)
 
+    puts "WAIT FOR CONTENT"
     wait_for_selector ".content-container"
 
-    checkbox_input = find("input[type='checkbox']")
+    puts "CHECK"
+    checkbox_input = wait_for_and_find("input[type='checkbox']")
     expect(checkbox_input[:checked]).to eq "true"
 
+    puts "UNCHECK"
     uncheck task1.name
 
-    find("input[type=submit]").click
+    puts "SUBMIT"
+    wait_for_and_find("input[type=submit]").click
 
     wait_for_browser do
+      puts "WAIT FOR BROWSER"
       account_market_task1.reload
+
+      puts "FOUND AS NOT EXPECTED"
       false
     rescue ActiveRecord::RecordNotFound
+      puts "NOT FOUND AS EXPECTED"
       true
     end
+
+    puts "DONE"
   end
 end
