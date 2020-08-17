@@ -7,7 +7,15 @@ describe "bootstrap - checkboxes" do
   let(:task2) { create :task, user: user }
   let(:user) { create :user }
 
-  it "adds new relationships" do
+  before do
+    ActiveRecord::Base.logger = Logger.new(STDOUT)
+  end
+
+  after do
+    ActiveRecord::Base.logger = nil
+  end
+
+  it "adds a new relationships" do
     task1
     task2
 

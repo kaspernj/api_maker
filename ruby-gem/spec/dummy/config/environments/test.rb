@@ -48,6 +48,4 @@ Rails.application.configure do
   config.webpacker.check_yarn_integrity = false
 
   config.hosts << "127.0.0.1"
-
-  config.logger = Logger.new(STDOUT)
 end
