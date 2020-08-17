@@ -1,3 +1,5 @@
+import {digg} from "@kaspernj/object-digger"
+
 const inflection = require("inflection")
 
 export default class ApiMakerPreloaded {
@@ -12,8 +14,8 @@ export default class ApiMakerPreloaded {
     for(const preloadedType in this.response.preloaded) {
       for(const preloadedId in this.response.preloaded[preloadedType]) {
         const preloadedData = this.response.preloaded[preloadedType][preloadedId]
-        const modelClassName = inflection.dasherize(inflection.singularize(preloadedType))
-        const modelClass = require(`api-maker/models/${modelClassName}`).default
+        const modelClassName = inflection.classify(preloadedType.replace(/-/, "_"))
+        const modelClass = digg(require("api-maker/models"), modelClassName)
         const model = new modelClass({data: preloadedData, isNewRecord: false})
 
         if (!this.preloaded[preloadedType])

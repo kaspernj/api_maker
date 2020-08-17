@@ -1,9 +1,4 @@
-<% if import_classes? %>
-  import BaseModel from "../base-model"
-  import Collection from "../collection"
-<% end %>
-
-<%= "export default" if export_default? %> class <%= resource.short_name %> extends BaseModel {
+class <%= resource.short_name %> extends BaseModel {
   static modelClassData() {
     return <%= {
       attributes: attributes,
@@ -23,40 +18,47 @@
     <% if reflection.macro == :belongs_to %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}") %>() {
         const id = this.<%= ApiMaker::JsMethodNamerService.execute!(name: reflection.foreign_key) %>()
-        const modelClass = require(`api-maker/models/<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).require_name %>`).default
+        const resourceName = "<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name %>"
+        const modelClass = digg(require("api-maker/models"), resourceName)
         return this._loadBelongsToReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>, <%= api_maker_json("ransack" => {"#{reflection.options[:primary_key] || reflection.klass.primary_key}_eq" => "{{id}}"}) %>)
       }
 
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name) %>() {
-        const modelClass = require(`api-maker/models/<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).require_name %>`).default
+        const resourceName = "<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name %>"
+        const modelClass = digg(require("api-maker/models"), resourceName)
         return this._readBelongsToReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>)
       }
     <% elsif reflection.macro == :has_many %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name) %>() {
         const id = this.<%= ApiMaker::JsMethodNamerService.execute!(name: reflection.options[:primary_key] || reflection.active_record.primary_key) %>()
-        const modelClass = require(`api-maker/models/<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).require_name %>`).default
+        const resourceName = "<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name %>"
+        const modelClass = digg(require("api-maker/models"), resourceName)
         return new Collection(<%= api_maker_json(reflection_has_many_parameters(reflection)) %>, <%= api_maker_json(reflection_has_many_parameters_query(reflection)) %>)
       }
     <% elsif reflection.macro == :has_one && reflection.options[:through] %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}") %>() {
         const id = this.<%= reflection.active_record.primary_key %>()
-        const modelClass = require(`api-maker/models/<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).require_name %>`).default
+        const resourceName = "<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name %>"
+        const modelClass = digg(require("api-maker/models"), resourceName)
         return this._loadHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>, <%= api_maker_json("params": {"through" => {"model" => model.model_name, "id" => "{{id}}", "reflection" => reflection.name}}) %>)
       }
 
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name) %>() {
-        const modelClass = require(`api-maker/models/<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).require_name %>`).default
+        const resourceName = "<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name %>"
+        const modelClass = digg(require("api-maker/models"), resourceName)
         return this._readHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>)
       }
     <% elsif reflection.macro == :has_one %>
       <%= ApiMaker::JsMethodNamerService.execute!(name: "load_#{reflection.name}") %>() {
         const id = this.<%= reflection.active_record.primary_key %>()
-        const modelClass = require(`api-maker/models/<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).require_name %>`).default
+        const resourceName = "<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name %>"
+        const modelClass = digg(require("api-maker/models"), resourceName)
         return this._loadHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>, <%= api_maker_json("ransack" => {"#{reflection.foreign_key}_eq" => "{{id}}"}) %>)
       }
 
       <%= ApiMaker::JsMethodNamerService.execute!(name: reflection.name) %>() {
-        const modelClass = require(`api-maker/models/<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).require_name %>`).default
+        const resourceName = "<%= ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name %>"
+        const modelClass = digg(require("api-maker/models"), resourceName)
         return this._readHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>)
       }
     <% end %>

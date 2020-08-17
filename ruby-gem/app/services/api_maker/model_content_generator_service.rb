@@ -1,9 +1,7 @@
 class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
   attr_reader :model
 
-  def initialize(export_default:, import_classes:, model:)
-    @export_default = export_default
-    @import_classes = import_classes
+  def initialize(model:)
     @model = model
   end
 
@@ -26,14 +24,6 @@ private
   def collection_commands
     ApiMaker::Loader.load_everything
     ApiMaker::MemoryStorage.current.storage_for(resource, :collection_commands)
-  end
-
-  def export_default?
-    @export_default
-  end
-
-  def import_classes?
-    @import_classes
   end
 
   def member_commands

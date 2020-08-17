@@ -1,3 +1,4 @@
+import {digg} from "@kaspernj/object-digger"
 import Preloaded from "./preloaded"
 
 const inflection = require("inflection")
@@ -22,8 +23,8 @@ export default class ModelsResponseReader {
     const models = []
 
     for(const modelType in this.response.data) {
-      const modelClassName = inflection.singularize(modelType)
-      const modelClass = require(`api-maker/models/${modelClassName}`).default
+      const modelClassName = inflection.classify(modelType.replace(/-/, "_"))
+      const modelClass = digg(require("api-maker/models"), modelClassName)
       const collectionName = inflection.dasherize(modelClass.modelClassData().collectionName)
 
       for(const modelId of this.response.data[modelType]) {

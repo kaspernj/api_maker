@@ -7,7 +7,7 @@ describe "bootstrap - checkboxes" do
   let(:task2) { create :task, user: user }
   let(:user) { create :user }
 
-  it "adds new relationships" do
+  it "adds a new relationships" do
     task1
     task2
 
@@ -19,7 +19,7 @@ describe "bootstrap - checkboxes" do
 
     check task1.name
 
-    find("input[type=submit]").click
+    wait_for_and_find("input[type=submit]").click
 
     wait_for_browser { AccountMarkedTask.where(account: account, task: task1).any? }
 
@@ -35,15 +35,16 @@ describe "bootstrap - checkboxes" do
 
     wait_for_selector ".content-container"
 
-    checkbox_input = find("input[type='checkbox']")
+    checkbox_input = wait_for_and_find("input[type='checkbox']")
     expect(checkbox_input[:checked]).to eq "true"
 
     uncheck task1.name
 
-    find("input[type=submit]").click
+    wait_for_and_find("input[type=submit]").click
 
     wait_for_browser do
       account_market_task1.reload
+
       false
     rescue ActiveRecord::RecordNotFound
       true

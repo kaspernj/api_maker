@@ -4,18 +4,6 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     copy_base_model
     copy_base_controllers
 
-    models.each do |model|
-      next if ignore_model?(model)
-
-      model_content_response = ApiMaker::ModelContentGeneratorService.execute(export_default: true, import_classes: true, model: model)
-
-      if model_content_response.success?
-        File.open(model_file(model), "w") { |fp| fp.write(model_content_response.result) }
-      else
-        puts model_content_response.errors.join(". ")
-      end
-    end
-
     ApiMaker::GenerateReactNativeApiService.execute! if ApiMaker::Configuration.current.react_native_path.present?
     succeed!
   end
@@ -87,12 +75,6 @@ private
     # Dont remove all the files. It messes up running Webpack Dev Servers which forces you to restart all the time.
     # FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
 
-    FileUtils.mkdir_p(api_maker_root_path.join("models"))
     FileUtils.mkdir_p(controller_path) unless File.exist?(controller_path)
-  end
-
-  def model_file(model)
-    resource_class = ApiMaker::MemoryStorage.current.resource_for_model(model)
-    api_maker_root_path.join("models", "#{resource_class.short_name.underscore.dasherize}.js")
   end
 end

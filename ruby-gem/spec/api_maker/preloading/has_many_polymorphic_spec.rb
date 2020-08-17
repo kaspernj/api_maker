@@ -14,9 +14,4 @@ describe "preloading - has many polymorphic" do
     expect(result.dig!("data", "tasks")).to eq [task.id]
     expect(result.dig!("preloaded", "tasks", task.id.to_s, "r", "comments")).to eq [comment.id]
   end
-
-  it "adds a special type argument to the ransack for the models load method" do
-    task_model = File.read(Rails.root.join("app/javascript/api-maker/models/task.js"))
-    expect(task_model).to include '{"ransack":{"resource_id_eq":id,"resource_type_eq":"Task"}}'
-  end
 end

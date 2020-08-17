@@ -48,6 +48,7 @@ Dir[File.join(__dir__, "support", "**", "*.rb")].sort.each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 # ActiveRecord::Migration.maintain_test_schema!
 
+Capybara.default_max_wait_time = 5
 Capybara.server = :puma, {Silent: true}
 
 RSpec.configure do |config|
@@ -74,6 +75,13 @@ RSpec.configure do |config|
     config.retry_callback = proc do |ex|
       # Run some additional clean up task - can be filtered by example metadata
       Capybara.reset! if ex.metadata[:type] == :system
+    end
+
+    # Timeout after some time to avoid freezes
+    config.around do |example|
+      Timeout.timeout(30) do
+        example.run
+      end
     end
   end
 

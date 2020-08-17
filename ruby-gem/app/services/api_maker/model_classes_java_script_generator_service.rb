@@ -6,7 +6,7 @@ class ApiMaker::ModelClassesJavaScriptGeneratorService < ApiMaker::ApplicationSe
     models.each do |model|
       next if ignore_model?(model)
 
-      javascript_code << ApiMaker::ModelContentGeneratorService.execute!(export_default: false, model: model, import_classes: false)
+      javascript_code << ApiMaker::ModelContentGeneratorService.execute!(model: model)
       javascript_code << "\n\n"
 
       resource = resource_for_model(model)
@@ -14,8 +14,6 @@ class ApiMaker::ModelClassesJavaScriptGeneratorService < ApiMaker::ApplicationSe
     end
 
     javascript_code << "export {#{resource_names.sort.join(", ")}}\n"
-
-    Rails.logger.info "GENERATED JAVASCRIPT CODE:\n\n#{javascript_code}\n\n"
 
     succeed! javascript_code
   end

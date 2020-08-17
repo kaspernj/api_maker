@@ -1,3 +1,5 @@
+import {digg} from "@kaspernj/object-digger"
+
 const inflection = require("inflection")
 
 export class ValidationError {
@@ -49,9 +51,9 @@ export class ValidationError {
   }
 
   getModelClass() {
-    const modelFileName = inflection.dasherize(this.modelName)
-    const modelClass = require(`api-maker/models/${modelFileName}`).default
-    return modelClass
+    const modelName = inflection.classify(digg(this, "modelName"))
+
+    return digg(require("api-maker/models"), modelName)
   }
 
   setHandled() {
