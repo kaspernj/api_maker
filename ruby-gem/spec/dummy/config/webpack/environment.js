@@ -1,5 +1,5 @@
 const { environment } = require("@rails/webpacker")
-const erb = require('./loaders/erb')
+const erb = require("./loaders/erb")
 const path = require("path")
 const webpack = require("webpack")
 
