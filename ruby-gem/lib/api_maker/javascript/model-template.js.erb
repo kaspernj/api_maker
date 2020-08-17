@@ -1,7 +1,9 @@
-import BaseModel from "../base-model"
-import Collection from "../collection"
+<% if import_classes? %>
+  import BaseModel from "../base-model"
+  import Collection from "../collection"
+<% end %>
 
-export default class <%= model.name.gsub("::", "") %> extends BaseModel {
+<%= "export default " if export_default? %> class <%= resource.short_name %> extends BaseModel {
   static modelClassData() {
     return <%= {
       attributes: attributes,
