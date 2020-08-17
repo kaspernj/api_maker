@@ -7,7 +7,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     models.each do |model|
       next if ignore_model?(model)
 
-      model_content_response = ApiMaker::ModelContentGeneratorService.execute(model: model)
+      model_content_response = ApiMaker::ModelContentGeneratorService.execute(export_default: true, import_classes: true, model: model)
 
       if model_content_response.success?
         File.open(model_file(model), "w") { |fp| fp.write(model_content_response.result) }
@@ -49,7 +49,7 @@ private
   def copy_base_model
     files = %w[
       base-model.js cable-connection-pool.js cable-subscription.js cable-subscription-pool.js collection.js
-      commands-pool.js deserializer.js devise.js preloaded.js key-value-store.js models-response-reader.js
+      commands-pool.js deserializer.js devise.js models.js.erb preloaded.js key-value-store.js models-response-reader.js
       resource-routes.jsx resource-route.jsx session-status-updater.js validation-errors.js
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")

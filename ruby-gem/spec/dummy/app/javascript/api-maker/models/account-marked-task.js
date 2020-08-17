@@ -1,5 +1,7 @@
-import BaseModel from "../base-model"
-import Collection from "../collection"
+
+  import BaseModel from "../base-model"
+  import Collection from "../collection"
+
 
 export default class AccountMarkedTask extends BaseModel {
   static modelClassData() {
