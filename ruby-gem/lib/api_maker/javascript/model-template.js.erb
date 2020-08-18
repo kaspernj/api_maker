@@ -67,14 +67,7 @@ class <%= resource.short_name %> extends BaseModel {
   <% attributes.each do |attribute_data| %>
     <% methodName = ApiMaker::JsMethodNamerService.execute!(name: attribute_data.fetch(:name)) %>
     <%= methodName %>() {
-      // <%= attribute_data.fetch(:type) %>
-      <% if attribute_data.fetch(:type) == :datetime || attribute_data.fetch(:type) == :date %>
-        return this._getAttributeDateTime("<%= attribute_data.fetch(:name) %>")
-      <% elsif attribute_data.fetch(:type) == :money %>
-        return this._getAttributeMoney("<%= attribute_data.fetch(:name) %>")
-      <% else %>
-        return this._getAttribute("<%= attribute_data.fetch(:name) %>")
-      <% end %>
+      return this._getAttribute("<%= attribute_data.fetch(:name) %>")
     }
 
     <%= ApiMaker::JsMethodNamerService.execute!(name: "has_#{attribute_data.fetch(:name)}") %>() {
