@@ -30,9 +30,9 @@ private
     elsif object.class.name == "Money"
       {api_maker_type: :money, amount: object.cents, currency: object.currency.iso_code}
     elsif object.is_a?(Date)
-      object.iso8601
+      {api_maker_type: :date, value: object.iso8601}
     elsif object.is_a?(Time)
-      object.utc.iso8601
+      {api_maker_type: :time, value: object.utc.iso8601}
     elsif object.is_a?(ApiMaker::CollectionSerializer) || object.is_a?(ApiMaker::Serializer)
       parse_object(object.as_json)
     elsif object.is_a?(ActiveRecord::Base)

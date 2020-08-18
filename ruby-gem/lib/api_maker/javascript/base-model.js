@@ -1,10 +1,10 @@
 import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
 import CommandsPool from "./commands-pool"
-import { CustomError, FormDataToObject, ModelName, ValidationError } from "@kaspernj/api-maker"
+import {CustomError, FormDataToObject, ModelName, ValidationError} from "@kaspernj/api-maker"
+import {digg} from "@kaspernj/object-digger"
 import ModelsResponseReader from "./models-response-reader"
-import Money from "js-money"
-import { ValidationErrors } from "./validation-errors"
+import {ValidationErrors} from "./validation-errors"
 
 const inflection = require("inflection")
 const objectToFormData = require("object-to-formdata").serialize
@@ -606,29 +606,6 @@ export default class BaseModel {
     throw new Error(`No such attribute: ${this.modelClassData().name}#${attributeName}`)
   }
 
-  _getAttributeDateTime(attributeName) {
-    const value = this._getAttribute(attributeName)
-
-    if (!value) {
-      return value
-    } else if (value instanceof Date) {
-      return value
-    } else {
-      return new Date(value)
-    }
-  }
-
-  _getAttributeMoney(attributeName) {
-    const value = this._getAttribute(attributeName)
-
-    if (!value)
-      return null
-
-    const cents = value.amount
-    const currency = value.currency
-    return Money.fromInteger(cents, currency)
-  }
-
   isAttributeLoaded(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
 
@@ -730,7 +707,7 @@ export default class BaseModel {
   }
 
   primaryKey() {
-    return this._getAttribute(this.modelClassData().primaryKey)
+    return this._getAttribute(digg(this.modelClassData(), "primaryKey"))
   }
 
   static _token() {

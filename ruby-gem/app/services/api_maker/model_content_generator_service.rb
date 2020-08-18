@@ -17,7 +17,7 @@ private
 
   def attributes
     resource._attributes.map do |attribute, _data|
-      {name: attribute, type: model_type(attribute)}
+      {name: attribute}
     end
   end
 
@@ -39,13 +39,6 @@ private
 
   def model_template_path
     File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "model-template.js.erb")
-  end
-
-  def model_type(attribute_name)
-    model_type = model.columns_hash[attribute_name.to_s]&.type
-    model_type = :money if monetized_attributes.include?(attribute_name.to_s)
-    model_type ||= :unknown
-    model_type
   end
 
   def monetized_attributes
