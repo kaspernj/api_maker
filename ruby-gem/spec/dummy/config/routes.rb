@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     get :find
     get :has_many
     get :has_one
+    get :has_one_polymorphic
     get :preload
     get :ransack
     get :validate

@@ -9,6 +9,7 @@ class Project < ApplicationRecord
 
   has_one :customer, through: :account
   has_one :project_detail, -> { where(deleted_at: nil) }, dependent: :destroy
+  has_one :polymorphic_model, as: :resource
 
   validates :name, presence: true
 

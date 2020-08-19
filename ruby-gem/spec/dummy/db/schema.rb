@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_08_171429) do
+ActiveRecord::Schema.define(version: 2020_08_19_135724) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -73,6 +73,14 @@ ActiveRecord::Schema.define(version: 2020_06_08_171429) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "polymorphic_models", force: :cascade do |t|
+    t.string "resource_type"
+    t.integer "resource_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["resource_type", "resource_id"], name: "index_polymorphic_models_on_resource_type_and_resource_id"
   end
 
   create_table "project_detail_files", force: :cascade do |t|
