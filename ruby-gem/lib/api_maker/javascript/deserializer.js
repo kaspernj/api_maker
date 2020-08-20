@@ -9,7 +9,9 @@ export default class ApiMakerDeserializer {
       return object.map(value => ApiMakerDeserializer.parse(value))
     } else if (object && typeof object == "object") {
       if (object.api_maker_type == "date" || object.api_maker_type == "time") {
-        return new Date(digg(object, "value"))
+        const date = new Date(digg(object, "value"))
+
+        return date
       } else if (object.api_maker_type == "money") {
         const cents = digg(object, "amount")
         const currency = digg(object, "currency")
@@ -18,7 +20,8 @@ export default class ApiMakerDeserializer {
       } else if (object.api_maker_type == "model") {
         const modelClassName = inflection.classify(object.model_name.replace(/-/g, "_"))
         const modelClass = digg(require("api-maker/models"), modelClassName)
-        const model = new modelClass({data: object.serialized, isNewRecord: false})
+        const data = ApiMakerDeserializer.parse(digg(object, "serialized"))
+        const model = new modelClass({data, isNewRecord: false})
 
         return model
       } else {
