@@ -70,4 +70,26 @@ describe ApiMaker::PreloaderHasOne do
 
     expect(attributes).to eq("api_maker_origin_id" => task.id, "id" => customer.id)
   end
+
+  it "filters on the type when preloading a polymorphic relationship" do
+    ability = ApiMaker::Ability.new
+    collection = Task.where(id: task.id)
+    reflection = Task.reflections.fetch("comment")
+
+    preloader = ApiMaker::PreloaderHasOne.new(
+      ability: ability,
+      args: {},
+      collection: collection,
+      data: {},
+      locals: {},
+      records: collection.to_a,
+      reflection: reflection,
+      select: nil,
+      select_columns: nil
+    )
+
+    sql = preloader.query_normal.to_sql
+
+    expect(sql).to include "\"comments\".\"resource_type\" = 'Task'"
+  end
 end
