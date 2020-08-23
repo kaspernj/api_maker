@@ -92,4 +92,26 @@ describe ApiMaker::PreloaderHasOne do
 
     expect(sql).to include "\"comments\".\"resource_type\" = 'Task'"
   end
+
+  it "supports giving collection as an array" do
+    ability = ApiMaker::Ability.new
+    collection = [task]
+    reflection = Task.reflections.fetch("comment")
+
+    preloader = ApiMaker::PreloaderHasOne.new(
+      ability: ability,
+      args: {},
+      collection: collection,
+      data: {},
+      locals: {},
+      records: collection.to_a,
+      reflection: reflection,
+      select: nil,
+      select_columns: nil
+    )
+
+    sql = preloader.query_normal.to_sql
+
+    expect(sql).to include "\"comments\".\"resource_type\" = 'Task'"
+  end
 end
