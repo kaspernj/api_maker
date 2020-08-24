@@ -10,10 +10,12 @@ module ApiMaker::SpecHelper
   class SelectorFoundError < RuntimeError; end
 
   def browser_logs
+    @recorded_browser_logs ||= []
+
     if browser_firefox?
       []
     else
-      chrome_logs
+      @recorded_browser_logs += chrome_logs
     end
   end
 
@@ -46,6 +48,7 @@ module ApiMaker::SpecHelper
     logs = browser_logs
       .map(&:to_s)
       .reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
+      .reject { |log| log.include?("DEBUG: ") }
       .join("\n")
 
     expect_no_browser_window_errors
@@ -70,6 +73,10 @@ module ApiMaker::SpecHelper
   def pretty_html
     require "htmlbeautifier"
     HtmlBeautifier.beautify(page.html)
+  end
+
+  def recorded_browser_logs
+    @recorded_browser_logs
   end
 
   def reset_indexeddb
