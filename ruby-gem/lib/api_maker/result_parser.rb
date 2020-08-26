@@ -17,16 +17,34 @@ class ApiMaker::ResultParser
 
 private
 
+  def parse_active_record(object)
+    serializer = ApiMaker::Serializer.new(ability: ability, args: args, model: object)
+
+    {
+      api_maker_type: :model,
+      model_name: serializer.resource.collection_name,
+      serialized: parse_object(serializer.as_json)
+    }
+  end
+
+  def parse_array(object)
+    object.map { |value| parse_object(value) }
+  end
+
+  def parse_hash(object)
+    result = {}
+    object.each do |key, value|
+      result[key] = parse_object(value)
+    end
+
+    result
+  end
+
   def parse_object(object)
     if object.is_a?(Hash)
-      result = {}
-      object.each do |key, value|
-        result[key] = parse_object(value)
-      end
-
-      result
+      parse_hash(object)
     elsif object.is_a?(Array)
-      object.map { |value| parse_object(value) }
+      parse_array(object)
     elsif object.class.name == "Money"
       {api_maker_type: :money, amount: object.cents, currency: object.currency.iso_code}
     elsif object.is_a?(Date)
@@ -35,14 +53,10 @@ private
       {api_maker_type: :time, value: object.utc.iso8601}
     elsif object.is_a?(ApiMaker::CollectionSerializer) || object.is_a?(ApiMaker::Serializer)
       parse_object(object.as_json)
+    elsif object.is_a?(Class) && object < ApiMaker::BaseResource
+      {api_maker_type: :resource, name: object.short_name}
     elsif object.is_a?(ActiveRecord::Base)
-      serializer = ApiMaker::Serializer.new(ability: ability, args: args, model: object)
-
-      {
-        api_maker_type: :model,
-        model_name: serializer.resource.collection_name,
-        serialized: parse_object(serializer.as_json)
-      }
+      parse_active_record(object)
     else
       object
     end

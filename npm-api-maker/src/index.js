@@ -15,6 +15,7 @@ import ModelName from "./model-name"
 import MoneyFormatter from "./money-formatter"
 import Params from "./params"
 import Result from "./result"
+import Serializer from "./serializer"
 import Services from "./services"
 import SourceMapsLoader from "./source-maps-loader"
 import UpdatedAttribute from "./updated-attribute"
@@ -37,6 +38,7 @@ export {
   MoneyFormatter,
   Params,
   Result,
+  Serializer,
   Services,
   SourceMapsLoader,
   UpdatedAttribute,

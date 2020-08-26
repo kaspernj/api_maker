@@ -16,6 +16,7 @@ export {
   MoneyFormatter,
   Params,
   Result,
+  Serializer,
   Services,
   SourceMapsLoader,
   UpdatedAttribute,
