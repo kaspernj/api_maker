@@ -23,7 +23,7 @@ export default class Serializer {
       }
     } else if (Array.isArray(arg)) {
       return this.serializeArray(arg)
-    } else if (arg && typeof arg == "object" && arg.constructor.name == "Object") {
+    } else if (typeof arg == "object" && arg !== null && arg.constructor.name == "Object") {
       return this.serializeObject(arg)
     } else {
       return arg
