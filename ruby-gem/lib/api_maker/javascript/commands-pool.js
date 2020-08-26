@@ -1,5 +1,6 @@
 import { Api, CustomError, FormDataToObject } from "@kaspernj/api-maker"
 import Deserializer from "./deserializer"
+import {Serializer} from "@kaspernj/api-maker"
 
 const objectToFormData = require("object-to-formdata").serialize
 
@@ -51,7 +52,7 @@ export default class ApiMakerCommandsPool {
       const commandName = data.command
       const collectionName = data.collectionName
 
-      this.pool[id] = {resolve: resolve, reject: reject}
+      this.pool[id] = {resolve, reject}
 
       if (!this.poolData[commandType])
         this.poolData[commandType] = {}
@@ -70,7 +71,7 @@ export default class ApiMakerCommandsPool {
       }
 
       this.poolData[commandType][collectionName][commandName][id] = {
-        args: args,
+        args: Serializer.serialize(args),
         primary_key: data.primaryKey,
         id: id
       }

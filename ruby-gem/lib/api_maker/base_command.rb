@@ -72,7 +72,7 @@ private
 
   def run_command(command_id, command_data)
     command = ApiMaker::IndividualCommand.new(
-      args: command_data[:args],
+      args: ApiMaker::Deserializer.execute!(arg: command_data[:args]),
       collection: @collection,
       command: self,
       id: command_id,

@@ -12,46 +12,37 @@ export default class ApiMakerCanCan {
   }
 
   constructor() {
-    this.abilities = {
-      custom: {},
-      resources: {}
-    }
-
-    this.resetToLoad()
-  }
-
-  resetToLoad() {
-    this.abilitiesToLoad = {
-      custom: {},
-      resources: {}
-    }
-    this.abilitiesToLoadData = {
-      custom: {},
-      resources: {}
-    }
+    this.abilities = []
+    this.abilitiesToLoad = []
+    this.abilitiesToLoadData = []
   }
 
   can(ability, subject) {
     ability = inflection.underscore(ability)
+    const foundAbility = this.findAbility(ability, subject)
 
-    if (!(subject in this.abilities)) {
-      throw new Error(`Subject wasn't loaded: ${subject}`)
+    if (foundAbility === undefined) {
+      throw new Error(`Ability not loaded ${subject}#${ability}`)
     }
 
-    if (!(ability in this.abilities[subject])) {
-      throw new Error(`Ability wasn't loaded: ${subject}#${ability}`)
-    }
+    return digg(foundAbility, "can")
+  }
 
-    return this.abilities[subject][ability]
+  findAbility(ability, subject) {
+    return this.abilities.find((abilityData) => digg(abilityData, "subject") == subject && digg(abilityData, "ability") == ability)
   }
 
   isAbilityLoaded(ability, subject) {
-    if ((subject in this.abilities) && (ability in this.abilities[subject])) {
+    const foundAbility = this.findAbility(ability, subject)
+
+    if (foundAbility !== undefined) {
       return true
     }
+
+    return false
   }
 
-  loadAbilities(abilities) {
+  async loadAbilities(abilities) {
     return new Promise((resolve) => {
       const promises = []
 
@@ -74,20 +65,12 @@ export default class ApiMakerCanCan {
         return resolve()
       }
 
-      if (!this.abilitiesToLoad[subject]) {
-        this.abilitiesToLoad[subject] = {}
-      }
+      const includes = this.abilitiesToLoad.find((abilityToLoad) => digg(abilityToLoad, "ability") == ability && digg(abilityToLoad, "subject") == subject)
 
-      if (!this.abilitiesToLoad[subject][ability]) {
-        this.abilitiesToLoad[subject][ability] = []
+      if (!includes) {
+        this.abilitiesToLoad.push({ability, callback: resolve, subject})
+        this.abilitiesToLoadData.push({ability, subject})
       }
-
-      if (!this.abilitiesToLoadData[subject]) {
-        this.abilitiesToLoadData[subject] = []
-      }
-
-      this.abilitiesToLoadData[subject].push(ability)
-      this.abilitiesToLoad[subject][ability].push({callback: resolve})
 
       this.queueAbilitiesRequest()
     })
@@ -102,37 +85,28 @@ export default class ApiMakerCanCan {
   }
 
   resetAbilities() {
-    this.abilities = {}
+    this.abilities = []
   }
 
   async sendAbilitiesRequest() {
-    const {abilitiesToLoad, abilitiesToLoadData} = this
-    this.resetToLoad()
+    const abilitiesToLoad = this.abilitiesToLoad
+    const abilitiesToLoadData = this.abilitiesToLoadData
+
+    this.abilitiesToLoad = []
+    this.abilitiesToLoadData = []
 
     // Load abilities from backend
     const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
       request: abilitiesToLoadData
     })
+    const abilities = digg(result, "abilities")
 
     // Set the loaded abilities
-    const callbacks = []
-    for (const subjectName in result.abilities) {
-      if (!(subjectName in this.abilities)) {
-        this.abilities[subjectName] = {}
-      }
-
-      for (const abilityName in result.abilities[subjectName]) {
-        this.abilities[subjectName][abilityName] = result.abilities[subjectName][abilityName]
-
-        for (const abilityData of abilitiesToLoad[subjectName][abilityName]) {
-          callbacks.push(abilityData.callback)
-        }
-      }
-    }
+    this.abilities = this.abilities.concat(abilities)
 
     // Call the callbacks that are waiting for the ability to have been loaded
-    for (const callback of callbacks) {
-      callback()
+    for (const abilityData of abilitiesToLoad) {
+      abilityData.callback()
     }
   }
 }

@@ -1,28 +1,24 @@
 class Services::CanCan::LoadAbilities < ApiMaker::BaseService
   def execute
-    result = {
-      custom: {},
-      resources: {}
-    }
+    result = []
 
-    request.each do |type, subject_data|
-      subject_data.each do |subject, abilities|
-        abilities.each do |ability|
-          if type == "custom"
-            # Do nothing
-          elsif type == "resources"
-            resource = "Resources::#{subject}Resource".safe_constantize
-            subject = resource.model_class
-          else
-            raise "Unknown type: #{type}"
-          end
+    request.each do |ability_data|
+      # Sometimes Rails passes a hash instead of an array
+      ability_data = ability_data.fetch(1) if ability_data.is_a?(Array)
 
-          can = current_ability.can?(ability, subject)
+      ability = ability_data.fetch("ability")
+      subject = ability_data.fetch("subject")
+      subject_to_check = subject
 
-          result[type][subject] ||= {}
-          result[type][subject][ability] = can
-        end
-      end
+      # Convert subject to original model class if resource is given
+      subject_to_check = subject.model_class if subject.is_a?(Class) && subject < ApiMaker::BaseResource
+
+      can = current_ability.can?(ability.to_sym, subject_to_check)
+      result << {
+        ability: ability,
+        can: can,
+        subject: subject
+      }
     end
 
     succeed!(abilities: result)
