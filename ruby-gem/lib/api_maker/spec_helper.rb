@@ -10,13 +10,16 @@ module ApiMaker::SpecHelper
   class SelectorFoundError < RuntimeError; end
 
   def browser_logs
-    @recorded_browser_logs ||= []
-
-    if browser_firefox?
+    logs = if browser_firefox?
       []
     else
-      @recorded_browser_logs += chrome_logs
+      chrome_logs
     end
+
+    @recorded_browser_logs ||= []
+    @recorded_browser_logs += logs
+
+    logs
   end
 
   def browser_firefox?
@@ -76,7 +79,7 @@ module ApiMaker::SpecHelper
   end
 
   def recorded_browser_logs
-    @recorded_browser_logs
+    @recorded_browser_logs || []
   end
 
   def reset_indexeddb
