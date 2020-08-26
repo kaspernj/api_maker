@@ -19,7 +19,7 @@ export default class Serializer {
       }
     } else if (Array.isArray(this.arg)) {
       return this.serializeArray()
-    } else if (typeof this.arg == "object") {
+    } else if (typeof this.arg == "object" && this.arg.constructor.name == "Object") {
       return this.serializeObject()
     } else {
       return this.arg
