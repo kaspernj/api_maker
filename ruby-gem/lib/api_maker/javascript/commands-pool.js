@@ -67,13 +67,13 @@ export default class ApiMakerCommandsPool {
       if (data.args instanceof FormData) {
         args = FormDataToObject.toObject(data.args)
       } else {
-        args = data.args
+        args = Serializer.serialize(data.args)
       }
 
       this.poolData[commandType][collectionName][commandName][id] = {
-        args: Serializer.serialize(args),
+        args,
         primary_key: data.primaryKey,
-        id: id
+        id
       }
     })
   }

@@ -12,30 +12,35 @@ export default class Serializer {
   }
 
   serialize() {
-    if (typeof this.arg == "function" && this.arg["modelClassData"] && this.arg["modelName"]) {
+    return this.serializeArgument(this.arg)
+  }
+
+  serializeArgument(arg) {
+    if (typeof arg == "function" && arg["modelClassData"] && arg["modelName"]) {
       return {
         api_maker_type: "resource",
-        name: digg(this.arg.modelClassData(), "name")
+        name: digg(arg.modelClassData(), "name")
       }
-    } else if (Array.isArray(this.arg)) {
-      return this.serializeArray()
-    } else if (typeof this.arg == "object" && this.arg.constructor.name == "Object") {
-      return this.serializeObject()
+    } else if (Array.isArray(arg)) {
+      return this.serializeArray(arg)
+    } else if (arg && typeof arg == "object" && arg.constructor.name == "Object") {
+      return this.serializeObject(arg)
     } else {
-      return this.arg
+      return arg
     }
   }
 
-  serializeArray() {
-    return this.arg.map((value) => Serializer.serialize(value))
+  serializeArray(arg) {
+    return arg.map((value) => this.serializeArgument(value))
   }
 
-  serializeObject() {
+  serializeObject(arg) {
     const newObject = {}
 
-    for (const key in this.arg) {
-      const newValue = Serializer.serialize(this.arg[key])
-      const newKey = Serializer.serialize(key)
+    for (const key in arg) {
+      const value = arg[key]
+      const newValue = this.serializeArgument(value)
+      const newKey = this.serializeArgument(key)
 
       newObject[newKey] = newValue
     }
