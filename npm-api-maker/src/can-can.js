@@ -12,9 +12,23 @@ export default class ApiMakerCanCan {
   }
 
   constructor() {
-    this.abilities = {}
-    this.abilitiesToLoad = {}
-    this.abilitiesToLoadData = {}
+    this.abilities = {
+      custom: {},
+      resources: {}
+    }
+
+    this.resetToLoad()
+  }
+
+  resetToLoad() {
+    this.abilitiesToLoad = {
+      custom: {},
+      resources: {}
+    }
+    this.abilitiesToLoadData = {
+      custom: {},
+      resources: {}
+    }
   }
 
   can(ability, subject) {
@@ -37,7 +51,7 @@ export default class ApiMakerCanCan {
     }
   }
 
-  async loadAbilities(abilities) {
+  loadAbilities(abilities) {
     return new Promise((resolve) => {
       const promises = []
 
@@ -92,11 +106,8 @@ export default class ApiMakerCanCan {
   }
 
   async sendAbilitiesRequest() {
-    const abilitiesToLoad = this.abilitiesToLoad
-    const abilitiesToLoadData = this.abilitiesToLoadData
-
-    this.abilitiesToLoad = {}
-    this.abilitiesToLoadData = {}
+    const {abilitiesToLoad, abilitiesToLoadData} = this
+    this.resetToLoad()
 
     // Load abilities from backend
     const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
