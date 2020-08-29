@@ -1,4 +1,3 @@
-import classNames from "classnames"
 import idForComponent from "./id-for-component"
 import nameForComponent from "./name-for-component"
 import PropTypes from "prop-types"
@@ -12,7 +11,6 @@ export default class ApiMakerCheckbox extends React.Component {
 
   static propTypes = {
     attribute: PropTypes.string,
-    className: PropTypes.string,
     defaultChecked: PropTypes.bool,
     defaultValue: PropTypes.node,
     id: PropTypes.string,
@@ -29,7 +27,7 @@ export default class ApiMakerCheckbox extends React.Component {
   }
 
   render() {
-    const { attribute, className, defaultChecked, defaultValue, id, model, name, zeroInput, ...restProps } = this.props
+    const { attribute, defaultChecked, defaultValue, id, model, name, zeroInput, ...restProps } = this.props
 
     return (
       <>
@@ -38,7 +36,6 @@ export default class ApiMakerCheckbox extends React.Component {
         }
         <input
           defaultChecked={this.inputDefaultChecked()}
-          className={classNames("form-check-input", className)}
           defaultValue={defaultValue}
           id={this.inputId()}
           name={this.inputName()}
