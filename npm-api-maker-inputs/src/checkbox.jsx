@@ -28,17 +28,18 @@ export default class ApiMakerCheckbox extends React.Component {
 
   render() {
     const { attribute, defaultChecked, defaultValue, id, model, name, zeroInput, ...restProps } = this.props
+    const inputName = this.inputName()
 
     return (
       <>
-        {zeroInput &&
-          <input defaultValue="0" name={this.inputName()} type="hidden" type="hidden" />
+        {zeroInput && inputName &&
+          <input defaultValue="0" name={inputName} type="hidden" type="hidden" />
         }
         <input
           defaultChecked={this.inputDefaultChecked()}
           defaultValue={defaultValue}
           id={this.inputId()}
-          name={this.inputName()}
+          name={inputName}
           ref="input"
           type="checkbox"
           {...restProps}
