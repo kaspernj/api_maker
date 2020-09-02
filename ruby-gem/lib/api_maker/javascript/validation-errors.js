@@ -1,4 +1,4 @@
-import {digg} from "@kaspernj/object-digger"
+import {digg, digs} from "@kaspernj/object-digger"
 
 const inflection = require("inflection")
 
@@ -31,15 +31,17 @@ export class ValidationError {
   }
 
   getAttributeName() {
-    return this.attributeName
+    return digg(this, "attributeName")
   }
 
   getErrorMessage() {
-    return this.errorMessage
+    return digg(this, "errorMessage")
   }
 
   getFullErrorMessage() {
-    if (this.attributeType == "base") {
+    const {attributeType} = digs(this, "attributeType")
+
+    if (attributeType == "base") {
       return this.getErrorMessage()
     } else {
       const attributeHumanName = this.getModelClass().humanAttributeName(this.getAttributeName())
