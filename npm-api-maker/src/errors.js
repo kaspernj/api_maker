@@ -1,3 +1,5 @@
+import {digg} from "@kaspernj/object-digger"
+
 export class CustomError extends Error {
   constructor(message, args = {}) {
     if (args.response && args.response.errors)
@@ -10,6 +12,14 @@ export class CustomError extends Error {
       Error.captureStackTrace(this, CustomError)
 
     this.args = args
+  }
+
+  errorMessages() {
+    return digg(this, "args", "response", "errors").map((error) => digg(error, "message"))
+  }
+
+  errorTypes() {
+    return digg(this, "args", "response", "errors").map((error) => digg(error, "type"))
   }
 }
 
