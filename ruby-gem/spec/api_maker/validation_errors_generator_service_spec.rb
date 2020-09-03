@@ -90,4 +90,27 @@ describe ApiMaker::ValidationErrorsGeneratorService do
       }
     ]
   end
+
+  it "handles errors that are added to base" do
+    params = {
+      name: "Hans"
+    }
+
+    project.assign_attributes(params)
+
+    expect(project).to be_invalid
+
+    result = ApiMaker::ValidationErrorsGeneratorService.execute!(
+      model: project,
+      params: params
+    )
+
+    expect(result).to eq [
+                        {
+                          attribute_name: :base,
+                          id: nil,
+                          error_message: "bogus"
+                        }
+                      ]
+  end
 end
