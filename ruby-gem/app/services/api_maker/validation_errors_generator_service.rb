@@ -19,28 +19,47 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     return if model.errors.empty?
 
     model.errors.details.each do |attribute_name, errors|
-      next unless handle_attribute?(model, attribute_name)
+      attribute_type = attribute_type(model, attribute_name)
+      next unless attribute_type
 
       attribute_path = path + [attribute_name]
       input_name = path_to_attribute_name(attribute_path)
 
       errors.each_with_index do |error, error_index|
-        result << {
+        error_data = {
           attribute_name: attribute_name,
+          attribute_type: attribute_type,
           id: model.id,
-          input_name: input_name,
           model_name: model.model_name.param_key,
           error_message: model.errors.messages.fetch(attribute_name).fetch(error_index),
-          error_type: error.fetch(:error)
+          error_type: error_type(attribute_type, error)
         }
+
+        error_data[:input_name] = input_name unless attribute_type == :base
+
+        result << error_data
       end
     end
   end
 
-  def handle_attribute?(model, attribute_name)
-    model.attribute_names.include?(attribute_name.to_s) ||
-      model._reflections.key?(attribute_name.to_s) ||
-      model.class.try(:monetized_attributes)&.include?(attribute_name.to_s)
+  def attribute_type(model, attribute_name)
+    if model.attribute_names.include?(attribute_name.to_s)
+      :attribute
+    elsif model._reflections.key?(attribute_name.to_s)
+      :reflection
+    elsif model.class.try(:monetized_attributes)&.include?(attribute_name.to_s)
+      :monetized_attribute
+    elsif attribute_name == :base
+      :base
+    end
+  end
+
+  def error_type(attribute_type, error)
+    if attribute_type == :base
+      :base
+    else
+      error.fetch(:error)
+    end
   end
 
   def inspect_params(model, params, path)
