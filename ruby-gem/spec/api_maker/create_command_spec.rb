@@ -51,6 +51,7 @@ describe ApiMaker::CreateCommand do
       "validation_errors" => [
         {
           "attribute_name" => "project",
+          "attribute_type" => "reflection",
           "error_message" => "must exist",
           "error_type" => "blank",
           "id" => nil,
