@@ -18,6 +18,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
     expect(result).to eq [
       {
         attribute_name: :price_per_hour,
+        attribute_type: :monetized_attribute,
         id: project.id,
         input_name: "project[price_per_hour]",
         model_name: "project",
@@ -51,6 +52,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
     expect(result).to eq [
       {
         attribute_name: :filename,
+        attribute_type: :attribute,
         id: nil,
         input_name: "project[project_detail_attributes][project_detail_files_attributes][0][filename]",
         model_name: "project_detail_file",
@@ -82,6 +84,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
     expect(result).to eq [
       {
         attribute_name: :filename,
+        attribute_type: :attribute,
         id: nil,
         input_name: "project[project_detail_attributes][project_detail_files_attributes][0][filename]",
         model_name: "project_detail_file",
@@ -108,8 +111,11 @@ describe ApiMaker::ValidationErrorsGeneratorService do
     expect(result).to eq [
                         {
                           attribute_name: :base,
-                          id: nil,
-                          error_message: "bogus"
+                          attribute_type: :base,
+                          id: project.id,
+                          model_name: "project",
+                          error_message: "Navn kan ikke være Hans",
+                          error_type: :base
                         }
                       ]
   end

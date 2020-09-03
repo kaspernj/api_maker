@@ -32,7 +32,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
           id: model.id,
           model_name: model.model_name.param_key,
           error_message: model.errors.messages.fetch(attribute_name).fetch(error_index),
-          error_type: error.fetch(:error)
+          error_type: error_type(attribute_type, error)
         }
 
         error_data[:input_name] = input_name unless attribute_type == :base
@@ -49,8 +49,16 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
       :reflection
     elsif model.class.try(:monetized_attributes)&.include?(attribute_name.to_s)
       :monetized_attribute
-    else
+    elsif attribute_name == :base
       :base
+    end
+  end
+
+  def error_type(attribute_type, error)
+    if attribute_type == :base
+      :base
+    else
+      error.fetch(:error)
     end
   end
 
