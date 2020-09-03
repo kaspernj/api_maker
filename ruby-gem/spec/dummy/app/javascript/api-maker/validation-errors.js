@@ -1,15 +1,16 @@
-import {digg} from "@kaspernj/object-digger"
+import {digg, digs} from "@kaspernj/object-digger"
 
 const inflection = require("inflection")
 
 export class ValidationError {
   constructor(args) {
-    this.attributeName = args.attribute_name
-    this.errorMessage = args.error_message
-    this.errorType = args.error_type
+    this.attributeName = digg(args, "attribute_name")
+    this.attributeType = digg(args, "attribute_type")
+    this.errorMessage = digg(args, "error_message")
+    this.errorType = digg(args, "error_type")
     this.inputName = args.input_name
     this.handled = false
-    this.modelName = args.model_name
+    this.modelName = digg(args, "model_name")
   }
 
   matchesAttributeAndInputName(attributeName, inputName) {
@@ -30,24 +31,30 @@ export class ValidationError {
   }
 
   getAttributeName() {
-    return this.attributeName
+    return digg(this, "attributeName")
   }
 
   getErrorMessage() {
-    return this.errorMessage
+    return digg(this, "errorMessage")
   }
 
   getFullErrorMessage() {
-    const attributeHumanName = this.getModelClass().humanAttributeName(this.getAttributeName())
-    return `${attributeHumanName} ${this.getErrorMessage()}`
+    const {attributeType} = digs(this, "attributeType")
+
+    if (attributeType == "base") {
+      return this.getErrorMessage()
+    } else {
+      const attributeHumanName = this.getModelClass().humanAttributeName(this.getAttributeName())
+      return `${attributeHumanName} ${this.getErrorMessage()}`
+    }
   }
 
   getHandled() {
-    return this.handled
+    return digg(this, "handled")
   }
 
   getInputName() {
-    return this.inputName
+    return digg(this, "inputName")
   }
 
   getModelClass() {
@@ -63,8 +70,8 @@ export class ValidationError {
 
 export class ValidationErrors {
   constructor(args) {
-    this.rootModel = args.model
-    this.validationErrors = args.validationErrors.map(validationError => new ValidationError(validationError))
+    this.rootModel = digg(args, "model")
+    this.validationErrors = digg(args, "validationErrors").map(validationError => new ValidationError(validationError))
   }
 
   getErrorMessage() {

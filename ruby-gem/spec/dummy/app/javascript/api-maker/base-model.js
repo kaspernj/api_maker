@@ -273,10 +273,10 @@ export default class BaseModel {
 
     const validationErrors = new ValidationErrors({
       model: this,
-      validationErrors: error.args.response.validation_errors
+      validationErrors: digg(error, "args", "response", "validation_errors")
     })
 
-    if (validationErrors) this.sendValidationErrorsEvent(validationErrors, options)
+    this.sendValidationErrorsEvent(validationErrors, options)
     throw new ValidationError(validationErrors)
   }
 
