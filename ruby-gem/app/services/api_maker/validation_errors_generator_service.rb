@@ -19,7 +19,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     return if model.errors.empty?
 
     model.errors.details.each do |attribute_name, errors|
-      attribute_type = attribute_type_for_model_and_attribute(model, attribute_name)
+      attribute_type = attribute_type(model, attribute_name)
       next unless attribute_type
 
       attribute_path = path + [attribute_name]
@@ -42,7 +42,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     end
   end
 
-  def attribute_type_for_model_and_attribute(model, attribute_name)
+  def attribute_type(model, attribute_name)
     if model.attribute_names.include?(attribute_name.to_s)
       :attribute
     elsif model._reflections.key?(attribute_name.to_s)
