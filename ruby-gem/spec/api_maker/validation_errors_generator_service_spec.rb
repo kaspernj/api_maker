@@ -109,14 +109,14 @@ describe ApiMaker::ValidationErrorsGeneratorService do
     )
 
     expect(result).to eq [
-                        {
-                          attribute_name: :base,
-                          attribute_type: :base,
-                          id: project.id,
-                          model_name: "project",
-                          error_message: "Navn kan ikke være Hans",
-                          error_type: :base
-                        }
-                      ]
+      {
+        attribute_name: :base,
+        attribute_type: :base,
+        id: project.id,
+        model_name: "project",
+        error_message: "Navn kan ikke være Hans",
+        error_type: :base
+      }
+    ]
   end
 end
