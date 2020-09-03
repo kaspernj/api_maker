@@ -17,7 +17,7 @@ class Project < ApplicationRecord
 
   accepts_nested_attributes_for :project_detail
 
-  private
+private
 
   def name_cannot_be_hans
     errors.add(:base, "Navn kan ikke være Hans") if name == "Hans"

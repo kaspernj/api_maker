@@ -41,6 +41,7 @@ describe ApiMaker::UpdateCommand do
     expect(command.result.fetch(:validation_errors)).to eq [
       {
         attribute_name: :name,
+        attribute_type: :attribute,
         error_message: "can't be blank",
         error_type: :blank,
         input_name: "user[tasks_attributes][124][name]",
