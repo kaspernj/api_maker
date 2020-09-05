@@ -14,7 +14,7 @@ class ApiMaker::ServiceCommand < ApiMaker::BaseCommand
       if response.success?
         command.result(response.result)
       else
-        command.fail(errors: response.errors)
+        command.fail(errors: response.error_messages)
       end
     end
   end
