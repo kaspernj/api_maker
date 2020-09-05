@@ -12,10 +12,11 @@ export default class ApiMakerPreloaded {
     this.preloaded = {}
 
     for(const preloadedType in this.response.preloaded) {
+      const modelClassName = inflection.classify(preloadedType.replace(/-/g, "_"))
+      const modelClass = digg(require("api-maker/models"), modelClassName)
+
       for(const preloadedId in this.response.preloaded[preloadedType]) {
         const preloadedData = this.response.preloaded[preloadedType][preloadedId]
-        const modelClassName = inflection.classify(preloadedType.replace(/-/g, "_"))
-        const modelClass = digg(require("api-maker/models"), modelClassName)
         const model = new modelClass({data: preloadedData, isNewRecord: false})
 
         if (!this.preloaded[preloadedType])
