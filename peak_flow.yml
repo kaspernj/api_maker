@@ -1,7 +1,4 @@
 before_script:
-  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  - sudo apt install -y ./google-chrome-stable_current_amd64.deb
-  - sudo apt-get update && sudo apt-get install -y firefox google-chrome-stable
   - cd npm-api-maker && yarn install
   - cd npm-api-maker && yarn link
   - cd npm-api-maker-bootstrap && yarn install
@@ -19,8 +16,6 @@ before_script:
   - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
   - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
   - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem/spec/dummy && rake api_maker:generate_models
-environment:
-  - CHROME_DRIVER_VERSION=83.0.4103.39
 builds:
   build_1:
     name: Ruby gem / RSpec Kaminari
