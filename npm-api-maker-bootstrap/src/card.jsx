@@ -1,9 +1,12 @@
+import {digs} from "@kaspernj/object-digger"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class ApiMakerBootstrapCard extends React.Component {
   static defaultProps = {
+    defaultExpanded: true,
+    expandable: false,
     responsiveTable: true
   }
 
@@ -11,6 +14,8 @@ export default class ApiMakerBootstrapCard extends React.Component {
     className: PropTypes.string,
     children: PropTypes.node,
     controls: PropTypes.node,
+    defaultExpanded: PropTypes.bool.isRequired,
+    expandable: PropTypes.bool.isRequired,
     header: PropTypes.node,
     onClick: PropTypes.func,
     striped: PropTypes.bool,
@@ -19,29 +24,50 @@ export default class ApiMakerBootstrapCard extends React.Component {
     table: PropTypes.bool
   })
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      expanded: props.defaultExpanded
+    }
+  }
+
   render() {
-    const { children, controls, header, onClick, style, table } = this.props
+    const {children, controls, header, onClick, style, table} = this.props
+    const {expandable} = digs(this.props, "expandable")
+    const {expanded} = digs(this.state, "expanded")
 
     return (
       <div className={this.classNames()} onClick={onClick} ref="card" style={style}>
-        {(controls || header) &&
-          <div className="card-header">
+        {(controls || expandable || header) &&
+          <div className={`card-header ${!expanded && "border-bottom-0"}`}>
             {header}
-            {controls &&
+            {(controls || expandable) &&
               <div className="float-right">
                 {controls}
+                {expandable && expanded &&
+                  <a className="collapse-card-button text-muted" href="#" onClick={(e) => this.onCollapseClicked(e)}>
+                    <i className="la la-angle-up" />
+                  </a>
+                }
+                {expandable && !expanded &&
+                  <a className="expand-card-button text-muted" href="#" onClick={(e) => this.onExpandClicked(e)}>
+                    <i className="la la-angle-down" />
+                  </a>
+                }
               </div>
             }
           </div>
         }
-        <div className={this.bodyClassNames()}>
-          {table &&
-            <table className={this.tableClassNames()}>
-              {children}
-            </table>
-          }
-          {!table && children}
-        </div>
+        {expanded &&
+          <div className={this.bodyClassNames()}>
+            {table &&
+              <table className={this.tableClassNames()}>
+                {children}
+              </table>
+            }
+            {!table && children}
+          </div>
+        }
       </div>
     )
   }
@@ -67,6 +93,16 @@ export default class ApiMakerBootstrapCard extends React.Component {
     }
 
     return classNames.join(" ")
+  }
+
+  onCollapseClicked(e) {
+    e.preventDefault()
+    this.setState({expanded: false})
+  }
+
+  onExpandClicked(e) {
+    e.preventDefault()
+    this.setState({expanded: true})
   }
 
   tableClassNames() {
