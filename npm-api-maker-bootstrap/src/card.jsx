@@ -7,7 +7,8 @@ export default class ApiMakerBootstrapCard extends React.Component {
   static defaultProps = {
     defaultExpanded: true,
     expandable: false,
-    responsiveTable: true
+    responsiveTable: true,
+    table: false
   }
 
   static propTypes = PropTypesExact({
@@ -20,8 +21,8 @@ export default class ApiMakerBootstrapCard extends React.Component {
     onClick: PropTypes.func,
     striped: PropTypes.bool,
     style: PropTypes.object,
-    responsiveTable: PropTypes.bool,
-    table: PropTypes.bool
+    responsiveTable: PropTypes.bool.isRequired,
+    table: PropTypes.bool.isRequired
   })
 
   constructor(props) {
@@ -58,16 +59,14 @@ export default class ApiMakerBootstrapCard extends React.Component {
             }
           </div>
         }
-        {expanded &&
-          <div className={this.bodyClassNames()}>
-            {table &&
-              <table className={this.tableClassNames()}>
-                {children}
-              </table>
-            }
-            {!table && children}
-          </div>
-        }
+        <div className={this.bodyClassNames()}>
+          {table &&
+            <table className={this.tableClassNames()}>
+              {children}
+            </table>
+          }
+          {!table && children}
+        </div>
       </div>
     )
   }
@@ -82,10 +81,16 @@ export default class ApiMakerBootstrapCard extends React.Component {
   }
 
   bodyClassNames() {
+    const {responsiveTable, table} = digs(this.props, "responsiveTable", "table")
+    const {expanded} = digs(this.state, "expanded")
     const classNames = ["card-body"]
 
-    if (this.props.table) {
-      if (this.props.responsiveTable){
+    if (!expanded) {
+      classNames.push("d-none")
+    }
+
+    if (table) {
+      if (responsiveTable){
         classNames.push("table-responsive")
       }
 
