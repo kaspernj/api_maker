@@ -98,13 +98,6 @@ RSpec.configure do |config|
     end
   end
 
-  # Time out test after 15 seconds
-  config.around do |example|
-    Timeout.timeout(30) do
-      example.run
-    end
-  end
-
   config.before(:suite) do
     Warden.test_mode!
     ApiMaker::ModelsGeneratorService.execute!
