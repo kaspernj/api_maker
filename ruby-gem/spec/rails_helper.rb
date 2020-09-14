@@ -99,7 +99,7 @@ RSpec.configure do |config|
   end
 
   # Time out test after 15 seconds
-  config.around(:each) do |example|
+  config.around do |example|
     Timeout.timeout(30) do
       example.run
     end
