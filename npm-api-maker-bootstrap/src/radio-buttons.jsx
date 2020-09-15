@@ -1,3 +1,4 @@
+import {digs} from "@kaspernj/object-digger"
 import { EventListener } from "@kaspernj/api-maker"
 import InvalidFeedback from "./invalid-feedback"
 import PropTypes from "prop-types"
@@ -17,6 +18,7 @@ export default class ApiMakerBootstrapRadioButtons extends React.Component {
     id: PropTypes.string,
     name: PropTypes.string,
     model: PropTypes.object,
+    onChange: PropTypes.func,
     wrapperClassName: PropTypes.string
   })
 
@@ -92,8 +94,9 @@ export default class ApiMakerBootstrapRadioButtons extends React.Component {
   }
 
   optionElement(option, index) {
-    const { collection } = this.props
-    const { validationErrors } = this.state
+    const {collection} = digs(this.props, "collection")
+    const {onChange} = this.props
+    const {validationErrors} = this.state
     const id = this.generatedId()
 
     return (
@@ -104,6 +107,7 @@ export default class ApiMakerBootstrapRadioButtons extends React.Component {
           defaultChecked={option[1] == this.inputDefaultValue()}
           id={id}
           name={this.inputName()}
+          onChange={onChange}
           type="radio"
           value={option[1]}
         />
