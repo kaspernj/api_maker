@@ -25,10 +25,9 @@ export default class ApiMakerCommandSubmitData {
   }
 
   getFormData() {
-    const objectForFormData = {}
+    const objectForFormData = this.getRawData()
 
     objectForFormData.json = JSON.stringify(this.getJsonData())
-    objectForFormData.raw = this.getRawData()
 
     const formData = objectToFormData(objectForFormData)
 

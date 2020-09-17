@@ -101,7 +101,7 @@ export default class ApiMakerCommandsPool {
     if (commandSubmitData.getFilesCount() > 0) {
       response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()})
     } else {
-      response = await Api.requestLocal({path: url, method: "POST", data: {raw: commandSubmitData.getJsonData()}})
+      response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()})
     }
 
     for(const commandId in response.responses) {
