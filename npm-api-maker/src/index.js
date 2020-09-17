@@ -1,5 +1,6 @@
 import Api from "./api"
 import CanCan from "./can-can"
+import CommandSubmitData from "./command-submit-data"
 import { CustomError, ValidationError } from "./errors"
 import ErrorLogger from "./error-logger"
 import EventConnection from "./event-connection"
@@ -23,6 +24,7 @@ import UpdatedAttribute from "./updated-attribute"
 export {
   Api,
   CanCan,
+  CommandSubmitData,
   CustomError,
   ErrorLogger,
   EventConnection,
