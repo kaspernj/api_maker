@@ -3,14 +3,25 @@ const objectToFormData = require("object-to-formdata").serialize
 export default class ApiMakerCommandSubmitData {
   constructor(data) {
     this.data = data
+    this.formData
+    this.filesCount = 0
+    this.jsonData = this.traverseObject(this.data, "json")
+  }
+
+  getFilesCount() {
+    return this.filesCount
   }
 
   getJsonData() {
-    return this.traverseObject(this.data, "json")
+    return this.jsonData
   }
 
   getRawData() {
-    return this.traverseObject(this.data, "raw")
+    if (this.rawData) {
+      this.rawData = this.traverseObject(this.data, "raw")
+    }
+
+    return this.rawData
   }
 
   getFormData() {
@@ -36,10 +47,23 @@ export default class ApiMakerCommandSubmitData {
 
   shouldSkip(object, type) {
     if (type == "json" && object instanceof File) {
+      this.filesCount += 1
       return true
     }
 
-    if (type == "raw" && !(object instanceof File)) {
+    if (type == "raw") {
+      console.log({ object })
+    }
+
+    if (type == "raw" && !Array.isArray(object) && !this.isObject(object) && !(object instanceof File)) {
+      return true
+    }
+
+    return false
+  }
+
+  isObject(value) {
+    if (typeof value == "object" && value !== null && value.constructor.name == "Object") {
       return true
     }
 
@@ -56,7 +80,7 @@ export default class ApiMakerCommandSubmitData {
 
       if (Array.isArray(value)) {
         newArray.push(this.convertDynamic(value, type))
-      } else if (typeof value == "object" && value !== null && value.constructor.name == "Object") {
+      } else if (this.isObject(value)) {
         newArray.push(this.convertDynamic(value, type))
       } else {
         newArray.push(value)
@@ -78,7 +102,7 @@ export default class ApiMakerCommandSubmitData {
 
       if (Array.isArray(value)) {
         newObject[key] = this.convertDynamic(value, type)
-      } else if (typeof value == "object" && value !== null && value.constructor.name == "Object") {
+      } else if (this.isObject(value)) {
         newObject[key] = this.convertDynamic(value, type)
       } else {
         newObject[key] = value

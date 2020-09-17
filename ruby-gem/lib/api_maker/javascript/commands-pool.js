@@ -94,9 +94,15 @@ export default class ApiMakerCommandsPool {
       submitData.global = this.globalRequestData
 
     const commandSubmitData = new CommandSubmitData(submitData)
-    const formData = commandSubmitData.getFormData()
     const url = `/api_maker/commands`
-    const response = await Api.requestLocal({path: url, method: "POST", rawData: formData})
+
+    let response
+
+    if (commandSubmitData.getFilesCount() > 0) {
+      response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()})
+    } else {
+      response = await Api.requestLocal({path: url, method: "POST", data: {raw: commandSubmitData.getJsonData()}})
+    }
 
     for(const commandId in response.responses) {
       const commandResponse = response.responses[commandId]

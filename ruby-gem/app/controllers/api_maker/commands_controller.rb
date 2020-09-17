@@ -25,16 +25,15 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
   end
 
   def json_params
-    @json_params ||= begin
-      return if params[:json].blank?
-
-      json_params = JSON.parse(params[:json])
-      controller_params = ActionController::Parameters.new(json_params)
-
-      {result: controller_params}
+    @json_params ||= if json_data
+      ActionController::Parameters.new(json_data)
     end
+  end
 
-    @json_params.fetch(:result)
+  def json_data
+    @json_data ||= if params[:json]
+      JSON.parse(params[:json])
+    end
   end
 
   def raw_params
@@ -42,8 +41,10 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
   end
 
   def pool_params
-    @pool ||= if json_params && raw_params
-      json_params.deep_merge(raw_params)
+    @pool ||= if json_data && raw_params
+      raw_data = raw_params.permit!.to_h
+      merged_data = json_data.deep_merge(raw_data)
+      ActionController::Parameters.new(merged_data)
     elsif json_params
       json_params
     elsif raw_params
