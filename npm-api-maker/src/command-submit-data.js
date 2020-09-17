@@ -17,7 +17,7 @@ export default class ApiMakerCommandSubmitData {
   }
 
   getRawData() {
-    if (this.rawData) {
+    if (!this.rawData) {
       this.rawData = this.traverseObject(this.data, "raw")
     }
 
@@ -25,7 +25,7 @@ export default class ApiMakerCommandSubmitData {
   }
 
   getFormData() {
-    const objectForFormData = this.getRawData()
+    const objectForFormData = this.getRawData() || {}
 
     objectForFormData.json = JSON.stringify(this.getJsonData())
 
