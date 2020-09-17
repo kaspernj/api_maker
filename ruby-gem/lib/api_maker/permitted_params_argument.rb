@@ -7,6 +7,6 @@ class ApiMaker::PermittedParamsArgument
   end
 
   def params
-    command.args&.dig(:save)
+    @params ||= command.args&.dig(:save) || {}
   end
 end
