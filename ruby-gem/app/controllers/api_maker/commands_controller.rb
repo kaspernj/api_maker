@@ -42,14 +42,12 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
   end
 
   def pool_params
-    @pool ||= begin
-      if json_params && raw_params
-        json_params.deep_merge(raw_params)
-      elsif json_params
-        json_params
-      elsif raw_params
-        raw_params
-      end
+    @pool ||= if json_params && raw_params
+      json_params.deep_merge(raw_params)
+    elsif json_params
+      json_params
+    elsif raw_params
+      raw_params
     end
   end
 end
