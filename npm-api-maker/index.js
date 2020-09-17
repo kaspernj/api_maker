@@ -1,6 +1,7 @@
 export {
   Api,
   CanCan,
+  CommandSubmitData,
   CustomError,
   ErrorLogger,
   EventConnection,
