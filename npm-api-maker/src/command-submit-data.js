@@ -50,10 +50,6 @@ export default class ApiMakerCommandSubmitData {
       return true
     }
 
-    if (type == "raw") {
-      console.log({ object })
-    }
-
     if (type == "raw" && !Array.isArray(object) && !this.isObject(object) && !(object instanceof File)) {
       return true
     }
