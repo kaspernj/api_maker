@@ -35,7 +35,7 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
   end
 
   def merged_params
-    @pool_params ||= if json_data
+    @merged_params ||= if json_data
       raw_data = params.permit!.to_h
       merged_data = json_data.deep_merge(raw_data)
       ActionController::Parameters.new(merged_data)
