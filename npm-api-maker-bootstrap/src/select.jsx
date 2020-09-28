@@ -18,6 +18,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     label: PropTypes.node,
     labelContainerClassName: PropTypes.string,
     model: PropTypes.object,
+    onMatchValidationError: PropTypes.func,
     placeholder: PropTypes.string,
     wrapperClassName: PropTypes.string
   }
@@ -56,6 +57,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
       label,
       labelContainerClassName,
       name,
+      onMatchValidationError,
       placeholder,
       wrapperClassName,
       ...restProps
@@ -125,7 +127,12 @@ export default class ApiMakerBootstrapSelect extends React.Component {
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
+    const validationErrors = event.detail.getValidationErrorsForInput({
+      attribute: this.props.attribute,
+      inputName: this.inputName(),
+      onMatchValidationError: this.props.onMatchValidationError
+    })
+
     this.setState({validationErrors})
   }
 
