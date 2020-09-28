@@ -82,9 +82,18 @@ export class ValidationErrors {
     return this.validationErrors
   }
 
-  getValidationErrorsForInput(attributeName, inputName) {
-    const validationErrors = this.validationErrors.filter(validationError => validationError.matchesAttributeAndInputName(attributeName, inputName))
-    validationErrors.map(validationError => validationError.setHandled())
+  getValidationErrorsForInput(args) {
+    const {attributeName, inputName, onMatchValidationError} = args
+    const validationErrors = this.validationErrors.filter((validationError) => {
+      if (onMatchValidationError) {
+        return onMatchValidationError(validationError)
+      } else {
+        return validationError.matchesAttributeAndInputName(attributeName, inputName, onMatchValidationError)
+      }
+    })
+
+    validationErrors.map((validationError) => validationError.setHandled())
+
     return validationErrors
   }
 
