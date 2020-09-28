@@ -15,6 +15,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.Component {
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
+    onMatchValidationError: PropTypes.func,
     options: PropTypes.array.isRequired
   })
 
