@@ -19,6 +19,7 @@ export default class ApiMakerBootstrapRadioButtons extends React.Component {
     name: PropTypes.string,
     model: PropTypes.object,
     onChange: PropTypes.func,
+    onMatchValidationError: PropTypes.func,
     wrapperClassName: PropTypes.string
   })
 
@@ -89,7 +90,11 @@ export default class ApiMakerBootstrapRadioButtons extends React.Component {
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
+    const validationErrors = event.detail.getValidationErrorsForInput({
+      attribute: this.props.attribute,
+      inputName: this.inputName(),
+      onMatchValidationError: this.props.onMatchValidationError
+    })
     this.setState({validationErrors})
   }
 

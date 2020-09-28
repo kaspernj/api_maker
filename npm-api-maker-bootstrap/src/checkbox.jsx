@@ -21,6 +21,7 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
+    onMatchValidationError: PropTypes.func,
     wrapperClassName: PropTypes.string,
     zeroInput: PropTypes.bool
   }
@@ -46,7 +47,7 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
   }
 
   render() {
-    const { className, hint, id, label, labelClassName, wrapperClassName, ...restProps } = this.props
+    const { className, hint, id, label, labelClassName, onMatchValidationError, wrapperClassName, ...restProps } = this.props
     const { form, validationErrors } = this.state
 
     return (
@@ -98,7 +99,12 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
+    const validationErrors = event.detail.getValidationErrorsForInput({
+      attribute: this.props.attribute,
+      inputName: this.inputName(),
+      onMatchValidationError: this.props.onMatchValidationError
+    })
+
     this.setState({validationErrors})
   }
 

@@ -1,8 +1,6 @@
-import { Api, CustomError, FormDataToObject } from "@kaspernj/api-maker"
+import { Api, CommandSubmitData, CustomError, FormDataToObject } from "@kaspernj/api-maker"
 import Deserializer from "./deserializer"
 import {Serializer} from "@kaspernj/api-maker"
-
-const objectToFormData = require("object-to-formdata").serialize
 
 export default class ApiMakerCommandsPool {
   static addCommand(data, args = {}) {
@@ -90,14 +88,21 @@ export default class ApiMakerCommandsPool {
     this.pool = {}
     this.poolData = {}
 
-    const objectForFormData = {pool: currentPoolData}
+    const submitData = {pool: currentPoolData}
 
     if (this.globalRequestData)
-      objectForFormData.global = this.globalRequestData
+      submitData.global = this.globalRequestData
 
-    const formData = objectToFormData(objectForFormData)
+    const commandSubmitData = new CommandSubmitData(submitData)
     const url = `/api_maker/commands`
-    const response = await Api.requestLocal({path: url, method: "POST", rawData: formData})
+
+    let response
+
+    if (commandSubmitData.getFilesCount() > 0) {
+      response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()})
+    } else {
+      response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()})
+    }
 
     for(const commandId in response.responses) {
       const commandResponse = response.responses[commandId]

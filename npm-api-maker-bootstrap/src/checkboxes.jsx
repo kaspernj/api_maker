@@ -124,7 +124,11 @@ export default class ApiMakerBootstrapCheckboxes extends React.Component {
   }
 
   onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrorsForInput(this.props.attribute, this.inputName())
+    const validationErrors = event.detail.getValidationErrorsForInput({
+      attribute: this.props.attribute,
+      inputName: this.inputName(),
+      onMatchValidationError: this.props.onMatchValidationError
+    })
     this.setState({validationErrors})
   }
 
