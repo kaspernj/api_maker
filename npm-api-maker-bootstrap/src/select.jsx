@@ -116,7 +116,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
 
     if (this.props.className) classNames.push(this.props.className)
 
-    if (this.state.validationErrors.length > 0)
+    if (this.state.errors.length > 0)
       classNames.push("is-invalid")
 
     return classNames.join(" ")
