@@ -1046,6 +1046,16 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
+"@kaspernj/api-maker@^1.0.18":
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.18.tgz#c77c603ecfe206a0c3b3d93167cb5ad08a65bf4b"
+  integrity sha512-yIEjCVNNG3tjq9FzAAkA9/9ia5wG/mfwjRRZMf+LyEPHxL0p+D7v9Eub+XBTSXdRqLPkW8wl26g0PvQyguNXXg==
+
+"@kaspernj/object-digger@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.1.tgz#d76a787b8fb5e9b48a37fa11c16756f138070895"
+  integrity sha512-kIMqg6Iq0zrYglAZ095n9hMbscYpiqG/xEaX5f/82BMvh0d/ZGvGNPhbdk1EAHnXOdFfA3KfEgZMoPLHdggb8Q==
+
 "@sinonjs/commons@^1.7.0":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.7.2.tgz#505f55c74e0272b43f6c52d81946bed7058fc0e2"

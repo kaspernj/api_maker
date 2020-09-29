@@ -10,6 +10,7 @@ before_script:
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-bootstrap
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-inputs
+  - cd npm-api-maker-inputs && yarn link @kaspernj/api-maker
   - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle install --jobs 4 --without production staging
   - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec appraisal install
   - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec appraisal bundle

@@ -44,5 +44,9 @@
     "prop-types": "^15.7.2",
     "prop-types-exact": "^1.2.0",
     "react": "^16.13.1"
+  },
+  "dependencies": {
+    "@kaspernj/api-maker": "^1.0.18",
+    "@kaspernj/object-digger": "^1.0.1"
   }
 }
