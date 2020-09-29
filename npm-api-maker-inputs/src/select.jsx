@@ -68,7 +68,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
         <select
           defaultValue={this.inputDefaultValue()}
           id={idForComponent(this)}
-          name={nameForComponent(this)}
+          name={this.inputName()}
           ref="select"
           {...restProps}
         >
@@ -103,6 +103,10 @@ export default class ApiMakerBootstrapSelect extends React.Component {
 
       return this.props.model[this.props.attribute]()
     }
+  }
+
+  inputName() {
+    return nameForComponent(this)
   }
 
   onValidationErrors(event) {
