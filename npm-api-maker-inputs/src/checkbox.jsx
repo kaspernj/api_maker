@@ -1,3 +1,4 @@
+import {digs} from "@kaspernj/object-digger"
 import idForComponent from "./id-for-component"
 import nameForComponent from "./name-for-component"
 import PropTypes from "prop-types"
@@ -49,7 +50,8 @@ export default class ApiMakerCheckbox extends React.Component {
   }
 
   render() {
-    const { attribute, defaultChecked, defaultValue, id, model, name, onErrors, zeroInput, ...restProps } = this.props
+    const {attribute, defaultChecked, defaultValue, id, model, name, onErrors, zeroInput, ...restProps} = this.props
+    const {form} = digs(this.state, "form")
     const inputName = this.inputName()
 
     return (
