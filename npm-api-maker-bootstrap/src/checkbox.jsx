@@ -21,7 +21,6 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
-    onMatchValidationError: PropTypes.func,
     wrapperClassName: PropTypes.string,
     zeroInput: PropTypes.bool
   }
@@ -29,36 +28,23 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      validationErrors: []
+      errors: []
     }
-  }
-
-  componentDidMount() {
-    this.setForm()
-  }
-
-  componentDidUpdate() {
-    this.setForm()
-  }
-
-  setForm() {
-    const form = this.refs.checkbox && this.refs.checkbox.refs.input && this.refs.checkbox.refs.input.form
-    if (form != this.state.form) this.setState({form})
   }
 
   render() {
     const { className, hint, id, label, labelClassName, onMatchValidationError, wrapperClassName, ...restProps } = this.props
-    const { form, validationErrors } = this.state
+    const { errors } = this.state
 
     return (
       <div className={this.wrapperClassName()}>
-        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         <div className="form-check">
           <Checkbox
             defaultChecked={this.inputDefaultChecked()}
             className={classNames("form-check-input", className)}
             id={this.inputId()}
             name={this.inputName()}
+            onErrors={(errors) => this.onErrors(errors)}
             ref="checkbox"
             {...restProps}
           />
@@ -74,7 +60,7 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
             {hint}
           </p>
         }
-        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
+        {errors.length > 0 && <InvalidFeedback errors={errors} />}
       </div>
     )
   }
@@ -96,16 +82,6 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
 
   inputName() {
     return nameForComponent(this)
-  }
-
-  onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrorsForInput({
-      attribute: this.props.attribute,
-      inputName: this.inputName(),
-      onMatchValidationError: this.props.onMatchValidationError
-    })
-
-    this.setState({validationErrors})
   }
 
   label() {

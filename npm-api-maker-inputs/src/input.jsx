@@ -1,4 +1,5 @@
-import classNames from "classnames"
+import {dig, digs} from "@kaspernj/object-digger"
+import {EventListener} from "@kaspernj/api-maker"
 import idForComponent from "./id-for-component"
 import nameForComponent from "./name-for-component"
 import PropTypes from "prop-types"
@@ -12,44 +13,70 @@ export default class ApiMakerInput extends React.Component {
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
+    onErrors: PropTypes.func,
+    onMatchValidationError: PropTypes.func,
     type: PropTypes.string
   }
 
   constructor(props) {
     super(props)
     this.state = {
-      blankInputName: this.props.type == "file"
+      blankInputName: this.props.type == "file",
+      form: undefined
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.onErrors) {
+      this.setForm()
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.onErrors) {
+      this.setForm()
+    }
+  }
+
+  setForm() {
+    const form = dig(this, "refs", "input", "form")
+
+    if (form != this.state.form) {
+      this.setState({form})
     }
   }
 
   render() {
-    const { attribute, id, model, name, onChange, type, ...restProps } = this.props
+    const {attribute, id, model, name, onChange, onErrors, onMatchValidationError, type, ...restProps} = this.props
+    const {form} = digs(this.state, "form")
 
-    if (type == "textarea") {
-      return (
-        <textarea
-          defaultValue={this.inputDefaultValue()}
-          id={this.inputId()}
-          name={this.inputName()}
-          onChange={(e) => this.onInputChanged(e)}
-          ref="input"
-          type={this.inputType()}
-          {...restProps}
-        />
-      )
-    } else {
-      return (
-        <input
-          defaultValue={this.inputDefaultValue()}
-          id={this.inputId()}
-          name={this.inputName()}
-          onChange={(e) => this.onInputChanged(e)}
-          ref="input"
-          type={this.inputType()}
-          {...restProps}
-        />
-      )
-    }
+    return (
+      <>
+        {form && onErrors && <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />}
+        {type == "textarea" &&
+          <textarea
+            defaultValue={this.inputDefaultValue()}
+            id={this.inputId()}
+            name={this.inputName()}
+            onChange={(e) => this.onInputChanged(e)}
+            ref="input"
+            type={this.inputType()}
+            {...restProps}
+          />
+        }
+        {type != "textarea" &&
+          <input
+            defaultValue={this.inputDefaultValue()}
+            id={this.inputId()}
+            name={this.inputName()}
+            onChange={(e) => this.onInputChanged(e)}
+            ref="input"
+            type={this.inputType()}
+            {...restProps}
+          />
+        }
+      </>
+    )
   }
 
   formatValue(value) {
@@ -91,6 +118,22 @@ export default class ApiMakerInput extends React.Component {
     } else {
       return "text"
     }
+  }
+
+  onValidationErrors(event) {
+    const {onErrors} = this.props
+
+    if (!onErrors) {
+      return
+    }
+
+    const errors = event.detail.getValidationErrorsForInput({
+      attribute: this.props.attribute,
+      inputName: this.inputName(),
+      onMatchValidationError: this.props.onMatchValidationError
+    })
+
+    onErrors(errors)
   }
 
   onInputChanged(e) {
