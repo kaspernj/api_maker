@@ -1,5 +1,4 @@
 import { dig } from "@kaspernj/object-digger"
-import { EventListener } from "@kaspernj/api-maker"
 import { idForComponent, nameForComponent, Select } from "@kaspernj/api-maker-inputs"
 import InvalidFeedback from "./invalid-feedback"
 import PropTypes from "prop-types"
@@ -18,7 +17,6 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     label: PropTypes.node,
     labelContainerClassName: PropTypes.string,
     model: PropTypes.object,
-    onMatchValidationError: PropTypes.func,
     placeholder: PropTypes.string,
     wrapperClassName: PropTypes.string
   }
@@ -26,28 +24,12 @@ export default class ApiMakerBootstrapSelect extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      validationErrors: []
-    }
-  }
-
-  componentDidMount() {
-    this.setForm()
-  }
-
-  componentDidUpdate() {
-    this.setForm()
-  }
-
-  setForm() {
-    const form = dig(this, "refs", "select", "refs", "select", "form")
-
-    if (form != this.state.form) {
-      this.setState({form})
+      errors: []
     }
   }
 
   render() {
-    const { form, validationErrors } = this.state
+    const { errors } = this.state
     const {
       className,
       description,
@@ -57,7 +39,6 @@ export default class ApiMakerBootstrapSelect extends React.Component {
       label,
       labelContainerClassName,
       name,
-      onMatchValidationError,
       placeholder,
       wrapperClassName,
       ...restProps
@@ -65,7 +46,6 @@ export default class ApiMakerBootstrapSelect extends React.Component {
 
     return (
       <div className={this.wrapperClassName()}>
-        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         {this.label() &&
           <div className={labelContainerClassName ? labelContainerClassName : null}>
             <label className={this.labelClassName()} htmlFor={this.inputId()}>
@@ -87,6 +67,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
           className={this.selectClassName()}
           id={this.inputId()}
           name={this.inputName()}
+          onErrors={(errors) => this.onErrors(errors)}
           ref="select"
           {...restProps}
         />
@@ -95,7 +76,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
             {hintBottom}
           </span>
         }
-        {validationErrors.length > 0 && <InvalidFeedback errors={validationErrors} />}
+        {errors.length > 0 && <InvalidFeedback errors={errors} />}
       </div>
     )
   }
@@ -126,14 +107,8 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     return classNames.join(" ")
   }
 
-  onValidationErrors(event) {
-    const validationErrors = event.detail.getValidationErrorsForInput({
-      attribute: this.props.attribute,
-      inputName: this.inputName(),
-      onMatchValidationError: this.props.onMatchValidationError
-    })
-
-    this.setState({validationErrors})
+  onErrors(errors) {
+    this.setState({errors})
   }
 
   selectClassName() {
@@ -141,7 +116,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
 
     if (this.props.className) classNames.push(this.props.className)
 
-    if (this.state.validationErrors.length > 0)
+    if (this.state.errors.length > 0)
       classNames.push("is-invalid")
 
     return classNames.join(" ")
