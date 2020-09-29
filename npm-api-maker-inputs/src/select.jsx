@@ -1,3 +1,4 @@
+import {dig} from "@kaspernj/object-digger"
 import {EventListener} from "@kaspernj/api-maker"
 import idForComponent from "./id-for-component"
 import nameForComponent from "./name-for-component"
