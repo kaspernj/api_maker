@@ -4,6 +4,7 @@ import Card from "./card"
 import Checkbox from "./checkbox"
 import Checkboxes from "./checkboxes"
 import Input from "./input"
+import InvalidFeedback from "./invalid-feedback"
 import LiveTable from "./live-table"
 import Paginate from "./paginate"
 import RadioButtons from "./radio-buttons"
@@ -17,6 +18,7 @@ export {
   Checkbox,
   Checkboxes,
   Input,
+  InvalidFeedback,
   LiveTable,
   Paginate,
   RadioButtons,

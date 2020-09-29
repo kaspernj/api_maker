@@ -16,22 +16,45 @@ export default class ApiMakerCheckbox extends React.Component {
     id: PropTypes.string,
     model: PropTypes.object,
     name: PropTypes.string,
+    onErrors: PropTypes.func,
+    onMatchValidationError: PropTypes.func,
     zeroInput: PropTypes.bool
   }
 
   constructor(props) {
     super(props)
     this.state = {
-      validationErrors: []
+      form: undefined
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.onErrors) {
+      this.setForm()
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.onErrors) {
+      this.setForm()
+    }
+  }
+
+  setForm() {
+    const form = this.refs.checkbox && this.refs.checkbox.refs.input && this.refs.checkbox.refs.input.form
+
+    if (form != this.state.form) {
+      this.setState({form})
     }
   }
 
   render() {
-    const { attribute, defaultChecked, defaultValue, id, model, name, zeroInput, ...restProps } = this.props
+    const { attribute, defaultChecked, defaultValue, id, model, name, onErrors, zeroInput, ...restProps } = this.props
     const inputName = this.inputName()
 
     return (
       <>
+        {form && onErrors && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         {zeroInput && inputName &&
           <input defaultValue="0" name={inputName} type="hidden" type="hidden" />
         }
@@ -43,7 +66,7 @@ export default class ApiMakerCheckbox extends React.Component {
           ref="input"
           type="checkbox"
           {...restProps}
-          />
+        />
       </>
     )
   }
@@ -65,5 +88,21 @@ export default class ApiMakerCheckbox extends React.Component {
 
   inputName() {
     return nameForComponent(this)
+  }
+
+  onValidationErrors(event) {
+    const {onErrors} = this.props
+
+    if (!onErrors) {
+      return
+    }
+
+    const errors = event.detail.getValidationErrorsForInput({
+      attribute: this.props.attribute,
+      inputName: this.inputName(),
+      onMatchValidationError: this.props.onMatchValidationError
+    })
+
+    onErrors(errors)
   }
 }
