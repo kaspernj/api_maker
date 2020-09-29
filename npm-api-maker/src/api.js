@@ -1,7 +1,7 @@
 import { CustomError } from "./errors"
 import qs from "qs"
 
-export default class {
+export default class Api {
   static get(path, data = null) {
     return this.requestLocal({"path": path, "pathParams": data, "method": "GET"})
   }
