@@ -31,7 +31,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@kaspernj/api-maker": "^1.0.18",
-    "@kaspernj/object-digger": "^1.0.1"
+    "@kaspernj/api-maker": ">= 1.0.28",
+    "@kaspernj/object-digger": ">= 1.0.1"
   }
 }

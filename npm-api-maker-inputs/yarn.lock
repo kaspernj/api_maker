@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@kaspernj/api-maker@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.18.tgz#c77c603ecfe206a0c3b3d93167cb5ad08a65bf4b"
-  integrity sha512-yIEjCVNNG3tjq9FzAAkA9/9ia5wG/mfwjRRZMf+LyEPHxL0p+D7v9Eub+XBTSXdRqLPkW8wl26g0PvQyguNXXg==
+"@kaspernj/api-maker@>= 1.0.28":
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.28.tgz#086deedb68edd8dee67b83ed5f0164de40976a62"
+  integrity sha512-VbK0vWZ1ov9KSYJkwEIW2rB0bpClhz/kg0KLq/ZaY1Vm6kllWQqAaaDgXYSf2iQy5sM3BqNQSPjJCgphBImOow==
 
-"@kaspernj/object-digger@^1.0.1":
+"@kaspernj/object-digger@>= 1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.1.tgz#d76a787b8fb5e9b48a37fa11c16756f138070895"
   integrity sha512-kIMqg6Iq0zrYglAZ095n9hMbscYpiqG/xEaX5f/82BMvh0d/ZGvGNPhbdk1EAHnXOdFfA3KfEgZMoPLHdggb8Q==
