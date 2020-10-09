@@ -1,13 +1,19 @@
 import {dig, digs} from "@kaspernj/object-digger"
-import {EventListener} from "@kaspernj/api-maker"
+import {EventListener, EventUpdated} from "@kaspernj/api-maker"
 import idForComponent from "./id-for-component"
 import nameForComponent from "./name-for-component"
 import PropTypes from "prop-types"
 import React from "react"
 
 export default class ApiMakerInput extends React.Component {
+  static defaultProps = {
+    autoRefresh: false,
+    autoSubmit: false
+  }
   static propTypes = {
     attribute: PropTypes.string,
+    autoRefresh: PropTypes.bool.isRequired,
+    autoSubmit: PropTypes.bool.isRequired,
     className: PropTypes.string,
     id: PropTypes.string,
     model: PropTypes.object,
@@ -47,11 +53,14 @@ export default class ApiMakerInput extends React.Component {
   }
 
   render() {
-    const {attribute, id, model, name, onChange, onErrors, onMatchValidationError, type, ...restProps} = this.props
+    const {attribute, autoRefresh, autoSubmit, id, model, name, onChange, onErrors, onMatchValidationError, type, ...restProps} = this.props
     const {form} = digs(this.state, "form")
 
     return (
       <>
+        {autoRefresh && model &&
+          <EventUpdated model={model} onUpdated={(args) => this.onModelUpdated(args)} />
+        }
         {form && onErrors && <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />}
         {type == "textarea" &&
           <textarea
@@ -77,6 +86,16 @@ export default class ApiMakerInput extends React.Component {
         }
       </>
     )
+  }
+
+  autoSubmit() {
+    const {attribute, model} = this.props
+    const value = digg(this, "refs", "input", "value")
+    const updateParams = {}
+
+    updateParams[attribute] = value
+
+    model.update(updateParams)
   }
 
   formatValue(value) {
@@ -120,6 +139,18 @@ export default class ApiMakerInput extends React.Component {
     }
   }
 
+  onModelUpdated(args) {
+    const {attribute} = digs(this.props, "attribute")
+    const newModel = digg(args, "model")
+    const input = digg(this, "refs", "input")
+    const currentValue = digg(input, "value")
+    const newValue = newModel.readAttribute(attribute)
+
+    if (currentValue != newValue) {
+      input.value = newValue
+    }
+  }
+
   onValidationErrors(event) {
     const {onErrors} = this.props
 
@@ -137,10 +168,19 @@ export default class ApiMakerInput extends React.Component {
   }
 
   onInputChanged(e) {
-    const { onChange, type } = this.props
+    const { attribute, autoSubmit, model, onChange, type } = this.props
 
+    if (attribute && autoSubmit && model) this.delayAutoSubmit()
     if (type == "file") this.setState({blankInputName: this.getBlankInputName()})
     if (onChange) onChange(e)
+  }
+
+  delayAutoSubmit() {
+    if (this.delayAutoSubmitTimeout) {
+      clearTimeout(this.delayAutoSubmitTimeout)
+    }
+
+    this.delayAutoSubmitTimeout = setTimeout(() => this.autoSubmit(), 200)
   }
 
   // This fixes an issue in Firefox and ActiveStorage, where uploads would be a blank string if a file wasn't chosen
