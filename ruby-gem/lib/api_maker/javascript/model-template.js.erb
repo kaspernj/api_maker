@@ -67,7 +67,7 @@ class <%= resource.short_name %> extends BaseModel {
   <% attributes.each do |attribute_data| %>
     <% methodName = ApiMaker::JsMethodNamerService.execute!(name: attribute_data.fetch(:name)) %>
     <%= methodName %>() {
-      return this._getAttribute("<%= attribute_data.fetch(:name) %>")
+      return this.readAttribute("<%= attribute_data.fetch(:name) %>")
     }
 
     <%= ApiMaker::JsMethodNamerService.execute!(name: "has_#{attribute_data.fetch(:name)}") %>() {

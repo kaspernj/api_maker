@@ -63,7 +63,7 @@ export default class BaseModel {
       let deleteChange = false
 
       if (this.isAttributeLoaded(key)) {
-        const oldValue = this._getAttribute(key)
+        const oldValue = this.readAttribute(key)
         const originalValue = this.modelData[key]
 
         if (newValue == oldValue) {
@@ -589,7 +589,7 @@ export default class BaseModel {
     return postData
   }
 
-  _getAttribute(attributeName) {
+  readAttribute(attributeName) {
     if (attributeName in this.changes) {
       return this.changes[attributeName]
     } else if (attributeName in this.modelData) {
@@ -707,7 +707,7 @@ export default class BaseModel {
   }
 
   primaryKey() {
-    return this._getAttribute(digg(this.modelClassData(), "primaryKey"))
+    return this.readAttribute(digg(this.modelClassData(), "primaryKey"))
   }
 
   static _token() {
