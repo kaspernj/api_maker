@@ -59,7 +59,12 @@ private
       Rails.logger.error e.message
       Rails.logger.error e.backtrace.join("\n")
 
-      ApiMaker::Configuration.current.report_error(controller: controller, error: e, response: nil)
+      ApiMaker::Configuration.current.report_error(
+        command: nil,
+        controller: controller,
+        error: e,
+        response: nil
+      )
     end
   end
 end
