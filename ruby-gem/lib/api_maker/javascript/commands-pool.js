@@ -1,5 +1,6 @@
 import { Api, CommandSubmitData, CustomError, FormDataToObject } from "@kaspernj/api-maker"
 import Deserializer from "./deserializer"
+import {dig} from "@kaspernj/object-digger"
 import {Serializer} from "@kaspernj/api-maker"
 
 export default class ApiMakerCommandsPool {
