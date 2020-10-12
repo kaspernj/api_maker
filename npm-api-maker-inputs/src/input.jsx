@@ -53,7 +53,7 @@ export default class ApiMakerInput extends React.Component {
   }
 
   render() {
-    const {attribute, autoRefresh, autoSubmit, id, model, name, onChange, onErrors, onMatchValidationError, type, ...restProps} = this.props
+    const {attribute, autoRefresh, autoSubmit, defaultValue, id, model, name, onChange, onErrors, onMatchValidationError, type, ...restProps} = this.props
     const {form} = digs(this.state, "form")
 
     return (
@@ -100,7 +100,7 @@ export default class ApiMakerInput extends React.Component {
 
   formatValue(value) {
     // We need to use a certain format for datetime-local
-    if (value instanceof Date) {
+    if (value instanceof Date && !isNaN(value.getTime())) {
       if (this.inputType() == "datetime-local") {
         return I18n.strftime(value, "%Y-%m-%dT%H:%M:%S")
       } else if (this.inputType() == "date") {
