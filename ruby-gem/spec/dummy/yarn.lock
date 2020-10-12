@@ -725,24 +725,27 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@kaspernj/api-maker-bootstrap@1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.18.tgz#3d59401b0a54375565114131008b2882e21035dd"
-  integrity sha512-piad3j7mh71EYiV7fxAVl03DtLd9xGK/dfP1JI2hsYltxdFS7idejsHW1hzo30XJlbD2ZMxA1dUDszYTCcKo+g==
+"@kaspernj/api-maker-bootstrap@1.0.27":
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.27.tgz#34446560caf8d8461e8fb384d256d81aa2932fa0"
+  integrity sha512-yws3FWEu0TKwkf2qeVL2bORTt5lED09TirA56G9pw8wRanU57TpY0y/+5c30SDX/LaNfTAOtqfnL10yosNr+wQ==
   dependencies:
     "@kaspernj/object-digger" "^1.0.1"
 
-"@kaspernj/api-maker-inputs@1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.9.tgz#0bb5cfa448aaba85ab4d643966c94b2b98990ee6"
-  integrity sha512-CHnYIk6D2bQmmYDB2Hj/txoxO+WYCGfTXCrfKG9m8bY4uguu8YGKqCPjhpXhzNP3sEYJcdpG/soO5UEmI2nXDA==
+"@kaspernj/api-maker-inputs@1.0.28":
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.28.tgz#e1eb5ea7ce4676d2093bc7f7bc0de9b1e33d312f"
+  integrity sha512-JpHmp1JqSVHd4c1+blH4UnO0oIvzpsNSt7+jy30TXLOx1u7Dzbgveok3FcsPUd99lGLGA4nv6YZrtycnqlOP5w==
+  dependencies:
+    "@kaspernj/api-maker" ">= 1.0.28"
+    "@kaspernj/object-digger" ">= 1.0.1"
 
-"@kaspernj/api-maker@1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.8.tgz#00c199f25f9f5fe1a7a2e6032a8ba75f9a26db35"
-  integrity sha512-t4HzT6I85EdYPMQxvlX5afm/8F97J7K4Vm4O7YNc+yecVkj2GTKK3iojaeSROrRid68/gGti+BdZ2TZ6YPmj8A==
+"@kaspernj/api-maker@1.0.28", "@kaspernj/api-maker@>= 1.0.28":
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.28.tgz#086deedb68edd8dee67b83ed5f0164de40976a62"
+  integrity sha512-VbK0vWZ1ov9KSYJkwEIW2rB0bpClhz/kg0KLq/ZaY1Vm6kllWQqAaaDgXYSf2iQy5sM3BqNQSPjJCgphBImOow==
 
-"@kaspernj/object-digger@^1.0.1":
+"@kaspernj/object-digger@>= 1.0.1", "@kaspernj/object-digger@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.1.tgz#d76a787b8fb5e9b48a37fa11c16756f138070895"
   integrity sha512-kIMqg6Iq0zrYglAZ095n9hMbscYpiqG/xEaX5f/82BMvh0d/ZGvGNPhbdk1EAHnXOdFfA3KfEgZMoPLHdggb8Q==

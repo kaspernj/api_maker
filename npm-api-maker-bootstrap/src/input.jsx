@@ -10,7 +10,6 @@ export default class ApiMakerBootstrapInput extends React.Component {
     className: PropTypes.string,
     currenciesCollection: PropTypes.array,
     currencyName: PropTypes.string,
-    defaultValue: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.node]),
     hint: PropTypes.node,
     hintBottom: PropTypes.node,
     id: PropTypes.string,
@@ -40,7 +39,6 @@ export default class ApiMakerBootstrapInput extends React.Component {
       className,
       currenciesCollection,
       currencyName,
-      defaultValue,
       hint,
       hintBottom,
       id,
@@ -91,7 +89,6 @@ export default class ApiMakerBootstrapInput extends React.Component {
             <Input
               attribute={attribute}
               className={this.inputClassName()}
-              defaultValue={this.inputDefaultValue()}
               id={this.inputId()}
               model={model}
               name={this.inputName()}
@@ -129,28 +126,6 @@ export default class ApiMakerBootstrapInput extends React.Component {
       classNames.push("is-invalid")
 
     return classNames.join(" ")
-  }
-
-  inputDefaultValue() {
-    if ("defaultValue" in this.props) {
-      return this.formatValue(this.props.defaultValue)
-    } else if (this.props.model) {
-      if (!this.props.model[this.props.attribute])
-        throw new Error(`No such attribute: ${this.props.model.modelClassData().name}#${this.props.attribute}`)
-
-      return this.formatValue(this.props.model[this.props.attribute]())
-    }
-  }
-
-  formatValue(value) {
-    // We need to use a certain format for datetime-local
-    if (this.inputType() == "datetime-local" && value instanceof Date) {
-      return I18n.strftime(value, "%Y-%m-%dT%H:%M:%S")
-    } else if (this.inputType() == "date" && value instanceof Date) {
-      return I18n.strftime(value, "%Y-%m-%d")
-    }
-
-    return value
   }
 
   inputId() {
