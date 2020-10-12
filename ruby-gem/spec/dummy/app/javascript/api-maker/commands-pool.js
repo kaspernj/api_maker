@@ -1,5 +1,6 @@
 import { Api, CommandSubmitData, CustomError, FormDataToObject } from "@kaspernj/api-maker"
 import Deserializer from "./deserializer"
+import {dig} from "@kaspernj/object-digger"
 import {Serializer} from "@kaspernj/api-maker"
 
 export default class ApiMakerCommandsPool {
@@ -108,6 +109,14 @@ export default class ApiMakerCommandsPool {
       const commandResponse = response.responses[commandId]
       const commandResponseData = Deserializer.parse(commandResponse.data)
       const commandData = currentPool[parseInt(commandId)]
+
+      if (commandResponseData) {
+        const bugReportUrl = dig(commandResponseData, "bug_report_url")
+
+        if (bugReportUrl) {
+          console.log(`Bug report URL: ${bugReportUrl}`)
+        }
+      }
 
       if (commandResponse.type == "success") {
         commandData.resolve(commandResponseData)
