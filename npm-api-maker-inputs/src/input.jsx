@@ -100,9 +100,9 @@ export default class ApiMakerInput extends React.Component {
 
   formatValue(value) {
     // We need to use a certain format for datetime-local
-    if (this.inputType() == "datetime-local" && value instanceof Date) {
+    if (this.inputType() == "datetime-local" && value instanceof Date && !isNaN(value.getTime())) {
       return I18n.strftime(value, "%Y-%m-%dT%H:%M:%S")
-    } else if (this.inputType() == "date" && value instanceof Date) {
+    } else if (this.inputType() == "date" && value instanceof Date && !isNaN(value.getTime())) {
       return I18n.strftime(value, "%Y-%m-%d")
     }
 
@@ -110,13 +110,15 @@ export default class ApiMakerInput extends React.Component {
   }
 
   inputDefaultValue() {
-    if ("defaultValue" in this.props) {
-      return this.formatValue(this.props.defaultValue)
-    } else if (this.props.model) {
-      if (!this.props.model[this.props.attribute])
-        throw new Error(`No such attribute: ${this.props.model.modelClassData().name}#${this.props.attribute}`)
+    const {attribute, defaultValue, model} = this.props
 
-      return this.formatValue(this.props.model[this.props.attribute]())
+    if ("defaultValue" in this.props) {
+      return this.formatValue(defaultValue)
+    } else if (model) {
+      if (!model[attribute])
+        throw new Error(`No such attribute: ${model.modelClassData().name}#${attribute}`)
+
+      return this.formatValue(model[attribute]())
     }
   }
 
