@@ -83,12 +83,17 @@ private
     begin
       yield command
     rescue => e # rubocop:disable Style/RescueStandardError
-      command.error(success: false, errors: [command_error_message(e)])
+      error_response = {
+        success: false,
+        errors: [command_error_message(e)]
+      }
 
       Rails.logger.error e.message
       Rails.logger.error e.backtrace.join("\n")
 
-      ApiMaker::Configuration.current.report_error(controller: controller, error: e)
+      ApiMaker::Configuration.current.report_error(controller: controller, error: e, response: error_response)
+
+      command.error(error_response)
     end
   end
 
