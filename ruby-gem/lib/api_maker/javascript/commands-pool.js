@@ -109,10 +109,13 @@ export default class ApiMakerCommandsPool {
       const commandResponse = response.responses[commandId]
       const commandResponseData = Deserializer.parse(commandResponse.data)
       const commandData = currentPool[parseInt(commandId)]
-      const bugReportUrl = dig(commandResponseData, "bug_report_url")
 
-      if (bugReportUrl) {
-        console.log(`Bug report URL: ${bugReportUrl}`)
+      if (commandResponseData) {
+        const bugReportUrl = dig(commandResponseData, "bug_report_url")
+
+        if (bugReportUrl) {
+          console.log(`Bug report URL: ${bugReportUrl}`)
+        }
       }
 
       if (commandResponse.type == "success") {
