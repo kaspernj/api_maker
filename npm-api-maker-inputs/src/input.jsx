@@ -114,7 +114,7 @@ export default class ApiMakerInput extends React.Component {
 
     if ("defaultValue" in this.props) {
       return this.formatValue(defaultValue)
-    } else if (model) {
+    } else if (attribute && model) {
       if (!model[attribute])
         throw new Error(`No such attribute: ${model.modelClassData().name}#${attribute}`)
 
