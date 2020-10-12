@@ -27,8 +27,6 @@ require "waitutil"
 require "webdrivers"
 require "webpacker"
 
-Webdrivers::Chromedriver.required_version = ENV.fetch("CHROME_DRIVER_VERSION") if ENV["CHROME_DRIVER_VERSION"].present?
-
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
