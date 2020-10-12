@@ -100,7 +100,7 @@ export default class ApiMakerInput extends React.Component {
 
   formatValue(value) {
     // We need to use a certain format for datetime-local
-    if (value instanceof Date && !isNaN(value.getTime())) {
+    if (value instanceof Date) {
       if (this.inputType() == "datetime-local") {
         return I18n.strftime(value, "%Y-%m-%dT%H:%M:%S")
       } else if (this.inputType() == "date") {
