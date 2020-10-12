@@ -35,7 +35,6 @@ export default class ApiMakerBootstrapInput extends React.Component {
     const {errors} = this.state
     const {
       append,
-      attribute,
       className,
       currenciesCollection,
       currencyName,
@@ -44,7 +43,6 @@ export default class ApiMakerBootstrapInput extends React.Component {
       id,
       label,
       labelClassName,
-      model,
       name,
       prepend,
       wrapperClassName,
@@ -65,10 +63,8 @@ export default class ApiMakerBootstrapInput extends React.Component {
         }
         {this.inputType() == "money" &&
           <Money
-            attribute={attribute}
             currenciesCollection={currenciesCollection}
             currencyName={currencyName}
-            model={model}
             name={name}
             className={this.inputClassName()}
             onChange={this.props.onChange}
@@ -87,10 +83,8 @@ export default class ApiMakerBootstrapInput extends React.Component {
               </div>
             }
             <Input
-              attribute={attribute}
               className={this.inputClassName()}
               id={this.inputId()}
-              model={model}
               name={this.inputName()}
               onErrors={(errors) => this.onErrors(errors)}
               ref="input"
