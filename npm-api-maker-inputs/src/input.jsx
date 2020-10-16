@@ -16,6 +16,7 @@ export default class ApiMakerInput extends React.Component {
     autoRefresh: PropTypes.bool.isRequired,
     autoSubmit: PropTypes.bool.isRequired,
     className: PropTypes.string,
+    formatValue: PropTypes.func,
     id: PropTypes.string,
     model: PropTypes.object,
     name: PropTypes.string,
@@ -54,7 +55,21 @@ export default class ApiMakerInput extends React.Component {
   }
 
   render() {
-    const {attribute, autoRefresh, autoSubmit, defaultValue, id, model, name, onChange, onErrors, onMatchValidationError, type, ...restProps} = this.props
+    const {
+      attribute,
+      autoRefresh,
+      autoSubmit,
+      defaultValue,
+      formatValue,
+      id,
+      model,
+      name,
+      onChange,
+      onErrors,
+      onMatchValidationError,
+      type,
+      ...restProps
+    } = this.props
     const {form} = digs(this.state, "form")
 
     return (
@@ -101,8 +116,12 @@ export default class ApiMakerInput extends React.Component {
   }
 
   formatValue(value) {
-    // We need to use a certain format for datetime-local
-    if (value instanceof Date && !isNaN(value.getTime())) {
+    const {formatValue} = this.props
+
+    if (formatValue) {
+      return formatValue(value)
+    } else if (value instanceof Date && !isNaN(value.getTime())) {
+      // We need to use a certain format for datetime-local
       if (this.inputType() == "datetime-local") {
         return I18n.strftime(value, "%Y-%m-%dT%H:%M:%S")
       } else if (this.inputType() == "date") {
@@ -149,9 +168,10 @@ export default class ApiMakerInput extends React.Component {
     const input = digg(this, "refs", "input")
     const currentValue = digg(input, "value")
     const newValue = newModel.readAttribute(attribute)
+    const newFormattedValue = this.formatValue(newValue)
 
-    if (currentValue != newValue) {
-      input.value = newValue
+    if (currentValue != newFormattedValue) {
+      input.value = newFormattedValue
     }
   }
 
