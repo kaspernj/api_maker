@@ -1,6 +1,7 @@
 import {dig, digs} from "@kaspernj/object-digger"
 import {EventListener, EventUpdated} from "@kaspernj/api-maker"
 import idForComponent from "./id-for-component"
+import inflection from "inflection"
 import nameForComponent from "./name-for-component"
 import PropTypes from "prop-types"
 import React from "react"
@@ -90,10 +91,11 @@ export default class ApiMakerInput extends React.Component {
 
   autoSubmit() {
     const {attribute, model} = this.props
+    const updateAttributeName = inflection.underscore(attribute)
     const value = digg(this, "refs", "input", "value")
     const updateParams = {}
 
-    updateParams[attribute] = value
+    updateParams[updateAttributeName] = value
 
     model.update(updateParams)
   }
