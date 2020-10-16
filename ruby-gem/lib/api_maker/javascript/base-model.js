@@ -592,7 +592,7 @@ export default class BaseModel {
   readAttribute(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
 
-    return this.readAttributeUnderscore(attributeName)
+    return this.readAttributeUnderscore(attributeNameUnderscore)
   }
 
   readAttributeUnderscore(attributeName) {
