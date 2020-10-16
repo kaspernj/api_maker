@@ -1,9 +1,9 @@
 const inflection = require("inflection")
 
 export default function ApiMakerIdForComponent(component) {
-  if (component.props.id) {
+  if ("id" in component.props) {
     return component.props.id
-  } else if (component.props.model) {
+  } else if (component.props.attribute && component.props.model) {
     return `${component.props.model.modelClassData().paramKey}_${inflection.underscore(component.props.attribute)}`
   } else if (component.generatedInputId) {
     return component.generatedInputId
