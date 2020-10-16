@@ -3,26 +3,26 @@ import qs from "qs"
 
 export default class Api {
   static get(path, data = null) {
-    return this.requestLocal({"path": path, "pathParams": data, "method": "GET"})
+    return this.requestLocal({path, "pathParams": data, method: "GET"})
   }
 
   static delete(path, data = null) {
-    return this.requestLocal({"path": path, "pathParams": data, "method": "DELETE"})
+    return this.requestLocal({path, "pathParams": data, method: "DELETE"})
   }
 
   static patch(path, data = {}) {
-    return this.requestLocal({"path": path, "data": data, "method": "PATCH"})
+    return this.requestLocal({path, data, method: "PATCH"})
   }
 
   static post(path, data = {}) {
-    return this.requestLocal({"path": path, "data": data, "method": "POST"})
+    return this.requestLocal({path, data, method: "POST"})
   }
 
   static request(args) {
     let path = args.path
 
     if (args.pathParams) {
-      const pathParamsString = qs.stringify(args.pathParams, {"arrayFormat": "brackets"})
+      const pathParamsString = qs.stringify(args.pathParams, {arrayFormat: "brackets"})
       path += `?${pathParamsString}`
     }
 
@@ -42,7 +42,7 @@ export default class Api {
         if (xhr.status == 200) {
           resolve(response)
         } else {
-          reject(new CustomError(`Request failed with code: ${xhr.status}`, {response: response}))
+          reject(new CustomError(`Request failed with code: ${xhr.status}`, {response, xhr}))
         }
       }
 
@@ -70,7 +70,7 @@ export default class Api {
   }
 
   static put(path, data = {}) {
-    return this.requestLocal({"path": path, "data": data, "method": "PUT"})
+    return this.requestLocal({path, data, method: "PUT"})
   }
 
   static _token() {
