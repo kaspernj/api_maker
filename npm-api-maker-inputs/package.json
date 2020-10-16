@@ -21,7 +21,7 @@
     "type": "git",
     "url": "git+https://github.com/kaspernj/api-maker-inputs.git"
   },
-  "version": "1.0.29",
+  "version": "1.0.30",
   "peerDependencies": {
     "classnames": "^2.2.6",
     "format-number": "^3.0.0",
