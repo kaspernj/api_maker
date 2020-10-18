@@ -10,7 +10,8 @@ class <%= resource.short_name %> extends BaseModel {
       relationships: reflections_for_model_class_data,
       paramKey: model.model_name.param_key,
       path: "/api_maker/#{model.model_name.route_key}",
-      primaryKey: model.primary_key
+      primaryKey: model.primary_key,
+      underscore: model.model_name.plural
     }.to_json %>
   }
 

@@ -12,7 +12,7 @@ class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
     new_collection = @collection
     return succeed! new_collection if new_collection.is_a?(Array)
 
-    param_name = @model_class.model_name.param_key.dasherize
+    param_name = @model_class.model_name.param_key.underscore
     selected_columns = @select_columns&.dig(param_name)
     arel_table = Arel::Table.new(@table_name)
 

@@ -20,8 +20,8 @@ class ApiMaker::PreloaderBase
     end
   end
 
-  def collection_name
-    @collection_name ||= ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
+  def underscore_name
+    @underscore_name ||= ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).underscore_name
   end
 
   def models_with_join

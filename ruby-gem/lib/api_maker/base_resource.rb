@@ -74,6 +74,10 @@ class ApiMaker::BaseResource
     @short_name ||= name.match(/\AResources::(.+)Resource\Z/)[1]
   end
 
+  def self.underscore_name
+    @underscore_name ||= plural_name.underscore
+  end
+
   def initialize(ability: nil, args: {}, locals:, model:)
     @ability = ability
     @args = args

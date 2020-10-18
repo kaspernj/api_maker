@@ -50,7 +50,7 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail"]}).to_json)
 
     expect(result.dig("preloaded", "projects", "2", "r", "project_detail")).to eq 6
-    expect(result.dig("preloaded", "project-details", "6", "a", "details")).to eq "Test project details"
+    expect(result.dig("preloaded", "project_details", "6", "a", "details")).to eq "Test project details"
   end
 
   it "includes an empty relationship if it has been preloaded but doesnt exist for has one" do
@@ -93,7 +93,7 @@ describe ApiMaker::CollectionSerializer do
     expect(result.dig!("preloaded", "users", user.id.to_s, "r", "tasks")).to eq [3]
 
     task_preload = result.dig!("preloaded", "tasks").fetch("3")
-    project_detail_preload = result.dig!("preloaded", "project-details", "6")
+    project_detail_preload = result.dig!("preloaded", "project_details", "6")
 
     expect(task_preload.dig!("r", "project_detail")).to eq 6
     expect(project_detail_preload.dig!("a", "details")).to eq "Test project details"

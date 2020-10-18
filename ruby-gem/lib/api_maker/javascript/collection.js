@@ -16,7 +16,7 @@ export default class Collection {
     const newAbilities = {}
 
     for(const originalAbilityName in originalAbilities) {
-      const newModelName = inflection.dasherize(inflection.underscore(originalAbilityName))
+      const newModelName = inflection.underscore(originalAbilityName)
       const newValues = []
       const originalValues = originalAbilities[originalAbilityName]
 
@@ -144,7 +144,7 @@ export default class Collection {
     const newSelect = {}
 
     for(const originalModelName in originalSelect) {
-      const newModelName = inflection.dasherize(inflection.underscore(originalModelName))
+      const newModelName = inflection.underscore(originalModelName)
       const newValues = []
       const originalValues = originalSelect[originalModelName]
 
@@ -163,7 +163,7 @@ export default class Collection {
     const newSelect = {}
 
     for(const originalModelName in originalSelect) {
-      const newModelName = inflection.dasherize(inflection.underscore(originalModelName))
+      const newModelName = inflection.underscore(inflection.underscore(originalModelName))
       const newValues = []
       const originalValues = originalSelect[originalModelName]
 

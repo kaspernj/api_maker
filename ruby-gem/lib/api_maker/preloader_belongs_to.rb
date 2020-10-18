@@ -8,10 +8,10 @@ class ApiMaker::PreloaderBelongsTo < ApiMaker::PreloaderBase
       end
 
       serializer = ApiMaker::Serializer.new(ability: ability, args: args, locals: locals, model: model, select: select&.dig(model.class))
-      collection_name = serializer.resource.collection_name
+      underscore_name = serializer.resource.underscore_name
 
-      data.fetch(:preloaded)[collection_name] ||= {}
-      data.fetch(:preloaded).fetch(collection_name)[model_id] ||= serializer
+      data.fetch(:preloaded)[underscore_name] ||= {}
+      data.fetch(:preloaded).fetch(underscore_name)[model_id] ||= serializer
     end
 
     models
@@ -43,7 +43,7 @@ private
   def records_for_model(model)
     # Force to string if one column is an integer and another is a string
     records
-      .fetch(collection_name)
+      .fetch(underscore_name)
       .values
       .select { |record| record.model[reflection.foreign_key].to_s == model[look_up_key].to_s }
   end

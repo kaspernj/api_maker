@@ -25,7 +25,7 @@ export default class ModelsResponseReader {
     for(const modelType in this.response.data) {
       const modelClassName = inflection.classify(modelType.replace(/-/g, "_"))
       const modelClass = digg(require("api-maker/models"), modelClassName)
-      const collectionName = inflection.dasherize(modelClass.modelClassData().collectionName)
+      const collectionName = inflection.underscore(modelClass.modelClassData().collectionName)
 
       for(const modelId of this.response.data[modelType]) {
         const modelData = this.response.preloaded[collectionName][modelId]

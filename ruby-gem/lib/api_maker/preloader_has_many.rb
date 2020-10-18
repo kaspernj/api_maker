@@ -45,10 +45,10 @@ private
     origin_data.fetch(:r).fetch(reflection.name) << model_id
 
     serializer = ApiMaker::Serializer.new(ability: ability, args: args, locals: locals, model: model, select: select&.dig(model.class))
-    collection_name = serializer.resource.collection_name
+    underscore_name = serializer.resource.underscore_name
 
-    data.fetch(:preloaded)[collection_name] ||= {}
-    data.fetch(:preloaded).fetch(collection_name)[model_id] ||= serializer
+    data.fetch(:preloaded)[underscore_name] ||= {}
+    data.fetch(:preloaded).fetch(underscore_name)[model_id] ||= serializer
   end
 
   def primary_key_column
@@ -63,9 +63,9 @@ private
 
   def find_origin_data_for_model(model)
     origin_id = model[:api_maker_origin_id]
-    origin_data = records.fetch(collection_name).fetch(origin_id)
+    origin_data = records.fetch(underscore_name).fetch(origin_id)
 
-    raise "Couldn't find any origin data by that type (#{collection_name}) and ID (#{origin_id})" unless origin_data
+    raise "Couldn't find any origin data by that type (#{underscore_name}) and ID (#{origin_id})" unless origin_data
 
     origin_data
   end

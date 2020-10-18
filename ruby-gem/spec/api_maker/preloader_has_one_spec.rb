@@ -37,14 +37,14 @@ describe ApiMaker::PreloaderHasOne do
       query_params: {
         preload: ["project_detail"],
         select_columns: {
-          "project-detail" => ["id"]
+          "project_detail" => ["id"]
         }
       }
     )
 
     attributes = collection_serializer
       .result
-      .dig!(:preloaded, "project-details", project_detail.id)
+      .dig!(:preloaded, "project_details", project_detail.id)
       .model
       .attributes
 
