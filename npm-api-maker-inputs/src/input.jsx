@@ -163,9 +163,15 @@ export default class ApiMakerInput extends React.Component {
   }
 
   onModelUpdated(args) {
+    const input = this.refs.input
+
+    if (!input) {
+      // This can happen if the component is being unmounted
+      return
+    }
+
     const {attribute} = digs(this.props, "attribute")
     const newModel = digg(args, "model")
-    const input = digg(this, "refs", "input")
     const currentValue = digg(input, "value")
     const newValue = newModel.readAttribute(attribute)
     const newFormattedValue = this.formatValue(newValue)
