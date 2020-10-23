@@ -11,6 +11,10 @@ export default class SourceMapsLoader {
     this.loadSourceMapsForScriptTagsCallback = callback
   }
 
+  sourceMapForSource(callback) {
+    this.sourceMapForSourceCallback = callback
+  }
+
   async loadSourceMaps() {
     const scripts = document.querySelectorAll("script")
     const promises = []
@@ -32,11 +36,20 @@ export default class SourceMapsLoader {
   async loadSourceMapForSource(src) {
     const url = this.loadUrl(src)
     const originalUrl = `${url.origin}${url.pathname}`
-    const mapUrl = `${url.origin}${url.pathname}.map`
+
+    let mapUrl
+
+    if (this.sourceMapForSourceCallback) {
+      // Use custom callback to resolve which map-file to download
+      mapUrl = this.sourceMapForSourceCallback({src, url})
+    } else {
+      // Default to original URL with '.map' appended
+      mapUrl = `${url.origin}${url.pathname}.map`
+    }
+
     const xhr = new XMLHttpRequest()
 
     xhr.open("GET", mapUrl, true)
-    xhr.withCredentials = true
 
     await this.loadXhr(xhr)
 
