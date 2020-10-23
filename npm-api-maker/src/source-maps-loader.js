@@ -36,6 +36,8 @@ export default class SourceMapsLoader {
     const xhr = new XMLHttpRequest()
 
     xhr.open("GET", mapUrl, true)
+    xhr.withCredentials = true
+
     await this.loadXhr(xhr)
 
     const consumer = new SourceMapConsumer(JSON.parse(xhr.responseText))
