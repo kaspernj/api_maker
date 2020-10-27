@@ -85,7 +85,7 @@ private
     rescue => e # rubocop:disable Style/RescueStandardError
       error_response = {
         success: false,
-        errors: [command_error_message(e)]
+        errors: [{message: command_error_message(e), type: :runtime_error}]
       }
 
       Rails.logger.error e.message
