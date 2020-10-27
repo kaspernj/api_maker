@@ -44,7 +44,7 @@ export default class SourceMapsLoader {
       mapUrl = this.sourceMapForSourceCallback({src, url})
     } else {
       // Default to original URL with '.map' appended
-      mapUrl = `${url.origin}${url.pathname}.map`
+      mapUrl = `${originalUrl}.map`
     }
 
     const xhr = new XMLHttpRequest()
