@@ -3,7 +3,7 @@ import {digg} from "@kaspernj/object-digger"
 export class CustomError extends Error {
   constructor(message, args = {}) {
     if (args.response && args.response.errors)
-      message = `${message}: ${args.response.errors.join(". ")}`
+      message = `${message}: ${args.response.errors.map((errorData) => digg(errorData, "message")).join(". ")}`
 
     super(message)
 
