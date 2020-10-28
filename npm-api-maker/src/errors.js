@@ -1,9 +1,19 @@
-import {digg} from "@kaspernj/object-digger"
+import {dig, digg} from "@kaspernj/object-digger"
 
 export class CustomError extends Error {
   constructor(message, args = {}) {
-    if (args.response && args.response.errors)
-      message = `${message}: ${args.response.errors.map((errorData) => digg(errorData, "message")).join(". ")}`
+    const errors = dig(args, "response", "errors")
+
+    if (errors) {
+      const errorMessages = errors.map((error) => {
+        if (typeof error == "string") {
+          return error
+        }
+
+        return digg(error, "message")
+      })
+      message = `${message}: ${errorMessages.join(". ")}`
+    }
 
     super(message)
 
