@@ -7,7 +7,7 @@ export default class DisplayNotification {
 
   static error(error) {
     if (error instanceof CustomError) {
-      DisplayNotification.alert(error.args.response.errors.join(". "))
+      DisplayNotification.alert(error.args.response.errors.map((error) => error.message).join(". "))
     } else if (error instanceof ValidationError) {
       if (error.hasUnhandledErrors())
         DisplayNotification.alert(error.message)

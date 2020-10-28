@@ -35,7 +35,7 @@ class ApiMaker::BaseCommand
     command.fail(
       model: serialized_model(model),
       success: false,
-      errors: model.errors.full_messages,
+      errors: model.errors.full_messages.map { |error_message| {message: error_message, type: :validation_error} },
       validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model: model, params: params)
     )
   end
