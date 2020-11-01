@@ -44,4 +44,28 @@ describe ApiMaker::PreloaderBelongsTo do
 
     expect(attributes).to eq("id" => account.id)
   end
+
+  it "doesnt try to preload through database when none of the models has a relationship" do
+    task.update!(user: nil)
+    ability = ApiMaker::Ability.new
+    collection = Task.where(id: task.id)
+    reflection = Task.reflections.fetch("user")
+
+    preloader = ApiMaker::PreloaderBelongsTo.new(
+      ability: ability,
+      args: {},
+      collection: collection,
+      data: {},
+      locals: {},
+      records: collection.to_a,
+      reflection: reflection,
+      select: nil,
+      select_columns: nil
+    )
+    models = preloader.__send__(:models)
+
+    expect(preloader.__send__(:look_up_values)).to eq []
+    expect(models).to be_an Array
+    expect(models).to be_empty
+  end
 end
