@@ -21,6 +21,6 @@ export default class ApiMakerEventDestroyed extends React.Component {
   }
 
   render() {
-    return ""
+    return null
   }
 }

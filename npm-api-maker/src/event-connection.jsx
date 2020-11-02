@@ -24,7 +24,7 @@ export default class ApiMakerEventConnection extends React.Component {
   }
 
   render() {
-    return ""
+    return null
   }
 
   onCall(...args) {
