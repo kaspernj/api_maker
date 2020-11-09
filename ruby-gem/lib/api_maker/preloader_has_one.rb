@@ -19,23 +19,21 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
   end
 
   def models
-    @models ||= begin
-      if reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-        models_with_join
-      else
-        query = query_normal
-        query = query.instance_eval(&reflection.scope) if reflection.scope
-        query = query.accessible_by(ability) if ability
-        query = ApiMaker::SelectColumnsOnCollection.execute!(
-          collection: query,
-          model_class: reflection.klass,
-          select_columns: select_columns,
-          table_name: query.klass.table_name
-        )
-        query = query.fix
-        query.load
-        query
-      end
+    @models ||= if reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+      models_with_join
+    else
+      query = query_normal
+      query = query.instance_eval(&reflection.scope) if reflection.scope
+      query = query.accessible_by(ability) if ability
+      query = ApiMaker::SelectColumnsOnCollection.execute!(
+        collection: query,
+        model_class: reflection.klass,
+        select_columns: select_columns,
+        table_name: query.klass.table_name
+      )
+      query = query.fix if ApiMaker::DatabaseType.postgres?
+      query.load
+      query
     end
   end
 
