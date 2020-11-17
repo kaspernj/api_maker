@@ -20,6 +20,8 @@ export default class ModelsDestroyEvent extends React.Component {
         {tasks && tasks.map(task =>
           <div className="task-row" data-task-id={task.id()} key={task.cacheKey()}>
             <EventDestroyed model={task} onDestroyed={(args) => this.onDestroyed(args)} />
+
+            {task.id()}
           </div>
         )}
       </div>

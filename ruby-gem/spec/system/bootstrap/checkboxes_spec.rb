@@ -12,13 +12,9 @@ describe "bootstrap - checkboxes" do
     task2
 
     login_as user
-
     visit bootstrap_checkboxes_path(account_id: account.id)
-
     wait_for_selector ".content-container"
-
     check task1.name
-
     wait_for_and_find("input[type=submit]").click
 
     wait_for_browser { AccountMarkedTask.where(account: account, task: task1).any? }
@@ -30,16 +26,11 @@ describe "bootstrap - checkboxes" do
     account_market_task1
 
     login_as user
-
     visit bootstrap_checkboxes_path(account_id: account.id)
-
     wait_for_selector ".content-container"
-
-    checkbox_input = wait_for_and_find("input[type='checkbox']")
-    expect(checkbox_input[:checked]).to eq "true"
-
+    wait_for_selector "input[type='checkbox']:checked"
     uncheck task1.name
-
+    wait_for_selector "input[type='checkbox']:not(:checked)"
     wait_for_and_find("input[type=submit]").click
 
     wait_for_browser do
