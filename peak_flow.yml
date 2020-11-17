@@ -1,5 +1,5 @@
 before_script:
-  - apt-get update && apt-get install -y firefox
+  - sudo apt-get update && sudo apt-get install -y firefox
   - cd npm-api-maker && yarn install
   - cd npm-api-maker && yarn link
   - cd npm-api-maker-bootstrap && yarn install
