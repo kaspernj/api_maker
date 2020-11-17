@@ -45,7 +45,7 @@ private
       parse_hash(object)
     elsif object.is_a?(Array)
       parse_array(object)
-    elsif object.class.name == "Money"
+    elsif object.class.name == "Money" # rubocop:disable Style/ClassEqualityComparison
       {api_maker_type: :money, amount: object.cents, currency: object.currency.iso_code}
     elsif object.is_a?(Date)
       {api_maker_type: :date, value: object.iso8601}

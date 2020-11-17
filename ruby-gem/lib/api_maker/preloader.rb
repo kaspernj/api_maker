@@ -67,7 +67,7 @@ private
       collection_name = ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
       records_to_set = @records.fetch(collection_name).values
     else
-      records_to_set = @records.select { |record| record.model.class == reflection.active_record }
+      records_to_set = @records.select { |record| record.model.class.is_a?(reflection.active_record) }
     end
 
     case reflection.macro
