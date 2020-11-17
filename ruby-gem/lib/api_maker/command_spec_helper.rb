@@ -34,7 +34,7 @@ class ApiMaker::CommandSpecHelper
   end
 
   def controller
-    @controller ||= double(current_user: user)
+    @controller ||= instance_double("ApplicationController", current_user: user)
   end
 
   def response

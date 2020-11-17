@@ -94,7 +94,7 @@ class ApiMaker::CollectionSerializer
   def parsed_collection
     @parsed_collection ||= begin
       new_collection = ApiMaker::SelectColumnsOnCollection.execute!(collection: collection, model_class: model_class, select_columns: select_columns)
-      new_collection = new_collection.fix unless new_collection.is_a?(Array)
+      new_collection = new_collection.fix if !new_collection.is_a?(Array) && ApiMaker::DatabaseType.postgres?
       new_collection
     end
   end

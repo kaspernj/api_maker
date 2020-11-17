@@ -25,7 +25,7 @@ class ApiMaker::Ability
   def load_abilities(subject)
     return unless active_record?(subject)
 
-    if subject.class == Class
+    if subject.class == Class # rubocop:disable Style/ClassEqualityComparison
       loader.load_model_class(subject)
     elsif subject.class != Class
       loader.load_model_class(subject.class)
@@ -33,7 +33,7 @@ class ApiMaker::Ability
   end
 
   def active_record?(subject)
-    return subject < ActiveRecord::Base if subject.class == Class
+    return subject < ActiveRecord::Base if subject.class == Class # rubocop:disable Style/ClassEqualityComparison
 
     subject.is_a?(ActiveRecord::Base)
   end
