@@ -1,9 +1,12 @@
 import * as stackTraceParser from "stacktrace-parser"
 import {SourceMapConsumer} from "source-map"
 
-SourceMapConsumer.initialize({
-  "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
-})
+// Sometimes this needs to be called and sometimes not
+if (SourceMapConsumer.initialize) {
+  SourceMapConsumer.initialize({
+    "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
+  })
+}
 
 export default class SourceMapsLoader {
   constructor() {
