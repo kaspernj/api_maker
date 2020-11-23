@@ -1,6 +1,10 @@
 import * as stackTraceParser from "stacktrace-parser"
 import {SourceMapConsumer} from "source-map"
 
+SourceMapConsumer.initialize({
+  "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
+})
+
 export default class SourceMapsLoader {
   constructor() {
     this.sourceMaps = []
@@ -53,7 +57,8 @@ export default class SourceMapsLoader {
 
     await this.loadXhr(xhr)
 
-    const consumer = new SourceMapConsumer(JSON.parse(xhr.responseText))
+    const consumer = await new SourceMapConsumer(xhr.responseText)
+
     this.sourceMaps.push({consumer, originalUrl, src})
   }
 
@@ -85,8 +90,7 @@ export default class SourceMapsLoader {
       let filePath, fileString, original
 
       if (sourceMapData) {
-        const sourceMapConsumer = sourceMapData.consumer
-        original = sourceMapConsumer.originalPositionFor({
+        original = sourceMapData.consumer.originalPositionFor({
           line: trace.lineNumber,
           column: trace.column
         })
