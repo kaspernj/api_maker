@@ -34,7 +34,7 @@ export default class ApiMakerBootstrapAttributeRows extends React.Component {
       throw new Error(`Attribute not found: ${this.props.model.modelClassData().name}#${attribute}`)
 
     if (this.props.checkIfAttributeLoaded && !this.props.model.isAttributeLoaded(attribute))
-      return ""
+      return null
 
     return this.props.model[attribute]()
   }

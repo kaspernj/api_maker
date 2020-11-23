@@ -32,6 +32,6 @@ export default class ApiMakerEventUpdated extends React.Component {
   }
 
   render() {
-    return ""
+    return null
   }
 }

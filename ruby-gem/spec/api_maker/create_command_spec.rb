@@ -28,7 +28,7 @@ describe ApiMaker::CreateCommand do
     json_result = command.result.to_json
 
     expect(JSON.parse(json_result)).to eq(
-      "errors" => ["Project must exist"],
+      "errors" => [{"message" => "Project must exist", "type" => "validation_error"}],
       "model" => {
         "data" => {"tasks" => ["new-0"]},
         "preloaded" => {

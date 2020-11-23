@@ -27,6 +27,6 @@ export default class ApiMakerEventEmitterListener extends React.Component {
   }
 
   render() {
-    return ""
+    return null
   }
 }

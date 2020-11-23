@@ -6,7 +6,7 @@ class ApiMaker::DeviseController < ApiMaker::BaseController
 
   def do_sign_in
     if !model.active_for_authentication?
-      render json: {success: false, errors: [model.inactive_message]}
+      render json: {success: false, errors: [inactive_message]}
     elsif model.valid_password?(params[:password])
       sign_in(model, scope: scope)
       remember_me(model) if params.dig(:args, :rememberMe)
@@ -32,6 +32,12 @@ private
 
   def check_serializer_exists
     render json: {success: false, errors: ["Serializer doesn't exist for #{scope}"]} unless resource
+  end
+
+  def inactive_message
+    message = model.inactive_message
+    message = t("devise.failure.#{message}") if message.is_a?(Symbol)
+    message
   end
 
   def invalid_error_message

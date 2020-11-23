@@ -21,6 +21,6 @@ export default class ApiMakerEventCreated extends React.Component {
   }
 
   render() {
-    return ""
+    return null
   }
 }

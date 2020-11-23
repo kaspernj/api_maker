@@ -7,9 +7,7 @@ describe "models destroy event" do
 
   it "reacts on destroy events" do
     login_as user
-
     visit models_destroy_event_path
-
     wait_for_selector ".task-row[data-task-id='#{task1.id}']"
     wait_for_selector ".task-row[data-task-id='#{task2.id}']"
 
@@ -18,8 +16,7 @@ describe "models destroy event" do
 
     task1.destroy!
 
-    wait_for_browser { !page.has_selector?(".task-row[data-task-id='#{task1.id}']") }
-
+    wait_for_no_selector ".task-row[data-task-id='#{task1.id}']"
     wait_for_selector ".task-row[data-task-id='#{task2.id}']"
   end
 end
