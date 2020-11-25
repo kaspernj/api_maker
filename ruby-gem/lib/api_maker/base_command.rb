@@ -19,6 +19,20 @@ class ApiMaker::BaseCommand
     @collection = custom_collection(@collection) if respond_to?(:custom_collection)
   end
 
+  def execute_service_or_fail(command, service_class, *args, &blk)
+    response = service_class.execute(*args, &blk)
+
+    if response.success?
+      command.result(success: true)
+    else
+      fail_command_from_service_error_response(command, response)
+    end
+  end
+
+  def fail_command_from_service_error_response(command, response)
+    command.fail(errors: serialize_service_errors(response.errors))
+  end
+
   def locals
     @locals ||= ApiMaker::LocalsFromController.execute!(controller: controller)
   end
@@ -38,6 +52,15 @@ class ApiMaker::BaseCommand
       errors: model.errors.full_messages.map { |error_message| {message: error_message, type: :validation_error} },
       validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model: model, params: params)
     )
+  end
+
+  def serialize_service_errors(errors)
+    errors.map do |error|
+      {
+        message: error.message,
+        type: error.type
+      }
+    end
   end
 
   def self.execute_in_thread!(**args)
