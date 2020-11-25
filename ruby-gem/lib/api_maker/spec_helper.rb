@@ -70,6 +70,32 @@ module ApiMaker::SpecHelper
     expect_no_browser_errors
   end
 
+  def expect_to_be_able_to(ability, model, permissions)
+    permissions.each do |permission|
+      # Test access through 'can?'
+      expect(ability).to be_able_to permission, model
+
+      # Test access through 'accessible_by'
+      if model.is_a?(ActiveRecord::Base) && model.persisted?
+        readable_models = model.class.where(id: model).accessible_by(ability, permission)
+        expect(readable_models).to eq [model]
+      end
+    end
+  end
+
+  def expect_not_to_be_able_to(ability, model, permissions)
+    permissions.each do |permission|
+      # Test access through 'can?'
+      expect(ability).not_to be_able_to permission, model
+
+      # Test access through 'accessible_by'
+      if model.is_a?(ActiveRecord::Base) && model.persisted?
+        readable_models = model.class.where(id: model).accessible_by(ability, permission)
+        expect(readable_models).to be_empty
+      end
+    end
+  end
+
   def js_fill_in(element_id, with:)
     page.execute_script("document.querySelector(#{element_id.to_json}).value = #{with.to_json}")
   end
