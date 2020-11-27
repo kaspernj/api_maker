@@ -10,7 +10,7 @@ export default class ApiMakerCableConnectionPool {
   }
 
   constructor() {
-    this.cableSubscriptionPool = new CableSubscriptionPool
+    this.cableSubscriptionPool = new CableSubscriptionPool()
     this.upcomingSubscriptionData = {}
     this.upcomingSubscriptions = []
   }
