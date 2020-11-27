@@ -8,27 +8,30 @@ const inflection = require("inflection")
 export default class ApiMakerCableSubscriptionPool {
   constructor(props) {
     this.props = props
-    this.activeSubscriptions = 0
-    this.registerSubscriptions()
+    this.activeSubscriptionsCount = 0
+    this.subscriptions = []
   }
 
   subscribe(args) {
-
+    this.connectMissingSubscriptions(args)
+    this.registerSubscriptions(args)
   }
 
-  connect() {
+  connectMissingSubscriptions(args) {
     const globalData = CommandsPool.current().globalRequestData
 
-    this.subscription = ChannelsConsumer.subscriptions.create(
+    // TODO find all subscriptions that arent connected
+
+    this.subscriptions.push(ChannelsConsumer.subscriptions.create(
       {
         channel: "ApiMaker::SubscriptionsChannel",
         global: globalData,
-        subscription_data: this.props.subscriptionData
+        subscription_data: args.subscriptionData
       },
       {
         received: (data) => this.onReceived(data)
       }
-    )
+    ))
   }
 
   onReceived(rawData) {
