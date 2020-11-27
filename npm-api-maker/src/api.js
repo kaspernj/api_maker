@@ -1,5 +1,5 @@
 import { CustomError } from "./errors"
-import { FormDataToObject } from "./form-data-to-object"
+import FormDataToObject from "./form-data-to-object"
 import qs from "qs"
 
 export default class Api {
