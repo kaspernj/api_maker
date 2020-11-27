@@ -10,7 +10,7 @@ export default class ApiMakerCableConnectionPool {
   }
 
   constructor() {
-    this.connections = {}
+    this.cableSubscriptionPool = new CableSubscriptionPool
     this.upcomingSubscriptionData = {}
     this.upcomingSubscriptions = []
   }
@@ -182,19 +182,13 @@ export default class ApiMakerCableConnectionPool {
 
     this.upcomingSubscriptionData = {}
     this.upcomingSubscriptions = {}
-
-    const cableSubscriptionPool = new CableSubscriptionPool({
-      subscriptionData: subscriptionData,
-      subscriptions: subscriptions
-    })
-
-    return cableSubscriptionPool
+    this.cableSubscriptionPool.subscribe({subscriptionData, subscriptions})
   }
 
   scheduleConnectUpcoming() {
     if (this.scheduleConnectUpcomingTimeout)
       clearTimeout(this.scheduleConnectUpcomingTimeout)
 
-    this.scheduleConnectUpcomingTimeout = setTimeout(() => this.connectUpcoming(), 50)
+    this.scheduleConnectUpcomingTimeout = setTimeout(() => this.connectUpcoming()), 50)
   }
 }
