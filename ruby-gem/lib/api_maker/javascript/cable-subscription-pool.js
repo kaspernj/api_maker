@@ -79,6 +79,7 @@ export default class ApiMakerCableSubscriptionPool {
     this.activeSubscriptions -= 1
     Logger.log(`activeSubscriptions after unsub: ${this.activeSubscriptions}`)
 
+    // TODO this count should be per subscription
     if (this.activeSubscriptions <= 0) {
       Logger.log("Unsubscribe from ActionCable subscription")
       this.subscription.unsubscribe()
