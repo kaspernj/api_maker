@@ -82,7 +82,10 @@ class ApiMaker::PreloaderBase
         .where("#{accessible_query.klass.table_name}.#{accessible_query.klass.primary_key} = accessible_table.#{reflection.klass.primary_key}")
 
       query = query
-        .joins("JOIN #{reflection.klass.table_name} AS accessible_table ON accessible_table.id = #{reflection.klass.table_name}.#{reflection.klass.primary_key}")
+        .joins(
+          "JOIN #{reflection.klass.table_name} AS accessible_table ON " \
+            "accessible_table.id = #{reflection.klass.table_name}.#{reflection.klass.primary_key}"
+        )
         .where("EXISTS (#{exists_query.to_sql})")
     end
 
