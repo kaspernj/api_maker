@@ -18,7 +18,7 @@ module ApiMaker
   autoload :CollectionSerializer, "#{dir}/collection_serializer"
   autoload :CommandSpecHelper, "#{dir}/command_spec_helper"
   autoload :Configuration, "#{dir}/configuration"
-  autoload :ExpectToBeAbleToHelper, "#{dir}/export_to_able_to_helper"
+  autoload :ExpectToBeAbleToHelper, "#{dir}/expect_to_able_to_helper"
   autoload :IndividualCommand, "#{dir}/individual_command"
   autoload :Loader, "#{dir}/loader"
   autoload :MemoryStorage, "#{dir}/memory_storage"
