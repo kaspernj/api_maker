@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_08_171429) do
+ActiveRecord::Schema.define(version: 2020_11_28_105835) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -147,6 +147,7 @@ ActiveRecord::Schema.define(version: 2020_06_08_171429) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "birthday_at"
+    t.boolean "admin", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

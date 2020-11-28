@@ -71,15 +71,31 @@ class ApiMaker::PreloaderBase
   # This is done to avoid "WHERE id IN sub_query" which is much slower than "WHERE EXISTS sub_query"
   # The "WHERE id IN sub_query" version looks this simple line: .where(reflection.klass.table_name => {reflection.klass.primary_key => accessible_query})
   def join_query_with_normal_name # rubocop:disable Metrics/AbcSize
-    exists_query = accessible_query
-      .select("1")
-      .where("#{accessible_query.klass.table_name}.#{accessible_query.klass.primary_key} = accessible_table.#{reflection.klass.primary_key}")
-
-    initial_join_query
+    query = initial_join_query
       .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
-      .joins("JOIN #{reflection.klass.table_name} AS accessible_table ON accessible_table.id = #{reflection.klass.table_name}.#{reflection.klass.primary_key}")
       .where(reflection.active_record.primary_key => collection_ids)
-      .where("EXISTS (#{exists_query.to_sql})")
+
+    # No reason to add all the extra SQL if the ability has unconditioned read access
+    unless unconditioned_read_access?
+      exists_query = accessible_query
+        .select("1")
+        .where("#{accessible_query.klass.table_name}.#{accessible_query.klass.primary_key} = accessible_table.#{reflection.klass.primary_key}")
+
+      query = query
+        .joins("JOIN #{reflection.klass.table_name} AS accessible_table ON accessible_table.id = #{reflection.klass.table_name}.#{reflection.klass.primary_key}")
+        .where("EXISTS (#{exists_query.to_sql})")
+    end
+
+    query
+  end
+
+  def unconditioned_read_access?
+    relevant_rules = ability.__send__(:relevant_rules, :read, reflection.klass)
+    relevant_rules.each do |can_can_rule|
+      return true if can_can_rule.__send__(:conditions_empty?)
+    end
+
+    false
   end
 
   def accessible_query
