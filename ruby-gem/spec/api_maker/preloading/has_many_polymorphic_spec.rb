@@ -2,7 +2,8 @@ require "rails_helper"
 
 describe "preloading - has many polymorphic" do
   let!(:comment) { create :comment, resource: task }
-  let!(:task) { create :task, user: user }
+  let!(:task) { create :task, project: project, user: user }
+  let(:project) { create :project }
 
   let(:user) { create :user }
   let(:user_ability) { ApiMaker::Ability.new(args: {current_user: user}) }

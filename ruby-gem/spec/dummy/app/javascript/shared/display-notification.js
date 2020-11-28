@@ -1,4 +1,5 @@
 import { CustomError, ValidationError } from "@kaspernj/api-maker"
+import { digg } from "@kaspernj/object-digger"
 
 export default class DisplayNotification {
   static alert(message) {
@@ -7,7 +8,16 @@ export default class DisplayNotification {
 
   static error(error) {
     if (error instanceof CustomError) {
-      DisplayNotification.alert(error.args.response.errors.map((error) => error.message).join(". "))
+      const errors = error.args.response.errors
+      const errorMessages = errors.map((error) => {
+        if (typeof error == "string") {
+          return error
+        }
+
+        return digg(error, "message")
+      })
+
+      DisplayNotification.alert(errorMessages.map((error) => error.message).join(". "))
     } else if (error instanceof ValidationError) {
       if (error.hasUnhandledErrors())
         DisplayNotification.alert(error.message)
