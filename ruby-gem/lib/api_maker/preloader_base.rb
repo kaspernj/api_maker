@@ -67,21 +67,18 @@ class ApiMaker::PreloaderBase
       .where("EXISTS (#{exists_query.to_sql})")
   end
 
-  def join_query_with_normal_name
-    query = initial_join_query
-      .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
-      .where(reflection.active_record.primary_key => collection_ids)
-
-    # Join a copy of the original table to be able to access previous table (by a copy) in the accessible query
-    # This is done to avoid "WHERE id IN sub_query" which is much slower than "WHERE EXISTS sub_query"
-    # The "WHERE id IN sub_query" version looks this simple line: .where(reflection.klass.table_name => {reflection.klass.primary_key => accessible_query})
-
+  # Join a copy of the original table to be able to access previous table (by a copy) in the accessible query
+  # This is done to avoid "WHERE id IN sub_query" which is much slower than "WHERE EXISTS sub_query"
+  # The "WHERE id IN sub_query" version looks this simple line: .where(reflection.klass.table_name => {reflection.klass.primary_key => accessible_query})
+  def join_query_with_normal_name # rubocop:disable Metrics/AbcSize
     exists_query = accessible_query
       .select("1")
       .where("#{accessible_query.klass.table_name}.#{accessible_query.klass.primary_key} = accessible_table.#{reflection.klass.primary_key}")
 
-    query
+    initial_join_query
+      .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
       .joins("JOIN #{reflection.klass.table_name} AS accessible_table ON accessible_table.id = #{reflection.klass.table_name}.#{reflection.klass.primary_key}")
+      .where(reflection.active_record.primary_key => collection_ids)
       .where("EXISTS (#{exists_query.to_sql})")
   end
 
