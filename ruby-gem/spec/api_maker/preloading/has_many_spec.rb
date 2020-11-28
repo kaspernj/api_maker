@@ -59,7 +59,7 @@ describe "preloading - has many" do
     sql = preloader.join_query.to_sql
 
     expect(preloader.models).to eq [task]
-    expect(sql).not_to include 'JOIN tasks AS accessible_table ON accessible_table.id = tasks.id'
-    expect(sql).not_to include 'EXISTS'
+    expect(sql).not_to include "JOIN tasks AS accessible_table ON accessible_table.id = tasks.id"
+    expect(sql).not_to include "EXISTS"
   end
 end
