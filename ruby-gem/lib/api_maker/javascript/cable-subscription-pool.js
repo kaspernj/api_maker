@@ -9,18 +9,39 @@ export default class ApiMakerCableSubscriptionPool {
   constructor(props) {
     this.props = props
     this.activeSubscriptionsCount = 0
-    this.subscriptions = []
+    this.subscriptions = {}
   }
 
   subscribe(args) {
-    this.connectMissingSubscriptions(args)
-    this.registerSubscriptions(args)
+    const missingSubscriptions = this.findMissingSubscriptions(args)
+    this.connectSubscriptions(missingSubscriptions)
+    this.registerSubscriptions(missingSubscriptions)
   }
 
-  connectMissingSubscriptions({subscriptionData}) {
-    const globalData = CommandsPool.current().globalRequestData
+  findMissingSubscriptions({subscriptionData}) {
+    const upcomingSubscriptions = {}
 
-    console.log(subscriptionData)
+    for (const modelName in subscriptionData) {
+      for (const eventName in subscriptionData[modelName]) {
+        if (!this.subscriptions[modelName] || !this.subscriptions[modelName][eventName]) {
+          if(!upcomingSubscriptions[modelName]) {
+            upcomingSubscriptions[modelName] = {}
+          }
+
+          upcomingSubscriptions[modelName][eventName] = subscriptionData[modelName][eventName]
+        } else if (subscriptionData[modelName][eventName] === this.subscriptions[modelName][eventName]) {
+          // already added
+        }
+
+        // TODO handle arrays
+      }
+    }
+
+    return upcomingSubscriptions
+  }
+
+  connectSubscriptions(subscriptions) {
+    const globalData = CommandsPool.current().globalRequestData
 
     // TODO find all subscriptions that arent connected
     const createdSubscription = ChannelsConsumer
@@ -28,12 +49,10 @@ export default class ApiMakerCableSubscriptionPool {
       .create({
         channel: "ApiMaker::SubscriptionsChannel",
         global: globalData,
-        subscription_data: subscriptionData
+        subscription_data: subscriptions
       }, {
         received: (data) => this.onReceived(data)
       })
-
-    this.subscriptions.push(createdSubscription)
   }
 
   onReceived(rawData) {
@@ -88,18 +107,18 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
-  registerSubscriptions({subscriptions}) {
+  registerSubscriptions(subscriptions) {
     Logger.log(`registerSubscriptions: ${subscriptions.length}`)
     Logger.log(subscriptions)
 
-    for(const modelName in subscriptions) {
+    for (const modelName in subscriptions) {
       if (subscriptions[modelName]["creates"]) {
-        for(const subscription of subscriptions[modelName]["creates"]) {
+        for (const subscription of subscriptions[modelName]["creates"]) {
           this.connectUnsubscriptionForSubscription(subscription)
         }
       }
 
-      if (this.props.subscriptions[modelName]["events"]) {
+      if (this.subscriptions[modelName] && this.subscriptions[modelName]["events"]) {
         for(const eventName in subscriptions[modelName]["events"]) {
           for(const modelId in subscriptions[modelName]["events"][eventName]) {
             for(const subscription of subscriptions[modelName]["events"][eventName][modelId]) {
@@ -113,6 +132,23 @@ export default class ApiMakerCableSubscriptionPool {
         for(const modelId in subscriptions[modelName]["updates"]) {
           for(const subscription of subscriptions[modelName]["updates"][modelId]) {
             this.connectUnsubscriptionForSubscription(subscription)
+          }
+        }
+      }
+    }
+
+    // Update the subscriptions object
+    for(const modelName in subscriptions) {
+      for(const eventName in subscriptions[modelName]) {
+        if (!this.subscriptions[modelName]) {
+          this.subscriptions[modelName] = {}
+        }
+
+        if (!this.subscriptions[modelName][eventName]) {
+          this.subscriptions[modelName][eventName] = subscriptions[modelName][eventName]
+        } else {
+          if (typeof this.subscriptions[modelName][eventName] == "object" && typeof this.subscriptions[modelName][eventName] == "object") {
+            this.subscriptions[modelName][eventName] = this.subscriptions.concat(subscriptions[modelName][eventName])
           }
         }
       }
