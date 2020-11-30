@@ -15,7 +15,7 @@ export default class ApiMakerCableSubscriptionPool {
   subscribe(args) {
     const missingSubscriptions = this.findMissingSubscriptions(args)
     this.connectSubscriptions(missingSubscriptions)
-    this.registerSubscriptions(missingSubscriptions)
+    this.registerSubscriptions(args)
   }
 
   findMissingSubscriptions({subscriptionData}) {
@@ -107,7 +107,7 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
-  registerSubscriptions(subscriptions) {
+  registerSubscriptions({subscriptions}) {
     Logger.log(`registerSubscriptions: ${subscriptions.length}`)
     Logger.log(subscriptions)
 
@@ -132,23 +132,6 @@ export default class ApiMakerCableSubscriptionPool {
         for(const modelId in subscriptions[modelName]["updates"]) {
           for(const subscription of subscriptions[modelName]["updates"][modelId]) {
             this.connectUnsubscriptionForSubscription(subscription)
-          }
-        }
-      }
-    }
-
-    // Update the subscriptions object
-    for(const modelName in subscriptions) {
-      for(const eventName in subscriptions[modelName]) {
-        if (!this.subscriptions[modelName]) {
-          this.subscriptions[modelName] = {}
-        }
-
-        if (!this.subscriptions[modelName][eventName]) {
-          this.subscriptions[modelName][eventName] = subscriptions[modelName][eventName]
-        } else {
-          if (typeof this.subscriptions[modelName][eventName] == "object" && typeof this.subscriptions[modelName][eventName] == "object") {
-            this.subscriptions[modelName][eventName] = this.subscriptions.concat(subscriptions[modelName][eventName])
           }
         }
       }
