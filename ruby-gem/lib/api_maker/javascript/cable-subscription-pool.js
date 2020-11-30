@@ -17,21 +17,23 @@ export default class ApiMakerCableSubscriptionPool {
     this.registerSubscriptions(args)
   }
 
-  connectMissingSubscriptions(args) {
+  connectMissingSubscriptions({subscriptionData}) {
     const globalData = CommandsPool.current().globalRequestData
 
-    // TODO find all subscriptions that arent connected
+    console.log(subscriptionData)
 
-    this.subscriptions.push(ChannelsConsumer.subscriptions.create(
-      {
+    // TODO find all subscriptions that arent connected
+    const createdSubscription = ChannelsConsumer
+      .subscriptions
+      .create({
         channel: "ApiMaker::SubscriptionsChannel",
         global: globalData,
-        subscription_data: args.subscriptionData
-      },
-      {
+        subscription_data: subscriptionData
+      }, {
         received: (data) => this.onReceived(data)
-      }
-    ))
+      })
+
+    this.subscriptions.push(createdSubscription)
   }
 
   onReceived(rawData) {
@@ -86,30 +88,30 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
-  registerSubscriptions(args) {
-    Logger.log(`registerSubscriptions: ${args.subscriptions.length}`)
-    Logger.log(args.subscriptions)
+  registerSubscriptions({subscriptions}) {
+    Logger.log(`registerSubscriptions: ${subscriptions.length}`)
+    Logger.log(subscriptions)
 
-    for(const modelName in args.subscriptions) {
-      if (args.subscriptions[modelName]["creates"]) {
-        for(const subscription of args.subscriptions[modelName]["creates"]) {
+    for(const modelName in subscriptions) {
+      if (subscriptions[modelName]["creates"]) {
+        for(const subscription of subscriptions[modelName]["creates"]) {
           this.connectUnsubscriptionForSubscription(subscription)
         }
       }
 
       if (this.props.subscriptions[modelName]["events"]) {
-        for(const eventName in args.subscriptions[modelName]["events"]) {
-          for(const modelId in args.subscriptions[modelName]["events"][eventName]) {
-            for(const subscription of args.subscriptions[modelName]["events"][eventName][modelId]) {
+        for(const eventName in subscriptions[modelName]["events"]) {
+          for(const modelId in subscriptions[modelName]["events"][eventName]) {
+            for(const subscription of subscriptions[modelName]["events"][eventName][modelId]) {
               this.connectUnsubscriptionForSubscription(subscription)
             }
           }
         }
       }
 
-      if (args.subscriptions[modelName]["updates"]) {
-        for(const modelId in args.subscriptions[modelName]["updates"]) {
-          for(const subscription of args.subscriptions[modelName]["updates"][modelId]) {
+      if (subscriptions[modelName]["updates"]) {
+        for(const modelId in subscriptions[modelName]["updates"]) {
+          for(const subscription of subscriptions[modelName]["updates"][modelId]) {
             this.connectUnsubscriptionForSubscription(subscription)
           }
         }
