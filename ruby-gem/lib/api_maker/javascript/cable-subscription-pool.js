@@ -8,51 +8,18 @@ const inflection = require("inflection")
 export default class ApiMakerCableSubscriptionPool {
   constructor(props) {
     this.props = props
-    this.activeSubscriptionsCount = 0
-    this.subscriptions = {}
+    this.activeSubscriptions = 0
+    this.registerSubscriptions()
+    this.connect()
   }
 
-  subscribe(args) {
-    const missingSubscriptions = this.findMissingSubscriptions(args)
-    this.connectSubscriptions(missingSubscriptions)
-    this.registerSubscriptions(args)
-  }
-
-  findMissingSubscriptions({subscriptionData}) {
-    const upcomingSubscriptions = {}
-
-    for (const modelName in subscriptionData) {
-      for (const eventName in subscriptionData[modelName]) {
-        if (!this.subscriptions[modelName] || !this.subscriptions[modelName][eventName]) {
-          if(!upcomingSubscriptions[modelName]) {
-            upcomingSubscriptions[modelName] = {}
-          }
-
-          upcomingSubscriptions[modelName][eventName] = subscriptionData[modelName][eventName]
-        } else if (subscriptionData[modelName][eventName] === this.subscriptions[modelName][eventName]) {
-          // already added
-        }
-
-        // TODO handle arrays
-      }
-    }
-
-    return upcomingSubscriptions
-  }
-
-  connectSubscriptions(subscriptions) {
+  connect() {
     const globalData = CommandsPool.current().globalRequestData
 
-    // TODO find all subscriptions that arent connected
-    const createdSubscription = ChannelsConsumer
-      .subscriptions
-      .create({
-        channel: "ApiMaker::SubscriptionsChannel",
-        global: globalData,
-        subscription_data: subscriptions
-      }, {
-        received: (data) => this.onReceived(data)
-      })
+    this.subscription = ChannelsConsumer.subscriptions.create(
+      {channel: "ApiMaker::SubscriptionsChannel", global: globalData, subscription_data: this.props.subscriptionData},
+      {received: (data) => this.onReceived(data)}
+    )
   }
 
   onReceived(rawData) {
@@ -100,37 +67,36 @@ export default class ApiMakerCableSubscriptionPool {
     this.activeSubscriptions -= 1
     Logger.log(`activeSubscriptions after unsub: ${this.activeSubscriptions}`)
 
-    // TODO this count should be per subscription
     if (this.activeSubscriptions <= 0) {
       Logger.log("Unsubscribe from ActionCable subscription")
       this.subscription.unsubscribe()
     }
   }
 
-  registerSubscriptions({subscriptions}) {
-    Logger.log(`registerSubscriptions: ${subscriptions.length}`)
-    Logger.log(subscriptions)
+  registerSubscriptions() {
+    Logger.log(`registerSubscriptions: ${this.props.subscriptions.length}`)
+    Logger.log(this.props.subscriptions)
 
-    for (const modelName in subscriptions) {
-      if (subscriptions[modelName]["creates"]) {
-        for (const subscription of subscriptions[modelName]["creates"]) {
+    for(const modelName in this.props.subscriptions) {
+      if (this.props.subscriptions[modelName]["creates"]) {
+        for(const subscription of this.props.subscriptions[modelName]["creates"]) {
           this.connectUnsubscriptionForSubscription(subscription)
         }
       }
 
-      if (this.subscriptions[modelName] && this.subscriptions[modelName]["events"]) {
-        for(const eventName in subscriptions[modelName]["events"]) {
-          for(const modelId in subscriptions[modelName]["events"][eventName]) {
-            for(const subscription of subscriptions[modelName]["events"][eventName][modelId]) {
+      if (this.props.subscriptions[modelName]["events"]) {
+        for(const eventName in this.props.subscriptions[modelName]["events"]) {
+          for(const modelId in this.props.subscriptions[modelName]["events"][eventName]) {
+            for(const subscription of this.props.subscriptions[modelName]["events"][eventName][modelId]) {
               this.connectUnsubscriptionForSubscription(subscription)
             }
           }
         }
       }
 
-      if (subscriptions[modelName]["updates"]) {
-        for(const modelId in subscriptions[modelName]["updates"]) {
-          for(const subscription of subscriptions[modelName]["updates"][modelId]) {
+      if (this.props.subscriptions[modelName]["updates"]) {
+        for(const modelId in this.props.subscriptions[modelName]["updates"]) {
+          for(const subscription of this.props.subscriptions[modelName]["updates"][modelId]) {
             this.connectUnsubscriptionForSubscription(subscription)
           }
         }
