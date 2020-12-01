@@ -17,12 +17,11 @@ export default class ApiMakerCableConnectionPool {
   }
 
   connectCreated(modelName, callback) {
-    existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "creates")
-
     const subscription = new CableSubscription({
       callback: callback,
       modelName: modelName
     })
+    const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "creates")
 
     if (existingConnection) {
       existingConnection.addSubscription(subscription)
@@ -52,8 +51,7 @@ export default class ApiMakerCableConnectionPool {
       modelname: modelname,
       modelid: modelId
     })
-
-    existingconnection = dig(this.subscriptionDataToConnectionMapping, modelName, "destroys", modelId)
+    const existingconnection = dig(this.subscriptionDataToConnectionMapping, modelName, "destroys", modelId)
 
     if (existingconnection) {
       existingconnection.addSubscription(subscription)
@@ -90,7 +88,6 @@ export default class ApiMakerCableConnectionPool {
       modelName: modelName,
       modelId: modelId
     })
-
     const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "events", modelId, "eventName")
 
     if (existingConnection) {
@@ -137,7 +134,6 @@ export default class ApiMakerCableConnectionPool {
       callback: callback,
       modelName: modelName
     })
-
     const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "model_class_events", eventName)
 
     if (existingConnection) {
@@ -177,7 +173,7 @@ export default class ApiMakerCableConnectionPool {
     })
     const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "updates", modelId)
 
-    if(existingConnection){
+    if (existingConnection) {
       existingConnection.addSubscription(subscription)
     } else {
       if (!this.upcomingSubscriptionData[modelName])
