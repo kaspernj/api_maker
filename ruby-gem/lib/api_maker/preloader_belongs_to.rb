@@ -25,24 +25,22 @@ private
   end
 
   def models
-    @models ||= begin
-      if look_up_values.empty?
-        # There is nothing to preload
-        []
-      else
-        query = reflection.klass.where(look_up_key => look_up_values)
-        query = query.instance_eval(&reflection.scope) if reflection.scope
-        query = query.accessible_by(ability) if ability
-        query = ApiMaker::SelectColumnsOnCollection.execute!(
-          collection: query,
-          model_class: reflection.klass,
-          select_columns: select_columns,
-          table_name: query.klass.table_name
-        )
+    @models ||= if look_up_values.empty?
+      # There is nothing to preload
+      []
+    else
+      query = reflection.klass.where(look_up_key => look_up_values)
+      query = query.instance_eval(&reflection.scope) if reflection.scope
+      query = query.accessible_by(ability) if ability
+      query = ApiMaker::SelectColumnsOnCollection.execute!(
+        collection: query,
+        model_class: reflection.klass,
+        select_columns: select_columns,
+        table_name: query.klass.table_name
+      )
 
-        query.load
-        query
-      end
+      query.load
+      query
     end
   end
 

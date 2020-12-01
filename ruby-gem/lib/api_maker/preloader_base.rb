@@ -28,10 +28,6 @@ class ApiMaker::PreloaderBase
     @models_with_join ||= reflection.klass.find_by_sql(join_query.to_sql)
   end
 
-  def accessible_query
-    reflection.klass.accessible_by(ability)
-  end
-
   # ActiveRecord might have joined the relationship by a predictable alias. If so we need to use that alias
   def joined_name
     "#{reflection.name.to_s.pluralize}_#{reflection.klass.name.underscore.pluralize}"
@@ -58,16 +54,54 @@ class ApiMaker::PreloaderBase
   end
 
   def join_query_with_joined_name
+    # Since the joined table is using a different name, we don't need to double join the original table with an alias like under 'join_query_with_normal_name'
+    # The "WHERE id IN sub_query version looks like this: # .where(joined_name => {reflection.klass.primary_key => accessible_query})
+
+    exists_query = accessible_query
+      .select("1")
+      .where("#{accessible_query.klass.table_name}.#{accessible_query.klass.primary_key} = #{joined_name}.#{reflection.klass.primary_key}")
+
     initial_join_query
       .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
       .where(reflection.active_record.primary_key => collection_ids)
-      .where(joined_name => {reflection.klass.primary_key => accessible_query})
+      .where("EXISTS (#{exists_query.to_sql})")
   end
 
-  def join_query_with_normal_name
-    initial_join_query
+  # Join a copy of the original table to be able to access previous table (by a copy) in the accessible query
+  # This is done to avoid "WHERE id IN sub_query" which is much slower than "WHERE EXISTS sub_query"
+  # The "WHERE id IN sub_query" version looks this simple line: .where(reflection.klass.table_name => {reflection.klass.primary_key => accessible_query})
+  def join_query_with_normal_name # rubocop:disable Metrics/AbcSize
+    query = initial_join_query
       .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
       .where(reflection.active_record.primary_key => collection_ids)
-      .where(reflection.klass.table_name => {reflection.klass.primary_key => accessible_query})
+
+    # No reason to add all the extra SQL if the ability has unconditioned read access
+    unless unconditioned_read_access?
+      exists_query = accessible_query
+        .select("1")
+        .where("#{accessible_query.klass.table_name}.#{accessible_query.klass.primary_key} = accessible_table.#{reflection.klass.primary_key}")
+
+      query = query
+        .joins(
+          "JOIN #{reflection.klass.table_name} AS accessible_table ON " \
+            "accessible_table.id = #{reflection.klass.table_name}.#{reflection.klass.primary_key}"
+        )
+        .where("EXISTS (#{exists_query.to_sql})")
+    end
+
+    query
+  end
+
+  def unconditioned_read_access?
+    relevant_rules = ability.__send__(:relevant_rules, :read, reflection.klass)
+    relevant_rules.each do |can_can_rule|
+      return true if can_can_rule.__send__(:conditions_empty?)
+    end
+
+    false
+  end
+
+  def accessible_query
+    reflection.klass.accessible_by(ability)
   end
 end

@@ -15,6 +15,7 @@ class Resources::TaskResource < Resources::ApplicationResource
   ].freeze
 
   def abilities
+    can :read, Task if current_user&.admin?
     can CRUD + USER_TASK_ABILITIES, Task, user_id: current_user.id if current_user
     can :command_serialize, Task
     can :test_accessible_by, Task, id: 3

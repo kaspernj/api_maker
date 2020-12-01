@@ -72,22 +72,18 @@ class ApiMaker::CollectionSerializer
   end
 
   def model_class
-    @model_class ||= begin
-      if collection.is_a?(Array)
-        collection.first.class
-      else
-        resource.model_class
-      end
+    @model_class ||= if collection.is_a?(Array)
+      collection.first.class
+    else
+      resource.model_class
     end
   end
 
   def resource
-    @resource ||= begin
-      if collection.is_a?(Array)
-        ApiMaker::MemoryStorage.current.resource_for_model(collection.first.class)
-      else
-        ApiMaker::MemoryStorage.current.resource_for_model(collection.klass)
-      end
+    @resource ||= if collection.is_a?(Array)
+      ApiMaker::MemoryStorage.current.resource_for_model(collection.first.class)
+    else
+      ApiMaker::MemoryStorage.current.resource_for_model(collection.klass)
     end
   end
 
