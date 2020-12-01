@@ -119,4 +119,18 @@ describe ApiMaker::ValidationErrorsGeneratorService do
       }
     ]
   end
+
+  it "handles validations that are added multiple times" do
+    params = {
+      name: nil
+    }
+
+    project.assign_attributes(params)
+
+    expect(project).to be_invalid
+    result = ApiMaker::ValidationErrorsGeneratorService.execute!(
+      model: project,
+      params: params
+    )
+  end
 end
