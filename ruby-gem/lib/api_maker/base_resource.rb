@@ -4,6 +4,7 @@ class ApiMaker::BaseResource
   delegate :can, to: :ability
 
   CRUD = [:create, :read, :update, :destroy].freeze
+  READ = [:destroy_events, :read, :update_events].freeze
 
   def self.attributes(*attributes, **args)
     attributes.each do |attribute|
