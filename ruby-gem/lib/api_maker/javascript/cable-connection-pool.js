@@ -1,5 +1,6 @@
 import CableSubscriptionPool from "./cable-subscription-pool"
 import CableSubscription from "./cable-subscription"
+import {dig} from "@kaspernj/object-digger"
 
 export default class ApiMakerCableConnectionPool {
   static current() {
@@ -10,64 +11,75 @@ export default class ApiMakerCableConnectionPool {
   }
 
   constructor() {
-    this.connections = {}
+    this.subscriptionDataToConnectionMapping = {}
     this.upcomingSubscriptionData = {}
     this.upcomingSubscriptions = []
   }
 
   connectCreated(modelName, callback) {
-    if (!this.upcomingSubscriptionData[modelName])
-      this.upcomingSubscriptionData[modelName] = {}
-
-    if (!this.upcomingSubscriptionData[modelName]["creates"])
-      this.upcomingSubscriptionData[modelName]["creates"] = true
-
-    if (!this.upcomingSubscriptions[modelName])
-      this.upcomingSubscriptions[modelName] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["creates"])
-      this.upcomingSubscriptions[modelName]["creates"] = []
+    existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "creates")
 
     const subscription = new CableSubscription({
       callback: callback,
       modelName: modelName
     })
 
-    this.upcomingSubscriptions[modelName]["creates"].push(subscription)
+    if (existingConnection) {
+      existingConnection.addSubscription(subscription)
+    } else {
+      if (!this.upcomingSubscriptionData[modelName])
+        this.upcomingSubscriptionData[modelName] = {}
 
-    this.scheduleConnectUpcoming()
+      if (!this.upcomingSubscriptionData[modelName]["creates"])
+        this.upcomingSubscriptionData[modelName]["creates"] = true
+
+      if (!this.upcomingSubscriptions[modelName])
+        this.upcomingSubscriptions[modelName] = {}
+
+      if (!this.upcomingSubscriptions[modelName]["creates"])
+        this.upcomingSubscriptions[modelName]["creates"] = []
+
+      this.upcomingSubscriptions[modelName]["creates"].push(subscription)
+      this.scheduleConnectUpcoming()
+    }
 
     return subscription
   }
 
-  connectDestroyed(modelName, modelId, callback) {
-    if (!this.upcomingSubscriptionData[modelName])
-      this.upcomingSubscriptionData[modelName] = {}
-
-    if (!this.upcomingSubscriptionData[modelName]["destroys"])
-      this.upcomingSubscriptionData[modelName]["destroys"] = []
-
-    if (!this.upcomingSubscriptionData[modelName]["destroys"].includes(modelId))
-      this.upcomingSubscriptionData[modelName]["destroys"].push(modelId)
-
-    if (!this.upcomingSubscriptions[modelName])
-      this.upcomingSubscriptions[modelName] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["destroys"])
-      this.upcomingSubscriptions[modelName]["destroys"] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["destroys"][modelId])
-      this.upcomingSubscriptions[modelName]["destroys"][modelId] = []
-
-    const subscription = new CableSubscription({
+  connectDestroyed(modelname, modelid, callback) {
+    const subscription = new cablesubscription({
       callback: callback,
-      modelName: modelName,
-      modelId: modelId
+      modelname: modelname,
+      modelid: modelid
     })
 
-    this.upcomingSubscriptions[modelName]["destroys"][modelId].push(subscription)
+    existingconnection = dig(this.subscriptiondatatoconnectionmappign, modelname, "destroys", modelid)
 
-    this.scheduleConnectUpcoming()
+    if (existingconnection) {
+      existingconnection.addsubscription(subscription)
+    } else {
+      if (!this.upcomingsubscriptiondata[modelname])
+        this.upcomingsubscriptiondata[modelname] = {}
+
+      if (!this.upcomingsubscriptiondata[modelname]["destroys"])
+        this.upcomingsubscriptiondata[modelname]["destroys"] = []
+
+      if (!this.upcomingsubscriptiondata[modelname]["destroys"].includes(modelid))
+        this.upcomingsubscriptiondata[modelname]["destroys"].push(modelid)
+
+      if (!this.upcomingsubscriptions[modelname])
+        this.upcomingsubscriptions[modelname] = {}
+
+      if (!this.upcomingsubscriptions[modelname]["destroys"])
+        this.upcomingsubscriptions[modelname]["destroys"] = {}
+
+      if (!this.upcomingsubscriptions[modelname]["destroys"][modelid])
+        this.upcomingsubscriptions[modelname]["destroys"][modelid] = []
+
+      this.upcomingsubscriptions[modelname]["destroys"][modelid].push(subscription)
+
+      this.scheduleconnectupcoming()
+    }
 
     return subscription
   }
@@ -188,6 +200,10 @@ export default class ApiMakerCableConnectionPool {
       subscriptions: subscriptions
     })
 
+    // update the mapping
+    this.addConnectCreatedToConnectionMapping(cableSubscriptionPool)
+    this.addConnectDestroyedToConnectionMapping(cableSubscriptionPool)
+
     return cableSubscriptionPool
   }
 
@@ -196,5 +212,25 @@ export default class ApiMakerCableConnectionPool {
       clearTimeout(this.scheduleConnectUpcomingTimeout)
 
     this.scheduleConnectUpcomingTimeout = setTimeout(() => this.connectUpcoming(), 50)
+  }
+
+  addConnectCreatedToConnectionMapping(modelName, subscriptionConnection) {
+    if (!this.subscriptionDataToConnectionMapping[modelName]) {
+      this.subscriptionDataToConnectionMapping[modelName] = {}
+    }
+
+    this.upcomingSubscriptionData[modelName]["creates"] = subscriptionConnection
+  }
+
+  addConnectDestroyedToConnectionMapping(modelName, modelId, subscriptionConnection) {
+    if (!this.subscriptionDataToConnectionMapping[modelName]) {
+      this.subscriptionDataToConnectionMapping[modelname] = {}
+    }
+
+    if (!this.subscriptionDataToConnectionMapping[modelName]["destroys"]) {
+      this.subscriptionDataToConnectionMapping[modelName]["destroys"] = {}
+    }
+
+    this.subscriptionDataToConnectionMapping[modelName]["destroys"][modelId] = subscriptionConnection
   }
 }
