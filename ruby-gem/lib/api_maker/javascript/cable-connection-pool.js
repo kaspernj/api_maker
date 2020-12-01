@@ -23,7 +23,7 @@ export default class ApiMakerCableConnectionPool {
     })
     const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "creates")
 
-    if (existingConnection) {
+    if (existingConnection && existingConnection.isActive()) {
       existingConnection.addSubscription(subscription)
     } else {
       if (!this.upcomingSubscriptionData[modelName])
@@ -53,7 +53,7 @@ export default class ApiMakerCableConnectionPool {
     })
     const existingconnection = dig(this.subscriptionDataToConnectionMapping, modelName, "destroys", modelId)
 
-    if (existingconnection) {
+    if (existingconnection && existingConnection.isActive()) {
       existingconnection.addSubscription(subscription)
     } else {
       if (!this.upcomingsubscriptiondata[modelname])
@@ -90,7 +90,7 @@ export default class ApiMakerCableConnectionPool {
     })
     const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "events", modelId, "eventName")
 
-    if (existingConnection) {
+    if (existingConnection && existingConnection.isActive()) {
       existingConnection.addSubscription(subscription)
     } else {
       if (!this.upcomingSubscriptionData[modelName])
@@ -136,7 +136,7 @@ export default class ApiMakerCableConnectionPool {
     })
     const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "model_class_events", eventName)
 
-    if (existingConnection) {
+    if (existingConnection && existingConnection.isActive()) {
       existingConnection.addSubscription(subscription)
     } else {
       if (!(modelName in this.upcomingSubscriptionData))
@@ -173,7 +173,7 @@ export default class ApiMakerCableConnectionPool {
     })
     const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "updates", modelId)
 
-    if (existingConnection) {
+    if (existingConnection && existingConnection.isActive()) {
       existingConnection.addSubscription(subscription)
     } else {
       if (!this.upcomingSubscriptionData[modelName])

@@ -8,6 +8,7 @@ const inflection = require("inflection")
 export default class ApiMakerCableSubscriptionPool {
   constructor(props) {
     this.props = props
+    this.active = true
     this.activeSubscriptions = 0
     this.registerSubscriptions(props.subscriptions)
     this.connect()
@@ -22,8 +23,12 @@ export default class ApiMakerCableSubscriptionPool {
     )
   }
 
-  addSubscribers(subscriptions) {
-    this.registerSubscriptions(subscriptions)
+  addSubscription(subscription) {
+    this.registerSubscriptions([subscription])
+  }
+
+  isActive() {
+    return this.active
   }
 
   onReceived(rawData) {
@@ -74,6 +79,7 @@ export default class ApiMakerCableSubscriptionPool {
     if (this.activeSubscriptions <= 0) {
       Logger.log("Unsubscribe from ActionCable subscription")
       this.subscription.unsubscribe()
+      this.active = false
     }
   }
 
