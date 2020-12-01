@@ -10,21 +10,19 @@ class ApiMaker::PreloaderHasMany < ApiMaker::PreloaderBase
 private
 
   def models
-    @models ||= begin
-      if use_joined_query?
-        models_with_join
-      else
-        query = models_initial_query.select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
-        query = query.instance_eval(&reflection.scope) if reflection.scope
-        query = query.accessible_by(ability) if ability
-        query = ApiMaker::SelectColumnsOnCollection.execute!(
-          collection: query,
-          model_class: reflection.klass,
-          select_columns: select_columns,
-          table_name: query.klass.table_name
-        )
-        query
-      end
+    @models ||= if use_joined_query?
+      models_with_join
+    else
+      query = models_initial_query.select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
+      query = query.instance_eval(&reflection.scope) if reflection.scope
+      query = query.accessible_by(ability) if ability
+      query = ApiMaker::SelectColumnsOnCollection.execute!(
+        collection: query,
+        model_class: reflection.klass,
+        select_columns: select_columns,
+        table_name: query.klass.table_name
+      )
+      query
     end
   end
 

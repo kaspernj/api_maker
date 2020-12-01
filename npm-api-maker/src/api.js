@@ -1,4 +1,5 @@
 import { CustomError } from "./errors"
+import FormDataToObject from "./form-data-to-object"
 import qs from "qs"
 
 export default class Api {
@@ -42,7 +43,15 @@ export default class Api {
         if (xhr.status == 200) {
           resolve(response)
         } else {
-          reject(new CustomError(`Request failed with code: ${xhr.status}`, {response, xhr}))
+          const customError = new CustomError(`Request failed with code: ${xhr.status}`, {response, xhr})
+
+          if (args.data instanceof FormData) {
+            customError.peakflowParameters = FormDataToObject.toObject(args.data)
+          } else {
+            customError.peakflowParameters = args.data
+          }
+
+          reject(customError)
         }
       }
 
