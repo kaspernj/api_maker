@@ -49,7 +49,7 @@ export default class ApiMakerCableConnectionPool {
     const subscription = new CableSubscription({
       callback: callback,
       modelName: modelName,
-      modelid: modelId
+      modelId: modelId
     })
     const existingconnection = dig(this.subscriptionDataToConnectionMapping, modelName, "destroys", modelId)
 
