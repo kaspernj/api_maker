@@ -138,7 +138,7 @@ export default class ApiMakerCableConnectionPool {
       modelName: modelName
     })
 
-    existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "model_class_events", eventName)
+    const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "model_class_events", eventName)
 
     if (existingConnection) {
       existingConnection.addSubscription(subscription)
@@ -175,7 +175,7 @@ export default class ApiMakerCableConnectionPool {
       modelName: modelName,
       modelId: modelId
     })
-    existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "updates", modelId)
+    const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "updates", modelId)
 
     if(existingConnection){
       existingConnection.addSubscription(subscription)
@@ -233,24 +233,39 @@ export default class ApiMakerCableConnectionPool {
   updateSubscriptionDataToConnectionMapping(cableSubscriptionPool) {
     for(const modelName in subscriptions) {
       if (subscriptions[modelName]["creates"]) {
-        this.addConnectCreatedToConnectionMapping(cableSubscriptionPool)
+        this.updateSubscriptionDataToConnectionMappingWithCreatedEvents(cableSubscriptionPool)
       }
 
       if (subscriptions[modelName]["events"]) {
         for(const eventName in subscriptions[modelName]["events"]) {
           for(const modelId in subscriptions[modelName]["events"][eventName]) {
-            this.addConnectDestroyedToConnectionMapping(modelName, modelId, cableSubscriptionPool)
+            this.updateSubscriptionDataToConnectionMappingWithEvents(modelName, eventName, modelId, cableSubscriptionPool)
           }
         }
       }
 
       if (subscriptions[modelName]["updates"]) {
-        addConnectUpdatedToConnectionMapping(modelName, modelId, cableSubscriptionPool)
+        for(const modelId in subscriptions[modelName]["updates"]) {
+          updateSubscriptionDataToConnectionMappingWithUpdates(modelName, modelId, cableSubscriptionPool)
+        }
+      }
+
+      if (subscriptions[modelName]["destroys"]) {
+        for(const modelId in subscriptions[modelName]["updates"]) {
+          this.updateSubscriptionDataToConnectionMappingWithDestroys(modelName, modelId, cableSubscriptionPool)
+        }
+      }
+
+
+      if (subscriptions[modelName]["model_class_events"]) {
+        for(const eventName in subscriptions[modelName]["model_class_events"]) {
+          this.updateSubscriptionDataToConnectionMappingWithModelClassEvents(modelName, eventName, cableSubscriptionPool)
+        }
       }
     }
   }
 
-  addConnectCreatedToConnectionMapping(modelName, subscriptionConnection) {
+  updateSubscriptionDataToConnectionMappingWithCreatedEvents(modelName, subscriptionConnection) {
     if (!this.subscriptionDataToConnectionMapping[modelName]) {
       this.subscriptionDataToConnectionMapping[modelName] = {}
     }
@@ -258,7 +273,7 @@ export default class ApiMakerCableConnectionPool {
     this.upcomingSubscriptionData[modelName]["creates"] = subscriptionConnection
   }
 
-  addConnectDestroyedToConnectionMapping(modelName, modelId, subscriptionConnection) {
+  updateSubscriptionDataToConnectionMappingWithDestroys(modelName, modelId, subscriptionConnection) {
     if (!this.subscriptionDataToConnectionMapping[modelName]) {
       this.subscriptionDataToConnectionMapping[modelname] = {}
     }
@@ -270,7 +285,7 @@ export default class ApiMakerCableConnectionPool {
     this.subscriptionDataToConnectionMapping[modelName]["destroys"][modelId] = subscriptionConnection
   }
 
-  addConnectEventToConnectionMapping(modelName, modelId, eventName, subscriptionConnection) {
+  updateSubscriptionDataToConnectionMappingWithEvents(modelName, eventName, modelId, subscriptionConnection) {
     if (!this.subscriptionDataToConnectionMapping[modelName])
       this.subscriptionDataToConnectionMapping[modelName] = {}
 
@@ -283,7 +298,7 @@ export default class ApiMakerCableConnectionPool {
     this.subscriptionDataToConnectionMapping[modelName]["events"][eventName][modelId] = subscriptionConnection
   }
 
-  addConnectUpdatedToConnectionMapping(modelName, modelId, subscriptionConnection) {
+  updateSubscriptionDataToConnectionMappingWithUpdates(modelName, modelId, subscriptionConnection) {
     if (!this.subscriptionDataToConnectionMapping[modelName]) {
       this.subscriptionDataToConnectionMapping[modelname] = {}
     }
@@ -293,5 +308,18 @@ export default class ApiMakerCableConnectionPool {
     }
 
     this.subscriptionDataToConnectionMapping[modelName]["updates"][modelId] = subscriptionConnection
+  }
+
+  updateSubscriptionDataToConnectionMappingWithModelClassEvents(modelName, eventName, subscriptionConnection) {
+    if (!this.subscriptionDataToConnectionMapping[modelName])
+      this.subscriptionDataToConnectionMapping[modelName] = {}
+
+    if (!this.subscriptionDataToConnectionMapping[modelName]["model_class_events"])
+      this.subscriptionDataToConnectionMapping[modelName]["model_class_events"] = {}
+
+    if (!this.subscriptionDataToConnectionMapping[modelName]["model_class_events"][eventName])
+      this.subscriptionDataToConnectionMapping[modelName]["model_class_events"][eventName] = {}
+
+    this.subscriptionDataToConnectionMapping[modelName]["model_class_events"][eventName][modelId] = subscriptionConnection
   }
 }
