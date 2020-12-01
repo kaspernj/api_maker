@@ -1,5 +1,5 @@
 class ApiMaker::Configuration
-  attr_accessor :ability_class_name, :profiling, :react_native_path, :threadding
+  attr_accessor :ability_class_name, :before_create_event_callbacks, :profiling, :react_native_path, :threadding
 
   def self.current
     @current ||= ApiMaker::Configuration.new
@@ -19,12 +19,17 @@ class ApiMaker::Configuration
 
   def initialize
     @ability_class_name = "ApiMaker::Ability"
+    @before_create_event_callbacks = []
     @on_error = []
     @threadding = true
   end
 
   def ability_class
     ability_class_name.constantize
+  end
+
+  def before_create_event(&blk)
+    before_create_event_callbacks << blk
   end
 
   def on_error(&blk)
