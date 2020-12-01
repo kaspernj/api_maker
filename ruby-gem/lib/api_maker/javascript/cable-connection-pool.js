@@ -241,7 +241,7 @@ export default class ApiMakerCableConnectionPool {
 
       if (subscriptionData[modelName]["updates"]) {
         for(const modelId in subscriptionData[modelName]["updates"]) {
-          updateSubscriptionDataToConnectionMappingWithUpdates(modelName, modelId, cableSubscriptionPool)
+          this.updateSubscriptionDataToConnectionMappingWithUpdates(modelName, modelId, cableSubscriptionPool)
         }
       }
 
@@ -250,7 +250,6 @@ export default class ApiMakerCableConnectionPool {
           this.updateSubscriptionDataToConnectionMappingWithDestroys(modelName, modelId, cableSubscriptionPool)
         }
       }
-
 
       if (subscriptionData[modelName]["model_class_events"]) {
         for(const eventName in subscriptionData[modelName]["model_class_events"]) {
