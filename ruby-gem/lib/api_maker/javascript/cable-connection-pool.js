@@ -265,7 +265,7 @@ export default class ApiMakerCableConnectionPool {
       this.subscriptionDataToConnectionMapping[modelName] = {}
     }
 
-    this.upcomingSubscriptionData[modelName]["creates"] = subscriptionConnection
+    this.subscriptionDataToConnectionMapping[modelName]["creates"] = subscriptionConnection
   }
 
   updateSubscriptionDataToConnectionMappingWithDestroys(modelName, modelId, subscriptionConnection) {
