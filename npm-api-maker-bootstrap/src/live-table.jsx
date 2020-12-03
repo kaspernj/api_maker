@@ -291,7 +291,6 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     const foundModel = this.state.models.find((model) => model.id() == updatedModel.id())
 
     if (foundModel) {
-      console.log("loadModels")
       this.loadModelsDebounce()
     }
   }
