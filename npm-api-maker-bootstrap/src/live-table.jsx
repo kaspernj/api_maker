@@ -1,6 +1,8 @@
-import { EventCreated, EventDestroyed, Params } from "@kaspernj/api-maker"
+import { EventCreated, EventDestroyed, EventUpdated, Params } from "@kaspernj/api-maker"
 import { Card, Paginate } from "@kaspernj/api-maker-bootstrap"
 import Collection from "api-maker/collection"
+import { debounce } from "debounce"
+import { digg } from "@kaspernj/object-digger"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -111,6 +113,8 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     return this.setState({qParams})
   }
 
+  loadModelsDebounce = debounce(() => this.loadModels())
+
   async loadModels() {
     const params = Params.parse()
     const { abilities, modelClass, onModelsLoaded, preloads, select } = this.props
@@ -189,7 +193,10 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
         }
 
         {models.map(model =>
-          <EventDestroyed key={`event-destroyed-${model.cacheKey()}`} model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
+          <React.Fragment key={`events-${model.id()}`}>
+            <EventDestroyed model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
+            <EventUpdated model={model} onUpdated={(args) => this.onModelUpdated(args)} />
+          </React.Fragment>
         )}
 
         <Card className="mb-4" controls={controlsContent} header={headerContent} table>
@@ -277,5 +284,15 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     this.setState({
       models: this.state.models.filter(model => model.id() != args.model.id())
     })
+  }
+
+  onModelUpdated(args) {
+    const updatedModel = digg(args, "model")
+    const foundModel = this.state.models.find((model) => model.id() == updatedModel.id())
+
+    if (foundModel) {
+      console.log("loadModels")
+      this.loadModelsDebounce()
+    }
   }
 }
