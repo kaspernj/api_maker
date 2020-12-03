@@ -15,6 +15,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   static propTypes = PropTypesExact({
+    abilities: PropTypes.object,
     actionsContent: PropTypes.func,
     className: PropTypes.string,
     collection: PropTypes.instanceOf(Collection),
