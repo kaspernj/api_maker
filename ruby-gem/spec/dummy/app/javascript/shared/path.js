@@ -2,10 +2,12 @@ import Routes from "api-maker/routes"
 
 export default class Path {
   static localized(pathName, params, args = {}) {
+    let locale
+
     if (args.locale) {
-      const locale = args.locale
+      locale = args.locale
     } else {
-      const locale = I18n.locale
+      locale = I18n.locale
     }
 
     const methodName = `${pathName}${Inflection.camelize(locale)}Path`
