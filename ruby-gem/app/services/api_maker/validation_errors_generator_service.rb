@@ -18,7 +18,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
   def inspect_model(model, path)
     return if model.errors.empty?
 
-    model.errors.details.each do |attribute_name, errors|
+    model.errors.details.each do |attribute_name, _errors|
       attribute_type = attribute_type(model, attribute_name)
       next unless attribute_type
 
