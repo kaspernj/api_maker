@@ -1,3 +1,5 @@
+import Routes from "api-maker/routes"
+
 export default class Path {
   static localized(pathName, params, args = {}) {
     if (args.locale) {
