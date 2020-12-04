@@ -1,27 +1,18 @@
 require "waitutil"
 
 module ApiMaker::SpecHelper
+  require_relative "spec_helper/browser_logs"
+  require_relative "spec_helper/expect_no_browser_errors"
   require_relative "spec_helper/wait_for_expect"
   require_relative "spec_helper/wait_for_flash_message"
+  include BrowserLogs
+  include ExpectNoBrowserErrors
   include WaitForExpect
   include WaitForFlashMessage
 
   class JavaScriptError < RuntimeError; end
   class SelectorNotFoundError < RuntimeError; end
   class SelectorFoundError < RuntimeError; end
-
-  def browser_logs
-    logs = if browser_firefox?
-      []
-    else
-      chrome_logs
-    end
-
-    @recorded_browser_logs ||= []
-    @recorded_browser_logs += logs
-
-    logs
-  end
 
   def browser_firefox?
     capabilities = page.driver.browser.try(:capabilities)
@@ -46,23 +37,6 @@ module ApiMaker::SpecHelper
     error.set_backtrace(custom_trace)
 
     raise error
-  end
-
-  def expect_no_browser_errors
-    logs = browser_logs
-      .map(&:to_s)
-      .reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
-      .reject { |log| log.include?("DEBUG: ") }
-      .join("\n")
-
-    expect_no_browser_window_errors
-    return if logs.blank? || logs.exclude?("SEVERE ")
-
-    # Lets try one more time - just in case browser window error got registered meanwhile
-    sleep 0.4
-    expect_no_browser_window_errors
-
-    raise logs
   end
 
   def expect_no_errors
