@@ -52,8 +52,8 @@ describe ApiMaker::CreateCommand do
         {
           "attribute_name" => "project",
           "attribute_type" => "reflection",
-          "error_message" => "must exist",
-          "error_type" => "blank",
+          "error_messages" => ["must exist"],
+          "error_types" => ["blank"],
           "id" => nil,
           "input_name" => "task[project]",
           "model_name" => "task"

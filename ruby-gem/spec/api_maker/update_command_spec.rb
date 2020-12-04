@@ -42,8 +42,8 @@ describe ApiMaker::UpdateCommand do
       {
         attribute_name: :name,
         attribute_type: :attribute,
-        error_message: "can't be blank",
-        error_type: :blank,
+        error_messages: ["can't be blank"],
+        error_types: [:blank],
         input_name: "user[tasks_attributes][124][name]",
         id: nil,
         model_name: "task"
