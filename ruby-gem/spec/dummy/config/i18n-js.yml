@@ -1,3 +1,4 @@
+export_i18n_js: false
 translations:
-  - file: "app/assets/javascripts/i18n/translations.js"
-    only: ["*.activerecord.attributes.*", "*.activerecord.models.*", "*.date.*", "*.js.*", "*.number.currency.*", "*.time.*"]
+  - file: "app/javascript/shared/translations.js"
+    only: ["*.activerecord.attributes.*", "*.activerecord.models.*", "*.date.*", "*.js.*", "*.number.currency.*", "*.number.format", "*.time.*"]

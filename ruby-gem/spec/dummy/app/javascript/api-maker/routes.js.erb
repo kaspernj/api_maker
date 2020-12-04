@@ -1,0 +1,9 @@
+/* rails-erb-loader-dependencies ../config/routes.rb ./javascript/shared/routes.json */
+
+const routes = {};
+
+(function() {
+  <%= JsRoutes.generate(namespace: "Namespace") %>
+}.call(routes))
+
+export default routes.Namespace
