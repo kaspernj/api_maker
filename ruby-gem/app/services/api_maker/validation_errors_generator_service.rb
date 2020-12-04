@@ -25,20 +25,26 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
       attribute_path = path + [attribute_name]
       input_name = path_to_attribute_name(attribute_path)
 
-      errors.each_with_index do |error, error_index|
-        error_data = {
-          attribute_name: attribute_name,
-          attribute_type: attribute_type,
-          id: model.id,
-          model_name: model.model_name.param_key,
-          error_message: model.errors.messages.fetch(attribute_name).fetch(error_index),
-          error_type: error_type(attribute_type, error)
-        }
+      error_data = {
+        attribute_name: attribute_name,
+        attribute_type: attribute_type,
+        id: model.id,
+        model_name: model.model_name.param_key,
+        error_messages: model.errors.messages.fetch(attribute_name),
+        error_types: model.errors.details.fetch(attribute_name).map do |error|
+          error = error.fetch(:error)
 
-        error_data[:input_name] = input_name unless attribute_type == :base
+          if error.is_a?(Symbol)
+            error
+          else
+            :custom_error
+          end
+        end
+      }
 
-        result << error_data
-      end
+      error_data[:input_name] = input_name unless attribute_type == :base
+
+      result << error_data
     end
   end
 

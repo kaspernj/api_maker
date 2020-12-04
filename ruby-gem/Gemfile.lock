@@ -7,7 +7,7 @@ PATH
       cancancan
       dig_bang
       i18n-js
-      rails (>= 5.2.0)
+      rails (>= 6.0.0)
       ransack
       service_pattern (>= 0.0.8)
       waitutil
