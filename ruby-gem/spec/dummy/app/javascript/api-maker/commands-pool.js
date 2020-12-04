@@ -121,7 +121,6 @@ export default class ApiMakerCommandsPool {
       if (commandResponse.type == "success") {
         commandData.resolve(commandResponseData)
       } else if (commandResponse.type == "error") {
-        console.error("Command error", JSON.stringify(commandResponseData, null, 2))
         commandData.reject(new CustomError("Command error", {response: commandResponseData}))
       } else {
         commandData.reject(new CustomError("Command failed", {response: commandResponseData}))

@@ -6,8 +6,8 @@ export class ValidationError {
   constructor(args) {
     this.attributeName = digg(args, "attribute_name")
     this.attributeType = digg(args, "attribute_type")
-    this.errorMessage = digg(args, "error_message")
-    this.errorType = digg(args, "error_type")
+    this.errorMessages = digg(args, "error_messages")
+    this.errorTypes = digg(args, "error_types")
     this.inputName = args.input_name
     this.handled = false
     this.modelName = digg(args, "model_name")
@@ -34,18 +34,24 @@ export class ValidationError {
     return digg(this, "attributeName")
   }
 
-  getErrorMessage() {
-    return digg(this, "errorMessage")
+  getErrorMessages() {
+    return digg(this, "errorMessages")
   }
 
-  getFullErrorMessage() {
+  getFullErrorMessages() {
     const {attributeType} = digs(this, "attributeType")
 
     if (attributeType == "base") {
-      return this.getErrorMessage()
+      return this.getErrorMessages()
     } else {
-      const attributeHumanName = this.getModelClass().humanAttributeName(this.getAttributeName())
-      return `${attributeHumanName} ${this.getErrorMessage()}`
+      const fullErrorMessages = []
+
+      for (const errorMessage of this.getErrorMessages()) {
+        const attributeHumanName = this.getModelClass().humanAttributeName(this.getAttributeName())
+        fullErrorMessages.push(`${attributeHumanName} ${errorMessage}`)
+      }
+
+      return fullErrorMessages
     }
   }
 
@@ -75,7 +81,15 @@ export class ValidationErrors {
   }
 
   getErrorMessage() {
-    return this.validationErrors.map(validationError => validationError.getFullErrorMessage()).join(". ")
+    const fullErrorMessages = []
+
+    for (const validationError of this.validationErrors) {
+      for (const fullErrorMessage of validationError.getFullErrorMessages()) {
+        fullErrorMessages.push(fullErrorMessage)
+      }
+    }
+
+    return fullErrorMessages.join(". ")
   }
 
   getValidationErrors() {
@@ -100,7 +114,16 @@ export class ValidationErrors {
   getUnhandledErrorMessage() {
     const unhandledValidationErrors = this.validationErrors.filter(validationError => !validationError.getHandled())
 
-    if (unhandledValidationErrors.length > 0)
-      return unhandledValidationErrors.map(validationError => validationError.getFullErrorMessage()).join(". ")
+    if (unhandledValidationErrors.length > 0) {
+      const unhandledValidationErrorMessages = []
+
+      for (const unhandledValidationError of unhandledValidationErrors) {
+        for (const errorMessage of unhandledValidationError.getFullErrorMessages()) {
+          unhandledValidationErrorMessages.push(errorMessage)
+        }
+      }
+
+      return unhandledValidationErrorMessages.join(". ")
+    }
   }
 }

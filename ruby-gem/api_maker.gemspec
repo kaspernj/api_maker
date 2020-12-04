@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "rails", ">= 5.2.0"
+  s.add_dependency "rails", ">= 6.0.0"
   s.add_dependency "waitutil"
 
   s.add_runtime_dependency "active_record_better_dependent_error_messages", ">= 0.0.2"
