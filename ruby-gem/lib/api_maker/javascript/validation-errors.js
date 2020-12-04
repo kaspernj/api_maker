@@ -34,18 +34,24 @@ export class ValidationError {
     return digg(this, "attributeName")
   }
 
-  getErrorMessage() {
-    return digg(this, "errorMessage")
+  getErrorMessages() {
+    return digg(this, "errorMessages")
   }
 
-  getFullErrorMessage() {
+  getFullErrorMessages() {
     const {attributeType} = digs(this, "attributeType")
 
     if (attributeType == "base") {
-      return this.getErrorMessage()
+      return this.getErrorMessages()
     } else {
-      const attributeHumanName = this.getModelClass().humanAttributeName(this.getAttributeName())
-      return `${attributeHumanName} ${this.getErrorMessage()}`
+      const fullErrorMessages = []
+
+      for (const errorMessage of this.this.getErrorMessages()) {
+        const attributeHumanName = this.getModelClass().humanAttributeName(this.getAttributeName())
+        fullErrorMessages.push(`${attributeHumanName} ${errorMessage}`)
+      }
+
+      return fullErrorMessages
     }
   }
 
