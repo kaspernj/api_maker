@@ -1,7 +1,7 @@
 class ApiMaker::BaseResource
   attr_reader :ability, :args, :locals, :model
 
-  delegate :can, to: :ability
+  delegate :can, :can?, to: :ability
 
   CRUD = [:create, :create_events, :read, :update, :update_events, :destroy, :destroy_events].freeze
   READ = [:create_events, :destroy_events, :read, :update_events].freeze
