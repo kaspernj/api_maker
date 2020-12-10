@@ -2,8 +2,4 @@
 
 const routes = {};
 
-(function() {
-  <%= JsRoutes.generate(namespace: "Namespace") %>
-}.call(routes))
-
-export default routes.Namespace
+<%= JsRoutes.generate(namespace: "Namespace") %>
