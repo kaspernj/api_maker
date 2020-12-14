@@ -1,11 +1,12 @@
 import {Api, CanCan, CustomError} from "@kaspernj/api-maker"
 import {digg} from "@kaspernj/object-digger"
 import EventEmitter from "events"
-const inflection = require("inflection")
+import inflection from "inflection"
+import {Services} from "@kaspernj/api-maker"
 
 export default class Devise {
   static callSignOutEvent(args) {
-    Devise.events().emit("onDeviseSignOut", {args: args})
+    Devise.events().emit("onDeviseSignOut", {args})
   }
 
   static current() {
@@ -42,22 +43,17 @@ export default class Devise {
     if (!args.scope)
       args.scope = "user"
 
-    const postData = {"username": username, "password": password, "args": args}
-    const response = await Api.post("/api_maker/devise/do_sign_in", postData)
+    const postData = {username, password, args}
+    const response = await Services.current().sendRequest("Devise::SignIn", postData)
+    const modelClass = digg(require("api-maker/models"), inflection.camelize(args.scope))
+    const modelInstance = new modelClass(response.model_data)
 
-    if (response.success) {
-      const modelClass = digg(require("api-maker/models"), inflection.camelize(args.scope))
-      const modelInstance = new modelClass(response.model_data)
+    CanCan.current().resetAbilities()
 
-      CanCan.current().resetAbilities()
+    Devise.updateSession(modelInstance)
+    Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
 
-      Devise.updateSession(modelInstance)
-      Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
-
-      return {model: modelInstance, response: response}
-    } else {
-      throw new CustomError("Sign in failed", {response: response})
-    }
+    return {model: modelInstance, response}
   }
 
   static updateSession(model) {
@@ -73,17 +69,13 @@ export default class Devise {
     if (!args.scope)
       args.scope = "user"
 
-    const postData = {"args": args}
-    const response = await Api.post("/api_maker/devise/do_sign_out", postData)
+    const response = await Services.current().sendRequest("Devise::SignOut", {args})
 
-    if (response.success) {
-      CanCan.current().resetAbilities()
-      Devise.setSignedOut(args)
-      Devise.callSignOutEvent(args)
-      return response
-    } else {
-      throw new CustomError("Sign out failed", {response: response})
-    }
+    CanCan.current().resetAbilities()
+    Devise.setSignedOut(args)
+    Devise.callSignOutEvent(args)
+
+    return response
   }
 
   constructor() {

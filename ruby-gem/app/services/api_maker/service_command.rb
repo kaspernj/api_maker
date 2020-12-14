@@ -7,7 +7,9 @@ class ApiMaker::ServiceCommand < ApiMaker::BaseCommand
       service_args = command.args.fetch(:service_args)&.permit!&.to_h
       service_instance = service_constant.new(
         ability: current_ability,
-        args: service_args
+        args: service_args,
+        api_maker_args: api_maker_args,
+        controller: controller
       )
       response = service_instance.execute
 
