@@ -10,11 +10,10 @@ describe "Devise sign in" do
     fill_in "password", with: "password.123"
     click_on "Sign in"
 
-    wait_for_browser { find("[data-controller='devise--sign-in']", visible: false)["data-success-response"].present? }
+    wait_for_browser { wait_for_and_find("[data-controller='devise--sign-in']", visible: false)["data-success-response"].present? }
 
-    response = JSON.parse(find("[data-controller='devise--sign-in']", visible: false)["data-success-response"])
+    response = JSON.parse(wait_for_and_find("[data-controller='devise--sign-in']", visible: false)["data-success-response"])
 
-    expect(response.dig!("deviseSignInResponse", "response", "success")).to eq true
     expect(response.dig!("deviseSignInResponse", "response", "model_data", "a", "email")).to eq user.email
     expect(response.dig!("currentUserResult", "modelData", "id")).to eq user.id
     expect(response.fetch("isUserSignedInResult")).to eq true
