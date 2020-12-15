@@ -656,6 +656,17 @@ export default class BaseModel {
     return this.relationshipsCache[args.reflectionName]
   }
 
+  async _loadHasManyReflection(args, queryArgs = {}) {
+    if (args.reflectionName in this.relationshipsCache) {
+      return this.relationshipsCache[args.reflectionName]
+    } else {
+      const collection = new Collection(args, queryArgs)
+      const model = await collection.toArray()
+      this.relationshipsCache[args.reflectionName] = model
+      return model
+    }
+  }
+
   async _loadHasOneReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationshipsCache) {
       return this.relationshipsCache[args.reflectionName]
