@@ -2,7 +2,6 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
   def execute
     create_base_structure
     copy_base_model
-    copy_base_controllers
 
     ApiMaker::GenerateReactNativeApiService.execute! if ApiMaker::Configuration.current.react_native_path.present?
     succeed!
@@ -24,14 +23,6 @@ private
 
   def controller_path
     Rails.root.join("app/controllers/api_maker")
-  end
-
-  def copy_base_controllers
-    files = %w[devise_controller.rb]
-    path = File.join(__dir__, "..", "..", "controllers", "api_maker")
-    target_path = Rails.root.join("app/controllers/api_maker")
-
-    copy_base_files(files, path, target_path)
   end
 
   def copy_base_model
