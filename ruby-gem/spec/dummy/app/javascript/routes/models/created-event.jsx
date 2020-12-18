@@ -5,12 +5,13 @@ export default class ModelsCreatedEvent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      eventsCount: 0,
       tasks: []
     }
   }
 
   render() {
-    const { tasks } = this.state
+    const { eventsCount, showEventsCounter, tasks } = this.state
 
     return (
       <Layout className="component-models-created-event">
@@ -30,6 +31,17 @@ export default class ModelsCreatedEvent extends React.Component {
             )}
           </tbody>
         </table>
+        {showEventsCounter &&
+          <div className="events-counter">
+            <EventCreated modelClass={Task} onCreated={args => this.onCreatedForCounter(args)} />
+            {eventsCount}
+          </div>
+        }
+        {!showEventsCounter &&
+          <button className="show-events-counter-button" onClick={(e) => this.onShowEventsCounterClicked(e)}>
+            Show events counter
+          </button>
+        }
       </Layout>
     )
   }
@@ -38,5 +50,15 @@ export default class ModelsCreatedEvent extends React.Component {
     this.setState({
       tasks: this.state.tasks.concat([args.model])
     })
+  }
+
+  onCreatedForCounter() {
+    this.setState((prevState) => ({eventsCount: prevState.eventsCount + 1}))
+  }
+
+  onShowEventsCounterClicked(e) {
+    e.preventDefault()
+
+    this.setState({showEventsCounter: true})
   }
 }

@@ -10,7 +10,8 @@ export default class ApiMakerCableSubscriptionPool {
     this.props = props
     this.active = true
     this.activeSubscriptions = 0
-    this.registerSubscriptions(props.subscriptions)
+    this.subscriptions = props.subscriptions
+    this.registerSubscriptions(props.subscriptions, false)
     this.connect()
   }
 
@@ -24,7 +25,7 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   addSubscription(subscription) {
-    this.registerSubscriptions([subscription])
+    this.registerSubscriptions(subscription, true)
   }
 
   isActive() {
@@ -37,7 +38,7 @@ export default class ApiMakerCableSubscriptionPool {
     const modelName = inflection.camelize(inflection.singularize(modelType.replace(/-/g, "_")))
     const modelId = data.model_id
     const modelInstance = data.model
-    const subscriptions = this.props.subscriptions
+    const subscriptions = this.subscriptions
 
     if (data.type == "update") {
       for(const subscription of subscriptions[modelName]["updates"][modelId]) {
@@ -80,10 +81,11 @@ export default class ApiMakerCableSubscriptionPool {
       Logger.log("Unsubscribe from ActionCable subscription")
       this.subscription.unsubscribe()
       this.active = false
+      // TODO remove subscription
     }
   }
 
-  registerSubscriptions(subscriptions) {
+  registerSubscriptions(subscriptions, updateSubscriptions) {
     Logger.log(`registerSubscriptions: ${subscriptions.length}`)
     Logger.log(subscriptions)
 
@@ -91,6 +93,10 @@ export default class ApiMakerCableSubscriptionPool {
       if (subscriptions[modelName]["creates"]) {
         for(const subscription of subscriptions[modelName]["creates"]) {
           this.connectUnsubscriptionForSubscription(subscription)
+
+          if (updateSubscriptions) {
+            this.subscriptions[modelName]["creates"].push(subscription)
+          }
         }
       }
 

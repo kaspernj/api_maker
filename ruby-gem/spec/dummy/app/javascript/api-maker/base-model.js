@@ -92,6 +92,16 @@ export default class BaseModel {
     return this.abilities[abilityName]
   }
 
+  clone() {
+    const clone = new this.constructor
+
+    clone.abilities = Object.assign({}, this.abilities)
+    clone.modelData = Object.assign({}, this.modelData)
+    clone.relationshipsCache = Object.assign({}, this.relationshipsCache)
+
+    return clone
+  }
+
   connect(eventName, callback) {
     const cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this.primaryKey(), eventName, callback)
     return cableSubscription
@@ -654,6 +664,17 @@ export default class BaseModel {
     }
 
     return this.relationshipsCache[args.reflectionName]
+  }
+
+  async _loadHasManyReflection(args, queryArgs = {}) {
+    if (args.reflectionName in this.relationshipsCache) {
+      return this.relationshipsCache[args.reflectionName]
+    } else {
+      const collection = new Collection(args, queryArgs)
+      const model = await collection.toArray()
+      this.relationshipsCache[args.reflectionName] = model
+      return model
+    }
   }
 
   async _loadHasOneReflection(args, queryArgs = {}) {
