@@ -1,6 +1,8 @@
-import { EventCreated, EventDestroyed, Params } from "@kaspernj/api-maker"
+import { EventCreated, EventDestroyed, EventUpdated, Params } from "@kaspernj/api-maker"
 import { Card, Paginate } from "@kaspernj/api-maker-bootstrap"
 import Collection from "api-maker/collection"
+import { debounce } from "debounce"
+import { digg } from "@kaspernj/object-digger"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
@@ -15,6 +17,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   static propTypes = PropTypesExact({
+    abilities: PropTypes.object,
     actionsContent: PropTypes.func,
     className: PropTypes.string,
     collection: PropTypes.instanceOf(Collection),
@@ -66,25 +69,38 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   abilitiesToLoad() {
-    const abilitiesToLoad = []
-    const {abilities} = this.props
-
-    if (abilities) {
-      for (const ability of abilities) {
-        abilitiesToLoad.push(ability)
-      }
-    }
+    const abilitiesToLoad = {}
+    const {abilities, modelClass} = this.props
+    const ownAbilities = []
 
     if (this.props.destroyEnabled) {
-      abilitiesToLoad.push("destroy")
+      ownAbilities.push("destroy")
     }
 
     if (this.props.editModelPath) {
-      abilitiesToLoad.push("edit")
+      ownAbilities.push("edit")
     }
 
     if (this.props.viewModelPath) {
-      abilitiesToLoad.push("show")
+      ownAbilities.push("show")
+    }
+
+    if (ownAbilities.length > 0) {
+      const modelClassName = modelClass.modelClassData().name
+
+      abilitiesToLoad[modelClassName] = ownAbilities
+    }
+
+    if (abilities) {
+      for (const modelName in abilities) {
+        if (!(modelName in abilitiesToLoad)) {
+          abilitiesToLoad[modelName] = []
+        }
+
+        for (const ability of abilities[modelName]) {
+          abilitiesToLoad[modelName].push(ability)
+        }
+      }
     }
 
     return abilitiesToLoad
@@ -97,9 +113,11 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     return this.setState({qParams})
   }
 
+  loadModelsDebounce = debounce(() => this.loadModels())
+
   async loadModels() {
     const params = Params.parse()
-    const { modelClass, onModelsLoaded, preloads, select } = this.props
+    const { abilities, modelClass, onModelsLoaded, preloads, select } = this.props
     const { qParams, queryPageName, queryQName } = this.state
     let query
 
@@ -119,12 +137,8 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
     const abilitiesToLoad = this.abilitiesToLoad()
 
-    if (abilitiesToLoad.length > 0) {
-      const modelClassName = modelClass.modelClassData().name
-      const loadAbilitiesArgument = {}
-
-      loadAbilitiesArgument[modelClassName] = abilitiesToLoad
-      query = query.abilities(loadAbilitiesArgument)
+    if (Object.keys(abilitiesToLoad).length > 0) {
+      query = query.abilities(abilitiesToLoad)
     }
 
     const result = await query.result()
@@ -179,7 +193,10 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
         }
 
         {models.map(model =>
-          <EventDestroyed key={`event-destroyed-${model.cacheKey()}`} model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
+          <React.Fragment key={`events-${model.id()}`}>
+            <EventDestroyed model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
+            <EventUpdated model={model} onUpdated={(args) => this.onModelUpdated(args)} />
+          </React.Fragment>
         )}
 
         <Card className="mb-4" controls={controlsContent} header={headerContent} table>
@@ -267,5 +284,14 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     this.setState({
       models: this.state.models.filter(model => model.id() != args.model.id())
     })
+  }
+
+  onModelUpdated(args) {
+    const updatedModel = digg(args, "model")
+    const foundModel = this.state.models.find((model) => model.id() == updatedModel.id())
+
+    if (foundModel) {
+      this.loadModelsDebounce()
+    }
   }
 }

@@ -11,6 +11,7 @@ class Project < ApplicationRecord
   has_one :project_detail, -> { where(deleted_at: nil) }, dependent: :destroy
 
   validates :name, presence: true
+  validates :name, presence: true, length: {maximum: 110}
   validate :name_cannot_be_hans
 
   monetize :price_per_hour_cents, allow_nil: true

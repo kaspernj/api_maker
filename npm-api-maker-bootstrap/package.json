@@ -9,7 +9,7 @@
     ]
   },
   "name": "@kaspernj/api-maker-bootstrap",
-  "version": "1.0.29",
+  "version": "1.0.32",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -33,6 +33,7 @@
     "react-router-dom": "^5.1.2"
   },
   "dependencies": {
-    "@kaspernj/object-digger": "^1.0.1"
+    "@kaspernj/object-digger": "^1.0.1",
+    "debounce": "^1.2.0"
   }
 }

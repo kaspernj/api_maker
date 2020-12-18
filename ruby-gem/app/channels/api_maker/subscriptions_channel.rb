@@ -29,6 +29,10 @@ private
     model_class = model_for_resource_name(model_name)
     channel_name = model_class.api_maker_broadcast_create_channel_name
     stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
+      ApiMaker::Configuration.current.before_create_event_callbacks.each do |callback|
+        callback.call(data: data)
+      end
+
       # We need to look the model up to evaluate if the user has access
       model = data.fetch("model_class_name").safe_constantize.accessible_by(current_ability, :create_events).find(data.fetch("model_id"))
 

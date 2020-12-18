@@ -3,6 +3,7 @@ import DisplayNotification from "shared/display-notification"
 import { EventEmitterListener } from "@kaspernj/api-maker"
 import { Link } from "react-router-dom"
 import React from "react"
+import Routes from "api-maker/routes"
 
 export default class Layout extends React.Component {
   constructor(props) {

@@ -115,20 +115,11 @@ translations:
     only: ["*.activerecord.attributes.*", "*.activerecord.models.*", "*.date.*", "*.js.*", "*.number.currency.*", "*.time.*"]
 ```
 
-Then add this to `app/assets/javascript/application.js.erb`:
+You can use translations like this:
 ```js
-//= require i18n
-//= require i18n/translations
+import I18n from "api-maker/i18n"
 
-var locale = document.querySelector("html").getAttribute("lang")
-I18n.locale = locale
-
-<% if Rails.env.development? || Rails.env.test? %>
-  I18n.missingTranslation = function(key) {
-    console.error(`No translation for: ${key}`)
-    return `translation missing: ${key}`
-  }
-<% end %>
+I18n.t("js.some.key")
 ```
 
 Add this to the `<html>`-tag:
@@ -136,9 +127,13 @@ Add this to the `<html>`-tag:
 <html lang="<%= I18n.locale %>">
 ```
 
-Add this to `config/application.rb` to ease development:
-```ruby
-config.middleware.use I18n::JS::Middleware
+### Routes
+
+You can use your Rails routes like this:
+```js
+import Routes from "api-maker/routes"
+
+Routes.userPath(user.id()) //=> users/4
 ```
 
 ### ActionCable

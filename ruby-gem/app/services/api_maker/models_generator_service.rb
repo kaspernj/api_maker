@@ -2,7 +2,6 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
   def execute
     create_base_structure
     copy_base_model
-    copy_base_controllers
 
     ApiMaker::GenerateReactNativeApiService.execute! if ApiMaker::Configuration.current.react_native_path.present?
     succeed!
@@ -26,19 +25,11 @@ private
     Rails.root.join("app/controllers/api_maker")
   end
 
-  def copy_base_controllers
-    files = %w[devise_controller.rb]
-    path = File.join(__dir__, "..", "..", "controllers", "api_maker")
-    target_path = Rails.root.join("app/controllers/api_maker")
-
-    copy_base_files(files, path, target_path)
-  end
-
   def copy_base_model
     files = %w[
       base-model.js cable-connection-pool.js cable-subscription.js cable-subscription-pool.js collection.js
-      commands-pool.js deserializer.js devise.js models.js.erb preloaded.js key-value-store.js models-response-reader.js
-      resource-routes.jsx resource-route.jsx session-status-updater.js validation-errors.js
+      commands-pool.js deserializer.js devise.js i18n.js.erb models.js.erb preloaded.js key-value-store.js models-response-reader.js
+      resource-routes.jsx resource-route.jsx routes.js.erb session-status-updater.js validation-errors.js
     ]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path

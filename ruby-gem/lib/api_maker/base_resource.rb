@@ -1,9 +1,10 @@
 class ApiMaker::BaseResource
   attr_reader :ability, :args, :locals, :model
 
-  delegate :can, to: :ability
+  delegate :can, :can?, allow_nil: true, to: :ability
 
-  CRUD = [:create, :read, :update, :destroy].freeze
+  CRUD = [:create, :create_events, :read, :update, :update_events, :destroy, :destroy_events].freeze
+  READ = [:create_events, :destroy_events, :read, :update_events].freeze
 
   def self.attributes(*attributes, **args)
     attributes.each do |attribute|

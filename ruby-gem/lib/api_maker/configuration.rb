@@ -1,5 +1,13 @@
 class ApiMaker::Configuration
-  attr_accessor :ability_class_name, :profiling, :react_native_path, :threadding
+  attr_accessor(
+    :ability_class_name,
+    :before_create_event_callbacks,
+    :devise_sign_in_enabled,
+    :devise_sign_out_enabled,
+    :profiling,
+    :react_native_path,
+    :threadding
+  )
 
   def self.current
     @current ||= ApiMaker::Configuration.new
@@ -18,13 +26,21 @@ class ApiMaker::Configuration
   end
 
   def initialize
-    @ability_class_name = "ApiMaker::Ability"
+    self.ability_class_name = "ApiMaker::Ability"
+    self.before_create_event_callbacks = []
+    self.devise_sign_in_enabled = true
+    self.devise_sign_out_enabled = true
+    self.threadding = true
+
     @on_error = []
-    @threadding = true
   end
 
   def ability_class
     ability_class_name.constantize
+  end
+
+  def before_create_event(&blk)
+    before_create_event_callbacks << blk
   end
 
   def on_error(&blk)
