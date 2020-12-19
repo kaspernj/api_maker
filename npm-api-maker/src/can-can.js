@@ -29,8 +29,6 @@ export default class ApiMakerCanCan {
         subjectLabel = subject.modelClassData().name
       }
 
-      console.log(this.abilities)
-
       throw new Error(`Ability not loaded ${subjectLabel}#${ability}`)
     }
 
