@@ -22,7 +22,16 @@ export default class ApiMakerCanCan {
     const foundAbility = this.findAbility(ability, subject)
 
     if (foundAbility === undefined) {
-      throw new Error(`Ability not loaded ${subject}#${ability}`)
+      let subjectLabel = subject
+
+      // Translate resource-models into class name strings
+      if (typeof subject == "function" && subject["modelClassData"]) {
+        subjectLabel = subject.modelClassData().name
+      }
+
+      console.log(this.abilities)
+
+      throw new Error(`Ability not loaded ${subjectLabel}#${ability}`)
     }
 
     return digg(foundAbility, "can")
@@ -46,9 +55,12 @@ export default class ApiMakerCanCan {
     return new Promise((resolve) => {
       const promises = []
 
-      for (const subject in abilities) {
-        for (const ability of abilities[subject]) {
+      for (const abilityData of abilities) {
+        const subject = abilityData[0]
+
+        for (const ability of abilityData[1]) {
           const promise = this.loadAbility(ability, subject)
+
           promises.push(promise)
         }
       }
