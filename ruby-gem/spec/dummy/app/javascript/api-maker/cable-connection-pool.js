@@ -55,10 +55,16 @@ export default class ApiMakerCableConnectionPool {
       modelName: modelName,
       modelId: modelId
     })
-    const existingconnection = dig(this.subscriptionDataToConnectionMapping, modelName, "destroys", modelId)
+    const existingConnection = dig(this.subscriptionDataToConnectionMapping, modelName, "destroys", modelId)
 
-    if (existingconnection && existingConnection.isActive()) {
-      existingconnection.addSubscription(subscription)
+    if (existingConnection  && existingConnection.isActive()) {
+      existingConnection.addSubscription({
+        [modelName]: {
+          "destroys": {
+            [modelId]: [subscription]
+          }
+        }
+      })
     } else {
       if (!this.upcomingSubscriptionData[modelName])
         this.upcomingSubscriptionData[modelName] = {}

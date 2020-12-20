@@ -100,6 +100,22 @@ export default class ApiMakerCableSubscriptionPool {
         }
       }
 
+      if (subscriptions[modelName]["destroys"]) {
+        for(const modelId in subscriptions[modelName]["destroys"]) {
+          for(const subscription of subscriptions[modelName]["destroys"][modelId]) {
+            this.connectUnsubscriptionForSubscription(subscription)
+
+            if (updateSubscriptions) {
+              if (!this.subscriptions[modelName]["destroys"][modelId]) {
+                this.subscriptions[modelName]["destroys"][modelId] = []
+              }
+
+              this.subscriptions[modelName]["destroys"][modelId].push(subscription)
+            }
+          }
+        }
+      }
+
       if (subscriptions[modelName]["events"]) {
         for(const eventName in subscriptions[modelName]["events"]) {
           for(const modelId in subscriptions[modelName]["events"][eventName]) {
