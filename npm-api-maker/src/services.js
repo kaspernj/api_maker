@@ -1,4 +1,4 @@
-import CommandsPool from "api-maker/commands-pool"
+import {CommandsPool} from "@kaspernj/api-maker"
 
 export default class ApiMakerServices {
   static current() {

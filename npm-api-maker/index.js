@@ -1,7 +1,10 @@
 import Api from "./src/api"
+import CableConnectionPool from "./src/cable-connection-pool"
 import CanCan from "./src/can-can"
 import CommandSubmitData from "./src/command-submit-data"
+import CommandsPool from "./src/commands-pool"
 import { CustomError, ValidationError } from "./src/errors"
+import Deserializer from "./src/deserializer"
 import ErrorLogger from "./src/error-logger"
 import EventConnection from "./src/event-connection"
 import EventCreated from "./src/event-created"
@@ -20,12 +23,16 @@ import Serializer from "./src/serializer"
 import Services from "./src/services"
 import SourceMapsLoader from "./src/source-maps-loader"
 import UpdatedAttribute from "./src/updated-attribute"
+import ValidationErrors from "./src/validation-errors"
 
 export {
   Api,
+  CableConnectionPool,
   CanCan,
   CommandSubmitData,
+  CommandsPool,
   CustomError,
+  Deserializer,
   ErrorLogger,
   EventConnection,
   EventCreated,
@@ -44,5 +51,6 @@ export {
   Services,
   SourceMapsLoader,
   UpdatedAttribute,
-  ValidationError
+  ValidationError,
+  ValidationErrors
 }
