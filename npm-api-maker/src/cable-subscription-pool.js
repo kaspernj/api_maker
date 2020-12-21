@@ -1,4 +1,4 @@
-import ChannelsConsumer from "channels/consumer"
+import ChannelsConsumer from "./channels-consumer"
 import CommandsPool from "./commands-pool"
 import Deserializer from "./deserializer"
 import Logger from "./logger"
