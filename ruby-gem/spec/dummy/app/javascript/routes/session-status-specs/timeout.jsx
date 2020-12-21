@@ -1,7 +1,8 @@
 import Devise from "api-maker/devise"
-import {EventEmitterListener, SessionStatusUpdater} from "@kaspernj/api-maker"
+import {EventEmitterListener} from "@kaspernj/api-maker"
 import Layout from "components/layout"
 import React from "react"
+import SessionStatusUpdater from "api-maker/session-status-updater"
 
 export default class SessionStatusSpecsTimeout extends React.Component {
   constructor(props) {

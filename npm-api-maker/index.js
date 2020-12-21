@@ -23,7 +23,7 @@ import Serializer from "./src/serializer"
 import Services from "./src/services"
 import SourceMapsLoader from "./src/source-maps-loader"
 import UpdatedAttribute from "./src/updated-attribute"
-import ValidationErrors from "./src/validation-errors"
+import {ValidationErrors} from "./src/validation-errors"
 
 export {
   Api,
