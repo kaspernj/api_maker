@@ -1,8 +1,7 @@
-import {Api, CanCan, CustomError} from "@kaspernj/api-maker"
+import {Api, CanCan, CustomError, Services} from "@kaspernj/api-maker"
 import {digg} from "@kaspernj/object-digger"
 import EventEmitter from "events"
 import inflection from "inflection"
-import {Services} from "@kaspernj/api-maker"
 
 export default class Devise {
   static callSignOutEvent(args) {

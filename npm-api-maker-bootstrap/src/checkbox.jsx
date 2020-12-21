@@ -1,6 +1,5 @@
-import { Checkbox, idForComponent, nameForComponent } from "@kaspernj/api-maker-inputs"
+import {Checkbox, idForComponent, nameForComponent} from "@kaspernj/api-maker-inputs"
 import classNames from "classnames"
-import { EventListener } from "@kaspernj/api-maker"
 import PropTypes from "prop-types"
 import React from "react"
 

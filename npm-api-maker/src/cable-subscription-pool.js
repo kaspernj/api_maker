@@ -1,5 +1,7 @@
 import ChannelsConsumer from "channels/consumer"
-import {CommandsPool, Deserializer, Logger} from "@kaspernj/api-maker"
+import CommandsPool from "./commands-pool"
+import Deserializer from "./deserializer"
+import Logger from "./logger"
 
 const inflection = require("inflection")
 

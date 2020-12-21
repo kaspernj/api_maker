@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom"
+import {Link} from "react-router-dom"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import qs from "qs"
 import React from "react"
-import { Result } from "@kaspernj/api-maker"
+import {Result} from "@kaspernj/api-maker"
 
 export default class ApiMakerBootstrapPaginate extends React.Component {
   static propTypes = PropTypesExact({

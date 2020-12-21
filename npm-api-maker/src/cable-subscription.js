@@ -1,4 +1,4 @@
-import { Logger } from "@kaspernj/api-maker"
+import Logger from "./logger"
 
 export default class ApiMakerCableSubscription {
   constructor(props) {

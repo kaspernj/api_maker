@@ -1,4 +1,4 @@
-import { EventListener } from "@kaspernj/api-maker"
+import {EventListener} from "@kaspernj/api-maker"
 import InvalidFeedback from "./invalid-feedback"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
