@@ -1,4 +1,4 @@
-import { CustomError } from "./errors"
+import CustomError from "./custom-error"
 import FormDataToObject from "./form-data-to-object"
 import qs from "qs"
 

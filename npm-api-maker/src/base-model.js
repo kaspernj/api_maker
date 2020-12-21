@@ -1,9 +1,12 @@
 import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
 import CommandsPool from "./commands-pool"
-import {CustomError, FormDataToObject, ModelName, ValidationError} from "@kaspernj/api-maker"
+import CustomError from "./custom-error"
 import {digg} from "@kaspernj/object-digger"
+import FormDataToObject from "./form-data-to-object"
+import ModelName from "./model-name"
 import ModelsResponseReader from "./models-response-reader"
+import ValidationError from "./validation-error"
 import {ValidationErrors} from "./validation-errors"
 
 const inflection = require("inflection")
@@ -90,6 +93,16 @@ export default class BaseModel {
     }
 
     return this.abilities[abilityName]
+  }
+
+  clone() {
+    const clone = new this.constructor
+
+    clone.abilities = Object.assign({}, this.abilities)
+    clone.modelData = Object.assign({}, this.modelData)
+    clone.relationshipsCache = Object.assign({}, this.relationshipsCache)
+
+    return clone
   }
 
   connect(eventName, callback) {
@@ -654,6 +667,17 @@ export default class BaseModel {
     }
 
     return this.relationshipsCache[args.reflectionName]
+  }
+
+  async _loadHasManyReflection(args, queryArgs = {}) {
+    if (args.reflectionName in this.relationshipsCache) {
+      return this.relationshipsCache[args.reflectionName]
+    } else {
+      const collection = new Collection(args, queryArgs)
+      const model = await collection.toArray()
+      this.relationshipsCache[args.reflectionName] = model
+      return model
+    }
   }
 
   async _loadHasOneReflection(args, queryArgs = {}) {

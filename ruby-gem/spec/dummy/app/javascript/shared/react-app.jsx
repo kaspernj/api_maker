@@ -2,7 +2,7 @@ import ApplicationHistory from "shared/application-history"
 import { Router } from "react-router-dom"
 import React from "react"
 import ReactDOM from "react-dom"
-import ResourceRoutes from "api-maker/resource-routes"
+import {ResourceRoutes} from "@kaspernj/api-maker"
 import ScrollToTop from "shared/scroll-to-top"
 import {Suspense} from "react"
 

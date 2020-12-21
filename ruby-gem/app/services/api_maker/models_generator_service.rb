@@ -26,11 +26,7 @@ private
   end
 
   def copy_base_model
-    files = %w[
-      base-model.js cable-connection-pool.js cable-subscription.js cable-subscription-pool.js collection.js
-      commands-pool.js deserializer.js devise.js i18n.js.erb models.js.erb preloaded.js key-value-store.js models-response-reader.js
-      resource-routes.jsx resource-route.jsx routes.js.erb session-status-updater.js validation-errors.js
-    ]
+    files = %w[devise.js i18n.js.erb models.js.erb routes.js.erb session-status-updater.js]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path
 
