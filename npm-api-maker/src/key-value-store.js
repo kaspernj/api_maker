@@ -1,5 +1,4 @@
-import Dexie from "dexie"
-import Params from "params"
+import Params from "./params"
 
 export default class KeyValueStore {
   static current() {

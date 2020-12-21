@@ -1,7 +1,13 @@
+import CableConnectionPool from "./cable-connection-pool"
 import Collection from "./collection"
-import {CableConnectionPool, CommandsPool, CustomError, FormDataToObject, ModelName, ValidationError, ValidationErrors} from "@kaspernj/api-maker"
+import CommandsPool from "./commands-pool"
+import CustomError from "./custom-error"
 import {digg} from "@kaspernj/object-digger"
+import FormDataToObject from "./form-data-to-object"
+import ModelName from "./model-name"
 import ModelsResponseReader from "./models-response-reader"
+import ValidationError from "./validation-error"
+import {ValidationErrors} from "./validation-errors"
 
 const inflection = require("inflection")
 const objectToFormData = require("object-to-formdata").serialize

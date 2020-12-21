@@ -1,7 +1,8 @@
+import CommandsPool from "./commands-pool"
 import {digg} from "@kaspernj/object-digger"
 import merge from "merge"
 import ModelsResponseReader from "./models-response-reader"
-import {CommandsPool, Result} from "@kaspernj/api-maker"
+import Result from "./result"
 
 const inflection = require("inflection")
 

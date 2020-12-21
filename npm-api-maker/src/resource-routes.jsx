@@ -1,6 +1,6 @@
 import React from "react" // This fixes an issue with the Baristo project where it needed it to be loaded
 import ResourceRoute from "./resource-route"
-import { Route } from "react-router-dom"
+import {Route} from "react-router-dom"
 
 export default class ApiMakerResourceRoutes {
   static readRoutes(args = {}) {

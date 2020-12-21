@@ -1,9 +1,11 @@
 import Api from "./src/api"
+import BaseModel from "./src/base-model"
 import CableConnectionPool from "./src/cable-connection-pool"
 import CanCan from "./src/can-can"
+import Collection from "./src/collection"
 import CommandSubmitData from "./src/command-submit-data"
 import CommandsPool from "./src/commands-pool"
-import { CustomError, ValidationError } from "./src/errors"
+import CustomError from "./src/custom-error"
 import Deserializer from "./src/deserializer"
 import ErrorLogger from "./src/error-logger"
 import EventConnection from "./src/event-connection"
@@ -14,21 +16,29 @@ import EventListener from "./src/event-listener"
 import EventModelClass from "./src/event-model-class"
 import EventUpdated from "./src/event-updated"
 import FormDataToObject from "./src/form-data-to-object"
+import KeyValueStore from "./src/key-value-store"
 import Logger from "./src/logger"
 import ModelName from "./src/model-name"
+import ModelsResponseReader from "./src/models-response-reader"
 import MoneyFormatter from "./src/money-formatter"
 import Params from "./src/params"
+import Preloaded from "./src/preloaded"
+import ResourceRoute from "./src/resource-route"
+import ResourceRoutes from "./src/resource-routes"
 import Result from "./src/result"
 import Serializer from "./src/serializer"
 import Services from "./src/services"
 import SourceMapsLoader from "./src/source-maps-loader"
 import UpdatedAttribute from "./src/updated-attribute"
+import ValidationError from "./src/validation-error"
 import {ValidationErrors} from "./src/validation-errors"
 
 export {
   Api,
+  BaseModel,
   CableConnectionPool,
   CanCan,
+  Collection,
   CommandSubmitData,
   CommandsPool,
   CustomError,
@@ -42,10 +52,15 @@ export {
   EventModelClass,
   EventUpdated,
   FormDataToObject,
+  KeyValueStore,
   Logger,
   ModelName,
+  ModelsResponseReader,
   MoneyFormatter,
   Params,
+  Preloaded,
+  ResourceRoute,
+  ResourceRoutes,
   Result,
   Serializer,
   Services,
