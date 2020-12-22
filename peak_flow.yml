@@ -47,6 +47,10 @@ builds:
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_7:
+    name: NPM API maker Jest
+    script:
+      - cd npm-api-maker && yarn test
+  build_8:
     name: Linters
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec rubocop
