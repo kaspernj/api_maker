@@ -1,9 +1,9 @@
 class ApiMaker::AbilityLoader
-  attr_reader :ability, :args, :loaded, :locals, :loaded_model_names
+  attr_reader :ability, :api_maker_args, :loaded, :locals, :loaded_model_names
 
-  def initialize(ability:, args:, locals:)
+  def initialize(ability:, api_maker_args:, locals:)
     @ability = ability
-    @args = args
+    @api_maker_args = api_maker_args
     @locals = locals
     @loaded_model_names = {}
   end
@@ -18,7 +18,7 @@ class ApiMaker::AbilityLoader
   def load_resource(resource)
     return if loaded_model_names.key?(resource.model_class_name)
 
-    resource.new(ability: ability, args: args, locals: locals, model: nil).abilities
+    resource.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: nil).abilities
     loaded_model_names[resource.model_class_name] = true
   end
 end

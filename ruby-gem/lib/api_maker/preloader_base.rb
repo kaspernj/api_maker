@@ -1,9 +1,9 @@
 class ApiMaker::PreloaderBase
-  attr_reader :ability, :args, :collection, :data, :locals, :records, :reflection, :reflection_name, :select, :select_columns
+  attr_reader :ability, :api_maker_args, :collection, :data, :locals, :records, :reflection, :reflection_name, :select, :select_columns
 
-  def initialize(ability:, args:, data:, collection:, locals:, records:, reflection:, select:, select_columns:)
+  def initialize(ability:, api_maker_args:, data:, collection:, locals:, records:, reflection:, select:, select_columns:)
     @ability = ability
-    @args = args
+    @api_maker_args = api_maker_args
     @data = data
     @collection = collection
     @locals = locals

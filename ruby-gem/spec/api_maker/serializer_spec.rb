@@ -12,17 +12,17 @@ describe ApiMaker::Serializer do
   end
 
   it "includes given arguments" do
-    result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
+    result = JSON.parse(ApiMaker::Serializer.new(api_maker_args: {test_arg: "Test"}, model: user).to_json)
     expect(result.dig("a", "custom_attribute")).to eq "CustomAttribute - Test arg: Test"
   end
 
   it "supports conditions for attributes" do
-    result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
+    result = JSON.parse(ApiMaker::Serializer.new(api_maker_args: {test_arg: "Test"}, model: user).to_json)
     expect(result.fetch("a").keys).not_to include "updated_at"
 
     user.email = "kasper@example.com"
 
-    result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
+    result = JSON.parse(ApiMaker::Serializer.new(api_maker_args: {test_arg: "Test"}, model: user).to_json)
     expect(result.fetch("a").keys).to include "updated_at"
   end
 

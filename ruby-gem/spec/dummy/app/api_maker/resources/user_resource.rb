@@ -19,7 +19,7 @@ class Resources::UserResource < Resources::ApplicationResource
   end
 
   def custom_attribute
-    "CustomAttribute - Test arg: #{args[:test_arg]}"
+    "CustomAttribute - Test arg: #{api_maker_args[:test_arg]}"
   end
 
   def email_kasper?

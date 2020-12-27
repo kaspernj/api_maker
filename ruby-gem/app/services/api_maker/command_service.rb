@@ -1,9 +1,9 @@
 class ApiMaker::CommandService < ApiMaker::ApplicationService
-  attr_reader :ability, :args, :commands, :command_name, :command_response, :controller, :resource_name
+  attr_reader :ability, :api_maker_args, :commands, :command_name, :command_response, :controller, :resource_name
 
-  def initialize(ability:, args:, commands:, command_name:, command_response:, controller:, resource_name:)
+  def initialize(ability:, api_maker_args:, commands:, command_name:, command_response:, controller:, resource_name:)
     @ability = ability
-    @args = args
+    @api_maker_args = api_maker_args
     @command_name = command_name
     @command_response = command_response
     @commands = commands

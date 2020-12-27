@@ -6,7 +6,7 @@ describe "preloading - has many polymorphic" do
   let(:project) { create :project }
 
   let(:user) { create :user }
-  let(:user_ability) { ApiMaker::Ability.new(args: {current_user: user}) }
+  let(:user_ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
 
   it "preloads without messing it up" do
     collection = Task.where(id: [task.id])

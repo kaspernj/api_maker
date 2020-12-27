@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ApiMaker::CollectionCommandService do
-  let(:ability) { ApiMaker::Ability.new(args: {current_user: user}) }
+  let(:ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
   let(:individual_command) do
     ApiMaker::IndividualCommand.new(
       args: {},
@@ -20,7 +20,7 @@ describe ApiMaker::CollectionCommandService do
 
     ApiMaker::CollectionCommandService.execute!(
       ability: ability,
-      args: {},
+      api_maker_args: {},
       commands: {
         9 => {
           args: {},

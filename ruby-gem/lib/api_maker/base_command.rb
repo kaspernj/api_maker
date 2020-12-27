@@ -12,8 +12,8 @@ class ApiMaker::BaseCommand
     @goldiloader
   end
 
-  def initialize(ability:, args:, collection:, collection_instance:, command:, commands:, command_response:, controller:)
-    @api_maker_args = args
+  def initialize(ability:, api_maker_args:, collection:, collection_instance:, command:, commands:, command_response:, controller:)
+    @api_maker_args = api_maker_args
     @current_ability = ability
     @collection = collection
     @collection_instance = collection_instance
@@ -31,12 +31,12 @@ class ApiMaker::BaseCommand
     end
   end
 
-  def self.execute_in_thread!(ability:, args:, collection:, commands:, command_response:, controller:)
+  def self.execute_in_thread!(ability:, api_maker_args:, collection:, commands:, command_response:, controller:)
     command_response.with_thread do
       if const_defined?(:CollectionInstance)
         collection_instance = const_get(:CollectionInstance).new(
           ability: ability,
-          args: args,
+          api_maker_args: api_maker_args,
           collection: collection,
           commands: commands,
           command_response: command_response,
@@ -60,7 +60,7 @@ class ApiMaker::BaseCommand
       each_command(collection: collection, command_response: command_response, commands: commands, controller: controller, threadded: threadded) do |command|
         command_instance = new(
           ability: ability,
-          args: args,
+          api_maker_args: api_maker_args,
           collection: collection,
           collection_instance: collection_instance,
           command: command,
@@ -196,7 +196,7 @@ private
   def serialized_model(model)
     collection_serializer = ApiMaker::CollectionSerializer.new(
       ability: current_ability,
-      args: api_maker_args,
+      api_maker_args: api_maker_args,
       collection: [model],
       model_class: model.class,
       query_params: args&.dig(:query_params)
@@ -205,6 +205,6 @@ private
   end
 
   def serialized_resource(model)
-    ApiMaker::Serializer.new(ability: current_ability, args: api_maker_args, model: model)
+    ApiMaker::Serializer.new(ability: current_ability, api_maker_args: api_maker_args, model: model)
   end
 end
