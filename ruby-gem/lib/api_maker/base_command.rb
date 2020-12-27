@@ -129,7 +129,7 @@ class ApiMaker::BaseCommand
     end
   end
 
-  def execute_service_or_fail(command, service_class, *args, &blk)
+  def execute_service_or_fail(service_class, *args, &blk)
     response = service_class.execute(*args, &blk)
 
     if response.success?
@@ -164,6 +164,18 @@ class ApiMaker::BaseCommand
     )
   end
 
+  def save_models_or_fail(*models, simple_model_errors: false)
+    response = Models::Save.execute(models: models, simple_model_errors: simple_model_errors)
+
+    if response.success?
+      succeed!(success: true)
+      true
+    else
+      fail!(errors: response.error_messages.map { |error| {message: error, type: :validation_error} })
+      false
+    end
+  end
+
   def serialize_service_errors(errors)
     errors.map do |error|
       {
@@ -189,7 +201,7 @@ private
       args: api_maker_args,
       collection: [model],
       model_class: model.class,
-      query_params: command.args&.dig(:query_params)
+      query_params: args&.dig(:query_params)
     )
     collection_serializer.result
   end
