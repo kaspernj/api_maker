@@ -1,4 +1,6 @@
 class ApiMaker::BaseResource
+  ApiMaker::IncludeHelpers.execute!(klass: self)
+
   attr_reader :ability, :args, :locals, :model
 
   delegate :can, :can?, allow_nil: true, to: :ability
