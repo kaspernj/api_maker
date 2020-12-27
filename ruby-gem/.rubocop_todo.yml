@@ -10,11 +10,6 @@
 Metrics/AbcSize:
   Max: 32
 
-# Offense count: 7
-# Configuration parameters: CountKeywordArgs.
-Metrics/ParameterLists:
-  Max: 7
-
 # Offense count: 3
 # Configuration parameters: CustomTransform, IgnoreMethods.
 RSpec/FilePath:

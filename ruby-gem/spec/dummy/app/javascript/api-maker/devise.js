@@ -1,4 +1,4 @@
-import {Api, CanCan, Services} from "@kaspernj/api-maker"
+import {Api, CanCan, CustomError, Services} from "@kaspernj/api-maker"
 import {digg} from "@kaspernj/object-digger"
 import EventEmitter from "events"
 import inflection from "inflection"
@@ -22,9 +22,9 @@ export default class Devise {
     return window.apiMakerDeviseEvents
   }
 
-
-
-
+  
+    
+    
       static isUserSignedIn() {
         if (Devise.current().getCurrentScope("User"))
           return true
@@ -35,8 +35,8 @@ export default class Devise {
       static currentUser() {
         return Devise.current().getCurrentScope("User")
       }
-
-
+    
+  
 
   static async signIn(username, password, args = {}) {
     if (!args.scope)

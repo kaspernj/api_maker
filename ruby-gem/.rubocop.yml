@@ -80,6 +80,9 @@ Metrics/CyclomaticComplexity:
 Metrics/MethodLength:
   Max: 50
 
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
 Metrics/PerceivedComplexity:
   Max: 12
 
