@@ -32,8 +32,6 @@ class ApiMaker::BaseCommand
   def self.execute_in_thread!(ability:, args:, collection:, commands:, command_response:, controller:)
     command_response.with_thread do
       if const_defined?(:CollectionInstance)
-        binding.pry
-
         collection_instance = const_get(:CollectionInstance).new(
           ability: ability,
           args: args,
