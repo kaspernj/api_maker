@@ -18,9 +18,6 @@ class ApiMaker::BaseCommand
     @commands = commands
     @command_response = command_response
     @controller = controller
-
-    # Make it possible to do custom preloads (useful in threadded mode that doesnt support Goldiloader)
-    @collection = custom_collection(@collection) if respond_to?(:custom_collection)
   end
 
   def execute_service_or_fail(command, service_class, *args, &blk)
@@ -77,7 +74,10 @@ class ApiMaker::BaseCommand
           command_response: command_response,
           controller: controller
         )
+
         collection = collection_instance.custom_collection if collection_instance.respond_to?(:custom_collection)
+        collection_instance.collection = collection
+
         threadded = collection_instance.try(:threadded?)
       end
 
