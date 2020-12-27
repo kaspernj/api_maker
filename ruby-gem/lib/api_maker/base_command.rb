@@ -2,6 +2,7 @@ class ApiMaker::BaseCommand
   attr_reader :api_maker_args, :collection, :collection_instance, :command, :commands, :command_response, :controller, :current_ability
 
   delegate :args, :model, :model_id, to: :command
+  delegate :result_for_command, to: :command_response
 
   # Returns true if the gem "goldiloader" is present in the app
   def self.goldiloader?
@@ -139,10 +140,6 @@ class ApiMaker::BaseCommand
     end
   end
 
-  delegate :result_for_command, to: :command_response
-
-private
-
   def self.run_command(collection:, command_id:, command_data:, command_response:, controller:)
     command = ApiMaker::IndividualCommand.new(
       args: ApiMaker::Deserializer.execute!(arg: command_data[:args]),
@@ -174,6 +171,8 @@ private
       command.error(error_response)
     end
   end
+
+private
 
   def serialized_model(model)
     collection_serializer = ApiMaker::CollectionSerializer.new(
