@@ -39,12 +39,25 @@ class ApiMaker::CommandSpecHelper
       ability: controller.__send__(:current_ability),
       args: controller.__send__(:api_maker_args),
       collection: collection,
-      collection_instance: nil,
+      collection_instance: collection_instance,
       command: individual_command,
       commands: commands,
       command_response: response,
       controller: controller
     )
+  end
+
+  def collection_instance
+    @collection_instance ||= if command_class.const_defined?(:CollectionInstance)
+      command_class.const_get(:CollectionInstance).new(
+        ability: controller.__send__(:current_ability),
+        args: controller.__send__(:api_maker_args),
+        collection: collection,
+        commands: commands,
+        command_response: response,
+        controller: controller
+      )
+    end
   end
 
   def controller
