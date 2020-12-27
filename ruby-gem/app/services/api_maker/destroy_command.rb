@@ -1,18 +1,13 @@
 class ApiMaker::DestroyCommand < ApiMaker::BaseCommand
-  attr_reader :command, :model, :params, :serializer
+  attr_reader :serializer
 
   def execute!
-    each_command do |command|
-      @command = command
-      @model = command.model
-      @params = command.args || {}
-      @serializer = serialized_resource(model)
+    @serializer = serialized_resource(model)
 
-      if command.model.destroy
-        success_response
-      else
-        failure_response
-      end
+    if command.model.destroy
+      success_response
+    else
+      failure_response
     end
   end
 

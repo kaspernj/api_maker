@@ -1,5 +1,7 @@
 class ApiMaker::BaseCommand
-  attr_reader :api_maker_args, :commands, :command_response, :collection, :controller, :current_ability
+  attr_reader :api_maker_args, :collection, :collection_instance, :command, :commands, :command_response, :controller, :current_ability
+
+  delegate :args, :model, :model_id, to: :command
 
   # Returns true if the gem "goldiloader" is present in the app
   def self.goldiloader?
@@ -7,10 +9,12 @@ class ApiMaker::BaseCommand
     @goldiloader
   end
 
-  def initialize(ability:, args:, collection:, commands:, command_response:, controller:)
+  def initialize(ability:, args:, collection:, collection_instance:, command:, commands:, command_response:, controller:)
     @api_maker_args = args
     @current_ability = ability
     @collection = collection
+    @collection_instance = collection_instance
+    @command = command
     @commands = commands
     @command_response = command_response
     @controller = controller
@@ -63,28 +67,66 @@ class ApiMaker::BaseCommand
     end
   end
 
-  def self.execute_in_thread!(**args)
-    args.fetch(:command_response).with_thread do
-      new(**args).execute!
+  def self.execute_in_thread!(ability:, args:, collection:, commands:, command_response:, controller:)
+    command_response.with_thread do
+      if const_defined?(:CollectionInstance)
+        collection_instance = const_get(:CollectionInstance).new(
+          args: args,
+          collection: collection,
+          commands: commands,
+          command_response: command_response,
+          controller: controller
+        )
+        collection = collection_instance.custom_collection if collection_instance.respond_to?(:custom_collection)
+        threadded = collection_instance.try(:threadded?)
+      end
+
+      if threadded
+        # Goldiloader doesn't work with threads (loads all relationships for each thread)
+        collection = collection.auto_include(false) if ApiMaker::BaseCommand.goldiloader?
+
+        # Load relationship before commands so each command doesn't query on its own
+        collection.load
+      end
+
+      each_command(collection: collection, command_response: command_response, commands: commands, controller: controller, threadded: threadded) do |command|
+        command_instance = new(
+          ability: ability,
+          args: args,
+          collection: collection,
+          collection_instance: collection_instance,
+          command: command,
+          commands: command,
+          command_response: command_response,
+          controller: controller
+        )
+        command_instance.execute!
+      end
     end
   end
 
-  def each_command(args = {}, &blk)
-    if args[:threadded]
-      # Goldiloader doesn't work with threads (loads all relationships for each thread)
-      @collection = @collection.auto_include(false) if ApiMaker::BaseCommand.goldiloader?
-
-      # Load relationship before commands so each command doesn't query on its own
-      @collection.load
-    end
-
+  def self.each_command(collection:, command_response:, commands:, controller:, threadded:, &blk)
     commands.each do |command_id, command_data|
-      if args[:threadded]
+      if threadded
         command_response.with_thread do
-          run_command(command_id, command_data, &blk)
+          run_command(
+            command_id: command_id,
+            command_data: command_data,
+            command_response: command_response,
+            collection: collection,
+            controller: controller,
+            &blk
+          )
         end
       else
-        run_command(command_id, command_data, &blk)
+        run_command(
+          command_id: command_id,
+          command_data: command_data,
+          command_response: command_response,
+          collection: collection,
+          controller: controller,
+          &blk
+        )
       end
     end
   end
@@ -93,10 +135,10 @@ class ApiMaker::BaseCommand
 
 private
 
-  def run_command(command_id, command_data)
+  def self.run_command(collection:, command_id:, command_data:, command_response:, controller:)
     command = ApiMaker::IndividualCommand.new(
       args: ApiMaker::Deserializer.execute!(arg: command_data[:args]),
-      collection: @collection,
+      collection: collection,
       command: self,
       id: command_id,
       primary_key: command_data[:primary_key],
@@ -125,7 +167,7 @@ private
     end
   end
 
-  def command_error_message(error)
+  def self.command_error_message(error)
     if Rails.application.config.consider_all_requests_local
       "#{error.class.name}: #{error.message}"
     else

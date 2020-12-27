@@ -1,22 +1,18 @@
 class ApiMaker::CreateCommand < ApiMaker::BaseCommand
-  attr_reader :command, :model, :params, :serializer
+  attr_reader :model, :serializer
 
   def execute!
-    each_command do |command|
-      @command = command
-      @model = collection.klass.new
-      @params = command.args || {}
-      @serializer = serialized_resource(model)
-      sanitized_parameters = sanitize_parameters
-      @model.assign_attributes(sanitized_parameters)
+    @model = collection.klass.new
+    @serializer = serialized_resource(model)
+    sanitized_parameters = sanitize_parameters
+    @model.assign_attributes(sanitized_parameters)
 
-      if !current_ability.can?(:create, @model)
-        failure_response(errors: ["No access to create that resource"])
-      elsif @model.save
-        success_response
-      else
-        failure_save_response(model: model, params: sanitized_parameters)
-      end
+    if !current_ability.can?(:create, @model)
+      failure_response(errors: ["No access to create that resource"])
+    elsif @model.save
+      success_response
+    else
+      failure_save_response(model: model, params: sanitized_parameters)
     end
   end
 
