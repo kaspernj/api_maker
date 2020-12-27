@@ -77,6 +77,7 @@ class ApiMaker::BaseCommand
     command_response.with_thread do
       if const_defined?(:CollectionInstance)
         collection_instance = const_get(:CollectionInstance).new(
+          ability: ability,
           args: args,
           collection: collection,
           commands: commands,
