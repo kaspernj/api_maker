@@ -17,7 +17,7 @@ class ApiMaker::DestroyCommand < ApiMaker::BaseCommand
   end
 
   def failure_response
-    command.fail(
+    fail!(
       model: serialized_model(model),
       success: false,
       errors: errors_for_model
@@ -25,7 +25,7 @@ class ApiMaker::DestroyCommand < ApiMaker::BaseCommand
   end
 
   def success_response
-    command.result(
+    succeed!(
       model: serialized_model(model),
       success: true
     )

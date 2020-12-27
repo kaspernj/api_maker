@@ -10,7 +10,7 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
         locals: locals,
         params: command.args || {}
       )
-      command.result(result)
+      succeed!(result)
     end
   end
 end

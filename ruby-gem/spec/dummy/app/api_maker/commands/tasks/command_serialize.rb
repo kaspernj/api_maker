@@ -1,6 +1,6 @@
 class Commands::Tasks::CommandSerialize < Commands::ApplicationCommand
   def execute!
-    command.result(
+    succeed!(
       test: {
         task: Task.find(command.args.fetch(:task_id))
       }

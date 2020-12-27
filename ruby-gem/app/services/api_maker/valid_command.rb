@@ -11,7 +11,7 @@ class ApiMaker::ValidCommand < ApiMaker::BaseCommand
     serializer = serialized_resource(model)
     model.assign_attributes(sanitize_parameters(serializer))
 
-    command.result(valid: model.valid?, errors: model.errors.full_messages)
+    succeed!(valid: model.valid?, errors: model.errors.full_messages)
   end
 
   def resource_instance_class

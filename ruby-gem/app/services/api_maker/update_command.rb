@@ -17,7 +17,7 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
   end
 
   def success_response
-    command.result(
+    succeed!(
       model: serialized_model(model),
       success: true
     )

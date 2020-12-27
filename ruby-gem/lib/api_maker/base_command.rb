@@ -29,53 +29,11 @@ class ApiMaker::BaseCommand
     end
   end
 
-  def execute_service_or_fail(command, service_class, *args, &blk)
-    response = service_class.execute(*args, &blk)
-
-    if response.success?
-      command.result(success: true)
-    else
-      fail_command_from_service_error_response(command, response)
-    end
-  end
-
-  def fail_command_from_service_error_response(command, response)
-    command.fail(errors: serialize_service_errors(response.errors))
-  end
-
-  def locals
-    @locals ||= ApiMaker::LocalsFromController.execute!(controller: controller)
-  end
-
-  def failure_response(errors:)
-    command.fail(
-      model: serialized_model(model),
-      success: false,
-      errors: errors
-    )
-  end
-
-  def failure_save_response(model:, params:)
-    command.fail(
-      model: serialized_model(model),
-      success: false,
-      errors: model.errors.full_messages.map { |error_message| {message: error_message, type: :validation_error} },
-      validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model: model, params: params)
-    )
-  end
-
-  def serialize_service_errors(errors)
-    errors.map do |error|
-      {
-        message: error.message,
-        type: error.type
-      }
-    end
-  end
-
   def self.execute_in_thread!(ability:, args:, collection:, commands:, command_response:, controller:)
     command_response.with_thread do
       if const_defined?(:CollectionInstance)
+        binding.pry
+
         collection_instance = const_get(:CollectionInstance).new(
           ability: ability,
           args: args,
@@ -171,6 +129,58 @@ class ApiMaker::BaseCommand
 
       command.error(error_response)
     end
+  end
+
+  def execute_service_or_fail(command, service_class, *args, &blk)
+    response = service_class.execute(*args, &blk)
+
+    if response.success?
+      succeed!(success: true)
+    else
+      fail_command_from_service_error_response(command, response)
+    end
+  end
+
+  def fail_command_from_service_error_response(command, response)
+    fail!(errors: serialize_service_errors(response.errors))
+  end
+
+  def locals
+    @locals ||= ApiMaker::LocalsFromController.execute!(controller: controller)
+  end
+
+  def failure_response(errors:)
+    fail!(
+      model: serialized_model(model),
+      success: false,
+      errors: errors
+    )
+  end
+
+  def failure_save_response(model:, params:)
+    fail!(
+      model: serialized_model(model),
+      success: false,
+      errors: model.errors.full_messages.map { |error_message| {message: error_message, type: :validation_error} },
+      validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model: model, params: params)
+    )
+  end
+
+  def serialize_service_errors(errors)
+    errors.map do |error|
+      {
+        message: error.message,
+        type: error.type
+      }
+    end
+  end
+
+  def fail!(*args, &blk)
+    command.fail(*args, &blk)
+  end
+
+  def succeed!(*args, &blk)
+    command.result(*args, &blk)
   end
 
 private
