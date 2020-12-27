@@ -20,6 +20,14 @@ class ApiMaker::BaseCommand
     @controller = controller
   end
 
+  def self.command_error_message(error)
+    if Rails.application.config.consider_all_requests_local
+      "#{error.class.name}: #{error.message}"
+    else
+      "Internal server error"
+    end
+  end
+
   def execute_service_or_fail(command, service_class, *args, &blk)
     response = service_class.execute(*args, &blk)
 
@@ -164,14 +172,6 @@ private
       )
 
       command.error(error_response)
-    end
-  end
-
-  def self.command_error_message(error)
-    if Rails.application.config.consider_all_requests_local
-      "#{error.class.name}: #{error.message}"
-    else
-      "Internal server error"
     end
   end
 
