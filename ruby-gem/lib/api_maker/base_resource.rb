@@ -1,7 +1,7 @@
 class ApiMaker::BaseResource
   ApiMaker::IncludeHelpers.execute!(klass: self)
 
-  attr_reader :ability, :args, :locals, :model
+  attr_reader :ability, :api_maker_args, :locals, :model
 
   delegate :can, :can?, allow_nil: true, to: :ability
 
@@ -77,10 +77,10 @@ class ApiMaker::BaseResource
     @short_name ||= name.match(/\AResources::(.+)Resource\Z/)[1]
   end
 
-  def initialize(ability: nil, args: {}, locals:, model:)
+  def initialize(ability: nil, api_maker_args: {}, locals:, model:)
     @ability = ability
-    @args = args
-    @locals = locals || args&.dig(:locals) || {}
+    @api_maker_args = api_maker_args
+    @locals = locals || api_maker_args&.dig(:locals) || {}
     @model = model
   end
 end

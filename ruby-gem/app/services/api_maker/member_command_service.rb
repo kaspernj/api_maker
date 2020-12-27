@@ -5,7 +5,7 @@ class ApiMaker::MemberCommandService < ApiMaker::CommandService
 
     constant.execute_in_thread!(
       ability: ability,
-      args: args,
+      api_maker_args: api_maker_args,
       collection: collection,
       commands: commands,
       command_response: command_response,

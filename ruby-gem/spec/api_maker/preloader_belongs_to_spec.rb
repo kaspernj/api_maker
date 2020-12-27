@@ -7,7 +7,7 @@ describe ApiMaker::PreloaderBelongsTo do
   let!(:project_detail) { create :project_detail, project: project, id: 6, details: "Test project details" }
   let!(:task) { create :task, id: 3, name: "Test task", project: project, user: user }
   let!(:user) { create :user, id: 4 }
-  let(:ability) { ApiMaker::Ability.new(args: args) }
+  let(:ability) { ApiMaker::Ability.new(api_maker_args: args) }
   let(:args) { {current_user: user} }
 
   let(:task_with_same_project) { create :task, project: project }
@@ -53,7 +53,7 @@ describe ApiMaker::PreloaderBelongsTo do
 
     preloader = ApiMaker::PreloaderBelongsTo.new(
       ability: ability,
-      args: {},
+      api_maker_args: {},
       collection: collection,
       data: {},
       locals: {},

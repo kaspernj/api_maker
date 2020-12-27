@@ -4,8 +4,8 @@ class ApiMaker::BaseCollectionInstance
   attr_accessor :collection
   attr_reader :api_maker_args, :commands, :command_response, :controller, :current_ability
 
-  def initialize(ability:, args:, collection:, commands:, command_response:, controller:)
-    @api_maker_args = args
+  def initialize(ability:, api_maker_args:, collection:, commands:, command_response:, controller:)
+    @api_maker_args = api_maker_args
     @current_ability = ability
     @collection = collection
     @commands = commands

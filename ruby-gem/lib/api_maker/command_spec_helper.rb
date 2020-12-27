@@ -23,28 +23,30 @@ class ApiMaker::CommandSpecHelper
   end
 
   def command
-    command_id = commands.keys.first
-    command_data = commands.values.first
+    @command ||= begin
+      command_id = commands.keys.first
+      command_data = commands.values.first
 
-    individual_command = ApiMaker::IndividualCommand.new(
-      args: ApiMaker::Deserializer.execute!(arg: command_data[:args]),
-      collection: collection,
-      command: self,
-      id: command_id,
-      primary_key: command_data[:primary_key],
-      response: response
-    )
+      individual_command = ApiMaker::IndividualCommand.new(
+        args: ApiMaker::Deserializer.execute!(arg: command_data[:args]),
+        collection: collection,
+        command: self,
+        id: command_id,
+        primary_key: command_data[:primary_key],
+        response: response
+      )
 
-    @command ||= command_class.new(
-      ability: controller.__send__(:current_ability),
-      args: controller.__send__(:api_maker_args),
-      collection: collection,
-      collection_instance: collection_instance,
-      command: individual_command,
-      commands: commands,
-      command_response: response,
-      controller: controller
-    )
+      command_class.new(
+        ability: controller.__send__(:current_ability),
+        api_maker_args: controller.__send__(:api_maker_args),
+        collection: collection,
+        collection_instance: collection_instance,
+        command: individual_command,
+        commands: commands,
+        command_response: response,
+        controller: controller
+      )
+    end
   end
 
   def collection_instance

@@ -4,7 +4,7 @@ describe ApiMaker::CreateCommand do
   let(:project) { create :project }
   let(:user) { create :user }
 
-  let(:ability) { ApiMaker::Ability.new(args: {current_user: user}) }
+  let(:ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
   let(:collection) { Task.accessible_by(ability) }
   let(:controller) { instance_double("ApplicationController", api_maker_args: api_maker_args, current_ability: ability, current_user: user) }

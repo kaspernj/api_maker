@@ -1,9 +1,9 @@
 class ApiMaker::Preloader
-  attr_reader :locals, :model_class, :preload_param
+  attr_reader :api_maker_args, :locals, :model_class, :preload_param
 
-  def initialize(ability: nil, args: nil, collection:, data:, locals:, preload_param:, model_class: nil, records:, select:, select_columns:)
+  def initialize(ability: nil, api_maker_args: nil, collection:, data:, locals:, preload_param:, model_class: nil, records:, select:, select_columns:)
     @ability = ability
-    @args = args
+    @api_maker_args = api_maker_args
     @collection = collection
     @data = data
     @locals = locals
@@ -32,7 +32,7 @@ class ApiMaker::Preloader
       preload_result = ApiMaker::Configuration.profile("Preloading #{reflection.klass.name} with #{preload_class.name}") do
         preload_class.new(
           ability: @ability,
-          args: @args,
+          api_maker_args: api_maker_args,
           collection: @collection,
           data: @data,
           locals: locals,
@@ -47,7 +47,7 @@ class ApiMaker::Preloader
 
       ApiMaker::Preloader.new(
         ability: @ability,
-        args: @args,
+        api_maker_args: api_maker_args,
         data: @data,
         collection: preload_result,
         locals: locals,

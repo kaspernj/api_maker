@@ -7,7 +7,7 @@ describe ApiMaker::CollectionSerializer do
   let!(:project_detail) { create :project_detail, project: project, id: 6, details: "Test project details" }
   let!(:task) { create :task, id: 3, name: "Test task", project: project, user: user }
   let!(:user) { create :user, id: 4 }
-  let(:ability) { ApiMaker::Ability.new(args: args) }
+  let(:ability) { ApiMaker::Ability.new(api_maker_args: args) }
   let(:args) { {current_user: user} }
 
   let(:task_with_same_project) { create :task, project: project }
@@ -112,7 +112,7 @@ describe ApiMaker::CollectionSerializer do
 
   it "only includes the same relationship once for belongs to relationships" do
     collection = Task.where(id: [task.id, task_with_same_project.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(args: args, collection: collection, query_params: {preload: ["project"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(api_maker_args: args, collection: collection, query_params: {preload: ["project"]}).to_json)
 
     expect(result.dig!("data", "tasks")).to eq [task.id, task_with_same_project.id]
     expect(result.dig!("preloaded", "projects", project.id.to_s, "a", "id")).to eq project.id

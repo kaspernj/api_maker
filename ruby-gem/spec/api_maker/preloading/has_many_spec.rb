@@ -8,7 +8,7 @@ describe "preloading - has many" do
   let(:other_task) { create :task }
 
   let(:user) { create :user }
-  let(:user_ability) { ApiMaker::Ability.new(args: {current_user: user}) }
+  let(:user_ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
 
   it "adds joins and exists if the user has ability with no conditions" do
     collection = Account.where(id: account.id)
@@ -19,7 +19,7 @@ describe "preloading - has many" do
 
     preloader = ApiMaker::PreloaderHasOne.new(
       ability: user_ability,
-      args: {},
+      api_maker_args: {},
       collection: collection,
       data: {},
       locals: {},
@@ -46,7 +46,7 @@ describe "preloading - has many" do
 
     preloader = ApiMaker::PreloaderHasOne.new(
       ability: user_ability,
-      args: {},
+      api_maker_args: {},
       collection: collection,
       data: {},
       locals: {},

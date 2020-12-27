@@ -1,11 +1,11 @@
 class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
-  attr_reader :ability, :args, :collection, :locals, :params
+  attr_reader :ability, :api_maker_args, :collection, :locals, :params
 
-  def initialize(args:, ability:, collection:, locals: nil, params: {})
+  def initialize(api_maker_args:, ability:, collection:, locals: nil, params: {})
     @ability = ability
-    @args = args
+    @api_maker_args = api_maker_args
     @collection = collection
-    @locals = locals || args[:locals] || {}
+    @locals = locals || api_maker_args&.dig(:locals) || {}
     @params = params
   end
 
@@ -35,7 +35,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   def collection_from_query(collection)
     ApiMaker::CollectionSerializer.new(
       ability: ability,
-      args: args,
+      api_maker_args: api_maker_args,
       collection: collection,
       locals: locals,
       query_params: params

@@ -42,7 +42,7 @@ private
     origin_data.fetch(:r)[reflection.name] ||= []
     origin_data.fetch(:r).fetch(reflection.name) << model_id
 
-    serializer = ApiMaker::Serializer.new(ability: ability, args: args, locals: locals, model: model, select: select&.dig(model.class))
+    serializer = ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model, select: select&.dig(model.class))
     collection_name = serializer.resource.collection_name
 
     data.fetch(:preloaded)[collection_name] ||= {}

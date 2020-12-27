@@ -1,14 +1,14 @@
 class ApiMaker::ResultParser
-  attr_reader :ability, :args
+  attr_reader :ability, :api_maker_args
 
   def self.parse(*args)
     ApiMaker::ResultParser.new(*args).result
   end
 
-  def initialize(object, ability: nil, args: nil, controller: nil)
+  def initialize(object, ability: nil, api_maker_args: nil, controller: nil)
     @object = object
     @ability = ability || controller&.__send__(:current_ability)
-    @args = args || controller&.__send__(:api_maker_args) || {}
+    @api_maker_args = api_maker_args || controller&.__send__(:api_maker_args) || {}
   end
 
   def result
@@ -18,7 +18,7 @@ class ApiMaker::ResultParser
 private
 
   def parse_active_record(object)
-    serializer = ApiMaker::Serializer.new(ability: ability, args: args, model: object)
+    serializer = ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, model: object)
 
     {
       api_maker_type: :model,
