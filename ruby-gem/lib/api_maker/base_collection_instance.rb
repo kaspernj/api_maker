@@ -1,4 +1,6 @@
 class ApiMaker::BaseCollectionInstance
+  ApiMaker::IncludeHelpers.execute!(klass: self)
+
   attr_accessor :collection
   attr_reader :api_maker_args, :commands, :command_response, :controller, :current_ability
 

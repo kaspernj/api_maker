@@ -1,4 +1,6 @@
 class ApiMaker::BaseCommand
+  ApiMaker::IncludeHelpers.execute!(klass: self)
+
   attr_reader :api_maker_args, :collection, :collection_instance, :command, :commands, :command_response, :controller, :current_ability
 
   delegate :args, :model, :model_id, to: :command
@@ -141,10 +143,6 @@ class ApiMaker::BaseCommand
 
   def fail_command_from_service_error_response(response)
     fail!(errors: serialize_service_errors(response.errors))
-  end
-
-  def locals
-    @locals ||= ApiMaker::LocalsFromController.execute!(controller: controller)
   end
 
   def failure_response(errors:)
