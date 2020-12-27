@@ -139,7 +139,7 @@ class ApiMaker::BaseCommand
     end
   end
 
-  def fail_command_from_service_error_response(command, response)
+  def fail_command_from_service_error_response(response)
     fail!(errors: serialize_service_errors(response.errors))
   end
 
