@@ -137,7 +137,7 @@ class ApiMaker::BaseCommand
     if response.success?
       succeed!(success: true)
     else
-      fail_command_from_service_error_response(command, response)
+      fail_command_from_service_error_response(response)
     end
   end
 
