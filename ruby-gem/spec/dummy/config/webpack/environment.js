@@ -7,12 +7,16 @@ const webpack = require("webpack")
 environment.config.resolve.modules = [path.resolve("./node_modules")]
 // environment.config.resolve.symlinks = false // Enabling this will make webpack-dev-server unable to watch for changes
 
-// For whatever reason suddenly this was required
 environment.loaders.append("babel", {
   test: /\.(js|jsx)$/,
-    loader: "babel-loader"
+  use: {
+    loader: "babel-loader",
+    options: {
+      cacheCompression: false,
+      cacheDirectory: true
+    }
   }
-)
+})
 
 // Makes it possible to not import these very used components
 environment.plugins.append(
