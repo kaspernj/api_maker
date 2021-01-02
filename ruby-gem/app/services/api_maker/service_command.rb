@@ -18,7 +18,7 @@ class ApiMaker::ServiceCommand < ApiMaker::BaseCommand
         {message: error.message, type: error.type}
       end
 
-      fail!(errors: response.error_messages)
+      fail!(errors: errors)
     end
   end
 end
