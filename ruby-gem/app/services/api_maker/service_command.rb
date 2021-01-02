@@ -14,6 +14,10 @@ class ApiMaker::ServiceCommand < ApiMaker::BaseCommand
     if response.success?
       succeed!(response.result)
     else
+      errors = response.errors.map do |error|
+        {message: error.message, type: error.type}
+      end
+
       fail!(errors: response.error_messages)
     end
   end
