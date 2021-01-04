@@ -176,7 +176,7 @@ export default class ApiMakerInput extends React.Component {
 
     const {attribute} = digs(this.props, "attribute")
     const newModel = digg(args, "model")
-    const currentValue = digg(input, "value")
+    const currentValue = digg(inputRef, "current", "value")
     const newValue = newModel.readAttribute(attribute)
     const newFormattedValue = this.formatValue(newValue)
 
