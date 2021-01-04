@@ -140,7 +140,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
       id: project.id,
       model_name: "project",
       error_messages: ["can't be blank"],
-      error_types: [:blank],
+      error_types: [:blank, :blank],
       input_name: "project[name]"
     }]
   end
