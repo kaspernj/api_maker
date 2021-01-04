@@ -219,7 +219,7 @@ export default class ApiMakerInput extends React.Component {
 
   // This fixes an issue in Firefox and ActiveStorage, where uploads would be a blank string if a file wasn't chosen
   getBlankInputName() {
-    const value = this.refs.input.value
+    const value = (this.props.inputRef || this.inputRef)?.current?.value
 
     if (this.props.type == "file" && value == "")
       return true
