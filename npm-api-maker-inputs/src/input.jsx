@@ -50,7 +50,7 @@ export default class ApiMakerInput extends React.Component {
   }
 
   setForm() {
-    const form = (this.props.inputRef || this.inputRef)?.current?.form
+    const form = dig(this.props.inputRef || this.inputRef, "current", "form")
 
     if (form != this.state.form) {
       this.setState({form})
@@ -219,7 +219,7 @@ export default class ApiMakerInput extends React.Component {
 
   // This fixes an issue in Firefox and ActiveStorage, where uploads would be a blank string if a file wasn't chosen
   getBlankInputName() {
-    const value = (this.props.inputRef || this.inputRef)?.current?.value
+    const value = dig(this.props.inputRef || this.inputRef, "current", "value")
 
     if (this.props.type == "file" && value == "")
       return true
