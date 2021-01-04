@@ -18,6 +18,7 @@ export default class ApiMakerInput extends React.Component {
     className: PropTypes.string,
     formatValue: PropTypes.func,
     id: PropTypes.string,
+    inputRef: PropTypes.object,
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
@@ -25,6 +26,8 @@ export default class ApiMakerInput extends React.Component {
     onMatchValidationError: PropTypes.func,
     type: PropTypes.string
   }
+
+  inputRef = React.createRef()
 
   constructor(props) {
     super(props)
@@ -47,7 +50,7 @@ export default class ApiMakerInput extends React.Component {
   }
 
   setForm() {
-    const form = dig(this, "refs", "input", "form")
+    const form = (this.props.inputRef || this.inputRef)?.current?.form
 
     if (form != this.state.form) {
       this.setState({form})
@@ -62,6 +65,7 @@ export default class ApiMakerInput extends React.Component {
       defaultValue,
       formatValue,
       id,
+      inputRef,
       model,
       name,
       onChange,
@@ -84,7 +88,7 @@ export default class ApiMakerInput extends React.Component {
             id={this.inputId()}
             name={this.inputName()}
             onChange={(e) => this.onInputChanged(e)}
-            ref="input"
+            ref={this.props.inputRef || this.inputRef}
             type={this.inputType()}
             {...restProps}
           />
@@ -95,7 +99,7 @@ export default class ApiMakerInput extends React.Component {
             id={this.inputId()}
             name={this.inputName()}
             onChange={(e) => this.onInputChanged(e)}
-            ref="input"
+            ref={this.props.inputRef || this.inputRef}
             type={this.inputType()}
             {...restProps}
           />
@@ -107,7 +111,7 @@ export default class ApiMakerInput extends React.Component {
   autoSubmit() {
     const {attribute, model} = this.props
     const updateAttributeName = inflection.underscore(attribute)
-    const value = digg(this, "refs", "input", "value")
+    const value = digg(this.props.inputRef || this.inputRef, "current", "value")
     const updateParams = {}
 
     updateParams[updateAttributeName] = value
@@ -163,9 +167,9 @@ export default class ApiMakerInput extends React.Component {
   }
 
   onModelUpdated(args) {
-    const input = this.refs.input
+    const inputRef = this.props.inputRef || this.inputRef
 
-    if (!input) {
+    if (!inputRef.current) {
       // This can happen if the component is being unmounted
       return
     }
@@ -177,7 +181,7 @@ export default class ApiMakerInput extends React.Component {
     const newFormattedValue = this.formatValue(newValue)
 
     if (currentValue != newFormattedValue) {
-      input.value = newFormattedValue
+      inputRef.current.value = newFormattedValue
     }
   }
 
