@@ -9,7 +9,7 @@ class Services::Models::FindOrCreateBy < ApiMaker::BaseService
     model = model_class.find_or_initialize_by(find_or_create_by_args)
     model.assign_attributes(additional_data) if model.new_record? && additional_data
 
-    if model
+    if model.save
       succeed! model: model
     else
       fail! errors: model.errors.full_messages
