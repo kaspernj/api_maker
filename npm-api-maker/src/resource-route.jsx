@@ -30,7 +30,10 @@ export default class ResourceRoute {
   }
 
   requireComponent() {
-    return React.lazy(() => import( /* webpackChunkName: "[request]" */ `routes/${this.args.path}${this.route.component}`))
+    return this.args.requireComponent({
+      args: this.args,
+      route: this.route
+    })
   }
 
   withLocale() {
@@ -42,10 +45,7 @@ export default class ResourceRoute {
     for(const locale of Locales.availableLocales()) {
       const path = Path.localized(inflection.camelize(this.route.name, true), this.findRouteParams(this.route), {locale: locale})
 
-      routes.push({
-        path: path,
-        component: component
-      })
+      routes.push({path, component})
     }
 
     return routes
