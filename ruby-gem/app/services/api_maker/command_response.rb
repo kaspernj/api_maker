@@ -48,8 +48,16 @@ class ApiMaker::CommandResponse
 private
 
   def spawn_thread(&blk)
+    parent_thread = Thread.current
+
     @threads << Thread.new do
+      child_thread = Thread.current
+
       Rails.application.executor.wrap do
+        ApiMaker::Configuration.current.on_thread_callbacks&.each do |on_thread_callback|
+          on_thread_callback.call(parent_thread: parent_thread, child_thread: child_thread)
+        end
+
         I18n.with_locale(locale, &blk)
       end
     rescue => e # rubocop:disable Style/RescueStandardError

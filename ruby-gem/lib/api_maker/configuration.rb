@@ -4,6 +4,7 @@ class ApiMaker::Configuration
     :before_create_event_callbacks,
     :devise_sign_in_enabled,
     :devise_sign_out_enabled,
+    :on_thread_callbacks,
     :profiling,
     :react_native_path,
     :threadding
@@ -45,6 +46,11 @@ class ApiMaker::Configuration
 
   def on_error(&blk)
     @on_error << blk
+  end
+
+  def on_thread(&blk)
+    @on_thread_callbacks ||= []
+    @on_thread_callbacks << blk
   end
 
   def report_error(error)
