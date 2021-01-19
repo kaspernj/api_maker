@@ -271,6 +271,10 @@ export default class BaseModel {
         .abilities(abilitiesParams)
         .first()
 
+      if (!anotherModel) {
+        throw new Error(`Could not look up the same model ${this.primaryKey()} with abilities: ${abilitiesToLoad.join(", ")}`)
+      }
+
       const newAbilities = anotherModel.abilities
       for (const newAbility in newAbilities) {
         this.abilities[newAbility] = newAbilities[newAbility]
