@@ -455,6 +455,34 @@ if (firstTask.can("edit")) {
 }
 ```
 
+### Loading static abilities from CanCan
+
+Getting the CanCan instance
+```js
+import { CanCan } from "api-maker"
+
+const canCan = CanCan.current()
+```
+
+Loading a single ability
+```js
+await canCan.loadAbility("access", "admin")
+```
+
+Loading multiple static abilities for a model
+```js
+await canCan.loadAbilities([
+  [Invoice, ["bookBookable", "creditCreditable"]]
+])
+```
+
+### Resetting cached abilities in CanCan
+
+To avoid doing queries for the same abilities in CanCan over an over they are cached. If some things change it can be necessary to reset those abilities.
+```js
+canCan.resetAbilities()
+```
+
 ## Serializing
 
 ### Conditional attributes
