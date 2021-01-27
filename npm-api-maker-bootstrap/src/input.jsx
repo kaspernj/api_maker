@@ -93,7 +93,6 @@ export default class ApiMakerBootstrapInput extends React.Component {
               model={model}
               name={this.inputName()}
               onErrors={(errors) => this.onErrors(errors)}
-              ref="input"
               type={this.inputType()}
               {...restProps}
             />

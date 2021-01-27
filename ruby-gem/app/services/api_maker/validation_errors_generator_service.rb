@@ -30,7 +30,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
         attribute_type: attribute_type,
         id: model.id,
         model_name: model.model_name.param_key,
-        error_messages: model.errors.messages.fetch(attribute_name),
+        error_messages: model.errors.messages.fetch(attribute_name).to_a,
         error_types: model.errors.details.fetch(attribute_name).map do |error|
           error = error.fetch(:error)
 

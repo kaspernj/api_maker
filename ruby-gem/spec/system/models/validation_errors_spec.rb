@@ -17,9 +17,7 @@ describe "models - validation errors" do
 
   it "renders validation errors when updating" do
     login_as user
-
     visit models_validation_errors_path(id: user.id)
-
     wait_for_selectors(
       ".component-models-validation-errors .content-container",
       "#task_name_#{task2.id}"
@@ -29,7 +27,7 @@ describe "models - validation errors" do
     fill_in "task_name_#{task2.id}", with: ""
     fill_in "project_name_#{project3.id}", with: ""
 
-    find("input[type=submit]").click
+    wait_for_and_find("input[type=submit]").click
 
     wait_for_selector ".project-account-1 .invalid-feedback", text: "must exist"
     wait_for_selector ".task-name-2 .invalid-feedback", text: "can't be blank"

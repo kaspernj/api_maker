@@ -6,6 +6,7 @@ import {digg} from "@kaspernj/object-digger"
 import FormDataToObject from "./form-data-to-object"
 import ModelName from "./model-name"
 import ModelsResponseReader from "./models-response-reader"
+import Services from "./services"
 import ValidationError from "./validation-error"
 import {ValidationErrors} from "./validation-errors"
 
@@ -29,6 +30,17 @@ export default class BaseModel {
     } else {
       throw new CustomError("Record not found")
     }
+  }
+
+  static async findOrCreateBy(findOrCreateByArgs, args = {}) {
+    const result = await Services.current().sendRequest("Models::FindOrCreateBy", {
+      additional_data: args.additionalData,
+      find_or_create_by_args: findOrCreateByArgs,
+      resource_name: digg(this.modelClassData(), "name"),
+    })
+    const model = digg(result, "model")
+
+    return model
   }
 
   static modelName() {
@@ -258,6 +270,10 @@ export default class BaseModel {
         .ransack(ransackParams)
         .abilities(abilitiesParams)
         .first()
+
+      if (!anotherModel) {
+        throw new Error(`Could not look up the same model ${this.primaryKey()} with abilities: ${abilitiesToLoad.join(", ")}`)
+      }
 
       const newAbilities = anotherModel.abilities
       for (const newAbility in newAbilities) {

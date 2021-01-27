@@ -98,7 +98,7 @@ export default class ApiMakerCommandsPool {
       submitData.global = this.globalRequestData
 
     const commandSubmitData = new CommandSubmitData(submitData)
-    const url = `/api_maker/commands`
+    const url = "/api_maker/commands"
 
     let response
 

@@ -18,6 +18,7 @@ export default class ApiMakerInputsMoney extends React.Component {
     currenciesCollection: PropTypes.array.isRequired,
     currencyName: PropTypes.string,
     id: PropTypes.string,
+    inputRef: PropTypes.object,
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
@@ -25,6 +26,8 @@ export default class ApiMakerInputsMoney extends React.Component {
     showCurrencyOptions: PropTypes.bool,
     small: PropTypes.bool
   })
+
+  inputRef = React.createRef()
 
   constructor(props) {
     super(props)
@@ -37,12 +40,16 @@ export default class ApiMakerInputsMoney extends React.Component {
     this.formatter = formatNumber(formatOptions)
   }
 
+  getInputRef() {
+    return this.props.inputRef || this.inputRef
+  }
+
   render() {
     const {showCurrencyOptions} = this.props
 
     return (
       <div className="component-api-maker-bootstrap-money-input">
-        <input defaultValue={this.inputDefaultCentsValue()} id={this.inputCentsId()} name={this.inputCentsName()} ref="input" type="hidden" />
+        <input defaultValue={this.inputDefaultCentsValue()} id={this.inputCentsId()} name={this.inputCentsName()} ref={this.getInputRef()} type="hidden" />
 
         <div className="input-group">
           <input
@@ -113,8 +120,8 @@ export default class ApiMakerInputsMoney extends React.Component {
   inputDefaultCentsValue() {
     let value = this.props.model[this.props.attribute]()
 
-    if (this.refs.input)
-      return this.refs.input.value
+    if (this.getInputRef().current)
+      return digg(this.getInputRef(), "current", "value")
 
     if (value)
       return MoneyFormatter.amountFromMoney(value)
@@ -141,10 +148,12 @@ export default class ApiMakerInputsMoney extends React.Component {
   }
 
   setAmount() {
-    if (!this.refs.input.value && this.refs.input.value == "") {
+    const inputElement = this.getInputRef().current
+
+    if (!inputElement.value && inputElement.value == "") {
       this.refs.whole.value = ""
     } else {
-      const cents = parseFloat(this.refs.input.value)
+      const cents = parseFloat(inputElement.value)
       const formatted = MoneyFormatter.fromMoney({amount: cents, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
 
       this.refs.whole.value = formatted
@@ -152,14 +161,16 @@ export default class ApiMakerInputsMoney extends React.Component {
   }
 
   setCents() {
+    const inputElement = this.getInputRef().current
+
     let whole = MoneyFormatter.stringToFloat(this.refs.whole.value)
     let cents = parseInt(whole * 100, 10)
-    let oldCents = parseInt(this.refs.input.value, 10)
+    let oldCents = parseInt(inputElement.value, 10)
 
     if (cents) {
-      this.refs.input.value = cents
+      inputElement.value = cents
     } else{
-      this.refs.input.value = ''
+      inputElement.value = ''
     }
 
     if (this.props.onChange && oldCents != cents)
