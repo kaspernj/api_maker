@@ -22,11 +22,9 @@ export default class ApiMakerCheckbox extends React.Component {
     zeroInput: PropTypes.bool
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      form: undefined
-    }
+  inputRef = React.createRef()
+  state = {
+    form: undefined
   }
 
   componentDidMount() {
@@ -50,7 +48,7 @@ export default class ApiMakerCheckbox extends React.Component {
   }
 
   render() {
-    const {attribute, defaultChecked, defaultValue, id, model, name, onErrors, zeroInput, ...restProps} = this.props
+    const {attribute, defaultChecked, defaultValue, id, inputRef, model, name, onErrors, zeroInput, ...restProps} = this.props
     const {form} = digs(this.state, "form")
     const inputName = this.inputName()
 
@@ -65,7 +63,7 @@ export default class ApiMakerCheckbox extends React.Component {
           defaultValue={defaultValue}
           id={this.inputId()}
           name={inputName}
-          ref="input"
+          ref={inputRef || this.inputRef}
           type="checkbox"
           {...restProps}
         />

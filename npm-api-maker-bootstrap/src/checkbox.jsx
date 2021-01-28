@@ -8,6 +8,7 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
     defaultValue: 1,
     zeroInput: true
   }
+
   static propTypes = {
     attribute: PropTypes.string,
     className: PropTypes.string,
@@ -24,11 +25,8 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
     zeroInput: PropTypes.bool
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      errors: []
-    }
+  state = {
+    errors: []
   }
 
   render() {
@@ -44,7 +42,6 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
             id={this.inputId()}
             name={this.inputName()}
             onErrors={(errors) => this.onErrors(errors)}
-            ref="checkbox"
             {...restProps}
           />
 

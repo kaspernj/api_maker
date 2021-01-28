@@ -16,6 +16,7 @@ import EventListener from "./src/event-listener"
 import EventModelClass from "./src/event-model-class"
 import EventUpdated from "./src/event-updated"
 import FormDataToObject from "./src/form-data-to-object"
+import HistoryListener from "./src/history-listener"
 import KeyValueStore from "./src/key-value-store"
 import Logger from "./src/logger"
 import ModelName from "./src/model-name"
@@ -52,6 +53,7 @@ export {
   EventModelClass,
   EventUpdated,
   FormDataToObject,
+  HistoryListener,
   KeyValueStore,
   Logger,
   ModelName,
