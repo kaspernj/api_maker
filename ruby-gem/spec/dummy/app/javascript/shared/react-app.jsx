@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const reactRoot = document.querySelector(".react-root")
   const routes = ResourceRoutes.readRoutes({
     path: "",
+    requireComponent: ({route}) => React.lazy(() => import(/* webpackChunkName: "[request]" */ `routes/${route.component}`)),
     routes: require("./routes.json")
   })
 
