@@ -117,7 +117,7 @@ translations:
 
 You can use translations like this:
 ```js
-import I18n from "api-maker/i18n"
+import {I18n} from "@kaspernj/api-maker"
 
 I18n.t("js.some.key")
 ```
@@ -131,7 +131,7 @@ Add this to the `<html>`-tag:
 
 You can use your Rails routes like this:
 ```js
-import Routes from "api-maker/routes"
+import {Routes} from "@kaspernj/api-maker"
 
 Routes.userPath(user.id()) //=> users/4
 ```
@@ -320,7 +320,7 @@ First include this in your layout, so JS can know which user is signed in:
 
 Then you can do like this in JS:
 ```js
-import Devise from "api-maker/devise"
+import {Devise} from "@kaspernj/api-maker"
 
 Devise.currentUser().then(user => {
   console.log(`The current user has this email: ${user.email()}`)

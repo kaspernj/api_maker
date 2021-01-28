@@ -1,5 +1,5 @@
 import { Controller } from "stimulus"
-import Devise from "api-maker/devise"
+import {Devise} from "@kaspernj/api-maker"
 
 export default class DeviseSignInController extends Controller {
   static targets = ["email", "password", "remember"]

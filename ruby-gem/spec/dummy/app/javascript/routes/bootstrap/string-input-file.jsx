@@ -1,4 +1,4 @@
-import Devise from "api-maker/devise"
+import {Devise} from "@kaspernj/api-maker"
 
 export default class BootstrapStringInputFile extends React.Component {
   constructor(props) {

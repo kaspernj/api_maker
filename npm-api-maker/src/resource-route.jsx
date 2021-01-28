@@ -1,5 +1,4 @@
-import React from "react"
-import Routes from "api-maker/routes"
+import {Routes} from "@kaspernj/api-maker"
 
 const inflection = require("inflection")
 
