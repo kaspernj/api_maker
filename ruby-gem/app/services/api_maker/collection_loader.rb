@@ -49,11 +49,20 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   def group_query
     return if params[:group_by].blank?
 
-    column_name = params[:group_by].to_s
-    raise "Not a valid column name: #{column_name}" unless collection.klass.column_names.include?(column_name)
-
-    arel_column = collection.klass.arel_table[column_name]
-    @query = @query.group(arel_column)
+    params[:group_by].each do |group_by|
+      if group_by.is_a?(Array)
+        resource_class = group_by[0]
+        column_name = group_by[1]
+        model_class = resource_class.model_class
+        raise "Not a valid column name: #{column_name}" unless model_class.column_names.include?(column_name)
+        arel_column = model_class.arel_table[column_name]
+        @query = @query.group(arel_column)
+      else
+        arel_column = collection.klass.arel_table[group_by]
+        raise "Not a valid column name: #{column_name}" unless collection.klass.column_names.include?(column_name)
+        @query = @query.group(arel_column)
+      end
+    end
   end
 
   def limit_query
