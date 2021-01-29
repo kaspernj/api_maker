@@ -22,7 +22,7 @@ export default class Serializer {
         name: digg(arg.modelClassData(), "name")
       }
     } else if (arg instanceof Date) {
-      let offsetNumber = (arg.getTimezoneOffset() / 60) * 100
+      let offsetNumber = parseInt((arg.getTimezoneOffset() / 60) * 100)
 
       offsetNumber = -offsetNumber
 
