@@ -24,6 +24,8 @@ class ApiMaker::CommandSpecHelper
 
   def command
     @command ||= begin
+      raise "No commands have been added" if commands.empty?
+
       command_id = commands.keys.first
       command_data = commands.values.first
 
