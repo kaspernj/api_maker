@@ -1,6 +1,6 @@
 require "waitutil"
 
-module ApiMaker::SpecHelper
+module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   autoload :ExecuteMemberCommand, "#{__dir__}/spec_helper/execute_member_command"
 
   require_relative "spec_helper/browser_logs"

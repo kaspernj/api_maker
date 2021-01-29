@@ -57,13 +57,14 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
         column_name = group_by[1]
         model_class = resource_class.model_class
         raise "Not a valid column name: #{column_name}" unless model_class.column_names.include?(column_name)
+
         arel_column = model_class.arel_table[column_name]
-        @query = @query.group(arel_column)
       else
         arel_column = collection.klass.arel_table[group_by]
         raise "Not a valid column name: #{group_by}" unless collection.klass.column_names.include?(group_by)
-        @query = @query.group(arel_column)
       end
+
+      @query = @query.group(arel_column)
     end
   end
 
