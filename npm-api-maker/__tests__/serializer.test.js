@@ -10,4 +10,11 @@ describe("Serializer", () => {
 
     expect(serialized).toEqual({userModel: {api_maker_type: "resource", name: "User"}})
   })
+
+  test("it serializes dates", () => {
+    const date = new Date(1985, 5, 17, 10, 30, 5)
+    const serialized = Serializer.serialize(date)
+
+    expect(serialized).toEqual({api_maker_type: "datetime", value: "1985-6-17 10:30:5+0200"})
+  })
 })
