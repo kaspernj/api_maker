@@ -51,6 +51,8 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
 
     params[:group_by].each do |group_by|
       if group_by.is_a?(Array)
+        raise "Expected table and column but array length was wrong: #{group_by.length}" unless group_by.length == 2
+
         resource_class = group_by[0]
         column_name = group_by[1]
         model_class = resource_class.model_class
@@ -59,7 +61,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
         @query = @query.group(arel_column)
       else
         arel_column = collection.klass.arel_table[group_by]
-        raise "Not a valid column name: #{column_name}" unless collection.klass.column_names.include?(column_name)
+        raise "Not a valid column name: #{group_by}" unless collection.klass.column_names.include?(group_by)
         @query = @query.group(arel_column)
       end
     end
