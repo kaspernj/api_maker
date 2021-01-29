@@ -1,4 +1,4 @@
-class ApiMaker::SpecHelpers::ExecuteMemberCommand < ApiMaker::ApplicationService
+class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
   include RSpec::Mocks::ExampleMethods
 
   attr_reader :args, :command, :model

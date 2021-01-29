@@ -1,6 +1,8 @@
 require "waitutil"
 
 module ApiMaker::SpecHelper
+  autoload :ExecuteMemberCommand, "#{__dir__}/spec_helper/execute_member_command"
+
   require_relative "spec_helper/browser_logs"
   require_relative "spec_helper/expect_no_browser_errors"
   require_relative "spec_helper/wait_for_expect"
