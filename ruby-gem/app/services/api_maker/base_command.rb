@@ -163,7 +163,7 @@ class ApiMaker::BaseCommand
   end
 
   def save_models_or_fail(*models, simple_model_errors: false)
-    response = Models::Save.execute(models: models, simple_model_errors: simple_model_errors)
+    response = ApiMaker::Models::Save.execute(models: models, simple_model_errors: simple_model_errors)
 
     if response.success?
       succeed!(success: true)
