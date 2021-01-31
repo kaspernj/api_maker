@@ -48,7 +48,7 @@ export default class ApiMakerDevise {
     const postData = {username, password, args}
     const response = await Services.current().sendRequest("Devise::SignIn", postData)
     const modelClass = digg(require("api-maker/models"), inflection.camelize(args.scope))
-    const modelInstance = new modelClass(response.model_data)
+    const modelInstance = new modelClass(digg(response, "model_data"))
 
     CanCan.current().resetAbilities()
 
@@ -60,16 +60,18 @@ export default class ApiMakerDevise {
 
   static updateSession(model) {
     const scope = digg(model.modelClassData(), "name")
-    ApiMakerDevise.current().currents[scope] = model
+    const camelizedScopeName = inflection.camelize(scope, true)
+
+    ApiMakerDevise.current().currents[camelizedScopeName] = model
   }
 
   static setSignedOut(args) {
-    ApiMakerDevise.current().currents[inflection.camelize(args.scope)] = null
+    ApiMakerDevise.current().currents[inflection.camelize(args.scope, true)] = null
   }
 
   static async signOut(args = {}) {
     if (!args.scope)
-      args.scope = "User"
+      args.scope = "user"
 
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
 
