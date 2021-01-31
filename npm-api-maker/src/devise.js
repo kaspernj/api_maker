@@ -26,13 +26,13 @@ export default class ApiMakerDevise {
   static addUserScope(scope) {
     const currentMethodName = `current${inflection.camelize(scope)}`
 
-    this[currentMethodName] = function() {
+    ApiMakerDevise[currentMethodName] = function() {
       return ApiMakerDevise.current().getCurrentScope(scope)
     }
 
     const isSignedInMethodName = `is${inflection.camelize(scope)}SignedIn`
 
-    this[isSignedInMethodName] = function() {
+    ApiMakerDevise[isSignedInMethodName] = function() {
       if (ApiMakerDevise.current().getCurrentScope(scope)) {
         return true
       }
@@ -53,7 +53,7 @@ export default class ApiMakerDevise {
     CanCan.current().resetAbilities()
 
     ApiMakerDevise.updateSession(modelInstance)
-    ApiMakerDevise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
+    ApiMakerDevise.events().emit("onDeviseSignIn", Object.assign({username}, args))
 
     return {model: modelInstance, response}
   }
