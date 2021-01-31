@@ -59,6 +59,7 @@
     "js-money": "^0.6.3",
     "merge": "^2.1.0",
     "object-to-formdata": "^4.1.0",
+    "strftime": "^0.10.0",
     "wake-event": "^0.0.1"
   }
 }
