@@ -27,9 +27,9 @@ class ApiMakerI18n {
         this._scanRecursive(value, storage[key], id, currentPath.concat([key]))
       } else {
         if (key in storage) {
-          const source = digg(storage, "id")
+          const source = dig(storage, "id")
 
-          console.error(`Key already found in locales: ${currentPath.join(".")}.${key}`, {oldValue: storage[key], newValue: value, id, source})
+          console.error(`Key already found in locales: ${currentPath.join(".")}.${key} '${id}' and '${source}`, {oldValue: storage[key], newValue: value})
         }
 
         storage[key] = {id, value}
