@@ -1,25 +1,29 @@
-import React from "react"
-import Routes from "api-maker/routes"
-
+const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 
-export default class ResourceRoute {
-  constructor(args) {
-    this.args = args.args
-    this.route = args.route
+export default class ApiMakerResourceRoute {
+  constructor({jsRoutes, locales, requireComponent, routeDefinition}) {
+    this.jsRoutes = jsRoutes
+    this.locales = locales
+    this.requireComponent = requireComponent
+    this.routeDefinition = routeDefinition
+
+    if (!jsRoutes) {
+      throw new Error("No 'jsRoutes' given")
+    }
   }
 
-  routes() {
-    if (this.args.locales) {
+  routesResult() {
+    if (digg(this, "locales")) {
       return this.withLocale()
     } else {
       return this.withoutLocale()
     }
   }
 
-  findRouteParams(route) {
+  findRouteParams() {
     const result = []
-    const parts = route.path.split("/")
+    const parts = digg(this, "routeDefinition", "path").split("/")
 
     for(const part of parts) {
       if (part.match(/^:([a-z_]+)$/))
@@ -29,21 +33,20 @@ export default class ResourceRoute {
     return result
   }
 
-  requireComponent() {
-    return this.args.requireComponent({
-      args: this.args,
-      route: this.route
+  requireComponentFromCaller() {
+    return this.requireComponent({
+      routeDefinition: digg(this, "routeDefinition")
     })
   }
 
   withLocale() {
-    const component = this.requireComponent()
+    const component = this.requireComponentFromCaller()
     const Locales = require("shared/locales").default
     const Path = require("shared/path").default
     const routes = []
 
     for(const locale of Locales.availableLocales()) {
-      const path = Path.localized(inflection.camelize(this.route.name, true), this.findRouteParams(this.route), {locale: locale})
+      const path = Path.localized(inflection.camelize(digg(this, "routeDefinition", "name"), true), this.findRouteParams(), {locale})
 
       routes.push({path, component})
     }
@@ -52,14 +55,14 @@ export default class ResourceRoute {
   }
 
   withoutLocale() {
-    const routePathName = inflection.camelize(this.route.name, true)
-    const routePathMethod = Routes[`${routePathName}Path`]
+    const routePathName = inflection.camelize(digg(this, "routeDefinition", "name"), true)
+    const routePathMethod = this.jsRoutes[`${routePathName}Path`]
 
     if (!routePathMethod)
       throw new Error(`No such route could be found: ${routePathName}`)
 
-    const path = routePathMethod.apply(null, this.findRouteParams(this.route))
-    const component = this.requireComponent()
+    const path = routePathMethod.apply(null, this.findRouteParams())
+    const component = this.requireComponentFromCaller()
 
     return [{
       path,

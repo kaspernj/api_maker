@@ -4326,6 +4326,11 @@ w3c-xmlserializer@^2.0.0:
   dependencies:
     xml-name-validator "^3.0.0"
 
+wake-event@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/wake-event/-/wake-event-0.0.1.tgz#84ff6f321ddf42e98d1a01a27e33c9853ea668e4"
+  integrity sha1-hP9vMh3fQumNGgGifjPJhT6maOQ=
+
 walker@^1.0.7, walker@~1.0.5:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/walker/-/walker-1.0.7.tgz#2f7f9b8fd10d677262b18a884e28d19618e028fb"

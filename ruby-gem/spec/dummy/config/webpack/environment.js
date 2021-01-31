@@ -24,13 +24,13 @@ environment.plugins.append(
   new webpack.ProvidePlugin({
     Account: ["api-maker/models", "Account"],
     Hash: ["shared/hash", "default"],
-    I18n: ["api-maker/i18n", "default"],
+    I18n: ["@kaspernj/api-maker", "I18n"],
     Layout: ["components/layout", "default"],
     Params: ["shared/params", "default"],
     Project: ["api-maker/models", "Project"],
     PropTypesExact: "prop-types-exact",
     React: "react",
-    Routes: ["api-maker/routes", "default"],
+    Routes: ["shared/routes", "default"],
     setStateAsync: ["shared/set-state-async", "default"],
     Task: ["api-maker/models", "Task"],
 
@@ -41,5 +41,5 @@ environment.plugins.append(
   })
 )
 
-environment.loaders.prepend('erb', erb)
+environment.loaders.prepend("erb", erb)
 module.exports = environment

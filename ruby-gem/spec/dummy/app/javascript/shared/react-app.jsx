@@ -9,8 +9,10 @@ import {Suspense} from "react"
 document.addEventListener("DOMContentLoaded", () => {
   const reactRoot = document.querySelector(".react-root")
   const routes = ResourceRoutes.readRoutes({
+    jsRoutes: Routes,
     path: "",
-    routes: require("./routes.json")
+    requireComponent: ({routeDefinition}) => React.lazy(() => import(/* webpackChunkName: "[request]" */ `routes/${routeDefinition.component}`)),
+    routeDefinitions: require("./route-definitions.json")
   })
 
   ReactDOM.render((

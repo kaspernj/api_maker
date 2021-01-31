@@ -26,7 +26,7 @@ private
   end
 
   def copy_base_model
-    files = %w[devise.js i18n.js.erb models.js.erb routes.js.erb session-status-updater.js]
+    files = %w[models.js.erb]
     path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
     target_path = api_maker_root_path
 

@@ -80,6 +80,7 @@ private
 
   def connect_updates(model_name, model_ids)
     model_class = model_for_resource_name(model_name)
+
     models = model_class.accessible_by(current_ability, :update_events).where(model_class.primary_key => model_ids)
     models.each do |model|
       channel_name = model.api_maker_broadcast_update_channel_name

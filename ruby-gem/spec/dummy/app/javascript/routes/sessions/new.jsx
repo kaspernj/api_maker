@@ -1,4 +1,4 @@
-import Devise from "api-maker/devise"
+import {Devise} from "@kaspernj/api-maker"
 import DisplayNotification from "shared/display-notification"
 import { EventEmitterListener } from "@kaspernj/api-maker"
 import React from "react"
