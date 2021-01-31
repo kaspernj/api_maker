@@ -69,7 +69,7 @@ export default class ApiMakerDevise {
 
   static async signOut(args = {}) {
     if (!args.scope)
-      args.scope = "user"
+      args.scope = "User"
 
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
 

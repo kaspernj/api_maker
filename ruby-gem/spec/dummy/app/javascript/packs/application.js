@@ -2,7 +2,7 @@ import { Application } from "stimulus"
 import { Devise } from "@kaspernj/api-maker"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 
-Devise.addUserScope("user")
+Devise.addUserScope("User")
 
 require("shared/error-logger")
 
