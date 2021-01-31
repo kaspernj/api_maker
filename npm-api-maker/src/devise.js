@@ -1,16 +1,17 @@
-import {Api, CanCan, CustomError, Services} from "@kaspernj/api-maker"
+import CanCan from "./can-can"
 import {digg} from "@kaspernj/object-digger"
 import EventEmitter from "events"
 import inflection from "inflection"
+import Services from "./services"
 
-export default class Devise {
+export default class ApiMakerDevise {
   static callSignOutEvent(args) {
-    Devise.events().emit("onDeviseSignOut", {args})
+    ApiMakerDevise.events().emit("onDeviseSignOut", {args})
   }
 
   static current() {
     if (!window.currentApiMakerDevise)
-      window.currentApiMakerDevise = new Devise()
+      window.currentApiMakerDevise = new ApiMakerDevise()
 
     return window.currentApiMakerDevise
   }
@@ -22,24 +23,23 @@ export default class Devise {
     return window.apiMakerDeviseEvents
   }
 
-  <% Devise.mappings.each do |scope| %>
-    <%
-      klass = scope[1].class_name.safe_constantize
-      resource = ApiMaker::Serializer.resource_for(klass)
-    %>
-    <% if resource %>
-      static <%= ApiMaker::JsMethodNamerService.execute!(name: "is_#{scope[0]}_signed_in") %>() {
-        if (Devise.current().getCurrentScope("<%= scope[1].class_name %>"))
-          return true
+  static addUserScope(scope) {
+    const currentMethodName = `current${inflection.camelize(scope)}`
 
-        return false
+    ApiMakerDevise[currentMethodName] = function() {
+      return ApiMakerDevise.current().getCurrentScope(scope)
+    }
+
+    const isSignedInMethodName = `is${inflection.camelize(scope)}SignedIn`
+
+    ApiMakerDevise[isSignedInMethodName] = function() {
+      if (ApiMakerDevise.current().getCurrentScope(scope)) {
+        return true
       }
 
-      static current<%= scope[1].class_name %>() {
-        return Devise.current().getCurrentScope("<%= scope[1].class_name %>")
-      }
-    <% end %>
-  <% end %>
+      return false
+    }
+  }
 
   static async signIn(username, password, args = {}) {
     if (!args.scope)
@@ -48,23 +48,25 @@ export default class Devise {
     const postData = {username, password, args}
     const response = await Services.current().sendRequest("Devise::SignIn", postData)
     const modelClass = digg(require("api-maker/models"), inflection.camelize(args.scope))
-    const modelInstance = new modelClass(response.model_data)
+    const modelInstance = new modelClass(digg(response, "model_data"))
 
     CanCan.current().resetAbilities()
 
-    Devise.updateSession(modelInstance)
-    Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
+    ApiMakerDevise.updateSession(modelInstance)
+    ApiMakerDevise.events().emit("onDeviseSignIn", Object.assign({username}, args))
 
     return {model: modelInstance, response}
   }
 
   static updateSession(model) {
-    const scope = model.modelClassData().name
-    Devise.current().currents[scope] = model
+    const scope = digg(model.modelClassData(), "name")
+    const camelizedScopeName = inflection.camelize(scope, true)
+
+    ApiMakerDevise.current().currents[camelizedScopeName] = model
   }
 
   static setSignedOut(args) {
-    Devise.current().currents[inflection.camelize(args.scope)] = null
+    ApiMakerDevise.current().currents[inflection.camelize(args.scope, true)] = null
   }
 
   static async signOut(args = {}) {
@@ -74,8 +76,8 @@ export default class Devise {
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
 
     CanCan.current().resetAbilities()
-    Devise.setSignedOut(args)
-    Devise.callSignOutEvent(args)
+    ApiMakerDevise.setSignedOut(args)
+    ApiMakerDevise.callSignOutEvent(args)
 
     return response
   }
