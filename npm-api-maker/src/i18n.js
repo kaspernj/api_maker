@@ -1,3 +1,4 @@
+const {digg} = require("@kaspernj/object-digger")
 const strftime = require("strftime")
 
 class ApiMakerI18n {
