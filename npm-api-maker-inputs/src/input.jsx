@@ -5,6 +5,7 @@ import inflection from "inflection"
 import nameForComponent from "./name-for-component"
 import PropTypes from "prop-types"
 import React from "react"
+import strftime from "strftime"
 
 export default class ApiMakerInput extends React.Component {
   static defaultProps = {
@@ -127,9 +128,9 @@ export default class ApiMakerInput extends React.Component {
     } else if (value instanceof Date && !isNaN(value.getTime())) {
       // We need to use a certain format for datetime-local
       if (this.inputType() == "datetime-local") {
-        return I18n.strftime(value, "%Y-%m-%dT%H:%M:%S")
+        return strftime("%Y-%m-%dT%H:%M:%S", value)
       } else if (this.inputType() == "date") {
-        return I18n.strftime(value, "%Y-%m-%d")
+        return strftime("%Y-%m-%d", value)
       }
     }
 
