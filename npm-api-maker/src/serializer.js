@@ -21,6 +21,21 @@ export default class Serializer {
         api_maker_type: "resource",
         name: digg(arg.modelClassData(), "name")
       }
+    } else if (arg instanceof Date) {
+      let offsetNumber = parseInt((arg.getTimezoneOffset() / 60) * 100)
+
+      offsetNumber = -offsetNumber
+
+      let offset = `${offsetNumber}`
+
+      while(offset.length < 4) {
+        offset = `0${offset}`
+      }
+
+      return {
+        api_maker_type: "datetime",
+        value: `${arg.getFullYear()}-${arg.getMonth() + 1}-${arg.getDate()} ${arg.getHours()}:${arg.getMinutes()}:${arg.getSeconds()}+${offset}`
+      }
     } else if (Array.isArray(arg)) {
       return this.serializeArray(arg)
     } else if (typeof arg == "object" && arg !== null && arg.constructor.name == "Object") {

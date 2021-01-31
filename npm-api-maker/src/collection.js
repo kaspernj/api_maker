@@ -57,9 +57,19 @@ export default class Collection {
     return models[0]
   }
 
-  groupBy(columnName) {
+  groupBy(...arrayOfTablesAndColumns) {
+    const arrayOfTablesAndColumnsWithLowercaseColumns = arrayOfTablesAndColumns.map((tableAndColumn) => {
+      if (Array.isArray(tableAndColumn)) {
+        return [tableAndColumn[0], tableAndColumn[1].toLowerCase()]
+      } else {
+        return tableAndColumn.toLowerCase()
+      }
+    })
+    const currentGroupBy = this.queryArgs.groupBy || []
+    const newGroupBy = currentGroupBy.concat(arrayOfTablesAndColumnsWithLowercaseColumns)
+
     return this._clone({
-      groupBy: inflection.underscore(columnName)
+      groupBy: newGroupBy
     })
   }
 

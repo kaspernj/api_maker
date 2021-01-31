@@ -30,6 +30,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func.isRequired,
     header: PropTypes.func,
+    groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
     onModelsLoaded: PropTypes.func,
     preloads: PropTypes.array.isRequired,
@@ -116,15 +117,12 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
   async loadModels() {
     const params = Params.parse()
-    const { abilities, modelClass, onModelsLoaded, preloads, select } = this.props
+    const { collection, groupBy, modelClass, onModelsLoaded, preloads, select } = this.props
     const { qParams, queryPageName, queryQName } = this.state
-    let query
 
-    if (this.props.collection) {
-      query = this.props.collection
-    } else {
-      query = modelClass
-    }
+    let query = collection || modelClass
+
+    if (groupBy) query = query.groupBy(groupBy)
 
     query = query
       .ransack(qParams)
