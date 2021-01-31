@@ -17,6 +17,11 @@ environment.loaders.append("babel", {
     }
   }
 })
+environment.loaders.prepend("yaml", {
+  test: /\.ya?ml$/,
+  exclude: /node_modules/,
+  use: "js-yaml-loader"
+})
 
 // Makes it possible to not import these very used components
 environment.plugins.append(
