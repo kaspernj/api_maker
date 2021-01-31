@@ -59,7 +59,7 @@ export default class ApiMakerDevise {
   }
 
   static updateSession(model) {
-    const scope = model.modelClassData().name
+    const scope = digg(model.modelClassData(), "name")
     ApiMakerDevise.current().currents[scope] = model
   }
 
