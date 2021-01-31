@@ -7,10 +7,16 @@ export default class ApiMakerRoutes {
     this.routeDefinitions = routeDefinitions
 
     for (const routeDefinition of digg(this, "routeDefinitions", "routes")) {
-      const routeName = inflection.camelize(`${digg(routeDefinition, "name")}_path`, true)
+      const routeNamePath = inflection.camelize(`${digg(routeDefinition, "name")}_path`, true)
 
-      this[routeName] = (...args) => {
-        return this.jsRoutes[routeName](...args)
+      this[routeNamePath] = (...args) => {
+        return this.jsRoutes[routeNamePath](...args)
+      }
+
+      const routeNameUrl = inflection.camelize(`${digg(routeDefinition, "name")}_url`, true)
+
+      this[routeNameUrl] = (...args) => {
+        return this.jsRoutes[routeNameUrl](...args)
       }
     }
   }
