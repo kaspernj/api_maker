@@ -1,10 +1,12 @@
-import BaseModel from "../../src/base-model"
-
-export default class User extends BaseModel {
+export default class User {
   static modelClassData() {
     return {
       attributes: [],
       name: "User"
     }
+  }
+
+  static modelName() {
+    return "User"
   }
 }
