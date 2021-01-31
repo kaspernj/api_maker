@@ -6,6 +6,7 @@ import React from "react"
 export default class SessionsNew extends React.Component {
   emailRef = React.createRef()
   passwordRef = React.createRef()
+  rememberMeRef = React.createRef()
 
   constructor(props) {
     super(props)
@@ -29,7 +30,7 @@ export default class SessionsNew extends React.Component {
           <form onSubmit={(e) => { this.onSubmit(e) }}>
             <Input inputRef={this.emailRef} label="Email" />
             <Input inputRef={this.passwordRef} label="Password" type="password" />
-            <Checkbox label="Remember me" ref="rememberMe" />
+            <Checkbox label="Remember me" inputRef={this.rememberMeRef} />
             <input type="submit" value="Sign in" />
           </form>
         }
@@ -46,7 +47,7 @@ export default class SessionsNew extends React.Component {
 
     const email = this.emailRef.current.value
     const password = this.passwordRef.current.value
-    const rememberMe = this.refs.rememberMe.refs.checkbox.refs.input.checked
+    const rememberMe = this.rememberMeRef.current.checked
 
     Devise.signIn(email, password, {rememberMe}).then(() => {
       DisplayNotification.success("You were signed in")
