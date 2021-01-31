@@ -30,7 +30,7 @@ environment.plugins.append(
     Project: ["api-maker/models", "Project"],
     PropTypesExact: "prop-types-exact",
     React: "react",
-    Routes: ["@kaspernj/api-maker", "Routes"],
+    Routes: ["shared/routes", "default"],
     setStateAsync: ["shared/set-state-async", "default"],
     Task: ["api-maker/models", "Task"],
 
@@ -41,5 +41,5 @@ environment.plugins.append(
   })
 )
 
-environment.loaders.prepend('erb', erb)
+environment.loaders.prepend("erb", erb)
 module.exports = environment

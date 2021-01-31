@@ -1,21 +1,22 @@
-import React from "react" // This fixes an issue with the Baristo project where it needed it to be loaded
+import React from "react"
 import ResourceRoute from "./resource-route"
 import {Route} from "react-router-dom"
 
-export default class ApiMakerResourceRoutes {
-  static readRoutes(args = {}) {
-    if (!args.routes)
-      throw new Error("Please pass 'routes' to this method")
+const {digg} = require("@kaspernj/object-digger")
 
-    const routesJson = args.routes
+export default class ApiMakerResourceRoutes {
+  static readRoutes({jsRoutes, locales, requireComponent, routeDefinitions}) {
+    if (!routeDefinitions)
+      throw new Error("Please pass 'routeDefinitions' to this method")
+
     const routes = []
 
-    for(const route of routesJson.routes) {
-      const resourceRoute = new ResourceRoute({args, route})
+    for(const routeDefinition of routeDefinitions.routes) {
+      const resourceRoute = new ResourceRoute({jsRoutes, locales, requireComponent, routeDefinition})
 
-      for(const newRoute of resourceRoute.routes()) {
+      for(const newRoute of resourceRoute.routesResult()) {
         routes.push(
-          <Route exact key={`route-${newRoute.path}`} path={newRoute.path} component={newRoute.component} />
+          <Route exact key={`route-${digg(newRoute, "path")}`} path={digg(newRoute, "path")} component={digg(newRoute, "component")} />
         )
       }
     }

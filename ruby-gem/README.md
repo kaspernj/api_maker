@@ -129,11 +129,49 @@ Add this to the `<html>`-tag:
 
 ### Routes
 
+Define route definitions that can be read by both Rails and JS like this in `app/javascript/route-definitions.json`:
+```json
+{
+  "routes": [
+    {"name": "new_session", "path": "/sessions/new", "component": "sessions/new"},
+    {"name": "root", "path": "/", "component": "sessions/new"}
+  ]
+}
+```
+
+Define a file for `js-routes` in `app/javascript/js-routes.js.erb` that will automatically update if the routes or the definitions are changed:
+```js
+/* rails-erb-loader-dependencies ../config/routes.rb ./javascript/route-definitions.json */
+
+const routes = {};
+
+<%= JsRoutes.generate(namespace: "Namespace") %>
+```
+
+Install the route definitions in the Rails routes like this in `config/routes.rb`:
+```ruby
+Rails.application.routes.draw do
+  route_definitions = JSON.parse(File.read(Rails.root.join("app/javascript/nemoa/route-definitions.json")))
+  ApiMaker::ResourceRouting.install_resource_routes(self, layout: "nemoa", route_definitions: route_definitions)
+end
+```
+
+Define a routes file for your project (or multiple) in `app/javascript/routes.js`:
+```js
+import jsRoutes from "js-routes"
+import {Routes} from "@kaspernj/api-maker"
+import routeDefinitions from "route-definitions.json"
+
+const routes = new Routes({jsRoutes, routeDefinitions})
+
+export default routes
+```
+
 You can use your Rails routes like this:
 ```js
-import {Routes} from "@kaspernj/api-maker"
+import Routes from "routes"
 
-Routes.userPath(user.id()) //=> users/4
+Routes.userPath(user.id()) //=> /users/4
 ```
 
 ### ActionCable
