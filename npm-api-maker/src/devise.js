@@ -6,12 +6,12 @@ import Services from "./services"
 
 export default class ApiMakerDevise {
   static callSignOutEvent(args) {
-    Devise.events().emit("onDeviseSignOut", {args})
+    ApiMakerDevise.events().emit("onDeviseSignOut", {args})
   }
 
   static current() {
     if (!window.currentApiMakerDevise)
-      window.currentApiMakerDevise = new Devise()
+      window.currentApiMakerDevise = new ApiMakerDevise()
 
     return window.currentApiMakerDevise
   }
@@ -52,19 +52,19 @@ export default class ApiMakerDevise {
 
     CanCan.current().resetAbilities()
 
-    Devise.updateSession(modelInstance)
-    Devise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
+    ApiMakerDevise.updateSession(modelInstance)
+    ApiMakerDevise.events().emit("onDeviseSignIn", Object.assign({username: username}, args))
 
     return {model: modelInstance, response}
   }
 
   static updateSession(model) {
     const scope = model.modelClassData().name
-    Devise.current().currents[scope] = model
+    ApiMakerDevise.current().currents[scope] = model
   }
 
   static setSignedOut(args) {
-    Devise.current().currents[inflection.camelize(args.scope)] = null
+    ApiMakerDevise.current().currents[inflection.camelize(args.scope)] = null
   }
 
   static async signOut(args = {}) {
@@ -74,8 +74,8 @@ export default class ApiMakerDevise {
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
 
     CanCan.current().resetAbilities()
-    Devise.setSignedOut(args)
-    Devise.callSignOutEvent(args)
+    ApiMakerDevise.setSignedOut(args)
+    ApiMakerDevise.callSignOutEvent(args)
 
     return response
   }
