@@ -5,7 +5,28 @@ const strftime = require("strftime")
 class ApiMakerI18n {
   constructor() {
     this.locales = {}
-    this.locale = "en"
+  }
+
+  setLocale(locale) {
+    this.locale = locale
+    this.setLocaleOnStrftime()
+  }
+
+  setLocaleOnStrftime() {
+    const monthNames = [...Object.values(this.t("date.month_names"))]
+    const abbrMonthNames = [...Object.values(this.t("date.abbr_month_names"))]
+
+    monthNames.shift()
+    abbrMonthNames.shift()
+
+    const strftimeLocales = {
+      days: Object.values(this.t("date.day_names")),
+      shortDays: Object.values(this.t("date.abbr_day_names")),
+      months: monthNames,
+      shortMonths: abbrMonthNames
+    }
+
+    this.strftime = strftime.localize(strftimeLocales)
   }
 
   scanRequireContext(contextLoader) {
@@ -28,19 +49,17 @@ class ApiMakerI18n {
         this._scanRecursive(value, storage[key], id, currentPath.concat([key]))
       } else {
         if (key in storage) {
-          const source = dig(storage, "id")
-
-          console.error(`Key already found in locales: ${currentPath.join(".")}.${key} '${id}' and '${source}`, {oldValue: storage[key], newValue: value})
+          console.error(`Key already found in locales: ${currentPath.join(".")}.${key} '${id}'`, {oldValue: storage[key], newValue: value})
         }
 
-        storage[key] = {id, value}
+        storage[key] = value
       }
     }
   }
 
   l(format, date) {
     const formatValue = this.t(format)
-    const formattedDate = strftime(formatValue, date)
+    const formattedDate = this.strftime(formatValue, date)
 
     return formattedDate
   }
@@ -48,11 +67,7 @@ class ApiMakerI18n {
   t(key, variables) {
     const path = key.split(".")
 
-    let value = digg(this.locales, this.locale, ...path, "value")
-
-    if (typeof value != "number" && typeof value != "string") {
-      throw new Error(`Value for ${key} wasn't a string: ${typeof value}`, value)
-    }
+    let value = digg(this.locales, this.locale, ...path)
 
     if (variables) {
       for (const key in variables) {
