@@ -1,4 +1,5 @@
 const {digg} = require("@kaspernj/object-digger")
+const numberable = require("numberable")
 const strftime = require("strftime")
 
 class ApiMakerI18n {
@@ -49,8 +50,8 @@ class ApiMakerI18n {
 
     let value = digg(this.locales, this.locale, ...path, "value")
 
-    if (typeof value != "string") {
-      throw new Error(`Value for ${key} wasn't a string`, value)
+    if (typeof value != "number" && typeof value != "string") {
+      throw new Error(`Value for ${key} wasn't a string: ${typeof value}`, value)
     }
 
     if (variables) {
@@ -60,6 +61,14 @@ class ApiMakerI18n {
     }
 
     return value
+  }
+
+  toNumber(number) {
+    return numberable(number, {
+      delimiter: this.t("number.format.delimiter"),
+      precision: this.t("number.format.precision"),
+      separator: this.t("number.format.separator")
+    })
   }
 }
 
