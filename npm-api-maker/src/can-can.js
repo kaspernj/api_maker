@@ -29,10 +29,12 @@ export default class ApiMakerCanCan {
         subjectLabel = subject.modelClassData().name
       }
 
-      throw new Error(`Ability not loaded ${subjectLabel}#${ability}`)
-    }
+      console.error(`Ability not loaded ${subjectLabel}#${ability}`)
 
-    return digg(foundAbility, "can")
+      return false
+    } else {
+      return digg(foundAbility, "can")
+    }
   }
 
   findAbility(ability, subject) {
