@@ -29,7 +29,7 @@ environment.plugins.append(
   new webpack.ProvidePlugin({
     Account: ["api-maker/models", "Account"],
     Hash: ["shared/hash", "default"],
-    I18n: ["@kaspernj/api-maker", "I18n"],
+    I18n: ["shared/i18n", "default"],
     Layout: ["components/layout", "default"],
     Params: ["shared/params", "default"],
     Project: ["api-maker/models", "Project"],
