@@ -101,30 +101,25 @@ end
 
 ### I18n
 
-In order to use the built in text support, you need to add `i18n-js` to your project.
-
-Start by adding to your Gemfile:
-```ruby
-gem "i18n-js"
+Start by adding i18n-on-steroids to your project:
+```bash
+yarn i18n-on-steroids
 ```
 
-Then add `config/i18n-js.yml`:
-```yml
-translations:
-  - file: "app/assets/javascripts/i18n/translations.js"
-    only: ["*.activerecord.attributes.*", "*.activerecord.models.*", "*.date.*", "*.js.*", "*.number.currency.*", "*.time.*"]
-```
-
-You can use translations like this:
+Create a I18n object you want to use throughout your project (app/javascript/i18n.js):
 ```js
-import {I18n} from "@kaspernj/api-maker"
+import I18nOnSteroids from "i18n-on-steroids"
 
-I18n.t("js.some.key")
+const i18n = new I18nOnSteroids()
+
+i18n.setLocale("en")
+
+export default i18n
 ```
 
-Add this to the `<html>`-tag:
-```html
-<html lang="<%= I18n.locale %>">
+You can import it globally through the provide plugin in Webpack and then use translations like this:
+```js
+i18n.t("js.some.key") //=> Key
 ```
 
 ### Routes
