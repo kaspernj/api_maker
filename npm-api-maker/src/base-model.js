@@ -12,6 +12,7 @@ import {ValidationErrors} from "./validation-errors"
 
 const inflection = require("inflection")
 const objectToFormData = require("object-to-formdata").serialize
+const shared = {}
 
 export default class BaseModel {
   static modelClassData() {
@@ -52,7 +53,7 @@ export default class BaseModel {
   }
 
   static setI18n(i18n) {
-    this.i18n = i18n
+    shared.i18n = i18n
   }
 
   constructor(args = {}) {
@@ -321,16 +322,18 @@ export default class BaseModel {
   }
 
   static humanAttributeName(attributeName) {
-    const keyName = this.modelClassData().i18nKey
-    return this.i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`)
+    const keyName = digg(this.modelClassData(), "i18nKey")
+
+    return shared.i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`)
   }
 
   isAttributeChanged(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
-    const attributeData = this.modelClassData().attributes.find(attribute => attribute.name == attributeNameUnderscore)
+    const attributeData = this.modelClassData().attributes.find((attribute) => digg(attribute, "name") == attributeNameUnderscore)
 
     if (!attributeData) {
-      const attributeNames = this.modelClassData().attributes.map(attribute => attribute.name)
+      const attributeNames = this.modelClassData().attributes.map((attribute) => digg(attribute, "name"))
+
       throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
     }
 
