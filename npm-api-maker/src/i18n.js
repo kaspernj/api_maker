@@ -2,14 +2,13 @@ const {digg} = require("@kaspernj/object-digger")
 const numberable = require("numberable")
 const strftime = require("strftime")
 
-class ApiMakerI18n {
+module.exports = class ApiMakerI18n {
   constructor() {
     this.locales = {}
   }
 
   setLocale(locale) {
     this.locale = locale
-    this.setLocaleOnStrftime()
   }
 
   setLocaleOnStrftime() {
@@ -33,11 +32,15 @@ class ApiMakerI18n {
     contextLoader.keys().forEach((id) => {
       const content = contextLoader(id)
 
-      this._scanRecursive(content, this.locales, id)
+      this._scanRecursive(content, this.locales, [], id)
     })
   }
 
-  _scanRecursive(data, storage, id, currentPath = []) {
+  scanObject(object) {
+    this._scanRecursive(object, this.locales, [])
+  }
+
+  _scanRecursive(data, storage, currentPath, id) {
     for (const key in data) {
       const value = data[key]
 
@@ -46,7 +49,7 @@ class ApiMakerI18n {
           storage[key] = {}
         }
 
-        this._scanRecursive(value, storage[key], id, currentPath.concat([key]))
+        this._scanRecursive(value, storage[key], currentPath.concat([key], id))
       } else {
         if (key in storage) {
           console.error(`Key already found in locales: ${currentPath.join(".")}.${key} '${id}'`, {oldValue: storage[key], newValue: value})
@@ -86,7 +89,3 @@ class ApiMakerI18n {
     })
   }
 }
-
-const i18ninstance = new ApiMakerI18n()
-
-export default i18ninstance
