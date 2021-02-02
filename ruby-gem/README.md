@@ -101,9 +101,7 @@ end
 
 ### I18n
 
-In order to use the built in text support, you need to add `i18n-js` to your project.
-
-Start by adding to your project:
+Start by adding i18n-on-steroids to your project:
 ```bash
 yarn i18n-on-steroids
 ```
