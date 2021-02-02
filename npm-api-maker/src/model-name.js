@@ -1,5 +1,3 @@
-import I18n from "./i18n"
-
 export default class ModelName {
   constructor(data) {
     this.data = data
@@ -19,6 +17,6 @@ export default class ModelName {
 
     const key = `activerecord.models.${this.data.modelClassData.i18nKey}.${countKey}`
 
-    return I18n.t(key)
+    return data.i18n.t(key)
   }
 }

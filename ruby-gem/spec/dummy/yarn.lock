@@ -750,6 +750,11 @@
   resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.1.tgz#d76a787b8fb5e9b48a37fa11c16756f138070895"
   integrity sha512-kIMqg6Iq0zrYglAZ095n9hMbscYpiqG/xEaX5f/82BMvh0d/ZGvGNPhbdk1EAHnXOdFfA3KfEgZMoPLHdggb8Q==
 
+"@kaspernj/object-digger@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.2.tgz#92d4cba641f9429fa0c572822d25132d4bae206b"
+  integrity sha512-L0Y460I2nEWbxF/6zyrU8Lyi+MHTxdh9xS9CkJhHrcMoHndUKGXqb6Tw7imApslMU9eyjNBXW5n5tMPtk46ACw==
+
 "@rails/actioncable@^6.0.3-2":
   version "6.0.3-2"
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-6.0.3-2.tgz#18933d870649e356f3c47a134af9430f17ce51ca"
@@ -3439,10 +3444,14 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-i18n-js@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-3.8.0.tgz#b8fd6b12e1d88cb71f9806c29bca7c31c012e504"
-  integrity sha512-hDsGgPuvw/2P+lXSbOafAwspK8Ste8YrwuuUg17W3wEcO1JkQxBlPgsN1t2+852nTnz4YSYTjZc/1nAA2PC/nw==
+i18n-on-steroids@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.0.tgz#491bbee4828339317ba1d05ce9b5d43fea042e60"
+  integrity sha512-F5nK7K6SdT5u+5ly0HQPOUjPwhvBxvu2hxzBZQ5xf6boSMbrHPzL5nPkrPYQnmszqa8DQIVhnETETUANNoC6vQ==
+  dependencies:
+    "@kaspernj/object-digger" "^1.0.2"
+    numberable "^1.0.0"
+    strftime "^0.10.0"
 
 iconv-lite@0.4.24, iconv-lite@^0.4.4:
   version "0.4.24"
@@ -4701,6 +4710,11 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
+
+numberable@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/numberable/-/numberable-1.0.0.tgz#926efc7b0ee5992ac7060ce26b8bc3b339e0c9d2"
+  integrity sha512-MZ0EgrzLgUdM1U8TcoZWhbGxUepQLkntv7ZP+Hxof6pmqLpgYl+xtp9J9Iu52uKiVqCXZVUCE5mEFmojQ8vZJw==
 
 oauth-sign@~0.9.0:
   version "0.9.0"

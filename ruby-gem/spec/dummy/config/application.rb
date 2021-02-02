@@ -22,7 +22,6 @@ require "active_record_query_fixer"
 require "api_maker"
 require "cancancan"
 require "devise"
-require "i18n-js"
 require "js-routes"
 require "kaminari" if Gem.loaded_specs["kaminari"]
 require "will_paginate" if Gem.loaded_specs["will_paginate"]

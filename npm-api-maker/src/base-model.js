@@ -45,7 +45,7 @@ export default class BaseModel {
   }
 
   static modelName() {
-    return new ModelName({modelClassData: this.modelClassData()})
+    return new ModelName({i18n: shared.i18n, modelClassData: this.modelClassData()})
   }
 
   static ransack(query = {}) {
