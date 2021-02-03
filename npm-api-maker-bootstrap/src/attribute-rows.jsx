@@ -2,6 +2,7 @@ import AttributeRow from "./attribute-row"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
+import strftime from "strftime"
 
 export default class ApiMakerBootstrapAttributeRows extends React.Component {
   static defaultProps = {
@@ -43,7 +44,7 @@ export default class ApiMakerBootstrapAttributeRows extends React.Component {
     const value = this.value(attribute)
 
     if (value instanceof Date) {
-      return I18n.strftime(value, "%Y-%m-%d %H:%M")
+      return strftime("%Y-%m-%d %H:%M", value)
     } else if (typeof value === "boolean") {
       if (value)
         return I18n.t("js.shared.yes")

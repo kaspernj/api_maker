@@ -1,4 +1,4 @@
-import Devise from "./devise"
+import {Devise} from "@kaspernj/api-maker"
 
 const inflection = require("inflection")
 const wakeEvent = require("wake-event")

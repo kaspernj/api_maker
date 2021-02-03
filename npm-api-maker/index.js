@@ -7,6 +7,7 @@ import CommandSubmitData from "./src/command-submit-data"
 import CommandsPool from "./src/commands-pool"
 import CustomError from "./src/custom-error"
 import Deserializer from "./src/deserializer"
+import Devise from "./src/devise"
 import ErrorLogger from "./src/error-logger"
 import EventConnection from "./src/event-connection"
 import EventCreated from "./src/event-created"
@@ -27,8 +28,10 @@ import Preloaded from "./src/preloaded"
 import ResourceRoute from "./src/resource-route"
 import ResourceRoutes from "./src/resource-routes"
 import Result from "./src/result"
+import Routes from "./src/routes"
 import Serializer from "./src/serializer"
 import Services from "./src/services"
+import SessionStatusUpdater from "./src/session-status-updater"
 import SourceMapsLoader from "./src/source-maps-loader"
 import UpdatedAttribute from "./src/updated-attribute"
 import ValidationError from "./src/validation-error"
@@ -44,6 +47,7 @@ export {
   CommandsPool,
   CustomError,
   Deserializer,
+  Devise,
   ErrorLogger,
   EventConnection,
   EventCreated,
@@ -64,8 +68,10 @@ export {
   ResourceRoute,
   ResourceRoutes,
   Result,
+  Routes,
   Serializer,
   Services,
+  SessionStatusUpdater,
   SourceMapsLoader,
   UpdatedAttribute,
   ValidationError,

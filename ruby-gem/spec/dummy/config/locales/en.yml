@@ -9,3 +9,8 @@ en:
       user:
         email: Email
         updated_at: Updated at
+  number:
+    currency:
+      format:
+        separator: "."
+        delimiter: ","
