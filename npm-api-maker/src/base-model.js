@@ -191,7 +191,7 @@ export default class BaseModel {
     }
 
     if (response.model) {
-      this._refreshModelDataFromResponse(response)
+      this._refreshModelFromResponse(response)
       this.changes = {}
     }
 
@@ -513,7 +513,7 @@ export default class BaseModel {
 
     if (response.success) {
       if (response.model) {
-        this._refreshModelDataFromResponse(response)
+        this._refreshModelFromResponse(response)
         this.changes = {}
       }
 
@@ -558,7 +558,7 @@ export default class BaseModel {
     }
 
     if (response.model) {
-      this._refreshModelDataFromResponse(response)
+      this._refreshModelFromResponse(response)
       this.changes = {}
     }
 
