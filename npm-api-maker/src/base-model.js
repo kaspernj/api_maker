@@ -406,12 +406,12 @@ export default class BaseModel {
 
   setNewModel(model) {
     this.setNewModelData(model)
-    this.relationshipsCache = model.relationshipsCache
+    this.relationshipsCache = digg(model, "relationshipsCache")
   }
 
   setNewModelData(model) {
-    this.previousModelData = this.modelData
-    this.modelData = model.modelData
+    this.previousModelData = digg(this, "modelData")
+    this.modelData = digg(model, "modelData")
   }
 
   _isDateChanged(oldValue, newValue) {
@@ -523,9 +523,14 @@ export default class BaseModel {
     }
   }
 
-  _refreshModelDataFromResponse(response) {
-    const newModel = ModelsResponseReader.first(response.model)
+  _refreshModelFromResponse(response) {
+    const newModel = ModelsResponseReader.first(digg(response, "model"))
     this.setNewModel(newModel)
+  }
+
+  _refreshModelDataFromResponse(response) {
+    const newModel = ModelsResponseReader.first(digg(response, "model"))
+    this.setNewModelData(newModel)
   }
 
   async updateRaw(rawData, options = {}) {
