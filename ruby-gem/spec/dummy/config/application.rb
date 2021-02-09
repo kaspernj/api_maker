@@ -18,6 +18,10 @@ Bundler.require(*Rails.groups)
 require "dotenv-rails"
 Dotenv::Railtie.load
 
+# Fixes autoload issues when booting up dummy in dev env
+module ApiHelpers; end
+require_relative "../../../app/api_maker/api_helpers/api_maker_helpers"
+
 require "active_record_query_fixer"
 require "api_maker"
 require "cancancan"

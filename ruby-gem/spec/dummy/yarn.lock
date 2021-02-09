@@ -725,22 +725,38 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@kaspernj/api-maker-bootstrap@1.0.27":
-  version "1.0.27"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.27.tgz#34446560caf8d8461e8fb384d256d81aa2932fa0"
-  integrity sha512-yws3FWEu0TKwkf2qeVL2bORTt5lED09TirA56G9pw8wRanU57TpY0y/+5c30SDX/LaNfTAOtqfnL10yosNr+wQ==
+"@kaspernj/api-maker-bootstrap@1.0.38":
+  version "1.0.38"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.38.tgz#eb839a3dbf830f92ab1d210ec950380b80969292"
+  integrity sha512-fNqejJvhfz6tixBQ0tk5TGVExAon/AjQfboixbpbtTztSjZESb6DYukbqGQYR4VBal0siNrPfJU+BRraAInldw==
   dependencies:
     "@kaspernj/object-digger" "^1.0.1"
+    debounce "^1.2.0"
 
-"@kaspernj/api-maker-inputs@1.0.28":
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.28.tgz#e1eb5ea7ce4676d2093bc7f7bc0de9b1e33d312f"
-  integrity sha512-JpHmp1JqSVHd4c1+blH4UnO0oIvzpsNSt7+jy30TXLOx1u7Dzbgveok3FcsPUd99lGLGA4nv6YZrtycnqlOP5w==
+"@kaspernj/api-maker-inputs@1.0.40":
+  version "1.0.40"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.40.tgz#11d0af64c130ce83d8d95cd7e2e6370f36956042"
+  integrity sha512-w4QrcyOyeIBdBZxZozUzWpWYzlnhGVlGQ/Ft0QfoenvuFSZ4rLwSP6pkdmfZPl15YKhZmQyth3Km1xXIjiH56Q==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.28"
     "@kaspernj/object-digger" ">= 1.0.1"
 
-"@kaspernj/api-maker@1.0.28", "@kaspernj/api-maker@>= 1.0.28":
+"@kaspernj/api-maker@1.0.60":
+  version "1.0.60"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.60.tgz#de3587080f4eadc41702a001fb8b4097e5b3f78c"
+  integrity sha512-UJF7fYqHUQHqZJj8D3dSAVxNBoKBC3ZSna5tko5AGgzMrVS+GClv2rcDillDtSsjJLHCfLs7h+Q4i4e6DggUFw==
+  dependencies:
+    "@kaspernj/object-digger" "^1.0.2"
+    "@rails/actioncable" "^6.1.0"
+    inflection "^1.12.0"
+    js-money "^0.6.3"
+    merge "^2.1.0"
+    numberable "^1.0.0"
+    object-to-formdata "^4.1.0"
+    strftime "^0.10.0"
+    wake-event "^0.0.1"
+
+"@kaspernj/api-maker@>= 1.0.28":
   version "1.0.28"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.28.tgz#086deedb68edd8dee67b83ed5f0164de40976a62"
   integrity sha512-VbK0vWZ1ov9KSYJkwEIW2rB0bpClhz/kg0KLq/ZaY1Vm6kllWQqAaaDgXYSf2iQy5sM3BqNQSPjJCgphBImOow==
@@ -759,6 +775,11 @@
   version "6.0.3-2"
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-6.0.3-2.tgz#18933d870649e356f3c47a134af9430f17ce51ca"
   integrity sha512-zgMwnvn0zmJuy1N7IgZpd4X1ERWBL/bd9ZrqaSKtWay7F4ZB+Q6F5dc1D2I3IyUYYQU5dssQb5VaygvMLc7+GA==
+
+"@rails/actioncable@^6.1.0":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-6.1.1.tgz#e980b2ea1c62cae17bcddad37deb6ba88d498b63"
+  integrity sha512-A8toxvSuzK/wX9uMwyV6T1EYzlqzIJNrO8XiNCSNsmKresdX2cbAjxFdMu9haaPJPjl3aC2FKRJeVCUWVtLPAQ==
 
 "@rails/webpacker@4.0.7":
   version "4.0.7"
@@ -4262,6 +4283,11 @@ merge@^1.2.1:
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.1.tgz#38bebf80c3220a8a487b6fcfb3941bb11720c145"
   integrity sha512-VjFo4P5Whtj4vsLzsYBu5ayHhoHJ0UqNm7ibvShmbmoz7tGi0vXaoJbGdB+GmDMLUdg8DpQXEIeVDAe8MaABvQ==
 
+merge@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/merge/-/merge-2.1.0.tgz#91fff62458ba2eca378dd395fa85f1690bf87f60"
+  integrity sha512-TcuhVDV+e6X457MQAm7xIb19rWhZuEDEho7RrwxMpQ/3GhD5sDlnP188gjQQuweXHy9igdke5oUtVOXX1X8Sxg==
+
 methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
@@ -4744,6 +4770,11 @@ object-to-formdata@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/object-to-formdata/-/object-to-formdata-4.0.1.tgz#37457ac856c10580ec16bedfded56b0c09ccb0c8"
   integrity sha512-6PSHCYTVZkY2mTjW1y0baOuUpopFp0h3jjN65x+DFP3pYHfhHRnvkAzHUc9xZK2SeYDVu9Ej9P3hHWyglUznrg==
+
+object-to-formdata@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/object-to-formdata/-/object-to-formdata-4.1.0.tgz#0d7bdd6f9e4efa8c0075a770c11ec92b7bf6c560"
+  integrity sha512-4Ti3VLTspWOUt5QIBl5/BpvLBnr4tbFpZ/FpXKWQFqLslvGIB3ug3jurW/k8iIpoyE6HcZhhmQ6mFiOq1tKGEQ==
 
 object-visit@^1.0.0:
   version "1.0.1"
