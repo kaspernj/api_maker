@@ -27,18 +27,12 @@ export default class ApiMakerInputsMoney extends React.Component {
     small: PropTypes.bool
   })
 
+  formatter = formatNumber(formatOptions = {
+    decimal: I18n.t("number.currency.format.separator"),
+    integerSeparator: I18n.t("number.currency.format.delimiter")
+  })
   inputRef = React.createRef()
-
-  constructor(props) {
-    super(props)
-    this.state = {}
-
-    let formatOptions = {
-      decimal: I18n.t("number.currency.format.separator"),
-      integerSeparator: I18n.t("number.currency.format.delimiter")
-    }
-    this.formatter = formatNumber(formatOptions)
-  }
+  state = {}
 
   getInputRef() {
     return this.props.inputRef || this.inputRef
