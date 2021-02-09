@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@kaspernj/object-digger@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.1.tgz#d76a787b8fb5e9b48a37fa11c16756f138070895"
-  integrity sha512-kIMqg6Iq0zrYglAZ095n9hMbscYpiqG/xEaX5f/82BMvh0d/ZGvGNPhbdk1EAHnXOdFfA3KfEgZMoPLHdggb8Q==
+"@kaspernj/object-digger@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.2.tgz#92d4cba641f9429fa0c572822d25132d4bae206b"
+  integrity sha512-L0Y460I2nEWbxF/6zyrU8Lyi+MHTxdh9xS9CkJhHrcMoHndUKGXqb6Tw7imApslMU9eyjNBXW5n5tMPtk46ACw==
 
 debounce@^1.2.0:
   version "1.2.0"
