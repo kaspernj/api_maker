@@ -27,7 +27,7 @@ export default class ApiMakerInputsMoney extends React.Component {
     small: PropTypes.bool
   })
 
-  formatter = formatNumber(formatOptions = {
+  formatter = formatNumber({
     decimal: I18n.t("number.currency.format.separator"),
     integerSeparator: I18n.t("number.currency.format.delimiter")
   })
