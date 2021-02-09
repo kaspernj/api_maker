@@ -21,16 +21,16 @@
     "type": "git",
     "url": "git+https://github.com/kaspernj/api-maker-inputs.git"
   },
-  "version": "1.0.40",
+  "version": "1.0.42",
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "prop-types-exact": "^1.2.0",
     "react": "^16.13.1"
   },
   "dependencies": {
-    "classnames": ">= 2.2.6",
-    "inflection": ">= 1.12.0",
     "@kaspernj/api-maker": ">= 1.0.60",
-    "@kaspernj/object-digger": ">= 1.0.2"
+    "@kaspernj/object-digger": ">= 1.0.2",
+    "classnames": ">= 2.2.6",
+    "inflection": ">= 1.12.0"
   }
 }
