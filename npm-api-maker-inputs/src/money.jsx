@@ -1,4 +1,3 @@
-import formatNumber from "format-number"
 import idForComponent from "./id-for-component"
 import { MoneyFormatter } from "@kaspernj/api-maker"
 import PropTypes from "prop-types"
@@ -27,10 +26,6 @@ export default class ApiMakerInputsMoney extends React.Component {
     small: PropTypes.bool
   })
 
-  formatter = formatNumber({
-    decimal: I18n.t("number.currency.format.separator"),
-    integerSeparator: I18n.t("number.currency.format.delimiter")
-  })
   inputRef = React.createRef()
   state = {}
 
