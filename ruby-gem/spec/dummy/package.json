@@ -12,9 +12,9 @@
   "private": true,
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
-    "@kaspernj/api-maker": "1.0.28",
-    "@kaspernj/api-maker-bootstrap": "1.0.27",
-    "@kaspernj/api-maker-inputs": "1.0.28",
+    "@kaspernj/api-maker": "1.0.60",
+    "@kaspernj/api-maker-bootstrap": "1.0.38",
+    "@kaspernj/api-maker-inputs": "1.0.40",
     "@kaspernj/object-digger": "^1.0.1",
     "@rails/actioncable": "^6.0.3-2",
     "@rails/webpacker": "4.0.7",

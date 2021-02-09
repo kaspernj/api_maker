@@ -12,6 +12,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.number, PropTypes.string]),
     id: PropTypes.string,
     includeBlank: PropTypes.bool,
+    inputRef: PropTypes.object,
     model: PropTypes.object,
     name: PropTypes.string,
     onErrors: PropTypes.func,
@@ -19,11 +20,9 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     options: PropTypes.array
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      form: undefined
-    }
+  inputRef = React.createRef()
+  state = {
+    form: undefined
   }
 
   componentDidMount() {
@@ -39,7 +38,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
   }
 
   setForm() {
-    const form = dig(this, "refs", "select", "form")
+    const form = dig(this.props.inputRef || this.inputRef, "current", "form")
 
     if (form != this.state.form) {
       this.setState({form})
@@ -69,7 +68,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
           defaultValue={this.inputDefaultValue()}
           id={idForComponent(this)}
           name={this.inputName()}
-          ref="select"
+          ref={this.props.inputRef || this.inputRef}
           {...restProps}
         >
           {this.includeBlank() &&

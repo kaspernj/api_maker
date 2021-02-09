@@ -29,13 +29,9 @@ export default class ApiMakerInput extends React.Component {
   }
 
   inputRef = React.createRef()
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      blankInputName: this.props.type == "file",
-      form: undefined
-    }
+  state = {
+    blankInputName: this.props.type == "file",
+    form: undefined
   }
 
   componentDidMount() {
