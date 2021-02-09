@@ -52,6 +52,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
       defaultValue,
       id,
       includeBlank,
+      inputRef,
       model,
       name,
       onErrors,
