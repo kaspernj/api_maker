@@ -1,4 +1,4 @@
-const AttributeRow = require("./attribute-row")
+const AttributeRow = require("./attribute-row").default
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
