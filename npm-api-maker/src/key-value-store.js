@@ -1,6 +1,6 @@
-import Params from "./params"
+const Params = require("./params")
 
-export default class KeyValueStore {
+module.exports = class KeyValueStore {
   static current() {
     if (!window.currentKeyValueStore)
       window.currentKeyValueStore = new KeyValueStore()

@@ -1,11 +1,11 @@
-import ChannelsConsumer from "./channels-consumer"
-import CommandsPool from "./commands-pool"
-import Deserializer from "./deserializer"
-import Logger from "./logger"
+const ChannelsConsumer = require("./channels-consumer")
+const CommandsPool = require("./commands-pool")
+const Deserializer = require("./deserializer")
+const Logger = require("./logger")
 
 const inflection = require("inflection")
 
-export default class ApiMakerCableSubscriptionPool {
+module.exports = class ApiMakerCableSubscriptionPool {
   constructor(props) {
     this.props = props
     this.activeSubscriptions = 0

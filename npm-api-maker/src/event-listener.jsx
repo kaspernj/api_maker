@@ -1,8 +1,8 @@
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
-export default class ApiMakerEventListener extends React.Component {
+module.exports = class ApiMakerEventListener extends React.Component {
   static callEvent(target, eventName, args = []) {
     let event = document.createEvent("Event")
     event.initEvent(eventName, false, true)

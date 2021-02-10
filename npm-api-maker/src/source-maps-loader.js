@@ -1,5 +1,5 @@
-import * as stackTraceParser from "stacktrace-parser"
-import {SourceMapConsumer} from "source-map"
+const * as stackTraceParser = require("stacktrace-parser")
+const {SourceMapConsumer} = require("source-map")
 
 // Sometimes this needs to be called and sometimes not
 if (SourceMapConsumer.initialize) {
@@ -8,7 +8,7 @@ if (SourceMapConsumer.initialize) {
   })
 }
 
-export default class SourceMapsLoader {
+module.exports = class SourceMapsLoader {
   constructor() {
     this.sourceMaps = []
     this.srcLoaded = {}

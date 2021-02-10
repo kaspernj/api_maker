@@ -1,15 +1,15 @@
-import AttributeRow from "./src/attribute-row"
-import AttributeRows from "./src/attribute-rows"
-import Card from "./src/card"
-import Checkbox from "./src/checkbox"
-import Checkboxes from "./src/checkboxes"
-import Input from "./src/input"
-import InvalidFeedback from "./src/invalid-feedback"
-import LiveTable from "./src/live-table"
-import Paginate from "./src/paginate"
-import RadioButtons from "./src/radio-buttons"
-import Select from "./src/select"
-import SortLink from "./src/sort-link"
+const AttributeRow = require("./src/attribute-row")
+const AttributeRows = require("./src/attribute-rows")
+const Card = require("./src/card")
+const Checkbox = require("./src/checkbox")
+const Checkboxes = require("./src/checkboxes")
+const Input = require("./src/input")
+const InvalidFeedback = require("./src/invalid-feedback")
+const LiveTable = require("./src/live-table")
+const Paginate = require("./src/paginate")
+const RadioButtons = require("./src/radio-buttons")
+const Select = require("./src/select")
+const SortLink = require("./src/sort-link")
 
 export {
   AttributeRow,

@@ -1,14 +1,14 @@
-import CustomError from "./custom-error"
-import FormDataToObject from "./form-data-to-object"
-import qs from "qs"
+const {CustomError} = require("./custom-error")
+const FormDataToObject = require("./form-data-to-object")
+const qs = require("qs")
 
-export default class Api {
-  static get(path, data = null) {
-    return this.requestLocal({path, "pathParams": data, method: "GET"})
+module.exports = class Api {
+  static get(path, pathParams = null) {
+    return this.requestLocal({path, pathParams, method: "GET"})
   }
 
-  static delete(path, data = null) {
-    return this.requestLocal({path, "pathParams": data, method: "DELETE"})
+  static delete(path, pathParams = null) {
+    return this.requestLocal({path, pathParams, method: "DELETE"})
   }
 
   static patch(path, data = {}) {

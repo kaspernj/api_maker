@@ -1,3 +1,3 @@
-import {createConsumer} from "@rails/actioncable"
+const {createConsumer} = require("@rails/actioncable")
 
 export default createConsumer()

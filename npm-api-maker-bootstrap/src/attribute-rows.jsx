@@ -1,10 +1,10 @@
-import AttributeRow from "./attribute-row"
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
-import strftime from "strftime"
+const AttributeRow = require("./attribute-row")
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
+const strftime = require("strftime")
 
-export default class ApiMakerBootstrapAttributeRows extends React.Component {
+module.exports = class ApiMakerBootstrapAttributeRows extends React.Component {
   static defaultProps = {
     checkIfAttributeLoaded: false
   }

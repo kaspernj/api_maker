@@ -1,12 +1,11 @@
-import idForComponent from "./id-for-component"
-import { MoneyFormatter } from "@kaspernj/api-maker"
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
-
+const idForComponent = require("./id-for-component")
 const inflection = require("inflection")
+const { MoneyFormatter } = require("@kaspernj/api-maker")
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
-export default class ApiMakerInputsMoney extends React.Component {
+module.exports = class ApiMakerInputsMoney extends React.Component {
   static defaultProps = {
     showCurrencyOptions: true
   }

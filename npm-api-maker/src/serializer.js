@@ -1,6 +1,6 @@
-import {digg} from "@kaspernj/object-digger"
+const {digg} = require("@kaspernj/object-digger")
 
-export default class Serializer {
+module.exports = class Serializer {
   static serialize(arg) {
     const serialize = new Serializer(arg)
 

@@ -1,6 +1,6 @@
 const objectToFormData = require("object-to-formdata").serialize
 
-export default class ApiMakerCommandSubmitData {
+module.exports = class ApiMakerCommandSubmitData {
   constructor(data) {
     this.data = data
     this.formData

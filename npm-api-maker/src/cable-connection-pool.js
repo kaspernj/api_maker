@@ -1,7 +1,7 @@
-import CableSubscriptionPool from "./cable-subscription-pool"
-import CableSubscription from "./cable-subscription"
+const CableSubscriptionPool = require("./cable-subscription-pool")
+const CableSubscription = require("./cable-subscription")
 
-export default class ApiMakerCableConnectionPool {
+module.exports = class ApiMakerCableConnectionPool {
   static current() {
     if (!window.apiMakerCableConnectionPool)
       window.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()

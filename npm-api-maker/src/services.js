@@ -1,6 +1,6 @@
-import CommandsPool from "./commands-pool"
+const CommandsPool = require("./commands-pool")
 
-export default class ApiMakerServices {
+module.exports = class ApiMakerServices {
   static current() {
     if (!window.currentApiMakerService) {
       window.currentApiMakerService = new ApiMakerServices()

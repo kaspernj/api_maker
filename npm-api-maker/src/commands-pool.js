@@ -1,12 +1,12 @@
-import Api from "./api"
-import CommandSubmitData from "./command-submit-data"
-import CustomError from "./custom-error"
-import Deserializer from "./deserializer"
-import {dig} from "@kaspernj/object-digger"
-import FormDataToObject from "./form-data-to-object"
-import Serializer from "./serializer"
+const Api = require("./api")
+const CommandSubmitData = require("./command-submit-data")
+const CustomError = require("./custom-error")
+const Deserializer = require("./deserializer")
+const {dig} = require("@kaspernj/object-digger")
+const FormDataToObject = require("./form-data-to-object")
+const Serializer = require("./serializer")
 
-export default class ApiMakerCommandsPool {
+module.exports = class ApiMakerCommandsPool {
   static addCommand(data, args = {}) {
     let pool
 

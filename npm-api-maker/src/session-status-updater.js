@@ -1,9 +1,9 @@
-import {Devise} from "@kaspernj/api-maker"
+const {Devise} = require("@kaspernj/api-maker")
 
 const inflection = require("inflection")
 const wakeEvent = require("wake-event")
 
-export default class ApiMakerSessionStatusUpdater {
+module.exports = class ApiMakerSessionStatusUpdater {
   static current() {
     if (!window.apiMakerSessionStatusUpdater)
       window.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()

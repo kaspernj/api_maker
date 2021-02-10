@@ -1,4 +1,4 @@
-import {dig, digg} from "@kaspernj/object-digger"
+const {dig, digg} = require("@kaspernj/object-digger")
 
 function errorMessages(args) {
   return digg(args, "response", "errors").map((error) => {
@@ -10,7 +10,7 @@ function errorMessages(args) {
   })
 }
 
-export default class CustomError extends Error {
+module.exports = class CustomError extends Error {
   constructor(message, args = {}) {
     if (dig(args, "response", "errors")) {
       message = `${message}: ${errorMessages(args).join(". ")}`

@@ -1,9 +1,9 @@
-import {digg} from "@kaspernj/object-digger"
-import Money from "js-money"
+const {digg} = require("@kaspernj/object-digger")
+const Money = require("js-money")
 
 const inflection = require("inflection")
 
-export default class ApiMakerDeserializer {
+module.exports = class ApiMakerDeserializer {
   static parse(object) {
     if (Array.isArray(object)) {
       return object.map(value => ApiMakerDeserializer.parse(value))

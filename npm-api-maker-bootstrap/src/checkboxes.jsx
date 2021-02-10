@@ -1,12 +1,12 @@
-import {EventListener} from "@kaspernj/api-maker"
-import InvalidFeedback from "./invalid-feedback"
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
+const {EventListener} = require("@kaspernj/api-maker")
+const InvalidFeedback = require("./invalid-feedback")
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
 const inflection = require("inflection")
 
-export default class ApiMakerBootstrapCheckboxes extends React.Component {
+module.exports = class ApiMakerBootstrapCheckboxes extends React.Component {
   static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,

@@ -1,13 +1,13 @@
-import {dig, digs} from "@kaspernj/object-digger"
-import {EventListener, EventUpdated} from "@kaspernj/api-maker"
-import idForComponent from "./id-for-component"
-import inflection from "inflection"
-import nameForComponent from "./name-for-component"
-import PropTypes from "prop-types"
-import React from "react"
-import strftime from "strftime"
+const {dig, digs} = require("@kaspernj/object-digger")
+const {EventListener, EventUpdated} = require("@kaspernj/api-maker")
+const idForComponent = require("./id-for-component")
+const inflection = require("inflection")
+const nameForComponent = require("./name-for-component")
+const PropTypes = require("prop-types")
+const React = require("react")
+const strftime = require("strftime")
 
-export default class ApiMakerInput extends React.Component {
+module.exports = class ApiMakerInput extends React.Component {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false

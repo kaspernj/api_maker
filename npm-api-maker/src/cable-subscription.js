@@ -1,6 +1,6 @@
-import Logger from "./logger"
+const Logger = require("./logger")
 
-export default class ApiMakerCableSubscription {
+module.exports = class ApiMakerCableSubscription {
   constructor(props) {
     this.props = props
     this.onUnsubscribeCallbacks = []

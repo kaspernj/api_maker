@@ -1,8 +1,8 @@
-import formSerialize from "form-serialize"
-import merge from "merge"
-import qs from "qs"
+const formSerialize = require("form-serialize")
+const merge = require("merge")
+const qs = require("qs")
 
-export default class Params {
+module.exports = class Params {
   static parse() {
     return qs.parse(window.location.search.substr(1))
   }

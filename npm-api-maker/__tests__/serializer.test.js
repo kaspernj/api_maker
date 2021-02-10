@@ -1,5 +1,5 @@
-import Serializer from "../src/serializer"
-import User from "./support/user"
+const Serializer = require("../src/serializer")
+const User = require("./support/user")
 
 describe("Serializer", () => {
   test("it serializes model classes", () => {

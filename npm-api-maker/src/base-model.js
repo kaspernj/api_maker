@@ -1,20 +1,20 @@
-import CableConnectionPool from "./cable-connection-pool"
-import Collection from "./collection"
-import CommandsPool from "./commands-pool"
-import CustomError from "./custom-error"
-import {digg} from "@kaspernj/object-digger"
-import FormDataToObject from "./form-data-to-object"
-import ModelName from "./model-name"
-import ModelsResponseReader from "./models-response-reader"
-import Services from "./services"
-import ValidationError from "./validation-error"
-import {ValidationErrors} from "./validation-errors"
-
+const CableConnectionPool = require("./cable-connection-pool")
+const Collection = require("./collection")
+const CommandsPool = require("./commands-pool")
+const CustomError = require("./custom-error")
+const {digg} = require("@kaspernj/object-digger")
+const FormDataToObject = require("./form-data-to-object")
 const inflection = require("inflection")
+const ModelName = require("./model-name")
+const ModelsResponseReader = require("./models-response-reader")
 const objectToFormData = require("object-to-formdata").serialize
+const Services = require("./services")
+const ValidationError = require("./validation-error")
+const {ValidationErrors} = require("./validation-errors")
+
 const shared = {}
 
-export default class BaseModel {
+module.exports = class BaseModel {
   static modelClassData() {
     throw new Error("modelClassData should be overriden by child")
   }

@@ -1,8 +1,8 @@
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
-export default class ApiMakerUpdatedAttribute extends React.Component {
+module.exports = class ApiMakerUpdatedAttribute extends React.Component {
   static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     model: PropTypes.object.isRequired,

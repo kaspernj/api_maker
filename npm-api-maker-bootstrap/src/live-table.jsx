@@ -1,14 +1,14 @@
-import {Collection, EventCreated, EventDestroyed, EventUpdated, Params} from "@kaspernj/api-maker"
-import {Card, Paginate} from "@kaspernj/api-maker-bootstrap"
-import {debounce} from "debounce"
-import {digg} from "@kaspernj/object-digger"
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
+const {Collection, EventCreated, EventDestroyed, EventUpdated, Params} = require("@kaspernj/api-maker")
+const {Card, Paginate} = require("@kaspernj/api-maker-bootstrap")
+const {debounce} = require("debounce")
+const {digg} = require("@kaspernj/object-digger")
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
 const inflection = require("inflection")
 
-export default class ApiMakerBootstrapLiveTable extends React.Component {
+module.exports = class ApiMakerBootstrapLiveTable extends React.Component {
   static defaultProps = {
     destroyEnabled: true,
     preloads: [],

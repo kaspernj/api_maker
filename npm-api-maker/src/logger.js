@@ -1,4 +1,4 @@
-export default class ApiMakerLogger {
+module.exports = class ApiMakerLogger {
   static current() {
     if (!window.apiMakerLogger) {
       window.apiMakerLogger = new ApiMakerLogger()

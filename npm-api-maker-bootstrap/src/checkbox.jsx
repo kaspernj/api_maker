@@ -1,9 +1,9 @@
-import {Checkbox, idForComponent, nameForComponent} from "@kaspernj/api-maker-inputs"
-import classNames from "classnames"
-import PropTypes from "prop-types"
-import React from "react"
+const {Checkbox, idForComponent, nameForComponent} = require("@kaspernj/api-maker-inputs")
+const classNames = require("classnames")
+const PropTypes = require("prop-types")
+const React = require("react")
 
-export default class ApiMakerBootstrapCheckbox extends React.Component {
+module.exports = class ApiMakerBootstrapCheckbox extends React.Component {
   static defaultProps = {
     defaultValue: 1,
     zeroInput: true

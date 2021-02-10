@@ -1,10 +1,10 @@
-import CanCan from "./can-can"
-import {digg} from "@kaspernj/object-digger"
-import EventEmitter from "events"
-import inflection from "inflection"
-import Services from "./services"
+const CanCan = require("./can-can")
+const {digg} = require("@kaspernj/object-digger")
+const EventEmitter = require("events")
+const inflection = require("inflection")
+const Services = require("./services")
 
-export default class ApiMakerDevise {
+module.exports = class ApiMakerDevise {
   static callSignOutEvent(args) {
     ApiMakerDevise.events().emit("onDeviseSignOut", {args})
   }

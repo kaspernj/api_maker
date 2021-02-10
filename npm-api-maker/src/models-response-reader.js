@@ -1,9 +1,9 @@
-import {digg} from "@kaspernj/object-digger"
-import Preloaded from "./preloaded"
+const {digg} = require("@kaspernj/object-digger")
+const Preloaded = require("./preloaded")
 
 const inflection = require("inflection")
 
-export default class ModelsResponseReader {
+module.exports = class ModelsResponseReader {
   static first(response) {
     return ModelsResponseReader.collection(response)[0]
   }

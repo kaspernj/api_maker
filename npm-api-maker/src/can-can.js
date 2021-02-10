@@ -1,8 +1,8 @@
-import Services from "./services"
+const Services = require("./services")
 
 const inflection = require("inflection")
 
-export default class ApiMakerCanCan {
+module.exports = class ApiMakerCanCan {
   static current() {
     if (!window.currentApiMakerCanCan) {
       window.currentApiMakerCanCan = new ApiMakerCanCan()

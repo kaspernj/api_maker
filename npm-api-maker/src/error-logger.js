@@ -1,6 +1,6 @@
-import SourceMapsLoader from "./source-maps-loader"
+const SourceMapsLoader = require("./source-maps-loader")
 
-export default class ErrorLogger {
+module.exports = class ErrorLogger {
   constructor() {
     this.errors = []
     this.sourceMapsLoader = new SourceMapsLoader()

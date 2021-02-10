@@ -1,9 +1,9 @@
-import {Input, idForComponent, Money, nameForComponent} from "@kaspernj/api-maker-inputs"
-import InvalidFeedback from "./invalid-feedback"
-import PropTypes from "prop-types"
-import React from "react"
+const {Input, idForComponent, Money, nameForComponent} = require("@kaspernj/api-maker-inputs")
+const InvalidFeedback = require("./invalid-feedback")
+const PropTypes = require("prop-types")
+const React = require("react")
 
-export default class ApiMakerBootstrapInput extends React.Component {
+module.exports = class ApiMakerBootstrapInput extends React.Component {
   static propTypes = {
     append: PropTypes.node,
     attribute: PropTypes.string,

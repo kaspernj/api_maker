@@ -1,4 +1,4 @@
-import {digg, digs} from "@kaspernj/object-digger"
+const {digg, digs} = require("@kaspernj/object-digger")
 
 const inflection = require("inflection")
 

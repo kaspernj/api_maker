@@ -1,11 +1,11 @@
-import {dig} from "@kaspernj/object-digger"
-import {EventListener} from "@kaspernj/api-maker"
-import idForComponent from "./id-for-component"
-import nameForComponent from "./name-for-component"
-import PropTypes from "prop-types"
-import React from "react"
+const {dig} = require("@kaspernj/object-digger")
+const {EventListener} = require("@kaspernj/api-maker")
+const idForComponent = require("./id-for-component")
+const nameForComponent = require("./name-for-component")
+const PropTypes = require("prop-types")
+const React = require("react")
 
-export default class ApiMakerBootstrapSelect extends React.Component {
+module.exports = class ApiMakerBootstrapSelect extends React.Component {
   static propTypes = {
     attribute: PropTypes.string,
     children: PropTypes.node,

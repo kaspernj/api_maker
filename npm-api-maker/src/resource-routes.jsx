@@ -1,10 +1,10 @@
-import React from "react"
-import ResourceRoute from "./resource-route"
-import {Route} from "react-router-dom"
+const React = require("react")
+const ResourceRoute = require("./resource-route")
+const {Route} = require("react-router-dom")
 
 const {digg} = require("@kaspernj/object-digger")
 
-export default class ApiMakerResourceRoutes {
+module.exports = class ApiMakerResourceRoutes {
   static readRoutes({jsRoutes, locales, requireComponent, routeDefinitions}) {
     if (!routeDefinitions)
       throw new Error("Please pass 'routeDefinitions' to this method")

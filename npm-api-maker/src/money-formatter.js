@@ -1,8 +1,8 @@
-import Money from "js-money"
-import formatNumber from "format-number"
-import replaceall from "replaceall"
+const Money = require("js-money")
+const formatNumber = require("format-number")
+const replaceall = require("replaceall")
 
-export default class MoneyFormatter {
+module.exports = class MoneyFormatter {
   static fromMoney(money, args = {}) {
     return new MoneyFormatter(money, args)
   }

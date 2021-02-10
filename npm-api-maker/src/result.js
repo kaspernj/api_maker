@@ -1,4 +1,4 @@
-export default class Result {
+module.exports = class Result {
   constructor(data) {
     this.data = data
   }

@@ -1,8 +1,8 @@
-import {digg} from "@kaspernj/object-digger"
+const {digg} = require("@kaspernj/object-digger")
 
 const inflection = require("inflection")
 
-export default class ApiMakerPreloaded {
+module.exports = class ApiMakerPreloaded {
   constructor(response) {
     this.response = response
     this.loadPreloadedModels()

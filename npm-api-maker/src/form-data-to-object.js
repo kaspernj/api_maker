@@ -1,4 +1,4 @@
-export default class FormDataToObject {
+module.exports = class FormDataToObject {
   static toObject(formData) {
     const formDataToObject = new FormDataToObject(formData)
     return formDataToObject.toObject()

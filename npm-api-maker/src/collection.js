@@ -1,12 +1,12 @@
-import CommandsPool from "./commands-pool"
-import {digg} from "@kaspernj/object-digger"
-import merge from "merge"
-import ModelsResponseReader from "./models-response-reader"
-import Result from "./result"
+const CommandsPool = require("./commands-pool")
+const {digg} = require("@kaspernj/object-digger")
+const merge = require("merge")
+const ModelsResponseReader = require("./models-response-reader")
+const Result = require("./result")
 
 const inflection = require("inflection")
 
-export default class Collection {
+module.exports = class Collection {
   constructor(args, queryArgs = {}) {
     this.queryArgs = queryArgs
     this.args = args

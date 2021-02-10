@@ -1,4 +1,4 @@
-export default class ModelName {
+module.exports = class ModelName {
   constructor(data) {
     this.data = data
   }

@@ -1,4 +1,4 @@
-export default class ValidationError extends Error {
+module.exports = class ValidationError extends Error {
   constructor(validationErrors) {
     super(validationErrors.getUnhandledErrorMessage() || validationErrors.getErrorMessage())
     this.validationErrors = validationErrors
