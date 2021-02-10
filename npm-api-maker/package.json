@@ -54,14 +54,14 @@
     "react-test-renderer": "^17.0.1"
   },
   "dependencies": {
-    "@kaspernj/object-digger": "^1.0.2",
-    "@rails/actioncable": "^6.1.0",
-    "format-number": "^3.0.0",
-    "inflection": "^1.12.0",
-    "js-money": "^0.6.3",
-    "numberable": "^1.0.0",
-    "object-to-formdata": "^4.1.0",
-    "strftime": "^0.10.0",
-    "wake-event": "^0.0.1"
+    "@kaspernj/object-digger": ">= 1.0.2",
+    "@rails/actioncable": ">= 6.1.0",
+    "format-number": ">= 3.0.0",
+    "inflection": ">= 1.12.0",
+    "js-money": ">= 0.6.3",
+    "numberable": ">= 1.0.0",
+    "object-to-formdata": ">= 4.1.0",
+    "strftime": ">= 0.10.0",
+    "wake-event": ">= 0.0.1"
   }
 }
