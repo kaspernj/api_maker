@@ -1,5 +1,5 @@
 const formSerialize = require("form-serialize")
-const merge = require("merge")
+const {merge} = require("./merge.cjs")
 const qs = require("qs")
 
 module.exports = class Params {
@@ -8,7 +8,7 @@ module.exports = class Params {
   }
 
   static change(given) {
-    return merge.recursive(true, Params.parse(), given)
+    return merge.recursive(Params.parse(), given)
   }
 
   static changeParams(given) {

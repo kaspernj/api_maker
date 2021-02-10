@@ -1,7 +1,7 @@
 const CommandsPool = require("./commands-pool.cjs")
 const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
-const merge = require("merge")
+const {merge} = require("./merge.cjs")
 const ModelsResponseReader = require("./models-response-reader.cjs")
 const Result = require("./result.cjs")
 
@@ -109,7 +109,7 @@ module.exports = class Collection {
   params() {
     let params = {}
 
-    if (this.queryArgs.params) params = this._merge(params, this.queryArgs.params)
+    if (this.queryArgs.params) params = merge(params, this.queryArgs.params)
     if (this.queryArgs.abilities) params.abilities = this.queryArgs.abilities
     if (this.queryArgs.accessibleBy) params.accessible_by = inflection.underscore(this.queryArgs.accessibleBy)
     if (this.queryArgs.count) params.count = this.queryArgs.count
@@ -176,7 +176,7 @@ module.exports = class Collection {
       const newValues = []
       const originalValues = originalSelect[originalModelName]
 
-      for(const originalAttributeName of originalValues) {
+      for (const originalAttributeName of originalValues) {
         const newAttributeName = inflection.underscore(originalAttributeName)
         newValues.push(newAttributeName)
       }
@@ -202,12 +202,8 @@ module.exports = class Collection {
     return digg(require("api-maker/models"), modelName)
   }
 
-  _clone(args) {
-    return new Collection(this.args, this._merge(this.queryArgs, args))
-  }
-
-  _merge(object1, object2) {
-    return merge.recursive(true, object1, object2)
+  _clone(newQueryArgs) {
+    return new Collection(this.args, merge(this.queryArgs, newQueryArgs))
   }
 
   _response() {
