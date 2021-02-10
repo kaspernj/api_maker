@@ -1,10 +1,10 @@
-import idForComponent from "./id-for-component"
-import { MoneyFormatter } from "@kaspernj/api-maker"
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
-
+const {digg} = require("@kaspernj/object-digger")
+const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
+const { MoneyFormatter } = require("@kaspernj/api-maker")
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
 export default class ApiMakerInputsMoney extends React.Component {
   static defaultProps = {
@@ -70,7 +70,7 @@ export default class ApiMakerInputsMoney extends React.Component {
 
   checkAttributeExists() {
     if (this.props.model && !this.props.model[this.props.attribute])
-      throw new Error(`No such attribute: ${this.props.model.modelClassData().name}#${this.props.attribute}`)
+      throw new Error(`No such attribute: ${digg(this.props.model.modelClassData(), "name")}#${this.props.attribute}`)
   }
 
   inputCurrencyId() {

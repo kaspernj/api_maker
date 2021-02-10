@@ -1,6 +1,6 @@
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
 export default class ApiMakerBootstrapAttributeRow extends React.Component {
   static propTypes = PropTypesExact({

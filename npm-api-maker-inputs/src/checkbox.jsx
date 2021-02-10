@@ -1,8 +1,8 @@
-import {digs} from "@kaspernj/object-digger"
-import idForComponent from "./id-for-component"
-import nameForComponent from "./name-for-component"
-import PropTypes from "prop-types"
-import React from "react"
+const {digs} = require("@kaspernj/object-digger")
+const idForComponent = require("./id-for-component.cjs")
+const nameForComponent = require("./name-for-component.cjs")
+const PropTypes = require("prop-types")
+const React = require("react")
 
 export default class ApiMakerCheckbox extends React.Component {
   static defaultProps = {

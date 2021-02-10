@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom"
-import qs from "qs"
-import React from "react"
-
 const inflection = require("inflection")
+const { Link } = require("react-router-dom")
+const qs = require("qs")
+const React = require("react")
 
 export default class ApiMakerBootstrapSortLink extends React.Component {
   constructor(props) {

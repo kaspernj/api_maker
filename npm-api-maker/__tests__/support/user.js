@@ -1,4 +1,4 @@
-export default class User {
+module.exports = class User {
   static modelClassData() {
     return {
       attributes: [],

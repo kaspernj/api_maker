@@ -1,9 +1,8 @@
-import { idForComponent, nameForComponent, Select } from "@kaspernj/api-maker-inputs"
-import InvalidFeedback from "./invalid-feedback"
-import PropTypes from "prop-types"
-import React from "react"
-
+const { idForComponent, nameForComponent, Select } = require("@kaspernj/api-maker-inputs")
 const inflection = require("inflection")
+const InvalidFeedback = require("./invalid-feedback").default
+const PropTypes = require("prop-types")
+const React = require("react")
 
 export default class ApiMakerBootstrapSelect extends React.Component {
   static propTypes = {
