@@ -1,4 +1,3 @@
-import { dig } from "@kaspernj/object-digger"
 import { idForComponent, nameForComponent, Select } from "@kaspernj/api-maker-inputs"
 import InvalidFeedback from "./invalid-feedback"
 import PropTypes from "prop-types"
