@@ -21,7 +21,7 @@
     "type": "git",
     "url": "git+https://github.com/kaspernj/api-maker-inputs.git"
   },
-  "version": "1.0.43",
+  "version": "1.0.44",
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "prop-types-exact": "^1.2.0",
