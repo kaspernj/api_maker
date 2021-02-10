@@ -324,7 +324,7 @@ module.exports = class BaseModel {
   static humanAttributeName(attributeName) {
     const keyName = digg(this.modelClassData(), "i18nKey")
 
-    return shared.i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`)
+    return shared.i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`, {defaultValue: attributeName})
   }
 
   isAttributeChanged(attributeName) {
