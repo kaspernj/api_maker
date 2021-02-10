@@ -1,6 +1,6 @@
 const {digs} = require("@kaspernj/object-digger")
 const {EventListener} = require("@kaspernj/api-maker")
-const InvalidFeedback = require("./invalid-feedback")
+const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")

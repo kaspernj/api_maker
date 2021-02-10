@@ -1,6 +1,6 @@
 const { idForComponent, nameForComponent, Select } = require("@kaspernj/api-maker-inputs")
 const inflection = require("inflection")
-const InvalidFeedback = require("./invalid-feedback")
+const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
 
