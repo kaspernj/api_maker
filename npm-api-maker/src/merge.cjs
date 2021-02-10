@@ -1,5 +1,9 @@
 function isPlainObject(input) {
-  return input && typeof input === "object" && !Array.isArray(input)
+  if (input && typeof input === "object" && !Array.isArray(input)) {
+    return true
+  }
+
+  return false
 }
 
 function merge(...objects) {
