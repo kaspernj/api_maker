@@ -1,6 +1,6 @@
 const I18nOnSteroids = require("i18n-on-steroids")
 const i18n = new I18nOnSteroids()
-const ModelName = require("../src/model-name").default
+const ModelName = require("../src/model-name.cjs")
 
 i18n.scanObject({
   da: {

@@ -1,4 +1,4 @@
-const Serializer = require("../src/serializer")
+const Serializer = require("../src/serializer.cjs")
 const User = require("./support/user")
 
 describe("Serializer", () => {
