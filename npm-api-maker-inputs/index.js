@@ -1,9 +1,9 @@
-const Checkbox = require("./src/checkbox")
-const idForComponent = require("./src/id-for-component")
-const Input = require("./src/input")
-const Money = require("./src/money")
-const nameForComponent = require("./src/name-for-component")
-const Select = require("./src/select")
+const Checkbox = require("./src/checkbox").default
+const idForComponent = require("./src/id-for-component.cjs")
+const Input = require("./src/input").default
+const Money = require("./src/money").default
+const nameForComponent = require("./src/name-for-component.cjs")
+const Select = require("./src/select").default
 
 export {
   Checkbox,

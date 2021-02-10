@@ -1,15 +1,15 @@
-const AttributeRow = require("./src/attribute-row")
-const AttributeRows = require("./src/attribute-rows")
-const Card = require("./src/card")
-const Checkbox = require("./src/checkbox")
-const Checkboxes = require("./src/checkboxes")
-const Input = require("./src/input")
-const InvalidFeedback = require("./src/invalid-feedback")
-const LiveTable = require("./src/live-table")
-const Paginate = require("./src/paginate")
-const RadioButtons = require("./src/radio-buttons")
-const Select = require("./src/select")
-const SortLink = require("./src/sort-link")
+const AttributeRow = require("./src/attribute-row").default
+const AttributeRows = require("./src/attribute-rows").default
+const Card = require("./src/card").default
+const Checkbox = require("./src/checkbox").default
+const Checkboxes = require("./src/checkboxes").default
+const Input = require("./src/input").default
+const InvalidFeedback = require("./src/invalid-feedback").default
+const LiveTable = require("./src/live-table").default
+const Paginate = require("./src/paginate").default
+const RadioButtons = require("./src/radio-buttons").default
+const Select = require("./src/select").default
+const SortLink = require("./src/sort-link").default
 
 export {
   AttributeRow,

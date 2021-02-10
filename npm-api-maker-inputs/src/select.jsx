@@ -1,7 +1,7 @@
 const {dig} = require("@kaspernj/object-digger")
 const {EventListener} = require("@kaspernj/api-maker")
-const idForComponent = require("./id-for-component")
-const nameForComponent = require("./name-for-component")
+const idForComponent = require("./id-for-component.cjs")
+const nameForComponent = require("./name-for-component.cjs")
 const PropTypes = require("prop-types")
 const React = require("react")
 

@@ -1,4 +1,4 @@
-const idForComponent = require("./id-for-component")
+const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
 const { MoneyFormatter } = require("@kaspernj/api-maker")
 const PropTypes = require("prop-types")
