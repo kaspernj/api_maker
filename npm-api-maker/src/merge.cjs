@@ -19,7 +19,9 @@ function merge(...objects) {
 function mergeArraysInto(mergeIntoValue, ...arrays) {
   for (const array of arrays) {
     for (const value of array) {
-      mergeIntoValue.push(value)
+      if (!mergeIntoValue.includes(value)) {
+        mergeIntoValue.push(value)
+      }
     }
   }
 }
@@ -38,10 +40,10 @@ function mergeObjectsInto(mergeInto, object) {
         }
 
         mergeArraysInto(mergeInto[key], value)
-      } else if (isPlainObject(value)) {
+      } else if (isPlainObject(mergeIntoValue) && isPlainObject(value)) {
         mergeObjectsInto(mergeIntoValue, value)
       } else {
-        mergeInto = value
+        mergeInto[key] = value
       }
     } else {
       mergeInto[key] = value
