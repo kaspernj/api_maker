@@ -3,7 +3,7 @@ const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 const merge = require("merge")
 const ModelsResponseReader = require("./models-response-reader.cjs")
-const Result = require("./result")
+const Result = require("./result.cjs")
 
 module.exports = class Collection {
   constructor(args, queryArgs = {}) {

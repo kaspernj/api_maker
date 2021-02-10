@@ -1,4 +1,4 @@
-const Logger = require("./logger")
+const Logger = require("./logger.cjs")
 
 module.exports = class ApiMakerCableSubscription {
   constructor(props) {

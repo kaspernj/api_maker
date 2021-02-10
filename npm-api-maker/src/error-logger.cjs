@@ -1,4 +1,4 @@
-const SourceMapsLoader = require("./source-maps-loader")
+const SourceMapsLoader = require("./source-maps-loader.cjs")
 
 module.exports = class ErrorLogger {
   constructor() {

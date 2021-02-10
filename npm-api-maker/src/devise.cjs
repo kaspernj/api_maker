@@ -1,8 +1,8 @@
-const CanCan = require("./can-can")
+const CanCan = require("./can-can.cjs")
 const {digg} = require("@kaspernj/object-digger")
 const EventEmitter = require("events")
 const inflection = require("inflection")
-const Services = require("./services")
+const Services = require("./services.cjs")
 
 module.exports = class ApiMakerDevise {
   static callSignOutEvent(args) {

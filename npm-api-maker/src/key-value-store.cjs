@@ -1,4 +1,4 @@
-const Params = require("./params")
+const Params = require("./params.cjs")
 
 module.exports = class KeyValueStore {
   static current() {

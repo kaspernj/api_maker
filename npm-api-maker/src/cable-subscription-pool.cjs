@@ -1,4 +1,4 @@
-const ChannelsConsumer = require("./channels-consumer")
+const ChannelsConsumer = require("./channels-consumer.cjs")
 const CommandsPool = require("./commands-pool.cjs")
 const Deserializer = require("./deserializer.cjs")
 const inflection = require("inflection")

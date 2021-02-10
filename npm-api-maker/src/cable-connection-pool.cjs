@@ -1,5 +1,5 @@
-const CableSubscriptionPool = require("./cable-subscription-pool")
-const CableSubscription = require("./cable-subscription")
+const CableSubscriptionPool = require("./cable-subscription-pool.cjs")
+const CableSubscription = require("./cable-subscription.cjs")
 
 module.exports = class ApiMakerCableConnectionPool {
   static current() {
