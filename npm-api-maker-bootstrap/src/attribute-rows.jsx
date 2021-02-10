@@ -1,4 +1,5 @@
 const AttributeRow = require("./attribute-row").default
+const {digg} = require("@kaspernj/object-digger")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
@@ -32,7 +33,7 @@ export default class ApiMakerBootstrapAttributeRows extends React.Component {
 
   value(attribute) {
     if (!(attribute in this.props.model))
-      throw new Error(`Attribute not found: ${this.props.model.modelClassData().name}#${attribute}`)
+      throw new Error(`Attribute not found: ${digg(this.props.model.modelClassData(), "name")}#${attribute}`)
 
     if (this.props.checkIfAttributeLoaded && !this.props.model.isAttributeLoaded(attribute))
       return null

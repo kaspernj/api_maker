@@ -106,7 +106,7 @@ module.exports = class BaseModel {
     const abilityName = inflection.underscore(givenAbilityName)
 
     if (!(abilityName in this.abilities)) {
-      throw new Error(`Ability ${abilityName} hasn't been loaded for ${this.modelClassData().name}`)
+      throw new Error(`Ability ${abilityName} hasn't been loaded for ${digg(this.modelClassData(), "name")}`)
     }
 
     return this.abilities[abilityName]
@@ -123,27 +123,27 @@ module.exports = class BaseModel {
   }
 
   connect(eventName, callback) {
-    const cableSubscription = CableConnectionPool.current().connectEvent(this.modelClassData().name, this.primaryKey(), eventName, callback)
+    const cableSubscription = CableConnectionPool.current().connectEvent(digg(this.modelClassData(), "name"), this.primaryKey(), eventName, callback)
     return cableSubscription
   }
 
   static connect(eventName, callback) {
-    const cableSubscription = CableConnectionPool.current().connectModelClassEvent(this.modelClassData().name, eventName, callback)
+    const cableSubscription = CableConnectionPool.current().connectModelClassEvent(digg(this.modelClassData(), "name"), eventName, callback)
     return cableSubscription
   }
 
   static connectCreated(callback) {
-    const cableSubscription = CableConnectionPool.current().connectCreated(this.modelClassData().name, callback)
+    const cableSubscription = CableConnectionPool.current().connectCreated(digg(this.modelClassData(), "name"), callback)
     return cableSubscription
   }
 
   connectDestroyed(callback) {
-    const cableSubscription = CableConnectionPool.current().connectDestroyed(this.modelClassData().name, this.primaryKey(), callback)
+    const cableSubscription = CableConnectionPool.current().connectDestroyed(digg(this.modelClassData(), "name"), this.primaryKey(), callback)
     return cableSubscription
   }
 
   connectUpdated(callback) {
-    const cableSubscription = CableConnectionPool.current().connectUpdate(this.modelClassData().name, this.primaryKey(), callback)
+    const cableSubscription = CableConnectionPool.current().connectUpdate(digg(this.modelClassData(), "name"), this.primaryKey(), callback)
     return cableSubscription
   }
 
@@ -269,7 +269,7 @@ module.exports = class BaseModel {
       ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
 
       const abilitiesParams = {}
-      abilitiesParams[this.modelClassData().name] = abilitiesToLoad
+      abilitiesParams[digg(this.modelClassData(), "name")] = abilitiesToLoad
 
       const anotherModel = await this.constructor
         .ransack(ransackParams)
@@ -654,7 +654,7 @@ module.exports = class BaseModel {
       }
     }
 
-    throw new Error(`No such attribute: ${this.modelClassData().name}#${attributeName}`)
+    throw new Error(`No such attribute: ${digg(this.modelClassData(), "name")}#${attributeName}`)
   }
 
   isAttributeLoaded(attributeName) {
@@ -691,7 +691,7 @@ module.exports = class BaseModel {
       if (this.isNewRecord())
         return null
 
-      throw new Error(`${this.modelClassData().name}#${args.reflectionName} hasn't been loaded yet`)
+      throw new Error(`${digg(this.modelClassData(), "name")}#${args.reflectionName} hasn't been loaded yet`)
     }
 
     return this.relationshipsCache[args.reflectionName]
@@ -724,7 +724,7 @@ module.exports = class BaseModel {
       if (this.isNewRecord())
         return null
 
-      throw new Error(`${this.modelClassData().name}#${args.reflectionName} hasn't been loaded yet`)
+      throw new Error(`${digg(this.modelClassData(), "name")}#${args.reflectionName} hasn't been loaded yet`)
     }
 
     return this.relationshipsCache[args.reflectionName]
@@ -743,10 +743,10 @@ module.exports = class BaseModel {
 
     for(const relationshipName in this.preloadedRelationships) {
       const relationshipData = this.preloadedRelationships[relationshipName]
-      const relationshipClassData = this.modelClassData().relationships.find(relationship => relationship.name == relationshipName)
+      const relationshipClassData = this.modelClassData().relationships.find(relationship => digg(relationship, "name") == relationshipName)
 
       if (!relationshipClassData)
-        throw new Error(`No relationship on ${this.modelClassData().name} by that name: ${relationshipName}`)
+        throw new Error(`No relationship on ${digg(this.modelClassData(), "name")} by that name: ${relationshipName}`)
 
         const relationshipType = relationshipClassData.collectionName
 

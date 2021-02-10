@@ -1,4 +1,4 @@
-const {dig, digs} = require("@kaspernj/object-digger")
+const {dig, digg, digs} = require("@kaspernj/object-digger")
 const {EventListener, EventUpdated} = require("@kaspernj/api-maker")
 const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
@@ -138,7 +138,7 @@ export default class ApiMakerInput extends React.Component {
       return this.formatValue(this.props.defaultValue)
     } else if (this.props.model) {
       if (!this.props.model[this.props.attribute])
-        throw new Error(`No such attribute: ${this.props.model.modelClassData().name}#${this.props.attribute}`)
+        throw new Error(`No such attribute: ${digg(this.props.model.modelClassData(), "name")}#${this.props.attribute}`)
 
       return this.formatValue(this.props.model[this.props.attribute]())
     }

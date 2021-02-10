@@ -1,3 +1,4 @@
+const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 const Services = require("./services.cjs")
 
@@ -25,7 +26,7 @@ module.exports = class ApiMakerCanCan {
 
       // Translate resource-models into class name strings
       if (typeof subject == "function" && subject["modelClassData"]) {
-        subjectLabel = subject.modelClassData().name
+        subjectLabel = digg(subject.modelClassData(), "name")
       }
 
       console.error(`Ability not loaded ${subjectLabel}#${ability}`)

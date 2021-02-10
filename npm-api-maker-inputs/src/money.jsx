@@ -1,3 +1,4 @@
+const {digg} = require("@kaspernj/object-digger")
 const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
 const { MoneyFormatter } = require("@kaspernj/api-maker")
@@ -69,7 +70,7 @@ export default class ApiMakerInputsMoney extends React.Component {
 
   checkAttributeExists() {
     if (this.props.model && !this.props.model[this.props.attribute])
-      throw new Error(`No such attribute: ${this.props.model.modelClassData().name}#${this.props.attribute}`)
+      throw new Error(`No such attribute: ${digg(this.props.model.modelClassData(), "name")}#${this.props.attribute}`)
   }
 
   inputCurrencyId() {

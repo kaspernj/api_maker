@@ -86,7 +86,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     }
 
     if (ownAbilities.length > 0) {
-      const modelClassName = modelClass.modelClassData().name
+      const modelClassName = digg(modelClass.modelClassData(), "name")
 
       abilitiesToLoad[modelClassName] = ownAbilities
     }
