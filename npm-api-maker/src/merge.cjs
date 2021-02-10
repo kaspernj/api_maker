@@ -34,7 +34,7 @@ function mergeObjectsInto(mergeInto, object) {
         }
 
         mergeArraysInto(mergeInto[key], value)
-      } else if (isPlainObject) {
+      } else if (isPlainObject(value)) {
         mergeObjectsInto(mergeIntoValue, value)
       } else {
         mergeInto = value
