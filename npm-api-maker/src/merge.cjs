@@ -27,8 +27,13 @@ function mergeObjectsInto(mergeInto, object) {
     if (key in mergeInto) {
       const mergeIntoValue = mergeInto[key]
 
-      if (Array.isArray(mergeIntoValue)) {
-        mergeArraysInto(mergeIntoValue, value)
+      if (Array.isArray(value)) {
+        // Current value isn't an array - turn into array and then merge into that
+        if (!Array.isArray(mergeIntoValue)) {
+          mergeInto[key] = [mergeIntoValue]
+        }
+
+        mergeArraysInto(mergeInto[key], value)
       } else if (isPlainObject) {
         mergeObjectsInto(mergeIntoValue, value)
       } else {
