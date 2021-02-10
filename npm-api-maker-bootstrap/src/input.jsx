@@ -3,7 +3,7 @@ const InvalidFeedback = require("./invalid-feedback")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-module.exports = class ApiMakerBootstrapInput extends React.Component {
+export default class ApiMakerBootstrapInput extends React.Component {
   static propTypes = {
     append: PropTypes.node,
     attribute: PropTypes.string,

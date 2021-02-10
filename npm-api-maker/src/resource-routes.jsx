@@ -4,7 +4,7 @@ const {Route} = require("react-router-dom")
 
 const {digg} = require("@kaspernj/object-digger")
 
-module.exports = class ApiMakerResourceRoutes {
+export default class ApiMakerResourceRoutes {
   static readRoutes({jsRoutes, locales, requireComponent, routeDefinitions}) {
     if (!routeDefinitions)
       throw new Error("Please pass 'routeDefinitions' to this method")

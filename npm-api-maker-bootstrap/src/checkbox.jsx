@@ -3,7 +3,7 @@ const classNames = require("classnames")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-module.exports = class ApiMakerBootstrapCheckbox extends React.Component {
+export default class ApiMakerBootstrapCheckbox extends React.Component {
   static defaultProps = {
     defaultValue: 1,
     zeroInput: true

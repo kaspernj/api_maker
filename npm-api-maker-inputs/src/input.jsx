@@ -7,7 +7,7 @@ const PropTypes = require("prop-types")
 const React = require("react")
 const strftime = require("strftime")
 
-module.exports = class ApiMakerInput extends React.Component {
+export default class ApiMakerInput extends React.Component {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false

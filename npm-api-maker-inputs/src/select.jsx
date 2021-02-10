@@ -5,7 +5,7 @@ const nameForComponent = require("./name-for-component")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-module.exports = class ApiMakerBootstrapSelect extends React.Component {
+export default class ApiMakerBootstrapSelect extends React.Component {
   static propTypes = {
     attribute: PropTypes.string,
     children: PropTypes.node,

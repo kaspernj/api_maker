@@ -2,7 +2,7 @@ const {digs} = require("@kaspernj/object-digger")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-module.exports = class ApiMakerBootstrapCard extends React.Component {
+export default class ApiMakerBootstrapCard extends React.Component {
   static defaultProps = {
     defaultExpanded: true,
     expandable: false,

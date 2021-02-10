@@ -1,10 +1,10 @@
-const Api = require("./api")
-const CommandSubmitData = require("./command-submit-data")
-const CustomError = require("./custom-error")
-const Deserializer = require("./deserializer")
+const Api = require("./api.cjs")
+const CommandSubmitData = require("./command-submit-data.cjs")
+const CustomError = require("./custom-error.cjs")
+const Deserializer = require("./deserializer.cjs")
 const {dig} = require("@kaspernj/object-digger")
-const FormDataToObject = require("./form-data-to-object")
-const Serializer = require("./serializer")
+const FormDataToObject = require("./form-data-to-object.cjs")
+const Serializer = require("./serializer.cjs")
 
 module.exports = class ApiMakerCommandsPool {
   static addCommand(data, args = {}) {

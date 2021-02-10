@@ -1,5 +1,4 @@
 const {digg} = require("@kaspernj/object-digger")
-
 const inflection = require("inflection")
 
 module.exports = class ApiMakerPreloaded {

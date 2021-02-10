@@ -2,7 +2,7 @@ const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
 
-module.exports = class ApiMakerBootstrapAttributeRow extends React.Component {
+export default class ApiMakerBootstrapAttributeRow extends React.Component {
   static propTypes = PropTypesExact({
     children: PropTypes.node,
     label: PropTypes.node,

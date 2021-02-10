@@ -1,10 +1,9 @@
+const inflection = require("inflection")
 const { Link } = require("react-router-dom")
 const qs = require("qs")
 const React = require("react")
 
-const inflection = require("inflection")
-
-module.exports = class ApiMakerBootstrapSortLink extends React.Component {
+export default class ApiMakerBootstrapSortLink extends React.Component {
   constructor(props) {
     super(props)
     const searchKey = this.props.query.queryArgs.searchKey || "q"

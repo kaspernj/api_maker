@@ -1,7 +1,7 @@
 const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 
-module.exports = class ApiMakerResourceRoute {
+export default class ApiMakerResourceRoute {
   constructor({jsRoutes, locales, requireComponent, routeDefinition}) {
     this.jsRoutes = jsRoutes
     this.locales = locales

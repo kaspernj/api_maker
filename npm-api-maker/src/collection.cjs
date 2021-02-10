@@ -1,10 +1,9 @@
-const CommandsPool = require("./commands-pool")
+const CommandsPool = require("./commands-pool.cjs")
 const {digg} = require("@kaspernj/object-digger")
-const merge = require("merge")
-const ModelsResponseReader = require("./models-response-reader")
-const Result = require("./result")
-
 const inflection = require("inflection")
+const merge = require("merge")
+const ModelsResponseReader = require("./models-response-reader.cjs")
+const Result = require("./result")
 
 module.exports = class Collection {
   constructor(args, queryArgs = {}) {

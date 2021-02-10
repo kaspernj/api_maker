@@ -1,5 +1,4 @@
 const {digg, digs} = require("@kaspernj/object-digger")
-
 const inflection = require("inflection")
 
 export class ValidationError {

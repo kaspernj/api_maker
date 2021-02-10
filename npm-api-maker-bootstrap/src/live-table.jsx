@@ -8,7 +8,7 @@ const React = require("react")
 
 const inflection = require("inflection")
 
-module.exports = class ApiMakerBootstrapLiveTable extends React.Component {
+export default class ApiMakerBootstrapLiveTable extends React.Component {
   static defaultProps = {
     destroyEnabled: true,
     preloads: [],

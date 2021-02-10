@@ -5,7 +5,7 @@ const React = require("react")
 
 const inflection = require("inflection")
 
-module.exports = class ApiMakerBootstrapSelect extends React.Component {
+export default class ApiMakerBootstrapSelect extends React.Component {
   static propTypes = {
     attribute: PropTypes.string,
     className: PropTypes.string,

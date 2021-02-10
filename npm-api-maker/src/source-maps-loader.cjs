@@ -1,4 +1,4 @@
-const * as stackTraceParser = require("stacktrace-parser")
+const stackTraceParser = require("stacktrace-parser")
 const {SourceMapConsumer} = require("source-map")
 
 // Sometimes this needs to be called and sometimes not

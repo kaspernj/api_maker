@@ -1,4 +1,4 @@
-const CommandsPool = require("./commands-pool")
+const CommandsPool = require("./commands-pool.cjs")
 
 module.exports = class ApiMakerServices {
   static current() {

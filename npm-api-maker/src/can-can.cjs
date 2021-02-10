@@ -1,6 +1,5 @@
-const Services = require("./services")
-
 const inflection = require("inflection")
+const Services = require("./services.cjs")
 
 module.exports = class ApiMakerCanCan {
   static current() {

@@ -1,16 +1,16 @@
-const CableConnectionPool = require("./cable-connection-pool")
-const Collection = require("./collection")
-const CommandsPool = require("./commands-pool")
-const CustomError = require("./custom-error")
+const CableConnectionPool = require("./cable-connection-pool.cjs")
+const Collection = require("./collection.cjs")
+const CommandsPool = require("./commands-pool.cjs")
+const CustomError = require("./custom-error.cjs")
 const {digg} = require("@kaspernj/object-digger")
-const FormDataToObject = require("./form-data-to-object")
+const FormDataToObject = require("./form-data-to-object.cjs")
 const inflection = require("inflection")
-const ModelName = require("./model-name")
-const ModelsResponseReader = require("./models-response-reader")
+const ModelName = require("./model-name.cjs")
+const ModelsResponseReader = require("./models-response-reader.cjs")
 const objectToFormData = require("object-to-formdata").serialize
-const Services = require("./services")
-const ValidationError = require("./validation-error")
-const {ValidationErrors} = require("./validation-errors")
+const Services = require("./services.cjs")
+const ValidationError = require("./validation-error.cjs")
+const {ValidationErrors} = require("./validation-errors.cjs")
 
 const shared = {}
 

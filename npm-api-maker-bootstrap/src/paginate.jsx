@@ -5,7 +5,7 @@ const qs = require("qs")
 const React = require("react")
 const {Result} = require("@kaspernj/api-maker")
 
-module.exports = class ApiMakerBootstrapPaginate extends React.Component {
+export default class ApiMakerBootstrapPaginate extends React.Component {
   static propTypes = PropTypesExact({
     result: PropTypes.instanceOf(Result).isRequired
   })

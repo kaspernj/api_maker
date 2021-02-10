@@ -1,9 +1,8 @@
 const ChannelsConsumer = require("./channels-consumer")
-const CommandsPool = require("./commands-pool")
-const Deserializer = require("./deserializer")
-const Logger = require("./logger")
-
+const CommandsPool = require("./commands-pool.cjs")
+const Deserializer = require("./deserializer.cjs")
 const inflection = require("inflection")
+const Logger = require("./logger.cjs")
 
 module.exports = class ApiMakerCableSubscriptionPool {
   constructor(props) {

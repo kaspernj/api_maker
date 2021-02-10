@@ -6,7 +6,7 @@ const React = require("react")
 
 const inflection = require("inflection")
 
-module.exports = class ApiMakerBootstrapCheckboxes extends React.Component {
+export default class ApiMakerBootstrapCheckboxes extends React.Component {
   static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,

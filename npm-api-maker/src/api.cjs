@@ -1,5 +1,5 @@
-const {CustomError} = require("./custom-error")
-const FormDataToObject = require("./form-data-to-object")
+const {CustomError} = require("./custom-error.cjs")
+const FormDataToObject = require("./form-data-to-object.cjs")
 const qs = require("qs")
 
 module.exports = class Api {

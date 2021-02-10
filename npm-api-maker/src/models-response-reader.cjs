@@ -1,7 +1,6 @@
 const {digg} = require("@kaspernj/object-digger")
-const Preloaded = require("./preloaded")
-
 const inflection = require("inflection")
+const Preloaded = require("./preloaded.cjs")
 
 module.exports = class ModelsResponseReader {
   static first(response) {
