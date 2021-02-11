@@ -171,7 +171,7 @@ describe ApiMaker::CollectionSerializer do
     expect(result.dig!("preloaded", "projects", project.id.to_s, "a", "id")).to eq project.id
   end
 
-  it "automatically selects the right columns even if restricted" do
+  it "automatically selects the right columns even if constrained" do
     user = create :user, first_name: "Donald", last_name: "Duck"
     collection = User.where(id: [user.id])
     collection_serializer = ApiMaker::CollectionSerializer.new(
