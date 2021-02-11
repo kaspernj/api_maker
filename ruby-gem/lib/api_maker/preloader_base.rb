@@ -44,7 +44,8 @@ class ApiMaker::PreloaderBase
     ApiMaker::SelectColumnsOnCollection.execute!(
       collection: collection,
       model_class: reflection.klass,
-      select_columns: @select_columns,
+      select_attributes: select,
+      select_columns: select_columns,
       table_name: table_name
     )
   end

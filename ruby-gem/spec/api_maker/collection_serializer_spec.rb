@@ -170,4 +170,21 @@ describe ApiMaker::CollectionSerializer do
     expect(selects.first.name).to eq "id"
     expect(result.dig!("preloaded", "projects", project.id.to_s, "a", "id")).to eq project.id
   end
+
+  it "automatically selects the right columns even if restricted" do
+    user = create :user, first_name: "Donald", last_name: "Duck"
+    collection = User.where(id: [user.id])
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      collection: collection,
+      query_params: {
+        preload: nil,
+        select: {
+          "user" => ["id", "name"]
+        },
+        select_columns: {"user" => ["id"]}
+      }
+    )
+    result = JSON.parse(collection_serializer.to_json)
+    selects = collection_serializer.parsed_collection.values[:select]
+  end
 end
