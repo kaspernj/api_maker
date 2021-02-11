@@ -1,6 +1,6 @@
 class Resources::UserResource < Resources::ApplicationResource
   attribute :name, requires_columns: [:first_name, :last_name]
-  attributes :birthday_at, :id, :email, :created_at, :custom_attribute
+  attributes :birthday_at, :created_at, :custom_attribute, :email, :first_name, :id, :last_name
   attributes :updated_at, if: :email_kasper?
 
   relationships :tasks
