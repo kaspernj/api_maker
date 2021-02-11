@@ -185,6 +185,9 @@ describe ApiMaker::CollectionSerializer do
       }
     )
     result = JSON.parse(collection_serializer.to_json)
-    selects = collection_serializer.parsed_collection.values[:select]
+    selects = collection_serializer.parsed_collection.values[:select].map(&:name)
+
+    expect(selects).to eq ["id", "first_name", "last_name"]
+    expect(result.dig!("preloaded", "users", user.id.to_s, "a")).to eq("id" => 5, "name" => "Donald Duck")
   end
 end
