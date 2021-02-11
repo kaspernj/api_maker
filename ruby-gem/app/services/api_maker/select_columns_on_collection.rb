@@ -33,7 +33,7 @@ class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
   def all_columns_to_select
     required_columns = []
 
-    select_attributes&.each do |attribute_name, attribute_args|
+    select_attributes&.each_value do |attribute_args|
       requires_columns = attribute_args.dig(:args, :requires_columns)
       required_columns += requires_columns if requires_columns
     end
