@@ -28,6 +28,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
       query = ApiMaker::SelectColumnsOnCollection.execute!(
         collection: query,
         model_class: reflection.klass,
+        select_attributes: select,
         select_columns: select_columns,
         table_name: query.klass.table_name
       )
