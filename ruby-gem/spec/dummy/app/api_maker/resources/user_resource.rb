@@ -1,4 +1,5 @@
 class Resources::UserResource < Resources::ApplicationResource
+  attribute :name, requires_columns: [:first_name, :last_name]
   attributes :birthday_at, :id, :email, :created_at, :custom_attribute
   attributes :updated_at, if: :email_kasper?
 

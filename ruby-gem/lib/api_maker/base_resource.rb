@@ -8,6 +8,10 @@ class ApiMaker::BaseResource
   CRUD = [:create, :create_events, :read, :update, :update_events, :destroy, :destroy_events].freeze
   READ = [:create_events, :destroy_events, :read, :update_events].freeze
 
+  def self.attribute(attribute, args = {})
+    ApiMaker::MemoryStorage.current.add(self, :attributes, attribute, args)
+  end
+
   def self.attributes(*attributes, **args)
     attributes.each do |attribute|
       ApiMaker::MemoryStorage.current.add(self, :attributes, attribute, args)
