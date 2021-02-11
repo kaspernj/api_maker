@@ -187,7 +187,27 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(collection_serializer.to_json)
     selects = collection_serializer.parsed_collection.values[:select].map(&:name)
 
-    expect(selects).to eq ["id", :first_name, :last_name]
+    expect(selects).to eq ["id", "first_name", "last_name"]
     expect(result.dig!("preloaded", "users", user.id.to_s, "a")).to eq("id" => 5, "name" => "Donald Duck")
+  end
+
+  it "automatically selects columns when the `columns` argument isnt given" do
+    user = create :user, first_name: "Donald", last_name: "Duck"
+    collection = User.where(id: [user.id])
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      collection: collection,
+      query_params: {
+        preload: nil,
+        select: {
+          "user" => ["id", "first_name"]
+        },
+        select_columns: {"user" => ["id"]}
+      }
+    )
+    result = JSON.parse(collection_serializer.to_json)
+    selects = collection_serializer.parsed_collection.values[:select].map(&:name)
+
+    expect(selects).to eq ["id", "first_name"]
+    expect(result.dig!("preloaded", "users", user.id.to_s, "a")).to eq("id" => 5, "first_name" => "Donald")
   end
 end

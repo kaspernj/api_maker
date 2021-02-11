@@ -38,7 +38,7 @@ class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
       required_columns += requires_columns if requires_columns
     end
 
-    (selected_columns + required_columns).uniq
+    (selected_columns + required_columns).map(&:to_s).uniq
   end
 
   def param_name

@@ -36,8 +36,8 @@ describe ApiMaker::Serializer do
       serializer = ApiMaker::Serializer.new(model: account)
 
       expect(serializer.attributes_to_read).to eq(
-        id: {args: {}, data: :id},
-        name: {args: {}, data: :name}
+        id: {args: {requires_columns: [:id]}, data: :id},
+        name: {args: {requires_columns: [:name]}, data: :name}
       )
       expect(serializer.as_json).to eq(
         a: {

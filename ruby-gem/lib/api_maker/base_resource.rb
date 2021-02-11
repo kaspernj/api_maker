@@ -8,13 +8,16 @@ class ApiMaker::BaseResource
   CRUD = [:create, :create_events, :read, :update, :update_events, :destroy, :destroy_events].freeze
   READ = [:create_events, :destroy_events, :read, :update_events].freeze
 
-  def self.attribute(attribute, args = {})
-    ApiMaker::MemoryStorage.current.add(self, :attributes, attribute, args)
+  def self.attribute(attribute_name, **args)
+    # Automatically add a columns argument if the attribute name matches a column name on the models table
+    args[:requires_columns] = [attribute_name] if !args.key?(:requires_columns) && model_class.column_names.include?(attribute_name.to_s)
+
+    ApiMaker::MemoryStorage.current.add(self, :attributes, attribute_name, args)
   end
 
   def self.attributes(*attributes, **args)
-    attributes.each do |attribute|
-      ApiMaker::MemoryStorage.current.add(self, :attributes, attribute, args)
+    attributes.each do |attribute_name|
+      attribute(attribute_name, args)
     end
   end
 
