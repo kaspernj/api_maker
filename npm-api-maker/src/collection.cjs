@@ -36,7 +36,7 @@ module.exports = class Collection {
   }
 
   async count() {
-    const response = await this.clone({count: true})._response()
+    const response = await this.clone()._merge({count: true})._response()
 
     return response.count
   }

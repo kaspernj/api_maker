@@ -1,6 +1,19 @@
 const Collection = require("../src/collection.cjs")
 
 describe("Collection", () => {
+  describe("count", () => {
+    it("is able to clone the collection and merge count into it without manipulating the original given query", () => {
+      let collection = new Collection({}, {})
+
+      collection.ransack({name_cont: "Kasper"})
+
+      let countCollection = collection.clone()._merge({count: true})
+
+      expect(collection.queryArgs).toEqual({ransack: {name_cont: "Kasper"}})
+      expect(countCollection.queryArgs).toEqual({count: true, ransack: {name_cont: "Kasper"}})
+    })
+  })
+
   describe("ransack", () => {
     it("handles sorts of different types", () => {
       let collection = new Collection({}, {})
