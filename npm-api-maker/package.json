@@ -56,6 +56,7 @@
   "dependencies": {
     "@kaspernj/object-digger": ">= 1.0.2",
     "@rails/actioncable": ">= 6.1.0",
+    "clone-deep": "^4.0.1",
     "format-number": ">= 3.0.0",
     "inflection": ">= 1.12.0",
     "js-money": ">= 0.6.3",

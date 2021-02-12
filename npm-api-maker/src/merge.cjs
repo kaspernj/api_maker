@@ -6,14 +6,12 @@ function isPlainObject(input) {
   return false
 }
 
-function merge(...objects) {
-  const newObject = {}
-
+function merge(firstObject, ...objects) {
   for (const object of objects) {
-    mergeObjectsInto(newObject, object)
+    mergeObjectsInto(firstObject, object)
   }
 
-  return newObject
+  return firstObject
 }
 
 function mergeArraysInto(mergeIntoValue, ...arrays) {

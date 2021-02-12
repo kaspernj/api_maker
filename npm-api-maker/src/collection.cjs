@@ -1,3 +1,4 @@
+const cloneDeep = require("clone-deep")
 const CommandsPool = require("./commands-pool.cjs")
 const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
@@ -27,11 +28,11 @@ module.exports = class Collection {
       newAbilities[newModelName] = newValues
     }
 
-    return this._clone({abilities: newAbilities})
+    return this._merge({abilities: newAbilities})
   }
 
   accessibleBy(abilityName) {
-    return this._clone({accessibleBy: abilityName})
+    return this._merge({accessibleBy: abilityName})
   }
 
   async count() {
@@ -40,7 +41,7 @@ module.exports = class Collection {
   }
 
   distinct() {
-    return this._clone({distinct: true})
+    return this._merge({distinct: true})
   }
 
   async each(callback) {
@@ -67,7 +68,7 @@ module.exports = class Collection {
     const currentGroupBy = this.queryArgs.groupBy || []
     const newGroupBy = currentGroupBy.concat(arrayOfTablesAndColumnsWithLowercaseColumns)
 
-    return this._clone({
+    return this._merge({
       groupBy: newGroupBy
     })
   }
@@ -80,7 +81,7 @@ module.exports = class Collection {
   }
 
   limit(amount) {
-    return this._clone({limit: amount})
+    return this._merge({limit: amount})
   }
 
   loaded() {
@@ -92,18 +93,18 @@ module.exports = class Collection {
   }
 
   preload(preloadValue) {
-    return this._clone({preload: preloadValue})
+    return this._merge({preload: preloadValue})
   }
 
   page(page) {
     if (!page)
       page = 1
 
-    return this._clone({page})
+    return this._merge({page})
   }
 
   pageKey(pageKey) {
-    return this._clone({pageKey})
+    return this._merge({pageKey})
   }
 
   params() {
@@ -127,15 +128,15 @@ module.exports = class Collection {
   }
 
   per(per) {
-    return this._clone({per})
+    return this._merge({per})
   }
 
   perKey(perKey) {
-    return this._clone({perKey})
+    return this._merge({perKey})
   }
 
   ransack(params) {
-    return this._clone({ransack: params})
+    return this._merge({ransack: params})
   }
 
   async result() {
@@ -146,7 +147,7 @@ module.exports = class Collection {
   }
 
   searchKey(searchKey) {
-    return this._clone({searchKey: searchKey})
+    return this._merge({searchKey: searchKey})
   }
 
   select(originalSelect) {
@@ -165,7 +166,7 @@ module.exports = class Collection {
       newSelect[newModelName] = newValues
     }
 
-    return this._clone({select: newSelect})
+    return this._merge({select: newSelect})
   }
 
   selectColumns(originalSelect) {
@@ -184,11 +185,11 @@ module.exports = class Collection {
       newSelect[newModelName] = newValues
     }
 
-    return this._clone({selectColumns: newSelect})
+    return this._merge({selectColumns: newSelect})
   }
 
   sort(sortBy) {
-    return this._clone({ransack: {s: sortBy}})
+    return this._merge({ransack: {s: sortBy}})
   }
 
   async toArray() {
@@ -202,8 +203,16 @@ module.exports = class Collection {
     return digg(require("api-maker/models"), modelName)
   }
 
-  _clone(newQueryArgs) {
-    return new Collection(this.args, merge(this.queryArgs, newQueryArgs))
+  clone() {
+    const clonedQueryArgs = cloneDeep(this.queryArgs)
+
+    return new Collection(this.args, clonedQueryArgs)
+  }
+
+  _merge(newQueryArgs) {
+    merge(this.queryArgs, newQueryArgs)
+
+    return this
   }
 
   _response() {
