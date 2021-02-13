@@ -84,11 +84,14 @@ private
 
   def reflections_for_model_class_data
     @reflections_for_model_class_data ||= reflections.map do |reflection|
+      resource = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass)
+
       {
         className: reflection.class_name,
-        collectionName: ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).collection_name,
+        collectionName: resource.collection_name,
         name: reflection.name,
-        macro: reflection.macro
+        macro: reflection.macro,
+        resource_name: resource.short_name
       }
     end
   end
