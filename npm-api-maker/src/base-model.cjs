@@ -1,3 +1,4 @@
+const AttributeNotLoadedError = require("./attribute-not-loaded-error.cjs")
 const CableConnectionPool = require("./cable-connection-pool.cjs")
 const Collection = require("./collection.cjs")
 const CommandsPool = require("./commands-pool.cjs")
@@ -7,6 +8,7 @@ const FormDataToObject = require("./form-data-to-object.cjs")
 const inflection = require("inflection")
 const ModelName = require("./model-name.cjs")
 const ModelsResponseReader = require("./models-response-reader.cjs")
+const NotLoadedError = require("./not-loaded-error.cjs")
 const objectToFormData = require("object-to-formdata").serialize
 const Services = require("./services.cjs")
 const ValidationError = require("./validation-error.cjs")
@@ -654,7 +656,7 @@ module.exports = class BaseModel {
       }
     }
 
-    throw new Error(`No such attribute: ${digg(this.modelClassData(), "name")}#${attributeName}`)
+    throw new AttributeNotLoadedError(`No such attribute: ${digg(this.modelClassData(), "name")}#${attributeName}`)
   }
 
   isAttributeLoaded(attributeName) {
@@ -691,7 +693,7 @@ module.exports = class BaseModel {
       if (this.isNewRecord())
         return null
 
-      throw new Error(`${digg(this.modelClassData(), "name")}#${args.reflectionName} hasn't been loaded yet`)
+      throw new NotLoadedError(`${digg(this.modelClassData(), "name")}#${args.reflectionName} hasn't been loaded yet`)
     }
 
     return this.relationshipsCache[args.reflectionName]
@@ -724,7 +726,7 @@ module.exports = class BaseModel {
       if (this.isNewRecord())
         return null
 
-      throw new Error(`${digg(this.modelClassData(), "name")}#${args.reflectionName} hasn't been loaded yet`)
+      throw new NotLoadedError(`${digg(this.modelClassData(), "name")}#${args.reflectionName} hasn't been loaded yet`)
     }
 
     return this.relationshipsCache[args.reflectionName]

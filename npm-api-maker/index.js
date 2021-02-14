@@ -1,4 +1,5 @@
 const Api = require("./src/api.cjs")
+const AttributeNotLoadedError = require("./src/attribute-not-loaded-error.cjs")
 const BaseModel = require("./src/base-model.cjs")
 const CableConnectionPool = require("./src/cable-connection-pool.cjs")
 const CanCan = require("./src/can-can.cjs")
@@ -23,6 +24,7 @@ const Logger = require("./src/logger.cjs")
 const ModelName = require("./src/model-name.cjs")
 const ModelsResponseReader = require("./src/models-response-reader.cjs")
 const MoneyFormatter = require("./src/money-formatter.cjs")
+const NotLoadedError = require("./src/not-loaded-error.cjs")
 const Params = require("./src/params.cjs")
 const Preloaded = require("./src/preloaded.cjs")
 const ResourceRoute = require("./src/resource-route").default
@@ -39,6 +41,7 @@ const {ValidationErrors} = require("./src/validation-errors.cjs")
 
 export {
   Api,
+  AttributeNotLoadedError,
   BaseModel,
   CableConnectionPool,
   CanCan,
@@ -63,6 +66,7 @@ export {
   ModelName,
   ModelsResponseReader,
   MoneyFormatter,
+  NotLoadedError,
   Params,
   Preloaded,
   ResourceRoute,
