@@ -3,7 +3,7 @@ const CommandSubmitData = require("./command-submit-data.cjs")
 const CustomError = require("./custom-error.cjs")
 const Deserializer = require("./deserializer.cjs")
 const {dig} = require("@kaspernj/object-digger")
-const FormDataToObject = require("./form-data-to-object.cjs")
+const FormDataObjectizer = require("form-data-objectizer")
 const Serializer = require("./serializer.cjs")
 
 module.exports = class ApiMakerCommandsPool {
@@ -66,8 +66,9 @@ module.exports = class ApiMakerCommandsPool {
         this.poolData[commandType][collectionName][commandName] = {}
 
       let args
+
       if (data.args instanceof FormData) {
-        args = FormDataToObject.toObject(data.args)
+        args = FormDataObjectizer.toObject(data.args)
       } else {
         args = Serializer.serialize(data.args)
       }
