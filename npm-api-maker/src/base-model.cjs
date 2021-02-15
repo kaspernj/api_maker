@@ -4,7 +4,7 @@ const Collection = require("./collection.cjs")
 const CommandsPool = require("./commands-pool.cjs")
 const CustomError = require("./custom-error.cjs")
 const {digg} = require("@kaspernj/object-digger")
-const FormDataToObject = require("./form-data-to-object.cjs")
+const FormDataObjectizer = require("form-data-objectizer")
 const inflection = require("inflection")
 const ModelName = require("./model-name.cjs")
 const ModelsResponseReader = require("./models-response-reader.cjs")
@@ -201,8 +201,9 @@ module.exports = class BaseModel {
   }
 
   async createRaw(rawData, options = {}) {
-    const formData = FormDataToObject.formDataFromObject(rawData, options)
-    const objectData = FormDataToObject.toObject(formData)
+    const formData = FormDataObjectizer.formDataFromObject(rawData, options)
+    const objectData = FormDataObjectizer.toObject(formData)
+
     let response
 
     try {
@@ -536,8 +537,8 @@ module.exports = class BaseModel {
   }
 
   async updateRaw(rawData, options = {}) {
-    const formData = FormDataToObject.formDataFromObject(rawData, options)
-    const objectData = FormDataToObject.toObject(formData)
+    const formData = FormDataObjectizer.formDataFromObject(rawData, options)
+    const objectData = FormDataObjectizer.toObject(formData)
     let response
 
     try {
