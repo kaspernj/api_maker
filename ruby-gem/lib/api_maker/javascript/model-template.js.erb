@@ -2,6 +2,7 @@ class <%= resource.short_name %> extends BaseModel {
   static modelClassData() {
     return <%= {
       attributes: attributes,
+      className: model.name,
       collectionKey: model.model_name.collection,
       collectionName: resource.collection_name,
       i18nKey: model.model_name.i18n_key,
