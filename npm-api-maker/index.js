@@ -17,7 +17,6 @@ const EventEmitterListener = require("./src/event-emitter-listener").default
 const EventListener = require("./src/event-listener").default
 const EventModelClass = require("./src/event-model-class").default
 const EventUpdated = require("./src/event-updated").default
-const FormDataToObject = require("./src/form-data-to-object.cjs")
 const HistoryListener = require("./src/history-listener").default
 const KeyValueStore = require("./src/key-value-store.cjs")
 const Logger = require("./src/logger.cjs")
@@ -59,7 +58,6 @@ export {
   EventListener,
   EventModelClass,
   EventUpdated,
-  FormDataToObject,
   HistoryListener,
   KeyValueStore,
   Logger,

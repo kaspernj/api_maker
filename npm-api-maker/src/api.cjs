@@ -1,5 +1,5 @@
 const {CustomError} = require("./custom-error.cjs")
-const FormDataToObject = require("./form-data-to-object.cjs")
+const FormDataObjectizer = require("form-data-objectizer")
 const qs = require("qs")
 
 module.exports = class Api {
@@ -46,7 +46,7 @@ module.exports = class Api {
           const customError = new CustomError(`Request failed with code: ${xhr.status}`, {response, xhr})
 
           if (args.data instanceof FormData) {
-            customError.peakflowParameters = FormDataToObject.toObject(args.data)
+            customError.peakflowParameters = FormDataObjectizer.toObject(args.data)
           } else {
             customError.peakflowParameters = args.data
           }
