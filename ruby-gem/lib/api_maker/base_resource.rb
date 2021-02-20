@@ -10,7 +10,7 @@ class ApiMaker::BaseResource
 
   def self.attribute(attribute_name, **args)
     # Automatically add a columns argument if the attribute name matches a column name on the models table
-    args[:requires_columns] = [attribute_name] if !args.key?(:requires_columns) && model_class.column_names.include?(attribute_name.to_s)
+    args[:requires_columns] = [attribute_name] if !args.key?(:requires_columns) && column_exists_on_model?(model_class, attribute_name)
 
     ApiMaker::MemoryStorage.current.add(self, :attributes, attribute_name, args)
   end
@@ -29,6 +29,10 @@ class ApiMaker::BaseResource
     list.each do |collection_command|
       ApiMaker::MemoryStorage.current.add(self, :collection_commands, collection_command)
     end
+  end
+
+  def self.column_exists_on_model?(model_class, column_name)
+    model_class.connection.schema_cache.columns_hash(model_class.table_name).key?(column_name.to_s)
   end
 
   def self.member_commands(*list)
