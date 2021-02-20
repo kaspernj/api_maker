@@ -32,7 +32,10 @@ class ApiMaker::BaseResource
   end
 
   def self.column_exists_on_model?(model_class, column_name)
-    model_class.connection.schema_cache.columns_hash(model_class.table_name).key?(column_name.to_s)
+    model_class.column_names.include?(column_name.to_s)
+  rescue ActiveRecord::StatementInvalid
+    # This happens if the table or column doesn't exist - like if we are running during a migration
+    false
   end
 
   def self.member_commands(*list)
