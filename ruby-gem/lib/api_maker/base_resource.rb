@@ -97,4 +97,32 @@ class ApiMaker::BaseResource
     @locals = locals || api_maker_args&.dig(:locals) || {}
     @model = model
   end
+
+  def can_access_through(ability:, relationship:)
+    reflection = model_class.reflections.fetch(relationship.to_s)
+    target_model_class = reflection.klass
+    self.ability.load_abilities(target_model_class)
+    relevant_rules = self.ability.__send__(:relevant_rules, ability, target_model_class)
+
+    relevant_rules.each do |relevant_rule|
+      if relevant_rule.conditions.empty?
+        lookup_query = target_model_class
+          .where("#{target_model_class.table_name}.#{reflection.foreign_key} = #{model_class.table_name}.#{model_class.primary_key}")
+
+        exists_sql = "EXISTS (#{lookup_query.to_sql})"
+
+        can ability, model_class, [exists_sql] do |model|
+          model.__send__(relationship).any?
+        end
+      else
+        can ability, model_class, {
+          reflection.name => relevant_rule.conditions
+        }
+      end
+    end
+  end
+
+  def model_class
+    self.class.model_class
+  end
 end
