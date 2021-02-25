@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_11_124303) do
+ActiveRecord::Schema.define(version: 2021_02_25_074333) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -114,6 +114,13 @@ ActiveRecord::Schema.define(version: 2021_02_11_124303) do
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
   end
 
+  create_table "task_details", force: :cascade do |t|
+    t.integer "task_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["task_id"], name: "index_task_details_on_task_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.string "name", null: false
     t.integer "project_id", null: false
@@ -161,6 +168,7 @@ ActiveRecord::Schema.define(version: 2021_02_11_124303) do
   add_foreign_key "customer_relationships", "customers", column: "parent_id"
   add_foreign_key "project_detail_files", "project_details"
   add_foreign_key "project_secrets", "projects"
+  add_foreign_key "task_details", "tasks"
   add_foreign_key "tasks", "projects"
   add_foreign_key "user_roles", "users"
 end

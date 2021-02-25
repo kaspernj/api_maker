@@ -13,6 +13,7 @@ MoneyRails::Hooks.init
 require "active_record_better_dependent_error_messages"
 require "api_helpers/api_maker_helpers"
 require "cancancan"
+require "cancan/matchers"
 require "devise"
 require "factory_bot_rails"
 require "js-routes"

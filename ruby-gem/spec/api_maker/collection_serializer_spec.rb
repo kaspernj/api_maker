@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ApiMaker::CollectionSerializer do
-  let!(:account) { create :account, customer: customer, id: 1 }
+  let!(:account) { create :account, customer: customer, id: 1, name: "Account 1" }
   let!(:customer) { create :customer, id: 5, name: "Test customer" }
   let!(:project) { create :project, account: account, id: 2, name: "Test project" }
   let!(:project_detail) { create :project_detail, project: project, id: 6, details: "Test project details" }
