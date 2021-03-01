@@ -1,3 +1,4 @@
+const {Card, Paginate} = require("@kaspernj/api-maker-bootstrap")
 const {Collection, EventCreated, EventDestroyed, EventUpdated, Params} = require("@kaspernj/api-maker")
 const {debounce} = require("debounce")
 const {digg, digs} = require("@kaspernj/object-digger")
@@ -5,8 +6,6 @@ const inflection = require("inflection")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
-
-import {Card, Paginate} from "@kaspernj/api-maker-bootstrap"
 
 export default class ApiMakerBootstrapLiveTable extends React.Component {
   static defaultProps = {
