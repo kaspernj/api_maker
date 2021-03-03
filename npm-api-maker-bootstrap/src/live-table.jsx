@@ -1,12 +1,12 @@
 const {Collection, EventCreated, EventDestroyed, EventUpdated, Params} = require("@kaspernj/api-maker")
-const {Card, Paginate} = require("@kaspernj/api-maker-bootstrap")
 const {debounce} = require("debounce")
-const {digg} = require("@kaspernj/object-digger")
+const {digg, digs} = require("@kaspernj/object-digger")
+const inflection = require("inflection")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
 
-const inflection = require("inflection")
+import {Card, Paginate} from "@kaspernj/api-maker-bootstrap"
 
 export default class ApiMakerBootstrapLiveTable extends React.Component {
   static defaultProps = {
@@ -163,7 +163,8 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   content() {
-    const { actionsContent, controls, destroyEnabled, editModelPath, filterContent, filterSubmitLabel, header, modelClass } = this.props
+    const { modelClass } = digs(this.props, "modelClass")
+    const { actionsContent, controls, destroyEnabled, editModelPath, filterContent, filterSubmitLabel, header } = this.props
     const { qParams, query, result, models } = this.state
 
     let controlsContent, headerContent
@@ -204,7 +205,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {models.map(model =>
+            {models.map((model) =>
               <tr className={`${inflection.singularize(modelClass.modelClassData().collectionName)}-row`} data-model-id={model.id()} key={model.cacheKey()}>
                 {this.props.columnsContent({model})}
                 <td className="actions-column text-nowrap text-right">
@@ -225,7 +226,9 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
           </tbody>
         </Card>
 
-        <Paginate result={result} />
+        {result &&
+          <Paginate result={result} />
+        }
       </div>
     )
   }
