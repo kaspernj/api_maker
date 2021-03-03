@@ -14,6 +14,16 @@ class ApiMaker::Ability
     subject = args.second
     load_abilities(subject)
     super
+  rescue ActiveModel::MissingAttributeError => e
+    if subject.is_a?(ActiveRecord::Base)
+      # Add subject / model class name to the error message
+      new_error = ActiveModel::MissingAttributeError.new("Error on #{subject.class.name}: #{e.message}")
+      new_error.set_backtrace(e.backtrace)
+
+      raise new_error
+    end
+
+    raise e
   end
 
   def model_adapter(*args)
