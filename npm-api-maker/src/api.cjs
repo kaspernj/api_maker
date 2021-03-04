@@ -1,4 +1,4 @@
-const {CustomError} = require("./custom-error.cjs")
+const CustomError = require("./custom-error.cjs")
 const FormDataObjectizer = require("form-data-objectizer")
 const qs = require("qs")
 
