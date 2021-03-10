@@ -12,6 +12,12 @@ describe ApiMaker::BaseCommand do
     end
   end
 
+  it "passes the api maker args for a member command" do
+    result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(api_maker_args: {passed: true}, command: Commands::Tasks::TestMember, model: task)
+
+    expect(result.dig!(:api_maker_args, :passed)).to eq true
+  end
+
   it "executes a collection command" do
     result = ::ApiMaker::SpecHelper::ExecuteCollectionCommand.execute!(
       api_maker_args: {passed: true},

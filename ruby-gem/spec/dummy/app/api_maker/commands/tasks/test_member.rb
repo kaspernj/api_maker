@@ -1,5 +1,8 @@
 class Commands::Tasks::TestMember < Commands::ApplicationCommand
   def execute!
-    succeed!(test_member_command_called: true)
+    succeed!(
+      api_maker_args: api_maker_args,
+      test_member_command_called: true
+    )
   end
 end

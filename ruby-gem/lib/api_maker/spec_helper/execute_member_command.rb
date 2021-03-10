@@ -1,7 +1,7 @@
 class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
   include RSpec::Mocks::ExampleMethods
 
-  attr_reader :args, :command, :model
+  attr_reader :api_maker_args, :args, :command, :model
 
   def initialize(ability: nil, api_maker_args: nil, command:, fake_controller: nil, model:, args: {})
     @ability = ability
@@ -19,17 +19,13 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
   end
 
   def ability
-    @ability ||= ApiMaker::Ability.new(api_maker_args: {})
-  end
-
-  def api_maker_args
-    @api_maker_args ||= fake_controller.api_maker_args
+    @ability ||= ApiMaker::Ability.new(api_maker_args: api_maker_args)
   end
 
   def fake_controller
     @fake_controller ||= instance_double(
       ApiMaker::BaseController,
-      api_maker_args: {},
+      api_maker_args: api_maker_args,
       current_ability: ability
     )
   end
