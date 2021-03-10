@@ -1,9 +1,9 @@
 class ApiMaker::SpecHelper::ExecuteCollectionCommand < ApiMaker::ApplicationService
   include RSpec::Mocks::ExampleMethods
 
-  attr_reader :args, :command, :model_class
+  attr_reader :api_maker_args, :args, :command, :model_class
 
-  def initialize(ability: nil, api_maker_args: nil, args: {}, command:, fake_controller: nil, model_class:)
+  def initialize(ability: nil, api_maker_args: {}, args: {}, command:, fake_controller: nil, model_class:)
     @ability = ability
     @api_maker_args = api_maker_args
     @args = args
@@ -19,17 +19,13 @@ class ApiMaker::SpecHelper::ExecuteCollectionCommand < ApiMaker::ApplicationServ
   end
 
   def ability
-    @ability ||= ApiMaker::Ability.new(api_maker_args: {})
-  end
-
-  def api_maker_args
-    @api_maker_args ||= fake_controller.api_maker_args
+    @ability ||= ApiMaker::Ability.new(api_maker_args: api_maker_args)
   end
 
   def fake_controller
     @fake_controller ||= instance_double(
       ApiMaker::BaseController,
-      api_maker_args: {},
+      api_maker_args: api_maker_args,
       current_ability: ability
     )
   end
