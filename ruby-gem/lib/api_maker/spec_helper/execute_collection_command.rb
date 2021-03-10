@@ -3,7 +3,7 @@ class ApiMaker::SpecHelper::ExecuteCollectionCommand < ApiMaker::ApplicationServ
 
   attr_reader :args, :command, :model_class
 
-  def initialize(ability: nil, args: {}, api_maker_args: nil, command:, fake_controller: nil, model_class:)
+  def initialize(ability: nil, api_maker_args: nil, args: {}, command:, fake_controller: nil, model_class:)
     @ability = ability
     @api_maker_args = api_maker_args
     @args = args
