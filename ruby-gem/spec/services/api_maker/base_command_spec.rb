@@ -13,8 +13,13 @@ describe ApiMaker::BaseCommand do
   end
 
   it "executes a collection command" do
-    result = ::ApiMaker::SpecHelper::ExecuteCollectionCommand.execute!(command: Commands::Tasks::TestCollection, model_class: Task)
+    result = ::ApiMaker::SpecHelper::ExecuteCollectionCommand.execute!(
+      api_maker_args: {passed: true},
+      command: Commands::Tasks::TestCollection,
+      model_class: Task
+    )
 
     expect(result.fetch(:test_collection_command_called)).to eq true
+    expect(result.dig!(:api_maker_args, :passed)).to eq true
   end
 end
