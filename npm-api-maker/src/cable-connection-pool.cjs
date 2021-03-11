@@ -1,5 +1,6 @@
 const CableSubscriptionPool = require("./cable-subscription-pool.cjs")
 const CableSubscription = require("./cable-subscription.cjs")
+const {dig} = require("@kaspernj/object-digger")
 
 module.exports = class ApiMakerCableConnectionPool {
   static current() {
@@ -10,170 +11,93 @@ module.exports = class ApiMakerCableConnectionPool {
   }
 
   constructor() {
+    this.cableSubscriptionPools = []
     this.connections = {}
     this.upcomingSubscriptionData = {}
     this.upcomingSubscriptions = []
   }
 
-  connectCreated(modelName, callback) {
-    if (!this.upcomingSubscriptionData[modelName])
-      this.upcomingSubscriptionData[modelName] = {}
+  connectEventToExistingSubscription({path, subscription}) {
+    for (const cableSubscriptionPool of this.cableSubscriptionPools) {
+      const existingSubscriptions = dig(cableSubscriptionPool.props.subscriptions, ...path)
 
-    if (!this.upcomingSubscriptionData[modelName]["creates"])
-      this.upcomingSubscriptionData[modelName]["creates"] = true
+      if (existingSubscriptions !== undefined) {
+        existingSubscriptions.push(subscription)
+        cableSubscriptionPool.connectUnsubscriptionForSubscription(subscription)
 
-    if (!this.upcomingSubscriptions[modelName])
-      this.upcomingSubscriptions[modelName] = {}
+        return true
+      }
+    }
 
-    if (!this.upcomingSubscriptions[modelName]["creates"])
-      this.upcomingSubscriptions[modelName]["creates"] = []
+    return false
+  }
 
-    const subscription = new CableSubscription({
-      callback: callback,
-      modelName: modelName
-    })
+  connectModelEvent({callback, path}) {
+    const subscription = new CableSubscription({callback})
 
-    this.upcomingSubscriptions[modelName]["creates"].push(subscription)
+    if (this.connectEventToExistingSubscription({path, subscription})) {
+      // Managed to connect to existing connection
+      return
+    }
+
+    const lastPathPart = path[path.length - 1]
+
+    let currentSubscriptionData = this.upcomingSubscriptionData
+    let currentSubscription = this.upcomingSubscriptions
+
+    for (let i = 0; i < path.length; i++) {
+      const pathPart = path[i]
+
+      if (!(pathPart in currentSubscriptionData)) {
+        if (i == path.length - 1) {
+          // Ignore last which have to be pushed to the array
+        } else if (i == path.length - 2) {
+          currentSubscriptionData[pathPart] = []
+        } else {
+          currentSubscriptionData[pathPart] = {}
+        }
+      }
+
+      if (i < path.length - 1) {
+        currentSubscriptionData = currentSubscriptionData[pathPart]
+      }
+
+      if (!(pathPart in currentSubscription)) {
+        if (i == path.length - 1) {
+          currentSubscription[pathPart] = []
+        } else {
+          currentSubscription[pathPart] = {}
+        }
+      }
+
+      currentSubscription = currentSubscription[pathPart]
+    }
+
+    if (!currentSubscriptionData.includes(lastPathPart)) {
+      currentSubscriptionData.push(lastPathPart)
+    }
+
+    currentSubscription.push(subscription)
 
     this.scheduleConnectUpcoming()
 
     return subscription
+  }
+
+  connectCreated(modelName, callback) {
+    return this.connectModelEvent({callback, path: [modelName, "creates"]})
   }
 
   connectDestroyed(modelName, modelId, callback) {
-    if (!this.upcomingSubscriptionData[modelName])
-      this.upcomingSubscriptionData[modelName] = {}
-
-    if (!this.upcomingSubscriptionData[modelName]["destroys"])
-      this.upcomingSubscriptionData[modelName]["destroys"] = []
-
-    if (!this.upcomingSubscriptionData[modelName]["destroys"].includes(modelId))
-      this.upcomingSubscriptionData[modelName]["destroys"].push(modelId)
-
-    if (!this.upcomingSubscriptions[modelName])
-      this.upcomingSubscriptions[modelName] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["destroys"])
-      this.upcomingSubscriptions[modelName]["destroys"] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["destroys"][modelId])
-      this.upcomingSubscriptions[modelName]["destroys"][modelId] = []
-
-    const subscription = new CableSubscription({
-      callback: callback,
-      modelName: modelName,
-      modelId: modelId
-    })
-
-    this.upcomingSubscriptions[modelName]["destroys"][modelId].push(subscription)
-
-    this.scheduleConnectUpcoming()
-
-    return subscription
-  }
-
-  connectEvent(modelName, modelId, eventName, callback) {
-    if (!this.upcomingSubscriptionData[modelName])
-      this.upcomingSubscriptionData[modelName] = {}
-
-    if (!this.upcomingSubscriptionData[modelName]["events"])
-      this.upcomingSubscriptionData[modelName]["events"] = {}
-
-    if (!this.upcomingSubscriptionData[modelName]["events"][eventName])
-      this.upcomingSubscriptionData[modelName]["events"][eventName] = []
-
-    if (!this.upcomingSubscriptionData[modelName]["events"][eventName].includes(modelId))
-      this.upcomingSubscriptionData[modelName]["events"][eventName].push(modelId)
-
-    if (!this.upcomingSubscriptions[modelName])
-      this.upcomingSubscriptions[modelName] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["events"])
-      this.upcomingSubscriptions[modelName]["events"] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["events"])
-      this.upcomingSubscriptions[modelName]["events"] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["events"][modelId])
-      this.upcomingSubscriptions[modelName]["events"][modelId] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["events"][modelId][eventName])
-      this.upcomingSubscriptions[modelName]["events"][modelId][eventName] = []
-
-    const subscription = new CableSubscription({
-      callback: callback,
-      modelName: modelName,
-      modelId: modelId
-    })
-
-    this.upcomingSubscriptions[modelName]["events"][modelId][eventName].push(subscription)
-
-    this.scheduleConnectUpcoming()
-
-    return subscription
-  }
-
-  connectModelClassEvent(modelName, eventName, callback) {
-    if (!(modelName in this.upcomingSubscriptionData))
-      this.upcomingSubscriptionData[modelName] = {}
-
-    if (!("model_class_events" in this.upcomingSubscriptionData[modelName]))
-      this.upcomingSubscriptionData[modelName]["model_class_events"] = []
-
-    if (!this.upcomingSubscriptionData[modelName]["model_class_events"].includes(eventName))
-      this.upcomingSubscriptionData[modelName]["model_class_events"].push(eventName)
-
-    if (!(modelName in this.upcomingSubscriptions))
-      this.upcomingSubscriptions[modelName] = {}
-
-    if (!("model_class_events" in this.upcomingSubscriptions[modelName]))
-      this.upcomingSubscriptions[modelName]["model_class_events"] = {}
-
-    if (!(eventName in this.upcomingSubscriptions[modelName]["model_class_events"]))
-      this.upcomingSubscriptions[modelName]["model_class_events"][eventName] = []
-
-    const subscription = new CableSubscription({
-      callback: callback,
-      modelName: modelName
-    })
-
-    this.upcomingSubscriptions[modelName]["model_class_events"][eventName].push(subscription)
-
-    this.scheduleConnectUpcoming()
-
-    return subscription
+    return this.connectModelEvent({callback, path: [modelName, "destroys", modelId]})
   }
 
   connectUpdate(modelName, modelId, callback) {
-    if (!this.upcomingSubscriptionData[modelName])
-      this.upcomingSubscriptionData[modelName] = {}
+    return this.connectModelEvent({callback, path: [modelName, "updates", modelId]})
+  }
 
-    if (!this.upcomingSubscriptionData[modelName]["updates"])
-      this.upcomingSubscriptionData[modelName]["updates"] = []
-
-    if (!this.upcomingSubscriptionData[modelName]["updates"].includes(modelId))
-      this.upcomingSubscriptionData[modelName]["updates"].push(modelId)
-
-    if (!this.upcomingSubscriptions[modelName])
-      this.upcomingSubscriptions[modelName] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["updates"])
-      this.upcomingSubscriptions[modelName]["updates"] = {}
-
-    if (!this.upcomingSubscriptions[modelName]["updates"][modelId])
-      this.upcomingSubscriptions[modelName]["updates"][modelId] = []
-
-    const subscription = new CableSubscription({
-      callback: callback,
-      modelName: modelName,
-      modelId: modelId
-    })
-
-    this.upcomingSubscriptions[modelName]["updates"][modelId].push(subscription)
-
-    this.scheduleConnectUpcoming()
-
-    return subscription
+  connectEvent(modelName, modelId, eventName, callback) {
+    return this.connectModelEvent({callback, path: [modelName, "events", eventName, modelId]})
   }
 
   connectUpcoming() {
@@ -183,12 +107,9 @@ module.exports = class ApiMakerCableConnectionPool {
     this.upcomingSubscriptionData = {}
     this.upcomingSubscriptions = {}
 
-    const cableSubscriptionPool = new CableSubscriptionPool({
-      subscriptionData: subscriptionData,
-      subscriptions: subscriptions
-    })
+    const cableSubscriptionPool = new CableSubscriptionPool({subscriptionData, subscriptions})
 
-    return cableSubscriptionPool
+    this.cableSubscriptionPools.push(cableSubscriptionPool)
   }
 
   scheduleConnectUpcoming() {
