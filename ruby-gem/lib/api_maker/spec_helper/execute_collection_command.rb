@@ -1,15 +1,15 @@
-class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
+class ApiMaker::SpecHelper::ExecuteCollectionCommand < ApiMaker::ApplicationService
   include RSpec::Mocks::ExampleMethods
 
-  attr_reader :api_maker_args, :args, :command, :model
+  attr_reader :api_maker_args, :args, :command, :model_class
 
-  def initialize(ability: nil, api_maker_args: nil, command:, fake_controller: nil, model:, args: {})
+  def initialize(ability: nil, api_maker_args: {}, args: {}, command:, fake_controller: nil, model_class:)
     @ability = ability
     @api_maker_args = api_maker_args
     @args = args
     @command = command
     @fake_controller = fake_controller
-    @model = model
+    @model_class = model_class
   end
 
   def execute
@@ -32,7 +32,7 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
 
   def helper
     @helper ||= ApiMaker::CommandSpecHelper.new(
-      collection: model.class.where(id: model.id),
+      collection: model_class,
       command: command,
       controller: fake_controller
     )
@@ -40,7 +40,6 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
 
   def helper_command
     @helper_command ||= helper.add_command(
-      primary_key: model.id,
       args: args
     )
   end
