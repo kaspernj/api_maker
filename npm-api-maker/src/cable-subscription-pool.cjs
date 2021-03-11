@@ -1,6 +1,7 @@
 const ChannelsConsumer = require("./channels-consumer.cjs")
 const CommandsPool = require("./commands-pool.cjs")
 const Deserializer = require("./deserializer.cjs")
+const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 const Logger = require("./logger.cjs")
 
@@ -23,25 +24,26 @@ module.exports = class ApiMakerCableSubscriptionPool {
 
   onReceived(rawData) {
     const data = Deserializer.parse(rawData)
+    const type = digg(data, "type")
     const modelType = data.model_type
     const modelName = inflection.camelize(inflection.singularize(modelType.replace(/-/g, "_")))
     const modelId = data.model_id
     const modelInstance = data.model
-    const subscriptions = this.props.subscriptions
+    const subscriptions = digg(this, "props", "subscriptions")
 
-    if (data.type == "update") {
+    if (type == "update") {
       for(const subscription of subscriptions[modelName]["updates"][modelId]) {
         subscription.onReceived({model: modelInstance})
       }
-    } else if (data.type == "create") {
+    } else if (type == "create") {
       for(const subscription of subscriptions[modelName]["creates"]) {
         subscription.onReceived({model: modelInstance})
       }
-    } else if (data.type == "destroy") {
-      for(const subscription of subscriptions[modelName]["destroys"][modelId]) {
+    } else if (type == "destroy") {
+      for(const subscription of digg(subscriptions, modelName, "destroys", modelId)) {
         subscription.onReceived({model: modelInstance})
       }
-    } else if (data.type == "event") {
+    } else if (type == "event") {
       for(const subscription of subscriptions[modelName]["events"][modelId][data.event_name]) {
         subscription.onReceived({
           args: data.args,
@@ -49,7 +51,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
           model: modelInstance
         })
       }
-    } else if (data.type == "model_class_event") {
+    } else if (type == "model_class_event") {
       for(const subscription of subscriptions[modelName]["model_class_events"][data.event_name]) {
         subscription.onReceived({
           args: data.args,
