@@ -14,14 +14,12 @@ module.exports = class ApiMakerCableConnectionPool {
     this.cableSubscriptionPools = []
     this.connections = {}
     this.upcomingSubscriptionData = {}
-    this.upcomingSubscriptions = []
+    this.upcomingSubscriptions = {}
   }
 
   connectEventToExistingSubscription({path, subscription, value}) {
     for (const cableSubscriptionPool of this.cableSubscriptionPools) {
       let existingSubscriptions
-
-      const realPath = [...path, value]
 
       if (value == true) {
         existingSubscriptions = dig(cableSubscriptionPool.props.subscriptions, ...path)
@@ -65,7 +63,7 @@ module.exports = class ApiMakerCableConnectionPool {
       currentSubscriptionData = currentSubscriptionData[pathPart]
 
       if (!(pathPart in currentSubscription)) {
-        if (value == true && i == path.length - 1) {
+        if (value === true && i == path.length - 1) {
           currentSubscription[pathPart] = []
         } else {
           currentSubscription[pathPart] = {}
@@ -79,7 +77,7 @@ module.exports = class ApiMakerCableConnectionPool {
       currentSubscriptionData.push(value)
     }
 
-    if (value == true) {
+    if (value === true) {
       currentSubscription.push(subscription)
     } else {
       if (!(value in currentSubscription)) {
@@ -98,6 +96,10 @@ module.exports = class ApiMakerCableConnectionPool {
     return this.connectModelEvent({callback, value: true, path: [modelName, "creates"]})
   }
 
+  connectEvent(modelName, modelId, eventName, callback) {
+    return this.connectModelEvent({callback, value: modelId, path: [modelName, "events", eventName]})
+  }
+
   connectDestroyed(modelName, modelId, callback) {
     return this.connectModelEvent({callback, value: modelId, path: [modelName, "destroys"]})
   }
@@ -108,10 +110,6 @@ module.exports = class ApiMakerCableConnectionPool {
 
   connectUpdate(modelName, modelId, callback) {
     return this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})
-  }
-
-  connectEvent(modelName, modelId, eventName, callback) {
-    return this.connectModelEvent({callback, value: modelId, path: [modelName, "events", eventName]})
   }
 
   connectUpcoming() {
