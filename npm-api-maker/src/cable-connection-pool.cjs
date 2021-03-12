@@ -43,7 +43,7 @@ module.exports = class ApiMakerCableConnectionPool {
 
     if (this.connectEventToExistingSubscription({path, subscription, value})) {
       // Managed to connect to existing connection
-      return
+      return subscription
     }
 
     let currentSubscriptionData = this.upcomingSubscriptionData
