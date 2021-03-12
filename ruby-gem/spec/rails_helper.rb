@@ -7,6 +7,10 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
+# Delete cache to force Webpacker to compile
+path = Rails.root.join("tmp/cache").to_s
+FileUtils.rm_rf(path)
+
 require "money-rails"
 MoneyRails::Hooks.init
 
