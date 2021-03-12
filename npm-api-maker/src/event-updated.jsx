@@ -18,7 +18,9 @@ export default class ApiMakerEventUpdated extends React.Component {
   }
 
   componentWillUnmount() {
-    this.connectUpdated.unsubscribe()
+    if (this.connectUpdated) {
+      this.connectUpdated.unsubscribe()
+    }
   }
 
   connect() {
