@@ -37,11 +37,16 @@ module.exports = class ApiMakerCableSubscriptionPool {
         subscription.onReceived({model: modelInstance})
       }
     } else if (type == "destroy") {
-      for(const subscription of digg(subscriptions, modelName, "destroys", modelId)) {
+      const destroySubscriptions = digg(subscriptions, modelName, "destroys", modelId)
+
+      for(const subscription of destroySubscriptions) {
         subscription.onReceived({model: modelInstance})
       }
     } else if (type == "event") {
-      for(const subscription of subscriptions[modelName]["events"][modelId][data.event_name]) {
+      const eventName = digg(data, "event_name")
+      const eventSubscriptions = digg(subscriptions, modelName, "events", eventName, modelId)
+
+      for(const subscription of eventSubscriptions) {
         subscription.onReceived({
           args: data.args,
           eventName: data.event_name,
@@ -49,7 +54,10 @@ module.exports = class ApiMakerCableSubscriptionPool {
         })
       }
     } else if (type == "model_class_event") {
-      for(const subscription of subscriptions[modelName]["model_class_events"][data.event_name]) {
+      const eventName = digg(data, "event_name")
+      const modelClassEventSubscriptions = digg(subscriptions, modelName, "model_class_events", eventName)
+
+      for(const subscription of modelClassEventSubscriptions) {
         subscription.onReceived({
           args: data.args,
           eventName: data.event_name
