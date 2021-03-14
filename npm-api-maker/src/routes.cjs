@@ -10,7 +10,6 @@ module.exports = class ApiMakerRoutes {
       const routeNamePath = inflection.camelize(`${digg(routeDefinition, "name")}_path`, true)
 
       if (!(routeNamePath in this.jsRoutes)) {
-        console.log(this.jsRoutes)
         throw new Error(`No such path in JS routes: ${routeNamePath}`)
       }
 
