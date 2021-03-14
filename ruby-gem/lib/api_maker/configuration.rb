@@ -27,6 +27,8 @@ class ApiMaker::Configuration
   end
 
   def initialize
+    puts "API MAKER CONFIGURATION"
+
     self.ability_class_name = "ApiMaker::Ability"
     self.before_create_event_callbacks = []
     self.devise_sign_in_enabled = true
