@@ -124,6 +124,14 @@ i18n.t("js.some.key") //=> Key
 
 ### Routes
 
+Configure JS routes in `config/js_routes.rb`:
+```ruby
+JsRoutes.setup do |config|
+  config.camel_case = true
+  config.url_links = true
+end
+```
+
 Define route definitions that can be read by both Rails and JS like this in `app/javascript/route-definitions.json`:
 ```json
 {
