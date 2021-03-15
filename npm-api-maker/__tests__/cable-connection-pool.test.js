@@ -1,4 +1,5 @@
 const CableConnectionPool = require("../src/cable-connection-pool.cjs")
+const CableSubscriptionPool = require("../src/cable-subscription-pool.cjs")
 const {digg} = require("@kaspernj/object-digger")
 
 describe("CableConnectionPool", () => {
@@ -13,7 +14,7 @@ describe("CableConnectionPool", () => {
         this.upcomingSubscriptionData = {}
         this.upcomingSubscriptions = {}
 
-        const cableSubscriptionPool = {props: {subscriptionData, subscriptions}}
+        const cableSubscriptionPool = {subscriptionData, subscriptions}
 
         this.cableSubscriptionPools.push(cableSubscriptionPool)
       }
@@ -23,7 +24,7 @@ describe("CableConnectionPool", () => {
       expect(cableConnectionPool.cableSubscriptionPools.length).toEqual(1)
 
       const newCableSubscriptionPool = digg(cableConnectionPool, "cableSubscriptionPools", 0)
-      const subscriptions = digg(newCableSubscriptionPool, "props", "subscriptions", "Contact", "creates")
+      const subscriptions = digg(newCableSubscriptionPool, "subscriptions", "Contact", "creates")
 
       expect(subscriptions.length).toEqual(1)
     })
@@ -32,14 +33,12 @@ describe("CableConnectionPool", () => {
   describe("connectDestroyed", () => {
     it("creates a new destroy event and connects", () => {
       const cableConnectionPool = new CableConnectionPool()
-      const fakeCableSubscriptionPool = {
-        props: {
-          subscriptions: {
-            Contact: {
-              updates: {
-                modelId: []
-              }
-            }
+      const cableSubscriptionPool = new CableSubscriptionPool()
+
+      cableSubscriptionPool.subscriptions = {
+        Contact: {
+          updates: {
+            modelId: []
           }
         }
       }
@@ -51,17 +50,17 @@ describe("CableConnectionPool", () => {
         this.upcomingSubscriptionData = {}
         this.upcomingSubscriptions = {}
 
-        const cableSubscriptionPool = {props: {subscriptionData, subscriptions}}
+        const cableSubscriptionPool = {subscriptionData, subscriptions}
 
         this.cableSubscriptionPools.push(cableSubscriptionPool)
       }
-      cableConnectionPool.cableSubscriptionPools = [fakeCableSubscriptionPool]
+      cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectDestroyed("Contact", "modelId", () => { })
 
       expect(cableConnectionPool.cableSubscriptionPools.length).toEqual(2)
 
       const newCableSubscriptionPool = cableConnectionPool.cableSubscriptionPools[1]
-      const subscriptions = digg(newCableSubscriptionPool, "props", "subscriptions", "Contact", "destroys", "modelId")
+      const subscriptions = digg(newCableSubscriptionPool, "subscriptions", "Contact", "destroys", "modelId")
 
       expect(subscriptions.length).toEqual(1)
     })
@@ -70,43 +69,74 @@ describe("CableConnectionPool", () => {
       let connectedUnsubscribeEvent = false
 
       const cableConnectionPool = new CableConnectionPool()
-      const fakeCableSubscriptionPool = {
-        connectUnsubscriptionForSubscription: function() {
-          connectedUnsubscribeEvent = true
-        },
-        props: {
-          subscriptions: {
-            Contact: {
-              destroys: {
-                modelId: []
-              }
-            }
+      const cableSubscriptionPool = new CableSubscriptionPool()
+
+      cableSubscriptionPool.connected = true
+      cableSubscriptionPool.connectUnsubscriptionForSubscription = function() {
+        connectedUnsubscribeEvent = true
+      }
+      cableSubscriptionPool.subscriptions = {
+        Contact: {
+          destroys: {
+            modelId: []
           }
         }
       }
 
       cableConnectionPool.connectUpcoming = () => console.log("connectUpcoming")
-      cableConnectionPool.cableSubscriptionPools = [fakeCableSubscriptionPool]
+      cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectDestroyed("Contact", "modelId", () => { })
 
-      const subscriptions = digg(fakeCableSubscriptionPool, "props", "subscriptions", "Contact", "destroys", "modelId")
+      const subscriptions = digg(cableSubscriptionPool, "subscriptions", "Contact", "destroys", "modelId")
 
       expect(subscriptions.length).toEqual(1)
       expect(connectedUnsubscribeEvent).toEqual(true)
+    })
+
+    it("doesnt connect to an existing destroy event that is disconnected", () => {
+      const cableConnectionPool = new CableConnectionPool()
+      const cableSubscriptionPool = new CableSubscriptionPool()
+
+      cableSubscriptionPool.subscriptions = {
+        Contact: {
+          destroys: {
+            modelId: []
+          }
+        }
+      }
+
+      cableConnectionPool.connected = false
+      cableConnectionPool.connectUpcoming = function() {
+        const subscriptionData = this.upcomingSubscriptionData
+        const subscriptions = this.upcomingSubscriptions
+
+        this.upcomingSubscriptionData = {}
+        this.upcomingSubscriptions = {}
+
+        const cableSubscriptionPool = {subscriptionData, subscriptions}
+
+        this.cableSubscriptionPools.push(cableSubscriptionPool)
+      }
+      cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
+      cableConnectionPool.scheduleConnectUpcoming = () => cableConnectionPool.connectUpcoming()
+      cableConnectionPool.connectDestroyed("Contact", "modelId", () => { })
+
+      const subscriptions = digg(cableSubscriptionPool, "subscriptions", "Contact", "destroys", "modelId")
+
+      expect(subscriptions.length).toEqual(0)
+      expect(cableConnectionPool.cableSubscriptionPools.length).toEqual(2)
     })
   })
 
   describe("connectUpdate", () => {
     it("creates a new update event and connects", () => {
       const cableConnectionPool = new CableConnectionPool()
-      const fakeCableSubscriptionPool = {
-        props: {
-          subscriptions: {
-            Contact: {
-              destroys: {
-                modelId: []
-              }
-            }
+      const cableSubscriptionPool = new CableSubscriptionPool()
+
+      cableSubscriptionPool.subscriptions = {
+        Contact: {
+          destroys: {
+            modelId: []
           }
         }
       }
@@ -118,17 +148,17 @@ describe("CableConnectionPool", () => {
         this.upcomingSubscriptionData = {}
         this.upcomingSubscriptions = {}
 
-        const cableSubscriptionPool = {props: {subscriptionData, subscriptions}}
+        const cableSubscriptionPool = {subscriptionData, subscriptions}
 
         this.cableSubscriptionPools.push(cableSubscriptionPool)
       }
-      cableConnectionPool.cableSubscriptionPools = [fakeCableSubscriptionPool]
+      cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectUpdate("Contact", "modelId", () => { })
 
       expect(cableConnectionPool.cableSubscriptionPools.length).toEqual(2)
 
       const newCableSubscriptionPool = cableConnectionPool.cableSubscriptionPools[1]
-      const subscriptions = digg(newCableSubscriptionPool, "props", "subscriptions", "Contact", "updates", "modelId")
+      const subscriptions = digg(newCableSubscriptionPool, "subscriptions", "Contact", "updates", "modelId")
 
       expect(subscriptions.length).toEqual(1)
     })
@@ -137,26 +167,25 @@ describe("CableConnectionPool", () => {
       let connectedUnsubscribeEvent = false
 
       const cableConnectionPool = new CableConnectionPool()
-      const fakeCableSubscriptionPool = {
-        connectUnsubscriptionForSubscription: function() {
-          connectedUnsubscribeEvent = true
-        },
-        props: {
-          subscriptions: {
-            Contact: {
-              updates: {
-                modelId: []
-              }
-            }
+      const cableSubscriptionPool = new CableSubscriptionPool()
+
+      cableSubscriptionPool.connected = true
+      cableSubscriptionPool.connectUnsubscriptionForSubscription = function() {
+        connectedUnsubscribeEvent = true
+      }
+      cableSubscriptionPool.subscriptions = {
+        Contact: {
+          updates: {
+            modelId: []
           }
         }
       }
 
       cableConnectionPool.connectUpcoming = () => console.log("connectUpcoming")
-      cableConnectionPool.cableSubscriptionPools = [fakeCableSubscriptionPool]
+      cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectUpdate("Contact", "modelId", () => { })
 
-      const subscriptions = digg(fakeCableSubscriptionPool, "props", "subscriptions", "Contact", "updates", "modelId")
+      const subscriptions = digg(cableSubscriptionPool, "subscriptions", "Contact", "updates", "modelId")
 
       expect(subscriptions.length).toEqual(1)
       expect(connectedUnsubscribeEvent).toEqual(true)
