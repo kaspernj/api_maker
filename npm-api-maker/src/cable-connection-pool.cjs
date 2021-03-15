@@ -19,12 +19,16 @@ module.exports = class ApiMakerCableConnectionPool {
 
   connectEventToExistingSubscription({path, subscription, value}) {
     for (const cableSubscriptionPool of this.cableSubscriptionPools) {
+      if (!cableSubscriptionPool.isConnected()) {
+        continue
+      }
+
       let existingSubscriptions
 
       if (value == true) {
-        existingSubscriptions = dig(cableSubscriptionPool.props.subscriptions, ...path)
+        existingSubscriptions = dig(cableSubscriptionPool.subscriptions, ...path)
       } else {
-        existingSubscriptions = dig(cableSubscriptionPool.props.subscriptions, ...path, value)
+        existingSubscriptions = dig(cableSubscriptionPool.subscriptions, ...path, value)
       }
 
       if (existingSubscriptions !== undefined) {
@@ -119,7 +123,10 @@ module.exports = class ApiMakerCableConnectionPool {
     this.upcomingSubscriptionData = {}
     this.upcomingSubscriptions = {}
 
-    const cableSubscriptionPool = new CableSubscriptionPool({subscriptionData, subscriptions})
+    const cableSubscriptionPool = new CableSubscriptionPool()
+
+    cableSubscriptionPool.registerSubscriptions(subscriptions)
+    cableSubscriptionPool.connect(subscriptionData)
 
     this.cableSubscriptionPools.push(cableSubscriptionPool)
   }
