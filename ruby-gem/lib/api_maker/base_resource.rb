@@ -140,7 +140,7 @@ class ApiMaker::BaseResource
     macro == :belongs_to || macro == :has_many || macro == :has_one
   end
 
-  def nested_raw_sql(relevant_rule:, reflection:, model_class:)
+  def nested_raw_sql(model_class:, reflection:, relevant_rule:)
     # The conditions are given as raw SQL so we nest the original sub-query under a new one that filters on the ID of the current table as well
     relationship_sql = relevant_rule.conditions.first
     "EXISTS (" \
@@ -152,7 +152,7 @@ class ApiMaker::BaseResource
     ")"
   end
 
-  def raw_sql_where(reflection:, model_class:)
+  def raw_sql_where(model_class:, reflection:)
     if reflection.macro == :belongs_to
       "#{reflection.klass.table_name}.#{reflection.join_primary_key} = #{model_class.table_name}.#{reflection.foreign_key}"
     else
