@@ -129,6 +129,19 @@ class ApiMaker::BaseResource
           can ability, model_class, [nested_sql] do |model|
             model_class.where(nested_sql).exists?(id: model.id)
           end
+        elsif reflection.macro == :belongs_to
+          relationship_sql = relevant_rule.conditions.first
+          nested_sql = "EXISTS (" \
+            "SELECT 1 " \
+            "FROM #{reflection.klass.table_name} " \
+            "WHERE " \
+              "#{reflection.klass.table_name}.#{reflection.join_primary_key} = #{model_class.table_name}.#{reflection.foreign_key} AND " \
+              "(#{relationship_sql})" \
+          ")"
+
+          can ability, model_class, [nested_sql] do |model|
+            model_class.where(nested_sql).exists?(id: model.id)
+          end
         else
           raise "No support for macro: #{reflection.macro}"
         end
