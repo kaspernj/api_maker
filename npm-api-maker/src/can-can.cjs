@@ -1,6 +1,7 @@
 const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 const Services = require("./services.cjs")
+const AwaitLock = require("await-lock").default
 
 module.exports = class ApiMakerCanCan {
   static current() {
@@ -15,6 +16,7 @@ module.exports = class ApiMakerCanCan {
     this.abilities = []
     this.abilitiesToLoad = []
     this.abilitiesToLoadData = []
+    this.lock = new AwaitLock()
   }
 
   can(ability, subject) {
@@ -52,7 +54,9 @@ module.exports = class ApiMakerCanCan {
   }
 
   async loadAbilities(abilities) {
-    return new Promise((resolve) => {
+    await this.lock.acquireAsync()
+
+    try {
       const promises = []
 
       for (const abilityData of abilities) {
@@ -65,8 +69,10 @@ module.exports = class ApiMakerCanCan {
         }
       }
 
-      Promise.all(promises).then(() => resolve())
-    })
+      await Promise.all(promises)
+    } finally {
+      this.lock.release()
+    }
   }
 
   async loadAbility(ability, subject) {
@@ -96,8 +102,14 @@ module.exports = class ApiMakerCanCan {
     this.queueAbilitiesRequestTimeout = setTimeout(() => this.sendAbilitiesRequest(), 0)
   }
 
-  resetAbilities() {
-    this.abilities = []
+  async resetAbilities() {
+    await this.lock.acquireAsync()
+
+    try {
+      this.abilities = []
+    } finally {
+      this.lock.release()
+    }
   }
 
   async sendAbilitiesRequest() {
