@@ -115,16 +115,13 @@ class ApiMaker::BaseResource
           model.__send__(relationship).any?
         end
       elsif relevant_rule.conditions.is_a?(Array)
-        if reflection.macro == :belongs_to || reflection.macro == :has_many || reflection.macro == :has_one
-          # The conditions are given as raw SQL so we nest the original sub-query under a new one that filters on the ID of the current table as well
-          relationship_sql = relevant_rule.conditions.first
-          nested_sql = "EXISTS (" \
-            "SELECT 1 " \
-            "FROM #{reflection.klass.table_name} " \
-            "WHERE " \
-              "#{raw_sql_where(model_class: model_class, reflection: reflection)} AND " \
-              "(#{relationship_sql})" \
-          ")"
+        if raw_supported_macro?(reflection.macro)
+          nested_sql = nested_raw_sql(
+            model_class: model_class,
+            relevant_rule: relevant_rule,
+            reflection: reflection
+          )
+
           can ability, model_class, [nested_sql] do |model|
             model_class.where(nested_sql).exists?(id: model.id)
           end
@@ -137,6 +134,22 @@ class ApiMaker::BaseResource
         }
       end
     end
+  end
+
+  def raw_supported_macro?(macro)
+    macro == :belongs_to || macro == :has_many || macro == :has_one
+  end
+
+  def nested_raw_sql(relevant_rule:, reflection:, model_class:)
+    # The conditions are given as raw SQL so we nest the original sub-query under a new one that filters on the ID of the current table as well
+    relationship_sql = relevant_rule.conditions.first
+    "EXISTS (" \
+      "SELECT 1 " \
+      "FROM #{reflection.klass.table_name} " \
+      "WHERE " \
+        "#{raw_sql_where(model_class: model_class, reflection: reflection)} AND " \
+        "(#{relationship_sql})" \
+    ")"
   end
 
   def raw_sql_where(reflection:, model_class:)
