@@ -115,30 +115,16 @@ class ApiMaker::BaseResource
           model.__send__(relationship).any?
         end
       elsif relevant_rule.conditions.is_a?(Array)
-        if reflection.macro == :has_many || reflection.macro == :has_one
+        if reflection.macro == :belongs_to || reflection.macro == :has_many || reflection.macro == :has_one
           # The conditions are given as raw SQL so we nest the original sub-query under a new one that filters on the ID of the current table as well
           relationship_sql = relevant_rule.conditions.first
           nested_sql = "EXISTS (" \
             "SELECT 1 " \
             "FROM #{reflection.klass.table_name} " \
             "WHERE " \
-              "#{reflection.klass.table_name}.#{reflection.foreign_key} = #{model_class.table_name}.#{model_class.primary_key} AND " \
+              "#{raw_sql_where(model_class: model_class, reflection: reflection)} AND " \
               "(#{relationship_sql})" \
           ")"
-
-          can ability, model_class, [nested_sql] do |model|
-            model_class.where(nested_sql).exists?(id: model.id)
-          end
-        elsif reflection.macro == :belongs_to
-          relationship_sql = relevant_rule.conditions.first
-          nested_sql = "EXISTS (" \
-            "SELECT 1 " \
-            "FROM #{reflection.klass.table_name} " \
-            "WHERE " \
-              "#{reflection.klass.table_name}.#{reflection.join_primary_key} = #{model_class.table_name}.#{reflection.foreign_key} AND " \
-              "(#{relationship_sql})" \
-          ")"
-
           can ability, model_class, [nested_sql] do |model|
             model_class.where(nested_sql).exists?(id: model.id)
           end
@@ -150,6 +136,14 @@ class ApiMaker::BaseResource
           reflection.name => relevant_rule.conditions
         }
       end
+    end
+  end
+
+  def raw_sql_where(reflection:, model_class:)
+    if reflection.macro == :belongs_to
+      "#{reflection.klass.table_name}.#{reflection.join_primary_key} = #{model_class.table_name}.#{reflection.foreign_key}"
+    else
+      "#{reflection.klass.table_name}.#{reflection.foreign_key} = #{model_class.table_name}.#{model_class.primary_key}"
     end
   end
 
