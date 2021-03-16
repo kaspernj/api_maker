@@ -19,8 +19,8 @@ class Resources::TaskResource < Resources::ApplicationResource
     can CRUD + USER_TASK_ABILITIES, Task, user_id: current_user.id if current_user
     can :command_serialize, Task
     can :test_accessible_by, Task, id: 3
-    can :read, Task, ["tasks.name = 'Some readable task'"] do
-      task.title = "Some readable task"
+    can :read, Task, ["tasks.name = 'Some readable task'"] do |task|
+      task.name == "Some readable task"
     end
 
     can_access_through ability: :read, relationship: :account_marked_tasks
