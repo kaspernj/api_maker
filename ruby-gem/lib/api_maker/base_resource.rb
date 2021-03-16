@@ -127,6 +127,12 @@ class ApiMaker::BaseResource
     end
   end
 
+  def model_class
+    self.class.model_class
+  end
+
+private
+
   def handle_empty_conditions(model_class:, reflection:, relationship:, target_model_class:)
     lookup_query = target_model_class
       .where("#{target_model_class.table_name}.#{reflection.foreign_key} = #{model_class.table_name}.#{model_class.primary_key}")
@@ -176,9 +182,5 @@ class ApiMaker::BaseResource
     else
       "#{reflection.klass.table_name}.#{reflection.foreign_key} = #{model_class.table_name}.#{model_class.primary_key}"
     end
-  end
-
-  def model_class
-    self.class.model_class
   end
 end
