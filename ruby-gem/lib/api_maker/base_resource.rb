@@ -98,7 +98,7 @@ class ApiMaker::BaseResource
     @model = model
   end
 
-  def can_access_through(ability:, relationship:)
+  def can_access_through(ability:, relationship:) # rubocop:disable Metrics/AbcSize
     reflection = model_class.reflections.fetch(relationship.to_s)
     target_model_class = reflection.klass
     self.ability.load_abilities(target_model_class)
