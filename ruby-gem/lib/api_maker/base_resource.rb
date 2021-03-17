@@ -127,6 +127,10 @@ class ApiMaker::BaseResource
     end
   end
 
+  def inspect
+    "#<#{self.class.name}:#{__id__}>"
+  end
+
   def model_class
     self.class.model_class
   end
