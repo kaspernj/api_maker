@@ -32,6 +32,8 @@ private
   end
 
   def models_initial_query
+    raise "#{reflection.active_record.name}.#{reflection.name} didn't have an `inverse_of` instruction" unless reflection.inverse_of
+
     query = reflection.klass.where(reflection.foreign_key => collection.map(&primary_key_column))
     query.joins(reflection.inverse_of.name)
   end
