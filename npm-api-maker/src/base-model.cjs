@@ -486,8 +486,9 @@ module.exports = class BaseModel {
     if (newAttributes)
       this.assignAttributes(newAttributes)
 
-    if (this.changes.length == 0)
-      return resolve({model: this})
+    if (Object.keys(this.changes).length == 0) {
+      return {model: this}
+    }
 
     const paramKey = this.modelClassData().paramKey
     const modelData = this.changes

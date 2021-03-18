@@ -1,7 +1,7 @@
 const {digg, digs} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 
-export class ValidationError {
+module.exports.ValidationError = class ValidationError {
   constructor(args) {
     this.attributeName = digg(args, "attribute_name")
     this.attributeType = digg(args, "attribute_type")
@@ -73,7 +73,7 @@ export class ValidationError {
   }
 }
 
-export class ValidationErrors {
+module.exports.ValidationErrors = class ValidationErrors {
   constructor(args) {
     this.rootModel = digg(args, "model")
     this.validationErrors = digg(args, "validationErrors").map(validationError => new ValidationError(validationError))
