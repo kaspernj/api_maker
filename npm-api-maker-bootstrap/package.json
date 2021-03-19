@@ -14,14 +14,14 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kaspernj/api-maker-bootstrap.git"
+    "url": "git+https://github.com/kaspernj/api_maker.git"
   },
   "author": "kaspernj",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kaspernj/api-maker-bootstrap/issues"
+    "url": "https://github.com/kaspernj/api_maker/issues"
   },
-  "homepage": "https://github.com/kaspernj/api-maker-bootstrap#readme",
+  "homepage": "https://github.com/kaspernj/api_maker#readme",
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "prop-types-exact": "^1.2.0",
