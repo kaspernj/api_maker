@@ -23,7 +23,7 @@ describe ApiMaker::DestroyCommand do
       expect_any_instance_of(ApiMaker::DestroyCommand).to receive(:errors_for_model).and_call_original
 
       project = create :project
-      project_secret = create :project_secret, id: 4849, project: project
+      create :project_secret, id: 4849, project: project
 
       result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(command: ApiMaker::DestroyCommand, model: project)
 
