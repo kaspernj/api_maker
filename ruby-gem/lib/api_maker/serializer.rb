@@ -16,7 +16,7 @@ class ApiMaker::Serializer
   def initialize(ability: nil, api_maker_args: {}, locals: nil, model:, select: nil)
     @ability = ability
     @api_maker_args = api_maker_args
-    @locals = locals || api_maker_args[:locals] || {}
+    @locals = locals || api_maker_args&.dig(:locals) || {}
     @model = model
     @select = select
   end
