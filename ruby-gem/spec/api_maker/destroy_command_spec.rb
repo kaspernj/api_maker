@@ -18,6 +18,19 @@ describe ApiMaker::DestroyCommand do
   let!(:task) { create :task, project: project }
   let!(:user) { create :user }
 
+  describe "#errors_for_model" do
+    it "generates error messages" do
+      expect_any_instance_of(ApiMaker::DestroyCommand).to receive(:errors_for_model).and_call_original
+
+      project = create :project
+      create :project_secret, id: 4849, project: project
+
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(command: ApiMaker::DestroyCommand, model: project)
+
+      expect(result.fetch(:errors)).to eq ["Cannot delete because of child errors in project_secrets with IDs: 4849: cannot destroy project secret 4849"]
+    end
+  end
+
   describe "#execute!" do
     it "finds all tasks" do
       command = helper.add_command(primary_key: account.id)

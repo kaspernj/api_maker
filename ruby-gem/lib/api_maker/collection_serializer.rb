@@ -8,7 +8,7 @@ class ApiMaker::CollectionSerializer
     @ability = ability || ApiMaker::Ability.new(api_maker_args: api_maker_args)
     @api_maker_args = api_maker_args
     @collection = collection
-    @locals = locals || api_maker_args[:locals] || {}
+    @locals = locals || api_maker_args&.dig(:locals) || {}
     @preload_param = @query_params[:preload]
     @model_class = model_class
     @select = ApiMaker::SelectParser.execute!(select: query_params[:select]) if @query_params[:select]
