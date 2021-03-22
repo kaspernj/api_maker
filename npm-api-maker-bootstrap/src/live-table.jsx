@@ -1,4 +1,4 @@
-const {Collection, EventCreated, EventDestroyed, EventUpdated, Params} = require("@kaspernj/api-maker")
+const {Collection, EventCreated, EventDestroyed, EventUpdated, instanceOfClassName, Params} = require("@kaspernj/api-maker")
 const {debounce} = require("debounce")
 const {digg, digs} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
@@ -19,7 +19,10 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     abilities: PropTypes.object,
     actionsContent: PropTypes.func,
     className: PropTypes.string,
-    collection: PropTypes.instanceOf(Collection),
+    collection: PropTypes.oneOfType([
+      instanceOfClassName("ApiMakerCollection"),
+      PropTypes.instanceOf(Collection)
+    ]),
     columnsContent: PropTypes.func.isRequired,
     controls: PropTypes.func,
     defaultParams: PropTypes.object,
