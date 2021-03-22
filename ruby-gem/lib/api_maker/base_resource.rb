@@ -106,14 +106,19 @@ class ApiMaker::BaseResource
 
     relevant_rules.each do |relevant_rule|
       if relevant_rule.conditions.empty?
-        lookup_query = target_model_class
-          .where("#{target_model_class.table_name}.#{reflection.foreign_key} = #{model_class.table_name}.#{model_class.primary_key}")
-
-        exists_sql = "EXISTS (#{lookup_query.to_sql})"
-
-        can ability, model_class, [exists_sql] do |model|
-          model.__send__(relationship).any?
-        end
+        handle_empty_conditions(
+          model_class: model_class,
+          reflection: reflection,
+          relationship: relationship,
+          target_model_class: target_model_class
+        )
+      elsif relevant_rule.conditions.is_a?(Array)
+        handle_array_condition_rule(
+          ability: ability,
+          model_class: model_class,
+          reflection: reflection,
+          relevant_rule: relevant_rule
+        )
       else
         can ability, model_class, {
           reflection.name => relevant_rule.conditions
@@ -122,7 +127,64 @@ class ApiMaker::BaseResource
     end
   end
 
+  def inspect
+    "#<#{self.class.name}:#{__id__}>"
+  end
+
   def model_class
     self.class.model_class
+  end
+
+private
+
+  def handle_empty_conditions(model_class:, reflection:, relationship:, target_model_class:)
+    lookup_query = target_model_class
+      .where("#{target_model_class.table_name}.#{reflection.foreign_key} = #{model_class.table_name}.#{model_class.primary_key}")
+
+    exists_sql = "EXISTS (#{lookup_query.to_sql})"
+
+    can ability, model_class, [exists_sql] do |model|
+      model.__send__(relationship).any?
+    end
+  end
+
+  def handle_array_condition_rule(ability:, model_class:, reflection:, relevant_rule:)
+    if raw_supported_macro?(reflection.macro)
+      nested_sql = nested_raw_sql(
+        model_class: model_class,
+        relevant_rule: relevant_rule,
+        reflection: reflection
+      )
+
+      can ability, model_class, [nested_sql] do |model|
+        model_class.where(nested_sql).exists?(id: model.id)
+      end
+    else
+      raise "No support for macro: #{reflection.macro}"
+    end
+  end
+
+  def raw_supported_macro?(macro)
+    macro == :belongs_to || macro == :has_many || macro == :has_one
+  end
+
+  def nested_raw_sql(model_class:, reflection:, relevant_rule:)
+    # The conditions are given as raw SQL so we nest the original sub-query under a new one that filters on the ID of the current table as well
+    relationship_sql = relevant_rule.conditions.first
+    "EXISTS (" \
+      "SELECT 1 " \
+      "FROM #{reflection.klass.table_name} " \
+      "WHERE " \
+        "#{nested_raw_sql_condition(model_class: model_class, reflection: reflection)} AND " \
+        "(#{relationship_sql})" \
+    ")"
+  end
+
+  def nested_raw_sql_condition(model_class:, reflection:)
+    if reflection.macro == :belongs_to
+      "#{reflection.klass.table_name}.#{reflection.join_primary_key} = #{model_class.table_name}.#{reflection.foreign_key}"
+    else
+      "#{reflection.klass.table_name}.#{reflection.foreign_key} = #{model_class.table_name}.#{model_class.primary_key}"
+    end
   end
 end

@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     api_maker (0.0.1)
-      active_record_better_dependent_error_messages (>= 0.0.2)
+      active_record_better_dependent_error_messages (>= 0.0.3)
       active_record_query_fixer (>= 0.0.13)
       cancancan
       dig_bang
@@ -52,7 +52,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_record_better_dependent_error_messages (0.0.2)
+    active_record_better_dependent_error_messages (0.0.3)
       rails (>= 6.0.0)
     active_record_query_fixer (0.0.13)
       dig_bang

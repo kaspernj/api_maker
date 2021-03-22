@@ -13,7 +13,9 @@ export default class ApiMakerEventDestroyed extends React.Component {
   }
 
   componentWillUnmount() {
-    this.connectDestroyed.unsubscribe()
+    if (this.connectDestroyed) {
+      this.connectDestroyed.unsubscribe()
+    }
   }
 
   connect() {

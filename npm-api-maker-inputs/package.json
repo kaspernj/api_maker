@@ -10,16 +10,16 @@
     ]
   },
   "bugs": {
-    "url": "https://github.com/kaspernj/api-maker-inputs/issues"
+    "url": "https://github.com/kaspernj/api_maker/issues"
   },
   "description": "",
-  "homepage": "https://github.com/kaspernj/api-maker-inputs#readme",
+  "homepage": "https://github.com/kaspernj/api_maker#readme",
   "license": "ISC",
   "main": "index.js",
   "name": "@kaspernj/api-maker-inputs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kaspernj/api-maker-inputs.git"
+    "url": "git+https://github.com/kaspernj/api_maker.git"
   },
   "version": "1.0.44",
   "peerDependencies": {

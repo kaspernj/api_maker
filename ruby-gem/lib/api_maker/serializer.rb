@@ -16,13 +16,13 @@ class ApiMaker::Serializer
   def initialize(ability: nil, api_maker_args: {}, locals: nil, model:, select: nil)
     @ability = ability
     @api_maker_args = api_maker_args
-    @locals = locals || api_maker_args[:locals] || {}
+    @locals = locals || api_maker_args&.dig(:locals) || {}
     @model = model
     @select = select
   end
 
   def attributes
-    ApiMaker::Configuration.profile("attributes") do
+    profile("attributes") do
       result = {}
       attributes_to_read.each do |attribute, data|
         if (if_name = data.dig(:args, :if))
@@ -38,14 +38,18 @@ class ApiMaker::Serializer
   end
 
   def attributes_to_read
-    @attributes_to_read ||= @select || resource.default_select
+    @attributes_to_read ||= profile("attributes_to_read") do
+      @select || resource.default_select
+    end
   end
 
   def attribute_value(attribute)
-    if resource_instance.respond_to?(attribute)
-      resource_instance.__send__(attribute)
-    else
-      model.__send__(attribute)
+    profile("attribute_value #{attribute}") do
+      if resource_instance.respond_to?(attribute)
+        resource_instance.__send__(attribute)
+      else
+        model.__send__(attribute)
+      end
     end
   end
 
@@ -63,11 +67,15 @@ class ApiMaker::Serializer
   end
 
   def resource
-    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(model.class)
+    @resource ||= profile("resource") do
+      ApiMaker::MemoryStorage.current.resource_for_model(model.class)
+    end
   end
 
   def resource_instance
-    @resource_instance ||= resource.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model)
+    @resource_instance ||= profile("resource_instance") do
+      resource.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model)
+    end
   end
 
   def result
@@ -78,16 +86,28 @@ class ApiMaker::Serializer
   end
 
   def as_json(_options = nil)
-    result
+    profile("as_json") do
+      result
+    end
   end
 
   def to_json(_options = nil)
-    JSON.generate(as_json)
+    profile("to_json") do
+      JSON.generate(as_json)
+    end
   end
 
   def inspect
-    "<ApiMaker::Serializer id=\"#{model.id}\" model=\"#{model.class.name}\" relationships=\"#{relationships}\">"
+    profile("inspect") do
+      "<ApiMaker::Serializer id=\"#{model.id}\" model=\"#{model.class.name}\" relationships=\"#{relationships}\">"
+    end
   end
 
   alias to_s inspect
+
+private
+
+  def profile(message, &blk)
+    ApiMaker::Configuration.profile("Serializer for #{model.class.name}: #{message}", &blk)
+  end
 end

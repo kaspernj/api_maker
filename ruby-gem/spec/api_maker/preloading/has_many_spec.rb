@@ -33,7 +33,9 @@ describe "preloading - has many" do
 
     expect(preloader.models).to eq [task]
     expect(sql).to include "JOIN tasks AS accessible_table ON accessible_table.id = tasks.id"
-    expect(sql).to include '(EXISTS (SELECT 1 FROM "tasks" WHERE "tasks"."user_id" = 1 AND (tasks.id = accessible_table.id)))'
+    expect(sql).to include "EXISTS (SELECT 1 FROM \"tasks\" WHERE ((" \
+      "EXISTS (SELECT 1 FROM account_marked_tasks WHERE account_marked_tasks.task_id = tasks.id AND (account_marked_tasks.id = 5))) OR "\
+      "((tasks.name = 'Some readable task') OR (\"tasks\".\"user_id\" = 1))) AND (tasks.id = accessible_table.id)"
   end
 
   it "doesnt add joins and exists if the user has ability with no conditions" do

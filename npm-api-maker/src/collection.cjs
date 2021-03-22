@@ -32,7 +32,7 @@ module.exports = class Collection {
   }
 
   accessibleBy(abilityName) {
-    return this._merge({accessibleBy: abilityName})
+    return this._merge({accessibleBy: inflection.underscore(abilityName)})
   }
 
   async count() {

@@ -14,7 +14,9 @@ export default class ApiMakerEventModelClass extends React.Component {
   }
 
   componentWillUnmount() {
-    this.connection.unsubscribe()
+    if (this.connection) {
+      this.connection.unsubscribe()
+    }
   }
 
   connect() {

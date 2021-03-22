@@ -16,19 +16,19 @@
     ]
   },
   "name": "@kaspernj/api-maker",
-  "version": "1.0.67",
+  "version": "1.0.74",
   "description": "",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kaspernj/api-maker.git"
+    "url": "git+https://github.com/kaspernj/api_maker.git"
   },
   "author": "kaspernj",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kaspernj/api-maker/issues"
+    "url": "https://github.com/kaspernj/api_maker/issues"
   },
-  "homepage": "https://github.com/kaspernj/api-maker",
+  "homepage": "https://github.com/kaspernj/api_maker",
   "scripts": {
     "test": "jest"
   },

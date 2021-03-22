@@ -1,5 +1,6 @@
 require "api_maker/engine"
 
+require "active_record_better_dependent_error_messages"
 require "active_record_query_fixer"
 require "cancancan"
 require "ransack"
