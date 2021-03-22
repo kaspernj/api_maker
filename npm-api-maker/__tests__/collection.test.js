@@ -15,6 +15,17 @@ describe("Collection", () => {
   })
 
   describe("ransack", () => {
+    it("handles undefined arguments", () => {
+      // This can happen if someone does something like this and users_q isn't set:
+      // query.ransack(params.users_q)
+
+      let collection = new Collection({}, {ransack: {id_eq: 5}})
+
+      collection.ransack(undefined)
+
+      expect(collection.queryArgs).toEqual({ransack: {id_eq: 5}})
+    })
+
     it("handles sorts of different types", () => {
       let collection = new Collection({}, {})
 
