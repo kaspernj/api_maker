@@ -137,7 +137,11 @@ module.exports = class Collection {
   }
 
   ransack(params) {
-    return this._merge({ransack: params})
+    if (params) {
+      this._merge({ransack: params})
+    }
+
+    return this
   }
 
   async result() {
