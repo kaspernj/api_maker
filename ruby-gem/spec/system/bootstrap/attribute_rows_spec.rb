@@ -11,9 +11,9 @@ describe "bootstrap attribute rows" do
     visit bootstrap_attribute_rows_path
 
     # Shouldn't crash because 'updated at' isn't loaded
-    wait_for_browser { wait_for_and_find(".user-row[data-user-id='#{user.id}'] .updated-at-column td").text == "" }
+    wait_for_expect { expect(wait_for_and_find(".user-row[data-user-id='#{user.id}'] .updated-at-column td").text).to eq "" }
 
     # Should show 'updated at' so it shouldn't be empty
-    wait_for_browser { wait_for_and_find(".user-row[data-user-id='#{user_kasper.id}'] .updated-at-column td").text != "" }
+    wait_for_expect { expect(wait_for_and_find(".user-row[data-user-id='#{user_kasper.id}'] .updated-at-column td").text).not_to eq "" }
   end
 end
