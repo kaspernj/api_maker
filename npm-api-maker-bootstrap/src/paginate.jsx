@@ -1,3 +1,4 @@
+const {instanceOfClassName} = require("@kaspernj/api-maker")
 const {Link} = require("react-router-dom")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
@@ -8,7 +9,10 @@ import {Result} from "@kaspernj/api-maker"
 
 export default class ApiMakerBootstrapPaginate extends React.Component {
   static propTypes = PropTypesExact({
-    result: PropTypes.instanceOf(Result).isRequired
+    result: PropTypes.oneOfType([
+      instanceOfClassName("ApiMakerResult"),
+      PropTypes.instanceOf(Result)
+    ]).isRequired
   })
 
   constructor(props) {
