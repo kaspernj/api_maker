@@ -18,6 +18,10 @@ const EventListener = require("./src/event-listener").default
 const EventModelClass = require("./src/event-model-class").default
 const EventUpdated = require("./src/event-updated").default
 const HistoryListener = require("./src/history-listener").default
+const instanceOfClassName = require("./src/instance-of-class-name.cjs")
+
+console.log({ instanceOfClassName })
+
 const KeyValueStore = require("./src/key-value-store.cjs")
 const Logger = require("./src/logger.cjs")
 const ModelName = require("./src/model-name.cjs")
@@ -59,6 +63,7 @@ export {
   EventModelClass,
   EventUpdated,
   HistoryListener,
+  instanceOfClassName,
   KeyValueStore,
   Logger,
   ModelName,

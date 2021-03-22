@@ -6,7 +6,7 @@ const {merge} = require("./merge.cjs")
 const ModelsResponseReader = require("./models-response-reader.cjs")
 const Result = require("./result.cjs")
 
-module.exports = class Collection {
+module.exports = class ApiMakerCollection {
   constructor(args, queryArgs = {}) {
     this.queryArgs = queryArgs
     this.args = args

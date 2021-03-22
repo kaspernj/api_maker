@@ -1,4 +1,4 @@
-module.exports = class Result {
+module.exports = class ApiMakerResult {
   constructor(data) {
     this.data = data
   }
