@@ -211,7 +211,7 @@ module.exports = class ApiMakerCollection {
   clone() {
     const clonedQueryArgs = cloneDeep(this.queryArgs)
 
-    return new Collection(this.args, clonedQueryArgs)
+    return new ApiMakerCollection(this.args, clonedQueryArgs)
   }
 
   _merge(newQueryArgs) {
