@@ -55,6 +55,7 @@
   "dependencies": {
     "@kaspernj/object-digger": ">= 1.0.2",
     "@rails/actioncable": ">= 6.1.0",
+    "await-lock": "^2.1.0",
     "clone-deep": "^4.0.1",
     "form-data-objectizer": "^1.0.0",
     "format-number": ">= 3.0.0",
