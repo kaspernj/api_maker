@@ -1,7 +1,7 @@
+const AwaitLock = require("await-lock").default
 const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 const Services = require("./services.cjs")
-const AwaitLock = require("await-lock").default
 
 module.exports = class ApiMakerCanCan {
   static current() {
