@@ -6,6 +6,10 @@ class ApiMaker::PermittedParamsArgument
     @model = model
   end
 
+  def inspect
+    "#<#{self.class.name}:#{__id__}>"
+  end
+
   def params
     @params ||= command.args&.dig(:save) || {}
   end
