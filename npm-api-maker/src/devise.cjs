@@ -3,6 +3,7 @@ const {digg} = require("@kaspernj/object-digger")
 const EventEmitter = require("events")
 const inflection = require("inflection")
 const Services = require("./services.cjs")
+const SessionStatusUpdater = require("./session-status-updater.cjs")
 
 module.exports = class ApiMakerDevise {
   static callSignOutEvent(args) {
@@ -76,6 +77,7 @@ module.exports = class ApiMakerDevise {
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
 
     CanCan.current().resetAbilities()
+    SessionStatusUpdater.current().updateSessionStatus()
     ApiMakerDevise.setSignedOut(args)
     ApiMakerDevise.callSignOutEvent(args)
 
