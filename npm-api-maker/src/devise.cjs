@@ -76,6 +76,12 @@ module.exports = class ApiMakerDevise {
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
 
     CanCan.current().resetAbilities()
+
+    // Cannot use the class because they would both import each other
+    if (window.apiMakerSessionStatusUpdater) {
+      window.apiMakerSessionStatusUpdater.updateSessionStatus()
+    }
+
     ApiMakerDevise.setSignedOut(args)
     ApiMakerDevise.callSignOutEvent(args)
 
