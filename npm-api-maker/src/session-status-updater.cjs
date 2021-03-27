@@ -1,4 +1,4 @@
-const {Devise} = require("./devise.cjs")
+const Devise = require("./devise.cjs")
 const inflection = require("inflection")
 const wakeEvent = require("wake-event")
 
