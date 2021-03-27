@@ -1,4 +1,4 @@
-const {Devise} = require("@kaspernj/api-maker")
+const {Devise} = require("./devise.cjs")
 const inflection = require("inflection")
 const wakeEvent = require("wake-event")
 
