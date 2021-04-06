@@ -17,8 +17,10 @@ module.exports = class ApiMakerDevise {
   }
 
   static events() {
-    if (!window.apiMakerDeviseEvents)
+    if (!window.apiMakerDeviseEvents) {
       window.apiMakerDeviseEvents = new EventEmitter()
+      window.apiMakerDeviseEvents.setMaxListeners(1000)
+    }
 
     return window.apiMakerDeviseEvents
   }
