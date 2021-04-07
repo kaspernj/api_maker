@@ -135,6 +135,6 @@ module.exports = class ApiMakerCableConnectionPool {
     if (this.scheduleConnectUpcomingTimeout)
       clearTimeout(this.scheduleConnectUpcomingTimeout)
 
-    this.scheduleConnectUpcomingTimeout = setTimeout(() => this.connectUpcoming(), 50)
+    this.scheduleConnectUpcomingTimeout = setTimeout(() => this.connectUpcoming(), 0)
   }
 }
