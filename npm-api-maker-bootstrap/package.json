@@ -30,7 +30,7 @@
     "react-router-dom": "^5.1.2"
   },
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.77",
+    "@kaspernj/api-maker": ">= 1.0.81",
     "@kaspernj/api-maker-inputs": ">= 1.0.44",
     "@kaspernj/object-digger": ">= 1.0.2",
     "debounce": ">= 1.2.0",

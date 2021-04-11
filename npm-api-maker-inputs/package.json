@@ -28,7 +28,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.60",
+    "@kaspernj/api-maker": ">= 1.0.81",
     "@kaspernj/object-digger": ">= 1.0.2",
     "classnames": ">= 2.2.6",
     "inflection": ">= 1.12.0"
