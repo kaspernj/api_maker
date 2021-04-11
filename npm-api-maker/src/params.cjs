@@ -8,7 +8,7 @@ module.exports = class Params {
   }
 
   static change(given) {
-    return merge.recursive(Params.parse(), given)
+    return merge(Params.parse(), given)
   }
 
   static changeParams(given) {

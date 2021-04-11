@@ -1,4 +1,4 @@
-import Params from "shared/params"
+import { Params } from "@kaspernj/api-maker"
 import React from "react"
 import { Paginate, SortLink } from "@kaspernj/api-maker-bootstrap"
 
