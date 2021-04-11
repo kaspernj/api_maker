@@ -1,4 +1,4 @@
-const {Devise} = require("@kaspernj/api-maker")
+const Devise = require("./devise.cjs")
 const inflection = require("inflection")
 const wakeEvent = require("wake-event")
 
@@ -20,11 +20,11 @@ module.exports = class ApiMakerSessionStatusUpdater {
   }
 
   connectOnlineEvent() {
-    window.addEventListener("online", () => { this.updateSessionStatus() }, false)
+    window.addEventListener("online", () => this.updateSessionStatus(), false)
   }
 
   connectWakeEvent() {
-    wakeEvent(() => { this.updateSessionStatus() })
+    wakeEvent(() => this.updateSessionStatus())
   }
 
   debug(message) {
@@ -32,8 +32,8 @@ module.exports = class ApiMakerSessionStatusUpdater {
       console.log(`ApiMakerSessionStatusUpdater: ${message}`)
   }
 
-  sessionStatus() {
-    return new Promise(resolve => {
+  async sessionStatus() {
+    return new Promise((resolve) => {
       const xhr = new XMLHttpRequest()
       xhr.open("POST", "/api_maker/session_statuses", true)
       xhr.onload = () => {
@@ -68,14 +68,14 @@ module.exports = class ApiMakerSessionStatusUpdater {
       clearTimeout(this.updateTimeout)
   }
 
-  updateSessionStatus() {
+  async updateSessionStatus() {
     this.debug("updateSessionStatus")
 
-    this.sessionStatus().then(result => {
-      this.debug(`Result: ${JSON.stringify(result, null, 2)}`)
-      this.updateMetaElementsFromResult(result)
-      this.updateUserSessionsFromResult(result)
-    })
+    const result = await this.sessionStatus()
+
+    this.debug(`Result: ${JSON.stringify(result, null, 2)}`)
+    this.updateMetaElementsFromResult(result)
+    this.updateUserSessionsFromResult(result)
   }
 
   updateMetaElementsFromResult(result) {
