@@ -747,12 +747,16 @@ module.exports = class BaseModel {
 
     for(const relationshipName in this.preloadedRelationships) {
       const relationshipData = this.preloadedRelationships[relationshipName]
-      const relationshipClassData = this.modelClassData().relationships.find(relationship => digg(relationship, "name") == relationshipName)
+      const relationshipClassData = this.modelClassData().relationships.find((relationship) => digg(relationship, "name") == relationshipName)
+      const relationshipType = digg(relationshipClassData, "collectionName")
 
-      if (!relationshipClassData)
+      if (relationshipName in this.relationshipsCache) {
+        throw new Error(`${relationshipName} has already been loaded`)
+      }
+
+      if (!relationshipClassData) {
         throw new Error(`No relationship on ${digg(this.modelClassData(), "name")} by that name: ${relationshipName}`)
-
-        const relationshipType = relationshipClassData.collectionName
+      }
 
       if (!relationshipData) {
         this.relationshipsCache[relationshipName] = null
