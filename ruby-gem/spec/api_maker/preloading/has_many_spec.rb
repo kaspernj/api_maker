@@ -64,4 +64,54 @@ describe "preloading - has many" do
     expect(sql).not_to include "JOIN tasks AS accessible_table ON accessible_table.id = tasks.id"
     expect(sql).not_to include "EXISTS"
   end
+
+  describe "#preload_model" do
+    # This can happen if the same model is preloaded under different paths like so
+    # .preload([
+    #   "photo_sheet_product_sheet_layouts.sheet_layout.boxes",
+    #   "sheet_layout.boxes"
+    # ])
+    it "doesnt preload the same model multiple times" do
+      user.update!(admin: true)
+      collection = Project.where(id: project.id)
+      reflection = Project.reflections.fetch("tasks")
+
+      expect(user_ability.can?(:read, task)).to eq true
+      expect(user_ability.can?(:read, other_task)).to eq true
+
+      data = {
+        preloaded: {}
+      }
+
+      records = {
+        "projects" => {
+          project.id => {
+            r: {}
+          }
+        }
+      }
+
+      preloader = ApiMaker::PreloaderHasMany.new(
+        ability: user_ability,
+        api_maker_args: {},
+        collection: collection,
+        data: data,
+        locals: {},
+        records: records,
+        reflection: reflection,
+        select: nil,
+        select_columns: nil
+      )
+
+      allow(task).to receive(:[]).with(:api_maker_origin_id).and_return(project.id).at_least(:once)
+
+      preloader.__send__(:preload_model, task)
+      preloader.__send__(:preload_model, task)
+      preloader.__send__(:preload_model, task)
+
+      preloaded_task_ids_for_project = records.dig!("projects", project.id, :r, :tasks)
+
+      expect(preloaded_task_ids_for_project).to eq [task.id]
+    end
+  end
 end

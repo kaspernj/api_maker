@@ -13,7 +13,9 @@ private
     @models ||= if use_joined_query?
       models_with_join
     else
-      query = models_initial_query.select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
+      primary_key_arel_column = reflection.active_record.arel_table[reflection.active_record.primary_key]
+
+      query = models_initial_query.select(primary_key_arel_column.as("api_maker_origin_id"))
       query = query.instance_eval(&reflection.scope) if reflection.scope
       query = query.accessible_by(ability) if ability
       query = ApiMaker::SelectColumnsOnCollection.execute!(
@@ -42,8 +44,8 @@ private
     origin_data = find_origin_data_for_model(model)
     model_id = ApiMaker::PrimaryIdForModel.get(model)
 
-    origin_data.fetch(:r)[reflection.name] ||= []
-    origin_data.fetch(:r).fetch(reflection.name) << model_id
+    reflection_data = origin_data.fetch(:r)[reflection.name] ||= []
+    reflection_data << model_id unless reflection_data.include?(model_id)
 
     serializer = ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model, select: select&.dig(model.class))
     collection_name = serializer.resource.collection_name
