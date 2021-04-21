@@ -22,7 +22,7 @@ describe ApiMaker::ServiceCommand do
         command_response: command_response,
         controller: nil
       )
-      .execute!
+      .execute_with_response
 
     expect(response).to eq(
       type: :failed,

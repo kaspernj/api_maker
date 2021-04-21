@@ -1,8 +1,6 @@
 class ApiMaker::CommandSpecHelper
   attr_reader :commands, :command_class, :collection
 
-  delegate :execute!, to: :command
-
   def initialize(command:, collection: nil, controller: nil)
     @collection = collection
     @command_class = command
@@ -66,6 +64,10 @@ class ApiMaker::CommandSpecHelper
 
   def controller
     @controller ||= instance_double("ApplicationController", current_user: user)
+  end
+
+  def execute!
+    command.execute_with_response
   end
 
   def response
