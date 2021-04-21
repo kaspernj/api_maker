@@ -72,7 +72,7 @@ class ApiMaker::BaseCommand
         begin
           command_instance.execute!
         rescue ApiMaker::CommandFailedError => e
-          command.fail(errors: e.api_maker_errors)
+          command.fail(*e.api_maker_args, &e.api_maker_block)
         end
       end
     end
@@ -187,9 +187,9 @@ class ApiMaker::BaseCommand
     end
   end
 
-  def fail!(*args, errors: nil, &blk)
-    if errors
-       error_messages = errors.map do |error|
+  def fail!(*args, &blk)
+    if args.is_a?(Hash) && args.key?(:errors)
+      error_messages = args.fetch(:errors).map do |error|
         if error.is_a?(Hash) && error.key?(:message)
           error.fetch(:message)
         else
@@ -201,7 +201,8 @@ class ApiMaker::BaseCommand
     end
 
     error = ApiMaker::CommandFailedError.new(error_messages)
-    error.api_maker_errors = errors
+    error.api_maker_args = args
+    error.api_maker_block = blk
 
     raise error
   end
