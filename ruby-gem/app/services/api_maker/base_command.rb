@@ -197,7 +197,7 @@ class ApiMaker::BaseCommand
         end
       end
     else
-      error_messages = args
+      error_messages = ["Command failed"]
     end
 
     error = ApiMaker::CommandFailedError.new(error_messages)
