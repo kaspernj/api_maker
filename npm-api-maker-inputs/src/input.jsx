@@ -87,6 +87,7 @@ export default class ApiMakerInput extends React.Component {
         {localizedNumber &&
           <input
             defaultValue={this.inputDefaultValue()}
+            id={this.inputId()}
             name={this.inputName()}
             ref={this.inputReference()}
             type="hidden"
