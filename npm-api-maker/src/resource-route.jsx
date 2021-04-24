@@ -42,7 +42,7 @@ export default class ApiMakerResourceRoute {
   withLocale() {
     const component = this.requireComponentFromCaller()
     const Locales = require("shared/locales").default
-    const Path = require("shared/path").default
+    const Path = require("./path.cjs").default
     const routes = []
 
     for(const locale of Locales.availableLocales()) {
