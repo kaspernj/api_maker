@@ -1,5 +1,6 @@
 const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
+const Path = require("./path.cjs")
 
 export default class ApiMakerResourceRoute {
   constructor({jsRoutes, locales, requireComponent, routeDefinition}) {
@@ -42,7 +43,6 @@ export default class ApiMakerResourceRoute {
   withLocale() {
     const component = this.requireComponentFromCaller()
     const Locales = require("shared/locales").default
-    const Path = require("./path.cjs").default
     const routes = []
 
     for(const locale of Locales.availableLocales()) {

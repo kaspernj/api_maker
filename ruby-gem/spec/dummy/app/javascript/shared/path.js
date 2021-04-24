@@ -1,4 +1,4 @@
-import {Routes} from "@kaspernj/api-maker"
+const Routes = require("./routes.cjs")
 
 export default class Path {
   static localized(pathName, params, args = {}) {
