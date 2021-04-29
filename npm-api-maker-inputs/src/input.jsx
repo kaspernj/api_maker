@@ -182,7 +182,7 @@ export default class ApiMakerInput extends React.Component {
 
     let value = this.inputDefaultValue()
 
-    if (localizedNumber) {
+    if (localizedNumber && typeof value == "string") {
       const separator = I18n.t("number.currency.format.separator")
       const delimiter = I18n.t("number.currency.format.delimiter")
 
