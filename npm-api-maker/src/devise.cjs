@@ -52,7 +52,7 @@ module.exports = class ApiMakerDevise {
     const modelClass = digg(require("api-maker/models"), inflection.camelize(args.scope))
     const modelInstance = new modelClass(digg(response, "model_data"))
 
-    CanCan.current().resetAbilities()
+    await CanCan.current().resetAbilities()
 
     ApiMakerDevise.updateSession(modelInstance)
     ApiMakerDevise.events().emit("onDeviseSignIn", Object.assign({username}, args))
@@ -77,7 +77,7 @@ module.exports = class ApiMakerDevise {
 
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
 
-    CanCan.current().resetAbilities()
+    await CanCan.current().resetAbilities()
 
     // Cannot use the class because they would both import each other
     if (window.apiMakerSessionStatusUpdater) {

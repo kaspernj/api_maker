@@ -521,7 +521,7 @@ await canCan.loadAbilities([
 
 To avoid doing queries for the same abilities in CanCan over an over they are cached. If some things change it can be necessary to reset those abilities.
 ```js
-canCan.resetAbilities()
+await canCan.resetAbilities()
 ```
 
 ## Serializing
