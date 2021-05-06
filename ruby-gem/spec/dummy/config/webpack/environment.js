@@ -31,7 +31,7 @@ environment.plugins.append(
     Hash: ["shared/hash", "default"],
     I18n: ["shared/i18n", "default"],
     Layout: ["components/layout", "default"],
-    Params: ["shared/params", "default"],
+    Params: ["@kaspernj/api-maker", "Params"],
     Project: ["api-maker/models", "Project"],
     PropTypesExact: "prop-types-exact",
     React: "react",

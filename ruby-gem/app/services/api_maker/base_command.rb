@@ -23,6 +23,12 @@ class ApiMaker::BaseCommand
     @controller = controller
   end
 
+  def execute_with_response
+    execute!
+  rescue ApiMaker::CommandFailedError => e
+    command.fail(*e.api_maker_args, &e.api_maker_block)
+  end
+
   def self.command_error_message(error)
     if Rails.application.config.consider_all_requests_local
       "#{error.class.name}: #{error.message}"
@@ -68,7 +74,7 @@ class ApiMaker::BaseCommand
           command_response: command_response,
           controller: controller
         )
-        command_instance.execute!
+        command_instance.execute_with_response
       end
     end
   end
@@ -170,7 +176,6 @@ class ApiMaker::BaseCommand
       true
     else
       fail!(errors: response.error_messages.map { |error| {message: error, type: :validation_error} })
-      false
     end
   end
 
@@ -184,7 +189,23 @@ class ApiMaker::BaseCommand
   end
 
   def fail!(*args, &blk)
-    command.fail(*args, &blk)
+    if args.is_a?(Hash) && args.key?(:errors)
+      error_messages = args.fetch(:errors).map do |error|
+        if error.is_a?(Hash) && error.key?(:message)
+          error.fetch(:message)
+        else
+          error
+        end
+      end
+    else
+      error_messages = ["Command failed"]
+    end
+
+    error = ApiMaker::CommandFailedError.new(error_messages)
+    error.api_maker_args = args
+    error.api_maker_block = blk
+
+    raise error
   end
 
   def succeed!(*args, &blk)

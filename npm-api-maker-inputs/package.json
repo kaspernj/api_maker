@@ -21,14 +21,14 @@
     "type": "git",
     "url": "git+https://github.com/kaspernj/api_maker.git"
   },
-  "version": "1.0.44",
+  "version": "1.0.49",
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "prop-types-exact": "^1.2.0",
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.60",
+    "@kaspernj/api-maker": ">= 1.0.81",
     "@kaspernj/object-digger": ">= 1.0.2",
     "classnames": ">= 2.2.6",
     "inflection": ">= 1.12.0"

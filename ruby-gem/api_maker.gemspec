@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency "waitutil"
 
   s.add_runtime_dependency "active_record_better_dependent_error_messages", ">= 0.0.3"
-  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.13"
+  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.15"
   s.add_runtime_dependency "cancancan"
   s.add_runtime_dependency "dig_bang"
   s.add_runtime_dependency "ransack"

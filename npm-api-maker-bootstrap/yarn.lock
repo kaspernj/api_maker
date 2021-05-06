@@ -28,15 +28,16 @@
     strftime "^0.10.0"
     wake-event "^0.0.1"
 
-"@kaspernj/api-maker@>= 1.0.77":
-  version "1.0.77"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.77.tgz#701f9836ea398b7ba4253d97512bd64999bbdab2"
-  integrity sha512-iftKPY7GdP4M9gau3lR0e9j4ylIgaR7mKM0Ta1faxmAgOu0Ri6r0DCllPQf5wME1fe6J8nnC7VZB0lTA2PQ3EQ==
+"@kaspernj/api-maker@>= 1.0.81":
+  version "1.0.81"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.81.tgz#17a6e62bed811658b0e1c53e1807618759b3ae03"
+  integrity sha512-Cq7dJWt1Aa796GT9VHyiIxeoppylYtqc4kE4bawW16PLVimGAL/irJXqN2nI07IYKrJDgyOdLBIrWyo15Dd3Nw==
   dependencies:
     "@kaspernj/object-digger" ">= 1.0.2"
     "@rails/actioncable" ">= 6.1.0"
     clone-deep "^4.0.1"
     form-data-objectizer "^1.0.0"
+    form-serialize ">= 0.7.2"
     format-number ">= 3.0.0"
     inflection ">= 1.12.0"
     js-money ">= 0.6.3"
@@ -84,6 +85,11 @@ form-data-objectizer@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/form-data-objectizer/-/form-data-objectizer-1.0.0.tgz#6f47630fa368d8548738bd304ad815dc0d7201fe"
   integrity sha512-kXj3ud4KQ4AZNBP/eq2TOBHXINMdLu4IzcxBFhguFH/AQ8rjQs3UUlhu94eKUG+vAt8a4LHOdNGH/6CKKro1Mg==
+
+"form-serialize@>= 0.7.2":
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/form-serialize/-/form-serialize-0.7.2.tgz#b0a2ff0c22026fb6d3d15c9d33f6de6a432e4732"
+  integrity sha1-sKL/DCICb7bT0VydM/beakMuRzI=
 
 "format-number@>= 3.0.0", format-number@^3.0.0:
   version "3.0.0"

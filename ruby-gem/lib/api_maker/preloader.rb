@@ -30,33 +30,37 @@ class ApiMaker::Preloader
       Rails.logger.debug "API maker: Preloading: #{model_class}.#{key}"
 
       preload_result = ApiMaker::Configuration.profile("Preloading #{reflection.klass.name} with #{preload_class.name}") do
-        preload_class.new(
-          ability: @ability,
-          api_maker_args: api_maker_args,
-          collection: @collection,
-          data: @data,
-          locals: locals,
-          records: @records,
-          reflection: reflection,
-          select: @select,
-          select_columns: @select_columns
-        ).preload
+        preload_class
+          .new(
+            ability: @ability,
+            api_maker_args: api_maker_args,
+            collection: @collection,
+            data: @data,
+            locals: locals,
+            records: @records,
+            reflection: reflection,
+            select: @select,
+            select_columns: @select_columns
+          )
+          .preload
       end
 
       next if value.blank? || preload_result.empty?
 
-      ApiMaker::Preloader.new(
-        ability: @ability,
-        api_maker_args: api_maker_args,
-        data: @data,
-        collection: preload_result,
-        locals: locals,
-        preload_param: value,
-        model_class: reflection.klass,
-        records: @data.fetch(:preloaded),
-        select: @select,
-        select_columns: @select_columns
-      ).fill_data
+      ApiMaker::Preloader
+        .new(
+          ability: @ability,
+          api_maker_args: api_maker_args,
+          data: @data,
+          collection: preload_result,
+          locals: locals,
+          preload_param: value,
+          model_class: reflection.klass,
+          records: @data.fetch(:preloaded),
+          select: @select,
+          select_columns: @select_columns
+        )
+        .fill_data
     end
   end
 

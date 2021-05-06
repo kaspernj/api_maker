@@ -1,4 +1,4 @@
-import Params from "shared/params"
+import { Params } from "@kaspernj/api-maker"
 import React from "react"
 
 export default class ModelsCommandSerialize extends React.Component {
