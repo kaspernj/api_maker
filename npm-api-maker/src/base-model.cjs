@@ -104,6 +104,10 @@ module.exports = class BaseModel {
     }
   }
 
+  attributes() {
+    return digg(this, "modelData")
+  }
+
   can(givenAbilityName) {
     const abilityName = inflection.underscore(givenAbilityName)
 
