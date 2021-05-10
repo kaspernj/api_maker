@@ -205,8 +205,7 @@ module.exports = class BaseModel {
   }
 
   async createRaw(rawData, options = {}) {
-    const formData = FormDataObjectizer.formDataFromObject(rawData, options)
-    const objectData = FormDataObjectizer.toObject(formData)
+    const objectData = this._objectDataFromGivenRawData(rawData, options)
 
     let response
 
@@ -541,9 +540,19 @@ module.exports = class BaseModel {
     this.setNewModelData(newModel)
   }
 
+  _objectDataFromGivenRawData(rawData, options) {
+    if (rawData instanceof FormData || rawData.nodeName == "FORM") {
+      const formData = FormDataObjectizer.formDataFromObject(rawData, options)
+
+      return FormDataObjectizer.toObject(formData)
+    }
+
+    return rawData
+  }
+
   async updateRaw(rawData, options = {}) {
-    const formData = FormDataObjectizer.formDataFromObject(rawData, options)
-    const objectData = FormDataObjectizer.toObject(formData)
+    const objectData = this._objectDataFromGivenRawData(rawData, options)
+
     let response
 
     try {

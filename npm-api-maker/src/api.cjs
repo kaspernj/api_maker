@@ -60,20 +60,24 @@ module.exports = class Api {
   }
 
   static requestLocal(args) {
-    if (!args.headers)
+    if (!args.headers) {
       args["headers"] = {}
+    }
 
     const token = this._token()
-    if (token)
+
+    if (token) {
       args["headers"]["X-CSRF-Token"] = token
+    }
 
     if (args.data) {
       args["headers"]["Content-Type"] = "application/json"
       args["data"] = JSON.stringify(args.data)
     }
 
-    if (args.rawData)
+    if (args.rawData) {
       args["data"] = args.rawData
+    }
 
     return this.request(args)
   }
