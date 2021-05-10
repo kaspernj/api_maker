@@ -124,7 +124,7 @@ class ApiMaker::BaseCommand
       }
 
       Rails.logger.error e.message
-      Rails.logger.error e.backtrace.join("\n")
+      Rails.logger.error Rails.backtrace_cleaner.clean(e.backtrace).join("\n")
 
       ApiMaker::Configuration.current.report_error(
         command: command,

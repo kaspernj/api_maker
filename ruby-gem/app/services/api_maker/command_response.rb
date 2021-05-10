@@ -62,10 +62,10 @@ private
       end
     rescue => e # rubocop:disable Style/RescueStandardError
       puts e.inspect
-      puts e.backtrace
+      puts Rails.backtrace_cleaner.clean(e.backtrace)
 
       Rails.logger.error e.message
-      Rails.logger.error e.backtrace.join("\n")
+      Rails.logger.error Rails.backtrace_cleaner.clean(e.backtrace).join("\n")
 
       ApiMaker::Configuration.current.report_error(
         command: nil,

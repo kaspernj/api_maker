@@ -17,10 +17,10 @@ private
 
   def render_error(error)
     puts error.inspect
-    puts error.backtrace
+    puts Rails.backtrace_cleaner.clean(error.backtrace)
 
     logger.error error.inspect
-    logger.error error.backtrace.join("\n")
+    logger.error Rails.backtrace_cleaner.clean(error.backtrace).join("\n")
 
     raise error
   end
