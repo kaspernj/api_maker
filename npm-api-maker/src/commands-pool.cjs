@@ -28,8 +28,9 @@ module.exports = class ApiMakerCommandsPool {
   }
 
   static current() {
-    if (!window.currentApiMakerCommandsPool)
+    if (!window.currentApiMakerCommandsPool) {
       window.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
+    }
 
     return window.currentApiMakerCommandsPool
   }
@@ -39,6 +40,7 @@ module.exports = class ApiMakerCommandsPool {
   }
 
   constructor() {
+    this.flushCount = 0
     this.pool = {}
     this.poolData = {}
     this.currentId = 1
@@ -81,9 +83,14 @@ module.exports = class ApiMakerCommandsPool {
     })
   }
 
+  commandsCount() {
+    return Object.keys(this.pool)
+  }
+
   async flush() {
-    if (Object.keys(this.pool) == 0)
+    if (this.commandsCount() == 0) {
       return
+    }
 
     this.clearTimeout()
 
@@ -92,49 +99,67 @@ module.exports = class ApiMakerCommandsPool {
 
     this.pool = {}
     this.poolData = {}
+    this.flushCount++
 
-    const submitData = {pool: currentPoolData}
+    try {
+      const submitData = {pool: currentPoolData}
 
-    if (this.globalRequestData)
-      submitData.global = this.globalRequestData
+      if (this.globalRequestData)
+        submitData.global = this.globalRequestData
 
-    const commandSubmitData = new CommandSubmitData(submitData)
-    const url = "/api_maker/commands"
+      const commandSubmitData = new CommandSubmitData(submitData)
+      const url = "/api_maker/commands"
 
-    let response
+      let response
 
-    if (commandSubmitData.getFilesCount() > 0) {
-      response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()})
-    } else {
-      response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()})
-    }
+      if (commandSubmitData.getFilesCount() > 0) {
+        response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()})
+      } else {
+        response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()})
+      }
 
-    for(const commandId in response.responses) {
-      const commandResponse = response.responses[commandId]
-      const commandResponseData = Deserializer.parse(commandResponse.data)
-      const commandData = currentPool[parseInt(commandId)]
+      for(const commandId in response.responses) {
+        const commandResponse = response.responses[commandId]
+        const commandResponseData = Deserializer.parse(commandResponse.data)
+        const commandData = currentPool[parseInt(commandId)]
 
-      if (commandResponseData) {
-        const bugReportUrl = dig(commandResponseData, "bug_report_url")
+        if (commandResponseData) {
+          const bugReportUrl = dig(commandResponseData, "bug_report_url")
 
-        if (bugReportUrl) {
-          console.log(`Bug report URL: ${bugReportUrl}`)
+          if (bugReportUrl) {
+            console.log(`Bug report URL: ${bugReportUrl}`)
+          }
+        }
+
+        if (commandResponse.type == "success") {
+          commandData.resolve(commandResponseData)
+        } else if (commandResponse.type == "error") {
+          commandData.reject(new CustomError("Command error", {response: commandResponseData}))
+        } else {
+          commandData.reject(new CustomError("Command failed", {response: commandResponseData}))
         }
       }
-
-      if (commandResponse.type == "success") {
-        commandData.resolve(commandResponseData)
-      } else if (commandResponse.type == "error") {
-        commandData.reject(new CustomError("Command error", {response: commandResponseData}))
-      } else {
-        commandData.reject(new CustomError("Command failed", {response: commandResponseData}))
-      }
+    } finally {
+      this.flushCount--
     }
   }
 
   clearTimeout() {
-    if (this.flushTimeout)
+    if (this.flushTimeout) {
       clearTimeout(this.flushTimeout)
+    }
+  }
+
+  isActive() {
+    if (this.commandsCount() > 0) {
+      return true
+    }
+
+    if (this.flushCount > 0) {
+      return true
+    }
+
+    return false
   }
 
   setFlushTimeout() {
