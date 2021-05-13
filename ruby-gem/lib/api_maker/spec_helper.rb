@@ -3,6 +3,7 @@ require "waitutil"
 module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   autoload :ExecuteCollectionCommand, "#{__dir__}/spec_helper/execute_collection_command"
   autoload :ExecuteMemberCommand, "#{__dir__}/spec_helper/execute_member_command"
+  autoload :WaitForApiMakerToFinish, "#{__dir__}/spec_helper/wait_for_api_maker_to_finish"
 
   require_relative "spec_helper/browser_logs"
   require_relative "spec_helper/expect_no_browser_errors"

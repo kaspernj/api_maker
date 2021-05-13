@@ -28,8 +28,9 @@ module.exports = class ApiMakerCommandsPool {
   }
 
   static current() {
-    if (!window.currentApiMakerCommandsPool)
+    if (!window.currentApiMakerCommandsPool) {
       window.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
+    }
 
     return window.currentApiMakerCommandsPool
   }
