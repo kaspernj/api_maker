@@ -21,6 +21,9 @@
     "type": "git",
     "url": "git+https://github.com/kaspernj/api_maker.git"
   },
+  "scripts": {
+    "eslint": "eslint"
+  },
   "version": "1.0.49",
   "peerDependencies": {
     "prop-types": "^15.7.2",
@@ -34,6 +37,7 @@
     "inflection": ">= 1.12.0"
   },
   "devDependencies": {
-    "eslint": "^7.26.0"
+    "eslint": "^7.26.0",
+    "eslint-plugin-react": "^7.23.2"
   }
 }
