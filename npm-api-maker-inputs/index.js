@@ -5,7 +5,7 @@ const Money = require("./src/money").default
 const nameForComponent = require("./src/name-for-component.cjs")
 const Select = require("./src/select").default
 
-module.exports = {
+export {
   Checkbox,
   idForComponent,
   Input,
