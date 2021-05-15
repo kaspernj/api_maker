@@ -6,7 +6,8 @@ module.exports = {
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:jest/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -15,8 +16,14 @@ module.exports = {
     "ecmaVersion": 12
   },
   "plugins": [
+    "jest",
     "react"
   ],
+  "settings": {
+    "react": {
+      "version": "16.13.1"
+    }
+  },
   "rules": {
     "indent": [
       "error",

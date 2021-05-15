@@ -11,7 +11,7 @@ const RadioButtons = require("./src/radio-buttons").default
 const Select = require("./src/select").default
 const SortLink = require("./src/sort-link").default
 
-export {
+module.exports = {
   AttributeRow,
   AttributeRows,
   Card,

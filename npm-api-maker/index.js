@@ -39,7 +39,7 @@ const UpdatedAttribute = require("./src/updated-attribute").default
 const ValidationError = require("./src/validation-error.cjs")
 const {ValidationErrors} = require("./src/validation-errors.cjs")
 
-export {
+module.exports = {
   Api,
   AttributeNotLoadedError,
   BaseModel,
