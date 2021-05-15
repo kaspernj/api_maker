@@ -1,7 +1,7 @@
 const {merge} = require("../src/merge.cjs")
 
 describe("merge", () => {
-  fit("merges an empty object and changes nothing", () => {
+  it("merges an empty object and changes nothing", () => {
     const object = {
       firstName: "Kasper",
       age: 35
@@ -15,8 +15,7 @@ describe("merge", () => {
     })
   })
 
-
-  fit("merges an empty object into a nested object", () => {
+  it("merges an empty object into a nested object", () => {
     const object = {"ransack": {"account_id_eq": 1}}
 
     merge(object, {})
