@@ -25,6 +25,16 @@ class ApiMaker::BaseResource
     ApiMaker::MemoryStorage.current.storage_for(self, :attributes)
   end
 
+  def self._attributes_with_string_keys
+    @_attributes_with_string_keys ||= begin
+      result = {}
+      _attributes.each do |key, value|
+        result[key.to_s] = value
+      end
+      result
+    end
+  end
+
   def self.collection_commands(*list)
     list.each do |collection_command|
       ApiMaker::MemoryStorage.current.add(self, :collection_commands, collection_command)
