@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/kaspernj/api_maker",
   "scripts": {
+    "eslint": "eslint",
     "test": "jest"
   },
   "peerDependencies": {
@@ -44,6 +45,8 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "babel-jest": "^26.6.3",
+    "eslint": "^7.26.0",
+    "eslint-plugin-react": "^7.23.2",
     "i18n-on-steroids": "^1.0.0",
     "jest": "^26.6.3",
     "react-test-renderer": "^17.0.1"

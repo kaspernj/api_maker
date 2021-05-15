@@ -32,5 +32,8 @@
     "@kaspernj/object-digger": ">= 1.0.2",
     "classnames": ">= 2.2.6",
     "inflection": ">= 1.12.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.26.0"
   }
 }
