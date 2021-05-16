@@ -4,6 +4,7 @@ en:
       project:
         account: Account
         name: Name
+        illegal: Illegal
       task:
         name: Name
       user:

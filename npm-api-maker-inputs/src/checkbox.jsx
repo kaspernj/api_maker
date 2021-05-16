@@ -1,4 +1,5 @@
-const {digs} = require("@kaspernj/object-digger")
+const {digg, digs} = require("@kaspernj/object-digger")
+const {EventListener} = require("@kaspernj/api-maker")
 const idForComponent = require("./id-for-component.cjs")
 const nameForComponent = require("./name-for-component.cjs")
 const PropTypes = require("prop-types")
@@ -40,7 +41,7 @@ export default class ApiMakerCheckbox extends React.Component {
   }
 
   setForm() {
-    const form = this.refs.checkbox && this.refs.checkbox.refs.input && this.refs.checkbox.refs.input.form
+    const form = digg(this, "inputRef", "current", "form")
 
     if (form != this.state.form) {
       this.setState({form})
