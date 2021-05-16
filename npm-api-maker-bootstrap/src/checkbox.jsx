@@ -51,13 +51,13 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
               {this.label()}
             </label>
           }
+          {hint &&
+            <p className="text-muted">
+              {hint}
+            </p>
+          }
+          {errors.length > 0 && <InvalidFeedback errors={errors} />}
         </div>
-        {hint &&
-          <p className="text-muted">
-            {hint}
-          </p>
-        }
-        {errors.length > 0 && <InvalidFeedback errors={errors} />}
       </div>
     )
   }
