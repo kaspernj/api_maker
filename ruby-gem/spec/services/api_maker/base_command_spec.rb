@@ -3,6 +3,47 @@ require "rails_helper"
 describe ApiMaker::BaseCommand do
   let(:task) { create :task }
 
+  describe "#failure_save_response" do
+    it "responds with simple model errors" do
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(command: Commands::Tasks::FailureSaveResponse, model: task, args: {
+        task: {
+          project_attributes: {
+            name: ""
+          }
+        },
+        simple_model_errors: true
+      })
+
+      expect(response).to have_attributes(
+                            errors: "hejsa"
+                          )
+    end
+
+    it "responds with validation errors" do
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(command: Commands::Tasks::FailureSaveResponse, model: task, args: {
+        task: {
+          project_attributes: {
+            name: ""
+          }
+        },
+        simple_model_errors: false
+      })
+
+      expect(result).to include(
+        errors: [
+          {
+            message: "Account must exist",
+            type: :validation_error
+          },
+          {
+            message: "Name can't be blank",
+            type: :validation_error
+          }
+        ]
+      )
+    end
+  end
+
   describe "#save_models_or_fail" do
     it "saves the given model" do
       result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(command: Commands::Tasks::TouchWithSaveModelsOrFail, model: task)
