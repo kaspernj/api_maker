@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@kaspernj/api-maker": ">= 1.0.81",
-    "@kaspernj/api-maker-inputs": ">= 1.0.44",
+    "@kaspernj/api-maker-inputs": ">= 1.0.50",
     "@kaspernj/object-digger": ">= 1.0.2",
     "debounce": ">= 1.2.0",
     "inflection": ">= 1.12.0",
