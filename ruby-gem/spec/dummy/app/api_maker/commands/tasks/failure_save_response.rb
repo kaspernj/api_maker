@@ -10,6 +10,6 @@ class Commands::Tasks::FailureSaveResponse < Commands::ApplicationCommand
   end
 
   def params
-    args.require(:task).permit(project_attributes: [:name])
+    args.require(:task).permit(:name, project_attributes: [:account_id, :name])
   end
 end

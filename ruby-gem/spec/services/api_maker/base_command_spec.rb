@@ -1,42 +1,56 @@
 require "rails_helper"
 
 describe ApiMaker::BaseCommand do
+  let(:account) { create :account }
   let(:task) { create :task }
 
   describe "#failure_save_response" do
     it "responds with simple model errors" do
-      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(command: Commands::Tasks::FailureSaveResponse, model: task, args: {
-        task: {
-          project_attributes: {
-            name: ""
-          }
-        },
-        simple_model_errors: true
-      })
-
-      expect(response).to have_attributes(
-                            errors: "hejsa"
-                          )
-    end
-
-    it "responds with validation errors" do
-      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(command: Commands::Tasks::FailureSaveResponse, model: task, args: {
-        task: {
-          project_attributes: {
-            name: ""
-          }
-        },
-        simple_model_errors: false
-      })
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
+        command: Commands::Tasks::FailureSaveResponse,
+        model: task,
+        args: {
+          task: {
+            name: "Task",
+            project_attributes: {
+              account_id: account.id,
+              name: "Hans"
+            }
+          },
+          simple_model_errors: true
+        }
+      )
 
       expect(result).to include(
         errors: [
           {
-            message: "Account must exist",
+            message: "Navn kan ikke være Hans",
             type: :validation_error
+          }
+        ]
+      )
+    end
+
+    it "responds with validation errors" do
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
+        command: Commands::Tasks::FailureSaveResponse,
+        model: task,
+        args: {
+          task: {
+            name: "Task",
+            project_attributes: {
+              account_id: account.id,
+              name: "Hans"
+            }
           },
+          simple_model_errors: false
+        }
+      )
+
+      expect(result).to include(
+        errors: [
           {
-            message: "Name can't be blank",
+            message: "Project base Navn kan ikke være Hans",
             type: :validation_error
           }
         ]

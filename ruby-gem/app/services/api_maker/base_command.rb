@@ -161,7 +161,7 @@ class ApiMaker::BaseCommand
 
   def failure_save_response(model:, params:, simple_model_errors: false)
     error_messages = if simple_model_errors
-      SimpleModelErrors.execute!(model: model)
+      ApiMaker::SimpleModelErrors.execute!(model: model)
     else
       model.errors.full_messages
     end

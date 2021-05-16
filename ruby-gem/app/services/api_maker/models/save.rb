@@ -14,7 +14,7 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
         next if model.save
 
         if simple_model_errors
-          errors += SimpleModelErrors.execute!(model: model)
+          errors += ApiMaker::SimpleModelErrors.execute!(model: model)
         else
           errors += models.map(&:errors).map(&:full_messages).flatten
         end
