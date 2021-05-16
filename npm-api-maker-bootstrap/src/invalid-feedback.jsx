@@ -5,12 +5,15 @@ const React = require("react")
 
 export default class ApiMakerBootstrapInvalidFeedback extends React.Component {
   static propTypes = PropTypesExact({
+    className: PropTypes.string,
     errors: PropTypes.array.isRequired
   })
 
   render() {
+    const {className} = this.props
+
     return (
-      <div className="invalid-feedback">
+      <div className={classNames("invalid-feedback", className)}>
         {this.errorMessages().join(". ")}
       </div>
     )
