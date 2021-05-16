@@ -57,7 +57,7 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
             {hint}
           </p>
         }
-        {errors.length > 0 && <InvalidFeedback className="d-block" errors={errors} />}
+        {errors.length > 0 && <InvalidFeedback errors={errors} />}
       </div>
     )
   }

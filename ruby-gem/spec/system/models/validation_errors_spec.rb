@@ -33,8 +33,7 @@ describe "models - validation errors" do
     wait_for_selector ".project-account-1 .invalid-feedback", text: "must exist"
     wait_for_selector ".task-name-2 .invalid-feedback", text: "can't be blank"
     wait_for_selector ".project-name-3 .invalid-feedback", text: "can't be blank"
-    wait_for_selector ".project-illegal .invalid-feedback", text: "can't be illegal"
-    wait_for_selector ".project-illegal-3 .invalid-feedback", text: "can't be illegal"
+    wait_for_selector ".project-illegal-3 .invalid-feedback", text: "can't be true"
 
     # All validation errors should have been handled so no message should be shown
     wait_for_no_selector ".ui-pnotify-text"

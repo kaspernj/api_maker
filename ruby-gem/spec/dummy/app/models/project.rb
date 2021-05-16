@@ -26,6 +26,6 @@ private
   end
 
   def validate_illegal
-    errors.add(:illegal, "cannot be true") if illegal?
+    errors.add(:illegal, "can't be true") if illegal?
   end
 end
