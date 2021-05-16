@@ -126,6 +126,14 @@ export default class ModelsValidationErrors extends React.Component {
           options={accounts.map(account => [account.name(), account.id()])}
           wrapperClassName={`project-account-${project.id()}`}
         />
+        <Checkbox
+          attribute="illegal"
+          id={`project_illegal_${project.id()}`}
+          label="Illegal"
+          model={project}
+          name={`user[tasks_attributes][${task.uniqueKey()}][project_attributes][illegal]`}
+          wrapperClassName={`project-illegal-${project.id()}`}
+        />
       </div>
     )
   }

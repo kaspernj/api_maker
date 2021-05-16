@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_25_074333) do
+ActiveRecord::Schema.define(version: 2021_05_16_165612) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 2021_02_25_074333) do
     t.integer "price_per_hour_cents"
     t.string "price_per_hour_currency"
     t.datetime "deleted_at"
+    t.boolean "illegal", default: false, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
   end

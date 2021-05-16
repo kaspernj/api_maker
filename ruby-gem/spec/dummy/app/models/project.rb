@@ -13,6 +13,7 @@ class Project < ApplicationRecord
   validates :name, presence: true
   validates :name, presence: true, length: {maximum: 110}
   validate :name_cannot_be_hans
+  validate :validate_illegal
 
   monetize :price_per_hour_cents, allow_nil: true
 
@@ -22,5 +23,9 @@ private
 
   def name_cannot_be_hans
     errors.add(:base, "Navn kan ikke være Hans") if name == "Hans"
+  end
+
+  def validate_illegal
+    errors.add(:illegal, "cannot be true") if illegal?
   end
 end
