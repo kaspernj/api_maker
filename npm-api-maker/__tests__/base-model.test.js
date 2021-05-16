@@ -16,6 +16,9 @@ describe("BaseModel", () => {
   })
 
   describe("parseValidationErrors", () => {
+    const form = document.createElement("form")
+    const spy = jest.spyOn(form, "dispatchEvent")
+
     it("throws the validation errors", () => {
       const model = new BaseModel()
       const error = new CustomError("Some validation error", {
@@ -23,8 +26,6 @@ describe("BaseModel", () => {
           validation_errors: []
         }
       })
-      const form = document.createElement("form")
-      const spy = jest.spyOn(form, "dispatchEvent");
 
       expect(() => model.parseValidationErrors(error, {form})).toThrow(ValidationError)
       expect(spy).toHaveBeenCalled()
@@ -37,9 +38,6 @@ describe("BaseModel", () => {
           validation_errors: []
         }
       })
-
-      const form = document.createElement("form")
-      const spy = jest.spyOn(form, "dispatchEvent");
 
       model.parseValidationErrors(error, {form, throwValidationError: false})
       expect(spy).toHaveBeenCalled()
