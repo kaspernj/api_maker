@@ -1,4 +1,6 @@
 const BaseModel = require("../src/base-model.cjs")
+const CustomError = require("../src/custom-error.cjs")
+const ValidationError = require("../src/validation-error.cjs")
 
 describe("BaseModel", () => {
   describe("update", () => {
@@ -10,6 +12,35 @@ describe("BaseModel", () => {
 
       // There will be extra objects in the hash if it actually calls the backend.
       expect(response).toEqual({model})
+    })
+  })
+
+  describe("parseValidationErrors", () => {
+    const form = document.createElement("form")
+    const spy = jest.spyOn(form, "dispatchEvent")
+
+    it("throws the validation errors", () => {
+      const model = new BaseModel()
+      const error = new CustomError("Some validation error", {
+        response: {
+          validation_errors: []
+        }
+      })
+
+      expect(() => model.parseValidationErrors(error, {form})).toThrow(ValidationError)
+      expect(spy).toHaveBeenCalled()
+    })
+
+    it("doesnt throw validation errors if disabled", () => {
+      const model = new BaseModel()
+      const error = new CustomError("Some validation error", {
+        response: {
+          validation_errors: []
+        }
+      })
+
+      model.parseValidationErrors(error, {form, throwValidationError: false})
+      expect(spy).toHaveBeenCalled()
     })
   })
 })
