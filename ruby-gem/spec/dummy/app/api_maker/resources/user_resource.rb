@@ -14,7 +14,7 @@ class Resources::UserResource < Resources::ApplicationResource
       :email,
       tasks_attributes: [
         :id, :name, :project_id,
-        project_attributes: [:account_id, :id, :name]
+        project_attributes: [:account_id, :id, :illegal, :name]
       ]
     )
   end

@@ -1,5 +1,6 @@
 const {Checkbox, idForComponent, nameForComponent} = require("@kaspernj/api-maker-inputs")
 const classNames = require("classnames")
+const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
 
@@ -38,7 +39,7 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
         <div className="form-check">
           <Checkbox
             defaultChecked={this.inputDefaultChecked()}
-            className={classNames("form-check-input", className)}
+            className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
             id={this.inputId()}
             name={this.inputName()}
             onErrors={(errors) => this.onErrors(errors)}
@@ -50,13 +51,13 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
               {this.label()}
             </label>
           }
+          {hint &&
+            <p className="text-muted">
+              {hint}
+            </p>
+          }
+          {errors.length > 0 && <InvalidFeedback errors={errors} />}
         </div>
-        {hint &&
-          <p className="text-muted">
-            {hint}
-          </p>
-        }
-        {errors.length > 0 && <InvalidFeedback errors={errors} />}
       </div>
     )
   }
@@ -100,11 +101,15 @@ export default class ApiMakerBootstrapCheckbox extends React.Component {
   }
 
   wrapperClassName() {
-    const classNames = ["component-bootstrap-checkbox"]
+    const classNames = ["component-bootstrap-checkbox", "form-group"]
 
     if (this.props.wrapperClassName)
       classNames.push(this.props.wrapperClassName)
 
     return classNames.join(" ")
+  }
+
+  onErrors(errors) {
+    this.setState({errors})
   }
 }
