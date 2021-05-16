@@ -159,11 +159,17 @@ class ApiMaker::BaseCommand
     )
   end
 
-  def failure_save_response(model:, params:)
+  def failure_save_response(model:, params:, simple_model_errors: false)
+    error_messages = if simple_model_errors
+      SimpleModelErrors.execute!(model: model)
+    else
+      model.errors.full_messages
+    end
+
     fail!(
       model: serialized_model(model),
       success: false,
-      errors: model.errors.full_messages.map { |error_message| {message: error_message, type: :validation_error} },
+      errors: error_messages.map { |error_message| {message: error_message, type: :validation_error} },
       validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model: model, params: params)
     )
   end
