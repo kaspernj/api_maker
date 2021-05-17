@@ -504,24 +504,26 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.50":
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.50.tgz#c39ffc06cf27ce9f980a64b1ee71db3336793420"
-  integrity sha512-Wfvec+TC88vwm67Xy0gAtvH9vrf/8+g7hfoYsPpcBwyva6jBWaAXwh5xGEercq1AGA6bauVEX8pnu6Z1l0goEw==
+"@kaspernj/api-maker-inputs@>= 1.0.52":
+  version "1.0.53"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.53.tgz#f6c6645a12b4510c43be4509b5951fbb959bb1d7"
+  integrity sha512-6mEfr5ztZ27jBQcaQ63K6JbJsOtt5ofRj3U8gnweqA5/dEZB2UJjpdR0vic+nGhI2BsJqVmmcp4MrubGFXiHIA==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.81"
+    "@kaspernj/api-maker" ">= 1.0.91"
     "@kaspernj/object-digger" ">= 1.0.2"
     classnames ">= 2.2.6"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.81":
-  version "1.0.81"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.81.tgz#17a6e62bed811658b0e1c53e1807618759b3ae03"
-  integrity sha512-Cq7dJWt1Aa796GT9VHyiIxeoppylYtqc4kE4bawW16PLVimGAL/irJXqN2nI07IYKrJDgyOdLBIrWyo15Dd3Nw==
+"@kaspernj/api-maker@>= 1.0.91":
+  version "1.0.91"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.91.tgz#88d25ae4882193a5f8883110f4931104a47f76aa"
+  integrity sha512-/URf09KzLPuyPaow7MOqNlzoICcycSShUYn7zhN2/ujmHNt7/Rsv5y9FDwghUy1Sx3lOyfCf63Rh24u/8Bt1jA==
   dependencies:
     "@kaspernj/object-digger" ">= 1.0.2"
     "@rails/actioncable" ">= 6.1.0"
+    await-lock "^2.1.0"
     clone-deep "^4.0.1"
+    debounce "^1.2.1"
     form-data-objectizer "^1.0.0"
     form-serialize ">= 0.7.2"
     format-number ">= 3.0.0"
@@ -904,6 +906,11 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
+
+await-lock@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-2.1.0.tgz#bc78c51d229a34d5d90965a1c94770e772c6145e"
+  integrity sha512-t7Zm5YGgEEc/3eYAicF32m/TNvL+XOeYZy9CvBUeJY/szM7frLolFylhrlZNWV/ohWhcUXygrBGjYmoQdxF4CQ==
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -1318,6 +1325,11 @@ data-urls@^2.0.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.0.tgz#44a540abc0ea9943018dc0eaa95cce87f65cd131"
   integrity sha512-mYtLl1xfZLi1m4RtQYlZgJUNQjl4ZxVnHzIR8nLLgi4q1YT8o/WM+MK/f8yfcc9s5Ir5zRaPZyZU6xs1Syoocg==
+
+debounce@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
+  integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
 
 debug@^2.2.0, debug@^2.3.3:
   version "2.6.9"
