@@ -255,13 +255,13 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     }
 
     try {
-      model.destroy()
+      await model.destroy()
 
       if (destroyMessage) {
-        Notification.success(destroyMessage)
+        FlashMessage.success(destroyMessage)
       }
     } catch (error) {
-      Notification.errorResponse(error)
+      FlashMessage.errorResponse(error)
     }
   }
 
@@ -284,14 +284,17 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   onModelDestroyed(args) {
+    const {models} = digs(this.state, "models")
+
     this.setState({
-      models: this.state.models.filter(model => model.id() != args.model.id())
+      models: models.filter(model => model.id() != args.model.id())
     })
   }
 
   onModelUpdated(args) {
+    const {models} = digs(this.state, "models")
     const updatedModel = digg(args, "model")
-    const foundModel = this.state.models.find((model) => model.id() == updatedModel.id())
+    const foundModel = models.find((model) => model.id() == updatedModel.id())
 
     if (foundModel) {
       this.loadModelsDebounce()

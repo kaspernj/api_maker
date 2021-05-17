@@ -1,5 +1,5 @@
 import {Devise} from "@kaspernj/api-maker"
-import DisplayNotification from "shared/display-notification"
+import FlashMessage from "shared/flash-message"
 import { EventEmitterListener } from "@kaspernj/api-maker"
 import React from "react"
 
@@ -50,9 +50,9 @@ export default class SessionsNew extends React.Component {
     const rememberMe = this.rememberMeRef.current.checked
 
     Devise.signIn(email, password, {rememberMe}).then(() => {
-      DisplayNotification.success("You were signed in")
+      FlashMessage.success("You were signed in")
     }, (response) => {
-      DisplayNotification.error(response)
+      FlashMessage.errorResponse(response)
     })
   }
 }

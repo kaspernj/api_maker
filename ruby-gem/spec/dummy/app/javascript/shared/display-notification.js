@@ -1,12 +1,16 @@
 import { CustomError, ValidationError } from "@kaspernj/api-maker"
 import { digg } from "@kaspernj/object-digger"
 
-export default class DisplayNotification {
+export default class FlashMessage {
   static alert(message) {
-    new DisplayNotification({type: "alert", text: message})
+    new FlashMessage({type: "alert", text: message})
   }
 
-  static error(error) {
+  static error(message) {
+    this.alert(message)
+  }
+
+  static errorResponse(error) {
     if (error instanceof CustomError) {
       const errors = error.args.response.errors
       const errorMessages = errors.map((error) => {
@@ -17,17 +21,17 @@ export default class DisplayNotification {
         return digg(error, "message")
       })
 
-      DisplayNotification.alert(errorMessages.map((error) => error.message).join(". "))
+      FlashMessage.alert(errorMessages.map((error) => error.message).join(". "))
     } else if (error instanceof ValidationError) {
       if (error.hasUnhandledErrors())
-        DisplayNotification.alert(error.message)
+      FlashMessage.alert(error.message)
     } else {
       console.error("Didnt know what to do with this", error)
     }
   }
 
   static success(message) {
-    new DisplayNotification({type: "success", text: message})
+    new FlashMessage({type: "success", text: message})
   }
 
   constructor(args) {

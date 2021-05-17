@@ -1,5 +1,5 @@
 import {Devise} from "@kaspernj/api-maker"
-import DisplayNotification from "shared/display-notification"
+import FlashMessage from "shared/flash-message"
 import { EventEmitterListener } from "@kaspernj/api-maker"
 import { Link } from "react-router-dom"
 import React from "react"
@@ -112,9 +112,9 @@ export default class Layout extends React.Component {
     e.preventDefault()
 
     Devise.signOut().then(() => {
-      DisplayNotification.success("You were signed out")
+      FlashMessage.success("You were signed out")
     }, (response) => {
-      DisplayNotification.error(response)
+      FlashMessage.errorResponse(response)
     })
   }
 }
