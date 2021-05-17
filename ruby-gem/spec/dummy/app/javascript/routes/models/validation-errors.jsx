@@ -4,6 +4,7 @@ import { Params } from "@kaspernj/api-maker"
 import {User} from "api-maker/models"
 
 export default class ModelsValidationErrors extends React.Component {
+  // This ensures that it doesn't crash if the checkbox is passed an inputRef
   checkboxInputRef = React.createRef()
   state = {}
 
