@@ -24,7 +24,7 @@
   "scripts": {
     "eslint": "eslint"
   },
-  "version": "1.0.52",
+  "version": "1.0.53",
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "prop-types-exact": "^1.2.0",
