@@ -9,7 +9,7 @@
     ]
   },
   "name": "@kaspernj/api-maker-bootstrap",
-  "version": "1.0.49",
+  "version": "1.0.50",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -33,8 +33,8 @@
     "react-router-dom": "^5.1.2"
   },
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.81",
-    "@kaspernj/api-maker-inputs": ">= 1.0.50",
+    "@kaspernj/api-maker": ">= 1.0.89",
+    "@kaspernj/api-maker-inputs": ">= 1.0.51",
     "@kaspernj/object-digger": ">= 1.0.2",
     "debounce": ">= 1.2.0",
     "inflection": ">= 1.12.0",
