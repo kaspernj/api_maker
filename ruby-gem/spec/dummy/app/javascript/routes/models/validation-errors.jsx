@@ -129,6 +129,7 @@ export default class ModelsValidationErrors extends React.Component {
         <Checkbox
           attribute="illegal"
           id={`project_illegal_${project.id()}`}
+          inputRef={React.createRef()}
           label="Illegal"
           model={project}
           name={`user[tasks_attributes][${task.uniqueKey()}][project_attributes][illegal]`}
