@@ -504,14 +504,16 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@kaspernj/api-maker@>= 1.0.81":
-  version "1.0.81"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.81.tgz#17a6e62bed811658b0e1c53e1807618759b3ae03"
-  integrity sha512-Cq7dJWt1Aa796GT9VHyiIxeoppylYtqc4kE4bawW16PLVimGAL/irJXqN2nI07IYKrJDgyOdLBIrWyo15Dd3Nw==
+"@kaspernj/api-maker@>= 1.0.89":
+  version "1.0.89"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.89.tgz#5f857ecbc67bda9d3bab6acbb60d554b860dd860"
+  integrity sha512-yUJ/PSxKWbqfLokwKKxh1QlAkS5sefGvM+MPq5WThARJuQmdoyaZojwpsbPt2GYXSN7Zw/SqC1ZPVl1zSsvUnw==
   dependencies:
     "@kaspernj/object-digger" ">= 1.0.2"
     "@rails/actioncable" ">= 6.1.0"
+    await-lock "^2.1.0"
     clone-deep "^4.0.1"
+    debounce "^1.2.1"
     form-data-objectizer "^1.0.0"
     form-serialize ">= 0.7.2"
     format-number ">= 3.0.0"
@@ -894,6 +896,11 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
+
+await-lock@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-2.1.0.tgz#bc78c51d229a34d5d90965a1c94770e772c6145e"
+  integrity sha512-t7Zm5YGgEEc/3eYAicF32m/TNvL+XOeYZy9CvBUeJY/szM7frLolFylhrlZNWV/ohWhcUXygrBGjYmoQdxF4CQ==
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -1303,6 +1310,11 @@ data-urls@^2.0.0:
     abab "^2.0.3"
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
+
+debounce@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
+  integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
 
 debug@^2.2.0, debug@^2.3.3:
   version "2.6.9"
