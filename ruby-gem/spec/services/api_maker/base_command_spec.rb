@@ -1,7 +1,62 @@
 require "rails_helper"
 
 describe ApiMaker::BaseCommand do
+  let(:account) { create :account }
   let(:task) { create :task }
+
+  describe "#failure_save_response" do
+    it "responds with simple model errors" do
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
+        command: Commands::Tasks::FailureSaveResponse,
+        model: task,
+        args: {
+          task: {
+            name: "Task",
+            project_attributes: {
+              account_id: account.id,
+              name: "Hans"
+            }
+          },
+          simple_model_errors: true
+        }
+      )
+
+      expect(result).to include(
+        errors: [
+          {
+            message: "Navn kan ikke være Hans",
+            type: :validation_error
+          }
+        ]
+      )
+    end
+
+    it "responds with validation errors" do
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
+        command: Commands::Tasks::FailureSaveResponse,
+        model: task,
+        args: {
+          task: {
+            name: "Task",
+            project_attributes: {
+              account_id: account.id,
+              name: "Hans"
+            }
+          },
+          simple_model_errors: false
+        }
+      )
+
+      expect(result).to include(
+        errors: [
+          {
+            message: "Project base Navn kan ikke være Hans",
+            type: :validation_error
+          }
+        ]
+      )
+    end
+  end
 
   describe "#save_models_or_fail" do
     it "saves the given model" do
