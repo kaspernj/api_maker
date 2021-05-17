@@ -19,7 +19,18 @@ describe("BaseModel", () => {
     const form = document.createElement("form")
     const spy = jest.spyOn(form, "dispatchEvent")
 
-    it("throws the validation errors", () => {
+    it("throws the validation errors if not options are given", () => {
+      const model = new BaseModel()
+      const error = new CustomError("Some validation error", {
+        response: {
+          validation_errors: []
+        }
+      })
+
+      expect(() => model.parseValidationErrors(error)).toThrow(ValidationError)
+    })
+
+    it("throws the validation errors and dispatches an event to the form", () => {
       const model = new BaseModel()
       const error = new CustomError("Some validation error", {
         response: {
