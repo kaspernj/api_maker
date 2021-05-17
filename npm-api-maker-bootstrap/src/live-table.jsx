@@ -12,12 +12,14 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     card: true,
     destroyEnabled: true,
     preloads: [],
+    qParams: undefined,
     select: {}
   }
 
   static propTypes = {
     abilities: PropTypes.object,
     actionsContent: PropTypes.func,
+    appHistory: PropTypes.object,
     card: PropTypes.bool.isRequired,
     className: PropTypes.string,
     collection: PropTypes.oneOfType([
@@ -121,6 +123,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   loadModelsDebounce = debounce(() => this.loadModels())
+  submitFilterDebounce = debounce(() => this.submitFilter())
 
   async loadModels() {
     const params = Params.parse()
@@ -195,7 +198,8 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
       select,
       ...restProps
     } = this.props
-    const { models, query, result } = digs(this.state, "models", "query", "result")
+    const { models, qParams, query, result } = digs(this.state, "models", "qParams", "query", "result")
+    const {submitFilterDebounce} = digs(this, "submitFilterDebounce")
 
     let controlsContent, headerContent, PaginationComponent
 
@@ -225,7 +229,11 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
         {filterContent &&
           <Card className="mb-4">
             <form onSubmit={(e) => this.onFilterFormSubmit(e)} ref="filterForm">
-              {filterContent({qParams})}
+              {filterContent({
+                onFilterChanged: () => this.submitFilter(),
+                onFilterChangedWithDelay: submitFilterDebounce,
+                qParams
+              })}
               <input className="btn btn-primary" label={filterSubmitLabel} type="submit" />
             </form>
           </Card>
@@ -316,16 +324,18 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
   onFilterFormSubmit(e) {
     e.preventDefault()
+    this.submitFilter()
+  }
 
+  submitFilter() {
+    const {appHistory} = this.props
     const qParams = Params.serializeForm(this.refs.filterForm)
     const { queryQName } = this.state
 
     const changeParamsParams = {}
     changeParamsParams[queryQName] = qParams
 
-    Params.changeParams(changeParamsParams)
-
-    this.setState({currentHref: location.href, qParams}, () => this.loadModels())
+    Params.changeParams(changeParamsParams, {appHistory})
   }
 
   onModelCreated() {

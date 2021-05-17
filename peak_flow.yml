@@ -2,10 +2,13 @@ before_script:
   - sudo apt-get update && sudo apt-get install -y firefox
   - cd npm-api-maker && yarn install
   - cd npm-api-maker && yarn link
-  - cd npm-api-maker-bootstrap && yarn install
-  - cd npm-api-maker-bootstrap && yarn link
   - cd npm-api-maker-inputs && yarn install
+  - cd npm-api-maker-inputs && yarn link @kaspernj/api-maker
   - cd npm-api-maker-inputs && yarn link
+  - cd npm-api-maker-bootstrap && yarn install
+  - cd npm-api-maker-inputs && yarn link @kaspernj/api-maker
+  - cd npm-api-maker-inputs && yarn link @kaspernj/api-maker-inputs
+  - cd npm-api-maker-bootstrap && yarn link
   - cd ruby-gem/spec/dummy && yarn install
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-bootstrap

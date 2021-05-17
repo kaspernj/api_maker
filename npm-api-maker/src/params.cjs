@@ -11,12 +11,14 @@ module.exports = class Params {
     return merge(Params.parse(), given)
   }
 
-  static changeParams(given) {
+  static changeParams(given, opts = {}) {
     const params = Params.change(given)
     const newParams = qs.stringify(params)
     const newPath = `${location.pathname}?${newParams}`
 
-    AppHistory.push(newPath)
+    let appHistory = opts.appHistory || AppHistory
+
+    appHistory.push(newPath)
   }
 
   static serializeForm(form) {

@@ -6,10 +6,14 @@ en:
         name: Name
         illegal: Illegal
       task:
+        id: ID
         name: Name
       user:
         email: Email
         updated_at: Updated at
+  js:
+    shared:
+      are_you_sure: Are you sure?
   number:
     currency:
       format:
