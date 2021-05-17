@@ -15,6 +15,19 @@ describe "bootstrap - live table" do
     wait_for_selector model_row_selector(task2)
   end
 
+  it "filters" do
+    task1
+    task2
+
+    login_as user_admin
+    visit bootstrap_live_table_path
+    wait_for_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
+    wait_for_and_find("input[name='name_cont']").set("Task 2")
+    wait_for_no_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
+  end
+
   it "destroys a row" do
     task1
     task2
