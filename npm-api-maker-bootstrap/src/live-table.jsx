@@ -12,6 +12,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     card: true,
     destroyEnabled: true,
     preloads: [],
+    qParams: undefined,
     select: {}
   }
 
@@ -195,7 +196,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
       select,
       ...restProps
     } = this.props
-    const { models, query, result } = digs(this.state, "models", "query", "result")
+    const { models, qParams, query, result } = digs(this.state, "models", "qParams", "query", "result")
 
     let controlsContent, headerContent, PaginationComponent
 

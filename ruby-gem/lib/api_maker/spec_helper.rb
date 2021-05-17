@@ -26,6 +26,10 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     page.driver.browser.manage.logs.get(:browser)
   end
 
+  def confirm_accept
+    page.driver.browser.switch_to.alert.accept
+  end
+
   def expect_no_browser_window_errors
     errors = execute_script("if (window.errorLogger) { return window.errorLogger.getErrors() }")
     return if !errors.is_a?(Array) || errors.empty?
@@ -92,6 +96,10 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
 
   def reset_indexeddb
     ApiMaker::ResetIndexedDbService.execute!(context: self)
+  end
+
+  def wait_for_action_cable_to_connect
+    sleep 0.5
   end
 
   def wait_for_and_find(selector, *args)

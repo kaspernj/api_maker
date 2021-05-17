@@ -69,6 +69,9 @@ export default class Layout extends React.Component {
               Checkboxes
             </Link>
           }
+          <Link className="ml-2" to={Routes.bootstrapLiveTablePath()}>
+            Bootstrap live table
+          </Link>
 
           <Link to={Routes.modelsValidationErrorsPath()}>
             Validation errors (new)
