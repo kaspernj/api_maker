@@ -16,7 +16,7 @@ describe("BaseModel", () => {
   })
 
   describe("parseValidationErrors", () => {
-   const error = new CustomError("Some validation error", {
+    const error = new CustomError("Some validation error", {
       response: {
         validation_errors: []
       }
@@ -26,7 +26,7 @@ describe("BaseModel", () => {
     const spy = jest.spyOn(form, "dispatchEvent")
 
     it("throws the validation errors if no options are given", () => {
-       expect(() => model.parseValidationErrors(error)).toThrow(ValidationError)
+      expect(() => model.parseValidationErrors(error)).toThrow(ValidationError)
     })
 
     it("throws the validation errors and dispatches an event to the form", () => {
