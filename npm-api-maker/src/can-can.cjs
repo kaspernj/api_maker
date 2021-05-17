@@ -1,5 +1,6 @@
 const AwaitLock = require("await-lock").default
 const {digg} = require("@kaspernj/object-digger")
+const EventEmitter = require("events")
 const inflection = require("inflection")
 const Services = require("./services.cjs")
 
@@ -16,6 +17,7 @@ module.exports = class ApiMakerCanCan {
     this.abilities = []
     this.abilitiesToLoad = []
     this.abilitiesToLoadData = []
+    this.events = new EventEmitter()
     this.lock = new AwaitLock()
   }
 
@@ -107,6 +109,7 @@ module.exports = class ApiMakerCanCan {
 
     try {
       this.abilities = []
+      this.events.emit("onResetAbilities")
     } finally {
       this.lock.release()
     }
