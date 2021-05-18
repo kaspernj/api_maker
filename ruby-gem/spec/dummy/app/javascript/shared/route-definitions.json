@@ -11,6 +11,8 @@
     {"name": "bootstrap_string_input_file", "path": "/bootstrap/string-input-file", "component": "bootstrap/string-input-file"},
     {"name": "bootstrap_string_input_money", "path": "/bootstrap/string-input-money", "component": "bootstrap/string-input-money"},
 
+    {"name": "can_can_loader", "path": "/can_can/loader", "component": "can-can/loader"},
+
     {"name": "models_command_serialize", "path": "/models/command-serialize", "component": "models/command-serialize"},
     {"name": "models_created_event", "path": "/models/created-event", "component": "models/created-event"},
     {"name": "models_destroy_event", "path": "/models/destroy-event", "component": "models/destroy-event"},
