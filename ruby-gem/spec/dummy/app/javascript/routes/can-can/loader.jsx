@@ -1,49 +1,31 @@
-import {CanCanLoader, Devise} from "@kaspernj/api-maker"
+import {CanCan, Devise} from "@kaspernj/api-maker"
+import LoaderWithShape from "components/can-can/loader-with-shape"
+import LoaderWithState from "components/can-can/loader-with-state"
 
 export default class RoutesCanCanLoader extends React.Component {
-  state = {
-    canCan: undefined
+  onSignOutClicked(e) {
+    e.preventDefault()
+
+    Devise.signOut()
   }
 
   onResetAbilitiesClicked(e) {
     e.preventDefault()
 
-    const {canCan} = this.state
-
-    canCan.resetAbilities()
-  }
-
-  async onSignOutClicked(e) {
-    e.preventDefault()
-
-    await Devise.signOut()
+    CanCan.current().resetAbilities()
   }
 
   render() {
-    const {canCan} = this.state
-
     return (
-      <Layout className="component-can-can-loader">
-        <CanCanLoader abilities={[[Account, ["sum"]]]} component={this} />
-
+      <Layout className="routes-can-can-loader">
         <button className="reset-abilities-button" onClick={(e) => this.onResetAbilitiesClicked(e)}>
           reset abilities
         </button>
-
         <button className="sign-out-button" onClick={(e) => this.onSignOutClicked(e)}>
           sign out
         </button>
-
-        {canCan && canCan.can("sum", Account) &&
-          <div className="can-access-admin">
-            can access admin
-          </div>
-        }
-        {canCan && !canCan.can("sum", Account) &&
-          <div className="cannot-access-admin">
-            can not access admin
-          </div>
-        }
+        <LoaderWithShape />
+        <LoaderWithState />
       </Layout>
     )
   }

@@ -24,7 +24,6 @@ describe("CanCan", () => {
 
     it("dispatches an event", async () => {
       const eventListener = jest.fn()
-      canCan.abilities = ["bogus"]
       canCan.events.addListener("onResetAbilities", eventListener)
 
       await canCan.resetAbilities()
