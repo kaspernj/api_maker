@@ -3,23 +3,8 @@ import {act, create} from "react-test-renderer"
 import CanCanLoader from "../src/can-can-loader"
 const CanCan = require("../src/can-can.cjs")
 const canCan = CanCan.current()
-import {Shape} from "set-state-compare"
-
-class StateComponent extends React.Component {
-  state = {}
-
-  render() {
-    return null
-  }
-}
-
-class ShapeComponent extends React.Component {
-  shape = new Shape(this, {})
-
-  render() {
-    return null
-  }
-}
+import ShapeComponent from "./stubs/shape-component"
+import StateComponent from "./stubs/state-component"
 
 canCan.loadAbilities = jest.fn(async() => true)
 
@@ -31,9 +16,7 @@ describe("CanCanLoader", () => {
       component = create(<StateComponent />)
     })
 
-    let canCanLoader
-
-    act(() => {canCanLoader = create(<CanCanLoader abilities={[["admin", ["access"]]]} component={component.getInstance()} />)})
+    act(() => {create(<CanCanLoader abilities={[["admin", ["access"]]]} component={component.getInstance()} />)})
 
     expect(canCan.loadAbilities).toHaveBeenCalled()
     await(() => expect(component.getInstance().state).toBe({canCan: CanCan.current()}))
@@ -46,10 +29,8 @@ describe("CanCanLoader", () => {
       component = create(<StateComponent />)
     })
 
-    let canCanLoader
-
     act(() => {
-      canCanLoader = create(<CanCanLoader abilities={[["admin", ["access"]]]} component={component.getInstance()} />)
+      create(<CanCanLoader abilities={[["admin", ["access"]]]} component={component.getInstance()} />)
     })
 
     await act(async() => {
@@ -67,9 +48,9 @@ describe("CanCanLoader", () => {
       component = create(<ShapeComponent />)
     })
 
-    let canCanLoader
-
-    act(() => {canCanLoader = create(<CanCanLoader abilities={[["admin", ["access"]]]} component={component.getInstance()} />)})
+    act(() => {
+      create(<CanCanLoader abilities={[["admin", ["access"]]]} component={component.getInstance()} />)
+    })
 
     expect(canCan.loadAbilities).toHaveBeenCalledWith([["admin", ["access"]]])
     await(() => expect(component.getInstance().shape).toBe({canCan: CanCan.current()}))
