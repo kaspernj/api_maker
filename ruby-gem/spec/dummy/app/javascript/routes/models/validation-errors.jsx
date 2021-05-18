@@ -1,12 +1,12 @@
+import {digg} from "@kaspernj/object-digger"
 import FlashMessage from "shared/flash-message"
 import { Params } from "@kaspernj/api-maker"
 import {User} from "api-maker/models"
 
 export default class ModelsValidationErrors extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+  // This ensures that it doesn't crash if the checkbox is passed an inputRef
+  checkboxInputRef = React.createRef()
+  state = {}
 
   componentDidMount() {
     const params = Params.parse()
@@ -129,6 +129,7 @@ export default class ModelsValidationErrors extends React.Component {
         <Checkbox
           attribute="illegal"
           id={`project_illegal_${project.id()}`}
+          inputRef={digg(this, "checkboxInputRef")}
           label="Illegal"
           model={project}
           name={`user[tasks_attributes][${task.uniqueKey()}][project_attributes][illegal]`}

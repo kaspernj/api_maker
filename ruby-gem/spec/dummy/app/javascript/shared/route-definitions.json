@@ -3,6 +3,7 @@
     {"name": "bootstrap_attribute_rows", "path": "/bootstrap/attribute-rows", "component": "bootstrap/attribute-rows"},
     {"name": "bootstrap_checkbox_boolean", "path": "/bootstrap/checkbox-boolean", "component": "bootstrap/checkbox-boolean"},
     {"name": "bootstrap_checkboxes", "path": "/bootstrap/checkboxes", "component": "bootstrap/checkboxes"},
+    {"name": "bootstrap_live_table", "path": "/bootstrap/live-table", "component": "bootstrap/live-table"},
     {"name": "bootstrap_sort_link", "path": "/bootstrap/sort-link", "component": "bootstrap/sort-link"},
     {"name": "bootstrap_string_input_date", "path": "/bootstrap/string-input-date", "component": "bootstrap/string-input-date"},
     {"name": "bootstrap_string_input_date_object", "path": "/bootstrap/string-input-date-object", "component": "bootstrap/string-input-date-object"},

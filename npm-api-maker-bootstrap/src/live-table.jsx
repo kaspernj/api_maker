@@ -3,21 +3,24 @@ const {debounce} = require("debounce")
 const {digg, digs} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 const PropTypes = require("prop-types")
-const PropTypesExact = require("prop-types-exact")
 const React = require("react")
 
 import {Card, Paginate} from "@kaspernj/api-maker-bootstrap"
 
 export default class ApiMakerBootstrapLiveTable extends React.Component {
   static defaultProps = {
+    card: true,
     destroyEnabled: true,
     preloads: [],
+    qParams: undefined,
     select: {}
   }
 
-  static propTypes = PropTypesExact({
+  static propTypes = {
     abilities: PropTypes.object,
     actionsContent: PropTypes.func,
+    appHistory: PropTypes.object,
+    card: PropTypes.bool.isRequired,
     className: PropTypes.string,
     collection: PropTypes.oneOfType([
       instanceOfClassName("ApiMakerCollection"),
@@ -36,10 +39,11 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
     onModelsLoaded: PropTypes.func,
+    paginationComponent: PropTypes.func,
     preloads: PropTypes.array.isRequired,
     queryName: PropTypes.string,
     select: PropTypes.object
-  })
+  }
 
   constructor(props) {
     super(props)
@@ -52,6 +56,8 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
     this.state = {
       currentHref: location.href,
+      models: undefined,
+      query: undefined,
       queryName,
       queryQName: `${queryName}_q`,
       queryPageName: `${queryName}_page`
@@ -117,6 +123,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   loadModelsDebounce = debounce(() => this.loadModels())
+  submitFilterDebounce = debounce(() => this.submitFilter())
 
   async loadModels() {
     const params = Params.parse()
@@ -160,17 +167,41 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
     return (
       <div className={this.className()}>
-        {qParams && query && result && models && this.content()}
+        {qParams && query && result && models && this.cardOrTable()}
       </div>
     )
   }
 
-  content() {
-    const { modelClass } = digs(this.props, "modelClass")
-    const { actionsContent, controls, destroyEnabled, editModelPath, filterContent, filterSubmitLabel, header } = this.props
-    const { qParams, query, result, models } = this.state
+  cardOrTable() {
+    const {
+      abilities,
+      actionsContent,
+      card,
+      className,
+      collection,
+      columnsContent,
+      controls,
+      defaultParams,
+      destroyEnabled,
+      destroyMessage,
+      editModelPath,
+      filterContent,
+      filterSubmitLabel,
+      headersContent,
+      header,
+      groupBy,
+      modelClass,
+      onModelsLoaded,
+      paginationComponent,
+      preloads,
+      queryName,
+      select,
+      ...restProps
+    } = this.props
+    const { models, qParams, query, result } = digs(this.state, "models", "qParams", "query", "result")
+    const {submitFilterDebounce} = digs(this, "submitFilterDebounce")
 
-    let controlsContent, headerContent
+    let controlsContent, headerContent, PaginationComponent
 
     if (controls) {
       controlsContent = controls({models, qParams, query, result})
@@ -180,59 +211,85 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
       headerContent = header({models, qParams, query, result})
     }
 
+    if (paginationComponent) {
+      PaginationComponent = paginationComponent
+    } else {
+      PaginationComponent = Paginate
+    }
+
     return (
-      <div className="content-container">
+      <>
         <EventCreated modelClass={modelClass} onCreated={() => this.onModelCreated()} />
-
-        {filterContent &&
-          <Card className="mb-4">
-            <form onSubmit={(e) => this.onFilterFormSubmit(e)} ref="filterForm">
-              {filterContent({qParams})}
-              <input className="btn btn-primary" label={filterSubmitLabel} type="submit" />
-            </form>
-          </Card>
-        }
-
         {models.map(model =>
           <React.Fragment key={`events-${model.id()}`}>
             <EventDestroyed model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
             <EventUpdated model={model} onUpdated={(args) => this.onModelUpdated(args)} />
           </React.Fragment>
         )}
-
-        <Card className="mb-4" controls={controlsContent} header={headerContent} table>
-          <thead>
-            <tr>
-              {this.props.headersContent({query})}
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {models.map((model) =>
-              <tr className={`${inflection.singularize(modelClass.modelClassData().collectionName)}-row`} data-model-id={model.id()} key={model.cacheKey()}>
-                {this.props.columnsContent({model})}
-                <td className="actions-column text-nowrap text-right">
-                  {actionsContent && actionsContent({model})}
-                  {editModelPath && model.can("edit") &&
-                    <Link className="edit-button" to={editModelPath({model})}>
-                      <i className="la la-edit" />
-                    </Link>
-                  }
-                  {destroyEnabled && model.can("destroy") &&
-                    <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
-                      <i className="la la-remove" />
-                    </a>
-                  }
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </Card>
-
-        {result &&
-          <Paginate result={result} />
+        {filterContent &&
+          <Card className="mb-4">
+            <form onSubmit={(e) => this.onFilterFormSubmit(e)} ref="filterForm">
+              {filterContent({
+                onFilterChanged: () => this.submitFilter(),
+                onFilterChangedWithDelay: submitFilterDebounce,
+                qParams
+              })}
+              <input className="btn btn-primary" label={filterSubmitLabel} type="submit" />
+            </form>
+          </Card>
         }
-      </div>
+
+        {card &&
+          <Card className="mb-4" controls={controlsContent} header={headerContent} table>
+            {this.tableContent()}
+          </Card>
+        }
+        {!card &&
+          <table {...restProps}>
+            {this.tableContent()}
+          </table>
+        }
+        {result &&
+          <PaginationComponent result={result} />
+        }
+      </>
+    )
+  }
+
+  tableContent() {
+    const { modelClass } = digs(this.props, "modelClass")
+    const { actionsContent, destroyEnabled, editModelPath } = this.props
+    const { query, models } = this.state
+
+    return (
+      <>
+        <thead>
+          <tr>
+            {this.props.headersContent({query})}
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {models.map((model) =>
+            <tr className={`${inflection.singularize(modelClass.modelClassData().collectionName)}-row`} data-model-id={model.id()} key={model.cacheKey()}>
+              {this.props.columnsContent({model})}
+              <td className="actions-column text-nowrap text-right">
+                {actionsContent && actionsContent({model})}
+                {editModelPath && model.can("edit") &&
+                  <Link className="edit-button" to={editModelPath({model})}>
+                    <i className="la la-edit" />
+                  </Link>
+                }
+                {destroyEnabled && model.can("destroy") &&
+                  <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
+                    <i className="la la-remove" />
+                  </a>
+                }
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </>
     )
   }
 
@@ -267,16 +324,18 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
   onFilterFormSubmit(e) {
     e.preventDefault()
+    this.submitFilter()
+  }
 
+  submitFilter() {
+    const {appHistory} = this.props
     const qParams = Params.serializeForm(this.refs.filterForm)
     const { queryQName } = this.state
 
     const changeParamsParams = {}
     changeParamsParams[queryQName] = qParams
 
-    Params.changeParams(changeParamsParams)
-
-    this.setState({currentHref: location.href, qParams}, () => this.loadModels())
+    Params.changeParams(changeParamsParams, {appHistory})
   }
 
   onModelCreated() {
