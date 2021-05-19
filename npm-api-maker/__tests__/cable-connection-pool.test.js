@@ -153,7 +153,7 @@ describe("CableConnectionPool", () => {
         this.cableSubscriptionPools.push(cableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
-      cableConnectionPool.connectUpdate("Contact", "modelId", () => { })
+      cableConnectionPool.connectUpdate("Contact", "modelId", () => console.log("Update callback"))
 
       expect(cableConnectionPool.cableSubscriptionPools.length).toEqual(2)
 
@@ -186,6 +186,34 @@ describe("CableConnectionPool", () => {
       cableConnectionPool.connectUpdate("Contact", "modelId", () => { })
 
       const subscriptions = digg(cableSubscriptionPool, "subscriptions", "Contact", "updates", "modelId")
+
+      expect(subscriptions.length).toEqual(1)
+      expect(connectedUnsubscribeEvent).toEqual(true)
+    })
+
+    it("connects to an existing update event if the model ID is truthy like 1 is", () => {
+      let connectedUnsubscribeEvent = false
+
+      const cableConnectionPool = new CableConnectionPool()
+      const cableSubscriptionPool = new CableSubscriptionPool()
+
+      cableSubscriptionPool.connected = true
+      cableSubscriptionPool.connectUnsubscriptionForSubscription = function() {
+        connectedUnsubscribeEvent = true
+      }
+      cableSubscriptionPool.subscriptions = {
+        Contact: {
+          updates: {
+            1: []
+          }
+        }
+      }
+
+      cableConnectionPool.connectUpcoming = () => console.log("connectUpcoming")
+      cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
+      cableConnectionPool.connectUpdate("Contact", 1, () => console.log("Update callback called"))
+
+      const subscriptions = digg(cableSubscriptionPool, "subscriptions", "Contact", "updates", 1)
 
       expect(subscriptions.length).toEqual(1)
       expect(connectedUnsubscribeEvent).toEqual(true)

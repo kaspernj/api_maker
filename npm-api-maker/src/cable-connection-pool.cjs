@@ -25,7 +25,7 @@ module.exports = class ApiMakerCableConnectionPool {
 
       let existingSubscriptions
 
-      if (value == true) {
+      if (value === true) {
         existingSubscriptions = dig(cableSubscriptionPool.subscriptions, ...path)
       } else {
         existingSubscriptions = dig(cableSubscriptionPool.subscriptions, ...path, value)
@@ -33,8 +33,6 @@ module.exports = class ApiMakerCableConnectionPool {
 
       if (existingSubscriptions !== undefined) {
         if (!Array.isArray(existingSubscriptions)) {
-          console.error({ cableSubscriptionPool, existingSubscriptions, path, value })
-
           throw new Error(`existingSubscriptions wasn't an array: ${typeof existingSubscriptions} (${dig(existingSubscriptions, "constructor", "name")})`)
         }
 
