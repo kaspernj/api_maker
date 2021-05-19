@@ -23,7 +23,10 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
   }
 
   componentWillUnmount() {
-    this.connectUpdated.unsubscribe()
+    // Apparently 'componentWillUnmount' can be called without 'componentDidMount' was called. Several bug reports on this.
+    if (this.connectUpdated) {
+      this.connectUpdated.unsubscribe()
+    }
   }
 
   connect() {
