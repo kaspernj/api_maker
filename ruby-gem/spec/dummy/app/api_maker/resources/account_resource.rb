@@ -5,6 +5,7 @@ class Resources::AccountResource < Resources::ApplicationResource
 
   def abilities
     can CRUD, Account
+    can :sum, Account if current_user
   end
 
   def permitted_params(arg)

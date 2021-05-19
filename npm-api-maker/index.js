@@ -3,6 +3,7 @@ const AttributeNotLoadedError = require("./src/attribute-not-loaded-error.cjs")
 const BaseModel = require("./src/base-model.cjs")
 const CableConnectionPool = require("./src/cable-connection-pool.cjs")
 const CanCan = require("./src/can-can.cjs")
+const CanCanLoader = require("./src/can-can-loader.jsx").default
 const Collection = require("./src/collection.cjs")
 const CommandSubmitData = require("./src/command-submit-data.cjs")
 const CommandsPool = require("./src/commands-pool.cjs")
@@ -45,6 +46,7 @@ export {
   BaseModel,
   CableConnectionPool,
   CanCan,
+  CanCanLoader,
   Collection,
   CommandSubmitData,
   CommandsPool,

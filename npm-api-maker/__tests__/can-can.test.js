@@ -1,21 +1,34 @@
-const canCan = require("../src/can-can.cjs")
+const CanCan = require("../src/can-can.cjs")
 
 jest.mock("../src/services.cjs")
 
 describe("CanCan", () => {
-  test("that reset abilities and load abilities not have concurrency issues", async() => {
-    const Services = require("../src/services.cjs")
-    const mockedCurrent = jest.fn().mockReturnValue({
-      sendRequest: async() => ({abilities: ["loaded"]})
+  const canCan = CanCan.current()
+
+  describe("resetAbilities", () => {
+    test("that reset abilities and load abilities not have concurrency issues", async () => {
+      const Services = require("../src/services.cjs")
+      const mockedCurrent = jest.fn().mockReturnValue({
+        sendRequest: async () => ({abilities: ["loaded"]})
+      })
+      Services.current = mockedCurrent
+
+      const loadAbilitiesPromise = canCan.loadAbilities([["user", ["read"]]])
+      canCan.resetAbilities()
+
+      // await the abilities promise to make sure the lock has not been removed from the methods
+      await loadAbilitiesPromise
+
+      expect(canCan.abilities).toEqual([])
     })
-    Services.current = mockedCurrent
 
-    const loadAbilitiesPromise = canCan.current().loadAbilities([["user", ["read"]]])
-    canCan.current().resetAbilities()
+    it("dispatches an event", async () => {
+      const eventListener = jest.fn()
+      canCan.events.addListener("onResetAbilities", eventListener)
 
-    // await the abilities promise to make sure the lock has not been removed from the methods
-    await loadAbilitiesPromise
+      await canCan.resetAbilities()
 
-    expect(canCan.current().abilities).toEqual([])
+      expect(eventListener).toHaveBeenCalled()
+    })
   })
 })
