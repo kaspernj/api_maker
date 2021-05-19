@@ -32,6 +32,10 @@ module.exports = class ApiMakerCableConnectionPool {
       }
 
       if (existingSubscriptions !== undefined) {
+        if (!Array.isArray(existingSubscriptions)) {
+          throw new Error(`existingSubscriptions wasn't an array: ${typeof existingSubscriptions} (${dig(existingSubscriptions, "constructor", "name")})`)
+        }
+
         existingSubscriptions.push(subscription)
         cableSubscriptionPool.connectUnsubscriptionForSubscription(subscription)
 
