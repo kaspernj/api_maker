@@ -33,6 +33,8 @@ module.exports = class ApiMakerCableConnectionPool {
 
       if (existingSubscriptions !== undefined) {
         if (!Array.isArray(existingSubscriptions)) {
+          console.error({ cableSubscriptionPool, existingSubscriptions, path, value })
+
           throw new Error(`existingSubscriptions wasn't an array: ${typeof existingSubscriptions} (${dig(existingSubscriptions, "constructor", "name")})`)
         }
 
