@@ -10,7 +10,7 @@ module.exports = class ApiMakerPreloaded {
   loadPreloadedModels() {
     this.preloaded = {}
 
-    for(const preloadedType in this.response.preloaded) {
+    for (const preloadedType in this.response.preloaded) {
       const modelClassName = inflection.classify(preloadedType.replace(/-/g, "_"))
       const modelClass = digg(require("api-maker/models"), modelClassName)
 
@@ -18,15 +18,16 @@ module.exports = class ApiMakerPreloaded {
         const preloadedData = this.response.preloaded[preloadedType][preloadedId]
         const model = new modelClass({data: preloadedData, isNewRecord: false})
 
-        if (!this.preloaded[preloadedType])
+        if (!this.preloaded[preloadedType]) {
           this.preloaded[preloadedType] = {}
+        }
 
         this.preloaded[preloadedType][preloadedId] = model
       }
     }
 
-    for(const modelType in this.preloaded) {
-      for(const modelId in this.preloaded[modelType]) {
+    for (const modelType in this.preloaded) {
+      for (const modelId in this.preloaded[modelType]) {
         this.preloaded[modelType][modelId]._readPreloadedRelationships(this)
       }
     }
