@@ -27,7 +27,7 @@ class ApiMaker::Preloader
     @select_columns = select_columns
   end
 
-  def fill_data
+  def fill_data # rubocop:disable Metrics/AbcSize
     parsed = ApiMaker::RelationshipPreloader.parse(preload_param)
     return unless parsed
 
