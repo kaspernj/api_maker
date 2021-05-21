@@ -1,11 +1,12 @@
 class ApiMaker::Preloader
-  attr_reader :api_maker_args, :locals, :model_class, :preload_param
+  attr_reader :api_maker_args, :key_path, :locals, :model_class, :preload_param
 
-  def initialize(ability: nil, api_maker_args: nil, collection:, data:, locals:, preload_param:, model_class: nil, records:, select:, select_columns:)
+  def initialize(ability: nil, api_maker_args: nil, collection:, data:, key_path: [], locals:, preload_param:, model_class: nil, records:, select:, select_columns:)
     @ability = ability
     @api_maker_args = api_maker_args
     @collection = collection
     @data = data
+    @key_path = key_path
     @locals = locals
     @preload_param = preload_param
     @model_class = model_class || @collection.model
@@ -21,13 +22,15 @@ class ApiMaker::Preloader
     parsed.each do |key, value|
       next unless key
 
+      key_path << key
+
       reflection = model_class.reflections[key]
       raise "Unknown reflection: #{@collection.model.name}##{key}" unless reflection
 
       fill_empty_relationships_for_key(reflection, key)
       preload_class = preload_class_for_key(reflection)
 
-      Rails.logger.debug "API maker: Preloading: #{model_class}.#{key}"
+      Rails.logger.debug "API maker: Preloading #{model_class}: #{key_path.join(".")}"
 
       preload_result = ApiMaker::Configuration.profile("Preloading #{reflection.klass.name} with #{preload_class.name}") do
         preload_class
@@ -45,7 +48,10 @@ class ApiMaker::Preloader
           .preload
       end
 
-      next if value.blank? || preload_result.empty?
+      if value.blank? || preload_result.empty?
+        key_path.pop
+        next
+      end
 
       ApiMaker::Preloader
         .new(
@@ -53,6 +59,7 @@ class ApiMaker::Preloader
           api_maker_args: api_maker_args,
           data: @data,
           collection: preload_result,
+          key_path: key_path.dup,
           locals: locals,
           preload_param: value,
           model_class: reflection.klass,
@@ -61,6 +68,8 @@ class ApiMaker::Preloader
           select_columns: @select_columns
         )
         .fill_data
+
+      key_path.pop
     end
   end
 
