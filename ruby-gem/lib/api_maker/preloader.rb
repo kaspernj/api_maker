@@ -1,7 +1,19 @@
 class ApiMaker::Preloader
   attr_reader :api_maker_args, :key_path, :locals, :model_class, :preload_param
 
-  def initialize(ability: nil, api_maker_args: nil, collection:, data:, key_path: [], locals:, preload_param:, model_class: nil, records:, select:, select_columns:)
+  def initialize(
+    ability: nil,
+    api_maker_args: nil,
+    collection:,
+    data:,
+    key_path: [],
+    locals:,
+    preload_param:,
+    model_class: nil,
+    records:,
+    select:,
+    select_columns:
+  )
     @ability = ability
     @api_maker_args = api_maker_args
     @collection = collection
