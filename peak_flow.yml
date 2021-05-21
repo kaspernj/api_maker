@@ -59,5 +59,8 @@ builds:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec rubocop
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-2.6.5 && cd ruby-gem && bundle exec rails_best_practices
       - cd npm-api-maker && yarn eslint .
+      - cd npm-api-maker && yarn eslint-find-rules -d -u .eslintrc.js
       - cd npm-api-maker-bootstrap && yarn eslint .
+      - cd npm-api-maker-bootstrap && yarn eslint-find-rules -d -u .eslintrc.js
       - cd npm-api-maker-inputs && yarn eslint .
+      - cd npm-api-maker-inputs && yarn eslint-find-rules -d -u .eslintrc.js
