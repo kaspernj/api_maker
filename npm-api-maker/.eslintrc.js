@@ -287,7 +287,7 @@ module.exports = {
     "yoda": "error",
 
     // TODO: Configure, fix offences for and enable these
-    "array-element-newline": "off",
+    "array-element-newline": "off", // eslint-disable sort-keys
     "camelcase": "off",
     "capitalized-comments": "off",
     "func-names": "off",
