@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS = [:password].freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

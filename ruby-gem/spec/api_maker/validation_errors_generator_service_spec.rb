@@ -145,7 +145,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
     }]
   end
 
-  it "handles validations for attributes that are prefixed with encrypted" do
+  it "handles validations for attributes that are whitelisted" do
     params = {
       email: "user@example.com",
       password: nil

@@ -49,7 +49,10 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
   end
 
   def attribute_type(model, attribute_name)
-    if model.attribute_names.include?(attribute_name.to_s) || model.attribute_names.include?("encrypted_#{attribute_name}")
+    if model.attribute_names.include?(attribute_name.to_s)
+      :attribute
+    elsif model.class.const_defined?(:ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS) &&
+        model.class.const_get(:ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS).include?(attribute_name)
       :attribute
     elsif model._reflections.key?(attribute_name.to_s)
       :reflection
