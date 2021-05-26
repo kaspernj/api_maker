@@ -32,7 +32,7 @@ describe ApiMaker::BaseCommand do
       )
     end
 
-    it "receives additional attributes" do
+    it "handles additional attributes" do
       result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
         command: Commands::Users::FailureSaveResponse,
         model: user,
@@ -46,6 +46,30 @@ describe ApiMaker::BaseCommand do
       )
 
       expect(result).to include(
+        errors: [
+          {
+            message: "Password can't be blank",
+            type: :validation_error
+          }
+        ]
+      )
+    end
+
+
+    it "ignores validation errors that arent related to attributes" do
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
+        command: Commands::Users::FailureSaveResponse,
+        model: user,
+        args: {
+          additional_attributes: nil,
+          user: {
+            password: ""
+          },
+          simple_model_errors: true
+        }
+      )
+
+      expect(result).not_to include(
         errors: [
           {
             message: "Password can't be blank",

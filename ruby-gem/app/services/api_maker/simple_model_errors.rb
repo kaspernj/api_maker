@@ -23,7 +23,7 @@ class ApiMaker::SimpleModelErrors < ApiMaker::ApplicationService
       if attribute_name == :base
         @errors += attribute_errors
       else
-        next if model.attribute_names.exclude?(attribute_name.to_s) && additional_attributes.exclude?(attribute_name)
+        next if model.attribute_names.exclude?(attribute_name.to_s) && !additional_attributes&.include?(attribute_name)
 
         attribute_errors.each do |message|
           errors << "#{model.class.human_attribute_name(attribute_name)} #{message}"
