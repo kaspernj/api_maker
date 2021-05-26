@@ -8,7 +8,7 @@ PATH
       dig_bang
       rails (>= 6.0.0)
       ransack
-      service_pattern (>= 0.0.8)
+      service_pattern (>= 1.0.0)
       waitutil
 
 GEM

@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "cancancan"
   s.add_runtime_dependency "dig_bang"
   s.add_runtime_dependency "ransack"
-  s.add_runtime_dependency "service_pattern", ">= 0.0.8"
+  s.add_runtime_dependency "service_pattern", ">= 1.0.0"
 
   s.add_development_dependency "appraisal"
   s.add_development_dependency "best_practice_project"
