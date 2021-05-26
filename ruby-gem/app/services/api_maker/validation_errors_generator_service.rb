@@ -7,7 +7,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     @result = []
   end
 
-  def execute
+  def perform
     path = [model.model_name.singular]
 
     inspect_model(model, path)
@@ -53,7 +53,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
       :attribute
     elsif model.class.const_defined?(:ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS) &&
         model.class.const_get(:ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS).include?(attribute_name)
-      :attribute
+      :additional_attribute_for_validation
     elsif model._reflections.key?(attribute_name.to_s)
       :reflection
     elsif model.class.try(:monetized_attributes)&.include?(attribute_name.to_s)

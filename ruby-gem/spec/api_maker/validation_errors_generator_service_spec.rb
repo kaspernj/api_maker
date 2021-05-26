@@ -161,7 +161,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
 
     expect(result).to eq [{
       attribute_name: :password,
-      attribute_type: :attribute,
+      attribute_type: :additional_attribute_for_validation,
       error_messages: ["can't be blank"],
       error_types: [:blank],
       id: nil,
