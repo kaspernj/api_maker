@@ -11,7 +11,7 @@ class ApiMaker::AbilitiesLoader < ApiMaker::ApplicationService
     @serializers = serializers
   end
 
-  def execute
+  def perform
     scan_abilities
     scan_groupings
 

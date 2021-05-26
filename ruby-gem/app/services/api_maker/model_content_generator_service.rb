@@ -5,7 +5,7 @@ class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
     @model = model
   end
 
-  def execute
+  def perform
     if resource
       succeed! model_content
     else

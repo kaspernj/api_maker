@@ -9,7 +9,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     @params = params
   end
 
-  def execute
+  def perform
     set_query
 
     if params[:count]

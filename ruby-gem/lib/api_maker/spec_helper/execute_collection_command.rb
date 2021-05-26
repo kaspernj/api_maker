@@ -12,7 +12,7 @@ class ApiMaker::SpecHelper::ExecuteCollectionCommand < ApiMaker::ApplicationServ
     @model_class = model_class
   end
 
-  def execute
+  def perform
     helper_command
     helper.execute!
     succeed! helper_command.result

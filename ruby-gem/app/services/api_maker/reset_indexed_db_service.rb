@@ -7,7 +7,7 @@ class ApiMaker::ResetIndexedDbService < ApiMaker::ApplicationService
     @context = context
   end
 
-  def execute
+  def perform
     # Firefox doesnt support 'indexedDB.databases()'
     reset_indexed_db unless browser_firefox?
 

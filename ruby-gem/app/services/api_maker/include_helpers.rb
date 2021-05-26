@@ -5,7 +5,7 @@ class ApiMaker::IncludeHelpers < ApiMaker::ApplicationService
     @klass = klass
   end
 
-  def execute
+  def perform
     ::ApiHelpers.constants(false).each do |constant|
       klass.include ApiHelpers.const_get(constant)
     end

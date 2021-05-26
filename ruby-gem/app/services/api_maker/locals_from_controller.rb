@@ -5,7 +5,7 @@ class ApiMaker::LocalsFromController < ApiMaker::ApplicationService
     @controller = controller
   end
 
-  def execute
+  def perform
     variable_name = :@api_maker_locals
     controller.instance_variable_set(variable_name, {}) unless controller.instance_variable_defined?(variable_name)
     variable = controller.instance_variable_get(variable_name)

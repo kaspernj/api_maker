@@ -1,5 +1,5 @@
 class ApiMaker::ModelClassesJavaScriptGeneratorService < ApiMaker::ApplicationService
-  def execute
+  def perform
     javascript_code = ""
     resource_names = []
 

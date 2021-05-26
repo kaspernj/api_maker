@@ -5,7 +5,7 @@ class ApiMaker::SelectParser < ApiMaker::ApplicationService
     @select = select
   end
 
-  def execute
+  def perform
     new_select = {}
 
     select.each do |model_collection_name, attributes|
