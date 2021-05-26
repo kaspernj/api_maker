@@ -32,6 +32,32 @@ describe ApiMaker::BaseCommand do
       )
     end
 
+    it "responds with validation errors" do
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
+        command: Commands::Tasks::FailureSaveResponse,
+        model: task,
+        args: {
+          task: {
+            name: "Task",
+            project_attributes: {
+              account_id: account.id,
+              name: "Hans"
+            }
+          },
+          simple_model_errors: false
+        }
+      )
+
+      expect(result).to include(
+        errors: [
+          {
+            message: "Project base Navn kan ikke være Hans",
+            type: :validation_error
+          }
+        ]
+      )
+    end
+
     it "handles additional attributes" do
       result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
         command: Commands::Users::FailureSaveResponse,
@@ -54,7 +80,6 @@ describe ApiMaker::BaseCommand do
         ]
       )
     end
-
 
     it "ignores validation errors that arent related to attributes" do
       result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
