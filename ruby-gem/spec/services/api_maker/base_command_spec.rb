@@ -86,7 +86,7 @@ describe ApiMaker::BaseCommand do
         command: Commands::Users::FailureSaveResponse,
         model: user,
         args: {
-          additional_attributes: nil,
+          additional_attributes: [],
           user: {
             password: ""
           },
