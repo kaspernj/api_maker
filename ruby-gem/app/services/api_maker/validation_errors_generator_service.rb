@@ -51,6 +51,9 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
   def attribute_type(model, attribute_name)
     if model.attribute_names.include?(attribute_name.to_s)
       :attribute
+    elsif model.class.const_defined?(:ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS) &&
+        model.class.const_get(:ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS).include?(attribute_name)
+      :additional_attribute_for_validation
     elsif model._reflections.key?(attribute_name.to_s)
       :reflection
     elsif model.class.try(:monetized_attributes)&.include?(attribute_name.to_s)
