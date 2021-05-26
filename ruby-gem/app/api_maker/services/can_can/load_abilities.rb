@@ -1,5 +1,5 @@
 class Services::CanCan::LoadAbilities < ApiMaker::BaseService
-  def execute
+  def perform
     result = []
 
     request.each do |ability_data|

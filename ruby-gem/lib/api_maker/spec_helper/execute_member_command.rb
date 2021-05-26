@@ -12,7 +12,7 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
     @model = model
   end
 
-  def execute
+  def perform
     helper_command
     helper.execute!
     succeed! helper_command.result

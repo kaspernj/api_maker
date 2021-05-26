@@ -1,5 +1,5 @@
 class ApiMaker::IndexCommandService < ApiMaker::CommandService
-  def execute
+  def perform
     ApiMaker::IndexCommand.execute_in_thread!(
       ability: ability,
       api_maker_args: api_maker_args,

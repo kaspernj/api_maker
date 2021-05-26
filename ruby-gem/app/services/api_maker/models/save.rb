@@ -6,7 +6,7 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
     @simple_model_errors = simple_model_errors
   end
 
-  def execute
+  def perform
     errors = []
 
     models.first.transaction do

@@ -11,7 +11,7 @@ class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
     @table_name = table_name || @model_class.table_name
   end
 
-  def execute
+  def perform
     new_collection = collection
     return succeed! new_collection if new_collection.is_a?(Array)
 
