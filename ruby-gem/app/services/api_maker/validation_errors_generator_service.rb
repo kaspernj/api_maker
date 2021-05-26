@@ -7,7 +7,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     @result = []
   end
 
-  def perform
+  def execute
     path = [model.model_name.singular]
 
     inspect_model(model, path)
