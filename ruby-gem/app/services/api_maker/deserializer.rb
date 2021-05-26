@@ -5,7 +5,7 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
     @arg = arg
   end
 
-  def execute
+  def perform
     succeed! deserialize
   end
 
