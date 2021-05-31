@@ -24,7 +24,7 @@ module.exports = class ModelsResponseReader {
     for(const modelType in this.response.data) {
       const modelClassName = inflection.classify(modelType)
       const modelClass = digg(require("api-maker/models"), modelClassName)
-      const collectionName = inflection.underscore(modelClass.modelClassData().collectionName)
+      const collectionName = modelClass.modelClassData().collectionName
 
       for(const modelId of this.response.data[modelType]) {
         const modelData = this.response.preloaded[collectionName][modelId]
