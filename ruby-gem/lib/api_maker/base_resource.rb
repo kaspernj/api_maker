@@ -80,7 +80,7 @@ class ApiMaker::BaseResource
   end
 
   def self.collection_name
-    @collection_name ||= plural_name.underscore.dasherize
+    @collection_name ||= plural_name.underscore
   end
 
   def self.default_select

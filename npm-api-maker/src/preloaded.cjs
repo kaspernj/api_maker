@@ -11,7 +11,7 @@ module.exports = class ApiMakerPreloaded {
     this.preloaded = {}
 
     for (const preloadedType in this.response.preloaded) {
-      const modelClassName = inflection.classify(preloadedType.replace(/-/g, "_"))
+      const modelClassName = inflection.classify(preloadedType)
       const modelClass = digg(require("api-maker/models"), modelClassName)
 
       for(const preloadedId in this.response.preloaded[preloadedType]) {
@@ -34,8 +34,9 @@ module.exports = class ApiMakerPreloaded {
   }
 
   getModel(type, id) {
-    if (!this.preloaded[type] || !this.preloaded[type][id])
+    if (!this.preloaded[type] || !this.preloaded[type][id]) {
       throw new Error(`Could not find a ${type} by that ID: ${id}`)
+    }
 
     return this.preloaded[type][id]
   }

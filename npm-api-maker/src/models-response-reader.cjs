@@ -22,7 +22,7 @@ module.exports = class ModelsResponseReader {
     const models = []
 
     for(const modelType in this.response.data) {
-      const modelClassName = inflection.classify(modelType.replace(/-/g, "_"))
+      const modelClassName = inflection.classify(modelType)
       const modelClass = digg(require("api-maker/models"), modelClassName)
       const collectionName = inflection.underscore(modelClass.modelClassData().collectionName)
 
