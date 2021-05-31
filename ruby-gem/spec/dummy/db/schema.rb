@@ -76,11 +76,11 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
   end
 
   create_table "project_detail_files", force: :cascade do |t|
-    t.integer "project_detail_id", null: false
+    t.integer "project_id", null: false
     t.string "filename", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["project_detail_id"], name: "index_project_detail_files_on_project_detail_id"
+    t.index ["project_id"], name: "index_project_detail_files_on_project_id"
   end
 
   create_table "project_details", force: :cascade do |t|
@@ -164,12 +164,16 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
 
   add_foreign_key "account_marked_tasks", "accounts"
   add_foreign_key "account_marked_tasks", "tasks"
+  add_foreign_key "accounts", "customers"
   add_foreign_key "comments", "users", column: "author_id"
   add_foreign_key "customer_relationships", "customers", column: "child_id"
   add_foreign_key "customer_relationships", "customers", column: "parent_id"
-  add_foreign_key "project_detail_files", "project_details"
+  add_foreign_key "project_detail_files", "projects"
+  add_foreign_key "project_details", "projects"
   add_foreign_key "project_secrets", "projects"
+  add_foreign_key "projects", "accounts"
   add_foreign_key "task_details", "tasks"
   add_foreign_key "tasks", "projects"
+  add_foreign_key "tasks", "users"
   add_foreign_key "user_roles", "users"
 end
