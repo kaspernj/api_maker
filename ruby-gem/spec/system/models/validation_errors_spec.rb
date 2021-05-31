@@ -17,9 +17,7 @@ describe "models - validation errors" do
 
   it "renders validation errors when updating" do
     login_as user
-
     visit models_validation_errors_path(id: user.id)
-
     wait_for_selectors(
       ".component-models-validation-errors .content-container",
       "#task_name_#{task2.id}"
@@ -28,12 +26,14 @@ describe "models - validation errors" do
     select "", from: "project_account_#{project1.id}"
     fill_in "task_name_#{task2.id}", with: ""
     fill_in "project_name_#{project3.id}", with: ""
+    check "project_illegal_#{project3.id}"
 
-    find("input[type=submit]").click
+    wait_for_and_find("input[type=submit]").click
 
     wait_for_selector ".project-account-1 .invalid-feedback", text: "must exist"
     wait_for_selector ".task-name-2 .invalid-feedback", text: "can't be blank"
     wait_for_selector ".project-name-3 .invalid-feedback", text: "can't be blank"
+    wait_for_selector ".project-illegal-3 .invalid-feedback", text: "can't be true"
 
     # All validation errors should have been handled so no message should be shown
     wait_for_no_selector ".ui-pnotify-text"

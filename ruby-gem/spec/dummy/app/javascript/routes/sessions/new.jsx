@@ -1,9 +1,13 @@
-import Devise from "api-maker/devise"
-import DisplayNotification from "shared/display-notification"
+import {Devise} from "@kaspernj/api-maker"
+import FlashMessage from "shared/flash-message"
 import { EventEmitterListener } from "@kaspernj/api-maker"
 import React from "react"
 
 export default class SessionsNew extends React.Component {
+  emailRef = React.createRef()
+  passwordRef = React.createRef()
+  rememberMeRef = React.createRef()
+
   constructor(props) {
     super(props)
     this.state = {
@@ -24,9 +28,9 @@ export default class SessionsNew extends React.Component {
         }
         {!Devise.isUserSignedIn() &&
           <form onSubmit={(e) => { this.onSubmit(e) }}>
-            <Input label="Email" ref="email" />
-            <Input label="Password" ref="password" type="password" />
-            <Checkbox label="Remember me" ref="rememberMe" />
+            <Input inputRef={this.emailRef} label="Email" />
+            <Input inputRef={this.passwordRef} label="Password" type="password" />
+            <Checkbox label="Remember me" inputRef={this.rememberMeRef} />
             <input type="submit" value="Sign in" />
           </form>
         }
@@ -41,14 +45,14 @@ export default class SessionsNew extends React.Component {
   onSubmit(e) {
     e.preventDefault()
 
-    const email = this.refs.email.refs.input.refs.input.value
-    const password = this.refs.password.refs.input.refs.input.value
-    const rememberMe = this.refs.rememberMe.refs.checkbox.refs.input.checked
+    const email = this.emailRef.current.value
+    const password = this.passwordRef.current.value
+    const rememberMe = this.rememberMeRef.current.checked
 
     Devise.signIn(email, password, {rememberMe}).then(() => {
-      DisplayNotification.success("You were signed in")
+      FlashMessage.success("You were signed in")
     }, (response) => {
-      DisplayNotification.error(response)
+      FlashMessage.errorResponse(response)
     })
   }
 }

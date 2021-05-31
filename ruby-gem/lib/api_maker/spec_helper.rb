@@ -1,27 +1,21 @@
 require "waitutil"
 
-module ApiMaker::SpecHelper
+module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
+  autoload :ExecuteCollectionCommand, "#{__dir__}/spec_helper/execute_collection_command"
+  autoload :ExecuteMemberCommand, "#{__dir__}/spec_helper/execute_member_command"
+
+  require_relative "spec_helper/browser_logs"
+  require_relative "spec_helper/expect_no_browser_errors"
   require_relative "spec_helper/wait_for_expect"
   require_relative "spec_helper/wait_for_flash_message"
+  include BrowserLogs
+  include ExpectNoBrowserErrors
   include WaitForExpect
   include WaitForFlashMessage
 
   class JavaScriptError < RuntimeError; end
   class SelectorNotFoundError < RuntimeError; end
   class SelectorFoundError < RuntimeError; end
-
-  def browser_logs
-    logs = if browser_firefox?
-      []
-    else
-      chrome_logs
-    end
-
-    @recorded_browser_logs ||= []
-    @recorded_browser_logs += logs
-
-    logs
-  end
 
   def browser_firefox?
     capabilities = page.driver.browser.try(:capabilities)
@@ -30,6 +24,10 @@ module ApiMaker::SpecHelper
 
   def chrome_logs
     page.driver.browser.manage.logs.get(:browser)
+  end
+
+  def confirm_accept
+    page.driver.browser.switch_to.alert.accept
   end
 
   def expect_no_browser_window_errors
@@ -48,30 +46,43 @@ module ApiMaker::SpecHelper
     raise error
   end
 
-  def expect_no_browser_errors
-    logs = browser_logs
-      .map(&:to_s)
-      .reject { |log| log.include?("Warning: Can't perform a React state update on an unmounted component.") }
-      .reject { |log| log.include?("DEBUG: ") }
-      .join("\n")
-
-    expect_no_browser_window_errors
-    return if logs.blank? || logs.exclude?("SEVERE ")
-
-    # Lets try one more time - just in case browser window error got registered meanwhile
-    sleep 0.4
-    expect_no_browser_window_errors
-
-    raise logs
-  end
-
   def expect_no_errors
     expect_no_flash_errors
     expect_no_browser_errors
   end
 
+  def expect_to_be_able_to(ability, model, permissions)
+    permissions.each do |permission|
+      # Test access through 'can?'
+      expect(ability).to be_able_to permission, model
+
+      # Test access through 'accessible_by'
+      if model.is_a?(ActiveRecord::Base) && model.persisted?
+        readable_models = model.class.where(id: model).accessible_by(ability, permission)
+        expect(readable_models).to eq [model]
+      end
+    end
+  end
+
+  def expect_not_to_be_able_to(ability, model, permissions)
+    permissions.each do |permission|
+      # Test access through 'can?'
+      expect(ability).not_to be_able_to permission, model
+
+      # Test access through 'accessible_by'
+      if model.is_a?(ActiveRecord::Base) && model.persisted?
+        readable_models = model.class.where(id: model).accessible_by(ability, permission)
+        expect(readable_models).to be_empty
+      end
+    end
+  end
+
   def js_fill_in(element_id, with:)
     page.execute_script("document.querySelector(#{element_id.to_json}).value = #{with.to_json}")
+  end
+
+  def model_row_selector(model)
+    ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}']"
   end
 
   def pretty_html
@@ -85,6 +96,10 @@ module ApiMaker::SpecHelper
 
   def reset_indexeddb
     ApiMaker::ResetIndexedDbService.execute!(context: self)
+  end
+
+  def wait_for_action_cable_to_connect
+    sleep 0.5
   end
 
   def wait_for_and_find(selector, *args)
@@ -105,8 +120,12 @@ module ApiMaker::SpecHelper
 
   def wait_for_path(expected_path, **args)
     args[:ignore_query] = true unless args.key?(:ignore_query)
+
     expect(page).to have_current_path(expected_path, args)
     expect_no_browser_errors
+  rescue RSpec::Expectations::ExpectationNotMetError => e
+    expect_no_browser_errors
+    raise e
   end
 
   def wait_for_selector(selector, *args)

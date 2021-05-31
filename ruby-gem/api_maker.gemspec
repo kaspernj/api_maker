@@ -7,8 +7,8 @@ require "api_maker/version"
 Gem::Specification.new do |s|
   s.name        = "api_maker"
   s.version     = ApiMaker::VERSION
-  s.authors     = ["kjabtion"]
-  s.email       = ["kj@abtion.com"]
+  s.authors     = ["kaspernj"]
+  s.email       = ["kaspernj@gmail.com"]
   s.homepage    = "https://github.com/kaspernj/api_maker"
   s.summary     = "A Rails gem for generating a JavaScript API automatically based on your ActiveRecord models."
   s.description = "A Rails gem for generating a JavaScript API automatically based on your ActiveRecord models."
@@ -17,16 +17,15 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "rails", ">= 5.2.0"
+  s.add_dependency "rails", ">= 6.0.0"
   s.add_dependency "waitutil"
 
-  s.add_runtime_dependency "active_record_better_dependent_error_messages", ">= 0.0.2"
-  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.12"
+  s.add_runtime_dependency "active_record_better_dependent_error_messages", ">= 0.0.3"
+  s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.15"
   s.add_runtime_dependency "cancancan"
   s.add_runtime_dependency "dig_bang"
-  s.add_runtime_dependency "i18n-js"
   s.add_runtime_dependency "ransack"
-  s.add_runtime_dependency "service_pattern", ">= 0.0.8"
+  s.add_runtime_dependency "service_pattern", ">= 1.0.0"
 
   s.add_development_dependency "appraisal"
   s.add_development_dependency "best_practice_project"
@@ -36,7 +35,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "dotenv-rails"
   s.add_development_dependency "factory_bot_rails"
   s.add_development_dependency "htmlbeautifier"
-  s.add_development_dependency "js-routes"
+  s.add_development_dependency "js-routes", ">= 1.4.13"
   s.add_development_dependency "money-rails"
   s.add_development_dependency "pry-rails"
   s.add_development_dependency "public_activity"

@@ -7,7 +7,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
         origin_data = origin_data_for_model(model)
         origin_data.fetch(:r)[reflection.name] = model_id
 
-        serializer = ApiMaker::Serializer.new(ability: ability, args: args, locals: locals, model: model, select: select&.dig(model.class))
+        serializer = ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model, select: select&.dig(model.class))
         underscore_name = serializer.resource.underscore_name
 
         data.fetch(:preloaded)[underscore_name] ||= {}
@@ -19,23 +19,22 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
   end
 
   def models
-    @models ||= begin
-      if reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-        models_with_join
-      else
-        query = query_normal
-        query = query.instance_eval(&reflection.scope) if reflection.scope
-        query = query.accessible_by(ability) if ability
-        query = ApiMaker::SelectColumnsOnCollection.execute!(
-          collection: query,
-          model_class: reflection.klass,
-          select_columns: select_columns,
-          table_name: query.klass.table_name
-        )
-        query = query.fix
-        query.load
-        query
-      end
+    @models ||= if reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+      models_with_join
+    else
+      query = query_normal
+      query = query.instance_eval(&reflection.scope) if reflection.scope
+      query = query.accessible_by(ability) if ability
+      query = ApiMaker::SelectColumnsOnCollection.execute!(
+        collection: query,
+        model_class: reflection.klass,
+        select_attributes: select,
+        select_columns: select_columns,
+        table_name: query.klass.table_name
+      )
+      query = query.fix if ApiMaker::DatabaseType.postgres?
+      query.load
+      query
     end
   end
 

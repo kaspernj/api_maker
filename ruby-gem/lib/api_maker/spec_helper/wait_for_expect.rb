@@ -1,10 +1,10 @@
 module ApiMaker::SpecHelper::WaitForExpect
   # Waits for an expect to not fail - this is great because it whines
-  def wait_for_expect
+  def wait_for_expect(*args)
     last_error = nil
 
     begin
-      wait_for_browser do
+      wait_for_browser(*args) do
         yield
         true
       rescue RSpec::Expectations::ExpectationNotMetError => e

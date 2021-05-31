@@ -18,11 +18,14 @@ Bundler.require(*Rails.groups)
 require "dotenv-rails"
 Dotenv::Railtie.load
 
+# Fixes autoload issues when booting up dummy in dev env
+module ApiHelpers; end
+require_relative "../../../app/api_maker/api_helpers/api_maker_helpers"
+
 require "active_record_query_fixer"
 require "api_maker"
 require "cancancan"
 require "devise"
-require "i18n-js"
 require "js-routes"
 require "kaminari" if Gem.loaded_specs["kaminari"]
 require "will_paginate" if Gem.loaded_specs["will_paginate"]
@@ -37,8 +40,6 @@ class Dummy::Application < Rails::Application
   # Application configuration can go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded after loading
   # the framework and any gems in your application.
-
-  config.middleware.use I18n::JS::Middleware
 
   config.i18n.available_locales = [:da, :en]
   config.i18n.default_locale = :en

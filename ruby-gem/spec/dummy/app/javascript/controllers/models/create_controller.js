@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
-import Params from "shared/params"
+import { Params } from "@kaspernj/api-maker"
 
-export default class extends Controller {
+export default class ModelsCreateController extends Controller {
   connect() {
     this.element.dataset.initializeStarted = true
     const project = new Project()

@@ -80,6 +80,9 @@ Metrics/CyclomaticComplexity:
 Metrics/MethodLength:
   Max: 50
 
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
 Metrics/PerceivedComplexity:
   Max: 12
 
@@ -121,6 +124,9 @@ RSpec/NamedSubject:
   Enabled: false
 
 RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/StubbedMock:
   Enabled: false
 
 Style/ClassAndModuleChildren:

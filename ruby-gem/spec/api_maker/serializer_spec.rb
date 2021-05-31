@@ -12,17 +12,17 @@ describe ApiMaker::Serializer do
   end
 
   it "includes given arguments" do
-    result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
+    result = JSON.parse(ApiMaker::Serializer.new(api_maker_args: {test_arg: "Test"}, model: user).to_json)
     expect(result.dig("a", "custom_attribute")).to eq "CustomAttribute - Test arg: Test"
   end
 
   it "supports conditions for attributes" do
-    result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
+    result = JSON.parse(ApiMaker::Serializer.new(api_maker_args: {test_arg: "Test"}, model: user).to_json)
     expect(result.fetch("a").keys).not_to include "updated_at"
 
     user.email = "kasper@example.com"
 
-    result = JSON.parse(ApiMaker::Serializer.new(args: {test_arg: "Test"}, model: user).to_json)
+    result = JSON.parse(ApiMaker::Serializer.new(api_maker_args: {test_arg: "Test"}, model: user).to_json)
     expect(result.fetch("a").keys).to include "updated_at"
   end
 
@@ -36,8 +36,8 @@ describe ApiMaker::Serializer do
       serializer = ApiMaker::Serializer.new(model: account)
 
       expect(serializer.attributes_to_read).to eq(
-        id: {args: {}, data: :id},
-        name: {args: {}, data: :name}
+        id: {args: {requires_columns: [:id]}, data: :id},
+        name: {args: {requires_columns: [:name]}, data: :name}
       )
       expect(serializer.as_json).to eq(
         a: {

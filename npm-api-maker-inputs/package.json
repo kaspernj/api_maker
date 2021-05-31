@@ -10,28 +10,37 @@
     ]
   },
   "bugs": {
-    "url": "https://github.com/kaspernj/api-maker-inputs/issues"
+    "url": "https://github.com/kaspernj/api_maker/issues"
   },
   "description": "",
-  "homepage": "https://github.com/kaspernj/api-maker-inputs#readme",
+  "homepage": "https://github.com/kaspernj/api_maker#readme",
   "license": "ISC",
   "main": "index.js",
   "name": "@kaspernj/api-maker-inputs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kaspernj/api-maker-inputs.git"
+    "url": "git+https://github.com/kaspernj/api_maker.git"
   },
-  "version": "1.0.32",
+  "scripts": {
+    "eslint": "eslint"
+  },
+  "version": "1.0.53",
   "peerDependencies": {
-    "classnames": "^2.2.6",
-    "format-number": "^3.0.0",
-    "inflection": "^1.12.0",
     "prop-types": "^15.7.2",
     "prop-types-exact": "^1.2.0",
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.28",
-    "@kaspernj/object-digger": ">= 1.0.1"
+    "@kaspernj/api-maker": ">= 1.0.91",
+    "@kaspernj/object-digger": ">= 1.0.2",
+    "classnames": ">= 2.2.6",
+    "inflection": ">= 1.12.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.26.0",
+    "eslint-find-rules": "^3.6.1",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-react": "^7.23.2",
+    "jest": "^26.6.3"
   }
 }

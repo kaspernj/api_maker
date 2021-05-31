@@ -7,7 +7,7 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     @result = []
   end
 
-  def execute
+  def perform
     path = [model.model_name.singular]
 
     inspect_model(model, path)
@@ -18,33 +18,42 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
   def inspect_model(model, path)
     return if model.errors.empty?
 
-    model.errors.details.each do |attribute_name, errors|
+    model.errors.details.each do |attribute_name, _errors|
       attribute_type = attribute_type(model, attribute_name)
       next unless attribute_type
 
       attribute_path = path + [attribute_name]
       input_name = path_to_attribute_name(attribute_path)
 
-      errors.each_with_index do |error, error_index|
-        error_data = {
-          attribute_name: attribute_name,
-          attribute_type: attribute_type,
-          id: model.id,
-          model_name: model.model_name.param_key,
-          error_message: model.errors.messages.fetch(attribute_name).fetch(error_index),
-          error_type: error_type(attribute_type, error)
-        }
+      error_data = {
+        attribute_name: attribute_name,
+        attribute_type: attribute_type,
+        id: model.id,
+        model_name: model.model_name.param_key,
+        error_messages: model.errors.messages.fetch(attribute_name).to_a,
+        error_types: model.errors.details.fetch(attribute_name).map do |error|
+          error = error.fetch(:error)
 
-        error_data[:input_name] = input_name unless attribute_type == :base
+          if error.is_a?(Symbol)
+            error
+          else
+            :custom_error
+          end
+        end
+      }
 
-        result << error_data
-      end
+      error_data[:input_name] = input_name unless attribute_type == :base
+
+      result << error_data
     end
   end
 
   def attribute_type(model, attribute_name)
     if model.attribute_names.include?(attribute_name.to_s)
       :attribute
+    elsif model.class.const_defined?(:ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS) &&
+        model.class.const_get(:ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS).include?(attribute_name)
+      :additional_attribute_for_validation
     elsif model._reflections.key?(attribute_name.to_s)
       :reflection
     elsif model.class.try(:monetized_attributes)&.include?(attribute_name.to_s)

@@ -1,8 +1,9 @@
-import {digs} from "@kaspernj/object-digger"
-import idForComponent from "./id-for-component"
-import nameForComponent from "./name-for-component"
-import PropTypes from "prop-types"
-import React from "react"
+const {dig, digs} = require("@kaspernj/object-digger")
+const {EventListener} = require("@kaspernj/api-maker")
+const idForComponent = require("./id-for-component.cjs")
+const nameForComponent = require("./name-for-component.cjs")
+const PropTypes = require("prop-types")
+const React = require("react")
 
 export default class ApiMakerCheckbox extends React.Component {
   static defaultProps = {
@@ -15,6 +16,7 @@ export default class ApiMakerCheckbox extends React.Component {
     defaultChecked: PropTypes.bool,
     defaultValue: PropTypes.node,
     id: PropTypes.string,
+    inputRef: PropTypes.object,
     model: PropTypes.object,
     name: PropTypes.string,
     onErrors: PropTypes.func,
@@ -22,11 +24,9 @@ export default class ApiMakerCheckbox extends React.Component {
     zeroInput: PropTypes.bool
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      form: undefined
-    }
+  inputRef = React.createRef()
+  state = {
+    form: undefined
   }
 
   componentDidMount() {
@@ -42,7 +42,7 @@ export default class ApiMakerCheckbox extends React.Component {
   }
 
   setForm() {
-    const form = this.refs.checkbox && this.refs.checkbox.refs.input && this.refs.checkbox.refs.input.form
+    const form = dig(this.props.inputRef || this.inputRef, "current", "form")
 
     if (form != this.state.form) {
       this.setState({form})
@@ -50,7 +50,7 @@ export default class ApiMakerCheckbox extends React.Component {
   }
 
   render() {
-    const {attribute, defaultChecked, defaultValue, id, model, name, onErrors, zeroInput, ...restProps} = this.props
+    const {attribute, defaultChecked, defaultValue, id, inputRef, model, name, onErrors, zeroInput, ...restProps} = this.props
     const {form} = digs(this.state, "form")
     const inputName = this.inputName()
 
@@ -65,7 +65,7 @@ export default class ApiMakerCheckbox extends React.Component {
           defaultValue={defaultValue}
           id={this.inputId()}
           name={inputName}
-          ref="input"
+          ref={inputRef || this.inputRef}
           type="checkbox"
           {...restProps}
         />

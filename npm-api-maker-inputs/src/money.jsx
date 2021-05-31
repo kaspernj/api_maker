@@ -1,11 +1,10 @@
-import formatNumber from "format-number"
-import idForComponent from "./id-for-component"
-import { MoneyFormatter } from "@kaspernj/api-maker"
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
-
+const {digg} = require("@kaspernj/object-digger")
+const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
+const { MoneyFormatter } = require("@kaspernj/api-maker")
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
 export default class ApiMakerInputsMoney extends React.Component {
   static defaultProps = {
@@ -18,6 +17,7 @@ export default class ApiMakerInputsMoney extends React.Component {
     currenciesCollection: PropTypes.array.isRequired,
     currencyName: PropTypes.string,
     id: PropTypes.string,
+    inputRef: PropTypes.object,
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
@@ -26,15 +26,11 @@ export default class ApiMakerInputsMoney extends React.Component {
     small: PropTypes.bool
   })
 
-  constructor(props) {
-    super(props)
-    this.state = {}
+  inputRef = React.createRef()
+  state = {}
 
-    let formatOptions = {
-      decimal: I18n.t("number.currency.format.separator"),
-      integerSeparator: I18n.t("number.currency.format.delimiter")
-    }
-    this.formatter = formatNumber(formatOptions)
+  getInputRef() {
+    return this.props.inputRef || this.inputRef
   }
 
   render() {
@@ -42,7 +38,7 @@ export default class ApiMakerInputsMoney extends React.Component {
 
     return (
       <div className="component-api-maker-bootstrap-money-input">
-        <input defaultValue={this.inputDefaultCentsValue()} id={this.inputCentsId()} name={this.inputCentsName()} ref="input" type="hidden" />
+        <input defaultValue={this.inputDefaultCentsValue()} id={this.inputCentsId()} name={this.inputCentsName()} ref={this.getInputRef()} type="hidden" />
 
         <div className="input-group">
           <input
@@ -74,7 +70,7 @@ export default class ApiMakerInputsMoney extends React.Component {
 
   checkAttributeExists() {
     if (this.props.model && !this.props.model[this.props.attribute])
-      throw new Error(`No such attribute: ${this.props.model.modelClassData().name}#${this.props.attribute}`)
+      throw new Error(`No such attribute: ${digg(this.props.model.modelClassData(), "name")}#${this.props.attribute}`)
   }
 
   inputCurrencyId() {
@@ -113,8 +109,8 @@ export default class ApiMakerInputsMoney extends React.Component {
   inputDefaultCentsValue() {
     let value = this.props.model[this.props.attribute]()
 
-    if (this.refs.input)
-      return this.refs.input.value
+    if (this.getInputRef().current)
+      return digg(this.getInputRef(), "current", "value")
 
     if (value)
       return MoneyFormatter.amountFromMoney(value)
@@ -141,10 +137,12 @@ export default class ApiMakerInputsMoney extends React.Component {
   }
 
   setAmount() {
-    if (!this.refs.input.value && this.refs.input.value == "") {
+    const inputElement = this.getInputRef().current
+
+    if (!inputElement.value && inputElement.value == "") {
       this.refs.whole.value = ""
     } else {
-      const cents = parseFloat(this.refs.input.value)
+      const cents = parseFloat(inputElement.value)
       const formatted = MoneyFormatter.fromMoney({amount: cents, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
 
       this.refs.whole.value = formatted
@@ -152,14 +150,16 @@ export default class ApiMakerInputsMoney extends React.Component {
   }
 
   setCents() {
+    const inputElement = this.getInputRef().current
+
     let whole = MoneyFormatter.stringToFloat(this.refs.whole.value)
     let cents = parseInt(whole * 100, 10)
-    let oldCents = parseInt(this.refs.input.value, 10)
+    let oldCents = parseInt(inputElement.value, 10)
 
     if (cents) {
-      this.refs.input.value = cents
+      inputElement.value = cents
     } else{
-      this.refs.input.value = ''
+      inputElement.value = ''
     }
 
     if (this.props.onChange && oldCents != cents)

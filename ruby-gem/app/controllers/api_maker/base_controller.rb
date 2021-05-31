@@ -8,7 +8,7 @@ class ApiMaker::BaseController < ApplicationController
 private
 
   def current_ability
-    @current_ability ||= ApiMaker::Configuration.current.ability_class.new(args: api_maker_args, locals: api_maker_locals)
+    @current_ability ||= ApiMaker::Configuration.current.ability_class.new(api_maker_args: api_maker_args, locals: api_maker_locals)
   end
 
   def api_maker_locals
@@ -17,10 +17,10 @@ private
 
   def render_error(error)
     puts error.inspect
-    puts error.backtrace
+    puts Rails.backtrace_cleaner.clean(error.backtrace)
 
     logger.error error.inspect
-    logger.error error.backtrace.join("\n")
+    logger.error Rails.backtrace_cleaner.clean(error.backtrace).join("\n")
 
     raise error
   end

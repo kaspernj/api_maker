@@ -1,5 +1,5 @@
 import { Controller } from "stimulus"
-import Devise from "api-maker/devise"
+import {Devise} from "@kaspernj/api-maker"
 
 export default class DeviseCurrentUserController extends Controller {
   connect() {

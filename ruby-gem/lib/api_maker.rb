@@ -1,5 +1,6 @@
 require "api_maker/engine"
 
+require "active_record_better_dependent_error_messages"
 require "active_record_query_fixer"
 require "cancancan"
 require "ransack"
@@ -12,13 +13,13 @@ module ApiMaker
 
   autoload :Ability, "#{dir}/ability"
   autoload :AbilityLoader, "#{dir}/ability_loader"
-  autoload :BaseCommand, "#{dir}/base_command"
+  autoload :BaseCollectionInstance, "#{dir}/base_collection_instance"
   autoload :BaseResource, "#{dir}/base_resource"
   autoload :BaseService, "#{dir}/base_service"
   autoload :CollectionSerializer, "#{dir}/collection_serializer"
   autoload :CommandSpecHelper, "#{dir}/command_spec_helper"
   autoload :Configuration, "#{dir}/configuration"
-  autoload :ExpectToBeAbleToHelper, "#{dir}/export_to_able_to_helper"
+  autoload :ExpectToBeAbleToHelper, "#{dir}/expect_to_able_to_helper"
   autoload :IndividualCommand, "#{dir}/individual_command"
   autoload :Loader, "#{dir}/loader"
   autoload :MemoryStorage, "#{dir}/memory_storage"

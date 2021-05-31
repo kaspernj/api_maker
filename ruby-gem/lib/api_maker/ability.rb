@@ -3,10 +3,10 @@ class ApiMaker::Ability
 
   attr_reader :loader
 
-  def initialize(args: nil, locals: nil)
-    @args = args || {}
-    @locals = locals || @args[:locals] || {}
-    @loader = ApiMaker::AbilityLoader.new(ability: self, locals: locals, args: args)
+  def initialize(api_maker_args: nil, locals: nil)
+    @api_maker_args = api_maker_args || {}
+    @locals = locals || api_maker_args&.dig(:locals) || {}
+    @loader = ApiMaker::AbilityLoader.new(ability: self, locals: locals, api_maker_args: api_maker_args)
   end
 
   # Override methods from CanCan::Ability to first load abilities from the given resource
@@ -14,6 +14,16 @@ class ApiMaker::Ability
     subject = args.second
     load_abilities(subject)
     super
+  rescue ActiveModel::MissingAttributeError => e
+    if subject.is_a?(ActiveRecord::Base)
+      # Add subject / model class name to the error message
+      new_error = ActiveModel::MissingAttributeError.new("Error on #{subject.class.name}: #{e.message}")
+      new_error.set_backtrace(e.backtrace)
+
+      raise new_error
+    end
+
+    raise e
   end
 
   def model_adapter(*args)
@@ -25,15 +35,19 @@ class ApiMaker::Ability
   def load_abilities(subject)
     return unless active_record?(subject)
 
-    if subject.class == Class
-      loader.load_model_class(subject)
+    if subject.class == Class # rubocop:disable Style/ClassEqualityComparison
+      ApiMaker::Configuration.profile("Loading abilities for #{subject.name}") do
+        loader.load_model_class(subject)
+      end
     elsif subject.class != Class
-      loader.load_model_class(subject.class)
+      ApiMaker::Configuration.profile("Loading abilities for #{subject.class.name}") do
+        loader.load_model_class(subject.class)
+      end
     end
   end
 
   def active_record?(subject)
-    return subject < ActiveRecord::Base if subject.class == Class
+    return subject < ActiveRecord::Base if subject.class == Class # rubocop:disable Style/ClassEqualityComparison
 
     subject.is_a?(ActiveRecord::Base)
   end

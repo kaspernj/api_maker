@@ -7,7 +7,7 @@ describe ApiMaker::CollectionCommandService do
   let(:service) do
     ApiMaker::CollectionCommandService.new(
       ability: ability,
-      args: {},
+      api_maker_args: {},
       command_name: "asd",
       commands: [],
       command_response: command_response,
@@ -18,7 +18,7 @@ describe ApiMaker::CollectionCommandService do
   let(:account_marked_task_service) do
     ApiMaker::CollectionCommandService.new(
       ability: ability,
-      args: {},
+      api_maker_args: {},
       command_name: "asd",
       commands: [],
       command_response: command_response,

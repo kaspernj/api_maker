@@ -1,13 +1,13 @@
 require "rails_helper"
 
 describe ApiMaker::CollectionSerializer do
-  let!(:account) { create :account, customer: customer, id: 1 }
+  let!(:account) { create :account, customer: customer, id: 1, name: "Account 1" }
   let!(:customer) { create :customer, id: 5, name: "Test customer" }
   let!(:project) { create :project, account: account, id: 2, name: "Test project" }
   let!(:project_detail) { create :project_detail, project: project, id: 6, details: "Test project details" }
   let!(:task) { create :task, id: 3, name: "Test task", project: project, user: user }
   let!(:user) { create :user, id: 4 }
-  let(:ability) { ApiMaker::Ability.new(args: args) }
+  let(:ability) { ApiMaker::Ability.new(api_maker_args: args) }
   let(:args) { {current_user: user} }
 
   let(:task_with_same_project) { create :task, project: project }
@@ -112,7 +112,7 @@ describe ApiMaker::CollectionSerializer do
 
   it "only includes the same relationship once for belongs to relationships" do
     collection = Task.where(id: [task.id, task_with_same_project.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(args: args, collection: collection, query_params: {preload: ["project"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(api_maker_args: args, collection: collection, query_params: {preload: ["project"]}).to_json)
 
     expect(result.dig!("data", "tasks")).to eq [task.id, task_with_same_project.id]
     expect(result.dig!("preloaded", "projects", project.id.to_s, "a", "id")).to eq project.id
@@ -169,5 +169,45 @@ describe ApiMaker::CollectionSerializer do
     expect(selects.length).to eq 1
     expect(selects.first.name).to eq "id"
     expect(result.dig!("preloaded", "projects", project.id.to_s, "a", "id")).to eq project.id
+  end
+
+  it "automatically selects the right columns even if constrained" do
+    user = create :user, first_name: "Donald", last_name: "Duck"
+    collection = User.where(id: [user.id])
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      collection: collection,
+      query_params: {
+        preload: nil,
+        select: {
+          "user" => ["id", "name"]
+        },
+        select_columns: {"user" => ["id"]}
+      }
+    )
+    result = JSON.parse(collection_serializer.to_json)
+    selects = collection_serializer.parsed_collection.values[:select].map(&:name)
+
+    expect(selects).to eq ["id", "first_name", "last_name"]
+    expect(result.dig!("preloaded", "users", user.id.to_s, "a")).to eq("id" => 5, "name" => "Donald Duck")
+  end
+
+  it "automatically selects columns when the `columns` argument isnt given" do
+    user = create :user, first_name: "Donald", last_name: "Duck"
+    collection = User.where(id: [user.id])
+    collection_serializer = ApiMaker::CollectionSerializer.new(
+      collection: collection,
+      query_params: {
+        preload: nil,
+        select: {
+          "user" => ["id", "first_name"]
+        },
+        select_columns: {"user" => ["id"]}
+      }
+    )
+    result = JSON.parse(collection_serializer.to_json)
+    selects = collection_serializer.parsed_collection.values[:select].map(&:name)
+
+    expect(selects).to eq ["id", "first_name"]
+    expect(result.dig!("preloaded", "users", user.id.to_s, "a")).to eq("id" => 5, "first_name" => "Donald")
   end
 end

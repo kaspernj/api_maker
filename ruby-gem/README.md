@@ -101,44 +101,80 @@ end
 
 ### I18n
 
-In order to use the built in text support, you need to add `i18n-js` to your project.
-
-Start by adding to your Gemfile:
-```ruby
-gem "i18n-js"
+Start by adding i18n-on-steroids to your project:
+```bash
+yarn i18n-on-steroids
 ```
 
-Then add `config/i18n-js.yml`:
-```yml
-translations:
-  - file: "app/assets/javascripts/i18n/translations.js"
-    only: ["*.activerecord.attributes.*", "*.activerecord.models.*", "*.date.*", "*.js.*", "*.number.currency.*", "*.time.*"]
-```
-
-Then add this to `app/assets/javascript/application.js.erb`:
+Create a I18n object you want to use throughout your project (app/javascript/i18n.js):
 ```js
-//= require i18n
-//= require i18n/translations
+import I18nOnSteroids from "i18n-on-steroids"
 
-var locale = document.querySelector("html").getAttribute("lang")
-I18n.locale = locale
+const i18n = new I18nOnSteroids()
 
-<% if Rails.env.development? || Rails.env.test? %>
-  I18n.missingTranslation = function(key) {
-    console.error(`No translation for: ${key}`)
-    return `translation missing: ${key}`
-  }
-<% end %>
+i18n.setLocale("en")
+
+export default i18n
 ```
 
-Add this to the `<html>`-tag:
-```html
-<html lang="<%= I18n.locale %>">
+You can import it globally through the provide plugin in Webpack and then use translations like this:
+```js
+i18n.t("js.some.key") //=> Key
 ```
 
-Add this to `config/application.rb` to ease development:
+### Routes
+
+Configure JS routes in `config/js_routes.rb`:
 ```ruby
-config.middleware.use I18n::JS::Middleware
+JsRoutes.setup do |config|
+  config.camel_case = true
+  config.url_links = true
+end
+```
+
+Define route definitions that can be read by both Rails and JS like this in `app/javascript/route-definitions.json`:
+```json
+{
+  "routes": [
+    {"name": "new_session", "path": "/sessions/new", "component": "sessions/new"},
+    {"name": "root", "path": "/", "component": "sessions/new"}
+  ]
+}
+```
+
+Define a file for `js-routes` in `app/javascript/js-routes.js.erb` that will automatically update if the routes or the definitions are changed:
+```js
+/* rails-erb-loader-dependencies ../config/routes.rb ./javascript/route-definitions.json */
+
+const routes = {};
+
+<%= JsRoutes.generate(namespace: "Namespace") %>
+```
+
+Install the route definitions in the Rails routes like this in `config/routes.rb`:
+```ruby
+Rails.application.routes.draw do
+  route_definitions = JSON.parse(File.read(Rails.root.join("app/javascript/nemoa/route-definitions.json")))
+  ApiMaker::ResourceRouting.install_resource_routes(self, layout: "nemoa", route_definitions: route_definitions)
+end
+```
+
+Define a routes file for your project (or multiple) in `app/javascript/routes.js`:
+```js
+import jsRoutes from "js-routes"
+import {Routes} from "@kaspernj/api-maker"
+import routeDefinitions from "route-definitions.json"
+
+const routes = new Routes({jsRoutes, routeDefinitions})
+
+export default routes
+```
+
+You can use your Rails routes like this:
+```js
+import Routes from "routes"
+
+Routes.userPath(user.id()) //=> /users/4
 ```
 
 ### ActionCable
@@ -325,7 +361,7 @@ First include this in your layout, so JS can know which user is signed in:
 
 Then you can do like this in JS:
 ```js
-import Devise from "api-maker/devise"
+import {Devise} from "@kaspernj/api-maker"
 
 Devise.currentUser().then(user => {
   console.log(`The current user has this email: ${user.email()}`)
@@ -458,6 +494,34 @@ if (firstTask.can("edit")) {
 } else {
   console.log(`User cant edit task ${task.id()}`)
 }
+```
+
+### Loading static abilities from CanCan
+
+Getting the CanCan instance
+```js
+import { CanCan } from "api-maker"
+
+const canCan = CanCan.current()
+```
+
+Loading a single ability
+```js
+await canCan.loadAbility("access", "admin")
+```
+
+Loading multiple static abilities for a model
+```js
+await canCan.loadAbilities([
+  [Invoice, ["bookBookable", "creditCreditable"]]
+])
+```
+
+### Resetting cached abilities in CanCan
+
+To avoid doing queries for the same abilities in CanCan over an over they are cached. If some things change it can be necessary to reset those abilities.
+```js
+await canCan.resetAbilities()
 ```
 
 ## Serializing

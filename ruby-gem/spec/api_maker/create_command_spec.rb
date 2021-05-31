@@ -4,7 +4,7 @@ describe ApiMaker::CreateCommand do
   let(:project) { create :project }
   let(:user) { create :user }
 
-  let(:ability) { ApiMaker::Ability.new(args: {current_user: user}) }
+  let(:ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
   let(:collection) { Task.accessible_by(ability) }
   let(:controller) { instance_double("ApplicationController", api_maker_args: api_maker_args, current_ability: ability, current_user: user) }
@@ -28,7 +28,7 @@ describe ApiMaker::CreateCommand do
     json_result = command.result.to_json
 
     expect(JSON.parse(json_result)).to eq(
-      "errors" => ["Project must exist"],
+      "errors" => [{"message" => "Project must exist", "type" => "validation_error"}],
       "model" => {
         "data" => {"tasks" => ["new-0"]},
         "preloaded" => {
@@ -52,8 +52,8 @@ describe ApiMaker::CreateCommand do
         {
           "attribute_name" => "project",
           "attribute_type" => "reflection",
-          "error_message" => "must exist",
-          "error_type" => "blank",
+          "error_messages" => ["must exist"],
+          "error_types" => ["blank"],
           "id" => nil,
           "input_name" => "task[project]",
           "model_name" => "task"

@@ -5,7 +5,7 @@ class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
     @model = model
   end
 
-  def execute
+  def perform
     if resource
       succeed! model_content
     else
@@ -59,8 +59,7 @@ private
       reflectionName: reflection.name,
       model: "{{this}}",
       modelName: reflection.class_name,
-      modelClass: "{{modelClass}}",
-      targetPathName: "/api_maker/#{reflection.klass.model_name.route_key}"
+      modelClass: "{{modelClass}}"
     }
   end
 
@@ -84,11 +83,14 @@ private
 
   def reflections_for_model_class_data
     @reflections_for_model_class_data ||= reflections.map do |reflection|
+      resource = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass)
+
       {
         className: reflection.class_name,
-        collectionName: ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).collection_name,
+        collectionName: resource.collection_name,
         name: reflection.name,
-        macro: reflection.macro
+        macro: reflection.macro,
+        resource_name: resource.short_name
       }
     end
   end

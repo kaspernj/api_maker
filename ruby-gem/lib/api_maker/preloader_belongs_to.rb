@@ -7,7 +7,7 @@ class ApiMaker::PreloaderBelongsTo < ApiMaker::PreloaderBase
         record.relationships[reflection_name] = model_id
       end
 
-      serializer = ApiMaker::Serializer.new(ability: ability, args: args, locals: locals, model: model, select: select&.dig(model.class))
+      serializer = ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model, select: select&.dig(model.class))
       underscore_name = serializer.resource.underscore_name
 
       data.fetch(:preloaded)[underscore_name] ||= {}
@@ -19,14 +19,23 @@ class ApiMaker::PreloaderBelongsTo < ApiMaker::PreloaderBase
 
 private
 
+  # Collects all the parent foreign keys like "users.organization_id" when preloading organizations and removes the blank (if a user doesn't have an org.)
+  def look_up_values
+    @look_up_values ||= collection.map(&reflection.foreign_key.to_sym).reject(&:blank?)
+  end
+
   def models
-    @models ||= begin
-      query = reflection.klass.where(look_up_key => collection.map(&reflection.foreign_key.to_sym))
+    @models ||= if look_up_values.empty?
+      # There is nothing to preload
+      []
+    else
+      query = reflection.klass.where(look_up_key => look_up_values)
       query = query.instance_eval(&reflection.scope) if reflection.scope
       query = query.accessible_by(ability) if ability
       query = ApiMaker::SelectColumnsOnCollection.execute!(
         collection: query,
         model_class: reflection.klass,
+        select_attributes: select,
         select_columns: select_columns,
         table_name: query.klass.table_name
       )

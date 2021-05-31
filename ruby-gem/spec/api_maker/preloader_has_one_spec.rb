@@ -78,7 +78,7 @@ describe ApiMaker::PreloaderHasOne do
 
     preloader = ApiMaker::PreloaderHasOne.new(
       ability: ability,
-      args: {},
+      api_maker_args: {},
       collection: collection,
       data: {},
       locals: {},
@@ -100,7 +100,7 @@ describe ApiMaker::PreloaderHasOne do
 
     preloader = ApiMaker::PreloaderHasOne.new(
       ability: ability,
-      args: {},
+      api_maker_args: {},
       collection: collection,
       data: {},
       locals: {},

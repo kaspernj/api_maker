@@ -6,7 +6,7 @@ class ApiMaker::MoveComponentsToRoutes < ApplicationService
     @routes_path = routes_path
   end
 
-  def execute
+  def perform
     routes.each do |route|
       path = "#{prepend_path}#{route.fetch("component")}"
       full_path = "app/javascript/components/#{path}"

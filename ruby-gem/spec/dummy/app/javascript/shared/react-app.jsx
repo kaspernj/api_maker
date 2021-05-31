@@ -2,15 +2,17 @@ import ApplicationHistory from "shared/application-history"
 import { Router } from "react-router-dom"
 import React from "react"
 import ReactDOM from "react-dom"
-import ResourceRoutes from "api-maker/resource-routes"
+import {ResourceRoutes} from "@kaspernj/api-maker"
 import ScrollToTop from "shared/scroll-to-top"
 import {Suspense} from "react"
 
 document.addEventListener("DOMContentLoaded", () => {
   const reactRoot = document.querySelector(".react-root")
   const routes = ResourceRoutes.readRoutes({
+    jsRoutes: Routes,
     path: "",
-    routes: require("./routes.json")
+    requireComponent: ({routeDefinition}) => React.lazy(() => import(/* webpackChunkName: "[request]" */ `routes/${routeDefinition.component}`)),
+    routeDefinitions: require("./route-definitions.json")
   })
 
   ReactDOM.render((

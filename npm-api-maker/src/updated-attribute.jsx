@@ -1,6 +1,7 @@
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
+const {digg} = require("@kaspernj/object-digger")
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
 export default class ApiMakerUpdatedAttribute extends React.Component {
   static propTypes = PropTypesExact({
@@ -22,7 +23,10 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
   }
 
   componentWillUnmount() {
-    this.connectUpdated.unsubscribe()
+    // Apparently 'componentWillUnmount' can be called without 'componentDidMount' was called. Several bug reports on this.
+    if (this.connectUpdated) {
+      this.connectUpdated.unsubscribe()
+    }
   }
 
   connect() {
@@ -40,18 +44,18 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
 
   // This loads the model from the backend with the primary key and the attribute and calls setAttribute
   async loadModelWithAttribute() {
-    var id = this.props.model.primaryKey()
-    var modelClass = this.props.model.modelClass()
-    var modelName = modelClass.modelClassData().name
-    var primaryKey = modelClass.modelClassData().primaryKey
+    const id = this.props.model.primaryKey()
+    const modelClass = this.props.model.modelClass()
+    const modelName = digg(modelClass.modelClassData(), "name")
+    const primaryKey = digg(modelClass.modelClassData(), "primaryKey")
 
-    var args = {}
+    const args = {}
     args[`${primaryKey}_eq`] = id
 
-    var select = {}
+    const select = {}
     select[modelName] = [primaryKey, this.props.attribute]
 
-    var model = await modelClass.ransack(args).select(select).first()
+    const model = await modelClass.ransack(args).select(select).first()
 
     this.setState(
       {model},
@@ -66,7 +70,7 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
       newValue = this.props.onValue.apply(null, [{model: this.state.model}])
     } else {
       if (!this.state.model[this.props.attribute])
-        throw new Error(`No such method: ${this.state.model.modelClassData().name}#${this.props.attribute}()`)
+        throw new Error(`No such method: ${digg(this.state.model.modelClassData(), "name")}#${this.props.attribute}()`)
 
       newValue = this.state.model[this.props.attribute].apply(this.state.model)
     }
@@ -78,7 +82,7 @@ export default class ApiMakerUpdatedAttribute extends React.Component {
 
   render() {
     if (this.state.value === undefined)
-      return ""
+      return null
 
     return this.state.value
   }

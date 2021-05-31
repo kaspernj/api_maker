@@ -1,6 +1,6 @@
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
 export default class ApiMakerEventListener extends React.Component {
   static callEvent(target, eventName, args = []) {
@@ -12,15 +12,12 @@ export default class ApiMakerEventListener extends React.Component {
   static propTypes = PropTypesExact({
     event: PropTypes.string.isRequired,
     onCalled: PropTypes.func.isRequired,
-    target: PropTypes.object
+    target: PropTypes.object.isRequired
   })
 
   constructor(props) {
     super(props)
     this.onCalled = this.onCalled.bind(this)
-
-    if (!this.props.target)
-      throw new Error("'target' was expected but not given")
   }
 
   componentDidMount() {
@@ -36,6 +33,6 @@ export default class ApiMakerEventListener extends React.Component {
   }
 
   render() {
-    return ""
+    return null
   }
 }

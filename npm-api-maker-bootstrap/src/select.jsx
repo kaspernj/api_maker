@@ -1,10 +1,8 @@
-import { dig } from "@kaspernj/object-digger"
-import { idForComponent, nameForComponent, Select } from "@kaspernj/api-maker-inputs"
-import InvalidFeedback from "./invalid-feedback"
-import PropTypes from "prop-types"
-import React from "react"
-
+const { idForComponent, nameForComponent, Select } = require("@kaspernj/api-maker-inputs")
 const inflection = require("inflection")
+const InvalidFeedback = require("./invalid-feedback").default
+const PropTypes = require("prop-types")
+const React = require("react")
 
 export default class ApiMakerBootstrapSelect extends React.Component {
   static propTypes = {
@@ -14,6 +12,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     id: PropTypes.string,
     hint: PropTypes.node,
     hintBottom: PropTypes.node,
+    inputRef: PropTypes.object,
     label: PropTypes.node,
     labelContainerClassName: PropTypes.string,
     model: PropTypes.object,
@@ -21,11 +20,9 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     wrapperClassName: PropTypes.string
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      errors: []
-    }
+  inputRef = React.createRef()
+  state = {
+    errors: []
   }
 
   render() {
@@ -34,6 +31,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
       className,
       description,
       id,
+      inputRef,
       hint,
       hintBottom,
       label,
@@ -66,9 +64,9 @@ export default class ApiMakerBootstrapSelect extends React.Component {
         <Select
           className={this.selectClassName()}
           id={this.inputId()}
+          inputRef={this.props.inputRef || this.inputRef}
           name={this.inputName()}
           onErrors={(errors) => this.onErrors(errors)}
-          ref="select"
           {...restProps}
         />
         {hintBottom &&

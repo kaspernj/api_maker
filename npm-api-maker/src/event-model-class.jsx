@@ -1,6 +1,6 @@
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
+const PropTypes = require("prop-types")
+const PropTypesExact = require("prop-types-exact")
+const React = require("react")
 
 export default class ApiMakerEventModelClass extends React.Component {
   static propTypes = PropTypesExact({
@@ -14,7 +14,9 @@ export default class ApiMakerEventModelClass extends React.Component {
   }
 
   componentWillUnmount() {
-    this.connection.unsubscribe()
+    if (this.connection) {
+      this.connection.unsubscribe()
+    }
   }
 
   connect() {
@@ -22,6 +24,6 @@ export default class ApiMakerEventModelClass extends React.Component {
   }
 
   render() {
-    return ""
+    return null
   }
 }

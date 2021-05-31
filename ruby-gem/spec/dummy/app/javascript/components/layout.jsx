@@ -1,8 +1,9 @@
-import Devise from "api-maker/devise"
-import DisplayNotification from "shared/display-notification"
+import {Devise} from "@kaspernj/api-maker"
+import FlashMessage from "shared/flash-message"
 import { EventEmitterListener } from "@kaspernj/api-maker"
 import { Link } from "react-router-dom"
 import React from "react"
+import Routes from "shared/routes"
 
 export default class Layout extends React.Component {
   constructor(props) {
@@ -68,6 +69,9 @@ export default class Layout extends React.Component {
               Checkboxes
             </Link>
           }
+          <Link className="ml-2" to={Routes.bootstrapLiveTablePath()}>
+            Bootstrap live table
+          </Link>
 
           <Link to={Routes.modelsValidationErrorsPath()}>
             Validation errors (new)
@@ -111,9 +115,9 @@ export default class Layout extends React.Component {
     e.preventDefault()
 
     Devise.signOut().then(() => {
-      DisplayNotification.success("You were signed out")
+      FlashMessage.success("You were signed out")
     }, (response) => {
-      DisplayNotification.error(response)
+      FlashMessage.errorResponse(response)
     })
   }
 }

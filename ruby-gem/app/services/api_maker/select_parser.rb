@@ -5,7 +5,7 @@ class ApiMaker::SelectParser < ApiMaker::ApplicationService
     @select = select
   end
 
-  def execute
+  def perform
     new_select = {}
 
     select.each do |model_collection_name, attributes|
@@ -13,8 +13,18 @@ class ApiMaker::SelectParser < ApiMaker::ApplicationService
       resource = "Resources::#{model_class}Resource".safe_constantize
       raise "Resource not found for: #{model_collection_name}" unless resource
 
-      new_attributes = resource._attributes.select { |key| attributes.include?(key.to_s) }
-      new_select[resource.model_class] = new_attributes
+      selects = {}
+      new_select[resource.model_class] ||= selects
+      resource_attributes = resource._attributes_with_string_keys
+
+      attributes.each do |attribute|
+        resource_attribute = resource_attributes[attribute]
+        raise "Attribute not found on the #{resource.short_name} resource: #{attribute}" unless resource_attribute
+
+        selects[attribute.to_sym] = resource_attribute
+      end
+
+      new_select[resource.model_class] = selects
     end
 
     succeed! new_select

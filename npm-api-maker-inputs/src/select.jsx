@@ -1,9 +1,9 @@
-import {dig} from "@kaspernj/object-digger"
-import {EventListener} from "@kaspernj/api-maker"
-import idForComponent from "./id-for-component"
-import nameForComponent from "./name-for-component"
-import PropTypes from "prop-types"
-import React from "react"
+const {dig} = require("@kaspernj/object-digger")
+const {EventListener} = require("@kaspernj/api-maker")
+const idForComponent = require("./id-for-component.cjs")
+const nameForComponent = require("./name-for-component.cjs")
+const PropTypes = require("prop-types")
+const React = require("react")
 
 export default class ApiMakerBootstrapSelect extends React.Component {
   static propTypes = {
@@ -12,6 +12,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.number, PropTypes.string]),
     id: PropTypes.string,
     includeBlank: PropTypes.bool,
+    inputRef: PropTypes.object,
     model: PropTypes.object,
     name: PropTypes.string,
     onErrors: PropTypes.func,
@@ -19,11 +20,9 @@ export default class ApiMakerBootstrapSelect extends React.Component {
     options: PropTypes.array
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      form: undefined
-    }
+  inputRef = React.createRef()
+  state = {
+    form: undefined
   }
 
   componentDidMount() {
@@ -39,7 +38,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
   }
 
   setForm() {
-    const form = dig(this, "refs", "select", "form")
+    const form = dig(this.props.inputRef || this.inputRef, "current", "form")
 
     if (form != this.state.form) {
       this.setState({form})
@@ -53,6 +52,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
       defaultValue,
       id,
       includeBlank,
+      inputRef,
       model,
       name,
       onErrors,
@@ -69,7 +69,7 @@ export default class ApiMakerBootstrapSelect extends React.Component {
           defaultValue={this.inputDefaultValue()}
           id={idForComponent(this)}
           name={this.inputName()}
-          ref="select"
+          ref={this.props.inputRef || this.inputRef}
           {...restProps}
         >
           {this.includeBlank() &&

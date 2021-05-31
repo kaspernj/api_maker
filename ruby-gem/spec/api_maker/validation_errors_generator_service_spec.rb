@@ -22,8 +22,8 @@ describe ApiMaker::ValidationErrorsGeneratorService do
         id: project.id,
         input_name: "project[price_per_hour]",
         model_name: "project",
-        error_message: "is not a number",
-        error_type: :not_a_number
+        error_messages: ["is not a number"],
+        error_types: [:not_a_number]
       }
     ]
   end
@@ -56,8 +56,8 @@ describe ApiMaker::ValidationErrorsGeneratorService do
         id: nil,
         input_name: "project[project_detail_attributes][project_detail_files_attributes][0][filename]",
         model_name: "project_detail_file",
-        error_message: "can't be blank",
-        error_type: :blank
+        error_messages: ["can't be blank"],
+        error_types: [:blank]
       }
     ]
   end
@@ -88,8 +88,8 @@ describe ApiMaker::ValidationErrorsGeneratorService do
         id: nil,
         input_name: "project[project_detail_attributes][project_detail_files_attributes][0][filename]",
         model_name: "project_detail_file",
-        error_message: "can't be blank",
-        error_type: :blank
+        error_messages: ["can't be blank"],
+        error_types: [:blank]
       }
     ]
   end
@@ -114,9 +114,59 @@ describe ApiMaker::ValidationErrorsGeneratorService do
         attribute_type: :base,
         id: project.id,
         model_name: "project",
-        error_message: "Navn kan ikke være Hans",
-        error_type: :base
+        error_messages: ["Navn kan ikke være Hans"],
+        error_types: [:custom_error]
       }
     ]
+  end
+
+  it "handles validations that are added multiple times" do
+    params = {
+      name: nil
+    }
+
+    project.assign_attributes(params)
+
+    expect(project).to be_invalid
+
+    result = ApiMaker::ValidationErrorsGeneratorService.execute!(
+      model: project,
+      params: params
+    )
+
+    expect(result).to eq [{
+      attribute_name: :name,
+      attribute_type: :attribute,
+      id: project.id,
+      model_name: "project",
+      error_messages: ["can't be blank"],
+      error_types: [:blank, :blank],
+      input_name: "project[name]"
+    }]
+  end
+
+  it "handles validations for attributes that are whitelisted" do
+    params = {
+      email: "user@example.com",
+      password: nil
+    }
+
+    user = User.new(params)
+    expect(user).to be_invalid
+
+    result = ApiMaker::ValidationErrorsGeneratorService.execute!(
+      model: user,
+      params: params
+    )
+
+    expect(result).to eq [{
+      attribute_name: :password,
+      attribute_type: :additional_attribute_for_validation,
+      error_messages: ["can't be blank"],
+      error_types: [:blank],
+      id: nil,
+      input_name: "user[password]",
+      model_name: "user"
+    }]
   end
 end

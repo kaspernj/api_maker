@@ -1,14 +1,14 @@
 class ApiMaker::CollectionSerializer
-  attr_reader :ability, :args, :collection, :locals, :preload_param, :query_params, :select, :select_columns
+  attr_reader :ability, :api_maker_args, :collection, :locals, :preload_param, :query_params, :select, :select_columns
 
-  def initialize(ability: nil, args: {}, collection:, locals: nil, model_class: nil, query_params: nil)
+  def initialize(ability: nil, api_maker_args: {}, collection:, locals: nil, model_class: nil, query_params: nil)
     raise "No collection was given" unless collection
 
     @query_params = query_params || {}
-    @ability = ability || ApiMaker::Ability.new(args: args)
-    @args = args
+    @ability = ability || ApiMaker::Ability.new(api_maker_args: api_maker_args)
+    @api_maker_args = api_maker_args
     @collection = collection
-    @locals = locals || args[:locals] || {}
+    @locals = locals || api_maker_args&.dig(:locals) || {}
     @preload_param = @query_params[:preload]
     @model_class = model_class
     @select = ApiMaker::SelectParser.execute!(select: query_params[:select]) if @query_params[:select]
@@ -72,29 +72,30 @@ class ApiMaker::CollectionSerializer
   end
 
   def model_class
-    @model_class ||= begin
-      if collection.is_a?(Array)
-        collection.first.class
-      else
-        resource.model_class
-      end
+    @model_class ||= if collection.is_a?(Array)
+      collection.first.class
+    else
+      resource.model_class
     end
   end
 
   def resource
-    @resource ||= begin
-      if collection.is_a?(Array)
-        ApiMaker::MemoryStorage.current.resource_for_model(collection.first.class)
-      else
-        ApiMaker::MemoryStorage.current.resource_for_model(collection.klass)
-      end
+    @resource ||= if collection.is_a?(Array)
+      ApiMaker::MemoryStorage.current.resource_for_model(collection.first.class)
+    else
+      ApiMaker::MemoryStorage.current.resource_for_model(collection.klass)
     end
   end
 
   def parsed_collection
     @parsed_collection ||= begin
-      new_collection = ApiMaker::SelectColumnsOnCollection.execute!(collection: collection, model_class: model_class, select_columns: select_columns)
-      new_collection = new_collection.fix unless new_collection.is_a?(Array)
+      new_collection = ApiMaker::SelectColumnsOnCollection.execute!(
+        collection: collection,
+        model_class: model_class,
+        select_attributes: select,
+        select_columns: select_columns
+      )
+      new_collection = new_collection.fix if !new_collection.is_a?(Array) && ApiMaker::DatabaseType.postgres?
       new_collection
     end
   end
@@ -102,7 +103,7 @@ class ApiMaker::CollectionSerializer
   def preload_collection(data, records)
     preloader = ApiMaker::Preloader.new(
       ability: ability,
-      args: args,
+      api_maker_args: api_maker_args,
       collection: parsed_collection,
       data: data,
       locals: locals,
@@ -120,7 +121,7 @@ class ApiMaker::CollectionSerializer
   end
 
   def serializer_for_model(model)
-    ApiMaker::Serializer.new(ability: ability, args: args, locals: locals, model: model, select: select_for(model))
+    ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model, select: select_for(model))
   end
 
   def to_json(options = nil)

@@ -9,7 +9,7 @@ describe "preloading - has many through belongs to" do
   let!(:same_marked_task) { create :account_marked_task, account: another_account, task: task }
 
   let(:user) { create :user }
-  let(:user_ability) { ApiMaker::Ability.new(args: {current_user: user}) }
+  let(:user_ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
 
   it "preloads without messing it up" do
     collection = Account.where(id: [account.id, another_account.id])

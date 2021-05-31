@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  ADDITIONAL_ATTRIBUTES_FOR_VALIDATION_ERRORS = [:password].freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -11,4 +13,8 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :tasks
 
   has_one_attached :image
+
+  def name
+    "#{first_name} #{last_name}"
+  end
 end

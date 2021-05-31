@@ -4,7 +4,7 @@ describe ApiMaker::UpdateCommand do
   let(:project) { create :project }
   let(:user) { create :user }
 
-  let(:ability) { ApiMaker::Ability.new(args: {current_user: user}) }
+  let(:ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
   let(:collection) { User.accessible_by(ability).where(id: user.id) }
   let(:controller) { instance_double("ApplicationController", api_maker_args: api_maker_args, current_ability: ability, current_user: user) }
@@ -42,8 +42,8 @@ describe ApiMaker::UpdateCommand do
       {
         attribute_name: :name,
         attribute_type: :attribute,
-        error_message: "can't be blank",
-        error_type: :blank,
+        error_messages: ["can't be blank"],
+        error_types: [:blank],
         input_name: "user[tasks_attributes][124][name]",
         id: nil,
         model_name: "task"

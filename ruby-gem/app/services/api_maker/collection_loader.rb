@@ -1,15 +1,15 @@
 class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
-  attr_reader :ability, :args, :collection, :locals, :params
+  attr_reader :ability, :api_maker_args, :collection, :locals, :params
 
-  def initialize(args:, ability:, collection:, locals: nil, params: {})
+  def initialize(ability:, api_maker_args:, collection:, locals: nil, params: {})
     @ability = ability
-    @args = args
+    @api_maker_args = api_maker_args
     @collection = collection
-    @locals = locals || args[:locals] || {}
+    @locals = locals || api_maker_args&.dig(:locals) || {}
     @params = params
   end
 
-  def execute
+  def perform
     set_query
 
     if params[:count]
@@ -35,7 +35,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   def collection_from_query(collection)
     ApiMaker::CollectionSerializer.new(
       ability: ability,
-      args: args,
+      api_maker_args: api_maker_args,
       collection: collection,
       locals: locals,
       query_params: params
@@ -49,11 +49,23 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   def group_query
     return if params[:group_by].blank?
 
-    column_name = params[:group_by].to_s
-    raise "Not a valid column name: #{column_name}" unless collection.klass.column_names.include?(column_name)
+    params[:group_by].each do |group_by|
+      if group_by.is_a?(Array)
+        raise "Expected table and column but array length was wrong: #{group_by.length}" unless group_by.length == 2
 
-    arel_column = collection.klass.arel_table[column_name]
-    @query = @query.group(arel_column)
+        resource_class = group_by[0]
+        column_name = group_by[1]
+        model_class = resource_class.model_class
+        raise "Not a valid column name: #{column_name}" unless model_class.column_names.include?(column_name)
+
+        arel_column = model_class.arel_table[column_name]
+      else
+        arel_column = collection.klass.arel_table[group_by]
+        raise "Not a valid column name: #{group_by}" unless collection.klass.column_names.include?(group_by)
+      end
+
+      @query = @query.group(arel_column)
+    end
   end
 
   def limit_query
@@ -77,7 +89,10 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     return if params[:through].blank?
 
     model_class = params[:through][:model].safe_constantize
-    through_model = model_class.accessible_by(ability).find(params[:through][:id])
+    through_model = model_class.accessible_by(ability).find_by(model_class.primary_key => params[:through][:id])
+
+    return if through_model.nil?
+
     association = ActiveRecord::Associations::Association.new(through_model, model_class.reflections.fetch(params[:through][:reflection]))
 
     query_through = association.scope

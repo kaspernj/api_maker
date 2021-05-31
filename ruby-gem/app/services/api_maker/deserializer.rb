@@ -5,7 +5,7 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
     @arg = arg
   end
 
-  def execute
+  def perform
     succeed! deserialize
   end
 
@@ -15,6 +15,8 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
     elsif arg.is_a?(Hash) || arg.is_a?(ActionController::Parameters)
       if arg["api_maker_type"] == "resource"
         "Resources::#{arg.fetch("name")}Resource".safe_constantize
+      elsif arg["api_maker_type"] == "datetime"
+        Time.zone.parse(arg.fetch("value"))
       else
         new_hash = arg.class.new
         arg.each do |key, value|

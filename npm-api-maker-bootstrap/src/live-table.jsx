@@ -1,23 +1,31 @@
-import { EventCreated, EventDestroyed, Params } from "@kaspernj/api-maker"
-import { Card, Paginate } from "@kaspernj/api-maker-bootstrap"
-import Collection from "api-maker/collection"
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
-import React from "react"
-
+const {Collection, EventCreated, EventDestroyed, EventUpdated, instanceOfClassName, Params} = require("@kaspernj/api-maker")
+const {debounce} = require("debounce")
+const {digg, digs} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
+const PropTypes = require("prop-types")
+const React = require("react")
+
+import {Card, Paginate} from "@kaspernj/api-maker-bootstrap"
 
 export default class ApiMakerBootstrapLiveTable extends React.Component {
   static defaultProps = {
+    card: true,
     destroyEnabled: true,
     preloads: [],
+    qParams: undefined,
     select: {}
   }
 
-  static propTypes = PropTypesExact({
+  static propTypes = {
+    abilities: PropTypes.object,
     actionsContent: PropTypes.func,
+    appHistory: PropTypes.object,
+    card: PropTypes.bool.isRequired,
     className: PropTypes.string,
-    collection: PropTypes.instanceOf(Collection),
+    collection: PropTypes.oneOfType([
+      instanceOfClassName("ApiMakerCollection"),
+      PropTypes.instanceOf(Collection)
+    ]),
     columnsContent: PropTypes.func.isRequired,
     controls: PropTypes.func,
     defaultParams: PropTypes.object,
@@ -28,12 +36,14 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func.isRequired,
     header: PropTypes.func,
+    groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
     onModelsLoaded: PropTypes.func,
+    paginationComponent: PropTypes.func,
     preloads: PropTypes.array.isRequired,
     queryName: PropTypes.string,
     select: PropTypes.object
-  })
+  }
 
   constructor(props) {
     super(props)
@@ -46,6 +56,8 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
     this.state = {
       currentHref: location.href,
+      models: undefined,
+      query: undefined,
       queryName,
       queryQName: `${queryName}_q`,
       queryPageName: `${queryName}_page`
@@ -66,25 +78,38 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   abilitiesToLoad() {
-    const abilitiesToLoad = []
-    const {abilities} = this.props
-
-    if (abilities) {
-      for (const ability of abilities) {
-        abilitiesToLoad.push(ability)
-      }
-    }
+    const abilitiesToLoad = {}
+    const {abilities, modelClass} = this.props
+    const ownAbilities = []
 
     if (this.props.destroyEnabled) {
-      abilitiesToLoad.push("destroy")
+      ownAbilities.push("destroy")
     }
 
     if (this.props.editModelPath) {
-      abilitiesToLoad.push("edit")
+      ownAbilities.push("edit")
     }
 
     if (this.props.viewModelPath) {
-      abilitiesToLoad.push("show")
+      ownAbilities.push("show")
+    }
+
+    if (ownAbilities.length > 0) {
+      const modelClassName = digg(modelClass.modelClassData(), "name")
+
+      abilitiesToLoad[modelClassName] = ownAbilities
+    }
+
+    if (abilities) {
+      for (const modelName in abilities) {
+        if (!(modelName in abilitiesToLoad)) {
+          abilitiesToLoad[modelName] = []
+        }
+
+        for (const ability of abilities[modelName]) {
+          abilitiesToLoad[modelName].push(ability)
+        }
+      }
     }
 
     return abilitiesToLoad
@@ -97,17 +122,17 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     return this.setState({qParams})
   }
 
+  loadModelsDebounce = debounce(() => this.loadModels())
+  submitFilterDebounce = debounce(() => this.submitFilter())
+
   async loadModels() {
     const params = Params.parse()
-    const { modelClass, onModelsLoaded, preloads, select } = this.props
+    const { collection, groupBy, modelClass, onModelsLoaded, preloads, select } = this.props
     const { qParams, queryPageName, queryQName } = this.state
-    let query
 
-    if (this.props.collection) {
-      query = this.props.collection
-    } else {
-      query = modelClass
-    }
+    let query = collection || modelClass
+
+    if (groupBy) query = query.groupBy(groupBy)
 
     query = query
       .ransack(qParams)
@@ -119,12 +144,8 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
     const abilitiesToLoad = this.abilitiesToLoad()
 
-    if (abilitiesToLoad.length > 0) {
-      const modelClassName = modelClass.modelClassData().name
-      const loadAbilitiesArgument = {}
-
-      loadAbilitiesArgument[modelClassName] = abilitiesToLoad
-      query = query.abilities(loadAbilitiesArgument)
+    if (Object.keys(abilitiesToLoad).length > 0) {
+      query = query.abilities(abilitiesToLoad)
     }
 
     const result = await query.result()
@@ -146,16 +167,41 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
 
     return (
       <div className={this.className()}>
-        {qParams && query && result && models && this.content()}
+        {qParams && query && result && models && this.cardOrTable()}
       </div>
     )
   }
 
-  content() {
-    const { actionsContent, controls, destroyEnabled, editModelPath, filterContent, filterSubmitLabel, header, modelClass } = this.props
-    const { qParams, query, result, models } = this.state
+  cardOrTable() {
+    const {
+      abilities,
+      actionsContent,
+      card,
+      className,
+      collection,
+      columnsContent,
+      controls,
+      defaultParams,
+      destroyEnabled,
+      destroyMessage,
+      editModelPath,
+      filterContent,
+      filterSubmitLabel,
+      headersContent,
+      header,
+      groupBy,
+      modelClass,
+      onModelsLoaded,
+      paginationComponent,
+      preloads,
+      queryName,
+      select,
+      ...restProps
+    } = this.props
+    const { models, qParams, query, result } = digs(this.state, "models", "qParams", "query", "result")
+    const {submitFilterDebounce} = digs(this, "submitFilterDebounce")
 
-    let controlsContent, headerContent
+    let controlsContent, headerContent, PaginationComponent
 
     if (controls) {
       controlsContent = controls({models, qParams, query, result})
@@ -165,54 +211,85 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
       headerContent = header({models, qParams, query, result})
     }
 
-    return (
-      <div className="content-container">
-        <EventCreated modelClass={modelClass} onCreated={() => this.onModelCreated()} />
+    if (paginationComponent) {
+      PaginationComponent = paginationComponent
+    } else {
+      PaginationComponent = Paginate
+    }
 
+    return (
+      <>
+        <EventCreated modelClass={modelClass} onCreated={() => this.onModelCreated()} />
+        {models.map(model =>
+          <React.Fragment key={`events-${model.id()}`}>
+            <EventDestroyed model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
+            <EventUpdated model={model} onUpdated={(args) => this.onModelUpdated(args)} />
+          </React.Fragment>
+        )}
         {filterContent &&
           <Card className="mb-4">
             <form onSubmit={(e) => this.onFilterFormSubmit(e)} ref="filterForm">
-              {filterContent({qParams})}
+              {filterContent({
+                onFilterChanged: () => this.submitFilter(),
+                onFilterChangedWithDelay: submitFilterDebounce,
+                qParams
+              })}
               <input className="btn btn-primary" label={filterSubmitLabel} type="submit" />
             </form>
           </Card>
         }
 
-        {models.map(model =>
-          <EventDestroyed key={`event-destroyed-${model.cacheKey()}`} model={model} onDestroyed={(args) => this.onModelDestroyed(args)} />
-        )}
+        {card &&
+          <Card className="mb-4" controls={controlsContent} header={headerContent} table>
+            {this.tableContent()}
+          </Card>
+        }
+        {!card &&
+          <table {...restProps}>
+            {this.tableContent()}
+          </table>
+        }
+        {result &&
+          <PaginationComponent result={result} />
+        }
+      </>
+    )
+  }
 
-        <Card className="mb-4" controls={controlsContent} header={headerContent} table>
-          <thead>
-            <tr>
-              {this.props.headersContent({query})}
-              <th />
+  tableContent() {
+    const { modelClass } = digs(this.props, "modelClass")
+    const { actionsContent, destroyEnabled, editModelPath } = this.props
+    const { query, models } = this.state
+
+    return (
+      <>
+        <thead>
+          <tr>
+            {this.props.headersContent({query})}
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {models.map((model) =>
+            <tr className={`${inflection.singularize(modelClass.modelClassData().collectionName)}-row`} data-model-id={model.id()} key={model.cacheKey()}>
+              {this.props.columnsContent({model})}
+              <td className="actions-column text-nowrap text-right">
+                {actionsContent && actionsContent({model})}
+                {editModelPath && model.can("edit") &&
+                  <Link className="edit-button" to={editModelPath({model})}>
+                    <i className="la la-edit" />
+                  </Link>
+                }
+                {destroyEnabled && model.can("destroy") &&
+                  <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
+                    <i className="la la-remove" />
+                  </a>
+                }
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {models.map(model =>
-              <tr className={`${inflection.singularize(modelClass.modelClassData().collectionName)}-row`} data-model-id={model.id()} key={model.cacheKey()}>
-                {this.props.columnsContent({model})}
-                <td className="actions-column text-nowrap text-right">
-                  {actionsContent && actionsContent({model})}
-                  {editModelPath && model.can("edit") &&
-                    <Link className="edit-button" to={editModelPath({model})}>
-                      <i className="la la-edit" />
-                    </Link>
-                  }
-                  {destroyEnabled && model.can("destroy") &&
-                    <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
-                      <i className="la la-remove" />
-                    </a>
-                  }
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </Card>
-
-        <Paginate result={result} />
-      </div>
+          )}
+        </tbody>
+      </>
     )
   }
 
@@ -235,28 +312,30 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
     }
 
     try {
-      model.destroy()
+      await model.destroy()
 
       if (destroyMessage) {
-        Notification.success(destroyMessage)
+        FlashMessage.success(destroyMessage)
       }
     } catch (error) {
-      Notification.errorResponse(error)
+      FlashMessage.errorResponse(error)
     }
   }
 
   onFilterFormSubmit(e) {
     e.preventDefault()
+    this.submitFilter()
+  }
 
+  submitFilter() {
+    const {appHistory} = this.props
     const qParams = Params.serializeForm(this.refs.filterForm)
     const { queryQName } = this.state
 
     const changeParamsParams = {}
     changeParamsParams[queryQName] = qParams
 
-    Params.changeParams(changeParamsParams)
-
-    this.setState({currentHref: location.href, qParams}, () => this.loadModels())
+    Params.changeParams(changeParamsParams, {appHistory})
   }
 
   onModelCreated() {
@@ -264,8 +343,20 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
   }
 
   onModelDestroyed(args) {
+    const {models} = digs(this.state, "models")
+
     this.setState({
-      models: this.state.models.filter(model => model.id() != args.model.id())
+      models: models.filter(model => model.id() != args.model.id())
     })
+  }
+
+  onModelUpdated(args) {
+    const {models} = digs(this.state, "models")
+    const updatedModel = digg(args, "model")
+    const foundModel = models.find((model) => model.id() == updatedModel.id())
+
+    if (foundModel) {
+      this.loadModelsDebounce()
+    }
   }
 }
