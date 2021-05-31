@@ -43,17 +43,17 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type"
-    t.index ["owner_type", "owner_id"], name: "index_activities_on_owner_type_and_owner_id"
+    t.index ["owner_type", "owner_id"], name: "index_activities_on_owner"
     t.index ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type"
-    t.index ["recipient_type", "recipient_id"], name: "index_activities_on_recipient_type_and_recipient_id"
+    t.index ["recipient_type", "recipient_id"], name: "index_activities_on_recipient"
     t.index ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type"
-    t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable_type_and_trackable_id"
+    t.index ["trackable_type", "trackable_id"], name: "index_activities_on_trackable"
   end
 
   create_table "comments", force: :cascade do |t|
-    t.integer "author_id", null: false
+    t.bigint "author_id", null: false
     t.string "resource_type", null: false
-    t.integer "resource_id", null: false
+    t.bigint "resource_id", null: false
     t.text "comment", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -62,8 +62,8 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
   end
 
   create_table "customer_relationships", force: :cascade do |t|
-    t.integer "child_id", null: false
-    t.integer "parent_id", null: false
+    t.bigint "child_id", null: false
+    t.bigint "parent_id", null: false
     t.string "relationship_type", null: false
     t.index ["child_id"], name: "index_customer_relationships_on_child_id"
     t.index ["parent_id"], name: "index_customer_relationships_on_parent_id"
@@ -76,11 +76,11 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
   end
 
   create_table "project_detail_files", force: :cascade do |t|
-    t.integer "project_id", null: false
+    t.bigint "project_detail_id", null: false
     t.string "filename", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["project_id"], name: "index_project_detail_files_on_project_id"
+    t.index ["project_detail_id"], name: "index_project_detail_files_on_project_detail_id"
   end
 
   create_table "project_details", force: :cascade do |t|
@@ -168,7 +168,7 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
   add_foreign_key "comments", "users", column: "author_id"
   add_foreign_key "customer_relationships", "customers", column: "child_id"
   add_foreign_key "customer_relationships", "customers", column: "parent_id"
-  add_foreign_key "project_detail_files", "projects"
+  add_foreign_key "project_detail_files", "project_details"
   add_foreign_key "project_details", "projects"
   add_foreign_key "project_secrets", "projects"
   add_foreign_key "projects", "accounts"
