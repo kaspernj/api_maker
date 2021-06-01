@@ -21,7 +21,10 @@ export default class ApiMakerCanCanLoader extends React.Component {
 
     await canCan.loadAbilities(abilities)
 
-    this.updateComponent({canCan})
+    // The abilities could have been reset by another component and super-seeded by a reset call
+    if (canCan.abilities && canCan.abilities.length > 0) {
+      this.updateComponent({canCan})
+    }
   }
 
   render() {
