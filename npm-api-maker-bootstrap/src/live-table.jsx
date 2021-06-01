@@ -271,7 +271,7 @@ export default class ApiMakerBootstrapLiveTable extends React.Component {
         </thead>
         <tbody>
           {models.map((model) =>
-            <tr className={`${inflection.singularize(modelClass.modelClassData().collectionName)}-row`} data-model-id={model.id()} key={model.cacheKey()}>
+            <tr className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()} key={model.cacheKey()}>
               {this.props.columnsContent({model})}
               <td className="actions-column text-nowrap text-right">
                 {actionsContent && actionsContent({model})}
