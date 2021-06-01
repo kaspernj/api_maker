@@ -5,7 +5,7 @@ class ApiMaker::RoutesFileReloader < ApiMaker::ApplicationService
     @file_paths = file_paths
   end
 
-  def execute
+  def perform
     reloader = Rails.application.config.file_watcher.new(file_paths) do
       Rails.application.reload_routes!
     end

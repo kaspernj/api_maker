@@ -8,7 +8,7 @@ class ApiMaker::SimpleModelErrors < ApiMaker::ApplicationService
     @models_inspected = []
   end
 
-  def execute
+  def perform
     inspect_model(model)
     succeed! errors
   end

@@ -3,6 +3,7 @@ require "rails_helper"
 describe ApiMaker::BaseCommand do
   let(:account) { create :account }
   let(:task) { create :task }
+  let(:user) { create :user }
 
   describe "#failure_save_response" do
     it "responds with simple model errors" do
@@ -51,6 +52,52 @@ describe ApiMaker::BaseCommand do
         errors: [
           {
             message: "Project base Navn kan ikke være Hans",
+            type: :validation_error
+          }
+        ]
+      )
+    end
+
+    it "handles additional attributes" do
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
+        command: Commands::Users::FailureSaveResponse,
+        model: user,
+        args: {
+          additional_attributes: [:password],
+          user: {
+            password: ""
+          },
+          simple_model_errors: true
+        }
+      )
+
+      expect(result).to include(
+        errors: [
+          {
+            message: "Password can't be blank",
+            type: :validation_error
+          }
+        ]
+      )
+    end
+
+    it "ignores validation errors that arent related to attributes" do
+      result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(
+        command: Commands::Users::FailureSaveResponse,
+        model: user,
+        args: {
+          additional_attributes: [],
+          user: {
+            password: ""
+          },
+          simple_model_errors: true
+        }
+      )
+
+      expect(result).not_to include(
+        errors: [
+          {
+            message: "Password can't be blank",
             type: :validation_error
           }
         ]

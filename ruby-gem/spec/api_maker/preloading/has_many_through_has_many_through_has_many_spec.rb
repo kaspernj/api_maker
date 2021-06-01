@@ -16,7 +16,7 @@ describe "preloading - has many through has many through has many" do
 
     expect(result.dig!("data", "customers")).to eq [5]
     expect(result.dig!("preloaded", "customers", "5", "r", "project_details")).to eq [project_detail.id]
-    expect(result.dig!("preloaded", "project-details", "6", "a", "id")).to eq project_detail.id
+    expect(result.dig!("preloaded", "project_details", "6", "a", "id")).to eq project_detail.id
     expect(result.dig!("preloaded").length).to eq 2
   end
 end

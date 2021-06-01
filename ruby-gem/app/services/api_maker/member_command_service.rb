@@ -1,5 +1,5 @@
 class ApiMaker::MemberCommandService < ApiMaker::CommandService
-  def execute
+  def perform
     ability_name = @command_name.to_sym
     collection = model_class.accessible_by(@ability, ability_name).where(model_class.primary_key => ids)
 

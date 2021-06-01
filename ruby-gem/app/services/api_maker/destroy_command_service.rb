@@ -1,5 +1,5 @@
 class ApiMaker::DestroyCommandService < ApiMaker::CommandService
-  def execute
+  def perform
     ApiMaker::DestroyCommand.execute_in_thread!(
       ability: ability,
       api_maker_args: api_maker_args,

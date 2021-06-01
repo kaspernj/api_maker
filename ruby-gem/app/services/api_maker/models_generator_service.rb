@@ -1,5 +1,5 @@
 class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
-  def execute
+  def perform
     create_base_structure
     copy_base_model
 

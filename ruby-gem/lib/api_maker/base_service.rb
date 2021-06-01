@@ -11,8 +11,4 @@ class ApiMaker::BaseService < ServicePattern::Service
     @controller = controller
     @current_ability = ability
   end
-
-  def execute
-    raise "No 'execute' method defined"
-  end
 end

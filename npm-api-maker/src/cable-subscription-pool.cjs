@@ -28,8 +28,16 @@ module.exports = class ApiMakerCableSubscriptionPool {
   onReceived(rawData) {
     const data = Deserializer.parse(rawData)
     const {model: modelInstance, model_id: modelId, model_type: modelType, type} = data
-    const modelName = inflection.camelize(inflection.singularize(modelType.replace(/-/g, "_")))
     const subscriptions = digg(this, "subscriptions")
+
+    let modelName
+
+    // This is more effective if it is an option
+    if (modelInstance) {
+      modelName = modelInstance.modelClassData().name
+    } else {
+      modelName = inflection.camelize(inflection.singularize(modelType))
+    }
 
     if (type == "update") {
       for(const subscription of subscriptions[modelName]["updates"][modelId]) {

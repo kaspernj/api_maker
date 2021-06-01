@@ -1,5 +1,5 @@
 class ApiMaker::CollectionCommandService < ApiMaker::CommandService
-  def execute
+  def perform
     if authorized?
       constant.execute_in_thread!(
         ability: ability,

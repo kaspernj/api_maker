@@ -1,5 +1,5 @@
 class ApiMaker::ServiceCommandService < ApiMaker::CommandService
-  def execute
+  def perform
     ApiMaker::ServiceCommand.execute_in_thread!(
       ability: ability,
       api_maker_args: api_maker_args,

@@ -758,10 +758,11 @@ module.exports = class BaseModel {
   }
 
   _readPreloadedRelationships(preloaded) {
-    if (!this.preloadedRelationships)
+    if (!this.preloadedRelationships) {
       return
+    }
 
-    for(const relationshipName in this.preloadedRelationships) {
+    for (const relationshipName in this.preloadedRelationships) {
       const relationshipData = this.preloadedRelationships[relationshipName]
       const relationshipClassData = this.modelClassData().relationships.find((relationship) => digg(relationship, "name") == relationshipName)
       const relationshipType = digg(relationshipClassData, "collectionName")
@@ -781,6 +782,7 @@ module.exports = class BaseModel {
 
         for(const relationshipId of relationshipData) {
           const model = preloaded.getModel(relationshipType, relationshipId)
+
           result.push(model)
         }
 
@@ -798,7 +800,9 @@ module.exports = class BaseModel {
 
   static _token() {
     const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
-    if (csrfTokenElement)
+
+    if (csrfTokenElement) {
       return csrfTokenElement.getAttribute("content")
+    }
   }
 }

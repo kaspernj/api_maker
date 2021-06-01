@@ -11,7 +11,7 @@ class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
     @table_name = table_name || @model_class.table_name
   end
 
-  def execute
+  def perform
     new_collection = collection
     return succeed! new_collection if new_collection.is_a?(Array)
 
@@ -42,7 +42,7 @@ class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
   end
 
   def param_name
-    @param_name ||= model_class.model_name.param_key.dasherize
+    @param_name ||= model_class.model_name.param_key
   end
 
   # Prepends 'table_name.*' to the query. It needs to be pre-pended in case a `COUNT` or another aggregate function has been added to work with `DISTINCT`.

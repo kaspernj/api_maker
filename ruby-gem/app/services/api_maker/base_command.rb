@@ -159,9 +159,11 @@ class ApiMaker::BaseCommand
     )
   end
 
-  def failure_save_response(model:, params:, simple_model_errors: false)
+  def failure_save_response(additional_attributes: [], model:, params:, simple_model_errors: false)
+    raise "Cannot receive additional attributes unless simple model errors" if !additional_attributes.empty? && !simple_model_errors
+
     error_messages = if simple_model_errors
-      ApiMaker::SimpleModelErrors.execute!(model: model)
+      ApiMaker::SimpleModelErrors.execute!(additional_attributes: additional_attributes, model: model)
     else
       model.errors.full_messages
     end

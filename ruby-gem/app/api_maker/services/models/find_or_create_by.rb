@@ -1,5 +1,5 @@
 class Services::Models::FindOrCreateBy < ApiMaker::BaseService
-  def execute
+  def perform
     resource_name = args.fetch(:resource_name)
     resource = "Resources::#{resource_name}Resource".safe_constantize
     model_class = resource.model_class

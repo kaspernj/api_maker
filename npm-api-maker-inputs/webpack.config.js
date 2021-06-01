@@ -1,15 +1,15 @@
 module.exports = {
-  mode: "production",
-  module: {
-    rules: [
+  "mode": "production",
+  "module": {
+    "rules": [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: "babel-loader"
+        "exclude": /node_modules/,
+        "test": /\.(js|jsx)$/,
+        "use": "babel-loader"
       }
     ]
   },
-  resolve: {
-    extensions: [".js", ".jsx"],
+  "resolve": {
+    "extensions": [".js", ".jsx"]
   }
 }

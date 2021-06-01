@@ -16,10 +16,10 @@ describe("merge", () => {
   })
 
   it("merges an empty object into a nested object", () => {
-    const object = {"ransack": {"account_id_eq": 1}}
+    const object = {ransack: {account_id_eq: 1}}
 
     merge(object, {})
 
-    expect(object).toEqual({"ransack": {"account_id_eq": 1}})
+    expect(object).toEqual({ransack: {account_id_eq: 1}})
   })
 })

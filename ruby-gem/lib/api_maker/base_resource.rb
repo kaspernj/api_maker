@@ -80,7 +80,7 @@ class ApiMaker::BaseResource
   end
 
   def self.collection_name
-    @collection_name ||= plural_name.underscore.dasherize
+    @collection_name ||= plural_name.underscore
   end
 
   def self.default_select
@@ -99,6 +99,10 @@ class ApiMaker::BaseResource
 
   def self.short_name
     @short_name ||= name.match(/\AResources::(.+)Resource\Z/)[1]
+  end
+
+  def self.underscore_name
+    @underscore_name ||= plural_name.underscore
   end
 
   def initialize(ability: nil, api_maker_args: {}, locals:, model:)

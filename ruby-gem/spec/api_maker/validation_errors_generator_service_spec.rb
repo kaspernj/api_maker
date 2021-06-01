@@ -144,4 +144,29 @@ describe ApiMaker::ValidationErrorsGeneratorService do
       input_name: "project[name]"
     }]
   end
+
+  it "handles validations for attributes that are whitelisted" do
+    params = {
+      email: "user@example.com",
+      password: nil
+    }
+
+    user = User.new(params)
+    expect(user).to be_invalid
+
+    result = ApiMaker::ValidationErrorsGeneratorService.execute!(
+      model: user,
+      params: params
+    )
+
+    expect(result).to eq [{
+      attribute_name: :password,
+      attribute_type: :additional_attribute_for_validation,
+      error_messages: ["can't be blank"],
+      error_types: [:blank],
+      id: nil,
+      input_name: "user[password]",
+      model_name: "user"
+    }]
+  end
 end

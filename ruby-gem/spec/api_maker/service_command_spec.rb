@@ -4,7 +4,7 @@ describe ApiMaker::ServiceCommand do
   let(:command_response) { ApiMaker::CommandResponse.new(controller: nil) }
 
   it "generates errors" do
-    expect_any_instance_of(Services::Devise::SignOut).to receive(:execute) { |service| service.fail!("Hello", type: :test_error) }
+    expect_any_instance_of(Services::Devise::SignOut).to receive(:perform) { |service| service.fail!("Hello", type: :test_error) }
     response = ApiMaker::ServiceCommand
       .new(
         ability: nil,

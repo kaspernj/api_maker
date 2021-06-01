@@ -6,7 +6,7 @@ class Services::Devise::SignIn < ApiMaker::BaseService
     controller.__send__(:cookies)
   end
 
-  def execute
+  def perform
     fail! "Devise sign in isn't enabled", type: :devise_sign_in_isnt_enabled unless ApiMaker::Configuration.current.devise_sign_in_enabled
 
     check_model_exists
