@@ -1,4 +1,5 @@
 import {CanCan, Devise} from "@kaspernj/api-maker"
+import {digs} from "@kaspernj/object-digger"
 import LoaderWithShape from "components/can-can/loader-with-shape"
 import LoaderWithState from "components/can-can/loader-with-state"
 
@@ -8,7 +9,7 @@ export default class RoutesCanCanLoader extends React.Component {
   }
 
   render() {
-    const {showAdditionalLoader} = this.state
+    const {showAdditionalLoader} = digs(this.state, "showAdditionalLoader")
 
     return (
       <Layout className="routes-can-can-loader">
@@ -18,8 +19,8 @@ export default class RoutesCanCanLoader extends React.Component {
         <button className="sign-out-button" onClick={(e) => this.onSignOutClicked(e)}>
           sign out
         </button>
-        <button className="load-reset-load-button" onClick={(e) => this.onLoadResetLoadClicked(e)}>
-          load reset load
+        <button className="load-reset-load-button" onClick={(e) => this.onShowAdditionalLoaderClicked(e)}>
+          show additional loader
         </button>
         <LoaderWithShape />
         <LoaderWithState />
@@ -42,12 +43,11 @@ export default class RoutesCanCanLoader extends React.Component {
     CanCan.current().resetAbilities()
   }
 
-  async onLoadResetLoadClicked(e) {
+  async onShowAdditionalLoaderClicked(e) {
     e.preventDefault()
 
     this.setState({showAdditionalLoader: true})
 
-    await Devise.signOut()
-    await CanCan.current().resetAbilities()
+    Devise.signOut()
   }
 }

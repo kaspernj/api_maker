@@ -56,7 +56,7 @@ module.exports = class ApiMakerCanCan {
   }
 
   async loadAbilities(abilities) {
-    await this.lock.read(async() => {
+    await this.lock.write(async() => {
       const promises = []
 
       for (const abilityData of abilities) {

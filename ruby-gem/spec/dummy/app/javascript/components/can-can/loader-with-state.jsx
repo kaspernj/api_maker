@@ -11,12 +11,16 @@ export default class CanCanWithState extends React.Component {
   }
 
   render() {
-    const {className} = this.props
+    const {className, ...restProps} = this.props
     const {canCan} = digs(this.state, "canCan")
 
     return (
-      <div className={classNames("components-can-can-loader-with-state", className)}>
+      <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>
         <CanCanLoader abilities={[[Account, ["sum"]]]} component={this} />
+
+        {!canCan &&
+          "not loaded"
+        }
 
         {canCan && canCan.can("sum", Account) &&
           <div className="can-access-admin">

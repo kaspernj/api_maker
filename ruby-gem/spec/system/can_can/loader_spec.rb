@@ -28,6 +28,7 @@ describe "can can - loader" do
     login_as user
     visit can_can_loader_path
     wait_for_and_find(".load-reset-load-button").click
+    wait_for_selector ".additional-loader-with-state"
     wait_for_selector ".additional-loader-with-state #{cannot_access_admin_selector}"
   end
 end
