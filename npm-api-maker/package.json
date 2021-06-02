@@ -60,6 +60,7 @@
     "await-lock": "^2.1.0",
     "clone-deep": "^4.0.1",
     "debounce": "^1.2.1",
+    "epic-locks": "kaspernj/epic-locks",
     "form-data-objectizer": "^1.0.0",
     "form-serialize": ">= 0.7.2",
     "format-number": ">= 3.0.0",

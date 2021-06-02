@@ -1,4 +1,5 @@
-const AwaitLock = require("await-lock").default
+const epicLocks = require("epic-locks")
+const ReadersWriterLock = epicLocks.ReadersWriterLock
 const {digg} = require("@kaspernj/object-digger")
 const EventEmitter = require("events")
 const inflection = require("inflection")
@@ -18,7 +19,7 @@ module.exports = class ApiMakerCanCan {
     this.abilitiesToLoad = []
     this.abilitiesToLoadData = []
     this.events = new EventEmitter()
-    this.lock = new AwaitLock()
+    this.lock = new ReadersWriterLock()
   }
 
   can(ability, subject) {
@@ -56,9 +57,7 @@ module.exports = class ApiMakerCanCan {
   }
 
   async loadAbilities(abilities) {
-    await this.lock.acquireAsync()
-
-    try {
+    await this.lock.read(async() => {
       const promises = []
 
       for (const abilityData of abilities) {
@@ -72,9 +71,7 @@ module.exports = class ApiMakerCanCan {
       }
 
       await Promise.all(promises)
-    } finally {
-      this.lock.release()
-    }
+    })
   }
 
   async loadAbility(ability, subject) {
@@ -105,14 +102,10 @@ module.exports = class ApiMakerCanCan {
   }
 
   async resetAbilities() {
-    await this.lock.acquireAsync()
-
-    try {
+    await this.lock.write(() => {
       this.abilities = []
       this.events.emit("onResetAbilities")
-    } finally {
-      this.lock.release()
-    }
+    })
   }
 
   async sendAbilitiesRequest() {
