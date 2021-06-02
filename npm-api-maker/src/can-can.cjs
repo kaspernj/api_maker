@@ -1,8 +1,7 @@
-const epicLocks = require("epic-locks")
-const ReadersWriterLock = epicLocks.ReadersWriterLock
 const {digg} = require("@kaspernj/object-digger")
 const EventEmitter = require("events")
 const inflection = require("inflection")
+const {ReadersWriterLock} = require("epic-locks")
 const Services = require("./services.cjs")
 
 module.exports = class ApiMakerCanCan {
