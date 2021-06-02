@@ -23,4 +23,11 @@ describe "can can - loader" do
     wait_for_no_selector ".components-can-can-loader-with-shape #{can_access_admin_selector}"
     wait_for_no_selector ".components-can-can-loader-with-state #{can_access_admin_selector}"
   end
+
+  it "calls the abilities callbacks in the correct order" do
+    login_as user
+    visit can_can_loader_path
+    wait_for_and_find(".load-reset-load-button").click
+    wait_for_selector ".additional-loader-with-state #{cannot_access_admin_selector}"
+  end
 end
