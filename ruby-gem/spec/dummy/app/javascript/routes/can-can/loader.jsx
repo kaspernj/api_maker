@@ -7,27 +7,6 @@ export default class RoutesCanCanLoader extends React.Component {
     showAdditionalLoader: false
   }
 
-  onSignOutClicked(e) {
-    e.preventDefault()
-
-    Devise.signOut()
-  }
-
-  onResetAbilitiesClicked(e) {
-    e.preventDefault()
-
-    CanCan.current().resetAbilities()
-  }
-
-  async onLoadResetLoadClicked(e) {
-    e.preventDefault()
-
-    this.setState({showAdditionalLoader: true})
-
-    await Devise.signOut()
-    await CanCan.current().resetAbilities()
-  }
-
   render() {
     const {showAdditionalLoader} = this.state
 
@@ -49,5 +28,26 @@ export default class RoutesCanCanLoader extends React.Component {
         }
       </Layout>
     )
+  }
+
+  onSignOutClicked(e) {
+    e.preventDefault()
+
+    Devise.signOut()
+  }
+
+  onResetAbilitiesClicked(e) {
+    e.preventDefault()
+
+    CanCan.current().resetAbilities()
+  }
+
+  async onLoadResetLoadClicked(e) {
+    e.preventDefault()
+
+    this.setState({showAdditionalLoader: true})
+
+    await Devise.signOut()
+    await CanCan.current().resetAbilities()
   }
 }
