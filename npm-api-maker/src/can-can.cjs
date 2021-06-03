@@ -1,7 +1,7 @@
-const AwaitLock = require("await-lock").default
 const {digg} = require("@kaspernj/object-digger")
 const EventEmitter = require("events")
 const inflection = require("inflection")
+const {ReadersWriterLock} = require("epic-locks")
 const Services = require("./services.cjs")
 
 module.exports = class ApiMakerCanCan {
@@ -18,7 +18,7 @@ module.exports = class ApiMakerCanCan {
     this.abilitiesToLoad = []
     this.abilitiesToLoadData = []
     this.events = new EventEmitter()
-    this.lock = new AwaitLock()
+    this.lock = new ReadersWriterLock()
   }
 
   can(ability, subject) {
@@ -56,9 +56,7 @@ module.exports = class ApiMakerCanCan {
   }
 
   async loadAbilities(abilities) {
-    await this.lock.acquireAsync()
-
-    try {
+    await this.lock.read(async() => {
       const promises = []
 
       for (const abilityData of abilities) {
@@ -72,12 +70,10 @@ module.exports = class ApiMakerCanCan {
       }
 
       await Promise.all(promises)
-    } finally {
-      this.lock.release()
-    }
+    })
   }
 
-  async loadAbility(ability, subject) {
+  loadAbility(ability, subject) {
     return new Promise((resolve) => {
       ability = inflection.underscore(ability)
 
@@ -85,14 +81,16 @@ module.exports = class ApiMakerCanCan {
         return resolve()
       }
 
-      const includes = this.abilitiesToLoad.find((abilityToLoad) => digg(abilityToLoad, "ability") == ability && digg(abilityToLoad, "subject") == subject)
+      const foundAbility = this.abilitiesToLoad.find((abilityToLoad) => digg(abilityToLoad, "ability") == ability && digg(abilityToLoad, "subject") == subject)
 
-      if (!includes) {
-        this.abilitiesToLoad.push({ability, callback: resolve, subject})
+      if (foundAbility) {
+        foundAbility.callbacks.push(resolve)
+      } else {
+        this.abilitiesToLoad.push({ability, callbacks: [resolve], subject})
         this.abilitiesToLoadData.push({ability, subject})
-      }
 
-      this.queueAbilitiesRequest()
+        this.queueAbilitiesRequest()
+      }
     })
   }
 
@@ -105,14 +103,10 @@ module.exports = class ApiMakerCanCan {
   }
 
   async resetAbilities() {
-    await this.lock.acquireAsync()
-
-    try {
+    await this.lock.write(() => {
       this.abilities = []
-      this.events.emit("onResetAbilities")
-    } finally {
-      this.lock.release()
-    }
+    })
+    this.events.emit("onResetAbilities")
   }
 
   async sendAbilitiesRequest() {
@@ -133,7 +127,9 @@ module.exports = class ApiMakerCanCan {
 
     // Call the callbacks that are waiting for the ability to have been loaded
     for (const abilityData of abilitiesToLoad) {
-      abilityData.callback()
+      for (const callback of abilityData.callbacks) {
+        callback()
+      }
     }
   }
 }
