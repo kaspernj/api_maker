@@ -1,5 +1,5 @@
-import LoaderWithState from "./loader-with-state"
 import {Devise} from "@kaspernj/api-maker"
+import LoaderWithState from "./loader-with-state"
 
 export default class LoaderThatSignsOutOnMount extends React.Component {
   componentDidMount() {
