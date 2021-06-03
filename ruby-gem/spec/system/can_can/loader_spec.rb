@@ -29,7 +29,6 @@ describe "can can - loader" do
     visit can_can_loader_path
     wait_for_and_find(".show-loader-that-signs-out-on-load-button").click
     wait_for_selector ".components-can-can-loader-that-signs-out-on-mount"
-    sleep 5
     wait_for_selector ".components-can-can-loader-that-signs-out-on-mount #{cannot_access_admin_selector}"
   end
 end
