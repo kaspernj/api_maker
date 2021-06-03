@@ -73,7 +73,7 @@ module.exports = class ApiMakerCanCan {
     })
   }
 
-  async loadAbility(ability, subject) {
+  loadAbility(ability, subject) {
     return new Promise((resolve) => {
       ability = inflection.underscore(ability)
 
@@ -81,14 +81,16 @@ module.exports = class ApiMakerCanCan {
         return resolve()
       }
 
-      const includes = this.abilitiesToLoad.find((abilityToLoad) => digg(abilityToLoad, "ability") == ability && digg(abilityToLoad, "subject") == subject)
+      const foundAbility = this.abilitiesToLoad.find((abilityToLoad) => digg(abilityToLoad, "ability") == ability && digg(abilityToLoad, "subject") == subject)
 
-      if (!includes) {
-        this.abilitiesToLoad.push({ability, callback: resolve, subject})
+      if (foundAbility) {
+        foundAbility.callbacks.push(resolve)
+      } else {
+        this.abilitiesToLoad.push({ability, callbacks: [resolve], subject})
         this.abilitiesToLoadData.push({ability, subject})
-      }
 
-      this.queueAbilitiesRequest()
+        this.queueAbilitiesRequest()
+      }
     })
   }
 
@@ -125,7 +127,9 @@ module.exports = class ApiMakerCanCan {
 
     // Call the callbacks that are waiting for the ability to have been loaded
     for (const abilityData of abilitiesToLoad) {
-      abilityData.callback()
+      for (const callback of abilityData.callbacks) {
+        callback()
+      }
     }
   }
 }
