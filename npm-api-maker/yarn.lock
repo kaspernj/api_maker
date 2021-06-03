@@ -2113,7 +2113,7 @@ enquirer@^2.3.5:
   dependencies:
     ansi-colors "^4.1.1"
 
-epic-locks@^1.0.0:
+epic-locks@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/epic-locks/-/epic-locks-1.0.1.tgz#67f65bfe35c83920f45b2dcae806f6f80951fa7b"
   integrity sha512-5T+g7+BKe0u0E5NMH+yjpvuUzvByr2TQhtr0H76yVan1EneYmd63UKWkJ0PMCqxRfFuftN7gX1ruTOxfju0Ecg==
