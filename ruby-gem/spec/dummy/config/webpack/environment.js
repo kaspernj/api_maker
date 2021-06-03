@@ -28,11 +28,13 @@ environment.plugins.append(
   "ProvidePlugin",
   new webpack.ProvidePlugin({
     Account: ["api-maker/models", "Account"],
+    classNames: "classnames",
     Hash: ["shared/hash", "default"],
     I18n: ["shared/i18n", "default"],
     Layout: ["components/layout", "default"],
     Params: ["@kaspernj/api-maker", "Params"],
     Project: ["api-maker/models", "Project"],
+    PropTypes: "prop-types",
     PropTypesExact: "prop-types-exact",
     React: "react",
     Routes: ["shared/routes", "default"],

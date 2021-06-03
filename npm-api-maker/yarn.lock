@@ -1505,11 +1505,6 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-await-lock@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-2.1.0.tgz#bc78c51d229a34d5d90965a1c94770e772c6145e"
-  integrity sha512-t7Zm5YGgEEc/3eYAicF32m/TNvL+XOeYZy9CvBUeJY/szM7frLolFylhrlZNWV/ohWhcUXygrBGjYmoQdxF4CQ==
-
 aws-sign2@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
@@ -2117,6 +2112,11 @@ enquirer@^2.3.5:
   integrity sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==
   dependencies:
     ansi-colors "^4.1.1"
+
+epic-locks@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/epic-locks/-/epic-locks-1.0.1.tgz#67f65bfe35c83920f45b2dcae806f6f80951fa7b"
+  integrity sha512-5T+g7+BKe0u0E5NMH+yjpvuUzvByr2TQhtr0H76yVan1EneYmd63UKWkJ0PMCqxRfFuftN7gX1ruTOxfju0Ecg==
 
 error-ex@^1.2.0, error-ex@^1.3.1:
   version "1.3.2"

@@ -14,10 +14,9 @@ describe("CanCan", () => {
       Services.current = mockedCurrent
 
       const loadAbilitiesPromise = canCan.loadAbilities([["user", ["read"]]])
-      canCan.resetAbilities()
+      const resetPromise = canCan.resetAbilities()
 
-      // await the abilities promise to make sure the lock has not been removed from the methods
-      await loadAbilitiesPromise
+      await Promise.all([loadAbilitiesPromise, resetPromise])
 
       expect(canCan.abilities).toEqual([])
     })
