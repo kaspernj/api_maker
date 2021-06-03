@@ -105,8 +105,8 @@ module.exports = class ApiMakerCanCan {
   async resetAbilities() {
     await this.lock.write(() => {
       this.abilities = []
-      this.events.emit("onResetAbilities")
     })
+    this.events.emit("onResetAbilities")
   }
 
   async sendAbilitiesRequest() {
