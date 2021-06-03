@@ -27,8 +27,9 @@ describe "can can - loader" do
   it "calls the abilities callbacks in the correct order" do
     login_as user
     visit can_can_loader_path
-    wait_for_and_find(".load-reset-load-button").click
-    wait_for_selector ".additional-loader-with-state"
-    wait_for_selector ".additional-loader-with-state #{cannot_access_admin_selector}"
+    wait_for_and_find(".show-loader-that-signs-out-on-load-button").click
+    wait_for_selector ".components-can-can-loader-that-signs-out-on-mount"
+    sleep 5
+    wait_for_selector ".components-can-can-loader-that-signs-out-on-mount #{cannot_access_admin_selector}"
   end
 end

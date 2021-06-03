@@ -19,7 +19,7 @@ export default class CanCanWithState extends React.Component {
         <CanCanLoader abilities={[[Account, ["sum"]]]} component={this} />
 
         {!canCan &&
-          "not loaded"
+          "can can not loaded"
         }
 
         {canCan && canCan.can("sum", Account) &&
