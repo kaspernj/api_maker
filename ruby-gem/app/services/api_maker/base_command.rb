@@ -220,6 +220,10 @@ class ApiMaker::BaseCommand
     command.result(*args, &blk)
   end
 
+  def inspect
+    "#<#{self.class.name}:#{__id__}>"
+  end
+
 private
 
   def serialized_model(model)
