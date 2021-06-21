@@ -6,6 +6,7 @@ const React = require("react")
 export default class ApiMakerBootstrapInput extends React.Component {
   static propTypes = {
     append: PropTypes.node,
+    appendText: PropTypes.node,
     attribute: PropTypes.string,
     className: PropTypes.string,
     currenciesCollection: PropTypes.array,
@@ -19,6 +20,7 @@ export default class ApiMakerBootstrapInput extends React.Component {
     name: PropTypes.string,
     placeholder: PropTypes.node,
     prepend: PropTypes.node,
+    prependText: PropTypes.node,
     small: PropTypes.bool,
     type: PropTypes.string,
     wrapperClassName: PropTypes.string
@@ -35,6 +37,7 @@ export default class ApiMakerBootstrapInput extends React.Component {
     const {errors} = this.state
     const {
       append,
+      appendText,
       attribute,
       className,
       currenciesCollection,
@@ -47,6 +50,7 @@ export default class ApiMakerBootstrapInput extends React.Component {
       model,
       name,
       prepend,
+      prependText,
       wrapperClassName,
       ...restProps
     } = this.props
@@ -79,11 +83,14 @@ export default class ApiMakerBootstrapInput extends React.Component {
         }
         {this.inputType() != "money" &&
           <div className="input-group">
-            {prepend &&
+            {(prepend || prependText) &&
               <div className="input-group-prepend">
-                <span className="input-group-text">
-                  {prepend}
-                </span>
+                {prependText &&
+                  <span className="input-group-text">
+                    {prependText}
+                  </span>
+                }
+                {prepend}
               </div>
             }
             <Input
@@ -96,11 +103,14 @@ export default class ApiMakerBootstrapInput extends React.Component {
               type={this.inputType()}
               {...restProps}
             />
-            {append &&
+            {(append || appendText) &&
               <div className="input-group-append">
-                <span className="input-group-text">
-                  {append}
-                </span>
+                {appendText &&
+                  <span className="input-group-text">
+                    {append}
+                  </span>
+                }
+                {append}
               </div>
             }
             {errors.length > 0 && <InvalidFeedback errors={errors} />}
