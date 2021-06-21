@@ -107,7 +107,7 @@ export default class ApiMakerBootstrapInput extends React.Component {
               <div className="input-group-append">
                 {appendText &&
                   <span className="input-group-text">
-                    {append}
+                    {appendText}
                   </span>
                 }
                 {append}

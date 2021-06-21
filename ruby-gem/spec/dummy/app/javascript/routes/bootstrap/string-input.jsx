@@ -1,4 +1,4 @@
-export default class BootstrapStringInputDateObject extends React.Component {
+export default class BootstrapStringInput extends React.Component {
   render() {
     return (
       <Layout>
@@ -6,12 +6,12 @@ export default class BootstrapStringInputDateObject extends React.Component {
           <Input
             append={<button className="append-button" />}
             appendText="Goodbye world"
-            className="input-with-both"
             prepend={<button className="prepend-button" />}
             prependText="Hello world"
+            wrapperClassName="input-with-both"
           />
-          <Input appendText="Goodbye world" className="input-with-text" prependText="Hello world" />
-          <Input append={<button className="append-button" />} className="input-without-text" prepend={<button className="prepend-button" />} />
+          <Input appendText="Goodbye world" prependText="Hello world" wrapperClassName="input-with-text"  />
+          <Input append={<button className="append-button" />} prepend={<button className="prepend-button" />} wrapperClassName="input-without-text"  />
         </div>
       </Layout>
     )
