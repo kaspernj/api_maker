@@ -3,6 +3,7 @@ const CableConnectionPool = require("./cable-connection-pool.cjs")
 const Collection = require("./collection.cjs")
 const CommandsPool = require("./commands-pool.cjs")
 const CustomError = require("./custom-error.cjs")
+const CustomValidationError = require("./custom-validation-error.cjs")
 const {digg} = require("@kaspernj/object-digger")
 const FormDataObjectizer = require("form-data-objectizer")
 const inflection = require("inflection")
@@ -319,7 +320,7 @@ module.exports = class BaseModel {
     this.sendValidationErrorsEvent(validationErrors, options)
 
     if (!options || options.throwValidationError != false) {
-      throw new ValidationError(validationErrors)
+      throw new CustomValidationError("Custom validation error", error.args)
     }
   }
 
