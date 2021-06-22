@@ -12,9 +12,8 @@ module.exports = class ValidationError extends CustomError {
     return Boolean(unhandledError)
   }
 
-   hasValidationErrorForAttribute(attributeName) {
-    const underscoredAttributeName = inflection.underscore(attributeName)
-    const foundAttribute = this.validationErrors.find((validationError) => digg(validationError, "attribute_name") == underscoredAttributeName)
+  hasValidationErrorForAttribute(attributeName) {
+    const foundAttribute = this.validationErrors.getValidationErrors().find((validationError) => validationError.getAttributeName() == attributeName)
 
     if (foundAttribute) {
       return true
