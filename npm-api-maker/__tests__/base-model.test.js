@@ -1,6 +1,6 @@
 const BaseModel = require("../src/base-model.cjs")
 const CustomError = require("../src/custom-error.cjs")
-const ValidationError = require("../src/validation-error.cjs")
+const CustomValidationError = require("../src/custom-validation-error.cjs")
 
 describe("BaseModel", () => {
   describe("update", () => {
@@ -26,11 +26,11 @@ describe("BaseModel", () => {
     const spy = jest.spyOn(form, "dispatchEvent")
 
     it("throws the validation errors if no options are given", () => {
-      expect(() => model.parseValidationErrors(error)).toThrow(ValidationError)
+      expect(() => model.parseValidationErrors(error)).toThrow(CustomValidationError)
     })
 
     it("throws the validation errors and dispatches an event to the form", () => {
-      expect(() => model.parseValidationErrors(error, {form})).toThrow(ValidationError)
+      expect(() => model.parseValidationErrors(error, {form})).toThrow(CustomValidationError)
       expect(spy).toHaveBeenCalled()
     })
 
