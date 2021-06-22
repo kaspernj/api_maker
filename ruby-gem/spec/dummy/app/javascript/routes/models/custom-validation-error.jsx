@@ -1,6 +1,6 @@
-import {CustomValidationError, Params} from "@kaspernj/api-maker"
 import {digg, digs} from "@kaspernj/object-digger"
 import FlashMessage from "shared/flash-message"
+import {Params, ValidationError} from "@kaspernj/api-maker"
 import {User} from "api-maker/models"
 
 export default class ModelsCustomValidationError extends React.Component {
@@ -73,7 +73,7 @@ export default class ModelsCustomValidationError extends React.Component {
     } catch(error) {
       FlashMessage.errorResponse(error)
 
-      if (error instanceof CustomValidationError) {
+      if (error instanceof ValidationError) {
         this.setState({
           errorForProjectName: error.hasValidationErrorForAttribute("name")
         })
