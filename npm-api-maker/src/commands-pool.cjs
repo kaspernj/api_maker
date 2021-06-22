@@ -6,6 +6,7 @@ const {dig} = require("@kaspernj/object-digger")
 const FormDataObjectizer = require("form-data-objectizer")
 const Serializer = require("./serializer.cjs")
 const ValidationError = require("./validation-error.cjs")
+const {ValidationErrors} = require("./validation-errors.cjs")
 
 module.exports = class ApiMakerCommandsPool {
   static addCommand(data, args = {}) {
