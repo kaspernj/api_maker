@@ -5,6 +5,29 @@ describe "bootstrap - string input" do
   let(:project) { create :project, price_per_hour: Money.new(100_00, "USD") }
   let(:user) { create :user, birthday_at: "1985-06-17" }
 
+  let(:input_group_text_selector) { ".input-group-text" }
+
+  it "renders a input field with pre-and append" do
+    login_as user
+
+    visit bootstrap_string_input_path
+
+    # Input with both text and buttons
+    wait_for_selector ".input-with-both #{input_group_text_selector}", text: "Hello world"
+    wait_for_selector ".input-with-both .append-button"
+    wait_for_selector ".input-with-both #{input_group_text_selector}", text: "Goodbye world"
+    wait_for_selector ".input-with-both .prepend-button"
+
+    # Input with text only
+    wait_for_selector ".input-with-text #{input_group_text_selector}", text: "Hello world"
+    wait_for_selector ".input-with-text #{input_group_text_selector}", text: "Goodbye world"
+
+    # Input with buttons only
+    wait_for_selector ".input-without-text .append-button"
+    wait_for_selector ".input-without-text .prepend-button"
+    wait_for_no_selector ".input-without-text #{input_group_text_selector}"
+  end
+
   it "renders a date field and sets the value correctly" do
     login_as user
 

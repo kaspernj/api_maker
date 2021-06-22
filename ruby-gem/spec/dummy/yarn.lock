@@ -747,7 +747,7 @@
     classnames ">= 2.2.6"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.91":
+"@kaspernj/api-maker@>= 1.0.91", "@kaspernj/api-maker@^1.0.99":
   version "1.0.99"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.99.tgz#7943015491654a8b5ae3bc45a61975098d0a8824"
   integrity sha512-C3TFW72hbR23id6mnP0po24DAEHb+S1ZouwR6f92X2jfGuxk7LdCv8FEUg4t0CMh+9MDfAf4r8F5JRSSZ7wCKQ==
@@ -757,27 +757,6 @@
     clone-deep "^4.0.1"
     debounce "^1.2.1"
     epic-locks "^1.0.1"
-    form-data-objectizer "^1.0.0"
-    form-serialize ">= 0.7.2"
-    format-number ">= 3.0.0"
-    inflection ">= 1.12.0"
-    js-money ">= 0.6.3"
-    numberable ">= 1.0.0"
-    object-to-formdata ">= 4.1.0"
-    replaceall "^0.1.6"
-    strftime ">= 0.10.0"
-    wake-event ">= 0.0.1"
-
-"@kaspernj/api-maker@^1.0.89":
-  version "1.0.89"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.89.tgz#5f857ecbc67bda9d3bab6acbb60d554b860dd860"
-  integrity sha512-yUJ/PSxKWbqfLokwKKxh1QlAkS5sefGvM+MPq5WThARJuQmdoyaZojwpsbPt2GYXSN7Zw/SqC1ZPVl1zSsvUnw==
-  dependencies:
-    "@kaspernj/object-digger" ">= 1.0.2"
-    "@rails/actioncable" ">= 6.1.0"
-    await-lock "^2.1.0"
-    clone-deep "^4.0.1"
-    debounce "^1.2.1"
     form-data-objectizer "^1.0.0"
     form-serialize ">= 0.7.2"
     format-number ">= 3.0.0"
@@ -1308,11 +1287,6 @@ autoprefixer@^9.4.9:
     num2fraction "^1.2.2"
     postcss "^7.0.16"
     postcss-value-parser "^3.3.1"
-
-await-lock@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-2.1.0.tgz#bc78c51d229a34d5d90965a1c94770e772c6145e"
-  integrity sha512-t7Zm5YGgEEc/3eYAicF32m/TNvL+XOeYZy9CvBUeJY/szM7frLolFylhrlZNWV/ohWhcUXygrBGjYmoQdxF4CQ==
 
 aws-sign2@~0.7.0:
   version "0.7.0"
