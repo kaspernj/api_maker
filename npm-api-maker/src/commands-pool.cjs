@@ -1,6 +1,7 @@
 const Api = require("./api.cjs")
 const CommandSubmitData = require("./command-submit-data.cjs")
 const CustomError = require("./custom-error.cjs")
+const CustomValidationError = require("./custom-validation-error.cjs")
 const Deserializer = require("./deserializer.cjs")
 const {dig} = require("@kaspernj/object-digger")
 const FormDataObjectizer = require("form-data-objectizer")
@@ -136,7 +137,15 @@ module.exports = class ApiMakerCommandsPool {
         } else if (commandResponse.type == "error") {
           commandData.reject(new CustomError("Command error", {response: commandResponseData}))
         } else {
-          commandData.reject(new CustomError("Command failed", {response: commandResponseData}))
+          let error
+
+          if ("validation_errors" in commandResponseData) {
+            error = new CustomValidationError("Command failed with validation errors", {response: commandResponseData})
+          } else {
+            error = new CustomError("Command failed", {response: commandResponseData})
+          }
+
+          commandData.reject(error)
         }
       }
     } finally {

@@ -8,6 +8,7 @@ const Collection = require("./src/collection.cjs")
 const CommandSubmitData = require("./src/command-submit-data.cjs")
 const CommandsPool = require("./src/commands-pool.cjs")
 const CustomError = require("./src/custom-error.cjs")
+const CustomValidationError = require("./src/custom-validation-error.cjs")
 const Deserializer = require("./src/deserializer.cjs")
 const Devise = require("./src/devise.cjs")
 const ErrorLogger = require("./src/error-logger.cjs")
@@ -51,6 +52,7 @@ export {
   CommandSubmitData,
   CommandsPool,
   CustomError,
+  CustomValidationError,
   Deserializer,
   Devise,
   ErrorLogger,

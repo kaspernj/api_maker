@@ -22,6 +22,7 @@
     {"name": "models_paginate", "path": "/models/paginate", "component": "models/paginate"},
     {"name": "models_select", "path": "/models/select", "component": "models/select"},
     {"name": "models_validation_errors", "path": "/models/validation-errors", "component": "models/validation-errors"},
+    {"name": "models_custom_validation_error", "path": "/models/custom-validation-error", "component": "models/custom-validation-error"},
     {"name": "models_update", "path": "/models/update/:id", "component": "models/update"},
     {"name": "models_update_with_select", "path": "/models/update_with_select/:id", "component": "models/update-with-select"},
 
