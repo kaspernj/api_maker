@@ -137,17 +137,7 @@ module.exports = class ApiMakerCommandsPool {
         if (responseType == "success") {
           commandData.resolve(commandResponseData)
         } else if (responseType == "error") {
-          let error
-
-          if (commandResponseData.error_type == "validation_error") {
-            const validationErrors = new ValidationErrors({
-              model: digg(commandResponseData, "model"),
-              validationErrors: digg(commandResponseData, "validation_errors")
-            })
-            error = new ValidationError(validationErrors, {response: commandResponseData})
-          } else {
-            error = new CustomError("Command error", {response: commandResponseData})
-          }
+          this.handleErrorResponse(commandData, commandResponseData)
         } else {
           commandData.reject(new CustomError("Command failed", {response: commandResponseData}))
         }
@@ -155,6 +145,22 @@ module.exports = class ApiMakerCommandsPool {
     } finally {
       this.flushCount--
     }
+  }
+
+  handleCommandError(commandData, commandResponseData) {
+    let error
+
+    if (commandResponseData.error_type == "validation_error") {
+      const validationErrors = new ValidationErrors({
+        model: digg(commandResponseData, "model"),
+        validationErrors: digg(commandResponseData, "validation_errors")
+      })
+      error = new ValidationError(validationErrors, {response: commandResponseData})
+    } else {
+      error = new CustomError("Command error", {response: commandResponseData})
+    }
+
+    commandData.reject(new CustomError("Command failed", {response: commandResponseData}))
   }
 
   clearTimeout() {
