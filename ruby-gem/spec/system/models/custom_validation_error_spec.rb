@@ -8,7 +8,7 @@ describe "models - custom validation error" do
     account
 
     login_as user
-    visit models_custom_validation_error_path
+    visit models_validation_error_path
     wait_for_selector ".routes-models-custom-validation-error .content-container"
     wait_for_and_find(".submit-button").click
     wait_for_selector ".error-for-project-name", text: "Yes"

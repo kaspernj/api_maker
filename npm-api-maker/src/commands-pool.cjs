@@ -147,7 +147,7 @@ module.exports = class ApiMakerCommandsPool {
     }
   }
 
-  handleCommandError(commandData, commandResponseData) {
+  handleErrorResponse(commandData, commandResponseData) {
     let error
 
     if (commandResponseData.error_type == "validation_error") {
