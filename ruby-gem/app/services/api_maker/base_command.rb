@@ -170,9 +170,9 @@ class ApiMaker::BaseCommand
 
     fail!(
       error_type: :validation_error,
+      errors: error_messages.map { |error_message| {message: error_message, type: :validation_error} },
       model: serialized_model(model),
       success: false,
-      errors: error_messages.map { |error_message| {message: error_message, type: :validation_error} },
       validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model: model, params: params)
     )
   end
