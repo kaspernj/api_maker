@@ -124,6 +124,7 @@ module.exports = class ApiMakerCommandsPool {
         const commandResponse = response.responses[commandId]
         const commandResponseData = Deserializer.parse(commandResponse.data)
         const commandData = currentPool[parseInt(commandId)]
+        const responseType = commandResponse.type
 
         if (commandResponseData) {
           const bugReportUrl = dig(commandResponseData, "bug_report_url")
@@ -133,24 +134,22 @@ module.exports = class ApiMakerCommandsPool {
           }
         }
 
-        if (commandResponse.type == "success") {
+        if (responseType == "success") {
           commandData.resolve(commandResponseData)
-        } else if (commandResponse.type == "error") {
-          commandData.reject(new CustomError("Command error", {response: commandResponseData}))
-        } else {
+        } else if (responseType == "error") {
           let error
 
-          if ("validation_errors" in commandResponseData) {
+          if (commandResponseData.error_type == "validation_error") {
             const validationErrors = new ValidationErrors({
               model: digg(commandResponseData, "model"),
               validationErrors: digg(commandResponseData, "validation_errors")
             })
             error = new ValidationError(validationErrors, {response: commandResponseData})
           } else {
-            error = new CustomError("Command failed", {response: commandResponseData})
+            error = new CustomError("Command error", {response: commandResponseData})
           }
-
-          commandData.reject(error)
+        } else {
+          commandData.reject(new CustomError("Command failed", {response: commandResponseData}))
         }
       }
     } finally {
