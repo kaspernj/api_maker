@@ -1,9 +1,8 @@
 class Commands::Projects::CreateProject < Commands::ApplicationCommand
   def execute!
     project = Project.new(params)
-    project.save
 
-    if project.valid?
+    if project.save
       succeed!
     else
       failure_save_response(model: project, params: params)
