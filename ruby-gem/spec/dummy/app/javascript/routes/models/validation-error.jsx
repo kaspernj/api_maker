@@ -67,9 +67,10 @@ export default class ModelsCustomValidationError extends React.Component {
 
     const {project} = digs(this.state, "project")
     const form = digg(e, "target")
+    const formData = new FormData(form)
 
     try {
-      await project.saveRaw(form)
+      await Project.createProject(formData)
       this.setState({errorForProjectName: false})
     } catch(error) {
       FlashMessage.errorResponse(error)

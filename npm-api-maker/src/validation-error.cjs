@@ -1,5 +1,6 @@
 const CustomError = require("./custom-error.cjs")
 const {digg} = require("@kaspernj/object-digger")
+const inflection = require("inflection")
 
 module.exports = class ValidationError extends CustomError {
   constructor(validationErrors, args) {
@@ -13,7 +14,8 @@ module.exports = class ValidationError extends CustomError {
   }
 
   hasValidationErrorForAttribute(attributeName) {
-    const foundAttribute = this.validationErrors.getValidationErrors().find((validationError) => validationError.getAttributeName() == attributeName)
+    const underscoredAttributeName = inflection.underscore(attributeName)
+    const foundAttribute = this.validationErrors.getValidationErrors().find((validationError) => validationError.getAttributeName() == underscoredAttributeName)
 
     if (foundAttribute) {
       return true

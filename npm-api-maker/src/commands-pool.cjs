@@ -137,9 +137,11 @@ module.exports = class ApiMakerCommandsPool {
         if (responseType == "success") {
           commandData.resolve(commandResponseData)
         } else if (responseType == "error") {
-          this.handleErrorResponse(commandData, commandResponseData)
+          commandData.reject(new CustomError("Command error", {response: commandResponseData}))
+        } else if (responseType == "failed") {
+          this.handleFailedResponse(commandData, commandResponseData)
         } else {
-          commandData.reject(new CustomError("Command failed", {response: commandResponseData}))
+          throw new Error(`Unhandled response type: ${responseType}`)
         }
       }
     } finally {
@@ -147,7 +149,7 @@ module.exports = class ApiMakerCommandsPool {
     }
   }
 
-  handleErrorResponse(commandData, commandResponseData) {
+  handleFailedResponse(commandData, commandResponseData) {
     let error
 
     if (commandResponseData.error_type == "validation_error") {
@@ -157,10 +159,10 @@ module.exports = class ApiMakerCommandsPool {
       })
       error = new ValidationError(validationErrors, {response: commandResponseData})
     } else {
-      error = new CustomError("Command error", {response: commandResponseData})
+      error = new CustomError("Command failed", {response: commandResponseData})
     }
 
-    commandData.reject(new CustomError("Command failed", {response: commandResponseData}))
+    commandData.reject(error)
   }
 
   clearTimeout() {

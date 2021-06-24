@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "models - custom validation error" do
+describe "models - validation error" do
   let(:account) { create :account }
   let(:user) { create :user, admin: true }
 
