@@ -3,10 +3,7 @@ import { Params } from "@kaspernj/api-maker"
 import React from "react"
 
 export default class ModelsDestroyEvent extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+  state = {}
 
   async componentDidMount() {
     const params = Params.parse()

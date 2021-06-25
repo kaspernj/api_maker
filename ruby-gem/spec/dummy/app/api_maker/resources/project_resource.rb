@@ -1,5 +1,5 @@
 class Resources::ProjectResource < Resources::ApplicationResource
-  attributes :account_id, :created_at, :id, :illegal, :name, :price_per_hour
+  attributes :account_id, :created_at, :id, :illegal, :name, :price_per_hour, :public
   collection_commands :create_project
   relationships :project_detail, :tasks
 
@@ -8,6 +8,6 @@ class Resources::ProjectResource < Resources::ApplicationResource
   end
 
   def permitted_params(arg)
-    arg.params.require(:project).permit(:account_id, :name, :price_per_hour_cents, :price_per_hour_currency)
+    arg.params.require(:project).permit(:account_id, :name, :price_per_hour_cents, :price_per_hour_currency, :public)
   end
 end

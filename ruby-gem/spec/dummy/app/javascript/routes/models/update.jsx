@@ -1,9 +1,6 @@
 export default class ModelsUpdate extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      projectId: Hash.fetch("id", this.props.match.params)
-    }
+  state = {
+    projectId: digg(this, "props", "match", "params", "id")
   }
 
   componentDidMount() {

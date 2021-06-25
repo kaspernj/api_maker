@@ -2,6 +2,8 @@ require "money-rails"
 MoneyRails::Hooks.init
 
 class Project < ApplicationRecord
+  api_maker_broadcast_updates
+
   belongs_to :account, -> { where(deleted_at: nil) }, inverse_of: :projects
 
   has_many :project_secrets, dependent: :destroy

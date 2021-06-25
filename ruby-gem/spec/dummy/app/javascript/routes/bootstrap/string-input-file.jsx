@@ -1,11 +1,8 @@
 import {Devise} from "@kaspernj/api-maker"
 
 export default class BootstrapStringInputFile extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      user: Devise.currentUser()
-    }
+  state = {
+    user: Devise.currentUser()
   }
 
   render() {

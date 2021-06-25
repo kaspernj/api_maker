@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_16_165612) do
+ActiveRecord::Schema.define(version: 2021_06_25_114409) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -51,9 +51,9 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.bigint "author_id", null: false
+    t.integer "author_id", null: false
     t.string "resource_type", null: false
-    t.bigint "resource_id", null: false
+    t.integer "resource_id", null: false
     t.text "comment", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -62,8 +62,8 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
   end
 
   create_table "customer_relationships", force: :cascade do |t|
-    t.bigint "child_id", null: false
-    t.bigint "parent_id", null: false
+    t.integer "child_id", null: false
+    t.integer "parent_id", null: false
     t.string "relationship_type", null: false
     t.index ["child_id"], name: "index_customer_relationships_on_child_id"
     t.index ["parent_id"], name: "index_customer_relationships_on_parent_id"
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
   end
 
   create_table "project_detail_files", force: :cascade do |t|
-    t.bigint "project_detail_id", null: false
+    t.integer "project_detail_id", null: false
     t.string "filename", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 2021_05_16_165612) do
     t.string "price_per_hour_currency"
     t.datetime "deleted_at"
     t.boolean "illegal", default: false, null: false
+    t.boolean "public", default: false, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
   end

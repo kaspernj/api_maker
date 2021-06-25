@@ -2,11 +2,8 @@ import {AttributeRows, Card} from "@kaspernj/api-maker-bootstrap"
 import {User} from "api-maker/models"
 
 export default class RouteBootstrapAttributeRows extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      users: undefined
-    }
+  state = {
+    users: undefined
   }
 
   componentDidMount() {

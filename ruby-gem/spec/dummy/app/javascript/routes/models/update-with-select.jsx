@@ -1,11 +1,8 @@
 export default class ModelsUpdateWithSelect extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      accountId: Hash.fetch("id", this.props.match.params),
-      loaded: false,
-      updated: false
-    }
+  state = {
+    accountId: digg(this, "props", "match", "params", "id"),
+    loaded: false,
+    updated: false
   }
 
   componentDidMount() {
