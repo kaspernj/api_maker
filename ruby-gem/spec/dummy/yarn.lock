@@ -725,10 +725,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@kaspernj/api-maker-bootstrap@^1.0.54":
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.54.tgz#9bf6c887f401cb31ba657ffba001d6aa79855542"
-  integrity sha512-qL7N0cd673m93XrDAQlp/6hf4ZwvjmeMsUrhnnpE7YKPPnS1TVJ9xBDO7G62FLRzyOrZVXn6gaVPIyokV/TgBQ==
+"@kaspernj/api-maker-bootstrap@^1.0.55":
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.55.tgz#bf22de1de7ee45c699c57149b9958ddef4d585cd"
+  integrity sha512-UB8ABtrdTN9N5+pAW9wfi3ek0Ja+6KrVyHYU5IwCml/pOlg390TOo4nESSA+fb0SC2m/oh8HzMMdWgQw6cvknQ==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.91"
     "@kaspernj/api-maker-inputs" ">= 1.0.53"
@@ -1906,9 +1906,9 @@ color-name@^1.0.0:
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
 
 color-string@^1.5.2:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.5.3.tgz#c9bbc5f01b58b5492f3d6857459cb6590ce204cc"
-  integrity sha512-dC2C5qeWoYkxki5UAXapdjqO672AM4vZuPGRQfO8b5HKuKGBbKWpITyDYN7TOFKvRW7kOgAn3746clDBMDJyQw==
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.5.5.tgz#65474a8f0e7439625f3d27a6a19d89fc45223014"
+  integrity sha512-jgIoum0OfQfq9Whcfc2z/VhCNcmQjWbey6qBX0vqt7YICflUmBCh9E9CiQD5GSJ+Uehixm3NUwHVhqUAWRivZg==
   dependencies:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"

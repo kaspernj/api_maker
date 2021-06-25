@@ -2,9 +2,11 @@ const Api = require("./api.cjs")
 const CommandSubmitData = require("./command-submit-data.cjs")
 const CustomError = require("./custom-error.cjs")
 const Deserializer = require("./deserializer.cjs")
-const {dig} = require("@kaspernj/object-digger")
+const {dig, digg} = require("@kaspernj/object-digger")
 const FormDataObjectizer = require("form-data-objectizer")
 const Serializer = require("./serializer.cjs")
+const ValidationError = require("./validation-error.cjs")
+const {ValidationErrors} = require("./validation-errors.cjs")
 
 module.exports = class ApiMakerCommandsPool {
   static addCommand(data, args = {}) {
@@ -122,6 +124,7 @@ module.exports = class ApiMakerCommandsPool {
         const commandResponse = response.responses[commandId]
         const commandResponseData = Deserializer.parse(commandResponse.data)
         const commandData = currentPool[parseInt(commandId)]
+        const responseType = commandResponse.type
 
         if (commandResponseData) {
           const bugReportUrl = dig(commandResponseData, "bug_report_url")
@@ -131,17 +134,35 @@ module.exports = class ApiMakerCommandsPool {
           }
         }
 
-        if (commandResponse.type == "success") {
+        if (responseType == "success") {
           commandData.resolve(commandResponseData)
-        } else if (commandResponse.type == "error") {
+        } else if (responseType == "error") {
           commandData.reject(new CustomError("Command error", {response: commandResponseData}))
+        } else if (responseType == "failed") {
+          this.handleFailedResponse(commandData, commandResponseData)
         } else {
-          commandData.reject(new CustomError("Command failed", {response: commandResponseData}))
+          throw new Error(`Unhandled response type: ${responseType}`)
         }
       }
     } finally {
       this.flushCount--
     }
+  }
+
+  handleFailedResponse(commandData, commandResponseData) {
+    let error
+
+    if (commandResponseData.error_type == "validation_error") {
+      const validationErrors = new ValidationErrors({
+        model: digg(commandResponseData, "model"),
+        validationErrors: digg(commandResponseData, "validation_errors")
+      })
+      error = new ValidationError(validationErrors, {response: commandResponseData})
+    } else {
+      error = new CustomError("Command failed", {response: commandResponseData})
+    }
+
+    commandData.reject(error)
   }
 
   clearTimeout() {
