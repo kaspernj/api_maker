@@ -4,11 +4,8 @@ import { Task } from "api-maker/models"
 import React from "react"
 
 export default class ModelsCreatedEvent extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      eventData: undefined
-    }
+  state = {
+    eventData: undefined
   }
 
   render() {

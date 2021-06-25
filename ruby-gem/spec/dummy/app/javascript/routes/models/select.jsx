@@ -1,10 +1,7 @@
 import React from "react"
 
 export default class ModelsSelect extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+  state = {}
 
   async componentDidMount() {
     const tasks = await Task.ransack().select({Task: ["id", "name"]}).toArray()

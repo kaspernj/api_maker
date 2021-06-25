@@ -29,6 +29,8 @@ environment.plugins.append(
   new webpack.ProvidePlugin({
     Account: ["api-maker/models", "Account"],
     classNames: "classnames",
+    digg: ["@kaspernj/object-digger", "digg"],
+    digs: ["@kaspernj/object-digger", "digs"],
     Hash: ["shared/hash", "default"],
     I18n: ["shared/i18n", "default"],
     Layout: ["components/layout", "default"],

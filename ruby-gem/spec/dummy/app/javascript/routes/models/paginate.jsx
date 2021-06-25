@@ -3,11 +3,8 @@ import React from "react"
 import { Paginate, SortLink } from "@kaspernj/api-maker-bootstrap"
 
 export default class ModelsPaginate extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      currentHref: location.href
-    }
+  state = {
+    currentHref: location.href
   }
 
   componentDidMount() {

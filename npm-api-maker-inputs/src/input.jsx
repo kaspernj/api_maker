@@ -1,7 +1,7 @@
+const AutoSubmit = require("./auto-submit.cjs")
 const {dig, digg, digs} = require("@kaspernj/object-digger")
 const {EventListener, EventUpdated} = require("@kaspernj/api-maker")
 const idForComponent = require("./id-for-component.cjs")
-const inflection = require("inflection")
 const nameForComponent = require("./name-for-component.cjs")
 const PropTypes = require("prop-types")
 const React = require("react")
@@ -81,7 +81,7 @@ export default class ApiMakerInput extends React.Component {
     return (
       <>
         {autoRefresh && model &&
-          <EventUpdated model={model} onUpdated={(args) => this.onModelUpdated(args)} />
+          <EventUpdated model={model} onUpdated={(...args) => this.onModelUpdated(...args)} />
         }
         {form && onErrors && <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />}
         {localizedNumber &&
@@ -138,14 +138,7 @@ export default class ApiMakerInput extends React.Component {
   }
 
   autoSubmit() {
-    const {attribute, model} = this.props
-    const updateAttributeName = inflection.underscore(attribute)
-    const value = digg(this.props.inputRef || this.inputRef, "current", "value")
-    const updateParams = {}
-
-    updateParams[updateAttributeName] = value
-
-    model.update(updateParams)
+    new AutoSubmit({component: this}).autoSubmit()
   }
 
   formatValue(value) {
