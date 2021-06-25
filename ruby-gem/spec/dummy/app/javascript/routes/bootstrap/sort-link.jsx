@@ -2,11 +2,8 @@ import { Params } from "@kaspernj/api-maker"
 import { Card, SortLink } from "@kaspernj/api-maker-bootstrap"
 
 export default class BootstrapSortLink extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      currentHref: location.href
-    }
+  state = {
+    currentHref: location.href
   }
 
   componentDidMount() {

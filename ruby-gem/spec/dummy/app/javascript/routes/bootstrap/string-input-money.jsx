@@ -2,11 +2,8 @@ import { digg } from "@kaspernj/object-digger"
 import React from "react"
 
 export default class BootstrapStringInputDatetimeLocal extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      currenciesCollection: [["Danish kroner", "DKK"], ["American Dollars", "USD"]]
-    }
+  state = {
+    currenciesCollection: [["Danish kroner", "DKK"], ["American Dollars", "USD"]]
   }
 
   componentDidMount() {

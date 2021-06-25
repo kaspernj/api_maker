@@ -1,10 +1,7 @@
 import React from "react"
 
 export default class ModelsLoadHasOneThrough extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+  state = {}
 
   async componentDidMount() {
     const task = await Task.find(this.props.match.params.task_id)

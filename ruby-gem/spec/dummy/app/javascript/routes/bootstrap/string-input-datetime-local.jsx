@@ -1,8 +1,5 @@
 export default class BootstrapStringInputDatetimeLocal extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+  state = {}
 
   componentDidMount() {
     this.loadTask()
