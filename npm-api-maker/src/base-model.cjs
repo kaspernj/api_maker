@@ -319,7 +319,7 @@ module.exports = class BaseModel {
     this.sendValidationErrorsEvent(validationErrors, options)
 
     if (!options || options.throwValidationError != false) {
-      throw new ValidationError(validationErrors)
+      throw new ValidationError(validationErrors, digg(error, "args"))
     }
   }
 
