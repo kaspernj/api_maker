@@ -5,6 +5,7 @@ en:
         account: Account
         name: Name
         illegal: Illegal
+        public: Public
       task:
         id: ID
         name: Name
