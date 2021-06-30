@@ -27,7 +27,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
 
   onReceived(rawData) {
     const data = Deserializer.parse(rawData)
-    const {model: modelInstance, model_id: modelId, model_type: modelType, type} = data
+    const {e: eventName, m: modelInstance, mi: modelId, mt: modelType, t: type} = data
     const subscriptions = digg(this, "subscriptions")
 
     let modelName
@@ -39,22 +39,21 @@ module.exports = class ApiMakerCableSubscriptionPool {
       modelName = inflection.camelize(inflection.singularize(modelType))
     }
 
-    if (type == "update") {
+    if (type == "u") {
       for(const subscription of subscriptions[modelName]["updates"][modelId]) {
         subscription.onReceived({model: modelInstance})
       }
-    } else if (type == "create") {
+    } else if (type == "c") {
       for(const subscription of subscriptions[modelName]["creates"]) {
         subscription.onReceived({model: modelInstance})
       }
-    } else if (type == "destroy") {
+    } else if (type == "d") {
       const destroySubscriptions = digg(subscriptions, modelName, "destroys", modelId)
 
       for(const subscription of destroySubscriptions) {
         subscription.onReceived({model: modelInstance})
       }
-    } else if (type == "event") {
-      const eventName = digg(data, "event_name")
+    } else if (type == "e") {
       const eventSubscriptions = digg(subscriptions, modelName, "events", eventName, modelId)
 
       for(const subscription of eventSubscriptions) {
@@ -64,8 +63,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
           model: modelInstance
         })
       }
-    } else if (type == "model_class_event") {
-      const eventName = digg(data, "event_name")
+    } else if (type == "mce") {
       const modelClassEventSubscriptions = digg(subscriptions, modelName, "model_class_events", eventName)
 
       for(const subscription of modelClassEventSubscriptions) {
