@@ -30,10 +30,10 @@ module ApiMaker::ModelExtensions
       channel_name = api_maker_model_class_event_name(event_name)
       resource = ApiMaker::MemoryStorage.current.resource_for_model(self)
       data_to_broadcast = ApiMaker::ResultParser.parse(
-        args: args,
-        event_name: event_name,
-        model_type: resource.collection_name,
-        type: :model_class_event
+        a: args,
+        e: event_name,
+        mt: resource.collection_name,
+        t: :mce
       )
       ActionCable.server.broadcast(channel_name, data_to_broadcast)
     end
@@ -51,11 +51,11 @@ module ApiMaker::ModelExtensions
     channel_name = api_maker_event_channel_name(event_name)
     serializer = ApiMaker::Serializer.new(model: self)
     data_to_broadcast = ApiMaker::ResultParser.parse(
-      args: args,
-      event_name: event_name,
-      model_id: id,
-      model_type: serializer.resource.collection_name,
-      type: :event
+      a: args,
+      e: event_name,
+      mi: id,
+      mt: serializer.resource.collection_name,
+      t: :e
     )
     ActionCable.server.broadcast(channel_name, data_to_broadcast)
   end
@@ -67,11 +67,11 @@ module ApiMaker::ModelExtensions
   def api_maker_broadcast_create
     serializer = ApiMaker::Serializer.new(model: self)
     data_to_broadcast = ApiMaker::ResultParser.parse(
-      model: self,
-      model_class_name: self.class.name,
-      model_id: id,
-      model_type: serializer.resource.collection_name,
-      type: :create
+      m: self,
+      mcn: self.class.name,
+      mi: id,
+      mt: serializer.resource.collection_name,
+      t: :c
     )
     ActionCable.server.broadcast(self.class.api_maker_broadcast_create_channel_name, data_to_broadcast)
   end
@@ -79,10 +79,10 @@ module ApiMaker::ModelExtensions
   def api_maker_broadcast_destroy
     serializer = ApiMaker::Serializer.new(model: self)
     data_to_broadcast = ApiMaker::ResultParser.parse(
-      model: self,
-      model_id: id,
-      model_type: serializer.resource.collection_name,
-      type: :destroy
+      m: self,
+      mi: id,
+      mt: serializer.resource.collection_name,
+      t: :d
     )
     ActionCable.server.broadcast(api_maker_broadcast_destroy_channel_name, data_to_broadcast)
   end
@@ -94,10 +94,10 @@ module ApiMaker::ModelExtensions
   def api_maker_broadcast_update
     serializer = ApiMaker::Serializer.new(model: self)
     data_to_broadcast = ApiMaker::ResultParser.parse(
-      model: self,
-      model_id: id,
-      model_type: serializer.resource.collection_name,
-      type: :update
+      m: self,
+      mi: id,
+      mt: serializer.resource.collection_name,
+      t: :u
     )
     ActionCable.server.broadcast(api_maker_broadcast_update_channel_name, data_to_broadcast)
   end

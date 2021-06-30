@@ -7,13 +7,9 @@ describe "models created event" do
 
   it "receives the created event and adds a row to the table for tasks the user have access to" do
     login_as user
-
     visit models_created_event_path
-
     wait_for_selector ".tasks-table", visible: false
-
-    sleep 0.5 # Wait for ActionCable to connect
-
+    wait_for_action_cable_to_connect
     wait_for_no_selector ".task-row"
 
     task

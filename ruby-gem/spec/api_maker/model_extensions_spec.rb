@@ -8,11 +8,11 @@ describe ApiMaker::ModelExtensions do
     it "broadcasts an event" do
       expect(ActionCable.server).to receive(:broadcast).with(
         "api_maker_events_Task_#{task.id}_test-event",
-        args: {name: "Kasper"},
-        event_name: "test-event",
-        model_id: task.id,
-        model_type: "tasks",
-        type: :event
+        a: {name: "Kasper"},
+        e: "test-event",
+        mi: task.id,
+        mt: "tasks",
+        t: :e
       )
 
       task.api_maker_event("test-event", name: "Kasper")

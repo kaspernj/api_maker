@@ -34,9 +34,10 @@ private
       end
 
       # We need to look the model up to evaluate if the user has access
-      model = data.fetch("model_class_name").safe_constantize.accessible_by(current_ability, :create_events).find(data.fetch("model_id"))
+      model_class = data.fetch("mcn").safe_constantize
+      model = model_class.accessible_by(current_ability, :create_events).find_by(model_class.primary_key => data.fetch("mi"))
 
-      # Transmit the data to JS if its allowed
+      # Transmit the data to JS if its found (and thereby allowed)
       transmit data if model
     end
   end

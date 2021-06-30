@@ -27,52 +27,45 @@ module.exports = class ApiMakerCableSubscriptionPool {
 
   onReceived(rawData) {
     const data = Deserializer.parse(rawData)
-    const {model: modelInstance, model_id: modelId, model_type: modelType, type} = data
+    const {a: args, e: eventName, m: model, mi: modelId, mt: modelType, t: type} = data
     const subscriptions = digg(this, "subscriptions")
 
     let modelName
 
     // This is more effective if it is an option
-    if (modelInstance) {
-      modelName = modelInstance.modelClassData().name
+    if (model) {
+      modelName = model.modelClassData().name
     } else {
       modelName = inflection.camelize(inflection.singularize(modelType))
     }
 
-    if (type == "update") {
+    console.error("DEBUG: ", type, modelName)
+
+    if (type == "u") {
       for(const subscription of subscriptions[modelName]["updates"][modelId]) {
-        subscription.onReceived({model: modelInstance})
+        subscription.onReceived({model})
       }
-    } else if (type == "create") {
+    } else if (type == "c") {
       for(const subscription of subscriptions[modelName]["creates"]) {
-        subscription.onReceived({model: modelInstance})
+        subscription.onReceived({model})
       }
-    } else if (type == "destroy") {
+    } else if (type == "d") {
       const destroySubscriptions = digg(subscriptions, modelName, "destroys", modelId)
 
       for(const subscription of destroySubscriptions) {
-        subscription.onReceived({model: modelInstance})
+        subscription.onReceived({model})
       }
-    } else if (type == "event") {
-      const eventName = digg(data, "event_name")
+    } else if (type == "e") {
       const eventSubscriptions = digg(subscriptions, modelName, "events", eventName, modelId)
 
       for(const subscription of eventSubscriptions) {
-        subscription.onReceived({
-          args: data.args,
-          eventName: data.event_name,
-          model: modelInstance
-        })
+        subscription.onReceived({args, eventName, model})
       }
-    } else if (type == "model_class_event") {
-      const eventName = digg(data, "event_name")
+    } else if (type == "mce") {
       const modelClassEventSubscriptions = digg(subscriptions, modelName, "model_class_events", eventName)
 
       for(const subscription of modelClassEventSubscriptions) {
-        subscription.onReceived({
-          args: data.args,
-          eventName: data.event_name
-        })
+        subscription.onReceived({args, eventName})
       }
     } else {
       throw new Error(`Unknown type: ${data.type}`)

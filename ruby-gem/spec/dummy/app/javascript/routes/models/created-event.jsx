@@ -32,8 +32,12 @@ export default class ModelsCreatedEvent extends React.Component {
   }
 
   onCreated(args) {
+    const task = digg(args, "model")
+
+    console.error("DEBUG: onCreated called")
+
     this.setState({
-      tasks: this.state.tasks.concat([args.model])
+      tasks: this.state.tasks.concat([task])
     })
   }
 }
