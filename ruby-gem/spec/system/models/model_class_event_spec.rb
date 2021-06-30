@@ -14,7 +14,7 @@ describe "models - model class event" do
       raw_event_data = wait_for_and_find(".event-data", visible: false).text
 
       expect(raw_event_data).to be_present
-      expect(JSON.parse(raw_event_data)). to eq(
+      expect(JSON.parse(raw_event_data)).to eq(
         "args" => {
           "first_name" => "Donald",
           "last_name" => "Duck"
