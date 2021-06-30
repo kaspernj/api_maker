@@ -25,7 +25,7 @@ export default class ApiMakerBootstrapAttributeRows extends React.Component {
 
   render() {
     return this.props.attributes.map((attribute) =>
-      <AttributeRow key={`attribute-${attribute}`} label={this.state.classObject.humanAttributeName(attribute)}>
+      <AttributeRow attribute={attribute} key={`attribute-${attribute}`} label={this.state.classObject.humanAttributeName(attribute)}>
         {this.valueContent(attribute)}
       </AttributeRow>
     )

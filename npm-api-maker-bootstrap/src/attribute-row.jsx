@@ -1,22 +1,31 @@
+const classNames = require("classnames")
 const PropTypes = require("prop-types")
-const PropTypesExact = require("prop-types-exact")
 const React = require("react")
 
 export default class ApiMakerBootstrapAttributeRow extends React.Component {
-  static propTypes = PropTypesExact({
+  static propTypes = {
+    attribute: PropTypes.string,
     children: PropTypes.node,
+    identifier: PropTypes.string,
     label: PropTypes.node,
     value: PropTypes.node
-  })
+  }
 
   render() {
+    const {attribute, children, className, identifier, label, value, ...restProps} = this.props
+
     return (
-      <tr>
-        <th>
-          {this.props.label}
+      <tr
+        className={classNames(className, "component-api-maker-attribute-row")}
+        data-attribute={attribute}
+        data-identifier={identifier}
+        {...restProps}
+      >
+        <th className="attribute-row-label">
+          {label}
         </th>
-        <td>
-          {this.props.value || this.props.children}
+        <td className="attribute-row-value">
+          {value || children}
         </td>
       </tr>
     )

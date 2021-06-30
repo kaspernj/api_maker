@@ -111,6 +111,18 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     raise ApiMaker::SpecHelper::SelectorNotFoundError, e.message
   end
 
+  def wait_for_attribute_row(attribute: nil, identifier: nil, label: nil, value: nil, **opts)
+    raise "No attribute or identifier given" if !attribute && !identifier
+    raise "No label or value was given" if !label && !value
+
+    tr_selector = ".component-api-maker-attribute-row"
+    tr_selector << "[data-attribute='#{attribute.camelize(:lower)}']" if attribute
+    tr_selector << "[data-identifier='#{identifier.camelize}']" if identifier
+
+    wait_for_selector "#{tr_selector} > .attribute-row-label", exact_text: label, **opts if label
+    wait_for_selector "#{tr_selector} > .attribute-row-value", exact_text: value, **opts if value
+  end
+
   def wait_for_browser(delay_sec: 0.2, message: "wait for browser", timeout_sec: 6)
     WaitUtil.wait_for_condition(message, timeout_sec: timeout_sec, delay_sec: delay_sec) do
       expect_no_browser_errors
