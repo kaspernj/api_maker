@@ -30,7 +30,7 @@ class ApiMaker::ResetIndexedDbService < ApiMaker::ApplicationService
 
     WaitUtil.wait_for_condition("databases to be deleted", delay_sec: 0.2, timeout_sec: 6) do
       logs_text = browser_logs.map(&:message).join("\n")
-      logs_text.include?("\"All databases was deleted\"")
+      logs_text.include?("\"All databases were deleted\"")
     end
   end
 end
