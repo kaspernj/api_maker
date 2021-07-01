@@ -23,7 +23,7 @@ class ApiMaker::ResetIndexedDbService < ApiMaker::ApplicationService
         }
 
         Promise.all(promises).then(function() {
-          console.error('All databases was deleted')
+          console.error('All databases were deleted')
         })
       })
     "
