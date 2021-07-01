@@ -26,7 +26,7 @@ class ApiMaker::SimpleModelErrors < ApiMaker::ApplicationService
         next if model_to_inspect.attribute_names.exclude?(attribute_name.to_s) && additional_attributes.exclude?(attribute_name)
 
         attribute_errors.each do |message|
-          errors << "#{model.class.human_attribute_name(attribute_name)} #{message}"
+          errors << "#{model_to_inspect.class.human_attribute_name(attribute_name)} #{message}"
         end
       end
     end
