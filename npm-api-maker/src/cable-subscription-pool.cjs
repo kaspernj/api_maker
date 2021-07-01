@@ -39,8 +39,6 @@ module.exports = class ApiMakerCableSubscriptionPool {
       modelName = inflection.camelize(inflection.singularize(modelType))
     }
 
-    console.error("DEBUG: ", type, modelName)
-
     if (type == "u") {
       for(const subscription of subscriptions[modelName]["updates"][modelId]) {
         subscription.onReceived({model})
