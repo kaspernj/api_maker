@@ -92,7 +92,7 @@ GEM
     bootsnap (1.7.5)
       msgpack (~> 1.0)
     builder (3.2.4)
-    cancancan (3.2.2)
+    cancancan (3.3.0)
     capybara (3.35.3)
       addressable
       mini_mime (>= 0.1.3)
