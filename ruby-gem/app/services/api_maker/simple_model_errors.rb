@@ -31,14 +31,14 @@ class ApiMaker::SimpleModelErrors < ApiMaker::ApplicationService
       end
     end
 
-    collect_errors_from_associations
+    collect_errors_from_associations(sub_model)
   end
 
 private
 
-  def collect_errors_from_associations
-    model._reflections.each_key do |association_name|
-      target = model.association(association_name.to_sym).target
+  def collect_errors_from_associations(model_to_scan_reflections_on)
+    model_to_scan_reflections_on._reflections.each_key do |association_name|
+      target = model_to_scan_reflections_on.association(association_name.to_sym).target
 
       if target.is_a?(ActiveRecord::Base)
         inspect_model(target)
