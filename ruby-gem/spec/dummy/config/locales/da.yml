@@ -1,0 +1,25 @@
+da:
+  activerecord:
+    attributes:
+      project:
+        account: Konto
+        name: Navn
+        illegal: Ulovlig
+        public: Offentlig
+      task:
+        id: ID
+        name: Navn
+      user:
+        email: Email
+        updated_at: Opdateret d.
+    errors:
+      messages:
+        blank: kan ikke være blank
+  js:
+    shared:
+      are_you_sure: Er du sikker?
+  number:
+    currency:
+      format:
+        separator: ","
+        delimiter: "."
