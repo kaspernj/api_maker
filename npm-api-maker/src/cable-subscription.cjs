@@ -1,18 +1,10 @@
+const EventEmitter = require("events")
 const Logger = require("./logger.cjs")
 
 module.exports = class ApiMakerCableSubscription {
-  constructor(props) {
-    this.props = props
-    this.onUnsubscribeCallbacks = []
+  constructor() {
+    this.events = new EventEmitter()
     this.subscribed = true
-  }
-
-  onReceived(data) {
-    this.props.callback.apply(null, [data])
-  }
-
-  onUnsubscribe(callback) {
-    this.onUnsubscribeCallbacks.push(callback)
   }
 
   unsubscribe() {
@@ -21,13 +13,9 @@ module.exports = class ApiMakerCableSubscription {
       return
     }
 
-    Logger.log(`Unsubscribe called: ${this.onUnsubscribeCallbacks.length}`)
+    Logger.log("Unsubscribe called for subscription")
 
-    for(const onUnsubscribeCallback of this.onUnsubscribeCallbacks) {
-      Logger.log("onUnsubscribe called for a callback")
-      onUnsubscribeCallback.call()
-    }
-
+    this.events.emit("unsubscribed")
     this.subscribed = false
   }
 }
