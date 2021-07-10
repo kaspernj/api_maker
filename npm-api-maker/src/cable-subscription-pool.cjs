@@ -15,14 +15,68 @@ module.exports = class ApiMakerCableSubscriptionPool {
     const globalData = CommandsPool.current().globalRequestData
 
     this.subscription = ChannelsConsumer.subscriptions.create(
-      {channel: "ApiMaker::SubscriptionsChannel", global: globalData, subscription_data: subscriptionData},
-      {received: (data) => this.onReceived(data)}
+      {
+        channel: "ApiMaker::SubscriptionsChannel",
+        global: globalData,
+        subscription_data: subscriptionData
+      },
+      {
+        connected: () => this.onConnected(),
+        received: (data) => this.onReceived(data)
+      }
     )
     this.connected = true
   }
 
+  forEachSubscription(callback) {
+    const modelIdModes = ["destroys", "updates"]
+    const subscriptions = digg(this, "subscriptions")
+
+    for (const modelName in subscriptions) {
+      for (const modelIdMode of modelIdModes) {
+        if (subscriptions[modelName][modelIdMode]) {
+          for (const modelId in subscriptions[modelName][modelIdMode]) {
+            for (const subscription of subscriptions[modelName][modelIdMode][modelId]) {
+              callback({mode: modelIdMode, modelId, modelName, subscription})
+            }
+          }
+        }
+      }
+
+      if (subscriptions[modelName]["creates"]) {
+        for (const subscription of subscriptions[modelName]["creates"]) {
+          callback({mode: "creates", modelName, subscription})
+        }
+      }
+
+      if (subscriptions[modelName]["model_class_events"]) {
+        for (const eventName of subscriptions[modelName]["model_class_events"]) {
+          for (const subscription of subscriptions[modelName]["model_class_events"][eventName]) {
+            callback({eventName, mode: "model_class_events", modelName, subscription})
+          }
+        }
+      }
+
+      if (subscriptions[modelName]["events"]) {
+        for (const modelId in subscriptions[modelName]["events"]) {
+          for (const eventName in subscriptions[modelName]["events"][modelId]) {
+            for (const subscription of subscriptions[modelName]["events"][modelId][eventName]) {
+              callback({eventName, mode: "updates", modelId, modelName, subscription})
+            }
+          }
+        }
+      }
+    }
+  }
+
   isConnected() {
     return digg(this, "connected")
+  }
+
+  onConnected() {
+    this.forEachSubscription(({subscription}) => {
+      subscription.events.emit("connected")
+    })
   }
 
   onReceived(rawData) {
@@ -34,7 +88,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
 
     // This is more effective if it is an option
     if (model) {
-      modelName = model.modelClassData().name
+      modelName = digg(model.modelClassData(), "name")
     } else {
       modelName = inflection.camelize(inflection.singularize(modelType))
     }
@@ -121,7 +175,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
 
     this.activeSubscriptions += 1
 
-    subscription.onUnsubscribe(() => {
+    subscription.events.addListener("unsubscribed", () => {
       Logger.log("Call onUnsubscribe on self")
 
       this.onUnsubscribe(subscription)

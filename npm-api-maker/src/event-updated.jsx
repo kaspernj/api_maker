@@ -15,8 +15,14 @@ export default class ApiMakerEventUpdated extends React.Component {
       PropTypes.number
     ]),
     model: PropTypes.object.isRequired,
+    onConnected: PropTypes.func,
     onUpdated: PropTypes.func.isRequired
   })
+
+  constructor(props) {
+    super(props)
+    this.onConnected = this.onConnected.bind(this)
+  }
 
   componentDidMount() {
     this.connect()
@@ -26,10 +32,20 @@ export default class ApiMakerEventUpdated extends React.Component {
     if (this.connectUpdated) {
       this.connectUpdated.unsubscribe()
     }
+
+    if (this.onConnectedListener) {
+      this.connectUpdated.events.removeListener("connected", this.onConnected)
+    }
   }
 
   connect() {
-    this.connectUpdated = this.props.model.connectUpdated((...args) => this.onUpdated(...args))
+    const {model, onConnected} = this.props
+
+    this.connectUpdated = model.connectUpdated((...args) => this.onUpdated(...args))
+
+    if (onConnected) {
+      this.connectUpdated.events.addListener("connected", this.onConnected)
+    }
   }
 
   debounce() {
@@ -42,6 +58,10 @@ export default class ApiMakerEventUpdated extends React.Component {
     }
 
     return this.debounceInstance
+  }
+
+  onConnected() {
+    this.props.onConnected()
   }
 
   onUpdated(...args) {
