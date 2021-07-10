@@ -47,7 +47,9 @@ module.exports = class ApiMakerCableConnectionPool {
   }
 
   connectModelEvent({callback, path, value}) {
-    const subscription = new CableSubscription({callback})
+    const subscription = new CableSubscription()
+
+    subscription.events.addListener("received", callback)
 
     if (this.connectEventToExistingSubscription({path, subscription, value})) {
       // Managed to connect to existing connection

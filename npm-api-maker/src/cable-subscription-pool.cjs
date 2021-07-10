@@ -50,7 +50,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
       }
 
       if (subscriptions[modelName]["model_class_events"]) {
-        for (const eventName of subscriptions[modelName]["model_class_events"]) {
+        for (const eventName in subscriptions[modelName]["model_class_events"]) {
           for (const subscription of subscriptions[modelName]["model_class_events"][eventName]) {
             callback({eventName, mode: "model_class_events", modelName, subscription})
           }
@@ -95,29 +95,29 @@ module.exports = class ApiMakerCableSubscriptionPool {
 
     if (type == "u") {
       for(const subscription of subscriptions[modelName]["updates"][modelId]) {
-        subscription.onReceived({model})
+        subscription.events.emit("received", {model})
       }
     } else if (type == "c") {
       for(const subscription of subscriptions[modelName]["creates"]) {
-        subscription.onReceived({model})
+        subscription.events.emit("received", {model})
       }
     } else if (type == "d") {
       const destroySubscriptions = digg(subscriptions, modelName, "destroys", modelId)
 
       for(const subscription of destroySubscriptions) {
-        subscription.onReceived({model})
+        subscription.events.emit("received", {model})
       }
     } else if (type == "e") {
       const eventSubscriptions = digg(subscriptions, modelName, "events", eventName, modelId)
 
       for(const subscription of eventSubscriptions) {
-        subscription.onReceived({args, eventName, model})
+        subscription.events.emit("received", {args, eventName, model})
       }
     } else if (type == "mce") {
       const modelClassEventSubscriptions = digg(subscriptions, modelName, "model_class_events", eventName)
 
       for(const subscription of modelClassEventSubscriptions) {
-        subscription.onReceived({args, eventName})
+        subscription.events.emit("received", {args, eventName})
       }
     } else {
       throw new Error(`Unknown type: ${data.type}`)
