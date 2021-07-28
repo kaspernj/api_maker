@@ -1,4 +1,5 @@
 const CanCan = require("./can-can.cjs")
+const Deserializer = require("./deserializer.cjs")
 const {digg} = require("@kaspernj/object-digger")
 const EventEmitter = require("events")
 const inflection = require("inflection")
@@ -102,15 +103,14 @@ module.exports = class ApiMakerDevise {
   }
 
   loadCurrentScope(scope) {
-    const apiMakerDataElement = document.querySelector(".api-maker-data")
-    const keyName = `current${inflection.camelize(scope)}`
-    const scopeData = apiMakerDataElement.dataset[keyName]
+    const scopeData = window.apiMakerDeviseCurrent[scope]
 
     if (!scopeData)
       return null
 
+    const parsedScopeData = Deserializer.parse(scopeData)
     const modelClass = digg(require("api-maker/models"), inflection.camelize(scope))
-    const modelInstance = new modelClass({data: JSON.parse(scopeData)})
+    const modelInstance = new modelClass({data: parsedScopeData})
 
     return modelInstance
   }

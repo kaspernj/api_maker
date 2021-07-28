@@ -85,15 +85,19 @@ class ApiMaker::Serializer
     result
   end
 
-  def as_json(_options = nil)
+  def as_json(options = nil)
     profile("as_json") do
-      result
+      if options && options[:result_parser]
+        ApiMaker::ResultParser.new(result, ability: ability, api_maker_args: api_maker_args).result
+      else
+        result
+      end
     end
   end
 
-  def to_json(_options = nil)
+  def to_json(options = nil)
     profile("to_json") do
-      JSON.generate(as_json)
+      JSON.generate(as_json(options))
     end
   end
 
