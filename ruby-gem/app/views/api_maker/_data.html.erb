@@ -1,15 +1,21 @@
-<div class="api-maker-data"<%
+<script type="text/javascript">
+  if (!window.apiMakerDeviseCurrent) {
+    window.apiMakerDeviseCurrent = {}
+  }
 
-Devise.mappings.each do |scope|
-  model = __send__("current_#{scope[0]}")
-  next unless model
+  <%
+    Devise.mappings.each do |scope|
+      model = __send__("current_#{scope[0]}")
+      next unless model
 
-  resource_class = ApiMaker::Serializer.resource_for(model.class)
-  next unless resource_class
+      resource_class = ApiMaker::Serializer.resource_for(model.class)
+      next unless resource_class
 
-  serializer = ApiMaker::Serializer.new(ability: current_ability, api_maker_args: api_maker_args, model: model) if model
+      serializer = ApiMaker::Serializer.new(ability: current_ability, api_maker_args: api_maker_args, model: model) if model
 
-  %> data-current-<%= scope[0].to_s.dasherize %>="<%= model ? serializer.to_json : null %>"<%
-end
-
-%>></div>
+      %>
+        window.apiMakerDeviseCurrent["<%= scope[0] %>"] = <%= model ? serializer.to_json(result_parser: true).html_safe : null %>
+      <%
+    end
+  %>
+</script>

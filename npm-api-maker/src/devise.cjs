@@ -102,15 +102,13 @@ module.exports = class ApiMakerDevise {
   }
 
   loadCurrentScope(scope) {
-    const apiMakerDataElement = document.querySelector(".api-maker-data")
-    const keyName = `current${inflection.camelize(scope)}`
-    const scopeData = apiMakerDataElement.dataset[keyName]
+    const scopeData = window.apiMakerDeviseCurrent[scope]
 
     if (!scopeData)
       return null
 
     const modelClass = digg(require("api-maker/models"), inflection.camelize(scope))
-    const modelInstance = new modelClass({data: JSON.parse(scopeData)})
+    const modelInstance = new modelClass({data: scopeData})
 
     return modelInstance
   }
