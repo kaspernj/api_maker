@@ -161,6 +161,14 @@ module.exports = class BaseModel {
       ]
 
       if ("updated_at" in this.modelData) {
+        const updatedAt = this.updatedAt()
+
+        if (typeof updatedAt != "object") {
+          throw new Error(`updatedAt wasn't an object: ${typeof updatedAt}`)
+        } else if ("getTime" in updatedAt) {
+          throw new Error(`updatedAt didn't support getTime with class: ${updatedAt.constructor?.name}`)
+        }
+
         keyParts.push(`updatedAt-${this.updatedAt().getTime()}`)
       }
 
