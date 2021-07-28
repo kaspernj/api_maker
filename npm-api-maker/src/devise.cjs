@@ -1,4 +1,5 @@
 const CanCan = require("./can-can.cjs")
+const Deserializer = require("./deserializer.cjs")
 const {digg} = require("@kaspernj/object-digger")
 const EventEmitter = require("events")
 const inflection = require("inflection")
@@ -107,8 +108,9 @@ module.exports = class ApiMakerDevise {
     if (!scopeData)
       return null
 
+    const parsedScopeData = Deserializer.parse(scopeData)
     const modelClass = digg(require("api-maker/models"), inflection.camelize(scope))
-    const modelInstance = new modelClass({data: scopeData})
+    const modelInstance = new modelClass({data: parsedScopeData})
 
     return modelInstance
   }
