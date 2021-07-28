@@ -1,7 +1,6 @@
 const {digg} = require("@kaspernj/object-digger")
-const Money = require("js-money")
-
 const inflection = require("inflection")
+const Money = require("js-money")
 
 module.exports = class ApiMakerDeserializer {
   static parse(object) {
