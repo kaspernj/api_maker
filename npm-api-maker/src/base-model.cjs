@@ -165,7 +165,7 @@ module.exports = class BaseModel {
 
         if (typeof updatedAt != "object") {
           throw new Error(`updatedAt wasn't an object: ${typeof updatedAt}`)
-        } else if ("getTime" in updatedAt) {
+        } else if (!("getTime" in updatedAt)) {
           throw new Error(`updatedAt didn't support getTime with class: ${updatedAt.constructor && updatedAt.constructor.name}`)
         }
 
