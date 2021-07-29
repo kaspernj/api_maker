@@ -66,7 +66,7 @@ class ApiMaker::AbilitiesLoader < ApiMaker::ApplicationService
   end
 
   def load_abilities_with_no_conditions
-    Rails.logger.debug "API maker: Loading abilities with no condition: [#{abilities_with_no_conditions.join(", ")}], #{model_class}"
+    Rails.logger.debug { "API maker: Loading abilities with no condition: [#{abilities_with_no_conditions.join(", ")}], #{model_class}" }
     abilities_with_no_conditions.each do |ability_name|
       serializers.each do |serializer|
         serializer.load_ability(ability_name, true)
@@ -75,7 +75,7 @@ class ApiMaker::AbilitiesLoader < ApiMaker::ApplicationService
   end
 
   def load_abilities_with_no_rules
-    Rails.logger.debug "API maker: Loading abilities with no rules: [#{abilities_with_no_rules.join(", ")}], #{model_class}"
+    Rails.logger.debug { "API maker: Loading abilities with no rules: [#{abilities_with_no_rules.join(", ")}], #{model_class}" }
     abilities_with_no_rules.each do |ability_name|
       serializers.each do |serializer|
         serializer.load_ability(ability_name, false)
@@ -84,7 +84,7 @@ class ApiMaker::AbilitiesLoader < ApiMaker::ApplicationService
   end
 
   def load_abilities_with_conditions(ability_names)
-    Rails.logger.debug "API maker: Loading abilities with conditions through query: [#{ability_names.join(", ")}], #{model_class}"
+    Rails.logger.debug { "API maker: Loading abilities with conditions through query: [#{ability_names.join(", ")}], #{model_class}" }
 
     model_ids = model_class
       .accessible_by(ability, ability_names.first)

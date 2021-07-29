@@ -177,6 +177,10 @@ class ApiMaker::BaseCommand
     )
   end
 
+  def model_class
+    @model_class ||= collection.klass
+  end
+
   def save_models_or_fail(*models, simple_model_errors: false)
     response = ApiMaker::Models::Save.execute(models: models, simple_model_errors: simple_model_errors)
 

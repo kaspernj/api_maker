@@ -18,9 +18,9 @@ class ApiMaker::Configuration
     yield ApiMaker::Configuration.current
   end
 
-  def self.profile(name, &blk)
+  def self.profile(name_block, &blk)
     if ApiMaker::Configuration.current.profiling
-      Rack::MiniProfiler.step("AM #{name}", &blk)
+      Rack::MiniProfiler.step("AM #{name_block.call}", &blk)
     else
       yield
     end

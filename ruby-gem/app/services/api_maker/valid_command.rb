@@ -2,16 +2,18 @@ class ApiMaker::ValidCommand < ApiMaker::BaseCommand
   attr_reader :serializer
 
   def execute!
-    if command.model_id.present?
-      model = resource_instance_class.find(command.model_id)
-    else
-      model = resource_instance_class.new
+    ApiMaker::Configuration.profile(-> { "ValidCommand: #{model_class.name}" }) do
+      if command.model_id.present?
+        model = resource_instance_class.find(command.model_id)
+      else
+        model = resource_instance_class.new
+      end
+
+      serializer = serialized_resource(model)
+      model.assign_attributes(sanitize_parameters(serializer))
+
+      succeed!(valid: model.valid?, errors: model.errors.full_messages)
     end
-
-    serializer = serialized_resource(model)
-    model.assign_attributes(sanitize_parameters(serializer))
-
-    succeed!(valid: model.valid?, errors: model.errors.full_messages)
   end
 
   def resource_instance_class

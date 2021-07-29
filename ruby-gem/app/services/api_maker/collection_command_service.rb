@@ -1,19 +1,21 @@
 class ApiMaker::CollectionCommandService < ApiMaker::CommandService
   def perform
-    if authorized?
-      constant.execute_in_thread!(
-        ability: ability,
-        api_maker_args: api_maker_args,
-        collection: nil,
-        commands: commands,
-        command_response: command_response,
-        controller: controller
-      )
-    else
-      fail_with_no_access
-    end
+    ApiMaker::Configuration.profile(-> { "CollectionCommand: #{namespace}::#{command_name}" }) do
+      if authorized?
+        constant.execute_in_thread!(
+          ability: ability,
+          api_maker_args: api_maker_args,
+          collection: nil,
+          commands: commands,
+          command_response: command_response,
+          controller: controller
+        )
+      else
+        fail_with_no_access
+      end
 
-    succeed!
+      succeed!
+    end
   end
 
   def authorized?
