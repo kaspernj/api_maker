@@ -112,6 +112,6 @@ class ApiMaker::Serializer
 private
 
   def profile(message, &blk)
-    ApiMaker::Configuration.profile("Serializer for #{model.class.name}: #{message}", &blk)
+    ApiMaker::Configuration.profile(-> { "Serializer for #{model.class.name}: #{message}" }, &blk)
   end
 end

@@ -42,9 +42,9 @@ class ApiMaker::Preloader
       fill_empty_relationships_for_key(reflection, key)
       preload_class = preload_class_for_key(reflection)
 
-      Rails.logger.debug "API maker: Preloading #{model_class}: #{key_path.join(".")}"
+      Rails.logger.debug { "API maker: Preloading #{model_class}: #{key_path.join(".")}" }
 
-      preload_result = ApiMaker::Configuration.profile("Preloading #{reflection.klass.name} with #{preload_class.name}") do
+      preload_result = ApiMaker::Configuration.profile(-> { "Preloading #{reflection.klass.name} with #{preload_class.name}" }) do
         preload_class
           .new(
             ability: @ability,

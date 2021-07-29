@@ -2,13 +2,15 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
   attr_reader :serializer
 
   def execute!
-    @serializer = serialized_resource(model)
-    sanitized_parameters = sanitize_parameters
+    ApiMaker::Configuration.profile(-> { "UpdateCommand: #{model_class.name}" }) do
+      @serializer = serialized_resource(model)
+      sanitized_parameters = sanitize_parameters
 
-    if command.model.update(sanitized_parameters)
-      success_response
-    else
-      failure_save_response(model: model, params: sanitized_parameters)
+      if command.model.update(sanitized_parameters)
+        success_response
+      else
+        failure_save_response(model: model, params: sanitized_parameters)
+      end
     end
   end
 

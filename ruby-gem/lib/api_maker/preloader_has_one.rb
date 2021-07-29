@@ -3,7 +3,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
     models.each do |model|
       model_id = ApiMaker::PrimaryIdForModel.get(model)
 
-      ApiMaker::Configuration.profile("Preloading #{model.class.name}##{model_id}") do
+      ApiMaker::Configuration.profile(-> { "Preloading #{model.class.name}##{model_id}" }) do
         origin_data = origin_data_for_model(model)
         origin_data.fetch(:r)[reflection.name] = model_id
 

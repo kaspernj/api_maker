@@ -36,11 +36,11 @@ class ApiMaker::Ability
     return unless active_record?(subject)
 
     if subject.class == Class # rubocop:disable Style/ClassEqualityComparison
-      ApiMaker::Configuration.profile("Loading abilities for #{subject.name}") do
+      ApiMaker::Configuration.profile(-> { "Loading abilities for #{subject.name}" }) do
         loader.load_model_class(subject)
       end
     elsif subject.class != Class
-      ApiMaker::Configuration.profile("Loading abilities for #{subject.class.name}") do
+      ApiMaker::Configuration.profile(-> { "Loading abilities for #{subject.class.name}" }) do
         loader.load_model_class(subject.class)
       end
     end
