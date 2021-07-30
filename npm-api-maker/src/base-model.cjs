@@ -773,6 +773,11 @@ module.exports = class BaseModel {
     for (const relationshipName in this.preloadedRelationships) {
       const relationshipData = this.preloadedRelationships[relationshipName]
       const relationshipClassData = this.modelClassData().relationships.find((relationship) => digg(relationship, "name") == relationshipName)
+
+      if (!relationshipClassData) {
+        throw new Error(`Could not find the relation ${relationshipName} on the ${digg(this.modelClassData(), "name")} model`)
+      }
+
       const relationshipType = digg(relationshipClassData, "collectionName")
 
       if (relationshipName in this.relationshipsCache) {
