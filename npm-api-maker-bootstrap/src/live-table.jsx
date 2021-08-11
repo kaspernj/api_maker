@@ -5,7 +5,8 @@ const inflection = require("inflection")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-import {Card, Paginate} from "@kaspernj/api-maker-bootstrap"
+import Card from "./card"
+import Paginate from "./paginate"
 
 export default class ApiMakerBootstrapLiveTable extends React.Component {
   static defaultProps = {

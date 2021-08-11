@@ -25,13 +25,6 @@
     "url": "https://github.com/kaspernj/api_maker/issues"
   },
   "homepage": "https://github.com/kaspernj/api_maker#readme",
-  "peerDependencies": {
-    "prop-types": "^15.7.2",
-    "prop-types-exact": "^1.2.0",
-    "qs": "^6.9.3",
-    "react": "^16.13.1",
-    "react-router-dom": "^5.1.2"
-  },
   "dependencies": {
     "@kaspernj/api-maker": ">= 1.0.91",
     "@kaspernj/api-maker-inputs": ">= 1.0.53",
@@ -45,6 +38,11 @@
     "eslint-find-rules": "^3.6.1",
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-react": "^7.23.2",
-    "jest": "^26.6.3"
+    "jest": ">= 26.6.3",
+    "prop-types": ">= 15.7.2",
+    "prop-types-exact": ">= 1.2.0",
+    "qs": ">= 6.9.3",
+    "react": ">= 16.13.1",
+    "react-router-dom": ">= 5.2.0"
   }
 }
