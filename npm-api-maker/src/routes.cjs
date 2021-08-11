@@ -2,29 +2,52 @@ const {digg} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
 
 module.exports = class ApiMakerRoutes {
-  constructor({jsRoutes, routeDefinitions}) {
+  constructor({jsRoutes, locale, routeDefinitions}) {
     this.jsRoutes = jsRoutes
     this.routeDefinitions = routeDefinitions
 
     for (const routeDefinition of digg(this, "routeDefinitions", "routes")) {
-      const routeNamePath = inflection.camelize(`${digg(routeDefinition, "name")}_path`, true)
+      let testRouteNamePath, testRouteNameUrl
 
-      if (!(routeNamePath in this.jsRoutes)) {
-        throw new Error(`No such path in JS routes: ${routeNamePath}`)
+      const routeNamePath = inflection.camelize(`${digg(routeDefinition, "name")}_path`, true)
+      const routeNameUrl = inflection.camelize(`${digg(routeDefinition, "name")}_url`, true)
+
+      if (locale) {
+        testRouteNamePath = inflection.camelize(`${digg(routeDefinition, "name")}_${locale}_path`, true)
+        testRouteNameUrl = inflection.camelize(`${digg(routeDefinition, "name")}_${locale}_url`, true)
+      } else {
+        testRouteNamePath = inflection.camelize(`${digg(routeDefinition, "name")}_path`, true)
+        testRouteNameUrl = inflection.camelize(`${digg(routeDefinition, "name")}_url`, true)
+      }
+
+      if (!(testRouteNamePath in this.jsRoutes)) {
+        throw new Error(`No such path in JS routes: ${testRouteNamePath}: ${Object.keys(this.jsRoutes).join(", ")}`)
       }
 
       this[routeNamePath] = (...args) => {
-        return this.jsRoutes[routeNamePath](...args)
+        let routeNamePathToUse
+
+        if (locale) {
+          routeNamePathToUse = inflection.camelize(`${digg(routeDefinition, "name")}_${I18n.locale}_path`, true)
+        } else {
+          routeNamePathToUse = routeNamePath
+        }
+
+        return this.jsRoutes[routeNamePathToUse](...args)
       }
 
-      const routeNameUrl = inflection.camelize(`${digg(routeDefinition, "name")}_url`, true)
-
-      if (!(routeNameUrl in this.jsRoutes)) {
-        throw new Error(`No such URL in JS routes: ${routeNameUrl}`)
+      if (!(testRouteNameUrl in this.jsRoutes)) {
+        throw new Error(`No such URL in JS routes: ${testRouteNameUrl}: ${Object.keys(this.jsRoutes).join(", ")}`)
       }
 
       this[routeNameUrl] = (...args) => {
-        return this.jsRoutes[routeNameUrl](...args)
+        if (locale) {
+          routeNameUrlToUse = inflection.camelize(`${digg(routeDefinition, "name")}_${I18n.locale}_url`, true)
+        } else {
+          routeNameUrlToUse = routeNamePath
+        }
+
+        return this.jsRoutes[routeNameUrlToUse](...args)
       }
     }
   }
