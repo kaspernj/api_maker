@@ -42,11 +42,19 @@ module.exports = class ApiMakerResourceRoute {
   withLocale() {
     const component = this.requireComponentFromCaller()
     const Locales = require("shared/locales").default
-    const Path = require("shared/path").default
     const routes = []
 
     for(const locale of Locales.availableLocales()) {
-      const path = Path.localized(inflection.camelize(digg(this, "routeDefinition", "name"), true), this.findRouteParams(), {locale})
+      const routePathName = `${inflection.camelize(digg(this, "routeDefinition", "name"), true)}Path`
+      const params = this.findRouteParams()
+
+      params.push({locale})
+
+      if (!(routePathName in this.jsRoutes)) {
+        throw new Error(`${routePathName} not found in routes: ${Object.keys(this.jsRoutes, ", ")}`)
+      }
+
+      const path = this.jsRoutes[routePathName](...params)
 
       routes.push({path, component})
     }

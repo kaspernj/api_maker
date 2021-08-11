@@ -28,6 +28,7 @@ const MoneyFormatter = require("./src/money-formatter.cjs")
 const NotLoadedError = require("./src/not-loaded-error.cjs")
 const Params = require("./src/params.cjs")
 const Preloaded = require("./src/preloaded.cjs")
+const RoutesNative = require("./src/routes-native.cjs")
 const ResourceRoute = require("./src/resource-route.cjs")
 const ResourceRoutes = require("./src/resource-routes").default
 const Result = require("./src/result.cjs")
@@ -75,6 +76,7 @@ export {
   ResourceRoutes,
   Result,
   Routes,
+  RoutesNative,
   Serializer,
   Services,
   SessionStatusUpdater,
