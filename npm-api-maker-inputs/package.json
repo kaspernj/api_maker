@@ -36,9 +36,13 @@
     "eslint-find-rules": "^3.6.1",
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-react": "^7.23.2",
-    "jest": "^26.6.3",
+    "jest": "^26.6.3"
+  },
+  "peerDependencies": {
     "prop-types": ">= 15.7.2",
     "prop-types-exact": ">= 1.2.0",
-    "react": ">= 16.13.1"
+    "react": ">= 16.13.1",
+    "react-router-dom": "^5.2.0",
+    "stacktrace-parser": "^0.1.10"
   }
 }
