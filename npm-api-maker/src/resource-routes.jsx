@@ -1,6 +1,6 @@
 const {digg} = require("@kaspernj/object-digger")
 const React = require("react")
-const ResourceRoute = require("./resource-route").default
+const ResourceRoute = require("./resource-route.cjs")
 const {Route} = require("react-router-dom")
 
 export default class ApiMakerResourceRoutes {

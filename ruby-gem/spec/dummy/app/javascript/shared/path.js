@@ -14,7 +14,7 @@ export default class Path {
     const method = Routes[methodName]
 
     if (!method)
-      throw `No such method: ${methodName}`
+      throw `No such method: ${methodName}: ${Object.keys(Routes)}`
 
     return method.apply(null, params)
   }
@@ -25,7 +25,7 @@ export default class Path {
     const method = Routes[methodName]
 
     if (!method)
-      throw `No such method: ${methodName}`
+      throw `No such method: ${methodName}: ${Object.keys(Routes)}`
 
     return method.apply(null, params)
   }

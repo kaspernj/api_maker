@@ -98,6 +98,11 @@ module.exports = class ApiMakerSessionStatusUpdater {
 
   updateUserSessionScopeFromResult(scopeName, scope) {
     const deviseIsSignedInMethodName = `is${inflection.camelize(scopeName)}SignedIn`
+
+    if (!(deviseIsSignedInMethodName in Devise)) {
+      throw new Error(`No such method in Devise: ${deviseIsSignedInMethodName}`)
+    }
+
     const currentlySignedIn = Devise[deviseIsSignedInMethodName]()
     const signedInOnBackend = scope.signed_in
 
