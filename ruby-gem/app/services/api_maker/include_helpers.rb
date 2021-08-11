@@ -1,3 +1,5 @@
+require_relative "../../api_maker/api_helpers/api_maker_helpers" # Sometimes this file isn't auto-loaded so it needs to be manually required
+
 class ApiMaker::IncludeHelpers < ApiMaker::ApplicationService
   attr_reader :klass
 
