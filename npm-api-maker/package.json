@@ -36,11 +36,9 @@
   },
   "peerDependencies": {
     "prop-types": "^15.7.2",
-    "prop-types-exact": "^1.2.0",
     "qs": "^6.9.3",
     "react": "^16.13.1",
-    "source-map": "^0.7.3",
-    "stacktrace-parser": "^0.1.9"
+    "source-map": "^0.7.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",
@@ -52,22 +50,26 @@
     "eslint-plugin-react": "^7.23.2",
     "i18n-on-steroids": "^1.0.0",
     "jest": "^26.6.3",
-    "react-test-renderer": "^17.0.1"
+    "prop-types-exact": ">= 1.2.0",
+    "react": ">= 17.0.2",
+    "react-router-dom": ">= 5.2.0",
+    "react-test-renderer": "^17.0.1",
+    "stacktrace-parser": ">= 0.1.9"
   },
   "dependencies": {
     "@kaspernj/object-digger": ">= 1.0.2",
     "@rails/actioncable": ">= 6.1.0",
-    "clone-deep": "^4.0.1",
-    "debounce": "^1.2.1",
-    "epic-locks": "^1.0.1",
-    "form-data-objectizer": "^1.0.0",
+    "clone-deep": ">= 4.0.1",
+    "debounce": ">= 1.2.1",
+    "epic-locks": ">= 1.0.1",
+    "form-data-objectizer": ">= 1.0.0",
     "form-serialize": ">= 0.7.2",
     "format-number": ">= 3.0.0",
     "inflection": ">= 1.12.0",
     "js-money": ">= 0.6.3",
     "numberable": ">= 1.0.0",
     "object-to-formdata": ">= 4.1.0",
-    "replaceall": "^0.1.6",
+    "replaceall": ">= 0.1.6",
     "strftime": ">= 0.10.0",
     "wake-event": ">= 0.0.1"
   }
