@@ -93,6 +93,7 @@ describe("RoutesNative", () => {
     if (!global.location) global.location = {}
 
     global.location.host = "localhost"
+    global.location.protocol = "http:"
 
     const test = routesNative({args: {localized: true}})
     const daRoute = test.editDrinkUrl(5, {drink: {name: "Pina Colada"}, locale: "da"})
