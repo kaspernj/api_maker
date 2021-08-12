@@ -2866,9 +2866,9 @@ human-signals@^1.1.1:
   integrity sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
 
 i18n-on-steroids@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.0.tgz#491bbee4828339317ba1d05ce9b5d43fea042e60"
-  integrity sha512-F5nK7K6SdT5u+5ly0HQPOUjPwhvBxvu2hxzBZQ5xf6boSMbrHPzL5nPkrPYQnmszqa8DQIVhnETETUANNoC6vQ==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.1.tgz#f1a9aa1cba6e7c94f5e0991f2e09194f71d5cdb8"
+  integrity sha512-t5a8D0rBvk4k5BMGyvuSKPfOD64qi/oRPQnc97+hikOIeWlUVtDbpF0PZk9+jXdgjTTXdF2sEfvUUXbP/wbOMQ==
   dependencies:
     "@kaspernj/object-digger" "^1.0.2"
     numberable "^1.0.0"
