@@ -751,10 +751,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@kaspernj/api-maker-bootstrap@^1.0.55":
-  version "1.0.55"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.55.tgz#bf22de1de7ee45c699c57149b9958ddef4d585cd"
-  integrity sha512-UB8ABtrdTN9N5+pAW9wfi3ek0Ja+6KrVyHYU5IwCml/pOlg390TOo4nESSA+fb0SC2m/oh8HzMMdWgQw6cvknQ==
+"@kaspernj/api-maker-bootstrap@^1.0.56":
+  version "1.0.56"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.56.tgz#23765e99c143c560df801f029d40545324a06ed4"
+  integrity sha512-tbRsTBi5mHCrITC6YEcYizpPvNzKDhfz+5SZ4U9YB05IK2hF7RrZjUoBniIP6qpFxt8eLc2BFXQeUds5RROjGQ==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.91"
     "@kaspernj/api-maker-inputs" ">= 1.0.53"
@@ -794,15 +794,10 @@
     strftime ">= 0.10.0"
     wake-event ">= 0.0.1"
 
-"@kaspernj/object-digger@>= 1.0.2", "@kaspernj/object-digger@^1.0.2":
+"@kaspernj/object-digger@>= 1.0.2", "@kaspernj/object-digger@^1.0.1", "@kaspernj/object-digger@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.2.tgz#92d4cba641f9429fa0c572822d25132d4bae206b"
   integrity sha512-L0Y460I2nEWbxF/6zyrU8Lyi+MHTxdh9xS9CkJhHrcMoHndUKGXqb6Tw7imApslMU9eyjNBXW5n5tMPtk46ACw==
-
-"@kaspernj/object-digger@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.1.tgz#d76a787b8fb5e9b48a37fa11c16756f138070895"
-  integrity sha512-kIMqg6Iq0zrYglAZ095n9hMbscYpiqG/xEaX5f/82BMvh0d/ZGvGNPhbdk1EAHnXOdFfA3KfEgZMoPLHdggb8Q==
 
 "@rails/actioncable@>= 6.1.0", "@rails/actioncable@^6.1.4":
   version "6.1.4"
@@ -3636,15 +3631,10 @@ indexof@0.0.1:
   resolved "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d"
   integrity sha1-gtwzbSMrkGIXnQWrMpOmYFn9Q10=
 
-"inflection@>= 1.12.0":
+"inflection@>= 1.12.0", inflection@^1.12.0:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/inflection/-/inflection-1.13.1.tgz#c5cadd80888a90cf84c2e96e340d7edc85d5f0cb"
   integrity sha512-dldYtl2WlN0QDkIDtg8+xFwOS2Tbmp12t1cHa5/YClU6ZQjTFm7B66UcVbh9NQB+HvT5BAd2t5+yKsBkw5pcqA==
-
-inflection@^1.12.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/inflection/-/inflection-1.12.0.tgz#a200935656d6f5f6bc4dc7502e1aecb703228416"
-  integrity sha1-ogCTVlbW9fa8TcdQLhrstwMihBY=
 
 inflight@^1.0.4:
   version "1.0.6"
