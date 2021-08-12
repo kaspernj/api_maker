@@ -1155,9 +1155,9 @@
     fastq "^1.6.0"
 
 "@rails/actioncable@>= 6.1.0":
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-6.1.2.tgz#c2eb025afd3f97d2328aef5c647c1b44dcecb83c"
-  integrity sha512-KGl8Vd5MWAIE6X/QVr36y5LLkqNRgt8frflIUkuMm/zB/+vnL6vO8jXQgSzpmPHZ7+j7fJv4JmfL1jofKUDFdw==
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-6.1.4.tgz#c3c5a9f8302c429af9722b6c50ab48049016d2a3"
+  integrity sha512-0LmSKJTuo2dL6BQ+9xxLnS9lbkyfz2mBGeBnQ2J7o9Bn0l0q+ZC6VuoZMZZXPvABI4QT7Nfknv5WhfKYL+boew==
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.1"
