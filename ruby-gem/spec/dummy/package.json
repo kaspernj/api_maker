@@ -40,7 +40,7 @@
     "replaceall": "^0.1.6",
     "set-state-compare": "^1.0.12",
     "stacktrace-parser": "^0.1.10",
-    "stimulus": "^1.0.1",
+    "stimulus": "^2.0.0",
     "strftime": "^0.10.0",
     "wake-event": "^0.0.1"
   },
