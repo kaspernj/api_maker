@@ -65,6 +65,7 @@ module.exports = {
     "indent": ["error", 2],
     "init-declarations": "error",
     "jest/lowercase-name": ["error", {ignore: ["describe"]}],
+    "jest/max-nested-describe": "error",
     "jest/no-alias-methods": "error",
     "jest/no-duplicate-hooks": "error",
     "jest/no-hooks": "error",
