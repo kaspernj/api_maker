@@ -150,7 +150,7 @@ module.exports = class ApiMakerRoutesNative {
 
     fullUrl += host || global.location.host
 
-    if ((protocol == "http" && portToUse != 80) || (protocol == "https" && port != 443)) {
+    if (portToUse && ((protocol == "http" && portToUse != 80) || (protocol == "https" && port != 443))) {
       fullUrl += `:${portToUse}`
     }
 
