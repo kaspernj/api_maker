@@ -3,9 +3,9 @@ const Params = require("../src/params.cjs")
 describe("Params", () => {
   describe("change", () => {
     it("changes the params", () => {
-      delete window.location
+      delete global.location
 
-      window.location = {
+      global.location = {
         search: "?q[name_cont]=kasper"
       }
 
@@ -22,9 +22,9 @@ describe("Params", () => {
 
   describe("parse", () => {
     it("parses the current path", () => {
-      delete window.location
+      delete global.location
 
-      window.location = {
+      global.location = {
         search: "?q[name_cont]=kasper"
       }
 

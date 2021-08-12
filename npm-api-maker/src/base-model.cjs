@@ -333,9 +333,13 @@ module.exports = class BaseModel {
 
   sendValidationErrorsEvent(validationErrors, options) {
     if (options && options.form) {
-      const event = new CustomEvent("validation-errors", {detail: validationErrors})
+      const event = this.newCustomEvent(validationErrors)
       options.form.dispatchEvent(event)
     }
+  }
+
+  newCustomEvent(validationErrors) {
+    return new CustomEvent("validation-errors", {detail: validationErrors})
   }
 
   static humanAttributeName(attributeName) {

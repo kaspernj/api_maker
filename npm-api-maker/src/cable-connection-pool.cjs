@@ -4,10 +4,10 @@ const {dig} = require("@kaspernj/object-digger")
 
 module.exports = class ApiMakerCableConnectionPool {
   static current() {
-    if (!window.apiMakerCableConnectionPool)
-      window.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
+    if (!global.apiMakerCableConnectionPool)
+      global.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
 
-    return window.apiMakerCableConnectionPool
+    return global.apiMakerCableConnectionPool
   }
 
   constructor() {

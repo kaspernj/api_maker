@@ -1,5 +1,12 @@
+jest.mock("@rails/actioncable", () => ({
+  createConsumer: () => ({})
+}))
+
 const BaseModel = require("../src/base-model.cjs")
 const CustomError = require("../src/custom-error.cjs")
+const {JSDOM} = require("jsdom")
+const {window} = new JSDOM()
+const document = window.document
 const ValidationError = require("../src/validation-error.cjs")
 
 describe("BaseModel", () => {
@@ -23,7 +30,8 @@ describe("BaseModel", () => {
     })
     const form = document.createElement("form")
     const model = new BaseModel()
-    const spy = jest.spyOn(form, "dispatchEvent")
+    const dispatchEventSpy = jest.spyOn(form, "dispatchEvent").mockImplementation(() => "asd")
+    const newCustomEventSpy = jest.spyOn(model, "newCustomEvent").mockImplementation(() => "asd")
 
     it("throws the validation errors if no options are given", () => {
       expect(() => model.parseValidationErrors(error)).toThrow(ValidationError)
@@ -31,12 +39,14 @@ describe("BaseModel", () => {
 
     it("throws the validation errors and dispatches an event to the form", () => {
       expect(() => model.parseValidationErrors(error, {form})).toThrow(ValidationError)
-      expect(spy).toHaveBeenCalled()
+      expect(dispatchEventSpy).toHaveBeenCalled()
+      expect(newCustomEventSpy).toHaveBeenCalled()
     })
 
     it("doesnt throw validation errors if disabled", () => {
       model.parseValidationErrors(error, {form, throwValidationError: false})
-      expect(spy).toHaveBeenCalled()
+      expect(dispatchEventSpy).toHaveBeenCalled()
+      expect(newCustomEventSpy).toHaveBeenCalled()
     })
   })
 })

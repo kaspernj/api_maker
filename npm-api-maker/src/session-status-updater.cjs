@@ -4,10 +4,10 @@ const wakeEvent = require("wake-event")
 
 module.exports = class ApiMakerSessionStatusUpdater {
   static current() {
-    if (!window.apiMakerSessionStatusUpdater)
-      window.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()
+    if (!global.apiMakerSessionStatusUpdater)
+      global.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()
 
-    return window.apiMakerSessionStatusUpdater
+    return global.apiMakerSessionStatusUpdater
   }
 
   constructor(args = {}) {
@@ -20,7 +20,7 @@ module.exports = class ApiMakerSessionStatusUpdater {
   }
 
   connectOnlineEvent() {
-    window.addEventListener("online", () => this.updateSessionStatus(), false)
+    global.addEventListener("online", () => this.updateSessionStatus(), false)
   }
 
   connectWakeEvent() {

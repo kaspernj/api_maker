@@ -37,7 +37,6 @@
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "prop-types-exact": ">= 1.2.0",
-    "qs": "^6.9.3",
     "react": ">= 17.0.2",
     "react-router-dom": ">= 5.2.0",
     "react-test-renderer": "^17.0.1",
@@ -53,7 +52,8 @@
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-react": "^7.23.2",
     "i18n-on-steroids": "^1.0.0",
-    "jest": "^27.0.6"
+    "jest": "^27.0.6",
+    "jsdom": "^16.7.0"
   },
   "dependencies": {
     "@kaspernj/object-digger": ">= 1.0.2",
@@ -68,6 +68,7 @@
     "js-money": ">= 0.6.3",
     "numberable": ">= 1.0.0",
     "object-to-formdata": ">= 4.1.0",
+    "qs": ">= 6.9.3",
     "replaceall": ">= 0.1.6",
     "strftime": ">= 0.10.0",
     "wake-event": ">= 0.0.1"

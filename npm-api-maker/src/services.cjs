@@ -2,11 +2,11 @@ const CommandsPool = require("./commands-pool.cjs")
 
 module.exports = class ApiMakerServices {
   static current() {
-    if (!window.currentApiMakerService) {
-      window.currentApiMakerService = new ApiMakerServices()
+    if (!global.currentApiMakerService) {
+      global.currentApiMakerService = new ApiMakerServices()
     }
 
-    return window.currentApiMakerService
+    return global.currentApiMakerService
   }
 
   async sendRequest(serviceName, args) {

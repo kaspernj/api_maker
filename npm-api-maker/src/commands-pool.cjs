@@ -30,11 +30,11 @@ module.exports = class ApiMakerCommandsPool {
   }
 
   static current() {
-    if (!window.currentApiMakerCommandsPool) {
-      window.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
+    if (!global.currentApiMakerCommandsPool) {
+      global.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
     }
 
-    return window.currentApiMakerCommandsPool
+    return global.currentApiMakerCommandsPool
   }
 
   static flush() {
