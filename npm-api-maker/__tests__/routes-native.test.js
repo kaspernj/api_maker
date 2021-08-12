@@ -90,7 +90,7 @@ describe("RoutesNative", () => {
   it("generates urls", () => {
     currentLocale = "en"
 
-    if (!global.location) global.location = {}
+    if (!global.location) global.location = {} // eslint-disable-line jest/no-if
 
     global.location.host = "localhost"
     global.location.protocol = "http:"
