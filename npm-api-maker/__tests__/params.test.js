@@ -1,5 +1,4 @@
 const Params = require("../src/params.cjs")
-const window = {}
 
 describe("Params", () => {
   describe("change", () => {
