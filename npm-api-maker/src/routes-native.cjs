@@ -1,5 +1,6 @@
 const {dig, digg, digs} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
+const qs = require("qs")
 
 module.exports = class ApiMakerRoutesNative {
   constructor({getLocale}) {
@@ -41,6 +42,8 @@ module.exports = class ApiMakerRoutesNative {
 
         this[methodName] = (...args) => this.translateRoute({args, localizedRoutes})
       } else {
+        let variableCount = 0
+
         const pathParts = rawPathParts.map((pathPart) => {
           const variableMatch = pathPart.match(/^:([A-z_]+)$/)
 
@@ -72,23 +75,21 @@ module.exports = class ApiMakerRoutesNative {
   }
 
   translateRoute({args, localizedRoutes, pathParts}) {
-    let locale, options
+    let options
 
     // Extract options from args if any
     if (typeof args[args.length - 1] == "object") {
       options = args.pop()
+    } else {
+      options = {}
     }
 
     // Take locale from options if given or fall back to fallback
-    if (options && options.locale) {
-      locale = options.locale
-    } else {
-      locale = this.getLocale()
-    }
+    const {locale, ...restOptions} = options
 
     if (localizedRoutes) {
       // Put together route with variables and static translated parts (which were translated and cached previously)
-      const translatedRoute = digg(localizedRoutes, locale)
+      let translatedRoute = digg(localizedRoutes, locale || this.getLocale())
         .map((pathPart) => {
           if (pathPart.type == "pathPart") {
             return pathPart.name
@@ -99,6 +100,10 @@ module.exports = class ApiMakerRoutesNative {
           }
         })
         .join("/")
+
+      if (restOptions && Object.keys(restOptions).length > 0) {
+        translatedRoute += `?${qs.stringify(restOptions)}`
+      }
 
       return translatedRoute
     } else if (pathParts) {
