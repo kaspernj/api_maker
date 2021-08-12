@@ -20,7 +20,7 @@ module.exports = class ApiMakerDevise {
   static events() {
     if (!global.apiMakerDeviseEvents) {
       global.apiMakerDeviseEvents = new EventEmitter()
-      windglobalow.apiMakerDeviseEvents.setMaxListeners(1000)
+      global.apiMakerDeviseEvents.setMaxListeners(1000)
     }
 
     return global.apiMakerDeviseEvents
