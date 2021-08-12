@@ -799,11 +799,6 @@
   resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.2.tgz#92d4cba641f9429fa0c572822d25132d4bae206b"
   integrity sha512-L0Y460I2nEWbxF/6zyrU8Lyi+MHTxdh9xS9CkJhHrcMoHndUKGXqb6Tw7imApslMU9eyjNBXW5n5tMPtk46ACw==
 
-"@kaspernj/object-digger@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.1.tgz#d76a787b8fb5e9b48a37fa11c16756f138070895"
-  integrity sha512-kIMqg6Iq0zrYglAZ095n9hMbscYpiqG/xEaX5f/82BMvh0d/ZGvGNPhbdk1EAHnXOdFfA3KfEgZMoPLHdggb8Q==
-
 "@rails/actioncable@>= 6.1.0", "@rails/actioncable@^6.1.4":
   version "6.1.4"
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-6.1.4.tgz#c3c5a9f8302c429af9722b6c50ab48049016d2a3"
