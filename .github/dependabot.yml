@@ -3,11 +3,42 @@ updates:
 - package-ecosystem: bundler
   directory: "/ruby-gem"
   schedule:
-    interval: monthly
-    time: "11:00"
+    interval: daily
+    time: "01:00"
     timezone: Europe/Copenhagen
   open-pull-requests-limit: 99
-  ignore:
-  - dependency-name: activerecord
-    versions:
-    - 6.1.2.1
+- package-ecosystem: bundler
+  directory: "/ruby-gem/spec/dummy"
+  schedule:
+    interval: daily
+    time: "01:00"
+    timezone: Europe/Copenhagen
+  open-pull-requests-limit: 99
+- package-ecosystem: npm
+  directory: "/ruby-gem/spec/dummy"
+  schedule:
+    interval: daily
+    time: "01:00"
+    timezone: Europe/Copenhagen
+  open-pull-requests-limit: 99
+- package-ecosystem: npm
+  directory: "/npm-api-maker"
+  schedule:
+    interval: daily
+    time: "01:00"
+    timezone: Europe/Copenhagen
+  open-pull-requests-limit: 99
+- package-ecosystem: npm
+  directory: "/npm-api-maker-bootstrap"
+  schedule:
+    interval: daily
+    time: "01:00"
+    timezone: Europe/Copenhagen
+  open-pull-requests-limit: 99
+- package-ecosystem: npm
+  directory: "/npm-api-maker-inputs"
+  schedule:
+    interval: daily
+    time: "01:00"
+    timezone: Europe/Copenhagen
+  open-pull-requests-limit: 99
