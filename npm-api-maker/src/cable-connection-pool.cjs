@@ -5,7 +5,7 @@ const {dig} = require("@kaspernj/object-digger")
 module.exports = class ApiMakerCableConnectionPool {
   static current() {
     if (!global.apiMakerCableConnectionPool)
-      winglobaldow.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
+      global.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
 
     return global.apiMakerCableConnectionPool
   }
