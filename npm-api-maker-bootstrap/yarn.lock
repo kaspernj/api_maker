@@ -722,9 +722,9 @@
     chalk "^4.0.0"
 
 "@kaspernj/api-maker-inputs@>= 1.0.53":
-  version "1.0.53"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.53.tgz#f6c6645a12b4510c43be4509b5951fbb959bb1d7"
-  integrity sha512-6mEfr5ztZ27jBQcaQ63K6JbJsOtt5ofRj3U8gnweqA5/dEZB2UJjpdR0vic+nGhI2BsJqVmmcp4MrubGFXiHIA==
+  version "1.0.54"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.54.tgz#e28af92fc5c9d89d1f6483165d3f77359fba82c1"
+  integrity sha512-k4MqcWzNi/dofazbXIxUlQm+KrXjZDFcFFDsJvBrbHYIc4jCz/qqy18sZnDx4YoUZKn1PSu+GdCEnZEkT7g9rg==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.91"
     "@kaspernj/object-digger" ">= 1.0.2"
