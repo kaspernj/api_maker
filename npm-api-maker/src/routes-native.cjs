@@ -13,7 +13,8 @@ module.exports = class ApiMakerRoutesNative {
     for (const routeDefinition of digg(routeDefinitions, "routes")) {
       const {name, path} = digs(routeDefinition, "name", "path")
       const rawPathParts = path.split("/")
-      const methodName = `${inflection.camelize(name, true)}Path`
+      const pathMethodName = `${inflection.camelize(name, true)}Path`
+      const urlMethodName = `${inflection.camelize(name, true)}Url`
 
       if (routeDefinitionArgs && routeDefinitionArgs.localized) {
         const localizedRoutes = {}
@@ -40,7 +41,8 @@ module.exports = class ApiMakerRoutesNative {
           localizedRoutes[locale] = localizedPathParts
         }
 
-        this[methodName] = (...args) => this.translateRoute({args, localizedRoutes})
+        this[pathMethodName] = (...args) => this.translateRoute({args, localizedRoutes})
+        this[urlMethodName] = (...args) => this.translateRoute({args, localizedRoutes, url: true})
       } else {
         let variableCount = 0
 
@@ -54,7 +56,8 @@ module.exports = class ApiMakerRoutesNative {
           }
         })
 
-        this[methodName] = (...args) => this.translateRoute({args, pathParts})
+        this[pathMethodName] = (...args) => this.translateRoute({args, pathParts})
+        this[urlMethodName] = (...args) => this.translateRoute({args, pathParts, url: true})
       }
     }
   }
@@ -74,7 +77,7 @@ module.exports = class ApiMakerRoutesNative {
     }
   }
 
-  translateRoute({args, localizedRoutes, pathParts}) {
+  translateRoute({args, localizedRoutes, pathParts, url}) {
     let options
 
     // Extract options from args if any
@@ -85,7 +88,7 @@ module.exports = class ApiMakerRoutesNative {
     }
 
     // Take locale from options if given or fall back to fallback
-    const {locale, ...restOptions} = options
+    const {locale, host, port, protocol, ...restOptions} = options
 
     if (localizedRoutes) {
       // Put together route with variables and static translated parts (which were translated and cached previously)
@@ -104,6 +107,8 @@ module.exports = class ApiMakerRoutesNative {
       if (restOptions && Object.keys(restOptions).length > 0) {
         translatedRoute += `?${qs.stringify(restOptions)}`
       }
+
+      if (url) return this.addHostToRoute({host, port, protocol, translatedRoute})
 
       return translatedRoute
     } else if (pathParts) {
@@ -124,9 +129,33 @@ module.exports = class ApiMakerRoutesNative {
         translatedRoute += `?${qs.stringify(restOptions)}`
       }
 
+      if (url) return this.addHostToRoute({host, port, protocol, translatedRoute})
+
       return translatedRoute
     }
 
     throw new Error("Unhandled state")
+  }
+
+  addHostToRoute({host, port, protocol, translatedRoute}) {
+    let fullUrl = ""
+
+    const portToUse = port || global.location.port
+
+    if (protocol) {
+      fullUrl += `${protocol}://`
+    } else {
+      fullUrl += `${global.location.protocol}//`
+    }
+
+    fullUrl += host || global.location.host
+
+    if ((protocol == "http" && portToUse != 80) || (protocol == "https" && port != 443)) {
+      fullUrl += `:${portToUse}`
+    }
+
+    fullUrl += translatedRoute
+
+    return fullUrl
   }
 }

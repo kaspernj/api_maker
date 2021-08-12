@@ -86,4 +86,22 @@ describe("RoutesNative", () => {
 
     expect(daRoute).toEqual("/drinks/5/edit?drink%5Bname%5D=Pina%20Colada")
   })
+
+  it("generates urls", () => {
+    currentLocale = "en"
+
+    const test = routesNative({args: {localized: true}})
+    const daRoute = test.editDrinkUrl(5, {drink: {name: "Pina Colada"}, locale: "da"})
+
+    expect(daRoute).toEqual("http://localhost/da/drinks/5/rediger?drink%5Bname%5D=Pina%20Colada")
+  })
+
+  it("generates urls with custom options", () => {
+    currentLocale = "en"
+
+    const test = routesNative({args: {localized: true}})
+    const daRoute = test.editDrinkUrl(5, {drink: {name: "Pina Colada"}, locale: "da", host: "google.com", port: 123, protocol: "https"})
+
+    expect(daRoute).toEqual("https://google.com:123/da/drinks/5/rediger?drink%5Bname%5D=Pina%20Colada")
+  })
 })
