@@ -4,7 +4,7 @@ const qs = require("qs")
 
 module.exports = class Params {
   static parse() {
-    return qs.parse(window.location.search.substr(1))
+    return qs.parse(global.location.search.substr(1))
   }
 
   static change(given) {

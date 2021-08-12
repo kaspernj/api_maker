@@ -1,3 +1,6 @@
+jest.mock("@rails/actioncable", () => ({
+  createConsumer: () => ({})
+}))
 const CableConnectionPool = require("../src/cable-connection-pool.cjs")
 const CableSubscriptionPool = require("../src/cable-subscription-pool.cjs")
 const {digg} = require("@kaspernj/object-digger")

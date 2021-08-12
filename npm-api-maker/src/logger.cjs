@@ -1,11 +1,11 @@
 module.exports = class ApiMakerLogger {
   static current() {
-    if (!window.apiMakerLogger) {
-      window.apiMakerLogger = new ApiMakerLogger()
-      // window.apiMakerLogger.setDebug(true)
+    if (!global.apiMakerLogger) {
+      global.apiMakerLogger = new ApiMakerLogger()
+      // global.apiMakerLogger.setDebug(true)
     }
 
-    return window.apiMakerLogger
+    return global.apiMakerLogger
   }
 
   static log(message) {

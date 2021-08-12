@@ -24,7 +24,7 @@ module.exports = class ErrorLogger {
   }
 
   connectOnError() {
-    window.addEventListener("error", (event) => {
+    global.addEventListener("error", (event) => {
       if (!this.isHandlingError) {
         this.isHandlingError = true
         this.onError(event).finally(() => {
@@ -35,7 +35,7 @@ module.exports = class ErrorLogger {
   }
 
   connectUnhandledRejection() {
-    window.addEventListener("unhandledrejection", (event) => {
+    global.addEventListener("unhandledrejection", (event) => {
       if (!this.isHandlingError) {
         this.isHandlingError = true
         this.onUnhandledRejection(event).finally(() => {

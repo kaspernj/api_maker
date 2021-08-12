@@ -2,10 +2,10 @@ const Params = require("./params.cjs")
 
 module.exports = class KeyValueStore {
   static current() {
-    if (!window.currentKeyValueStore)
-      window.currentKeyValueStore = new KeyValueStore()
+    if (!global.currentKeyValueStore)
+      global.currentKeyValueStore = new KeyValueStore()
 
-    return window.currentKeyValueStore
+    return global.currentKeyValueStore
   }
 
   static async get(key) {

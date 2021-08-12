@@ -15,7 +15,7 @@ export default class ApiMakerBootstrapSortLink extends React.Component {
   }
 
   href() {
-    const currentParams = qs.parse(window.location.search.substr(1))
+    const currentParams = qs.parse(global.location.search.substr(1))
 
     if (!currentParams[this.state.searchKey])
       currentParams[this.state.searchKey] = {}

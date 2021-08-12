@@ -11,19 +11,19 @@ module.exports = class ApiMakerDevise {
   }
 
   static current() {
-    if (!window.currentApiMakerDevise)
-      window.currentApiMakerDevise = new ApiMakerDevise()
+    if (!global.currentApiMakerDevise)
+    global.currentApiMakerDevise = new ApiMakerDevise()
 
-    return window.currentApiMakerDevise
+    return global.currentApiMakerDevise
   }
 
   static events() {
-    if (!window.apiMakerDeviseEvents) {
-      window.apiMakerDeviseEvents = new EventEmitter()
-      window.apiMakerDeviseEvents.setMaxListeners(1000)
+    if (!global.apiMakerDeviseEvents) {
+      global.apiMakerDeviseEvents = new EventEmitter()
+      windglobalow.apiMakerDeviseEvents.setMaxListeners(1000)
     }
 
-    return window.apiMakerDeviseEvents
+    return global.apiMakerDeviseEvents
   }
 
   static addUserScope(scope) {
@@ -81,8 +81,8 @@ module.exports = class ApiMakerDevise {
     await CanCan.current().resetAbilities()
 
     // Cannot use the class because they would both import each other
-    if (window.apiMakerSessionStatusUpdater) {
-      window.apiMakerSessionStatusUpdater.updateSessionStatus()
+    if (global.apiMakerSessionStatusUpdater) {
+      global.apiMakerSessionStatusUpdater.updateSessionStatus()
     }
 
     ApiMakerDevise.setSignedOut(args)
@@ -103,7 +103,7 @@ module.exports = class ApiMakerDevise {
   }
 
   loadCurrentScope(scope) {
-    const scopeData = window.apiMakerDeviseCurrent[scope]
+    const scopeData = global.apiMakerDeviseCurrent[scope]
 
     if (!scopeData)
       return null

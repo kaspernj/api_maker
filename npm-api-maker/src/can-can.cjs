@@ -6,11 +6,11 @@ const Services = require("./services.cjs")
 
 module.exports = class ApiMakerCanCan {
   static current() {
-    if (!window.currentApiMakerCanCan) {
-      window.currentApiMakerCanCan = new ApiMakerCanCan()
+    if (!global.currentApiMakerCanCan) {
+      global.currentApiMakerCanCan = new ApiMakerCanCan()
     }
 
-    return window.currentApiMakerCanCan
+    return global.currentApiMakerCanCan
   }
 
   constructor() {

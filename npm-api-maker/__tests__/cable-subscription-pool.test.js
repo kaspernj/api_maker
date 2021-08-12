@@ -1,3 +1,6 @@
+jest.mock("@rails/actioncable", () => ({
+  createConsumer: () => ({})
+}))
 const CableSubscriptionPool = require("../src/cable-subscription-pool.cjs")
 
 describe("CableSubscriptionPool", () => {
