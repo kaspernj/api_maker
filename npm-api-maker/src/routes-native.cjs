@@ -107,7 +107,24 @@ module.exports = class ApiMakerRoutesNative {
 
       return translatedRoute
     } else if (pathParts) {
-      throw new Error("Missing support for un-translated routes")
+      // Put together route with variables and static translated parts (which were translated and cached previously)
+      let translatedRoute = pathParts
+        .map((pathPart) => {
+          if (pathPart.type == "pathPart") {
+            return pathPart.name
+          } else if (pathPart.type == "variable") {
+            return digg(args, digg(pathPart, "count"))
+          } else {
+            throw new Error(`Unhandled path part type: ${pathPart.type}`)
+          }
+        })
+        .join("/")
+
+      if (restOptions && Object.keys(restOptions).length > 0) {
+        translatedRoute += `?${qs.stringify(restOptions)}`
+      }
+
+      return translatedRoute
     }
 
     throw new Error("Unhandled state")
