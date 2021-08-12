@@ -90,6 +90,10 @@ describe("RoutesNative", () => {
   it("generates urls", () => {
     currentLocale = "en"
 
+    if (!global.location) global.location = {}
+
+    global.location.host = "localhost"
+
     const test = routesNative({args: {localized: true}})
     const daRoute = test.editDrinkUrl(5, {drink: {name: "Pina Colada"}, locale: "da"})
 
