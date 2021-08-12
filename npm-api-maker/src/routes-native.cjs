@@ -140,7 +140,7 @@ module.exports = class ApiMakerRoutesNative {
   addHostToRoute({host, port, protocol, translatedRoute}) {
     let fullUrl = ""
 
-    const portToUse = port || global.location.port
+    const portToUse = port || global.location?.port
 
     if (protocol) {
       fullUrl += `${protocol}://`
