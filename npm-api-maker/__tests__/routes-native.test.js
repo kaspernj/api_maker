@@ -1,0 +1,80 @@
+const RoutesNative = require("../src/routes-native.cjs")
+const testRoutes = {
+  routes: [
+    {"name": "blank", "path": "/blank", "component": "blank"},
+
+    {"name": "root", "path": "", "component": "dashboard"},
+
+    {"name": "new_drink", "path": "/drinks/new", "component": "drinks/edit"},
+    {"name": "edit_drink", "path": "/drinks/:id/edit", "component": "drinks/edit"},
+    {"name": "drink", "path": "/drinks/:id", "component": "drinks/show"},
+    {"name": "drinks", "path": "/drinks", "component": "drinks/index"}
+  ]
+}
+const testTranslations = {
+  locales: {
+    da: {
+      routes: {
+        drink: "drink",
+        edit: "rediger"
+      }
+    },
+    en: {
+      routes: {
+        drink: "drink",
+        edit: "edit"
+      }
+    }
+  }
+}
+
+let currentLocale = "en"
+
+const spawnTestRoutesNative = () => {
+  const test = new RoutesNative({
+    getLocale: () => currentLocale
+  })
+
+  test.loadRouteTranslations(testTranslations)
+  test.loadRouteDefinitions(testRoutes, {localized: true})
+
+  return test
+}
+
+describe("RoutesNative", () => {
+  it("translates routes from the current locale", () => {
+    currentLocale = "da"
+
+    const test = spawnTestRoutesNative()
+    const daRoute = test.editDrinkPath(5)
+
+    expect(daRoute).toEqual("/da/drinks/5/rediger")
+  })
+
+  it("translates routes from the locale-param", () => {
+    currentLocale = "en"
+
+    const test = spawnTestRoutesNative()
+    const daRoute = test.editDrinkPath(5, {locale: "da"})
+
+    expect(daRoute).toEqual("/da/drinks/5/rediger")
+  })
+
+  it("defaults to the locale given by the getLocale callback", () => {
+    currentLocale = "en"
+
+    const test = spawnTestRoutesNative()
+    const daRoute = test.editDrinkPath(5)
+
+    expect(daRoute).toEqual("/en/drinks/5/edit")
+  })
+
+  it("uses the rest of the params as a query string", () => {
+    currentLocale = "en"
+
+    const test = spawnTestRoutesNative()
+    const daRoute = test.editDrinkPath(5, {drink: {name: "Pina Colada"}, locale: "da"})
+
+    expect(daRoute).toEqual("/da/drinks/5/rediger?drink%5Bname%5D=Pina%20Colada")
+  })
+})
