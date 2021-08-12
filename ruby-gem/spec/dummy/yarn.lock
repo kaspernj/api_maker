@@ -794,15 +794,10 @@
     strftime ">= 0.10.0"
     wake-event ">= 0.0.1"
 
-"@kaspernj/object-digger@>= 1.0.2", "@kaspernj/object-digger@^1.0.2":
+"@kaspernj/object-digger@>= 1.0.2", "@kaspernj/object-digger@^1.0.1", "@kaspernj/object-digger@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.2.tgz#92d4cba641f9429fa0c572822d25132d4bae206b"
   integrity sha512-L0Y460I2nEWbxF/6zyrU8Lyi+MHTxdh9xS9CkJhHrcMoHndUKGXqb6Tw7imApslMU9eyjNBXW5n5tMPtk46ACw==
-
-"@kaspernj/object-digger@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.1.tgz#d76a787b8fb5e9b48a37fa11c16756f138070895"
-  integrity sha512-kIMqg6Iq0zrYglAZ095n9hMbscYpiqG/xEaX5f/82BMvh0d/ZGvGNPhbdk1EAHnXOdFfA3KfEgZMoPLHdggb8Q==
 
 "@rails/actioncable@>= 6.1.0", "@rails/actioncable@^6.1.4":
   version "6.1.4"
@@ -3534,10 +3529,10 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-i18n-on-steroids@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.0.tgz#491bbee4828339317ba1d05ce9b5d43fea042e60"
-  integrity sha512-F5nK7K6SdT5u+5ly0HQPOUjPwhvBxvu2hxzBZQ5xf6boSMbrHPzL5nPkrPYQnmszqa8DQIVhnETETUANNoC6vQ==
+i18n-on-steroids@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.1.tgz#f1a9aa1cba6e7c94f5e0991f2e09194f71d5cdb8"
+  integrity sha512-t5a8D0rBvk4k5BMGyvuSKPfOD64qi/oRPQnc97+hikOIeWlUVtDbpF0PZk9+jXdgjTTXdF2sEfvUUXbP/wbOMQ==
   dependencies:
     "@kaspernj/object-digger" "^1.0.2"
     numberable "^1.0.0"
