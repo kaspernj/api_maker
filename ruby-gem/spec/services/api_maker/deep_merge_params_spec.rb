@@ -12,7 +12,7 @@ describe ApiMaker::DeepMergeParams do
     hash2 = {
       products: [
         {name: "Product 1"},
-        {name: "Product 2"},
+        {name: "Product 2"}
       ]
     }
 
