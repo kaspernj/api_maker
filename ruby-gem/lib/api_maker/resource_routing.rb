@@ -8,11 +8,10 @@ class ApiMaker::ResourceRouting
       route_as = route_name
       route_path = route.fetch("path")
 
-      # No longer necessary? Fixed after around Rails 6.0.4?
-      # if installed_routes.key?(route_name)
-      #   route_duplicate_count = installed_routes.fetch(route_name)
-      #   route_as = "#{route_as}_duplicate_#{route_duplicate_count}"
-      # end
+      if installed_routes.key?(route_name)
+        route_duplicate_count = installed_routes.fetch(route_name)
+        route_as = "#{route_as}_duplicate_#{route_duplicate_count}"
+      end
 
       rails_routes.get route_path => "#{layout}#show", as: route_as
 
