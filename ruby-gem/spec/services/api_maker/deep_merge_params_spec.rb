@@ -1,0 +1,27 @@
+require "rails_helper"
+
+describe ApiMaker::DeepMergeParams do
+  it "merges arrays" do
+    hash1 = {
+      products: [
+        {id: 1},
+        {id: 2}
+      ]
+    }
+
+    hash2 = {
+      products: [
+        {name: "Product 1"},
+        {name: "Product 2"}
+      ]
+    }
+
+    expect(ApiMaker::DeepMergeParams.execute!(hash1, hash2)).to eq(
+      {
+        products: [
+          {id: 1, name: "Product 1"}, {id: 2, name: "Product 2"}
+        ]
+      }
+    )
+  end
+end
