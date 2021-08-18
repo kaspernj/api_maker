@@ -45,6 +45,6 @@
     "wake-event": "^0.0.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.0.0"
   }
 }
