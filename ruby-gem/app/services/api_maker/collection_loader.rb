@@ -75,30 +75,40 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   def include_pagination_data(response, collection)
     return if params[:page].blank?
 
-    countable_collection = collection.except(:distinct).except(:select).except(:order)
+    countable_collection = collection.except(:distinct).except(:group).except(:select).except(:order)
+
+    Rails.logger.debug { "API maker: CollectionLoader total pages for #{model_class.name}" }
+    total_pages = countable_collection.total_pages
+
+    Rails.logger.debug { "API maker: CollectionLoader total count for #{model_class.name}" }
+    total_count = countable_collection.try(:total_count) || countable_collection.total_entries
 
     response[:meta] = {
       currentPage: collection.current_page,
       perPage: collection.try(:per_page) || collection.limit_value,
-      totalCount: countable_collection.try(:total_count) || countable_collection.total_entries,
-      totalPages: countable_collection.total_pages
+      totalCount: total_count,
+      totalPages: total_pages
     }
   end
 
   def manage_through_relationship
     return if params[:through].blank?
 
-    model_class = params[:through][:model].safe_constantize
-    through_model = model_class.accessible_by(ability).find_by(model_class.primary_key => params[:through][:id])
+    through_model_class = params[:through][:model].safe_constantize
+    through_model = through_model_class.accessible_by(ability).find_by(through_model_class.primary_key => params[:through][:id])
 
     return if through_model.nil?
 
-    association = ActiveRecord::Associations::Association.new(through_model, model_class.reflections.fetch(params[:through][:reflection]))
+    association = ActiveRecord::Associations::Association.new(through_model, through_model_class.reflections.fetch(params[:through][:reflection]))
 
     query_through = association.scope
     query_through = query_through.accessible_by(ability)
 
     filter_custom_accessible_by(query_through)
+  end
+
+  def model_class
+    @model_class ||= collection.klass
   end
 
   def set_query

@@ -35,6 +35,8 @@ private
 
       # We need to look the model up to evaluate if the user has access
       model_class = data.fetch("mcn").safe_constantize
+
+      Rails.logger.debug { "API maker: ConnectCreates for #{model_class.name}" }
       model = model_class.accessible_by(current_ability, :create_events).find_by(model_class.primary_key => data.fetch("mi"))
 
       # Transmit the data to JS if its found (and thereby allowed)
@@ -44,6 +46,7 @@ private
 
   def connect_destroys(model_name, model_ids)
     model_class = model_for_resource_name(model_name)
+    Rails.logger.debug { "API maker: ConnectDestroys for #{model_class.name}" }
     models = model_class.accessible_by(current_ability, :destroy_events).where(model_class.primary_key => model_ids)
     models.each do |model|
       channel_name = model.api_maker_broadcast_destroy_channel_name
@@ -56,6 +59,7 @@ private
   def connect_event(model_name, model_ids, event_name)
     ability_name = "event_#{event_name}".to_sym
     model_class = model_for_resource_name(model_name)
+    Rails.logger.debug { "API maker: ConnectEvents for #{model_class.name} #{event_name}" }
     models = model_class.accessible_by(current_ability, ability_name).where(model_class.primary_key => model_ids)
     models.each do |model|
       channel_name = model.api_maker_event_channel_name(event_name)
@@ -70,17 +74,20 @@ private
     model_class = model_for_resource_name(model_name)
     channel_name = model_class.api_maker_model_class_event_name(event_name)
 
+    Rails.logger.debug { "API maker: ConnectModelClassEvent for #{model_class.name} #{event_name}" }
+
     if current_ability.can?(ability_name, model_class)
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
     else
-      Rails.logger.warn "API maker: No access to model class event #{model_class.name}##{event_name} with ability name: #{ability_name}"
+      Rails.logger.warn { "API maker: No access to model class event #{model_class.name}##{event_name} with ability name: #{ability_name}" }
     end
   end
 
   def connect_updates(model_name, model_ids)
     model_class = model_for_resource_name(model_name)
+    Rails.logger.debug { "API maker: ConnectUpdates for #{model_class.name}" }
 
     models = model_class.accessible_by(current_ability, :update_events).where(model_class.primary_key => model_ids)
     models.each do |model|
