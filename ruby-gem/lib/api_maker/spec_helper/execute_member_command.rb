@@ -3,10 +3,11 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
 
   attr_reader :api_maker_args, :args, :command, :model
 
-  def initialize(ability: nil, api_maker_args: nil, command:, fake_controller: nil, model:, args: {})
+  def initialize(ability: nil, api_maker_args: nil, collection: nil, command:, fake_controller: nil, model:, args: {})
     @ability = ability
     @api_maker_args = api_maker_args
     @args = args
+    @collection = collection
     @command = command
     @fake_controller = fake_controller
     @model = model
@@ -22,6 +23,10 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
     @ability ||= ApiMaker::Ability.new(api_maker_args: api_maker_args)
   end
 
+  def collection
+    @collection ||= model.class.where(id: model.id)
+  end
+
   def fake_controller
     @fake_controller ||= instance_double(
       ApiMaker::BaseController,
@@ -32,7 +37,7 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
 
   def helper
     @helper ||= ApiMaker::CommandSpecHelper.new(
-      collection: model.class.where(id: model.id),
+      collection: collection,
       command: command,
       controller: fake_controller
     )
