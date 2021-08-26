@@ -87,10 +87,13 @@ class ApiMaker::Preloader
 
 private
 
-  def fill_empty_relationships_for_key(reflection, key)
-    # Smoke test to make sure we aren't doing any additional and unnecessary queries
+  # Smoke test to make sure we aren't doing any additional and unnecessary queries
+  def check_collection_loaded!
     raise "Collection wasn't loaded?" if @collection.is_a?(ActiveRecord::Relation) && !@collection.loaded?
+  end
 
+  def fill_empty_relationships_for_key(reflection, key)
+    check_collection_loaded!
     collection_name = ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
     records_to_set = @collection.map { |model| @records.dig(collection_name, model.id) }
 
