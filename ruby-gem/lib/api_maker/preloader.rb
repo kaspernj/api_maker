@@ -88,12 +88,11 @@ class ApiMaker::Preloader
 private
 
   def fill_empty_relationships_for_key(reflection, key)
-    if @records.is_a?(Hash)
-      collection_name = ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
-      records_to_set = @records.fetch(collection_name).values
-    else
-      records_to_set = @records.select { |record| record.model.class.is_a?(reflection.active_record) }
-    end
+    # Smoke test to make sure we aren't doing any additional and unnecessary queries
+    raise "Collection wasn't loaded?" if @collection.is_a?(ActiveRecord::Relation) && !@collection.loaded?
+
+    collection_name = ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
+    records_to_set = @collection.map { |model| @records.dig(collection_name, model.id) }
 
     case reflection.macro
     when :has_many
