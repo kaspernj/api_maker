@@ -109,4 +109,13 @@ describe("RoutesNative", () => {
 
     expect(daRoute).toEqual("https://google.com:123/da/drinks/5/rediger?drink%5Bname%5D=Pina%20Colada")
   })
+
+  it("generates urls without locales", () => {
+    currentLocale = "en"
+
+    const test = routesNative({})
+    const daRoute = test.editDrinkUrl(5, {drink: {name: "Pina Colada"}, locale: "da", host: "google.com", port: 123, protocol: "https"})
+
+    expect(daRoute).toEqual("https://google.com:123/drinks/5/edit?drink%5Bname%5D=Pina%20Colada")
+  })
 })
