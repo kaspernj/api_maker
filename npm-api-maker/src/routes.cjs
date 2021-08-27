@@ -41,6 +41,8 @@ module.exports = class ApiMakerRoutes {
       }
 
       this[routeNameUrl] = (...args) => {
+        let routeNameUrlToUse
+
         if (locale) {
           routeNameUrlToUse = inflection.camelize(`${digg(routeDefinition, "name")}_${I18n.locale}_url`, true)
         } else {
