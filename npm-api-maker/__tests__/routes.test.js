@@ -11,22 +11,6 @@ const testRoutes = {
     {"name": "drinks", "path": "/drinks", "component": "drinks/index"}
   ]
 }
-const testTranslations = {
-  locales: {
-    da: {
-      routes: {
-        drink: "drink",
-        edit: "rediger"
-      }
-    },
-    en: {
-      routes: {
-        drink: "drink",
-        edit: "edit"
-      }
-    }
-  }
-}
 const fakeJsRoutes = {
   blankPath: () => "/blank",
   blankUrl: () => "https://localhost/blank",
