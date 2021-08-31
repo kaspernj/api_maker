@@ -987,19 +987,19 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@kaspernj/api-maker-bootstrap@^1.0.56":
-  version "1.0.56"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.56.tgz#23765e99c143c560df801f029d40545324a06ed4"
-  integrity sha512-tbRsTBi5mHCrITC6YEcYizpPvNzKDhfz+5SZ4U9YB05IK2hF7RrZjUoBniIP6qpFxt8eLc2BFXQeUds5RROjGQ==
+"@kaspernj/api-maker-bootstrap@^1.0.57":
+  version "1.0.57"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.57.tgz#a5665b171a0fa89940e88291e478f95929cebbb3"
+  integrity sha512-C0xbXNHyIB5e09zIUsYDVRTFqW4WV1s6OL+YxzT9GJthiXUTT2sVkdiUzH1UScMfJRvTo+q3HpYhmDi2a+hs4w==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.91"
-    "@kaspernj/api-maker-inputs" ">= 1.0.53"
+    "@kaspernj/api-maker" ">= 1.0.112"
+    "@kaspernj/api-maker-inputs" ">= 1.0.54"
     "@kaspernj/object-digger" ">= 1.0.2"
     debounce ">= 1.2.0"
     inflection ">= 1.12.0"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.53", "@kaspernj/api-maker-inputs@^1.0.55":
+"@kaspernj/api-maker-inputs@>= 1.0.54", "@kaspernj/api-maker-inputs@^1.0.55":
   version "1.0.55"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.55.tgz#f80256f60d67922dd07cedb1342b9853c20fee06"
   integrity sha512-QPWwpy0aLD+Ych5kdQuBrVx5By3Dm2PIo287mlvDnn+1oHUb8DulqA4PNcSwz6bSz960/IL/Qd+OOx4d2C0csQ==
@@ -1009,7 +1009,7 @@
     classnames ">= 2.2.6"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.112", "@kaspernj/api-maker@>= 1.0.91", "@kaspernj/api-maker@^1.0.99":
+"@kaspernj/api-maker@>= 1.0.112", "@kaspernj/api-maker@^1.0.99":
   version "1.0.112"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.112.tgz#c63dd0439480b04192c28e40e1dd995810d34bf6"
   integrity sha512-PnDCcbd1O0+Snglp/g5GD8igokmphg6Si2l28zCBYbryQSZpIXNwIdNRA3Lq+9S8LZPVCaMjBnTzBrsLKqcZIA==
