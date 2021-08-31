@@ -999,34 +999,35 @@
     inflection ">= 1.12.0"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.53", "@kaspernj/api-maker-inputs@^1.0.54":
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.54.tgz#e28af92fc5c9d89d1f6483165d3f77359fba82c1"
-  integrity sha512-k4MqcWzNi/dofazbXIxUlQm+KrXjZDFcFFDsJvBrbHYIc4jCz/qqy18sZnDx4YoUZKn1PSu+GdCEnZEkT7g9rg==
+"@kaspernj/api-maker-inputs@>= 1.0.53", "@kaspernj/api-maker-inputs@^1.0.55":
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.55.tgz#f80256f60d67922dd07cedb1342b9853c20fee06"
+  integrity sha512-QPWwpy0aLD+Ych5kdQuBrVx5By3Dm2PIo287mlvDnn+1oHUb8DulqA4PNcSwz6bSz960/IL/Qd+OOx4d2C0csQ==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.91"
+    "@kaspernj/api-maker" ">= 1.0.112"
     "@kaspernj/object-digger" ">= 1.0.2"
     classnames ">= 2.2.6"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.91", "@kaspernj/api-maker@^1.0.99":
-  version "1.0.99"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.99.tgz#7943015491654a8b5ae3bc45a61975098d0a8824"
-  integrity sha512-C3TFW72hbR23id6mnP0po24DAEHb+S1ZouwR6f92X2jfGuxk7LdCv8FEUg4t0CMh+9MDfAf4r8F5JRSSZ7wCKQ==
+"@kaspernj/api-maker@>= 1.0.112", "@kaspernj/api-maker@>= 1.0.91", "@kaspernj/api-maker@^1.0.99":
+  version "1.0.112"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.112.tgz#c63dd0439480b04192c28e40e1dd995810d34bf6"
+  integrity sha512-PnDCcbd1O0+Snglp/g5GD8igokmphg6Si2l28zCBYbryQSZpIXNwIdNRA3Lq+9S8LZPVCaMjBnTzBrsLKqcZIA==
   dependencies:
     "@kaspernj/object-digger" ">= 1.0.2"
     "@rails/actioncable" ">= 6.1.0"
-    clone-deep "^4.0.1"
-    debounce "^1.2.1"
-    epic-locks "^1.0.1"
-    form-data-objectizer "^1.0.0"
+    clone-deep ">= 4.0.1"
+    debounce ">= 1.2.1"
+    epic-locks ">= 1.0.1"
+    form-data-objectizer ">= 1.0.0"
     form-serialize ">= 0.7.2"
     format-number ">= 3.0.0"
     inflection ">= 1.12.0"
     js-money ">= 0.6.3"
     numberable ">= 1.0.0"
     object-to-formdata ">= 4.1.0"
-    replaceall "^0.1.6"
+    qs ">= 6.9.3"
+    replaceall ">= 0.1.6"
     strftime ">= 0.10.0"
     wake-event ">= 0.0.1"
 
@@ -2149,7 +2150,7 @@ cliui@^5.0.0:
     strip-ansi "^5.2.0"
     wrap-ansi "^5.1.0"
 
-clone-deep@^4.0.1:
+"clone-deep@>= 4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/clone-deep/-/clone-deep-4.0.1.tgz#c19fd9bdbbf85942b4fd979c84dcf7d5f07c2387"
   integrity sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==
@@ -2669,7 +2670,7 @@ date-now@^0.1.4:
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
-"debounce@>= 1.2.0", debounce@^1.2.1:
+"debounce@>= 1.2.0", "debounce@>= 1.2.1", debounce@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
   integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
@@ -2961,7 +2962,7 @@ entities@^2.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.3.tgz#5c487e5742ab93c15abb5da22759b8590ec03b7f"
   integrity sha512-MyoZ0jgnLvB2X3Lg5HqpFmn1kybDiIfEQmKzTb5apr51Rb+T3KdmMiqa70T+bhGnyv7bQ6WMj2QMHpGMmlrUYQ==
 
-epic-locks@^1.0.1:
+"epic-locks@>= 1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/epic-locks/-/epic-locks-1.0.1.tgz#67f65bfe35c83920f45b2dcae806f6f80951fa7b"
   integrity sha512-5T+g7+BKe0u0E5NMH+yjpvuUzvByr2TQhtr0H76yVan1EneYmd63UKWkJ0PMCqxRfFuftN7gX1ruTOxfju0Ecg==
@@ -3323,7 +3324,7 @@ for-in@^1.0.2:
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
   integrity sha1-gQaNKVqBQuwKxybG4iAMMPttXoA=
 
-form-data-objectizer@^1.0.0:
+"form-data-objectizer@>= 1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/form-data-objectizer/-/form-data-objectizer-1.0.0.tgz#6f47630fa368d8548738bd304ad815dc0d7201fe"
   integrity sha512-kXj3ud4KQ4AZNBP/eq2TOBHXINMdLu4IzcxBFhguFH/AQ8rjQs3UUlhu94eKUG+vAt8a4LHOdNGH/6CKKro1Mg==
@@ -6173,7 +6174,7 @@ qs@6.7.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
-qs@^6.10.1:
+"qs@>= 6.9.3", qs@^6.10.1:
   version "6.10.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.1.tgz#4931482fa8d647a5aab799c5271d2133b981fb6a"
   integrity sha512-M528Hph6wsSVOBiYUnGf+K/7w0hNshs/duGsNXPUCLH5XAqjEtiPGwNONLV0tBH8NoGb0mvD5JubnUTrujKDTg==
@@ -6479,7 +6480,7 @@ repeat-string@^1.6.1:
   resolved "https://registry.yarnpkg.com/repeat-string/-/repeat-string-1.6.1.tgz#8dcae470e1c88abc2d600fff4a776286da75e637"
   integrity sha1-jcrkcOHIirwtYA//Sndihtp15jc=
 
-replaceall@^0.1.6:
+"replaceall@>= 0.1.6", replaceall@^0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/replaceall/-/replaceall-0.1.6.tgz#81d81ac7aeb72d7f5c4942adf2697a3220688d8e"
   integrity sha1-gdgax663LX9cSUKt8ml6MiBojY4=
