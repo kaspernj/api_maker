@@ -320,6 +320,29 @@ Task.ransack({s: "id desc"})
 
 Each attribute is defined as a method on each model. So if you have an attribute called `name` on the `Task`-model, then it be read by doing this: `task.name()`.
 
+### Prop types validation
+
+You can validate model types and loaded attributes like this:
+
+```js
+import {ModelPropType} from "@kaspernj/api-maker"
+
+class MyComponent extends React.Component {
+  static propTypes = {
+    task: ModelPropType.ofModel(Task).withAttributes(["id", "name", "updatedAt"]).isRequired
+  }
+}
+```
+
+Or if it isn't required:
+```js
+class MyComponent extends React.Component {
+  static propTypes = {
+    task: ModelPropType.ofModel(Task).withAttributes(["id", "name", "updatedAt"]).isNotRequired
+  }
+}
+```
+
 ### Relationships
 
 #### Has many
