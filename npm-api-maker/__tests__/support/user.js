@@ -10,7 +10,8 @@ module.exports = class User {
     return "User"
   }
 
-  constructor({a}) {
+  constructor({a, b}) {
+    this.abilities = b
     this.modelData = a
   }
 }

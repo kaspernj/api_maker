@@ -39,8 +39,18 @@ module.exports = class ApiMakerModelPropType {
       return new Error(`Expected ${propName} to be of type ${this.modelClass.name} but it wasn't: ${model.constructor.name}`)
     }
 
-    if (this._withAttributes) {
-      for (const attributeName of this._withAttributes) {
+    if (this._withLoadedAbilities) {
+      for (const abilityName of this._withLoadedAbilities) {
+        const underscoreAbilityName = Inflection.underscore(abilityName)
+
+        if (!(underscoreAbilityName in model.abilities)) {
+          return new Error(`The ability ${abilityName} was required to be loaded in ${propName} of the ${model.constructor.name} type but it wasn't`)
+        }
+      }
+    }
+
+    if (this._withLoadedAttributes) {
+      for (const attributeName of this._withLoadedAttributes) {
         const underscoreAttributeName = Inflection.underscore(attributeName)
 
         if (!(underscoreAttributeName in model.modelData)) {
@@ -50,8 +60,14 @@ module.exports = class ApiMakerModelPropType {
     }
   }
 
-  withAttributes(arrayOfAttributes) {
-    this._withAttributes = arrayOfAttributes
+  withLoadedAbilities(arrayOfAbilities) {
+    this._withLoadedAbilities = arrayOfAbilities
+
+    return this
+  }
+
+  withLoadedAttributes(arrayOfAttributes) {
+    this._withLoadedAttributes = arrayOfAttributes
 
     return this
   }
