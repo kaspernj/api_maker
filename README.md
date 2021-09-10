@@ -352,6 +352,22 @@ class MyComponent extends React.Component {
 }
 ```
 
+It is possible to validate on nested preloaded associations recursively as well:
+```js
+class MyComponent extends React.Component {
+  static propTypes = {
+    task: ModelPropType.ofModel(Task)
+      .withLoadedAssociation("project")
+        .withLoadedAttributes(["name"]) // Validates that the attribute 'name' is loaded on the association called 'project'
+        .withLoadedAssociation("account")
+          .withLoadedAttributes(["name"]) // Validates that the attribute 'name' is loaded on the association called 'account' through 'project'
+          .previous()
+        .previous()
+      .isRequired
+  }
+}
+```
+
 ### Relationships
 
 #### Has many
