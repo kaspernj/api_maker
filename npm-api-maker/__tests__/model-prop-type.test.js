@@ -3,20 +3,22 @@ const Task = require("./support/task")
 const User = require("./support/user")
 
 describe("ModelPropType", () => {
-  it("validates model class successfully", () => {
-    const user = new User({})
-    const validator = ModelPropType.ofModel(User).isRequired
-    const validation = validator({user}, "user")
+  describe("ofModel", () => {
+    it("validates model class successfully", () => {
+      const user = new User({})
+      const validator = ModelPropType.ofModel(User).isRequired
+      const validation = validator({user}, "user")
 
-    expect(validation).toBeUndefined()
-  })
+      expect(validation).toBeUndefined()
+    })
 
-  it("validates model class unsuccessfully", () => {
-    const task = new Task()
-    const validator = ModelPropType.ofModel(User).isRequired
-    const validation = validator({user: task}, "user")
+    it("validates model class unsuccessfully", () => {
+      const task = new Task()
+      const validator = ModelPropType.ofModel(User).isRequired
+      const validation = validator({user: task}, "user")
 
-    expect(validation).toEqual(new Error("Expected user to be of type User but it wasn't: Task"))
+      expect(validation).toEqual(new Error("Expected user to be of type User but it wasn't: Task"))
+    })
   })
 
   describe("withLoadedAbilities", () => {
@@ -98,6 +100,14 @@ describe("ModelPropType", () => {
       const validation = validator({user}, "user")
 
       expect(validation).toEqual(new Error("The attribute name was required to be loaded in user of the User type but it wasn't"))
+    })
+
+    it("ignores if the model is a new record", () => {
+      const user = new User({isNewRecord: true})
+      const validator = ModelPropType.ofModel(User).withLoadedAttributes(["id", "name"]).isRequired
+      const validation = validator({user}, "user")
+
+      expect(validation).toBeUndefined()
     })
   })
 })
