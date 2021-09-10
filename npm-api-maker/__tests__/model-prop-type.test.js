@@ -8,7 +8,7 @@ describe("ModelPropType", () => {
     const validator = ModelPropType.ofModel(User).isRequired
     const validation = validator({user}, "user")
 
-    expect(validation).toEqual(undefined)
+    expect(validation).toBeUndefined()
   })
 
   it("validates model class unsuccessfully", () => {
@@ -24,7 +24,7 @@ describe("ModelPropType", () => {
     const validator = ModelPropType.ofModel(User).withAttributes(["id", "name"]).isRequired
     const validation = validator({user}, "user")
 
-    expect(validation).toEqual(undefined)
+    expect(validation).toBeUndefined()
   })
 
   it("validates required attributes unsuccessfully", () => {
