@@ -42,7 +42,12 @@ describe("ModelPropType", () => {
       const task = new Task()
       const user = new User({r: {tasks: [task]}})
 
-      const validator = ModelPropType.ofModel(User).withLoadedAssociation("tasks").previous().isRequired
+      const validator = ModelPropType
+        .ofModel(User)
+        .withLoadedAssociation("tasks")
+        .previous()
+        .isRequired
+
       const validation = validator({user}, "user")
 
       expect(validation).toBeUndefined()
@@ -51,7 +56,12 @@ describe("ModelPropType", () => {
     it("validates association is loaded overall unsuccessfully", () => {
       const user = new User({r: {}})
 
-      const validator = ModelPropType.ofModel(User).withLoadedAssociation("tasks").previous().isRequired
+      const validator = ModelPropType
+        .ofModel(User)
+        .withLoadedAssociation("tasks")
+        .previous()
+        .isRequired
+
       const validation = validator({user}, "user")
 
       expect(validation).toEqual(new Error("The association tasks was required to be loaded in user of the User type but it wasn't"))
