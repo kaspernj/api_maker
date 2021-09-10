@@ -37,6 +37,42 @@ describe("ModelPropType", () => {
     })
   })
 
+  describe("withLoadedAssociation", () => {
+    it("validates association is loaded overall successfully", () => {
+      const task = new Task()
+      const user = new User({r: {tasks: [task]}})
+
+      const validator = ModelPropType.ofModel(User).withLoadedAssociation("tasks").previous().isRequired
+      const validation = validator({user}, "user")
+
+      expect(validation).toBeUndefined()
+    })
+
+    it("validates association is loaded overall unsuccessfully", () => {
+      const user = new User({r: {}})
+
+      const validator = ModelPropType.ofModel(User).withLoadedAssociation("tasks").previous().isRequired
+      const validation = validator({user}, "user")
+
+      expect(validation).toEqual(new Error("The association tasks was required to be loaded in user of the User type but it wasn't"))
+    })
+
+    it("validates attributes on nested associations", () => {
+      const task = new Task({a: {id: 4, name: "Test task"}})
+      const user = new User({r: {tasks: [task]}})
+
+      const validator = ModelPropType.ofModel(User)
+        .withLoadedAssociation("tasks")
+          .withLoadedAttributes(["id", "name", "updatedAt"])
+          .previous()
+        .isRequired
+
+      const validation = validator({user}, "user")
+
+      expect(validation).toEqual(new Error("The attribute updatedAt was required to be loaded in user.tasks of the Task type but it wasn't"))
+    })
+  })
+
   describe("withLoadedAttributes", () => {
     it("validates required attributes successfully", () => {
       const user = new User({a: {id: 5, name: "Donald Duck"}})
@@ -51,7 +87,7 @@ describe("ModelPropType", () => {
       const validator = ModelPropType.ofModel(User).withLoadedAttributes(["id", "name"]).isRequired
       const validation = validator({user}, "user")
 
-      expect(validation).toEqual(new Error("name was required to be loaded in user of the User type but it wasn't"))
+      expect(validation).toEqual(new Error("The attribute name was required to be loaded in user of the User type but it wasn't"))
     })
   })
 })

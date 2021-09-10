@@ -1,10 +1,11 @@
+const {digg} = require("@kaspernj/object-digger")
 const Inflection = require("inflection")
 
 module.exports = class ApiMakerModelPropType {
   static ofModel(modelClass) {
     const modelPropTypeInstance = new ApiMakerModelPropType()
 
-    modelPropTypeInstance.setModelClass(modelClass)
+    modelPropTypeInstance.withModelType(modelClass)
 
     return modelPropTypeInstance
   }
@@ -12,6 +13,7 @@ module.exports = class ApiMakerModelPropType {
   constructor() {
     this.isNotRequired = this.isNotRequired.bind(this)
     this.isRequired = this.isRequired.bind(this)
+    this._withLoadedAssociations = {}
   }
 
   isNotRequired(props, propName, _componentName) {
@@ -30,21 +32,62 @@ module.exports = class ApiMakerModelPropType {
     return this.validate({model, propName})
   }
 
-  setModelClass(modelClass) {
-    this.modelClass = modelClass
+  previous() {
+    if (!this._previousModelPropType) throw new Error("No previous model prop type set")
+
+    return this._previousModelPropType
+  }
+
+  setPreviousModelPropType(previousModelPropType) {
+    this._previousModelPropType = previousModelPropType
+  }
+
+  withModelType(modelClass) {
+    this._withModelType = modelClass
   }
 
   validate({model, propName}) {
-    if (this.modelClass.name != model.constructor.name) {
-      return new Error(`Expected ${propName} to be of type ${this.modelClass.name} but it wasn't: ${model.constructor.name}`)
-    }
+    if (this._withModelType && this._withModelType.name != model.constructor.name)
+      return new Error(`Expected ${propName} to be of type ${this._withModelType.name} but it wasn't: ${model.constructor.name}`)
 
     if (this._withLoadedAbilities) {
       for (const abilityName of this._withLoadedAbilities) {
         const underscoreAbilityName = Inflection.underscore(abilityName)
 
-        if (!(underscoreAbilityName in model.abilities)) {
+        if (!(underscoreAbilityName in model.abilities))
           return new Error(`The ability ${abilityName} was required to be loaded in ${propName} of the ${model.constructor.name} type but it wasn't`)
+      }
+    }
+
+    if (this._withLoadedAssociations) {
+      for (const associationName in this._withLoadedAssociations) {
+        const associationModelPropType = digg(this._withLoadedAssociations, associationName)
+        const underscoreAssociationName = Inflection.underscore(associationName)
+
+        if (!(underscoreAssociationName in model.relationshipsCache))
+          return new Error(`The association ${associationName} was required to be loaded in ${propName} of the ${model.constructor.name} type but it wasn't`)
+
+        const associationCache = digg(model.relationshipsCache, underscoreAssociationName)
+
+        let associationModel
+
+        // Find a model to run sub-model-prop-type-validations on
+        if (Array.isArray(associationCache)) {
+          if (associationCache.length > 0) {
+            associationModel = associationCache[0]
+          }
+        } else if (associationCache) {
+          associationModel = associationCache
+        }
+
+        // Run sub-model-prop-type-validations
+        if (associationModel) {
+          const validationResult = associationModelPropType.validate({
+            model: associationModel,
+            propName: `${propName}.${associationName}`
+          })
+
+          if (validationResult) return validationResult
         }
       }
     }
@@ -54,7 +97,7 @@ module.exports = class ApiMakerModelPropType {
         const underscoreAttributeName = Inflection.underscore(attributeName)
 
         if (!(underscoreAttributeName in model.modelData)) {
-          return new Error(`${attributeName} was required to be loaded in ${propName} of the ${model.constructor.name} type but it wasn't`)
+          return new Error(`The attribute ${attributeName} was required to be loaded in ${propName} of the ${model.constructor.name} type but it wasn't`)
         }
       }
     }
@@ -64,6 +107,15 @@ module.exports = class ApiMakerModelPropType {
     this._withLoadedAbilities = arrayOfAbilities
 
     return this
+  }
+
+  withLoadedAssociation(associationName) {
+    const associationModelPropType = new ApiMakerModelPropType()
+
+    associationModelPropType.setPreviousModelPropType(this)
+    this._withLoadedAssociations[associationName] = associationModelPropType
+
+    return associationModelPropType
   }
 
   withLoadedAttributes(arrayOfAttributes) {
