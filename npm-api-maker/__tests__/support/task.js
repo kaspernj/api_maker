@@ -1,4 +1,4 @@
-module.exports = class User {
+module.exports = class Task {
   static modelClassData() {
     return {
       attributes: [],
@@ -7,10 +7,6 @@ module.exports = class User {
   }
 
   static modelName() {
-    return "User"
-  }
-
-  constructor({a}) {
-    this.modelData = a
+    return "Task"
   }
 }

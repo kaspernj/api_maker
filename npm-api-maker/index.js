@@ -23,6 +23,7 @@ const instanceOfClassName = require("./src/instance-of-class-name.cjs")
 const KeyValueStore = require("./src/key-value-store.cjs")
 const Logger = require("./src/logger.cjs")
 const ModelName = require("./src/model-name.cjs")
+const ModelPropType = require("./src/model-prop-type.cjs")
 const ModelsResponseReader = require("./src/models-response-reader.cjs")
 const MoneyFormatter = require("./src/money-formatter.cjs")
 const NotLoadedError = require("./src/not-loaded-error.cjs")
@@ -67,6 +68,7 @@ export {
   KeyValueStore,
   Logger,
   ModelName,
+  ModelPropType,
   ModelsResponseReader,
   MoneyFormatter,
   NotLoadedError,
