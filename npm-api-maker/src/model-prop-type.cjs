@@ -73,17 +73,17 @@ module.exports = class ApiMakerModelPropType {
 
         // Find a model to run sub-model-prop-type-validations on
         if (Array.isArray(associationCache)) {
-          if (associationCache.length > 0) {
-            associationModel = associationCache[0]
+          for (const preloadedModel of associationCache) {
+            const validationResult = associationModelPropType.validate({
+              model: preloadedModel,
+              propName: `${propName}.${associationName}`
+            })
+
+            if (validationResult) return validationResult
           }
         } else if (associationCache) {
-          associationModel = associationCache
-        }
-
-        // Run sub-model-prop-type-validations
-        if (associationModel) {
           const validationResult = associationModelPropType.validate({
-            model: associationModel,
+            model: associationCache,
             propName: `${propName}.${associationName}`
           })
 
