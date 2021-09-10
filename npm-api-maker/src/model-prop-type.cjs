@@ -92,7 +92,7 @@ module.exports = class ApiMakerModelPropType {
       }
     }
 
-    if (this._withLoadedAttributes) {
+    if (this._withLoadedAttributes && model.isPersisted()) {
       for (const attributeName of this._withLoadedAttributes) {
         const underscoreAttributeName = Inflection.underscore(attributeName)
 
