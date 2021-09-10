@@ -26,7 +26,7 @@
   },
   "version": "1.0.54",
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.112",
+    "@kaspernj/api-maker": ">= 1.0.115",
     "@kaspernj/object-digger": ">= 1.0.2",
     "classnames": ">= 2.2.6",
     "inflection": ">= 1.12.0"
