@@ -35,6 +35,10 @@ module.exports = class ApiMakerModelPropType {
   }
 
   validate({model, propName}) {
+    if (this.modelClass.name != model.constructor.name) {
+      return new Error(`Expected ${propName} to be of type ${this.modelClass.name} but it wasn't: ${model.constructor.name}`)
+    }
+
     if (this._withAttributes) {
       for (const attributeName of this._withAttributes) {
         const underscoreAttributeName = Inflection.underscore(attributeName)
