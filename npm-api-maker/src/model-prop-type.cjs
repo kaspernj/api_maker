@@ -17,7 +17,9 @@ module.exports = class ApiMakerModelPropType {
   isNotRequired(props, propName, _componentName) {
     const model = props[propName]
 
-    return this.validate({model, propName})
+    if (model) {
+      return this.validate({model, propName})
+    }
   }
 
   isRequired(props, propName, _componentName) {
