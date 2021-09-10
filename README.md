@@ -329,7 +329,7 @@ import {ModelPropType} from "@kaspernj/api-maker"
 
 class MyComponent extends React.Component {
   static propTypes = {
-    task: ModelPropType.ofModel(Task).withAttributes(["id", "name", "updatedAt"]).isRequired
+    task: ModelPropType.ofModel(Task).withLoadedAttributes(["id", "name", "updatedAt"]).isRequired
   }
 }
 ```
@@ -338,7 +338,16 @@ Or if it isn't required:
 ```js
 class MyComponent extends React.Component {
   static propTypes = {
-    task: ModelPropType.ofModel(Task).withAttributes(["id", "name", "updatedAt"]).isNotRequired
+    task: ModelPropType.ofModel(Task).withLoadedAttributes(["id", "name", "updatedAt"]).isNotRequired
+  }
+}
+```
+
+You can also validate loaded abilities like this:
+```js
+class MyComponent extends React.Component {
+  static propTypes = {
+    task: ModelPropType.ofModel(Task).withLoadedAbilities(["destroy", "edit"]).isNotRequired
   }
 }
 ```
