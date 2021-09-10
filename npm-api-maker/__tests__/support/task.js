@@ -2,7 +2,7 @@ module.exports = class Task {
   static modelClassData() {
     return {
       attributes: [],
-      name: "User"
+      name: "Task"
     }
   }
 
