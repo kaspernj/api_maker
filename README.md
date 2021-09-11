@@ -226,67 +226,68 @@ import {Task} from "api-maker/models"
 
 const task = new Task()
 task.assignAttributes({name: "New task"})
-task.create().then(status => {
-  if (status.success) {
-    console.log(`Task was created with ID: ${task.id()}`)
-  } else {
-    console.log("Task wasnt created")
-  }
-})
+
+try {
+ await task.create()
+ console.log(`Task was created with ID: ${task.id()}`)
+} catch (error) {
+  console.log("Task wasnt created")
+}
 ```
 
 ### Finding an existing model
 
 ```js
-Task.find(5).then(task => {
-  console.log(`Task found: ${task.name()}`)
-})
+const task = await Task.find(5)
+
+console.log(`Task found: ${task.name()}`)
 ```
 
 ### Updating a model
 
 ```js
 task.assignAttributes({name: "New name"})
-task.save().then(status => {
-  if (status.success) {
-    console.log(`Task was updated and name is now: ${task.name()}`)
-  } else {
-    console.log("Task wasnt updated")
-  }
-})
+
+try {
+  await task.save()
+
+  console.log(`Task was updated and name is now: ${task.name()}`)
+} catch (error) {
+  console.log("Task wasnt updated")
+}
 ```
 
 ```js
-task.update({name: "New name"}).then(status => {
-  if (status.success) {
-    console.log(`Task was updated and name is now: ${task.name()}`)
-  } else {
-    console.log("Task wasnt updated")
-  }
-})
+try {
+  await task.update({name: "New name"})
+
+  console.log(`Task was updated and name is now: ${task.name()}`)
+} catch (error) {
+  console.log("Task wasnt updated")
+}
 ```
 
 ### Deleting a model
 
 ```js
-task.destroy().then(status => {
-  if (status.success) {
-    console.log("Task was destroyed")
-  } else {
-    console.log("Task wasnt destroyed")
-  }
-})
+try {
+  await task.destroy()
+
+  console.log("Task was destroyed")
+} catch (error) {
+  console.log("Task wasnt destroyed")
+}
 ```
 
 ### Preloading models
 
 ```js
-Task.ransack().preload("project.customer").toArray().then(tasks => {
-  for(const task of tasks) {
-    console.log(`Project of task ${task.id()}: ${task.project().name()}`)
-    console.log(`Customer of task ${task.id()}: ${task.project().customer().name()}`)
-  }
-})
+const tasks = await Task.ransack().preload("project.customer").toArray()
+
+for (const task of tasks) {
+  console.log(`Project of task ${task.id()}: ${task.project().name()}`)
+  console.log(`Customer of task ${task.id()}: ${task.project().customer().name()}`)
+}
 ```
 
 ### Query models
@@ -294,9 +295,9 @@ Task.ransack().preload("project.customer").toArray().then(tasks => {
 ApiModels uses [Ransack](https://github.com/activerecord-hackery/ransack) to expose a huge amount of options to query data.
 
 ```js
-Task.ransack({name_cont: "something"}).toArray().then(tasks => {
-  console.log(`Found: ${tasks.length} tasks`)
-})
+const = tasks = await Task.ransack({name_cont: "something"}).toArray()
+
+console.log(`Found: ${tasks.length} tasks`)
 ```
 
 Distinct:
@@ -307,7 +308,7 @@ const tasks = await Task.ransack({relationships_something_eq: "something"}).dist
 ### Selecting only specific attributes
 
 ```js
-Task.ransack().select({Task: ["id", "name"]}).toArray().then(tasks => this.setState({tasks}))
+const tasks = await Task.ransack().select({Task: ["id", "name"]}).toArray()
 ```
 
 ### Sorting models
@@ -375,14 +376,14 @@ class MyComponent extends React.Component {
 A `has many` relationship will return a collection the queries the sub models.
 
 ```js
-project.tasks().toArray().then(tasks => {
-  console.log(`Project ${project.id()} has ${tasks.length} tasks`)
+const tasks = await project.tasks().toArray()
 
-  for(const key in tasks) {
-    const task = tasks[key]
-    console.log(`Task ${task.id()} is named: ${task.name()}`)
-  }
-})
+console.log(`Project ${project.id()} has ${tasks.length} tasks`)
+
+for(const key in tasks) {
+  const task = tasks[key]
+  console.log(`Task ${task.id()} is named: ${task.name()}`)
+}
 ```
 
 #### Belongs to
@@ -390,9 +391,9 @@ project.tasks().toArray().then(tasks => {
 A `belongs to` relationship will return a promise that will get that model:
 
 ```js
-task.project().then(project => {
-  console.log(`Task ${task.id()} belongs to a project called: ${project.name()}`)
-})
+const project = await task.project()
+
+console.log(`Task ${task.id()} belongs to a project called: ${project.name()}`)
 ```
 
 #### Has one
@@ -411,9 +412,7 @@ Then you can do like this in JS:
 ```js
 import {Devise} from "@kaspernj/api-maker"
 
-Devise.currentUser().then(user => {
-  console.log(`The current user has this email: ${user.email()}`)
-})
+console.log(`The current user has this email: ${Devise.currentUser().email()}`)
 ```
 
 ## Events from the backend
@@ -470,10 +469,10 @@ end
 ```
 
 ```js
-User.find(5).then(user => {
-  let subscription = user.connectUpdated(args => {
-    console.log(`Model was updated: ${args.model.id()}`)
-  })
+const user = await User.find(5)
+
+let subscription = user.connectUpdated(args => {
+  console.log(`Model was updated: ${args.model.id()}`)
 })
 ```
 
@@ -488,21 +487,21 @@ import { EventCreated, EventDestroyed, EventUpdated } from "@kaspernj/api-maker"
 ```
 
 ```jsx
-<EventCreated modelClass={User} onCreated={(args) => this.onUserCreated(args)} />
-<EventDestroyed model={user} onDestroyed={(args) => this.onUserDestroyed(args)} />
-<EventUpdated model={user} onUpdated={(args) => this.onUserUpdated(args)} />
+<EventCreated modelClass={User} onCreated={this.onUserCreated} />
+<EventDestroyed model={user} onDestroyed={this.onUserDestroyed} />
+<EventUpdated model={user} onUpdated={this.onUserUpdated} />
 ```
 
 ```jsx
-onUserCreated(args) {
+onUserCreated = (args) => {
   this.setState({user: args.model})
 }
 
-onUserDestroyed(args) {
+onUserDestroyed = (args) => {
   this.setState({user: args.model})
 }
 
-onUserUpdated(args) {
+onUserUpdated = (args) => {
   this.setState({user: args.model})
 }
 ```
@@ -523,7 +522,11 @@ import { EventConnection } from "@kaspernj/api-maker"
 ```
 
 ```jsx
-<EventConnection model={this.state.user} event="eventName" onCall={(data) => this.onEvent(data)} />
+<EventConnection model={this.state.user} event="eventName" onCall={this.onEvent} />
+
+onEvent = (data) => {
+  console.log("Event was called", data)
+}
 ```
 
 ### Loading abilities into the frontend from CanCan
