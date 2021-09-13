@@ -738,10 +738,10 @@
     classnames ">= 2.2.6"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.115":
-  version "1.0.115"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.115.tgz#cbec3f5ae9cedcf868a00d597efcbedaba8c6b8b"
-  integrity sha512-DDoaeTP/6uoPHuZxTx9fpXZF7TfX0zBIixtH9fCqNbLcsqAtG+VBqs4uoYIOUIwNY+vetz3craXnDSUILAfQWg==
+"@kaspernj/api-maker@>= 1.0.115", "@kaspernj/api-maker@>= 1.0.91":
+  version "1.0.116"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.116.tgz#a40b9dbf3268e4594f55f1c85c04566abfeccd5b"
+  integrity sha512-FxWFeE3xXXyFieJAPHR6qvteNsJUSTejlgpzng66QJjaJqDVR7DaIDlymmmjj9QMQO4LVVeePvRYGec3CHJ2Sw==
   dependencies:
     "@kaspernj/object-digger" ">= 1.0.2"
     "@rails/actioncable" ">= 6.1.0"
@@ -757,27 +757,6 @@
     object-to-formdata ">= 4.1.0"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
-    strftime ">= 0.10.0"
-    wake-event ">= 0.0.1"
-
-"@kaspernj/api-maker@>= 1.0.91":
-  version "1.0.91"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.91.tgz#88d25ae4882193a5f8883110f4931104a47f76aa"
-  integrity sha512-/URf09KzLPuyPaow7MOqNlzoICcycSShUYn7zhN2/ujmHNt7/Rsv5y9FDwghUy1Sx3lOyfCf63Rh24u/8Bt1jA==
-  dependencies:
-    "@kaspernj/object-digger" ">= 1.0.2"
-    "@rails/actioncable" ">= 6.1.0"
-    await-lock "^2.1.0"
-    clone-deep "^4.0.1"
-    debounce "^1.2.1"
-    form-data-objectizer "^1.0.0"
-    form-serialize ">= 0.7.2"
-    format-number ">= 3.0.0"
-    inflection ">= 1.12.0"
-    js-money ">= 0.6.3"
-    numberable ">= 1.0.0"
-    object-to-formdata ">= 4.1.0"
-    replaceall "^0.1.6"
     strftime ">= 0.10.0"
     wake-event ">= 0.0.1"
 
@@ -1136,11 +1115,6 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
-await-lock@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-2.1.0.tgz#bc78c51d229a34d5d90965a1c94770e772c6145e"
-  integrity sha512-t7Zm5YGgEEc/3eYAicF32m/TNvL+XOeYZy9CvBUeJY/szM7frLolFylhrlZNWV/ohWhcUXygrBGjYmoQdxF4CQ==
-
 babel-jest@^27.1.1:
   version "27.1.1"
   resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-27.1.1.tgz#9359c45995d0940b84d2176ab83423f9eed07617"
@@ -1354,7 +1328,7 @@ cliui@^7.0.2:
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
 
-"clone-deep@>= 4.0.1", clone-deep@^4.0.1:
+"clone-deep@>= 4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/clone-deep/-/clone-deep-4.0.1.tgz#c19fd9bdbbf85942b4fd979c84dcf7d5f07c2387"
   integrity sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==
@@ -1470,7 +1444,7 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-"debounce@>= 1.2.0", "debounce@>= 1.2.1", debounce@^1.2.1:
+"debounce@>= 1.2.0", "debounce@>= 1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
   integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
@@ -1969,7 +1943,7 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.1.1.tgz#c4b489e80096d9df1dfc97c79871aea7c617c469"
   integrity sha512-zAoAQiudy+r5SvnSw3KJy5os/oRJYHzrzja/tBDqrZtNhUw8bt6y8OBzMWcjWr+8liV8Eb6yOhw8WZ7VFZ5ZzA==
 
-"form-data-objectizer@>= 1.0.0", form-data-objectizer@^1.0.0:
+"form-data-objectizer@>= 1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/form-data-objectizer/-/form-data-objectizer-1.0.0.tgz#6f47630fa368d8548738bd304ad815dc0d7201fe"
   integrity sha512-kXj3ud4KQ4AZNBP/eq2TOBHXINMdLu4IzcxBFhguFH/AQ8rjQs3UUlhu94eKUG+vAt8a4LHOdNGH/6CKKro1Mg==
@@ -3556,7 +3530,7 @@ regexpp@^3.1.0:
   resolved "https://registry.yarnpkg.com/regexpp/-/regexpp-3.1.0.tgz#206d0ad0a5648cffbdb8ae46438f3dc51c9f78e2"
   integrity sha512-ZOIzd8yVsQQA7j8GCSlPGXwg5PfmA1mrq0JP4nGhh54LaKN3xdai/vHUDu74pKwV8OxseMS65u2NImosQcSD0Q==
 
-"replaceall@>= 0.1.6", replaceall@^0.1.6:
+"replaceall@>= 0.1.6":
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/replaceall/-/replaceall-0.1.6.tgz#81d81ac7aeb72d7f5c4942adf2697a3220688d8e"
   integrity sha1-gdgax663LX9cSUKt8ml6MiBojY4=
