@@ -17,7 +17,7 @@
     "@kaspernj/api-maker-inputs": "^1.0.55",
     "@kaspernj/object-digger": "^1.0.2",
     "@rails/actioncable": "^6.1.4",
-    "@rails/webpacker": "5.4.2",
+    "@rails/webpacker": "5.4.3",
     "babel-preset-react": "^6.24.1",
     "classnames": "^2.3.1",
     "debounce": "^1.2.1",
