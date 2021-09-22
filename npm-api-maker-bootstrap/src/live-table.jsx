@@ -8,6 +8,7 @@ const React = require("react")
 
 import Card from "./card"
 import Paginate from "./paginate"
+import SortLink from "./sort-link"
 
 export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   static defaultProps = {
@@ -355,7 +356,12 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
         data-identifier={this.identifierForColumn(column)}
         key={this.identifierForColumn(column)}
       >
-        {this.headerLabelForColumn(column)}
+        {column.sortKey && this.state.query &&
+          <SortLink attribute={column.sortKey} query={this.state.query} title={this.headerLabelForColumn(column)} />
+        }
+        {(!column.sortKey || !this.state.query) &&
+          this.headerLabelForColumn(column)
+        }
       </th>
     )
   }
