@@ -253,6 +253,7 @@ module.exports = {
     "react/no-unused-state": "error",
     "react/no-will-update-set-state": "error",
     "react/prefer-es6-class": "error",
+    "react/prefer-exact-props": "error",
     "react/prefer-read-only-props": "error",
     "react/prefer-stateless-function": "error",
     "react/require-default-props": "error",
