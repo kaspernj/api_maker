@@ -3,7 +3,7 @@ import { EventModelClass } from "@kaspernj/api-maker"
 import { Task } from "api-maker/models"
 import React from "react"
 
-export default class ModelsCreatedEvent extends React.Component {
+export default class ModelsCreatedEvent extends React.PureComponent {
   state = {
     eventData: undefined
   }

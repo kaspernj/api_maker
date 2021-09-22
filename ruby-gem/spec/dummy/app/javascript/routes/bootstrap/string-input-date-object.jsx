@@ -1,4 +1,4 @@
-export default class BootstrapStringInputDateObject extends React.Component {
+export default class BootstrapStringInputDateObject extends React.PureComponent {
   render() {
     return (
       <Layout>

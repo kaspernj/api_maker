@@ -1,6 +1,6 @@
 import React from "react"
 
-export default class ModelsLoadHasOneThrough extends React.Component {
+export default class ModelsLoadHasOneThrough extends React.PureComponent {
   state = {}
 
   async componentDidMount() {

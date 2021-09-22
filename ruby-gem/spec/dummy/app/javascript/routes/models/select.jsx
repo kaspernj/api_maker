@@ -1,6 +1,6 @@
 import React from "react"
 
-export default class ModelsSelect extends React.Component {
+export default class ModelsSelect extends React.PureComponent {
   state = {}
 
   async componentDidMount() {

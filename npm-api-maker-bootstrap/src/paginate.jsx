@@ -7,7 +7,7 @@ const React = require("react")
 
 import {Result} from "@kaspernj/api-maker"
 
-export default class ApiMakerBootstrapPaginate extends React.Component {
+export default class ApiMakerBootstrapPaginate extends React.PureComponent {
   static propTypes = PropTypesExact({
     result: PropTypes.oneOfType([
       instanceOfClassName("ApiMakerResult"),

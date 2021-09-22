@@ -3,7 +3,7 @@ const { Link } = require("react-router-dom")
 const qs = require("qs")
 const React = require("react")
 
-export default class ApiMakerBootstrapSortLink extends React.Component {
+export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   constructor(props) {
     super(props)
     const searchKey = this.props.query.queryArgs.searchKey || "q"

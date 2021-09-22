@@ -1,4 +1,4 @@
-export default class ModelsUpdate extends React.Component {
+export default class ModelsUpdate extends React.PureComponent {
   state = {
     projectId: digg(this, "props", "match", "params", "id")
   }

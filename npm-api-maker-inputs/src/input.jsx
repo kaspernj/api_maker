@@ -8,7 +8,7 @@ const React = require("react")
 const replaceall = require("replaceall")
 const strftime = require("strftime")
 
-export default class ApiMakerInput extends React.Component {
+export default class ApiMakerInput extends React.PureComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,

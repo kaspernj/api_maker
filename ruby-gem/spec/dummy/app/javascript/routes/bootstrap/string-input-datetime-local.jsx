@@ -1,4 +1,4 @@
-export default class BootstrapStringInputDatetimeLocal extends React.Component {
+export default class BootstrapStringInputDatetimeLocal extends React.PureComponent {
   state = {}
 
   componentDidMount() {
