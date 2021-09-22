@@ -2,6 +2,7 @@ const {Collection, EventCreated, EventDestroyed, EventLocationChanged, EventUpda
 const {debounce} = require("debounce")
 const {digg, digs} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
+const Money = require("js-money")
 const PropTypes = require("prop-types")
 const React = require("react")
 
@@ -27,7 +28,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       instanceOfClassName("ApiMakerCollection"),
       PropTypes.instanceOf(Collection)
     ]),
-    columnsContent: PropTypes.func.isRequired,
+    columns: PropTypes.array,
+    columnsContent: PropTypes.func,
     controls: PropTypes.func,
     defaultParams: PropTypes.object,
     destroyEnabled: PropTypes.bool.isRequired,
@@ -35,7 +37,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     editModelPath: PropTypes.func,
     filterContent: PropTypes.func,
     filterSubmitLabel: PropTypes.node,
-    headersContent: PropTypes.func.isRequired,
+    headersContent: PropTypes.func,
     header: PropTypes.func,
     groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
@@ -259,14 +261,16 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       <>
         <thead>
           <tr>
-            {this.props.headersContent({query})}
+            {this.props.columns && this.headersContentFromColumns()}
+            {this.props.headersContent && this.props.headersContent({query})}
             <th />
           </tr>
         </thead>
         <tbody>
           {models.map((model) =>
             <tr className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()} key={model.id()}>
-              {this.props.columnsContent({model})}
+              {this.props.columns && this.columnsContentFromColumns(model)}
+              {this.props.columnsContent && this.props.columnsContent({model})}
               <td className="actions-column text-nowrap text-right">
                 {actionsContent && actionsContent({model})}
                 {editModelPath && model.can("edit") &&
@@ -294,6 +298,91 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       classNames.push(this.props.className)
 
     return classNames.join(" ")
+  }
+
+  columnContentFromContentArg(column, model) {
+    const modelArgName = inflection.camelize(this.props.modelClass.modelClassData().name, true)
+    const contentArgs = {}
+
+    contentArgs[modelArgName] = model
+
+    const value = column.content(contentArgs)
+
+    return this.presentColumnValue(value)
+  }
+
+  columnClassNamesForColumn(column) {
+    const classNames = ["live-table-column"]
+
+    if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
+    if (column.textCenter) classNames.push("text-center")
+    if (column.textRight) classNames.push("text-right")
+
+    return classNames
+  }
+
+  columnsContentFromColumns(model) {
+    return this.props.columns.map((column) =>
+      <td
+        className={classNames(this.columnClassNamesForColumn(column))}
+        data-identifier={this.identifierForColumn(column)}
+        key={this.identifierForColumn(column)}
+      >
+        {column.content && this.columnContentFromContentArg(column, model)}
+        {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
+      </td>
+    )
+  }
+
+  columnsContentFromAttributeAndPath(column, model) {
+    const {attribute} = digs(column, "attribute")
+    const currentModelClass = this.props.modelClass
+    const path = column.path || []
+
+    if (path.length > 0) throw new Error("'path' support not implemented")
+
+    if (!(attribute in model)) throw new Error(`${currentModelClass.modelName().name} doesn't respond to ${attribute}`)
+
+    const value = model[attribute]()
+
+    return this.presentColumnValue(value)
+  }
+
+  headersContentFromColumns() {
+    return this.props.columns.map((column) =>
+      <th
+        className={classNames(...this.headerClassNameForColumn(column))}
+        data-identifier={this.identifierForColumn(column)}
+        key={this.identifierForColumn(column)}
+      >
+        {this.headerLabelForColumn(column)}
+      </th>
+    )
+  }
+
+  headerClassNameForColumn(column) {
+    const classNames = ["live-table-header"]
+
+    if (column.headerProps && column.headerProps.className) classNames.push(column.headerProps.className)
+    if (column.textCenter) classNames.push("text-center")
+    if (column.textRight) classNames.push("text-right")
+
+    return classNames
+  }
+
+  headerLabelForColumn(column) {
+    if (column.label) return column.label
+    if (column.attribute) return this.props.modelClass.humanAttributeName(column.attribute)
+
+    throw new Error("No 'label' or 'attribute' was given")
+  }
+
+  identifierForColumn(column) {
+    if (column.identifier) return column.identifier
+    if (column.attribute) return `attribute-${column.attribute}`
+    if (column.sortKey) return `sort-key-${column.sortKey}`
+
+    throw new Error("No 'attribute', 'identifier' or 'sortKey' was given")
   }
 
   onDestroyClicked = async (e, model) => {
@@ -359,10 +448,31 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     }
   }
 
+  presentColumnValue(value) {
+    if (value instanceof Date) {
+      return I18n.l("time.formats.default", value)
+    } else if (value instanceof Money) {
+      return MoneyFormatter.format(value)
+    } else if (typeof value == "boolean") {
+      if (value) {
+        return I18n.t("js.shared.yes")
+      }
+
+      return I18n.t("js.shared.no")
+    } else if (Array.isArray(value)) {
+      return value
+        .map((valuePart) => this.presentColumnValue(valuePart))
+        .filter((valuePart) => Boolean(valuePart))
+        .join(", ")
+    }
+
+    return value
+  }
+
   submitFilter = () => {
     const {appHistory} = this.props
     const qParams = Params.serializeForm(this.refs.filterForm)
-    const { queryQName } = this.state
+    const {queryQName} = this.state
 
     const changeParamsParams = {}
     changeParamsParams[queryQName] = qParams
