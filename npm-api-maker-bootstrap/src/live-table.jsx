@@ -37,7 +37,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func.isRequired,
     header: PropTypes.func,
-    history: PropTypes.object.isRequired,
     groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
     onModelsLoaded: PropTypes.func,
@@ -169,6 +168,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     const {
       abilities,
       actionsContent,
+      appHistory,
       card,
       className,
       collection,
@@ -182,7 +182,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       filterSubmitLabel,
       headersContent,
       header,
-      history,
       groupBy,
       modelClass,
       onModelsLoaded,
@@ -214,7 +213,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return (
       <>
         <EventCreated modelClass={modelClass} onCreated={this.onModelCreated} />
-        <EventLocationChanged history={history} onChanged={this.onLocationChanged} />
+        <EventLocationChanged history={appHistory} onChanged={this.onLocationChanged} />
         {models.map(model =>
           <React.Fragment key={`events-${model.id()}`}>
             <EventDestroyed model={model} onDestroyed={this.onModelDestroyed} />

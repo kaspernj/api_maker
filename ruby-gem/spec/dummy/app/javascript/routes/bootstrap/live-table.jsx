@@ -8,16 +8,16 @@ export default class BootstrapLiveTable extends React.PureComponent {
       <Layout>
         <LiveTable
           appHistory={ApplicationHistory}
-          columnsContent={(args) => this.columnsContent(args)}
-          filterContent={(args) => this.filterContent(args)}
-          headersContent={(args) => this.headersContent(args)}
+          columnsContent={this.columnsContent}
+          filterContent={this.filterContent}
+          headersContent={this.headersContent}
           modelClass={Task}
         />
       </Layout>
     )
   }
 
-  filterContent(args) {
+  filterContent = (args) => {
     const {onFilterChangedWithDelay, qParams} = digs(args, "onFilterChangedWithDelay", "qParams")
 
     return (
@@ -30,7 +30,7 @@ export default class BootstrapLiveTable extends React.PureComponent {
     )
   }
 
-  headersContent({query}) {
+  headersContent = ({query}) => {
     return (
       <>
         <th>
@@ -43,7 +43,7 @@ export default class BootstrapLiveTable extends React.PureComponent {
     )
   }
 
-  columnsContent({model: task}) {
+  columnsContent = ({model: task}) => {
     return (
       <>
         <td>
