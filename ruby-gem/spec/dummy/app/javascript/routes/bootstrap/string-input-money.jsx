@@ -1,7 +1,7 @@
 import { digg } from "@kaspernj/object-digger"
 import React from "react"
 
-export default class BootstrapStringInputDatetimeLocal extends React.Component {
+export default class BootstrapStringInputDatetimeLocal extends React.PureComponent {
   state = {
     currenciesCollection: [["Danish kroner", "DKK"], ["American Dollars", "USD"]]
   }

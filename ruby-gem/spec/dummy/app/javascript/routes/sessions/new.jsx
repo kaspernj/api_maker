@@ -3,7 +3,7 @@ import FlashMessage from "shared/flash-message"
 import { EventEmitterListener } from "@kaspernj/api-maker"
 import React from "react"
 
-export default class SessionsNew extends React.Component {
+export default class SessionsNew extends React.PureComponent {
   emailRef = React.createRef()
   passwordRef = React.createRef()
   rememberMeRef = React.createRef()

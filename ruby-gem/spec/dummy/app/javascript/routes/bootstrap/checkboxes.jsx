@@ -1,4 +1,4 @@
-export default class BootstrapCheckboxes extends React.Component {
+export default class BootstrapCheckboxes extends React.PureComponent {
   state = {}
 
   componentDidMount() {

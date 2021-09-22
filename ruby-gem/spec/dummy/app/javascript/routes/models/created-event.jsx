@@ -1,7 +1,7 @@
 import { EventCreated } from "@kaspernj/api-maker"
 import React from "react"
 
-export default class ModelsCreatedEvent extends React.Component {
+export default class ModelsCreatedEvent extends React.PureComponent {
   state = {
     tasks: []
   }

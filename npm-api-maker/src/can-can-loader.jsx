@@ -5,7 +5,7 @@ const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
 
-export default class ApiMakerCanCanLoader extends React.Component {
+export default class ApiMakerCanCanLoader extends React.PureComponent {
   static propTypes = PropTypesExact({
     abilities: PropTypes.array.isRequired,
     component: PropTypes.object.isRequired

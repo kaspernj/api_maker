@@ -2,7 +2,7 @@ const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
 
-export default class ApiMakerEventDestroyed extends React.Component {
+export default class ApiMakerEventDestroyed extends React.PureComponent {
   static propTypes = PropTypesExact({
     model: PropTypes.object.isRequired,
     onDestroyed: PropTypes.func.isRequired

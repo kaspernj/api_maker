@@ -2,7 +2,7 @@ const classNames = require("classnames")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerBootstrapAttributeRow extends React.Component {
+export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
   static propTypes = {
     attribute: PropTypes.string,
     children: PropTypes.node,

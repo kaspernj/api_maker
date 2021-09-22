@@ -6,7 +6,7 @@ const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
 
-export default class ApiMakerInputsMoney extends React.Component {
+export default class ApiMakerInputsMoney extends React.PureComponent {
   static defaultProps = {
     showCurrencyOptions: true
   }

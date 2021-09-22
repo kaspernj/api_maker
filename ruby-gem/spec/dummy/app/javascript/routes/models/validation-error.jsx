@@ -3,7 +3,7 @@ import FlashMessage from "shared/flash-message"
 import {Params, ValidationError} from "@kaspernj/api-maker"
 import {User} from "api-maker/models"
 
-export default class ModelsCustomValidationError extends React.Component {
+export default class ModelsCustomValidationError extends React.PureComponent {
   state = {
     account: undefined,
     errorForProjectName: undefined,

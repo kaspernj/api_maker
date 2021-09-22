@@ -2,7 +2,7 @@ const EventEmitter = require("events")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerEventEmitterListener extends React.Component {
+export default class ApiMakerEventEmitterListener extends React.PureComponent {
   static propTypes = {
     events: PropTypes.instanceOf(EventEmitter).isRequired,
     event: PropTypes.string.isRequired,

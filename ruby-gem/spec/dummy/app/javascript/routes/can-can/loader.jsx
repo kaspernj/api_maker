@@ -4,7 +4,7 @@ import LoaderWithShape from "components/can-can/loader-with-shape"
 import LoaderThatSignsOutOnMount from "components/can-can/loader-that-signs-out-on-mount"
 import LoaderWithState from "components/can-can/loader-with-state"
 
-export default class RoutesCanCanLoader extends React.Component {
+export default class RoutesCanCanLoader extends React.PureComponent {
   state = {
     showLoaderThatSignsOutOnMount: false
   }

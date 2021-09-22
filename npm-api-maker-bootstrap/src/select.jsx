@@ -4,7 +4,7 @@ const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerBootstrapSelect extends React.Component {
+export default class ApiMakerBootstrapSelect extends React.PureComponent {
   static propTypes = {
     attribute: PropTypes.string,
     className: PropTypes.string,

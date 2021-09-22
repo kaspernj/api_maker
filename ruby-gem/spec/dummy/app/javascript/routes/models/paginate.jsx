@@ -2,7 +2,7 @@ import { Params } from "@kaspernj/api-maker"
 import React from "react"
 import { Paginate, SortLink } from "@kaspernj/api-maker-bootstrap"
 
-export default class ModelsPaginate extends React.Component {
+export default class ModelsPaginate extends React.PureComponent {
   state = {
     currentHref: location.href
   }

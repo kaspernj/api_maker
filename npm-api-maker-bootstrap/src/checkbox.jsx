@@ -4,7 +4,7 @@ const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerBootstrapCheckbox extends React.Component {
+export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
   static defaultProps = {
     defaultValue: 1,
     zeroInput: true

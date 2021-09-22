@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import React from "react"
 import Routes from "shared/routes"
 
-export default class Layout extends React.Component {
+export default class Layout extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {

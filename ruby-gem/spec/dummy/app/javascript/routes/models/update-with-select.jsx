@@ -1,4 +1,4 @@
-export default class ModelsUpdateWithSelect extends React.Component {
+export default class ModelsUpdateWithSelect extends React.PureComponent {
   state = {
     accountId: digg(this, "props", "match", "params", "id"),
     loaded: false,

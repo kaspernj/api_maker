@@ -2,7 +2,7 @@ import {Devise, EventEmitterListener, SessionStatusUpdater} from "@kaspernj/api-
 import Layout from "components/layout"
 import React from "react"
 
-export default class SessionStatusSpecsTimeout extends React.Component {
+export default class SessionStatusSpecsTimeout extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {

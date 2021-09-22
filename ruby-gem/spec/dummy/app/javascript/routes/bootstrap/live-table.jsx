@@ -2,7 +2,7 @@ import ApplicationHistory from "shared/application-history"
 import { digs } from "@kaspernj/object-digger"
 import { Input, SortLink, LiveTable } from "@kaspernj/api-maker-bootstrap"
 
-export default class BootstrapLiveTable extends React.Component {
+export default class BootstrapLiveTable extends React.PureComponent {
   render() {
     return (
       <Layout>

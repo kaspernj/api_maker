@@ -6,7 +6,7 @@ const nameForComponent = require("./name-for-component.cjs")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerInputsCheckbox extends React.Component {
+export default class ApiMakerInputsCheckbox extends React.PureComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,

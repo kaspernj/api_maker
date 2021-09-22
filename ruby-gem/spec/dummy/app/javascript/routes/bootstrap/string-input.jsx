@@ -1,4 +1,4 @@
-export default class BootstrapStringInput extends React.Component {
+export default class BootstrapStringInput extends React.PureComponent {
   render() {
     return (
       <Layout>

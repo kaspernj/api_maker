@@ -5,7 +5,7 @@ const PropTypesExact = require("prop-types-exact")
 const React = require("react")
 const strftime = require("strftime")
 
-export default class ApiMakerBootstrapAttributeRows extends React.Component {
+export default class ApiMakerBootstrapAttributeRows extends React.PureComponent {
   static defaultProps = {
     checkIfAttributeLoaded: false
   }

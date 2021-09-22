@@ -2,7 +2,7 @@ import Hash from "shared/hash"
 import { Params } from "@kaspernj/api-maker"
 import React from "react"
 
-export default class ModelsDestroyEvent extends React.Component {
+export default class ModelsDestroyEvent extends React.PureComponent {
   state = {}
 
   async componentDidMount() {

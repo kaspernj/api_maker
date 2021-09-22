@@ -7,7 +7,7 @@ const React = require("react")
 
 const inflection = require("inflection")
 
-export default class ApiMakerBootstrapRadioButtons extends React.Component {
+export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   static propTypes = PropTypesExact({
     attribute: PropTypes.string,
     collection: PropTypes.array.isRequired,

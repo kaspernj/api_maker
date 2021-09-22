@@ -1,7 +1,7 @@
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 
-export default class ApiMakerHistoryListener extends React.Component {
+export default class ApiMakerHistoryListener extends React.PureComponent {
   static propTypes = PropTypesExact({
     onChanged: PropTypes.func.isRequired
   })

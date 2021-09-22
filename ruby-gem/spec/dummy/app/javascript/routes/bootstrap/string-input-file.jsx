@@ -1,6 +1,6 @@
 import {Devise} from "@kaspernj/api-maker"
 
-export default class BootstrapStringInputFile extends React.Component {
+export default class BootstrapStringInputFile extends React.PureComponent {
   state = {
     user: Devise.currentUser()
   }

@@ -1,4 +1,4 @@
-export default class RoutesInputsCheckbox extends React.Component {
+export default class RoutesInputsCheckbox extends React.PureComponent {
   params = Params.parse()
   autoRefresh = Boolean(this.params.auto_refresh)
   autoSubmit = Boolean(this.params.auto_submit)

@@ -1,7 +1,7 @@
 import {Devise} from "@kaspernj/api-maker"
 import LoaderWithState from "./loader-with-state"
 
-export default class LoaderThatSignsOutOnMount extends React.Component {
+export default class LoaderThatSignsOutOnMount extends React.PureComponent {
   componentDidMount() {
     Devise.signOut()
   }
