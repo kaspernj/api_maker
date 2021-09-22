@@ -24,7 +24,7 @@
   "scripts": {
     "eslint": "eslint"
   },
-  "version": "1.0.55",
+  "version": "1.0.56",
   "dependencies": {
     "@kaspernj/api-maker": ">= 1.0.115",
     "@kaspernj/object-digger": ">= 1.0.2",
