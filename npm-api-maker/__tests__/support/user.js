@@ -1,8 +1,11 @@
-module.exports = class User {
+const BaseModel = require("../../src/base-model.cjs")
+
+module.exports = class User extends BaseModel {
   static modelClassData() {
     return {
       attributes: [],
-      name: "User"
+      name: "User",
+      primaryKey: "id"
     }
   }
 
@@ -11,6 +14,8 @@ module.exports = class User {
   }
 
   constructor({a, b, isNewRecord = false, r}) {
+    super({a})
+
     this.abilities = b
     this._isNewRecord = isNewRecord
     this.modelData = a

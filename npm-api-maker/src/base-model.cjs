@@ -310,6 +310,12 @@ module.exports = class BaseModel {
     throw new new CustomError("Response wasn't successful", {model: this, response})
   }
 
+  identifierKey() {
+    if (!this._identifierKey) this._identifierKey = this.isPersisted() ? this.primaryKey() : this.uniqueKey()
+
+    return this._identifierKey
+  }
+
   isAssociationLoaded(associationName) {
     if (associationName in this.relationshipsCache) return true
     return false
