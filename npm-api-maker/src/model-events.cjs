@@ -22,14 +22,14 @@ module.exports = class ModelEvents {
     return cableSubscription
   }
 
-  static connectDestroyed(callback) {
+  static connectDestroyed(model, callback) {
     const modelClassName = digg(model.modelClassData(), "name")
     const cableSubscription = CableConnectionPool.current().connectDestroyed(modelClassName, model.primaryKey(), callback)
 
     return cableSubscription
   }
 
-  static connectUpdated(callback) {
+  static connectUpdated(model, callback) {
     const modelClassName = digg(model.modelClassData(), "name")
     const cableSubscription = CableConnectionPool.current().connectUpdate(modelClassName, model.primaryKey(), callback)
 
