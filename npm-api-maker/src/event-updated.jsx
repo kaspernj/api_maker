@@ -1,4 +1,5 @@
 const debounce = require("debounce")
+const ModelEvents = require("./model-events.cjs")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
@@ -41,7 +42,7 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
   connect() {
     const {model, onConnected} = this.props
 
-    this.connectUpdated = model.connectUpdated((...args) => this.onUpdated(...args))
+    this.connectUpdated = ModelEvents.connectUpdated(model, (...args) => this.onUpdated(...args))
 
     if (onConnected) {
       this.connectUpdated.events.addListener("connected", this.onConnected)

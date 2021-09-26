@@ -1,3 +1,4 @@
+const ModelEvents = require("./model-events.cjs")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
@@ -20,7 +21,7 @@ export default class ApiMakerEventModelClass extends React.PureComponent {
   }
 
   connect() {
-    this.connection = this.props.modelClass.connect(this.props.event, this.props.onCall)
+    this.connection = ModelEvents.connectModelClass(this.props.modelClass, this.props.event, this.props.onCall)
   }
 
   render() {

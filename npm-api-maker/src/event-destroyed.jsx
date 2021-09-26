@@ -1,3 +1,4 @@
+const ModelEvents = require("./model-events.cjs")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
@@ -19,7 +20,7 @@ export default class ApiMakerEventDestroyed extends React.PureComponent {
   }
 
   connect() {
-    this.connectDestroyed = this.props.model.connectDestroyed(this.props.onDestroyed)
+    this.connectDestroyed = ModelEvents.connectDestroyed(this.props.model, this.props.onDestroyed)
   }
 
   render() {

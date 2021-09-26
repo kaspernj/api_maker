@@ -1,4 +1,5 @@
 const {digg} = require("@kaspernj/object-digger")
+const ModelEvents = require("./model-events.cjs")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
@@ -30,7 +31,7 @@ export default class ApiMakerUpdatedAttribute extends React.PureComponent {
   }
 
   connect() {
-    this.connectUpdated = this.props.model.connectUpdated(args => {
+    this.connectUpdated = ModelEvents.connectUpdated(this.props.model, args => {
       if (!this.props.attribute || args.model.isAttributeLoaded(this.props.attribute)) {
         this.setState(
           {model: args.model},
