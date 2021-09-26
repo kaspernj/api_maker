@@ -1,3 +1,4 @@
+const ModelEvents = require("./model-events.cjs")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
@@ -15,7 +16,7 @@ export default class ApiMakerEventConnection extends React.PureComponent {
   })
 
   componentDidMount() {
-    this.subscription = this.props.model.connect(this.props.event, (...args) => this.onCall(...args))
+    this.subscription = ModelEvents.connect(this.props.model, this.props.event, (...args) => this.onCall(...args))
   }
 
   componentWillUnmount() {

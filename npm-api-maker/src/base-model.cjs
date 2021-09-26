@@ -1,5 +1,4 @@
 const AttributeNotLoadedError = require("./attribute-not-loaded-error.cjs")
-const CableConnectionPool = require("./cable-connection-pool.cjs")
 const Collection = require("./collection.cjs")
 const CommandsPool = require("./commands-pool.cjs")
 const CustomError = require("./custom-error.cjs")
@@ -126,31 +125,6 @@ module.exports = class BaseModel {
     clone.relationshipsCache = Object.assign({}, this.relationshipsCache)
 
     return clone
-  }
-
-  connect(eventName, callback) {
-    const cableSubscription = CableConnectionPool.current().connectEvent(digg(this.modelClassData(), "name"), this.primaryKey(), eventName, callback)
-    return cableSubscription
-  }
-
-  static connect(eventName, callback) {
-    const cableSubscription = CableConnectionPool.current().connectModelClassEvent(digg(this.modelClassData(), "name"), eventName, callback)
-    return cableSubscription
-  }
-
-  static connectCreated(callback) {
-    const cableSubscription = CableConnectionPool.current().connectCreated(digg(this.modelClassData(), "name"), callback)
-    return cableSubscription
-  }
-
-  connectDestroyed(callback) {
-    const cableSubscription = CableConnectionPool.current().connectDestroyed(digg(this.modelClassData(), "name"), this.primaryKey(), callback)
-    return cableSubscription
-  }
-
-  connectUpdated(callback) {
-    const cableSubscription = CableConnectionPool.current().connectUpdate(digg(this.modelClassData(), "name"), this.primaryKey(), callback)
-    return cableSubscription
   }
 
   cacheKey() {
@@ -308,6 +282,12 @@ module.exports = class BaseModel {
   handleResponseError(response) {
     this.parseValidationErrors(response)
     throw new new CustomError("Response wasn't successful", {model: this, response})
+  }
+
+  identifierKey() {
+    if (!this._identifierKey) this._identifierKey = this.isPersisted() ? this.primaryKey() : this.uniqueKey()
+
+    return this._identifierKey
   }
 
   isAssociationLoaded(associationName) {
