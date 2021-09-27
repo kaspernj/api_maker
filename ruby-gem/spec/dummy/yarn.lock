@@ -999,17 +999,17 @@
     inflection ">= 1.12.0"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.54", "@kaspernj/api-maker-inputs@^1.0.55":
-  version "1.0.55"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.55.tgz#f80256f60d67922dd07cedb1342b9853c20fee06"
-  integrity sha512-QPWwpy0aLD+Ych5kdQuBrVx5By3Dm2PIo287mlvDnn+1oHUb8DulqA4PNcSwz6bSz960/IL/Qd+OOx4d2C0csQ==
+"@kaspernj/api-maker-inputs@>= 1.0.54", "@kaspernj/api-maker-inputs@^1.0.58":
+  version "1.0.58"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.58.tgz#24d9e2b4cc8e64ff8e61119902e77ad77da2c0c5"
+  integrity sha512-chH4dFk7d4ECNs0OGyC4gAljubjxlWSt6cBIqAnNhyaKheQEfT2ryxIfsJ4hRLBNxi9PwSe0SgmNpUIeUrf2YA==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.112"
+    "@kaspernj/api-maker" ">= 1.0.117"
     "@kaspernj/object-digger" ">= 1.0.2"
     classnames ">= 2.2.6"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.112", "@kaspernj/api-maker@^1.0.118":
+"@kaspernj/api-maker@>= 1.0.112", "@kaspernj/api-maker@>= 1.0.117", "@kaspernj/api-maker@^1.0.118":
   version "1.0.118"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.118.tgz#41e3d884325be40f151a74554be2e94e2abdee73"
   integrity sha512-KuuMkAvWBCeg5+6o4Yu6LHDoPiP5XzVrpJOW9CVlxrBzGtXuMZ3CWZLixQRYhxpyedpWiSX0r5eMFq2sexPvxw==
