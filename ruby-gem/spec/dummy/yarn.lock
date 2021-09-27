@@ -987,19 +987,19 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@kaspernj/api-maker-bootstrap@^1.0.57":
-  version "1.0.57"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.57.tgz#a5665b171a0fa89940e88291e478f95929cebbb3"
-  integrity sha512-C0xbXNHyIB5e09zIUsYDVRTFqW4WV1s6OL+YxzT9GJthiXUTT2sVkdiUzH1UScMfJRvTo+q3HpYhmDi2a+hs4w==
+"@kaspernj/api-maker-bootstrap@^1.0.61":
+  version "1.0.61"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.61.tgz#f0e90f012a7250aadbd9442c163d21c04ea40aae"
+  integrity sha512-6sZDovIbBqbpc8RpP/7JQkcAUayfORpVbZCu7DgPZmEIRX6Ax+3gQIgPyy9K8KZ66V8yOddP+GxJolLzrShZKw==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.112"
-    "@kaspernj/api-maker-inputs" ">= 1.0.54"
+    "@kaspernj/api-maker" ">= 1.0.117"
+    "@kaspernj/api-maker-inputs" ">= 1.0.58"
     "@kaspernj/object-digger" ">= 1.0.2"
     debounce ">= 1.2.0"
     inflection ">= 1.12.0"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.54", "@kaspernj/api-maker-inputs@^1.0.58":
+"@kaspernj/api-maker-inputs@>= 1.0.58", "@kaspernj/api-maker-inputs@^1.0.58":
   version "1.0.58"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.58.tgz#24d9e2b4cc8e64ff8e61119902e77ad77da2c0c5"
   integrity sha512-chH4dFk7d4ECNs0OGyC4gAljubjxlWSt6cBIqAnNhyaKheQEfT2ryxIfsJ4hRLBNxi9PwSe0SgmNpUIeUrf2YA==
@@ -1009,7 +1009,7 @@
     classnames ">= 2.2.6"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.112", "@kaspernj/api-maker@>= 1.0.117", "@kaspernj/api-maker@^1.0.118":
+"@kaspernj/api-maker@>= 1.0.117", "@kaspernj/api-maker@^1.0.118":
   version "1.0.118"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.118.tgz#41e3d884325be40f151a74554be2e94e2abdee73"
   integrity sha512-KuuMkAvWBCeg5+6o4Yu6LHDoPiP5XzVrpJOW9CVlxrBzGtXuMZ3CWZLixQRYhxpyedpWiSX0r5eMFq2sexPvxw==
