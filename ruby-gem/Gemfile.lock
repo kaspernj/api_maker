@@ -87,7 +87,7 @@ GEM
     auto_autoloader (0.0.5)
       string-cases
     bcrypt (3.1.16)
-    best_practice_project (0.0.11)
+    best_practice_project (0.0.12)
       auto_autoloader (>= 0.0.5)
     bootsnap (1.9.1)
       msgpack (~> 1.0)
