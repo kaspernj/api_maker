@@ -65,6 +65,8 @@ module.exports = {
     "indent": ["error", 2, {"MemberExpression": "off"}],
     "init-declarations": "error",
     "jest/consistent-test-it": "error",
+    "jest/prefer-expect-resolves": "error",
+    "jest/prefer-to-be": "error",
     "jest/lowercase-name": "error",
     "jest/max-nested-describe": "error",
     "jest/no-alias-methods": "error",
