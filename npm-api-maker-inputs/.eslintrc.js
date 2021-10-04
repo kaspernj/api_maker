@@ -263,6 +263,7 @@ module.exports = {
     "react/no-did-mount-set-state": "error",
     "react/no-did-update-set-state": "error",
     "react/no-multi-comp": "error",
+    "react/no-namespace": "error",
     "react/no-redundant-should-component-update": "error",
     "react/no-set-state": "error",
     "react/no-this-in-sfc": "error",
