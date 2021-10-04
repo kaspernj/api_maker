@@ -73,7 +73,9 @@ module.exports = {
     "jest/no-large-snapshots": "error",
     "jest/no-restricted-matchers": "error",
     "jest/no-test-return-statement": "error",
+    "jest/prefer-expect-resolves": "off", // Needs configuration and no documentation could be found?
     "jest/prefer-hooks-on-top": "error",
+    "jest/prefer-to-be": "off", // Needs configuration and no documentation could be found?
     "jest/prefer-spy-on": "error",
     "jest/prefer-to-be-null": "error",
     "jest/prefer-to-be-undefined": "error",
@@ -86,7 +88,7 @@ module.exports = {
     "key-spacing": "error",
     "keyword-spacing": "error",
     "linebreak-style": ["error", "unix"],
-    "line-comment-position": "error",
+    "line-comment-position": "off",
     "lines-around-comment": "error",
     "lines-between-class-members": "error",
     "max-classes-per-file": "error",
@@ -118,7 +120,7 @@ module.exports = {
     "no-implicit-coercion": "error",
     "no-implicit-globals": "error",
     "no-implied-eval": "error",
-    "no-inline-comments": "error",
+    "no-inline-comments": "off",
     "no-invalid-this": "error",
     "no-iterator": "error",
     "no-label-var": "error",
