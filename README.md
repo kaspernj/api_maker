@@ -292,7 +292,7 @@ for (const task of tasks) {
 
 ### Query models
 
-ApiModels uses [Ransack](https://github.com/activerecord-hackery/ransack) to expose a huge amount of options to query data.
+API maker uses [Ransack](https://github.com/activerecord-hackery/ransack) to expose a huge amount of options to query data.
 
 ```js
 const = tasks = await Task.ransack({name_cont: "something"}).toArray()
