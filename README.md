@@ -103,7 +103,7 @@ end
 
 Start by adding i18n-on-steroids to your project:
 ```bash
-yarn i18n-on-steroids
+yarn add i18n-on-steroids
 ```
 
 Create a I18n object you want to use throughout your project (app/javascript/i18n.js):
