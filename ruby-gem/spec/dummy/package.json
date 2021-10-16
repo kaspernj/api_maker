@@ -40,11 +40,11 @@
     "replaceall": "^0.1.6",
     "set-state-compare": "^1.0.15",
     "stacktrace-parser": "^0.1.10",
-    "stimulus": "^2.0.0",
+    "stimulus": "^3.0.1",
     "strftime": "^0.10.0",
     "wake-event": "^0.0.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "^4.3.0"
+    "webpack-dev-server": "^4.3.1"
   }
 }

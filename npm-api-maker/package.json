@@ -53,7 +53,7 @@
     "eslint-plugin-react": "^7.23.2",
     "i18n-on-steroids": "^1.0.0",
     "jest": "^27.0.6",
-    "jsdom": "^17.0.0"
+    "jsdom": "^18.0.0"
   },
   "dependencies": {
     "@kaspernj/object-digger": ">= 1.0.2",
