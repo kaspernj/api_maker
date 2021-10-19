@@ -3,6 +3,7 @@ const {Collection, EventCreated, EventDestroyed, EventLocationChanged, EventUpda
 const {debounce} = require("debounce")
 const {digg, digs} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
+const {Link} = require("react-router-dom")
 const Money = require("js-money")
 const PropTypes = require("prop-types")
 const React = require("react")
@@ -279,12 +280,12 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
                 {actionsContent && actionsContent({model})}
                 {editModelPath && model.can("edit") &&
                   <Link className="edit-button" to={editModelPath({model})}>
-                    <i className="la la-edit" />
+                    <i className="fa fa-edit" />
                   </Link>
                 }
                 {destroyEnabled && model.can("destroy") &&
                   <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
-                    <i className="la la-remove" />
+                    <i className="fa fa-remove" />
                   </a>
                 }
               </td>
