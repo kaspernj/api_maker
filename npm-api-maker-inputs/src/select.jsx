@@ -99,7 +99,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
       return this.props.defaultValue
     } else if (this.props.attribute && this.props.model) {
       if (!this.props.model[this.props.attribute])
-        throw new Error(`No attribute by that name: ${this.props.attribute}`)
+        throw new Error(`No attribute by that name on ${this.props.model.modelClassData().name}: ${this.props.attribute}`)
 
       return this.props.model[this.props.attribute]()
     }
