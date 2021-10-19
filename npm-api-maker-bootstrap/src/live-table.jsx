@@ -40,7 +40,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     filterContent: PropTypes.func,
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func,
-    header: PropTypes.func,
+    header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
     onModelsLoaded: PropTypes.func,
@@ -204,8 +204,10 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       controlsContent = controls({models, qParams, query, result})
     }
 
-    if (header) {
+    if (typeof header == "function") {
       headerContent = header({models, qParams, query, result})
+    } else if (header) {
+      headerContent = header
     }
 
     if (paginationComponent) {
@@ -238,12 +240,12 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
         }
 
         {card &&
-          <Card className="mb-4" controls={controlsContent} header={headerContent} table>
+          <Card className={classNames("mb-4", className)} controls={controlsContent} header={headerContent} table>
             {this.tableContent()}
           </Card>
         }
         {!card &&
-          <table {...restProps}>
+          <table className={className} {...restProps}>
             {this.tableContent()}
           </table>
         }
