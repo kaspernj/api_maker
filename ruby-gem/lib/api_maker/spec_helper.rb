@@ -81,6 +81,10 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     page.execute_script("document.querySelector(#{element_id.to_json}).value = #{with.to_json}")
   end
 
+  def model_column_selector(model, identifier)
+    ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}'] .live-table-column[data-identifier='#{identifier}']"
+  end
+
   def model_row_selector(model)
     ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}']"
   end
