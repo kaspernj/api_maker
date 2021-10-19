@@ -276,7 +276,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
             <tr className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()} key={model.id()}>
               {this.props.columns && this.columnsContentFromColumns(model)}
               {this.props.columnsContent && this.props.columnsContent({model})}
-              <td className="actions-column text-nowrap text-right">
+              <td className="actions-column text-end text-nowrap text-right">
                 {actionsContent && actionsContent({model})}
                 {editModelPath && model.can("edit") &&
                   <Link className="edit-button" to={editModelPath({model})}>
@@ -321,7 +321,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
     if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
     if (column.textCenter) classNames.push("text-center")
-    if (column.textRight) classNames.push("text-right")
+    if (column.textRight) classNames.push("text-end text-right")
 
     return classNames
   }
