@@ -117,7 +117,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
 
     tr_selector = ".component-api-maker-attribute-row"
     tr_selector << "[data-attribute='#{attribute.camelize(:lower)}']" if attribute
-    tr_selector << "[data-identifier='#{identifier.camelize}']" if identifier
+    tr_selector << "[data-identifier='#{identifier}']" if identifier
 
     wait_for_selector "#{tr_selector} > .attribute-row-label", exact_text: label, **opts if label
     wait_for_selector "#{tr_selector} > .attribute-row-value", exact_text: value, **opts if value
