@@ -375,13 +375,20 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
     if (column.headerProps && column.headerProps.className) classNames.push(column.headerProps.className)
     if (column.textCenter) classNames.push("text-center")
-    if (column.textRight) classNames.push("text-right")
+    if (column.textRight) classNames.push("text-end text-right")
 
     return classNames
   }
 
   headerLabelForColumn(column) {
-    if (column.label) return column.label
+    if (column.label) {
+      if (typeof column.label == "function") {
+        return column.label()
+      } else {
+        return column.label
+      }
+    }
+
     if (column.attribute) return this.props.modelClass.humanAttributeName(column.attribute)
 
     throw new Error("No 'label' or 'attribute' was given")
