@@ -50,10 +50,12 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     return (
       <div className={this.classNames()} ref="card" {...restProps}>
         {(controls || expandable || header) &&
-          <div className={`card-header ${!expanded && "border-bottom-0"}`}>
-            {header}
+          <div className={`card-header d-flex ${!expanded && "border-bottom-0"}`}>
+            <div style={{alignSelf: "center", marginRight: "auto"}}>
+              {header}
+            </div>
             {(controls || expandable) &&
-              <div className="float-right">
+              <div style={{alignSelf: "center"}}>
                 {controls}
                 {expandable && expanded &&
                   <a className="collapse-card-button text-muted" href="#" onClick={(e) => this.onCollapseClicked(e)}>

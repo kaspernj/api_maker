@@ -28,6 +28,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
   render() {
     const { errors } = this.state
     const {
+      children,
       className,
       description,
       id,
@@ -61,14 +62,17 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
             {hint}
           </span>
         }
-        <Select
-          className={this.selectClassName()}
-          id={this.inputId()}
-          inputRef={this.props.inputRef || this.inputRef}
-          name={this.inputName()}
-          onErrors={(errors) => this.onErrors(errors)}
-          {...restProps}
-        />
+        {children}
+        {!children &&
+          <Select
+            className={this.selectClassName()}
+            id={this.inputId()}
+            inputRef={this.props.inputRef || this.inputRef}
+            name={this.inputName()}
+            onErrors={(errors) => this.onErrors(errors)}
+            {...restProps}
+          />
+        }
         {hintBottom &&
           <span className="form-text text-muted font-smoothing font-xs">
             {hintBottom}

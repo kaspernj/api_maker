@@ -107,7 +107,11 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
   }
 
   inputDefaultCentsValue() {
-    let value = this.props.model[this.props.attribute]()
+    const {attribute, model} = this.props
+
+    if (!(attribute in model)) throw new Error(`No such attribute on ${model.modelClassData().name}: ${attribute}`)
+
+    let value = model[attribute]()
 
     if (this.getInputRef().current)
       return digg(this.getInputRef(), "current", "value")

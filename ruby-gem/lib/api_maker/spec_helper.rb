@@ -81,6 +81,10 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     page.execute_script("document.querySelector(#{element_id.to_json}).value = #{with.to_json}")
   end
 
+  def model_column_selector(model, identifier)
+    ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}'] .live-table-column[data-identifier='#{identifier}']"
+  end
+
   def model_row_selector(model)
     ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}']"
   end
@@ -117,7 +121,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
 
     tr_selector = ".component-api-maker-attribute-row"
     tr_selector << "[data-attribute='#{attribute.camelize(:lower)}']" if attribute
-    tr_selector << "[data-identifier='#{identifier.camelize}']" if identifier
+    tr_selector << "[data-identifier='#{identifier}']" if identifier
 
     wait_for_selector "#{tr_selector} > .attribute-row-label", exact_text: label, **opts if label
     wait_for_selector "#{tr_selector} > .attribute-row-value", exact_text: value, **opts if value

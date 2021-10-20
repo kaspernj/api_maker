@@ -3,6 +3,7 @@ const {Collection, EventCreated, EventDestroyed, EventLocationChanged, EventUpda
 const {debounce} = require("debounce")
 const {digg, digs} = require("@kaspernj/object-digger")
 const inflection = require("inflection")
+const {Link} = require("react-router-dom")
 const Money = require("js-money")
 const PropTypes = require("prop-types")
 const React = require("react")
@@ -40,7 +41,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     filterContent: PropTypes.func,
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func,
-    header: PropTypes.func,
+    header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
     onModelsLoaded: PropTypes.func,
@@ -114,7 +115,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   async loadQParams() {
     const { queryQName } = this.state
     const params = Params.parse()
-    const qParams = params[queryQName] || this.props.defaultParams || {}
+    const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
+
     return this.setState({qParams})
   }
 
@@ -204,8 +206,10 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       controlsContent = controls({models, qParams, query, result})
     }
 
-    if (header) {
+    if (typeof header == "function") {
       headerContent = header({models, qParams, query, result})
+    } else if (header) {
+      headerContent = header
     }
 
     if (paginationComponent) {
@@ -238,12 +242,12 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
         }
 
         {card &&
-          <Card className="mb-4" controls={controlsContent} header={headerContent} table>
+          <Card className={classNames("mb-4", className)} controls={controlsContent} header={headerContent} table>
             {this.tableContent()}
           </Card>
         }
         {!card &&
-          <table {...restProps}>
+          <table className={className} {...restProps}>
             {this.tableContent()}
           </table>
         }
@@ -273,16 +277,16 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
             <tr className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()} key={model.id()}>
               {this.props.columns && this.columnsContentFromColumns(model)}
               {this.props.columnsContent && this.props.columnsContent({model})}
-              <td className="actions-column text-nowrap text-right">
+              <td className="actions-column text-end text-nowrap text-right">
                 {actionsContent && actionsContent({model})}
                 {editModelPath && model.can("edit") &&
                   <Link className="edit-button" to={editModelPath({model})}>
-                    <i className="la la-edit" />
+                    <i className="fa fa-edit la la-edit" />
                   </Link>
                 }
                 {destroyEnabled && model.can("destroy") &&
                   <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
-                    <i className="la la-remove" />
+                    <i className="fa fa-remove la la-remove" />
                   </a>
                 }
               </td>
@@ -318,7 +322,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
     if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
     if (column.textCenter) classNames.push("text-center")
-    if (column.textRight) classNames.push("text-right")
+    if (column.textRight) classNames.push("text-end text-right")
 
     return classNames
   }
@@ -372,13 +376,20 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
     if (column.headerProps && column.headerProps.className) classNames.push(column.headerProps.className)
     if (column.textCenter) classNames.push("text-center")
-    if (column.textRight) classNames.push("text-right")
+    if (column.textRight) classNames.push("text-end text-right")
 
     return classNames
   }
 
   headerLabelForColumn(column) {
-    if (column.label) return column.label
+    if (column.label) {
+      if (typeof column.label == "function") {
+        return column.label()
+      } else {
+        return column.label
+      }
+    }
+
     if (column.attribute) return this.props.modelClass.humanAttributeName(column.attribute)
 
     throw new Error("No 'label' or 'attribute' was given")
@@ -421,7 +432,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     if (this.state.currentHref != location.href) {
       const {queryQName} = digs(this.state, "queryQName")
       const params = Params.parse()
-      const qParams = params[queryQName] || {}
+      const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
 
       this.setState(
         {
