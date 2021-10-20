@@ -628,6 +628,17 @@ class MyAbility < ApiMaker::Ability
 end
 ```
 
+## Development
+
+Bundle all configurations.
+```bash
+bundle exec appraisal bundle
+```
+
+Run a spec with all configurations.
+```bash
+bundle exec appraisal rspec
+```
 
 ## Contributing
 Contribution directions go here.

@@ -115,7 +115,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   async loadQParams() {
     const { queryQName } = this.state
     const params = Params.parse()
-    const qParams = params[queryQName] || this.props.defaultParams || {}
+    const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
+
     return this.setState({qParams})
   }
 
@@ -280,12 +281,12 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
                 {actionsContent && actionsContent({model})}
                 {editModelPath && model.can("edit") &&
                   <Link className="edit-button" to={editModelPath({model})}>
-                    <i className="fa fa-edit" />
+                    <i className="fa fa-edit la la-edit" />
                   </Link>
                 }
                 {destroyEnabled && model.can("destroy") &&
                   <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
-                    <i className="fa fa-remove" />
+                    <i className="fa fa-remove la la-remove" />
                   </a>
                 }
               </td>
@@ -431,7 +432,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     if (this.state.currentHref != location.href) {
       const {queryQName} = digs(this.state, "queryQName")
       const params = Params.parse()
-      const qParams = params[queryQName] || {}
+      const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
 
       this.setState(
         {

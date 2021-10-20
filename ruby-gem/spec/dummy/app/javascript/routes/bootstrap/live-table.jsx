@@ -9,6 +9,7 @@ export default class BootstrapLiveTable extends React.PureComponent {
         <LiveTable
           appHistory={ApplicationHistory}
           columnsContent={this.columnsContent}
+          defaultParams={{s: "name asc"}}
           filterContent={this.filterContent}
           headersContent={this.headersContent}
           modelClass={Task}
