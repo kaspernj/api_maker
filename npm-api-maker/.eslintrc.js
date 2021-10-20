@@ -75,12 +75,14 @@ module.exports = {
     "jest/no-test-return-statement": "error",
     "jest/prefer-expect-resolves": "off", // Needs configuration and no documentation could be found?
     "jest/prefer-hooks-on-top": "error",
+    "jest/prefer-lowercase-title": "error",
     "jest/prefer-to-be": "off", // Needs configuration and no documentation could be found?
     "jest/prefer-spy-on": "error",
     "jest/prefer-to-be-null": "error",
     "jest/prefer-to-be-undefined": "error",
     "jest/prefer-to-contain": "error",
     "jest/prefer-todo": "error",
+    "jest/require-hook": "error",
     "jest/require-to-throw-message": "error",
     "jest/require-top-level-describe": "error",
     "jest/unbound-method": "error",
