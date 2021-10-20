@@ -62,19 +62,19 @@ describe "bootstrap - live table" do
     login_as user_admin
     visit bootstrap_live_table_path
 
-    tasks.slice(70, 30).reverse.each do |task|
+    tasks.slice(70, 30).reverse_each do |task|
       wait_for_selector model_row_selector(task)
     end
 
     wait_for_and_find(".page-link", text: 2).click
 
-    tasks.slice(40, 30).reverse.each do |task|
+    tasks.slice(40, 30).reverse_each do |task|
       wait_for_selector model_row_selector(task)
     end
 
     wait_for_and_find(".page-link", text: 3).click
 
-    tasks.slice(10, 30).reverse.each do |task|
+    tasks.slice(10, 30).reverse_each do |task|
       wait_for_selector model_row_selector(task)
     end
   end
