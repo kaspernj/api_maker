@@ -281,12 +281,12 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
                 {actionsContent && actionsContent({model})}
                 {editModelPath && model.can("edit") &&
                   <Link className="edit-button" to={editModelPath({model})}>
-                    <i className="fa fa-edit" />
+                    <i className="fa fa-edit la la-edit" />
                   </Link>
                 }
                 {destroyEnabled && model.can("destroy") &&
                   <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
-                    <i className="fa fa-remove" />
+                    <i className="fa fa-remove la la-remove" />
                   </a>
                 }
               </td>
