@@ -115,7 +115,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   async loadQParams() {
     const { queryQName } = this.state
     const params = Params.parse()
-    const qParams = params[queryQName] || this.props.defaultParams || {}
+    const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
+
     return this.setState({qParams})
   }
 
@@ -431,7 +432,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     if (this.state.currentHref != location.href) {
       const {queryQName} = digs(this.state, "queryQName")
       const params = Params.parse()
-      const qParams = params[queryQName] || {}
+      const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
 
       this.setState(
         {
