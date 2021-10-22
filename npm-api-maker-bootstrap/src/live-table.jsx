@@ -236,7 +236,12 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
                 onFilterChangedWithDelay: submitFilterDebounce,
                 qParams
               })}
-              <input className="btn btn-primary" label={filterSubmitLabel} type="submit" />
+              <input
+                className="btn btn-primary submit-filter-button"
+                label={filterSubmitLabel}
+                type="submit"
+                value={I18n.t("js.api_maker_bootstrap.live_table.filter")}
+              />
             </form>
           </Card>
         }
