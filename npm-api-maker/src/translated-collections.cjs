@@ -1,11 +1,11 @@
 const translatedCollectionsData = require("./translated-collections-data").default
 
-console.log({ translatedCollectionsData })
-
 export default class ApiMakerTranslatedCollections {
-  get(modelClass, collectionName) {
-    console.log({ modelClass, collectionName })
+  static get(modelClass, collectionName) {
+    const locale = I18n.locale
+    const modelClassName = digg(modelClass.modelClassData(), "name")
+    const collection = digg(translatedCollectionsData, modelClassName, collectionName, locale, "collection_array")
 
-    throw new Error("stub")
+    return collection
   }
 }

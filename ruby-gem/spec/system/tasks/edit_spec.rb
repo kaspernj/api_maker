@@ -9,6 +9,9 @@ describe "tasks - edit" do
     visit edit_task_path(task)
     wait_for_and_find("#task_name").set("Test update task")
     find("input[type=submit]").click
+
+    # binding.pry
+
     wait_for_flash_message "The task was saved"
 
     expect(task.reload).to have_attributes(

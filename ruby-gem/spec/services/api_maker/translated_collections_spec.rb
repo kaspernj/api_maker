@@ -54,4 +54,23 @@ describe ApiMaker::TranslatedCollections do
       )
     end
   end
+
+  it "doesnt allow changing translated collection keys" do
+    expect { Task.translated_states["test"] = "test" }.to raise_error(FrozenError)
+  end
+
+  it "validates state" do
+    task.state = "invalid"
+
+    expect(task).to be_invalid
+    expect(task.errors.full_messages).to eq ["State is not included in the list"]
+  end
+
+  it "adds a class method for the possible values" do
+    expect(Task.states).to eq ["open", "closed"]
+  end
+
+  it "doesnt allow changing the possible values" do
+    expect { Task.states << "test" }.to raise_error(FrozenError)
+  end
 end

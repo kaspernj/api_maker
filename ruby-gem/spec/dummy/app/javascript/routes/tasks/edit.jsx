@@ -21,6 +21,13 @@ export default class RoutesTasksEdit extends React.PureComponent {
     }
   }
 
+  async loadTask() {
+    const {taskId} = digs(this, "taskId")
+    const task = await Task.find(taskId)
+
+    this.shape.set({task})
+  }
+
   render() {
     const {task} = digs(this.shape, "task")
 
