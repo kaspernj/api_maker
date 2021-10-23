@@ -24,11 +24,11 @@
   "scripts": {
     "eslint": "eslint"
   },
-  "version": "1.0.59",
+  "version": "1.0.60",
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.117",
+    "@kaspernj/api-maker": ">= 1.0.119",
     "classnames": ">= 2.2.6",
-    "diggerize": "^1.0.3",
+    "diggerize": ">= 1.0.3",
     "inflection": ">= 1.12.0"
   },
   "devDependencies": {
