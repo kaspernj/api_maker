@@ -38,4 +38,20 @@ describe ApiMaker::TranslatedCollections do
       )
     end
   end
+
+  it "adds a 'translated_states_inverted' class method" do
+    I18n.with_locale(:da) do
+      expect(Task.translated_states_inverted).to eq(
+        "open" => "Åben",
+        "closed" => "Lukket"
+      )
+    end
+
+    I18n.with_locale(:en) do
+      expect(Task.translated_states_inverted).to eq(
+        "open" => "Open",
+        "closed" => "Closed"
+      )
+    end
+  end
 end
