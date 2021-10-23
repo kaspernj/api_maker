@@ -15,6 +15,10 @@ en:
   js:
     shared:
       are_you_sure: Are you sure?
+  models:
+    task:
+      closed: Closed
+      open: Open
   number:
     currency:
       format:

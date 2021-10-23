@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_25_114409) do
+ActiveRecord::Schema.define(version: 2021_10_23_091132) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 2021_06_25_114409) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.boolean "finished", default: false, null: false
+    t.string "state", default: "open", null: false
     t.index ["project_id"], name: "index_tasks_on_project_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end

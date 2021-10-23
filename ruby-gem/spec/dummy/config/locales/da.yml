@@ -18,6 +18,10 @@ da:
   js:
     shared:
       are_you_sure: Er du sikker?
+  models:
+    task:
+      closed: Lukket
+      open: Åben
   number:
     currency:
       format:
