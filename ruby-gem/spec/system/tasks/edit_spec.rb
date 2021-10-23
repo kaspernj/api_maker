@@ -8,14 +8,13 @@ describe "tasks - edit" do
     login_as admin
     visit edit_task_path(task)
     wait_for_and_find("#task_name").set("Test update task")
-    find("input[type=submit]").click
-
-    # binding.pry
-
+    select "Closed", from: "task_state"
+    wait_for_and_find("input[type=submit]").click
     wait_for_flash_message "The task was saved"
 
     expect(task.reload).to have_attributes(
-      name: "Test update task"
+      name: "Test update task",
+      state: "closed"
     )
   end
 end
