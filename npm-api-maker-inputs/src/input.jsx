@@ -1,5 +1,5 @@
 const AutoSubmit = require("./auto-submit.cjs")
-const {dig, digg, digs} = require("@kaspernj/object-digger")
+const {dig, digg, digs} = require("diggerize")
 const {EventListener, EventUpdated} = require("@kaspernj/api-maker")
 const idForComponent = require("./id-for-component.cjs")
 const nameForComponent = require("./name-for-component.cjs")

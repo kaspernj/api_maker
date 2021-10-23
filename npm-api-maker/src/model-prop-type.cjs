@@ -1,4 +1,4 @@
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const Inflection = require("inflection")
 
 module.exports = class ApiMakerModelPropType {

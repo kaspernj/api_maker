@@ -1506,11 +1506,6 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@kaspernj/object-digger@>= 1.0.2", "@kaspernj/object-digger@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.2.tgz#92d4cba641f9429fa0c572822d25132d4bae206b"
-  integrity sha512-L0Y460I2nEWbxF/6zyrU8Lyi+MHTxdh9xS9CkJhHrcMoHndUKGXqb6Tw7imApslMU9eyjNBXW5n5tMPtk46ACw==
-
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"
@@ -2304,6 +2299,11 @@ diff-sequences@^27.0.6:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-27.0.6.tgz#3305cb2e55a033924054695cc66019fd7f8e5723"
   integrity sha512-ag6wfpBFyNXZ0p8pcuIDS//D8H062ZQJ3fzYxjpmeKjnz8W4pekL3AI8VohmyZmsWW2PWaHgjsmqR6L13101VQ==
 
+diggerize@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.3.tgz#1c08fb9f461c2ed1af9416c83142539f041350a3"
+  integrity sha512-sqZM36ZDSizaGTkjs+CZjjPlccDaz+Khozw/9+fnYJ2oS2n6is2JPoycofSnWTi0JDKEKVI86IKsMxwWzbrG1Q==
+
 dir-glob@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/dir-glob/-/dir-glob-3.0.1.tgz#56dbf73d992a4a93ba1584f4534063fd2e41717f"
@@ -3047,11 +3047,11 @@ human-signals@^2.1.0:
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
 i18n-on-steroids@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.1.tgz#f1a9aa1cba6e7c94f5e0991f2e09194f71d5cdb8"
-  integrity sha512-t5a8D0rBvk4k5BMGyvuSKPfOD64qi/oRPQnc97+hikOIeWlUVtDbpF0PZk9+jXdgjTTXdF2sEfvUUXbP/wbOMQ==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.2.tgz#facb994d440fd64998b3bc61bea7e3955dd054c5"
+  integrity sha512-wmRt37/C7Ctmi0EsxQaTAQ8NcX3+TC6LogOPLx61s7nwLDpw0Vvc+Dk8aRJVLNVVXWZxYEZlB1qXlh4z6M67lA==
   dependencies:
-    "@kaspernj/object-digger" "^1.0.2"
+    diggerize "^1.0.3"
     numberable "^1.0.0"
     strftime "^0.10.0"
 

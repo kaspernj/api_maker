@@ -1,4 +1,4 @@
-import { digg } from "@kaspernj/object-digger"
+import { digg } from "diggerize"
 import React from "react"
 
 export default class BootstrapStringInputDatetimeLocal extends React.PureComponent {

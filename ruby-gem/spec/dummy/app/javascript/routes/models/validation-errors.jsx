@@ -1,4 +1,4 @@
-import {digg} from "@kaspernj/object-digger"
+import {digg} from "diggerize"
 import FlashMessage from "shared/flash-message"
 import { Params } from "@kaspernj/api-maker"
 import {User} from "api-maker/models"

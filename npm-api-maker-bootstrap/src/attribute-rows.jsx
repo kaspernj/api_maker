@@ -1,5 +1,5 @@
 const AttributeRow = require("./attribute-row").default
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")

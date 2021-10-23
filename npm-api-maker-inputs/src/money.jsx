@@ -1,4 +1,4 @@
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
 const { MoneyFormatter } = require("@kaspernj/api-maker")

@@ -3,7 +3,7 @@ jest.mock("@rails/actioncable", () => ({
 }))
 const CableConnectionPool = require("../src/cable-connection-pool.cjs")
 const CableSubscriptionPool = require("../src/cable-subscription-pool.cjs")
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 
 describe("CableConnectionPool", () => {
   describe("connectCreated", () => {

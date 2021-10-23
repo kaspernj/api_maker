@@ -1,5 +1,5 @@
 import {CanCan, Devise} from "@kaspernj/api-maker"
-import {digs} from "@kaspernj/object-digger"
+import {digs} from "diggerize"
 import LoaderWithShape from "components/can-can/loader-with-shape"
 import LoaderThatSignsOutOnMount from "components/can-can/loader-that-signs-out-on-mount"
 import LoaderWithState from "components/can-can/loader-with-state"

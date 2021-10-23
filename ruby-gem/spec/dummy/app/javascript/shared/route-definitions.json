@@ -32,6 +32,8 @@
     {"name": "session_status_specs_timeout", "path": "/session_status_specs/timeout", "component": "session-status-specs/timeout"},
     {"name": "new_session", "path": "/sessions/new", "component": "sessions/new"},
 
+    {"name": "edit_task", "path": "/tasks/:id/edit", "component": "tasks/edit"},
+
     {"name": "root", "path": "/", "component": "sessions/new"}
   ]
 }

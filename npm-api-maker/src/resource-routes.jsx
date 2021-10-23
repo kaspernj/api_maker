@@ -1,4 +1,4 @@
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const React = require("react")
 const ResourceRoute = require("./resource-route.cjs")
 const {Route} = require("react-router-dom")

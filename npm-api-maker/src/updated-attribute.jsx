@@ -1,4 +1,4 @@
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const ModelEvents = require("./model-events.cjs")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
