@@ -1,6 +1,6 @@
 const CanCan = require("./can-can.cjs")
 const Deserializer = require("./deserializer.cjs")
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const EventEmitter = require("events")
 const inflection = require("inflection")
 const Services = require("./services.cjs")

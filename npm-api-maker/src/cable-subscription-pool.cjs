@@ -1,7 +1,7 @@
 const ChannelsConsumer = require("./channels-consumer.cjs")
 const CommandsPool = require("./commands-pool.cjs")
 const Deserializer = require("./deserializer.cjs")
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const inflection = require("inflection")
 const Logger = require("./logger.cjs")
 

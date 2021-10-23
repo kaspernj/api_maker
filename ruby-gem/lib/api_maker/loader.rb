@@ -1,12 +1,20 @@
 class ApiMaker::Loader
-  def self.load_everything
-    return if @loaded
+  def self.load_resources
+    load_dir(Rails.root.join("app/api_maker/resources"))
+  end
 
-    @loaded = true
+  def self.load_models
+    load_dir(Rails.root.join("app/models"))
+  end
 
-    resources_dir = Rails.root.join("app/api_maker/resources")
-    files = Dir.glob("#{resources_dir}/**/*.rb")
+  def self.load_dir(dir)
+    @dirs_loaded ||= {}
 
+    return if @dirs_loaded.key?(dir)
+
+    @dirs_loaded[dir] = true
+
+    files = Dir.glob("#{dir}/**/*.rb")
     files.each do |file|
       require file
     end

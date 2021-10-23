@@ -1,5 +1,5 @@
 import {CanCanLoader} from "@kaspernj/api-maker";
-import {digs} from "@kaspernj/object-digger"
+import {digs} from "diggerize"
 import {Shape} from "set-state-compare"
 
 export default class CanCanWithShape extends React.PureComponent {

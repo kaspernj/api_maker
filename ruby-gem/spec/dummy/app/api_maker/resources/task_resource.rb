@@ -1,5 +1,5 @@
 class Resources::TaskResource < Resources::ApplicationResource
-  attributes :created_at, :finished, :id, :name, :project_id, :user_id, :custom_id
+  attributes :created_at, :custom_id, :finished, :id, :name, :project_id, :state, :translated_state, :user_id
   collection_commands :command_serialize, :test_collection
   member_commands :test_member
   relationships :account, :comments, :project, :user
@@ -15,7 +15,7 @@ class Resources::TaskResource < Resources::ApplicationResource
   ].freeze
 
   def abilities
-    can READ + [:destroy], Task if current_user&.admin?
+    can READ + [:update, :destroy], Task if current_user&.admin?
     can CRUD + USER_TASK_ABILITIES + [:model_class_event_test_model_class_event], Task, user_id: current_user.id if current_user
     can :command_serialize, Task
     can :test_accessible_by, Task, id: 3
@@ -31,6 +31,6 @@ class Resources::TaskResource < Resources::ApplicationResource
   end
 
   def permitted_params(arg)
-    arg.params.require(:task).permit(:finished, :name, :project_id, :task, :user_id)
+    arg.params.require(:task).permit(:finished, :name, :project_id, :state, :task, :user_id)
   end
 end

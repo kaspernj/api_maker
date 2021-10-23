@@ -1,4 +1,4 @@
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 
 const instanceOfClassName = (expectedClassName) => {
   return (props, propName, componentName) => {

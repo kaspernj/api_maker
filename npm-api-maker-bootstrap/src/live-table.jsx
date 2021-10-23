@@ -1,7 +1,7 @@
 const classNames = require("classnames")
 const {Collection, EventCreated, EventDestroyed, EventLocationChanged, EventUpdated, instanceOfClassName, Params} = require("@kaspernj/api-maker")
 const {debounce} = require("debounce")
-const {digg, digs} = require("@kaspernj/object-digger")
+const {digg, digs} = require("diggerize")
 const inflection = require("inflection")
 const {Link} = require("react-router-dom")
 const Money = require("js-money")

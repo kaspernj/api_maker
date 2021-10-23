@@ -1,5 +1,5 @@
 import {CanCanLoader} from "@kaspernj/api-maker";
-import {digs} from "@kaspernj/object-digger"
+import {digs} from "diggerize"
 
 export default class CanCanWithState extends React.PureComponent {
   static propTypes = {

@@ -1,4 +1,4 @@
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 
 module.exports = class Serializer {
   static serialize(arg) {

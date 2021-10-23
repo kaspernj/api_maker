@@ -1,5 +1,5 @@
 const CustomError = require("./custom-error.cjs")
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const inflection = require("inflection")
 
 module.exports = class ValidationError extends CustomError {

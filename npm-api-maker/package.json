@@ -51,15 +51,15 @@
     "eslint-find-rules": "^3.6.1",
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-react": "^7.23.2",
-    "i18n-on-steroids": "^1.0.0",
+    "i18n-on-steroids": "^1.0.2",
     "jest": "^27.0.6",
     "jsdom": "^18.0.0"
   },
   "dependencies": {
-    "@kaspernj/object-digger": ">= 1.0.2",
     "@rails/actioncable": ">= 6.1.0",
     "clone-deep": ">= 4.0.1",
     "debounce": ">= 1.2.1",
+    "diggerize": "^1.0.3",
     "epic-locks": ">= 1.0.1",
     "form-data-objectizer": ">= 1.0.0",
     "form-serialize": ">= 0.7.2",

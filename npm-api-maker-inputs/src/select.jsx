@@ -1,4 +1,4 @@
-const {dig} = require("@kaspernj/object-digger")
+const {dig} = require("diggerize")
 const {EventListener} = require("@kaspernj/api-maker")
 const idForComponent = require("./id-for-component.cjs")
 const nameForComponent = require("./name-for-component.cjs")
@@ -64,7 +64,9 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
 
     return (
       <>
-        {form && onErrors && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
+        {form && onErrors &&
+          <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />
+        }
         <select
           defaultValue={this.inputDefaultValue()}
           id={idForComponent(this)}

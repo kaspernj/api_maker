@@ -1,4 +1,4 @@
-import { digs } from "@kaspernj/object-digger"
+import { digs } from "diggerize"
 import { EventModelClass } from "@kaspernj/api-maker"
 import { Task } from "api-maker/models"
 import React from "react"
