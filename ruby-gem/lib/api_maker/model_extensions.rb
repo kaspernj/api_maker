@@ -45,6 +45,14 @@ module ApiMaker::ModelExtensions
     def api_maker_resource
       @api_maker_resource ||= ApiMaker::MemoryStorage.current.resource_for_model(self)
     end
+
+    def translated_collection(collection_name, &blk)
+      ApiMaker::TranslatedCollections.add(
+        blk: blk,
+        collection_name: collection_name,
+        model_class: self
+      )
+    end
   end
 
   def api_maker_event(event_name, args = {})

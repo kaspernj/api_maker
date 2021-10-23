@@ -22,12 +22,12 @@ private
   end
 
   def collection_commands
-    ApiMaker::Loader.load_everything
+    ApiMaker::Loader.load_resources
     ApiMaker::MemoryStorage.current.storage_for(resource, :collection_commands)
   end
 
   def member_commands
-    ApiMaker::Loader.load_everything
+    ApiMaker::Loader.load_resources
     ApiMaker::MemoryStorage.current.storage_for(resource, :member_commands)
   end
 

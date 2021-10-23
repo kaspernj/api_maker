@@ -1,0 +1,5 @@
+/* rails-erb-loader-dependencies models/ */
+
+const translatedCollections = <%= ApiMaker::TranslatedCollections.translated_collections.to_json %>
+
+export default translatedCollections
