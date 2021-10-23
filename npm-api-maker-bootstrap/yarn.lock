@@ -728,25 +728,25 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.58":
-  version "1.0.58"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.58.tgz#24d9e2b4cc8e64ff8e61119902e77ad77da2c0c5"
-  integrity sha512-chH4dFk7d4ECNs0OGyC4gAljubjxlWSt6cBIqAnNhyaKheQEfT2ryxIfsJ4hRLBNxi9PwSe0SgmNpUIeUrf2YA==
+"@kaspernj/api-maker-inputs@>= 1.0.60":
+  version "1.0.60"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.60.tgz#30596c9c9a2fed7a0174795558a69637605a22e9"
+  integrity sha512-/dg2FqpGPHFIQnMkDFzdDh96VxWjTW+aVyhdBQlFwNiasPuSZ1F4pSTCX4aI+4oTez7FOOufZQKujzwHnpEGaQ==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.117"
-    "@kaspernj/object-digger" ">= 1.0.2"
+    "@kaspernj/api-maker" ">= 1.0.119"
     classnames ">= 2.2.6"
+    diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.117":
-  version "1.0.118"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.118.tgz#41e3d884325be40f151a74554be2e94e2abdee73"
-  integrity sha512-KuuMkAvWBCeg5+6o4Yu6LHDoPiP5XzVrpJOW9CVlxrBzGtXuMZ3CWZLixQRYhxpyedpWiSX0r5eMFq2sexPvxw==
+"@kaspernj/api-maker@>= 1.0.119":
+  version "1.0.119"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.119.tgz#7aff4f1d60461d2d5670df7fb5c3dfeaec3c600e"
+  integrity sha512-KVa8CMcw7kmNS9BkAkT0kTvL8HW+FXmsEcLEVN0vFnhhDtHK1fWYqkU612BK+ym0S0bRQfDJoHBwmiexvzLPKg==
   dependencies:
-    "@kaspernj/object-digger" ">= 1.0.2"
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
     debounce ">= 1.2.1"
+    diggerize "^1.0.3"
     epic-locks ">= 1.0.1"
     form-data-objectizer ">= 1.0.0"
     form-serialize ">= 0.7.2"
@@ -759,11 +759,6 @@
     replaceall ">= 0.1.6"
     strftime ">= 0.10.0"
     wake-event ">= 0.0.1"
-
-"@kaspernj/object-digger@>= 1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.2.tgz#92d4cba641f9429fa0c572822d25132d4bae206b"
-  integrity sha512-L0Y460I2nEWbxF/6zyrU8Lyi+MHTxdh9xS9CkJhHrcMoHndUKGXqb6Tw7imApslMU9eyjNBXW5n5tMPtk46ACw==
 
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
@@ -1508,7 +1503,7 @@ diff-sequences@^27.0.6:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-27.0.6.tgz#3305cb2e55a033924054695cc66019fd7f8e5723"
   integrity sha512-ag6wfpBFyNXZ0p8pcuIDS//D8H062ZQJ3fzYxjpmeKjnz8W4pekL3AI8VohmyZmsWW2PWaHgjsmqR6L13101VQ==
 
-diggerize@^1.0.3:
+"diggerize@>= 1.0.3", diggerize@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.3.tgz#1c08fb9f461c2ed1af9416c83142539f041350a3"
   integrity sha512-sqZM36ZDSizaGTkjs+CZjjPlccDaz+Khozw/9+fnYJ2oS2n6is2JPoycofSnWTi0JDKEKVI86IKsMxwWzbrG1Q==
