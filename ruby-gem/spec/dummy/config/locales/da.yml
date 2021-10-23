@@ -16,6 +16,9 @@ da:
       messages:
         blank: kan ikke være blank
   js:
+    api_maker_bootstrap:
+      live_table:
+        filter: Filter
     shared:
       are_you_sure: Er du sikker?
   models:

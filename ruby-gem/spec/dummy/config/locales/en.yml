@@ -13,6 +13,9 @@ en:
         email: Email
         updated_at: Updated at
   js:
+    api_maker_bootstrap:
+      live_table:
+        filter: Filter
     shared:
       are_you_sure: Are you sure?
   models:
