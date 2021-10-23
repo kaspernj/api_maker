@@ -28,7 +28,7 @@ class ApiMaker::TranslatedCollections
     add_collection_values_method(model_class, plural_name, collection_values)
     add_translated_method(model_class, collection_name, inverted_translated_collection_name)
 
-    model_class.validates :state, inclusion: {in: collection_values}
+    model_class.validates collection_name, inclusion: {in: collection_values}
   end
 
   def self.add_translated_collection_method(model_class, plural_name, collections)
