@@ -9,11 +9,13 @@ describe "tasks - edit" do
     visit edit_task_path(task)
     wait_for_and_find("#task_name").set("Test update task")
     select "Closed", from: "task_state"
+    select 6, from: "task_priority"
     wait_for_and_find("input[type=submit]").click
     wait_for_flash_message "The task was saved"
 
     expect(task.reload).to have_attributes(
       name: "Test update task",
+      priority: 6,
       state: "closed"
     )
   end
