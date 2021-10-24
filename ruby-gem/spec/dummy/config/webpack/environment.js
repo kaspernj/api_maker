@@ -27,7 +27,7 @@ environment.loaders.prepend("yaml", {
 environment.plugins.append(
   "ProvidePlugin",
   new webpack.ProvidePlugin({
-    Account: ["api-maker/models", "Account"],
+    Account: ["@kaspernj/api-maker/src/models", "Account"],
     classNames: "classnames",
     digg: ["diggerize", "digg"],
     digs: ["diggerize", "digs"],
@@ -36,13 +36,13 @@ environment.plugins.append(
     I18n: ["shared/i18n", "default"],
     Layout: ["components/layout", "default"],
     Params: ["@kaspernj/api-maker", "Params"],
-    Project: ["api-maker/models", "Project"],
+    Project: ["@kaspernj/api-maker/src/models", "Project"],
     PropTypes: "prop-types",
     PropTypesExact: "prop-types-exact",
     React: "react",
     Routes: ["shared/routes", "default"],
     setStateAsync: ["shared/set-state-async", "default"],
-    Task: ["api-maker/models", "Task"],
+    Task: ["@kaspernj/api-maker/src/models", "Task"],
 
     Checkbox: ["@kaspernj/api-maker-bootstrap", "Checkbox"],
     Checkboxes: ["@kaspernj/api-maker-bootstrap", "Checkboxes"],
