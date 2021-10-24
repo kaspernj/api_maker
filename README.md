@@ -40,6 +40,8 @@ Rails.application.routes.draw do
 end
 ```
 
+Install the ERB loader for Webpack, and make sure it doesn't ignore the `node_modules` folder.
+
 ## Resources
 
 ApiMaker will only create models, endpoints and serializers for ActiveRecord models that are defined as resources. So be sure to add resources under `app/api_maker/resources` for your models first. You can add some helper methods if you want to use in your resources like `current_user` and `signed_in_as_admin?`.
@@ -84,11 +86,6 @@ end
 ```
 
 ApiMaker uses that to keep track of what attributes, relationships and commands you want exposed through the API.
-
-Its now time to generate everything like this:
-```bash
-rake api_maker:generate_models
-```
 
 If you want to be able to create and update models, then you should go into each resource and create a params method to define, which attributes can be written on each model like this:
 ```ruby
@@ -222,7 +219,7 @@ end
 ### Creating a new model from JavaScript
 
 ```js
-import {Task} from "api-maker/models"
+import {Task} from "@kaspernj/api-maker/src/models"
 
 const task = new Task()
 task.assignAttributes({name: "New task"})

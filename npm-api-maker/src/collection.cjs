@@ -205,7 +205,7 @@ module.exports = class ApiMakerCollection {
   modelClass() {
     const modelName = digg(this.args.modelClass.modelClassData(), "name")
 
-    return digg(require("api-maker/models"), modelName)
+    return digg(require("@kaspernj/api-maker/src/models"), modelName)
   }
 
   clone() {
