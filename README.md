@@ -85,11 +85,6 @@ end
 
 ApiMaker uses that to keep track of what attributes, relationships and commands you want exposed through the API.
 
-Its now time to generate everything like this:
-```bash
-rake api_maker:generate_models
-```
-
 If you want to be able to create and update models, then you should go into each resource and create a params method to define, which attributes can be written on each model like this:
 ```ruby
 class Resources::TaskResource < ApiMaker::ModelController
