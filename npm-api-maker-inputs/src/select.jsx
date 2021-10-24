@@ -78,14 +78,44 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
             <option />
           }
           {options && options.map(option =>
-            <option key={`select-option-${option[1]}`} value={option[1]}>
-              {option[0]}
+            <option key={this.optionKey(option)} value={this.optionValue(option)}>
+              {this.optionLabel(option)}
             </option>
           )}
           {children}
         </select>
       </>
     )
+  }
+
+  optionKey(option) {
+    console.log("optionKey", {option})
+
+    if (Array.isArray(option)) {
+      return `select-option-${option[1]}`
+    } else {
+      return `select-option-${option}`
+    }
+  }
+
+  optionLabel(option) {
+    console.log("optionLabel", {option})
+
+    if (Array.isArray(option)) {
+      return option[0]
+    } else {
+      return option
+    }
+  }
+
+  optionValue(option) {
+    console.log("optionValue", {option})
+
+    if (Array.isArray(option)) {
+      return option[1]
+    } else {
+      return option
+    }
   }
 
   includeBlank() {

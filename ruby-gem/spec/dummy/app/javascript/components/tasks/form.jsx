@@ -8,8 +8,10 @@ export default class ComponentsTasksForm extends React.PureComponent {
     task: PropTypes.instanceOf(Task).isRequired
   }
 
+  priorityCollection = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
   render() {
-    const {onSubmit} = digs(this, "onSubmit")
+    const {onSubmit, priorityCollection} = digs(this, "onSubmit", "priorityCollection")
     const {className, task, ...restProps} = this.props
     const stateOptionsCollection = TranslatedCollections
       .get(Task, "state")
@@ -19,6 +21,7 @@ export default class ComponentsTasksForm extends React.PureComponent {
       <form className={classNames("components-tasks-form", className)} onSubmit={onSubmit} {...restProps}>
         <Input attribute="name" model={task} />
         <Select attribute="state" includeBlank model={task} options={stateOptionsCollection} />
+        <Select attribute="priority" includeBlank model={task} options={priorityCollection} />
         <input type="submit" />
       </form>
     )
