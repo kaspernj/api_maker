@@ -22,7 +22,7 @@ export default class SessionStatusSpecsTimeout extends React.PureComponent {
   render() {
     return (
       <Layout className="component-session-status-specs-timeout">
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={() => this.onDeviseSignOut()} />
+        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={this.onDeviseSignOut} />
 
         <div className="status-text">
           isUserSignedIn: {this.state.isUserSignedIn ? "Yes" : "No"}
@@ -31,7 +31,5 @@ export default class SessionStatusSpecsTimeout extends React.PureComponent {
     )
   }
 
-  onDeviseSignOut() {
-    this.setState({isUserSignedIn: false})
-  }
+  onDeviseSignOut = () => this.setState({isUserSignedIn: false})
 }

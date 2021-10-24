@@ -18,8 +18,8 @@ export default class SessionsNew extends React.PureComponent {
   render() {
     return (
       <Layout>
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={() => { this.onDeviseSigned() }} />
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={() => { this.onDeviseSigned() }} />
+        <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={this.onDeviseSigned} />
+        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={this.onDeviseSigned} />
 
         {Devise.isUserSignedIn() &&
           <div>
@@ -27,7 +27,7 @@ export default class SessionsNew extends React.PureComponent {
           </div>
         }
         {!Devise.isUserSignedIn() &&
-          <form onSubmit={(e) => { this.onSubmit(e) }}>
+          <form onSubmit={this.onSubmit}>
             <Input inputRef={this.emailRef} label="Email" />
             <Input inputRef={this.passwordRef} label="Password" type="password" />
             <Checkbox label="Remember me" inputRef={this.rememberMeRef} />
@@ -38,11 +38,9 @@ export default class SessionsNew extends React.PureComponent {
     )
   }
 
-  onDeviseSigned() {
-    this.setState({isUserSignedIn: Devise.isUserSignedIn()})
-  }
+  onDeviseSigned = () => this.setState({isUserSignedIn: Devise.isUserSignedIn()})
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault()
 
     const email = this.emailRef.current.value

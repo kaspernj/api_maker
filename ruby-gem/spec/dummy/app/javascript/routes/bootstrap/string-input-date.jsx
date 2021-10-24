@@ -18,7 +18,7 @@ export default class BootstrapStringInputDatetimeLocal extends React.PureCompone
 
     return (
       <div className="content-container">
-        <form onSubmit={(e) => this.onSubmit(e)}>
+        <form onSubmit={this.onSubmit}>
           <Input attribute="birthdayAt" label="Birthday" model={user} type="date" />
           <input type="submit" value="Save" />
         </form>
@@ -26,7 +26,7 @@ export default class BootstrapStringInputDatetimeLocal extends React.PureCompone
     )
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault()
 
     const { user } = this.state

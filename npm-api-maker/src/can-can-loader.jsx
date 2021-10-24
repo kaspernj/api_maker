@@ -32,12 +32,12 @@ export default class ApiMakerCanCanLoader extends React.PureComponent {
       <ApiMakerEventEmitterListener
         events={events}
         event="onResetAbilities"
-        onCalled={() => this.onResetAbilities()}
+        onCalled={this.onResetAbilities}
       />
     )
   }
 
-  onResetAbilities() {
+  onResetAbilities = () => {
     this.updateComponent({canCan: undefined})
     this.loadAbilities()
   }

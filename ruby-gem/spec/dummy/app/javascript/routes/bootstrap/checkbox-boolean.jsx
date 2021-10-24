@@ -22,7 +22,7 @@ export default class BootstrapCheckboxBoolean extends React.PureComponent {
   content() {
     return (
       <div className="content-container">
-        <form onSubmit={(e) => this.onSubmit(e)}>
+        <form onSubmit={this.onSubmit}>
           <Checkbox attribute="finished" model={this.state.task} />
           <input type="submit" value="Save" />
         </form>
@@ -30,7 +30,7 @@ export default class BootstrapCheckboxBoolean extends React.PureComponent {
     )
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault()
 
     const { task } = this.state

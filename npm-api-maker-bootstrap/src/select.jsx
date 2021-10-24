@@ -69,7 +69,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
             id={this.inputId()}
             inputRef={this.props.inputRef || this.inputRef}
             name={this.inputName()}
-            onErrors={(errors) => this.onErrors(errors)}
+            onErrors={this.onErrors}
             {...restProps}
           />
         }
@@ -109,9 +109,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  onErrors(errors) {
-    this.setState({errors})
-  }
+  onErrors = (errors) => this.setState({errors})
 
   selectClassName() {
     const classNames = ["form-control"]

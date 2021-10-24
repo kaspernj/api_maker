@@ -41,7 +41,7 @@ export default class ModelsCustomValidationError extends React.PureComponent {
 
     return (
       <div className="content-container">
-        <form onSubmit={(e) => this.onSubmit(e)}>
+        <form onSubmit={this.onSubmit}>
           <input type="hidden" name="project[account_id]" value={account.id()} />
           <Input attribute="name" model={project} />
 
@@ -62,7 +62,7 @@ export default class ModelsCustomValidationError extends React.PureComponent {
     )
   }
 
-  async onSubmit(e) {
+  onSubmit = async (e) => {
     e.preventDefault()
 
     const {project} = digs(this.state, "project")

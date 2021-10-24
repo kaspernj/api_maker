@@ -99,7 +99,7 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
               id={this.inputId()}
               model={model}
               name={this.inputName()}
-              onErrors={(errors) => this.onErrors(errors)}
+              onErrors={this.onErrors}
               type={this.inputType()}
               {...restProps}
             />
@@ -170,9 +170,7 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  onErrors(errors) {
-    this.setState({errors})
-  }
+  onErrors = (errors) => this.setState({errors})
 
   wrapperClassName() {
     const classNames = ["form-group", "component-bootstrap-string-input"]
