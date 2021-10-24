@@ -28,7 +28,7 @@ export default class BootstrapCheckboxes extends React.PureComponent {
   content() {
     return (
       <div className="content-container">
-        <form onSubmit={(e) => this.onSubmit(e)} ref="form">
+        <form onSubmit={this.onSubmit} ref="form">
           <Checkboxes
             defaultValue={this.state.account.tasks().loaded().map(task => task.id())}
             label="Choose tasks"
@@ -41,7 +41,7 @@ export default class BootstrapCheckboxes extends React.PureComponent {
     )
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault()
 
     this.state.account.saveRaw(e.target).then(() => {

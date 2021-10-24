@@ -81,9 +81,9 @@ export default class ApiMakerInput extends React.PureComponent {
     return (
       <>
         {autoRefresh && model &&
-          <EventUpdated model={model} onUpdated={(...args) => this.onModelUpdated(...args)} />
+          <EventUpdated model={model} onUpdated={this.onModelUpdated} />
         }
-        {form && onErrors && <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />}
+        {form && onErrors && <EventListener event="validation-errors" onCalled={this.onValidationErrors} target={form} />}
         {localizedNumber &&
           <input
             defaultValue={this.inputDefaultValue()}
@@ -98,7 +98,7 @@ export default class ApiMakerInput extends React.PureComponent {
             defaultValue={this.inputDefaultValueLocalized()}
             id={localizedNumber ? null : this.inputId()}
             name={localizedNumber ? null : this.inputName()}
-            onChange={(e) => this.onInputChanged(e)}
+            onChange={this.onInputChanged}
             ref={localizedNumber ? this.visibleInputRef : this.inputReference()}
             type={this.inputType()}
             {...restProps}
@@ -109,7 +109,7 @@ export default class ApiMakerInput extends React.PureComponent {
             defaultValue={this.inputDefaultValueLocalized()}
             id={localizedNumber ? null : this.inputId()}
             name={localizedNumber ? null : this.inputName()}
-            onChange={(e) => this.onInputChanged(e)}
+            onChange={this.onInputChanged}
             ref={localizedNumber ? this.visibleInputRef : this.inputReference()}
             type={this.inputType()}
             {...restProps}
@@ -215,7 +215,7 @@ export default class ApiMakerInput extends React.PureComponent {
     }
   }
 
-  onModelUpdated(args) {
+  onModelUpdated = (args) => {
     const inputRef = this.props.inputRef || this.inputRef
 
     if (!inputRef.current) {
@@ -234,7 +234,7 @@ export default class ApiMakerInput extends React.PureComponent {
     }
   }
 
-  onValidationErrors(event) {
+  onValidationErrors = (event) => {
     const {onErrors} = this.props
 
     if (!onErrors) {
@@ -250,7 +250,7 @@ export default class ApiMakerInput extends React.PureComponent {
     onErrors(errors)
   }
 
-  onInputChanged(e) {
+  onInputChanged = (e) => {
     const { attribute, autoSubmit, model, onChange, type } = this.props
     const { localizedNumber } = digs(this.props, "localizedNumber")
     const input = digg(e, "target")

@@ -42,7 +42,7 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
             className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
             id={this.inputId()}
             name={this.inputName()}
-            onErrors={(errors) => this.onErrors(errors)}
+            onErrors={this.onErrors}
             {...restProps}
           />
 
@@ -109,7 +109,5 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  onErrors(errors) {
-    this.setState({errors})
-  }
+  onErrors = (errors) => this.setState({errors})
 }

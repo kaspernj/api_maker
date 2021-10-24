@@ -18,7 +18,7 @@ export default class BootstrapStringInputFile extends React.PureComponent {
 
     return (
       <div className="content-container">
-        <form onSubmit={(e) => this.onSubmit(e)}>
+        <form onSubmit={this.onSubmit}>
           <Input attribute="image" defaultValue={null} label="Image" model={user} type="file" />
           <input type="submit" value="Save" />
         </form>
@@ -26,7 +26,7 @@ export default class BootstrapStringInputFile extends React.PureComponent {
     )
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault()
 
     const { user } = this.state

@@ -16,7 +16,7 @@ export default class ModelsDestroyEvent extends React.PureComponent {
       <div className="component-models-destroy-event">
         {tasks && tasks.map(task =>
           <div className="task-row" data-task-id={task.id()} key={task.cacheKey()}>
-            <EventDestroyed model={task} onDestroyed={(args) => this.onDestroyed(args)} />
+            <EventDestroyed model={task} onDestroyed={this.onDestroyed} />
 
             {task.id()}
           </div>
@@ -25,9 +25,8 @@ export default class ModelsDestroyEvent extends React.PureComponent {
     )
   }
 
-  onDestroyed(args) {
+  onDestroyed = (args) =>
     this.setState({
       tasks: this.state.tasks.filter(task => task.id() != args.model.id())
     })
-  }
 }

@@ -14,13 +14,13 @@ export default class RoutesCanCanLoader extends React.PureComponent {
 
     return (
       <Layout className="routes-can-can-loader">
-        <button className="reset-abilities-button" onClick={(e) => this.onResetAbilitiesClicked(e)}>
+        <button className="reset-abilities-button" onClick={this.onResetAbilitiesClicked}>
           reset abilities
         </button>
-        <button className="sign-out-button" onClick={(e) => this.onSignOutClicked(e)}>
+        <button className="sign-out-button" onClick={this.onSignOutClicked}>
           sign out
         </button>
-        <button className="show-loader-that-signs-out-on-load-button" onClick={(e) => this.onShowLoaderThatSignsOutOnMountClicked(e)}>
+        <button className="show-loader-that-signs-out-on-load-button" onClick={this.onShowLoaderThatSignsOutOnMountClicked}>
           show loader that signs out on load
         </button>
         <LoaderWithShape />
@@ -32,19 +32,19 @@ export default class RoutesCanCanLoader extends React.PureComponent {
     )
   }
 
-  onSignOutClicked(e) {
+  onSignOutClicked = (e) => {
     e.preventDefault()
 
     Devise.signOut()
   }
 
-  onResetAbilitiesClicked(e) {
+  onResetAbilitiesClicked = (e) => {
     e.preventDefault()
 
     CanCan.current().resetAbilities()
   }
 
-  onShowLoaderThatSignsOutOnMountClicked(e) {
+  onShowLoaderThatSignsOutOnMountClicked = (e) => {
     e.preventDefault()
 
     this.setState({showLoaderThatSignsOutOnMount: true})
