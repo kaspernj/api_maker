@@ -997,19 +997,19 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.1.tgz#141f15645acaa3b133b7c247cad58ae252ffae85"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
-"@kaspernj/api-maker-bootstrap@^1.0.61":
-  version "1.0.61"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.61.tgz#f0e90f012a7250aadbd9442c163d21c04ea40aae"
-  integrity sha512-6sZDovIbBqbpc8RpP/7JQkcAUayfORpVbZCu7DgPZmEIRX6Ax+3gQIgPyy9K8KZ66V8yOddP+GxJolLzrShZKw==
+"@kaspernj/api-maker-bootstrap@^1.0.67":
+  version "1.0.67"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.67.tgz#721ef52daacee1206b1dbfc090aa0c7e8a6753b3"
+  integrity sha512-F8jpuGqIAaHTLNvFLamnRuTH2x7IHcwJXV0G12FQa2lVX+yqLWrLKKV1zA+HpZVo9bqfIKQjl8FPrwobPvrN/w==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.117"
-    "@kaspernj/api-maker-inputs" ">= 1.0.58"
-    "@kaspernj/object-digger" ">= 1.0.2"
+    "@kaspernj/api-maker" ">= 1.0.119"
+    "@kaspernj/api-maker-inputs" ">= 1.0.60"
     debounce ">= 1.2.0"
+    diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.58", "@kaspernj/api-maker-inputs@^1.0.60":
+"@kaspernj/api-maker-inputs@>= 1.0.60", "@kaspernj/api-maker-inputs@^1.0.60":
   version "1.0.60"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.60.tgz#30596c9c9a2fed7a0174795558a69637605a22e9"
   integrity sha512-/dg2FqpGPHFIQnMkDFzdDh96VxWjTW+aVyhdBQlFwNiasPuSZ1F4pSTCX4aI+4oTez7FOOufZQKujzwHnpEGaQ==
@@ -1019,7 +1019,7 @@
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.117", "@kaspernj/api-maker@>= 1.0.119", "@kaspernj/api-maker@^1.0.118":
+"@kaspernj/api-maker@>= 1.0.119", "@kaspernj/api-maker@^1.0.118":
   version "1.0.119"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.119.tgz#7aff4f1d60461d2d5670df7fb5c3dfeaec3c600e"
   integrity sha512-KVa8CMcw7kmNS9BkAkT0kTvL8HW+FXmsEcLEVN0vFnhhDtHK1fWYqkU612BK+ym0S0bRQfDJoHBwmiexvzLPKg==
@@ -1040,11 +1040,6 @@
     replaceall ">= 0.1.6"
     strftime ">= 0.10.0"
     wake-event ">= 0.0.1"
-
-"@kaspernj/object-digger@>= 1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@kaspernj/object-digger/-/object-digger-1.0.2.tgz#92d4cba641f9429fa0c572822d25132d4bae206b"
-  integrity sha512-L0Y460I2nEWbxF/6zyrU8Lyi+MHTxdh9xS9CkJhHrcMoHndUKGXqb6Tw7imApslMU9eyjNBXW5n5tMPtk46ACw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
