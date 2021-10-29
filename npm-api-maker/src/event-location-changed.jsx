@@ -1,3 +1,5 @@
+import React from "react"
+
 export default class EventLocationChanged extends React.PureComponent {
   static propTypes = {
     history: PropTypes.object.isRequired,
