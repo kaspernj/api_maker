@@ -735,10 +735,10 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@kaspernj/api-maker@>= 1.0.120":
-  version "1.0.120"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.120.tgz#944498bbf321affe174b238e0baeb5c5e4f93987"
-  integrity sha512-LhGWYUqf6WuvBNHswGDytAn0+aXc7Gjczis5tMcerlMWHYOw1GO48rHLrh281fuXn2npGpl1L/pKXVAMgc1EWw==
+"@kaspernj/api-maker@>= 1.0.121":
+  version "1.0.121"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.121.tgz#6cbac6124d4eef35dce711fc10b01c55c2183abb"
+  integrity sha512-5BCEvDG9L4UfxQFVZYZC6HcEWk7yeM4bEHp0htGOCfaDrxsKpPVM4JvFwLXa7sbyms5P0Zo2punIFeM6sLghhA==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
