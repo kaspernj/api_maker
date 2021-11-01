@@ -65,7 +65,7 @@ class ValidationError {
   getModelClass() {
     const modelName = inflection.classify(digg(this, "modelName"))
 
-    return digg(require("@kaspernj/api-maker/src/models"), modelName)
+    return digg(require("@kaspernj/api-maker/src/models.js.erb"), modelName)
   }
 
   setHandled() {

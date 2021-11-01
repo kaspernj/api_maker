@@ -1,7 +1,7 @@
 import {digg, digs} from "diggerize"
 import FlashMessage from "shared/flash-message"
 import {Params, ValidationError} from "@kaspernj/api-maker"
-import {User} from "@kaspernj/api-maker/src/models"
+import {User} from "@kaspernj/api-maker/src/models.js.erb"
 
 export default class ModelsCustomValidationError extends React.PureComponent {
   state = {

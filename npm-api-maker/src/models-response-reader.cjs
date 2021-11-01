@@ -23,7 +23,7 @@ module.exports = class ModelsResponseReader {
 
     for(const modelType in this.response.data) {
       const modelClassName = inflection.classify(modelType)
-      const modelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
+      const modelClass = digg(require("@kaspernj/api-maker/src/models.js.erb"), modelClassName)
       const collectionName = modelClass.modelClassData().collectionName
 
       for(const modelId of this.response.data[modelType]) {
