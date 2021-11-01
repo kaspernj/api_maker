@@ -728,37 +728,15 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.60":
-  version "1.0.60"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.60.tgz#30596c9c9a2fed7a0174795558a69637605a22e9"
-  integrity sha512-/dg2FqpGPHFIQnMkDFzdDh96VxWjTW+aVyhdBQlFwNiasPuSZ1F4pSTCX4aI+4oTez7FOOufZQKujzwHnpEGaQ==
+"@kaspernj/api-maker-inputs@>= 1.0.61":
+  version "1.0.61"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.61.tgz#dc24351fc0f0d1043b2dfc7dcd0b3600582fb137"
+  integrity sha512-aEw21Bg95COC+ibcbRfQn13s6qmxSlqPUHbCH3CcY4DETDlC7PqJkqvVvLVnywaIofHl+HjRg+9r0P39IF1r2w==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.119"
+    "@kaspernj/api-maker" ">= 1.0.120"
     classnames ">= 2.2.6"
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
-
-"@kaspernj/api-maker@>= 1.0.119":
-  version "1.0.119"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.119.tgz#7aff4f1d60461d2d5670df7fb5c3dfeaec3c600e"
-  integrity sha512-KVa8CMcw7kmNS9BkAkT0kTvL8HW+FXmsEcLEVN0vFnhhDtHK1fWYqkU612BK+ym0S0bRQfDJoHBwmiexvzLPKg==
-  dependencies:
-    "@rails/actioncable" ">= 6.1.0"
-    clone-deep ">= 4.0.1"
-    debounce ">= 1.2.1"
-    diggerize "^1.0.3"
-    epic-locks ">= 1.0.1"
-    form-data-objectizer ">= 1.0.0"
-    form-serialize ">= 0.7.2"
-    format-number ">= 3.0.0"
-    inflection ">= 1.12.0"
-    js-money ">= 0.6.3"
-    numberable ">= 1.0.0"
-    object-to-formdata ">= 4.1.0"
-    qs ">= 6.9.3"
-    replaceall ">= 0.1.6"
-    strftime ">= 0.10.0"
-    wake-event ">= 0.0.1"
 
 "@kaspernj/api-maker@>= 1.0.120":
   version "1.0.120"
@@ -1525,7 +1503,7 @@ diff-sequences@^27.0.6:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-27.0.6.tgz#3305cb2e55a033924054695cc66019fd7f8e5723"
   integrity sha512-ag6wfpBFyNXZ0p8pcuIDS//D8H062ZQJ3fzYxjpmeKjnz8W4pekL3AI8VohmyZmsWW2PWaHgjsmqR6L13101VQ==
 
-"diggerize@>= 1.0.3", diggerize@^1.0.3:
+"diggerize@>= 1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.3.tgz#1c08fb9f461c2ed1af9416c83142539f041350a3"
   integrity sha512-sqZM36ZDSizaGTkjs+CZjjPlccDaz+Khozw/9+fnYJ2oS2n6is2JPoycofSnWTi0JDKEKVI86IKsMxwWzbrG1Q==
