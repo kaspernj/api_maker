@@ -18,14 +18,14 @@ module.exports = class ApiMakerDeserializer {
         return Money.fromInteger(cents, currency)
       } else if (object.api_maker_type == "model") {
         const modelClassName = inflection.classify(digg(object, "model_name"))
-        const modelClass = digg(require("@kaspernj/api-maker/src/models.js.erb"), modelClassName)
+        const modelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
         const data = ApiMakerDeserializer.parse(digg(object, "serialized"))
         const model = new modelClass({data, isNewRecord: false})
 
         return model
       } else if (object.api_maker_type == "resource") {
         const modelClassName = inflection.classify(digg(object, "name"))
-        const modelClass = digg(require("@kaspernj/api-maker/src/models.js.erb"), modelClassName)
+        const modelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
 
         return modelClass
       } else {
