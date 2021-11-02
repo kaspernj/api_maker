@@ -223,7 +223,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
         <EventCreated modelClass={modelClass} onCreated={this.onModelCreated} />
         <EventLocationChanged history={appHistory} onChanged={this.onLocationChanged} />
         {models.map(model =>
-          <React.Fragment key={`events-${model.id()}`}>
+          <React.Fragment key={model.id()}>
             <EventDestroyed model={model} onDestroyed={this.onModelDestroyed} />
             <EventUpdated model={model} onUpdated={this.onModelUpdated} />
           </React.Fragment>
@@ -281,11 +281,11 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
           {models.map((model) =>
             <tr className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()} key={model.id()}>
               {this.props.columns && this.columnsContentFromColumns(model)}
-              {this.props.columnsContent && this.props.columnsContent({model})}
+              {this.props.columnsContent && this.props.columnsContent(this.modelCallbackArgs(model))}
               <td className="actions-column text-end text-nowrap text-right">
-                {actionsContent && actionsContent({model})}
+                {actionsContent && actionsContent(this.modelCallbackArgs(model))}
                 {editModelPath && model.can("edit") &&
-                  <Link className="edit-button" to={editModelPath({model})}>
+                  <Link className="edit-button" to={editModelPath(this.modelCallbackArgs(model))}>
                     <i className="fa fa-edit la la-edit" />
                   </Link>
                 }
@@ -312,14 +312,19 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   columnContentFromContentArg(column, model) {
-    const modelArgName = inflection.camelize(this.props.modelClass.modelClassData().name, true)
-    const contentArgs = {}
-
-    contentArgs[modelArgName] = model
-
+    const contentArgs = this.modelCallbackArgs(model)
     const value = column.content(contentArgs)
 
     return this.presentColumnValue(value)
+  }
+
+  modelCallbackArgs(model) {
+    const modelArgName = inflection.camelize(this.props.modelClass.modelClassData().name, true)
+    const modelCallbackArgs = {}
+
+    modelCallbackArgs[modelArgName] = model
+
+    return modelCallbackArgs
   }
 
   columnClassNamesForColumn(column) {
