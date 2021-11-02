@@ -44,7 +44,7 @@ export default class BootstrapLiveTable extends React.PureComponent {
     )
   }
 
-  columnsContent = ({model: task}) => {
+  columnsContent = ({task}) => {
     return (
       <>
         <td>
