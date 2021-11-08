@@ -4,17 +4,15 @@ const {digg} = require("diggerize")
 const inflection = require("inflection")
 
 module.exports = class ApiMakerModelRecipesModelLoader {
-  constructor({modelRecipe}) {
+  constructor({modelRecipe, modelRecipesLoader}) {
     if (!modelRecipe) throw new Error("No 'modelRecipe' was given")
 
+    this.modelRecipesLoader = modelRecipesLoader
     this.modelRecipe = modelRecipe
   }
 
   createClass() {
     const {modelRecipe} = digs(this, "modelRecipe")
-
-    console.log({ modelRecipe })
-
     const {
       attributes,
       collection_commands: collectionCommands,
@@ -28,13 +26,11 @@ module.exports = class ApiMakerModelRecipesModelLoader {
       "relationships"
     )
     const {name: modelClassName} = digs(modelClassData, "name")
+    const ModelClass = class ApiMakerModel extends BaseModel { }
 
-    const ModelClass = function() {
-      throw new Error(`Constructor for ${modelClassName}`)
-    }
+    Object.defineProperty(ModelClass, "name", {writable: false, value: modelClassName})
 
-    ModelClass.prototype = new BaseModel()
-    ModelClass.prototype.constructor = ModelClass
+    ModelClass.prototype.constructor.modelClassData = () => modelClassData
 
     this.addAttributeMethodsToModelClass(ModelClass, attributes)
     this.addRelationshipsToModelClass(ModelClass, relationships)
@@ -47,38 +43,151 @@ module.exports = class ApiMakerModelRecipesModelLoader {
     for (const attributeName in attributes) {
       const attribute = attributes[attributeName]
       const {name} = digs(attribute, "name")
+      const methodName = inflection.camelize(name, true)
+      const hasMethodName = inflection.camelize(`has_${name}`, true)
 
-      ModelClass.prototype[name] = function () {
-        throw new Error(`Attribute function for ${name}`)
+      ModelClass.prototype[methodName] = function () { return this.readAttributeUnderscore(attributeName) }
+      ModelClass.prototype[hasMethodName] = function () {
+        const value = this[methodName]()
+
+        return this._isPresent(value)
       }
     }
   }
 
   addRelationshipsToModelClass(ModelClass, relationships) {
+    const {modelRecipesLoader} = digs(this, "modelRecipesLoader")
+
     for (const relationshipName in relationships) {
       const relationship = relationships[relationshipName]
-
-      console.log({ relationship })
-
-      const loadMethodName = inflection.camelize(`load_${relationshipName}`)
-      const modelMethodName = inflection.camelize(relationshipName)
+      const {
+        active_record: {name: activeRecordName},
+        class_name: className,
+        foreign_key: foreignKey,
+        options: {optionsAs, optionsThrough},
+        resource_name: resourceName,
+        through,
+        type
+      } = digs(
+        relationship,
+        "active_record",
+        "class_name",
+        "foreign_key",
+        "options",
+        "resource_name",
+        "through",
+        "type"
+      )
+      const loadMethodName = inflection.camelize(`load_${relationshipName}`, true)
+      const modelMethodName = inflection.camelize(relationshipName, true)
 
       ModelClass.prototype[loadMethodName] = () => {
-        throw new Error(`Load relationship function for ${relationshipName}`)
+        if (type == "has_many") {
+          const id = this.primaryKey()
+          const modelClass = modelRecipesLoader.getModelClass(resourceName)
+          const ransack = {}
+
+          ransack[`${foreignKey}_eq`] = id
+
+          return this._loadHasManyReflection(
+            {
+              reflectionName: relationshipName,
+              model: this,
+              modelClass
+            },
+            {ransack}
+          )
+        } else {
+          throw new Error(`Unknown relationship type: ${type}`)
+        }
       }
 
-      ModelClass.prototype[modelMethodName] = () => {
-        throw new Error(`Relationship function for ${relationshipName}`)
+      ModelClass.prototype[modelMethodName] = function () {
+        if (type == "belongs_to" || type == "has_one") {
+          return this._readBelongsToReflection({reflectionName: relationshipName})
+        } else if (type == "has_many") {
+          const id = this.primaryKey()
+          const modelClass = modelRecipesLoader.getModelClass(resourceName)
+          const ransack = {}
+
+          ransack[`${foreignKey}_eq`] = id
+
+          return this._loadHasManyReflection(
+            {
+              reflectionName: relationshipName,
+              model: this,
+              modelClass
+            },
+            {ransack}
+          )
+        } else {
+          throw new Error(`Unknown relationship type: ${type}`)
+        }
+      }
+
+      ModelClass.prototype[modelMethodName] = function () {
+        if (type == "belongs_to" || type == "has_one") {
+          return this._readBelongsToReflection({reflectionName: relationshipName})
+        } else if (type == "has_many") {
+          const id = this.primaryKey()
+          const modelClass = modelRecipesLoader.getModelClass(resourceName)
+          const ransack = {}
+
+          ransack[`${foreignKey}_eq`] = id
+
+          const hasManyParameters = {
+            reflectionName: relationshipName,
+            model: this,
+            modelName: className,
+            modelClass
+          }
+
+          let queryParameters
+
+          if (optionsThrough) {
+            queryParameters = {
+              params: {
+                through: {
+                  model: className,
+                  id: this.primaryKey(),
+                  reflection: relationshipName
+                }
+              }
+            }
+          } else {
+            const ransack = {}
+
+            ransack[`${foreignKey}_eq`] = this.primaryKey()
+
+            if (as) {
+              ransack[`${as}_type_eq`] = reflection.active_record.name
+            }
+
+            queryParameters = {ransack}
+          }
+
+          return new Collection(hasManyParameters, queryParameters)
+        } else {
+          throw new Error(`Unknown relationship type: ${type}`)
+        }
       }
     }
   }
 
   addCollectionCommandsToModelClass(ModelClass, collectionCommands) {
     for (const collectionCommandName in collectionCommands) {
-      const methodName = inflection.camelize(collectionCommandName)
+      const methodName = inflection.camelize(collectionCommandName, true)
 
-      ModelClass.constructor.prototype[methodName] = () => {
-        throw new Error(`Collection command function for ${collectionCommandName}`)
+      ModelClass[methodName] = function (args, commandArgs = {}) {
+        return this._callCollectionCommand(
+          {
+            args,
+            command: collectionCommandName,
+            collectionName: digg(this.modelClassData(), "collectionName"),
+            type: "collection"
+          },
+          commandArgs
+        )
       }
     }
   }
@@ -166,18 +275,6 @@ class <%= resource.short_name %> extends BaseModel {
         return this._readHasOneReflection(<%= api_maker_json("reflectionName" => reflection.name, "model" => "{{this}}", "modelClass" => "{{modelClass}}") %>)
       }
     <% end %>
-  <% end %>
-
-  <% attributes.each do |attribute_data| %>
-    <% methodName = ApiMaker::JsMethodNamerService.execute!(name: attribute_data.fetch(:name)) %>
-    <%= methodName %>() {
-      return this.readAttributeUnderscore("<%= attribute_data.fetch(:name) %>")
-    }
-
-    <%= ApiMaker::JsMethodNamerService.execute!(name: "has_#{attribute_data.fetch(:name)}") %>() {
-      const value = this.<%= methodName %>()
-      return this._isPresent(value)
-    }
   <% end %>
 
   <% collection_commands.each do |collection_command, data| %>

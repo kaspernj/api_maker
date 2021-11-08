@@ -26,7 +26,7 @@ private
     result = {}
     collection_commands = ApiMaker::MemoryStorage.current.storage_for(resource, :collection_commands)
     collection_commands.each_key do |collection_command_name, data|
-      result[collection_command] = {name: collection_command_name}
+      result[collection_command_name] = {name: collection_command_name}
     end
 
     result
@@ -56,7 +56,7 @@ private
       i18nKey: model_class.model_name.i18n_key,
       name: resource.short_name,
       pluralName: model_class.model_name.plural,
-      reflections: reflections_for_model_class_data,
+      relationships: reflections_for_model_class_data,
       paramKey: model_class.model_name.param_key,
       primaryKey: model_class.primary_key
     }
@@ -81,25 +81,17 @@ private
   def relationships
     relationships = {}
     reflections.each do |reflection|
-      reflection_data = {}
-      reflection_data[:resource_name] = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name
-
-      if reflection.macro == :belongs_to
-        reflection_data[:type] = :belongs_to
-
-      elsif reflection.macro == :has_many
-        reflection_data[:type] = :has_many
-        reflection_data[:foreign_key] = reflection.foreign_key
-        reflection_data[:through] = true if reflection.options[:through]
-      elsif reflection.macro == :has_one
-        reflection_data[:type] = :has_one
-        reflection_data[:foreign_key] = reflection.foreign_key
-        reflection_data[:through] = true if reflection.options[:through]
-      else
-        raise "Unknown reflection: #{reflection.macro}"
-      end
-
-      relationships[reflection.name] = reflection_data
+      relationships[reflection.name] = {
+        active_record: {name: reflection.active_record.name},
+        class_name: reflection.class_name,
+        foreign_key: reflection.foreign_key,
+        options: {
+          as: reflection.options[:as],
+          through: reflection.options[:through],
+        },
+        resource_name: ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name,
+        type: reflection.macro
+      }
     end
 
     relationships

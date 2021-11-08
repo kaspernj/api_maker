@@ -3,22 +3,26 @@ const ModelRecipesModelLoader = require("./model-recipes-model-loader.cjs")
 
 module.exports = class ModelRecipesLoader {
   constructor({recipes}) {
+    this.modelClasses = {}
     this.recipes = recipes
+  }
+
+  getModelClass(name) {
+    return digg(this, "modelClasses", name)
   }
 
   load() {
     const {recipes} = digs(this, "recipes")
     const {models} = digs(recipes, "models")
-    const result = {}
 
     for (const modelName in models) {
       const modelRecipe = models[modelName]
-      const modelClassLoader = new ModelRecipesModelLoader({modelRecipe})
+      const modelClassLoader = new ModelRecipesModelLoader({modelRecipe, modelRecipesLoader: this})
       const modelClass = modelClassLoader.createClass()
 
-      result[modelName] = modelClass
+      this.modelClasses[modelName] = modelClass
     }
 
-    return result
+    return this.modelClasses
   }
 }
