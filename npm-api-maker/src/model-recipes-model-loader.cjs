@@ -66,7 +66,6 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         foreign_key: foreignKey,
         options: {optionsAs, optionsThrough},
         resource_name: resourceName,
-        through,
         type
       } = digs(
         relationship,
@@ -75,7 +74,6 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         "foreign_key",
         "options",
         "resource_name",
-        "through",
         "type"
       )
       const loadMethodName = inflection.camelize(`load_${relationshipName}`, true)
@@ -159,8 +157,8 @@ module.exports = class ApiMakerModelRecipesModelLoader {
 
             ransack[`${foreignKey}_eq`] = this.primaryKey()
 
-            if (as) {
-              ransack[`${as}_type_eq`] = reflection.active_record.name
+            if (optionsAs) {
+              ransack[`${optionsAs}_type_eq`] = activeRecordName
             }
 
             queryParameters = {ransack}
