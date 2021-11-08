@@ -1,29 +1,35 @@
 class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
-  attr_reader :model
+  attr_reader :resource
 
-  def initialize(model:)
-    @model = model
+  delegate :model_class, to: :resource
+
+  def initialize(resource:)
+    @resource = resource
   end
 
   def perform
-    if resource
-      succeed! model_content
-    else
-      fail! "No resource defined for #{model.name}"
-    end
+    succeed! model_content
   end
 
 private
 
   def attributes
+    attributes = {}
     resource._attributes.map do |attribute, _data|
-      {name: attribute}
+      attributes[attribute] = {name: attribute}
     end
+    attributes
   end
 
   def collection_commands
     ApiMaker::Loader.load_resources
-    ApiMaker::MemoryStorage.current.storage_for(resource, :collection_commands)
+    result = {}
+    collection_commands = ApiMaker::MemoryStorage.current.storage_for(resource, :collection_commands)
+    collection_commands.each_key do |collection_command_name, data|
+      result[collection_command] = {name: collection_command_name}
+    end
+
+    result
   end
 
   def member_commands
@@ -32,56 +38,71 @@ private
   end
 
   def model_content
-    erb = ERB.new(File.read(model_template_path))
-    erb.filename = File.realpath(model_template_path)
-    erb.result(binding)
+    {
+      attributes: attributes,
+      collection_commands: collection_commands,
+      model_class_data: model_class_data,
+      monetized_attributes: monetized_attributes,
+      relationships: relationships
+    }
   end
 
-  def model_template_path
-    File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript", "model-template.js.erb")
+  def model_class_data
+    {
+      attributes: attributes,
+      className: model_class.name,
+      collectionKey: model_class.model_name.collection,
+      collectionName: resource.collection_name,
+      i18nKey: model_class.model_name.i18n_key,
+      name: resource.short_name,
+      pluralName: model_class.model_name.plural,
+      reflections: reflections_for_model_class_data,
+      paramKey: model_class.model_name.param_key,
+      primaryKey: model_class.primary_key
+    }
   end
 
   def monetized_attributes
-    @monetized_attributes ||= @model.try(:monetized_attributes).try(:map) { |attribute| attribute[0] } || []
+    @monetized_attributes ||= model_class.try(:monetized_attributes).try(:map) { |attribute| {name: attribute[0]} } || []
   end
 
   def reflections
     @reflections ||= resource._relationships.map do |name, _data|
-      reflection = model.reflections.values.find { |reflection_i| reflection_i.name == name }
+      reflection = model_class.reflections.values.find { |reflection_i| reflection_i.name == name }
 
       unless reflection
-        raise "Couldnt find reflection by that name: #{name} on the model: #{model.name}. Reflections found: #{model.reflections.keys.join(", ")}"
+        raise "Couldnt find reflection by that name: #{name} on the model: #{model_class.name}. Reflections found: #{model_class.reflections.keys.join(", ")}"
       end
 
       reflection
     end
   end
 
-  def reflection_has_many_parameters(reflection)
-    {
-      reflectionName: reflection.name,
-      model: "{{this}}",
-      modelName: reflection.class_name,
-      modelClass: "{{modelClass}}"
-    }
-  end
+  def relationships
+    relationships = {}
+    reflections.each do |reflection|
+      reflection_data = {}
+      reflection_data[:resource_name] = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name
 
-  def reflection_has_many_parameters_query(reflection)
-    if reflection.options[:through]
-      {
-        params: {
-          through: {
-            model: model.name,
-            id: "{{id}}",
-            reflection: reflection.name
-          }
-        }
-      }
-    else
-      ransack = {"#{reflection.foreign_key}_eq" => "{{id}}"}
-      ransack["#{reflection.options[:as]}_type_eq"] = reflection.active_record.name if reflection.options[:as]
-      {ransack: ransack}
+      if reflection.macro == :belongs_to
+        reflection_data[:type] = :belongs_to
+
+      elsif reflection.macro == :has_many
+        reflection_data[:type] = :has_many
+        reflection_data[:foreign_key] = reflection.foreign_key
+        reflection_data[:through] = true if reflection.options[:through]
+      elsif reflection.macro == :has_one
+        reflection_data[:type] = :has_one
+        reflection_data[:foreign_key] = reflection.foreign_key
+        reflection_data[:through] = true if reflection.options[:through]
+      else
+        raise "Unknown reflection: #{reflection.macro}"
+      end
+
+      relationships[reflection.name] = reflection_data
     end
+
+    relationships
   end
 
   def reflections_for_model_class_data
@@ -96,9 +117,5 @@ private
         resource_name: resource.short_name
       }
     end
-  end
-
-  def resource
-    @resource ||= ApiMaker::MemoryStorage.current.resource_for_model(@model)
   end
 end

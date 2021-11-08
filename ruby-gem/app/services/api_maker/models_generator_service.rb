@@ -8,10 +8,6 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     model.name.end_with?("::Translation", "::ApplicationRecord")
   end
 
-  def models
-    ApiMaker::ModelsFinderService.execute!
-  end
-
 private
 
   def copy_base_files(files, path, target_path)

@@ -1,10 +1,10 @@
 require "rails_helper"
 
 describe ApiMaker::ModelContentGeneratorService do
-  let(:content_project) { service_project.__send__(:model_content) }
-  let(:content_task) { service_task.__send__(:model_content) }
-  let(:service_project) { ApiMaker::ModelContentGeneratorService.new(model: Project) }
-  let(:service_task) { ApiMaker::ModelContentGeneratorService.new(model: Task) }
+  let(:content_project) { service_project.execute! }
+  let(:content_task) { service_task.execute! }
+  let(:service_project) { ApiMaker::ModelContentGeneratorService.new(resource: Resources::ProjectResource) }
+  let(:service_task) { ApiMaker::ModelContentGeneratorService.new(resource: Resources::TaskResource) }
 
   describe "#model_content" do
     it "generates the right class for the model" do

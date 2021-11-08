@@ -1,3 +1,90 @@
+const BaseModel = require("./base-model.cjs")
+const Collection = require("./collection.cjs")
+const {digg} = require("diggerize")
+const inflection = require("inflection")
+
+module.exports = class ApiMakerModelRecipesModelLoader {
+  constructor({modelRecipe}) {
+    if (!modelRecipe) throw new Error("No 'modelRecipe' was given")
+
+    this.modelRecipe = modelRecipe
+  }
+
+  createClass() {
+    const {modelRecipe} = digs(this, "modelRecipe")
+
+    console.log({ modelRecipe })
+
+    const {
+      attributes,
+      collection_commands: collectionCommands,
+      model_class_data: modelClassData,
+      relationships
+    } = digs(
+      modelRecipe,
+      "attributes",
+      "collection_commands",
+      "model_class_data",
+      "relationships"
+    )
+    const {name: modelClassName} = digs(modelClassData, "name")
+
+    const ModelClass = function() {
+      throw new Error(`Constructor for ${modelClassName}`)
+    }
+
+    ModelClass.prototype = new BaseModel()
+    ModelClass.prototype.constructor = ModelClass
+
+    this.addAttributeMethodsToModelClass(ModelClass, attributes)
+    this.addRelationshipsToModelClass(ModelClass, relationships)
+    this.addCollectionCommandsToModelClass(ModelClass, collectionCommands)
+
+    return ModelClass
+  }
+
+  addAttributeMethodsToModelClass(ModelClass, attributes) {
+    for (const attributeName in attributes) {
+      const attribute = attributes[attributeName]
+      const {name} = digs(attribute, "name")
+
+      ModelClass.prototype[name] = function () {
+        throw new Error(`Attribute function for ${name}`)
+      }
+    }
+  }
+
+  addRelationshipsToModelClass(ModelClass, relationships) {
+    for (const relationshipName in relationships) {
+      const relationship = relationships[relationshipName]
+
+      console.log({ relationship })
+
+      const loadMethodName = inflection.camelize(`load_${relationshipName}`)
+      const modelMethodName = inflection.camelize(relationshipName)
+
+      ModelClass.prototype[loadMethodName] = () => {
+        throw new Error(`Load relationship function for ${relationshipName}`)
+      }
+
+      ModelClass.prototype[modelMethodName] = () => {
+        throw new Error(`Relationship function for ${relationshipName}`)
+      }
+    }
+  }
+
+  addCollectionCommandsToModelClass(ModelClass, collectionCommands) {
+    for (const collectionCommandName in collectionCommands) {
+      const methodName = inflection.camelize(collectionCommandName)
+
+      ModelClass.constructor.prototype[methodName] = () => {
+        throw new Error(`Collection command function for ${collectionCommandName}`)
+      }
+    }
+  }
+}
+
+/*
 class <%= resource.short_name %> extends BaseModel {
   static modelClassData() {
     return <%= {
@@ -122,3 +209,4 @@ class <%= resource.short_name %> extends BaseModel {
     }
   <% end %>
 }
+*/

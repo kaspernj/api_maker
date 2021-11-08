@@ -35,6 +35,7 @@ default: &default
     - .woff2
 
   extensions:
+    - .cjs
     - .erb
     - .js.erb
     - .jsx
