@@ -14,7 +14,7 @@
     "@babel/preset-react": "^7.16.0",
     "@kaspernj/api-maker": "^1.0.121",
     "@kaspernj/api-maker-bootstrap": "^1.0.67",
-    "@kaspernj/api-maker-inputs": "^1.0.60",
+    "@kaspernj/api-maker-inputs": "^1.0.62",
     "@rails/actioncable": "^6.1.4",
     "@rails/webpacker": "5.4.3",
     "babel-preset-react": "^6.24.1",
