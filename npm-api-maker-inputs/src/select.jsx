@@ -89,8 +89,6 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
   }
 
   optionKey(option) {
-    console.log("optionKey", {option})
-
     if (Array.isArray(option)) {
       return `select-option-${option[1]}`
     } else {
@@ -99,8 +97,6 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
   }
 
   optionLabel(option) {
-    console.log("optionLabel", {option})
-
     if (Array.isArray(option)) {
       return option[0]
     } else {
