@@ -166,9 +166,9 @@ GEM
     html_gen (0.0.16)
       string-cases
     htmlbeautifier (1.3.1)
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
-    js-routes (2.1.1)
+    js-routes (2.1.2)
       railties (>= 4)
     json (2.6.1)
     loofah (2.12.0)

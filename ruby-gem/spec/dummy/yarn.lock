@@ -1046,15 +1046,15 @@
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.119", "@kaspernj/api-maker@^1.0.118":
-  version "1.0.119"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.119.tgz#7aff4f1d60461d2d5670df7fb5c3dfeaec3c600e"
-  integrity sha512-KVa8CMcw7kmNS9BkAkT0kTvL8HW+FXmsEcLEVN0vFnhhDtHK1fWYqkU612BK+ym0S0bRQfDJoHBwmiexvzLPKg==
+"@kaspernj/api-maker@>= 1.0.119", "@kaspernj/api-maker@^1.0.121":
+  version "1.0.121"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.121.tgz#6cbac6124d4eef35dce711fc10b01c55c2183abb"
+  integrity sha512-5BCEvDG9L4UfxQFVZYZC6HcEWk7yeM4bEHp0htGOCfaDrxsKpPVM4JvFwLXa7sbyms5P0Zo2punIFeM6sLghhA==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
     debounce ">= 1.2.1"
-    diggerize "^1.0.3"
+    diggerize ">= 1.0.3"
     epic-locks ">= 1.0.1"
     form-data-objectizer ">= 1.0.0"
     form-serialize ">= 0.7.2"
