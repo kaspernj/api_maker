@@ -95,6 +95,10 @@ module.exports = class ApiMakerModelRecipesModelLoader {
             },
             {ransack}
           )
+        } else if (type == "has_one") {
+          const modelClass = modelRecipesLoader.getModelClass(resourceName)
+
+          return this._readHasOneReflection({reflectionName: relationshipName, model: this, modelClass})
         } else {
           throw new Error(`Unknown relationship type: ${type}`)
         }
