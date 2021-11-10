@@ -7,24 +7,20 @@ describe ApiMaker::ModelContentGeneratorService do
   let(:service_task) { ApiMaker::ModelContentGeneratorService.new(resource: Resources::TaskResource) }
 
   describe "#model_content" do
-    it "generates the right class for the model" do
-      expect(content_task).to include "class Task extends BaseModel"
-    end
-
     it "includes attributes defined in the serializer" do
-      expect(content_task).to include "createdAt() {"
+      expect(content_task.fetch(:attributes).keys).to include :created_at
     end
 
     it "doesnt include attributes not defined in the serializer" do
-      expect(content_task).not_to include "updatedAt() {"
+      expect(content_task.fetch(:attributes).keys).not_to include :updated_at
     end
 
     it "includes relationships defined in the serializer" do
-      expect(content_project).to include "tasks() {"
+      expect(content_project.fetch(:relationships).keys).to include :tasks
     end
 
     it "doesnt include relationships not defined in the serializer" do
-      expect(content_project).not_to include "projectSecrets() {"
+      expect(content_project.fetch(:relationships).keys).not_to include :project_secrets
     end
   end
 end
