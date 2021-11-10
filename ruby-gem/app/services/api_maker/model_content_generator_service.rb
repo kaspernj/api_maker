@@ -25,7 +25,7 @@ private
     ApiMaker::Loader.load_resources
     result = {}
     collection_commands = ApiMaker::MemoryStorage.current.storage_for(resource, :collection_commands)
-    collection_commands.each_key do |collection_command_name, data|
+    collection_commands.each_key do |collection_command_name|
       result[collection_command_name] = {name: collection_command_name}
     end
 
@@ -87,7 +87,7 @@ private
         foreign_key: reflection.foreign_key,
         options: {
           as: reflection.options[:as],
-          through: reflection.options[:through],
+          through: reflection.options[:through]
         },
         resource_name: ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name,
         type: reflection.macro
