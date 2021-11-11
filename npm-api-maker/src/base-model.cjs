@@ -724,8 +724,6 @@ module.exports = class BaseModel {
   }
 
   async _loadHasOneReflection(args, queryArgs = {}) {
-    console.error(`DEBUG: loadHasOneReflection. queryArgs: ${JSON.stringify(queryArgs)}`)
-
     if (args.reflectionName in this.relationshipsCache) {
       return this.relationshipsCache[args.reflectionName]
     } else {
