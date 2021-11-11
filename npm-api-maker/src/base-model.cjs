@@ -701,7 +701,10 @@ module.exports = class BaseModel {
       if (this.isNewRecord())
         return null
 
-      throw new NotLoadedError(`${digg(this.modelClassData(), "name")}#${reflectionName} hasn't been loaded yet`)
+      const loadedRelationships = Object.keys(this.relationshipsCache)
+      const modelClassName = digg(this.modelClassData(), "name")
+
+      throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
     }
 
     return this.relationshipsCache[reflectionName]
@@ -721,12 +724,16 @@ module.exports = class BaseModel {
   }
 
   async _loadHasOneReflection(args, queryArgs = {}) {
+    console.error(`DEBUG: loadHasOneReflection. queryArgs: ${JSON.stringify(queryArgs)}`)
+
     if (args.reflectionName in this.relationshipsCache) {
       return this.relationshipsCache[args.reflectionName]
     } else {
       const collection = new Collection(args, queryArgs)
       const model = await collection.first()
+
       this.relationshipsCache[args.reflectionName] = model
+
       return model
     }
   }
@@ -736,7 +743,10 @@ module.exports = class BaseModel {
       if (this.isNewRecord())
         return null
 
-      throw new NotLoadedError(`${digg(this.modelClassData(), "name")}#${reflectionName} hasn't been loaded yet`)
+      const loadedRelationships = Object.keys(this.relationshipsCache)
+      const modelClassName = digg(this.modelClassData(), "name")
+
+      throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
     }
 
     return this.relationshipsCache[reflectionName]

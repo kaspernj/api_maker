@@ -82,11 +82,18 @@ private
     relationships = {}
     reflections.each do |reflection|
       relationships[reflection.name] = {
-        active_record: {name: reflection.active_record.name},
+        active_record: {
+          name: reflection.active_record.name,
+          primary_key: reflection.active_record.primary_key
+        },
         class_name: reflection.class_name,
         foreign_key: reflection.foreign_key,
+        klass: {
+          primary_key: reflection.klass.primary_key
+        },
         options: {
           as: reflection.options[:as],
+          primary_key: reflection.options[:primary_key],
           through: reflection.options[:through]
         },
         resource_name: ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass).short_name,
