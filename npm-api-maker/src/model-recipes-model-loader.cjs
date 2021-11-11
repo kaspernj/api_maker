@@ -108,7 +108,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
           relationshipName,
           resourceName
         })
-        this.defineHasManyLoadMethod({foreignKey, loadMethodName, ModelClass, modelRecipesLoader, relationshipName, resourceName})
+        this.defineHasManyLoadMethod({foreignKey, loadMethodName, ModelClass, modelClassData, modelRecipesLoader, relationshipName, resourceName})
       } else if (type == "has_one") {
         this.defineHasOneGetMethd({ModelClass, modelMethodName, relationshipName})
         this.defineHasOneLoadMethod({
@@ -215,22 +215,44 @@ module.exports = class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  defineHasManyLoadMethod({foreignKey, loadMethodName, ModelClass, modelRecipesLoader, relationshipName, resourceName}) {
+  defineHasManyLoadMethod({foreignKey, loadMethodName, ModelClass, modelClassData, modelRecipesLoader, optionsThrough, relationshipName, resourceName}) {
     ModelClass.prototype[loadMethodName] = function () {
       const id = this.primaryKey()
       const modelClass = modelRecipesLoader.getModelClass(resourceName)
-      const ransack = {}
 
-      ransack[`${foreignKey}_eq`] = id
+      if (optionsThrough) {
+        const modelClassName = digg(modelClassData, "className")
 
-      return this._loadHasManyReflection(
-        {
-          reflectionName: relationshipName,
-          model: this,
-          modelClass
-        },
-        {ransack}
-      )
+        return this._loadHasManyReflection(
+          {
+            reflectionName: relationshipName,
+            model: this,
+            modelClass
+          },
+          {
+            params: {
+              through: {
+                model: modelClassName,
+                id,
+                reflection: relationshipName
+              }
+            }
+          }
+        )
+      } else {
+        const ransack = {}
+
+        ransack[`${foreignKey}_eq`] = id
+
+        return this._loadHasManyReflection(
+          {
+            reflectionName: relationshipName,
+            model: this,
+            modelClass
+          },
+          {ransack}
+        )
+      }
     }
   }
 
