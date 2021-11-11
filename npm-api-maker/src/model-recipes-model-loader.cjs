@@ -216,7 +216,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         queryParameters = {
           params: {
             through: {
-              model: className,
+              model: activeRecordName,
               id: this.primaryKey(),
               reflection: relationshipName
             }
