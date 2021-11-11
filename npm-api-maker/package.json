@@ -48,7 +48,7 @@
     "@babel/preset-react": "^7.12.10",
     "babel-jest": "^27.0.6",
     "eslint": "^7.26.0",
-    "eslint-find-rules": "^3.6.1",
+    "eslint-find-rules": "^4.0.0",
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-react": "^7.23.2",
     "i18n-on-steroids": "^1.0.2",
