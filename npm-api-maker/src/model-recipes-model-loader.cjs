@@ -225,7 +225,8 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         }
       } else {
         const ransack = {}
-        const primaryKeyMethodName = inflection.camelize(optionsPrimaryKey, true)
+        const primaryKeyColumnName = optionsPrimaryKey || digg(ModelClass.modelClassData(), "primaryKey")
+        const primaryKeyMethodName = inflection.camelize(primaryKeyColumnName, true)
 
         if (!(primaryKeyMethodName in this)) throw new Error(`No such primary key method: ${primaryKeyMethodName}`)
 
