@@ -25,7 +25,7 @@ export default class ModelsHasManyAs extends React.PureComponent {
     const {tasks} = digs(this.state, "tasks")
 
     return (
-      <div className="routes-models-has-many-as">
+      <div className="routes-models-has-many-through">
         <div>
           Tasks count: {tasks !== undefined && tasks.length}
         </div>
