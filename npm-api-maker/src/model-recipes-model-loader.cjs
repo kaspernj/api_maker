@@ -79,7 +79,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
       const loadMethodName = inflection.camelize(`load_${relationshipName}`, true)
       const modelMethodName = inflection.camelize(relationshipName, true)
 
-      ModelClass.prototype[loadMethodName] = () => {
+      ModelClass.prototype[loadMethodName] = function () {
         if (type == "has_many") {
           const id = this.primaryKey()
           const modelClass = modelRecipesLoader.getModelClass(resourceName)
