@@ -138,6 +138,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         })
       } else if (type == "has_many") {
         this.defineHasManyGetMethod({
+          activeRecordName,
           className,
           foreignKey,
           ModelClass,
@@ -194,7 +195,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  defineHasManyGetMethod({className, foreignKey, ModelClass, modelMethodName, modelRecipesLoader, optionsAs, optionsThrough, relationshipName, resourceName}) {
+  defineHasManyGetMethod({activeRecordName, className, foreignKey, ModelClass, modelMethodName, modelRecipesLoader, optionsAs, optionsThrough, relationshipName, resourceName}) {
     ModelClass.prototype[modelMethodName] = function () {
       const id = this.primaryKey()
       const modelClass = modelRecipesLoader.getModelClass(resourceName)
