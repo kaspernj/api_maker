@@ -113,6 +113,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         this.defineHasOneGetMethd({ModelClass, modelMethodName, relationshipName})
         this.defineHasOneLoadMethod({
           activeRecordPrimaryKey,
+          foreignKey,
           loadMethodName,
           ModelClass,
           modelClassData,
@@ -239,15 +240,16 @@ module.exports = class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  defineHasOneLoadMethod({activeRecordPrimaryKey, loadMethodName, ModelClass, modelClassData, modelRecipesLoader, optionsThrough, relationshipName, resourceName}) {
+  defineHasOneLoadMethod({activeRecordPrimaryKey, foreignKey, loadMethodName, ModelClass, modelClassData, modelRecipesLoader, optionsThrough, relationshipName, resourceName}) {
     ModelClass.prototype[loadMethodName] = function () {
+      const primaryKeyMethodName = inflection.camelize(activeRecordPrimaryKey, true)
+
+      if (!(primaryKeyMethodName in this)) throw new Error(`Primary key method wasn't defined: ${primaryKeyMethodName}`)
+
+      const id = this[primaryKeyMethodName]()
+      const modelClass = modelRecipesLoader.getModelClass(resourceName)
+
       if (optionsThrough) {
-        const primaryKeyMethodName = inflection.camelize(activeRecordPrimaryKey, true)
-
-        if (!(primaryKeyMethodName in this)) throw new Error(`Primary key method wasn't defined: ${primaryKeyMethodName}`)
-
-        const id = this[primaryKeyMethodName]()
-        const modelClass = modelRecipesLoader.getModelClass(resourceName)
         const modelClassName = digg(modelClassData, "className")
 
         return this._loadHasOneReflection(
@@ -255,7 +257,18 @@ module.exports = class ApiMakerModelRecipesModelLoader {
           {params: {through: {model: modelClassName, id, reflection: relationshipName}}}
         )
       } else {
-        return this._readHasOneReflection({reflectionName: relationshipName})
+        const ransack = {}
+
+        ransack[`${foreignKey}_eq`] = id
+
+        return this._loadHasOneReflection(
+          {
+            reflectionName: relationshipName,
+            model: this,
+            modelClass
+          },
+          {ransack}
+        )
       }
     }
   }
