@@ -14,7 +14,7 @@ private
       next if path_name == "application_resource"
 
       resource_class = "Resources::#{path_name.classify}".constantize
-      result << resource_class.model_class
+      result << resource_class
     end
 
     result
