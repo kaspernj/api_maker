@@ -23,6 +23,7 @@ private
 
   def collection_commands
     ApiMaker::Loader.load_resources
+
     result = {}
     collection_commands = ApiMaker::MemoryStorage.current.storage_for(resource, :collection_commands)
     collection_commands.each_key do |collection_command_name|
@@ -34,13 +35,21 @@ private
 
   def member_commands
     ApiMaker::Loader.load_resources
-    ApiMaker::MemoryStorage.current.storage_for(resource, :member_commands)
+
+    result = {}
+    member_commands = ApiMaker::MemoryStorage.current.storage_for(resource, :member_commands)
+    member_commands.each_key do |member_command_name|
+      result[member_command_name] = {name: member_command_name}
+    end
+
+    result
   end
 
   def model_content
     {
       attributes: attributes,
       collection_commands: collection_commands,
+      member_commands: member_commands,
       model_class_data: model_class_data,
       monetized_attributes: monetized_attributes,
       relationships: relationships

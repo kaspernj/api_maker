@@ -16,12 +16,14 @@ module.exports = class ApiMakerModelRecipesModelLoader {
     const {
       attributes,
       collection_commands: collectionCommands,
+      member_commands: memberCommands,
       model_class_data: modelClassData,
       relationships
     } = digs(
       modelRecipe,
       "attributes",
       "collection_commands",
+      "member_commands",
       "model_class_data",
       "relationships"
     )
@@ -35,6 +37,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
     this.addAttributeMethodsToModelClass(ModelClass, attributes)
     this.addRelationshipsToModelClass(ModelClass, modelClassData, relationships)
     this.addCollectionCommandsToModelClass(ModelClass, collectionCommands)
+    this.addMemberCommandsToModelClass(ModelClass, memberCommands)
 
     return ModelClass
   }
@@ -51,6 +54,43 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         const value = this[methodName]()
 
         return this._isPresent(value)
+      }
+    }
+  }
+
+  addCollectionCommandsToModelClass(ModelClass, collectionCommands) {
+    for (const collectionCommandName in collectionCommands) {
+      const methodName = inflection.camelize(collectionCommandName, true)
+
+      ModelClass[methodName] = function (args, commandArgs = {}) {
+        return this._callCollectionCommand(
+          {
+            args,
+            command: collectionCommandName,
+            collectionName: digg(this.modelClassData(), "collectionName"),
+            type: "collection"
+          },
+          commandArgs
+        )
+      }
+    }
+  }
+
+  addMemberCommandsToModelClass(ModelClass, memberCommands) {
+    for (const memberCommandName in memberCommands) {
+      const methodName = inflection.camelize(memberCommandName, true)
+
+      ModelClass.prototype[methodName] = function (args, commandArgs = {}) {
+        return this._callMemberCommand(
+          {
+            args,
+            command: memberCommandName,
+            primaryKey: this.primaryKey(),
+            collectionName: this.modelClassData().collectionName,
+            type: "member"
+          },
+          commandArgs
+        )
       }
     }
   }
@@ -124,24 +164,6 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         })
       } else {
         throw new Error(`Unknown relationship type: ${type}`)
-      }
-    }
-  }
-
-  addCollectionCommandsToModelClass(ModelClass, collectionCommands) {
-    for (const collectionCommandName in collectionCommands) {
-      const methodName = inflection.camelize(collectionCommandName, true)
-
-      ModelClass[methodName] = function (args, commandArgs = {}) {
-        return this._callCollectionCommand(
-          {
-            args,
-            command: collectionCommandName,
-            collectionName: digg(this.modelClassData(), "collectionName"),
-            type: "collection"
-          },
-          commandArgs
-        )
       }
     }
   }
