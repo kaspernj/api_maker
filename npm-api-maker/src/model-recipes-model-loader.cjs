@@ -229,8 +229,6 @@ module.exports = class ApiMakerModelRecipesModelLoader {
 
         if (!(primaryKeyMethodName in this)) throw new Error(`No such primary key method: ${primaryKeyMethodName}`)
 
-        console.log({ activeRecordName, foreignKey, optionsPrimaryKey })
-
         ransack[`${foreignKey}_eq`] = this[primaryKeyMethodName]()
 
         if (optionsAs) {
