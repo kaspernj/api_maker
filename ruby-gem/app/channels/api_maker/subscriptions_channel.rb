@@ -27,6 +27,14 @@ private
 
   def connect_creates(model_name)
     model_class = model_for_resource_name(model_name)
+
+    unless model_class.respond_to?(:api_maker_broadcast_create_channel_name)
+      error_message = "The model #{model_class.name} doesn't support the static method 'api_maker_broadcast_create_channel_name'. " \
+        "Maybe API maker extensions haven't been included?"
+
+      raise error_message
+    end
+
     channel_name = model_class.api_maker_broadcast_create_channel_name
     stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
       ApiMaker::Configuration.current.before_create_event_callbacks.each do |callback|
