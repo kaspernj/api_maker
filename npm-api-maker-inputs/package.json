@@ -24,7 +24,7 @@
   "scripts": {
     "eslint": "eslint"
   },
-  "version": "1.0.63",
+  "version": "1.0.64",
   "dependencies": {
     "@kaspernj/api-maker": ">= 1.0.122",
     "classnames": ">= 2.2.6",

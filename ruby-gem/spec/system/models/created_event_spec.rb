@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "models created event" do
-  let(:task) { create :task, name: "test create task", user: user }
+  let(:task) { create :task, id: 1, name: "test create task", user: user }
   let(:task_from_other_user) { create :task }
   let(:user) { create :user }
 
@@ -9,8 +9,8 @@ describe "models created event" do
     login_as user
     visit models_created_event_path
     wait_for_selector ".tasks-table", visible: false
-    wait_for_action_cable_to_connect
     wait_for_no_selector ".task-row"
+    wait_for_action_cable_to_connect
 
     task
     task_from_other_user

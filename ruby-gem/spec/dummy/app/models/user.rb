@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   has_many :comments, dependent: :restrict_with_error
   has_many :tasks, dependent: :destroy
+  has_many :supported_tasks, class_name: "Task", foreign_key: :support_email, primary_key: :email
   has_many :user_roles, dependent: :destroy
 
   accepts_nested_attributes_for :tasks

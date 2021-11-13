@@ -12,8 +12,6 @@ export default class BootstrapStringInputDatetimeLocal extends React.PureCompone
 
   async loadProject() {
     const params = Params.parse()
-    console.log(params)
-
     const project = await Project.find(digg(params, "project_id"))
 
     this.setState({project})
