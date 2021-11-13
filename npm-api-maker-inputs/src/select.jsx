@@ -105,8 +105,6 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
   }
 
   optionValue(option) {
-    console.log("optionValue", {option})
-
     if (Array.isArray(option)) {
       return option[1]
     } else {
