@@ -75,7 +75,7 @@ private
       end
     end
 
-    report_unaccessible_model_ids(model_ids, accessible_model_ids, "destroys")
+    report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, "destroys")
   end
 
   def connect_event(model_name, model_ids, event_name)
@@ -95,7 +95,7 @@ private
       end
     end
 
-    report_unaccessible_model_ids(model_ids, accessible_model_ids, "#{event_name} event")
+    report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, "#{event_name} event")
   end
 
   def connect_model_class_event(model_name, event_name)
@@ -130,14 +130,14 @@ private
       end
     end
 
-    report_unaccessible_model_ids(model_ids, accessible_model_ids, "updates")
+    report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, "updates")
   end
 
   def model_for_resource_name(resource_name)
     resource_for_resource_name(resource_name).model_class
   end
 
-  def report_unaccessible_model_ids(model_ids, accessible_model_ids, operation)
+  def report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, operation)
     model_ids = model_ids.map(&:to_s)
     accessible_model_ids = accessible_model_ids.map(&:to_s)
     unaccessible_model_ids = model_ids - accessible_model_ids
