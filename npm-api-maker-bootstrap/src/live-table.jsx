@@ -16,8 +16,9 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   static defaultProps = {
     card: true,
     destroyEnabled: true,
+    filterCard: true,
+    filterSubmitButton: true,
     preloads: [],
-    qParams: undefined,
     select: {}
   }
 
@@ -31,20 +32,23 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       instanceOfClassName("ApiMakerCollection"),
       PropTypes.instanceOf(Collection)
     ]),
-    columns: PropTypes.array,
+    columns: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
     columnsContent: PropTypes.func,
     controls: PropTypes.func,
     defaultParams: PropTypes.object,
     destroyEnabled: PropTypes.bool.isRequired,
     destroyMessage: PropTypes.string,
     editModelPath: PropTypes.func,
+    filterCard: PropTypes.bool.isRequired,
     filterContent: PropTypes.func,
+    filterSubmitLabel: PropTypes.bool.isRequired,
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func,
     header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
     onModelsLoaded: PropTypes.func,
+    paginateContent: PropTypes.func,
     paginationComponent: PropTypes.func,
     preloads: PropTypes.array.isRequired,
     queryName: PropTypes.string,
@@ -54,6 +58,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   constructor(props) {
     super(props)
 
+    let columns
     let queryName = props.queryName
 
     if (!queryName) {
@@ -61,6 +66,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     }
 
     this.state = {
+      columns: this.columnsAsArray(),
       currentHref: location.href,
       models: undefined,
       query: undefined,
@@ -68,6 +74,14 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       queryQName: `${queryName}_q`,
       queryPageName: `${queryName}_page`
     }
+  }
+
+  columnsAsArray() {
+    if (typeof this.props.columns == "function") {
+      return this.props.columns()
+    }
+
+    return this.props.columns
   }
 
   componentDidMount() {
@@ -178,19 +192,23 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       card,
       className,
       collection,
+      columns,
       columnsContent,
       controls,
       defaultParams,
       destroyEnabled,
       destroyMessage,
       editModelPath,
+      filterCard,
       filterContent,
+      filterSubmitButton,
       filterSubmitLabel,
       headersContent,
       header,
       groupBy,
       modelClass,
       onModelsLoaded,
+      paginateContent,
       paginationComponent,
       preloads,
       queryName,
@@ -198,7 +216,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       ...restProps
     } = this.props
     const {models, qParams, query, result} = digs(this.state, "models", "qParams", "query", "result")
-    const {submitFilterDebounce} = digs(this, "submitFilterDebounce")
 
     let controlsContent, headerContent, PaginationComponent
 
@@ -212,10 +229,12 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       headerContent = header
     }
 
-    if (paginationComponent) {
-      PaginationComponent = paginationComponent
-    } else {
-      PaginationComponent = Paginate
+    if (!paginateContent) {
+      if (paginationComponent) {
+        PaginationComponent = paginationComponent
+      } else {
+        PaginationComponent = Paginate
+      }
     }
 
     return (
@@ -228,26 +247,16 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
             <EventUpdated model={model} onUpdated={this.onModelUpdated} />
           </React.Fragment>
         )}
-        {filterContent &&
-          <Card className="mb-4">
-            <form onSubmit={this.onFilterFormSubmit} ref="filterForm">
-              {filterContent({
-                onFilterChanged: this.submitFilter,
-                onFilterChangedWithDelay: submitFilterDebounce,
-                qParams
-              })}
-              <input
-                className="btn btn-primary submit-filter-button"
-                label={filterSubmitLabel}
-                type="submit"
-                value={I18n.t("js.api_maker_bootstrap.live_table.filter")}
-              />
-            </form>
+        {filterContent && filterCard &&
+          <Card className="live-table--filter-card mb-4">
+            {this.filterForm()}
           </Card>
         }
-
+        {filterContent && !filterCard &&
+          this.filterForm()
+        }
         {card &&
-          <Card className={classNames("mb-4", className)} controls={controlsContent} header={headerContent} table>
+          <Card className={classNames("mb-4", className)} controls={controlsContent} header={headerContent} table {...restProps}>
             {this.tableContent()}
           </Card>
         }
@@ -256,10 +265,37 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
             {this.tableContent()}
           </table>
         }
-        {result &&
+        {result && PaginationComponent &&
           <PaginationComponent result={result} />
         }
+        {result && paginateContent &&
+          paginateContent({result})
+        }
       </>
+    )
+  }
+
+  filterForm = () => {
+    const {submitFilterDebounce} = digs(this, "submitFilterDebounce")
+    const {filterContent, filterSubmitButton} = digs(this.props, "filterContent", "filterSubmitButton")
+    const {filterSubmitLabel} = this.props
+    const {qParams} = digs(this.state, "qParams")
+
+    return (
+      <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref="filterForm">
+        {filterContent({
+          onFilterChanged: this.submitFilter,
+          onFilterChangedWithDelay: submitFilterDebounce,
+          qParams
+        })}
+        {filterSubmitButton &&
+          <input
+            className="btn btn-primary live-table--submit-filter-button"
+            type="submit"
+            value={filterSubmitLabel || I18n.t("js.api_maker_bootstrap.live_table.filter")}
+          />
+        }
+      </form>
     )
   }
 
@@ -272,7 +308,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       <>
         <thead>
           <tr>
-            {this.props.columns && this.headersContentFromColumns()}
+            {this.state.columns && this.headersContentFromColumns()}
             {this.props.headersContent && this.props.headersContent({query})}
             <th />
           </tr>
@@ -280,8 +316,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
         <tbody>
           {models.map((model) =>
             <tr className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()} key={model.id()}>
-              {this.props.columns && this.columnsContentFromColumns(model)}
-              {this.props.columnsContent && this.props.columnsContent(this.modelCallbackArgs(model))}
+              {this.state.columns && this.columnsContentFromColumns(model)}
+              {!this.state.columns && this.props.columnsContent && this.props.columnsContent(this.modelCallbackArgs(model))}
               <td className="actions-column text-end text-nowrap text-right">
                 {actionsContent && actionsContent(this.modelCallbackArgs(model))}
                 {editModelPath && model.can("edit") &&
@@ -338,7 +374,9 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   columnsContentFromColumns(model) {
-    return this.props.columns.map((column) =>
+    const {columns} = digs(this.state, "columns")
+
+    return columns.map((column) =>
       <td
         className={classNames(this.columnClassNamesForColumn(column))}
         data-identifier={this.identifierForColumn(column)}
@@ -365,7 +403,9 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   headersContentFromColumns() {
-    return this.props.columns.map((column) =>
+    const {columns} = digs(this.state, "columns")
+
+    return columns.map((column) =>
       <th
         className={classNames(...this.headerClassNameForColumn(column))}
         data-identifier={this.identifierForColumn(column)}
@@ -392,7 +432,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   headerLabelForColumn(column) {
-    if (column.label) {
+    if ("label" in column) {
       if (typeof column.label == "function") {
         return column.label()
       } else {

@@ -4,6 +4,9 @@ import { Input, SortLink, LiveTable } from "@kaspernj/api-maker-bootstrap"
 
 export default class BootstrapLiveTable extends React.PureComponent {
   render() {
+    const params = Params.parse()
+    const liveTableProps = params.live_table_props && JSON.parse(params.live_table_props)
+
     return (
       <Layout>
         <LiveTable
@@ -13,6 +16,7 @@ export default class BootstrapLiveTable extends React.PureComponent {
           filterContent={this.filterContent}
           headersContent={this.headersContent}
           modelClass={Task}
+          {...liveTableProps}
         />
       </Layout>
     )
