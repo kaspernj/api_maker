@@ -47,6 +47,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
+    noRecordsFoundContent: PropTypes.func,
     onModelsLoaded: PropTypes.func,
     paginateContent: PropTypes.func,
     paginationComponent: PropTypes.func,
@@ -58,7 +59,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   constructor(props) {
     super(props)
 
-    let columns
     let queryName = props.queryName
 
     if (!queryName) {
@@ -72,7 +72,9 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       query: undefined,
       queryName,
       queryQName: `${queryName}_q`,
-      queryPageName: `${queryName}_page`
+      queryPageName: `${queryName}_page`,
+      qParams: undefined,
+      result: undefined
     }
   }
 
@@ -175,10 +177,21 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   render() {
-    const { qParams, query, result, models } = this.state
+    const {appHistory, modelClass} = digs(this.props, "appHistory", "modelClass")
+    const {noRecordsFoundContent} = this.props
+    const {qParams, query, result, models} = digs(this.state, "qParams", "query", "result", "models")
 
     return (
       <div className={this.className()}>
+        <EventCreated modelClass={modelClass} onCreated={this.onModelCreated} />
+        <EventLocationChanged history={appHistory} onChanged={this.onLocationChanged} />
+        {models && models.map(model =>
+          <React.Fragment key={model.id()}>
+            <EventDestroyed model={model} onDestroyed={this.onModelDestroyed} />
+            <EventUpdated model={model} onUpdated={this.onModelUpdated} />
+          </React.Fragment>
+        )}
+        {models !== undefined && models.length === 0 && noRecordsFoundContent && noRecordsFoundContent()}
         {qParams && query && result && models && this.cardOrTable()}
       </div>
     )
@@ -207,6 +220,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       header,
       groupBy,
       modelClass,
+      noRecordsFoundContent,
       onModelsLoaded,
       paginateContent,
       paginationComponent,
@@ -239,14 +253,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
     return (
       <>
-        <EventCreated modelClass={modelClass} onCreated={this.onModelCreated} />
-        <EventLocationChanged history={appHistory} onChanged={this.onLocationChanged} />
-        {models.map(model =>
-          <React.Fragment key={model.id()}>
-            <EventDestroyed model={model} onDestroyed={this.onModelDestroyed} />
-            <EventUpdated model={model} onUpdated={this.onModelUpdated} />
-          </React.Fragment>
-        )}
         {filterContent && filterCard &&
           <Card className="live-table--filter-card mb-4">
             {this.filterForm()}
