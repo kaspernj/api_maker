@@ -26,6 +26,7 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
 private
 
   def connect_creates(model_name)
+    ability_name = :create_events
     model_class = model_for_resource_name(model_name)
 
     unless model_class.respond_to?(:api_maker_broadcast_create_channel_name)
@@ -46,25 +47,25 @@ private
 
       Rails.logger.debug { "API maker: ConnectCreates for #{model_class.name}" }
       model_exists = model_class
-        .accessible_by(current_ability, :create_events)
-        .find_by(model_class.primary_key => data.fetch("mi"))
-        .exists?
+        .accessible_by(current_ability, ability_name)
+        .exists?(model_class.primary_key => data.fetch("mi"))
 
       # Transmit the data to JS if its found (and thereby allowed)
       if model_exists
         transmit data
       else
-        Rails.logger.warn { "API maker: No access to connect to #{model_class.name} creates event" }
+        Rails.logger.warn { "API maker: No access to connect to #{model_class.name} #{ability_name}" }
       end
     end
   end
 
   def connect_destroys(model_name, model_ids)
+    ability_name = :destroy_events
     model_class = model_for_resource_name(model_name)
 
     Rails.logger.debug { "API maker: ConnectDestroys for #{model_class.name}" }
     accessible_model_ids = model_class
-      .accessible_by(current_ability, :destroy_events)
+      .accessible_by(current_ability, ability_name)
       .where(model_class.primary_key => model_ids)
       .ids
 
@@ -75,7 +76,7 @@ private
       end
     end
 
-    report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, "destroys")
+    report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, ability_name)
   end
 
   def connect_event(model_name, model_ids, event_name)
@@ -95,7 +96,7 @@ private
       end
     end
 
-    report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, "#{event_name} event")
+    report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, ability_name)
   end
 
   def connect_model_class_event(model_name, event_name)
@@ -115,11 +116,12 @@ private
   end
 
   def connect_updates(model_name, model_ids)
+    ability_name = :update_events
     model_class = model_for_resource_name(model_name)
 
     Rails.logger.debug { "API maker: ConnectUpdates for #{model_class.name}" }
     accessible_model_ids = model_class
-      .accessible_by(current_ability, :update_events)
+      .accessible_by(current_ability, ability_name)
       .where(model_class.primary_key => model_ids)
       .ids
 
@@ -130,20 +132,20 @@ private
       end
     end
 
-    report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, "updates")
+    report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, ability_name)
   end
 
   def model_for_resource_name(resource_name)
     resource_for_resource_name(resource_name).model_class
   end
 
-  def report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, operation)
+  def report_unaccessible_model_ids(model_class, model_ids, accessible_model_ids, ability_name)
     model_ids = model_ids.map(&:to_s)
     accessible_model_ids = accessible_model_ids.map(&:to_s)
     unaccessible_model_ids = model_ids - accessible_model_ids
 
     if unaccessible_model_ids.any?
-      Rails.logger.warn { "API maker: No access to connect to #{model_class.name} #{operation} for IDs: #{unaccessible_model_ids.join(", ")}" }
+      Rails.logger.warn { "API maker: No access to connect to #{model_class.name} #{ability_name} for IDs: #{unaccessible_model_ids.join(", ")}" }
     end
   end
 
