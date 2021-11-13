@@ -14,6 +14,13 @@ export default class BootstrapLiveTable extends React.PureComponent {
       liveTableProps = {}
     }
 
+    if (params.no_records_available_content) {
+      liveTableProps.noRecordsAvailableContent = () =>
+        <div className="no-tasks-available-content">
+          No tasks were available!
+        </div>
+    }
+
     if (params.no_records_found_content) {
       liveTableProps.noRecordsFoundContent = () =>
         <div className="no-tasks-found-content">
