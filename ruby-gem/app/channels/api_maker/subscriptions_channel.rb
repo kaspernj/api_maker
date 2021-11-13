@@ -45,13 +45,13 @@ private
       model_class = data.fetch("mcn").safe_constantize
 
       Rails.logger.debug { "API maker: ConnectCreates for #{model_class.name}" }
-      model = model_class
+      model_exists = model_class
         .accessible_by(current_ability, :create_events)
-        .select(model_class.primary_key.to_sym)
         .find_by(model_class.primary_key => data.fetch("mi"))
+        .exists?
 
       # Transmit the data to JS if its found (and thereby allowed)
-      transmit data if model
+      transmit data if model_exists
     end
   end
 
@@ -59,13 +59,13 @@ private
     model_class = model_for_resource_name(model_name)
 
     Rails.logger.debug { "API maker: ConnectDestroys for #{model_class.name}" }
-    models = model_class
+    model_ids = model_class
       .accessible_by(current_ability, :destroy_events)
       .where(model_class.primary_key => model_ids)
-      .select(model_class.primary_key.to_sym)
+      .ids
 
-    models.each do |model|
-      channel_name = model.api_maker_broadcast_destroy_channel_name
+    model_ids.each do |model_id|
+      channel_name = model_class.api_maker_broadcast_destroy_channel_name(model_id)
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
@@ -77,13 +77,13 @@ private
     model_class = model_for_resource_name(model_name)
 
     Rails.logger.debug { "API maker: ConnectEvents for #{model_class.name} #{event_name}" }
-    models = model_class
+    model_ids = model_class
       .accessible_by(current_ability, ability_name)
       .where(model_class.primary_key => model_ids)
-      .select(model_class.primary_key.to_sym)
+      .ids
 
-    models.each do |model|
-      channel_name = model.api_maker_event_channel_name(event_name)
+    model_ids.each do |model_id|
+      channel_name = model_class.api_maker_event_channel_name(model_id, event_name)
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
@@ -110,13 +110,13 @@ private
     model_class = model_for_resource_name(model_name)
 
     Rails.logger.debug { "API maker: ConnectUpdates for #{model_class.name}" }
-    models = model_class
+    model_ids = model_class
       .accessible_by(current_ability, :update_events)
       .where(model_class.primary_key => model_ids)
-      .select(model_class.primary_key.to_sym)
+      .ids
 
-    models.each do |model|
-      channel_name = model.api_maker_broadcast_update_channel_name
+    model_ids.each do |model_id|
+      channel_name = model_class.api_maker_broadcast_update_channel_name(model_id)
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
