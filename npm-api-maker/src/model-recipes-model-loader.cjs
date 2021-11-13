@@ -145,6 +145,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
           modelMethodName,
           modelRecipesLoader,
           optionsAs,
+          optionsPrimaryKey,
           optionsThrough,
           relationshipName,
           resourceName
@@ -195,7 +196,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  defineHasManyGetMethod({activeRecordName, className, foreignKey, ModelClass, modelMethodName, modelRecipesLoader, optionsAs, optionsThrough, relationshipName, resourceName}) {
+  defineHasManyGetMethod({activeRecordName, className, foreignKey, ModelClass, modelMethodName, modelRecipesLoader, optionsAs, optionsPrimaryKey, optionsThrough, relationshipName, resourceName}) {
     ModelClass.prototype[modelMethodName] = function () {
       const id = this.primaryKey()
       const modelClass = modelRecipesLoader.getModelClass(resourceName)
@@ -216,7 +217,7 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         queryParameters = {
           params: {
             through: {
-              model: className,
+              model: activeRecordName,
               id: this.primaryKey(),
               reflection: relationshipName
             }
@@ -224,8 +225,12 @@ module.exports = class ApiMakerModelRecipesModelLoader {
         }
       } else {
         const ransack = {}
+        const primaryKeyColumnName = optionsPrimaryKey || digg(ModelClass.modelClassData(), "primaryKey")
+        const primaryKeyMethodName = inflection.camelize(primaryKeyColumnName, true)
 
-        ransack[`${foreignKey}_eq`] = this.primaryKey()
+        if (!(primaryKeyMethodName in this)) throw new Error(`No such primary key method: ${primaryKeyMethodName}`)
+
+        ransack[`${foreignKey}_eq`] = this[primaryKeyMethodName]()
 
         if (optionsAs) {
           ransack[`${optionsAs}_type_eq`] = activeRecordName

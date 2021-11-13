@@ -152,6 +152,10 @@ module.exports = class BaseModel {
     }
   }
 
+  static all() {
+    return this.ransack()
+  }
+
   async create(attributes, options) {
     if (attributes) this.assignAttributes(attributes)
     const paramKey = this.modelClassData().paramKey
