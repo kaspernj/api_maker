@@ -51,7 +51,11 @@ private
         .exists?
 
       # Transmit the data to JS if its found (and thereby allowed)
-      transmit data if model_exists
+      if model_exists
+        transmit data
+      else
+        Rails.logger.warn { "API maker: No access to connect to #{model_class.name} creates event" }
+      end
     end
   end
 
@@ -59,17 +63,19 @@ private
     model_class = model_for_resource_name(model_name)
 
     Rails.logger.debug { "API maker: ConnectDestroys for #{model_class.name}" }
-    model_ids = model_class
+    accessible_model_ids = model_class
       .accessible_by(current_ability, :destroy_events)
       .where(model_class.primary_key => model_ids)
       .ids
 
-    model_ids.each do |model_id|
-      channel_name = model_class.api_maker_broadcast_destroy_channel_name(model_id)
+    accessible_model_ids.each do |accessible_model_id|
+      channel_name = model_class.api_maker_broadcast_destroy_channel_name(accessible_model_id)
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
     end
+
+    report_unaccessible_model_ids(model_ids, accessible_model_ids, "destroys")
   end
 
   def connect_event(model_name, model_ids, event_name)
@@ -77,17 +83,19 @@ private
     model_class = model_for_resource_name(model_name)
 
     Rails.logger.debug { "API maker: ConnectEvents for #{model_class.name} #{event_name}" }
-    model_ids = model_class
+    accessible_model_ids = model_class
       .accessible_by(current_ability, ability_name)
       .where(model_class.primary_key => model_ids)
       .ids
 
-    model_ids.each do |model_id|
-      channel_name = model_class.api_maker_event_channel_name(model_id, event_name)
+    accessible_model_ids.each do |accessible_model_id|
+      channel_name = model_class.api_maker_event_channel_name(accessible_model_id, event_name)
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
     end
+
+    report_unaccessible_model_ids(model_ids, accessible_model_ids, "#{event_name} event")
   end
 
   def connect_model_class_event(model_name, event_name)
@@ -110,21 +118,33 @@ private
     model_class = model_for_resource_name(model_name)
 
     Rails.logger.debug { "API maker: ConnectUpdates for #{model_class.name}" }
-    model_ids = model_class
+    accessible_model_ids = model_class
       .accessible_by(current_ability, :update_events)
       .where(model_class.primary_key => model_ids)
       .ids
 
-    model_ids.each do |model_id|
-      channel_name = model_class.api_maker_broadcast_update_channel_name(model_id)
+    accessible_model_ids.each do |accessible_model_id|
+      channel_name = model_class.api_maker_broadcast_update_channel_name(accessible_model_id)
       stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
         transmit data
       end
     end
+
+    report_unaccessible_model_ids(model_ids, accessible_model_ids, "updates")
   end
 
   def model_for_resource_name(resource_name)
     resource_for_resource_name(resource_name).model_class
+  end
+
+  def report_unaccessible_model_ids(model_ids, accessible_model_ids, operation)
+    model_ids = model_ids.map(&:to_s)
+    accessible_model_ids = accessible_model_ids.map(&:to_s)
+    unaccessible_model_ids = model_ids - accessible_model_ids
+
+    if unaccessible_model_ids.any?
+      Rails.logger.warn { "API maker: No access to connect to #{model_class.name} #{operation} for IDs: #{unaccessible_model_ids.join(", ")}" }
+    end
   end
 
   def resource_for_resource_name(resource_name)
