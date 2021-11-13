@@ -96,7 +96,7 @@ describe "bootstrap - live table" do
   it "shows noRecordsFoundContent if no rows are found and given" do
     login_as user_admin
     visit bootstrap_live_table_path(no_records_found_content: true)
-    wait_for_selector no_tasks_found_content
+    wait_for_selector no_tasks_found_content, text: "No tasks were found!"
   end
 
   it "sorts by default given through params when switching pages" do
