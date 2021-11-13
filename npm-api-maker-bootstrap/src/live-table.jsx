@@ -55,7 +55,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     paginationComponent: PropTypes.func,
     preloads: PropTypes.array.isRequired,
     queryName: PropTypes.string,
-    select: PropTypes.object
+    select: PropTypes.object,
+    selectColumns: PropTypes.object
   }
 
   constructor(props) {
@@ -156,7 +157,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
   async loadModels() {
     const params = Params.parse()
-    const { collection, groupBy, modelClass, onModelsLoaded, preloads, select } = this.props
+    const { collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns } = this.props
     const { qParams, queryPageName, queryQName } = this.shape
 
     let query = collection || modelClass
@@ -176,6 +177,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     if (Object.keys(abilitiesToLoad).length > 0) {
       query = query.abilities(abilitiesToLoad)
     }
+
+    if (selectColumns) query = query.selectColumns(selectColumns)
 
     const result = await query.result()
 
@@ -216,7 +219,9 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
             {noRecordsFoundContent({models, qParams, overallCount})}
           </div>
         }
-        {qParams && query && result && models && this.cardOrTable()}
+        {qParams && query && result && models && !this.showNoRecordsAvailableContent() && !this.showNoRecordsFoundContent() &&
+          this.cardOrTable()
+        }
       </div>
     )
   }
@@ -272,6 +277,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       preloads,
       queryName,
       select,
+      selectColumns,
       ...restProps
     } = this.props
     const {models, qParams, query, result} = digs(this.shape, "models", "qParams", "query", "result")
