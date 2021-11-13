@@ -1,6 +1,6 @@
 const cloneDeep = require("clone-deep")
 const CommandsPool = require("./commands-pool.cjs")
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const inflection = require("inflection")
 const {merge} = require("./merge.cjs")
 const ModelsResponseReader = require("./models-response-reader.cjs")
@@ -205,7 +205,7 @@ module.exports = class ApiMakerCollection {
   modelClass() {
     const modelName = digg(this.args.modelClass.modelClassData(), "name")
 
-    return digg(require("api-maker/models"), modelName)
+    return digg(require("@kaspernj/api-maker/src/models"), modelName)
   }
 
   clone() {

@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "service_pattern", ">= 1.0.0"
 
   s.add_development_dependency "appraisal"
+  s.add_development_dependency "awesome_translations", ">= 0.0.60"
   s.add_development_dependency "best_practice_project"
   s.add_development_dependency "bootsnap"
   s.add_development_dependency "capybara"
@@ -47,7 +48,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rubocop-performance"
   s.add_development_dependency "rubocop-rails"
   s.add_development_dependency "rubocop-rspec"
-  s.add_development_dependency "selenium-webdriver"
+  s.add_development_dependency "selenium-webdriver", "<= 3.142.7"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "tzinfo-data"
   s.add_development_dependency "webdrivers"

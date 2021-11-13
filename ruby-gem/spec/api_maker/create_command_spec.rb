@@ -41,7 +41,10 @@ describe ApiMaker::CreateCommand do
                 "finished" => false,
                 "id" => nil,
                 "name" => "Test task",
+                "priority" => nil,
                 "project_id" => nil,
+                "state" => "open",
+                "translated_state" => "Open",
                 "user_id" => user.id
               }
             }

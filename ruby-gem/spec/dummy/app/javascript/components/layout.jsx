@@ -39,8 +39,8 @@ export default class Layout extends React.PureComponent {
 
     return (
       <div className={this.className()}>
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={() => this.onDeviseSigned()} />
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={() => this.onDeviseSigned()} />
+        <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={this.onDeviseSigned} />
+        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={this.onDeviseSigned} />
 
         <div>
           <Link to={Routes.sessionStatusSpecsTimeoutPath()}>
@@ -81,7 +81,7 @@ export default class Layout extends React.PureComponent {
               <Link to={Routes.modelsValidationErrorsPath(Devise.currentUser().id())}>
                 Validation errors (edit)
               </Link>
-              <a className="ml-2" href="#" onClick={(e) => this.onSignOutClicked(e)}>
+              <a className="ml-2" href="#" onClick={this.onSignOutClicked}>
                 Sign out
               </a>
             </>
@@ -107,11 +107,9 @@ export default class Layout extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  onDeviseSigned() {
-    this.setState({isUserSignedIn: Devise.isUserSignedIn()})
-  }
+  onDeviseSigned = () => this.setState({isUserSignedIn: Devise.isUserSignedIn()})
 
-  onSignOutClicked(e) {
+  onSignOutClicked = (e) => {
     e.preventDefault()
 
     Devise.signOut().then(() => {

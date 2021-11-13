@@ -1,6 +1,6 @@
 const CableSubscriptionPool = require("./cable-subscription-pool.cjs")
 const CableSubscription = require("./cable-subscription.cjs")
-const {dig} = require("@kaspernj/object-digger")
+const {dig} = require("diggerize")
 
 module.exports = class ApiMakerCableConnectionPool {
   static current() {

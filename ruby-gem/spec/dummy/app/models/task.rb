@@ -20,4 +20,11 @@ class Task < ApplicationRecord
   validates :name, presence: true
 
   accepts_nested_attributes_for :project
+
+  translated_collection :state do
+    {
+      t(".open") => "open",
+      t(".closed") => "closed"
+    }
+  end
 end

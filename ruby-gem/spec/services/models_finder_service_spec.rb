@@ -3,7 +3,8 @@ require "rails_helper"
 describe ApiMaker::ModelsFinderService do
   describe "#execute!" do
     it "finds all the registered models" do
-      models = ApiMaker::ModelsFinderService.execute!
+      resources = ApiMaker::ModelsFinderService.execute!
+      models = resources.map(&:model_class)
 
       expect(models).to include Project
       expect(models).to include Task

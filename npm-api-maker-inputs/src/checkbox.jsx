@@ -1,5 +1,5 @@
 const AutoSubmit = require("./auto-submit.cjs")
-const {dig, digs} = require("@kaspernj/object-digger")
+const {dig, digs} = require("diggerize")
 const {EventListener, EventUpdated} = require("@kaspernj/api-maker")
 const idForComponent = require("./id-for-component.cjs")
 const nameForComponent = require("./name-for-component.cjs")
@@ -76,7 +76,7 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
     return (
       <>
         {autoRefresh && model &&
-          <EventUpdated model={model} onUpdated={(args) => this.onModelUpdated(args)} />
+          <EventUpdated model={model} onUpdated={this.onModelUpdated} />
         }
         {form && onErrors && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
         {zeroInput && inputName &&
@@ -89,7 +89,7 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
           defaultValue={defaultValue}
           id={this.inputId()}
           name={inputName}
-          onChange={(...args) => this.onChanged(...args)}
+          onChange={this.onChanged}
           ref={inputRef || this.inputRef}
           type="checkbox"
           {...restProps}
@@ -117,14 +117,14 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
     return nameForComponent(this)
   }
 
-  onChanged(...args) {
+  onChanged = (...args) => {
     const {attribute, autoSubmit, model, onChange} = this.props
 
     if (attribute && autoSubmit && model) new AutoSubmit({component: this}).autoSubmit()
     if (onChange) onChange(...args)
   }
 
-  onModelUpdated(args) {
+  onModelUpdated = (args) => {
     const inputRef = this.props.inputRef || this.inputRef
 
     if (!inputRef.current) {

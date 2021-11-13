@@ -1,8 +1,5 @@
 class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
   def perform
-    create_base_structure
-    copy_base_model
-
     ApiMaker::GenerateReactNativeApiService.execute! if ApiMaker::Configuration.current.react_native_path.present?
     succeed!
   end
@@ -11,27 +8,7 @@ class ApiMaker::ModelsGeneratorService < ApiMaker::ApplicationService
     model.name.end_with?("::Translation", "::ApplicationRecord")
   end
 
-  def models
-    ApiMaker::ModelsFinderService.execute!
-  end
-
 private
-
-  def api_maker_root_path
-    Rails.root.join("app/javascript/api-maker")
-  end
-
-  def controller_path
-    Rails.root.join("app/controllers/api_maker")
-  end
-
-  def copy_base_model
-    files = %w[models.js.erb]
-    path = File.join(__dir__, "..", "..", "..", "lib", "api_maker", "javascript")
-    target_path = api_maker_root_path
-
-    copy_base_files(files, path, target_path)
-  end
 
   def copy_base_files(files, path, target_path)
     files.each do |file|
@@ -56,12 +33,5 @@ private
         fp.write(content)
       end
     end
-  end
-
-  def create_base_structure
-    # Dont remove all the files. It messes up running Webpack Dev Servers which forces you to restart all the time.
-    # FileUtils.rm_rf(api_maker_root_path) if File.exist?(api_maker_root_path)
-
-    FileUtils.mkdir_p(controller_path) unless File.exist?(controller_path)
   end
 end

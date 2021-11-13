@@ -1,4 +1,4 @@
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
 const { MoneyFormatter } = require("@kaspernj/api-maker")
@@ -45,15 +45,15 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
             className={this.props.className}
             defaultValue={this.inputDefaultValue()}
             id={this.inputId()}
-            onBlur={() => this.setAmount()}
-            onChange={() => this.setCents()}
-            onKeyUp={() => this.setCents()}
+            onBlur={this.setAmount}
+            onChange={this.setCents}
+            onKeyUp={this.setCents}
             placeholder={this.props.placeholder}
             ref="whole"
             type="text"
           />
           {showCurrencyOptions &&
-            <select className="component-bootstrap-money-input" defaultValue={this.inputCurrencyValue()} id={this.inputCurrencyId()} name={this.inputCurrencyName()} onChange={() => { this.onCurrencyChanged() }} ref="currency">
+            <select className="component-bootstrap-money-input" defaultValue={this.inputCurrencyValue()} id={this.inputCurrencyId()} name={this.inputCurrencyName()} onChange={this.onCurrencyChanged} ref="currency">
               <option></option>
               {this.props.currenciesCollection.map(option => (
                 <option key={`select-option-${option[1]}`} value={option[1]}>
@@ -135,12 +135,12 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     return idForComponent(this)
   }
 
-  onCurrencyChanged() {
+  onCurrencyChanged = () => {
     if (this.props.onChange)
       this.props.onChange()
   }
 
-  setAmount() {
+  setAmount = () => {
     const inputElement = this.getInputRef().current
 
     if (!inputElement.value && inputElement.value == "") {
@@ -153,7 +153,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     }
   }
 
-  setCents() {
+  setCents = () => {
     const inputElement = this.getInputRef().current
 
     let whole = MoneyFormatter.stringToFloat(this.refs.whole.value)

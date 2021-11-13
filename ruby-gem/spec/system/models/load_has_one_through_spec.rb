@@ -17,12 +17,10 @@ describe "models - load has one through" do
 
   it "loads the account through the project" do
     login_as user
-
     visit models_load_has_one_through_path(task_id: task.id)
-
     wait_for_selector ".component-models-load-has-one-through .content-container"
 
-    content_container = find(".content-container")
+    content_container = wait_for_and_find(".content-container")
 
     expect(content_container["data-account-id"]).to eq "22"
     expect(content_container["data-task-id"]).to eq "24"

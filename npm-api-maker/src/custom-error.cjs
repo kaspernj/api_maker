@@ -1,4 +1,4 @@
-const {dig, digg} = require("@kaspernj/object-digger")
+const {dig, digg} = require("diggerize")
 
 function errorMessages(args) {
   return digg(args, "response", "errors").map((error) => {

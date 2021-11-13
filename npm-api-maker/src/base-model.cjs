@@ -2,7 +2,7 @@ const AttributeNotLoadedError = require("./attribute-not-loaded-error.cjs")
 const Collection = require("./collection.cjs")
 const CommandsPool = require("./commands-pool.cjs")
 const CustomError = require("./custom-error.cjs")
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const FormDataObjectizer = require("form-data-objectizer")
 const inflection = require("inflection")
 const ModelName = require("./model-name.cjs")
@@ -150,6 +150,10 @@ module.exports = class BaseModel {
     } else {
       return this.uniqueKey()
     }
+  }
+
+  static all() {
+    return this.ransack()
   }
 
   async create(attributes, options) {
@@ -659,11 +663,9 @@ module.exports = class BaseModel {
       return this.modelData[attributeName]
     } else if (this.isNewRecord()) {
       // Return null if this is a new record and the attribute name is a recognized attribute
-      const attributes = this.modelClassData().attributes
-      for(const attribute of attributes) {
-        if (attribute.name == attributeName)
-          return null
-      }
+      const attributes = digg(this.modelClassData(), "attributes")
+
+      if (attributeName in attributes) return null
     }
 
     throw new AttributeNotLoadedError(`No such attribute: ${digg(this.modelClassData(), "name")}#${attributeName}`)
@@ -698,26 +700,31 @@ module.exports = class BaseModel {
     }
   }
 
-  _readBelongsToReflection(args) {
-    if (!(args.reflectionName in this.relationshipsCache)) {
+  _readBelongsToReflection({reflectionName}) {
+    if (!(reflectionName in this.relationshipsCache)) {
       if (this.isNewRecord())
         return null
 
-      throw new NotLoadedError(`${digg(this.modelClassData(), "name")}#${args.reflectionName} hasn't been loaded yet`)
+      const loadedRelationships = Object.keys(this.relationshipsCache)
+      const modelClassName = digg(this.modelClassData(), "name")
+
+      throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
     }
 
-    return this.relationshipsCache[args.reflectionName]
+    return this.relationshipsCache[reflectionName]
   }
 
   async _loadHasManyReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationshipsCache) {
       return this.relationshipsCache[args.reflectionName]
-    } else {
-      const collection = new Collection(args, queryArgs)
-      const model = await collection.toArray()
-      this.relationshipsCache[args.reflectionName] = model
-      return model
     }
+
+    const collection = new Collection(args, queryArgs)
+    const models = await collection.toArray()
+
+    this.relationshipsCache[args.reflectionName] = models
+
+    return models
   }
 
   async _loadHasOneReflection(args, queryArgs = {}) {
@@ -726,20 +733,25 @@ module.exports = class BaseModel {
     } else {
       const collection = new Collection(args, queryArgs)
       const model = await collection.first()
+
       this.relationshipsCache[args.reflectionName] = model
+
       return model
     }
   }
 
-  _readHasOneReflection(args) {
-    if (!(args.reflectionName in this.relationshipsCache)) {
+  _readHasOneReflection({reflectionName}) {
+    if (!(reflectionName in this.relationshipsCache)) {
       if (this.isNewRecord())
         return null
 
-      throw new NotLoadedError(`${digg(this.modelClassData(), "name")}#${args.reflectionName} hasn't been loaded yet`)
+      const loadedRelationships = Object.keys(this.relationshipsCache)
+      const modelClassName = digg(this.modelClassData(), "name")
+
+      throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
     }
 
-    return this.relationshipsCache[args.reflectionName]
+    return this.relationshipsCache[reflectionName]
   }
 
   _readModelDataFromArgs(args) {
@@ -754,9 +766,11 @@ module.exports = class BaseModel {
       return
     }
 
+    const relationships = digg(this.modelClassData(), "relationships")
+
     for (const relationshipName in this.preloadedRelationships) {
       const relationshipData = this.preloadedRelationships[relationshipName]
-      const relationshipClassData = this.modelClassData().relationships.find((relationship) => digg(relationship, "name") == relationshipName)
+      const relationshipClassData = relationships.find((relationship) => digg(relationship, "name") == relationshipName)
 
       if (!relationshipClassData) {
         throw new Error(`Could not find the relation ${relationshipName} on the ${digg(this.modelClassData(), "name")} model`)

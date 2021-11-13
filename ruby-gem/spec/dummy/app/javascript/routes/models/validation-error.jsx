@@ -1,7 +1,7 @@
-import {digg, digs} from "@kaspernj/object-digger"
+import {digg, digs} from "diggerize"
 import FlashMessage from "shared/flash-message"
 import {Params, ValidationError} from "@kaspernj/api-maker"
-import {User} from "api-maker/models"
+import {User} from "@kaspernj/api-maker/src/models"
 
 export default class ModelsCustomValidationError extends React.PureComponent {
   state = {
@@ -41,7 +41,7 @@ export default class ModelsCustomValidationError extends React.PureComponent {
 
     return (
       <div className="content-container">
-        <form onSubmit={(e) => this.onSubmit(e)}>
+        <form onSubmit={this.onSubmit}>
           <input type="hidden" name="project[account_id]" value={account.id()} />
           <Input attribute="name" model={project} />
 
@@ -62,7 +62,7 @@ export default class ModelsCustomValidationError extends React.PureComponent {
     )
   }
 
-  async onSubmit(e) {
+  onSubmit = async (e) => {
     e.preventDefault()
 
     const {project} = digs(this.state, "project")

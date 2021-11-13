@@ -99,7 +99,8 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
 
     return if through_model.nil?
 
-    association = ActiveRecord::Associations::Association.new(through_model, through_model_class.reflections.fetch(params[:through][:reflection]))
+    reflection = through_model_class.reflections.fetch(params[:through][:reflection])
+    association = ActiveRecord::Associations::Association.new(through_model, reflection)
 
     query_through = association.scope
     query_through = query_through.accessible_by(ability)

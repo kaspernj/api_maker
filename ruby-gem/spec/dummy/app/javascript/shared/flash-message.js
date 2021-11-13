@@ -1,5 +1,5 @@
 import { CustomError, ValidationError } from "@kaspernj/api-maker"
-import { digg } from "@kaspernj/object-digger"
+import { digg } from "diggerize"
 
 export default class FlashMessage {
   static alert(message) {

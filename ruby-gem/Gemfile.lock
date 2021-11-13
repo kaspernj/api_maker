@@ -52,6 +52,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active-record-transactioner (0.0.7)
     active_record_better_dependent_error_messages (0.0.3)
       rails (>= 6.0.0)
     active_record_query_fixer (0.0.15)
@@ -83,8 +84,38 @@ GEM
       bundler
       rake
       thor (>= 0.14.0)
+    array_enumerator (0.0.10)
     ast (2.4.2)
     auto_autoloader (0.0.5)
+      string-cases
+    awesome_translations (0.0.60)
+      active-record-transactioner (>= 0.0.7)
+      array_enumerator (>= 0.0.10)
+      auto_autoloader (>= 0.0.4)
+      baza (>= 0.0.37)
+      baza_migrations (>= 0.0.1)
+      baza_models (>= 0.0.14)
+      rails (>= 5.0.0)
+      sass-rails (>= 4.0.5)
+      string-cases (>= 0.0.3)
+    baza (0.0.38)
+      array_enumerator (~> 0.0.10)
+      auto_autoloader (~> 0.0.5)
+      datet (~> 0.0.25)
+      event_handler (~> 0.0.0)
+      simple_delegate (~> 0.0.2)
+      string-cases (~> 0.0.4)
+      wref (~> 0.0.8)
+    baza_migrations (0.0.2)
+      auto_autoloader
+      baza (~> 0.0.20)
+      string-cases (~> 0.0.1)
+    baza_models (0.0.15)
+      array_enumerator
+      auto_autoloader
+      baza
+      html_gen
+      simple_delegate
       string-cases
     bcrypt (3.1.16)
     best_practice_project (0.0.12)
@@ -93,8 +124,9 @@ GEM
       msgpack (~> 1.0)
     builder (3.2.4)
     cancancan (3.3.0)
-    capybara (3.35.3)
+    capybara (3.36.0)
       addressable
+      matrix
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
       rack (>= 1.6.0)
@@ -107,6 +139,7 @@ GEM
     coderay (1.1.3)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
+    datet (0.0.25)
     devise (4.8.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -121,27 +154,32 @@ GEM
       railties (>= 3.2)
     erubi (1.10.0)
     erubis (2.7.0)
+    event_handler (0.0.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    ffi (1.15.4)
     globalid (0.5.2)
       activesupport (>= 5.0)
+    html_gen (0.0.16)
+      string-cases
     htmlbeautifier (1.3.1)
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
-    js-routes (2.1.1)
+    js-routes (2.1.2)
       railties (>= 4)
-    json (2.5.1)
+    json (2.6.1)
     loofah (2.12.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     marcel (1.0.2)
+    matrix (0.4.2)
     method_source (1.0.0)
-    mini_mime (1.1.0)
+    mini_mime (1.1.2)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
     monetize (1.11.0)
@@ -175,7 +213,7 @@ GEM
     public_suffix (4.0.6)
     puma (5.5.2)
       nio4r (~> 2.0)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-proxy (0.7.0)
       rack
@@ -201,7 +239,7 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    rails_best_practices (1.21.0)
+    rails_best_practices (1.22.1)
       activesupport
       code_analyzer (>= 0.5.2)
       erubis
@@ -269,12 +307,23 @@ GEM
       rubocop-ast (>= 0.7.1)
     ruby-progressbar (1.11.0)
     rubyzip (2.3.2)
+    sass-rails (6.0.0)
+      sassc-rails (~> 2.1, >= 2.1.1)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
     service_pattern (1.0.2)
-    sexp_processor (4.15.3)
+    sexp_processor (4.16.0)
+    simple_delegate (0.0.2)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -285,9 +334,10 @@ GEM
     sqlite3 (1.4.2)
     string-cases (0.0.4)
     thor (1.1.0)
+    tilt (2.0.10)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2021.4)
+    tzinfo-data (1.2021.5)
       tzinfo (>= 1.0.0)
     unicode-display_width (1.7.0)
     waitutil (0.2.1)
@@ -305,9 +355,10 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    wref (0.0.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   ruby
@@ -315,6 +366,7 @@ PLATFORMS
 DEPENDENCIES
   api_maker!
   appraisal
+  awesome_translations (>= 0.0.60)
   best_practice_project
   bootsnap
   capybara
@@ -334,7 +386,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
-  selenium-webdriver
+  selenium-webdriver (<= 3.142.7)
   sqlite3
   tzinfo-data
   webdrivers

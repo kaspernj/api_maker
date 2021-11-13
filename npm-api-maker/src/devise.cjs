@@ -1,6 +1,6 @@
 const CanCan = require("./can-can.cjs")
 const Deserializer = require("./deserializer.cjs")
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const EventEmitter = require("events")
 const inflection = require("inflection")
 const Services = require("./services.cjs")
@@ -50,7 +50,7 @@ module.exports = class ApiMakerDevise {
 
     const postData = {username, password, args}
     const response = await Services.current().sendRequest("Devise::SignIn", postData)
-    const modelClass = digg(require("api-maker/models"), inflection.camelize(args.scope))
+    const modelClass = digg(require("@kaspernj/api-maker/src/models"), inflection.camelize(args.scope))
     const modelInstance = new modelClass(digg(response, "model_data"))
 
     await CanCan.current().resetAbilities()
@@ -109,7 +109,7 @@ module.exports = class ApiMakerDevise {
       return null
 
     const parsedScopeData = Deserializer.parse(scopeData)
-    const modelClass = digg(require("api-maker/models"), inflection.camelize(scope))
+    const modelClass = digg(require("@kaspernj/api-maker/src/models"), inflection.camelize(scope))
     const modelInstance = new modelClass({data: parsedScopeData})
 
     return modelInstance

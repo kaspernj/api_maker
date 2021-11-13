@@ -9,6 +9,8 @@ Add this line to your application's Gemfile:
 gem "api_maker", git: "https://github.com/kaspernj/api_maker.git"
 ```
 
+Add the extension `.cjs` to `webpacker.yml`.
+
 ApiMaker requires [Webpacker](https://github.com/rails/webpacker), so make sure you have that set up as well. It also uses an extension called [qs](https://www.npmjs.com/package/qs), that you should add to your packages, but that is probally already there by default.
 
 ApiMaker makes use of [CanCanCan](https://github.com/CanCanCommunity/cancancan) to keep track of what models a given user should have access to. Each resource defines its own abilities under `app/api_maker/resources/user_resource` like this:
@@ -39,6 +41,8 @@ Rails.application.routes.draw do
   mount ApiMaker::Engine => "/api_maker"
 end
 ```
+
+Install the ERB loader for Webpack, and make sure it doesn't ignore the `node_modules` folder.
 
 ## Resources
 
@@ -84,11 +88,6 @@ end
 ```
 
 ApiMaker uses that to keep track of what attributes, relationships and commands you want exposed through the API.
-
-Its now time to generate everything like this:
-```bash
-rake api_maker:generate_models
-```
 
 If you want to be able to create and update models, then you should go into each resource and create a params method to define, which attributes can be written on each model like this:
 ```ruby
@@ -222,7 +221,7 @@ end
 ### Creating a new model from JavaScript
 
 ```js
-import {Task} from "api-maker/models"
+import {Task} from "@kaspernj/api-maker/src/models"
 
 const task = new Task()
 task.assignAttributes({name: "New task"})

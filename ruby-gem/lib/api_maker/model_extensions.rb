@@ -14,6 +14,18 @@ module ApiMaker::ModelExtensions
       @api_maker_broadcast_create_channel_name ||= "api_maker_creates_#{api_maker_resource.short_name}"
     end
 
+    def api_maker_broadcast_destroy_channel_name(id)
+      @api_maker_broadcast_destroy_channel_name ||= "api_maker_destroys_#{api_maker_resource.short_name}_#{id}"
+    end
+
+    def api_maker_event_channel_name(id, event_name)
+      "api_maker_events_#{api_maker_resource.short_name}_#{id}_#{event_name}"
+    end
+
+    def api_maker_broadcast_update_channel_name(id)
+      @api_maker_broadcast_update_channel_name ||= "api_maker_updates_#{api_maker_resource.short_name}_#{id}"
+    end
+
     def api_maker_broadcast_updates
       after_commit on: :update do |model| # rubocop:disable Style/SymbolProc
         model.api_maker_broadcast_update
@@ -45,6 +57,14 @@ module ApiMaker::ModelExtensions
     def api_maker_resource
       @api_maker_resource ||= ApiMaker::MemoryStorage.current.resource_for_model(self)
     end
+
+    def translated_collection(collection_name, &blk)
+      ApiMaker::TranslatedCollections.add(
+        blk: blk,
+        collection_name: collection_name,
+        model_class: self
+      )
+    end
   end
 
   def api_maker_event(event_name, args = {})
@@ -61,7 +81,7 @@ module ApiMaker::ModelExtensions
   end
 
   def api_maker_event_channel_name(event_name)
-    "api_maker_events_#{api_maker_resource.short_name}_#{id}_#{event_name}"
+    self.class.api_maker_event_channel_name(id, event_name)
   end
 
   def api_maker_broadcast_create
@@ -88,7 +108,7 @@ module ApiMaker::ModelExtensions
   end
 
   def api_maker_broadcast_destroy_channel_name
-    @api_maker_broadcast_destroy_channel_name ||= "api_maker_destroys_#{api_maker_resource.short_name}_#{id}"
+    @api_maker_broadcast_destroy_channel_name ||= self.class.api_maker_broadcast_destroy_channel_name(id)
   end
 
   def api_maker_broadcast_update
@@ -103,7 +123,7 @@ module ApiMaker::ModelExtensions
   end
 
   def api_maker_broadcast_update_channel_name
-    @api_maker_broadcast_update_channel_name ||= "api_maker_updates_#{api_maker_resource.short_name}_#{id}"
+    self.class.api_maker_broadcast_update_channel_name(id)
   end
 
   def api_maker_resource

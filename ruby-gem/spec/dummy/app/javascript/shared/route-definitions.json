@@ -21,6 +21,9 @@
     {"name": "models_destroy_event", "path": "/models/destroy-event", "component": "models/destroy-event"},
     {"name": "models_index_distinct", "path": "/models/index-distinct", "component": "models/index-distinct"},
     {"name": "models_model_class_event", "path": "/models/model-class-event", "component": "models/model-class-event"},
+    {"name": "models_has_many_as", "path": "/models/has_many_as", "component": "models/has-many-as"},
+    {"name": "models_has_many_options_primary_key", "path": "/models/has_many_options_primary_key", "component": "models/has-many-options-primary-key"},
+    {"name": "models_has_many_through", "path": "/models/has_many_through", "component": "models/has-many-through"},
     {"name": "models_load_has_one_through", "path": "/models/load-has-one-through/:task_id", "component": "models/load-has-one-through"},
     {"name": "models_paginate", "path": "/models/paginate", "component": "models/paginate"},
     {"name": "models_select", "path": "/models/select", "component": "models/select"},
@@ -31,6 +34,9 @@
 
     {"name": "session_status_specs_timeout", "path": "/session_status_specs/timeout", "component": "session-status-specs/timeout"},
     {"name": "new_session", "path": "/sessions/new", "component": "sessions/new"},
+
+    {"name": "new_task", "path": "/tasks/new", "component": "tasks/edit"},
+    {"name": "edit_task", "path": "/tasks/:id/edit", "component": "tasks/edit"},
 
     {"name": "root", "path": "/", "component": "sessions/new"}
   ]

@@ -1,4 +1,4 @@
-const {dig, digg, digs} = require("@kaspernj/object-digger")
+const {dig, digg, digs} = require("diggerize")
 const inflection = require("inflection")
 const qs = require("qs")
 

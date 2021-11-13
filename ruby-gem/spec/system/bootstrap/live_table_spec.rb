@@ -5,6 +5,12 @@ describe "bootstrap - live table" do
   let(:task2) { create :task, name: "Task 2" }
   let(:user_admin) { create :user, admin: true }
 
+  let(:filter_card_selector) { ".live-table--filter-card" }
+  let(:filter_form_selector) { ".live-table--filter-form" }
+  let(:filter_submit_button_selector) { ".live-table--submit-filter-button" }
+  let(:no_tasks_available_content) { ".no-tasks-available-content" }
+  let(:no_tasks_found_content) { ".no-tasks-found-content" }
+
   it "renders a table with rows" do
     task1
     task2
@@ -13,19 +19,58 @@ describe "bootstrap - live table" do
     visit bootstrap_live_table_path
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
+    wait_for_no_selector no_tasks_found_content
   end
 
-  it "filters" do
-    task1
-    task2
+  describe "filtering" do
+    it "uses the filter to filter results" do
+      task1
+      task2
 
-    login_as user_admin
-    visit bootstrap_live_table_path
-    wait_for_selector model_row_selector(task1)
-    wait_for_selector model_row_selector(task2)
-    wait_for_and_find("input[name='name_cont']").set("Task 2")
-    wait_for_no_selector model_row_selector(task1)
-    wait_for_selector model_row_selector(task2)
+      login_as user_admin
+      visit bootstrap_live_table_path
+      wait_for_selector model_row_selector(task1)
+      wait_for_selector model_row_selector(task2)
+      wait_for_and_find("input[name='name_cont']").set("Task 2")
+      wait_for_no_selector model_row_selector(task1)
+      wait_for_selector model_row_selector(task2)
+
+      wait_for_selector filter_card_selector
+      wait_for_selector filter_form_selector
+      wait_for_selector filter_submit_button_selector
+    end
+
+    it "hides the filter card if given in props" do
+      login_as user_admin
+      visit bootstrap_live_table_path(live_table_props: JSON.generate(filterCard: false))
+      wait_for_no_selector filter_card_selector
+      wait_for_selector filter_form_selector
+      wait_for_selector filter_submit_button_selector
+    end
+
+    it "hides the filter content if given in props" do
+      login_as user_admin
+      visit bootstrap_live_table_path(live_table_props: JSON.generate(filterContent: nil))
+      wait_for_no_selector filter_card_selector
+      wait_for_no_selector filter_form_selector
+      wait_for_no_selector filter_submit_button_selector
+    end
+
+    it "hides the filter submit button if given in props" do
+      login_as user_admin
+      visit bootstrap_live_table_path(live_table_props: JSON.generate(filterSubmitButton: false))
+      wait_for_selector filter_card_selector
+      wait_for_selector filter_form_selector
+      wait_for_no_selector filter_submit_button_selector
+    end
+
+    it "uses a custom label for the filter button is given" do
+      login_as user_admin
+      visit bootstrap_live_table_path(live_table_props: JSON.generate(filterSubmitLabel: "Test custom filter submit label"))
+      wait_for_selector filter_card_selector
+      wait_for_selector filter_form_selector
+      wait_for_selector "#{filter_submit_button_selector}[value='Test custom filter submit label']"
+    end
   end
 
   it "destroys a row" do
@@ -47,6 +92,25 @@ describe "bootstrap - live table" do
     expect { destroy_action.call }.to change(Task, :count).by(-1)
     expect { task2.reload }.to raise_error(ActiveRecord::RecordNotFound)
     wait_for_selector model_row_selector(task1)
+  end
+
+  describe "no records found or available" do
+    it "shows noRecordsAvailableContent if no rows are available" do
+      login_as user_admin
+      visit bootstrap_live_table_path(no_records_available_content: true, no_records_found_content: true)
+      wait_for_selector no_tasks_available_content, text: "No tasks were available!"
+      wait_for_no_selector no_tasks_found_content
+    end
+
+    it "shows noRecordsFoundContent if rows are available but none found because of filters" do
+      task1
+      task2
+
+      login_as user_admin
+      visit bootstrap_live_table_path(no_records_available_content: true, no_records_found_content: true, tasks_q: {id_null: true})
+      wait_for_selector no_tasks_found_content, text: "No tasks were found!"
+      wait_for_no_selector no_tasks_available_content
+    end
   end
 
   it "sorts by default given through params when switching pages" do

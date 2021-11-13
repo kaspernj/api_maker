@@ -1,4 +1,4 @@
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const EventEmitter = require("events")
 const inflection = require("inflection")
 const {ReadersWriterLock} = require("epic-locks")

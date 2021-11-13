@@ -1,4 +1,4 @@
-const {digs} = require("@kaspernj/object-digger")
+const {digs} = require("diggerize")
 const PropTypes = require("prop-types")
 const React = require("react")
 
@@ -58,12 +58,12 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
               <div style={{alignSelf: "center"}}>
                 {controls}
                 {expandable && expanded &&
-                  <a className="collapse-card-button text-muted" href="#" onClick={(e) => this.onCollapseClicked(e)}>
+                  <a className="collapse-card-button text-muted" href="#" onClick={this.onCollapseClicked}>
                     <i className="la la-angle-up" />
                   </a>
                 }
                 {expandable && !expanded &&
-                  <a className="expand-card-button text-muted" href="#" onClick={(e) => this.onExpandClicked(e)}>
+                  <a className="expand-card-button text-muted" href="#" onClick={this.onExpandClicked}>
                     <i className="la la-angle-down" />
                   </a>
                 }
@@ -114,12 +114,12 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  onCollapseClicked(e) {
+  onCollapseClicked = (e) => {
     e.preventDefault()
     this.setState({expanded: false})
   }
 
-  onExpandClicked(e) {
+  onExpandClicked = (e) => {
     e.preventDefault()
     this.setState({expanded: true})
   }

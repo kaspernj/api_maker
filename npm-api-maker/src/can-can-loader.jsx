@@ -1,5 +1,5 @@
 import ApiMakerEventEmitterListener from "./event-emitter-listener"
-import {digg, digs} from "@kaspernj/object-digger"
+import {digg, digs} from "diggerize"
 const CanCan = require("./can-can.cjs")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
@@ -32,12 +32,12 @@ export default class ApiMakerCanCanLoader extends React.PureComponent {
       <ApiMakerEventEmitterListener
         events={events}
         event="onResetAbilities"
-        onCalled={() => this.onResetAbilities()}
+        onCalled={this.onResetAbilities}
       />
     )
   }
 
-  onResetAbilities() {
+  onResetAbilities = () => {
     this.updateComponent({canCan: undefined})
     this.loadAbilities()
   }

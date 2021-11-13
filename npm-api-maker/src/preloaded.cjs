@@ -1,4 +1,4 @@
-const {digg} = require("@kaspernj/object-digger")
+const {digg} = require("diggerize")
 const inflection = require("inflection")
 
 module.exports = class ApiMakerPreloaded {
@@ -12,7 +12,7 @@ module.exports = class ApiMakerPreloaded {
 
     for (const preloadedType in this.response.preloaded) {
       const modelClassName = inflection.classify(preloadedType)
-      const modelClass = digg(require("api-maker/models"), modelClassName)
+      const modelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
 
       for(const preloadedId in this.response.preloaded[preloadedType]) {
         const preloadedData = this.response.preloaded[preloadedType][preloadedId]

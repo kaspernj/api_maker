@@ -1,4 +1,4 @@
-const {dig} = require("@kaspernj/object-digger")
+const {dig} = require("diggerize")
 const {EventListener} = require("@kaspernj/api-maker")
 const idForComponent = require("./id-for-component.cjs")
 const nameForComponent = require("./name-for-component.cjs")
@@ -64,7 +64,9 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
 
     return (
       <>
-        {form && onErrors && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
+        {form && onErrors &&
+          <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />
+        }
         <select
           defaultValue={this.inputDefaultValue()}
           id={idForComponent(this)}
@@ -76,14 +78,38 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
             <option />
           }
           {options && options.map(option =>
-            <option key={`select-option-${option[1]}`} value={option[1]}>
-              {option[0]}
+            <option key={this.optionKey(option)} value={this.optionValue(option)}>
+              {this.optionLabel(option)}
             </option>
           )}
           {children}
         </select>
       </>
     )
+  }
+
+  optionKey(option) {
+    if (Array.isArray(option)) {
+      return `select-option-${option[1]}`
+    } else {
+      return `select-option-${option}`
+    }
+  }
+
+  optionLabel(option) {
+    if (Array.isArray(option)) {
+      return option[0]
+    } else {
+      return option
+    }
+  }
+
+  optionValue(option) {
+    if (Array.isArray(option)) {
+      return option[1]
+    } else {
+      return option
+    }
   }
 
   includeBlank() {
