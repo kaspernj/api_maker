@@ -8,6 +8,7 @@ describe "bootstrap - live table" do
   let(:filter_card_selector) { ".live-table--filter-card" }
   let(:filter_form_selector) { ".live-table--filter-form" }
   let(:filter_submit_button_selector) { ".live-table--submit-filter-button" }
+  let(:no_tasks_available_content) { ".no-tasks-available-content" }
   let(:no_tasks_found_content) { ".no-tasks-found-content" }
 
   it "renders a table with rows" do
@@ -93,10 +94,23 @@ describe "bootstrap - live table" do
     wait_for_selector model_row_selector(task1)
   end
 
-  it "shows noRecordsFoundContent if no rows are found and given" do
-    login_as user_admin
-    visit bootstrap_live_table_path(no_records_found_content: true)
-    wait_for_selector no_tasks_found_content, text: "No tasks were found!"
+  describe "no records found or available" do
+    it "shows noRecordsAvailableContent if no rows are available" do
+      login_as user_admin
+      visit bootstrap_live_table_path(no_records_available_content: true, no_records_found_content: true)
+      wait_for_selector no_tasks_available_content, text: "No tasks were available!"
+      wait_for_no_selector no_tasks_found_content
+    end
+
+    it "shows noRecordsFoundContent if rows are available but none found because of filters" do
+      task1
+      task2
+
+      login_as user_admin
+      visit bootstrap_live_table_path(no_records_available_content: true, no_records_found_content: true, tasks_q: {id_null: true})
+      wait_for_selector no_tasks_found_content, text: "No tasks were found!"
+      wait_for_no_selector no_tasks_available_content
+    end
   end
 
   it "sorts by default given through params when switching pages" do
