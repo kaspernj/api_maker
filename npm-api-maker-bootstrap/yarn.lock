@@ -3141,6 +3141,11 @@ object.values@^1.1.5:
     define-properties "^1.1.3"
     es-abstract "^1.19.1"
 
+on-location-changed@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.0.tgz#183ed69173745c892c777997e0daa03d362e89d7"
+  integrity sha512-P/AKWIqYDEiZ+X83jMTHlhwihpr8lwFWsn9HXOOyJQkbqb+eeq56+Wezsomrim1fq6D092foyn9pZ8k8WoC2wg==
+
 once@^1.3.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"

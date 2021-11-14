@@ -16,7 +16,6 @@ const EventCreated = require("./src/event-created").default
 const EventDestroyed = require("./src/event-destroyed").default
 const EventEmitterListener = require("./src/event-emitter-listener").default
 const EventListener = require("./src/event-listener").default
-const EventLocationChanged = require("./src/event-location-changed").default
 const EventModelClass = require("./src/event-model-class").default
 const EventUpdated = require("./src/event-updated").default
 const HistoryListener = require("./src/history-listener").default
@@ -62,7 +61,6 @@ export {
   EventDestroyed,
   EventEmitterListener,
   EventListener,
-  EventLocationChanged,
   EventModelClass,
   EventUpdated,
   HistoryListener,

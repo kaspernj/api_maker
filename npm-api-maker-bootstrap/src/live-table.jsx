@@ -1,9 +1,10 @@
 const classNames = require("classnames")
-const {Collection, EventCreated, EventDestroyed, EventLocationChanged, EventUpdated, instanceOfClassName, Params} = require("@kaspernj/api-maker")
+const {Collection, EventCreated, EventDestroyed, EventUpdated, instanceOfClassName, Params} = require("@kaspernj/api-maker")
 const {debounce} = require("debounce")
 const {digg, digs} = require("diggerize")
 const inflection = require("inflection")
 const {Link} = require("react-router-dom")
+const {LocationChanged} = require("on-location-changed/location-changed-component")
 const Money = require("js-money")
 const PropTypes = require("prop-types")
 const React = require("react")
@@ -202,7 +203,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return (
       <div className={this.className()}>
         <EventCreated modelClass={modelClass} onCreated={this.onModelCreated} />
-        <EventLocationChanged history={appHistory} onChanged={this.onLocationChanged} />
+        <LocationChanged history={appHistory} onChanged={this.onLocationChanged} />
         {models && models.map(model =>
           <React.Fragment key={model.id()}>
             <EventDestroyed model={model} onDestroyed={this.onModelDestroyed} />
