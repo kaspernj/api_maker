@@ -17,7 +17,7 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   }
 
   currentParams = this.calculatedCurrentParams()
-  searchKey = digg(this, "props", "query", "queryArgs", "searchKey") || "q"
+  searchKey = digg(this, "props", "query", "queryArgs").searchKey || "q"
 
   state = {
     href: this.href(),
