@@ -1,26 +1,44 @@
+const {digg, digs} = require("diggerize")
+const {LocationChanged} = require("on-location-changed/location-changed-component")
 const inflection = require("inflection")
 const { Link } = require("react-router-dom")
+const PropTypes = require("prop-types")
 const qs = require("qs")
 const React = require("react")
 
 export default class ApiMakerBootstrapSortLink extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    const searchKey = this.props.query.queryArgs.searchKey || "q"
-    this.state = {searchKey}
+  static propTypes = {
+    attribute: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    linkComponent: PropTypes.object,
+    onChanged: PropTypes.func,
+    query: PropTypes.object.isRequired,
+    title: PropTypes.node
+  }
+
+  currentParams = this.calculatedCurrentParams()
+  searchKey = digg(this, "props", "query", "queryArgs").searchKey || "q"
+
+  state = {
+    href: this.href(),
+    sortMode: this.sortMode()
   }
 
   attribute() {
     return inflection.underscore(this.props.attribute)
   }
 
+  calculatedCurrentParams() {
+    return qs.parse(global.location.search.substr(1))
+  }
+
   href() {
-    const currentParams = qs.parse(global.location.search.substr(1))
+    const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
 
-    if (!currentParams[this.state.searchKey])
-      currentParams[this.state.searchKey] = {}
+    if (!currentParams[searchKey])
+      currentParams[searchKey] = {}
 
-    currentParams[this.state.searchKey]["s"] = `${this.attribute()} ${this.sortMode()}`
+    currentParams[searchKey]["s"] = `${this.attribute()} ${this.sortMode()}`
 
     const newParams = qs.stringify(currentParams)
     const newPath = `${location.pathname}?${newParams}`
@@ -29,10 +47,13 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   }
 
   isSortedByAttribute() {
-    if (this.props.query.queryArgs.ransack && this.props.query.queryArgs.ransack.s == this.attribute())
+    const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
+    const params = currentParams[searchKey] || {}
+
+    if (params.s == this.attribute())
       return true
 
-    if (this.props.query.queryArgs.ransack && this.props.query.queryArgs.ransack.s == `${this.attribute()} asc`)
+    if (params.s == `${this.attribute()} asc`)
       return true
 
     return false
@@ -40,12 +61,16 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
 
   render() {
     const LinkComponent = this.linkComponent()
-    const { attribute, className, linkComponent, query, title, ...other } = this.props
+    const {attribute, className, linkComponent, onChanged, query, title, ...restProps} = this.props
+    const {href, sortMode} = digs(this.state, "href", "sortMode")
 
     return (
-      <LinkComponent {...other} className={this.className()} data-attribute={attribute} data-sort-mode={this.sortMode()} to={this.href()}>
-        {this.title()}
-      </LinkComponent>
+      <>
+        <LocationChanged onChanged={digg(this, "onLocationChanged")} />
+        <LinkComponent className={this.className()} data-attribute={attribute} data-sort-mode={sortMode} to={href} {...restProps}>
+          {this.title()}
+        </LinkComponent>
+      </>
     )
   }
 
@@ -66,6 +91,15 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     }
   }
 
+  onLocationChanged = () => {
+    this.currentParams = this.calculatedCurrentParams()
+
+    this.setState({
+      href: this.href(),
+      sortMode: this.sortMode()
+    })
+  }
+
   sortMode() {
     if (this.isSortedByAttribute()) {
       return "desc"
@@ -75,9 +109,11 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   }
 
   title() {
-    if (this.props.title)
-      return this.props.title
+    const {attribute, query} = digs(this.props, "attribute", "query")
+    const {title} = this.props
 
-    return this.props.query.modelClass().humanAttributeName(this.props.attribute)
+    if (title) return title
+
+    return query.modelClass().humanAttributeName(attribute)
   }
 }
