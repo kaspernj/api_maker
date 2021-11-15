@@ -9,6 +9,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:jest/recommended"
   ],
+  parser: "@babel/eslint-parser",
   parserOptions: {
     ecmaFeatures: {
       jsx: true
@@ -185,7 +186,7 @@ module.exports = {
     "one-var-declaration-per-line": "error",
     "operator-assignment": "error",
     "operator-linebreak": "error",
-    "padded-blocks": "off",
+    "padded-blocks": ["error", "never"],
     "padding-line-between-statements": "error",
     "prefer-arrow-callback": "error",
     "prefer-exponentiation-operator": "error",
@@ -234,7 +235,7 @@ module.exports = {
     "react/jsx-one-expression-per-line": "error",
     "react/jsx-pascal-case": "error",
     "react/jsx-props-no-multi-spaces": "error",
-    "react/jsx-props-no-spreading": "error",
+    "react/jsx-props-no-spreading": "off",
     "react/jsx-sort-default-props": "error",
     "react/jsx-sort-props": "error",
     "react/jsx-tag-spacing": "error",
@@ -262,7 +263,7 @@ module.exports = {
     "react/prefer-exact-props": "error",
     "react/prefer-read-only-props": "error",
     "react/prefer-stateless-function": "error",
-    "react/require-default-props": "error",
+    "react/require-default-props": "off",
     "react/require-optimization": "error",
     "react/self-closing-comp": "error",
     "react/sort-comp": "error",
@@ -307,7 +308,7 @@ module.exports = {
     "jest/prefer-strict-equal": "off",
     "no-shadow": "off",
     "jest/prefer-to-have-length": "off",
-    "max-len": "off",
+    "max-len": ["error", {"code": 160}],
     "max-lines": "off",
     "max-lines-per-function": "off",
     "max-statements": "off",
@@ -327,7 +328,7 @@ module.exports = {
     "require-await": "off",
     "require-unicode-regexp": "off",
     "sort-keys": "off",
-    "space-before-function-paren": "off",
+    "space-before-function-paren": ["error", "never"],
     "spaced-comment": "off"
   }
 }

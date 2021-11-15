@@ -1,7 +1,7 @@
 const {digg, digs} = require("diggerize")
 const {LocationChanged} = require("on-location-changed/location-changed-component")
 const inflection = require("inflection")
-const { Link } = require("react-router-dom")
+const {Link} = require("react-router-dom")
 const PropTypes = require("prop-types")
 const qs = require("qs")
 const React = require("react")
@@ -66,8 +66,14 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
 
     return (
       <>
-        <LocationChanged onChanged={digg(this, "onLocationChanged")} />
-        <LinkComponent className={this.className()} data-attribute={attribute} data-sort-mode={sortMode} to={href} {...restProps}>
+        <LocationChanged onChanged={this.onLocationChanged} />
+        <LinkComponent
+          className={this.className()}
+          data-attribute={attribute}
+          data-sort-mode={sortMode}
+          to={href}
+          {...restProps}
+        >
           {this.title()}
         </LinkComponent>
       </>
@@ -86,9 +92,9 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   linkComponent() {
     if (this.props.linkComponent) {
       return this.props.linkComponent
-    } else {
-      return Link
     }
+
+    return Link
   }
 
   onLocationChanged = () => {
@@ -101,11 +107,9 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   }
 
   sortMode() {
-    if (this.isSortedByAttribute()) {
-      return "desc"
-    } else {
-      return "asc"
-    }
+    if (this.isSortedByAttribute()) return "desc"
+
+    return "asc"
   }
 
   title() {

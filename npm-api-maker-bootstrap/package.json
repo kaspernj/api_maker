@@ -17,7 +17,7 @@
     "url": "git+https://github.com/kaspernj/api_maker.git"
   },
   "scripts": {
-    "eslint": "eslint"
+    "eslint": "eslint --ext .cjs,.js,.jsx"
   },
   "author": "kaspernj",
   "license": "ISC",
@@ -36,6 +36,7 @@
     "strftime": ">= 0.10.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.16.3",
     "eslint": "^8.2.0",
     "eslint-find-rules": "^4.0.0",
     "eslint-plugin-jest": "^25.2.4",

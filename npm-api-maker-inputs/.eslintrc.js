@@ -9,6 +9,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:jest/recommended"
   ],
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -97,7 +98,7 @@ module.exports = {
     "lines-between-class-members": "error",
     "max-classes-per-file": "error",
     "max-depth": "error",
-    "max-len": "error",
+    "max-len": ["error", {"code": 160}],
     "max-lines-per-function": "error",
     "max-nested-callbacks": "error",
     "max-params": "error",
@@ -202,7 +203,7 @@ module.exports = {
     "one-var-declaration-per-line": "error",
     "operator-assignment": "error",
     "operator-linebreak": "error",
-    "padded-blocks": "error",
+    "padded-blocks": ["error", "never"],
     "padding-line-between-statements": "error",
     "prefer-arrow-callback": "error",
     "prefer-const": "error",
@@ -253,7 +254,7 @@ module.exports = {
     "react/jsx-one-expression-per-line": "error",
     "react/jsx-pascal-case": "error",
     "react/jsx-props-no-multi-spaces": "error",
-    "react/jsx-props-no-spreading": "error",
+    "react/jsx-props-no-spreading": "off",
     "react/jsx-sort-default-props": "error",
     "react/jsx-sort-props": "error",
     "react/jsx-tag-spacing": "error",
@@ -281,7 +282,7 @@ module.exports = {
     "react/prefer-exact-props": "error",
     "react/prefer-read-only-props": "error",
     "react/prefer-stateless-function": "error",
-    "react/require-default-props": "error",
+    "react/require-default-props": "off",
     "react/require-optimization": "error",
     "react/self-closing-comp": "error",
     "react/sort-comp": "error",
@@ -300,7 +301,7 @@ module.exports = {
     "sort-keys": "error",
     "sort-vars": "error",
     "space-before-blocks": "error",
-    "space-before-function-paren": "error",
+    "space-before-function-paren": ["error", "never"],
     "space-in-parens": "error",
     "space-infix-ops": "error",
     "space-unary-ops": "error",
