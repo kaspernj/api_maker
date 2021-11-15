@@ -1,5 +1,6 @@
 const {instanceOfClassName} = require("@kaspernj/api-maker")
 const {Link} = require("react-router-dom")
+const {LocationChanged} = require("on-location-changed/location-changed-component")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const qs = require("qs")
@@ -26,6 +27,10 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     if (prevProps.result != this.props.result) {
       this.setState({pages: this.pages()})
     }
+  }
+
+  onLocationChanged = () => {
+    console.log("onLocationChanged")
   }
 
   isPageActiveClass(pageNumber) {
@@ -107,49 +112,52 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     const {pages} = this.state
 
     return (
-      <ul className="pagination" data-pages-length={pages.length}>
-        <li className={`page-item ${result.currentPage() <= 1 ? "disabled" : ""}`} key="page-first">
-          <Link className="page-link" to={this.pagePath(1)}>
-            ⇤
-          </Link>
-        </li>
-        <li className={`page-item ${result.currentPage() <= 1 ? "disabled" : ""}`} key="page-previous">
-          <Link className="page-link" to={this.previousPagePath()}>
-            ←
-          </Link>
-        </li>
-        {this.showBackwardsDots() &&
-          <li className="page-item">
-            <a className="page-link disabled" href="#">
-              &hellip;
-            </a>
-          </li>
-        }
-        {pages.map(page =>
-          <li className={`page-item ${this.isPageActiveClass(page)}`} key={`page-${page}`}>
-            <Link className="page-link" to={this.pagePath(page)}>
-              {page}
+      <>
+        <LocationChanged onChanged={digg(this, "onLocationChanged")} />
+        <ul className="pagination" data-pages-length={pages.length}>
+          <li className={`page-item ${result.currentPage() <= 1 ? "disabled" : ""}`} key="page-first">
+            <Link className="page-link" to={this.pagePath(1)}>
+              ⇤
             </Link>
           </li>
-        )}
-        {this.showForwardsDots() &&
-          <li className="page-item">
-            <a className="page-link disabled" href="#">
-              &hellip;
-            </a>
+          <li className={`page-item ${result.currentPage() <= 1 ? "disabled" : ""}`} key="page-previous">
+            <Link className="page-link" to={this.previousPagePath()}>
+              ←
+            </Link>
           </li>
-        }
-        <li className={`page-item ${result.currentPage() >= result.totalPages() ? "disabled" : ""}`} key="page-next">
-          <Link className="page-link" to={this.nextPagePath()}>
-            →
-          </Link>
-        </li>
-        <li className={`page-item ${result.currentPage() >= result.totalPages() ? "disabled" : ""}`} key="page-last">
-          <Link className="page-link" to={this.pagePath(result.totalPages())}>
-            ⇥
-          </Link>
-        </li>
-      </ul>
+          {this.showBackwardsDots() &&
+            <li className="page-item">
+              <a className="page-link disabled" href="#">
+                &hellip;
+              </a>
+            </li>
+          }
+          {pages.map(page =>
+            <li className={`page-item ${this.isPageActiveClass(page)}`} key={`page-${page}`}>
+              <Link className="page-link" to={this.pagePath(page)}>
+                {page}
+              </Link>
+            </li>
+          )}
+          {this.showForwardsDots() &&
+            <li className="page-item">
+              <a className="page-link disabled" href="#">
+                &hellip;
+              </a>
+            </li>
+          }
+          <li className={`page-item ${result.currentPage() >= result.totalPages() ? "disabled" : ""}`} key="page-next">
+            <Link className="page-link" to={this.nextPagePath()}>
+              →
+            </Link>
+          </li>
+          <li className={`page-item ${result.currentPage() >= result.totalPages() ? "disabled" : ""}`} key="page-last">
+            <Link className="page-link" to={this.pagePath(result.totalPages())}>
+              ⇥
+            </Link>
+          </li>
+        </ul>
+      </>
     )
   }
 }

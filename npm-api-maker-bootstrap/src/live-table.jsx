@@ -71,7 +71,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
     this.shape = new Shape(this, {
       columns: this.columnsAsArray(),
-      currentHref: location.href,
       models: undefined,
       overallCount: undefined,
       query: undefined,
@@ -203,7 +202,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return (
       <div className={this.className()}>
         <EventCreated modelClass={modelClass} onCreated={this.onModelCreated} />
-        <LocationChanged history={appHistory} onChanged={this.onLocationChanged} />
+        <LocationChanged onChanged={this.onLocationChanged} />
         {models && models.map(model =>
           <React.Fragment key={model.id()}>
             <EventDestroyed model={model} onDestroyed={this.onModelDestroyed} />
@@ -537,19 +536,12 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   onLocationChanged = () => {
-    if (this.shape.currentHref != location.href) {
-      const {queryQName} = digs(this.shape, "queryQName")
-      const params = Params.parse()
-      const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
+    const {queryQName} = digs(this.shape, "queryQName")
+    const params = Params.parse()
+    const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
 
-      this.shape.set(
-        {
-          currentHref: location.href,
-          qParams
-        },
-        () => this.loadModels()
-      )
-    }
+    this.shape.set({qParams})
+    this.loadModels()
   }
 
   onModelCreated = () => {

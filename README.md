@@ -42,6 +42,14 @@ Rails.application.routes.draw do
 end
 ```
 
+Make API maker able to listen for location changes by inserting this into your pack:
+```js
+import history from "shared/history"
+import {callbacksHandler} from "on-location-changed/callbacks-handler"
+
+callbacksHandler.connectReactRouterHistory(history)
+```
+
 Install the ERB loader for Webpack, and make sure it doesn't ignore the `node_modules` folder.
 
 ## Resources

@@ -1474,7 +1474,7 @@ diff-sequences@^27.0.6:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-27.0.6.tgz#3305cb2e55a033924054695cc66019fd7f8e5723"
   integrity sha512-ag6wfpBFyNXZ0p8pcuIDS//D8H062ZQJ3fzYxjpmeKjnz8W4pekL3AI8VohmyZmsWW2PWaHgjsmqR6L13101VQ==
 
-"diggerize@>= 1.0.3":
+"diggerize@>= 1.0.3", diggerize@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.3.tgz#1c08fb9f461c2ed1af9416c83142539f041350a3"
   integrity sha512-sqZM36ZDSizaGTkjs+CZjjPlccDaz+Khozw/9+fnYJ2oS2n6is2JPoycofSnWTi0JDKEKVI86IKsMxwWzbrG1Q==
@@ -3141,10 +3141,12 @@ object.values@^1.1.5:
     define-properties "^1.1.3"
     es-abstract "^1.19.1"
 
-on-location-changed@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.0.tgz#183ed69173745c892c777997e0daa03d362e89d7"
-  integrity sha512-P/AKWIqYDEiZ+X83jMTHlhwihpr8lwFWsn9HXOOyJQkbqb+eeq56+Wezsomrim1fq6D092foyn9pZ8k8WoC2wg==
+"on-location-changed@>= 1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.2.tgz#bc59824b54f05de0b7958cd0ec3ee1ace37a0fce"
+  integrity sha512-UnFKFPCB3m11ggnLrbithADIallCl982QtCf2t44z2BsgA65VwMlOqgmYzgwxXq4XcrIEeAHUqFkXjJ6E0u6LA==
+  dependencies:
+    diggerize "^1.0.3"
 
 once@^1.3.0:
   version "1.4.0"
