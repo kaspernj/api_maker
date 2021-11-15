@@ -16,10 +16,8 @@ const EventCreated = require("./src/event-created").default
 const EventDestroyed = require("./src/event-destroyed").default
 const EventEmitterListener = require("./src/event-emitter-listener").default
 const EventListener = require("./src/event-listener").default
-const EventLocationChanged = require("./src/event-location-changed").default
 const EventModelClass = require("./src/event-model-class").default
 const EventUpdated = require("./src/event-updated").default
-const HistoryListener = require("./src/history-listener").default
 const instanceOfClassName = require("./src/instance-of-class-name.cjs")
 const KeyValueStore = require("./src/key-value-store.cjs")
 const Logger = require("./src/logger.cjs")
@@ -62,10 +60,8 @@ export {
   EventDestroyed,
   EventEmitterListener,
   EventListener,
-  EventLocationChanged,
   EventModelClass,
   EventUpdated,
-  HistoryListener,
   instanceOfClassName,
   KeyValueStore,
   Logger,

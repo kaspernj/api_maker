@@ -12,9 +12,9 @@
   "private": true,
   "dependencies": {
     "@babel/preset-react": "^7.16.0",
-    "@kaspernj/api-maker": "^1.0.121",
-    "@kaspernj/api-maker-bootstrap": "^1.0.71",
-    "@kaspernj/api-maker-inputs": "^1.0.62",
+    "@kaspernj/api-maker": "^1.0.125",
+    "@kaspernj/api-maker-bootstrap": "^1.0.74",
+    "@kaspernj/api-maker-inputs": "^1.0.64",
     "@rails/actioncable": "^6.1.4",
     "@rails/webpacker": "5.4.3",
     "babel-preset-react": "^6.24.1",
@@ -29,6 +29,7 @@
     "js-yaml-loader": "^1.2.2",
     "merge": "^2.1.1",
     "object-to-formdata": "^4.1.0",
+    "on-location-changed": ">= 1.0.2",
     "prop-types": "^15.7.2",
     "prop-types-exact": "^1.2.0",
     "qs": "^6.10.1",
@@ -45,6 +46,6 @@
     "wake-event": "^0.0.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "^4.4.0"
+    "webpack-dev-server": "^4.5.0"
   }
 }

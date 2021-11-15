@@ -1024,32 +1024,33 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.1.tgz#141f15645acaa3b133b7c247cad58ae252ffae85"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
-"@kaspernj/api-maker-bootstrap@^1.0.71":
-  version "1.0.71"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.71.tgz#d1383e367f97cf667a6a6ffccdd7f8d81bd0c21d"
-  integrity sha512-RWuL1KwstV/Hhe+WW295RLmWBwXLYnStq4Ruh5GMuRNjW7T24lXfD0iKhzbxX3lHtLYTk65caG7oHNdMIxjkog==
+"@kaspernj/api-maker-bootstrap@^1.0.74":
+  version "1.0.74"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.74.tgz#d6a45ffc54ca9951dbc4a236229de2f79f41ddb2"
+  integrity sha512-rfaWB8TEAVt+6wft/1VxColgA6JmH87ie4wMYN5GsBsTJNO4hddYot6/Ct3J9fRzvte6d6ydoR4VZWeVm7Ln7g==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.122"
-    "@kaspernj/api-maker-inputs" ">= 1.0.63"
+    "@kaspernj/api-maker" ">= 1.0.125"
+    "@kaspernj/api-maker-inputs" ">= 1.0.64"
     debounce ">= 1.2.0"
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
+    set-state-compare "^1.0.15"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.63", "@kaspernj/api-maker-inputs@^1.0.62":
-  version "1.0.63"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.63.tgz#26012bb7e165caef5027c72ecba12665f9d7c04d"
-  integrity sha512-yGAZf5fNCK4q1KvHewEe2DZ1a47mUrUBq5oaEEM24zEq/CXw+6ys1kuyoV4TW4H7nWEzp9FRcVeJbQ1yER4tag==
+"@kaspernj/api-maker-inputs@>= 1.0.64", "@kaspernj/api-maker-inputs@^1.0.64":
+  version "1.0.64"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.64.tgz#357dbb0e9fefba727e3aba96dcdf3189b9f45a64"
+  integrity sha512-7Ot8kVFpOOb4twBOhzyU149DFvPSaFa0rLplIgdcfIhXtmwM96+QCv3tnGpCBT6W6keP0oKnzQ0vvFAv/WCjIw==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.122"
     classnames ">= 2.2.6"
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.122", "@kaspernj/api-maker@^1.0.121":
-  version "1.0.122"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.122.tgz#ca03a0809e76abeecb3fde011fc34b480a243a30"
-  integrity sha512-FkQb/1HBDxjI2bIAyUkDmrn7FoNPzCeKfmdWCg02T7cC4HNr+g3xmpNWkfdTUVnBIQ1uNr+F0r8VVGqLm5uT6Q==
+"@kaspernj/api-maker@>= 1.0.122", "@kaspernj/api-maker@>= 1.0.125", "@kaspernj/api-maker@^1.0.125":
+  version "1.0.125"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.125.tgz#f0f5fff2135bbdda65792aca2d8767a96f756be3"
+  integrity sha512-8+AsyIg63+Mfm3Rqny5ZZz5L2ztG9ceHH/Mf965stmhDJ4fuq6gQgyWAugg9nvhr/GHIdr+lGb0bl5FUIvIpdA==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -5092,6 +5093,13 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
+"on-location-changed@>= 1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.2.tgz#bc59824b54f05de0b7958cd0ec3ee1ace37a0fce"
+  integrity sha512-UnFKFPCB3m11ggnLrbithADIallCl982QtCf2t44z2BsgA65VwMlOqgmYzgwxXq4XcrIEeAHUqFkXjJ6E0u6LA==
+  dependencies:
+    diggerize "^1.0.3"
+
 once@^1.3.0, once@^1.3.1, once@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
@@ -7685,10 +7693,10 @@ webpack-dev-middleware@^5.2.1:
     range-parser "^1.2.1"
     schema-utils "^3.1.0"
 
-webpack-dev-server@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-4.4.0.tgz#10ec17088f840c9ccb2ebb0b43c49ec293206f7e"
-  integrity sha512-+S0XRIbsopVjPFjCO8I07FXYBWYqkFmuP56ucGMTs2hA/gV4q2M9xTmNo5Tg4o8ffRR+Nm3AsXnQXxKRyYovrA==
+webpack-dev-server@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-4.5.0.tgz#614b5112cfa4730a4801bb4ddebb3be5b0d70497"
+  integrity sha512-Ss4WptsUjYa+3hPI4iYZYEc8FrtnfkaPrm5WTjk9ux5kiCS718836srs0ppKMHRaCHP5mQ6g4JZGcfDdGbCjpQ==
   dependencies:
     ansi-html-community "^0.0.8"
     bonjour "^3.5.0"
