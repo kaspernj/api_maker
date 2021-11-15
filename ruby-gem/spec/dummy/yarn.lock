@@ -1024,19 +1024,20 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.1.tgz#141f15645acaa3b133b7c247cad58ae252ffae85"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
-"@kaspernj/api-maker-bootstrap@^1.0.71":
-  version "1.0.71"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.71.tgz#d1383e367f97cf667a6a6ffccdd7f8d81bd0c21d"
-  integrity sha512-RWuL1KwstV/Hhe+WW295RLmWBwXLYnStq4Ruh5GMuRNjW7T24lXfD0iKhzbxX3lHtLYTk65caG7oHNdMIxjkog==
+"@kaspernj/api-maker-bootstrap@^1.0.74":
+  version "1.0.74"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.74.tgz#d6a45ffc54ca9951dbc4a236229de2f79f41ddb2"
+  integrity sha512-rfaWB8TEAVt+6wft/1VxColgA6JmH87ie4wMYN5GsBsTJNO4hddYot6/Ct3J9fRzvte6d6ydoR4VZWeVm7Ln7g==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.122"
-    "@kaspernj/api-maker-inputs" ">= 1.0.63"
+    "@kaspernj/api-maker" ">= 1.0.125"
+    "@kaspernj/api-maker-inputs" ">= 1.0.64"
     debounce ">= 1.2.0"
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
+    set-state-compare "^1.0.15"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.63", "@kaspernj/api-maker-inputs@^1.0.64":
+"@kaspernj/api-maker-inputs@>= 1.0.64", "@kaspernj/api-maker-inputs@^1.0.64":
   version "1.0.64"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.64.tgz#357dbb0e9fefba727e3aba96dcdf3189b9f45a64"
   integrity sha512-7Ot8kVFpOOb4twBOhzyU149DFvPSaFa0rLplIgdcfIhXtmwM96+QCv3tnGpCBT6W6keP0oKnzQ0vvFAv/WCjIw==
@@ -1046,7 +1047,7 @@
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.122", "@kaspernj/api-maker@^1.0.125":
+"@kaspernj/api-maker@>= 1.0.122", "@kaspernj/api-maker@>= 1.0.125", "@kaspernj/api-maker@^1.0.125":
   version "1.0.125"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.125.tgz#f0f5fff2135bbdda65792aca2d8767a96f756be3"
   integrity sha512-8+AsyIg63+Mfm3Rqny5ZZz5L2ztG9ceHH/Mf965stmhDJ4fuq6gQgyWAugg9nvhr/GHIdr+lGb0bl5FUIvIpdA==
