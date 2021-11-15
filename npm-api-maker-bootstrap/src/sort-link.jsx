@@ -35,10 +35,9 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   href() {
     const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
 
-    if (!currentParams[searchKey])
-      currentParams[searchKey] = {}
+    if (!currentParams[searchKey]) currentParams[searchKey] = {}
 
-    currentParams[searchKey]["s"] = `${this.attribute()} ${this.sortMode()}`
+    currentParams[searchKey].s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
 
     const newParams = qs.stringify(currentParams)
     const newPath = `${location.pathname}?${newParams}`
@@ -50,11 +49,8 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
     const params = currentParams[searchKey] || {}
 
-    if (params.s == this.attribute())
-      return true
-
-    if (params.s == `${this.attribute()} asc`)
-      return true
+    if (params.s == this.attribute()) return true
+    if (params.s == `${this.attribute()} asc`) return true
 
     return false
   }
@@ -83,16 +79,13 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   className() {
     const classNames = ["component-api-maker-bootstrap-sort-link"]
 
-    if (this.props.className)
-      classNames.push(this.props.className)
+    if (this.props.className) classNames.push(this.props.className)
 
     return classNames.join(" ")
   }
 
   linkComponent() {
-    if (this.props.linkComponent) {
-      return this.props.linkComponent
-    }
+    if (this.props.linkComponent) return this.props.linkComponent
 
     return Link
   }
