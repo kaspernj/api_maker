@@ -164,6 +164,7 @@ module.exports = {
     "no-unmodified-loop-condition": "error",
     "no-unneeded-ternary": "error",
     "no-unreachable-loop": "error",
+    "no-unused-private-class-members": "error",
     "no-unsafe-optional-chaining": "error",
     "no-unused-expressions": "error",
     "no-use-before-define": "error",
