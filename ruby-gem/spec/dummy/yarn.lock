@@ -1036,10 +1036,10 @@
     inflection ">= 1.12.0"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.63", "@kaspernj/api-maker-inputs@^1.0.62":
-  version "1.0.63"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.63.tgz#26012bb7e165caef5027c72ecba12665f9d7c04d"
-  integrity sha512-yGAZf5fNCK4q1KvHewEe2DZ1a47mUrUBq5oaEEM24zEq/CXw+6ys1kuyoV4TW4H7nWEzp9FRcVeJbQ1yER4tag==
+"@kaspernj/api-maker-inputs@>= 1.0.63", "@kaspernj/api-maker-inputs@^1.0.64":
+  version "1.0.64"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.64.tgz#357dbb0e9fefba727e3aba96dcdf3189b9f45a64"
+  integrity sha512-7Ot8kVFpOOb4twBOhzyU149DFvPSaFa0rLplIgdcfIhXtmwM96+QCv3tnGpCBT6W6keP0oKnzQ0vvFAv/WCjIw==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.122"
     classnames ">= 2.2.6"
