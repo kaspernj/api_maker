@@ -16,7 +16,7 @@ module.exports = class Serializer {
   }
 
   serializeArgument(arg) {
-    if (typeof arg == "function" && arg["modelClassData"] && arg["modelName"]) {
+    if (typeof arg == "function" && arg.modelClassData && arg.modelName) {
       return {
         api_maker_type: "resource",
         name: digg(arg.modelClassData(), "name")
@@ -28,7 +28,7 @@ module.exports = class Serializer {
 
       let offset = `${offsetNumber}`
 
-      while(offset.length < 4) {
+      while (offset.length < 4) {
         offset = `0${offset}`
       }
 

@@ -5,7 +5,7 @@ const Money = require("js-money")
 module.exports = class ApiMakerDeserializer {
   static parse(object) {
     if (Array.isArray(object)) {
-      return object.map(value => ApiMakerDeserializer.parse(value))
+      return object.map((value) => ApiMakerDeserializer.parse(value))
     } else if (object && typeof object == "object") {
       if (object.api_maker_type == "date" || object.api_maker_type == "time") {
         const date = new Date(digg(object, "value"))
@@ -31,7 +31,7 @@ module.exports = class ApiMakerDeserializer {
       } else {
         const newObject = {}
 
-        for(const key in object) {
+        for (const key in object) {
           const value = object[key]
           newObject[key] = ApiMakerDeserializer.parse(value)
         }

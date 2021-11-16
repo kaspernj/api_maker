@@ -32,7 +32,7 @@ module.exports = class Api {
       xhr.open(args.method, path, true)
 
       if (args.headers) {
-        for(const headerName in args.headers) {
+        for (const headerName in args.headers) {
           xhr.setRequestHeader(headerName, args.headers[headerName])
         }
       }
@@ -61,22 +61,22 @@ module.exports = class Api {
 
   static requestLocal(args) {
     if (!args.headers) {
-      args["headers"] = {}
+      args.headers = {}
     }
 
     const token = this._token()
 
     if (token) {
-      args["headers"]["X-CSRF-Token"] = token
+      args.headers["X-CSRF-Token"] = token
     }
 
     if (args.data) {
-      args["headers"]["Content-Type"] = "application/json"
-      args["data"] = JSON.stringify(args.data)
+      args.headers["Content-Type"] = "application/json"
+      args.data = JSON.stringify(args.data)
     }
 
     if (args.rawData) {
-      args["data"] = args.rawData
+      args.data = args.rawData
     }
 
     return this.request(args)

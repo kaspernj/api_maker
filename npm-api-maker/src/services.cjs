@@ -9,8 +9,8 @@ module.exports = class ApiMakerServices {
     return global.currentApiMakerService
   }
 
-  async sendRequest(serviceName, args) {
-    return await CommandsPool.addCommand({
+  sendRequest(serviceName, args) {
+    return CommandsPool.addCommand({
       args: {
         service_args: args,
         service_name: serviceName

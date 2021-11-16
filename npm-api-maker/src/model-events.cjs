@@ -1,4 +1,5 @@
 const CableConnectionPool = require("./cable-connection-pool.cjs")
+const {digg} = require("diggerize")
 
 module.exports = class ModelEvents {
   static connect(model, eventName, callback) {

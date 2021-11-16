@@ -1,7 +1,7 @@
 const {digg} = require("diggerize")
 const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
-const { MoneyFormatter } = require("@kaspernj/api-maker")
+const {MoneyFormatter} = require("@kaspernj/api-maker")
 const PropTypes = require("prop-types")
 const PropTypesExact = require("prop-types-exact")
 const React = require("react")
@@ -55,7 +55,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
           {showCurrencyOptions &&
             <select className="component-bootstrap-money-input" defaultValue={this.inputCurrencyValue()} id={this.inputCurrencyId()} name={this.inputCurrencyName()} onChange={this.onCurrencyChanged} ref="currency">
               <option></option>
-              {this.props.currenciesCollection.map(option => (
+              {this.props.currenciesCollection.map((option) => (
                 <option key={`select-option-${option[1]}`} value={option[1]}>
                   {this.props.small && option[1]}
                   {!this.props.small && option[0]}
@@ -162,7 +162,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
 
     if (cents) {
       inputElement.value = cents
-    } else{
+    } else {
       inputElement.value = ''
     }
 

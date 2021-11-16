@@ -78,7 +78,7 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
         {autoRefresh && model &&
           <EventUpdated model={model} onUpdated={this.onModelUpdated} />
         }
-        {form && onErrors && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
+        {form && onErrors && <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />}
         {zeroInput && inputName &&
           <input defaultValue="0" name={inputName} type="hidden" type="hidden" />
         }

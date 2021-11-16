@@ -10,10 +10,10 @@ export default class ApiMakerResourceRoutes {
 
     const routes = []
 
-    for(const routeDefinition of routeDefinitions.routes) {
+    for (const routeDefinition of routeDefinitions.routes) {
       const resourceRoute = new ResourceRoute({jsRoutes, locales, requireComponent, routeDefinition})
 
-      for(const newRoute of resourceRoute.routesResult()) {
+      for (const newRoute of resourceRoute.routesResult()) {
         routes.push(
           <Route exact key={`route-${digg(newRoute, "path")}`} path={digg(newRoute, "path")} component={digg(newRoute, "component")} />
         )

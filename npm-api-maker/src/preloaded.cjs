@@ -14,7 +14,7 @@ module.exports = class ApiMakerPreloaded {
       const modelClassName = inflection.classify(preloadedType)
       const modelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
 
-      for(const preloadedId in this.response.preloaded[preloadedType]) {
+      for (const preloadedId in this.response.preloaded[preloadedType]) {
         const preloadedData = this.response.preloaded[preloadedType][preloadedId]
         const model = new modelClass({data: preloadedData, isNewRecord: false})
 

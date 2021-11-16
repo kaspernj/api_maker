@@ -86,7 +86,7 @@ module.exports = class ErrorLogger {
   }
 
   testPromiseError() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       throw new Error("testPromiseError")
     })
   }

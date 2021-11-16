@@ -157,8 +157,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
   async loadModels() {
     const params = Params.parse()
-    const { collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns } = this.props
-    const { qParams, queryPageName, queryQName } = this.shape
+    const {collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
+    const {qParams, queryPageName, queryQName} = this.shape
 
     let query = collection || modelClass
 
@@ -203,7 +203,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       <div className={this.className()}>
         <EventCreated modelClass={modelClass} onCreated={this.onModelCreated} />
         <LocationChanged onChanged={this.onLocationChanged} />
-        {models && models.map(model =>
+        {models && models.map((model) =>
           <React.Fragment key={model.id()}>
             <EventDestroyed model={model} onDestroyed={this.onModelDestroyed} />
             <EventUpdated model={model} onUpdated={this.onModelUpdated} />
@@ -552,7 +552,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     const {models} = digs(this.shape, "models")
 
     this.shape.set({
-      models: models.filter(model => model.id() != args.model.id())
+      models: models.filter((model) => model.id() != args.model.id())
     })
   }
 

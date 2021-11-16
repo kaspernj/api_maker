@@ -1,3 +1,4 @@
+const {digg} = require("diggerize")
 const translatedCollectionsData = require("./translated-collections-data").default
 
 export default class ApiMakerTranslatedCollections {

@@ -228,7 +228,6 @@
         "curly": "off",
         "no-undefined": "off",
         "max-statements": "off",
-        "guard-for-in": "off",
         "prefer-object-spread": "off",
         "no-invalid-this": "off",
         "object-curly-spacing": "off",
@@ -251,7 +250,6 @@
         "no-shadow": "off",
         "nonblock-statement-body-position": "off",
         "no-else-return": "off",
-        "space-before-function-paren": "off",
         "no-alert": "off"
       }
     },

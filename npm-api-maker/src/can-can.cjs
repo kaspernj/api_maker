@@ -29,7 +29,7 @@ module.exports = class ApiMakerCanCan {
       let subjectLabel = subject
 
       // Translate resource-models into class name strings
-      if (typeof subject == "function" && subject["modelClassData"]) {
+      if (typeof subject == "function" && subject.modelClassData) {
         subjectLabel = digg(subject.modelClassData(), "name")
       }
 

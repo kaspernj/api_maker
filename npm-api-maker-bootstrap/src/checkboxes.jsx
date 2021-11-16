@@ -40,11 +40,11 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   }
 
   render() {
-    const { form } = this.state
+    const {form} = this.state
 
     return (
       <div className="component-bootstrap-checkboxes form-group">
-        {form && <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />}
+        {form && <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />}
         <label className={this.labelClassName()}>
           {this.label()}
         </label>
@@ -56,7 +56,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   }
 
   inputDefaultValue() {
-    const { attribute, defaultValue, model } = this.props
+    const {attribute, defaultValue, model} = this.props
 
     if (defaultValue) {
       return defaultValue
@@ -99,7 +99,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   }
 
   label() {
-    const { attribute, label, model } = this.props
+    const {attribute, label, model} = this.props
 
     if ("label" in this.props) {
       return label
@@ -134,8 +134,8 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   }
 
   optionElement(option, index) {
-    const { onChange, options } = this.props
-    const { validationErrors } = this.state
+    const {onChange, options} = this.props
+    const {validationErrors} = this.state
     const id = `${this.generatedId()}-${index}`
 
     return (

@@ -1,4 +1,4 @@
-const { idForComponent, nameForComponent, Select } = require("@kaspernj/api-maker-inputs")
+const {idForComponent, nameForComponent, Select} = require("@kaspernj/api-maker-inputs")
 const inflection = require("inflection")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
@@ -26,7 +26,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
   }
 
   render() {
-    const { errors } = this.state
+    const {errors} = this.state
     const {
       children,
       className,

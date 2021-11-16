@@ -25,7 +25,7 @@ module.exports = class ApiMakerResourceRoute {
     const result = []
     const parts = digg(this, "routeDefinition", "path").split("/")
 
-    for(const part of parts) {
+    for (const part of parts) {
       if (part.match(/^:([a-z_]+)$/))
         result.push(part)
     }
@@ -44,7 +44,7 @@ module.exports = class ApiMakerResourceRoute {
     const Locales = require("shared/locales").default
     const routes = []
 
-    for(const locale of Locales.availableLocales()) {
+    for (const locale of Locales.availableLocales()) {
       const routePathName = `${inflection.camelize(digg(this, "routeDefinition", "name"), true)}Path`
       const params = this.findRouteParams()
 

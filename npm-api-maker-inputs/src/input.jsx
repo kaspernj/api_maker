@@ -251,8 +251,8 @@ export default class ApiMakerInput extends React.PureComponent {
   }
 
   onInputChanged = (e) => {
-    const { attribute, autoSubmit, model, onChange, type } = this.props
-    const { localizedNumber } = digs(this.props, "localizedNumber")
+    const {attribute, autoSubmit, model, onChange, type} = this.props
+    const {localizedNumber} = digs(this.props, "localizedNumber")
     const input = digg(e, "target")
 
     if (localizedNumber) {
