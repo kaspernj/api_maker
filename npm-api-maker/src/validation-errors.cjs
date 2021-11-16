@@ -76,7 +76,7 @@ class ValidationError {
 class ValidationErrors {
   constructor(args) {
     this.rootModel = digg(args, "model")
-    this.validationErrors = digg(args, "validationErrors").map(validationError => new ValidationError(validationError))
+    this.validationErrors = digg(args, "validationErrors").map((validationError) => new ValidationError(validationError))
   }
 
   getErrorMessage() {
@@ -111,7 +111,7 @@ class ValidationErrors {
   }
 
   getUnhandledErrorMessage() {
-    const unhandledValidationErrors = this.validationErrors.filter(validationError => !validationError.getHandled())
+    const unhandledValidationErrors = this.validationErrors.filter((validationError) => !validationError.getHandled())
 
     if (unhandledValidationErrors.length > 0) {
       const unhandledValidationErrorMessages = []

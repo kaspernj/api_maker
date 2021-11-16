@@ -1,5 +1,4 @@
 const CustomError = require("./custom-error.cjs")
-const {digg} = require("diggerize")
 const inflection = require("inflection")
 
 module.exports = class ValidationError extends CustomError {
@@ -9,7 +8,7 @@ module.exports = class ValidationError extends CustomError {
   }
 
   hasUnhandledErrors() {
-    const unhandledError = this.validationErrors.getValidationErrors().find(validationError => !validationError.getHandled())
+    const unhandledError = this.validationErrors.getValidationErrors().find((validationError) => !validationError.getHandled())
     return Boolean(unhandledError)
   }
 
@@ -17,9 +16,7 @@ module.exports = class ValidationError extends CustomError {
     const underscoredAttributeName = inflection.underscore(attributeName)
     const foundAttribute = this.validationErrors.getValidationErrors().find((validationError) => validationError.getAttributeName() == underscoredAttributeName)
 
-    if (foundAttribute) {
-      return true
-    }
+    if (foundAttribute) return true
 
     return false
   }

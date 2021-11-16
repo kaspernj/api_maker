@@ -26,7 +26,7 @@ module.exports = class SourceMapsLoader {
     const scripts = document.querySelectorAll("script")
     const promises = []
 
-    for(const script of scripts) {
+    for (const script of scripts) {
       const src = this.loadSourceMapsForScriptTagsCallback(script)
 
       if (src && !this.srcLoaded[src]) {
@@ -88,7 +88,7 @@ module.exports = class SourceMapsLoader {
     const stack = stackTraceParser.parse(stackTrace)
     const newSourceMap = []
 
-    for(const trace of stack) {
+    for (const trace of stack) {
       const sourceMapData = this.sourceMaps.find((sourceMapData) => sourceMapData.originalUrl == trace.file)
       let filePath, fileString, original
 

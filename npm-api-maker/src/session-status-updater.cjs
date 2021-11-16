@@ -91,7 +91,7 @@ module.exports = class ApiMakerSessionStatusUpdater {
   }
 
   updateUserSessionsFromResult(result) {
-    for(const scopeName in result.scopes) {
+    for (const scopeName in result.scopes) {
       this.updateUserSessionScopeFromResult(scopeName, result.scopes[scopeName])
     }
   }
