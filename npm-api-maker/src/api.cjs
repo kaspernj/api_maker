@@ -32,7 +32,7 @@ module.exports = class Api {
       xhr.open(args.method, path, true)
 
       if (args.headers) {
-        for(const headerName in args.headers) {
+        for (const headerName in args.headers) {
           xhr.setRequestHeader(headerName, args.headers[headerName])
         }
       }

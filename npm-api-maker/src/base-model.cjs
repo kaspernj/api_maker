@@ -77,7 +77,7 @@ module.exports = class BaseModel {
   }
 
   assignAttributes(newAttributes) {
-    for(const key in newAttributes) {
+    for (const key in newAttributes) {
       const newValue = newAttributes[key]
 
       let applyChange = true
@@ -791,7 +791,7 @@ module.exports = class BaseModel {
       } else if (Array.isArray(relationshipData)) {
         const result = []
 
-        for(const relationshipId of relationshipData) {
+        for (const relationshipId of relationshipData) {
           const model = preloaded.getModel(relationshipType, relationshipId)
 
           result.push(model)

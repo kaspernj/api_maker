@@ -120,7 +120,7 @@ module.exports = class ApiMakerCommandsPool {
         response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()})
       }
 
-      for(const commandId in response.responses) {
+      for (const commandId in response.responses) {
         const commandResponse = response.responses[commandId]
         const commandResponseData = Deserializer.parse(commandResponse.data)
         const commandData = currentPool[parseInt(commandId)]

@@ -31,7 +31,7 @@ module.exports = class ApiMakerDeserializer {
       } else {
         const newObject = {}
 
-        for(const key in object) {
+        for (const key in object) {
           const value = object[key]
           newObject[key] = ApiMakerDeserializer.parse(value)
         }

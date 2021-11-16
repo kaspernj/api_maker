@@ -38,7 +38,7 @@ module.exports = class Params {
         return undefined
 
       const newGiven = {}
-      for(const key in given) {
+      for (const key in given) {
         newGiven[key] = Params.setUndefined(given[key])
       }
 

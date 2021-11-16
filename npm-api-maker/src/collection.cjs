@@ -15,12 +15,12 @@ module.exports = class ApiMakerCollection {
   abilities(originalAbilities) {
     const newAbilities = {}
 
-    for(const originalAbilityName in originalAbilities) {
+    for (const originalAbilityName in originalAbilities) {
       const newModelName = inflection.underscore(originalAbilityName)
       const newValues = []
       const originalValues = originalAbilities[originalAbilityName]
 
-      for(const originalAbilityName of originalValues) {
+      for (const originalAbilityName of originalValues) {
         const newAbilityName = inflection.underscore(originalAbilityName)
         newValues.push(newAbilityName)
       }
@@ -48,7 +48,7 @@ module.exports = class ApiMakerCollection {
   async each(callback) {
     const array = await this.toArray()
 
-    for(const model in array) {
+    for (const model in array) {
       callback.call(model)
     }
   }
@@ -158,12 +158,12 @@ module.exports = class ApiMakerCollection {
   select(originalSelect) {
     const newSelect = {}
 
-    for(const originalModelName in originalSelect) {
+    for (const originalModelName in originalSelect) {
       const newModelName = inflection.underscore(originalModelName)
       const newValues = []
       const originalValues = originalSelect[originalModelName]
 
-      for(const originalAttributeName of originalValues) {
+      for (const originalAttributeName of originalValues) {
         const newAttributeName = inflection.underscore(originalAttributeName)
         newValues.push(newAttributeName)
       }
@@ -177,7 +177,7 @@ module.exports = class ApiMakerCollection {
   selectColumns(originalSelect) {
     const newSelect = {}
 
-    for(const originalModelName in originalSelect) {
+    for (const originalModelName in originalSelect) {
       const newModelName = inflection.underscore(inflection.underscore(originalModelName))
       const newValues = []
       const originalValues = originalSelect[originalModelName]

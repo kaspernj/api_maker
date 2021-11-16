@@ -28,7 +28,7 @@ module.exports = class Serializer {
 
       let offset = `${offsetNumber}`
 
-      while(offset.length < 4) {
+      while (offset.length < 4) {
         offset = `0${offset}`
       }
 
