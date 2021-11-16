@@ -7,7 +7,8 @@ module.exports = {
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:jest/recommended"
+    "plugin:jest/recommended",
+    ".eslintrc-todo.json"
   ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
