@@ -132,7 +132,7 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
               </a>
             </li>
           }
-          {pages.map(page =>
+          {pages.map((page) =>
             <li className={`page-item ${this.isPageActiveClass(page)}`} key={`page-${page}`}>
               <Link className="page-link" to={this.pagePath(page)}>
                 {page}

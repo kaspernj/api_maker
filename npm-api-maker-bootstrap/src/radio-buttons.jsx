@@ -44,12 +44,12 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   }
 
   render() {
-    const { form } = this.state
+    const {form} = this.state
 
     return (
       <div className={this.wrapperClassName()}>
         {form &&
-          <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />
+          <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />
         }
         <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
         {this.props.collection.map((option, index) => this.optionElement(option, index))}

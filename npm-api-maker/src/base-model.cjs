@@ -38,7 +38,7 @@ module.exports = class BaseModel {
     const result = await Services.current().sendRequest("Models::FindOrCreateBy", {
       additional_data: args.additionalData,
       find_or_create_by_args: findOrCreateByArgs,
-      resource_name: digg(this.modelClassData(), "name"),
+      resource_name: digg(this.modelClassData(), "name")
     })
     const model = digg(result, "model")
 
@@ -388,10 +388,10 @@ module.exports = class BaseModel {
       return false
 
     const attributeNameUnderscore = inflection.underscore(attributeName)
-    const attributeData = this.modelClassData().attributes.find(attribute => attribute.name == attributeNameUnderscore)
+    const attributeData = this.modelClassData().attributes.find((attribute) => attribute.name == attributeNameUnderscore)
 
     if (!attributeData) {
-      const attributeNames = this.modelClassData().attributes.map(attribute => attribute.name)
+      const attributeNames = this.modelClassData().attributes.map((attribute) => attribute.name)
       throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
     }
 

@@ -31,8 +31,8 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
   }
 
   render() {
-    const { className, hint, id, label, labelClassName, onMatchValidationError, wrapperClassName, ...restProps } = this.props
-    const { errors } = this.state
+    const {className, hint, id, label, labelClassName, onMatchValidationError, wrapperClassName, ...restProps} = this.props
+    const {errors} = this.state
 
     return (
       <div className={this.wrapperClassName()}>
@@ -82,7 +82,7 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
   }
 
   label() {
-    const { attribute, label, model } = this.props
+    const {attribute, label, model} = this.props
 
     if ("label" in this.props) {
       return label

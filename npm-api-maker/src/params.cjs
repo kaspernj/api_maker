@@ -32,7 +32,7 @@ module.exports = class Params {
       if (given.length == 0)
         return undefined
 
-      return given.map(givenI => Params.setUndefined(givenI))
+      return given.map((givenI) => Params.setUndefined(givenI))
     } else if (typeof given === "object") {
       if (Object.keys(given).length == 0)
         return undefined

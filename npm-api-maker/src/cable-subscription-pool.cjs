@@ -171,7 +171,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
 
   connectUnsubscriptionForSubscription(subscription) {
     Logger.log("Connecting to unsubscribe on subscription")
-    Logger.log({ subscription })
+    Logger.log({subscription})
 
     this.activeSubscriptions += 1
 

@@ -65,7 +65,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     return (
       <>
         {form && onErrors &&
-          <EventListener event="validation-errors" onCalled={event => this.onValidationErrors(event)} target={form} />
+          <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />
         }
         <select
           defaultValue={this.inputDefaultValue()}
@@ -77,7 +77,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
           {this.includeBlank() &&
             <option />
           }
-          {options && options.map(option =>
+          {options && options.map((option) =>
             <option key={this.optionKey(option)} value={this.optionValue(option)}>
               {this.optionLabel(option)}
             </option>
