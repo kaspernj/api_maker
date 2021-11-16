@@ -9,7 +9,7 @@
     ]
   },
   "name": "@kaspernj/api-maker-bootstrap",
-  "version": "1.0.74",
+  "version": "1.0.75",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -17,7 +17,7 @@
     "url": "git+https://github.com/kaspernj/api_maker.git"
   },
   "scripts": {
-    "eslint": "eslint"
+    "eslint": "eslint --ext .cjs,.js,.jsx"
   },
   "author": "kaspernj",
   "license": "ISC",
@@ -26,8 +26,8 @@
   },
   "homepage": "https://github.com/kaspernj/api_maker#readme",
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.125",
-    "@kaspernj/api-maker-inputs": ">= 1.0.64",
+    "@kaspernj/api-maker": ">= 1.0.126",
+    "@kaspernj/api-maker-inputs": ">= 1.0.65",
     "debounce": ">= 1.2.0",
     "diggerize": ">= 1.0.3",
     "inflection": ">= 1.12.0",
@@ -36,6 +36,7 @@
     "strftime": ">= 0.10.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.16.3",
     "eslint": "^8.2.0",
     "eslint-find-rules": "^4.0.0",
     "eslint-plugin-jest": "^25.2.4",

@@ -16,7 +16,7 @@
     ]
   },
   "name": "@kaspernj/api-maker",
-  "version": "1.0.125",
+  "version": "1.0.126",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/kaspernj/api_maker",
   "scripts": {
-    "eslint": "eslint",
+    "eslint": "eslint --ext .cjs,.js,.jsx",
     "eslint-find-rules": "eslint-find-rules",
     "test": "jest"
   },
@@ -44,6 +44,7 @@
     "stacktrace-parser": ">= 0.1.9"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.16.3",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "babel-jest": "^27.0.6",

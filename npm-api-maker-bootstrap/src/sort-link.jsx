@@ -1,7 +1,7 @@
 const {digg, digs} = require("diggerize")
 const {LocationChanged} = require("on-location-changed/location-changed-component")
 const inflection = require("inflection")
-const { Link } = require("react-router-dom")
+const {Link} = require("react-router-dom")
 const PropTypes = require("prop-types")
 const qs = require("qs")
 const React = require("react")
@@ -35,10 +35,9 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   href() {
     const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
 
-    if (!currentParams[searchKey])
-      currentParams[searchKey] = {}
+    if (!currentParams[searchKey]) currentParams[searchKey] = {}
 
-    currentParams[searchKey]["s"] = `${this.attribute()} ${this.sortMode()}`
+    currentParams[searchKey].s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
 
     const newParams = qs.stringify(currentParams)
     const newPath = `${location.pathname}?${newParams}`
@@ -50,11 +49,8 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
     const params = currentParams[searchKey] || {}
 
-    if (params.s == this.attribute())
-      return true
-
-    if (params.s == `${this.attribute()} asc`)
-      return true
+    if (params.s == this.attribute()) return true
+    if (params.s == `${this.attribute()} asc`) return true
 
     return false
   }
@@ -66,8 +62,14 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
 
     return (
       <>
-        <LocationChanged onChanged={digg(this, "onLocationChanged")} />
-        <LinkComponent className={this.className()} data-attribute={attribute} data-sort-mode={sortMode} to={href} {...restProps}>
+        <LocationChanged onChanged={this.onLocationChanged} />
+        <LinkComponent
+          className={this.className()}
+          data-attribute={attribute}
+          data-sort-mode={sortMode}
+          to={href}
+          {...restProps}
+        >
           {this.title()}
         </LinkComponent>
       </>
@@ -77,18 +79,15 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   className() {
     const classNames = ["component-api-maker-bootstrap-sort-link"]
 
-    if (this.props.className)
-      classNames.push(this.props.className)
+    if (this.props.className) classNames.push(this.props.className)
 
     return classNames.join(" ")
   }
 
   linkComponent() {
-    if (this.props.linkComponent) {
-      return this.props.linkComponent
-    } else {
-      return Link
-    }
+    if (this.props.linkComponent) return this.props.linkComponent
+
+    return Link
   }
 
   onLocationChanged = () => {
@@ -101,11 +100,9 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
   }
 
   sortMode() {
-    if (this.isSortedByAttribute()) {
-      return "desc"
-    } else {
-      return "asc"
-    }
+    if (this.isSortedByAttribute()) return "desc"
+
+    return "asc"
   }
 
   title() {

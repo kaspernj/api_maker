@@ -61,6 +61,15 @@
     semver "^6.3.0"
     source-map "^0.5.0"
 
+"@babel/eslint-parser@^7.16.3":
+  version "7.16.3"
+  resolved "https://registry.yarnpkg.com/@babel/eslint-parser/-/eslint-parser-7.16.3.tgz#2a6b1702f3f5aea48e00cea5a5bcc241c437e459"
+  integrity sha512-iB4ElZT0jAt7PKVaeVulOECdGe6UnmA/O0P9jlF5g5GBOwDVbna8AXhHRu4s27xQf6OkveyA8iTDv1jHdDejgQ==
+  dependencies:
+    eslint-scope "^5.1.1"
+    eslint-visitor-keys "^2.1.0"
+    semver "^6.3.0"
+
 "@babel/generator@^7.14.2":
   version "7.14.2"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.14.2.tgz#d5773e8b557d421fd6ce0d5efa5fd7fc22567c30"
@@ -696,42 +705,20 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.64":
-  version "1.0.64"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.64.tgz#357dbb0e9fefba727e3aba96dcdf3189b9f45a64"
-  integrity sha512-7Ot8kVFpOOb4twBOhzyU149DFvPSaFa0rLplIgdcfIhXtmwM96+QCv3tnGpCBT6W6keP0oKnzQ0vvFAv/WCjIw==
+"@kaspernj/api-maker-inputs@>= 1.0.65":
+  version "1.0.65"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.65.tgz#c9a0210d4b299462d6b938f77c4b901ccc529f1d"
+  integrity sha512-WntjfpebBIOyQCxFR3CazqS/sfGXAE/4QzJm4Rt2cYB72BhGWTu6ydtDQJAgohtvqPCJlmERa+dci0YaX2U3XA==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.122"
+    "@kaspernj/api-maker" ">= 1.0.126"
     classnames ">= 2.2.6"
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.122":
-  version "1.0.122"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.122.tgz#ca03a0809e76abeecb3fde011fc34b480a243a30"
-  integrity sha512-FkQb/1HBDxjI2bIAyUkDmrn7FoNPzCeKfmdWCg02T7cC4HNr+g3xmpNWkfdTUVnBIQ1uNr+F0r8VVGqLm5uT6Q==
-  dependencies:
-    "@rails/actioncable" ">= 6.1.0"
-    clone-deep ">= 4.0.1"
-    debounce ">= 1.2.1"
-    diggerize ">= 1.0.3"
-    epic-locks ">= 1.0.1"
-    form-data-objectizer ">= 1.0.0"
-    form-serialize ">= 0.7.2"
-    format-number ">= 3.0.0"
-    inflection ">= 1.12.0"
-    js-money ">= 0.6.3"
-    numberable ">= 1.0.0"
-    object-to-formdata ">= 4.1.0"
-    qs ">= 6.9.3"
-    replaceall ">= 0.1.6"
-    strftime ">= 0.10.0"
-    wake-event ">= 0.0.1"
-
-"@kaspernj/api-maker@>= 1.0.125":
-  version "1.0.125"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.125.tgz#f0f5fff2135bbdda65792aca2d8767a96f756be3"
-  integrity sha512-8+AsyIg63+Mfm3Rqny5ZZz5L2ztG9ceHH/Mf965stmhDJ4fuq6gQgyWAugg9nvhr/GHIdr+lGb0bl5FUIvIpdA==
+"@kaspernj/api-maker@>= 1.0.126":
+  version "1.0.126"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.126.tgz#0bc8ce9994dbb887627e4c3a8d784f982e4961e6"
+  integrity sha512-M5At8gi4s9Ghh/jJFGC9uPv5nVcKg/mk1ZwMNNKahrtAItFEwjdwUKcl6I/HJrxKKLOaT9hT0J+gjgFrSF7Xzg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -1695,7 +1682,7 @@ eslint-utils@^3.0.0:
   dependencies:
     eslint-visitor-keys "^2.0.0"
 
-eslint-visitor-keys@^2.0.0:
+eslint-visitor-keys@^2.0.0, eslint-visitor-keys@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-2.1.0.tgz#f65328259305927392c938ed44eb0a5c9b2bd303"
   integrity sha512-0rSmRBzXgDzIsD6mGdJgevzgezI534Cer5L/vyMX0kHzT/jiB43jRhd9YUlMGYLQy2zprNmoT8qasCGtY+QaKw==
