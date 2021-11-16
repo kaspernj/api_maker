@@ -86,7 +86,7 @@ export default class ApiMakerUpdatedAttribute extends React.PureComponent {
   }
 
   render() {
-    if (this.state.value === undefined) return
+    if (this.state.value === undefined) return null
 
     return this.state.value
   }
