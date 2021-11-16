@@ -43,24 +43,24 @@ module.exports = class ApiMakerCableSubscriptionPool {
         }
       }
 
-      if (subscriptions[modelName]["creates"]) {
-        for (const subscription of subscriptions[modelName]["creates"]) {
+      if (subscriptions[modelName].creates) {
+        for (const subscription of subscriptions[modelName].creates) {
           callback({mode: "creates", modelName, subscription})
         }
       }
 
-      if (subscriptions[modelName]["model_class_events"]) {
-        for (const eventName in subscriptions[modelName]["model_class_events"]) {
-          for (const subscription of subscriptions[modelName]["model_class_events"][eventName]) {
+      if (subscriptions[modelName].model_class_events) {
+        for (const eventName in subscriptions[modelName].model_class_events) {
+          for (const subscription of subscriptions[modelName].model_class_events[eventName]) {
             callback({eventName, mode: "model_class_events", modelName, subscription})
           }
         }
       }
 
-      if (subscriptions[modelName]["events"]) {
-        for (const modelId in subscriptions[modelName]["events"]) {
-          for (const eventName in subscriptions[modelName]["events"][modelId]) {
-            for (const subscription of subscriptions[modelName]["events"][modelId][eventName]) {
+      if (subscriptions[modelName].events) {
+        for (const modelId in subscriptions[modelName].events) {
+          for (const eventName in subscriptions[modelName].events[modelId]) {
+            for (const subscription of subscriptions[modelName].events[modelId][eventName]) {
               callback({eventName, mode: "updates", modelId, modelName, subscription})
             }
           }
@@ -94,11 +94,11 @@ module.exports = class ApiMakerCableSubscriptionPool {
     }
 
     if (type == "u") {
-      for (const subscription of subscriptions[modelName]["updates"][modelId]) {
+      for (const subscription of subscriptions[modelName].updates[modelId]) {
         subscription.events.emit("received", {model})
       }
     } else if (type == "c") {
-      for (const subscription of subscriptions[modelName]["creates"]) {
+      for (const subscription of subscriptions[modelName].creates) {
         subscription.events.emit("received", {model})
       }
     } else if (type == "d") {
@@ -143,25 +143,25 @@ module.exports = class ApiMakerCableSubscriptionPool {
     Logger.log(subscriptions)
 
     for (const modelName in subscriptions) {
-      if (subscriptions[modelName]["creates"]) {
-        for (const subscription of subscriptions[modelName]["creates"]) {
+      if (subscriptions[modelName].creates) {
+        for (const subscription of subscriptions[modelName].creates) {
           this.connectUnsubscriptionForSubscription(subscription)
         }
       }
 
-      if (subscriptions[modelName]["events"]) {
-        for (const eventName in subscriptions[modelName]["events"]) {
-          for (const modelId in subscriptions[modelName]["events"][eventName]) {
-            for (const subscription of subscriptions[modelName]["events"][eventName][modelId]) {
+      if (subscriptions[modelName].events) {
+        for (const eventName in subscriptions[modelName].events) {
+          for (const modelId in subscriptions[modelName].events[eventName]) {
+            for (const subscription of subscriptions[modelName].events[eventName][modelId]) {
               this.connectUnsubscriptionForSubscription(subscription)
             }
           }
         }
       }
 
-      if (subscriptions[modelName]["updates"]) {
-        for (const modelId in subscriptions[modelName]["updates"]) {
-          for (const subscription of subscriptions[modelName]["updates"][modelId]) {
+      if (subscriptions[modelName].updates) {
+        for (const modelId in subscriptions[modelName].updates) {
+          for (const subscription of subscriptions[modelName].updates[modelId]) {
             this.connectUnsubscriptionForSubscription(subscription)
           }
         }
