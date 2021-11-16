@@ -51,7 +51,7 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     if (pagesTo > totalPages)
       pagesTo = totalPages
 
-    for(let i = pagesFrom; i <= pagesTo; i++) {
+    for (let i = pagesFrom; i <= pagesTo; i++) {
       pages.push(i)
     }
 

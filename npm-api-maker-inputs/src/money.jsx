@@ -162,7 +162,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
 
     if (cents) {
       inputElement.value = cents
-    } else{
+    } else {
       inputElement.value = ''
     }
 
