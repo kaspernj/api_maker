@@ -152,7 +152,7 @@ module.exports = class ApiMakerCollection {
   }
 
   searchKey (searchKey) {
-    return this._merge({searchKey: searchKey})
+    return this._merge({searchKey})
   }
 
   select (originalSelect) {

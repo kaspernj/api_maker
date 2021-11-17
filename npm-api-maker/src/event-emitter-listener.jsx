@@ -4,8 +4,8 @@ const React = require("react")
 
 export default class ApiMakerEventEmitterListener extends React.PureComponent {
   static propTypes = {
-    events: PropTypes.instanceOf(EventEmitter).isRequired,
     event: PropTypes.string.isRequired,
+    events: PropTypes.instanceOf(EventEmitter).isRequired,
     onCalled: PropTypes.func.isRequired
   }
 

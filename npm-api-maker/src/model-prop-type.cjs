@@ -69,8 +69,6 @@ module.exports = class ApiMakerModelPropType {
 
         const associationCache = digg(model.relationshipsCache, underscoreAssociationName)
 
-        let associationModel
-
         // Find a model to run sub-model-prop-type-validations on
         if (Array.isArray(associationCache)) {
           for (const preloadedModel of associationCache) {

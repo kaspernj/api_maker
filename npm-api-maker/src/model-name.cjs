@@ -4,12 +4,13 @@ module.exports = class ModelName {
   }
 
   human (args) {
-    if (!args)
-      args = {count: 1}
+    let argsToUse = args
+
+    if (!argsToUse) argsToUse = {count: 1}
 
     let countKey
 
-    if (args.count > 1 || args.count < 0) {
+    if (argsToUse.count > 1 || argsToUse.count < 0) {
       countKey = "other"
     } else {
       countKey = "one"

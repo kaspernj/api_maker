@@ -109,8 +109,8 @@ module.exports = class ApiMakerDevise {
       return null
 
     const parsedScopeData = Deserializer.parse(scopeData)
-    const modelClass = digg(require("@kaspernj/api-maker/src/models"), inflection.camelize(scope))
-    const modelInstance = new modelClass({data: parsedScopeData})
+    const ModelClass = digg(require("@kaspernj/api-maker/src/models"), inflection.camelize(scope))
+    const modelInstance = new ModelClass({data: parsedScopeData})
 
     return modelInstance
   }

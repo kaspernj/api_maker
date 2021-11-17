@@ -1,10 +1,10 @@
 const ModelEvents = require("./model-events.cjs")
 const PropTypes = require("prop-types")
-const PropTypesExact = require("prop-types-exact")
+const propTypesExact = require("prop-types-exact")
 const React = require("react")
 
 export default class ApiMakerEventModelClass extends React.PureComponent {
-  static propTypes = PropTypesExact({
+  static propTypes = propTypesExact({
     event: PropTypes.string.isRequired,
     modelClass: PropTypes.func.isRequired,
     onCall: PropTypes.func.isRequired

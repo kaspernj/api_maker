@@ -3,7 +3,6 @@ const objectToFormData = require("object-to-formdata").serialize
 module.exports = class ApiMakerCommandSubmitData {
   constructor (data) {
     this.data = data
-    this.formData
     this.filesCount = 0
     this.jsonData = this.traverseObject(this.data, "json")
   }

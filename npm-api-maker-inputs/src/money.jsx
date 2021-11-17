@@ -3,7 +3,7 @@ const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
 const {MoneyFormatter} = require("@kaspernj/api-maker")
 const PropTypes = require("prop-types")
-const PropTypesExact = require("prop-types-exact")
+const propTypesExact = require("prop-types-exact")
 const React = require("react")
 
 export default class ApiMakerInputsMoney extends React.PureComponent {
@@ -11,7 +11,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     showCurrencyOptions: true
   }
 
-  static propTypes = PropTypesExact({
+  static propTypes = propTypesExact({
     attribute: PropTypes.string,
     className: PropTypes.string,
     currenciesCollection: PropTypes.array.isRequired,

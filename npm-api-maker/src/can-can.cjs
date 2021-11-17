@@ -22,8 +22,8 @@ module.exports = class ApiMakerCanCan {
   }
 
   can (ability, subject) {
-    ability = inflection.underscore(ability)
-    const foundAbility = this.findAbility(ability, subject)
+    let abilityToUse = inflection.underscore(ability)
+    const foundAbility = this.findAbility(abilityToUse, subject)
 
     if (foundAbility === undefined) {
       let subjectLabel = subject
@@ -33,7 +33,7 @@ module.exports = class ApiMakerCanCan {
         subjectLabel = digg(subject.modelClassData(), "name")
       }
 
-      console.error(`Ability not loaded ${subjectLabel}#${ability}`)
+      console.error(`Ability not loaded ${subjectLabel}#${abilityToUse}`)
 
       return false
     } else {
@@ -78,7 +78,8 @@ module.exports = class ApiMakerCanCan {
       ability = inflection.underscore(ability)
 
       if (this.isAbilityLoaded(ability, subject)) {
-        return resolve()
+        resolve()
+        return
       }
 
       const foundAbility = this.abilitiesToLoad.find((abilityToLoad) => digg(abilityToLoad, "ability") == ability && digg(abilityToLoad, "subject") == subject)

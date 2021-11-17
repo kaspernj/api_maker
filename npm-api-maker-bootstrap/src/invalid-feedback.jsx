@@ -1,10 +1,10 @@
 const {digs} = require("diggerize")
 const PropTypes = require("prop-types")
-const PropTypesExact = require("prop-types-exact")
+const propTypesExact = require("prop-types-exact")
 const React = require("react")
 
 export default class ApiMakerBootstrapInvalidFeedback extends React.PureComponent {
-  static propTypes = PropTypesExact({
+  static propTypes = propTypesExact({
     errors: PropTypes.array.isRequired
   })
 
