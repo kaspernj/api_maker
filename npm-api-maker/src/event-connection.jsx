@@ -15,21 +15,21 @@ export default class ApiMakerEventConnection extends React.PureComponent {
     onCall: PropTypes.func.isRequired
   })
 
-  componentDidMount() {
+  componentDidMount () {
     this.subscription = ModelEvents.connect(this.props.model, this.props.event, (...args) => this.onCall(...args))
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.subscription) {
       this.subscription.unsubscribe()
     }
   }
 
-  render() {
+  render () {
     return null
   }
 
-  onCall(...args) {
+  onCall (...args) {
     if (this.props.active) {
       this.props.onCall(...args)
     }

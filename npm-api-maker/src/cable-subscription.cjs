@@ -2,12 +2,12 @@ const EventEmitter = require("events")
 const Logger = require("./logger.cjs")
 
 module.exports = class ApiMakerCableSubscription {
-  constructor() {
+  constructor () {
     this.events = new EventEmitter()
     this.subscribed = true
   }
 
-  unsubscribe() {
+  unsubscribe () {
     if (!this.subscribed) {
       Logger.log("Unsubscribed already called")
       return

@@ -1,7 +1,7 @@
 const CommandsPool = require("./commands-pool.cjs")
 
 module.exports = class ApiMakerServices {
-  static current() {
+  static current () {
     if (!global.currentApiMakerService) {
       global.currentApiMakerService = new ApiMakerServices()
     }
@@ -9,7 +9,7 @@ module.exports = class ApiMakerServices {
     return global.currentApiMakerService
   }
 
-  sendRequest(serviceName, args) {
+  sendRequest (serviceName, args) {
     return CommandsPool.addCommand({
       args: {
         service_args: args,

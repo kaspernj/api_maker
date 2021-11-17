@@ -25,7 +25,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     errors: []
   }
 
-  render() {
+  render () {
     const {errors} = this.state
     const {
       children,
@@ -83,15 +83,15 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     )
   }
 
-  inputId() {
+  inputId () {
     return idForComponent(this)
   }
 
-  inputName() {
+  inputName () {
     return nameForComponent(this)
   }
 
-  label() {
+  label () {
     if ("label" in this.props) {
       return this.props.label
     } else if (this.props.model) {
@@ -100,7 +100,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     }
   }
 
-  labelClassName() {
+  labelClassName () {
     const classNames = ["form-group-label"]
 
     if (this.props.labelClassName)
@@ -111,7 +111,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
 
   onErrors = (errors) => this.setState({errors})
 
-  selectClassName() {
+  selectClassName () {
     const classNames = ["form-control"]
 
     if (this.props.className) classNames.push(this.props.className)
@@ -122,7 +122,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  wrapperClassName() {
+  wrapperClassName () {
     const classNames = ["form-group", "component-bootstrap-select"]
 
     if (this.props.wrapperClassName)

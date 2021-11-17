@@ -2,7 +2,7 @@ const {digg} = require("diggerize")
 const Inflection = require("inflection")
 
 module.exports = class ApiMakerModelPropType {
-  static ofModel(modelClass) {
+  static ofModel (modelClass) {
     const modelPropTypeInstance = new ApiMakerModelPropType()
 
     modelPropTypeInstance.withModelType(modelClass)
@@ -10,13 +10,13 @@ module.exports = class ApiMakerModelPropType {
     return modelPropTypeInstance
   }
 
-  constructor() {
+  constructor () {
     this.isNotRequired = this.isNotRequired.bind(this)
     this.isRequired = this.isRequired.bind(this)
     this._withLoadedAssociations = {}
   }
 
-  isNotRequired(props, propName, _componentName) {
+  isNotRequired (props, propName, _componentName) {
     const model = props[propName]
 
     if (model) {
@@ -24,7 +24,7 @@ module.exports = class ApiMakerModelPropType {
     }
   }
 
-  isRequired(props, propName, _componentName) {
+  isRequired (props, propName, _componentName) {
     const model = props[propName]
 
     if (!model) return new Error(`${propName} was required but not given`)
@@ -32,21 +32,21 @@ module.exports = class ApiMakerModelPropType {
     return this.validate({model, propName})
   }
 
-  previous() {
+  previous () {
     if (!this._previousModelPropType) throw new Error("No previous model prop type set")
 
     return this._previousModelPropType
   }
 
-  setPreviousModelPropType(previousModelPropType) {
+  setPreviousModelPropType (previousModelPropType) {
     this._previousModelPropType = previousModelPropType
   }
 
-  withModelType(modelClass) {
+  withModelType (modelClass) {
     this._withModelType = modelClass
   }
 
-  validate({model, propName}) {
+  validate ({model, propName}) {
     if (this._withModelType && this._withModelType.name != model.constructor.name)
       return new Error(`Expected ${propName} to be of type ${this._withModelType.name} but it wasn't: ${model.constructor.name}`)
 
@@ -103,13 +103,13 @@ module.exports = class ApiMakerModelPropType {
     }
   }
 
-  withLoadedAbilities(arrayOfAbilities) {
+  withLoadedAbilities (arrayOfAbilities) {
     this._withLoadedAbilities = arrayOfAbilities
 
     return this
   }
 
-  withLoadedAssociation(associationName) {
+  withLoadedAssociation (associationName) {
     const associationModelPropType = new ApiMakerModelPropType()
 
     associationModelPropType.setPreviousModelPropType(this)
@@ -118,7 +118,7 @@ module.exports = class ApiMakerModelPropType {
     return associationModelPropType
   }
 
-  withLoadedAttributes(arrayOfAttributes) {
+  withLoadedAttributes (arrayOfAttributes) {
     this._withLoadedAttributes = arrayOfAttributes
 
     return this

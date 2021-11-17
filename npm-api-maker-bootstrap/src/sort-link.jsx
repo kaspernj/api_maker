@@ -24,15 +24,15 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     sortMode: this.sortMode()
   }
 
-  attribute() {
+  attribute () {
     return inflection.underscore(this.props.attribute)
   }
 
-  calculatedCurrentParams() {
+  calculatedCurrentParams () {
     return qs.parse(global.location.search.substr(1))
   }
 
-  href() {
+  href () {
     const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
 
     if (!currentParams[searchKey]) currentParams[searchKey] = {}
@@ -45,7 +45,7 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     return newPath
   }
 
-  isSortedByAttribute() {
+  isSortedByAttribute () {
     const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
     const params = currentParams[searchKey] || {}
 
@@ -55,7 +55,7 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     return false
   }
 
-  render() {
+  render () {
     const LinkComponent = this.linkComponent()
     const {attribute, className, linkComponent, onChanged, query, title, ...restProps} = this.props
     const {href, sortMode} = digs(this.state, "href", "sortMode")
@@ -76,7 +76,7 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     )
   }
 
-  className() {
+  className () {
     const classNames = ["component-api-maker-bootstrap-sort-link"]
 
     if (this.props.className) classNames.push(this.props.className)
@@ -84,7 +84,7 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  linkComponent() {
+  linkComponent () {
     if (this.props.linkComponent) return this.props.linkComponent
 
     return Link
@@ -99,13 +99,13 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     })
   }
 
-  sortMode() {
+  sortMode () {
     if (this.isSortedByAttribute()) return "desc"
 
     return "asc"
   }
 
-  title() {
+  title () {
     const {attribute, query} = digs(this.props, "attribute", "query")
     const {title} = this.props
 

@@ -2,21 +2,21 @@ const {digg} = require("diggerize")
 const inflection = require("inflection")
 
 module.exports = class ApiMakerPreloaded {
-  constructor(response) {
+  constructor (response) {
     this.response = response
     this.loadPreloadedModels()
   }
 
-  loadPreloadedModels() {
+  loadPreloadedModels () {
     this.preloaded = {}
 
     for (const preloadedType in this.response.preloaded) {
       const modelClassName = inflection.classify(preloadedType)
-      const modelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
+      const ModelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
 
       for (const preloadedId in this.response.preloaded[preloadedType]) {
         const preloadedData = this.response.preloaded[preloadedType][preloadedId]
-        const model = new modelClass({data: preloadedData, isNewRecord: false})
+        const model = new ModelClass({data: preloadedData, isNewRecord: false})
 
         if (!this.preloaded[preloadedType]) {
           this.preloaded[preloadedType] = {}
@@ -33,7 +33,7 @@ module.exports = class ApiMakerPreloaded {
     }
   }
 
-  getModel(type, id) {
+  getModel (type, id) {
     if (!this.preloaded[type] || !this.preloaded[type][id]) {
       throw new Error(`Could not find a ${type} by that ID: ${id}`)
     }

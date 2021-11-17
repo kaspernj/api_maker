@@ -3,15 +3,15 @@ const {merge} = require("./merge.cjs")
 const qs = require("qs")
 
 module.exports = class Params {
-  static parse() {
+  static parse () {
     return qs.parse(global.location.search.substr(1))
   }
 
-  static change(given) {
+  static change (given) {
     return merge(Params.parse(), given)
   }
 
-  static changeParams(given, opts = {}) {
+  static changeParams (given, opts = {}) {
     const params = Params.change(given)
     const newParams = qs.stringify(params)
     const newPath = `${location.pathname}?${newParams}`
@@ -21,13 +21,13 @@ module.exports = class Params {
     appHistory.push(newPath)
   }
 
-  static serializeForm(form) {
+  static serializeForm (form) {
     const hash = formSerialize(form, {empty: true, hash: true})
     return Params.setUndefined(hash)
   }
 
   // This is used to set all empty values to 'undefined' which makes qs removed those elements from the query string
-  static setUndefined(given) {
+  static setUndefined (given) {
     if (Array.isArray(given)) {
       if (given.length == 0)
         return undefined

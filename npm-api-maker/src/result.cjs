@@ -1,29 +1,29 @@
 module.exports = class ApiMakerResult {
-  constructor(data) {
+  constructor (data) {
     this.data = data
   }
 
-  currentPage() {
+  currentPage () {
     return this.data.response.meta.currentPage
   }
 
-  models() {
+  models () {
     return this.data.models
   }
 
-  modelClass() {
+  modelClass () {
     return this.data.collection.modelClass()
   }
 
-  perPage() {
+  perPage () {
     return this.data.response.meta.perPage
   }
 
-  totalCount() {
+  totalCount () {
     return this.data.response.meta.totalCount
   }
 
-  totalPages() {
+  totalPages () {
     return this.data.response.meta.totalPages
   }
 }

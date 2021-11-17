@@ -2,7 +2,7 @@ const {digg} = require("diggerize")
 const inflection = require("inflection")
 
 module.exports = class ApiMakerResourceRoute {
-  constructor({jsRoutes, locales, requireComponent, routeDefinition}) {
+  constructor ({jsRoutes, locales, requireComponent, routeDefinition}) {
     this.jsRoutes = jsRoutes
     this.locales = locales
     this.requireComponent = requireComponent
@@ -13,7 +13,7 @@ module.exports = class ApiMakerResourceRoute {
     }
   }
 
-  routesResult() {
+  routesResult () {
     if (digg(this, "locales")) {
       return this.withLocale()
     } else {
@@ -21,7 +21,7 @@ module.exports = class ApiMakerResourceRoute {
     }
   }
 
-  findRouteParams() {
+  findRouteParams () {
     const result = []
     const parts = digg(this, "routeDefinition", "path").split("/")
 
@@ -33,13 +33,13 @@ module.exports = class ApiMakerResourceRoute {
     return result
   }
 
-  requireComponentFromCaller() {
+  requireComponentFromCaller () {
     return this.requireComponent({
       routeDefinition: digg(this, "routeDefinition")
     })
   }
 
-  withLocale() {
+  withLocale () {
     const component = this.requireComponentFromCaller()
     const Locales = require("shared/locales").default
     const routes = []
@@ -62,7 +62,7 @@ module.exports = class ApiMakerResourceRoute {
     return routes
   }
 
-  withoutLocale() {
+  withoutLocale () {
     const routePathName = inflection.camelize(digg(this, "routeDefinition", "name"), true)
     const routePathMethod = this.jsRoutes[`${routePathName}Path`]
 
@@ -72,9 +72,11 @@ module.exports = class ApiMakerResourceRoute {
     const path = routePathMethod.apply(null, this.findRouteParams())
     const component = this.requireComponentFromCaller()
 
-    return [{
-      path,
-      component
-    }]
+    return [
+      {
+        path,
+        component
+      }
+    ]
   }
 }

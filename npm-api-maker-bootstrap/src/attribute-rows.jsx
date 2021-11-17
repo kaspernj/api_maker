@@ -16,14 +16,14 @@ export default class ApiMakerBootstrapAttributeRows extends React.PureComponent 
     model: PropTypes.object.isRequired
   })
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       classObject: props.model.modelClass()
     }
   }
 
-  render() {
+  render () {
     return this.props.attributes.map((attribute) =>
       <AttributeRow attribute={attribute} key={`attribute-${attribute}`} label={this.state.classObject.humanAttributeName(attribute)}>
         {this.valueContent(attribute)}
@@ -31,7 +31,7 @@ export default class ApiMakerBootstrapAttributeRows extends React.PureComponent 
     )
   }
 
-  value(attribute) {
+  value (attribute) {
     if (!(attribute in this.props.model))
       throw new Error(`Attribute not found: ${digg(this.props.model.modelClassData(), "name")}#${attribute}`)
 
@@ -41,7 +41,7 @@ export default class ApiMakerBootstrapAttributeRows extends React.PureComponent 
     return this.props.model[attribute]()
   }
 
-  valueContent(attribute) {
+  valueContent (attribute) {
     const value = this.value(attribute)
 
     if (value instanceof Date) {

@@ -9,20 +9,20 @@ if (SourceMapConsumer.initialize) {
 }
 
 module.exports = class SourceMapsLoader {
-  constructor() {
+  constructor () {
     this.sourceMaps = []
     this.srcLoaded = {}
   }
 
-  loadSourceMapsForScriptTags(callback) {
+  loadSourceMapsForScriptTags (callback) {
     this.loadSourceMapsForScriptTagsCallback = callback
   }
 
-  sourceMapForSource(callback) {
+  sourceMapForSource (callback) {
     this.sourceMapForSourceCallback = callback
   }
 
-  async loadSourceMaps() {
+  async loadSourceMaps () {
     const scripts = document.querySelectorAll("script")
     const promises = []
 
@@ -40,7 +40,7 @@ module.exports = class SourceMapsLoader {
     await Promise.all(promises)
   }
 
-  async loadSourceMapForSource(src) {
+  async loadSourceMapForSource (src) {
     const url = this.loadUrl(src)
     const originalUrl = `${url.origin}${url.pathname}`
 
@@ -65,26 +65,26 @@ module.exports = class SourceMapsLoader {
     this.sourceMaps.push({consumer, originalUrl, src})
   }
 
-  loadUrl(url) {
+  loadUrl (url) {
     const parser = document.createElement("a")
     parser.href = url
 
     return parser
   }
 
-  loadXhr(xhr, postData) {
+  loadXhr (xhr, postData) {
     return new Promise((resolve) => {
       xhr.onload = () => resolve()
       xhr.send(postData)
     })
   }
 
-  parseStackTrace(stackTrace) {
+  parseStackTrace (stackTrace) {
     return this.getStackTraceData(stackTrace)
       .map((traceData) => `at ${traceData.methodName} (${traceData.fileString})`)
   }
 
-  getStackTraceData(stackTrace) {
+  getStackTraceData (stackTrace) {
     const stack = stackTraceParser.parse(stackTrace)
     const newSourceMap = []
 

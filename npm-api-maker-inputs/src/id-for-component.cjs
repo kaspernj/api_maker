@@ -1,6 +1,6 @@
 const inflection = require("inflection")
 
-module.exports = function ApiMakerIdForComponent(component) {
+module.exports = function ApiMakerIdForComponent (component) {
   if ("id" in component.props) {
     return component.props.id
   } else if (component.props.attribute && component.props.model) {

@@ -3,13 +3,13 @@ const inflection = require("inflection")
 const qs = require("qs")
 
 module.exports = class ApiMakerRoutesNative {
-  constructor({getLocale}) {
+  constructor ({getLocale}) {
     this.getLocale = getLocale
     this.routeDefinitions = []
     this.routeTranslationParts = {}
   }
 
-  loadRouteDefinitions(routeDefinitions, routeDefinitionArgs) {
+  loadRouteDefinitions (routeDefinitions, routeDefinitionArgs) {
     for (const routeDefinition of digg(routeDefinitions, "routes")) {
       const {name, path} = digs(routeDefinition, "name", "path")
       const rawPathParts = path.split("/")
@@ -62,7 +62,7 @@ module.exports = class ApiMakerRoutesNative {
     }
   }
 
-  loadRouteTranslations(i18n) {
+  loadRouteTranslations (i18n) {
     const locales = digg(i18n, "locales")
 
     for (const locale in locales) {
@@ -77,7 +77,7 @@ module.exports = class ApiMakerRoutesNative {
     }
   }
 
-  translateRoute({args, localizedRoutes, pathParts, url}) {
+  translateRoute ({args, localizedRoutes, pathParts, url}) {
     let options
 
     // Extract options from args if any
@@ -137,7 +137,7 @@ module.exports = class ApiMakerRoutesNative {
     throw new Error("Unhandled state")
   }
 
-  addHostToRoute({host, port, protocol, translatedRoute}) {
+  addHostToRoute ({host, port, protocol, translatedRoute}) {
     let fullUrl = ""
 
     const hostToUse = host || global.location && global.location.host
@@ -150,7 +150,7 @@ module.exports = class ApiMakerRoutesNative {
     } else if (global.location && global.location.protocol) {
       fullUrl += `${global.location.protocol}//`
     } else {
-      fullUrl += `https://`
+      fullUrl += "https://"
     }
 
     fullUrl += hostToUse

@@ -34,19 +34,19 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
     form: undefined
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (this.props.onErrors) {
       this.setForm()
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     if (this.props.onErrors) {
       this.setForm()
     }
   }
 
-  setForm() {
+  setForm () {
     const form = dig(this.props.inputRef || this.inputRef, "current", "form")
 
     if (form != this.state.form) {
@@ -54,7 +54,7 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
     }
   }
 
-  render() {
+  render () {
     const {
       attribute,
       autoRefresh,
@@ -98,7 +98,7 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
     )
   }
 
-  inputDefaultChecked() {
+  inputDefaultChecked () {
     if ("defaultChecked" in this.props) {
       return this.props.defaultChecked
     } else if (this.props.model) {
@@ -109,11 +109,11 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
     }
   }
 
-  inputId() {
+  inputId () {
     return idForComponent(this)
   }
 
-  inputName() {
+  inputName () {
     return nameForComponent(this)
   }
 
@@ -142,7 +142,7 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
     }
   }
 
-  onValidationErrors(event) {
+  onValidationErrors (event) {
     const {onErrors} = this.props
 
     if (!onErrors) {

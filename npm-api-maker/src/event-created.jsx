@@ -19,21 +19,21 @@ export default class ApiMakerEventCreated extends React.PureComponent {
     onCreated: PropTypes.func.isRequired
   })
 
-  componentDidMount() {
+  componentDidMount () {
     this.connect()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.connectCreated) {
       this.connectCreated.unsubscribe()
     }
   }
 
-  connect() {
+  connect () {
     this.connectCreated = ModelEvents.connectCreated(this.props.modelClass, (...args) => this.onCreated(...args))
   }
 
-  debounce() {
+  debounce () {
     if (!this.debounceInstance) {
       if (typeof this.props.debounce == "number") {
         this.debounceInstance = debounce(this.props.onCreated, this.props.debounce)
@@ -45,7 +45,7 @@ export default class ApiMakerEventCreated extends React.PureComponent {
     return this.debounceInstance
   }
 
-  onCreated(...args) {
+  onCreated (...args) {
     if (!this.props.active) {
       return
     }
@@ -57,7 +57,7 @@ export default class ApiMakerEventCreated extends React.PureComponent {
     }
   }
 
-  render() {
+  render () {
     return null
   }
 }

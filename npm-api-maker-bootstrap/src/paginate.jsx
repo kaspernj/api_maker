@@ -16,14 +16,14 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     ]).isRequired
   })
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       pages: this.pages()
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     if (prevProps.result != this.props.result) {
       this.setState({pages: this.pages()})
     }
@@ -33,12 +33,12 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     console.log("onLocationChanged")
   }
 
-  isPageActiveClass(pageNumber) {
+  isPageActiveClass (pageNumber) {
     if (this.props.result.currentPage() == pageNumber)
       return "active"
   }
 
-  pages() {
+  pages () {
     const currentPage = this.props.result.currentPage()
     const pages = []
     const totalPages = this.props.result.totalPages()
@@ -58,7 +58,7 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     return pages
   }
 
-  pagePath(pageNumber) {
+  pagePath (pageNumber) {
     let pageKey = this.props.result.data.collection.queryArgs.pageKey
 
     if (!pageKey)
@@ -72,7 +72,7 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     return newPath
   }
 
-  previousPagePath() {
+  previousPagePath () {
     let previousPage
 
     if (this.props.result.currentPage() > 1) {
@@ -84,7 +84,7 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     return this.pagePath(previousPage)
   }
 
-  nextPagePath() {
+  nextPagePath () {
     let nextPage
 
     if (this.props.result.currentPage() < this.props.result.totalPages()) {
@@ -96,18 +96,18 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     return this.pagePath(nextPage)
   }
 
-  showBackwardsDots() {
+  showBackwardsDots () {
     const currentPage = this.props.result.currentPage()
     return (currentPage - 5 > 1)
   }
 
-  showForwardsDots() {
+  showForwardsDots () {
     const currentPage = this.props.result.currentPage()
     const totalPages = this.props.result.totalPages()
     return (currentPage + 5 < totalPages)
   }
 
-  render() {
+  render () {
     const {result} = this.props
     const {pages} = this.state
 

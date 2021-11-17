@@ -9,24 +9,24 @@ export default class ApiMakerEventEmitterListener extends React.PureComponent {
     onCalled: PropTypes.func.isRequired
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.onCalled = this.onCalled.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.events.addListener(this.props.event, this.onCalled)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.events.removeListener(this.props.event, this.onCalled)
   }
 
-  onCalled(...args) {
+  onCalled (...args) {
     this.props.onCalled.apply(null, ...args)
   }
 
-  render() {
+  render () {
     return null
   }
 }

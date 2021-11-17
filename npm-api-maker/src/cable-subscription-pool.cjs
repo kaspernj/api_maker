@@ -6,12 +6,12 @@ const inflection = require("inflection")
 const Logger = require("./logger.cjs")
 
 module.exports = class ApiMakerCableSubscriptionPool {
-  constructor() {
+  constructor () {
     this.activeSubscriptions = 0
     this.connected = false
   }
 
-  connect(subscriptionData) {
+  connect (subscriptionData) {
     const globalData = CommandsPool.current().globalRequestData
 
     this.subscription = ChannelsConsumer.subscriptions.create(
@@ -28,7 +28,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
     this.connected = true
   }
 
-  forEachSubscription(callback) {
+  forEachSubscription (callback) {
     const modelIdModes = ["destroys", "updates"]
     const subscriptions = digg(this, "subscriptions")
 
@@ -69,17 +69,17 @@ module.exports = class ApiMakerCableSubscriptionPool {
     }
   }
 
-  isConnected() {
+  isConnected () {
     return digg(this, "connected")
   }
 
-  onConnected() {
+  onConnected () {
     this.forEachSubscription(({subscription}) => {
       subscription.events.emit("connected")
     })
   }
 
-  onReceived(rawData) {
+  onReceived (rawData) {
     const data = Deserializer.parse(rawData)
     const {a: args, e: eventName, m: model, mi: modelId, mt: modelType, t: type} = data
     const subscriptions = digg(this, "subscriptions")
@@ -124,7 +124,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
     }
   }
 
-  onUnsubscribe() {
+  onUnsubscribe () {
     Logger.log(`activeSubscriptions before unsub: ${this.activeSubscriptions}`)
     this.activeSubscriptions -= 1
     Logger.log(`activeSubscriptions after unsub: ${this.activeSubscriptions}`)
@@ -136,7 +136,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
     }
   }
 
-  registerSubscriptions(subscriptions) {
+  registerSubscriptions (subscriptions) {
     this.subscriptions = subscriptions
 
     Logger.log(`registerSubscriptions: ${subscriptions.length}`)
@@ -169,7 +169,7 @@ module.exports = class ApiMakerCableSubscriptionPool {
     }
   }
 
-  connectUnsubscriptionForSubscription(subscription) {
+  connectUnsubscriptionForSubscription (subscription) {
     Logger.log("Connecting to unsubscribe on subscription")
     Logger.log({subscription})
 

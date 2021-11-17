@@ -1,9 +1,9 @@
 module.exports = class ModelName {
-  constructor(data) {
+  constructor (data) {
     this.data = data
   }
 
-  human(args) {
+  human (args) {
     if (!args)
       args = {count: 1}
 

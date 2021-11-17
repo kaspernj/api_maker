@@ -26,14 +26,14 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     wrapperClassName: PropTypes.string
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       errors: []
     }
   }
 
-  render() {
+  render () {
     const {errors} = this.state
     const {
       append,
@@ -125,7 +125,7 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     )
   }
 
-  inputClassName() {
+  inputClassName () {
     const classNames = ["form-control"]
 
     if (this.props.className)
@@ -137,15 +137,15 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  inputId() {
+  inputId () {
     return idForComponent(this)
   }
 
-  inputName() {
+  inputName () {
     return nameForComponent(this)
   }
 
-  inputType() {
+  inputType () {
     if (this.props.type) {
       return this.props.type
     } else {
@@ -153,7 +153,7 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     }
   }
 
-  label() {
+  label () {
     if ("label" in this.props) {
       return this.props.label
     } else if (this.props.model) {
@@ -161,7 +161,7 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     }
   }
 
-  labelClassName() {
+  labelClassName () {
     const classNames = []
 
     if (this.props.labelClassName)
@@ -172,7 +172,7 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
 
   onErrors = (errors) => this.setState({errors})
 
-  wrapperClassName() {
+  wrapperClassName () {
     const classNames = ["form-group", "component-bootstrap-string-input"]
 
     if (this.props.wrapperClassName)

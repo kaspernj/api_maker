@@ -1,5 +1,5 @@
 module.exports = class ApiMakerLogger {
-  static current() {
+  static current () {
     if (!global.apiMakerLogger) {
       global.apiMakerLogger = new ApiMakerLogger()
       // global.apiMakerLogger.setDebug(true)
@@ -8,16 +8,16 @@ module.exports = class ApiMakerLogger {
     return global.apiMakerLogger
   }
 
-  static log(message) {
+  static log (message) {
     ApiMakerLogger.current().log(message)
   }
 
-  log(message) {
+  log (message) {
     if (this.debug)
       console.log("ApiMaker", message)
   }
 
-  setDebug(value) {
+  setDebug (value) {
     this.debug = value
   }
 }

@@ -4,7 +4,7 @@ const ResourceRoute = require("./resource-route.cjs")
 const {Route} = require("react-router-dom")
 
 export default class ApiMakerResourceRoutes {
-  static readRoutes({jsRoutes, locales, requireComponent, routeDefinitions}) {
+  static readRoutes ({jsRoutes, locales, requireComponent, routeDefinitions}) {
     if (!routeDefinitions)
       throw new Error("Please pass 'routeDefinitions' to this method")
 
@@ -15,7 +15,12 @@ export default class ApiMakerResourceRoutes {
 
       for (const newRoute of resourceRoute.routesResult()) {
         routes.push(
-          <Route exact key={`route-${digg(newRoute, "path")}`} path={digg(newRoute, "path")} component={digg(newRoute, "component")} />
+          <Route
+            component={digg(newRoute, "component")}
+            exact
+            key={`route-${digg(newRoute, "path")}`}
+            path={digg(newRoute, "path")}
+          />
         )
       }
     }

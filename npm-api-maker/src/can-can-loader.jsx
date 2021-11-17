@@ -11,11 +11,11 @@ export default class ApiMakerCanCanLoader extends React.PureComponent {
     component: PropTypes.object.isRequired
   })
 
-  componentDidMount() {
+  componentDidMount () {
     this.loadAbilities()
   }
 
-  async loadAbilities() {
+  async loadAbilities () {
     const canCan = CanCan.current()
     const {abilities} = digs(this.props, "abilities")
 
@@ -24,7 +24,7 @@ export default class ApiMakerCanCanLoader extends React.PureComponent {
     this.updateComponent({canCan})
   }
 
-  render() {
+  render () {
     const canCan = CanCan.current()
     const events = digg(canCan, "events")
 
@@ -42,7 +42,7 @@ export default class ApiMakerCanCanLoader extends React.PureComponent {
     this.loadAbilities()
   }
 
-  updateComponent(updatedState) {
+  updateComponent (updatedState) {
     const {component} = digs(this.props, "component")
 
     if (component.shape) {

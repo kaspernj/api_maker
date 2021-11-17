@@ -9,7 +9,7 @@ const ValidationError = require("./validation-error.cjs")
 const {ValidationErrors} = require("./validation-errors.cjs")
 
 module.exports = class ApiMakerCommandsPool {
-  static addCommand(data, args = {}) {
+  static addCommand (data, args = {}) {
     let pool
 
     if (args.instant) {
@@ -29,7 +29,7 @@ module.exports = class ApiMakerCommandsPool {
     return promiseResult
   }
 
-  static current() {
+  static current () {
     if (!global.currentApiMakerCommandsPool) {
       global.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
     }
@@ -37,11 +37,11 @@ module.exports = class ApiMakerCommandsPool {
     return global.currentApiMakerCommandsPool
   }
 
-  static flush() {
+  static flush () {
     ApiMakerCommandsPool.current().flush()
   }
 
-  constructor() {
+  constructor () {
     this.flushCount = 0
     this.pool = {}
     this.poolData = {}
@@ -49,7 +49,7 @@ module.exports = class ApiMakerCommandsPool {
     this.globalRequestData = null
   }
 
-  addCommand(data) {
+  addCommand (data) {
     return new Promise((resolve, reject) => {
       const id = this.currentId
       this.currentId += 1
@@ -85,11 +85,11 @@ module.exports = class ApiMakerCommandsPool {
     })
   }
 
-  commandsCount() {
+  commandsCount () {
     return Object.keys(this.pool)
   }
 
-  async flush() {
+  async flush () {
     if (this.commandsCount() == 0) {
       return
     }
@@ -149,7 +149,7 @@ module.exports = class ApiMakerCommandsPool {
     }
   }
 
-  handleFailedResponse(commandData, commandResponseData) {
+  handleFailedResponse (commandData, commandResponseData) {
     let error
 
     if (commandResponseData.error_type == "validation_error") {
@@ -165,13 +165,13 @@ module.exports = class ApiMakerCommandsPool {
     commandData.reject(error)
   }
 
-  clearTimeout() {
+  clearTimeout () {
     if (this.flushTimeout) {
       clearTimeout(this.flushTimeout)
     }
   }
 
-  isActive() {
+  isActive () {
     if (this.commandsCount() > 0) {
       return true
     }
@@ -183,7 +183,7 @@ module.exports = class ApiMakerCommandsPool {
     return false
   }
 
-  setFlushTimeout() {
+  setFlushTimeout () {
     this.clearTimeout()
     this.flushTimeout = setTimeout(() => this.flush(), 0)
   }

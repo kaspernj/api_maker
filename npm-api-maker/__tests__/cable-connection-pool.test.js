@@ -75,7 +75,7 @@ describe("CableConnectionPool", () => {
       const cableSubscriptionPool = new CableSubscriptionPool()
 
       cableSubscriptionPool.connected = true
-      cableSubscriptionPool.connectUnsubscriptionForSubscription = function() {
+      cableSubscriptionPool.connectUnsubscriptionForSubscription = function () {
         connectedUnsubscribeEvent = true
       }
       cableSubscriptionPool.subscriptions = {
@@ -109,7 +109,7 @@ describe("CableConnectionPool", () => {
       }
 
       cableConnectionPool.connected = false
-      cableConnectionPool.connectUpcoming = function() {
+      cableConnectionPool.connectUpcoming = function () {
         const subscriptionData = this.upcomingSubscriptionData
         const subscriptions = this.upcomingSubscriptions
 
@@ -173,7 +173,7 @@ describe("CableConnectionPool", () => {
       const cableSubscriptionPool = new CableSubscriptionPool()
 
       cableSubscriptionPool.connected = true
-      cableSubscriptionPool.connectUnsubscriptionForSubscription = function() {
+      cableSubscriptionPool.connectUnsubscriptionForSubscription = function () {
         connectedUnsubscribeEvent = true
       }
       cableSubscriptionPool.subscriptions = {
@@ -201,7 +201,7 @@ describe("CableConnectionPool", () => {
       const cableSubscriptionPool = new CableSubscriptionPool()
 
       cableSubscriptionPool.connected = true
-      cableSubscriptionPool.connectUnsubscriptionForSubscription = function() {
+      cableSubscriptionPool.connectUnsubscriptionForSubscription = function () {
         connectedUnsubscribeEvent = true
       }
       cableSubscriptionPool.subscriptions = {

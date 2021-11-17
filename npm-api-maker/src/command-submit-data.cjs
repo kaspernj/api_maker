@@ -1,22 +1,22 @@
 const objectToFormData = require("object-to-formdata").serialize
 
 module.exports = class ApiMakerCommandSubmitData {
-  constructor(data) {
+  constructor (data) {
     this.data = data
     this.formData
     this.filesCount = 0
     this.jsonData = this.traverseObject(this.data, "json")
   }
 
-  getFilesCount() {
+  getFilesCount () {
     return this.filesCount
   }
 
-  getJsonData() {
+  getJsonData () {
     return this.jsonData
   }
 
-  getRawData() {
+  getRawData () {
     if (!this.rawData) {
       this.rawData = this.traverseObject(this.data, "raw")
     }
@@ -24,7 +24,7 @@ module.exports = class ApiMakerCommandSubmitData {
     return this.rawData
   }
 
-  getFormData() {
+  getFormData () {
     const objectForFormData = this.getRawData() || {}
 
     objectForFormData.json = JSON.stringify(this.getJsonData())
@@ -34,7 +34,7 @@ module.exports = class ApiMakerCommandSubmitData {
     return formData
   }
 
-  convertDynamic(value, type) {
+  convertDynamic (value, type) {
     if (Array.isArray(value)) {
       return this.traverseArray(value, type)
     } else if (typeof value == "object" && value !== null && value.constructor.name == "Object") {
@@ -44,7 +44,7 @@ module.exports = class ApiMakerCommandSubmitData {
     }
   }
 
-  shouldSkip(object, type) {
+  shouldSkip (object, type) {
     if (type == "json" && object instanceof File) {
       this.filesCount += 1
       return true
@@ -57,7 +57,7 @@ module.exports = class ApiMakerCommandSubmitData {
     return false
   }
 
-  isObject(value) {
+  isObject (value) {
     if (typeof value == "object" && value !== null && value.constructor.name == "Object") {
       return true
     }
@@ -65,7 +65,7 @@ module.exports = class ApiMakerCommandSubmitData {
     return false
   }
 
-  traverseArray(array, type) {
+  traverseArray (array, type) {
     const newArray = []
 
     for (const value of array) {
@@ -85,7 +85,7 @@ module.exports = class ApiMakerCommandSubmitData {
     return newArray
   }
 
-  traverseObject(object, type) {
+  traverseObject (object, type) {
     const newObject = {}
 
     for (const key in object) {

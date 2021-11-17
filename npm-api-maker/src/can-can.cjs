@@ -5,7 +5,7 @@ const {ReadersWriterLock} = require("epic-locks")
 const Services = require("./services.cjs")
 
 module.exports = class ApiMakerCanCan {
-  static current() {
+  static current () {
     if (!global.currentApiMakerCanCan) {
       global.currentApiMakerCanCan = new ApiMakerCanCan()
     }
@@ -13,7 +13,7 @@ module.exports = class ApiMakerCanCan {
     return global.currentApiMakerCanCan
   }
 
-  constructor() {
+  constructor () {
     this.abilities = []
     this.abilitiesToLoad = []
     this.abilitiesToLoadData = []
@@ -21,7 +21,7 @@ module.exports = class ApiMakerCanCan {
     this.lock = new ReadersWriterLock()
   }
 
-  can(ability, subject) {
+  can (ability, subject) {
     ability = inflection.underscore(ability)
     const foundAbility = this.findAbility(ability, subject)
 
@@ -41,11 +41,11 @@ module.exports = class ApiMakerCanCan {
     }
   }
 
-  findAbility(ability, subject) {
+  findAbility (ability, subject) {
     return this.abilities.find((abilityData) => digg(abilityData, "subject") == subject && digg(abilityData, "ability") == ability)
   }
 
-  isAbilityLoaded(ability, subject) {
+  isAbilityLoaded (ability, subject) {
     const foundAbility = this.findAbility(ability, subject)
 
     if (foundAbility !== undefined) {
@@ -55,8 +55,8 @@ module.exports = class ApiMakerCanCan {
     return false
   }
 
-  async loadAbilities(abilities) {
-    await this.lock.read(async() => {
+  async loadAbilities (abilities) {
+    await this.lock.read(async () => {
       const promises = []
 
       for (const abilityData of abilities) {
@@ -73,7 +73,7 @@ module.exports = class ApiMakerCanCan {
     })
   }
 
-  loadAbility(ability, subject) {
+  loadAbility (ability, subject) {
     return new Promise((resolve) => {
       ability = inflection.underscore(ability)
 
@@ -94,7 +94,7 @@ module.exports = class ApiMakerCanCan {
     })
   }
 
-  queueAbilitiesRequest() {
+  queueAbilitiesRequest () {
     if (this.queueAbilitiesRequestTimeout) {
       clearTimeout(this.queueAbilitiesRequestTimeout)
     }
@@ -102,14 +102,14 @@ module.exports = class ApiMakerCanCan {
     this.queueAbilitiesRequestTimeout = setTimeout(() => this.sendAbilitiesRequest(), 0)
   }
 
-  async resetAbilities() {
+  async resetAbilities () {
     await this.lock.write(() => {
       this.abilities = []
     })
     this.events.emit("onResetAbilities")
   }
 
-  async sendAbilitiesRequest() {
+  async sendAbilitiesRequest () {
     const abilitiesToLoad = this.abilitiesToLoad
     const abilitiesToLoadData = this.abilitiesToLoadData
 

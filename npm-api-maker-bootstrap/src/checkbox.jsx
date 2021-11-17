@@ -30,7 +30,7 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
     errors: []
   }
 
-  render() {
+  render () {
     const {className, hint, id, label, labelClassName, onMatchValidationError, wrapperClassName, ...restProps} = this.props
     const {errors} = this.state
 
@@ -62,7 +62,7 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
     )
   }
 
-  inputDefaultChecked() {
+  inputDefaultChecked () {
     if ("defaultChecked" in this.props) {
       return this.props.defaultChecked
     } else if (this.props.model) {
@@ -73,15 +73,15 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
     }
   }
 
-  inputId() {
+  inputId () {
     return idForComponent(this)
   }
 
-  inputName() {
+  inputName () {
     return nameForComponent(this)
   }
 
-  label() {
+  label () {
     const {attribute, label, model} = this.props
 
     if ("label" in this.props) {
@@ -91,7 +91,7 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
     }
   }
 
-  labelClassName() {
+  labelClassName () {
     const classNames = ["form-check-label"]
 
     if (this.props.labelClassName)
@@ -100,7 +100,7 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  wrapperClassName() {
+  wrapperClassName () {
     const classNames = ["component-bootstrap-checkbox", "form-group"]
 
     if (this.props.wrapperClassName)
