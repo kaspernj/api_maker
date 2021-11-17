@@ -118,11 +118,11 @@ module.exports = class BaseModel {
   }
 
   clone () {
-    const clone = new this.constructor
+    const clone = new this.constructor()
 
-    clone.abilities = Object.assign({}, this.abilities)
-    clone.modelData = Object.assign({}, this.modelData)
-    clone.relationshipsCache = Object.assign({}, this.relationshipsCache)
+    clone.abilities = {...this.abilities}
+    clone.modelData = {...this.modelData}
+    clone.relationshipsCache = {...this.relationshipsCache}
 
     return clone
   }
@@ -204,7 +204,8 @@ module.exports = class BaseModel {
           command: `${this.modelClassData().collectionName}-create`,
           collectionName: this.modelClassData().collectionName,
           primaryKey: this.primaryKey(),
-          type: "create"},
+          type: "create"
+        },
         {}
       )
     } catch (error) {
@@ -240,7 +241,7 @@ module.exports = class BaseModel {
 
       return {model: this, response}
     } else {
-      handleResponseError(response)
+      this.handleResponseError(response)
     }
   }
 
@@ -425,7 +426,7 @@ module.exports = class BaseModel {
   }
 
   _isIntegerChanged (oldValue, newValue) {
-    if (parseInt(oldValue) != parseInt(newValue))
+    if (parseInt(oldValue, 10) != parseInt(newValue, 10))
       return true
   }
 
@@ -525,7 +526,7 @@ module.exports = class BaseModel {
 
       return {response, model: this}
     } else {
-      handleResponseError(response)
+      this.handleResponseError(response)
     }
   }
 
@@ -617,8 +618,8 @@ module.exports = class BaseModel {
 
   uniqueKey () {
     if (!this.uniqueKeyValue) {
-      const min = 500000000000000000
-      const max = 999999999999999999
+      const min = 5000000000000000
+      const max = 9007199254740991
       const randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
       this.uniqueKeyValue = randomBetween
     }

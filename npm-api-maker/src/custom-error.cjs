@@ -1,6 +1,6 @@
 const {dig, digg} = require("diggerize")
 
-function errorMessages (args) {
+const errorMessages = (args) => {
   return digg(args, "response", "errors").map((error) => {
     if (typeof error == "string") {
       return error
@@ -12,11 +12,13 @@ function errorMessages (args) {
 
 module.exports = class CustomError extends Error {
   constructor (message, args = {}) {
+    let messageToUse = message
+
     if (dig(args, "response", "errors")) {
-      message = `${message}: ${errorMessages(args).join(". ")}`
+      messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
     }
 
-    super(message)
+    super(messageToUse)
     this.args = args
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)

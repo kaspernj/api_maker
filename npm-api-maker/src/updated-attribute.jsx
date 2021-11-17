@@ -1,11 +1,11 @@
 const {digg} = require("diggerize")
 const ModelEvents = require("./model-events.cjs")
 const PropTypes = require("prop-types")
-const PropTypesExact = require("prop-types-exact")
+const propTypesExact = require("prop-types-exact")
 const React = require("react")
 
 export default class ApiMakerUpdatedAttribute extends React.PureComponent {
-  static propTypes = PropTypesExact({
+  static propTypes = propTypesExact({
     attribute: PropTypes.string,
     model: PropTypes.object.isRequired,
     onValue: PropTypes.func

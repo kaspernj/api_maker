@@ -2,13 +2,13 @@ const {digs} = require("diggerize")
 const {EventListener} = require("@kaspernj/api-maker")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
-const PropTypesExact = require("prop-types-exact")
+const propTypesExact = require("prop-types-exact")
 const React = require("react")
 
 const inflection = require("inflection")
 
 export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
-  static propTypes = PropTypesExact({
+  static propTypes = propTypesExact({
     attribute: PropTypes.string,
     collection: PropTypes.array.isRequired,
     defaultValue: PropTypes.oneOfType([

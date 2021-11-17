@@ -91,7 +91,7 @@ module.exports = {
     "jest/unbound-method": "error",
     "jsx-quotes": "error",
     "key-spacing": "error",
-    "keyword-spacing": "error",
+    "keyword-spacing": "off",
     "line-comment-position": "error",
     "linebreak-style": ["error", "unix"],
     "lines-around-comment": "error",
@@ -283,7 +283,7 @@ module.exports = {
     "react/prefer-exact-props": "error",
     "react/prefer-read-only-props": "error",
     "react/prefer-stateless-function": "error",
-    "react/prop-types": "off", // Disabled because it doesn't work with PropTypesExact
+    "react/prop-types": "off", // Disabled because it doesn't work with propTypesExact
     "react/require-default-props": "off",
     "react/require-optimization": "error",
     "react/self-closing-comp": "error",

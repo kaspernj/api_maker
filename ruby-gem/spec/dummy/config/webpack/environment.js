@@ -36,7 +36,7 @@ environment.plugins.append(
     Layout: ["components/layout", "default"],
     Params: ["@kaspernj/api-maker", "Params"],
     PropTypes: "prop-types",
-    PropTypesExact: "prop-types-exact",
+    propTypesExact: "prop-types-exact",
     React: "react",
     Routes: ["shared/routes", "default"],
     setStateAsync: ["shared/set-state-async", "default"],

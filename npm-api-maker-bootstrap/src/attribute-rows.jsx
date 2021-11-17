@@ -1,7 +1,7 @@
 const AttributeRow = require("./attribute-row").default
 const {digg} = require("diggerize")
 const PropTypes = require("prop-types")
-const PropTypesExact = require("prop-types-exact")
+const propTypesExact = require("prop-types-exact")
 const React = require("react")
 const strftime = require("strftime")
 
@@ -10,7 +10,7 @@ export default class ApiMakerBootstrapAttributeRows extends React.PureComponent 
     checkIfAttributeLoaded: false
   }
 
-  static propTypes = PropTypesExact({
+  static propTypes = propTypesExact({
     attributes: PropTypes.array.isRequired,
     checkIfAttributeLoaded: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired

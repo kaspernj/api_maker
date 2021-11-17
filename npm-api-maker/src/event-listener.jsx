@@ -1,5 +1,5 @@
 const PropTypes = require("prop-types")
-const PropTypesExact = require("prop-types-exact")
+const propTypesExact = require("prop-types-exact")
 const React = require("react")
 
 export default class ApiMakerEventListener extends React.PureComponent {
@@ -9,7 +9,7 @@ export default class ApiMakerEventListener extends React.PureComponent {
     target.dispatchEvent(event, args)
   }
 
-  static propTypes = PropTypesExact({
+  static propTypes = propTypesExact({
     event: PropTypes.string.isRequired,
     onCalled: PropTypes.func.isRequired,
     target: PropTypes.object.isRequired

@@ -1,4 +1,4 @@
-function isPlainObject (input) {
+const isPlainObject = (input) => {
   if (input && typeof input === "object" && !Array.isArray(input)) {
     return true
   }
@@ -6,7 +6,7 @@ function isPlainObject (input) {
   return false
 }
 
-function merge (firstObject, ...objects) {
+const merge = (firstObject, ...objects) => {
   for (const object of objects) {
     mergeObjectsInto(firstObject, object)
   }
@@ -14,7 +14,7 @@ function merge (firstObject, ...objects) {
   return firstObject
 }
 
-function mergeArraysInto (mergeIntoValue, ...arrays) {
+const mergeArraysInto = (mergeIntoValue, ...arrays) => {
   for (const array of arrays) {
     for (const value of array) {
       if (!mergeIntoValue.includes(value)) {
@@ -24,7 +24,7 @@ function mergeArraysInto (mergeIntoValue, ...arrays) {
   }
 }
 
-function mergeObjectsInto (mergeInto, object) {
+const mergeObjectsInto = (mergeInto, object) => {
   for (const key in object) {
     const value = object[key]
 

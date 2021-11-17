@@ -123,7 +123,7 @@ module.exports = class ApiMakerCommandsPool {
       for (const commandId in response.responses) {
         const commandResponse = response.responses[commandId]
         const commandResponseData = Deserializer.parse(commandResponse.data)
-        const commandData = currentPool[parseInt(commandId)]
+        const commandData = currentPool[parseInt(commandId, 10)]
         const responseType = commandResponse.type
 
         if (commandResponseData) {

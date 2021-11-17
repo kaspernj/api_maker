@@ -8,12 +8,12 @@ module.exports = class KeyValueStore {
     return global.currentKeyValueStore
   }
 
-  static async get (key) {
-    return await KeyValueStore.current().get(key)
+  static get (key) {
+    return KeyValueStore.current().get(key)
   }
 
-  static async set (key, value) {
-    return await KeyValueStore.current().set(key, value)
+  static set (key, value) {
+    return KeyValueStore.current().set(key, value)
   }
 
   static async getCachedParams (paramName, args = {}) {
@@ -29,8 +29,8 @@ module.exports = class KeyValueStore {
     }
   }
 
-  static async setCachedParams (paramName, qParams) {
-    return await KeyValueStore.set(paramName, qParams)
+  static setCachedParams (paramName, qParams) {
+    return KeyValueStore.set(paramName, qParams)
   }
 
   constructor () {
@@ -57,7 +57,7 @@ module.exports = class KeyValueStore {
       .first()
 
     if (row) {
-      await this.database.keyValues.update(row.id, {value: value})
+      await this.database.keyValues.update(row.id, {value})
     } else {
       await this.database.keyValues.add({key, value})
     }

@@ -273,7 +273,6 @@
         "no-console": "off",
         "consistent-return": "off",
         "nonblock-statement-body-position": "off",
-        "keyword-spacing": "off",
         "id-length": "off",
         "prefer-destructuring": "off",
         "no-extra-parens": "off",
