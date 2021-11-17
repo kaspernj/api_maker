@@ -7,12 +7,12 @@ const ModelsResponseReader = require("./models-response-reader.cjs")
 const Result = require("./result.cjs")
 
 module.exports = class ApiMakerCollection {
-  constructor(args, queryArgs = {}) {
+  constructor (args, queryArgs = {}) {
     this.queryArgs = queryArgs
     this.args = args
   }
 
-  abilities(originalAbilities) {
+  abilities (originalAbilities) {
     const newAbilities = {}
 
     for (const originalAbilityName in originalAbilities) {
@@ -31,21 +31,21 @@ module.exports = class ApiMakerCollection {
     return this._merge({abilities: newAbilities})
   }
 
-  accessibleBy(abilityName) {
+  accessibleBy (abilityName) {
     return this._merge({accessibleBy: inflection.underscore(abilityName)})
   }
 
-  async count() {
+  async count () {
     const response = await this.clone()._merge({count: true})._response()
 
     return response.count
   }
 
-  distinct() {
+  distinct () {
     return this._merge({distinct: true})
   }
 
-  async each(callback) {
+  async each (callback) {
     const array = await this.toArray()
 
     for (const model in array) {
@@ -53,12 +53,12 @@ module.exports = class ApiMakerCollection {
     }
   }
 
-  async first() {
+  async first () {
     const models = await this.toArray()
     return models[0]
   }
 
-  groupBy(...arrayOfTablesAndColumns) {
+  groupBy (...arrayOfTablesAndColumns) {
     const arrayOfTablesAndColumnsWithLowercaseColumns = arrayOfTablesAndColumns.map((tableAndColumn) => {
       if (Array.isArray(tableAndColumn)) {
         return [tableAndColumn[0], tableAndColumn[1].toLowerCase()]
@@ -74,18 +74,18 @@ module.exports = class ApiMakerCollection {
     })
   }
 
-  isLoaded() {
+  isLoaded () {
     if (this.args.reflectionName in this.args.model.relationshipsCache)
       return true
 
     return false
   }
 
-  limit(amount) {
+  limit (amount) {
     return this._merge({limit: amount})
   }
 
-  loaded() {
+  loaded () {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
       throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
     }
@@ -93,22 +93,22 @@ module.exports = class ApiMakerCollection {
     return this.args.model.relationshipsCache[this.args.reflectionName]
   }
 
-  preload(preloadValue) {
+  preload (preloadValue) {
     return this._merge({preload: preloadValue})
   }
 
-  page(page) {
+  page (page) {
     if (!page)
       page = 1
 
     return this._merge({page})
   }
 
-  pageKey(pageKey) {
+  pageKey (pageKey) {
     return this._merge({pageKey})
   }
 
-  params() {
+  params () {
     let params = {}
 
     if (this.queryArgs.params) params = merge(params, this.queryArgs.params)
@@ -128,15 +128,15 @@ module.exports = class ApiMakerCollection {
     return params
   }
 
-  per(per) {
+  per (per) {
     return this._merge({per})
   }
 
-  perKey(perKey) {
+  perKey (perKey) {
     return this._merge({perKey})
   }
 
-  ransack(params) {
+  ransack (params) {
     if (params) {
       this._merge({ransack: params})
     }
@@ -144,18 +144,18 @@ module.exports = class ApiMakerCollection {
     return this
   }
 
-  async result() {
+  async result () {
     const response = await this._response()
     const models = this._responseToModels(response)
     const result = new Result({collection: this, models, response})
     return result
   }
 
-  searchKey(searchKey) {
+  searchKey (searchKey) {
     return this._merge({searchKey: searchKey})
   }
 
-  select(originalSelect) {
+  select (originalSelect) {
     const newSelect = {}
 
     for (const originalModelName in originalSelect) {
@@ -174,7 +174,7 @@ module.exports = class ApiMakerCollection {
     return this._merge({select: newSelect})
   }
 
-  selectColumns(originalSelect) {
+  selectColumns (originalSelect) {
     const newSelect = {}
 
     for (const originalModelName in originalSelect) {
@@ -193,34 +193,34 @@ module.exports = class ApiMakerCollection {
     return this._merge({selectColumns: newSelect})
   }
 
-  sort(sortBy) {
+  sort (sortBy) {
     return this._merge({ransack: {s: sortBy}})
   }
 
-  async toArray() {
+  async toArray () {
     const response = await this._response()
     return this._responseToModels(response)
   }
 
-  modelClass() {
+  modelClass () {
     const modelName = digg(this.args.modelClass.modelClassData(), "name")
 
     return digg(require("@kaspernj/api-maker/src/models"), modelName)
   }
 
-  clone() {
+  clone () {
     const clonedQueryArgs = cloneDeep(this.queryArgs)
 
     return new ApiMakerCollection(this.args, clonedQueryArgs)
   }
 
-  _merge(newQueryArgs) {
+  _merge (newQueryArgs) {
     merge(this.queryArgs, newQueryArgs)
 
     return this
   }
 
-  _response() {
+  _response () {
     const modelClassData = this.args.modelClass.modelClassData()
 
     return CommandsPool.addCommand(
@@ -234,7 +234,7 @@ module.exports = class ApiMakerCollection {
     )
   }
 
-  _responseToModels(response) {
+  _responseToModels (response) {
     const modelsResponseReader = new ModelsResponseReader({
       collection: this,
       response

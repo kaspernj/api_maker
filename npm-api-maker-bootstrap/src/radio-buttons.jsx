@@ -23,27 +23,27 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     wrapperClassName: PropTypes.string
   })
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       validationErrors: []
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.setForm()
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     this.setForm()
   }
 
-  setForm() {
+  setForm () {
     const form = this.refs.hiddenInput && this.refs.hiddenInput.form
     if (form != this.state.form) this.setState({form})
   }
 
-  render() {
+  render () {
     const {form} = this.state
 
     return (
@@ -57,7 +57,7 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     )
   }
 
-  inputDefaultValue() {
+  inputDefaultValue () {
     if (this.props.defaultValue) {
       return this.props.defaultValue
     } else if (this.props.model) {
@@ -68,7 +68,7 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     }
   }
 
-  inputName() {
+  inputName () {
     if (this.props.name) {
       return this.props.name
     } else if (this.props.model) {
@@ -76,7 +76,7 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     }
   }
 
-  inputRadioClassName() {
+  inputRadioClassName () {
     const classNames = ["form-check-input"]
 
     if (this.state.validationErrors.length > 0)
@@ -85,11 +85,11 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  generatedId() {
+  generatedId () {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
   }
 
-  onValidationErrors(event) {
+  onValidationErrors (event) {
     const validationErrors = event.detail.getValidationErrorsForInput({
       attribute: this.props.attribute,
       inputName: this.inputName(),
@@ -98,7 +98,7 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     this.setState({validationErrors})
   }
 
-  optionElement(option, index) {
+  optionElement (option, index) {
     const {collection} = digs(this.props, "collection")
     const {onChange} = this.props
     const {validationErrors} = this.state
@@ -128,7 +128,7 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     )
   }
 
-  wrapperClassName() {
+  wrapperClassName () {
     const classNames = ["component-bootstrap-radio-buttons"]
 
     if (this.props.wrapperClassName)

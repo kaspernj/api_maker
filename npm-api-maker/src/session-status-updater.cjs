@@ -3,14 +3,14 @@ const inflection = require("inflection")
 const wakeEvent = require("wake-event")
 
 module.exports = class ApiMakerSessionStatusUpdater {
-  static current() {
+  static current () {
     if (!global.apiMakerSessionStatusUpdater)
       global.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()
 
     return global.apiMakerSessionStatusUpdater
   }
 
-  constructor(args = {}) {
+  constructor (args = {}) {
     this.debugging = args.debug || false
     this.events = {}
     this.timeout = args.timeout || 600000
@@ -19,20 +19,20 @@ module.exports = class ApiMakerSessionStatusUpdater {
     this.connectWakeEvent()
   }
 
-  connectOnlineEvent() {
+  connectOnlineEvent () {
     global.addEventListener("online", () => this.updateSessionStatus(), false)
   }
 
-  connectWakeEvent() {
+  connectWakeEvent () {
     wakeEvent(() => this.updateSessionStatus())
   }
 
-  debug(message) {
+  debug (message) {
     if (this.debugging)
       console.log(`ApiMakerSessionStatusUpdater: ${message}`)
   }
 
-  async sessionStatus() {
+  async sessionStatus () {
     return new Promise((resolve) => {
       const xhr = new XMLHttpRequest()
       xhr.open("POST", "/api_maker/session_statuses", true)
@@ -44,11 +44,11 @@ module.exports = class ApiMakerSessionStatusUpdater {
     })
   }
 
-  onSignedOut(callback) {
+  onSignedOut (callback) {
     this.addEvent("onSignedOut", callback)
   }
 
-  startTimeout() {
+  startTimeout () {
     this.debug("startTimeout")
 
     if (this.updateTimeout)
@@ -63,12 +63,12 @@ module.exports = class ApiMakerSessionStatusUpdater {
     )
   }
 
-  stopTimeout() {
+  stopTimeout () {
     if (this.updateTimeout)
       clearTimeout(this.updateTimeout)
   }
 
-  async updateSessionStatus() {
+  async updateSessionStatus () {
     this.debug("updateSessionStatus")
 
     const result = await this.sessionStatus()
@@ -78,7 +78,7 @@ module.exports = class ApiMakerSessionStatusUpdater {
     this.updateUserSessionsFromResult(result)
   }
 
-  updateMetaElementsFromResult(result) {
+  updateMetaElementsFromResult (result) {
     this.debug("updateMetaElementsFromResult")
     const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
@@ -90,13 +90,13 @@ module.exports = class ApiMakerSessionStatusUpdater {
     }
   }
 
-  updateUserSessionsFromResult(result) {
+  updateUserSessionsFromResult (result) {
     for (const scopeName in result.scopes) {
       this.updateUserSessionScopeFromResult(scopeName, result.scopes[scopeName])
     }
   }
 
-  updateUserSessionScopeFromResult(scopeName, scope) {
+  updateUserSessionScopeFromResult (scopeName, scope) {
     const deviseIsSignedInMethodName = `is${inflection.camelize(scopeName)}SignedIn`
 
     if (!(deviseIsSignedInMethodName in Devise)) {

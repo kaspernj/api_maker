@@ -2,7 +2,7 @@ const {digg} = require("diggerize")
 const inflection = require("inflection")
 
 module.exports = class ApiMakerRoutes {
-  constructor({jsRoutes, locale, routeDefinitions}) {
+  constructor ({jsRoutes, locale, routeDefinitions}) {
     this.jsRoutes = jsRoutes
     this.routeDefinitions = routeDefinitions
 

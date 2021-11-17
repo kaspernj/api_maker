@@ -3,7 +3,7 @@ const inflection = require("inflection")
 const Money = require("js-money")
 
 module.exports = class ApiMakerDeserializer {
-  static parse(object) {
+  static parse (object) {
     if (Array.isArray(object)) {
       return object.map((value) => ApiMakerDeserializer.parse(value))
     } else if (object && typeof object == "object") {

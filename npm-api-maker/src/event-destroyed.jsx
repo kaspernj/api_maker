@@ -9,21 +9,21 @@ export default class ApiMakerEventDestroyed extends React.PureComponent {
     onDestroyed: PropTypes.func.isRequired
   })
 
-  componentDidMount() {
+  componentDidMount () {
     this.connect()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.connectDestroyed) {
       this.connectDestroyed.unsubscribe()
     }
   }
 
-  connect() {
+  connect () {
     this.connectDestroyed = ModelEvents.connectDestroyed(this.props.model, this.props.onDestroyed)
   }
 
-  render() {
+  render () {
     return null
   }
 }

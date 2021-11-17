@@ -20,16 +20,16 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
     onUpdated: PropTypes.func.isRequired
   })
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.onConnected = this.onConnected.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.connect()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.connectUpdated) {
       this.connectUpdated.unsubscribe()
     }
@@ -39,7 +39,7 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
     }
   }
 
-  connect() {
+  connect () {
     const {model, onConnected} = this.props
 
     this.connectUpdated = ModelEvents.connectUpdated(model, (...args) => this.onUpdated(...args))
@@ -49,7 +49,7 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
     }
   }
 
-  debounce() {
+  debounce () {
     if (!this.debounceInstance) {
       if (typeof this.props.debounce == "number") {
         this.debounceInstance = debounce(this.props.onUpdated, this.props.debounce)
@@ -61,11 +61,11 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
     return this.debounceInstance
   }
 
-  onConnected() {
+  onConnected () {
     this.props.onConnected()
   }
 
-  onUpdated(...args) {
+  onUpdated (...args) {
     if (!this.props.active) {
       return
     }
@@ -77,7 +77,7 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
     }
   }
 
-  render() {
+  render () {
     return null
   }
 }

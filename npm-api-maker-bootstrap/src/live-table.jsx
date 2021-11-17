@@ -60,7 +60,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     selectColumns: PropTypes.object
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     let queryName = props.queryName
@@ -82,7 +82,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     })
   }
 
-  columnsAsArray() {
+  columnsAsArray () {
     if (typeof this.props.columns == "function") {
       return this.props.columns()
     }
@@ -90,7 +90,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return this.props.columns
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.loadQParams()
     this.loadModels()
 
@@ -99,7 +99,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     }
   }
 
-  abilitiesToLoad() {
+  abilitiesToLoad () {
     const abilitiesToLoad = {}
     const {abilities, modelClass} = this.props
     const ownAbilities = []
@@ -137,14 +137,14 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return abilitiesToLoad
   }
 
-  async loadOverallCount() {
+  async loadOverallCount () {
     const baseQuery = this.props.collection || this.props.modelClass.all()
     const overallCount = await baseQuery.count()
 
     this.shape.set({overallCount})
   }
 
-  loadQParams() {
+  loadQParams () {
     const {queryQName} = digs(this.shape, "queryQName")
     const params = Params.parse()
     const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
@@ -155,7 +155,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   loadModelsDebounce = debounce(() => this.loadModels())
   submitFilterDebounce = debounce(() => this.submitFilter())
 
-  async loadModels() {
+  async loadModels () {
     const params = Params.parse()
     const {collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
     const {qParams, queryPageName, queryQName} = this.shape
@@ -194,7 +194,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     this.shape.set({query, result, models: result.models()})
   }
 
-  render() {
+  render () {
     const {appHistory, modelClass} = digs(this.props, "appHistory", "modelClass")
     const {noRecordsAvailableContent, noRecordsFoundContent} = this.props
     const {overallCount, qParams, query, result, models} = digs(this.shape, "overallCount", "qParams", "query", "result", "models")
@@ -226,7 +226,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     )
   }
 
-  showNoRecordsAvailableContent() {
+  showNoRecordsAvailableContent () {
     const {noRecordsAvailableContent} = this.props
     const {models, overallCount} = digs(this.shape, "models", "overallCount")
 
@@ -234,7 +234,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     if (models.length === 0 && overallCount === 0 && noRecordsAvailableContent) return true
   }
 
-  showNoRecordsFoundContent() {
+  showNoRecordsFoundContent () {
     const {noRecordsAvailableContent, noRecordsFoundContent} = this.props
     const {models, overallCount} = digs(this.shape, "models", "overallCount")
 
@@ -246,7 +246,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     if (models.length === 0 && noRecordsFoundContent) return true
   }
 
-  cardOrTable() {
+  cardOrTable () {
     const {
       abilities,
       actionsContent,
@@ -356,7 +356,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     )
   }
 
-  tableContent() {
+  tableContent () {
     const {modelClass} = digs(this.props, "modelClass")
     const {actionsContent, destroyEnabled, editModelPath} = this.props
     const {query, models} = this.shape
@@ -395,7 +395,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     )
   }
 
-  className() {
+  className () {
     const classNames = ["component-api-maker-live-table"]
 
     if (this.props.className)
@@ -404,14 +404,14 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  columnContentFromContentArg(column, model) {
+  columnContentFromContentArg (column, model) {
     const contentArgs = this.modelCallbackArgs(model)
     const value = column.content(contentArgs)
 
     return this.presentColumnValue(value)
   }
 
-  modelCallbackArgs(model) {
+  modelCallbackArgs (model) {
     const modelArgName = inflection.camelize(this.props.modelClass.modelClassData().name, true)
     const modelCallbackArgs = {}
 
@@ -420,7 +420,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return modelCallbackArgs
   }
 
-  columnClassNamesForColumn(column) {
+  columnClassNamesForColumn (column) {
     const classNames = ["live-table-column"]
 
     if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
@@ -430,7 +430,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return classNames
   }
 
-  columnsContentFromColumns(model) {
+  columnsContentFromColumns (model) {
     const {columns} = digs(this.shape, "columns")
 
     return columns.map((column) =>
@@ -445,7 +445,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     )
   }
 
-  columnsContentFromAttributeAndPath(column, model) {
+  columnsContentFromAttributeAndPath (column, model) {
     const {attribute} = digs(column, "attribute")
     const currentModelClass = this.props.modelClass
     const path = column.path || []
@@ -459,7 +459,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return this.presentColumnValue(value)
   }
 
-  headersContentFromColumns() {
+  headersContentFromColumns () {
     const {columns} = digs(this.shape, "columns")
 
     return columns.map((column) =>
@@ -478,7 +478,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     )
   }
 
-  headerClassNameForColumn(column) {
+  headerClassNameForColumn (column) {
     const classNames = ["live-table-header"]
 
     if (column.headerProps && column.headerProps.className) classNames.push(column.headerProps.className)
@@ -488,7 +488,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return classNames
   }
 
-  headerLabelForColumn(column) {
+  headerLabelForColumn (column) {
     if ("label" in column) {
       if (typeof column.label == "function") {
         return column.label()
@@ -502,7 +502,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     throw new Error("No 'label' or 'attribute' was given")
   }
 
-  identifierForColumn(column) {
+  identifierForColumn (column) {
     if (column.identifier) return column.identifier
     if (column.attribute) return `attribute-${column.attribute}`
     if (column.sortKey) return `sort-key-${column.sortKey}`
@@ -566,7 +566,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     }
   }
 
-  presentColumnValue(value) {
+  presentColumnValue (value) {
     if (value instanceof Date) {
       return I18n.l("time.formats.default", value)
     } else if (value instanceof Money) {

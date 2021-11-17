@@ -3,7 +3,7 @@ const PropTypesExact = require("prop-types-exact")
 const React = require("react")
 
 export default class ApiMakerEventListener extends React.PureComponent {
-  static callEvent(target, eventName, args = []) {
+  static callEvent (target, eventName, args = []) {
     let event = document.createEvent("Event")
     event.initEvent(eventName, false, true)
     target.dispatchEvent(event, args)
@@ -15,24 +15,24 @@ export default class ApiMakerEventListener extends React.PureComponent {
     target: PropTypes.object.isRequired
   })
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.onCalled = this.onCalled.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.target.addEventListener(this.props.event, this.onCalled)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.target.removeEventListener(this.props.event, this.onCalled)
   }
 
-  onCalled(...args) {
+  onCalled (...args) {
     this.props.onCalled.apply(null, args)
   }
 
-  render() {
+  render () {
     return null
   }
 }

@@ -25,19 +25,19 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     form: undefined
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (this.props.onErrors) {
       this.setForm()
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     if (this.props.onErrors) {
       this.setForm()
     }
   }
 
-  setForm() {
+  setForm () {
     const form = dig(this.props.inputRef || this.inputRef, "current", "form")
 
     if (form != this.state.form) {
@@ -45,7 +45,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     }
   }
 
-  render() {
+  render () {
     const {
       attribute,
       children,
@@ -88,7 +88,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     )
   }
 
-  optionKey(option) {
+  optionKey (option) {
     if (Array.isArray(option)) {
       return `select-option-${option[1]}`
     } else {
@@ -96,7 +96,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     }
   }
 
-  optionLabel(option) {
+  optionLabel (option) {
     if (Array.isArray(option)) {
       return option[0]
     } else {
@@ -104,7 +104,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     }
   }
 
-  optionValue(option) {
+  optionValue (option) {
     if (Array.isArray(option)) {
       return option[1]
     } else {
@@ -112,7 +112,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     }
   }
 
-  includeBlank() {
+  includeBlank () {
     if (this.props.includeBlank && !this.props.multiple) {
       return true
     } else {
@@ -120,7 +120,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     }
   }
 
-  inputDefaultValue() {
+  inputDefaultValue () {
     if ("defaultValue" in this.props) {
       return this.props.defaultValue
     } else if (this.props.attribute && this.props.model) {
@@ -131,11 +131,11 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     }
   }
 
-  inputName() {
+  inputName () {
     return nameForComponent(this)
   }
 
-  onValidationErrors(event) {
+  onValidationErrors (event) {
     const {onErrors} = this.props
 
     if (!onErrors) {

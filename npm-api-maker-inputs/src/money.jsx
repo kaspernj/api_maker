@@ -29,11 +29,11 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
   inputRef = React.createRef()
   state = {}
 
-  getInputRef() {
+  getInputRef () {
     return this.props.inputRef || this.inputRef
   }
 
-  render() {
+  render () {
     const {showCurrencyOptions} = this.props
 
     return (
@@ -68,23 +68,23 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     )
   }
 
-  checkAttributeExists() {
+  checkAttributeExists () {
     if (this.props.model && !this.props.model[this.props.attribute])
       throw new Error(`No such attribute: ${digg(this.props.model.modelClassData(), "name")}#${this.props.attribute}`)
   }
 
-  inputCurrencyId() {
+  inputCurrencyId () {
     return `${this.inputId()}_currency`
   }
 
-  inputCurrencyName() {
+  inputCurrencyName () {
     if (this.props.currencyName)
       return this.props.currencyName
 
     return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}_currency]`
   }
 
-  inputCurrencyValue() {
+  inputCurrencyValue () {
     this.checkAttributeExists()
     let value = this.props.model[this.props.attribute]()
 
@@ -95,7 +95,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     }
   }
 
-  inputDefaultValue() {
+  inputDefaultValue () {
     this.checkAttributeExists()
     let value = this.props.model[this.props.attribute]()
 
@@ -106,7 +106,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     }
   }
 
-  inputDefaultCentsValue() {
+  inputDefaultCentsValue () {
     const {attribute, model} = this.props
 
     if (!(attribute in model)) throw new Error(`No such attribute on ${model.modelClassData().name}: ${attribute}`)
@@ -120,18 +120,18 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
       return MoneyFormatter.amountFromMoney(value)
   }
 
-  inputCentsId() {
+  inputCentsId () {
     return `${this.inputId()}_cents`
   }
 
-  inputCentsName() {
+  inputCentsName () {
     if (this.props.name)
       return this.props.name
 
     return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}_cents]`
   }
 
-  inputId() {
+  inputId () {
     return idForComponent(this)
   }
 

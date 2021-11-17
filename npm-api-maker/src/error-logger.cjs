@@ -1,7 +1,7 @@
 const SourceMapsLoader = require("./source-maps-loader.cjs")
 
 module.exports = class ErrorLogger {
-  constructor() {
+  constructor () {
     this.errors = []
     this.sourceMapsLoader = new SourceMapsLoader()
     this.sourceMapsLoader.loadSourceMapsForScriptTags((script) => {
@@ -14,16 +14,16 @@ module.exports = class ErrorLogger {
     })
   }
 
-  enable() {
+  enable () {
     this.connectOnError()
     this.connectUnhandledRejection()
   }
 
-  getErrors() {
+  getErrors () {
     return this.errors
   }
 
-  connectOnError() {
+  connectOnError () {
     global.addEventListener("error", (event) => {
       if (!this.isHandlingError) {
         this.isHandlingError = true
@@ -34,7 +34,7 @@ module.exports = class ErrorLogger {
     })
   }
 
-  connectUnhandledRejection() {
+  connectUnhandledRejection () {
     global.addEventListener("unhandledrejection", (event) => {
       if (!this.isHandlingError) {
         this.isHandlingError = true
@@ -45,7 +45,7 @@ module.exports = class ErrorLogger {
     })
   }
 
-  async onError(event) {
+  async onError (event) {
     await this.sourceMapsLoader.loadSourceMaps()
 
     if (event.error && event.error.stack) {
@@ -65,7 +65,7 @@ module.exports = class ErrorLogger {
     }
   }
 
-  async onUnhandledRejection(event) {
+  async onUnhandledRejection (event) {
     await this.sourceMapsLoader.loadSourceMaps()
 
     if (event.reason.stack) {
@@ -85,7 +85,7 @@ module.exports = class ErrorLogger {
     }
   }
 
-  testPromiseError() {
+  testPromiseError () {
     return new Promise((resolve) => {
       throw new Error("testPromiseError")
     })

@@ -2,11 +2,11 @@ const {digg} = require("diggerize")
 const inflection = require("inflection")
 
 module.exports = class ApiMakerInputsAutoSubmit {
-  constructor({component}) {
+  constructor ({component}) {
     this.component = component
   }
 
-  autoSubmit() {
+  autoSubmit () {
     const {attribute, model} = this.component.props
     const updateAttributeName = inflection.underscore(attribute)
     const updateParams = {}
@@ -16,7 +16,7 @@ module.exports = class ApiMakerInputsAutoSubmit {
     model.update(updateParams)
   }
 
-  value() {
+  value () {
     const inputRef = this.component.props.inputRef || this.component.inputRef
     const input = digg(inputRef, "current")
 

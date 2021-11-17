@@ -8,7 +8,7 @@ export default class ApiMakerBootstrapInvalidFeedback extends React.PureComponen
     errors: PropTypes.array.isRequired
   })
 
-  render() {
+  render () {
     return (
       <div className="invalid-feedback">
         {this.errorMessages().join(". ")}
@@ -16,7 +16,7 @@ export default class ApiMakerBootstrapInvalidFeedback extends React.PureComponen
     )
   }
 
-  errorMessages() {
+  errorMessages () {
     const {errors} = digs(this.props, "errors")
     const errorMessages = []
 

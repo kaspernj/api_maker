@@ -24,14 +24,14 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     table: PropTypes.bool.isRequired
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       expanded: props.defaultExpanded
     }
   }
 
-  render() {
+  render () {
     const {
       children,
       className,
@@ -85,7 +85,7 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     )
   }
 
-  classNames() {
+  classNames () {
     const classNames = ["component-bootstrap-card", "card", "card-default"]
 
     if (this.props.className)
@@ -94,7 +94,7 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  bodyClassNames() {
+  bodyClassNames () {
     const {expandableHide, responsiveTable, table} = digs(this.props, "expandableHide", "responsiveTable", "table")
     const {expanded} = digs(this.state, "expanded")
     const classNames = ["card-body"]
@@ -124,7 +124,7 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     this.setState({expanded: true})
   }
 
-  tableClassNames() {
+  tableClassNames () {
     const classNames = ["table", "table-hover", "mb-0", "w-100"]
 
     if (this.props.striped)

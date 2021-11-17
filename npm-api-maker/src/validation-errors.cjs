@@ -2,7 +2,7 @@ const {digg, digs} = require("diggerize")
 const inflection = require("inflection")
 
 class ValidationError {
-  constructor(args) {
+  constructor (args) {
     this.attributeName = digg(args, "attribute_name")
     this.attributeType = digg(args, "attribute_type")
     this.errorMessages = digg(args, "error_messages")
@@ -12,7 +12,7 @@ class ValidationError {
     this.modelName = digg(args, "model_name")
   }
 
-  matchesAttributeAndInputName(attributeName, inputName) {
+  matchesAttributeAndInputName (attributeName, inputName) {
     if (this.getInputName() == inputName) return true
     if (!attributeName) return false
 
@@ -29,15 +29,15 @@ class ValidationError {
     return false
   }
 
-  getAttributeName() {
+  getAttributeName () {
     return digg(this, "attributeName")
   }
 
-  getErrorMessages() {
+  getErrorMessages () {
     return digg(this, "errorMessages")
   }
 
-  getFullErrorMessages() {
+  getFullErrorMessages () {
     const {attributeType} = digs(this, "attributeType")
 
     if (attributeType == "base") {
@@ -54,32 +54,32 @@ class ValidationError {
     }
   }
 
-  getHandled() {
+  getHandled () {
     return digg(this, "handled")
   }
 
-  getInputName() {
+  getInputName () {
     return digg(this, "inputName")
   }
 
-  getModelClass() {
+  getModelClass () {
     const modelName = inflection.classify(digg(this, "modelName"))
 
     return digg(require("@kaspernj/api-maker/src/models"), modelName)
   }
 
-  setHandled() {
+  setHandled () {
     this.handled = true
   }
 }
 
 class ValidationErrors {
-  constructor(args) {
+  constructor (args) {
     this.rootModel = digg(args, "model")
     this.validationErrors = digg(args, "validationErrors").map((validationError) => new ValidationError(validationError))
   }
 
-  getErrorMessage() {
+  getErrorMessage () {
     const fullErrorMessages = []
 
     for (const validationError of this.validationErrors) {
@@ -91,11 +91,11 @@ class ValidationErrors {
     return fullErrorMessages.join(". ")
   }
 
-  getValidationErrors() {
+  getValidationErrors () {
     return this.validationErrors
   }
 
-  getValidationErrorsForInput(args) {
+  getValidationErrorsForInput (args) {
     const {attribute, inputName, onMatchValidationError} = args
     const validationErrors = this.validationErrors.filter((validationError) => {
       if (onMatchValidationError) {
@@ -110,7 +110,7 @@ class ValidationErrors {
     return validationErrors
   }
 
-  getUnhandledErrorMessage() {
+  getUnhandledErrorMessage () {
     const unhandledValidationErrors = this.validationErrors.filter((validationError) => !validationError.getHandled())
 
     if (unhandledValidationErrors.length > 0) {

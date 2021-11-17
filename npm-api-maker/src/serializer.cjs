@@ -1,28 +1,28 @@
 const {digg} = require("diggerize")
 
 module.exports = class Serializer {
-  static serialize(arg) {
+  static serialize (arg) {
     const serialize = new Serializer(arg)
 
     return serialize.serialize()
   }
 
-  constructor(arg) {
+  constructor (arg) {
     this.arg = arg
   }
 
-  serialize() {
+  serialize () {
     return this.serializeArgument(this.arg)
   }
 
-  serializeArgument(arg) {
+  serializeArgument (arg) {
     if (typeof arg == "function" && arg.modelClassData && arg.modelName) {
       return {
         api_maker_type: "resource",
         name: digg(arg.modelClassData(), "name")
       }
     } else if (arg instanceof Date) {
-      let offsetNumber = parseInt((arg.getTimezoneOffset() / 60) * 100)
+      let offsetNumber = parseInt((arg.getTimezoneOffset() / 60) * 100, 10)
 
       offsetNumber = -offsetNumber
 
@@ -45,11 +45,11 @@ module.exports = class Serializer {
     }
   }
 
-  serializeArray(arg) {
+  serializeArray (arg) {
     return arg.map((value) => this.serializeArgument(value))
   }
 
-  serializeObject(arg) {
+  serializeObject (arg) {
     const newObject = {}
 
     for (const key in arg) {

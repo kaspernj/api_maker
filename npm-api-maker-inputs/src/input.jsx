@@ -38,19 +38,19 @@ export default class ApiMakerInput extends React.PureComponent {
     form: undefined
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (this.props.onErrors) {
       this.setForm()
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     if (this.props.onErrors) {
       this.setForm()
     }
   }
 
-  setForm() {
+  setForm () {
     const form = dig(this.props.inputRef || this.inputRef, "current", "form")
 
     if (form != this.state.form) {
@@ -58,7 +58,7 @@ export default class ApiMakerInput extends React.PureComponent {
     }
   }
 
-  render() {
+  render () {
     const {
       attribute,
       autoRefresh,
@@ -119,7 +119,7 @@ export default class ApiMakerInput extends React.PureComponent {
     )
   }
 
-  actualValue(visibleInput) {
+  actualValue (visibleInput) {
     const {localizedNumber} = digs(this.props, "localizedNumber")
     const value = digg(visibleInput, "value")
 
@@ -137,11 +137,11 @@ export default class ApiMakerInput extends React.PureComponent {
     return value
   }
 
-  autoSubmit() {
+  autoSubmit () {
     new AutoSubmit({component: this}).autoSubmit()
   }
 
-  formatValue(value) {
+  formatValue (value) {
     const {formatValue} = this.props
 
     if (formatValue) {
@@ -158,7 +158,7 @@ export default class ApiMakerInput extends React.PureComponent {
     return value
   }
 
-  inputDefaultValue() {
+  inputDefaultValue () {
     if ("defaultValue" in this.props) {
       return this.formatValue(this.props.defaultValue)
     } else if (this.props.model) {
@@ -170,7 +170,7 @@ export default class ApiMakerInput extends React.PureComponent {
     }
   }
 
-  inputDefaultValueLocalized() {
+  inputDefaultValueLocalized () {
     const {localizedNumber} = digs(this.props, "localizedNumber")
 
     let value = this.inputDefaultValue()
@@ -192,22 +192,22 @@ export default class ApiMakerInput extends React.PureComponent {
     return value
   }
 
-  inputId() {
+  inputId () {
     return idForComponent(this)
   }
 
-  inputName() {
+  inputName () {
     if (this.state.blankInputName)
       return ""
 
     return nameForComponent(this)
   }
 
-  inputReference() {
+  inputReference () {
     return this.props.inputRef || this.inputRef
   }
 
-  inputType() {
+  inputType () {
     if (this.props.type) {
       return this.props.type
     } else {
@@ -264,7 +264,7 @@ export default class ApiMakerInput extends React.PureComponent {
     if (onChange) onChange(e)
   }
 
-  delayAutoSubmit() {
+  delayAutoSubmit () {
     if (this.delayAutoSubmitTimeout) {
       clearTimeout(this.delayAutoSubmitTimeout)
     }
@@ -273,7 +273,7 @@ export default class ApiMakerInput extends React.PureComponent {
   }
 
   // This fixes an issue in Firefox and ActiveStorage, where uploads would be a blank string if a file wasn't chosen
-  getBlankInputName() {
+  getBlankInputName () {
     const value = dig(this.props.inputRef || this.inputRef, "current", "value")
 
     if (this.props.type == "file" && value == "")

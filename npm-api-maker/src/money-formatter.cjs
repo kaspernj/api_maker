@@ -3,15 +3,15 @@ const formatNumber = require("format-number")
 const replaceall = require("replaceall")
 
 module.exports = class MoneyFormatter {
-  static fromMoney(money, args = {}) {
+  static fromMoney (money, args = {}) {
     return new MoneyFormatter(money, args)
   }
 
-  static format(money, args = {}) {
+  static format (money, args = {}) {
     return MoneyFormatter.fromMoney(money, args).toString()
   }
 
-  static stringToFloat(moneyString) {
+  static stringToFloat (moneyString) {
     let unformatted = replaceall(I18n.t("number.currency.format.delimiter"), "", moneyString)
 
     unformatted = replaceall(I18n.t("number.currency.format.separator"), ".", unformatted)
@@ -20,17 +20,17 @@ module.exports = class MoneyFormatter {
     return float
   }
 
-  static amountFromMoney(money) {
-    if (money.hasOwnProperty("amount")) {
+  static amountFromMoney (money) {
+    if ("amount" in money) {
       return parseFloat(money.amount)
-    } else if (money.hasOwnProperty("fractional")) {
+    } else if ("fractional" in money) {
       return parseFloat(money.fractional)
     }
 
     throw new Error(`Couldn't figure out amount from: ${JSON.stringify(money, null, 2)}`)
   }
 
-  static currencyFromMoney(money) {
+  static currencyFromMoney (money) {
     let currencyString
 
     if (typeof money.currency == "string") {
@@ -54,14 +54,14 @@ module.exports = class MoneyFormatter {
     return moneyCurrency
   }
 
-  constructor(money, args = {}) {
+  constructor (money, args = {}) {
     this.args = args
     this.money = money
     this.amount = MoneyFormatter.amountFromMoney(money)
     this.currency = MoneyFormatter.currencyFromMoney(money)
   }
 
-  toString() {
+  toString () {
     const amount = (this.amount / 100).toFixed(this.decimalDigits())
     const formatOptions = {
       prefix: this.prefix(),
@@ -72,7 +72,7 @@ module.exports = class MoneyFormatter {
     return formatNumber(formatOptions)(amount)
   }
 
-  decimalDigits() {
+  decimalDigits () {
     if (this.args.decimals !== null) {
       return this.args.decimals
     }
@@ -80,7 +80,7 @@ module.exports = class MoneyFormatter {
     return this.currency.decimal_digits
   }
 
-  prefix() {
+  prefix () {
     if (this.args.excludeCurrency) {
       return ""
     }

@@ -1,17 +1,17 @@
-const {digs} = require("diggerize")
+const {digg, digs} = require("diggerize")
 const ModelRecipesModelLoader = require("./model-recipes-model-loader.cjs")
 
 module.exports = class ModelRecipesLoader {
-  constructor({recipes}) {
+  constructor ({recipes}) {
     this.modelClasses = {}
     this.recipes = recipes
   }
 
-  getModelClass(name) {
+  getModelClass (name) {
     return digg(this, "modelClasses", name)
   }
 
-  load() {
+  load () {
     const {recipes} = digs(this, "recipes")
     const {models} = digs(recipes, "models")
 

@@ -6,18 +6,18 @@ const inflection = require("inflection")
 const Services = require("./services.cjs")
 
 module.exports = class ApiMakerDevise {
-  static callSignOutEvent(args) {
+  static callSignOutEvent (args) {
     ApiMakerDevise.events().emit("onDeviseSignOut", {args})
   }
 
-  static current() {
+  static current () {
     if (!global.currentApiMakerDevise)
     global.currentApiMakerDevise = new ApiMakerDevise()
 
     return global.currentApiMakerDevise
   }
 
-  static events() {
+  static events () {
     if (!global.apiMakerDeviseEvents) {
       global.apiMakerDeviseEvents = new EventEmitter()
       global.apiMakerDeviseEvents.setMaxListeners(1000)
@@ -26,16 +26,16 @@ module.exports = class ApiMakerDevise {
     return global.apiMakerDeviseEvents
   }
 
-  static addUserScope(scope) {
+  static addUserScope (scope) {
     const currentMethodName = `current${inflection.camelize(scope)}`
 
-    ApiMakerDevise[currentMethodName] = function() {
+    ApiMakerDevise[currentMethodName] = function () {
       return ApiMakerDevise.current().getCurrentScope(scope)
     }
 
     const isSignedInMethodName = `is${inflection.camelize(scope)}SignedIn`
 
-    ApiMakerDevise[isSignedInMethodName] = function() {
+    ApiMakerDevise[isSignedInMethodName] = function () {
       if (ApiMakerDevise.current().getCurrentScope(scope)) {
         return true
       }
@@ -44,7 +44,7 @@ module.exports = class ApiMakerDevise {
     }
   }
 
-  static async signIn(username, password, args = {}) {
+  static async signIn (username, password, args = {}) {
     if (!args.scope)
       args.scope = "user"
 
@@ -61,18 +61,18 @@ module.exports = class ApiMakerDevise {
     return {model: modelInstance, response}
   }
 
-  static updateSession(model) {
+  static updateSession (model) {
     const scope = digg(model.modelClassData(), "name")
     const camelizedScopeName = inflection.camelize(scope, true)
 
     ApiMakerDevise.current().currents[camelizedScopeName] = model
   }
 
-  static setSignedOut(args) {
+  static setSignedOut (args) {
     ApiMakerDevise.current().currents[inflection.camelize(args.scope, true)] = null
   }
 
-  static async signOut(args = {}) {
+  static async signOut (args = {}) {
     if (!args.scope)
       args.scope = "user"
 
@@ -91,18 +91,18 @@ module.exports = class ApiMakerDevise {
     return response
   }
 
-  constructor() {
+  constructor () {
     this.currents = {}
   }
 
-  getCurrentScope(scope) {
+  getCurrentScope (scope) {
     if (!(scope in this.currents))
       this.currents[scope] = this.loadCurrentScope(scope)
 
     return this.currents[scope]
   }
 
-  loadCurrentScope(scope) {
+  loadCurrentScope (scope) {
     const scopeData = global.apiMakerDeviseCurrent[scope]
 
     if (!scopeData)

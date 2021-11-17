@@ -3,23 +3,23 @@ const FormDataObjectizer = require("form-data-objectizer")
 const qs = require("qs")
 
 module.exports = class Api {
-  static get(path, pathParams = null) {
+  static get (path, pathParams = null) {
     return this.requestLocal({path, pathParams, method: "GET"})
   }
 
-  static delete(path, pathParams = null) {
+  static delete (path, pathParams = null) {
     return this.requestLocal({path, pathParams, method: "DELETE"})
   }
 
-  static patch(path, data = {}) {
+  static patch (path, data = {}) {
     return this.requestLocal({path, data, method: "PATCH"})
   }
 
-  static post(path, data = {}) {
+  static post (path, data = {}) {
     return this.requestLocal({path, data, method: "POST"})
   }
 
-  static request(args) {
+  static request (args) {
     let path = args.path
 
     if (args.pathParams) {
@@ -59,7 +59,7 @@ module.exports = class Api {
     })
   }
 
-  static requestLocal(args) {
+  static requestLocal (args) {
     if (!args.headers) {
       args.headers = {}
     }
@@ -82,18 +82,18 @@ module.exports = class Api {
     return this.request(args)
   }
 
-  static put(path, data = {}) {
+  static put (path, data = {}) {
     return this.requestLocal({path, data, method: "PUT"})
   }
 
-  static _token() {
+  static _token () {
     const tokenElement = document.querySelector("meta[name='csrf-token']")
 
     if (tokenElement)
       return tokenElement.getAttribute("content")
   }
 
-  static _parseResponse(xhr) {
+  static _parseResponse (xhr) {
     const responseType = xhr.getResponseHeader("content-type")
 
     if (responseType && responseType.startsWith("application/json")) {

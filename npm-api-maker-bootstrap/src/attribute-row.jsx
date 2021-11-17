@@ -11,7 +11,7 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
     value: PropTypes.node
   }
 
-  render() {
+  render () {
     const {attribute, children, className, identifier, label, value, ...restProps} = this.props
 
     return (

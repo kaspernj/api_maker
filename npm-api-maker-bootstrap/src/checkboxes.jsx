@@ -19,27 +19,27 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     options: PropTypes.array.isRequired
   })
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       validationErrors: []
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.setForm()
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     this.setForm()
   }
 
-  setForm() {
+  setForm () {
     const form = this.refs.hiddenInput && this.refs.hiddenInput.form
     if (form != this.state.form) this.setState({form})
   }
 
-  render() {
+  render () {
     const {form} = this.state
 
     return (
@@ -55,7 +55,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     )
   }
 
-  inputDefaultValue() {
+  inputDefaultValue () {
     const {attribute, defaultValue, model} = this.props
 
     if (defaultValue) {
@@ -68,7 +68,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     }
   }
 
-  inputCheckboxClassName() {
+  inputCheckboxClassName () {
     const classNames = []
 
     if (this.state.validationErrors.length > 0)
@@ -77,7 +77,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  inputName() {
+  inputName () {
     if (this.props.name) {
       return `${this.props.name}[]`
     } else if (this.props.model) {
@@ -85,7 +85,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     }
   }
 
-  isDefaultSelected(option) {
+  isDefaultSelected (option) {
     let defaultValue = this.inputDefaultValue()
 
     if (!defaultValue)
@@ -98,7 +98,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     }
   }
 
-  label() {
+  label () {
     const {attribute, label, model} = this.props
 
     if ("label" in this.props) {
@@ -108,7 +108,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     }
   }
 
-  labelClassName() {
+  labelClassName () {
     const classNames = []
 
     if (this.props.labelClassName)
@@ -117,14 +117,14 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  generatedId() {
+  generatedId () {
     if (!this.generatedIdValue)
       this.generatedIdValue = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 
     return this.generatedIdValue
   }
 
-  onValidationErrors(event) {
+  onValidationErrors (event) {
     const validationErrors = event.detail.getValidationErrorsForInput({
       attribute: this.props.attribute,
       inputName: this.inputName(),
@@ -133,7 +133,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     this.setState({validationErrors})
   }
 
-  optionElement(option, index) {
+  optionElement (option, index) {
     const {onChange, options} = this.props
     const {validationErrors} = this.state
     const id = `${this.generatedId()}-${index}`
