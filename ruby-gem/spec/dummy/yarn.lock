@@ -1024,20 +1024,21 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.1.tgz#141f15645acaa3b133b7c247cad58ae252ffae85"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
-"@kaspernj/api-maker-bootstrap@^1.0.74":
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.74.tgz#d6a45ffc54ca9951dbc4a236229de2f79f41ddb2"
-  integrity sha512-rfaWB8TEAVt+6wft/1VxColgA6JmH87ie4wMYN5GsBsTJNO4hddYot6/Ct3J9fRzvte6d6ydoR4VZWeVm7Ln7g==
+"@kaspernj/api-maker-bootstrap@^1.0.75":
+  version "1.0.75"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.75.tgz#2bf12c5be14919aef3d5420304ff3ee2dad2eacf"
+  integrity sha512-EWFsu+OS/fUnbEUp3NlIF/ZsJOs+WdLtmQs3Ctq0W1Dtf0y85/ZjbtjiKpd2v94+zLqp9vHb2V7lqT9X/cTWtQ==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.125"
-    "@kaspernj/api-maker-inputs" ">= 1.0.64"
+    "@kaspernj/api-maker" ">= 1.0.126"
+    "@kaspernj/api-maker-inputs" ">= 1.0.65"
     debounce ">= 1.2.0"
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
+    on-location-changed ">= 1.0.2"
     set-state-compare "^1.0.15"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.64", "@kaspernj/api-maker-inputs@^1.0.65":
+"@kaspernj/api-maker-inputs@>= 1.0.65", "@kaspernj/api-maker-inputs@^1.0.65":
   version "1.0.65"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.65.tgz#c9a0210d4b299462d6b938f77c4b901ccc529f1d"
   integrity sha512-WntjfpebBIOyQCxFR3CazqS/sfGXAE/4QzJm4Rt2cYB72BhGWTu6ydtDQJAgohtvqPCJlmERa+dci0YaX2U3XA==
@@ -1047,7 +1048,7 @@
     diggerize ">= 1.0.3"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.125", "@kaspernj/api-maker@>= 1.0.126", "@kaspernj/api-maker@^1.0.125":
+"@kaspernj/api-maker@>= 1.0.126", "@kaspernj/api-maker@^1.0.125":
   version "1.0.126"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.126.tgz#0bc8ce9994dbb887627e4c3a8d784f982e4961e6"
   integrity sha512-M5At8gi4s9Ghh/jJFGC9uPv5nVcKg/mk1ZwMNNKahrtAItFEwjdwUKcl6I/HJrxKKLOaT9hT0J+gjgFrSF7Xzg==
