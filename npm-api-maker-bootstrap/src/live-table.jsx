@@ -2,15 +2,13 @@ const classNames = require("classnames")
 const {Collection, EventCreated, EventDestroyed, EventUpdated, instanceOfClassName, Params} = require("@kaspernj/api-maker")
 const {debounce} = require("debounce")
 const {digg, digs} = require("diggerize")
-const inflection = require("inflection")
-const {Link} = require("react-router-dom")
 const {LocationChanged} = require("on-location-changed/location-changed-component")
-const Money = require("js-money")
 const PropTypes = require("prop-types")
 const React = require("react")
 const {Shape} = require("set-state-compare")
 
 import Card from "./card"
+import ModelRow from "./live-table/model-row"
 import Paginate from "./paginate"
 import SortLink from "./sort-link"
 
@@ -195,7 +193,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   render () {
-    const {appHistory, modelClass} = digs(this.props, "appHistory", "modelClass")
+    const {modelClass} = digs(this.props, "modelClass")
     const {noRecordsAvailableContent, noRecordsFoundContent} = this.props
     const {overallCount, qParams, query, result, models} = digs(this.shape, "overallCount", "qParams", "query", "result", "models")
 
@@ -357,8 +355,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   tableContent () {
-    const {modelClass} = digs(this.props, "modelClass")
-    const {actionsContent, destroyEnabled, editModelPath} = this.props
     const {query, models} = this.shape
 
     return (
@@ -372,23 +368,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
         </thead>
         <tbody>
           {models.map((model) =>
-            <tr className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()} key={model.id()}>
-              {this.shape.columns && this.columnsContentFromColumns(model)}
-              {!this.shape.columns && this.props.columnsContent && this.props.columnsContent(this.modelCallbackArgs(model))}
-              <td className="actions-column text-end text-nowrap text-right">
-                {actionsContent && actionsContent(this.modelCallbackArgs(model))}
-                {editModelPath && model.can("edit") &&
-                  <Link className="edit-button" to={editModelPath(this.modelCallbackArgs(model))}>
-                    <i className="fa fa-edit la la-edit" />
-                  </Link>
-                }
-                {destroyEnabled && model.can("destroy") &&
-                  <a className="destroy-button" href="#" onClick={(e) => this.onDestroyClicked(e, model)}>
-                    <i className="fa fa-remove la la-remove" />
-                  </a>
-                }
-              </td>
-            </tr>
+            <ModelRow key={model.id()} liveTable={this} model={model} />
           )}
         </tbody>
       </>
@@ -402,61 +382,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       classNames.push(this.props.className)
 
     return classNames.join(" ")
-  }
-
-  columnContentFromContentArg (column, model) {
-    const contentArgs = this.modelCallbackArgs(model)
-    const value = column.content(contentArgs)
-
-    return this.presentColumnValue(value)
-  }
-
-  modelCallbackArgs (model) {
-    const modelArgName = inflection.camelize(this.props.modelClass.modelClassData().name, true)
-    const modelCallbackArgs = {}
-
-    modelCallbackArgs[modelArgName] = model
-
-    return modelCallbackArgs
-  }
-
-  columnClassNamesForColumn (column) {
-    const classNames = ["live-table-column"]
-
-    if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
-    if (column.textCenter) classNames.push("text-center")
-    if (column.textRight) classNames.push("text-end text-right")
-
-    return classNames
-  }
-
-  columnsContentFromColumns (model) {
-    const {columns} = digs(this.shape, "columns")
-
-    return columns.map((column) =>
-      <td
-        className={classNames(this.columnClassNamesForColumn(column))}
-        data-identifier={this.identifierForColumn(column)}
-        key={this.identifierForColumn(column)}
-      >
-        {column.content && this.columnContentFromContentArg(column, model)}
-        {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
-      </td>
-    )
-  }
-
-  columnsContentFromAttributeAndPath (column, model) {
-    const {attribute} = digs(column, "attribute")
-    const currentModelClass = this.props.modelClass
-    const path = column.path || []
-
-    if (path.length > 0) throw new Error("'path' support not implemented")
-
-    if (!(attribute in model)) throw new Error(`${currentModelClass.modelName().name} doesn't respond to ${attribute}`)
-
-    const value = model[attribute]()
-
-    return this.presentColumnValue(value)
   }
 
   headersContentFromColumns () {
@@ -510,26 +435,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     throw new Error("No 'attribute', 'identifier' or 'sortKey' was given")
   }
 
-  onDestroyClicked = async (e, model) => {
-    e.preventDefault()
-
-    const {destroyMessage} = this.props
-
-    if (!confirm(I18n.t("js.shared.are_you_sure"))) {
-      return
-    }
-
-    try {
-      await model.destroy()
-
-      if (destroyMessage) {
-        FlashMessage.success(destroyMessage)
-      }
-    } catch (error) {
-      FlashMessage.errorResponse(error)
-    }
-  }
-
   onFilterFormSubmit = (e) => {
     e.preventDefault()
     this.submitFilter()
@@ -564,27 +469,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     if (foundModel) {
       this.loadModelsDebounce()
     }
-  }
-
-  presentColumnValue (value) {
-    if (value instanceof Date) {
-      return I18n.l("time.formats.default", value)
-    } else if (value instanceof Money) {
-      return MoneyFormatter.format(value)
-    } else if (typeof value == "boolean") {
-      if (value) {
-        return I18n.t("js.shared.yes")
-      }
-
-      return I18n.t("js.shared.no")
-    } else if (Array.isArray(value)) {
-      return value
-        .map((valuePart) => this.presentColumnValue(valuePart))
-        .filter((valuePart) => Boolean(valuePart))
-        .join(", ")
-    }
-
-    return value
   }
 
   submitFilter = () => {
