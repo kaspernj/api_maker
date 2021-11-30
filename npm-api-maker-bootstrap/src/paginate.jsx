@@ -1,6 +1,5 @@
 const {instanceOfClassName} = require("@kaspernj/api-maker")
 const {Link} = require("react-router-dom")
-const {LocationChanged} = require("on-location-changed/location-changed-component")
 const PropTypes = require("prop-types")
 const propTypesExact = require("prop-types-exact")
 const qs = require("qs")
@@ -27,10 +26,6 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     if (prevProps.result != this.props.result) {
       this.setState({pages: this.pages()})
     }
-  }
-
-  onLocationChanged = () => {
-    console.log("onLocationChanged")
   }
 
   isPageActiveClass (pageNumber) {
@@ -113,7 +108,6 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
 
     return (
       <>
-        <LocationChanged onChanged={digg(this, "onLocationChanged")} />
         <ul className="pagination" data-pages-length={pages.length}>
           <li className={`page-item ${result.currentPage() <= 1 ? "disabled" : ""}`} key="page-first">
             <Link className="page-link" to={this.pagePath(1)}>
