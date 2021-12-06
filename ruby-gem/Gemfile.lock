@@ -165,7 +165,7 @@ GEM
       activesupport (>= 5.0)
     html_gen (0.0.16)
       string-cases
-    htmlbeautifier (1.4.0)
+    htmlbeautifier (1.4.1)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     js-routes (2.1.2)
