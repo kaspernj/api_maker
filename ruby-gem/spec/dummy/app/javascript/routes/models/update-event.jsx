@@ -5,7 +5,7 @@ export default class ComponentsTasksForm extends React.Component {
   state = {}
 
   componentDidMount() {
-    this.loadTasks()
+    this.loadFinishedTask()
   }
 
   render() {
@@ -20,7 +20,7 @@ export default class ComponentsTasksForm extends React.Component {
             </div>
             <EventUpdated
               onConnected={() => this.setState({connected: true})}
-              model={task}
+              model={finishedTask}
               onUpdated={this.loadFinishedTask}
             />
           </div>
