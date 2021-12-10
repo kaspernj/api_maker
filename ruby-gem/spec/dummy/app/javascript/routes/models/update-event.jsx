@@ -14,7 +14,7 @@ export default class ComponentsTasksForm extends React.Component {
     return (
       <div className="routes-tasks-filter">
         {finishedTask &&
-          <div className="finished-task-container" data-connected={connected}>
+          <div className="finished-task-container" data-connected={connected} data-cache-key={finishedTask.cacheKey()}>
             <div id="finished-task-name">
               {finishedTask.name()}
             </div>

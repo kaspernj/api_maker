@@ -94,10 +94,8 @@ module.exports = class ApiMakerCableSubscriptionPool {
     }
 
     if (type == "u") {
-      if (subscriptions[modelName].updates[modelId]) {
-        for (const subscription of subscriptions[modelName].updates[modelId]) {
-          subscription.events.emit("received", {model})
-        }
+      for (const subscription of subscriptions[modelName].updates[modelId]) {
+        subscription.events.emit("received", {model})
       }
     } else if (type == "c") {
       for (const subscription of subscriptions[modelName].creates) {

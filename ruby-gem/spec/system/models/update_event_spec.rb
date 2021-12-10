@@ -5,7 +5,7 @@ describe "models - update event" do
   let(:unfinished_task) { create :task, finished: false, user: user }
   let(:user) { create :user }
 
-  it "ignores " do
+  it "ignores updates from other models" do
     finished_task
     unfinished_task
 
