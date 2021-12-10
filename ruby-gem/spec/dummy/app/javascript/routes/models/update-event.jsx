@@ -12,7 +12,7 @@ export default class ComponentsTasksForm extends React.Component {
     const {connected, finishedTask} = this.state
 
     return (
-      <div className="routes-tasks-filter">
+      <div className="routes-models-update-event">
         {finishedTask &&
           <div className="finished-task-container" data-connected={connected} data-cache-key={finishedTask.cacheKey()}>
             <div id="finished-task-name">
