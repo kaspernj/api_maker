@@ -1,7 +1,7 @@
 import {digg, digs} from "diggerize"
 import {EventUpdated} from "@kaspernj/api-maker"
 
-export default class ComponentsTasksForm extends React.Component {
+export default class ModelsUpdateEvent extends React.Component {
   state = {}
 
   componentDidMount() {
