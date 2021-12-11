@@ -15,7 +15,7 @@ module ApiMaker::ModelExtensions
     end
 
     def api_maker_broadcast_destroy_channel_name(id)
-      @api_maker_broadcast_destroy_channel_name ||= "api_maker_destroys_#{api_maker_resource.short_name}_#{id}"
+      "api_maker_destroys_#{api_maker_resource.short_name}_#{id}"
     end
 
     def api_maker_event_channel_name(id, event_name)
@@ -23,7 +23,7 @@ module ApiMaker::ModelExtensions
     end
 
     def api_maker_broadcast_update_channel_name(id)
-      @api_maker_broadcast_update_channel_name ||= "api_maker_updates_#{api_maker_resource.short_name}_#{id}"
+      "api_maker_updates_#{api_maker_resource.short_name}_#{id}"
     end
 
     def api_maker_broadcast_updates
