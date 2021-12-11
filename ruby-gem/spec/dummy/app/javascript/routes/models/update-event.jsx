@@ -15,7 +15,7 @@ export default class ModelsUpdateEvent extends React.Component {
       <div className="routes-models-update-event">
         {finishedTask &&
           <div className="finished-task-container" data-connected={connected}>
-            <div id="finished-task-name">
+            <div className="finished-task-name">
               {finishedTask.name()}
             </div>
             <EventUpdated
