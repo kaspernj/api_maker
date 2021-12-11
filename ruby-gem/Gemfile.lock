@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    api_maker (0.0.2)
+    api_maker (0.0.3)
       active_record_better_dependent_error_messages (>= 0.0.3)
       active_record_query_fixer (>= 0.0.15)
       cancancan
@@ -322,7 +322,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
-    service_pattern (1.0.2)
+    service_pattern (1.0.4)
     sexp_processor (4.16.0)
     simple_delegate (0.0.2)
     sprockets (4.0.2)
