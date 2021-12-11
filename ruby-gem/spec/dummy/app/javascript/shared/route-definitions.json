@@ -31,6 +31,7 @@
     {"name": "models_validation_errors", "path": "/models/validation-errors", "component": "models/validation-errors"},
     {"name": "models_update", "path": "/models/update/:id", "component": "models/update"},
     {"name": "models_update_with_select", "path": "/models/update_with_select/:id", "component": "models/update-with-select"},
+    {"name": "models_update_event", "path": "/models/update_event", "component": "models/update-event"},
 
     {"name": "session_status_specs_timeout", "path": "/session_status_specs/timeout", "component": "session-status-specs/timeout"},
     {"name": "new_session", "path": "/sessions/new", "component": "sessions/new"},
