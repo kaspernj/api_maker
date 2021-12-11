@@ -14,12 +14,12 @@ export default class ModelsUpdateEvent extends React.Component {
     return (
       <div className="routes-models-update-event">
         {finishedTask &&
-          <div className="finished-task-container" data-connected={connected} data-cache-key={finishedTask.cacheKey()}>
+          <div className="finished-task-container" data-connected={connected}>
             <div id="finished-task-name">
               {finishedTask.name()}
             </div>
             <EventUpdated
-              onConnected={() => this.setState({connected: true})}
+              onConnected={this.onConnected}
               model={finishedTask}
               onUpdated={this.loadFinishedTask}
             />
@@ -28,6 +28,8 @@ export default class ModelsUpdateEvent extends React.Component {
       </div>
     )
   }
+
+  onConnected = () => this.setState({connected: true})
 
   loadFinishedTask = async() => {
     const finishedTask = await Task.ransack({finished_eq: true}).first()
