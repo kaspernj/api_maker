@@ -23,7 +23,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def chrome_logs
-    page.driver.browser.manage.logs.get(:browser)
+    page.driver.browser.logs.get(:browser)
   end
 
   def confirm_accept
