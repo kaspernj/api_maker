@@ -42,7 +42,7 @@
     "set-state-compare": "^1.0.15",
     "stacktrace-parser": "^0.1.10",
     "stimulus": "^3.0.1",
-    "strftime": "^0.10.0",
+    "strftime": "^0.10.1",
     "wake-event": "^0.0.1"
   },
   "devDependencies": {
