@@ -11,7 +11,7 @@
   "name": "dummy",
   "private": true,
   "dependencies": {
-    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-react": "^7.16.5",
     "@kaspernj/api-maker": "^1.0.125",
     "@kaspernj/api-maker-bootstrap": "^1.0.76",
     "@kaspernj/api-maker-inputs": "^1.0.65",
