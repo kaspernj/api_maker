@@ -30,7 +30,7 @@
     "merge": "^2.1.1",
     "object-to-formdata": "^4.4.1",
     "on-location-changed": ">= 1.0.2",
-    "prop-types": "^15.7.2",
+    "prop-types": "^15.8.0",
     "prop-types-exact": "^1.2.0",
     "qs": "^6.10.2",
     "rails-erb-loader": "^5.5.2",
