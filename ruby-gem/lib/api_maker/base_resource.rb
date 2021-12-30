@@ -17,7 +17,7 @@ class ApiMaker::BaseResource
 
   def self.attributes(*attributes, **args)
     attributes.each do |attribute_name|
-      attribute(attribute_name, args)
+      attribute(attribute_name, **args)
     end
   end
 

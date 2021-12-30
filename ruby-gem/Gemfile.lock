@@ -8,7 +8,7 @@ PATH
       dig_bang
       rails (>= 6.0.0)
       ransack
-      service_pattern (>= 1.0.0)
+      service_pattern (>= 1.0.5)
       waitutil
 
 GEM
@@ -322,7 +322,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
-    service_pattern (1.0.4)
+    service_pattern (1.0.5)
     sexp_processor (4.16.0)
     simple_delegate (0.0.2)
     sprockets (4.0.2)
@@ -394,4 +394,4 @@ DEPENDENCIES
   webpacker
 
 BUNDLED WITH
-   2.1.4
+   2.2.32
