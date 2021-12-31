@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_bot_rails"
   s.add_development_dependency "htmlbeautifier"
   s.add_development_dependency "js-routes", ">= 2.0.7"
+  s.add_development_dependency "minitest", ">= 5.15" # Needed to make Ruby 3 work on CI
   s.add_development_dependency "money-rails"
   s.add_development_dependency "pry-rails"
   s.add_development_dependency "public_activity"

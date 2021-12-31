@@ -363,6 +363,7 @@ DEPENDENCIES
   factory_bot_rails
   htmlbeautifier
   js-routes (>= 2.0.7)
+  minitest (>= 5.15)
   money-rails
   pry-rails
   public_activity
