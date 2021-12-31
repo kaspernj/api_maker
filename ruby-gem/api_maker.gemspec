@@ -47,7 +47,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rubocop-performance"
   s.add_development_dependency "rubocop-rails"
   s.add_development_dependency "rubocop-rspec"
-  s.add_development_dependency "selenium-webdriver"
+  s.add_development_dependency "selenium-webdriver", ">= 4.1.0"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "tzinfo-data"
   s.add_development_dependency "webdrivers"
