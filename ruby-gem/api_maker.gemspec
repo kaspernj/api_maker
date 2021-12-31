@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "service_pattern", ">= 1.0.5"
 
   s.add_development_dependency "appraisal"
-  s.add_development_dependency "awesome_translations", ">= 0.0.60"
+  s.add_development_dependency "awesome_translations", ">= 0.0.61"
   s.add_development_dependency "best_practice_project"
   s.add_development_dependency "bootsnap"
   s.add_development_dependency "capybara"
