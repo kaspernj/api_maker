@@ -21,38 +21,86 @@ before_script:
   - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem/spec/dummy && rake api_maker:generate_models
 builds:
   build_1:
-    name: RSpec Kaminari
+    environment:
+      RUBY_VERSION: 2.7.4
+    name: RSpec Kaminari Ruby 2.7.4
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && bundle exec appraisal kaminari rspec --format documentation spec/api_maker spec/services
   build_2:
-    name: RSpec WillPaginate
+    environment:
+      RUBY_VERSION: 3.0.3
+    name: RSpec Kaminari Ruby 3.0.3
+    script:
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && bundle exec appraisal kaminari rspec --format documentation spec/api_maker spec/services
+  build_3:
+    environment:
+      RUBY_VERSION: 2.7.4
+    name: RSpec WillPaginate Ruby 2.7.4
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && bundle exec appraisal will_paginate rspec --format documentation spec/api_maker spec/services
-  build_3:
+  build_4:
+    environment:
+      RUBY_VERSION: 3.0.3
+    name: RSpec WillPaginate Ruby 3.0.3
+    script:
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && bundle exec appraisal will_paginate rspec --format documentation spec/api_maker spec/services
+  build_5:
+    environment:
+      RUBY_VERSION: 2.7.4
     name: Chrome Kaminari
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
-  build_4:
-    name: Chrome WillPaginate
+  build_6:
+    environment:
+      RUBY_VERSION: 3.0.3
+    name: Chrome Kaminari Ruby 3.0.3
+    script:
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
+  build_7:
+    environment:
+      RUBY_VERSION: 2.7.4
+    name: Chrome WillPaginate Ruby 2.7.4
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
-  build_5:
-    name: Firefox Kaminari
+  build_8:
     environment:
+      RUBY_VERSION: 3.0.3
+    name: Chrome WillPaginate Ruby 3.0.3
+    script:
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
+  build_9:
+    name: Firefox Kaminari Ruby 2.7.4
+    environment:
+      RUBY_VERSION: 2.7.4
       SELENIUM_DRIVER: firefox
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
-  build_6:
-    name: Firefox WillPaginate
+  build_10:
+    name: Firefox Kaminari Ruby 3.0.3
     environment:
+      RUBY_VERSION: 3.0.3
+      SELENIUM_DRIVER: firefox
+    script:
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
+  build_11:
+    name: Firefox WillPaginate Ruby 2.7.4
+    environment:
+      RUBY_VERSION: 2.7.4
       SELENIUM_DRIVER: firefox
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
-  build_7:
+  build_12:
+    name: Firefox WillPaginate Ruby 3.0.3
+    environment:
+      RUBY_VERSION: 3.0.3
+      SELENIUM_DRIVER: firefox
+    script:
+      - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
+  build_13:
     name: NPM API maker Jest
     script:
       - cd npm-api-maker && yarn test
-  build_8:
+  build_14:
     name: Linters
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && bundle exec rubocop
