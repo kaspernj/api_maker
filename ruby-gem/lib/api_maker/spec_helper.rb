@@ -141,7 +141,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   def wait_for_path(expected_path, **args)
     args[:ignore_query] = true unless args.key?(:ignore_query)
 
-    expect(page).to have_current_path(expected_path, args)
+    expect(page).to have_current_path(expected_path, **args)
     expect_no_browser_errors
   rescue RSpec::Expectations::ExpectationNotMetError => e
     expect_no_browser_errors
