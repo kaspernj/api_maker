@@ -1,14 +1,14 @@
 PATH
   remote: ..
   specs:
-    api_maker (0.0.2)
+    api_maker (0.0.3)
       active_record_better_dependent_error_messages (>= 0.0.3)
       active_record_query_fixer (>= 0.0.15)
       cancancan
       dig_bang
       rails (>= 6.0.0)
       ransack
-      service_pattern (>= 1.0.0)
+      service_pattern (>= 1.0.5)
       waitutil
 
 GEM
@@ -84,15 +84,14 @@ GEM
     ast (2.4.1)
     auto_autoloader (0.0.5)
       string-cases
-    awesome_translations (0.0.60)
+    awesome_translations (0.0.62)
       active-record-transactioner (>= 0.0.7)
       array_enumerator (>= 0.0.10)
       auto_autoloader (>= 0.0.4)
       baza (>= 0.0.37)
       baza_migrations (>= 0.0.1)
       baza_models (>= 0.0.14)
-      rails (>= 5.0.0)
-      sass-rails (>= 4.0.5)
+      rails (>= 6.0.0)
       string-cases (>= 0.0.3)
     baza (0.0.38)
       array_enumerator (~> 0.0.10)
@@ -116,8 +115,6 @@ GEM
     bcrypt (3.1.15)
     best_practice_project (0.0.11)
       auto_autoloader (>= 0.0.5)
-    bootsnap (1.4.8)
-      msgpack (~> 1.0)
     builder (3.2.4)
     cancancan (3.3.0)
     capybara (3.33.0)
@@ -155,8 +152,7 @@ GEM
     factory_bot_rails (6.1.0)
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
-    ffi (1.15.4)
-    globalid (0.5.2)
+    globalid (1.0.0)
       activesupport (>= 5.0)
     html_gen (0.0.16)
       string-cases
@@ -191,7 +187,7 @@ GEM
       rake
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.1)
+    minitest (5.15.0)
     monetize (1.9.4)
       money (~> 6.12)
     money (6.13.8)
@@ -201,7 +197,6 @@ GEM
       monetize (~> 1.9.0)
       money (~> 6.13.2)
       railties (>= 3.0)
-    msgpack (1.3.3)
     nio4r (2.5.2)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
@@ -263,7 +258,7 @@ GEM
       thor (>= 0.20.3, < 2.0)
     rainbow (3.0.0)
     rake (13.0.1)
-    ransack (2.4.2)
+    ransack (2.5.0)
       activerecord (>= 5.2.4)
       activesupport (>= 5.2.4)
       i18n
@@ -313,35 +308,24 @@ GEM
       rubocop (~> 0.87)
     ruby-progressbar (1.10.1)
     rubyzip (2.3.0)
-    sass-rails (6.0.0)
-      sassc-rails (~> 2.1, >= 2.1.1)
-    sassc (2.4.0)
-      ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (2.3.0)
-    service_pattern (1.0.2)
-    sexp_processor (4.15.0)
+    service_pattern (1.0.5)
+    sexp_processor (4.16.0)
     simple_delegate (0.0.2)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.2.2)
-      actionpack (>= 4.0)
-      activesupport (>= 4.0)
+    sprockets-rails (3.4.2)
+      actionpack (>= 5.2)
+      activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.2)
     string-cases (0.0.4)
     thor (1.0.1)
     thread_safe (0.3.6)
-    tilt (2.0.10)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     tzinfo-data (1.2020.1)
@@ -373,9 +357,8 @@ PLATFORMS
 DEPENDENCIES
   api_maker!
   appraisal
-  awesome_translations (>= 0.0.60)
+  awesome_translations (>= 0.0.62)
   best_practice_project
-  bootsnap
   capybara
   devise
   dotenv-rails
@@ -383,6 +366,7 @@ DEPENDENCIES
   htmlbeautifier
   js-routes (>= 2.0.7)
   kaminari
+  minitest (>= 5.15)
   money-rails
   pry-rails
   public_activity
@@ -394,11 +378,12 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
-  selenium-webdriver (<= 3.142.7)
+  selenium-webdriver
+  sexp_processor (>= 4.16.0)
   sqlite3
   tzinfo-data
   webdrivers
   webpacker
 
 BUNDLED WITH
-   2.1.4
+   2.2.32

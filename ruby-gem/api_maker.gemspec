@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "appraisal"
   s.add_development_dependency "awesome_translations", ">= 0.0.62"
   s.add_development_dependency "best_practice_project"
-  s.add_development_dependency "bootsnap"
   s.add_development_dependency "capybara"
   s.add_development_dependency "devise"
   s.add_development_dependency "dotenv-rails"
