@@ -110,8 +110,8 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     sleep 0.5
   end
 
-  def wait_for_and_find(selector, *args)
-    element = find(selector, *args)
+  def wait_for_and_find(selector, *args, **opts)
+    element = find(selector, *args, **opts)
     expect_no_browser_errors
     element
   rescue Capybara::ElementNotFound => e
@@ -148,8 +148,8 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     raise e
   end
 
-  def wait_for_selector(selector, *args)
-    expect(page).to have_selector selector, *args
+  def wait_for_selector(selector, *args, **opts)
+    expect(page).to have_selector selector, *args, **opts
     expect_no_browser_errors
   rescue RSpec::Expectations::ExpectationNotMetError => e
     expect_no_browser_errors
@@ -162,8 +162,8 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     end
   end
 
-  def wait_for_no_selector(selector, *args)
-    expect(page).to have_no_selector selector, *args
+  def wait_for_no_selector(selector, *args, **opts)
+    expect(page).to have_no_selector selector, *args, **opts
     expect_no_browser_errors
   rescue RSpec::Expectations::ExpectationNotMetError => e
     expect_no_browser_errors
