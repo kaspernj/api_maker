@@ -47,7 +47,7 @@ builds:
   build_5:
     environment:
       RUBY_VERSION: 2.7.4
-    name: Chrome Kaminari
+    name: Chrome Kaminari Ruby 2.7.4
     script:
       - source /home/build/.rvm/scripts/rvm && rvm use ruby-3.0.3 && cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
   build_6:
