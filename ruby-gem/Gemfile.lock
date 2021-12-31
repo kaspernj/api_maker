@@ -88,15 +88,14 @@ GEM
     ast (2.4.2)
     auto_autoloader (0.0.5)
       string-cases
-    awesome_translations (0.0.60)
+    awesome_translations (0.0.62)
       active-record-transactioner (>= 0.0.7)
       array_enumerator (>= 0.0.10)
       auto_autoloader (>= 0.0.4)
       baza (>= 0.0.37)
       baza_migrations (>= 0.0.1)
       baza_models (>= 0.0.14)
-      rails (>= 5.0.0)
-      sass-rails (>= 4.0.5)
+      rails (>= 6.0.0)
       string-cases (>= 0.0.3)
     baza (0.0.38)
       array_enumerator (~> 0.0.10)
@@ -160,7 +159,6 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    ffi (1.15.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
     html_gen (0.0.16)
@@ -307,16 +305,6 @@ GEM
       rubocop-ast (>= 0.7.1)
     ruby-progressbar (1.11.0)
     rubyzip (2.3.2)
-    sass-rails (6.0.0)
-      sassc-rails (~> 2.1, >= 2.1.1)
-    sassc (2.4.0)
-      ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     selenium-webdriver (4.1.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -335,7 +323,6 @@ GEM
     sqlite3 (1.4.2)
     string-cases (0.0.4)
     thor (1.1.0)
-    tilt (2.0.10)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2021.5)
@@ -367,7 +354,7 @@ PLATFORMS
 DEPENDENCIES
   api_maker!
   appraisal
-  awesome_translations (>= 0.0.60)
+  awesome_translations (>= 0.0.62)
   best_practice_project
   bootsnap
   capybara
