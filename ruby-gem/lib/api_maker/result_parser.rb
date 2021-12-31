@@ -1,8 +1,8 @@
 class ApiMaker::ResultParser
   attr_reader :ability, :api_maker_args
 
-  def self.parse(*args)
-    ApiMaker::ResultParser.new(*args).result
+  def self.parse(*args, **opts)
+    ApiMaker::ResultParser.new(*args, **opts).result
   end
 
   def initialize(object, ability: nil, api_maker_args: nil, controller: nil)
