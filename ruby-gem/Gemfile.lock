@@ -376,6 +376,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   selenium-webdriver
+  sexp_processor (>= 4.16.0)
   sqlite3
   tzinfo-data
   webdrivers
