@@ -1,5 +1,17 @@
 class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
   def subscribed
+    if respond_to?(:around_api_maker_subscribe_to_events)
+      around_api_maker_subscribe_to_events do
+        subscribe_to_events!
+      end
+    else
+      subscribe_to_events!
+    end
+  end
+
+private
+
+  def subscribe_to_events!
     params[:subscription_data].each do |model_name, subscription_types|
       subscription_types["model_class_events"]&.each do |event_name|
         connect_model_class_event(model_name, event_name)
@@ -22,8 +34,6 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
       end
     end
   end
-
-private
 
   def connect_creates(model_name)
     ability_name = :create_events
