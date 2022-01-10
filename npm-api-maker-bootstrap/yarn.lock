@@ -1764,9 +1764,9 @@ escodegen@^2.0.0:
     source-map "~0.6.1"
 
 eslint-find-rules@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-find-rules/-/eslint-find-rules-4.0.0.tgz#1c520218a37611fe0a2a2909905ecfaad8eae1fd"
-  integrity sha512-Nz89wr+rYtIkqqYcmNBbJRPYKSZmBBTYDlQ3qyvm/LVmruSpRPApVWEvdwhNSaxUf7vsNKdPDP0iqEaOFfNGTw==
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-find-rules/-/eslint-find-rules-4.1.0.tgz#f32671050cafbbf140592ab7fd04c2acc9117f5c"
+  integrity sha512-2nLJ0UrQRUGbOX8ksSxTgDNWGBW0RidIEIMlwNe1YR4RkjYksFDPYWf3WO9QFWM2NqkuHlTTeyOM94vaNwaFVw==
   dependencies:
     cliui "^3.2.0"
     eslint-rule-documentation "^1.0.23"
@@ -2283,19 +2283,7 @@ glob-parent@^6.0.1:
   dependencies:
     is-glob "^4.0.3"
 
-glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4:
-  version "7.1.7"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.7.tgz#3b193e9233f01d42d0b3f78294bbeeb418f94a90"
-  integrity sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==
-  dependencies:
-    fs.realpath "^1.0.0"
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "^3.0.4"
-    once "^1.3.0"
-    path-is-absolute "^1.0.0"
-
-glob@^7.2.0:
+glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.0.tgz#d15535af7732e02e948f4c41628bd910293f6023"
   integrity sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==
