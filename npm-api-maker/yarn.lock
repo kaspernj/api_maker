@@ -2448,9 +2448,9 @@ escodegen@^2.0.0:
     source-map "~0.6.1"
 
 eslint-find-rules@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-find-rules/-/eslint-find-rules-4.0.0.tgz#1c520218a37611fe0a2a2909905ecfaad8eae1fd"
-  integrity sha512-Nz89wr+rYtIkqqYcmNBbJRPYKSZmBBTYDlQ3qyvm/LVmruSpRPApVWEvdwhNSaxUf7vsNKdPDP0iqEaOFfNGTw==
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-find-rules/-/eslint-find-rules-4.1.0.tgz#f32671050cafbbf140592ab7fd04c2acc9117f5c"
+  integrity sha512-2nLJ0UrQRUGbOX8ksSxTgDNWGBW0RidIEIMlwNe1YR4RkjYksFDPYWf3WO9QFWM2NqkuHlTTeyOM94vaNwaFVw==
   dependencies:
     cliui "^3.2.0"
     eslint-rule-documentation "^1.0.23"
