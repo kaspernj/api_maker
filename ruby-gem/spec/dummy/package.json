@@ -24,7 +24,7 @@
     "form-serialize": "^0.7.2",
     "format-number": "^3.0.0",
     "i18n-on-steroids": "^1.0.2",
-    "inflection": "^1.12.0",
+    "inflection": "^1.13.2",
     "js-money": "^0.6.3",
     "js-yaml-loader": "^1.2.2",
     "merge": "^2.1.1",
