@@ -53,7 +53,7 @@ class ApiMaker::TranslatedCollections
     model_class.define_method("translated_#{collection_name}") do
       current_value = __send__(collection_name)
       inverted_translated_collection = self.class.__send__(inverted_translated_collection_name)
-      inverted_translated_collection.fetch(current_value)
+      inverted_translated_collection[current_value]
     end
   end
 
