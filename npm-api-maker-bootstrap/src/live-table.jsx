@@ -41,7 +41,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     editModelPath: PropTypes.func,
     filterCard: PropTypes.bool.isRequired,
     filterContent: PropTypes.func,
-    filterSubmitLabel: PropTypes.bool.isRequired,
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func,
     header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
@@ -153,7 +152,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   loadModelsDebounce = debounce(() => this.loadModels())
   submitFilterDebounce = debounce(() => this.submitFilter())
 
-  async loadModels () {
+  loadModels = async () => {
     const params = Params.parse()
     const {collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
     const {qParams, queryPageName, queryQName} = this.shape
