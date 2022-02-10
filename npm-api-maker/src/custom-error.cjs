@@ -1,20 +1,22 @@
 const {dig, digg} = require("diggerize")
 
 const errorMessages = (args) => {
-  return digg(args, "response", "errors").map((error) => {
-    if (typeof error == "string") {
-      return error
-    }
+  if (typeof args.response == "object") {
+    return digg(args, "response", "errors").map((error) => {
+      if (typeof error == "string") {
+        return error
+      }
 
-    return digg(error, "message")
-  })
+      return digg(error, "message")
+    })
+  }
 }
 
 module.exports = class CustomError extends Error {
   constructor (message, args = {}) {
     let messageToUse = message
 
-    if (dig(args, "response", "errors")) {
+    if (typeof args.response == "object" && dig(args, "response", "errors")) {
       messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
     }
 
@@ -31,6 +33,8 @@ module.exports = class CustomError extends Error {
   }
 
   errorTypes () {
-    return digg(this, "args", "response", "errors").map((error) => digg(error, "type"))
+    if (typeof this.args.response == "object") {
+      return digg(this, "args", "response", "errors").map((error) => digg(error, "type"))
+    }
   }
 }
