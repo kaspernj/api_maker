@@ -14,7 +14,7 @@ module.exports = class CustomError extends Error {
   constructor (message, args = {}) {
     let messageToUse = message
 
-    if (dig(args, "response", "errors")) {
+    if (typeof args == "object" && dig(args, "response", "errors")) {
       messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
     }
 
