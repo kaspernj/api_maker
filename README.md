@@ -608,7 +608,7 @@ Add an intializer with something like this:
 
 ```ruby
 ApiMaker::Configuration.configure do |config|
-  config.on_error do |controller:, error:|
+  config.on_error do |command:, controller:, error:, response:|
     ExceptionNotifier.notify_exception(error, env: controller&.request&.env)
   end
 end
