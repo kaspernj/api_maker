@@ -53,9 +53,9 @@ class ApiMaker::Configuration
     @on_thread_callbacks << blk
   end
 
-  def report_error(error)
+  def report_error(*args, **opts, &blk)
     @on_error.each do |on_error|
-      on_error.call(error)
+      on_error.call(*args, **opts, &blk)
     end
   end
 end
