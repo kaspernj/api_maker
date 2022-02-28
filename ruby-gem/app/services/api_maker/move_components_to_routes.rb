@@ -1,4 +1,4 @@
-class ApiMaker::MoveComponentsToRoutes < ApplicationService
+class ApiMaker::MoveComponentsToRoutes < ApiMaker::ApplicationService
   attr_reader :prepend_path, :routes_path
 
   def initialize(prepend_path:, routes_path:)
