@@ -49,12 +49,14 @@ class ApiMaker::MemoryStorage
     class_name = resource_name_for_model(model_class)
     resource_class = class_name.safe_constantize
 
-    if !resource_class && !resources_loaded?
-      load_all_resources # Some resources with custom model class won't have been loaded at this point
-      return resource_for_model(model_class)
+    unless resource_class
+      if resources_loaded?
+        raise "Resource couldn't be found from model: #{model_class}"
+      else
+        load_all_resources # Some resources with custom model class won't have been loaded at this point
+        return resource_for_model(model_class)
+      end
     end
-
-    raise "Resource couldn't be found from model: #{model_class}" unless resource_class
 
     resource_class
   end
