@@ -1,9 +1,11 @@
-const {Input, idForComponent, Money, nameForComponent} = require("@kaspernj/api-maker-inputs")
+const {Input, Money} = require("@kaspernj/api-maker-inputs")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerBootstrapInput extends React.PureComponent {
+import inputWrapper from "./wrapper"
+
+class ApiMakerBootstrapInput extends React.PureComponent {
   static propTypes = {
     append: PropTypes.node,
     appendText: PropTypes.node,
@@ -26,15 +28,7 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     wrapperClassName: PropTypes.string
   }
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      errors: []
-    }
-  }
-
   render () {
-    const {errors} = this.state
     const {
       append,
       appendText,
@@ -42,9 +36,11 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
       className,
       currenciesCollection,
       currencyName,
+      errors,
       hint,
       hintBottom,
       id,
+      inputClassName,
       label,
       labelClassName,
       model,
@@ -81,7 +77,7 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
             ref="money"
           />
         }
-        {this.inputType() != "money" &&
+        {type != "money" &&
           <div className="input-group">
             {(prepend || prependText) &&
               <div className="input-group-prepend">
@@ -96,11 +92,11 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
             <Input
               attribute={attribute}
               className={this.inputClassName()}
-              id={this.inputId()}
+              id={id}
               model={model}
-              name={this.inputName()}
+              name={name}
               onErrors={this.onErrors}
-              type={this.inputType()}
+              type={type}
               {...restProps}
             />
             {(append || appendText) &&
@@ -131,34 +127,10 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     if (this.props.className)
       classNames.push(this.props.className)
 
-    if (this.state.errors.length > 0)
+    if (this.props.errors.length > 0)
       classNames.push("is-invalid")
 
     return classNames.join(" ")
-  }
-
-  inputId () {
-    return idForComponent(this)
-  }
-
-  inputName () {
-    return nameForComponent(this)
-  }
-
-  inputType () {
-    if (this.props.type) {
-      return this.props.type
-    } else {
-      return "text"
-    }
-  }
-
-  label () {
-    if ("label" in this.props) {
-      return this.props.label
-    } else if (this.props.model) {
-      return this.props.model.modelClass().humanAttributeName(this.props.attribute)
-    }
   }
 
   labelClassName () {
@@ -170,8 +142,6 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  onErrors = (errors) => this.setState({errors})
-
   wrapperClassName () {
     const classNames = ["form-group", "component-bootstrap-string-input"]
 
@@ -181,3 +151,5 @@ export default class ApiMakerBootstrapInput extends React.PureComponent {
     return classNames.join(" ")
   }
 }
+
+export default inputWrapper(ApiMakerBootstrapInput)

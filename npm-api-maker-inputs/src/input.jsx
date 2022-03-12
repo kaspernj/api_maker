@@ -1,14 +1,16 @@
 const AutoSubmit = require("./auto-submit.cjs")
 const {dig, digg, digs} = require("diggerize")
-const {EventListener, EventUpdated} = require("@kaspernj/api-maker")
-const idForComponent = require("./id-for-component.cjs")
-const nameForComponent = require("./name-for-component.cjs")
+const {EventUpdated} = require("@kaspernj/api-maker")
 const PropTypes = require("prop-types")
 const React = require("react")
 const replaceall = require("replaceall")
 const strftime = require("strftime")
 
-export default class ApiMakerInput extends React.PureComponent {
+import inputWrapper from "./input-wrapper"
+
+console.log({ inputWrapper })
+
+class ApiMakerInput extends React.PureComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
@@ -26,7 +28,6 @@ export default class ApiMakerInput extends React.PureComponent {
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
-    onErrors: PropTypes.func,
     onMatchValidationError: PropTypes.func,
     type: PropTypes.string
   }
@@ -36,18 +37,6 @@ export default class ApiMakerInput extends React.PureComponent {
   state = {
     blankInputName: this.props.type == "file",
     form: undefined
-  }
-
-  componentDidMount () {
-    if (this.props.onErrors) {
-      this.setForm()
-    }
-  }
-
-  componentDidUpdate () {
-    if (this.props.onErrors) {
-      this.setForm()
-    }
   }
 
   setForm () {
@@ -83,12 +72,11 @@ export default class ApiMakerInput extends React.PureComponent {
         {autoRefresh && model &&
           <EventUpdated model={model} onUpdated={this.onModelUpdated} />
         }
-        {form && onErrors && <EventListener event="validation-errors" onCalled={this.onValidationErrors} target={form} />}
         {localizedNumber &&
           <input
             defaultValue={this.inputDefaultValue()}
-            id={this.inputId()}
-            name={this.inputName()}
+            id={input}
+            name={name}
             ref={this.inputReference()}
             type="hidden"
           />
@@ -96,22 +84,22 @@ export default class ApiMakerInput extends React.PureComponent {
         {type == "textarea" &&
           <textarea
             defaultValue={this.inputDefaultValueLocalized()}
-            id={localizedNumber ? null : this.inputId()}
-            name={localizedNumber ? null : this.inputName()}
+            id={localizedNumber ? null : id}
+            name={localizedNumber ? null : name}
             onChange={this.onInputChanged}
             ref={localizedNumber ? this.visibleInputRef : this.inputReference()}
-            type={this.inputType()}
+            type={type}
             {...restProps}
           />
         }
         {type != "textarea" &&
           <input
             defaultValue={this.inputDefaultValueLocalized()}
-            id={localizedNumber ? null : this.inputId()}
-            name={localizedNumber ? null : this.inputName()}
+            id={localizedNumber ? null : id}
+            name={localizedNumber ? null : name}
             onChange={this.onInputChanged}
             ref={localizedNumber ? this.visibleInputRef : this.inputReference()}
-            type={this.inputType()}
+            type={type}
             {...restProps}
           />
         }
@@ -142,32 +130,20 @@ export default class ApiMakerInput extends React.PureComponent {
   }
 
   formatValue (value) {
-    const {formatValue} = this.props
+    const {formatValue, type} = this.props
 
     if (formatValue) {
       return formatValue(value)
     } else if (value instanceof Date && !isNaN(value.getTime())) {
       // We need to use a certain format for datetime-local
-      if (this.inputType() == "datetime-local") {
+      if (type == "datetime-local") {
         return strftime("%Y-%m-%dT%H:%M:%S", value)
-      } else if (this.inputType() == "date") {
+      } else if (type == "date") {
         return strftime("%Y-%m-%d", value)
       }
     }
 
     return value
-  }
-
-  inputDefaultValue () {
-    if ("defaultValue" in this.props) {
-      return this.formatValue(this.props.defaultValue)
-    } else if (this.props.model) {
-      if (!this.props.model[this.props.attribute]) {
-        throw new Error(`No such attribute: ${digg(this.props.model.modelClassData(), "name")}#${this.props.attribute}`)
-      }
-
-      return this.formatValue(this.props.model[this.props.attribute]())
-    }
   }
 
   inputDefaultValueLocalized () {
@@ -192,27 +168,8 @@ export default class ApiMakerInput extends React.PureComponent {
     return value
   }
 
-  inputId () {
-    return idForComponent(this)
-  }
-
-  inputName () {
-    if (this.state.blankInputName)
-      return ""
-
-    return nameForComponent(this)
-  }
-
   inputReference () {
     return this.props.inputRef || this.inputRef
-  }
-
-  inputType () {
-    if (this.props.type) {
-      return this.props.type
-    } else {
-      return "text"
-    }
   }
 
   onModelUpdated = (args) => {
@@ -232,22 +189,6 @@ export default class ApiMakerInput extends React.PureComponent {
     if (currentValue != newFormattedValue) {
       inputRef.current.value = newFormattedValue
     }
-  }
-
-  onValidationErrors = (event) => {
-    const {onErrors} = this.props
-
-    if (!onErrors) {
-      return
-    }
-
-    const errors = event.detail.getValidationErrorsForInput({
-      attribute: this.props.attribute,
-      inputName: this.inputName(),
-      onMatchValidationError: this.props.onMatchValidationError
-    })
-
-    onErrors(errors)
   }
 
   onInputChanged = (e) => {
@@ -280,3 +221,5 @@ export default class ApiMakerInput extends React.PureComponent {
       return true
   }
 }
+
+export default inputWrapper(ApiMakerInput)
