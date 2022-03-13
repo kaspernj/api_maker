@@ -64,6 +64,7 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
           <Select
             {...forwardedInputProps}
             className={this.selectClassName()}
+            inputRef={ref}
             {...restProps}
           />
         }

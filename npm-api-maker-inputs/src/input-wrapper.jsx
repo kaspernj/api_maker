@@ -47,18 +47,6 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
 
       return (
         <>
-          <div>
-            FORM: {form ? "YES" : "NO"}
-          </div>
-          <div>
-            INPUT REF CURRENT: {inputProps.ref.current ? "YES" : "NO"}
-          </div>
-          <div>
-            TAG NAME: {digg(inputProps, "ref", "current")?.tagName}
-          </div>
-          <div>
-            WRAPPED COMPONENT NAME: {WrapperComponentClass.name}
-          </div>
           {form &&
             <EventListener event="validation-errors" onCalled={digg(this, "onValidationErrors")} target={form} />
           }

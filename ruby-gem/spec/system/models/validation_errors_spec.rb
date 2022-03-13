@@ -30,8 +30,6 @@ describe "models - validation errors" do
 
     wait_for_and_find("input[type=submit]").click
 
-    binding.pry
-
     wait_for_selector ".project-account-1 .invalid-feedback", text: "must exist"
     wait_for_selector ".task-name-2 .invalid-feedback", text: "can't be blank"
     wait_for_selector ".project-name-3 .invalid-feedback", text: "can't be blank"

@@ -38,7 +38,7 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
           <Checkbox
             {...forwardedInputProps}
             className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
-            ref={inputProps.ref}
+            inputRef={ref}
             {...restProps}
           />
 
