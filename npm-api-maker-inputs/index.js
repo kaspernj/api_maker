@@ -4,6 +4,7 @@ const Input = require("./src/input").default
 const Money = require("./src/money").default
 const nameForComponent = require("./src/name-for-component.cjs")
 const Select = require("./src/select").default
+const inputWrapper = require("./src/input-wrapper").default
 
 export {
   Checkbox,
@@ -11,5 +12,6 @@ export {
   Input,
   Money,
   nameForComponent,
-  Select
+  Select,
+  inputWrapper
 }

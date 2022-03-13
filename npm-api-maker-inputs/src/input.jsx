@@ -6,7 +6,7 @@ const React = require("react")
 const replaceall = require("replaceall")
 const strftime = require("strftime")
 
-import inputWrapper from "./input-wrapper"
+const inputWrapper = require("./input-wrapper").default
 
 console.log({ inputWrapper })
 
@@ -147,15 +147,14 @@ class ApiMakerInput extends React.PureComponent {
   }
 
   inputDefaultValueLocalized () {
+    const {defaultValue} = this.props
     const {localizedNumber} = digs(this.props, "localizedNumber")
 
-    let value = this.inputDefaultValue()
-
-    if (localizedNumber && value !== null && value !== undefined) {
+    if (localizedNumber && defaultValue !== null && defaultValue !== undefined) {
       const separator = I18n.t("number.currency.format.separator")
       const delimiter = I18n.t("number.currency.format.delimiter")
 
-      let formatted = `${value}`
+      let formatted = `${defaultValue}`
 
       formatted = replaceall(".", "{{separator}}", formatted)
       formatted = replaceall(",", "{{delimiter}}", formatted)
@@ -165,7 +164,7 @@ class ApiMakerInput extends React.PureComponent {
       return formatted
     }
 
-    return value
+    return defaultValue
   }
 
   inputReference () {

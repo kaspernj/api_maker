@@ -1,13 +1,19 @@
 const classNames = require("classnames")
+const {digs} = require("diggerize")
 const {EventListener} = require("@kaspernj/api-maker")
 const React = require("react")
-const {idForComponent, nameForComponent} = require("@kaspernj/api-maker-inputs")
+const idForComponent = require("./id-for-component.cjs")
+const nameForComponent = require("./name-for-component.cjs")
+const {parentElement} = require("./parent-element.cjs")
 const strftime = require("strftime")
 
 const inputWrapper = (WrapperComponentClass) => {
-  return new class ApiMakerInputWrapper extends React.PureComponent {
+  return class ApiMakerInputWrapper extends React.PureComponent {
+    rootElementRef = React.createRef()
+
     state = {
-      errors: []
+      errors: [],
+      form: undefined
     }
 
     componentDidMount() {
@@ -24,16 +30,18 @@ const inputWrapper = (WrapperComponentClass) => {
 
     render() {
       const {className, ...restProps} = this.props
+      const {errors, form} = digs(this.state, "errors", "form")
 
       return (
         <>
-          {form && onErrors &&
-            <EventListener event="validation-errors" onCalled={this.onValidationErrors} target={form} />
+          {form &&
+            <EventListener event="validation-errors" onCalled={digg(this, "onValidationErrors")} target={form} />
           }
+          <div className="api-maker-inputs-input-wrapper" ref={digg(this, "rootElementRef")} />
           <WrapperComponentClass
             className={classNames("api-maker-inputs-wrapper", className)}
             defaultValue={this.inputDefaultValue()}
-            errors={this.state.errors}
+            errors={errors}
             id={idForComponent(this)}
             label={this.label()}
             name={nameForComponent(this)}
@@ -104,6 +112,20 @@ const inputWrapper = (WrapperComponentClass) => {
       })
 
       this.setState({errors})
+    }
+
+    setForm () {
+      const rootElement = digg(this, "rootElementRef", "current")
+
+      let form
+
+      if (rootElement) {
+        form = parentElement({element: rootElement, callback: (element) => element.tagName == "SPAN"})
+      }
+
+      if (form != this.state.form) {
+        this.setState({form})
+      }
     }
   }
 }

@@ -1,9 +1,7 @@
-const {Input, Money} = require("@kaspernj/api-maker-inputs")
+const {Input, inputWrapper, Money} = require("@kaspernj/api-maker-inputs")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
-
-import inputWrapper from "./wrapper"
 
 class ApiMakerBootstrapInput extends React.PureComponent {
   static propTypes = {
@@ -47,15 +45,16 @@ class ApiMakerBootstrapInput extends React.PureComponent {
       name,
       prepend,
       prependText,
+      type,
       wrapperClassName,
       ...restProps
     } = this.props
 
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
-        {this.label() &&
-          <label className={this.labelClassName()} htmlFor={this.inputId()}>
-            {this.label()}
+        {label &&
+          <label className={this.labelClassName()} htmlFor={id}>
+            {label}
           </label>
         }
         {hint &&
@@ -63,7 +62,7 @@ class ApiMakerBootstrapInput extends React.PureComponent {
             {hint}
           </span>
         }
-        {this.inputType() == "money" &&
+        {type == "money" &&
           <Money
             attribute={attribute}
             currenciesCollection={currenciesCollection}
@@ -95,7 +94,6 @@ class ApiMakerBootstrapInput extends React.PureComponent {
               id={id}
               model={model}
               name={name}
-              onErrors={this.onErrors}
               type={type}
               {...restProps}
             />
@@ -152,4 +150,6 @@ class ApiMakerBootstrapInput extends React.PureComponent {
   }
 }
 
-export default inputWrapper(ApiMakerBootstrapInput)
+const wrappedInput = inputWrapper(ApiMakerBootstrapInput)
+
+export default wrappedInput
