@@ -1,14 +1,11 @@
 const AutoSubmit = require("./auto-submit.cjs")
 const {dig, digg, digs} = require("diggerize")
 const {EventUpdated} = require("@kaspernj/api-maker")
+const inputWrapper = require("./input-wrapper").default
 const PropTypes = require("prop-types")
 const React = require("react")
 const replaceall = require("replaceall")
 const strftime = require("strftime")
-
-const inputWrapper = require("./input-wrapper").default
-
-console.log({ inputWrapper })
 
 class ApiMakerInput extends React.PureComponent {
   static defaultProps = {
@@ -35,16 +32,7 @@ class ApiMakerInput extends React.PureComponent {
   inputRef = React.createRef()
   visibleInputRef = React.createRef()
   state = {
-    blankInputName: this.props.type == "file",
-    form: undefined
-  }
-
-  setForm () {
-    const form = dig(this.props.inputRef || this.inputRef, "current", "form")
-
-    if (form != this.state.form) {
-      this.setState({form})
-    }
+    blankInputName: this.props.type == "file"
   }
 
   render () {
@@ -65,7 +53,6 @@ class ApiMakerInput extends React.PureComponent {
       type,
       ...restProps
     } = this.props
-    const {form} = digs(this.state, "form")
 
     return (
       <>
@@ -76,7 +63,7 @@ class ApiMakerInput extends React.PureComponent {
           <input
             defaultValue={this.inputDefaultValue()}
             id={input}
-            name={name}
+            name={this.inputName()}
             ref={this.inputReference()}
             type="hidden"
           />
@@ -96,7 +83,7 @@ class ApiMakerInput extends React.PureComponent {
           <input
             defaultValue={this.inputDefaultValueLocalized()}
             id={localizedNumber ? null : id}
-            name={localizedNumber ? null : name}
+            name={localizedNumber ? null : this.inputName()}
             onChange={this.onInputChanged}
             ref={localizedNumber ? this.visibleInputRef : this.inputReference()}
             type={type}
@@ -218,6 +205,13 @@ class ApiMakerInput extends React.PureComponent {
 
     if (this.props.type == "file" && value == "")
       return true
+  }
+
+  inputName () {
+    if (this.state.blankInputName)
+      return ""
+
+    return this.props.name
   }
 }
 
