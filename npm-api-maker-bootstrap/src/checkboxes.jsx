@@ -1,4 +1,4 @@
-const {EventListener} = require("@kaspernj/api-maker")
+const {inputWrapper} = require("@kaspernj/api-maker-inputs")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const propTypesExact = require("prop-types-exact")
@@ -6,7 +6,7 @@ const React = require("react")
 
 const inflection = require("inflection")
 
-export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
+class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,
@@ -19,34 +19,11 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     options: PropTypes.array.isRequired
   })
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      validationErrors: []
-    }
-  }
-
-  componentDidMount () {
-    this.setForm()
-  }
-
-  componentDidUpdate () {
-    this.setForm()
-  }
-
-  setForm () {
-    const form = this.refs.hiddenInput && this.refs.hiddenInput.form
-    if (form != this.state.form) this.setState({form})
-  }
-
   render () {
-    const {form} = this.state
-
     return (
       <div className="component-bootstrap-checkboxes form-group">
-        {form && <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />}
         <label className={this.labelClassName()}>
-          {this.label()}
+          {this.props.inputProps.label}
         </label>
 
         <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
@@ -71,8 +48,7 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   inputCheckboxClassName () {
     const classNames = []
 
-    if (this.state.validationErrors.length > 0)
-      classNames.push("is-invalid")
+    if (this.props.errors.length > 0) classNames.push("is-invalid")
 
     return classNames.join(" ")
   }
@@ -98,16 +74,6 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     }
   }
 
-  label () {
-    const {attribute, label, model} = this.props
-
-    if ("label" in this.props) {
-      return label
-    } else if (attribute && model) {
-      return model.modelClass().humanAttributeName(attribute)
-    }
-  }
-
   labelClassName () {
     const classNames = []
 
@@ -124,18 +90,8 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     return this.generatedIdValue
   }
 
-  onValidationErrors (event) {
-    const validationErrors = event.detail.getValidationErrorsForInput({
-      attribute: this.props.attribute,
-      inputName: this.inputName(),
-      onMatchValidationError: this.props.onMatchValidationError
-    })
-    this.setState({validationErrors})
-  }
-
   optionElement (option, index) {
-    const {onChange, options} = this.props
-    const {validationErrors} = this.state
+    const {errors, onChange, options} = this.props
     const id = `${this.generatedId()}-${index}`
 
     return (
@@ -155,10 +111,12 @@ export default class ApiMakerBootstrapCheckboxes extends React.PureComponent {
           {option[0]}
         </label>
 
-        {(index + 1) == options.length && validationErrors.length > 0 &&
-          <InvalidFeedback errors={validationErrors} />
+        {(index + 1) == options.length && errors.length > 0 &&
+          <InvalidFeedback errors={errors} />
         }
       </div>
     )
   }
 }
+
+export default inputWrapper(ApiMakerBootstrapCheckboxes)

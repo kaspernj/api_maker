@@ -16,8 +16,10 @@ describe "boootstrap - checkbox" do
     login_as user
     visit bootstrap_checkbox_boolean_path(task_id: task.id)
     wait_for_selector ".content-container"
+    wait_for_selector "label[for='task_finished']", exact_text: "Finished"
     wait_for_selector "#task_finished:not(:checked)"
     check "Finished"
+    wait_for_selector "#task_finished:checked"
     wait_for_and_find("input[type=submit]").click
     wait_for_browser { task.reload.finished? }
   end

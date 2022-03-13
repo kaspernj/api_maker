@@ -1,10 +1,9 @@
-const {idForComponent, nameForComponent, Select} = require("@kaspernj/api-maker-inputs")
-const inflection = require("inflection")
+const {inputWrapper, Select} = require("@kaspernj/api-maker-inputs")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerBootstrapSelect extends React.PureComponent {
+class ApiMakerBootstrapSelect extends React.PureComponent {
   static propTypes = {
     attribute: PropTypes.string,
     className: PropTypes.string,
@@ -12,7 +11,7 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     id: PropTypes.string,
     hint: PropTypes.node,
     hintBottom: PropTypes.node,
-    inputRef: PropTypes.object,
+    inputProps: PropTypes.object.isRequired,
     label: PropTypes.node,
     labelContainerClassName: PropTypes.string,
     model: PropTypes.object,
@@ -20,19 +19,14 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     wrapperClassName: PropTypes.string
   }
 
-  inputRef = React.createRef()
-  state = {
-    errors: []
-  }
-
   render () {
-    const {errors} = this.state
     const {
       children,
       className,
       description,
+      errors,
       id,
-      inputRef,
+      inputProps,
       hint,
       hintBottom,
       label,
@@ -45,10 +39,10 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
 
     return (
       <div className={this.wrapperClassName()}>
-        {this.label() &&
+        {label &&
           <div className={labelContainerClassName ? labelContainerClassName : null}>
             <label className={this.labelClassName()} htmlFor={this.inputId()}>
-              {this.label()}
+              {label}
             </label>
           </div>
         }
@@ -65,11 +59,8 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
         {children}
         {!children &&
           <Select
+            {...inputProps}
             className={this.selectClassName()}
-            id={this.inputId()}
-            inputRef={this.props.inputRef || this.inputRef}
-            name={this.inputName()}
-            onErrors={this.onErrors}
             {...restProps}
           />
         }
@@ -83,23 +74,6 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     )
   }
 
-  inputId () {
-    return idForComponent(this)
-  }
-
-  inputName () {
-    return nameForComponent(this)
-  }
-
-  label () {
-    if ("label" in this.props) {
-      return this.props.label
-    } else if (this.props.model) {
-      const attributeMethodName = inflection.camelize(this.props.attribute.replace(/_id$/, ""), true)
-      return this.props.model.modelClass().humanAttributeName(attributeMethodName)
-    }
-  }
-
   labelClassName () {
     const classNames = ["form-group-label"]
 
@@ -109,15 +83,11 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  onErrors = (errors) => this.setState({errors})
-
   selectClassName () {
     const classNames = ["form-control"]
 
     if (this.props.className) classNames.push(this.props.className)
-
-    if (this.state.errors.length > 0)
-      classNames.push("is-invalid")
+    if (this.props.errors.length > 0) classNames.push("is-invalid")
 
     return classNames.join(" ")
   }
@@ -125,9 +95,10 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
   wrapperClassName () {
     const classNames = ["form-group", "component-bootstrap-select"]
 
-    if (this.props.wrapperClassName)
-      classNames.push(this.props.wrapperClassName)
+    if (this.props.wrapperClassName) classNames.push(this.props.wrapperClassName)
 
     return classNames.join(" ")
   }
 }
+
+export default inputWrapper(ApiMakerBootstrapSelect)

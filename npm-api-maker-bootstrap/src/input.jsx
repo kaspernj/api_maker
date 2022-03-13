@@ -149,6 +149,4 @@ class ApiMakerBootstrapInput extends React.PureComponent {
   }
 }
 
-const wrappedInput = inputWrapper(ApiMakerBootstrapInput)
-
-export default wrappedInput
+export default inputWrapper(ApiMakerBootstrapInput)

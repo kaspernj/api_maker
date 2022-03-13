@@ -6,7 +6,7 @@ const idForComponent = require("./id-for-component.cjs")
 const nameForComponent = require("./name-for-component.cjs")
 const strftime = require("strftime")
 
-const inputWrapper = (WrapperComponentClass) => {
+const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
   return class ApiMakerInputWrapper extends React.PureComponent {
     state = {
       errors: [],
@@ -24,12 +24,18 @@ const inputWrapper = (WrapperComponentClass) => {
     render() {
       const {className, ...restProps} = this.props
       const {errors, form} = digs(this.state, "errors", "form")
+      const type = this.inputType()
       const inputProps = {
-        defaultValue: this.inputDefaultValue(),
         id: idForComponent(this),
         name: nameForComponent(this),
         ref: this.inputRef(),
-        type: this.inputType()
+        type
+      }
+
+      if (this.handleAsCheckbox()) {
+        inputProps.defaultChecked = this.inputDefaultChecked()
+      } else {
+        inputProps.defaultValue = this.inputDefaultValue()
       }
 
       return (
@@ -66,7 +72,25 @@ const inputWrapper = (WrapperComponentClass) => {
       return value
     }
 
-    inputDefaultValue () {
+    handleAsCheckbox() {
+      if (this.props.type == "checkbox") return true
+      if (!("type" in this.props) && wrapperOptions == "checkbox") return true
+
+      return false
+    }
+
+    inputDefaultChecked () {
+      if ("defaultChecked" in this.props) {
+        return this.props.defaultChecked
+      } else if (this.props.model) {
+        if (!this.props.model[this.props.attribute])
+          throw new Error(`No such attribute: ${this.props.attribute}`)
+
+        return this.props.model[this.props.attribute]()
+      }
+    }
+
+    inputDefaultValue() {
       if ("defaultValue" in this.props) {
         return this.formatValue(this.props.defaultValue)
       } else if (this.props.model) {
@@ -97,6 +121,8 @@ const inputWrapper = (WrapperComponentClass) => {
     inputType() {
       if ("type" in this.props) {
         return this.props.type
+      } else if (wrapperOptions.type == "checkbox") {
+        return "checkbox"
       } else {
         return "text"
       }
