@@ -2314,7 +2314,12 @@ diff-sequences@^27.5.1:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-27.5.1.tgz#eaecc0d327fd68c8d9672a1e64ab8dccb2ef5327"
   integrity sha512-k1gCAXAsNgLwEL+Y8Wvl+M6oEFj5bgazfZULpS5CneoPPXRaCCW7dm+q21Ky2VEE5X+VeRDBVg1Pcvvsr4TtNQ==
 
-"diggerize@>= 1.0.3", diggerize@^1.0.3:
+"diggerize@>= 1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.4.tgz#21a7d1bc215999376eb86a024276236059fcf2bd"
+  integrity sha512-vC545+jn4Z55AswKUzpAPcDbkuu1S97MlOjBVoNkVUjwj1fnNdNi75XeOKLIaMLpT3uygCCmh5w8xDlAEboPwg==
+
+diggerize@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.3.tgz#1c08fb9f461c2ed1af9416c83142539f041350a3"
   integrity sha512-sqZM36ZDSizaGTkjs+CZjjPlccDaz+Khozw/9+fnYJ2oS2n6is2JPoycofSnWTi0JDKEKVI86IKsMxwWzbrG1Q==

@@ -57,7 +57,6 @@ describe "bootstrap - string input" do
 
   it "only sets a name on a file input when a file is chosen" do
     login_as user
-
     visit bootstrap_string_input_file_path
     wait_for_selector ".content-container"
 

@@ -39,6 +39,7 @@ class ApiMakerBootstrapInput extends React.PureComponent {
       hintBottom,
       id,
       inputClassName,
+      inputProps,
       label,
       labelClassName,
       model,
@@ -91,10 +92,8 @@ class ApiMakerBootstrapInput extends React.PureComponent {
             <Input
               attribute={attribute}
               className={this.inputClassName()}
-              id={id}
               model={model}
-              name={name}
-              type={type}
+              {...inputProps}
               {...restProps}
             />
             {(append || appendText) &&

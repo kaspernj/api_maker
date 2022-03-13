@@ -4,48 +4,45 @@ const {EventListener} = require("@kaspernj/api-maker")
 const React = require("react")
 const idForComponent = require("./id-for-component.cjs")
 const nameForComponent = require("./name-for-component.cjs")
-const {parentElement} = require("./parent-element.cjs")
 const strftime = require("strftime")
 
 const inputWrapper = (WrapperComponentClass) => {
   return class ApiMakerInputWrapper extends React.PureComponent {
-    rootElementRef = React.createRef()
-
     state = {
       errors: [],
       form: undefined
     }
 
     componentDidMount() {
-      if (this.props.onErrors) {
-        this.setForm()
-      }
+      if (this.props.onErrors) this.setForm()
     }
 
     componentDidUpdate() {
-      if (this.props.onErrors) {
-        this.setForm()
-      }
+      if (this.props.onErrors) this.setForm()
     }
 
     render() {
       const {className, ...restProps} = this.props
       const {errors, form} = digs(this.state, "errors", "form")
+      const inputProps = {
+        defaultValue: this.inputDefaultValue(),
+        id: idForComponent(this),
+        name: nameForComponent(this),
+        ref: this.inputRef(),
+        type: this.inputType()
+      }
 
       return (
         <>
           {form &&
             <EventListener event="validation-errors" onCalled={digg(this, "onValidationErrors")} target={form} />
           }
-          <div className="api-maker-inputs-input-wrapper" ref={digg(this, "rootElementRef")} />
           <WrapperComponentClass
             className={classNames("api-maker-inputs-wrapper", className)}
-            defaultValue={this.inputDefaultValue()}
             errors={errors}
-            id={idForComponent(this)}
+            form={form}
+            inputProps={inputProps}
             label={this.label()}
-            name={nameForComponent(this)}
-            type={this.inputType()}
             {...restProps}
           />
         </>
@@ -81,15 +78,24 @@ const inputWrapper = (WrapperComponentClass) => {
       }
     }
 
-    inputName () {
-      if (this.state.blankInputName)
-        return ""
+    inputName() {
+      if (this.state.blankInputName) return ""
 
       return nameForComponent(this)
     }
 
+    inputRefBackup() {
+      if (!this._inputRefBackup) this._inputRefBackup = React.createRef()
+
+      return this._inputRefBackup
+    }
+
+    inputRef() {
+      return this.props.inputRef || this.inputRefBackup()
+    }
+
     inputType() {
-      if (this.props.type) {
+      if ("type" in this.props) {
         return this.props.type
       } else {
         return "text"
@@ -115,17 +121,12 @@ const inputWrapper = (WrapperComponentClass) => {
     }
 
     setForm () {
-      const rootElement = digg(this, "rootElementRef", "current")
+      const inputElement = this.inputRef().current
 
       let form
 
-      if (rootElement) {
-        form = parentElement({element: rootElement, callback: (element) => element.tagName == "SPAN"})
-      }
-
-      if (form != this.state.form) {
-        this.setState({form})
-      }
+      if (inputElement) form = digg(inputElement, "form")
+      if (form != this.state.form) this.setState({form})
     }
   }
 }

@@ -13,6 +13,7 @@ class ApiMakerInput extends React.PureComponent {
     autoSubmit: false,
     localizedNumber: false
   }
+
   static propTypes = {
     attribute: PropTypes.string,
     autoRefresh: PropTypes.bool.isRequired,
@@ -20,7 +21,6 @@ class ApiMakerInput extends React.PureComponent {
     className: PropTypes.string,
     formatValue: PropTypes.func,
     id: PropTypes.string,
-    inputRef: PropTypes.object,
     localizedNumber: PropTypes.bool.isRequired,
     model: PropTypes.object,
     name: PropTypes.string,
@@ -29,10 +29,9 @@ class ApiMakerInput extends React.PureComponent {
     type: PropTypes.string
   }
 
-  inputRef = React.createRef()
   visibleInputRef = React.createRef()
   state = {
-    blankInputName: this.props.type == "file"
+    blankInputName: digg(this, "props", "inputProps", "type") == "file"
   }
 
   render () {
@@ -43,6 +42,7 @@ class ApiMakerInput extends React.PureComponent {
       defaultValue,
       formatValue,
       id,
+      inputProps,
       inputRef,
       localizedNumber,
       model,
@@ -56,13 +56,14 @@ class ApiMakerInput extends React.PureComponent {
 
     return (
       <>
+        TYPE: {inputProps.type}
         {autoRefresh && model &&
           <EventUpdated model={model} onUpdated={this.onModelUpdated} />
         }
         {localizedNumber &&
           <input
             defaultValue={defaultValue}
-            id={input}
+            id={inputProps.id}
             name={this.inputName()}
             ref={this.inputReference()}
             type="hidden"
@@ -71,22 +72,22 @@ class ApiMakerInput extends React.PureComponent {
         {type == "textarea" &&
           <textarea
             defaultValue={this.inputDefaultValueLocalized()}
-            id={localizedNumber ? null : id}
-            name={localizedNumber ? null : name}
             onChange={this.onInputChanged}
+            {...inputProps}
+            id={localizedNumber ? null : inputProps.id}
+            name={localizedNumber ? null : inputProps.name}
             ref={localizedNumber ? this.visibleInputRef : this.inputReference()}
-            type={type}
             {...restProps}
           />
         }
         {type != "textarea" &&
           <input
             defaultValue={this.inputDefaultValueLocalized()}
-            id={localizedNumber ? null : id}
-            name={localizedNumber ? null : this.inputName()}
             onChange={this.onInputChanged}
+            {...inputProps}
+            id={localizedNumber ? null : inputProps.id}
+            name={localizedNumber ? null : this.inputName()}
             ref={localizedNumber ? this.visibleInputRef : this.inputReference()}
-            type={type}
             {...restProps}
           />
         }
@@ -112,7 +113,7 @@ class ApiMakerInput extends React.PureComponent {
     return value
   }
 
-  autoSubmit () {
+  autoSubmit = () => {
     new AutoSubmit({component: this}).autoSubmit()
   }
 
@@ -154,12 +155,18 @@ class ApiMakerInput extends React.PureComponent {
     return defaultValue
   }
 
-  inputReference () {
-    return this.props.inputRef || this.inputRef
+  inputName () {
+    if (this.state.blankInputName) return ""
+
+    return this.props.inputProps.name
+  }
+
+  inputReference() {
+    return digg(this, "props", "inputProps", "ref")
   }
 
   onModelUpdated = (args) => {
-    const inputRef = this.props.inputRef || this.inputRef
+    const inputRef = this.inputReference()
 
     if (!inputRef.current) {
       // This can happen if the component is being unmounted
@@ -178,16 +185,14 @@ class ApiMakerInput extends React.PureComponent {
   }
 
   onInputChanged = (e) => {
-    const {attribute, autoSubmit, model, onChange, type} = this.props
+    const {attribute, autoSubmit, inputProps, model, onChange} = this.props
     const {localizedNumber} = digs(this.props, "localizedNumber")
     const input = digg(e, "target")
 
-    if (localizedNumber) {
-      this.inputReference().current.value = this.actualValue(input)
-    }
+    if (localizedNumber) this.inputReference().current.value = this.actualValue(input)
 
     if (attribute && autoSubmit && model) this.delayAutoSubmit()
-    if (type == "file") this.setState({blankInputName: this.getBlankInputName()})
+    if (digg(inputProps, "type") == "file") this.setState({blankInputName: this.getBlankInputName()})
     if (onChange) onChange(e)
   }
 
@@ -196,22 +201,15 @@ class ApiMakerInput extends React.PureComponent {
       clearTimeout(this.delayAutoSubmitTimeout)
     }
 
-    this.delayAutoSubmitTimeout = setTimeout(() => this.autoSubmit(), 200)
+    this.delayAutoSubmitTimeout = setTimeout(this.autoSubmit, 200)
   }
 
   // This fixes an issue in Firefox and ActiveStorage, where uploads would be a blank string if a file wasn't chosen
   getBlankInputName () {
-    const value = dig(this.props.inputRef || this.inputRef, "current", "value")
+    const value = dig(this.inputReference(), "current", "value")
 
-    if (this.props.type == "file" && value == "")
+    if (this.props.inputProps.type == "file" && value == "")
       return true
-  }
-
-  inputName () {
-    if (this.state.blankInputName)
-      return ""
-
-    return this.props.name
   }
 }
 
