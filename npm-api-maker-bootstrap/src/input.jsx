@@ -69,7 +69,7 @@ class ApiMakerBootstrapInput extends React.PureComponent {
             currenciesCollection={currenciesCollection}
             currencyName={currencyName}
             model={model}
-            name={name}
+            name={inputProps.name}
             className={this.inputClassName()}
             onChange={this.props.onChange}
             placeholder={this.props.placeholder}
