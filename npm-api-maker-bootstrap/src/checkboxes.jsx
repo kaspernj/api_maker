@@ -25,7 +25,7 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     return (
       <div className="component-bootstrap-checkboxes form-group">
         <label className={this.labelClassName()}>
-          {this.props.inputProps.label}
+          {this.props.wrapperProps.label}
         </label>
 
         <input name={this.inputName()} ref={this.props.inputProps.ref} type="hidden" value="" />

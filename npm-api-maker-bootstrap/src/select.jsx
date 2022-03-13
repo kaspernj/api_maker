@@ -42,10 +42,10 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
 
     return (
       <div className={this.wrapperClassName()}>
-        {label &&
+        {wrapperProps.label &&
           <div className={labelContainerClassName ? labelContainerClassName : null}>
             <label className={this.labelClassName()} htmlFor={inputProps.id}>
-              {label}
+              {wrapperProps.label}
             </label>
           </div>
         }

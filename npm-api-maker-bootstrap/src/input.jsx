@@ -57,9 +57,9 @@ class ApiMakerBootstrapInput extends React.PureComponent {
 
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
-        {label &&
+        {wrapperProps.label &&
           <label className={this.labelClassName()} htmlFor={inputProps.id}>
-            {label}
+            {wrapperProps.label}
           </label>
         }
         {hint &&
