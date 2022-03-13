@@ -24,9 +24,9 @@
   "scripts": {
     "eslint": "eslint --ext .cjs,.js,.jsx"
   },
-  "version": "1.0.65",
+  "version": "1.0.67",
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.126",
+    "@kaspernj/api-maker": ">= 1.0.128",
     "classnames": ">= 2.2.6",
     "diggerize": ">= 1.0.4",
     "inflection": ">= 1.12.0"
