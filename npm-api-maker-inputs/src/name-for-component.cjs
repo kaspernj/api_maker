@@ -4,6 +4,12 @@ module.exports = function apiMakerNameForComponent (component) {
   if ("name" in component.props) {
     return component.props.name
   } else if (component.props.attribute && component.props.model) {
-    return `${component.props.model.modelClassData().paramKey}[${inflection.underscore(component.props.attribute)}]`
+    let attributeName = inflection.underscore(component.props.attribute)
+
+    if (component.props.type == "money") {
+      attributeName += "_cents"
+    }
+
+    return `${component.props.model.modelClassData().paramKey}[${attributeName}]`
   }
 }

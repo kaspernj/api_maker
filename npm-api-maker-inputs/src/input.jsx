@@ -61,7 +61,7 @@ class ApiMakerInput extends React.PureComponent {
         }
         {localizedNumber &&
           <input
-            defaultValue={this.inputDefaultValue()}
+            defaultValue={defaultValue}
             id={input}
             name={this.inputName()}
             ref={this.inputReference()}
