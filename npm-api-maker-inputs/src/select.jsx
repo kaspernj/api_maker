@@ -1,23 +1,24 @@
 const {dig} = require("diggerize")
 const {EventListener} = require("@kaspernj/api-maker")
 const idForComponent = require("./id-for-component.cjs")
+const inputWrapper = require("./input-wrapper").default
 const nameForComponent = require("./name-for-component.cjs")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerBootstrapSelect extends React.PureComponent {
+class ApiMakerBootstrapSelect extends React.PureComponent {
   static propTypes = {
     attribute: PropTypes.string,
     children: PropTypes.node,
     defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.number, PropTypes.string]),
     id: PropTypes.string,
     includeBlank: PropTypes.bool,
+    inputProps: PropTypes.object.isRequired,
     inputRef: PropTypes.object,
     model: PropTypes.object,
     name: PropTypes.string,
-    onErrors: PropTypes.func,
-    onMatchValidationError: PropTypes.func,
-    options: PropTypes.array
+    options: PropTypes.array,
+    wrapperOpts: PropTypes.object.isRequired
   }
 
   inputRef = React.createRef()
@@ -52,39 +53,27 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
       defaultValue,
       id,
       includeBlank,
+      inputProps,
       inputRef,
       model,
       name,
-      onErrors,
-      onMatchValidationError,
       options,
+      wrapperOpts,
       ...restProps
     } = this.props
-    const {form} = this.state
 
     return (
-      <>
-        {form && onErrors &&
-          <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />
+      <select {...inputProps} {...restProps}>
+        {this.includeBlank() &&
+          <option />
         }
-        <select
-          defaultValue={this.inputDefaultValue()}
-          id={idForComponent(this)}
-          name={this.inputName()}
-          ref={this.props.inputRef || this.inputRef}
-          {...restProps}
-        >
-          {this.includeBlank() &&
-            <option />
-          }
-          {options && options.map((option) =>
-            <option key={this.optionKey(option)} value={this.optionValue(option)}>
-              {this.optionLabel(option)}
-            </option>
-          )}
-          {children}
-        </select>
-      </>
+        {options && options.map((option) =>
+          <option key={this.optionKey(option)} value={this.optionValue(option)}>
+            {this.optionLabel(option)}
+          </option>
+        )}
+        {children}
+      </select>
     )
   }
 
@@ -119,35 +108,6 @@ export default class ApiMakerBootstrapSelect extends React.PureComponent {
       return false
     }
   }
-
-  inputDefaultValue () {
-    if ("defaultValue" in this.props) {
-      return this.props.defaultValue
-    } else if (this.props.attribute && this.props.model) {
-      if (!this.props.model[this.props.attribute])
-        throw new Error(`No attribute by that name on ${this.props.model.modelClassData().name}: ${this.props.attribute}`)
-
-      return this.props.model[this.props.attribute]()
-    }
-  }
-
-  inputName () {
-    return nameForComponent(this)
-  }
-
-  onValidationErrors (event) {
-    const {onErrors} = this.props
-
-    if (!onErrors) {
-      return
-    }
-
-    const errors = event.detail.getValidationErrorsForInput({
-      attribute: this.props.attribute,
-      inputName: this.inputName(),
-      onMatchValidationError: this.props.onMatchValidationError
-    })
-
-    onErrors(errors)
-  }
 }
+
+export default inputWrapper(ApiMakerBootstrapSelect)

@@ -57,7 +57,6 @@ describe "bootstrap - string input" do
 
   it "only sets a name on a file input when a file is chosen" do
     login_as user
-
     visit bootstrap_string_input_file_path
     wait_for_selector ".content-container"
 
@@ -70,6 +69,8 @@ describe "bootstrap - string input" do
     login_as user
     visit bootstrap_string_input_money_path(project_id: project.id)
     wait_for_selector ".content-container"
+    wait_for_selector "label[for='project_price_per_hour']"
+
     fill_in "project_price_per_hour", with: 500
     select "American Dollars", from: "project_price_per_hour_currency"
 

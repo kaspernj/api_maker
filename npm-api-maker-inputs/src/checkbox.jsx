@@ -1,12 +1,13 @@
 const AutoSubmit = require("./auto-submit.cjs")
-const {dig, digs} = require("diggerize")
+const {digg, digs} = require("diggerize")
 const {EventListener, EventUpdated} = require("@kaspernj/api-maker")
 const idForComponent = require("./id-for-component.cjs")
+const inputWrapper = require("./input-wrapper").default
 const nameForComponent = require("./name-for-component.cjs")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerInputsCheckbox extends React.PureComponent {
+class ApiMakerInputsCheckbox extends React.PureComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
@@ -29,31 +30,6 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
     zeroInput: PropTypes.bool
   }
 
-  inputRef = React.createRef()
-  state = {
-    form: undefined
-  }
-
-  componentDidMount () {
-    if (this.props.onErrors) {
-      this.setForm()
-    }
-  }
-
-  componentDidUpdate () {
-    if (this.props.onErrors) {
-      this.setForm()
-    }
-  }
-
-  setForm () {
-    const form = dig(this.props.inputRef || this.inputRef, "current", "form")
-
-    if (form != this.state.form) {
-      this.setState({form})
-    }
-  }
-
   render () {
     const {
       attribute,
@@ -62,59 +38,35 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
       defaultChecked,
       defaultValue,
       id,
+      inputProps,
       inputRef,
       model,
       name,
       onChange,
-      onErrors,
       zeroInput,
+      wrapperProps,
       ...restProps
     } = this.props
-    const {form} = digs(this.state, "form")
-    const inputName = this.inputName()
 
     return (
       <>
         {autoRefresh && model &&
-          <EventUpdated model={model} onUpdated={this.onModelUpdated} />
+          <EventUpdated model={model} onUpdated={digg(this, "onModelUpdated")} />
         }
-        {form && onErrors && <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />}
-        {zeroInput && inputName &&
-          <input defaultValue="0" name={inputName} type="hidden" type="hidden" />
+        {zeroInput && inputProps.name &&
+          <input defaultValue="0" name={inputProps.name} type="hidden" type="hidden" />
         }
         <input
+          {...inputProps}
           data-auto-refresh={autoRefresh}
           data-auto-submit={autoSubmit}
-          defaultChecked={this.inputDefaultChecked()}
           defaultValue={defaultValue}
-          id={this.inputId()}
-          name={inputName}
-          onChange={this.onChanged}
-          ref={inputRef || this.inputRef}
+          onChange={digg(this, "onChanged")}
           type="checkbox"
           {...restProps}
         />
       </>
     )
-  }
-
-  inputDefaultChecked () {
-    if ("defaultChecked" in this.props) {
-      return this.props.defaultChecked
-    } else if (this.props.model) {
-      if (!this.props.model[this.props.attribute])
-        throw new Error(`No such attribute: ${this.props.attribute}`)
-
-      return this.props.model[this.props.attribute]()
-    }
-  }
-
-  inputId () {
-    return idForComponent(this)
-  }
-
-  inputName () {
-    return nameForComponent(this)
   }
 
   onChanged = (...args) => {
@@ -125,7 +77,7 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
   }
 
   onModelUpdated = (args) => {
-    const inputRef = this.props.inputRef || this.inputRef
+    const inputRef = digg(this, "props", "inputProps", "ref")
 
     if (!inputRef.current) {
       // This can happen if the component is being unmounted
@@ -141,20 +93,6 @@ export default class ApiMakerInputsCheckbox extends React.PureComponent {
       inputRef.current.checked = newValue
     }
   }
-
-  onValidationErrors (event) {
-    const {onErrors} = this.props
-
-    if (!onErrors) {
-      return
-    }
-
-    const errors = event.detail.getValidationErrorsForInput({
-      attribute: this.props.attribute,
-      inputName: this.inputName(),
-      onMatchValidationError: this.props.onMatchValidationError
-    })
-
-    onErrors(errors)
-  }
 }
+
+export default inputWrapper(ApiMakerInputsCheckbox, {type: "checkbox"})

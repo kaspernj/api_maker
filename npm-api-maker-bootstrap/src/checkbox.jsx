@@ -1,10 +1,11 @@
-const {Checkbox, idForComponent, nameForComponent} = require("@kaspernj/api-maker-inputs")
+const {Checkbox, inputWrapper} = require("@kaspernj/api-maker-inputs")
 const classNames = require("classnames")
+const {digs} = require("diggerize")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
 
-export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
+class ApiMakerBootstrapCheckbox extends React.PureComponent {
   static defaultProps = {
     defaultValue: 1,
     zeroInput: true
@@ -26,29 +27,23 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
     zeroInput: PropTypes.bool
   }
 
-  state = {
-    errors: []
-  }
-
   render () {
-    const {className, hint, id, label, labelClassName, onMatchValidationError, wrapperClassName, ...restProps} = this.props
-    const {errors} = this.state
+    const {className, hint, id, inputProps, inputRef, label, labelClassName, wrapperClassName, wrapperProps, ...restProps} = this.props
+    const {ref, ...forwardedInputProps} = inputProps
+    const {errors} = digs(wrapperProps, "errors")
 
     return (
       <div className={this.wrapperClassName()}>
         <div className="form-check">
           <Checkbox
-            defaultChecked={this.inputDefaultChecked()}
+            {...forwardedInputProps}
             className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
-            id={this.inputId()}
-            name={this.inputName()}
-            onErrors={this.onErrors}
+            inputRef={ref}
             {...restProps}
           />
-
-          {this.label() &&
-            <label className={this.labelClassName()} htmlFor={this.inputId()}>
-              {this.label()}
+          {wrapperProps.label &&
+            <label className={this.labelClassName()} htmlFor={inputProps.id}>
+              {wrapperProps.label}
             </label>
           }
           {hint &&
@@ -60,35 +55,6 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
         </div>
       </div>
     )
-  }
-
-  inputDefaultChecked () {
-    if ("defaultChecked" in this.props) {
-      return this.props.defaultChecked
-    } else if (this.props.model) {
-      if (!this.props.model[this.props.attribute])
-        throw new Error(`No such attribute: ${this.props.attribute}`)
-
-      return this.props.model[this.props.attribute]()
-    }
-  }
-
-  inputId () {
-    return idForComponent(this)
-  }
-
-  inputName () {
-    return nameForComponent(this)
-  }
-
-  label () {
-    const {attribute, label, model} = this.props
-
-    if ("label" in this.props) {
-      return label
-    } else if (attribute && model) {
-      return model.modelClass().humanAttributeName(attribute)
-    }
   }
 
   labelClassName () {
@@ -108,6 +74,6 @@ export default class ApiMakerBootstrapCheckbox extends React.PureComponent {
 
     return classNames.join(" ")
   }
-
-  onErrors = (errors) => this.setState({errors})
 }
+
+export default inputWrapper(ApiMakerBootstrapCheckbox, {type: "checkbox"})

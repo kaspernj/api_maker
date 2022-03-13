@@ -9,6 +9,7 @@ da:
       task:
         id: ID
         name: Navn
+        state: Status
       user:
         email: Email
         updated_at: Opdateret d.

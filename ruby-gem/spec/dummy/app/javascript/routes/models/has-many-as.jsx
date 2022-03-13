@@ -1,3 +1,5 @@
+import {digg, digs} from "diggerize"
+
 export default class ModelsHasManyAs extends React.PureComponent {
   params = Params.parse()
   state = {

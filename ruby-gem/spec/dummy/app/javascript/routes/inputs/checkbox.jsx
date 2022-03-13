@@ -1,3 +1,5 @@
+import {digg, digs} from "diggerize"
+
 export default class RoutesInputsCheckbox extends React.PureComponent {
   params = Params.parse()
   autoRefresh = Boolean(this.params.auto_refresh)

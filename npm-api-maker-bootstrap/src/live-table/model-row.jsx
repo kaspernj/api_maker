@@ -1,7 +1,8 @@
-const {digs} = require("diggerize")
+const {digg, digs} = require("diggerize")
 const inflection = require("inflection")
 const {Link} = require("react-router-dom")
 const Money = require("js-money")
+const PropTypes = require("prop-types")
 
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
   static propTypes = {

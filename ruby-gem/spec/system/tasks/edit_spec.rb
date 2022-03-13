@@ -7,6 +7,7 @@ describe "tasks - edit" do
   it "updates a given task" do
     login_as admin
     visit edit_task_path(task)
+    wait_for_selector "label[for='task_state']", exact_text: "State"
     wait_for_and_find("#task_name").set("Test update task")
     select "Closed", from: "task_state"
     select 6, from: "task_priority"
