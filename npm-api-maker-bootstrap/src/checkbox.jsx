@@ -41,10 +41,9 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
             inputRef={ref}
             {...restProps}
           />
-
-          {label &&
+          {wrapperProps.label &&
             <label className={this.labelClassName()} htmlFor={inputProps.id}>
-              {label}
+              {wrapperProps.label}
             </label>
           }
           {hint &&

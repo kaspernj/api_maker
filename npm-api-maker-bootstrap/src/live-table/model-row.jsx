@@ -1,4 +1,4 @@
-const {digs} = require("diggerize")
+const {digg, digs} = require("diggerize")
 const inflection = require("inflection")
 const {Link} = require("react-router-dom")
 const Money = require("js-money")

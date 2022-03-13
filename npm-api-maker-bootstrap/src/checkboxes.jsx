@@ -11,13 +11,14 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,
+    inputProps: PropTypes.object.isRequired,
     label: PropTypes.string,
     labelClassName: PropTypes.string,
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
-    onMatchValidationError: PropTypes.func,
-    options: PropTypes.array.isRequired
+    options: PropTypes.array.isRequired,
+    wrapperProps: PropTypes.object.isRequired
   })
 
   render () {
@@ -49,7 +50,7 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   inputCheckboxClassName () {
     const classNames = []
 
-    if (this.props.errors.length > 0) classNames.push("is-invalid")
+    if (this.props.wrapperProps.errors.length > 0) classNames.push("is-invalid")
 
     return classNames.join(" ")
   }
