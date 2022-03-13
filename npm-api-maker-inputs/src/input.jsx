@@ -51,6 +51,7 @@ class ApiMakerInput extends React.PureComponent {
       onErrors,
       onMatchValidationError,
       type,
+      wrapperProps,
       ...restProps
     } = this.props
 

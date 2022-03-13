@@ -1,3 +1,4 @@
+const {digs} = require("diggerize")
 const {Input, inputWrapper, Money} = require("@kaspernj/api-maker-inputs")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
@@ -34,12 +35,12 @@ class ApiMakerBootstrapInput extends React.PureComponent {
       className,
       currenciesCollection,
       currencyName,
-      errors,
       hint,
       hintBottom,
       id,
       inputClassName,
       inputProps,
+      inputRef,
       label,
       labelClassName,
       model,
@@ -48,8 +49,11 @@ class ApiMakerBootstrapInput extends React.PureComponent {
       prependText,
       type,
       wrapperClassName,
+      wrapperProps,
       ...restProps
     } = this.props
+    const {ref, ...forwardedInputProps} = inputProps
+    const {errors} = digs(wrapperProps, "errors")
 
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
@@ -92,8 +96,9 @@ class ApiMakerBootstrapInput extends React.PureComponent {
             <Input
               attribute={attribute}
               className={this.inputClassName()}
+              inputRef={inputProps.ref}
               model={model}
-              {...inputProps}
+              {...forwardedInputProps}
               {...restProps}
             />
             {(append || appendText) &&
@@ -124,7 +129,7 @@ class ApiMakerBootstrapInput extends React.PureComponent {
     if (this.props.className)
       classNames.push(this.props.className)
 
-    if (this.props.errors.length > 0)
+    if (this.props.wrapperProps.errors.length > 0)
       classNames.push("is-invalid")
 
     return classNames.join(" ")

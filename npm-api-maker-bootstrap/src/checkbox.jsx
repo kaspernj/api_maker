@@ -1,5 +1,6 @@
 const {Checkbox, inputWrapper} = require("@kaspernj/api-maker-inputs")
 const classNames = require("classnames")
+const {digs} = require("diggerize")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
@@ -15,7 +16,6 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
     className: PropTypes.string,
     defaultChecked: PropTypes.bool,
     defaultValue: PropTypes.node,
-    errors: PropTypes.array.isRequired,
     hint: PropTypes.node,
     id: PropTypes.string,
     label: PropTypes.node,
@@ -28,14 +28,17 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
   }
 
   render () {
-    const {className, errors, hint, id, inputProps, label, labelClassName, onMatchValidationError, wrapperClassName, ...restProps} = this.props
+    const {className, hint, id, inputProps, inputRef, label, labelClassName, wrapperClassName, wrapperProps, ...restProps} = this.props
+    const {ref, ...forwardedInputProps} = inputProps
+    const {errors} = digs(wrapperProps, "errors")
 
     return (
       <div className={this.wrapperClassName()}>
         <div className="form-check">
           <Checkbox
-            {...inputProps}
+            {...forwardedInputProps}
             className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
+            ref={inputProps.ref}
             {...restProps}
           />
 

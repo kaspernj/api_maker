@@ -9,6 +9,7 @@ en:
       task:
         id: ID
         name: Name
+        state: State
       user:
         email: Email
         updated_at: Updated at

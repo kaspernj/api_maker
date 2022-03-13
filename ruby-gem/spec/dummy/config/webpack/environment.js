@@ -27,16 +27,11 @@ environment.loaders.prepend("yaml", {
 environment.plugins.append(
   "ProvidePlugin",
   new webpack.ProvidePlugin({
-    classNames: "classnames",
-    digg: ["diggerize", "digg"],
-    digs: ["diggerize", "digs"],
     FlashMessage: ["shared/flash-message", "default"],
     Hash: ["shared/hash", "default"],
     I18n: ["shared/i18n", "default"],
     Layout: ["components/layout", "default"],
     Params: ["@kaspernj/api-maker", "Params"],
-    PropTypes: "prop-types",
-    propTypesExact: "prop-types-exact",
     React: "react",
     Routes: ["shared/routes", "default"],
     setStateAsync: ["shared/set-state-async", "default"],

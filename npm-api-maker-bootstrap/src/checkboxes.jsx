@@ -26,7 +26,7 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
           {this.props.inputProps.label}
         </label>
 
-        <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
+        <input name={this.inputName()} ref={this.props.inputProps.ref} type="hidden" value="" />
         {this.props.options.map((option, index) => this.optionElement(option, index))}
       </div>
     )
@@ -64,8 +64,7 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   isDefaultSelected (option) {
     let defaultValue = this.inputDefaultValue()
 
-    if (!defaultValue)
-      return false
+    if (!defaultValue) return false
 
     if (defaultValue.constructor === Array) {
       return defaultValue.includes(option)
@@ -77,8 +76,7 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   labelClassName () {
     const classNames = []
 
-    if (this.props.labelClassName)
-      classNames.push(this.props.labelClassName)
+    if (this.props.labelClassName) classNames.push(this.props.labelClassName)
 
     return classNames.join(" ")
   }
@@ -91,7 +89,8 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   }
 
   optionElement (option, index) {
-    const {errors, onChange, options} = this.props
+    const {onChange, options, wrapperProps} = this.props
+    const {errors} = digs(wrapperProps, "errors")
     const id = `${this.generatedId()}-${index}`
 
     return (

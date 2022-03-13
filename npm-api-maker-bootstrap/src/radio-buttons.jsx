@@ -1,13 +1,11 @@
 const {digs} = require("diggerize")
-const {EventListener} = require("@kaspernj/api-maker")
+const {inputWrapper} = require("@kaspernj/api-maker-inputs")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const propTypesExact = require("prop-types-exact")
 const React = require("react")
 
-const inflection = require("inflection")
-
-export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
+class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
     collection: PropTypes.array.isRequired,
@@ -16,70 +14,28 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
       PropTypes.string
     ]),
     id: PropTypes.string,
+    inputProps: PropTypes.object.isRequired,
     name: PropTypes.string,
     model: PropTypes.object,
     onChange: PropTypes.func,
     onMatchValidationError: PropTypes.func,
-    wrapperClassName: PropTypes.string
+    wrapperClassName: PropTypes.string,
+    wrapperProps: PropTypes.object.isRequired
   })
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      validationErrors: []
-    }
-  }
-
-  componentDidMount () {
-    this.setForm()
-  }
-
-  componentDidUpdate () {
-    this.setForm()
-  }
-
-  setForm () {
-    const form = this.refs.hiddenInput && this.refs.hiddenInput.form
-    if (form != this.state.form) this.setState({form})
-  }
-
   render () {
-    const {form} = this.state
-
     return (
       <div className={this.wrapperClassName()}>
-        {form &&
-          <EventListener event="validation-errors" onCalled={(event) => this.onValidationErrors(event)} target={form} />
-        }
-        <input name={this.inputName()} ref="hiddenInput" type="hidden" value="" />
+        <input {...this.props.inputProps} type="hidden" value="" />
         {this.props.collection.map((option, index) => this.optionElement(option, index))}
       </div>
     )
   }
 
-  inputDefaultValue () {
-    if (this.props.defaultValue) {
-      return this.props.defaultValue
-    } else if (this.props.model) {
-      if (!this.props.model[this.props.attribute])
-        throw new Error(`No such attribute: ${this.props.attribute}`)
-
-      return this.props.model[this.props.attribute]()
-    }
-  }
-
-  inputName () {
-    if (this.props.name) {
-      return this.props.name
-    } else if (this.props.model) {
-      return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}]`
-    }
-  }
-
   inputRadioClassName () {
     const classNames = ["form-check-input"]
 
-    if (this.state.validationErrors.length > 0)
+    if (this.props.wrapperProps.errors.length > 0)
       classNames.push("is-invalid")
 
     return classNames.join(" ")
@@ -89,19 +45,9 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
   }
 
-  onValidationErrors (event) {
-    const validationErrors = event.detail.getValidationErrorsForInput({
-      attribute: this.props.attribute,
-      inputName: this.inputName(),
-      onMatchValidationError: this.props.onMatchValidationError
-    })
-    this.setState({validationErrors})
-  }
-
   optionElement (option, index) {
     const {collection} = digs(this.props, "collection")
     const {onChange} = this.props
-    const {validationErrors} = this.state
     const id = this.generatedId()
 
     return (
@@ -109,9 +55,9 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
         <input
           className={this.inputRadioClassName()}
           data-option-value={option[1]}
-          defaultChecked={option[1] == this.inputDefaultValue()}
+          defaultChecked={option[1] == this.props.inputProps.defaultValue}
           id={id}
-          name={this.inputName()}
+          name={this.props.inputProps.name}
           onChange={onChange}
           type="radio"
           value={option[1]}
@@ -121,8 +67,8 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
           {option[0]}
         </label>
 
-        {(index + 1) == collection.length && validationErrors.length > 0 &&
-          <InvalidFeedback errors={validationErrors} />
+        {(index + 1) == collection.length && this.props.wrapperProps.errors.length > 0 &&
+          <InvalidFeedback errors={this.props.wrapperProps.errors} />
         }
       </div>
     )
@@ -137,3 +83,5 @@ export default class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     return classNames.join(" ")
   }
 }
+
+export default inputWrapper(ApiMakerBootstrapRadioButtons)

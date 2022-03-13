@@ -1,3 +1,4 @@
+const {digs} = require("diggerize")
 const {inputWrapper, Select} = require("@kaspernj/api-maker-inputs")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
@@ -24,7 +25,6 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
       children,
       className,
       description,
-      errors,
       id,
       inputProps,
       hint,
@@ -34,14 +34,17 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
       name,
       placeholder,
       wrapperClassName,
+      wrapperProps,
       ...restProps
     } = this.props
+    const {ref, ...forwardedInputProps} = inputProps
+    const {errors} = digs(wrapperProps, "errors")
 
     return (
       <div className={this.wrapperClassName()}>
         {label &&
           <div className={labelContainerClassName ? labelContainerClassName : null}>
-            <label className={this.labelClassName()} htmlFor={this.inputId()}>
+            <label className={this.labelClassName()} htmlFor={inputProps.id}>
               {label}
             </label>
           </div>
@@ -59,7 +62,7 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
         {children}
         {!children &&
           <Select
-            {...inputProps}
+            {...forwardedInputProps}
             className={this.selectClassName()}
             {...restProps}
           />
@@ -87,7 +90,7 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
     const classNames = ["form-control"]
 
     if (this.props.className) classNames.push(this.props.className)
-    if (this.props.errors.length > 0) classNames.push("is-invalid")
+    if (this.props.wrapperProps.errors.length > 0) classNames.push("is-invalid")
 
     return classNames.join(" ")
   }
@@ -101,4 +104,4 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
   }
 }
 
-export default inputWrapper(ApiMakerBootstrapSelect)
+export default inputWrapper(ApiMakerBootstrapSelect, {type: "select"})

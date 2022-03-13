@@ -1,5 +1,5 @@
 const classNames = require("classnames")
-const {digs} = require("diggerize")
+const {dig, digg, digs} = require("diggerize")
 const {EventListener} = require("@kaspernj/api-maker")
 const React = require("react")
 const idForComponent = require("./id-for-component.cjs")
@@ -14,42 +14,58 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
     }
 
     componentDidMount() {
-      if (this.props.onErrors) this.setForm()
+      this.setForm()
     }
 
     componentDidUpdate() {
-      if (this.props.onErrors) this.setForm()
+      this.setForm()
     }
 
     render() {
-      const {className, ...restProps} = this.props
       const {errors, form} = digs(this.state, "errors", "form")
       const type = this.inputType()
       const inputProps = {
         id: idForComponent(this),
         name: nameForComponent(this),
-        ref: this.inputRef(),
-        type
+        ref: this.inputRef()
       }
+
+      if (!inputProps.ref) throw new Error("No input ref?")
 
       if (this.handleAsCheckbox()) {
         inputProps.defaultChecked = this.inputDefaultChecked()
-      } else {
+      } else if (!this.handleAsSelect()) {
         inputProps.defaultValue = this.inputDefaultValue()
+        inputProps.type = type
+      }
+
+      const wrapperProps = {
+        errors,
+        form,
+        label: this.label()
       }
 
       return (
         <>
+          <div>
+            FORM: {form ? "YES" : "NO"}
+          </div>
+          <div>
+            INPUT REF CURRENT: {inputProps.ref.current ? "YES" : "NO"}
+          </div>
+          <div>
+            TAG NAME: {digg(inputProps, "ref", "current")?.tagName}
+          </div>
+          <div>
+            WRAPPED COMPONENT NAME: {WrapperComponentClass.name}
+          </div>
           {form &&
             <EventListener event="validation-errors" onCalled={digg(this, "onValidationErrors")} target={form} />
           }
           <WrapperComponentClass
-            className={classNames("api-maker-inputs-wrapper", className)}
-            errors={errors}
-            form={form}
             inputProps={inputProps}
-            label={this.label()}
-            {...restProps}
+            wrapperProps={wrapperProps}
+            {...this.props}
           />
         </>
       )
@@ -75,6 +91,12 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
     handleAsCheckbox() {
       if (this.props.type == "checkbox") return true
       if (!("type" in this.props) && wrapperOptions == "checkbox") return true
+
+      return false
+    }
+
+    handleAsSelect() {
+      if (wrapperOptions == "select") return true
 
       return false
     }
@@ -151,8 +173,8 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
 
       let form
 
-      if (inputElement) form = digg(inputElement, "form")
-      if (form != this.state.form) this.setState({form})
+      if (inputElement) form = dig(inputElement, "form")
+      if (form && form != this.state.form) this.setState({form})
     }
   }
 }
