@@ -56,7 +56,6 @@ class ApiMakerInput extends React.PureComponent {
 
     return (
       <>
-        TYPE: {inputProps.type}
         {autoRefresh && model &&
           <EventUpdated model={model} onUpdated={this.onModelUpdated} />
         }
