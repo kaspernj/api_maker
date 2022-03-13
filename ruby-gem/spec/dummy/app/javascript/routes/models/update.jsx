@@ -1,3 +1,5 @@
+import {digg} from "diggerize"
+
 export default class ModelsUpdate extends React.PureComponent {
   state = {
     projectId: digg(this, "props", "match", "params", "id")

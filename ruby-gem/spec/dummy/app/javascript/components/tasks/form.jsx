@@ -1,5 +1,7 @@
+import classNames from "classnames"
 import {digg, digs} from "diggerize"
 import {Input, Select} from "@kaspernj/api-maker-bootstrap"
+import PropTypes from "prop-types"
 import TranslatedCollections from "@kaspernj/api-maker/src/translated-collections.cjs"
 
 export default class ComponentsTasksForm extends React.PureComponent {
