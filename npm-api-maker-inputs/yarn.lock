@@ -904,15 +904,15 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@kaspernj/api-maker@>= 1.0.126":
-  version "1.0.127"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.127.tgz#646c798bfa0ee31b61cd643281e794537b67b817"
-  integrity sha512-3VhQXIcJpWuaPXk0gIipbS2gvDEOLzkGGHemSHU3J3A145VNgWX5pXlkMvADJiLZleBpkQZNbG5/vaqJmqBnWg==
+"@kaspernj/api-maker@>= 1.0.128":
+  version "1.0.129"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.129.tgz#e8a427c612f3b772632e1bd7d1111884b2f3a4bc"
+  integrity sha512-Twmff1QkGuQE/LuQZzOKH4ZvKzSQ2OhUlOWTrNPyiDhVY/L8qq9KrqWl0s+I5Vt+rrd78oIbITe0ZIuBWEJgnQ==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
     debounce ">= 1.2.1"
-    diggerize ">= 1.0.3"
+    diggerize ">= 1.0.4"
     epic-locks ">= 1.0.1"
     form-data-objectizer ">= 1.0.0"
     form-serialize ">= 0.7.2"
@@ -1644,11 +1644,6 @@ diff-sequences@^27.5.1:
   version "27.5.1"
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-27.5.1.tgz#eaecc0d327fd68c8d9672a1e64ab8dccb2ef5327"
   integrity sha512-k1gCAXAsNgLwEL+Y8Wvl+M6oEFj5bgazfZULpS5CneoPPXRaCCW7dm+q21Ky2VEE5X+VeRDBVg1Pcvvsr4TtNQ==
-
-"diggerize@>= 1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.3.tgz#1c08fb9f461c2ed1af9416c83142539f041350a3"
-  integrity sha512-sqZM36ZDSizaGTkjs+CZjjPlccDaz+Khozw/9+fnYJ2oS2n6is2JPoycofSnWTi0JDKEKVI86IKsMxwWzbrG1Q==
 
 "diggerize@>= 1.0.4":
   version "1.0.4"
