@@ -1,5 +1,6 @@
 const {digs} = require("diggerize")
-const {inputWrapper, Select} = require("@kaspernj/api-maker-inputs")
+const {inputWrapper} = require("@kaspernj/api-maker-inputs")
+const {Select} = require("@kaspernj/api-maker-inputs/src/select")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
@@ -17,7 +18,8 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
     labelContainerClassName: PropTypes.string,
     model: PropTypes.object,
     placeholder: PropTypes.string,
-    wrapperClassName: PropTypes.string
+    wrapperClassName: PropTypes.string,
+    wrapperOpts: PropTypes.object.isRequired
   }
 
   render () {
@@ -34,18 +36,18 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
       name,
       placeholder,
       wrapperClassName,
-      wrapperProps,
+      wrapperOpts,
       ...restProps
     } = this.props
     const {ref, ...forwardedInputProps} = inputProps
-    const {errors} = digs(wrapperProps, "errors")
+    const {errors} = digs(wrapperOpts, "errors")
 
     return (
       <div className={this.wrapperClassName()}>
-        {wrapperProps.label &&
+        {wrapperOpts.label &&
           <div className={labelContainerClassName ? labelContainerClassName : null}>
             <label className={this.labelClassName()} htmlFor={inputProps.id}>
-              {wrapperProps.label}
+              {wrapperOpts.label}
             </label>
           </div>
         }
@@ -64,7 +66,9 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
           <Select
             {...forwardedInputProps}
             className={this.selectClassName()}
+            inputProps={inputProps}
             inputRef={ref}
+            wrapperOpts={wrapperOpts}
             {...restProps}
           />
         }
@@ -91,7 +95,7 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
     const classNames = ["form-control"]
 
     if (this.props.className) classNames.push(this.props.className)
-    if (this.props.wrapperProps.errors.length > 0) classNames.push("is-invalid")
+    if (this.props.wrapperOpts.errors.length > 0) classNames.push("is-invalid")
 
     return classNames.join(" ")
   }

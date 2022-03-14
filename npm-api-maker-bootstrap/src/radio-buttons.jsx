@@ -20,7 +20,7 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     onChange: PropTypes.func,
     onMatchValidationError: PropTypes.func,
     wrapperClassName: PropTypes.string,
-    wrapperProps: PropTypes.object.isRequired
+    wrapperOpts: PropTypes.object.isRequired
   })
 
   render () {
@@ -35,7 +35,7 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   inputRadioClassName () {
     const classNames = ["form-check-input"]
 
-    if (this.props.wrapperProps.errors.length > 0)
+    if (this.props.wrapperOpts.errors.length > 0)
       classNames.push("is-invalid")
 
     return classNames.join(" ")
@@ -67,8 +67,8 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
           {option[0]}
         </label>
 
-        {(index + 1) == collection.length && this.props.wrapperProps.errors.length > 0 &&
-          <InvalidFeedback errors={this.props.wrapperProps.errors} />
+        {(index + 1) == collection.length && this.props.wrapperOpts.errors.length > 0 &&
+          <InvalidFeedback errors={this.props.wrapperOpts.errors} />
         }
       </div>
     )

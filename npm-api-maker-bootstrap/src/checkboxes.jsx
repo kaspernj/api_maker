@@ -1,11 +1,10 @@
 const {digs} = require("diggerize")
 const {inputWrapper} = require("@kaspernj/api-maker-inputs")
+const inflection = require("inflection")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const propTypesExact = require("prop-types-exact")
 const React = require("react")
-
-const inflection = require("inflection")
 
 class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   static propTypes = propTypesExact({
@@ -18,14 +17,14 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
     name: PropTypes.string,
     onChange: PropTypes.func,
     options: PropTypes.array.isRequired,
-    wrapperProps: PropTypes.object.isRequired
+    wrapperOpts: PropTypes.object.isRequired
   })
 
   render () {
     return (
       <div className="component-bootstrap-checkboxes form-group">
         <label className={this.labelClassName()}>
-          {this.props.wrapperProps.label}
+          {this.props.wrapperOpts.label}
         </label>
 
         <input name={this.inputName()} ref={this.props.inputProps.ref} type="hidden" value="" />
@@ -50,7 +49,7 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   inputCheckboxClassName () {
     const classNames = []
 
-    if (this.props.wrapperProps.errors.length > 0) classNames.push("is-invalid")
+    if (this.props.wrapperOpts.errors.length > 0) classNames.push("is-invalid")
 
     return classNames.join(" ")
   }
@@ -91,8 +90,8 @@ class ApiMakerBootstrapCheckboxes extends React.PureComponent {
   }
 
   optionElement (option, index) {
-    const {onChange, options, wrapperProps} = this.props
-    const {errors} = digs(wrapperProps, "errors")
+    const {onChange, options, wrapperOpts} = this.props
+    const {errors} = digs(wrapperOpts, "errors")
     const id = `${this.generatedId()}-${index}`
 
     return (

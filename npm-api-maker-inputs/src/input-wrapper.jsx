@@ -39,7 +39,7 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
         inputProps.type = type
       }
 
-      const wrapperProps = {
+      const wrapperOpts = {
         errors,
         form,
         label: this.label()
@@ -52,7 +52,7 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
           }
           <WrapperComponentClass
             inputProps={inputProps}
-            wrapperProps={wrapperProps}
+            wrapperOpts={wrapperOpts}
             {...this.props}
           />
         </>

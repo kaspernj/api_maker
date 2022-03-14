@@ -1,18 +1,15 @@
 const {dig} = require("diggerize")
-const {EventListener} = require("@kaspernj/api-maker")
-const idForComponent = require("./id-for-component.cjs")
 const inputWrapper = require("./input-wrapper").default
-const nameForComponent = require("./name-for-component.cjs")
 const PropTypes = require("prop-types")
 const React = require("react")
 
-class ApiMakerBootstrapSelect extends React.PureComponent {
+class ApiMakerInputsSelect extends React.PureComponent {
   static propTypes = {
     attribute: PropTypes.string,
     children: PropTypes.node,
     defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.number, PropTypes.string]),
     id: PropTypes.string,
-    includeBlank: PropTypes.bool,
+    includeBlank: PropTypes.oneOfType([PropTypes.bool, PropTypes.node]),
     inputProps: PropTypes.object.isRequired,
     inputRef: PropTypes.object,
     model: PropTypes.object,
@@ -65,7 +62,9 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
     return (
       <select {...inputProps} {...restProps}>
         {this.includeBlank() &&
-          <option />
+          <option data-include-blank="true">
+            {typeof includeBlank != "boolean" ? includeBlank : null}
+          </option>
         }
         {options && options.map((option) =>
           <option key={this.optionKey(option)} value={this.optionValue(option)}>
@@ -110,4 +109,5 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
   }
 }
 
-export default inputWrapper(ApiMakerBootstrapSelect)
+export {ApiMakerInputsSelect as Select}
+export default inputWrapper(ApiMakerInputsSelect)
