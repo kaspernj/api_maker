@@ -36,7 +36,6 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
       <div className={this.wrapperClassName()}>
         <div className="form-check">
           <Checkbox
-            {...forwardedInputProps}
             className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
             inputProps={inputProps}
             wrapperOpts={wrapperOpts}
