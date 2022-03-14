@@ -11,36 +11,10 @@ class ApiMakerInputsSelect extends React.PureComponent {
     id: PropTypes.string,
     includeBlank: PropTypes.oneOfType([PropTypes.bool, PropTypes.node]),
     inputProps: PropTypes.object.isRequired,
-    inputRef: PropTypes.object,
     model: PropTypes.object,
     name: PropTypes.string,
     options: PropTypes.array,
     wrapperOpts: PropTypes.object.isRequired
-  }
-
-  inputRef = React.createRef()
-  state = {
-    form: undefined
-  }
-
-  componentDidMount () {
-    if (this.props.onErrors) {
-      this.setForm()
-    }
-  }
-
-  componentDidUpdate () {
-    if (this.props.onErrors) {
-      this.setForm()
-    }
-  }
-
-  setForm () {
-    const form = dig(this.props.inputRef || this.inputRef, "current", "form")
-
-    if (form != this.state.form) {
-      this.setState({form})
-    }
   }
 
   render () {
@@ -51,7 +25,6 @@ class ApiMakerInputsSelect extends React.PureComponent {
       id,
       includeBlank,
       inputProps,
-      inputRef,
       model,
       name,
       options,

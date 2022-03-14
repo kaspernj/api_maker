@@ -38,6 +38,7 @@ describe "models - validation errors" do
     # All validation errors should have been handled so no message should be shown
     wait_for_no_selector ".ui-pnotify-text"
 
+    # These attributes shouldn't have validation errors because of their default values
     wait_for_no_selector ".task-name-1 .invalid-feedback"
     wait_for_no_selector ".task-name-3 .invalid-feedback"
 

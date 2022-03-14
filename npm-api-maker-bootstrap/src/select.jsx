@@ -17,7 +17,6 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
     label: PropTypes.node,
     labelContainerClassName: PropTypes.string,
     model: PropTypes.object,
-    placeholder: PropTypes.string,
     wrapperClassName: PropTypes.string,
     wrapperOpts: PropTypes.object.isRequired
   }
@@ -34,7 +33,6 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
       label,
       labelContainerClassName,
       name,
-      placeholder,
       wrapperClassName,
       wrapperOpts,
       ...restProps

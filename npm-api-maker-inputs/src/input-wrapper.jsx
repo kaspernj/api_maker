@@ -1,4 +1,3 @@
-const classNames = require("classnames")
 const {dig, digg, digs} = require("diggerize")
 const {EventListener} = require("@kaspernj/api-maker")
 const React = require("react")
@@ -34,10 +33,11 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
 
       if (this.handleAsCheckbox()) {
         inputProps.defaultChecked = this.inputDefaultChecked()
-      } else if (!this.handleAsSelect()) {
+      } else {
         inputProps.defaultValue = this.inputDefaultValue()
-        inputProps.type = type
       }
+
+      if (!this.handleAsSelect()) inputProps.type = type
 
       const wrapperOpts = {
         errors,
