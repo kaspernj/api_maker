@@ -78,13 +78,13 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
 
     handleAsCheckbox() {
       if (this.props.type == "checkbox") return true
-      if (!("type" in this.props) && wrapperOptions == "checkbox") return true
+      if (!("type" in this.props) && wrapperOptions.type == "checkbox") return true
 
       return false
     }
 
     handleAsSelect() {
-      if (wrapperOptions == "select") return true
+      if (wrapperOptions.type == "select") return true
 
       return false
     }
