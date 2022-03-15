@@ -1,5 +1,6 @@
 const {digg} = require("diggerize")
 const inflection = require("inflection")
+const ModelsResponseReader = require("./models-response-reader.cjs")
 const Money = require("js-money")
 
 module.exports = class ApiMakerDeserializer {
@@ -11,6 +12,8 @@ module.exports = class ApiMakerDeserializer {
         const date = new Date(digg(object, "value"))
 
         return date
+      } else if (object.api_maker_type == "collection") {
+        return ModelsResponseReader.collection(object)
       } else if (object.api_maker_type == "money") {
         const cents = digg(object, "amount")
         const currency = digg(object, "currency")
