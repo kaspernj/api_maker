@@ -541,7 +541,7 @@ module.exports = class BaseModel {
   }
 
   _refreshModelDataFromResponse (response) {
-    const newModel = digg(response, "model")
+    let newModel = digg(response, "model")
 
     if (Array.isArray(newModel)) newModel = newModel[0]
 
