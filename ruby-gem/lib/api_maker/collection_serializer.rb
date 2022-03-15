@@ -18,6 +18,7 @@ class ApiMaker::CollectionSerializer
   def result
     @result ||= begin
       data = {
+        api_maker_type: :collection,
         data: {},
         preloaded: {}
       }

@@ -17,6 +17,7 @@ class Services::Devise::SignIn < ApiMaker::BaseService
     elsif model.valid_password?(args[:password])
       controller.sign_in(model, scope: scope)
       remember_me(model) if args.dig(:args, :rememberMe)
+
       succeed!(model_data: serializer.result)
     else
       fail! invalid_error_message, type: :invalid

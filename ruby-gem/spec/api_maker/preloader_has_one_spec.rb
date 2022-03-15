@@ -18,7 +18,7 @@ describe ApiMaker::PreloaderHasOne do
     collection = Project.where(id: [project.id + 5])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail.accounts"]}).to_json)
 
-    expect(result).to eq("data" => {}, "preloaded" => {})
+    expect(result).to eq("api_maker_type" => "collection", "data" => {}, "preloaded" => {})
   end
 
   it "loads relationships through and with source" do

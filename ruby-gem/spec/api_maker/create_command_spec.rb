@@ -31,6 +31,7 @@ describe ApiMaker::CreateCommand do
       "error_type" => "validation_error",
       "errors" => [{"message" => "Project must exist", "type" => "validation_error"}],
       "model" => {
+        "api_maker_type" => "collection",
         "data" => {"tasks" => ["new-0"]},
         "preloaded" => {
           "tasks" => {

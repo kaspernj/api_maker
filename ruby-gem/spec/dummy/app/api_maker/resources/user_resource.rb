@@ -3,9 +3,10 @@ class Resources::UserResource < Resources::ApplicationResource
   attributes :birthday_at, :created_at, :custom_attribute, :email, :first_name, :id, :last_name
   attributes :updated_at, if: :email_kasper?
 
-  relationships :supported_tasks, :tasks
+  relationships :supported_tasks, :tasks, :user_roles
 
   def abilities
+    can :read, User
     can CRUD, User
   end
 

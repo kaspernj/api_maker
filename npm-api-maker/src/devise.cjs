@@ -45,20 +45,29 @@ module.exports = class ApiMakerDevise {
   }
 
   static async signIn (username, password, args = {}) {
-    if (!args.scope)
-      args.scope = "user"
+    if (!args.scope) args.scope = "user"
 
     const postData = {username, password, args}
     const response = await Services.current().sendRequest("Devise::SignIn", postData)
     const modelClass = digg(require("@kaspernj/api-maker/src/models"), inflection.camelize(args.scope))
     const modelInstance = new modelClass(digg(response, "model_data"))
 
+    let model
+
+    if (args.loadQuery) {
+      model = await args.loadQuery.clone().ransack({id_eq: modelInstance.id()}).first()
+
+      if (!model) throw new Error(`Couldn't read user with ID ${modelInstance.id()}`)
+    } else {
+      model = modelInstance
+    }
+
     await CanCan.current().resetAbilities()
 
-    ApiMakerDevise.updateSession(modelInstance)
+    ApiMakerDevise.updateSession(model)
     ApiMakerDevise.events().emit("onDeviseSignIn", Object.assign({username}, args))
 
-    return {model: modelInstance, response}
+    return {model, response}
   }
 
   static updateSession (model) {
@@ -105,10 +114,13 @@ module.exports = class ApiMakerDevise {
   loadCurrentScope (scope) {
     const scopeData = global.apiMakerDeviseCurrent[scope]
 
-    if (!scopeData)
-      return null
+    if (!scopeData) return null
 
     const parsedScopeData = Deserializer.parse(scopeData)
+
+    // Might be a collection with preloaded relationships
+    if (Array.isArray(parsedScopeData)) return parsedScopeData[0]
+
     const ModelClass = digg(require("@kaspernj/api-maker/src/models"), inflection.camelize(scope))
     const modelInstance = new ModelClass({data: parsedScopeData})
 

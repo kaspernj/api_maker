@@ -31,28 +31,20 @@ describe "bootstrap - string input" do
     login_as user
     visit bootstrap_string_input_date_path
     wait_for_selector ".content-container"
-
-    input = wait_for_and_find("#user_birthday_at")
-
-    expect(input[:value]).to eq "1985-06-17"
+    wait_for_selector "#user_birthday_at[value='1985-06-17']"
   end
 
   it "accepts Date object as defaultValue" do
     login_as user
     visit bootstrap_string_input_date_object_path
-    input = wait_for_and_find("#date_object")
-
-    expect(input[:value]).to eq "2020-01-01"
+    wait_for_selector "#date_object[value='2020-01-01']"
   end
 
   it "renders a datetime local field as sets the value correctly" do
     login_as user
     visit bootstrap_string_input_datetime_local_path(task_id: task.id)
     wait_for_selector ".content-container"
-
-    input = wait_for_and_find("#task_created_at")
-
-    expect(input[:value]).to eq "1985-06-17T10:30:00"
+    wait_for_selector "#task_created_at[value='1985-06-17T10:30:00']"
   end
 
   it "only sets a name on a file input when a file is chosen" do
@@ -62,7 +54,7 @@ describe "bootstrap - string input" do
 
     expect(wait_for_and_find("#user_image")[:name]).to eq ""
     attach_file "user_image", Rails.root.join("Gemfile")
-    expect(wait_for_and_find("#user_image")[:name]).to eq "user[image]"
+    wait_for_selector "#user_image[name='user[image]']"
   end
 
   it "renders several components for money" do
@@ -76,8 +68,8 @@ describe "bootstrap - string input" do
 
     wait_for_and_find("input[type=submit]").click
 
-    wait_for_browser do
-      project.reload.price_per_hour.format == "$500.00"
+    wait_for_expect do
+      expect(project.reload.price_per_hour.format).to eq "$500.00"
     end
   end
 end

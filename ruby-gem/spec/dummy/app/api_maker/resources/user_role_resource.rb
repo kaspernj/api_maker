@@ -3,4 +3,8 @@ class Resources::UserRoleResource < Resources::ApplicationResource
 
   attributes :id, :role, :user_id
   relationships :user
+
+  def abilities
+    can READ, UserRole, user_id: current_user.id if signed_in?
+  end
 end

@@ -19,9 +19,10 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
       succeed!(count: count)
     else
       collection = collection_from_query(@query)
-      response = collection.as_json
+      response = {
+        collection: collection.as_json
+      }
       include_pagination_data(response, @query)
-
       succeed!(response)
     end
   end

@@ -416,6 +416,8 @@ module.exports = class BaseModel {
   }
 
   setNewModelData (model) {
+    if (!("modelData" in model)) throw new Error(`No modelData in model: ${JSON.stringify(model)}`)
+
     this.previousModelData = digg(this, "modelData")
     this.modelData = digg(model, "modelData")
   }
@@ -531,12 +533,18 @@ module.exports = class BaseModel {
   }
 
   _refreshModelFromResponse (response) {
-    const newModel = ModelsResponseReader.first(digg(response, "model"))
+    let newModel = digg(response, "model")
+
+    if (Array.isArray(newModel)) newModel = newModel[0]
+
     this.setNewModel(newModel)
   }
 
   _refreshModelDataFromResponse (response) {
-    const newModel = ModelsResponseReader.first(digg(response, "model"))
+    let newModel = digg(response, "model")
+
+    if (Array.isArray(newModel)) newModel = newModel[0]
+
     this.setNewModelData(newModel)
   }
 
@@ -669,7 +677,7 @@ module.exports = class BaseModel {
       if (attributeName in attributes) return null
     }
 
-    throw new AttributeNotLoadedError(`No such attribute: ${digg(this.modelClassData(), "name")}#${attributeName}`)
+    throw new AttributeNotLoadedError(`No such attribute: ${digg(this.modelClassData(), "name")}#${attributeName}: ${JSON.stringify(this.modelData)}`)
   }
 
   isAttributeLoaded (attributeName) {
