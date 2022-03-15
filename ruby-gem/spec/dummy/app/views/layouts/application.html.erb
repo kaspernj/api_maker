@@ -10,7 +10,35 @@
     <%= javascript_pack_tag "application" %>
   </head>
   <body>
-    <%= render "api_maker/data" %>
+    <% if params[:current_user_with_preloads] %>
+      <script type="text/javascript">
+        if (!window.apiMakerDeviseCurrent) {
+          window.apiMakerDeviseCurrent = {}
+        }
+
+        <%
+          if signed_in?
+            collection_serializer = ApiMaker::CollectionSerializer.new(
+              ability: current_ability,
+              api_maker_args: api_maker_args,
+              collection: [current_user],
+              locals: api_maker_locals,
+              model_class: User,
+              query_params: {
+                preload: ["user_roles"]
+              }
+            )
+
+            %>
+              window.apiMakerDeviseCurrent["user"] = <%= signed_in? ? collection_serializer.to_json(result_parser: true).html_safe : null %>
+            <%
+          end
+        %>
+      </script>
+    <% else %>
+      <%= render "api_maker/data" %>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

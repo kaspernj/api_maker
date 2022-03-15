@@ -7,7 +7,23 @@ export default class DeviseSignInController extends Controller {
   async onSubmit(e) {
     e.preventDefault()
 
-    const deviseSignInResponse = await Devise.signIn(this.emailTarget.value, this.passwordTarget.value, {rememberMe: this.rememberTarget.checked})
+    const params = Params.parse()
+
+    let deviseSignInResponse
+
+    if (params["current_user_with_preloads"]) {
+      deviseSignInResponse = await Devise.signIn(
+        this.emailTarget.value,
+        this.passwordTarget.value,
+        {
+          loadQuery: User.ransack().preload("user_roles"),
+          rememberMe: this.rememberTarget.checked
+        }
+      )
+    } else {
+      deviseSignInResponse = await Devise.signIn(this.emailTarget.value, this.passwordTarget.value, {rememberMe: this.rememberTarget.checked})
+    }
+
     const currentUserResult = Devise.currentUser()
     const isUserSignedInResult = Devise.isUserSignedIn()
 

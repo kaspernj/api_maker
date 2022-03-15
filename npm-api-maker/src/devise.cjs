@@ -56,6 +56,8 @@ module.exports = class ApiMakerDevise {
 
     if (args.loadQuery) {
       model = await args.loadQuery.clone().ransack({id_eq: modelInstance.id()}).first()
+
+      if (!model) throw new Error(`Couldn't read user with ID ${modelInstance.id()}`)
     } else {
       model = modelInstance
     }
