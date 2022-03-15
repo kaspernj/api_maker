@@ -13,7 +13,10 @@ module.exports = class ApiMakerDeserializer {
 
         return date
       } else if (object.api_maker_type == "collection") {
-        return ModelsResponseReader.collection(object)
+        // Need to remove type to avoid circular error
+        const {api_maker_type, ...restObject} = object
+
+        return ModelsResponseReader.collection(ApiMakerDeserializer.parse(restObject))
       } else if (object.api_maker_type == "money") {
         const cents = digg(object, "amount")
         const currency = digg(object, "currency")
