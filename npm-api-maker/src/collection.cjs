@@ -146,7 +146,7 @@ module.exports = class ApiMakerCollection {
 
   async result () {
     const response = await this._response()
-    const models = this._responseToModels(response)
+    const models = digg(response, "collection")
     const result = new Result({collection: this, models, response})
     return result
   }
@@ -199,7 +199,7 @@ module.exports = class ApiMakerCollection {
 
   async toArray () {
     const response = await this._response()
-    return this._responseToModels(response)
+    return digg(response, "collection")
   }
 
   modelClass () {
@@ -232,13 +232,5 @@ module.exports = class ApiMakerCollection {
       },
       {}
     )
-  }
-
-  _responseToModels (response) {
-    const modelsResponseReader = new ModelsResponseReader({
-      collection: this,
-      response
-    })
-    return modelsResponseReader.models()
   }
 }

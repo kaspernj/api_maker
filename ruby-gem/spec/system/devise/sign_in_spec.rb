@@ -17,6 +17,7 @@ describe "Devise sign in" do
 
     expect(response.dig!("deviseSignInResponse", "response", "model_data", "a", "email")).to eq user.email
     expect(response.dig!("currentUserResult", "modelData", "id")).to eq user.id
+    expect(response.dig!("currentUserResult")).not_to have_key "preloadedRelationships"
     expect(response.fetch("isUserSignedInResult")).to eq true
   end
 
@@ -33,10 +34,9 @@ describe "Devise sign in" do
 
     response = JSON.parse(wait_for_and_find("[data-controller='devise--sign-in']", visible: false)["data-success-response"])
 
-    pp response
-
     expect(response.dig!("deviseSignInResponse", "response", "model_data", "a", "email")).to eq user.email
     expect(response.dig!("currentUserResult", "modelData", "id")).to eq user.id
+    expect(response.dig!("currentUserResult", "preloadedRelationships")).to eq("user_roles" => [user_role.id])
     expect(response.fetch("isUserSignedInResult")).to eq true
   end
 end

@@ -6,6 +6,7 @@ class Resources::UserResource < Resources::ApplicationResource
   relationships :supported_tasks, :tasks, :user_roles
 
   def abilities
+    can :read, User
     can CRUD, User
   end
 
