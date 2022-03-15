@@ -872,10 +872,10 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.67":
-  version "1.0.67"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.67.tgz#103cd28a5af4790273217dbb26e00f7f1a8653b3"
-  integrity sha512-lzb5pJ0sYFkbUYKw4AyZfr1FR0v9+vi9YUuXfXLqKCvCywBFG/tg9kLMOVeNQyaKSrMCZbaMIvaRUIp7KUg4mA==
+"@kaspernj/api-maker-inputs@>= 1.0.68":
+  version "1.0.68"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.68.tgz#323f0ca69f565cc36985d1638041c7b5a69c15e7"
+  integrity sha512-mlnOKLrS4D6PnORH5u0YlAHoTogAmFR9bBoKulI/tbvqWdw56gSIXSz5G4jAluWzg+SAkUHqY4zyFStsfO+TFw==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.128"
     classnames ">= 2.2.6"
