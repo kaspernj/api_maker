@@ -3,7 +3,6 @@ const CommandsPool = require("./commands-pool.cjs")
 const {digg} = require("diggerize")
 const inflection = require("inflection")
 const {merge} = require("./merge.cjs")
-const ModelsResponseReader = require("./models-response-reader.cjs")
 const Result = require("./result.cjs")
 
 module.exports = class ApiMakerCollection {
@@ -199,7 +198,14 @@ module.exports = class ApiMakerCollection {
 
   async toArray () {
     const response = await this._response()
-    return digg(response, "collection")
+    const models = digg(response, "collection")
+
+    // This is needed when reloading a version of the model with the same selected attributes and preloads
+    for(const model of models) {
+      model.collection = this
+    }
+
+    return models
   }
 
   modelClass () {

@@ -24,7 +24,7 @@ describe ApiMaker::IndexCommand do
       command = helper.add_command
       helper.execute!
 
-      expect(command.result.fetch("data").fetch("tasks").length).to eq 2
+      expect(command.result.dig!(:collection, "data", "tasks").length).to eq 2
     end
 
     it "includes pagination data" do
@@ -42,8 +42,8 @@ describe ApiMaker::IndexCommand do
       helper.execute!
       parsed = command.result
 
-      expect(parsed.dig("data", "tasks")).to eq [task.id]
-      expect(parsed.dig("preloaded", "tasks", task.id.to_s, :a, :user_id)).to eq user.id
+      expect(parsed.dig(:collection, "data", "tasks")).to eq [task.id]
+      expect(parsed.dig(:collection, "preloaded", "tasks", task.id.to_s, :a, :user_id)).to eq user.id
     end
 
     it "handels the distinct argument" do
@@ -53,7 +53,8 @@ describe ApiMaker::IndexCommand do
       command = helper.add_command(args: {distinct: true, q: {account_marked_tasks_account_id_eq: account.id}})
       helper.execute!
       parsed = command.result
-      tasks = parsed.fetch("data").fetch("tasks")
+
+      tasks = parsed.dig!(:collection, "data", "tasks")
 
       # This would cause two times the same task ID without the distinct
       expect(tasks).to eq [task.id]
