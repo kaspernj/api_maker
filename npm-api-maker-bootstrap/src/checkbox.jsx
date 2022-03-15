@@ -1,4 +1,5 @@
-const {Checkbox, inputWrapper} = require("@kaspernj/api-maker-inputs")
+const {inputWrapper} = require("@kaspernj/api-maker-inputs")
+const {Checkbox} = require("@kaspernj/api-maker-inputs/src/checkbox")
 const classNames = require("classnames")
 const {digs} = require("diggerize")
 const InvalidFeedback = require("./invalid-feedback").default
@@ -28,22 +29,21 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
   }
 
   render () {
-    const {className, hint, id, inputProps, inputRef, label, labelClassName, wrapperClassName, wrapperProps, ...restProps} = this.props
-    const {ref, ...forwardedInputProps} = inputProps
-    const {errors} = digs(wrapperProps, "errors")
+    const {className, hint, id, inputProps, inputRef, label, labelClassName, wrapperClassName, wrapperOpts, ...restProps} = this.props
+    const {errors} = digs(wrapperOpts, "errors")
 
     return (
       <div className={this.wrapperClassName()}>
         <div className="form-check">
           <Checkbox
-            {...forwardedInputProps}
             className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
-            inputRef={ref}
+            inputProps={inputProps}
+            wrapperOpts={wrapperOpts}
             {...restProps}
           />
-          {wrapperProps.label &&
+          {wrapperOpts.label &&
             <label className={this.labelClassName()} htmlFor={inputProps.id}>
-              {wrapperProps.label}
+              {wrapperOpts.label}
             </label>
           }
           {hint &&

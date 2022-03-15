@@ -1,9 +1,7 @@
 const AutoSubmit = require("./auto-submit.cjs")
 const {digg, digs} = require("diggerize")
-const {EventListener, EventUpdated} = require("@kaspernj/api-maker")
-const idForComponent = require("./id-for-component.cjs")
+const {EventUpdated} = require("@kaspernj/api-maker")
 const inputWrapper = require("./input-wrapper").default
-const nameForComponent = require("./name-for-component.cjs")
 const PropTypes = require("prop-types")
 const React = require("react")
 
@@ -44,7 +42,7 @@ class ApiMakerInputsCheckbox extends React.PureComponent {
       name,
       onChange,
       zeroInput,
-      wrapperProps,
+      wrapperOpts,
       ...restProps
     } = this.props
 
@@ -95,4 +93,5 @@ class ApiMakerInputsCheckbox extends React.PureComponent {
   }
 }
 
+export {ApiMakerInputsCheckbox as Checkbox}
 export default inputWrapper(ApiMakerInputsCheckbox, {type: "checkbox"})

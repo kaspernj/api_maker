@@ -1,4 +1,3 @@
-const classNames = require("classnames")
 const {dig, digg, digs} = require("diggerize")
 const {EventListener} = require("@kaspernj/api-maker")
 const React = require("react")
@@ -34,12 +33,13 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
 
       if (this.handleAsCheckbox()) {
         inputProps.defaultChecked = this.inputDefaultChecked()
-      } else if (!this.handleAsSelect()) {
+      } else {
         inputProps.defaultValue = this.inputDefaultValue()
-        inputProps.type = type
       }
 
-      const wrapperProps = {
+      if (!this.handleAsSelect()) inputProps.type = type
+
+      const wrapperOpts = {
         errors,
         form,
         label: this.label()
@@ -52,7 +52,7 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
           }
           <WrapperComponentClass
             inputProps={inputProps}
-            wrapperProps={wrapperProps}
+            wrapperOpts={wrapperOpts}
             {...this.props}
           />
         </>
@@ -78,13 +78,13 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
 
     handleAsCheckbox() {
       if (this.props.type == "checkbox") return true
-      if (!("type" in this.props) && wrapperOptions == "checkbox") return true
+      if (!("type" in this.props) && wrapperOptions.type == "checkbox") return true
 
       return false
     }
 
     handleAsSelect() {
-      if (wrapperOptions == "select") return true
+      if (wrapperOptions.type == "select") return true
 
       return false
     }

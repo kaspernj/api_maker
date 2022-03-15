@@ -1,5 +1,6 @@
 const {digs} = require("diggerize")
-const {Input, inputWrapper, Money} = require("@kaspernj/api-maker-inputs")
+const {inputWrapper, Money} = require("@kaspernj/api-maker-inputs")
+const {Input} = require("@kaspernj/api-maker-inputs/src/input")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
 const React = require("react")
@@ -49,17 +50,17 @@ class ApiMakerBootstrapInput extends React.PureComponent {
       prependText,
       type,
       wrapperClassName,
-      wrapperProps,
+      wrapperOpts,
       ...restProps
     } = this.props
     const {ref, ...forwardedInputProps} = inputProps
-    const {errors} = digs(wrapperProps, "errors")
+    const {errors} = digs(wrapperOpts, "errors")
 
     return (
       <div className={this.wrapperClassName()} ref="wrapper">
-        {wrapperProps.label &&
+        {wrapperOpts.label &&
           <label className={this.labelClassName()} htmlFor={inputProps.id}>
-            {wrapperProps.label}
+            {wrapperOpts.label}
           </label>
         }
         {hint &&
@@ -96,8 +97,9 @@ class ApiMakerBootstrapInput extends React.PureComponent {
             <Input
               attribute={attribute}
               className={this.inputClassName()}
-              inputRef={inputProps.ref}
+              inputProps={inputProps}
               model={model}
+              wrapperOpts={wrapperOpts}
               {...forwardedInputProps}
               {...restProps}
             />
@@ -129,7 +131,7 @@ class ApiMakerBootstrapInput extends React.PureComponent {
     if (this.props.className)
       classNames.push(this.props.className)
 
-    if (this.props.wrapperProps.errors.length > 0)
+    if (this.props.wrapperOpts.errors.length > 0)
       classNames.push("is-invalid")
 
     return classNames.join(" ")

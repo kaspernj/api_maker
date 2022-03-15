@@ -7,7 +7,7 @@ const React = require("react")
 const replaceall = require("replaceall")
 const strftime = require("strftime")
 
-class ApiMakerInput extends React.PureComponent {
+class ApiMakerInputsInput extends React.PureComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
@@ -51,7 +51,7 @@ class ApiMakerInput extends React.PureComponent {
       onErrors,
       onMatchValidationError,
       type,
-      wrapperProps,
+      wrapperOpts,
       ...restProps
     } = this.props
 
@@ -213,4 +213,5 @@ class ApiMakerInput extends React.PureComponent {
   }
 }
 
-export default inputWrapper(ApiMakerInput)
+export {ApiMakerInputsInput as Input}
+export default inputWrapper(ApiMakerInputsInput)
