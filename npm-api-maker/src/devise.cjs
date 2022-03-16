@@ -49,18 +49,10 @@ module.exports = class ApiMakerDevise {
 
     const postData = {username, password, args}
     const response = await Services.current().sendRequest("Devise::SignIn", postData)
-    const modelClass = digg(require("@kaspernj/api-maker/src/models"), inflection.camelize(args.scope))
-    const modelInstance = new modelClass(digg(response, "model_data"))
 
-    let model
+    let model = response.model
 
-    if (args.loadQuery) {
-      model = await args.loadQuery.clone().ransack({id_eq: modelInstance.id()}).first()
-
-      if (!model) throw new Error(`Couldn't read user with ID ${modelInstance.id()}`)
-    } else {
-      model = modelInstance
-    }
+    if (Array.isArray(model)) model = model[0]
 
     await CanCan.current().resetAbilities()
 
