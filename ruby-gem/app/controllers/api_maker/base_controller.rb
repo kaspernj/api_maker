@@ -11,6 +11,10 @@ private
     @current_ability ||= ApiMaker::Configuration.current.ability_class.new(api_maker_args: api_maker_args, locals: api_maker_locals)
   end
 
+  def reset_current_ability
+    @current_ability = nil
+  end
+
   def api_maker_locals
     @api_maker_locals ||= {}
   end

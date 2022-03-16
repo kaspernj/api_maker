@@ -38,6 +38,11 @@ module.exports = class Serializer {
       }
     } else if (Array.isArray(arg)) {
       return this.serializeArray(arg)
+    } else if (typeof arg == "object" && arg.constructor.name == "ApiMakerCollection") {
+      return {
+        api_maker_type: "collection",
+        value: this.serializeObject(arg)
+      }
     } else if (typeof arg == "object" && arg !== null && arg.constructor.name == "Object") {
       return this.serializeObject(arg)
     } else {

@@ -1,11 +1,6 @@
 class Services::Devise::SignIn < ApiMaker::BaseService
   include Devise::Controllers::Rememberable
 
-  # Rememberable needs this
-  def cookies
-    controller.__send__(:cookies)
-  end
-
   def perform
     fail! "Devise sign in isn't enabled", type: :devise_sign_in_isnt_enabled unless ApiMaker::Configuration.current.devise_sign_in_enabled
 
@@ -17,8 +12,8 @@ class Services::Devise::SignIn < ApiMaker::BaseService
     elsif model.valid_password?(args[:password])
       controller.sign_in(model, scope: scope)
       remember_me(model) if args.dig(:args, :rememberMe)
-
-      succeed!(model_data: serializer.result)
+      reset_current_ability
+      succeed!(model: sign_in_model_result)
     else
       fail! invalid_error_message, type: :invalid
     end
@@ -61,5 +56,21 @@ class Services::Devise::SignIn < ApiMaker::BaseService
 
   def serializer
     @serializer ||= ApiMaker::Serializer.new(ability: current_ability, api_maker_args: api_maker_args, model: model)
+  end
+
+  def sign_in_model_result
+    @sign_in_model_result ||=
+      if (load_query = args.dig(:args, :loadQuery))
+        ApiMaker::CollectionSerializer.new(
+          ability: current_ability,
+          api_maker_args: api_maker_args,
+          collection: [model],
+          locals: api_maker_locals,
+          model_class: model.class,
+          query_params: load_query.query_params
+        )
+      else
+        model
+      end
   end
 end
