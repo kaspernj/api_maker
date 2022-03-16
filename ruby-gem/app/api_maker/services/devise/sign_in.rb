@@ -13,21 +13,7 @@ class Services::Devise::SignIn < ApiMaker::BaseService
       controller.sign_in(model, scope: scope)
       remember_me(model) if args.dig(:args, :rememberMe)
       reset_current_ability
-
-      if (load_query = args.dig(:args, :loadQuery))
-        model_result = ApiMaker::CollectionSerializer.new(
-          ability: current_ability,
-          api_maker_args: api_maker_args,
-          collection: [model],
-          locals: api_maker_locals,
-          model_class: model.class,
-          query_params: load_query.query_params
-        )
-      else
-        model_result = model
-      end
-
-      succeed!(model: model_result)
+      succeed!(model: sign_in_model_result)
     else
       fail! invalid_error_message, type: :invalid
     end
@@ -70,5 +56,21 @@ class Services::Devise::SignIn < ApiMaker::BaseService
 
   def serializer
     @serializer ||= ApiMaker::Serializer.new(ability: current_ability, api_maker_args: api_maker_args, model: model)
+  end
+
+  def sign_in_model_result
+    @sign_in_model_result ||=
+      if (load_query = args.dig(:args, :loadQuery))
+        ApiMaker::CollectionSerializer.new(
+          ability: current_ability,
+          api_maker_args: api_maker_args,
+          collection: [model],
+          locals: api_maker_locals,
+          model_class: model.class,
+          query_params: load_query.query_params
+        )
+      else
+        model
+      end
   end
 end
