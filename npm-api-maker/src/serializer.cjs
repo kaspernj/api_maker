@@ -1,3 +1,4 @@
+const Collection = require("./collection.cjs")
 const {digg} = require("diggerize")
 
 module.exports = class Serializer {
@@ -38,7 +39,7 @@ module.exports = class Serializer {
       }
     } else if (Array.isArray(arg)) {
       return this.serializeArray(arg)
-    } else if (typeof arg == "object" && arg.constructor.name == "ApiMakerCollection") {
+    } else if (typeof arg == "object" && (arg instanceof Collection || arg.constructor.name == "ApiMakerCollection")) {
       return {
         api_maker_type: "collection",
         value: this.serializeObject(arg)
