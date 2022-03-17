@@ -1,6 +1,6 @@
 const AutoSubmit = require("./auto-submit.cjs")
 const {dig, digg, digs} = require("diggerize")
-const {EventUpdated} = require("@kaspernj/api-maker")
+const EventUpdated = require("@kaspernj/api-maker/src/event-updated").default
 const inputWrapper = require("./input-wrapper").default
 const PropTypes = require("prop-types")
 const React = require("react")

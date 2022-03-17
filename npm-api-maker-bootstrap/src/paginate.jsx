@@ -1,4 +1,4 @@
-const {instanceOfClassName} = require("@kaspernj/api-maker")
+const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-name")
 const {Link} = require("react-router-dom")
 const PropTypes = require("prop-types")
 const propTypesExact = require("prop-types-exact")

@@ -1,5 +1,5 @@
 const {digs} = require("diggerize")
-const {inputWrapper} = require("@kaspernj/api-maker-inputs")
+const inputWrapper = require("@kaspernj/api-maker-inputs/src/input-wrapper").default
 const {Select} = require("@kaspernj/api-maker-inputs/src/select")
 const InvalidFeedback = require("./invalid-feedback").default
 const PropTypes = require("prop-types")
