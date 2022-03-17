@@ -1,4 +1,4 @@
-import {CanCanLoader} from "@kaspernj/api-maker";
+import CanCanLoader from "@kaspernj/api-maker/src/can-can-loader"
 import {digs} from "diggerize"
 import {Shape} from "set-state-compare"
 

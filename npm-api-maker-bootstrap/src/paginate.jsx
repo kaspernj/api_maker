@@ -5,7 +5,7 @@ const propTypesExact = require("prop-types-exact")
 const qs = require("qs")
 const React = require("react")
 
-import {Result} from "@kaspernj/api-maker"
+import Result from "@kaspernj/api-maker/src/result"
 
 export default class ApiMakerBootstrapPaginate extends React.PureComponent {
   static propTypes = propTypesExact({

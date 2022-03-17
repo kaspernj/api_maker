@@ -37,7 +37,7 @@ module.exports = class ApiMakerCollection {
   async count () {
     const response = await this.clone()._merge({count: true})._response()
 
-    return response.count
+    return digg(response, "count")
   }
 
   distinct () {
@@ -146,7 +146,11 @@ module.exports = class ApiMakerCollection {
   async result () {
     const response = await this._response()
     const models = digg(response, "collection")
+
+    this._addCollectionToModels(models)
+
     const result = new Result({collection: this, models, response})
+
     return result
   }
 
@@ -200,10 +204,7 @@ module.exports = class ApiMakerCollection {
     const response = await this._response()
     const models = digg(response, "collection")
 
-    // This is needed when reloading a version of the model with the same selected attributes and preloads
-    for(const model of models) {
-      model.collection = this
-    }
+    this._addCollectionToModels(models)
 
     return models
   }
@@ -218,6 +219,13 @@ module.exports = class ApiMakerCollection {
     const clonedQueryArgs = cloneDeep(this.queryArgs)
 
     return new ApiMakerCollection(this.args, clonedQueryArgs)
+  }
+
+  // This is needed when reloading a version of the model with the same selected attributes and preloads
+  _addCollectionToModels(models) {
+    for(const model of models) {
+      model.collection = this
+    }
   }
 
   _merge (newQueryArgs) {

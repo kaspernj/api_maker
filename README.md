@@ -169,7 +169,7 @@ end
 Define a routes file for your project (or multiple) in `app/javascript/routes.js`:
 ```js
 import jsRoutes from "js-routes"
-import {Routes} from "@kaspernj/api-maker"
+import Routes from "@kaspernj/api-maker/src/routes"
 import routeDefinitions from "route-definitions.json"
 
 const routes = new Routes({jsRoutes, routeDefinitions})
@@ -333,7 +333,7 @@ Each attribute is defined as a method on each model. So if you have an attribute
 You can validate model types and loaded attributes like this:
 
 ```js
-import {ModelPropType} from "@kaspernj/api-maker"
+import ModelPropType from "@kaspernj/api-maker/src/model-prop-type"
 
 class MyComponent extends React.Component {
   static propTypes = {
@@ -417,7 +417,7 @@ First include this in your layout, so JS can know which user is signed in:
 
 Then you can do like this in JS:
 ```js
-import {Devise} from "@kaspernj/api-maker"
+import Devise from "@kaspernj/api-maker/src/devise"
 
 console.log(`The current user has this email: ${Devise.currentUser().email()}`)
 ```
@@ -490,7 +490,9 @@ subscription.unsubscribe()
 
 You can also use a React component if you use React and dont want to keep track of when to unsubscribe:
 ```jsx
-import { EventCreated, EventDestroyed, EventUpdated } from "@kaspernj/api-maker"
+import EventCreated from "@kaspernj/api-maker/src/event-created"
+import EventDestroyed from "@kaspernj/api-maker/src/event-destroyed"
+import EventUpdated from "@kaspernj/api-maker/src/event-updated"
 ```
 
 ```jsx
@@ -516,7 +518,7 @@ onUserUpdated = (args) => {
 You can also use this React component to show a models attribute with automatic updates:
 
 ```jsx
-import { UpdatedAttribute } from "@kaspernj/api-maker"
+import UpdatedAttribute from "@kaspernj/api-maker/src/updated-attribute"
 ```
 
 ```jsx
@@ -525,7 +527,7 @@ import { UpdatedAttribute } from "@kaspernj/api-maker"
 
 You can also use the `EventConnection` React component so you don't need to keep track of your subscription and unsubscribe:
 ```jsx
-import { EventConnection } from "@kaspernj/api-maker"
+import EventConnection from "@kaspernj/api-maker/src/event-connection"
 ```
 
 ```jsx

@@ -1,5 +1,5 @@
 import { digs } from "diggerize"
-import { EventModelClass } from "@kaspernj/api-maker"
+import EventModelClass from "@kaspernj/api-maker/src/event-model-class"
 import { Task } from "@kaspernj/api-maker/src/models"
 import React from "react"
 

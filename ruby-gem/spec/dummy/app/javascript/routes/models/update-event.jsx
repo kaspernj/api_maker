@@ -1,5 +1,4 @@
-import {digg, digs} from "diggerize"
-import {EventUpdated} from "@kaspernj/api-maker"
+import EventUpdated from "@kaspernj/api-maker/src/event-updated"
 
 export default class ModelsUpdateEvent extends React.Component {
   state = {}

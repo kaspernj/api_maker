@@ -2,7 +2,7 @@ import ApplicationHistory from "shared/application-history"
 import { Router } from "react-router-dom"
 import React from "react"
 import ReactDOM from "react-dom"
-import {ResourceRoutes} from "@kaspernj/api-maker"
+import ResourceRoutes from "@kaspernj/api-maker/src/resource-routes"
 import {Suspense} from "react"
 
 document.addEventListener("DOMContentLoaded", () => {
