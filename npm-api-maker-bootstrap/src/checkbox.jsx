@@ -1,4 +1,4 @@
-const {inputWrapper} = require("@kaspernj/api-maker-inputs")
+const inputWrapper = require("@kaspernj/api-maker-inputs/src/input-wrapper")
 const {Checkbox} = require("@kaspernj/api-maker-inputs/src/checkbox")
 const classNames = require("classnames")
 const {digs} = require("diggerize")

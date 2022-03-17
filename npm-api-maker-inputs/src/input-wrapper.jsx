@@ -1,5 +1,5 @@
 const {dig, digg, digs} = require("diggerize")
-const {EventListener} = require("@kaspernj/api-maker")
+const EventListener = require("@kaspernj/api-maker/src/event-listener")
 const React = require("react")
 const idForComponent = require("./id-for-component.cjs")
 const nameForComponent = require("./name-for-component.cjs")
