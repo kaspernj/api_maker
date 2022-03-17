@@ -14,7 +14,7 @@ const {ValidationErrors} = require("./validation-errors.cjs")
 
 const shared = {}
 
-module.exports = class BaseModel {
+class BaseModel {
   static modelClassData () {
     throw new Error("modelClassData should be overriden by child")
   }
@@ -825,3 +825,7 @@ module.exports = class BaseModel {
     }
   }
 }
+
+BaseModel.apiMakerType = "BaseModel"
+
+module.exports = BaseModel

@@ -16,7 +16,7 @@ module.exports = class Serializer {
   }
 
   serializeArgument (arg) {
-    if (typeof arg == "function" && arg.modelClassData && arg.modelName) {
+    if (typeof arg == "function" && arg.apiMakerType == "BaseModel") {
       return {
         api_maker_type: "resource",
         name: digg(arg.modelClassData(), "name")
@@ -38,7 +38,7 @@ module.exports = class Serializer {
       }
     } else if (Array.isArray(arg)) {
       return this.serializeArray(arg)
-    } else if (typeof arg == "object" && arg.constructor.name == "ApiMakerCollection") {
+    } else if (typeof arg == "object" && arg.constructor && arg.constructor.apiMakerType == "Collection") {
       return {
         api_maker_type: "collection",
         value: this.serializeObject(arg)
