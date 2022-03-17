@@ -5,7 +5,7 @@ const inflection = require("inflection")
 const {merge} = require("./merge.cjs")
 const Result = require("./result.cjs")
 
-module.exports = class ApiMakerCollection {
+class ApiMakerCollection {
   constructor (args, queryArgs = {}) {
     this.queryArgs = queryArgs
     this.args = args
@@ -248,3 +248,7 @@ module.exports = class ApiMakerCollection {
     )
   }
 }
+
+ApiMakerCollection.apiMakerType = "Collection"
+
+module.exports = ApiMakerCollection
