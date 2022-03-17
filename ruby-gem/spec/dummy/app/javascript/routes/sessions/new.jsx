@@ -1,6 +1,6 @@
-import {Devise} from "@kaspernj/api-maker"
+import Devise from "@kaspernj/api-maker/src/devise"
 import FlashMessage from "shared/flash-message"
-import { EventEmitterListener } from "@kaspernj/api-maker"
+import EventEmitterListener from "@kaspernj/api-maker/src/event-emitter-listener"
 import React from "react"
 
 export default class SessionsNew extends React.PureComponent {

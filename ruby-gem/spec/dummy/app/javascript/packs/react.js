@@ -13,7 +13,7 @@ const context = require.context("controllers", true, /.js$/)
 application.load(definitionsFromContext(context))
 
 // Devise
-import { Devise } from "@kaspernj/api-maker"
+import Devise from "@kaspernj/api-maker/src/devise"
 
 Devise.addUserScope("user")
 

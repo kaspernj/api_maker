@@ -1,5 +1,6 @@
-import { Params } from "@kaspernj/api-maker"
-import { Card, SortLink } from "@kaspernj/api-maker-bootstrap"
+import Card from "@kaspernj/api-maker-bootstrap/src/card"
+import Params from "@kaspernj/api-maker/src/params"
+import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 
 export default class BootstrapSortLink extends React.PureComponent {
   state = {

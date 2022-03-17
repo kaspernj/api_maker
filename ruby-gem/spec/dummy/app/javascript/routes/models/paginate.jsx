@@ -1,6 +1,7 @@
-import { Params } from "@kaspernj/api-maker"
+import Params from "@kaspernj/api-maker/src/params"
 import React from "react"
-import { Paginate, SortLink } from "@kaspernj/api-maker-bootstrap"
+import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
+import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 
 export default class ModelsPaginate extends React.PureComponent {
   state = {

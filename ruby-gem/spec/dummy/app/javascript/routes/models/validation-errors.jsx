@@ -1,6 +1,6 @@
 import {digg} from "diggerize"
 import FlashMessage from "shared/flash-message"
-import { Params } from "@kaspernj/api-maker"
+import Params from "@kaspernj/api-maker/src/params"
 import {User} from "@kaspernj/api-maker/src/models"
 
 export default class ModelsValidationErrors extends React.PureComponent {

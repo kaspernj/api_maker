@@ -1,4 +1,6 @@
-import {Devise, EventEmitterListener, SessionStatusUpdater} from "@kaspernj/api-maker"
+import Devise from "@kaspernj/api-maker/src/devise"
+import EventEmitterListener from "@kaspernj/api-maker/src/event-emitter-listener"
+import SessionStatusUpdater from "@kaspernj/api-maker/src/session-status-updater"
 import Layout from "components/layout"
 import React from "react"
 
