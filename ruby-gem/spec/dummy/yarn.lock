@@ -1048,10 +1048,10 @@
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.128", "@kaspernj/api-maker@^1.0.127":
-  version "1.0.129"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.129.tgz#e8a427c612f3b772632e1bd7d1111884b2f3a4bc"
-  integrity sha512-Twmff1QkGuQE/LuQZzOKH4ZvKzSQ2OhUlOWTrNPyiDhVY/L8qq9KrqWl0s+I5Vt+rrd78oIbITe0ZIuBWEJgnQ==
+"@kaspernj/api-maker@>= 1.0.128", "@kaspernj/api-maker@^1.0.133":
+  version "1.0.133"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.133.tgz#6453f7e872307798a61c5c5d2f9b1f2f39236a0f"
+  integrity sha512-VNwW6xYzRqROG/sSURx8FyHEoVJp1k37Ir5Zs7RtlpB0f3Q4AApMM1F4qQ16EhA8LxodCxQpTh/GPZM65vwqeg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
