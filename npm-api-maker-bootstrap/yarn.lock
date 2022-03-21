@@ -883,9 +883,9 @@
     inflection ">= 1.12.0"
 
 "@kaspernj/api-maker@>= 1.0.132":
-  version "1.0.132"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.132.tgz#a9cf081bc93c4cee71c8a760b77c33e25c636933"
-  integrity sha512-yFpvWz60HBPiiqqCSYwrulKq0HlLjUbB/1dOKGLqBlxfAKy4gN+i+g1u6crqBNUZOU/oKg4C/FvGf6dWVBzWDQ==
+  version "1.0.133"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.133.tgz#6453f7e872307798a61c5c5d2f9b1f2f39236a0f"
+  integrity sha512-VNwW6xYzRqROG/sSURx8FyHEoVJp1k37Ir5Zs7RtlpB0f3Q4AApMM1F4qQ16EhA8LxodCxQpTh/GPZM65vwqeg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -1799,15 +1799,10 @@ diff-sequences@^27.5.1:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-27.5.1.tgz#eaecc0d327fd68c8d9672a1e64ab8dccb2ef5327"
   integrity sha512-k1gCAXAsNgLwEL+Y8Wvl+M6oEFj5bgazfZULpS5CneoPPXRaCCW7dm+q21Ky2VEE5X+VeRDBVg1Pcvvsr4TtNQ==
 
-"diggerize@>= 1.0.4":
+"diggerize@>= 1.0.4", diggerize@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.4.tgz#21a7d1bc215999376eb86a024276236059fcf2bd"
   integrity sha512-vC545+jn4Z55AswKUzpAPcDbkuu1S97MlOjBVoNkVUjwj1fnNdNi75XeOKLIaMLpT3uygCCmh5w8xDlAEboPwg==
-
-diggerize@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.3.tgz#1c08fb9f461c2ed1af9416c83142539f041350a3"
-  integrity sha512-sqZM36ZDSizaGTkjs+CZjjPlccDaz+Khozw/9+fnYJ2oS2n6is2JPoycofSnWTi0JDKEKVI86IKsMxwWzbrG1Q==
 
 dir-glob@^3.0.1:
   version "3.0.1"
