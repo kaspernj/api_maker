@@ -905,9 +905,9 @@
     chalk "^4.0.0"
 
 "@kaspernj/api-maker@>= 1.0.132":
-  version "1.0.132"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.132.tgz#a9cf081bc93c4cee71c8a760b77c33e25c636933"
-  integrity sha512-yFpvWz60HBPiiqqCSYwrulKq0HlLjUbB/1dOKGLqBlxfAKy4gN+i+g1u6crqBNUZOU/oKg4C/FvGf6dWVBzWDQ==
+  version "1.0.133"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.133.tgz#6453f7e872307798a61c5c5d2f9b1f2f39236a0f"
+  integrity sha512-VNwW6xYzRqROG/sSURx8FyHEoVJp1k37Ir5Zs7RtlpB0f3Q4AApMM1F4qQ16EhA8LxodCxQpTh/GPZM65vwqeg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
