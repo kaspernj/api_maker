@@ -15,19 +15,19 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
     const {attribute, children, className, identifier, label, value, ...restProps} = this.props
 
     return (
-      <tr
+      <div
         className={classNames(className, "component-api-maker-attribute-row")}
         data-attribute={attribute}
         data-identifier={identifier}
         {...restProps}
       >
-        <th className="attribute-row-label">
+        <div className="attribute-row-label">
           {label}
-        </th>
-        <td className="attribute-row-value">
+        </div>
+        <div className="attribute-row-value">
           {value || children}
-        </td>
-      </tr>
+        </div>
+      </div>
     )
   }
 }
