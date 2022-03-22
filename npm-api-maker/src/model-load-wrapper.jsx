@@ -23,7 +23,7 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
   }
 
   async loadExistingModel() {
-    const {modelId} = digs(this.shape, "modelId")
+    const {modelId} = digs(this.state, "modelId")
     const query = await ModelClass.ransack({id_eq: modelId})
 
     if (args.preload) query.preload(args.preload)
