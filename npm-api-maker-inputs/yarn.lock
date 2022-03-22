@@ -905,9 +905,9 @@
     chalk "^4.0.0"
 
 "@kaspernj/api-maker@>= 1.0.132":
-  version "1.0.132"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.132.tgz#a9cf081bc93c4cee71c8a760b77c33e25c636933"
-  integrity sha512-yFpvWz60HBPiiqqCSYwrulKq0HlLjUbB/1dOKGLqBlxfAKy4gN+i+g1u6crqBNUZOU/oKg4C/FvGf6dWVBzWDQ==
+  version "1.0.133"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.133.tgz#6453f7e872307798a61c5c5d2f9b1f2f39236a0f"
+  integrity sha512-VNwW6xYzRqROG/sSURx8FyHEoVJp1k37Ir5Zs7RtlpB0f3Q4AApMM1F4qQ16EhA8LxodCxQpTh/GPZM65vwqeg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -1795,9 +1795,9 @@ eslint-find-rules@^4.0.0:
     yargs "^16.2.0"
 
 eslint-plugin-jest@^26.0.0:
-  version "26.1.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-26.1.1.tgz#7176dd745ef8bca3070263f62cdf112f2dfc9aa1"
-  integrity sha512-HRKOuPi5ADhza4ZBK5ufyNXy28bXXkib87w+pQqdvBhSTsamndh6sIAKPAUl8y0/n9jSWBdTPslrwtKWqkp8dA==
+  version "26.1.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-26.1.2.tgz#0f1a15c62889fffc3f78a773749d672f1bedb15f"
+  integrity sha512-1bXCoRODPkGN06n9KAMls4Jm0eyS+0Q/LWcIxhqWR2ycV0Z7lnx2c10idk4dtFIJY5xStgiIr5snC6/rxcXpbw==
   dependencies:
     "@typescript-eslint/utils" "^5.10.0"
 
