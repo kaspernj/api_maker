@@ -1,0 +1,8 @@
+.component-api-maker-attribute-row {
+  display: table-row;
+
+  .attribute-row-label,
+  .attribute-row-value {
+    display: table-cell;
+  }
+}
