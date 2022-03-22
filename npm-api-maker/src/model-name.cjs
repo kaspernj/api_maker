@@ -3,6 +3,10 @@ module.exports = class ModelName {
     this.data = data
   }
 
+  camelizedLower() {
+    return this.data.modelClassData.camelizedLower
+  }
+
   human (args) {
     let argsToUse = args
 
@@ -19,5 +23,9 @@ module.exports = class ModelName {
     const key = `activerecord.models.${this.data.modelClassData.i18nKey}.${countKey}`
 
     return this.data.i18n.t(key)
+  }
+
+  paramKey() {
+    return this.data.modelClassData.paramKey
   }
 }
