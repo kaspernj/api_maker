@@ -63,6 +63,7 @@ private
       collectionKey: model_class.model_name.collection,
       collectionName: resource.collection_name,
       i18nKey: model_class.model_name.i18n_key,
+      camelizedLower: model_class.model_name.name.camelize(:lower),
       name: resource.short_name,
       pluralName: model_class.model_name.plural,
       relationships: reflections_for_model_class_data,
