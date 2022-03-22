@@ -1,13 +1,14 @@
-const Params = require("./params.cjs")
+import Params from "./params.cjs"
+import React from "react"
 
-export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapper extends BaseComponent {
+export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapper extends React.PureComponent {
   camelizedLower = ModelClass.modelName().camelizedLower()
   paramsVariableName = `${ModelClass.modelName().paramKey()}_id`
 
-  shape = new Shape(this, {
+  state = {
     model: undefined,
     modelId: this.props.match.params[this.paramsVariableName] || this.props.match.params.id
-  })
+  }
 
   componentDidMount() {
     if (args.newIfNoId && !this.getModelId()) {
@@ -30,7 +31,7 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
 
     const model = await query.first()
 
-    this.shape.set({model})
+    this.setState({model})
   }
 
   loadNewModel() {
@@ -39,11 +40,11 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
     const modelData = params[paramKey] || {}
     const model = new ModelClass(modelData)
 
-    this.shape.set({model})
+    this.setState({model})
   }
 
   render() {
-    const {model, modelId} = digs(this.shape, "model", "modelId")
+    const {model, modelId} = digs(this.state, "model", "modelId")
     const wrappedComponentProps = {}
 
     wrappedComponentProps[this.camelizedLower] = model
