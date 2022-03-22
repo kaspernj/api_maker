@@ -1,3 +1,5 @@
+const Params = require("./params.cjs")
+
 export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapper extends BaseComponent {
   camelizedLower = ModelClass.modelName().camelizedLower()
   paramsVariableName = `${ModelClass.modelName().paramKey()}_id`
@@ -32,7 +34,10 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
   }
 
   loadNewModel() {
-    const model = new ModelClass()
+    const params = Params.parse()
+    const paramKey = ModelClass.modelName().paramKey()
+    const modelData = params[paramKey] || {}
+    const model = new ModelClass(modelData)
 
     this.shape.set({model})
   }
