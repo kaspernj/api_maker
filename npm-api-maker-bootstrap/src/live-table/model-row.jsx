@@ -10,21 +10,30 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     liveTable: PropTypes.object.isRequired
   }
 
+  modelCallbackArgs = this._modelCallbackArgs()
+
   render() {
     const {model} = digs(this.props, "model")
     const {modelClass} = digs(this.props.liveTable.props, "modelClass")
-    const {actionsContent, columnsContent, destroyEnabled, editModelPath} = digg(this, "props", "liveTable", "props")
+    const {actionsContent, columnsContent, destroyEnabled, editModelPath, viewModelPath} = digg(this, "props", "liveTable", "props")
     const {columns} = digg(this, "props", "liveTable", "shape")
-    let editPath
 
-    if (editModelPath && model.can("edit")) editPath = editModelPath(this.modelCallbackArgs(model))
+    let editPath, viewPath
+
+    if (editModelPath && model.can("edit")) editPath = editModelPath(this.modelCallbackArgs)
+    if (viewModelPath && model.can("show")) viewPath = viewModelPath(this.modelCallbackArgs)
 
     return (
       <tr className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()}>
         {columns && this.columnsContentFromColumns(model)}
-        {!columns && columnsContent && columnsContent(this.modelCallbackArgs(model))}
+        {!columns && columnsContent && columnsContent(this.modelCallbackArgs)}
         <td className="actions-column text-end text-nowrap text-right">
-          {actionsContent && actionsContent(this.modelCallbackArgs(model))}
+          {actionsContent && actionsContent(this.modelCallbackArgs)}
+          {viewModelPath &&
+            <Link className="view-button" to={viewPath}>
+              <i className="fa fa-magnifying-glass la la-magnifying-glass" />
+            </Link>
+          }
           {editPath &&
             <Link className="edit-button" to={editPath}>
               <i className="fa fa-edit la la-edit" />
@@ -66,8 +75,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
   }
 
   columnContentFromContentArg (column, model) {
-    const contentArgs = this.modelCallbackArgs(model)
-    const value = column.content(contentArgs)
+    const value = column.content(this.modelCallbackArgs)
 
     return this.presentColumnValue(value)
   }
@@ -86,7 +94,8 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     return this.presentColumnValue(value)
   }
 
-  modelCallbackArgs (model) {
+  _modelCallbackArgs () {
+    const {model} = digs(this.props, "model")
     const modelArgName = inflection.camelize(this.props.liveTable.props.modelClass.modelClassData().name, true)
     const modelCallbackArgs = {}
 

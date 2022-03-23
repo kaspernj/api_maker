@@ -59,7 +59,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     preloads: PropTypes.array.isRequired,
     queryName: PropTypes.string,
     select: PropTypes.object,
-    selectColumns: PropTypes.object
+    selectColumns: PropTypes.object,
+    viewModelPath: PropTypes.func
   }
 
   constructor (props) {
@@ -280,6 +281,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       queryName,
       select,
       selectColumns,
+      viewModelPath,
       ...restProps
     } = this.props
     const {models, qParams, query, result} = digs(this.shape, "models", "qParams", "query", "result")
