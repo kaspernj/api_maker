@@ -37,7 +37,8 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
   loadNewModel() {
     const params = Params.parse()
     const paramKey = ModelClass.modelName().paramKey()
-    const modelData = params[paramKey] || {}
+    const modelDataFromParams = params[paramKey] || {}
+    const modelData = Object.assign({}, args.newAttributes, modelDataFromParams)
     const model = new ModelClass(modelData)
 
     this.setState({model})
