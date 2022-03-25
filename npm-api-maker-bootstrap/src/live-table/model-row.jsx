@@ -31,7 +31,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
           {actionsContent && actionsContent(this.modelCallbackArgs)}
           {viewModelPath &&
             <Link className="view-button" to={viewPath}>
-              <i className="fa fa-magnifying-glass la la-magnifying-glass" />
+              <i className="fa fa-search la la-search" />
             </Link>
           }
           {editPath &&
@@ -41,7 +41,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
           }
           {destroyEnabled && model.can("destroy") &&
             <a className="destroy-button" href="#" onClick={this.onDestroyClicked}>
-              <i className="fa fa-remove la la-remove" />
+              <i className="fa fa-trash la la-trash" />
             </a>
           }
         </td>
