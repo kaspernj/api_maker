@@ -26,7 +26,7 @@ class ApiMaker::BaseCommand
   def execute_with_response
     execute!
   rescue ApiMaker::CommandFailedError => e
-    command.fail(*e.api_maker_args)
+    command.fail(*e.api_maker_args, &e.api_maker_block)
   end
 
   def self.command_error_message(error)
