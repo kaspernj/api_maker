@@ -904,6 +904,28 @@
     strftime ">= 0.10.0"
     wake-event ">= 0.0.1"
 
+"@kaspernj/api-maker@>= 1.0.137":
+  version "1.0.137"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.137.tgz#ea4c678f34b2fe67ca16f3b4edec1693a5c5e8b8"
+  integrity sha512-may8FXevsWXcAAf/Va1ef+7pmIc43sev4XG3MRR+mtYwdLF3x0//jiiFtIax/uLJKiceqd/OH7DAFOAaQC5P6w==
+  dependencies:
+    "@rails/actioncable" ">= 6.1.0"
+    clone-deep ">= 4.0.1"
+    debounce ">= 1.2.1"
+    diggerize ">= 1.0.4"
+    epic-locks ">= 1.0.1"
+    form-data-objectizer ">= 1.0.0"
+    form-serialize ">= 0.7.2"
+    format-number ">= 3.0.0"
+    inflection ">= 1.12.0"
+    js-money ">= 0.6.3"
+    numberable ">= 1.0.0"
+    object-to-formdata ">= 4.1.0"
+    qs ">= 6.9.3"
+    replaceall ">= 0.1.6"
+    strftime ">= 0.10.0"
+    wake-event ">= 0.0.1"
+
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"

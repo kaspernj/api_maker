@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/kaspernj/api_maker#readme",
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.132",
+    "@kaspernj/api-maker": ">= 1.0.137",
     "@kaspernj/api-maker-inputs": ">= 1.0.69",
     "debounce": ">= 1.2.0",
     "diggerize": ">= 1.0.4",
