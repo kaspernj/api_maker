@@ -126,7 +126,7 @@ module.exports = class ApiMakerCommandsPool {
         const commandData = currentPool[parseInt(commandId, 10)]
         const responseType = commandResponse.type
 
-        if (commandResponseData) {
+        if (commandResponseData && typeof commandResponseData == "object") {
           const bugReportUrl = dig(commandResponseData, "bug_report_url")
 
           if (bugReportUrl) {

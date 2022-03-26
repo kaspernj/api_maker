@@ -13,15 +13,7 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
     if arg.is_a?(Array)
       arg.map { |value| ApiMaker::Deserializer.execute!(arg: value) }
     elsif arg.is_a?(Hash) || arg.is_a?(ActionController::Parameters)
-      if arg["api_maker_type"] == "collection"
-        deserialize_api_maker_collection(arg)
-      elsif arg["api_maker_type"] == "resource"
-        "Resources::#{arg.fetch("name")}Resource".safe_constantize
-      elsif arg["api_maker_type"] == "datetime"
-        Time.zone.parse(arg.fetch("value"))
-      else
-        deserialize_normal_hash(arg)
-      end
+      deserialize_hash(arg)
     else
       arg
     end
@@ -34,6 +26,21 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
       ransack: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["ransack"]),
       preload: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["preload"])
     )
+  end
+
+  def deserialize_hash(arg)
+    if arg["api_maker_type"] == "collection"
+      deserialize_api_maker_collection(arg)
+    elsif arg["api_maker_type"] == "model"
+      model_class = arg.fetch("model_class_name").safe_constantize
+      model_class.find(arg.fetch("model_id"))
+    elsif arg["api_maker_type"] == "resource"
+      "Resources::#{arg.fetch("name")}Resource".safe_constantize
+    elsif arg["api_maker_type"] == "datetime"
+      Time.zone.parse(arg.fetch("value"))
+    else
+      deserialize_normal_hash(arg)
+    end
   end
 
   def deserialize_normal_hash(arg)
