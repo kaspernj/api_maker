@@ -26,6 +26,7 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
     const {modelId} = digs(this.state, "modelId")
     const query = await ModelClass.ransack({id_eq: modelId})
 
+    if (args.abilities) query.abilities(args.abilities)
     if (args.preload) query.preload(args.preload)
     if (args.select) query.select(args.select)
 
