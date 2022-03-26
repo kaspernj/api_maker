@@ -22,12 +22,21 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
         {...restProps}
       >
         <div className="attribute-row-label">
-          {label}
+          {this.label()}
         </div>
         <div className="attribute-row-value">
           {value || children}
         </div>
       </div>
     )
+  }
+
+  label() {
+    const {attribute, label, model} = this.props
+
+    if ("label" in this.props) return label
+    if (attribute && model) return model.constructor.humanAttributeName(attribute)
+
+    throw new Error("Couldn't figure out label")
   }
 }
