@@ -1,3 +1,4 @@
+import EventUpdated from "./event-updated"
 import Params from "./params.cjs"
 import React from "react"
 
@@ -53,7 +54,14 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
     wrappedComponentProps[`${this.camelizedLower}Id`] = modelId
 
     return (
-      <WrappedComponent {...wrappedComponentProps} {...this.props} />
+      <>
+        {model && args.eventUpdated &&
+          <EventUpdated model={model} onUpdated={digg(this, "onUpdated")} />
+        }
+        <WrappedComponent {...wrappedComponentProps} {...this.props} />
+      </>
     )
   }
+
+  onUpdated = ({model}) => this.setState({model})
 }

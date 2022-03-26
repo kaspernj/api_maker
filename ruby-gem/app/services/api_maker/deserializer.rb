@@ -15,6 +15,9 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
     elsif arg.is_a?(Hash) || arg.is_a?(ActionController::Parameters)
       if arg["api_maker_type"] == "collection"
         deserialize_api_maker_collection(arg)
+      elsif arg["api_maker_type"] == "model"
+        model_class = arg.fetch("model_class_name").safe_constantize
+        model_class.find(arg.fetch("model_id"))
       elsif arg["api_maker_type"] == "resource"
         "Resources::#{arg.fetch("name")}Resource".safe_constantize
       elsif arg["api_maker_type"] == "datetime"

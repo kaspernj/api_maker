@@ -26,7 +26,7 @@ class ApiMaker::BaseCommand
   def execute_with_response
     execute!
   rescue ApiMaker::CommandFailedError => e
-    command.fail(*e.api_maker_args, &e.api_maker_block)
+    command.fail(*e.api_maker_args)
   end
 
   def self.command_error_message(error)
@@ -202,14 +202,16 @@ class ApiMaker::BaseCommand
   end
 
   def fail!(*args, &blk)
-    if args.is_a?(Hash) && args.key?(:errors)
-      error_messages = args.fetch(:errors).map do |error|
+    if args.length == 1 && args[0].is_a?(Hash) && args[0].key?(:errors)
+      error_messages = args[0].fetch(:errors).map do |error|
         if error.is_a?(Hash) && error.key?(:message)
           error.fetch(:message)
         else
           error
         end
       end
+    elsif args.length == 1 && args[0].is_a?(String)
+      error_messages = [args]
     else
       error_messages = ["Command failed"]
     end
