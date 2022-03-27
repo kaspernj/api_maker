@@ -8,12 +8,9 @@ describe "model accessible by" do
 
   it "finds the parent model" do
     login_as user
-
     visit models_accessible_by_path
-
     wait_for_path models_accessible_by_path
-
-    wait_for_browser { find("[data-controller='models--accessible-by']", visible: false)["data-accessible-by-completed"] == "true" }
+    wait_for_selector "[data-controller='models--accessible-by'][data-accessible-by-completed='true']", visible: false
 
     project_data = JSON.parse(find("[data-controller='models--accessible-by']", visible: false)["data-result"])
 

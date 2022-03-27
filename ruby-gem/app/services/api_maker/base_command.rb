@@ -210,14 +210,18 @@ class ApiMaker::BaseCommand
           error
         end
       end
+
+      error_args = args
     elsif args.length == 1 && args[0].is_a?(String)
       error_messages = [args]
+      error_args = [{errors: args}]
     else
       error_messages = ["Command failed"]
+      error_args = args
     end
 
     error = ApiMaker::CommandFailedError.new(error_messages)
-    error.api_maker_args = args
+    error.api_maker_args = error_args
     error.api_maker_block = blk
 
     raise error
