@@ -63,5 +63,5 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
     )
   }
 
-  onUpdated = ({model}) => this.setState({model})
+  onUpdated = () => this.loadExistingModel()
 }
