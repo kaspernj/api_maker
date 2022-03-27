@@ -20,11 +20,6 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
     onUpdated: PropTypes.func.isRequired
   })
 
-  constructor (props) {
-    super(props)
-    this.onConnected = this.onConnected.bind(this)
-  }
-
   componentDidMount () {
     this.connect()
   }
@@ -35,17 +30,17 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
     }
 
     if (this.onConnectedListener) {
-      this.connectUpdated.events.removeListener("connected", this.onConnected)
+      this.connectUpdated.events.removeListener("connected", this.props.onConnected)
     }
   }
 
   connect () {
     const {model, onConnected} = this.props
 
-    this.connectUpdated = ModelEvents.connectUpdated(model, (...args) => this.onUpdated(...args))
+    this.connectUpdated = ModelEvents.connectUpdated(model, this.onUpdated)
 
     if (onConnected) {
-      this.connectUpdated.events.addListener("connected", this.onConnected)
+      this.onConnectedListener = this.connectUpdated.events.addListener("connected", this.props.onConnected)
     }
   }
 
@@ -61,11 +56,7 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
     return this.debounceInstance
   }
 
-  onConnected () {
-    this.props.onConnected()
-  }
-
-  onUpdated (...args) {
+  onUpdated = (...args) => {
     if (!this.props.active) {
       return
     }
