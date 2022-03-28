@@ -55,7 +55,7 @@ GEM
     active-record-transactioner (0.0.7)
     active_record_better_dependent_error_messages (0.0.3)
       rails (>= 6.0.0)
-    active_record_query_fixer (0.0.15)
+    active_record_query_fixer (0.0.16)
       dig_bang
     activejob (6.1.4.4)
       activesupport (= 6.1.4.4)
