@@ -5,7 +5,6 @@ const Checkbox = require("./src/checkbox").default
 const Checkboxes = require("./src/checkboxes").default
 const Input = require("./src/input").default
 const InvalidFeedback = require("./src/invalid-feedback").default
-const LiveTable = require("./src/live-table").default
 const Paginate = require("./src/paginate").default
 const RadioButtons = require("./src/radio-buttons").default
 const Select = require("./src/select").default
@@ -19,7 +18,6 @@ export {
   Checkboxes,
   Input,
   InvalidFeedback,
-  LiveTable,
   Paginate,
   RadioButtons,
   Select,

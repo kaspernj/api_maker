@@ -36,7 +36,6 @@ const Routes = require("./src/routes.cjs")
 const Serializer = require("./src/serializer.cjs")
 const Services = require("./src/services.cjs")
 const SessionStatusUpdater = require("./src/session-status-updater.cjs")
-const SourceMapsLoader = require("./src/source-maps-loader.cjs")
 const UpdatedAttribute = require("./src/updated-attribute").default
 const ValidationError = require("./src/validation-error.cjs")
 const {ValidationErrors} = require("./src/validation-errors.cjs")
@@ -80,7 +79,6 @@ export {
   Serializer,
   Services,
   SessionStatusUpdater,
-  SourceMapsLoader,
   UpdatedAttribute,
   ValidationError,
   ValidationErrors
