@@ -34,25 +34,6 @@
     "eslint-find-rules": "eslint-find-rules",
     "test": "jest"
   },
-  "peerDependencies": {
-    "prop-types": "^15.7.2",
-    "react": ">= 17.0.2",
-    "react-test-renderer": "^17.0.1",
-    "source-map": "^0.7.3"
-  },
-  "devDependencies": {
-    "@babel/eslint-parser": "^7.16.3",
-    "@babel/preset-env": "^7.12.11",
-    "@babel/preset-react": "^7.12.10",
-    "babel-jest": "^27.0.6",
-    "eslint": "^8.2.0",
-    "eslint-find-rules": "^4.0.0",
-    "eslint-plugin-jest": "^26.0.0",
-    "eslint-plugin-react": "^7.23.2",
-    "i18n-on-steroids": "^1.0.2",
-    "jest": "^27.0.6",
-    "jsdom": "^19.0.0"
-  },
   "dependencies": {
     "@rails/actioncable": ">= 6.1.0",
     "clone-deep": ">= 4.0.1",
@@ -66,13 +47,31 @@
     "js-money": ">= 0.6.3",
     "numberable": ">= 1.0.0",
     "object-to-formdata": ">= 4.1.0",
-    "prop-types-exact": ">= 1.2.0",
     "qs": ">= 6.9.3",
-    "react": ">= 16.0.0",
-    "react-router-dom": ">= 5.2.0",
     "replaceall": ">= 0.1.6",
-    "stacktrace-parser": ">= 0.1.9",
     "strftime": ">= 0.10.0",
     "wake-event": ">= 0.0.1"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.7.2",
+    "prop-types-exact": ">= 1.2.0",
+    "react": ">= 17.0.2",
+    "react-router-dom": ">= 5.2.0",
+    "react-test-renderer": "^17.0.1",
+    "source-map": "^0.7.3",
+    "stacktrace-parser": ">= 0.1.9"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.16.3",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "babel-jest": "^27.0.6",
+    "eslint": "^8.2.0",
+    "eslint-find-rules": "^4.0.0",
+    "eslint-plugin-jest": "^26.0.0",
+    "eslint-plugin-react": "^7.23.2",
+    "i18n-on-steroids": "^1.0.2",
+    "jest": "^27.0.6",
+    "jsdom": "^19.0.0"
   }
 }
