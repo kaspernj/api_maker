@@ -1,4 +1,4 @@
-import CanCanLoader from "@kaspernj/api-maker/src/can-can-loader";
+import CanCanLoader from "@kaspernj/api-maker/src/can-can-loader"
 import classNames from "classnames"
 import {digs} from "diggerize"
 import PropTypes from "prop-types"
