@@ -33,6 +33,9 @@
     "diggerize": ">= 1.0.4",
     "inflection": ">= 1.12.0",
     "on-location-changed": ">= 1.0.2",
+    "prop-types-exact": ">= 1.2.0",
+    "react": ">= 16.0.0",
+    "react-router-dom": ">= 5.2.0",
     "set-state-compare": "^1.0.15",
     "strftime": ">= 0.10.0"
   },
@@ -48,9 +51,7 @@
   },
   "peerDependencies": {
     "prop-types": ">= 15.7.2",
-    "prop-types-exact": ">= 1.2.0",
     "react": ">= 16.13.1",
-    "react-router-dom": ">= 5.2.0",
     "stacktrace-parser": "^0.1.10"
   }
 }

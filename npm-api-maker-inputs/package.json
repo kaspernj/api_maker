@@ -29,7 +29,9 @@
     "@kaspernj/api-maker": ">= 1.0.132",
     "classnames": ">= 2.2.6",
     "diggerize": ">= 1.0.4",
-    "inflection": ">= 1.12.0"
+    "inflection": ">= 1.12.0",
+    "prop-types-exact": ">= 1.2.0",
+    "react": ">= 16.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
@@ -41,7 +43,6 @@
   },
   "peerDependencies": {
     "prop-types": ">= 15.7.2",
-    "prop-types-exact": ">= 1.2.0",
     "react": ">= 16.13.1",
     "react-router-dom": "^5.2.0",
     "stacktrace-parser": "^0.1.10"
