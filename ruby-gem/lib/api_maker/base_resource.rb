@@ -141,6 +141,23 @@ class ApiMaker::BaseResource
     end
   end
 
+  def can_access_through_accessible_model(abilities, sub_query)
+    foreign_model_class = sub_query.klass
+
+    query = sub_query
+      .accessible_by(ability)
+      .except(:select)
+      .except(:group)
+      .except(:limit)
+      .except(:order)
+      .select("1")
+      .limit(1)
+
+    can abilities, model_class, ["EXISTS (#{query.to_sql})"] do |model|
+      query.exists?(model_class.primary_key => model.id)
+    end
+  end
+
   def inspect
     "#<#{self.class.name}:#{__id__}>"
   end
