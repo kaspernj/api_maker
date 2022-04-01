@@ -29,7 +29,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
         {!columns && columnsContent && columnsContent(this.modelCallbackArgs)}
         <td className="actions-column text-end text-nowrap text-right">
           {actionsContent && actionsContent(this.modelCallbackArgs)}
-          {viewModelPath &&
+          {viewPath &&
             <Link className="view-button" to={viewPath}>
               <i className="fa fa-search la la-search" />
             </Link>
