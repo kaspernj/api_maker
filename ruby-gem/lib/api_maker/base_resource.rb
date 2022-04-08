@@ -142,8 +142,6 @@ class ApiMaker::BaseResource
   end
 
   def can_access_through_accessible_model(abilities, sub_query)
-    foreign_model_class = sub_query.klass
-
     query = sub_query
       .accessible_by(ability)
       .except(:select)
