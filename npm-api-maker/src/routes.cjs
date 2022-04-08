@@ -3,6 +3,8 @@ const inflection = require("inflection")
 
 module.exports = class ApiMakerRoutes {
   constructor ({jsRoutes, locale, routeDefinitions}) {
+    if (!jsRoutes) throw new Error("'jsRoutes' wasn't given")
+
     this.jsRoutes = jsRoutes
     this.routeDefinitions = routeDefinitions
 
