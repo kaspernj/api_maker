@@ -1,3 +1,4 @@
+const classNames = require("classnames")
 const Config = require("@kaspernj/api-maker/src/config").default
 const {digg} = require("diggerize")
 const idForComponent = require("./id-for-component.cjs")
