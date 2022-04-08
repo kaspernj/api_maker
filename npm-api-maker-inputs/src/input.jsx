@@ -58,11 +58,9 @@ class ApiMakerInputsInput extends React.PureComponent {
     } = this.props
 
     const sharedProps = {
-      defaultValue: this.inputDefaultValueLocalized(),
       id: localizedNumber ? null : inputProps.id,
       name: localizedNumber ? null : inputProps.name,
-      ref: localizedNumber ? this.visibleInputRef : this.inputReference(),
-      onChange: this.onInputChanged
+      ref: localizedNumber ? this.visibleInputRef : this.inputReference()
     }
 
     return (
@@ -82,7 +80,9 @@ class ApiMakerInputsInput extends React.PureComponent {
         {type == "money" &&
           <Money
             attribute={attribute}
+            defaultValue={this.inputDefaultValueLocalized()}
             model={model}
+            onChange={this.onInputChanged}
             {...inputProps}
             {...sharedProps}
             {...restProps}
@@ -90,6 +90,8 @@ class ApiMakerInputsInput extends React.PureComponent {
         }
         {type == "textarea" &&
           <textarea
+            defaultValue={this.inputDefaultValueLocalized()}
+            onChange={this.onInputChanged}
             {...inputProps}
             {...sharedProps}
             {...restProps}
@@ -97,8 +99,11 @@ class ApiMakerInputsInput extends React.PureComponent {
         }
         {type != "money" && type != "textarea" &&
           <input
+            defaultValue={this.inputDefaultValueLocalized()}
+            onChange={this.onInputChanged}
             {...inputProps}
             {...sharedProps}
+            name={localizedNumber ? null : this.inputName()}
             {...restProps}
           />
         }
