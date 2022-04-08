@@ -1,7 +1,9 @@
 const AutoSubmit = require("./auto-submit.cjs")
+const Config = require("@kaspernj/api-maker/src/config").default
 const {dig, digg, digs} = require("diggerize")
 const EventUpdated = require("@kaspernj/api-maker/src/event-updated").default
 const inputWrapper = require("./input-wrapper").default
+const Money = require("./money").default
 const PropTypes = require("prop-types")
 const React = require("react")
 const replaceall = require("replaceall")
@@ -55,6 +57,14 @@ class ApiMakerInputsInput extends React.PureComponent {
       ...restProps
     } = this.props
 
+    const sharedProps = {
+      defaultValue: this.inputDefaultValueLocalized(),
+      id: localizedNumber ? null : inputProps.id,
+      name: localizedNumber ? null : inputProps.name,
+      ref: localizedNumber ? this.visibleInputRef : this.inputReference(),
+      onChange: this.onInputChanged
+    }
+
     return (
       <>
         {autoRefresh && model &&
@@ -69,25 +79,26 @@ class ApiMakerInputsInput extends React.PureComponent {
             type="hidden"
           />
         }
-        {type == "textarea" &&
-          <textarea
-            defaultValue={this.inputDefaultValueLocalized()}
-            onChange={this.onInputChanged}
+        {type == "money" &&
+          <Money
+            attribute={attribute}
+            model={model}
             {...inputProps}
-            id={localizedNumber ? null : inputProps.id}
-            name={localizedNumber ? null : inputProps.name}
-            ref={localizedNumber ? this.visibleInputRef : this.inputReference()}
+            {...sharedProps}
             {...restProps}
           />
         }
-        {type != "textarea" &&
-          <input
-            defaultValue={this.inputDefaultValueLocalized()}
-            onChange={this.onInputChanged}
+        {type == "textarea" &&
+          <textarea
             {...inputProps}
-            id={localizedNumber ? null : inputProps.id}
-            name={localizedNumber ? null : this.inputName()}
-            ref={localizedNumber ? this.visibleInputRef : this.inputReference()}
+            {...sharedProps}
+            {...restProps}
+          />
+        }
+        {type != "money" && type != "textarea" &&
+          <input
+            {...inputProps}
+            {...sharedProps}
             {...restProps}
           />
         }
@@ -187,9 +198,8 @@ class ApiMakerInputsInput extends React.PureComponent {
   onInputChanged = (e) => {
     const {attribute, autoSubmit, inputProps, model, onChange} = this.props
     const {localizedNumber} = digs(this.props, "localizedNumber")
-    const input = digg(e, "target")
 
-    if (localizedNumber) this.inputReference().current.value = this.actualValue(input)
+    if (localizedNumber) this.inputReference().current.value = this.actualValue(digg(e, "target"))
 
     if (attribute && autoSubmit && model) this.delayAutoSubmit()
     if (digg(inputProps, "type") == "file") this.setState({blankInputName: this.getBlankInputName()})

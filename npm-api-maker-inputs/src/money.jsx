@@ -1,9 +1,9 @@
+const Config = require("@kaspernj/api-maker/src/config").default
 const {digg} = require("diggerize")
 const idForComponent = require("./id-for-component.cjs")
 const inflection = require("inflection")
 const MoneyFormatter = require("@kaspernj/api-maker/src/money-formatter")
 const PropTypes = require("prop-types")
-const propTypesExact = require("prop-types-exact")
 const React = require("react")
 
 export default class ApiMakerInputsMoney extends React.PureComponent {
@@ -11,10 +11,10 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     showCurrencyOptions: true
   }
 
-  static propTypes = propTypesExact({
+  static propTypes = {
     attribute: PropTypes.string,
     className: PropTypes.string,
-    currenciesCollection: PropTypes.array.isRequired,
+    currenciesCollection: PropTypes.array,
     currencyName: PropTypes.string,
     id: PropTypes.string,
     inputRef: PropTypes.object,
@@ -24,53 +24,54 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     placeholder: PropTypes.node,
     showCurrencyOptions: PropTypes.bool,
     small: PropTypes.bool
-  })
+  }
 
   inputRef = React.createRef()
-  state = {}
 
   getInputRef () {
     return this.props.inputRef || this.inputRef
   }
 
   render () {
-    const {showCurrencyOptions} = this.props
+    const {attribute, className, model, showCurrencyOptions} = this.props
+    let {currenciesCollection} = this.props
+
+    if (!currenciesCollection) currenciesCollection = Config.getCurrenciesCollection()
 
     return (
-      <div className="component-api-maker-bootstrap-money-input">
+      <div className="api-maker-inputs-money" data-attribute={attribute} data-model-id={model?.id()}>
         <input defaultValue={this.inputDefaultCentsValue()} id={this.inputCentsId()} name={this.inputCentsName()} ref={this.getInputRef()} type="hidden" />
-
-        <div className="input-group">
-          <input
-            className={this.props.className}
-            defaultValue={this.inputDefaultValue()}
-            id={this.inputId()}
-            onBlur={this.setAmount}
-            onChange={this.setCents}
-            onKeyUp={this.setCents}
-            placeholder={this.props.placeholder}
-            ref="whole"
-            type="text"
-          />
-          {showCurrencyOptions &&
-            <select className="component-bootstrap-money-input" defaultValue={this.inputCurrencyValue()} id={this.inputCurrencyId()} name={this.inputCurrencyName()} onChange={this.onCurrencyChanged} ref="currency">
-              <option></option>
-              {this.props.currenciesCollection.map((option) => (
-                <option key={`select-option-${option[1]}`} value={option[1]}>
-                  {this.props.small && option[1]}
-                  {!this.props.small && option[0]}
-                </option>
-              ))}
-            </select>
-          }
-        </div>
+        <input
+          className={classNames("money-cents", className)}
+          defaultValue={this.inputDefaultValue()}
+          id={this.inputId()}
+          onBlur={this.setAmount}
+          onChange={this.setCents}
+          onKeyUp={this.setCents}
+          placeholder={this.props.placeholder}
+          ref="whole"
+          type="text"
+        />
+        {showCurrencyOptions &&
+          <select
+            className="money-currency"
+            defaultValue={this.inputCurrencyValue()}
+            id={this.inputCurrencyId()}
+            name={this.inputCurrencyName()}
+            onChange={this.onCurrencyChanged}
+            ref="currency"
+          >
+            <option></option>
+            {currenciesCollection.map((option) => (
+              <option key={`select-option-${option[1]}`} value={option[1]}>
+                {this.props.small && option[1]}
+                {!this.props.small && option[0]}
+              </option>
+            ))}
+          </select>
+        }
       </div>
     )
-  }
-
-  checkAttributeExists () {
-    if (this.props.model && !this.props.model[this.props.attribute])
-      throw new Error(`No such attribute: ${digg(this.props.model.modelClassData(), "name")}#${this.props.attribute}`)
   }
 
   inputCurrencyId () {
@@ -85,39 +86,33 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
   }
 
   inputCurrencyValue () {
-    this.checkAttributeExists()
-    let value = this.props.model[this.props.attribute]()
+    const {defaultValue} = this.props
 
-    if (value) {
-      return MoneyFormatter.currencyFromMoney(value).code
+    if (defaultValue) {
+      return MoneyFormatter.currencyFromMoney(defaultValue).code
     } else {
       return "DKK"
     }
   }
 
   inputDefaultValue () {
-    this.checkAttributeExists()
-    let value = this.props.model[this.props.attribute]()
+    const {defaultValue} = this.props
 
-    if (value) {
-      return MoneyFormatter.fromMoney({amount: value.amount, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
+    if (defaultValue) {
+      return MoneyFormatter.fromMoney({amount: defaultValue.amount, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
     } else {
       return ""
     }
   }
 
   inputDefaultCentsValue () {
-    const {attribute, model} = this.props
+    const {defaultValue} = this.props
 
-    if (!(attribute in model)) throw new Error(`No such attribute on ${model.modelClassData().name}: ${attribute}`)
-
-    let value = model[attribute]()
-
-    if (this.getInputRef().current)
+    if (this.getInputRef().current) {
       return digg(this.getInputRef(), "current", "value")
-
-    if (value)
-      return MoneyFormatter.amountFromMoney(value)
+    } else if (defaultValue) {
+      return MoneyFormatter.amountFromMoney(defaultValue)
+    }
   }
 
   inputCentsId () {
