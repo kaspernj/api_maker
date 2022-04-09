@@ -1,4 +1,5 @@
 const AttributeRow = require("./attribute-row").default
+const {digs} = require("diggerize")
 const PropTypes = require("prop-types")
 const propTypesExact = require("prop-types-exact")
 const React = require("react")
