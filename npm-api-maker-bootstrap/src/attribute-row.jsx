@@ -1,18 +1,27 @@
 const classNames = require("classnames")
+const {digg} = require("diggerize")
+const MoneyFormatter = require("@kaspernj/api-maker/src/money-formatter")
 const PropTypes = require("prop-types")
 const React = require("react")
+const strftime = require("strftime")
 
 export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
+  static defaultProps = {
+    checkIfAttributeLoaded: false
+  }
+
   static propTypes = {
     attribute: PropTypes.string,
+    checkIfAttributeLoaded: PropTypes.bool.isRequired,
     children: PropTypes.node,
     identifier: PropTypes.string,
     label: PropTypes.node,
+    model: PropTypes.object,
     value: PropTypes.node
   }
 
   render () {
-    const {attribute, children, className, identifier, label, value, ...restProps} = this.props
+    const {attribute, checkIfAttributeLoaded, children, className, identifier, label, value, ...restProps} = this.props
 
     return (
       <div
@@ -25,7 +34,7 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
           {this.label()}
         </div>
         <div className="attribute-row-value">
-          {value || children}
+          {this.value()}
         </div>
       </div>
     )
@@ -37,6 +46,41 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
     if ("label" in this.props) return label
     if (attribute && model) return model.constructor.humanAttributeName(attribute)
 
+    console.log({attribute, model})
+
     throw new Error("Couldn't figure out label")
+  }
+
+  value() {
+    const {attribute, checkIfAttributeLoaded, children, model} = this.props
+
+    if (children) return children
+
+    if (attribute && !(attribute in model))
+      throw new Error(`Attribute not found: ${digg(model.modelClassData(), "name")}#${attribute}`)
+
+    if (attribute && checkIfAttributeLoaded && !model.isAttributeLoaded(attribute))
+      return null
+
+    if (attribute && model) {
+      const value = model[attribute]()
+
+      return this.valueContent(value)
+    }
+  }
+
+  valueContent(value) {
+    if (value instanceof Date) {
+      return strftime("%Y-%m-%d %H:%M", value)
+    } else if (typeof value === "boolean") {
+      if (value)
+        return I18n.t("js.shared.yes")
+
+      return I18n.t("js.shared.no")
+    } else if (MoneyFormatter.isMoney(value)) {
+      return MoneyFormatter.format(value)
+    } else {
+      return value
+    }
   }
 }

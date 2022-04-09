@@ -1,7 +1,7 @@
 const {digg, digs} = require("diggerize")
 const inflection = require("inflection")
 const {Link} = require("react-router-dom")
-const Money = require("js-money")
+const MoneyFormatter = require("@kaspernj/api-maker/src/money-formatter")
 const PropTypes = require("prop-types")
 
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
@@ -128,7 +128,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
   presentColumnValue (value) {
     if (value instanceof Date) {
       return I18n.l("time.formats.default", value)
-    } else if (value instanceof Money) {
+    } else if (MoneyFormatter.isMoney(value)) {
       return MoneyFormatter.format(value)
     } else if (typeof value == "boolean") {
       if (value) {
