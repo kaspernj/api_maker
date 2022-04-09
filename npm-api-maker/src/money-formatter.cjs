@@ -54,6 +54,15 @@ module.exports = class MoneyFormatter {
     return moneyCurrency
   }
 
+  static isMoney(value) {
+    if (value instanceof Money) return true
+
+    if (typeof value == "object" && value && Object.keys(value).length == 2 && value.amount && value.currency)
+      return true
+
+    return false
+  }
+
   constructor (money, args = {}) {
     this.args = args
     this.money = money
