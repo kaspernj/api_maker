@@ -98,7 +98,11 @@ class ApiMaker::BaseResource
   end
 
   def self.short_name
-    @short_name ||= name.match(/\AResources::(.+)Resource\Z/)[1]
+    @short_name ||= begin
+      match = name.match(/\AResources::(.+)Resource\Z/)
+      raise "Couldn't match resource name. Does it end with 'Resource' and start with 'Resources::'? Name was: #{name}" unless match
+      match[1]
+    end
   end
 
   def self.underscore_name
