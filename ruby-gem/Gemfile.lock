@@ -308,7 +308,7 @@ GEM
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
     service_pattern (1.0.5)
-    sexp_processor (4.16.0)
+    sexp_processor (4.16.1)
     simple_delegate (0.0.2)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
