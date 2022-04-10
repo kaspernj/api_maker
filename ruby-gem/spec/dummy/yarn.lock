@@ -1024,13 +1024,13 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.1.tgz#141f15645acaa3b133b7c247cad58ae252ffae85"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
-"@kaspernj/api-maker-bootstrap@^1.0.83":
-  version "1.0.83"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.83.tgz#b8a3634ab93cc91b4dd28b47ffa7887ebfc1e069"
-  integrity sha512-UWkPZWg+T0hho085M7TWOc5OTLtjT94wYQqME/PZOcUJ/w+Eq+XSRf4BNpt5TQbLrU1tKcfAGvnqASDaI+mNWA==
+"@kaspernj/api-maker-bootstrap@^1.0.84":
+  version "1.0.84"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.84.tgz#b15368a5ddee336f1bdd8aa689aa68790d51e83e"
+  integrity sha512-yEEa9BalIVPBPz62Y49JY9YU1uHBQSz75CxTxLp6GpJM3pbqKeof1Zjjjm3w8dbuO4ty+suQLY7nu2X8PLuwlw==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.137"
-    "@kaspernj/api-maker-inputs" ">= 1.0.69"
+    "@kaspernj/api-maker" ">= 1.0.140"
+    "@kaspernj/api-maker-inputs" ">= 1.0.71"
     debounce ">= 1.2.0"
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
@@ -1038,20 +1038,20 @@
     set-state-compare "^1.0.15"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.69", "@kaspernj/api-maker-inputs@^1.0.69":
-  version "1.0.69"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.69.tgz#4f11909ce4b0bf0e8ee4c02fedfa415cba9446f0"
-  integrity sha512-2hLjRZinVhFYcXd5KwP7QRwFwHSbZsnEVWEgmkH+ONW1Nv2m8ng7QpdiPcvuxqDHA3avNylAo1YCnrsS97A5Uw==
+"@kaspernj/api-maker-inputs@>= 1.0.71", "@kaspernj/api-maker-inputs@^1.0.69":
+  version "1.0.71"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.71.tgz#3affbf9eb5b19f0115c3a40497b8c6d6916cb784"
+  integrity sha512-DeTybzwoGfEeGBAKO1JH+8OtmVDkBmYqCyZ+5YFMQUtO3EmVGNkRQCVMHBYVXHb49m4R3x8EX+I91c5h2a0uMw==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.132"
     classnames ">= 2.2.6"
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.132", "@kaspernj/api-maker@>= 1.0.137", "@kaspernj/api-maker@^1.0.127":
-  version "1.0.138"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.138.tgz#957d73f06d5a165e2b5a4d2150c6b03c95299c2c"
-  integrity sha512-QxAiArs+buzlS/jssam0/aKumjg1qX6TaQ2IowoHMuGo33biKJTsaS+uvXF43ElneHrUlW3spIyoisjAsB548w==
+"@kaspernj/api-maker@>= 1.0.132", "@kaspernj/api-maker@>= 1.0.140", "@kaspernj/api-maker@^1.0.127":
+  version "1.0.140"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.140.tgz#d4e5586c7c6d02f2873b12b80b3480172ec696ff"
+  integrity sha512-EnwIJs6vl8KU1nlkQ1qqq3x1xrov/EH28zsEmZkbE0HYD/mgrhvsBB/oFq0NQFv0LKHgENFScRPTa15grcCiAw==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
