@@ -97,7 +97,8 @@ module.exports = class ApiMakerRoutesNative {
           if (pathPart.type == "pathPart") {
             return pathPart.name
           } else if (pathPart.type == "variable") {
-            return digg(args, digg(pathPart, "count"))
+            // Args might not contain the right amount of variables, so dont change this to 'digg'
+            return dig(args, digg(pathPart, "count"))
           } else {
             throw new Error(`Unhandled path part type: ${pathPart.type}`)
           }
