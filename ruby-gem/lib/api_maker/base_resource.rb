@@ -101,6 +101,7 @@ class ApiMaker::BaseResource
     @short_name ||= begin
       match = name.match(/\AResources::(.+)Resource\Z/)
       raise "Couldn't match resource name. Does it end with 'Resource' and start with 'Resources::'? Name was: #{name}" unless match
+
       match[1]
     end
   end
