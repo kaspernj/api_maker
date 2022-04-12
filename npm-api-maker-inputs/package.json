@@ -33,6 +33,9 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
     "eslint": "^8.2.0",
     "eslint-find-rules": "^4.0.0",
     "eslint-plugin-jest": "^26.0.0",
