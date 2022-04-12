@@ -102,13 +102,34 @@ builds:
     script:
       - cd npm-api-maker && yarn test
   build_14:
-    name: Linters
+    name: Rubocop
     script:
       - cd ruby-gem && bundle exec rubocop
+  build_15:
+    name: Rails Best Practices
+    script:
       - cd ruby-gem && bundle exec rails_best_practices
+  build_16:
+    name: API maker ESLint
+    script:
       - cd npm-api-maker && yarn eslint .
+  build_17:
+    name: API maker ESLint find rules
+    script:
       - cd npm-api-maker && yarn eslint-find-rules -u .eslintrc.js
+  build_18:
+    name: API maker Bootstrap ESLint
+    script:
       - cd npm-api-maker-bootstrap && yarn eslint .
+  build_19:
+    name: API maker Bootstrap ESLint find rules
+    script:
       - cd npm-api-maker-bootstrap && yarn eslint-find-rules -u .eslintrc.js
+  build_20:
+    name: API maker Inputs ESLint
+    script:
       - cd npm-api-maker-inputs && yarn eslint .
+  build_21:
+    name: API maker Inputs ESLint find rules
+    script:
       - cd npm-api-maker-inputs && yarn eslint-find-rules -u .eslintrc.js
