@@ -17,9 +17,22 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   class SelectorNotFoundError < RuntimeError; end
   class SelectorFoundError < RuntimeError; end
 
+  def browser_chrome?
+    browser_name == "chrome"
+  end
+
   def browser_firefox?
+    browser_name == "firefox"
+  end
+
+  def browser_name
     capabilities = page.driver.browser.try(:capabilities)
-    capabilities && capabilities[:browser_name] == "firefox"
+    raise "Browser didn't have required capabilities" unless capabilities
+
+    browser_name = capabilities[:browser_name]
+    raise "Couldn't detect browser name" unless browser_name
+
+    browser_name
   end
 
   def chrome_logs
