@@ -5,10 +5,12 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   autoload :ExecuteMemberCommand, "#{__dir__}/spec_helper/execute_member_command"
 
   require_relative "spec_helper/browser_logs"
+  require_relative "spec_helper/expect_to_able_to_helper"
   require_relative "spec_helper/expect_no_browser_errors"
   require_relative "spec_helper/wait_for_expect"
   require_relative "spec_helper/wait_for_flash_message"
   include BrowserLogs
+  include ExpectToBeAbleToHelper
   include ExpectNoBrowserErrors
   include WaitForExpect
   include WaitForFlashMessage
