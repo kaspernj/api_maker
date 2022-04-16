@@ -4,12 +4,14 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   autoload :ExecuteCollectionCommand, "#{__dir__}/spec_helper/execute_collection_command"
   autoload :ExecuteMemberCommand, "#{__dir__}/spec_helper/execute_member_command"
 
+  require_relative "spec_helper/attribute_row_helpers"
   require_relative "spec_helper/browser_logs"
   require_relative "spec_helper/expect_no_browser_errors"
   require_relative "spec_helper/wait_for_expect"
   require_relative "spec_helper/wait_for_flash_message"
   include BrowserLogs
   include ApiMaker::ExpectToBeAbleToHelper
+  include AttributeRowHelpers
   include ExpectNoBrowserErrors
   include WaitForExpect
   include WaitForFlashMessage
@@ -105,18 +107,6 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   rescue Capybara::ElementNotFound => e
     expect_no_browser_errors
     raise ApiMaker::SpecHelper::SelectorNotFoundError, e.message
-  end
-
-  def wait_for_attribute_row(attribute: nil, identifier: nil, label: nil, value: nil, **opts)
-    raise "No attribute or identifier given" if !attribute && !identifier
-    raise "No label or value was given" if !label && !value
-
-    tr_selector = ".component-api-maker-attribute-row"
-    tr_selector << "[data-attribute='#{attribute.camelize(:lower)}']" if attribute
-    tr_selector << "[data-identifier='#{identifier}']" if identifier
-
-    wait_for_selector "#{tr_selector} > .attribute-row-label", exact_text: label, **opts if label
-    wait_for_selector "#{tr_selector} > .attribute-row-value", exact_text: value, **opts if value
   end
 
   def wait_for_browser(delay_sec: 0.2, message: "wait for browser", timeout_sec: 6)
