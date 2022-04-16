@@ -25,6 +25,7 @@ class ApiMakerInputsSelect extends React.PureComponent {
       id,
       includeBlank,
       inputProps,
+      inputRef,
       model,
       name,
       options,
