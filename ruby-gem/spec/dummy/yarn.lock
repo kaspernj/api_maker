@@ -1024,10 +1024,10 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.1.tgz#141f15645acaa3b133b7c247cad58ae252ffae85"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
-"@kaspernj/api-maker-bootstrap@^1.0.84":
-  version "1.0.84"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.84.tgz#b15368a5ddee336f1bdd8aa689aa68790d51e83e"
-  integrity sha512-yEEa9BalIVPBPz62Y49JY9YU1uHBQSz75CxTxLp6GpJM3pbqKeof1Zjjjm3w8dbuO4ty+suQLY7nu2X8PLuwlw==
+"@kaspernj/api-maker-bootstrap@^1.0.85":
+  version "1.0.85"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.85.tgz#78a2e769e221eedac2f5732cfba5021a47c3d5a9"
+  integrity sha512-q5QSIx5KQFt1EOiJSb7J+jFvRbxDJ/QqD6oc0fdMFkfO2KDewzHOBXCjY1Usn+ZMQb0ILezqm6OLoxhBUDS0JQ==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.140"
     "@kaspernj/api-maker-inputs" ">= 1.0.71"
