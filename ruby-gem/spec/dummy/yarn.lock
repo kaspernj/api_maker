@@ -1038,10 +1038,10 @@
     set-state-compare "^1.0.15"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@>= 1.0.71", "@kaspernj/api-maker-inputs@^1.0.69":
-  version "1.0.71"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.71.tgz#3affbf9eb5b19f0115c3a40497b8c6d6916cb784"
-  integrity sha512-DeTybzwoGfEeGBAKO1JH+8OtmVDkBmYqCyZ+5YFMQUtO3EmVGNkRQCVMHBYVXHb49m4R3x8EX+I91c5h2a0uMw==
+"@kaspernj/api-maker-inputs@>= 1.0.71", "@kaspernj/api-maker-inputs@^1.0.72":
+  version "1.0.72"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.72.tgz#c7c997f94ae0d44110507045c350d3b4b2c3af9d"
+  integrity sha512-kT0cyupzoomrBTLD+7gLJxiy79ouUlIbtGciG4HFPMvsU/6M2M1UJmjpnvPJaq+hM0258HsGazLxMQ6XoDZw+Q==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.132"
     classnames ">= 2.2.6"
