@@ -1,12 +1,18 @@
 class ApiMakerConfig {
-  getCurrenciesCollection() {
-    if (!this._currenciesCollection) throw new Error("Currencies collection hasn't been set")
+  constructor() {
+    if (!global.apiMakerConfigGlobal) global.apiMakerConfigGlobal = {}
 
-    return this._currenciesCollection
+    this.global = global.apiMakerConfigGlobal
+  }
+
+  getCurrenciesCollection() {
+    if (!this.global.currenciesCollection) throw new Error("Currencies collection hasn't been set")
+
+    return this.global.currenciesCollection
   }
 
   setCurrenciesCollection(newCurrenciesCollection) {
-    this._currenciesCollection = newCurrenciesCollection
+    this.global.currenciesCollection = newCurrenciesCollection
   }
 }
 
