@@ -1024,10 +1024,10 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.1.tgz#141f15645acaa3b133b7c247cad58ae252ffae85"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
-"@kaspernj/api-maker-bootstrap@^1.0.85":
-  version "1.0.85"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.85.tgz#78a2e769e221eedac2f5732cfba5021a47c3d5a9"
-  integrity sha512-q5QSIx5KQFt1EOiJSb7J+jFvRbxDJ/QqD6oc0fdMFkfO2KDewzHOBXCjY1Usn+ZMQb0ILezqm6OLoxhBUDS0JQ==
+"@kaspernj/api-maker-bootstrap@^1.0.86":
+  version "1.0.86"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.86.tgz#41f67fd8cb8ea224b85f46c3e97702a9f6321254"
+  integrity sha512-CZgOrxDPvhBSRiBi60ggyta7uFS934EZXuMTLIWMsJ8WWzsfRcsa6yZSYZOMZsoA/c0wkvipmNcFVfbqoF7QrQ==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.140"
     "@kaspernj/api-maker-inputs" ">= 1.0.71"
@@ -1035,6 +1035,7 @@
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
     on-location-changed ">= 1.0.2"
+    qs ">= 6.9.3"
     set-state-compare "^1.0.15"
     strftime ">= 0.10.0"
 
@@ -1048,10 +1049,10 @@
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.132", "@kaspernj/api-maker@>= 1.0.140", "@kaspernj/api-maker@^1.0.141":
-  version "1.0.141"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.141.tgz#02f6cecd79f6c2201b4ed69b19905ca4ed3d0a79"
-  integrity sha512-+v3XDkIryxH+1D9/ePk3LZ1hd69AZHdKcCBMRKYFJz/rZyJFYfhUfcLySaPv3mjhTZgHBVzp7M3IuR/5TTHdiw==
+"@kaspernj/api-maker@>= 1.0.132", "@kaspernj/api-maker@>= 1.0.140", "@kaspernj/api-maker@^1.0.142":
+  version "1.0.142"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.142.tgz#629f530d77e14d84e040045ff51f65c12622588d"
+  integrity sha512-/SuO32QbVpo645y4vjw/rpnLqY8gBrkSDqACfOg8MT5k9svlRh8tMy/9ILtJIdz725UCcsRtgTYokgibQ/d+MA==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
