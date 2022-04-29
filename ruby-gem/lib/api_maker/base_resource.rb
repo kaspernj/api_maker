@@ -146,7 +146,14 @@ class ApiMaker::BaseResource
     end
   end
 
-  def can_access_through_accessible_model(abilities, sub_query)
+  def can_access_through_accessible_model(abilities, relationship_name, sub_query = nil)
+    reflection = model_class.reflections.fetch(relationship_name.to_s)
+
+    raise "No reflection named '#{relationship_name}' in #{model_class.reflections.keys}" unless reflection
+    raise "You need to pass a third argument for a sub query on a polymorphic relationship" if reflection.options[:polymorphic] && !sub_query
+
+    sub_query ||= reflection.klass
+
     query = sub_query
       .accessible_by(ability)
       .except(:select)
@@ -157,7 +164,8 @@ class ApiMaker::BaseResource
       .limit(1)
 
     can abilities, model_class, ["EXISTS (#{query.to_sql})"] do |model|
-      query.exists?(model_class.primary_key => model.id)
+      model.read_attribute(reflection.foreign_type) == query.klass.name &&
+        query.exists?(query.primary_key => model.read_attribute(reflection.foreign_key))
     end
   end
 
