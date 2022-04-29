@@ -146,7 +146,7 @@ class ApiMaker::BaseResource
     end
   end
 
-  def can_access_through_accessible_model(abilities, relationship_name, sub_query = nil)
+  def can_access_through_accessible_model(abilities, relationship_name, sub_query = nil) # rubocop:disable Metrics/AbcSize
     reflection = model_class.reflections.fetch(relationship_name.to_s)
 
     raise "No reflection named '#{relationship_name}' in #{model_class.reflections.keys}" unless reflection
@@ -163,9 +163,20 @@ class ApiMaker::BaseResource
       .select("1")
       .limit(1)
 
-    can abilities, model_class, ["EXISTS (#{query.to_sql})"] do |model|
-      model.read_attribute(reflection.foreign_type) == query.klass.name &&
+    exists_query = query.where("#{query.klass.table_name}.#{query.klass.primary_key} = #{model_class.table_name}.#{reflection.foreign_key}")
+
+    if reflection.options[:polymorphic]
+      exists_query = exists_query.where(
+        model_class.table_name => {
+          reflection.foreign_type => query.klass.name
+        }
+      )
+    end
+
+    can abilities, model_class, ["EXISTS (#{exists_query.to_sql})"] do |model|
+      if !reflection.options[:polymorphic] || model.read_attribute(reflection.foreign_type) == query.klass.name
         query.exists?(query.primary_key => model.read_attribute(reflection.foreign_key))
+      end
     end
   end
 
