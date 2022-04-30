@@ -163,7 +163,14 @@ class ApiMaker::BaseResource
       .select("1")
       .limit(1)
 
-    exists_query = query.where("#{query.klass.table_name}.#{query.klass.primary_key} = #{model_class.table_name}.#{reflection.foreign_key}")
+    case reflection.macro
+    when :belongs_to
+      exists_query = query.where("#{query.klass.table_name}.#{query.klass.primary_key} = #{model_class.table_name}.#{reflection.foreign_key}")
+    when :has_many, :has_one
+      exists_query = query.where("#{query.klass.table_name}.#{reflection.foreign_key} = #{model_class.table_name}.#{model_class.primary_key}")
+    else
+      raise "Unhandled macro: #{reflection.macro}"
+    end
 
     if reflection.options[:polymorphic]
       exists_query = exists_query.where(
@@ -174,8 +181,15 @@ class ApiMaker::BaseResource
     end
 
     can abilities, model_class, ["EXISTS (#{exists_query.to_sql})"] do |model|
-      if !reflection.options[:polymorphic] || model.read_attribute(reflection.foreign_type) == query.klass.name
-        query.exists?(query.primary_key => model.read_attribute(reflection.foreign_key))
+      if !reflection.options[:polymorphic] || model.__send__(reflection.foreign_type) == query.klass.name
+        case reflection.macro
+        when :belongs_to
+          query.exists?(query.primary_key => model.__send__(reflection.foreign_key))
+        when :has_many, :has_one
+          query.exists?(reflection.foreign_key => model.__send__(model_class.primary_key))
+        else
+          raise "Unhandled macro: #{reflection.macro}"
+        end
       end
     end
   end
