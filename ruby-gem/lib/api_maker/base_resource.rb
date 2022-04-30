@@ -147,7 +147,7 @@ class ApiMaker::BaseResource
   end
 
   def can_access_through_accessible_model(abilities, relationship_name, sub_query = nil) # rubocop:disable Metrics/AbcSize
-    reflection = model_class.reflections.fetch(relationship_name.to_s)
+    reflection = model_class.reflections[relationship_name.to_s]
 
     raise "No reflection named '#{relationship_name}' in #{model_class.reflections.keys}" unless reflection
     raise "You need to pass a third argument for a sub query on a polymorphic relationship" if reflection.options[:polymorphic] && !sub_query
