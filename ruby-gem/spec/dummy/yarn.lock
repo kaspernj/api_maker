@@ -7181,10 +7181,10 @@ set-blocking@^2.0.0, set-blocking@~2.0.0:
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha1-BF+XgtARrppoA93TgrJDkrPYkPc=
 
-set-state-compare@^1.0.15:
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.15.tgz#58233b0f88caa1125ede35807ba7bd44b854f334"
-  integrity sha512-ZfgYl5wPfbikGPxBsuKayk8HK2o9mkcsWqUWUbvTRJLBYbcut76DS7tTYkdglmLuR568F4m67ikxbi/kYa2l+Q==
+set-state-compare@^1.0.15, set-state-compare@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.17.tgz#8d70ad67540fbb308fbb6718dc1a6e94e5129145"
+  integrity sha512-cF57j0+gJb6lDerGfrX+2qRfmXNL27WMzTMoHrSMQoPZgwigfbDYUPVeLfSyXM5iEqbaoqTrTK9YKvwfaY7tKA==
 
 set-value@^0.4.3:
   version "0.4.3"
