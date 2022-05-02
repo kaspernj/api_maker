@@ -1,3 +1,5 @@
+artifact_dirs:
+  - ruby-gem/spec/dummy/tmp/screenshots
 before_script:
   - cd npm-api-maker && yarn install --network-timeout 120000
   - cd npm-api-maker && yarn link
