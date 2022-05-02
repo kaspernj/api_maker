@@ -40,7 +40,7 @@
     "eslint-find-rules": "^4.0.0",
     "eslint-plugin-jest": "^26.0.0",
     "eslint-plugin-react": "^7.27.0",
-    "jest": "^27.0.6"
+    "jest": "^28.0.3"
   },
   "peerDependencies": {
     "prop-types": ">= 15.7.2",
