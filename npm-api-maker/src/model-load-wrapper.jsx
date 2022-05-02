@@ -36,11 +36,18 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
     this.setState({model})
   }
 
-  loadNewModel() {
+  async loadNewModel() {
     const params = Params.parse()
     const paramKey = ModelClass.modelName().paramKey()
     const modelDataFromParams = params[paramKey] || {}
-    const modelData = Object.assign({}, args.newAttributes, modelDataFromParams)
+
+    let defaults = {}
+
+    if (args.newIfNoId?.defaults) {
+      defaults = await args.newIfNoId.defaults()
+    }
+
+    const modelData = Object.assign(defaults, args.newAttributes, modelDataFromParams)
     const model = new ModelClass(modelData)
 
     this.setState({model})
