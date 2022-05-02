@@ -40,7 +40,7 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.3.1",
     "replaceall": "^0.1.6",
-    "set-state-compare": "^1.0.15",
+    "set-state-compare": "^1.0.17",
     "stacktrace-parser": "^0.1.10",
     "stimulus": "^3.0.1",
     "strftime": "^0.10.1",
