@@ -137,8 +137,8 @@ class ApiMaker::BaseCommand
     end
   end
 
-  def execute_service_or_fail(service_class, *args, &blk)
-    response = service_class.execute(*args, &blk)
+  def execute_service_or_fail(service_class, *args, **opts, &blk)
+    response = service_class.execute(*args, **opts, &blk)
 
     if response.success?
       succeed!(success: true)
