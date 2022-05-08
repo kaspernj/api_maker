@@ -34,13 +34,15 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   end
 
   def collection_from_query(collection)
-    ApiMaker::CollectionSerializer.new(
-      ability: ability,
-      api_maker_args: api_maker_args,
-      collection: collection,
-      locals: locals,
-      query_params: params
-    ).result
+    ApiMaker::CollectionSerializer
+      .new(
+        ability: ability,
+        api_maker_args: api_maker_args,
+        collection: collection,
+        locals: locals,
+        query_params: params
+      )
+      .result
   end
 
   def distinct_query
