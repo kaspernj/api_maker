@@ -1,7 +1,7 @@
 class ApiMaker::Ability
   include CanCan::Ability
 
-  attr_reader :loader
+  attr_reader :api_maker_args, :loader
 
   def initialize(api_maker_args: nil, locals: nil)
     @api_maker_args = api_maker_args || {}
