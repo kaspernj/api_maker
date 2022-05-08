@@ -38,14 +38,6 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     browser_name
   end
 
-  def chrome_logs
-    if Gem.loaded_specs["selenium-webdriver"].version > Gem::Version.new("4.0.0")
-      page.driver.browser.logs.get(:browser)
-    else
-      page.driver.browser.manage.logs.get(:browser)
-    end
-  end
-
   def confirm_accept
     page.driver.browser.switch_to.alert.accept
   end
