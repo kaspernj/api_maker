@@ -796,19 +796,19 @@
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
 "@kaspernj/api-maker-inputs@>= 1.0.71":
-  version "1.0.72"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.72.tgz#c7c997f94ae0d44110507045c350d3b4b2c3af9d"
-  integrity sha512-kT0cyupzoomrBTLD+7gLJxiy79ouUlIbtGciG4HFPMvsU/6M2M1UJmjpnvPJaq+hM0258HsGazLxMQ6XoDZw+Q==
+  version "1.0.73"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.73.tgz#d6de18145f5e277c8b96b01edc5a1e7b648abcd1"
+  integrity sha512-n1cIe61kcMHgpo/zPVXTiB9ZiXhts+5oGPromQwBVlAHNfKMoKgkYGD3xbWQwEA7zvYTU3AT17F5ZNAqg38SsQ==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.132"
+    "@kaspernj/api-maker" ">= 1.0.143"
     classnames ">= 2.2.6"
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.132", "@kaspernj/api-maker@>= 1.0.140":
-  version "1.0.142"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.142.tgz#629f530d77e14d84e040045ff51f65c12622588d"
-  integrity sha512-/SuO32QbVpo645y4vjw/rpnLqY8gBrkSDqACfOg8MT5k9svlRh8tMy/9ILtJIdz725UCcsRtgTYokgibQ/d+MA==
+"@kaspernj/api-maker@>= 1.0.140", "@kaspernj/api-maker@>= 1.0.143":
+  version "1.0.143"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.143.tgz#5d4ae7cb963f761559ccd51082e1981135e9f175"
+  integrity sha512-WRVTHtY8Tp55bHr01ByjQHeGUpfoVDQ5j9R4B+sdeiQGoZMrePvAUQEEMP2gs1DriMjGg8CtHD4b2AHIkEeMMg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
