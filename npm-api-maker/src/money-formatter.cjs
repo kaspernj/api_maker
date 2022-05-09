@@ -57,7 +57,7 @@ module.exports = class MoneyFormatter {
   static isMoney(value) {
     if (value instanceof Money) return true
 
-    if (typeof value == "object" && value && Object.keys(value).length == 2 && value.amount && value.currency)
+    if (typeof value == "object" && value && Object.keys(value).length == 2 && "amount" in value && "currency" in value)
       return true
 
     return false
