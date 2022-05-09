@@ -796,7 +796,7 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker-inputs@>= 1.0.71":
+"@kaspernj/api-maker-inputs@>= 1.0.72":
   version "1.0.73"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.73.tgz#d6de18145f5e277c8b96b01edc5a1e7b648abcd1"
   integrity sha512-n1cIe61kcMHgpo/zPVXTiB9ZiXhts+5oGPromQwBVlAHNfKMoKgkYGD3xbWQwEA7zvYTU3AT17F5ZNAqg38SsQ==
@@ -806,7 +806,7 @@
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.140", "@kaspernj/api-maker@>= 1.0.143":
+"@kaspernj/api-maker@>= 1.0.143":
   version "1.0.143"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.143.tgz#5d4ae7cb963f761559ccd51082e1981135e9f175"
   integrity sha512-WRVTHtY8Tp55bHr01ByjQHeGUpfoVDQ5j9R4B+sdeiQGoZMrePvAUQEEMP2gs1DriMjGg8CtHD4b2AHIkEeMMg==
@@ -3778,7 +3778,7 @@ semver@^7.3.5:
   dependencies:
     lru-cache "^6.0.0"
 
-set-state-compare@^1.0.15:
+set-state-compare@^1.0.17:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.17.tgz#8d70ad67540fbb308fbb6718dc1a6e94e5129145"
   integrity sha512-cF57j0+gJb6lDerGfrX+2qRfmXNL27WMzTMoHrSMQoPZgwigfbDYUPVeLfSyXM5iEqbaoqTrTK9YKvwfaY7tKA==

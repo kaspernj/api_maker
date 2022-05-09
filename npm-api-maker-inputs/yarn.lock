@@ -1540,7 +1540,7 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker@>= 1.0.132":
+"@kaspernj/api-maker@>= 1.0.143":
   version "1.0.143"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.143.tgz#5d4ae7cb963f761559ccd51082e1981135e9f175"
   integrity sha512-WRVTHtY8Tp55bHr01ByjQHeGUpfoVDQ5j9R4B+sdeiQGoZMrePvAUQEEMP2gs1DriMjGg8CtHD4b2AHIkEeMMg==
