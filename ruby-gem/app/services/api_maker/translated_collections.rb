@@ -1,4 +1,6 @@
 class ApiMaker::TranslatedCollections
+  class InvalidCollectionValueError < RuntimeError; end
+
   def self.add(blk:, collection_name:, model_class:)
     @translated_collections ||= {}
     collections = {}
@@ -22,13 +24,26 @@ class ApiMaker::TranslatedCollections
 
     plural_name = collection_name.to_s.pluralize
     inverted_translated_collection_name = "translated_#{plural_name}_inverted"
+    collection_values_as_strings = collection_values.map(&:to_s)
 
     add_translated_collection_method(model_class, plural_name, collections)
     add_translated_inverted_collection_method(model_class, inverted_translated_collection_name, collections)
     add_collection_values_method(model_class, plural_name, collection_values)
     add_translated_method(model_class, collection_name, inverted_translated_collection_name)
+    add_with_scope(model_class, collection_name, plural_name, collection_values_as_strings)
 
     model_class.validates collection_name, inclusion: {in: collection_values}
+  end
+
+  def self.add_with_scope(model_class, collection_name, plural_name, collection_values_as_strings)
+    model_class.scope "with_#{plural_name}".to_sym, lambda { |*options|
+      # Check that options are valid
+      options.each do |option|
+        raise InvalidCollectionValueError, "Invalid option for #{collection_name}: #{option}" if collection_values_as_strings.exclude?(option.to_s)
+      end
+
+      where(collection_name => options)
+    }
   end
 
   def self.add_translated_collection_method(model_class, plural_name, collections)

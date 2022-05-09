@@ -73,4 +73,18 @@ describe ApiMaker::TranslatedCollections do
   it "doesnt allow changing the possible values" do
     expect { Task.states << "test" }.to raise_error(FrozenError)
   end
+
+  it "adds a scope that checks for wrong values" do
+    task
+    open_tasks = Task.with_states(:open)
+    closed_tasks = Task.with_states(:closed)
+
+    expect(open_tasks).to eq [task]
+    expect(closed_tasks).to eq []
+  end
+
+  it "raises an error when given invalid scope values" do
+    expect { Task.with_states(:invalid_value) }
+      .to raise_error(ApiMaker::TranslatedCollections::InvalidCollectionValueError, "Invalid option for state: invalid_value")
+  end
 end
