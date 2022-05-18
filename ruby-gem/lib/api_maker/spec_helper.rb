@@ -9,12 +9,14 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   require_relative "spec_helper/expect_no_browser_errors"
   require_relative "spec_helper/wait_for_expect"
   require_relative "spec_helper/wait_for_flash_message"
+  require_relative "spec_helper/wait_for_selector"
   include BrowserLogs
   include ApiMaker::ExpectToBeAbleToHelper
   include AttributeRowHelpers
   include ExpectNoBrowserErrors
   include WaitForExpect
   include WaitForFlashMessage
+  include WaitForSelector
 
   class JavaScriptError < RuntimeError; end
   class SelectorNotFoundError < RuntimeError; end
@@ -116,27 +118,5 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   rescue RSpec::Expectations::ExpectationNotMetError => e
     expect_no_browser_errors
     raise e
-  end
-
-  def wait_for_selector(selector, *args, **opts)
-    expect(page).to have_selector selector, *args, **opts
-    expect_no_browser_errors
-  rescue RSpec::Expectations::ExpectationNotMetError => e
-    expect_no_browser_errors
-    raise ApiMaker::SpecHelper::SelectorNotFoundError, e.message
-  end
-
-  def wait_for_selectors(*selectors)
-    selectors.each do |selector|
-      wait_for_selector(selector)
-    end
-  end
-
-  def wait_for_no_selector(selector, *args, **opts)
-    expect(page).to have_no_selector selector, *args, **opts
-    expect_no_browser_errors
-  rescue RSpec::Expectations::ExpectationNotMetError => e
-    expect_no_browser_errors
-    raise ApiMaker::SpecHelper::SelectorFoundError, e.message
   end
 end
