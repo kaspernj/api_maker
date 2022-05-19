@@ -366,8 +366,8 @@ class BaseModel {
   }
 
   isNewRecord () {
-    if (this.newRecord === false) {
-      return false
+    if (this.newRecord !== undefined) {
+      return this.newRecord
     } else if ("id" in this.modelData && this.modelData.id) {
       return false
     } else {
@@ -676,7 +676,9 @@ class BaseModel {
       if (attributeName in attributes) return null
     }
 
-    throw new AttributeNotLoadedError(`No such attribute: ${digg(this.modelClassData(), "name")}#${attributeName}: ${JSON.stringify(this.modelData)}`)
+    if (this.isPersisted()) {
+      throw new AttributeNotLoadedError(`No such attribute: ${digg(this.modelClassData(), "name")}#${attributeName}: ${JSON.stringify(this.modelData)}`)
+    }
   }
 
   isAttributeLoaded (attributeName) {
