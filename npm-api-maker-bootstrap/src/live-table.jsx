@@ -412,6 +412,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   headerClassNameForColumn (column) {
     const classNames = ["live-table-header"]
 
+    if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
     if (column.headerProps && column.headerProps.className) classNames.push(column.headerProps.className)
     if (column.textCenter) classNames.push("text-center")
     if (column.textRight) classNames.push("text-end text-right")
