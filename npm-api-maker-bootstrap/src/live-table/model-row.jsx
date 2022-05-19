@@ -52,6 +52,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
   columnClassNamesForColumn (column) {
     const classNames = ["live-table-column"]
 
+    if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
     if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
     if (column.textCenter) classNames.push("text-center")
     if (column.textRight) classNames.push("text-end text-right")
