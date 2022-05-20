@@ -48,7 +48,10 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
     }
 
     const modelData = Object.assign(defaults, args.newAttributes, modelDataFromParams)
-    const model = new ModelClass(modelData)
+    const model = new ModelClass({
+      isNewRecord: true,
+      data: {a: modelData}
+    })
 
     this.setState({model})
   }
