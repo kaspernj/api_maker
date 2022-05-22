@@ -806,32 +806,10 @@
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.143":
-  version "1.0.143"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.143.tgz#5d4ae7cb963f761559ccd51082e1981135e9f175"
-  integrity sha512-WRVTHtY8Tp55bHr01ByjQHeGUpfoVDQ5j9R4B+sdeiQGoZMrePvAUQEEMP2gs1DriMjGg8CtHD4b2AHIkEeMMg==
-  dependencies:
-    "@rails/actioncable" ">= 6.1.0"
-    clone-deep ">= 4.0.1"
-    debounce ">= 1.2.1"
-    diggerize ">= 1.0.4"
-    epic-locks ">= 1.0.1"
-    form-data-objectizer ">= 1.0.0"
-    form-serialize ">= 0.7.2"
-    format-number ">= 3.0.0"
-    inflection ">= 1.12.0"
-    js-money ">= 0.6.3"
-    numberable ">= 1.0.0"
-    object-to-formdata ">= 4.1.0"
-    qs ">= 6.9.3"
-    replaceall ">= 0.1.6"
-    strftime ">= 0.10.0"
-    wake-event ">= 0.0.1"
-
-"@kaspernj/api-maker@>= 1.0.144":
-  version "1.0.144"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.144.tgz#aa4433131cb8f10c5a121356bf1988420da435f0"
-  integrity sha512-2K5CmbJVES1S/U7k1C7mKpCdy99IWYsNIIjwdPY1QKzYEY8wgS3CQgM7Hydf+HOti5koW0ZPnkZuRi4m0A4RUA==
+"@kaspernj/api-maker@>= 1.0.143", "@kaspernj/api-maker@>= 1.0.144":
+  version "1.0.146"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.146.tgz#1895b7f77db82a34cbce32eef59a669d1fa93d6c"
+  integrity sha512-VBI2LxrV/4gAJsVaO+2EdiWO+0Rob/onC+0IWZkCgPR1zc+xiMH1ywYHhhzSKsY7ZM60HIUkoeMblsKvpUVv4w==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
