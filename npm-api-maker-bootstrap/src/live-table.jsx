@@ -2,17 +2,14 @@ const classNames = require("classnames")
 const Collection = require("@kaspernj/api-maker/src/collection")
 const {debounce} = require("debounce")
 const {digg, digs} = require("diggerize")
-const EventCreated = require("@kaspernj/api-maker/src/event-created").default
-const EventDestroyed = require("@kaspernj/api-maker/src/event-destroyed").default
-const EventUpdated = require("@kaspernj/api-maker/src/event-updated").default
 const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-name")
-const {LocationChanged} = require("on-location-changed/location-changed-component")
 const Params = require("@kaspernj/api-maker/src/params")
 const PropTypes = require("prop-types")
 const React = require("react")
 const {Shape} = require("set-state-compare")
 
 import Card from "./card"
+import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
 import ModelRow from "./live-table/model-row"
 import Paginate from "./paginate"
 import SortLink from "./sort-link"
@@ -81,7 +78,9 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       queryQName: `${queryName}_q`,
       queryPageName: `${queryName}_page`,
       qParams: undefined,
-      result: undefined
+      result: undefined,
+      showNoRecordsAvailableContent: false,
+      showNoRecordsFoundContent: false
     })
   }
 
@@ -93,13 +92,55 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return this.props.columns
   }
 
-  componentDidMount () {
-    this.loadQParams()
-    this.loadModels()
+  submitFilterDebounce = debounce(() => this.submitFilter())
 
-    if (this.props.noRecordsAvailableContent) {
-      this.loadOverallCount()
-    }
+  render () {
+    const {modelClass} = digs(this.props, "modelClass")
+    const {noRecordsAvailableContent, noRecordsFoundContent, preloads, select, selectColumns} = this.props
+    const {
+      overallCount,
+      qParams,
+      query,
+      result,
+      models,
+      showNoRecordsAvailableContent,
+      showNoRecordsFoundContent
+    } = digs(
+      this.shape,
+      "overallCount",
+      "qParams",
+      "query",
+      "result",
+      "models",
+      "showNoRecordsAvailableContent",
+      "showNoRecordsFoundContent"
+    )
+
+    return (
+      <div className={this.className()}>
+        <CollectionLoader
+          abilities={this.abilitiesToLoad()}
+          component={this}
+          modelClass={modelClass}
+          preloads={preloads}
+          select={select}
+          selectColumns={selectColumns}
+        />
+        {showNoRecordsAvailableContent &&
+          <div className="live-table--no-records-available-content">
+            {noRecordsAvailableContent({models, qParams, overallCount})}
+          </div>
+        }
+        {showNoRecordsFoundContent &&
+          <div className="live-table--no-records-found-content">
+            {noRecordsFoundContent({models, qParams, overallCount})}
+          </div>
+        }
+        {qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
+          this.cardOrTable()
+        }
+      </div>
+    )
   }
 
   abilitiesToLoad () {
@@ -138,115 +179,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     }
 
     return abilitiesToLoad
-  }
-
-  async loadOverallCount () {
-    const baseQuery = this.props.collection || this.props.modelClass.all()
-    const overallCount = await baseQuery.count()
-
-    this.shape.set({overallCount})
-  }
-
-  loadQParams () {
-    const {queryQName} = digs(this.shape, "queryQName")
-    const params = Params.parse()
-    const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
-
-    this.shape.set({qParams})
-  }
-
-  loadModelsDebounce = debounce(() => this.loadModels())
-  submitFilterDebounce = debounce(() => this.submitFilter())
-
-  loadModels = async () => {
-    const params = Params.parse()
-    const {collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
-    const {qParams, queryPageName, queryQName} = this.shape
-
-    let query = collection || modelClass
-
-    if (groupBy) query = query.groupBy(groupBy)
-
-    query = query
-      .ransack(qParams)
-      .searchKey(queryQName)
-      .page(params[queryPageName])
-      .pageKey(queryPageName)
-      .preload(preloads)
-      .select(select)
-
-    const abilitiesToLoad = this.abilitiesToLoad()
-
-    if (Object.keys(abilitiesToLoad).length > 0) {
-      query = query.abilities(abilitiesToLoad)
-    }
-
-    if (selectColumns) query = query.selectColumns(selectColumns)
-
-    const result = await query.result()
-
-    if (onModelsLoaded) {
-      onModelsLoaded({
-        models: result.models(),
-        qParams,
-        query,
-        result
-      })
-    }
-
-    this.shape.set({query, result, models: result.models()})
-  }
-
-  render () {
-    const {modelClass} = digs(this.props, "modelClass")
-    const {noRecordsAvailableContent, noRecordsFoundContent} = this.props
-    const {overallCount, qParams, query, result, models} = digs(this.shape, "overallCount", "qParams", "query", "result", "models")
-
-    return (
-      <div className={this.className()}>
-        <EventCreated modelClass={modelClass} onCreated={this.onModelCreated} />
-        <LocationChanged onChanged={this.onLocationChanged} />
-        {models && models.map((model) =>
-          <React.Fragment key={model.id()}>
-            <EventDestroyed model={model} onDestroyed={this.onModelDestroyed} />
-            <EventUpdated model={model} onUpdated={this.onModelUpdated} />
-          </React.Fragment>
-        )}
-        {this.showNoRecordsAvailableContent() &&
-          <div className="live-table--no-records-available-content">
-            {noRecordsAvailableContent({models, qParams, overallCount})}
-          </div>
-        }
-        {this.showNoRecordsFoundContent()  &&
-          <div className="live-table--no-records-found-content">
-            {noRecordsFoundContent({models, qParams, overallCount})}
-          </div>
-        }
-        {qParams && query && result && models && !this.showNoRecordsAvailableContent() && !this.showNoRecordsFoundContent() &&
-          this.cardOrTable()
-        }
-      </div>
-    )
-  }
-
-  showNoRecordsAvailableContent () {
-    const {noRecordsAvailableContent} = this.props
-    const {models, overallCount} = digs(this.shape, "models", "overallCount")
-
-    if (models === undefined || overallCount === undefined || noRecordsAvailableContent === undefined) return
-    if (models.length === 0 && overallCount === 0 && noRecordsAvailableContent) return true
-  }
-
-  showNoRecordsFoundContent () {
-    const {noRecordsAvailableContent, noRecordsFoundContent} = this.props
-    const {models, overallCount} = digs(this.shape, "models", "overallCount")
-
-    if (models === undefined || noRecordsFoundContent === undefined) return
-
-    // Dont show noRecordsAvailableContent together with noRecordsAvailableContent
-    if (models.length === 0 && overallCount === 0 && noRecordsAvailableContent) return
-
-    if (models.length === 0 && noRecordsFoundContent) return true
   }
 
   cardOrTable () {
@@ -445,37 +377,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   onFilterFormSubmit = (e) => {
     e.preventDefault()
     this.submitFilter()
-  }
-
-  onLocationChanged = () => {
-    const {queryQName} = digs(this.shape, "queryQName")
-    const params = Params.parse()
-    const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
-
-    this.shape.set({qParams})
-    this.loadModels()
-  }
-
-  onModelCreated = () => {
-    this.loadModels()
-  }
-
-  onModelDestroyed = (args) => {
-    const {models} = digs(this.shape, "models")
-
-    this.shape.set({
-      models: models.filter((model) => model.id() != args.model.id())
-    })
-  }
-
-  onModelUpdated = (args) => {
-    const {models} = digs(this.shape, "models")
-    const updatedModel = digg(args, "model")
-    const foundModel = models.find((model) => model.id() == updatedModel.id())
-
-    if (foundModel) {
-      this.loadModelsDebounce()
-    }
   }
 
   submitFilter = () => {
