@@ -13,6 +13,8 @@ const React = require("react")
 export default class CollectionLoader extends React.PureComponent {
   static defaultProps = {
     destroyEnabled: true,
+    noRecordsAvailableContent: undefined,
+    noRecordsFoundContent: undefined,
     preloads: [],
     select: {}
   }
@@ -66,14 +68,20 @@ export default class CollectionLoader extends React.PureComponent {
     this.loadQParams()
     this.loadModels()
 
-    if (this.props.noRecordsAvailableContent) this.loadOverallCount()
+    const {noRecordsAvailableContent} = digs(this.props, "noRecordsAvailableContent")
+
+    if (noRecordsAvailableContent) this.loadOverallCount()
   }
 
   async loadOverallCount () {
     const baseQuery = this.props.collection || this.props.modelClass.all()
     const overallCount = await baseQuery.count()
 
-    this.shape.set({overallCount})
+    this.shape.set({
+      overallCount,
+      showNoRecordsAvailableContent: this.showNoRecordsAvailableContent({overallCount}),
+      showNoRecordsFoundContent: this.showNoRecordsFoundContent({overallCount})
+    })
   }
 
   loadQParams () {
@@ -94,8 +102,6 @@ export default class CollectionLoader extends React.PureComponent {
     let query = collection?.clone() || modelClass
 
     if (groupBy) query = query.groupBy(groupBy)
-
-    console.log({query})
 
     query = query
       .ransack(qParams)
@@ -156,17 +162,41 @@ export default class CollectionLoader extends React.PureComponent {
     this.loadModels()
   }
 
-  showNoRecordsAvailableContent ({models}) {
-    const {noRecordsAvailableContent} = this.props
-    const {overallCount} = digs(this.shape, "overallCount")
+  showNoRecordsAvailableContent (args) {
+    const {noRecordsAvailableContent} = digs(this.props, "noRecordsAvailableContent")
+    let models, overallCount
+
+    if (args.models !== undefined) {
+      models = args.models
+    } else if (this.shape.models !== undefined) {
+      models = this.shape.models
+    }
+
+    if (args.overallCount !== undefined) {
+      overallCount = args.overallCount
+    } else if (this.shape.overallCount !== undefined) {
+      overallCount = this.shape.overallCount
+    }
 
     if (models === undefined || overallCount === undefined || noRecordsAvailableContent === undefined) return false
     if (models.length === 0 && overallCount === 0 && noRecordsAvailableContent) return true
   }
 
-  showNoRecordsFoundContent ({models}) {
-    const {noRecordsAvailableContent, noRecordsFoundContent} = this.props
-    const {overallCount} = digs(this.shape, "overallCount")
+  showNoRecordsFoundContent (args) {
+    const {noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "noRecordsAvailableContent", "noRecordsFoundContent")
+    let models, overallCount
+
+    if (args.models !== undefined) {
+      models = args.models
+    } else if (this.shape.models !== undefined) {
+      models = this.shape.models
+    }
+
+    if (args.overallCount !== undefined) {
+      overallCount = args.overallCount
+    } else if (this.shape.overallCount !== undefined) {
+      overallCount = this.shape.overallCount
+    }
 
     if (models === undefined || noRecordsFoundContent === undefined) return false
 

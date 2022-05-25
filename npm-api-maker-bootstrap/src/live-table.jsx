@@ -20,6 +20,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     destroyEnabled: true,
     filterCard: true,
     filterSubmitButton: true,
+    noRecordsAvailableContent: undefined,
+    noRecordsFoundContent: undefined,
     preloads: [],
     select: {}
   }
@@ -95,8 +97,8 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   submitFilterDebounce = debounce(() => this.submitFilter())
 
   render () {
-    const {modelClass} = digs(this.props, "modelClass")
-    const {noRecordsAvailableContent, noRecordsFoundContent, preloads, select, selectColumns} = this.props
+    const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
+    const {defaultParams, preloads, select, selectColumns} = this.props
     const {
       overallCount,
       qParams,
@@ -120,6 +122,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       <div className={this.className()}>
         <CollectionLoader
           abilities={this.abilitiesToLoad()}
+          defaultParams={defaultParams}
           component={this}
           modelClass={modelClass}
           noRecordsAvailableContent={noRecordsAvailableContent}
@@ -128,15 +131,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
           select={select}
           selectColumns={selectColumns}
         />
-        <div>
-          Keys: {Object.keys(this.shape).join(", ")}
-        </div>
-        <div>
-          showNoRecordsAvailableContent: {showNoRecordsAvailableContent ? "YES" : "NO"}
-        </div>
-        <div>
-          showNoRecordsFoundContent: {showNoRecordsFoundContent ? "YES" : "NO"}
-        </div>
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
