@@ -98,7 +98,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {defaultParams, preloads, select, selectColumns} = this.props
+    const {collection, defaultParams, preloads, select, selectColumns} = this.props
     const {
       overallCount,
       qParams,
@@ -123,6 +123,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
         <CollectionLoader
           abilities={this.abilitiesToLoad()}
           defaultParams={defaultParams}
+          collection={collection}
           component={this}
           modelClass={modelClass}
           noRecordsAvailableContent={noRecordsAvailableContent}
