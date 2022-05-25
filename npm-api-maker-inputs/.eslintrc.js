@@ -257,6 +257,7 @@ module.exports = {
     "react/jsx-newline": "off",
     "react/jsx-no-bind": "error",
     "react/jsx-no-constructed-context-values": "error",
+    "react/jsx-no-leaked-render": "error",
     "react/jsx-no-literals": "error",
     "react/jsx-no-script-url": "error",
     "react/jsx-no-useless-fragment": "error",
