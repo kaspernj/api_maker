@@ -2,6 +2,8 @@ const Collection = require("@kaspernj/api-maker/src/collection")
 const {debounce} = require("debounce")
 const {digg, digs} = require("diggerize")
 const EventCreated = require("@kaspernj/api-maker/src/event-created").default
+const EventDestroyed = require("@kaspernj/api-maker/src/event-destroyed").default
+const EventUpdated = require("@kaspernj/api-maker/src/event-updated").default
 const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-name")
 const {LocationChanged} = require("on-location-changed/location-changed-component")
 const Params = require("@kaspernj/api-maker/src/params")
@@ -37,16 +39,14 @@ export default class CollectionLoader extends React.PureComponent {
     selectColumns: PropTypes.object
   }
 
-  shape = digg(this, "props", "component").shape || digg(this, "props", "component").state
+  shape = digg(this, "props", "component", "shape")
 
   constructor (props) {
     super(props)
 
     let queryName = props.queryName
 
-    if (!queryName) {
-      queryName = digg(props.modelClass.modelClassData(), "collectionKey")
-    }
+    if (!queryName) queryName = digg(props.modelClass.modelClassData(), "collectionKey")
 
     this.shape.set({
       models: undefined,
@@ -66,9 +66,7 @@ export default class CollectionLoader extends React.PureComponent {
     this.loadQParams()
     this.loadModels()
 
-    if (this.props.noRecordsAvailableContent) {
-      this.loadOverallCount()
-    }
+    if (this.props.noRecordsAvailableContent) this.loadOverallCount()
   }
 
   async loadOverallCount () {
@@ -93,8 +91,6 @@ export default class CollectionLoader extends React.PureComponent {
     const {abilities, collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
     const {qParams, queryPageName, queryQName} = digs(this.shape, "qParams", "queryPageName", "queryQName")
 
-    console.log({collection})
-
     let query = collection?.clone() || modelClass
 
     if (groupBy) query = query.groupBy(groupBy)
@@ -115,21 +111,22 @@ export default class CollectionLoader extends React.PureComponent {
     const result = await query.result()
     const models = result.models()
 
-    console.log("CollectionLoader", {abilities, qParams, query, selectColumns, models})
-
-
     if (onModelsLoaded) {
       onModelsLoaded({
         models,
         qParams,
         query,
-        result,
-        showNoRecordsAvailableContent: this.showNoRecordsAvailableContent(),
-        showNoRecordsFoundContent: this.showNoRecordsFoundContent()
+        result
       })
     }
 
-    this.shape.set({query, result, models: result.models()})
+    this.shape.set({
+      query,
+      result,
+      models: result.models(),
+      showNoRecordsAvailableContent: this.showNoRecordsAvailableContent({models}),
+      showNoRecordsFoundContent: this.showNoRecordsFoundContent({models})
+    })
   }
 
   onModelCreated = () => this.loadModels()
@@ -147,9 +144,7 @@ export default class CollectionLoader extends React.PureComponent {
     const updatedModel = digg(args, "model")
     const foundModel = models.find((model) => model.id() == updatedModel.id())
 
-    if (foundModel) {
-      this.loadModelsDebounce()
-    }
+    if (foundModel) this.loadModelsDebounce()
   }
 
   onLocationChanged = () => {
@@ -161,23 +156,22 @@ export default class CollectionLoader extends React.PureComponent {
     this.loadModels()
   }
 
-  showNoRecordsAvailableContent () {
+  showNoRecordsAvailableContent ({models}) {
     const {noRecordsAvailableContent} = this.props
-    const {models, overallCount} = digs(this.shape, "models", "overallCount")
+    const {overallCount} = digs(this.shape, "overallCount")
 
-    if (models === undefined || overallCount === undefined || noRecordsAvailableContent === undefined) return
+    if (models === undefined || overallCount === undefined || noRecordsAvailableContent === undefined) return false
     if (models.length === 0 && overallCount === 0 && noRecordsAvailableContent) return true
   }
 
-  showNoRecordsFoundContent () {
+  showNoRecordsFoundContent ({models}) {
     const {noRecordsAvailableContent, noRecordsFoundContent} = this.props
-    const {models, overallCount} = digs(this.shape, "models", "overallCount")
+    const {overallCount} = digs(this.shape, "overallCount")
 
-    if (models === undefined || noRecordsFoundContent === undefined) return
+    if (models === undefined || noRecordsFoundContent === undefined) return false
 
     // Dont show noRecordsAvailableContent together with noRecordsAvailableContent
-    if (models.length === 0 && overallCount === 0 && noRecordsAvailableContent) return
-
+    if (models.length === 0 && overallCount === 0 && noRecordsAvailableContent) return false
     if (models.length === 0 && noRecordsFoundContent) return true
   }
 
