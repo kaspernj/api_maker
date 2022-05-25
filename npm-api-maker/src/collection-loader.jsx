@@ -1,5 +1,6 @@
 const Collection = require("@kaspernj/api-maker/src/collection")
 const {debounce} = require("debounce")
+const {digg, digs} = require("diggerize")
 const EventCreated = require("@kaspernj/api-maker/src/event-created").default
 const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-name")
 const {LocationChanged} = require("on-location-changed/location-changed-component")
