@@ -185,8 +185,8 @@ export default class CollectionLoader extends React.PureComponent {
         <LocationChanged onChanged={digg(this, "onLocationChanged")} />
         {models && models.map((model) =>
           <React.Fragment key={model.id()}>
-            <EventDestroyed model={model} onDestroyed={this.onModelDestroyed} />
-            <EventUpdated model={model} onUpdated={this.onModelUpdated} />
+            <EventDestroyed model={model} onDestroyed={digg(this, "onModelDestroyed")} />
+            <EventUpdated model={model} onUpdated={digg(this, "onModelUpdated")} />
           </React.Fragment>
         )}
       </>
