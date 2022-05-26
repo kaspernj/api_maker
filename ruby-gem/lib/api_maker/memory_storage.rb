@@ -46,6 +46,20 @@ class ApiMaker::MemoryStorage
   end
 
   def resource_for_model(model_class)
+    # Try to find matching resource from detected resources
+    detected_resource = nil
+    ::Resources.constants.each do |resource_class_name|
+      resource_class = ::Resources.const_get(resource_class_name)
+
+      if resource_class.model_class_name == model_class.name
+        detected_resource = resource_class
+        break
+      end
+    end
+
+    return detected_resource if detected_resource
+
+    # Try to find matching resource by guessing the name and resolving it
     class_name = resource_name_for_model(model_class)
     resource_class = class_name.safe_constantize
 

@@ -6,6 +6,8 @@ export default class ApiMakerTableSettings {
   }
 
   async loadSettings() {
-    const tableSetting = await TableSetting.ransack({identifier: digg(this, "table", "props", "identifier")}).first()
+    console.log({props: this.table.props})
+
+    const tableSetting = await TableSetting.ransack({identifier_eq: digg(this, "table", "props", "identifier")}).first()
   }
 }
