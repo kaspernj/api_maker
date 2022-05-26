@@ -65,6 +65,10 @@ class ApiMaker::BaseResource
     model_class_name.constantize
   end
 
+  def self.model_class_name=(new_model_class_name)
+    @model_class_name = new_model_class_name
+  end
+
   def self.model_class_name
     @model_class_name ||= short_name
   end
