@@ -1,0 +1,42 @@
+{
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  },
+  "name": "api-maker-table",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/kaspernj/api_maker_table.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kaspernj/api_maker_table/issues"
+  },
+  "homepage": "https://github.com/kaspernj/api_maker_table#readme",
+  "dependencies": {
+    "@kaspernj/api-maker": ">= 1.0.138",
+    "@kaspernj/api-maker-bootstrap": ">= 1.0.83",
+    "classnames": ">= 2.3.1",
+    "debounce": ">= 1.2.1",
+    "diggerize": ">= 1.0.4",
+    "set-state-compare": ">= 1.0.15"
+  },
+  "peerDependencies": {
+    "prop-types": ">= 15.7.2",
+    "prop-types-exact": ">= 1.2.0",
+    "react": ">= 16.0.0",
+    "react-router-dom": ">= 6.2.2"
+  }
+}

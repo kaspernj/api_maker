@@ -1,0 +1,1 @@
+class Resources::TableSettingColumnResource < ApiMakerTable::ApplicationResource

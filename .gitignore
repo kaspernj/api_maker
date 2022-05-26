@@ -1,6 +1,7 @@
 npm-api-maker/node_modules
 npm-api-maker-bootstrap/node_modules
 npm-api-maker-inputs/node_modules
+api_maker_table_npm/node_modules
 ruby-gem/.bundle/
 ruby-gem/.env.test.local
 ruby-gem/log/*.log
