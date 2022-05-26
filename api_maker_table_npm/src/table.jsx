@@ -8,11 +8,12 @@ const PropTypes = require("prop-types")
 const React = require("react")
 const {Shape} = require("set-state-compare")
 
-import Card from "./card"
+import Card from "@kaspernj/api-maker-bootstrap/src/card"
 import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
-import ModelRow from "./live-table/model-row"
-import Paginate from "./paginate"
-import SortLink from "./sort-link"
+import ModelRow from "./model-row"
+import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
+import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
+import TableSettings from "./table-settings"
 
 export default class ApiMakerTable extends React.PureComponent {
   static defaultProps = {
@@ -71,8 +72,10 @@ export default class ApiMakerTable extends React.PureComponent {
       queryName = digg(props.modelClass.modelClassData(), "collectionKey")
     }
 
+    const columnsAsArray = this.columnsAsArray()
+
     this.shape = new Shape(this, {
-      columns: this.columnsAsArray(),
+      columns: columnsAsArray,
       models: undefined,
       overallCount: undefined,
       query: undefined,
@@ -84,6 +87,8 @@ export default class ApiMakerTable extends React.PureComponent {
       showNoRecordsAvailableContent: false,
       showNoRecordsFoundContent: false
     })
+    this.tableSettings = new TableSettings({table: this})
+    this.tableSettings.loadSettings()
   }
 
   columnsAsArray () {

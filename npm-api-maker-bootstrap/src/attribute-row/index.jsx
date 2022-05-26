@@ -46,8 +46,6 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
     if ("label" in this.props) return label
     if (attribute && model) return model.constructor.humanAttributeName(attribute)
 
-    console.log({attribute, model})
-
     throw new Error("Couldn't figure out label")
   }
 

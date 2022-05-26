@@ -4,7 +4,7 @@ const {Link} = require("react-router-dom")
 const Money = require("js-money")
 const PropTypes = require("prop-types")
 
-export default class ApiMakerTableModelRow extends React.PureComponent {
+export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
   static propTypes = {
     model: PropTypes.object.isRequired,
     liveTable: PropTypes.object.isRequired
@@ -29,7 +29,7 @@ export default class ApiMakerTableModelRow extends React.PureComponent {
         {!columns && columnsContent && columnsContent(this.modelCallbackArgs)}
         <td className="actions-column text-end text-nowrap text-right">
           {actionsContent && actionsContent(this.modelCallbackArgs)}
-          {viewModelPath &&
+          {viewPath &&
             <Link className="view-button" to={viewPath}>
               <i className="fa fa-search la la-search" />
             </Link>
@@ -129,7 +129,7 @@ export default class ApiMakerTableModelRow extends React.PureComponent {
   presentColumnValue (value) {
     if (value instanceof Date) {
       return I18n.l("time.formats.default", value)
-    } else if (value instanceof Money) {
+    } else if (MoneyFormatter.isMoney(value)) {
       return MoneyFormatter.format(value)
     } else if (typeof value == "boolean") {
       if (value) {
