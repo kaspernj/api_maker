@@ -15,7 +15,7 @@ class Resources::TableSettingResource < ApiMaker::BaseResource
       :identifier,
       :user_id,
       :user_type,
-      columns_attributes: [:attribute_name, :id, :identifier, :path, :position, :sort_key]
+      columns_attributes: [:attribute_name, :id, :identifier, :path, :position, :sort_key, :visible]
     )
   end
 end

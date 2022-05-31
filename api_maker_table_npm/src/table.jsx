@@ -49,7 +49,6 @@ export default class ApiMakerTable extends React.PureComponent {
     filterContent: PropTypes.func,
     filterSubmitLabel: PropTypes.node,
     groupBy: PropTypes.array,
-    headersContent: PropTypes.func,
     header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     identifier: PropTypes.string.isRequired,
     modelClass: PropTypes.func.isRequired,
@@ -80,6 +79,7 @@ export default class ApiMakerTable extends React.PureComponent {
       columns: columnsAsArray,
       models: undefined,
       overallCount: undefined,
+      preparedColumns: undefined,
       query: undefined,
       queryName,
       queryQName: `${queryName}_q`,
@@ -89,14 +89,22 @@ export default class ApiMakerTable extends React.PureComponent {
       showNoRecordsAvailableContent: false,
       showNoRecordsFoundContent: false
     })
-    this.tableSettings = new TableSettings({table: this})
-    this.tableSettings.loadSettings()
+
+    this.loadTableSetting()
   }
 
-  columnsAsArray () {
-    if (typeof this.props.columns == "function") {
-      return this.props.columns()
-    }
+  async loadTableSetting() {
+    this.tableSettings = new TableSettings({table: this})
+
+    const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
+
+    this.shape.set({
+      preparedColumns: this.tableSettings.preparedColumns(tableSetting)
+    })
+  }
+
+  columnsAsArray = () => {
+    if (typeof this.props.columns == "function") return this.props.columns()
 
     return this.props.columns
   }
@@ -215,7 +223,6 @@ export default class ApiMakerTable extends React.PureComponent {
       filterSubmitButton,
       filterSubmitLabel,
       groupBy,
-      headersContent,
       header,
       identifier,
       modelClass,
@@ -314,8 +321,7 @@ export default class ApiMakerTable extends React.PureComponent {
       <>
         <thead>
           <tr>
-            {this.shape.columns && this.headersContentFromColumns()}
-            {this.props.headersContent && this.props.headersContent({query})}
+            {this.headersContentFromColumns()}
             <th />
           </tr>
         </thead>
@@ -338,18 +344,18 @@ export default class ApiMakerTable extends React.PureComponent {
   }
 
   headersContentFromColumns () {
-    const {columns} = digs(this.shape, "columns")
+    const {preparedColumns, query} = digs(this.shape, "preparedColumns", "query")
 
-    return columns.map((column) =>
+    return preparedColumns?.map(({column, tableSettingColumn}) =>
       <th
         className={classNames(...this.headerClassNameForColumn(column))}
-        data-identifier={this.identifierForColumn(column)}
-        key={this.identifierForColumn(column)}
+        data-identifier={tableSettingColumn.identifier()}
+        key={tableSettingColumn.identifier()}
       >
-        {column.sortKey && this.shape.query &&
-          <SortLink attribute={column.sortKey} query={this.shape.query} title={this.headerLabelForColumn(column)} />
+        {tableSettingColumn.hasSortKey() && query &&
+          <SortLink attribute={tableSettingColumn.sortKey()} query={query} title={this.headerLabelForColumn(column)} />
         }
-        {(!column.sortKey || !this.shape.query) &&
+        {(!tableSettingColumn.hasSortKey() || !query) &&
           this.headerLabelForColumn(column)
         }
       </th>

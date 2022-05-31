@@ -61,9 +61,11 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
   }
 
   columnsContentFromColumns (model) {
-    const {columns} = digs(this.props.liveTable.shape, "columns")
+    const {preparedColumns} = digs(this.props.liveTable.shape, "preparedColumns")
 
-    return columns.map((column) =>
+    console.log({preparedColumns})
+
+    return preparedColumns?.map(({column}) =>
       <td
         className={classNames(this.columnClassNamesForColumn(column))}
         data-identifier={this.props.liveTable.identifierForColumn(column)}
