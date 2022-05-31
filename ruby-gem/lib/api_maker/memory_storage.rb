@@ -6,39 +6,25 @@ class ApiMaker::MemoryStorage
   end
 
   def initialize
-    reset
-  end
-
-  def reset
     @model_class_for_data = {}
     @resources_loaded = false
     @storage = {}
   end
 
   def storage_for(klass, mode)
-    @storage.dig(klass, mode) || {}
+    @storage.dig(klass.name, mode) || {}
   end
 
   def add(klass, mode, data, args = {})
-    @storage[klass] ||= {}
-    @storage[klass][mode] ||= {}
-    @storage[klass][mode][data] = {data: data, args: args} unless @storage[klass][mode].key?(data)
+    klass_name = klass.name
+
+    @storage[klass_name] ||= {}
+    @storage[klass_name][mode] ||= {}
+    @storage[klass_name][mode][data] = {data: data, args: args} unless @storage[klass_name][mode].key?(data)
   end
 
   def load_all_resources
-    resources_path = Rails.root.join("app/api_maker/resources")
-
-    Dir.foreach(resources_path) do |file|
-      match = file.match(/\A((.+)_resource)\.rb\Z/)
-      next unless match
-
-      resource_name = match[1]
-      resource_class_name = "Resources::#{resource_name.camelize}"
-
-      # Load the resource by constantizing it to support auto loading
-      resource_class_name.safe_constantize
-    end
-
+    ApiMaker::ModelsFinderService.execute!
     @resources_loaded = true
   end
 
