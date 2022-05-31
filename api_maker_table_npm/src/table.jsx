@@ -97,10 +97,9 @@ export default class ApiMakerTable extends React.PureComponent {
     this.tableSettings = new TableSettings({table: this})
 
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
+    const preparedColumns = this.tableSettings.preparedColumns(tableSetting)
 
-    this.shape.set({
-      preparedColumns: this.tableSettings.preparedColumns(tableSetting)
-    })
+    this.shape.set({preparedColumns})
   }
 
   columnsAsArray = () => {
@@ -315,7 +314,7 @@ export default class ApiMakerTable extends React.PureComponent {
   }
 
   tableContent () {
-    const {query, models} = this.shape
+    const {models, preparedColumns} = digs(this.shape, "models", "preparedColumns")
 
     return (
       <>
@@ -327,7 +326,7 @@ export default class ApiMakerTable extends React.PureComponent {
         </thead>
         <tbody>
           {models.map((model) =>
-            <ModelRow key={model.id()} liveTable={this} model={model} />
+            <ModelRow key={model.id()} liveTable={this} model={model} preparedColumns={preparedColumns} />
           )}
         </tbody>
       </>

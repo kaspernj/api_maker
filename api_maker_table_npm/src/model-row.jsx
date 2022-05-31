@@ -7,7 +7,8 @@ const PropTypes = require("prop-types")
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
   static propTypes = {
     model: PropTypes.object.isRequired,
-    liveTable: PropTypes.object.isRequired
+    liveTable: PropTypes.object.isRequired,
+    preparedColumns: PropTypes.array
   }
 
   modelCallbackArgs = this._modelCallbackArgs()
@@ -61,7 +62,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
   }
 
   columnsContentFromColumns (model) {
-    const {preparedColumns} = digs(this.props.liveTable.shape, "preparedColumns")
+    const {preparedColumns} = digs(this.props, "preparedColumns")
 
     return preparedColumns?.map(({column, tableSettingColumn}) => tableSettingColumn.visible() &&
       <td

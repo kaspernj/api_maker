@@ -30,13 +30,13 @@ export default class ApiMakerTableSettings {
 
   orderedTableSettingColumns = (tableSetting) => {
     return tableSetting
-      ?.columns()
-      ?.loaded()
-      ?.sort((tableSettingColumn1, tableSettingColumn2) => tableSettingColumn1.position() - tableSettingColumn2.position())
+      .columns()
+      .loaded()
+      .sort((tableSettingColumn1, tableSettingColumn2) => tableSettingColumn1.position() - tableSettingColumn2.position())
   }
 
   loadExistingOrCreateTableSettings = async () => {
-    let tableSetting = await this.loadSettings()
+    let tableSetting = await this.loadTableSetting()
 
     if (tableSetting) {
       tableSetting = await this.updateTableSetting(tableSetting)
@@ -47,7 +47,7 @@ export default class ApiMakerTableSettings {
     return tableSetting
   }
 
-  loadSettings = async () => {
+  loadTableSetting = async () => {
     const tableSetting = await TableSetting
       .ransack({
         identifier_eq: this.identifier(),
@@ -82,6 +82,10 @@ export default class ApiMakerTableSettings {
     const tableSettingFormData = objectToFormData({table_setting: tableSettingData})
 
     await tableSetting.saveRaw(tableSettingFormData)
+
+    const reloadedTableSetting = await this.loadTableSetting()
+
+    return reloadedTableSetting
   }
 
   columnSaveData(column, {identifier, position}) {

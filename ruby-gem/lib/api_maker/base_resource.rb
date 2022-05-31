@@ -1,6 +1,7 @@
 class ApiMaker::BaseResource
   ApiMaker::IncludeHelpers.execute!(klass: self)
 
+  attr_writer :model_class_name
   attr_reader :ability, :api_maker_args, :locals, :model
 
   delegate :can, :can?, allow_nil: true, to: :ability
@@ -63,10 +64,6 @@ class ApiMaker::BaseResource
   def self.model_class
     # Use the name to constantize to avoid reloading issues with Rails
     model_class_name.constantize
-  end
-
-  def self.model_class_name=(new_model_class_name)
-    @model_class_name = new_model_class_name
   end
 
   def self.model_class_name
