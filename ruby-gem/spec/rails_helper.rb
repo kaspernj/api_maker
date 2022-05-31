@@ -120,6 +120,7 @@ RSpec.configure do |config|
   end
 
   config.before do
+    ApiMaker::MemoryStorage.current.reset
     Capybara.reset_sessions!
     Warden.test_reset!
   end
