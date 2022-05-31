@@ -20,6 +20,7 @@ private
 
       path_name = model_path.gsub(/\A#{Regexp.escape(Rails.root.to_s)}\/app\/api_maker\/resources\//, "").gsub(/\.rb\Z/, "")
       next if path_name == "application_resource"
+      next unless path_name.end_with?("_resource")
 
       resource_class_name = path_name.classify.to_sym
       resource_class = "Resources::#{resource_class_name}".constantize
