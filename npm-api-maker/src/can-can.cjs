@@ -33,7 +33,7 @@ module.exports = class ApiMakerCanCan {
         subjectLabel = digg(subject.modelClassData(), "name")
       }
 
-      console.error(`Ability not loaded ${subjectLabel}#${abilityToUse}`)
+      console.error(`Ability not loaded ${subjectLabel}#${abilityToUse}`, {abilities: this.abilities, ability, subject})
 
       return false
     } else {
@@ -42,7 +42,26 @@ module.exports = class ApiMakerCanCan {
   }
 
   findAbility (ability, subject) {
-    return this.abilities.find((abilityData) => digg(abilityData, "subject") == subject && digg(abilityData, "ability") == ability)
+    return this.abilities.find((abilityData) => {
+      const abilityDataSubject = digg(abilityData, "subject")
+      const abilityDataAbility = digg(abilityData, "ability")
+
+      // If actually same class
+      if (abilityDataSubject == subject && abilityDataAbility == ability) return true
+
+      // Sometimes in dev when using linking it will actually be two different but identical resource classes
+      if (
+        typeof subject == "function" &&
+        subject.modelClassData &&
+        typeof abilityDataSubject == "function" &&
+        abilityDataSubject.modelClassData &&
+        digg(subject.modelClassData(), "name") == digg(abilityDataSubject.modelClassData(), "name")
+      ) {
+        return true
+      }
+
+      return false
+    })
   }
 
   isAbilityLoaded (ability, subject) {

@@ -1,21 +1,25 @@
-import {digg, digs} from "diggerize"
+import columnIdentifier from "@kaspernj/api-maker-table/src/column-identifier"
+import {digg} from "diggerize"
 import {serialize as objectToFormData} from "object-to-formdata"
 import {TableSetting} from "@kaspernj/api-maker/src/models"
 
 export default class ApiMakerTableSettings {
   constructor({table}) {
     this.table = table
-    this.columns = digg(table, "props", "columns")
-    this.identifier = digg(table, "props", "identifier")
   }
 
-  async loadSettings() {
-    console.log({props: this.table.props})
+  columns = () => digg(this, "table", "props", "columns")()
+  currentUser = () => digg(this, "table", "props", "currentUser")
+  identifier = () => digg(this, "table", "props", "identifier")
 
-    const {identifier} = digs(this, "identifier")
+  async loadSettings() {
     const tableSetting = await TableSetting
-      .ransack({identifier_eq: identifier})
-      .preload("table_setting_columns")
+      .ransack({
+        identifier_eq: this.identifier(),
+        user_id_eq: this.currentUser().id(),
+        user_type_eq: digg(this.currentUser().modelClassData(), "name")
+      })
+      .preload("columns")
       .first()
 
     if (tableSetting) {
@@ -26,17 +30,29 @@ export default class ApiMakerTableSettings {
   }
 
   async createInitialTableSetting() {
-    const {columns, identifier} = digs(this, "columns", "identifier")
     const tableSettingData = {
-      identifier,
-      table_setting_columns_attributes: {}
+      identifier: this.identifier(),
+      user_id: this.currentUser().id(),
+      user_type: digg(this.currentUser().modelClassData(), "name"),
+      columns_attributes: {}
     }
+
+    const columns = this.columns()
+
+    console.log({columns})
 
     for (const columnKey in columns) {
       const column = digg(columns, columnKey)
-      const columnData = {}
+      const identifier = columnIdentifier(column)
+      const columnData = {
+        attribute_name: column.attribute,
+        identifier,
+        path: column.path,
+        position: columnKey,
+        sort_key: column.sortKey
+      }
 
-      tableSettingData.table_setting_columns_attributes[columnKey] = columnData
+      tableSettingData.columns_attributes[columnKey] = columnData
     }
 
     console.log({tableSettingData})

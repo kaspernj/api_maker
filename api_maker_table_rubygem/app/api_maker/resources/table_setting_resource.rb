@@ -1,13 +1,21 @@
 class Resources::TableSettingResource < ApiMaker::BaseResource
   self.model_class_name = "ApiMakerTable::TableSetting"
 
-  attributes :id
+  attributes :id, :identifier
+  relationships :columns
 
   def abilities
-    can READ, ApiMakerTable::TableSetting, user_id: current_user.id, user_type: current_user.class.name
+    puts "Allow creating table for: #{{user_id: current_user.id, user_type: current_user.class.name}}"
+
+    can CRUD, ApiMakerTable::TableSetting, user_id: current_user.id, user_type: current_user.class.name if current_user
   end
 
   def permitted_params(arg)
-    arg.params.require(:table_setting).permit(:identifier)
+    arg.params.require(:table_setting).permit(
+      :identifier,
+      :user_id,
+      :user_type,
+      columns_attributes: [:attribute_name, :id, :identifier, :path, :position, :sort_key]
+    )
   end
 end

@@ -2,4 +2,6 @@ class ApiMakerTable::TableSetting < ApiMakerTable::ApplicationRecord
   self.table_name = "table_settings"
 
   has_many :columns, class_name: "ApiMakerTable::TableSettingColumn"
+
+  accepts_nested_attributes_for :columns, allow_destroy: true
 end
