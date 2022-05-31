@@ -1,6 +1,6 @@
 class ApiMaker::Loader
   def self.load_resources
-    load_dir(Rails.root.join("app/api_maker/resources"))
+    ApiMaker::ModelsFinderService.execute!
   end
 
   def self.load_models
