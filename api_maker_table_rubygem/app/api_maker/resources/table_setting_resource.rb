@@ -6,4 +6,8 @@ class Resources::TableSettingResource < ApiMaker::BaseResource
   def abilities
     can READ, ApiMakerTable::TableSetting, user_id: current_user.id, user_type: current_user.class.name
   end
+
+  def permitted_params(arg)
+    arg.params.require(:table_setting).permit(:identifier)
+  end
 end
