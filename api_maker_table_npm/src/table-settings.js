@@ -25,8 +25,6 @@ export default class ApiMakerTableSettings {
       result.push({column, tableSettingColumn})
     }
 
-    console.log({result, ordered})
-
     return result
   }
 
@@ -41,10 +39,8 @@ export default class ApiMakerTableSettings {
     let tableSetting = await this.loadSettings()
 
     if (tableSetting) {
-      console.log("Update table")
       tableSetting = await this.updateTableSetting(tableSetting)
     } else {
-      console.log("Add table setting")
       tableSetting = await this.createInitialTableSetting()
     }
 
@@ -118,7 +114,6 @@ export default class ApiMakerTableSettings {
     let changed = false
 
     // Add missing columns
-    console.log("Adding missing columns")
     for (const column of columns) {
       const identifier = columnIdentifier(column)
       const tableSettingColumn = tableSetting.columns().loaded().find((tableSettingColumn) => tableSettingColumn.identifier() == identifier)
@@ -138,9 +133,25 @@ export default class ApiMakerTableSettings {
       }
     }
 
-    const tableSettingFormData = objectToFormData({table_setting: tableSettingData})
+    for (const tableSettingColumn of tableSetting.columns().loaded()) {
+      const column = columns.find((column) => columnIdentifier(column) == tableSettingColumn.identifier())
+
+      if (column) {
+        // Update column if changed
+      } else {
+        // Removed saved columns no longer found
+        const columnKey = ++columnsKeyCount
+
+        columnsData[columnKey] = {
+          id: tableSettingColumn.id(),
+          _destroy: true
+        }
+      }
+    }
 
     if (changed) {
+      const tableSettingFormData = objectToFormData({table_setting: tableSettingData})
+
       await tableSetting.saveRaw(tableSettingFormData)
 
       // Maybe not necessary?
