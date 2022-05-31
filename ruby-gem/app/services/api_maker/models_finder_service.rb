@@ -31,6 +31,7 @@ private
     ::Resources.constants.each do |resource_class_name|
       next if resources_found.include?(resource_class_name)
       next if resource_class_name == :ApplicationResource
+      next unless resource_class_name.to_s.end_with?("Resource")
 
       resources_found[resource_class_name] = ::Resources.const_get(resource_class_name)
     end
