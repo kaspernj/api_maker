@@ -6,6 +6,10 @@ class ApiMaker::MemoryStorage
   end
 
   def initialize
+    reset
+  end
+
+  def reset
     @model_class_for_data = {}
     @storage = {}
   end
@@ -38,7 +42,7 @@ class ApiMaker::MemoryStorage
   end
 
   def resources_loaded?
-    @resources_loaded
+    !!@resources_loaded
   end
 
   def model_class_for(resource:, klass:)
