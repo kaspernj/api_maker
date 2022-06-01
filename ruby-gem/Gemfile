@@ -14,6 +14,6 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-group :test do
-  gem "api_maker_table", path: "/home/dev/Development/api_maker/api_maker_table_rubygem"
-end
+# group :test do
+#   gem "api_maker_table", path: "/home/dev/Development/api_maker/api_maker_table_rubygem"
+# end
