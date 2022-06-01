@@ -7,33 +7,24 @@ class ApiMaker::MemoryStorage
 
   def initialize
     @model_class_for_data = {}
+    @resources_loaded = false
     @storage = {}
   end
 
   def storage_for(klass, mode)
-    @storage.dig(klass, mode) || {}
+    @storage.dig(klass.name, mode) || {}
   end
 
   def add(klass, mode, data, args = {})
-    @storage[klass] ||= {}
-    @storage[klass][mode] ||= {}
-    @storage[klass][mode][data] = {data: data, args: args} unless @storage[klass][mode].key?(data)
+    klass_name = klass.name
+
+    @storage[klass_name] ||= {}
+    @storage[klass_name][mode] ||= {}
+    @storage[klass_name][mode][data] = {data: data, args: args} unless @storage[klass_name][mode].key?(data)
   end
 
   def load_all_resources
-    resources_path = Rails.root.join("app/api_maker/resources")
-
-    Dir.foreach(resources_path) do |file|
-      match = file.match(/\A((.+)_resource)\.rb\Z/)
-      next unless match
-
-      resource_name = match[1]
-      resource_class_name = "Resources::#{resource_name.camelize}"
-
-      # Load the resource by constantizing it to support auto loading
-      resource_class_name.safe_constantize
-    end
-
+    ApiMaker::ModelsFinderService.execute!
     @resources_loaded = true
   end
 
@@ -46,6 +37,20 @@ class ApiMaker::MemoryStorage
   end
 
   def resource_for_model(model_class)
+    # Try to find matching resource from detected resources
+    detected_resource = nil
+    ::Resources.constants.each do |resource_class_name|
+      resource_class = ::Resources.const_get(resource_class_name)
+
+      if resource_class.model_class_name == model_class.name
+        detected_resource = resource_class
+        break
+      end
+    end
+
+    return detected_resource if detected_resource
+
+    # Try to find matching resource by guessing the name and resolving it
     class_name = resource_name_for_model(model_class)
     resource_class = class_name.safe_constantize
 

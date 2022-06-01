@@ -329,7 +329,9 @@ class BaseModel {
   static humanAttributeName (attributeName) {
     const keyName = digg(this.modelClassData(), "i18nKey")
 
-    return shared.i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`, {defaultValue: attributeName})
+    if (shared.i18n) return shared.i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`, {defaultValue: attributeName})
+
+    return inflection.humanize(attributeName)
   }
 
   isAttributeChanged (attributeName) {
@@ -783,7 +785,10 @@ class BaseModel {
       const relationshipClassData = relationships.find((relationship) => digg(relationship, "name") == relationshipName)
 
       if (!relationshipClassData) {
-        throw new Error(`Could not find the relation ${relationshipName} on the ${digg(this.modelClassData(), "name")} model`)
+        const modelName = digg(this.modelClassData(), "name")
+        const relationshipsList = relationships.map((relationship) => relationship.name).join(", ")
+
+        throw new Error(`Could not find the relation ${relationshipName} on the ${modelName} model: ${relationshipsList}`)
       }
 
       const relationshipType = digg(relationshipClassData, "collectionName")
