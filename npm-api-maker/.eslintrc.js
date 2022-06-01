@@ -317,6 +317,7 @@ module.exports = {
     "jest/consistent-test-it": "off",
     "jest/prefer-called-with": "off",
     "jest/prefer-expect-assertions": "off",
+    "jest/prefer-hooks-in-order": "error",
     "jest/prefer-strict-equal": "off",
     "no-shadow": "off",
     "jest/prefer-to-have-length": "off",
