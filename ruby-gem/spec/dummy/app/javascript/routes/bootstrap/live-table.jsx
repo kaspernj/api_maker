@@ -1,5 +1,6 @@
 import ApiMakerTable from "@kaspernj/api-maker-table/src/table"
 import ApplicationHistory from "shared/application-history"
+import Devise from "@kaspernj/api-maker/src/devise"
 import { digs } from "diggerize"
 import Input from "@kaspernj/api-maker-bootstrap/src/input"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
@@ -35,6 +36,7 @@ export default class BootstrapLiveTable extends React.PureComponent {
         <ApiMakerTable
           appHistory={ApplicationHistory}
           columnsContent={this.columnsContent}
+          currentUser={Devise.currentUser()}
           defaultParams={{s: "name asc"}}
           filterContent={this.filterContent}
           headersContent={this.headersContent}

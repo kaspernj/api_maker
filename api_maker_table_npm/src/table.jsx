@@ -52,7 +52,7 @@ export default class ApiMakerTable extends React.PureComponent {
     filterSubmitLabel: PropTypes.node,
     groupBy: PropTypes.array,
     header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-    identifier: PropTypes.string.isRequired,
+    identifier: PropTypes.string,
     modelClass: PropTypes.func.isRequired,
     noRecordsAvailableContent: PropTypes.func,
     noRecordsFoundContent: PropTypes.func,
@@ -71,16 +71,16 @@ export default class ApiMakerTable extends React.PureComponent {
   constructor (props) {
     super(props)
 
+    const collectionKey = digg(props.modelClass.modelClassData(), "collectionKey")
     let queryName = props.queryName
 
-    if (!queryName) {
-      queryName = digg(props.modelClass.modelClassData(), "collectionKey")
-    }
+    if (!queryName) queryName = collectionKey
 
     const columnsAsArray = this.columnsAsArray()
 
     this.shape = new Shape(this, {
       columns: columnsAsArray,
+      identifier: this.props.identifier || `${collectionKey}-default`,
       models: undefined,
       overallCount: undefined,
       preparedColumns: undefined,
