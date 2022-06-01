@@ -1,7 +1,7 @@
+import ApiMakerTable from "@kaspernj/api-maker-table/src/table"
 import ApplicationHistory from "shared/application-history"
 import { digs } from "diggerize"
 import Input from "@kaspernj/api-maker-bootstrap/src/input"
-import LiveTable from "@kaspernj/api-maker-bootstrap/src/live-table"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 
 export default class BootstrapLiveTable extends React.PureComponent {
@@ -32,7 +32,7 @@ export default class BootstrapLiveTable extends React.PureComponent {
 
     return (
       <Layout>
-        <LiveTable
+        <ApiMakerTable
           appHistory={ApplicationHistory}
           columnsContent={this.columnsContent}
           defaultParams={{s: "name asc"}}

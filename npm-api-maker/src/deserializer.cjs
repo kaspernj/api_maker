@@ -8,8 +8,16 @@ module.exports = class ApiMakerDeserializer {
     if (Array.isArray(object)) {
       return object.map((value) => ApiMakerDeserializer.parse(value))
     } else if (object && typeof object == "object") {
-      if (object.api_maker_type == "date" || object.api_maker_type == "time") {
+      if (object.api_maker_type == "date") {
         const date = new Date(digg(object, "value"))
+
+        date.apiMakerType = "date"
+
+        return date
+      } else if (object.api_maker_type == "time") {
+        const date = new Date(digg(object, "value"))
+
+        date.apiMakerType = "time"
 
         return date
       } else if (object.api_maker_type == "collection") {

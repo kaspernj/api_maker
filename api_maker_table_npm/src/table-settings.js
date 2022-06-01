@@ -48,6 +48,8 @@ export default class ApiMakerTableSettings {
   }
 
   loadTableSetting = async () => {
+    if (!TableSetting) throw new Error("TableSetting model couldn't be imported")
+
     const tableSetting = await TableSetting
       .ransack({
         identifier_eq: this.identifier(),
