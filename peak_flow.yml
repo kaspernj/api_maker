@@ -7,13 +7,18 @@ before_script:
   - cd npm-api-maker-inputs && yarn link @kaspernj/api-maker
   - cd npm-api-maker-inputs && yarn link
   - cd npm-api-maker-bootstrap && yarn install --network-timeout 120000
-  - cd npm-api-maker-inputs && yarn link @kaspernj/api-maker
-  - cd npm-api-maker-inputs && yarn link @kaspernj/api-maker-inputs
+  - cd npm-api-maker-bootstrap && yarn link @kaspernj/api-maker
+  - cd npm-api-maker-bootstrap && yarn link @kaspernj/api-maker-inputs
   - cd npm-api-maker-bootstrap && yarn link
+  - cd api_maker_table_npm && yarn install --network-timeout 120000
+  - cd api_maker_table_npm && yarn link @kaspernj/api-maker
+  - cd api_maker_table_npm && yarn link @kaspernj/api-maker-bootstrap
+  - cd api_maker_table_npm && yarn link
   - cd ruby-gem/spec/dummy && yarn install --network-timeout 120000
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-bootstrap
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-inputs
+  - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-table
   - cd ruby-gem && bundle install --jobs 4 --without production staging
   - cd ruby-gem && bundle exec appraisal install
   - cd ruby-gem && bundle exec appraisal bundle
@@ -52,24 +57,28 @@ builds:
       RUBY_VERSION: 2.7.4
     name: Chrome Kaminari Ruby 2.7.4
     script:
+      - cd ruby-gem/spec/dummy && bin/webpack
       - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
   build_6:
     environment:
       RUBY_VERSION: 3.0.3
     name: Chrome Kaminari Ruby 3.0.3
     script:
+      - cd ruby-gem/spec/dummy && bin/webpack
       - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
   build_7:
     environment:
       RUBY_VERSION: 2.7.4
     name: Chrome WillPaginate Ruby 2.7.4
     script:
+      - cd ruby-gem/spec/dummy && bin/webpack
       - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_8:
     environment:
       RUBY_VERSION: 3.0.3
     name: Chrome WillPaginate Ruby 3.0.3
     script:
+      - cd ruby-gem/spec/dummy && bin/webpack
       - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_9:
     name: Firefox Kaminari Ruby 2.7.4
@@ -77,6 +86,7 @@ builds:
       RUBY_VERSION: 2.7.4
       SELENIUM_DRIVER: firefox
     script:
+      - cd ruby-gem/spec/dummy && bin/webpack
       - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
   build_10:
     name: Firefox Kaminari Ruby 3.0.3
@@ -84,6 +94,7 @@ builds:
       RUBY_VERSION: 3.0.3
       SELENIUM_DRIVER: firefox
     script:
+      - cd ruby-gem/spec/dummy && bin/webpack
       - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
   build_11:
     name: Firefox WillPaginate Ruby 2.7.4
@@ -91,6 +102,7 @@ builds:
       RUBY_VERSION: 2.7.4
       SELENIUM_DRIVER: firefox
     script:
+      - cd ruby-gem/spec/dummy && bin/webpack
       - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_12:
     name: Firefox WillPaginate Ruby 3.0.3
@@ -98,6 +110,7 @@ builds:
       RUBY_VERSION: 3.0.3
       SELENIUM_DRIVER: firefox
     script:
+      - cd ruby-gem/spec/dummy && bin/webpack
       - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_13:
     name: NPM API maker Jest

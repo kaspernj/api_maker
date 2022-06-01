@@ -80,6 +80,7 @@ module.exports = {
     "jest/prefer-comparison-matcher": "error",
     "jest/prefer-expect-assertions": "error",
     "jest/prefer-expect-resolves": "error",
+    "jest/prefer-hooks-in-order": "error",
     "jest/prefer-hooks-on-top": "error",
     "jest/prefer-lowercase-title": "error",
     "jest/prefer-equality-matcher": "error",

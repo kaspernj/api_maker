@@ -10,7 +10,7 @@ export default class ApiMakerTableSettings {
 
   columns = () => digg(this, "table", "columnsAsArray")()
   currentUser = () => digg(this, "table", "props", "currentUser")
-  identifier = () => digg(this, "table", "props", "identifier")
+  identifier = () => digg(this, "table", "shape", "identifier")
 
   preparedColumns = (tableSetting) => {
     const columns = this.table.columnsAsArray()
@@ -48,6 +48,8 @@ export default class ApiMakerTableSettings {
   }
 
   loadTableSetting = async () => {
+    if (!TableSetting) throw new Error("TableSetting model couldn't be imported")
+
     const tableSetting = await TableSetting
       .ransack({
         identifier_eq: this.identifier(),

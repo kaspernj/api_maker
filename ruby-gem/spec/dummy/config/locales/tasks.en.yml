@@ -4,3 +4,6 @@ en:
       task:
         created_at: Created at
         finished: Finished
+        id: ID
+        name: Name
+        state: State

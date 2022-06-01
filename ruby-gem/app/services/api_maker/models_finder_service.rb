@@ -16,9 +16,12 @@ private
 
   def find_resources_from_files
     files.each do |model_path|
-      next unless model_path.start_with?(Rails.root.to_s)
+      path_name_match = model_path.match(/app\/api_maker\/resources\/(.+)\.rb\Z/)
 
-      path_name = model_path.gsub(/\A#{Regexp.escape(Rails.root.to_s)}\/app\/api_maker\/resources\//, "").gsub(/\.rb\Z/, "")
+      raise "Could not match model path: #{model_path}" unless path_name_match
+
+      path_name = path_name_match[1]
+
       next if path_name == "application_resource"
       next unless path_name.end_with?("_resource")
 
@@ -38,7 +41,17 @@ private
     end
   end
 
+  def paths
+    @paths ||= [Rails.root.to_s] + Gem::Specification.map(&:gem_dir)
+  end
+
   def files
-    @files ||= Dir.glob(Rails.root.join("app/api_maker/resources/**/*_resource.rb"))
+    @files ||= begin
+      files = []
+      paths.each do |path|
+        files += Dir.glob("#{path}/app/api_maker/resources/**/*_resource.rb")
+      end
+      files
+    end
   end
 end
