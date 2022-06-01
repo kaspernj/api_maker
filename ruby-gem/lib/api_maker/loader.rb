@@ -17,7 +17,7 @@ class ApiMaker::Loader
     end
   end
 
-  def self.load_dir(dir, constantize: false)
+  def self.load_dir(dir)
     @dirs_loaded ||= {}
 
     return if @dirs_loaded.key?(dir)

@@ -9,7 +9,6 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
       @model.assign_attributes(sanitized_parameters)
 
       if !current_ability.can?(:create, model)
-        binding.pry
         failure_response(errors: ["No access to create #{model_class.name}"])
       elsif model.save
         success_response
