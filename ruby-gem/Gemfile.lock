@@ -11,12 +11,6 @@ PATH
       service_pattern (>= 1.0.5)
       waitutil
 
-PATH
-  remote: /home/dev/Development/api_maker/api_maker_table_rubygem
-  specs:
-    api_maker_table (0.1.1)
-      rails (>= 6.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -86,6 +80,8 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    api_maker_table (0.1.1)
+      rails (>= 6.0.0)
     appraisal (2.4.1)
       bundler
       rake
@@ -356,7 +352,7 @@ PLATFORMS
 
 DEPENDENCIES
   api_maker!
-  api_maker_table!
+  api_maker_table (>= 0.1.1)
   appraisal
   awesome_translations (>= 0.0.62)
   best_practice_project
