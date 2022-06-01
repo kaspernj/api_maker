@@ -69,7 +69,12 @@ Dir[File.join(__dir__, "support", "**", "*.rb")].sort.each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 # ActiveRecord::Migration.maintain_test_schema!
 
-Capybara.default_max_wait_time = 5
+if ENV["CI"]
+  Capybara.default_max_wait_time = 15
+else
+  Capybara.default_max_wait_time = 5
+end
+
 Capybara.server = :puma, {Silent: true}
 
 RSpec.configure do |config|
