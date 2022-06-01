@@ -64,6 +64,8 @@ export default class ApiMakerTable extends React.PureComponent {
     viewModelPath: PropTypes.func
   }
 
+  filterFormRef = React.createRef()
+
   constructor (props) {
     super(props)
 
@@ -290,15 +292,15 @@ export default class ApiMakerTable extends React.PureComponent {
   }
 
   filterForm = () => {
-    const {submitFilterDebounce} = digs(this, "submitFilterDebounce")
+    const {filterFormRef, submitFilter, submitFilterDebounce} = digs(this, "filterFormRef", "submitFilter", "submitFilterDebounce")
     const {filterContent, filterSubmitButton} = digs(this.props, "filterContent", "filterSubmitButton")
     const {filterSubmitLabel} = this.props
     const {qParams} = digs(this.shape, "qParams")
 
     return (
-      <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref="filterForm">
+      <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref={filterFormRef}>
         {filterContent({
-          onFilterChanged: this.submitFilter,
+          onFilterChanged: submitFilter,
           onFilterChangedWithDelay: submitFilterDebounce,
           qParams
         })}
@@ -400,11 +402,13 @@ export default class ApiMakerTable extends React.PureComponent {
   }
 
   submitFilter = () => {
+    const {filterFormRef} = digs(this, "filterFormRef")
+    const filterForm = digg(filterFormRef, "current")
     const {appHistory} = this.props
-    const qParams = Params.serializeForm(this.refs.filterForm)
+    const qParams = Params.serializeForm(filterForm)
     const {queryQName} = this.shape
-
     const changeParamsParams = {}
+
     changeParamsParams[queryQName] = qParams
 
     Params.changeParams(changeParamsParams, {appHistory})
