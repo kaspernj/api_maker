@@ -70,7 +70,7 @@ Dir[File.join(__dir__, "support", "**", "*.rb")].sort.each { |f| require f }
 # ActiveRecord::Migration.maintain_test_schema!
 
 if ENV["CI"]
-  Capybara.default_max_wait_time = 15
+  Capybara.default_max_wait_time = 20
 else
   Capybara.default_max_wait_time = 5
 end
