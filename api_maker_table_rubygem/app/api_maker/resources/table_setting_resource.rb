@@ -5,8 +5,6 @@ class Resources::TableSettingResource < ApiMaker::BaseResource
   relationships :columns
 
   def abilities
-    puts "Allow creating table for: #{{user_id: current_user.id, user_type: current_user.class.name}}"
-
     can CRUD, ApiMakerTable::TableSetting, user_id: current_user.id, user_type: current_user.class.name if current_user
   end
 
