@@ -6,13 +6,58 @@ en:
         name: Name
         illegal: Illegal
         public: Public
-      task:
-        id: ID
-        name: Name
-        state: State
       user:
         email: Email
         updated_at: Updated at
+  date:
+    formats:
+      default: "%e. %B %Y"
+      short: "%d/%m-%y"
+      long: "%A d. %e. %B %Y"
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    month_names:
+    -
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    abbr_month_names:
+    -
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
   js:
     api_maker_bootstrap:
       live_table:
@@ -28,3 +73,8 @@ en:
       format:
         separator: "."
         delimiter: ","
+  time:
+    formats:
+      default: "%e. %B %Y, %H.%M"
+      short: "%d/%m-%y %H:%M"
+      long: "%A d. %e. %B %Y, %H.%M"

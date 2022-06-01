@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe "bootstrap - live table" do
-  let(:task1) { create :task, name: "Task 1" }
-  let(:task2) { create :task, name: "Task 2" }
+  let(:task1) { create :task, created_at: "1985-06-17 10:30", name: "Task 1" }
+  let(:task2) { create :task, created_at: "1989-03-18 14:00", name: "Task 2" }
   let(:user_admin) { create :user, admin: true }
 
   let(:filter_card_selector) { ".live-table--filter-card" }
@@ -17,8 +17,13 @@ describe "bootstrap - live table" do
 
     login_as user_admin
     visit bootstrap_live_table_path
+
     wait_for_selector model_row_selector(task1)
+    wait_for_selector model_column_selector(task1, "attribute-createdAt"), exact_text: "17/06-85 10:30"
+
     wait_for_selector model_row_selector(task2)
+    wait_for_selector model_column_selector(task2, "attribute-createdAt"), exact_text: "18/03-89 14:00"
+
     wait_for_no_selector no_tasks_found_content
   end
 

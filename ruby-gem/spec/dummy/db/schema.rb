@@ -133,13 +133,13 @@ ActiveRecord::Schema.define(version: 2022_06_01_093509) do
 
   create_table "table_settings", force: :cascade do |t|
     t.string "user_type", null: false
-    t.string "user_id", limit: 36, null: false
+    t.integer "user_id", null: false
     t.string "identifier", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["identifier"], name: "index_table_settings_on_identifier"
     t.index ["user_id", "user_type", "identifier"], name: "index_table_settings_on_user_id_and_user_type_and_identifier", unique: true
-    t.index ["user_type", "user_id"], name: "index_table_settings_on_user_type_and_user_id"
+    t.index ["user_type", "user_id"], name: "index_table_settings_on_user"
   end
 
   create_table "task_details", force: :cascade do |t|
