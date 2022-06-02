@@ -10,6 +10,7 @@ const {Shape} = require("set-state-compare")
 
 import Card from "@kaspernj/api-maker-bootstrap/src/card"
 import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
+import columnVisible from "./column-visible"
 import ModelRow from "./model-row"
 import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
@@ -351,7 +352,7 @@ export default class ApiMakerTable extends React.PureComponent {
   headersContentFromColumns () {
     const {preparedColumns, query} = digs(this.shape, "preparedColumns", "query")
 
-    return preparedColumns?.map(({column, tableSettingColumn}) => tableSettingColumn.visible() &&
+    return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(tableSettingColumn) &&
       <th
         className={classNames(...this.headerClassNameForColumn(column))}
         data-identifier={tableSettingColumn.identifier()}
