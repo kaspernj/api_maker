@@ -91,13 +91,9 @@ export default class ApiMakerTableSettings {
   }
 
   columnSaveData(column, {identifier, position}) {
-    let visible
+    let visible = null
 
-    if ("defaultVisible" in column) {
-      visible = digg(column, "defaultVisible")
-    } else {
-      visible = true
-    }
+    if ("defaultVisible" in column) visible = digg(column, "defaultVisible")
 
     return {
       attribute_name: column.attribute,

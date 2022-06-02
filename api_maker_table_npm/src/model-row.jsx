@@ -4,6 +4,7 @@ const inflection = require("inflection")
 const {Link} = require("react-router-dom")
 const PropTypes = require("prop-types")
 
+import columnVisible from "./column-visible"
 import MoneyFormatter from "@kaspernj/api-maker/src/money-formatter"
 
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
@@ -66,7 +67,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
   columnsContentFromColumns (model) {
     const {preparedColumns} = digs(this.props, "preparedColumns")
 
-    return preparedColumns?.map(({column, tableSettingColumn}) => tableSettingColumn.visible() &&
+    return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(tableSettingColumn) &&
       <td
         className={classNames(this.columnClassNamesForColumn(column))}
         data-identifier={this.props.liveTable.identifierForColumn(column)}

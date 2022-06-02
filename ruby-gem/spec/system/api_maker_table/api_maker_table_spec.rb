@@ -25,6 +25,25 @@ describe "bootstrap - live table" do
     wait_for_selector model_column_selector(task2, "attribute-createdAt"), exact_text: "18/03-89 14:00"
 
     wait_for_no_selector no_tasks_found_content
+
+    created_table_setting = ApiMakerTable::TableSetting.last!
+
+    expect(created_table_setting).to have_attributes(
+      identifier: "tasks-default", # It generates an identifier itself
+      user: user_admin # It belongs to the current user
+    )
+
+    created_at_column = created_table_setting.columns.find_by!(identifier: "attribute-createdAt--sort-key-createdAt")
+    expect(created_at_column).to have_attributes(
+      attribute_name: "createdAt",
+      visible: nil
+    )
+
+    updated_at_column = created_table_setting.columns.find_by!(identifier: "attribute-updatedAt--sort-key-updatedAt")
+    expect(updated_at_column).to have_attributes(
+      attribute_name: "updatedAt",
+      visible: false
+    )
   end
 
   describe "filtering" do
