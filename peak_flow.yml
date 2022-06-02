@@ -2,6 +2,7 @@ artifact_dirs:
   - ruby-gem/spec/dummy/tmp/screenshots
 before_script:
   - cp ruby-gem/Gemfile.peakflow ruby-gem/Gemfile
+  - cd ruby-gem && bundle
   - cd npm-api-maker && yarn install --network-timeout 120000
   - cd npm-api-maker && yarn link
   - cd npm-api-maker-inputs && yarn install --network-timeout 120000
