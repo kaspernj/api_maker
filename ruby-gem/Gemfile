@@ -15,9 +15,9 @@ gemspec
 # gem 'byebug', group: [:development, :test]
 
 group :test do
-  if ENV["BUILD_URL"] || ENV["PEAKFLOW"]
+  if File.exists?("/home/build/project/api_maker_table_rubygem")
     gem "api_maker_table", path: "/home/build/project/api_maker_table_rubygem"
-  elsif File.exists?("/home/dev/Development/api_maker")
+  elsif File.exists?("/home/dev/Development/api_maker/api_maker_table_rubygem")
     gem "api_maker_table" # path: "/home/dev/Development/api_maker/api_maker_table_rubygem"
   end
 end
