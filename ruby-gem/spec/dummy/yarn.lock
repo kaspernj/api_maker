@@ -1057,19 +1057,19 @@
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker-table@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-table/-/api-maker-table-1.0.0.tgz#a994bbe8da7ecb59c5059e05e401960a282118ad"
-  integrity sha512-xg9LL6jNGXmKvrojXACpX1WfMvzStE5Ws6+JW3bsrXVrsHDnDH07xHAALfmIKwRurb7gHAI6YNPq9tUj87zDqg==
+"@kaspernj/api-maker-table@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-table/-/api-maker-table-1.0.2.tgz#1eefbfa8129f09480a3ea918ab55b9c163db7dc4"
+  integrity sha512-OwY99fSqAxmfUnoPjd4HZ8yuinAZ/1ylLJHNwcBEMuWgi4qVVNaTdI6NirbKe42dW0DkI8F4Eyfzzf3cuwZgOg==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.138"
+    "@kaspernj/api-maker" ">= 1.0.147"
     "@kaspernj/api-maker-bootstrap" ">= 1.0.83"
     classnames ">= 2.3.1"
     debounce ">= 1.2.1"
     diggerize ">= 1.0.4"
-    set-state-compare ">= 1.0.15"
+    set-state-compare ">= 1.0.17"
 
-"@kaspernj/api-maker@>= 1.0.138", "@kaspernj/api-maker@>= 1.0.147", "@kaspernj/api-maker@^1.0.146":
+"@kaspernj/api-maker@>= 1.0.147", "@kaspernj/api-maker@^1.0.146":
   version "1.0.147"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.147.tgz#0f2f3b86e916c95ac1f3d66f803ec6bf1a044a58"
   integrity sha512-O1Re64oMNTPr7aznFgP6zeDtyRiHBEm2qYU+KpHZzkEtwjlaUrtN8Mi8fla+rW9xgWiigRKtXUPQ6i4I1H12Mw==
@@ -7185,7 +7185,7 @@ set-blocking@^2.0.0, set-blocking@~2.0.0:
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha1-BF+XgtARrppoA93TgrJDkrPYkPc=
 
-"set-state-compare@>= 1.0.15", set-state-compare@^1.0.17:
+"set-state-compare@>= 1.0.17", set-state-compare@^1.0.17:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.17.tgz#8d70ad67540fbb308fbb6718dc1a6e94e5129145"
   integrity sha512-cF57j0+gJb6lDerGfrX+2qRfmXNL27WMzTMoHrSMQoPZgwigfbDYUPVeLfSyXM5iEqbaoqTrTK9YKvwfaY7tKA==
