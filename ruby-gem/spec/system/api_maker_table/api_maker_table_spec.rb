@@ -43,13 +43,13 @@ describe "bootstrap - live table" do
       user: user_admin # It belongs to the current user
     )
 
-    created_at_column = created_table_setting.columns.find_by!(identifier: "attribute-createdAt--sort-key-createdAt")
+    created_at_column = created_table_setting.columns.find_by!(identifier: created_at_identifier)
     expect(created_at_column).to have_attributes(
       attribute_name: "createdAt",
       visible: nil
     )
 
-    updated_at_column = created_table_setting.columns.find_by!(identifier: "attribute-updatedAt--sort-key-updatedAt")
+    updated_at_column = created_table_setting.columns.find_by!(identifier: updated_at_identifier)
     expect(updated_at_column).to have_attributes(
       attribute_name: "updatedAt",
       visible: false
