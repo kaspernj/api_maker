@@ -24,6 +24,8 @@ describe "bootstrap - live table" do
     wait_for_selector model_row_selector(task2)
     wait_for_selector model_column_selector(task2, "attribute-createdAt"), exact_text: "18/03-89 14:00"
 
+    wait_for_no_selector model_column_selector(task1, "attribute-updatedAt")
+    wait_for_no_selector model_column_selector(task2, "attribute-updatedAt")
     wait_for_no_selector no_tasks_found_content
 
     created_table_setting = ApiMakerTable::TableSetting.last!

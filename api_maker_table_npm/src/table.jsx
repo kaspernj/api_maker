@@ -352,7 +352,7 @@ export default class ApiMakerTable extends React.PureComponent {
   headersContentFromColumns () {
     const {preparedColumns, query} = digs(this.shape, "preparedColumns", "query")
 
-    return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(tableSettingColumn) &&
+    return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
       <th
         className={classNames(...this.headerClassNameForColumn(column))}
         data-identifier={tableSettingColumn.identifier()}
