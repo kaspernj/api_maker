@@ -4,6 +4,7 @@ const inflection = require("inflection")
 const {Link} = require("react-router-dom")
 const PropTypes = require("prop-types")
 
+import columnIdentifier from "./column-identifier"
 import columnVisible from "./column-visible"
 import MoneyFormatter from "@kaspernj/api-maker/src/money-formatter"
 
@@ -70,8 +71,8 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
       <td
         className={classNames(this.columnClassNamesForColumn(column))}
-        data-identifier={this.props.liveTable.identifierForColumn(column)}
-        key={this.props.liveTable.identifierForColumn(column)}
+        data-identifier={columnIdentifier(column)}
+        key={columnIdentifier(column)}
       >
         {column.content && this.columnContentFromContentArg(column, model)}
         {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
@@ -90,11 +91,18 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     const currentModelClass = this.props.modelClass
     const path = column.path || []
 
-    if (path.length > 0) throw new Error("'path' support not implemented")
+    let currentModel = model
 
-    if (!(attribute in model)) throw new Error(`${currentModelClass.modelName().name} doesn't respond to ${attribute}`)
+    if (path.length > 0) {
+      for (const pathPart of path) {
+        currentModel = currentModel[pathPart]()
+        if (!currentModel) return
+      }
+    }
 
-    const value = model[attribute]()
+    if (!(attribute in currentModel)) throw new Error(`${currentModelClass.modelName().name} doesn't respond to ${attribute}`)
+
+    const value = currentModel[attribute]()
 
     return this.presentColumnValue(value)
   }

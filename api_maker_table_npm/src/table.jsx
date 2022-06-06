@@ -11,10 +11,12 @@ const {Shape} = require("set-state-compare")
 import Card from "@kaspernj/api-maker-bootstrap/src/card"
 import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
 import columnVisible from "./column-visible"
+import inflection from "inflection"
 import ModelRow from "./model-row"
 import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 import TableSettings from "./table-settings"
+import uniqunize from "uniqunize"
 
 export default class ApiMakerTable extends React.PureComponent {
   static defaultProps = {
@@ -84,6 +86,7 @@ export default class ApiMakerTable extends React.PureComponent {
       identifier: this.props.identifier || `${collectionKey}-default`,
       models: undefined,
       overallCount: undefined,
+      preload: undefined,
       preparedColumns: undefined,
       query: undefined,
       queryName,
@@ -102,9 +105,12 @@ export default class ApiMakerTable extends React.PureComponent {
     this.tableSettings = new TableSettings({table: this})
 
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
-    const preparedColumns = this.tableSettings.preparedColumns(tableSetting)
+    const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
 
-    this.shape.set({preparedColumns})
+    this.shape.set({
+      preparedColumns: columns,
+      preload: this.mergedPreloads(preload)
+    })
   }
 
   columnsAsArray = () => {
@@ -115,11 +121,22 @@ export default class ApiMakerTable extends React.PureComponent {
 
   submitFilterDebounce = debounce(() => this.submitFilter())
 
+  mergedPreloads(preload) {
+    const {preloads} = this.props
+    let mergedPreloads = []
+
+    if (preloads) mergedPreloads = mergedPreloads.concat(preloads)
+    if (preload) mergedPreloads = mergedPreloads.concat(preload)
+
+    return uniqunize(mergedPreloads)
+  }
+
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, defaultParams, preloads, select, selectColumns} = this.props
+    const {collection, defaultParams, select, selectColumns} = this.props
     const {
       overallCount,
+      preload,
       qParams,
       query,
       result,
@@ -129,6 +146,7 @@ export default class ApiMakerTable extends React.PureComponent {
     } = digs(
       this.shape,
       "overallCount",
+      "preload",
       "qParams",
       "query",
       "result",
@@ -139,18 +157,20 @@ export default class ApiMakerTable extends React.PureComponent {
 
     return (
       <div className={this.className()}>
-        <CollectionLoader
-          abilities={this.abilitiesToLoad()}
-          defaultParams={defaultParams}
-          collection={collection}
-          component={this}
-          modelClass={modelClass}
-          noRecordsAvailableContent={noRecordsAvailableContent}
-          noRecordsFoundContent={noRecordsFoundContent}
-          preloads={preloads}
-          select={select}
-          selectColumns={selectColumns}
-        />
+        {preload !== undefined &&
+          <CollectionLoader
+            abilities={this.abilitiesToLoad()}
+            defaultParams={defaultParams}
+            collection={collection}
+            component={this}
+            modelClass={modelClass}
+            noRecordsAvailableContent={noRecordsAvailableContent}
+            noRecordsFoundContent={noRecordsFoundContent}
+            preloads={preload}
+            select={select}
+            selectColumns={selectColumns}
+          />
+        }
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
@@ -380,6 +400,8 @@ export default class ApiMakerTable extends React.PureComponent {
   }
 
   headerLabelForColumn (column) {
+    const {modelClass} = digs(this.props, "modelClass")
+
     if ("label" in column) {
       if (typeof column.label == "function") {
         return column.label()
@@ -388,17 +410,21 @@ export default class ApiMakerTable extends React.PureComponent {
       }
     }
 
-    if (column.attribute) return this.props.modelClass.humanAttributeName(column.attribute)
+    let currentModelClass = modelClass
+
+    // Calculate current model class through path
+    if (column.path) {
+      for (const pathPart of column.path) {
+        const relationships = digg(currentModelClass.modelClassData(), "relationships")
+        const relationship = relationships.find((relationshipInArray) => relationshipInArray.name == inflection.underscore(pathPart))
+
+        currentModelClass = digg(require("@kaspernj/api-maker/src/models"), digg(relationship, "className"))
+      }
+    }
+
+    if (column.attribute) return currentModelClass.humanAttributeName(column.attribute)
 
     throw new Error("No 'label' or 'attribute' was given")
-  }
-
-  identifierForColumn (column) {
-    if (column.identifier) return column.identifier
-    if (column.attribute) return `attribute-${column.attribute}`
-    if (column.sortKey) return `sort-key-${column.sortKey}`
-
-    throw new Error("No 'attribute', 'identifier' or 'sortKey' was given")
   }
 
   onFilterFormSubmit = (e) => {
