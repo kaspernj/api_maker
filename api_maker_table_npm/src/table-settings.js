@@ -1,5 +1,7 @@
 import columnIdentifier from "@kaspernj/api-maker-table/src/column-identifier"
+import columnVisible from "./column-visible"
 import {digg} from "diggerize"
+import inflection from "inflection"
 import {serialize as objectToFormData} from "object-to-formdata"
 import {TableSetting} from "@kaspernj/api-maker/src/models"
 
@@ -15,14 +17,26 @@ export default class ApiMakerTableSettings {
   preparedColumns = (tableSetting) => {
     const columns = this.table.columnsAsArray()
     const ordered = this.orderedTableSettingColumns(tableSetting)
-    const result = []
+    const result = {
+      columns: [],
+      preload: []
+    }
 
     if (!ordered) return
 
     for (const tableSettingColumn of ordered) {
       const column = columns.find((column) => columnIdentifier(column) == tableSettingColumn.identifier())
 
-      result.push({column, tableSettingColumn})
+      result.columns.push({column, tableSettingColumn})
+
+      // Add needed preloads if column is visible
+      if (columnVisible(column, tableSettingColumn)) {
+        if (column.path) {
+          const preload = column.path.map((pathPart) => inflection.underscore(pathPart)).join(".")
+
+          if (!result.preload.includes(preload)) result.preload.push(preload)
+        }
+      }
     }
 
     return result

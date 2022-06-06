@@ -4,8 +4,8 @@ export default function columnIdentifier(column) {
   const parts = []
 
   if ("path" in column) {
-    for (pathPart of column) {
-      parts.push(column.name)
+    for (const pathPart of column.path) {
+      parts.push(pathPart)
     }
   }
 

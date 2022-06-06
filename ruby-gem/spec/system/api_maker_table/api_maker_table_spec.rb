@@ -11,6 +11,9 @@ describe "bootstrap - live table" do
   let(:no_tasks_available_content) { ".no-tasks-available-content" }
   let(:no_tasks_found_content) { ".no-tasks-found-content" }
 
+  let(:created_at_identifier) { "attribute-createdAt--sort-key-createdAt" }
+  let(:updated_at_identifier) { "attribute-updatedAt--sort-key-createdAt" }
+
   it "renders a table with rows" do
     task1
     task2
@@ -18,16 +21,21 @@ describe "bootstrap - live table" do
     login_as user_admin
     visit bootstrap_live_table_path
 
+    # It shows the expected rows and columns
     wait_for_selector model_row_selector(task1)
-    wait_for_selector model_column_selector(task1, "attribute-createdAt"), exact_text: "17/06-85 10:30"
+    wait_for_selector model_column_selector(task1, created_at_identifier), exact_text: "17/06-85 10:30"
 
     wait_for_selector model_row_selector(task2)
-    wait_for_selector model_column_selector(task2, "attribute-createdAt"), exact_text: "18/03-89 14:00"
+    wait_for_selector model_column_selector(task2, created_at_identifier), exact_text: "18/03-89 14:00"
 
-    wait_for_no_selector model_column_selector(task1, "attribute-updatedAt")
-    wait_for_no_selector model_column_selector(task2, "attribute-updatedAt")
+    # It doesnt show columns with defaultVisible: false
+    wait_for_no_selector model_column_selector(task1, updated_at_identifier)
+    wait_for_no_selector model_column_selector(task2, updated_at_identifier)
+
+    # It doesn't show the no-tasks-found-content when tasks are found
     wait_for_no_selector no_tasks_found_content
 
+    # It creates table settings in the backend
     created_table_setting = ApiMakerTable::TableSetting.last!
 
     expect(created_table_setting).to have_attributes(
