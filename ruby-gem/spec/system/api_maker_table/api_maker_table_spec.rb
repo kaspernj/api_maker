@@ -12,7 +12,7 @@ describe "bootstrap - live table" do
   let(:no_tasks_found_content) { ".no-tasks-found-content" }
 
   let(:created_at_identifier) { "attribute-createdAt--sort-key-createdAt" }
-  let(:updated_at_identifier) { "attribute-updatedAt--sort-key-createdAt" }
+  let(:updated_at_identifier) { "attribute-updatedAt--sort-key-updatedAt" }
 
   it "renders a table with rows" do
     task1
