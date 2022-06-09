@@ -1,3 +1,5 @@
+import Params from "@kaspernj/api-maker/src/params"
+
 export default class BootstrapCheckboxBoolean extends React.PureComponent {
   state = {}
 

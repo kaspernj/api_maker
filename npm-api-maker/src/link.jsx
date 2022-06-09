@@ -12,7 +12,7 @@ export default class Link extends React.PureComponent {
   onLinkClicked = (e) => {
     e.preventDefault()
 
-    const history = global.apiMakerConfigGlobal.history
+    const history = global.apiMakerConfigGlobal?.history
 
     if (!history) throw new Error("History hasn't been set in the API maker configuration")
 

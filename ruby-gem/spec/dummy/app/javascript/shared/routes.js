@@ -1,7 +1,11 @@
-import {Routes as jsRoutes} from "shared/js-routes"
 import routeDefinitions from "shared/route-definitions.json"
-import Routes from "@kaspernj/api-maker/src/routes"
+import RoutesNative from "@kaspernj/api-maker/src/routes-native"
 
-const routes = new Routes({jsRoutes, routeDefinitions})
+const routes = new RoutesNative({
+  getLocale: () => I18n.locale
+})
+
+routes.loadRouteTranslations(I18n)
+routes.loadRouteDefinitions(routeDefinitions, {localized: false})
 
 export default routes

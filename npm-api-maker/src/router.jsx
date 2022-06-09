@@ -7,7 +7,7 @@ import {Suspense} from "react"
 
 export default class ApiMakerRouter extends React.Component {
   static propTypes = {
-    notFoundComponent: PropTypes.object,
+    notFoundComponent: PropTypes.elementType,
     path: PropTypes.string.isRequired,
     requireComponent: PropTypes.func.isRequired,
     routes: PropTypes.object,
@@ -79,22 +79,25 @@ export default class ApiMakerRouter extends React.Component {
   }
 
   findMatchingRoute() {
-    const {path} = this.props
+    const path = this.props.path.replace(/[\/]+$/, "")
 
     for (const parsedRouteDefinition of this.parsedRouteDefinitions) {
       const match = path.match(parsedRouteDefinition.pathRegex)
+      let matched, params
 
       if (match) {
-        const params = {}
+        matched = true
+        params = {}
 
         for (const groupKey in parsedRouteDefinition.groups) {
           const groupName = parsedRouteDefinition.groups[groupKey]
 
           params[groupName] = match[Number(groupKey) + 1]
         }
-
-        return {params, parsedRouteDefinition}
       }
+
+      if (path == "" && parsedRouteDefinition.routeDefinition.path == "/") matched = true
+      if (matched) return {params, parsedRouteDefinition}
     }
   }
 
@@ -102,13 +105,17 @@ export default class ApiMakerRouter extends React.Component {
     const matchingRoute = this.findMatchingRoute()
 
     if (!matchingRoute) {
-      const NotFoundComponent = this.props.notFoundComponent
+      if (this.props.notFoundComponent) {
+        const NotFoundComponent = this.props.notFoundComponent
 
-      return (
-        <Suspense fallback={<div />}>
-          <NotFoundComponent />
-        </Suspense>
-      )
+        return (
+          <Suspense fallback={<div />}>
+            <NotFoundComponent />
+          </Suspense>
+        )
+      } else {
+        return null
+      }
     }
 
     const Component = this.props.requireComponent({routeDefinition: matchingRoute.parsedRouteDefinition.routeDefinition})
