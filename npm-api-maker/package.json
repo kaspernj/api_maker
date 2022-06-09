@@ -56,7 +56,6 @@
     "prop-types": "^15.7.2",
     "prop-types-exact": ">= 1.2.0",
     "react": ">= 17.0.2",
-    "react-router-dom": ">= 5.2.0",
     "react-test-renderer": "^17.0.1",
     "source-map": "^0.7.3",
     "stacktrace-parser": ">= 0.1.9"

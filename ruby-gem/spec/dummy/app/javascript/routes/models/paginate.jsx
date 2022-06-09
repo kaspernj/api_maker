@@ -1,11 +1,16 @@
-import Params from "@kaspernj/api-maker/src/params"
-import React from "react"
 import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
+import PropTypes from "prop-types"
+import PureComponent from "set-state-compare/src/pure-component"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
+import withQueryParams from "on-location-changed/src/with-query-params"
 
-export default class ModelsPaginate extends React.PureComponent {
+class ModelsPaginate extends PureComponent {
+  static propTypes = {
+    queryParams: PropTypes.object.isRequired
+  }
+
   state = {
-    currentHref: location.href
+    queryParamsString: JSON.stringify(this.props.queryParams)
   }
 
   componentDidMount() {
@@ -13,15 +18,16 @@ export default class ModelsPaginate extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    if (this.state.currentHref != location.href)
-      this.loadTasks()
+    const queryParamsString = JSON.stringify(this.props.queryParams)
+
+    if (this.state.queryParamsString != queryParamsString) {
+      this.setState({queryParamsString}, this.loadTasks)
+    }
   }
 
-  async loadTasks() {
-    this.setState({currentHref: location.href})
-
-    const params = Params.parse()
-    const query = Task.ransack(params.tasks_q).searchKey("tasks_q").page(params.tasks_page).pageKey("tasks_page")
+  loadTasks = async () => {
+    const {queryParams} = this.props
+    const query = Task.ransack(queryParams.tasks_q).searchKey("tasks_q").page(queryParams.tasks_page).pageKey("tasks_page")
     const result = await query.result()
 
     this.setState({
@@ -68,3 +74,5 @@ export default class ModelsPaginate extends React.PureComponent {
     )
   }
 }
+
+export default withQueryParams(ModelsPaginate)

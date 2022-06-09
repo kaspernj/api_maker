@@ -1,10 +1,19 @@
 import Card from "@kaspernj/api-maker-bootstrap/src/card"
+import {digg} from "diggerize"
 import Params from "@kaspernj/api-maker/src/params"
+import PropTypes from "prop-types"
+import PureComponent from "set-state-compare/src/pure-component"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
+import withQueryParams from "on-location-changed/src/with-query-params"
 
-export default class BootstrapSortLink extends React.PureComponent {
+class BootstrapSortLink extends PureComponent {
+  static propTypes = {
+    queryParams: PropTypes.object
+  }
+
   state = {
-    currentHref: location.href
+    currentHref: location.href,
+    queryParamsString: JSON.stringify(digg(this, "props", "queryParams"))
   }
 
   componentDidMount() {
@@ -12,11 +21,13 @@ export default class BootstrapSortLink extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    if (this.state.currentHref != location.href)
-      this.setState({currentHref: location.href}, () => this.loadTasks())
+    const queryParamsString = JSON.stringify(digg(this, "props", "queryParams"))
+
+    if (this.state.queryParamsString != queryParamsString)
+      this.setState({queryParamsString}, digg(this, "loadTasks"))
   }
 
-  async loadTasks() {
+  loadTasks = async () => {
     const params = Params.parse()
     const query = Task.ransack(params.q)
     const result = await query.result()
@@ -62,3 +73,5 @@ export default class BootstrapSortLink extends React.PureComponent {
     )
   }
 }
+
+export default withQueryParams(BootstrapSortLink)

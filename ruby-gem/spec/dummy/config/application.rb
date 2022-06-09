@@ -24,6 +24,7 @@ require_relative "../../../app/api_maker/api_helpers/api_maker_helpers"
 
 require "active_record_query_fixer"
 require "api_maker"
+require "api_maker_table"
 require "cancancan"
 require "devise"
 require "js-routes"

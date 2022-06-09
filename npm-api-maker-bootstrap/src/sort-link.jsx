@@ -1,53 +1,48 @@
 const {digg, digs} = require("diggerize")
-const {LocationChanged} = require("on-location-changed/location-changed-component")
 const inflection = require("inflection")
-const {Link} = require("react-router-dom")
 const PropTypes = require("prop-types")
 const qs = require("qs")
 const React = require("react")
 
-export default class ApiMakerBootstrapSortLink extends React.PureComponent {
+import Link from "@kaspernj/api-maker/src/link"
+import PureComponent from "set-state-compare/src/pure-component"
+import withQueryParams from "on-location-changed/src/with-query-params"
+
+class ApiMakerBootstrapSortLink extends PureComponent {
   static propTypes = {
     attribute: PropTypes.string.isRequired,
     className: PropTypes.string,
     linkComponent: PropTypes.object,
     onChanged: PropTypes.func,
     query: PropTypes.object.isRequired,
+    queryParams: PropTypes.object.isRequired,
     title: PropTypes.node
   }
 
-  currentParams = this.calculatedCurrentParams()
   searchKey = digg(this, "props", "query", "queryArgs").searchKey || "q"
-
-  state = {
-    href: this.href(),
-    sortMode: this.sortMode()
-  }
 
   attribute () {
     return inflection.underscore(this.props.attribute)
   }
 
-  calculatedCurrentParams () {
-    return qs.parse(global.location.search.substr(1))
-  }
-
   href () {
-    const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
+    const {queryParams} = digs(this.props, "queryParams")
+    const {searchKey} = digs(this, "searchKey")
 
-    if (!currentParams[searchKey]) currentParams[searchKey] = {}
+    if (!queryParams[searchKey]) queryParams[searchKey] = {}
 
-    currentParams[searchKey].s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
+    queryParams[searchKey].s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
 
-    const newParams = qs.stringify(currentParams)
+    const newParams = qs.stringify(queryParams)
     const newPath = `${location.pathname}?${newParams}`
 
     return newPath
   }
 
   isSortedByAttribute () {
-    const {currentParams, searchKey} = digs(this, "currentParams", "searchKey")
-    const params = currentParams[searchKey] || {}
+    const {queryParams} = digs(this.props, "queryParams")
+    const {searchKey} = digs(this, "searchKey")
+    const params = queryParams[searchKey] || {}
 
     if (params.s == this.attribute()) return true
     if (params.s == `${this.attribute()} asc`) return true
@@ -57,17 +52,15 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
 
   render () {
     const LinkComponent = this.linkComponent()
-    const {attribute, className, linkComponent, onChanged, query, title, ...restProps} = this.props
-    const {href, sortMode} = digs(this.state, "href", "sortMode")
+    const {attribute, className, linkComponent, onChanged, query, queryParams, title, ...restProps} = this.props
 
     return (
       <>
-        <LocationChanged onChanged={this.onLocationChanged} />
         <LinkComponent
           className={this.className()}
           data-attribute={attribute}
-          data-sort-mode={sortMode}
-          to={href}
+          data-sort-mode={this.sortMode()}
+          to={this.href()}
           {...restProps}
         >
           {this.title()}
@@ -90,15 +83,6 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     return Link
   }
 
-  onLocationChanged = () => {
-    this.currentParams = this.calculatedCurrentParams()
-
-    this.setState({
-      href: this.href(),
-      sortMode: this.sortMode()
-    })
-  }
-
   sortMode () {
     if (this.isSortedByAttribute()) return "desc"
 
@@ -114,3 +98,5 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     return query.modelClass().humanAttributeName(attribute)
   }
 }
+
+export default withQueryParams(ApiMakerBootstrapSortLink)

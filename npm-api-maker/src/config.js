@@ -14,6 +14,10 @@ class ApiMakerConfig {
   setCurrenciesCollection(newCurrenciesCollection) {
     this.global.currenciesCollection = newCurrenciesCollection
   }
+
+  setHistory(history) {
+    this.global.history = history
+  }
 }
 
 const apiMakerConfig = new ApiMakerConfig()

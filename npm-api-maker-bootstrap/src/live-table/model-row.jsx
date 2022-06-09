@@ -1,8 +1,9 @@
 const {digg, digs} = require("diggerize")
 const inflection = require("inflection")
-const {Link} = require("react-router-dom")
 const MoneyFormatter = require("@kaspernj/api-maker/src/money-formatter")
 const PropTypes = require("prop-types")
+
+import Link from "@kaspernj/api-maker/src/link"
 
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
   static propTypes = {

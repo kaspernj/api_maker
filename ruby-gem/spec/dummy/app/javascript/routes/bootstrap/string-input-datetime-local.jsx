@@ -1,3 +1,5 @@
+import Params from "@kaspernj/api-maker/src/params"
+
 export default class BootstrapStringInputDatetimeLocal extends React.PureComponent {
   state = {}
 

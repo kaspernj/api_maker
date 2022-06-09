@@ -1,3 +1,5 @@
+import Params from "@kaspernj/api-maker/src/params"
+
 export default class BootstrapCheckboxes extends React.PureComponent {
   state = {}
 
@@ -41,13 +43,14 @@ export default class BootstrapCheckboxes extends React.PureComponent {
     )
   }
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault()
 
-    this.state.account.saveRaw(e.target).then(() => {
+    try {
+      await this.state.account.saveRaw(e.target)
       console.log("Account was saved")
-    }, (response) => {
-      console.log("Account couldnt be saved")
-    })
+    } catch (error) {
+      console.log(`Account couldnt be saved: ${e.message}`)
+    }
   }
 }

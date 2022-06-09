@@ -5,10 +5,11 @@ const EventCreated = require("@kaspernj/api-maker/src/event-created").default
 const EventDestroyed = require("@kaspernj/api-maker/src/event-destroyed").default
 const EventUpdated = require("@kaspernj/api-maker/src/event-updated").default
 const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-name")
-const {LocationChanged} = require("on-location-changed/location-changed-component")
 const Params = require("@kaspernj/api-maker/src/params")
 const PropTypes = require("prop-types")
 const React = require("react")
+
+import {LocationChanged} from "on-location-changed/src/location-changed-component"
 
 export default class CollectionLoader extends React.PureComponent {
   static defaultProps = {

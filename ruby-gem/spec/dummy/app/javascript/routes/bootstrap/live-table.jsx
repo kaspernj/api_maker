@@ -3,6 +3,7 @@ import ApplicationHistory from "shared/application-history"
 import Devise from "@kaspernj/api-maker/src/devise"
 import {digg, digs} from "diggerize"
 import Input from "@kaspernj/api-maker-bootstrap/src/input"
+import Params from "@kaspernj/api-maker/src/params"
 
 export default class BootstrapLiveTable extends React.PureComponent {
   render() {
