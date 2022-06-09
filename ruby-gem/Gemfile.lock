@@ -11,6 +11,12 @@ PATH
       service_pattern (>= 1.0.5)
       waitutil
 
+PATH
+  remote: /home/dev/Development/api_maker/api_maker_table_rubygem
+  specs:
+    api_maker_table (0.1.1)
+      rails (>= 6.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -167,7 +173,7 @@ GEM
     js-routes (2.0.8)
       railties (>= 4)
     json (2.6.1)
-    loofah (2.17.0)
+    loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -200,7 +206,7 @@ GEM
       method_source (~> 1.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    public_activity (2.0.0)
+    public_activity (2.0.1)
       actionpack (>= 5.0.0)
       activerecord (>= 5.0)
       i18n (>= 0.5.0)
@@ -350,6 +356,7 @@ PLATFORMS
 
 DEPENDENCIES
   api_maker!
+  api_maker_table!
   appraisal
   awesome_translations (>= 0.0.62)
   best_practice_project

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_11_170044) do
+ActiveRecord::Schema.define(version: 2022_06_01_093509) do
 
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -116,6 +116,32 @@ ActiveRecord::Schema.define(version: 2021_11_11_170044) do
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
   end
 
+  create_table "table_setting_columns", force: :cascade do |t|
+    t.integer "table_setting_id", null: false
+    t.string "identifier", null: false
+    t.string "attribute_name"
+    t.text "path"
+    t.string "sort_key"
+    t.integer "position", null: false
+    t.boolean "visible"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["identifier"], name: "index_table_setting_columns_on_identifier"
+    t.index ["table_setting_id", "identifier"], name: "index_table_setting_columns_on_table_setting_id_and_identifier", unique: true
+    t.index ["table_setting_id"], name: "index_table_setting_columns_on_table_setting_id"
+  end
+
+  create_table "table_settings", force: :cascade do |t|
+    t.string "user_type", null: false
+    t.integer "user_id", null: false
+    t.string "identifier", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["identifier"], name: "index_table_settings_on_identifier"
+    t.index ["user_id", "user_type", "identifier"], name: "index_table_settings_on_user_id_and_user_type_and_identifier", unique: true
+    t.index ["user_type", "user_id"], name: "index_table_settings_on_user"
+  end
+
   create_table "task_details", force: :cascade do |t|
     t.integer "task_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -176,6 +202,7 @@ ActiveRecord::Schema.define(version: 2021_11_11_170044) do
   add_foreign_key "project_details", "projects"
   add_foreign_key "project_secrets", "projects"
   add_foreign_key "projects", "accounts"
+  add_foreign_key "table_setting_columns", "table_settings"
   add_foreign_key "task_details", "tasks"
   add_foreign_key "tasks", "projects"
   add_foreign_key "tasks", "users"

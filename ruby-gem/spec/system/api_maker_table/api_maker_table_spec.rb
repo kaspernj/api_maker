@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe "bootstrap - live table" do
-  let(:task1) { create :task, name: "Task 1" }
-  let(:task2) { create :task, name: "Task 2" }
+  let(:task1) { create :task, created_at: "1985-06-17 10:30", name: "Task 1" }
+  let(:task2) { create :task, created_at: "1989-03-18 14:00", name: "Task 2" }
   let(:user_admin) { create :user, admin: true }
 
   let(:filter_card_selector) { ".live-table--filter-card" }
@@ -11,15 +11,49 @@ describe "bootstrap - live table" do
   let(:no_tasks_available_content) { ".no-tasks-available-content" }
   let(:no_tasks_found_content) { ".no-tasks-found-content" }
 
+  let(:created_at_identifier) { "attribute-createdAt--sort-key-createdAt" }
+  let(:updated_at_identifier) { "attribute-updatedAt--sort-key-updatedAt" }
+
   it "renders a table with rows" do
     task1
     task2
 
     login_as user_admin
     visit bootstrap_live_table_path
+
+    # It shows the expected rows and columns
     wait_for_selector model_row_selector(task1)
+    wait_for_selector model_column_selector(task1, created_at_identifier), exact_text: "17/06-85 10:30"
+
     wait_for_selector model_row_selector(task2)
+    wait_for_selector model_column_selector(task2, created_at_identifier), exact_text: "18/03-89 14:00"
+
+    # It doesnt show columns with defaultVisible: false
+    wait_for_no_selector model_column_selector(task1, updated_at_identifier)
+    wait_for_no_selector model_column_selector(task2, updated_at_identifier)
+
+    # It doesn't show the no-tasks-found-content when tasks are found
     wait_for_no_selector no_tasks_found_content
+
+    # It creates table settings in the backend
+    created_table_setting = ApiMakerTable::TableSetting.last!
+
+    expect(created_table_setting).to have_attributes(
+      identifier: "tasks-default", # It generates an identifier itself
+      user: user_admin # It belongs to the current user
+    )
+
+    created_at_column = created_table_setting.columns.find_by!(identifier: created_at_identifier)
+    expect(created_at_column).to have_attributes(
+      attribute_name: "createdAt",
+      visible: nil
+    )
+
+    updated_at_column = created_table_setting.columns.find_by!(identifier: updated_at_identifier)
+    expect(updated_at_column).to have_attributes(
+      attribute_name: "updatedAt",
+      visible: false
+    )
   end
 
   describe "filtering" do

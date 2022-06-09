@@ -8,6 +8,8 @@ class ApiMaker::IncludeHelpers < ApiMaker::ApplicationService
   end
 
   def perform
+    ApiMaker::Loader.load_api_helpers
+
     ::ApiHelpers.constants(false).each do |constant|
       klass.include ApiHelpers.const_get(constant)
     end

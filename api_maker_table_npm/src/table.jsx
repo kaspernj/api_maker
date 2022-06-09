@@ -10,10 +10,13 @@ const {Shape} = require("set-state-compare")
 
 import Card from "@kaspernj/api-maker-bootstrap/src/card"
 import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
+import columnVisible from "./column-visible"
+import inflection from "inflection"
 import ModelRow from "./model-row"
 import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 import TableSettings from "./table-settings"
+import uniqunize from "uniqunize"
 
 export default class ApiMakerTable extends React.PureComponent {
   static defaultProps = {
@@ -41,6 +44,8 @@ export default class ApiMakerTable extends React.PureComponent {
     columnsContent: PropTypes.func,
     controls: PropTypes.func,
     currentUser: PropTypes.object,
+    defaultDateFormatName: PropTypes.string,
+    defaultDateTimeFormatName: PropTypes.string,
     defaultParams: PropTypes.object,
     destroyEnabled: PropTypes.bool.isRequired,
     destroyMessage: PropTypes.string,
@@ -50,7 +55,7 @@ export default class ApiMakerTable extends React.PureComponent {
     filterSubmitLabel: PropTypes.node,
     groupBy: PropTypes.array,
     header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-    identifier: PropTypes.string.isRequired,
+    identifier: PropTypes.string,
     modelClass: PropTypes.func.isRequired,
     noRecordsAvailableContent: PropTypes.func,
     noRecordsFoundContent: PropTypes.func,
@@ -64,21 +69,24 @@ export default class ApiMakerTable extends React.PureComponent {
     viewModelPath: PropTypes.func
   }
 
+  filterFormRef = React.createRef()
+
   constructor (props) {
     super(props)
 
+    const collectionKey = digg(props.modelClass.modelClassData(), "collectionKey")
     let queryName = props.queryName
 
-    if (!queryName) {
-      queryName = digg(props.modelClass.modelClassData(), "collectionKey")
-    }
+    if (!queryName) queryName = collectionKey
 
     const columnsAsArray = this.columnsAsArray()
 
     this.shape = new Shape(this, {
       columns: columnsAsArray,
+      identifier: this.props.identifier || `${collectionKey}-default`,
       models: undefined,
       overallCount: undefined,
+      preload: undefined,
       preparedColumns: undefined,
       query: undefined,
       queryName,
@@ -97,9 +105,12 @@ export default class ApiMakerTable extends React.PureComponent {
     this.tableSettings = new TableSettings({table: this})
 
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
-    const preparedColumns = this.tableSettings.preparedColumns(tableSetting)
+    const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
 
-    this.shape.set({preparedColumns})
+    this.shape.set({
+      preparedColumns: columns,
+      preload: this.mergedPreloads(preload)
+    })
   }
 
   columnsAsArray = () => {
@@ -110,11 +121,22 @@ export default class ApiMakerTable extends React.PureComponent {
 
   submitFilterDebounce = debounce(() => this.submitFilter())
 
+  mergedPreloads(preload) {
+    const {preloads} = this.props
+    let mergedPreloads = []
+
+    if (preloads) mergedPreloads = mergedPreloads.concat(preloads)
+    if (preload) mergedPreloads = mergedPreloads.concat(preload)
+
+    return uniqunize(mergedPreloads)
+  }
+
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, defaultParams, preloads, select, selectColumns} = this.props
+    const {collection, defaultParams, select, selectColumns} = this.props
     const {
       overallCount,
+      preload,
       qParams,
       query,
       result,
@@ -124,6 +146,7 @@ export default class ApiMakerTable extends React.PureComponent {
     } = digs(
       this.shape,
       "overallCount",
+      "preload",
       "qParams",
       "query",
       "result",
@@ -134,18 +157,20 @@ export default class ApiMakerTable extends React.PureComponent {
 
     return (
       <div className={this.className()}>
-        <CollectionLoader
-          abilities={this.abilitiesToLoad()}
-          defaultParams={defaultParams}
-          collection={collection}
-          component={this}
-          modelClass={modelClass}
-          noRecordsAvailableContent={noRecordsAvailableContent}
-          noRecordsFoundContent={noRecordsFoundContent}
-          preloads={preloads}
-          select={select}
-          selectColumns={selectColumns}
-        />
+        {preload !== undefined &&
+          <CollectionLoader
+            abilities={this.abilitiesToLoad()}
+            defaultParams={defaultParams}
+            collection={collection}
+            component={this}
+            modelClass={modelClass}
+            noRecordsAvailableContent={noRecordsAvailableContent}
+            noRecordsFoundContent={noRecordsFoundContent}
+            preloads={preload}
+            select={select}
+            selectColumns={selectColumns}
+          />
+        }
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
@@ -213,6 +238,8 @@ export default class ApiMakerTable extends React.PureComponent {
       columnsContent,
       controls,
       currentUser,
+      defaultDateFormatName,
+      defaultDateTimeFormatName,
       defaultParams,
       destroyEnabled,
       destroyMessage,
@@ -290,15 +317,15 @@ export default class ApiMakerTable extends React.PureComponent {
   }
 
   filterForm = () => {
-    const {submitFilterDebounce} = digs(this, "submitFilterDebounce")
+    const {filterFormRef, submitFilter, submitFilterDebounce} = digs(this, "filterFormRef", "submitFilter", "submitFilterDebounce")
     const {filterContent, filterSubmitButton} = digs(this.props, "filterContent", "filterSubmitButton")
     const {filterSubmitLabel} = this.props
     const {qParams} = digs(this.shape, "qParams")
 
     return (
-      <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref="filterForm">
+      <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref={filterFormRef}>
         {filterContent({
-          onFilterChanged: this.submitFilter,
+          onFilterChanged: submitFilter,
           onFilterChangedWithDelay: submitFilterDebounce,
           qParams
         })}
@@ -345,7 +372,7 @@ export default class ApiMakerTable extends React.PureComponent {
   headersContentFromColumns () {
     const {preparedColumns, query} = digs(this.shape, "preparedColumns", "query")
 
-    return preparedColumns?.map(({column, tableSettingColumn}) => tableSettingColumn.visible() &&
+    return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
       <th
         className={classNames(...this.headerClassNameForColumn(column))}
         data-identifier={tableSettingColumn.identifier()}
@@ -373,6 +400,8 @@ export default class ApiMakerTable extends React.PureComponent {
   }
 
   headerLabelForColumn (column) {
+    const {modelClass} = digs(this.props, "modelClass")
+
     if ("label" in column) {
       if (typeof column.label == "function") {
         return column.label()
@@ -381,17 +410,21 @@ export default class ApiMakerTable extends React.PureComponent {
       }
     }
 
-    if (column.attribute) return this.props.modelClass.humanAttributeName(column.attribute)
+    let currentModelClass = modelClass
+
+    // Calculate current model class through path
+    if (column.path) {
+      for (const pathPart of column.path) {
+        const relationships = digg(currentModelClass.modelClassData(), "relationships")
+        const relationship = relationships.find((relationshipInArray) => relationshipInArray.name == inflection.underscore(pathPart))
+
+        currentModelClass = digg(require("@kaspernj/api-maker/src/models"), digg(relationship, "className"))
+      }
+    }
+
+    if (column.attribute) return currentModelClass.humanAttributeName(column.attribute)
 
     throw new Error("No 'label' or 'attribute' was given")
-  }
-
-  identifierForColumn (column) {
-    if (column.identifier) return column.identifier
-    if (column.attribute) return `attribute-${column.attribute}`
-    if (column.sortKey) return `sort-key-${column.sortKey}`
-
-    throw new Error("No 'attribute', 'identifier' or 'sortKey' was given")
   }
 
   onFilterFormSubmit = (e) => {
@@ -400,11 +433,13 @@ export default class ApiMakerTable extends React.PureComponent {
   }
 
   submitFilter = () => {
+    const {filterFormRef} = digs(this, "filterFormRef")
+    const filterForm = digg(filterFormRef, "current")
     const {appHistory} = this.props
-    const qParams = Params.serializeForm(this.refs.filterForm)
+    const qParams = Params.serializeForm(filterForm)
     const {queryQName} = this.shape
-
     const changeParamsParams = {}
+
     changeParamsParams[queryQName] = qParams
 
     Params.changeParams(changeParamsParams, {appHistory})

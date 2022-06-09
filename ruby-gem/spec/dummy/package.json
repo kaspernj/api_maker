@@ -15,6 +15,7 @@
     "@kaspernj/api-maker": "^1.0.146",
     "@kaspernj/api-maker-bootstrap": "^1.0.89",
     "@kaspernj/api-maker-inputs": "^1.0.74",
+    "@kaspernj/api-maker-table": "^1.0.2",
     "@rails/actioncable": "^7.0.3",
     "@rails/webpacker": "5.4.3",
     "babel-preset-react": "^6.24.1",
@@ -47,6 +48,6 @@
     "wake-event": "^0.0.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "^4.9.0"
+    "webpack-dev-server": "^4.9.1"
   }
 }

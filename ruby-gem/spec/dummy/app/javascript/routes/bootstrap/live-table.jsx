@@ -1,8 +1,8 @@
+import ApiMakerTable from "@kaspernj/api-maker-table/src/table"
 import ApplicationHistory from "shared/application-history"
-import { digs } from "diggerize"
+import Devise from "@kaspernj/api-maker/src/devise"
+import {digg, digs} from "diggerize"
 import Input from "@kaspernj/api-maker-bootstrap/src/input"
-import LiveTable from "@kaspernj/api-maker-bootstrap/src/live-table"
-import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 
 export default class BootstrapLiveTable extends React.PureComponent {
   render() {
@@ -32,9 +32,12 @@ export default class BootstrapLiveTable extends React.PureComponent {
 
     return (
       <Layout>
-        <LiveTable
+        <ApiMakerTable
           appHistory={ApplicationHistory}
-          columnsContent={this.columnsContent}
+          columns={digg(this, "columns")}
+          currentUser={Devise.currentUser()}
+          defaultDateFormatName="date.formats.short"
+          defaultDateTimeFormatName="time.formats.short"
           defaultParams={{s: "name asc"}}
           filterContent={this.filterContent}
           headersContent={this.headersContent}
@@ -58,29 +61,28 @@ export default class BootstrapLiveTable extends React.PureComponent {
     )
   }
 
-  headersContent = ({query}) => {
-    return (
-      <>
-        <th>
-          <SortLink attribute="id" query={query} />
-        </th>
-        <th>
-          <SortLink attribute="name" query={query} />
-        </th>
-      </>
-    )
-  }
-
-  columnsContent = ({task}) => {
-    return (
-      <>
-        <td>
-          {task.id()}
-        </td>
-        <td>
-          {task.name()}
-        </td>
-      </>
-    )
-  }
+  columns = () => [
+    {
+      attribute: "id",
+      sortKey: "id"
+    },
+    {
+      attribute: "name",
+      sortKey: "name"
+    },
+    {
+      attribute: "name",
+      path: ["project"],
+      sortKey: "projectName"
+    },
+    {
+      attribute: "createdAt",
+      sortKey: "createdAt"
+    },
+    {
+      attribute: "updatedAt",
+      defaultVisible: false,
+      sortKey: "updatedAt"
+    }
+  ]
 }

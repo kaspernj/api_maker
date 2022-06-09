@@ -1,8 +1,12 @@
+const classNames = require("classnames")
 const {digg, digs} = require("diggerize")
 const inflection = require("inflection")
 const {Link} = require("react-router-dom")
-const Money = require("js-money")
 const PropTypes = require("prop-types")
+
+import columnIdentifier from "./column-identifier"
+import columnVisible from "./column-visible"
+import MoneyFormatter from "@kaspernj/api-maker/src/money-formatter"
 
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
   static propTypes = {
@@ -64,11 +68,11 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
   columnsContentFromColumns (model) {
     const {preparedColumns} = digs(this.props, "preparedColumns")
 
-    return preparedColumns?.map(({column, tableSettingColumn}) => tableSettingColumn.visible() &&
+    return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
       <td
         className={classNames(this.columnClassNamesForColumn(column))}
-        data-identifier={this.props.liveTable.identifierForColumn(column)}
-        key={this.props.liveTable.identifierForColumn(column)}
+        data-identifier={columnIdentifier(column)}
+        key={columnIdentifier(column)}
       >
         {column.content && this.columnContentFromContentArg(column, model)}
         {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
@@ -87,11 +91,18 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     const currentModelClass = this.props.modelClass
     const path = column.path || []
 
-    if (path.length > 0) throw new Error("'path' support not implemented")
+    let currentModel = model
 
-    if (!(attribute in model)) throw new Error(`${currentModelClass.modelName().name} doesn't respond to ${attribute}`)
+    if (path.length > 0) {
+      for (const pathPart of path) {
+        currentModel = currentModel[pathPart]()
+        if (!currentModel) return
+      }
+    }
 
-    const value = model[attribute]()
+    if (!(attribute in currentModel)) throw new Error(`${currentModelClass.modelName().name} doesn't respond to ${attribute}`)
+
+    const value = currentModel[attribute]()
 
     return this.presentColumnValue(value)
   }
@@ -129,7 +140,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
 
   presentColumnValue (value) {
     if (value instanceof Date) {
-      return I18n.l("time.formats.default", value)
+      return this.presentDateTime(value)
     } else if (MoneyFormatter.isMoney(value)) {
       return MoneyFormatter.format(value)
     } else if (typeof value == "boolean") {
@@ -146,5 +157,21 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     }
 
     return value
+  }
+
+  presentDateTime(value) {
+    const apiMakerType = value.apiMakerType || "time"
+
+    if (apiMakerType == "time") {
+      const dateTimeFormatName = this.props.liveTable.props.defaultDateTimeFormatName || "time.formats.default"
+
+      return I18n.l(dateTimeFormatName, value)
+    } else if (apiMakerType == "date") {
+      const dateFormatName = this.props.liveTable.props.defaultDateTimeFormatName || "date.formats.default"
+
+      return I18n.l(dateFormatName, value)
+    } else {
+      throw new Error(`Unhandled type: ${apiMakerType}`)
+    }
   }
 }
