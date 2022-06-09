@@ -1,5 +1,5 @@
 import ApplicationHistory from "shared/application-history"
-import { Router } from "react-router-dom"
+import {BrowserRouter, Routes as ReactRouterDomRoutes} from "react-router-dom"
 import React from "react"
 import ReactDOM from "react-dom"
 import ResourceRoutes from "@kaspernj/api-maker/src/resource-routes"
@@ -15,10 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   ReactDOM.render((
-    <Router history={ApplicationHistory}>
+    <BrowserRouter history={ApplicationHistory}>
       <Suspense fallback={<div>Loading...</div>}>
-        {routes}
+        <ReactRouterDomRoutes>
+          {routes}
+        </ReactRouterDomRoutes>
       </Suspense>
-    </Router>
+    </BrowserRouter>
   ), reactRoot)
 })
