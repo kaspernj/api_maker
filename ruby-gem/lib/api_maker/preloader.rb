@@ -37,7 +37,7 @@ class ApiMaker::Preloader
       key_path << key
 
       reflection = model_class.reflections[key]
-      raise "Unknown reflection: #{@collection.model.name}##{key}" unless reflection
+      raise "Unknown reflection: #{model_class}##{key}" unless reflection
 
       fill_empty_relationships_for_key(reflection, key)
       preload_class = preload_class_for_key(reflection)
