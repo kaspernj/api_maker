@@ -1,4 +1,5 @@
 import {digg, digs} from "diggerize"
+import Params from "@kaspernj/api-maker/src/params"
 
 export default class ModelsHasManyAs extends React.PureComponent {
   params = Params.parse()
