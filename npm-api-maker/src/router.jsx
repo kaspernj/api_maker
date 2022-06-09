@@ -48,7 +48,7 @@ export default class ApiMakerRouter extends React.Component {
         if (!(routePathName in routes))
           throw new Error(`${routePathName} not found in routes: ${Object.keys(routes, ", ")}`)
 
-        const routePath = routes[routePathName](...params)
+        const routePath = routes[routePathName](...params).replace(/[\/]+$/, "")
         const groups = []
 
         let pathRegexString = '^'
@@ -97,7 +97,9 @@ export default class ApiMakerRouter extends React.Component {
       }
 
       if (path == "" && parsedRouteDefinition.routeDefinition.path == "/") matched = true
-      if (matched) return {params, parsedRouteDefinition}
+      if (matched) {
+        return {params, parsedRouteDefinition}
+      }
     }
   }
 
