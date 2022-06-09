@@ -1,10 +1,10 @@
 const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-name")
-const {Link} = require("react-router-dom")
 const PropTypes = require("prop-types")
 const propTypesExact = require("prop-types-exact")
 const qs = require("qs")
 const React = require("react")
 
+import Link from "@kaspernj/api-maker/src/link"
 import Result from "@kaspernj/api-maker/src/result"
 
 export default class ApiMakerBootstrapPaginate extends React.PureComponent {

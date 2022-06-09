@@ -1,12 +1,14 @@
 const {digg, digs} = require("diggerize")
 const {LocationChanged} = require("on-location-changed/location-changed-component")
 const inflection = require("inflection")
-const {Link} = require("react-router-dom")
 const PropTypes = require("prop-types")
 const qs = require("qs")
 const React = require("react")
 
-export default class ApiMakerBootstrapSortLink extends React.PureComponent {
+import Link from "@kaspernj/api-maker/src/link"
+import withQueryParams from "on-location-changed/src/with-query-params"
+
+class ApiMakerBootstrapSortLink extends React.PureComponent {
   static propTypes = {
     attribute: PropTypes.string.isRequired,
     className: PropTypes.string,
@@ -114,3 +116,5 @@ export default class ApiMakerBootstrapSortLink extends React.PureComponent {
     return query.modelClass().humanAttributeName(attribute)
   }
 }
+
+export default withHistory(withQueryParams(ApiMakerBootstrapSortLink))

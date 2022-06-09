@@ -1,7 +1,7 @@
 import Devise from "@kaspernj/api-maker/src/devise"
 import FlashMessage from "shared/flash-message"
 import EventEmitterListener from "@kaspernj/api-maker/src/event-emitter-listener"
-import { Link } from "react-router-dom"
+import Link from "@kaspernj/api-maker/src/link"
 import React from "react"
 import Routes from "shared/routes"
 
