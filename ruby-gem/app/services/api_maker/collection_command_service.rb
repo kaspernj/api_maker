@@ -46,7 +46,7 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
     raise CommandFailedError, message
   end
 
-  def fail_with_no_access
+  def fail_with_no_access!
     fail! "No access to '#{command_name}' on '#{model_class.name}'"
   end
 end
