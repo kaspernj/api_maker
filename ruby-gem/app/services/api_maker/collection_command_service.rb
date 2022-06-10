@@ -38,7 +38,7 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
 
   def constant
     @constant ||= constant_name.constantize
-  rescue NameError => e
+  rescue NameError
     fail! "Invalid command: #{constant_name}"
   end
 
