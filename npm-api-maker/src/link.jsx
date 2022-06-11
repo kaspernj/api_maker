@@ -2,10 +2,10 @@ import React from "react"
 
 export default class Link extends React.PureComponent {
   render() {
-    const {to, ...restProps} = this.props
+    const {to, onClick, ...restProps} = this.props
 
     return (
-      <a href={to} {...restProps} onClick={this.onLinkClicked} />
+      <a href={to} {...restProps} onClick={onClick || this.onLinkClicked} />
     )
   }
 
