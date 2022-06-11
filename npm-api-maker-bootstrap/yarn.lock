@@ -796,42 +796,20 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker-inputs@>= 1.0.75":
-  version "1.0.75"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.75.tgz#6acec5d011c829ff211d22b2d8c939e0a20f6fb8"
-  integrity sha512-m9Jd/lL95IQasLgTQbs8dfaZmKlzPpyb0XfQIe0xN4Qze4SQk2VT1aXDwuuLtMMtlZB4j4LM5X0z44gN0i7z7w==
+"@kaspernj/api-maker-inputs@>= 1.0.76":
+  version "1.0.76"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.76.tgz#dc536e003004abe4687a95205351764c00ee10a3"
+  integrity sha512-6RcP4OAIudofhn3rIanui8WJ6O/s+uBlAmVXgMi/Vi4cjv/ftB5zF3C/Tz6pbRgToTHnavJ7n+HRPmLJy9lzbg==
   dependencies:
-    "@kaspernj/api-maker" ">= 1.0.147"
+    "@kaspernj/api-maker" ">= 1.0.151"
     classnames ">= 2.2.6"
     diggerize ">= 1.0.4"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker@>= 1.0.147":
-  version "1.0.147"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.147.tgz#0f2f3b86e916c95ac1f3d66f803ec6bf1a044a58"
-  integrity sha512-O1Re64oMNTPr7aznFgP6zeDtyRiHBEm2qYU+KpHZzkEtwjlaUrtN8Mi8fla+rW9xgWiigRKtXUPQ6i4I1H12Mw==
-  dependencies:
-    "@rails/actioncable" ">= 6.1.0"
-    clone-deep ">= 4.0.1"
-    debounce ">= 1.2.1"
-    diggerize ">= 1.0.4"
-    epic-locks ">= 1.0.1"
-    form-data-objectizer ">= 1.0.0"
-    form-serialize ">= 0.7.2"
-    format-number ">= 3.0.0"
-    inflection ">= 1.12.0"
-    js-money ">= 0.6.3"
-    numberable ">= 1.0.0"
-    object-to-formdata ">= 4.1.0"
-    qs ">= 6.9.3"
-    replaceall ">= 0.1.6"
-    strftime ">= 0.10.0"
-    wake-event ">= 0.0.1"
-
-"@kaspernj/api-maker@>= 1.0.150":
-  version "1.0.150"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.150.tgz#e62c35e7912701fdafaa89f3225579799553573c"
-  integrity sha512-EtmKUcbXUZ6TpWGrm/qESd0plbzIJLixIOr64LXy5KBQXqhcwY+HSehkhC+tYCqnMBjNE8RWrKeSTiQCaGqK0A==
+"@kaspernj/api-maker@>= 1.0.151":
+  version "1.0.151"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.151.tgz#e7c6d31362269ffe2fe8b59fdacca0a32b66847a"
+  integrity sha512-R8Luq3j0nBeIoQnLfa8eQp6PI3a9N11c5RcQG9+xbEgHwIIrk3ZOMKz5Ylq675ED5gQsJ2RNd2sMfmTKMzRhWQ==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
