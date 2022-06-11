@@ -16,7 +16,7 @@ class ApiMakerRouter extends React.Component {
 
   render() {
     const {match, ...restProps} = this.props
-    const {matchingRoute} = {match}
+    const {matchingRoute} = match
 
     if (!matchingRoute) {
       if (this.props.notFoundComponent) {

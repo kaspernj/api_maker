@@ -6,7 +6,7 @@ import shouldComponentUpdate from "set-state-compare/src/should-component-update
 
 export default (WrapperComponent) => class WithRouter extends React.Component {
   static propTypes = {
-    path: PropTypes.string.isRequired,
+    path: PropTypes.string,
     routes: PropTypes.object,
     routeDefinitions: PropTypes.object
   }
@@ -27,6 +27,14 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
     }
 
     return result
+  }
+
+  path() {
+    let path = this.props.path || window.location.pathname
+
+    path = path.replace(/[\/]+$/, "")
+
+    return path
   }
 
   parseRouteDefinitions() {
@@ -76,7 +84,7 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
   }
 
   findMatchingRoute() {
-    const path = this.props.path.replace(/[\/]+$/, "")
+    const path = this.path()
 
     for (const parsedRouteDefinition of this.parsedRouteDefinitions) {
       const match = path.match(parsedRouteDefinition.pathRegex)
@@ -102,7 +110,6 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
 
   render() {
     const {path, routes, routeDefinitions, ...restProps} = this.props
-
     const matchingRoute = this.findMatchingRoute()
     const match = {
       matchingRoute,
