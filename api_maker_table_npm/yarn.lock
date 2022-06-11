@@ -980,10 +980,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker-bootstrap@>= 1.0.83":
-  version "1.0.89"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.89.tgz#84a08dfa449f21240b8333a7965d817af8300864"
-  integrity sha512-A4wav7kYV5zgBjtIeyrpNSDF9DRZLSUNEZYNPX9KUy8khcGDpnEkZThKaGIk6KwEtjxe5O5tzUgKZkUpZ7GECA==
+"@kaspernj/api-maker-bootstrap@>= 1.0.90":
+  version "1.0.90"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.90.tgz#d0d0760da96f640ae2382ff99311bf54dc857e97"
+  integrity sha512-Rcji8wkK4yOBMogGHKzjxkEvZP5zBH2LLD03k+jvjHCGVWHhAV22q+Bn9VN1/Xt4+lDZ5JOMVE4tkhwmXkx8ng==
   dependencies:
     "@kaspernj/api-maker" ">= 1.0.147"
     "@kaspernj/api-maker-inputs" ">= 1.0.73"
@@ -1009,6 +1009,28 @@
   version "1.0.147"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.147.tgz#0f2f3b86e916c95ac1f3d66f803ec6bf1a044a58"
   integrity sha512-O1Re64oMNTPr7aznFgP6zeDtyRiHBEm2qYU+KpHZzkEtwjlaUrtN8Mi8fla+rW9xgWiigRKtXUPQ6i4I1H12Mw==
+  dependencies:
+    "@rails/actioncable" ">= 6.1.0"
+    clone-deep ">= 4.0.1"
+    debounce ">= 1.2.1"
+    diggerize ">= 1.0.4"
+    epic-locks ">= 1.0.1"
+    form-data-objectizer ">= 1.0.0"
+    form-serialize ">= 0.7.2"
+    format-number ">= 3.0.0"
+    inflection ">= 1.12.0"
+    js-money ">= 0.6.3"
+    numberable ">= 1.0.0"
+    object-to-formdata ">= 4.1.0"
+    qs ">= 6.9.3"
+    replaceall ">= 0.1.6"
+    strftime ">= 0.10.0"
+    wake-event ">= 0.0.1"
+
+"@kaspernj/api-maker@>= 1.0.150":
+  version "1.0.150"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.150.tgz#e62c35e7912701fdafaa89f3225579799553573c"
+  integrity sha512-EtmKUcbXUZ6TpWGrm/qESd0plbzIJLixIOr64LXy5KBQXqhcwY+HSehkhC+tYCqnMBjNE8RWrKeSTiQCaGqK0A==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"

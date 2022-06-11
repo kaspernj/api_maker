@@ -6,7 +6,7 @@ const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-n
 const Params = require("@kaspernj/api-maker/src/params")
 const PropTypes = require("prop-types")
 const React = require("react")
-const {Shape} = require("set-state-compare")
+const Shape = require("set-state-compare/src/shape")
 
 import Card from "@kaspernj/api-maker-bootstrap/src/card"
 import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
