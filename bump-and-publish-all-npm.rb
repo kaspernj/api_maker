@@ -16,6 +16,7 @@ end
 def wait_for_publish
   puts "Waiting for publish"
   sleep 1
+  puts "Done waiting"
 end
 
 api_maker_package = JSON.parse(File.read("npm-api-maker/package.json"))
