@@ -1,6 +1,7 @@
 const Api = require("./api.cjs")
 const CommandSubmitData = require("./command-submit-data.cjs")
 const CustomError = require("./custom-error.cjs")
+const DestroyError = require("./destroy-error.cjs")
 const Deserializer = require("./deserializer.cjs")
 const {dig, digg} = require("diggerize")
 const FormDataObjectizer = require("form-data-objectizer")
@@ -152,14 +153,16 @@ module.exports = class ApiMakerCommandsPool {
   handleFailedResponse (commandData, commandResponseData) {
     let error
 
-    if (commandResponseData.error_type == "validation_error") {
+    if (commandResponseData.error_type == "destroy_error") {
+      error = new DestroyError(`Destroy failed`, {response: commandResponseData})
+    } else if (commandResponseData.error_type == "validation_error") {
       const validationErrors = new ValidationErrors({
         model: digg(commandResponseData, "model"),
         validationErrors: digg(commandResponseData, "validation_errors")
       })
       error = new ValidationError(validationErrors, {response: commandResponseData})
     } else {
-      error = new CustomError("Command failed", {response: commandResponseData})
+      error = new CustomError(`Command failed`, {response: commandResponseData})
     }
 
     commandData.reject(error)
