@@ -1,5 +1,4 @@
-import {digg} from "diggerize"
-
+const {digg} = require("diggerize")
 const errorMessages = (args) => {
   if (typeof args.response == "object") {
     return digg(args, "response", "errors").map((error) => {
