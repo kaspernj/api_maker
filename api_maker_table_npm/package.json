@@ -31,7 +31,7 @@
     "classnames": ">= 2.3.1",
     "debounce": ">= 1.2.1",
     "diggerize": ">= 1.0.4",
-    "set-state-compare": "^1.0.17",
+    "set-state-compare": "^1.0.18",
     "uniqunize": "^1.0.1"
   },
   "peerDependencies": {
