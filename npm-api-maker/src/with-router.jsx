@@ -4,6 +4,10 @@ import PropTypes from "prop-types"
 import React from "react"
 import shouldComponentUpdate from "set-state-compare/src/should-component-update"
 
+const cache = {
+  lastMountProps: {}
+}
+
 export default (WrapperComponent) => class WithRouter extends React.Component {
   static propTypes = {
     path: PropTypes.string,
@@ -12,6 +16,13 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
   }
 
   parsedRouteDefinitions = this.parseRouteDefinitions()
+
+  componentDidMount() {
+    const {routes, routeDefinitions} = this.props
+
+    // Save for later calls that would be given the props
+    if (routes && routeDefinitions) cache.lastMountProps = {routeDefinitions, routes}
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     return shouldComponentUpdate(this, nextProps, nextState)
@@ -37,9 +48,13 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
     return path
   }
 
+  routeDefinitions() { return this.props.routeDefinitions || cache.lastMountProps.routeDefinitions }
+  routes() { return this.props.routes || cache.lastMountProps.routes }
+
   parseRouteDefinitions() {
     const Locales = require("shared/locales").default
-    const {routeDefinitions, routes} = this.props
+    const routeDefinitions = this.routeDefinitions()
+    const routes = this.routes()
     const regex = /:([A-z\d_]+)/
     const parsedRouteDefinitions = []
 
