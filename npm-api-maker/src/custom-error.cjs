@@ -12,7 +12,7 @@ const errorMessages = (args) => {
   }
 }
 
-module.exports = class CustomError extends Error {
+class CustomError extends Error {
   constructor (message, args = {}) {
     let messageToUse = message
 
@@ -38,3 +38,7 @@ module.exports = class CustomError extends Error {
     }
   }
 }
+
+CustomError.apiMakerType = "CustomError"
+
+module.exports = CustomError
