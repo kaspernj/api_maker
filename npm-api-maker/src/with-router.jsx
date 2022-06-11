@@ -1,12 +1,9 @@
+import config from "./config"
 import escapeStringRegexp from "escape-string-regexp"
 import inflection from "inflection"
 import PropTypes from "prop-types"
 import React from "react"
 import shouldComponentUpdate from "set-state-compare/src/should-component-update"
-
-const cache = {
-  lastMountProps: {}
-}
 
 export default (WrapperComponent) => class WithRouter extends React.Component {
   static propTypes = {
@@ -16,13 +13,6 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
   }
 
   parsedRouteDefinitions = this.parseRouteDefinitions()
-
-  componentDidMount() {
-    const {routes, routeDefinitions} = this.props
-
-    // Save for later calls that would be given the props
-    if (routes && routeDefinitions) cache.lastMountProps = {routeDefinitions, routes}
-  }
 
   shouldComponentUpdate(nextProps, nextState) {
     return shouldComponentUpdate(this, nextProps, nextState)
@@ -48,8 +38,8 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
     return path
   }
 
-  routeDefinitions() { return this.props.routeDefinitions || cache.lastMountProps.routeDefinitions }
-  routes() { return this.props.routes || cache.lastMountProps.routes }
+  routeDefinitions() { return this.props.routeDefinitions || config.getRouteDefinitions() }
+  routes() { return this.props.routes || config.getRoutes() }
 
   parseRouteDefinitions() {
     const Locales = require("shared/locales").default

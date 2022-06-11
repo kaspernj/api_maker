@@ -11,12 +11,28 @@ class ApiMakerConfig {
     return this.global.currenciesCollection
   }
 
+  getRouteDefinitions() {
+    return this.global.routeDefinitions
+  }
+
+  getRoutes() {
+    return this.global.routes
+  }
+
   setCurrenciesCollection(newCurrenciesCollection) {
     this.global.currenciesCollection = newCurrenciesCollection
   }
 
   setHistory(history) {
     this.global.history = history
+  }
+
+  setRouteDefinitions(routeDefinitions) {
+    this.global.routeDefinitions = routeDefinitions
+  }
+
+  setRoutes(routes) {
+    this.global.routes = routes
   }
 }
 
