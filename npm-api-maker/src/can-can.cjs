@@ -46,18 +46,20 @@ module.exports = class ApiMakerCanCan {
       const abilityDataSubject = digg(abilityData, "subject")
       const abilityDataAbility = digg(abilityData, "ability")
 
-      // If actually same class
-      if (abilityDataSubject == subject && abilityDataAbility == ability) return true
+      if (abilityDataAbility == ability) {
+        // If actually same class
+        if (abilityDataSubject == subject) return true
 
-      // Sometimes in dev when using linking it will actually be two different but identical resource classes
-      if (
-        typeof subject == "function" &&
-        subject.modelClassData &&
-        typeof abilityDataSubject == "function" &&
-        abilityDataSubject.modelClassData &&
-        digg(subject.modelClassData(), "name") == digg(abilityDataSubject.modelClassData(), "name")
-      ) {
-        return true
+        // Sometimes in dev when using linking it will actually be two different but identical resource classes
+        if (
+          typeof subject == "function" &&
+          subject.modelClassData &&
+          typeof abilityDataSubject == "function" &&
+          abilityDataSubject.modelClassData &&
+          digg(subject.modelClassData(), "name") == digg(abilityDataSubject.modelClassData(), "name")
+        ) {
+          return true
+        }
       }
 
       return false
