@@ -26,7 +26,6 @@
   },
   "version": "1.0.76",
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.151",
     "classnames": ">= 2.2.6",
     "diggerize": ">= 1.0.4",
     "inflection": ">= 1.12.0"
@@ -42,6 +41,7 @@
     "jest": "^28.0.3"
   },
   "peerDependencies": {
+    "@kaspernj/api-maker": ">= 1.0.151",
     "prop-types": ">= 15.7.2",
     "prop-types-exact": ">= 1.2.0",
     "react": ">= 16.13.1",
