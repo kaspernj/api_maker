@@ -18,9 +18,10 @@ class ApiMaker::DestroyCommand < ApiMaker::BaseCommand
 
   def failure_response
     fail!(
+      error_type: :destroy_error,
+      errors: errors_for_model,
       model: serialized_model(model),
-      success: false,
-      errors: errors_for_model
+      success: false
     )
   end
 

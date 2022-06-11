@@ -22,6 +22,6 @@ class ValidationError extends CustomError {
   }
 }
 
-ValidationError.apiMakerType = "CustomError"
+ValidationError.apiMakerType = "ValidationError"
 
 module.exports = ValidationError
