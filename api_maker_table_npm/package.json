@@ -26,12 +26,14 @@
   },
   "homepage": "https://github.com/kaspernj/api_maker_table#readme",
   "dependencies": {
-    "@kaspernj/api-maker": ">= 1.0.147",
-    "@kaspernj/api-maker-bootstrap": ">= 1.0.83",
-    "classnames": ">= 2.3.1",
-    "debounce": ">= 1.2.1",
-    "diggerize": ">= 1.0.4",
-    "set-state-compare": "^1.0.17",
+    "@kaspernj/api-maker": ">= 1.0.150",
+    "@kaspernj/api-maker-bootstrap": ">= 1.0.90",
+    "classnames": "^2.3.1",
+    "debounce": "^1.2.1",
+    "diggerize": "^1.0.4",
+    "inflection": "^1.13.2",
+    "prop-types": "^15.8.1",
+    "set-state-compare": "^1.0.18",
     "uniqunize": "^1.0.1"
   },
   "peerDependencies": {

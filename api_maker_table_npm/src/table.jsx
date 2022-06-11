@@ -6,7 +6,6 @@ const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-n
 const Params = require("@kaspernj/api-maker/src/params")
 const PropTypes = require("prop-types")
 const React = require("react")
-const {Shape} = require("set-state-compare")
 
 import Card from "@kaspernj/api-maker-bootstrap/src/card"
 import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
@@ -14,6 +13,7 @@ import columnVisible from "./column-visible"
 import inflection from "inflection"
 import ModelRow from "./model-row"
 import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
+import Shape from "set-state-compare/src/shape"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"

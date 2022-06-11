@@ -1,6 +1,6 @@
 import {digs} from "diggerize"
 import Form from "components/tasks/form"
-import {Shape} from "set-state-compare"
+import Shape from "set-state-compare/src/shape"
 
 export default class RoutesTasksEdit extends React.PureComponent {
   taskId = this.props.match.params.id

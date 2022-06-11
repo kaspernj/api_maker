@@ -15,11 +15,8 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     ]).isRequired
   })
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      pages: this.pages()
-    }
+  state = {
+    pages: this.pages()
   }
 
   componentDidUpdate (prevProps) {
