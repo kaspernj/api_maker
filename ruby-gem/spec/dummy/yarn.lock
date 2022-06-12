@@ -1069,10 +1069,10 @@
     diggerize ">= 1.0.4"
     set-state-compare ">= 1.0.17"
 
-"@kaspernj/api-maker@>= 1.0.147", "@kaspernj/api-maker@^1.0.146":
-  version "1.0.147"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.147.tgz#0f2f3b86e916c95ac1f3d66f803ec6bf1a044a58"
-  integrity sha512-O1Re64oMNTPr7aznFgP6zeDtyRiHBEm2qYU+KpHZzkEtwjlaUrtN8Mi8fla+rW9xgWiigRKtXUPQ6i4I1H12Mw==
+"@kaspernj/api-maker@>= 1.0.147", "@kaspernj/api-maker@^1.0.161":
+  version "1.0.161"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.161.tgz#dea4a49678c77927dbbcc8cbb4bd0ea430068982"
+  integrity sha512-prN4AJWIftNltfzY3Xbw8lziElU0ISMY1r5rM5HsDkL8fWV2H1NwukcUhLwEM754JC5PUTkBl3nhpV6tEZgYbw==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -6527,14 +6527,7 @@ qs@6.9.7:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.7.tgz#4610846871485e1e048f44ae3b94033f0e675afe"
   integrity sha512-IhMFgUmuNpyRfxA90umL7ByLlgRXu6tIfKPpF5TmcfRLlLCckfP/g3IQmju6jjpu+Hh8rA+2p6A27ZSPOOHdKw==
 
-"qs@>= 6.9.3", qs@^6.10.3:
-  version "6.10.3"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.3.tgz#d6cde1b2ffca87b5aa57889816c5f81535e22e8e"
-  integrity sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==
-  dependencies:
-    side-channel "^1.0.4"
-
-qs@^6.10.5:
+"qs@>= 6.9.3", qs@^6.10.3, qs@^6.10.5:
   version "6.10.5"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.5.tgz#974715920a80ff6a262264acd2c7e6c2a53282b4"
   integrity sha512-O5RlPh0VFtR78y79rgcgKK4wbAI0C5zGVLztOIdpWX6ep368q5Hv6XRxDvXuZ9q3C6v+e3n8UfZZJw7IIG27eQ==
@@ -7138,6 +7131,11 @@ set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.17.tgz#8d70ad67540fbb308fbb6718dc1a6e94e5129145"
   integrity sha512-cF57j0+gJb6lDerGfrX+2qRfmXNL27WMzTMoHrSMQoPZgwigfbDYUPVeLfSyXM5iEqbaoqTrTK9YKvwfaY7tKA==
+
+set-state-compare@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.18.tgz#2cecd74fd6042aa6f1f2de690a5b346877f09d48"
+  integrity sha512-Hp37pr5Rv4dYbFg9Y7yXXnTcDIJkXeamkz8w3v8CqP4Dpn5T2QNM8DP4LRl0UDlmIDQBsCVQvrGVz4yU9fZJIg==
 
 set-value@^0.4.3:
   version "0.4.3"
