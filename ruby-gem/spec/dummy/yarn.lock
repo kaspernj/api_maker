@@ -5171,17 +5171,10 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.2.tgz#bc59824b54f05de0b7958cd0ec3ee1ace37a0fce"
-  integrity sha512-UnFKFPCB3m11ggnLrbithADIallCl982QtCf2t44z2BsgA65VwMlOqgmYzgwxXq4XcrIEeAHUqFkXjJ6E0u6LA==
-  dependencies:
-    diggerize "^1.0.3"
-
-"on-location-changed@>= 1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.5.tgz#22c27b8de6f58f63e94e542934bd710b72c8d567"
-  integrity sha512-E/etAIcRL6SoPku/sJ1++qrKbn12DoW/XC5DO36NbT5ncrxQRK52mS8+G1YMLtrozvBhYiLdOnErMAXgVoo/KQ==
+"on-location-changed@>= 1.0.2", "on-location-changed@>= 1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.7.tgz#cc25332e9bc2d6d5dcd52590052131c9770e8eb6"
+  integrity sha512-toc4vDfz58LMS6BRWCDJmva8MCkgK4R+VGUljCXF44uXBDVUxU6oodhAB27mW/5+cwJHMyWPdOWjbpGJ2m4z0g==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
@@ -6527,14 +6520,7 @@ qs@6.9.7:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.7.tgz#4610846871485e1e048f44ae3b94033f0e675afe"
   integrity sha512-IhMFgUmuNpyRfxA90umL7ByLlgRXu6tIfKPpF5TmcfRLlLCckfP/g3IQmju6jjpu+Hh8rA+2p6A27ZSPOOHdKw==
 
-"qs@>= 6.9.3", qs@^6.10.3:
-  version "6.10.3"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.3.tgz#d6cde1b2ffca87b5aa57889816c5f81535e22e8e"
-  integrity sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==
-  dependencies:
-    side-channel "^1.0.4"
-
-qs@^6.10.5:
+"qs@>= 6.9.3", qs@^6.10.3, qs@^6.10.5:
   version "6.10.5"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.5.tgz#974715920a80ff6a262264acd2c7e6c2a53282b4"
   integrity sha512-O5RlPh0VFtR78y79rgcgKK4wbAI0C5zGVLztOIdpWX6ep368q5Hv6XRxDvXuZ9q3C6v+e3n8UfZZJw7IIG27eQ==
@@ -7138,6 +7124,11 @@ set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.17.tgz#8d70ad67540fbb308fbb6718dc1a6e94e5129145"
   integrity sha512-cF57j0+gJb6lDerGfrX+2qRfmXNL27WMzTMoHrSMQoPZgwigfbDYUPVeLfSyXM5iEqbaoqTrTK9YKvwfaY7tKA==
+
+set-state-compare@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.18.tgz#2cecd74fd6042aa6f1f2de690a5b346877f09d48"
+  integrity sha512-Hp37pr5Rv4dYbFg9Y7yXXnTcDIJkXeamkz8w3v8CqP4Dpn5T2QNM8DP4LRl0UDlmIDQBsCVQvrGVz4yU9fZJIg==
 
 set-value@^0.4.3:
   version "0.4.3"

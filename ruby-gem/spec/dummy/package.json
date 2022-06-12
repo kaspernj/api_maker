@@ -31,7 +31,7 @@
     "js-yaml-loader": "^1.2.2",
     "merge": "^2.1.1",
     "object-to-formdata": "^4.4.2",
-    "on-location-changed": ">= 1.0.5",
+    "on-location-changed": ">= 1.0.7",
     "postcss-cssnext": "^3.1.1",
     "prop-types": "^15.8.1",
     "prop-types-exact": "^1.2.0",
