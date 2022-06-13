@@ -18,6 +18,7 @@ before_script:
   - cd api_maker_table_npm && yarn install --network-timeout 120000
   - cd api_maker_table_npm && yarn link @kaspernj/api-maker
   - cd api_maker_table_npm && yarn link @kaspernj/api-maker-bootstrap
+  - cd api_maker_table_npm && yarn link @kaspernj/api-maker-inputs
   - cd api_maker_table_npm && yarn link
 
   - cd ruby-gem/spec/dummy && yarn install --network-timeout 120000
