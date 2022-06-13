@@ -63,6 +63,7 @@ table_package["dependencies"]["@kaspernj/api-maker-inputs"] = inputs_new_version
 File.write("api_maker_table_npm/package.json", JSON.pretty_generate(table_package))
 
 puts %x[cd api_maker_table_npm && yarn && yarn publish --new-version #{table_new_version} --otp #{otp}]
+wait_for_publish
 
 
 dummy_package = JSON.parse(File.read("ruby-gem/spec/dummy/package.json"))
