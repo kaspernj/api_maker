@@ -63,3 +63,17 @@ table_package["dependencies"]["@kaspernj/api-maker-inputs"] = inputs_new_version
 File.write("api_maker_table_npm/package.json", JSON.pretty_generate(table_package))
 
 puts %x[cd api_maker_table_npm && yarn && yarn publish --new-version #{table_new_version} --otp #{otp}]
+
+
+dummy_package = JSON.parse(File.read("ruby-gem/spec/dummy/package.json"))
+table_version = table_package.fetch("version")
+table_new_version = bump_version(table_version)
+
+table_package["dependencies"]["@kaspernj/api-maker"] = api_maker_new_version
+table_package["dependencies"]["@kaspernj/api-maker-bootstrap"] = bootstrap_new_version
+table_package["dependencies"]["@kaspernj/api-maker-inputs"] = inputs_new_version
+table_package["dependencies"]["@kaspernj/api-maker-table"] = table_version
+
+File.write("ruby-gem/spec/dummy/package.json", JSON.pretty_generate(table_package))
+
+puts %x[cd ruby-gem/spec/dummy && yarn]
