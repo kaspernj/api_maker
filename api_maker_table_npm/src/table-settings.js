@@ -3,7 +3,7 @@ import columnVisible from "./column-visible"
 import {digg} from "diggerize"
 import inflection from "inflection"
 import {serialize as objectToFormData} from "object-to-formdata"
-import {TableSetting} from "@kaspernj/api-maker/src/models"
+import {TableSetting} from "@kaspernj/api-maker/src/models.cjs"
 
 export default class ApiMakerTableSettings {
   constructor({table}) {

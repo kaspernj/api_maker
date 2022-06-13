@@ -1,4 +1,4 @@
-import { Controller } from "stimulus"
+import {Controller} from "stimulus"
 import Devise from "@kaspernj/api-maker/src/devise"
 import Params from "@kaspernj/api-maker/src/params"
 

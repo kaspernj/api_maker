@@ -1,8 +1,8 @@
-const Devise = require("./devise.cjs")
-const inflection = require("inflection")
-const wakeEvent = require("wake-event")
+import Devise from "./devise.mjs"
+import inflection from "inflection"
+import wakeEvent from "wake-event"
 
-module.exports = class ApiMakerSessionStatusUpdater {
+export default class ApiMakerSessionStatusUpdater {
   static current () {
     if (!global.apiMakerSessionStatusUpdater)
       global.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()

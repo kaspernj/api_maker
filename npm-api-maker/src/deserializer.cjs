@@ -32,14 +32,14 @@ module.exports = class ApiMakerDeserializer {
         return Money.fromInteger(cents, currency)
       } else if (object.api_maker_type == "model") {
         const modelClassName = inflection.classify(digg(object, "model_name"))
-        const ModelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
+        const ModelClass = digg(require("@kaspernj/api-maker/src/models.cjs"), modelClassName)
         const data = ApiMakerDeserializer.parse(digg(object, "serialized"))
         const model = new ModelClass({data, isNewRecord: false})
 
         return model
       } else if (object.api_maker_type == "resource") {
         const modelClassName = inflection.classify(digg(object, "name"))
-        const ModelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
+        const ModelClass = digg(require("@kaspernj/api-maker/src/models.cjs"), modelClassName)
 
         return ModelClass
       } else {

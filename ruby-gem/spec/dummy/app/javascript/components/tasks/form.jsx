@@ -3,7 +3,7 @@ import {digg, digs} from "diggerize"
 import Input from "@kaspernj/api-maker-bootstrap/src/input"
 import PropTypes from "prop-types"
 import Select from "@kaspernj/api-maker-bootstrap/src/select"
-import TranslatedCollections from "@kaspernj/api-maker/src/translated-collections.cjs"
+import TranslatedCollections from "@kaspernj/api-maker/src/translated-collections.mjs"
 
 export default class ComponentsTasksForm extends React.PureComponent {
   static propTypes = {

@@ -1,29 +1,30 @@
-const CanCan = require("./can-can.cjs")
-const Deserializer = require("./deserializer.cjs")
-const {digg} = require("diggerize")
-const EventEmitter = require("events")
-const inflection = require("inflection")
-const Services = require("./services.cjs")
+import CanCan from "./can-can.cjs"
+import Deserializer from "./deserializer.cjs"
+import {digg} from "diggerize"
+import EventEmitter from "events"
+import inflection from "inflection"
+import modelClassRequire from "./model-class-require.cjs"
+import Services from "./services.cjs"
 
-module.exports = class ApiMakerDevise {
+export default class ApiMakerDevise {
   static callSignOutEvent (args) {
     ApiMakerDevise.events().emit("onDeviseSignOut", {args})
   }
 
   static current () {
-    if (!global.currentApiMakerDevise)
-    global.currentApiMakerDevise = new ApiMakerDevise()
+    if (!globalThis.currentApiMakerDevise)
+    globalThis.currentApiMakerDevise = new ApiMakerDevise()
 
-    return global.currentApiMakerDevise
+    return globalThis.currentApiMakerDevise
   }
 
   static events () {
-    if (!global.apiMakerDeviseEvents) {
-      global.apiMakerDeviseEvents = new EventEmitter()
-      global.apiMakerDeviseEvents.setMaxListeners(1000)
+    if (!globalThis.apiMakerDeviseEvents) {
+      globalThis.apiMakerDeviseEvents = new EventEmitter()
+      globalThis.apiMakerDeviseEvents.setMaxListeners(1000)
     }
 
-    return global.apiMakerDeviseEvents
+    return globalThis.apiMakerDeviseEvents
   }
 
   static addUserScope (scope) {
@@ -82,8 +83,8 @@ module.exports = class ApiMakerDevise {
     await CanCan.current().resetAbilities()
 
     // Cannot use the class because they would both import each other
-    if (global.apiMakerSessionStatusUpdater) {
-      global.apiMakerSessionStatusUpdater.updateSessionStatus()
+    if (globalThis.apiMakerSessionStatusUpdater) {
+      globalThis.apiMakerSessionStatusUpdater.updateSessionStatus()
     }
 
     ApiMakerDevise.setSignedOut(args)
@@ -104,7 +105,7 @@ module.exports = class ApiMakerDevise {
   }
 
   loadCurrentScope (scope) {
-    const scopeData = global.apiMakerDeviseCurrent[scope]
+    const scopeData = globalThis.apiMakerDeviseCurrent[scope]
 
     if (!scopeData) return null
 
@@ -113,7 +114,7 @@ module.exports = class ApiMakerDevise {
     // Might be a collection with preloaded relationships
     if (Array.isArray(parsedScopeData)) return parsedScopeData[0]
 
-    const ModelClass = digg(require("@kaspernj/api-maker/src/models"), inflection.camelize(scope))
+    const ModelClass = modelClassRequire(scope)
     const modelInstance = new ModelClass({data: parsedScopeData})
 
     return modelInstance

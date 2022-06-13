@@ -418,7 +418,7 @@ export default class ApiMakerTable extends React.PureComponent {
         const relationships = digg(currentModelClass.modelClassData(), "relationships")
         const relationship = relationships.find((relationshipInArray) => relationshipInArray.name == inflection.underscore(pathPart))
 
-        currentModelClass = digg(require("@kaspernj/api-maker/src/models"), digg(relationship, "className"))
+        currentModelClass = digg(require("@kaspernj/api-maker/src/models.cjs"), digg(relationship, "className"))
       }
     }
 

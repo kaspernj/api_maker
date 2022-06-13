@@ -8,8 +8,10 @@ require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Delete cache to force Webpacker to compile
-# path = Rails.root.join("tmp/cache").to_s
-# FileUtils.rm_rf(path)
+FileUtils.rm_rf(Rails.root.join("tmp/cache").to_s)
+FileUtils.rm_rf(Rails.root.join("public/packs").to_s)
+
+%x[cd spec/dummy && RAILS_ENV=development bin/webpacker && cd ..]
 
 require "money-rails"
 MoneyRails::Hooks.init

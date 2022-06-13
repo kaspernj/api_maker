@@ -212,7 +212,7 @@ class ApiMakerCollection {
   modelClass () {
     const modelName = digg(this.args.modelClass.modelClassData(), "name")
 
-    return digg(require("@kaspernj/api-maker/src/models"), modelName)
+    return digg(require("@kaspernj/api-maker/src/models.cjs"), modelName)
   }
 
   clone () {

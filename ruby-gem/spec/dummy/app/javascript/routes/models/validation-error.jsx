@@ -1,4 +1,4 @@
-import {Account} from "@kaspernj/api-maker/src/models"
+import {Account} from "@kaspernj/api-maker/src/models.cjs"
 import {digg, digs} from "diggerize"
 import FlashMessage from "shared/flash-message"
 import ValidationError from "@kaspernj/api-maker/src/validation-error"
