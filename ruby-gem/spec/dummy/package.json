@@ -13,7 +13,7 @@
   "dependencies": {
     "@babel/preset-react": "^7.17.12",
     "@kaspernj/api-maker": "^1.0.146",
-    "@kaspernj/api-maker-bootstrap": "^1.0.89",
+    "@kaspernj/api-maker-bootstrap": "^1.0.94",
     "@kaspernj/api-maker-inputs": "^1.0.74",
     "@kaspernj/api-maker-table": "^1.0.2",
     "@rails/actioncable": "^7.0.3",
