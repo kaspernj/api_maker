@@ -6,7 +6,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
   it "handles monetized attributes" do
     project.price_per_hour = "asd"
 
-    expect(project.valid?).to eq false
+    expect(project.valid?).to be false
 
     result = ApiMaker::ValidationErrorsGeneratorService.execute!(
       model: project,
@@ -140,7 +140,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
       id: project.id,
       model_name: "project",
       error_messages: ["can't be blank"],
-      error_types: [:blank, :blank],
+      error_types: [:blank],
       input_name: "project[name]"
     }]
   end

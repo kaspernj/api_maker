@@ -3,6 +3,7 @@ const CommandsPool = require("./commands-pool.cjs")
 const {digg} = require("diggerize")
 const inflection = require("inflection")
 const {merge} = require("./merge.cjs")
+const modelClassRequire = require("./model-class-require.cjs")
 const Result = require("./result.cjs")
 
 class ApiMakerCollection {
@@ -212,7 +213,7 @@ class ApiMakerCollection {
   modelClass () {
     const modelName = digg(this.args.modelClass.modelClassData(), "name")
 
-    return digg(require("@kaspernj/api-maker/src/models"), modelName)
+    return modelClassRequire(modelName)
   }
 
   clone () {

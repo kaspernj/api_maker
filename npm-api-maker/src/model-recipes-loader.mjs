@@ -1,7 +1,7 @@
-const {digg, digs} = require("diggerize")
-const ModelRecipesModelLoader = require("./model-recipes-model-loader.cjs")
+import {digg, digs} from "diggerize"
+import ModelRecipesModelLoader from "./model-recipes-model-loader.mjs"
 
-module.exports = class ModelRecipesLoader {
+export default class ModelRecipesLoader {
   constructor ({recipes}) {
     this.modelClasses = {}
     this.recipes = recipes

@@ -11,7 +11,7 @@ describe ApiMaker::PreloaderHasOne do
     collection = Project.where(id: [project.id])
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail.accounts"]}).to_json)
 
-    expect(result.dig!("preloaded", "projects", project.id.to_s, "r", "project_detail")).to eq nil
+    expect(result.dig!("preloaded", "projects", project.id.to_s, "r", "project_detail")).to be_nil
   end
 
   it "doesnt crash when trying to preload on an empty collection" do

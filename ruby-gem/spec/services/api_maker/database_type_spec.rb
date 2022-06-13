@@ -9,11 +9,11 @@ describe ApiMaker::DatabaseType do
   describe "#postgres?" do
     it "returns true when postgres" do
       expect(ApplicationRecord.connection).to receive(:adapter_name).and_return("PostgreSQL")
-      expect(ApiMaker::DatabaseType.postgres?).to eq true
+      expect(ApiMaker::DatabaseType.postgres?).to be true
     end
 
     it "returns false when sqlite" do
-      expect(ApiMaker::DatabaseType.postgres?).to eq false
+      expect(ApiMaker::DatabaseType.postgres?).to be false
     end
   end
 

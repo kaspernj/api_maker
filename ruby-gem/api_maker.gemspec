@@ -49,12 +49,13 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rubocop-rails"
   s.add_development_dependency "rubocop-rspec"
   s.add_development_dependency "selenium-webdriver", ">= 4.1.0"
+  s.add_development_dependency "shakapacker"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "tzinfo-data"
   s.add_development_dependency "webdrivers"
-  s.add_development_dependency "webpacker"
 
   # Needed to make Ruby 3 work on CI
   s.add_development_dependency "minitest", ">= 5.15"
   s.add_development_dependency "sexp_processor", ">= 4.16.0"
+  s.metadata["rubygems_mfa_required"] = "true"
 end

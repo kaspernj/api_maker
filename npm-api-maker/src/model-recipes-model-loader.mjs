@@ -1,9 +1,9 @@
-const BaseModel = require("./base-model.cjs")
-const Collection = require("./collection.cjs")
-const {digg, digs} = require("diggerize")
-const inflection = require("inflection")
+import BaseModel from "./base-model.cjs"
+import Collection from "./collection.cjs"
+import {digg, digs} from "diggerize"
+import inflection from "inflection"
 
-module.exports = class ApiMakerModelRecipesModelLoader {
+export default class ApiMakerModelRecipesModelLoader {
   constructor ({modelRecipe, modelRecipesLoader}) {
     if (!modelRecipe) throw new Error("No 'modelRecipe' was given")
 

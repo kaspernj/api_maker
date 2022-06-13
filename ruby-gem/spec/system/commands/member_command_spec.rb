@@ -13,6 +13,6 @@ describe "member command" do
 
     response = JSON.parse(find("[data-controller='commands--member']", visible: false)["data-test-member-response"])
 
-    expect(response.fetch("test_member_command_called")).to eq true
+    expect(response.fetch("test_member_command_called")).to be true
   end
 end

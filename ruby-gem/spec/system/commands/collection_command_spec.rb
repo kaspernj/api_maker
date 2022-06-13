@@ -16,6 +16,6 @@ describe "collection command" do
 
     response = JSON.parse(find("[data-controller='commands--collection']", visible: false)["data-test-collection-response"])
 
-    expect(response.fetch("test_collection_command_called")).to eq true
+    expect(response.fetch("test_collection_command_called")).to be true
   end
 end

@@ -8,8 +8,9 @@ require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Delete cache to force Webpacker to compile
-path = Rails.root.join("tmp/cache").to_s
-FileUtils.rm_rf(path)
+FileUtils.rm_rf(Rails.root.join("tmp/cache").to_s)
+FileUtils.rm_rf(Rails.root.join("public/packs").to_s)
+`cd spec/dummy && RAILS_ENV=development bin/webpacker && cd ..`
 
 require "money-rails"
 MoneyRails::Hooks.init
@@ -25,9 +26,9 @@ require "pry-rails"
 require "public_activity"
 require "puma"
 require "rspec/retry" if ENV["CI"]
+require "shakapacker"
 require "waitutil"
 require "webdrivers"
-require "webpacker"
 
 Capybara.register_driver :headless_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new

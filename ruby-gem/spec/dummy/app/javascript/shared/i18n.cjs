@@ -9,4 +9,4 @@ i18n.setLocaleOnStrftime()
 
 BaseModel.setI18n(i18n)
 
-export default i18n
+module.exports = i18n

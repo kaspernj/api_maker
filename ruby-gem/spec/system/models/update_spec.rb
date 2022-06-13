@@ -18,11 +18,11 @@ describe "model update" do
 
     result = JSON.parse(wait_for_and_find(".models-update", visible: false)["data-change-attributes-result"])
 
-    expect(result.fetch("initialChanged")).to eq false
+    expect(result.fetch("initialChanged")).to be false
     expect(result.fetch("initialChanges")).to eq({})
-    expect(result.fetch("firstChanged")).to eq true
+    expect(result.fetch("firstChanged")).to be true
     expect(result.fetch("firstChanges")).to eq("name" => "test-update-project")
-    expect(result.fetch("secondChanged")).to eq false
+    expect(result.fetch("secondChanged")).to be false
     expect(result.fetch("secondChanges")).to eq({})
   end
 end

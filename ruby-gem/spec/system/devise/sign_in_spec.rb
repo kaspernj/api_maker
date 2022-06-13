@@ -18,7 +18,7 @@ describe "Devise sign in" do
     expect(response.dig!("deviseSignInResponse", "response", "model", "modelData", "email")).to eq user.email
     expect(response.dig!("currentUserResult", "modelData", "id")).to eq user.id
     expect(response.dig!("currentUserResult")).not_to have_key "preloadedRelationships"
-    expect(response.fetch("isUserSignedInResult")).to eq true
+    expect(response.fetch("isUserSignedInResult")).to be true
   end
 
   it "signs in and sets current user with preloads" do
@@ -37,6 +37,6 @@ describe "Devise sign in" do
     expect(response.dig!("deviseSignInResponse", "response", "model", 0, "modelData", "email")).to eq user.email
     expect(response.dig!("currentUserResult", "modelData", "id")).to eq user.id
     expect(response.dig!("currentUserResult", "preloadedRelationships")).to eq("user_roles" => [user_role.id])
-    expect(response.fetch("isUserSignedInResult")).to eq true
+    expect(response.fetch("isUserSignedInResult")).to be true
   end
 end

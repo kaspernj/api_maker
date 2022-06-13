@@ -19,7 +19,7 @@ describe "bootstrap - checkboxes" do
 
     wait_for_browser { AccountMarkedTask.where(account: account, task: task1).any? }
 
-    expect(AccountMarkedTask.where(account: account, task: task2).any?).to eq false
+    expect(AccountMarkedTask.where(account: account, task: task2).any?).to be false
   end
 
   it "deletes the last relationship" do

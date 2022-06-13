@@ -1,13 +1,13 @@
-const Devise = require("./devise.cjs")
-const inflection = require("inflection")
-const wakeEvent = require("wake-event")
+import Devise from "./devise.mjs"
+import inflection from "inflection"
+import wakeEvent from "wake-event"
 
-module.exports = class ApiMakerSessionStatusUpdater {
+export default class ApiMakerSessionStatusUpdater {
   static current () {
-    if (!global.apiMakerSessionStatusUpdater)
-      global.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()
+    if (!globalThis.apiMakerSessionStatusUpdater)
+      globalThis.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()
 
-    return global.apiMakerSessionStatusUpdater
+    return globalThis.apiMakerSessionStatusUpdater
   }
 
   constructor (args = {}) {
@@ -20,7 +20,7 @@ module.exports = class ApiMakerSessionStatusUpdater {
   }
 
   connectOnlineEvent () {
-    global.addEventListener("online", () => this.updateSessionStatus(), false)
+    window.addEventListener("online", () => this.updateSessionStatus(), false)
   }
 
   connectWakeEvent () {

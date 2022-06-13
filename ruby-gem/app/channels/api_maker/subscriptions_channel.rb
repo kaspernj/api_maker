@@ -41,7 +41,7 @@ private
 
     unless model_class.respond_to?(:api_maker_broadcast_create_channel_name)
       error_message = "The model #{model_class.name} doesn't support the static method 'api_maker_broadcast_create_channel_name'. " \
-        "Maybe API maker extensions haven't been included?"
+                      "Maybe API maker extensions haven't been included?"
 
       raise error_message
     end

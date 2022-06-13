@@ -59,7 +59,7 @@ describe ApiMaker::CollectionSerializer do
     collection = Project.where(id: project.id)
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail"]}).to_json)
 
-    expect(result.dig!("preloaded", "projects", "2", "r", "project_detail")).to eq nil
+    expect(result.dig!("preloaded", "projects", "2", "r", "project_detail")).to be_nil
   end
 
   it "includes an empty array if it has been preloaded but doesnt exist for has many" do
@@ -147,7 +147,7 @@ describe ApiMaker::CollectionSerializer do
     result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail"]}).to_json)
 
     expect(result.dig!("data", "projects").length).to eq 1
-    expect(result.dig!("preloaded", "projects", project.id.to_s, "r", "project_detail")).to eq nil
+    expect(result.dig!("preloaded", "projects", project.id.to_s, "r", "project_detail")).to be_nil
   end
 
   it "selects given columns in the database query" do

@@ -13,6 +13,6 @@ describe "models - command serialize" do
 
     expect(response_data.dig!("modelData", "id")).to eq task.id
     expect(response_data.dig!("modelData", "user_id")).to eq user.id
-    expect(response_data.fetch("newRecord")).to eq false
+    expect(response_data.fetch("newRecord")).to be false
   end
 end

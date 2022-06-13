@@ -1,5 +1,6 @@
 const {digg} = require("diggerize")
 const inflection = require("inflection")
+const modelClassRequire = require("./model-class-require.cjs")
 const ModelsResponseReader = require("./models-response-reader.cjs")
 const Money = require("js-money")
 
@@ -32,14 +33,14 @@ module.exports = class ApiMakerDeserializer {
         return Money.fromInteger(cents, currency)
       } else if (object.api_maker_type == "model") {
         const modelClassName = inflection.classify(digg(object, "model_name"))
-        const ModelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
+        const ModelClass = modelClassRequire(modelClassName)
         const data = ApiMakerDeserializer.parse(digg(object, "serialized"))
         const model = new ModelClass({data, isNewRecord: false})
 
         return model
       } else if (object.api_maker_type == "resource") {
         const modelClassName = inflection.classify(digg(object, "name"))
-        const ModelClass = digg(require("@kaspernj/api-maker/src/models"), modelClassName)
+        const ModelClass = modelClassRequire(modelClassName)
 
         return ModelClass
       } else {

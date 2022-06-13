@@ -18,6 +18,6 @@ group :test do
   if File.exist?("/home/build/project/api_maker_table_rubygem")
     gem "api_maker_table", path: "/home/build/project/api_maker_table_rubygem"
   elsif File.exist?("/home/dev/Development/api_maker/api_maker_table_rubygem")
-    gem "api_maker_table", path: "/home/dev/Development/api_maker/api_maker_table_rubygem" # rubocop:disable Bundler/DuplicatedGem
+    gem "api_maker_table", path: "/home/dev/Development/api_maker/api_maker_table_rubygem"
   end
 end

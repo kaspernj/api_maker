@@ -1,5 +1,5 @@
-const {digg} = require("diggerize")
-const translatedCollectionsData = require("./translated-collections-data").default
+import {digg} from "diggerize"
+import translatedCollectionsData from "./translated-collections-data.mjs.erb"
 
 export default class ApiMakerTranslatedCollections {
   static get (modelClass, collectionName) {

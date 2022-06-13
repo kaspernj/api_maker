@@ -23,7 +23,7 @@ describe ApiMaker::CollectionLoader do
 
       result = collection_loader.manage_through_relationship
 
-      expect(result).to eq nil
+      expect(result).to be_nil
     end
   end
 end

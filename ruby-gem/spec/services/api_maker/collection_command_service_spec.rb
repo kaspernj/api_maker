@@ -12,7 +12,7 @@ describe ApiMaker::CollectionCommandService do
     )
   end
   let(:command_response) { ApiMaker::CommandResponse.new(controller: controller) }
-  let(:controller) { instance_double("ApplicationController", api_maker_args: {}, current_ability: ability) }
+  let(:controller) { instance_double(ApplicationController, api_maker_args: {}, current_ability: ability) }
   let(:user) { create :user }
 
   it "responds with an error when no access" do

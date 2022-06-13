@@ -1,5 +1,6 @@
 const {digg, digs} = require("diggerize")
 const inflection = require("inflection")
+const modelClassRequire = require("./model-class-require.cjs")
 
 class ValidationError {
   constructor (args) {
@@ -65,7 +66,7 @@ class ValidationError {
   getModelClass () {
     const modelName = inflection.classify(digg(this, "modelName"))
 
-    return digg(require("@kaspernj/api-maker/src/models"), modelName)
+    return modelClassRequire(modelName)
   }
 
   setHandled () {
