@@ -24,7 +24,7 @@ class ApiMakerRouter extends React.Component {
 
         return (
           <Suspense fallback={<div />}>
-            <NotFoundComponent />
+            <NotFoundComponent match={match} />
           </Suspense>
         )
       } else {
