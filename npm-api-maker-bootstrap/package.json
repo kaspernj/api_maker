@@ -9,7 +9,7 @@
     ]
   },
   "name": "@kaspernj/api-maker-bootstrap",
-  "version": "1.0.93",
+  "version": "1.0.94",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -27,8 +27,8 @@
   },
   "homepage": "https://github.com/kaspernj/api_maker#readme",
   "dependencies": {
-    "@kaspernj/api-maker": "1.0.161",
-    "@kaspernj/api-maker-inputs": "1.0.78",
+    "@kaspernj/api-maker": "1.0.162",
+    "@kaspernj/api-maker-inputs": "1.0.79",
     "debounce": ">= 1.2.0",
     "diggerize": ">= 1.0.4",
     "inflection": ">= 1.12.0",
