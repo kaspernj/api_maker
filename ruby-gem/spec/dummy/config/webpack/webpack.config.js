@@ -1,31 +1,32 @@
-const { environment } = require("@rails/webpacker")
+const babel = require("./loaders/babel")
 const erb = require("./loaders/erb")
 const path = require("path")
 const webpack = require("webpack")
+const { webpackConfig: baseWebpackConfig, merge } = require("shakapacker")
 
-// Fixes issues with resolving linked packages with peer dependencies when developing
-environment.config.resolve.modules = [path.resolve("./node_modules")]
-// environment.config.resolve.symlinks = false // Enabling this will make webpack-dev-server unable to watch for changes
-
-environment.loaders.append("babel", {
-  test: /\.(js|jsx)$/,
-  use: {
-    loader: "babel-loader",
-    options: {
-      cacheCompression: false,
-      cacheDirectory: true
-    }
+const options = {
+  module: {
+    rules: [
+      babel,
+      erb,
+      {
+        test: /\.ya?ml$/,
+        exclude: /node_modules/,
+        use: "js-yaml-loader"
+      }
+    ]
+  },
+  plugins: [],
+  resolve: {
+    extensions: [".css", ".scss", ".cjs", ".js.erb"],
+    modules: [path.resolve(__dirname, "../../node_modules")]
   }
-})
-environment.loaders.prepend("yaml", {
-  test: /\.ya?ml$/,
-  exclude: /node_modules/,
-  use: "js-yaml-loader"
-})
+}
 
-// Makes it possible to not import these very used components
-environment.plugins.append(
-  "ProvidePlugin",
+// This is necessary for the NPM packages to compile (it might be possible to get rid of with the right configuration)
+options.module.rules.push()
+
+options.plugins.push(
   new webpack.ProvidePlugin({
     FlashMessage: ["shared/flash-message", "default"],
     Hash: ["shared/hash", "default"],
@@ -48,5 +49,4 @@ environment.plugins.append(
   })
 )
 
-environment.loaders.prepend("erb", erb)
-module.exports = environment
+module.exports = merge({}, baseWebpackConfig, options)
