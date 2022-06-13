@@ -4,10 +4,10 @@ import wakeEvent from "wake-event"
 
 export default class ApiMakerSessionStatusUpdater {
   static current () {
-    if (!global.apiMakerSessionStatusUpdater)
-      global.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()
+    if (!globalThis.apiMakerSessionStatusUpdater)
+      globalThis.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()
 
-    return global.apiMakerSessionStatusUpdater
+    return globalThis.apiMakerSessionStatusUpdater
   }
 
   constructor (args = {}) {
@@ -20,7 +20,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   connectOnlineEvent () {
-    global.addEventListener("online", () => this.updateSessionStatus(), false)
+    window.addEventListener("online", () => this.updateSessionStatus(), false)
   }
 
   connectWakeEvent () {
