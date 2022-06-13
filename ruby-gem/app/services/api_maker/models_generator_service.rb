@@ -29,9 +29,7 @@ private
 
       base_model_target_path = File.join(target_path, file)
 
-      File.open(base_model_target_path, "w") do |fp|
-        fp.write(content)
-      end
+      File.write(base_model_target_path, content)
     end
   end
 end

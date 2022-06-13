@@ -21,7 +21,7 @@ private
 
   # Collects all the parent foreign keys like "users.organization_id" when preloading organizations and removes the blank (if a user doesn't have an org.)
   def look_up_values
-    @look_up_values ||= collection.map(&reflection.foreign_key.to_sym).reject(&:blank?)
+    @look_up_values ||= collection.map(&reflection.foreign_key.to_sym).reject(&:blank?) # rubocop:disable Rails/CompactBlank
   end
 
   def models

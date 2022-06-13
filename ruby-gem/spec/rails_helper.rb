@@ -11,7 +11,7 @@ require "rspec/rails"
 FileUtils.rm_rf(Rails.root.join("tmp/cache").to_s)
 FileUtils.rm_rf(Rails.root.join("public/packs").to_s)
 
-%x[cd spec/dummy && RAILS_ENV=development bin/webpacker && cd ..]
+`cd spec/dummy && RAILS_ENV=development bin/webpacker && cd ..`
 
 require "money-rails"
 MoneyRails::Hooks.init

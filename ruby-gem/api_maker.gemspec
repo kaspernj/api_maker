@@ -57,4 +57,5 @@ Gem::Specification.new do |s|
   # Needed to make Ruby 3 work on CI
   s.add_development_dependency "minitest", ">= 5.15"
   s.add_development_dependency "sexp_processor", ">= 4.16.0"
+  s.metadata["rubygems_mfa_required"] = "true"
 end

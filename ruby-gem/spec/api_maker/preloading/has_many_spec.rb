@@ -14,8 +14,8 @@ describe "preloading - has many" do
     collection = Account.where(id: account.id)
     reflection = Account.reflections.fetch("project_tasks")
 
-    expect(user_ability.can?(:read, task)).to eq true
-    expect(user_ability.can?(:read, other_task)).to eq false
+    expect(user_ability.can?(:read, task)).to be true
+    expect(user_ability.can?(:read, other_task)).to be false
 
     preloader = ApiMaker::PreloaderHasOne.new(
       ability: user_ability,
@@ -34,8 +34,8 @@ describe "preloading - has many" do
     expect(preloader.models).to eq [task]
     expect(sql).to include "JOIN tasks AS accessible_table ON accessible_table.id = tasks.id"
     expect(sql).to include "EXISTS (SELECT 1 FROM \"tasks\" WHERE ((" \
-      "EXISTS (SELECT 1 FROM account_marked_tasks WHERE account_marked_tasks.task_id = tasks.id AND (account_marked_tasks.id = 5))) OR "\
-      "((tasks.name = 'Some readable task') OR (\"tasks\".\"user_id\" = 1))) AND (tasks.id = accessible_table.id)"
+                           "EXISTS (SELECT 1 FROM account_marked_tasks WHERE account_marked_tasks.task_id = tasks.id AND (account_marked_tasks.id = 5))) OR "\
+                           "((tasks.name = 'Some readable task') OR (\"tasks\".\"user_id\" = 1))) AND (tasks.id = accessible_table.id)"
   end
 
   it "doesnt add joins and exists if the user has ability with no conditions" do
@@ -43,8 +43,8 @@ describe "preloading - has many" do
     collection = Account.where(id: account.id)
     reflection = Account.reflections.fetch("project_tasks")
 
-    expect(user_ability.can?(:read, task)).to eq true
-    expect(user_ability.can?(:read, other_task)).to eq true
+    expect(user_ability.can?(:read, task)).to be true
+    expect(user_ability.can?(:read, other_task)).to be true
 
     preloader = ApiMaker::PreloaderHasOne.new(
       ability: user_ability,
@@ -76,8 +76,8 @@ describe "preloading - has many" do
       collection = Project.where(id: project.id)
       reflection = Project.reflections.fetch("tasks")
 
-      expect(user_ability.can?(:read, task)).to eq true
-      expect(user_ability.can?(:read, other_task)).to eq true
+      expect(user_ability.can?(:read, task)).to be true
+      expect(user_ability.can?(:read, other_task)).to be true
 
       data = {
         preloaded: {}

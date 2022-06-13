@@ -6,7 +6,7 @@ describe Task do
 
     expect(task).to be_invalid
     expect(task.errors.full_messages).to eq ["State is not included in the list"]
-    expect(task.translated_state).to eq nil
+    expect(task.translated_state).to be_nil
   end
 
   it "translates the state" do

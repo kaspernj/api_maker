@@ -246,9 +246,9 @@ private
       "SELECT 1 " \
       "FROM #{reflection.klass.table_name} " \
       "WHERE " \
-        "#{nested_raw_sql_condition(model_class: model_class, reflection: reflection)} AND " \
-        "(#{relationship_sql})" \
-    ")"
+      "#{nested_raw_sql_condition(model_class: model_class, reflection: reflection)} AND " \
+      "(#{relationship_sql})" \
+      ")"
   end
 
   def nested_raw_sql_condition(model_class:, reflection:)
