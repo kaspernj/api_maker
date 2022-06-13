@@ -52,6 +52,4 @@ options.plugins.push(
 
 const config = merge({}, baseWebpackConfig, options)
 
-console.log(config)
-
 module.exports = config

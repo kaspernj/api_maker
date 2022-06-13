@@ -10,7 +10,6 @@ require "rspec/rails"
 # Delete cache to force Webpacker to compile
 FileUtils.rm_rf(Rails.root.join("tmp/cache").to_s)
 FileUtils.rm_rf(Rails.root.join("public/packs").to_s)
-
 `cd spec/dummy && RAILS_ENV=development bin/webpacker && cd ..`
 
 require "money-rails"

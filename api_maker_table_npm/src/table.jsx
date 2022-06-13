@@ -11,6 +11,7 @@ import Card from "@kaspernj/api-maker-bootstrap/src/card"
 import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
 import columnVisible from "./column-visible"
 import inflection from "inflection"
+import modelClassRequire from "@kaspernj/api-maker/src/model-class-require.cjs"
 import ModelRow from "./model-row"
 import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
 import Shape from "set-state-compare/src/shape"
@@ -418,7 +419,7 @@ export default class ApiMakerTable extends React.PureComponent {
         const relationships = digg(currentModelClass.modelClassData(), "relationships")
         const relationship = relationships.find((relationshipInArray) => relationshipInArray.name == inflection.underscore(pathPart))
 
-        currentModelClass = digg(require("@kaspernj/api-maker/src/models.cjs"), digg(relationship, "className"))
+        currentModelClass = modelClassRequire(digg(relationship, "className"))
       }
     }
 
