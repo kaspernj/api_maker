@@ -6,12 +6,12 @@ const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-n
 const Params = require("@kaspernj/api-maker/src/params")
 const PropTypes = require("prop-types")
 const React = require("react")
-const Shape = require("set-state-compare/src/shape")
 
 import Card from "./card"
 import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
 import ModelRow from "./live-table/model-row"
 import Paginate from "./paginate"
+import Shape from "set-state-compare/src/shape"
 import SortLink from "./sort-link"
 
 export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
