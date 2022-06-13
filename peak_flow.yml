@@ -29,7 +29,6 @@ before_script:
   - cd ruby-gem/spec/dummy && yarn
   - cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
   - cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
-  - cd ruby-gem/spec/dummy && rake api_maker:generate_models
 
 rvm: true
 builds:
