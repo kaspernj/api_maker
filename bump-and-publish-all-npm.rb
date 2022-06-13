@@ -72,7 +72,7 @@ table_new_version = bump_version(table_version)
 table_package["dependencies"]["@kaspernj/api-maker"] = api_maker_new_version
 table_package["dependencies"]["@kaspernj/api-maker-bootstrap"] = bootstrap_new_version
 table_package["dependencies"]["@kaspernj/api-maker-inputs"] = inputs_new_version
-table_package["dependencies"]["@kaspernj/api-maker-table"] = table_version
+table_package["dependencies"]["@kaspernj/api-maker-table"] = table_new_version
 
 File.write("ruby-gem/spec/dummy/package.json", JSON.pretty_generate(table_package))
 

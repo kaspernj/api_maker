@@ -14,12 +14,16 @@ const options = {
         test: /\.ya?ml$/,
         exclude: /node_modules/,
         use: "js-yaml-loader"
+      },
+      {
+        test: /\.(sass|scss|css)$/,
+        use: ["style-loader", "css-loader"]
       }
     ]
   },
   plugins: [],
   resolve: {
-    extensions: [".css", ".scss", ".cjs", ".mjs", ".js.erb"],
+    extensions: [".css", ".scss", ".cjs", ".cjs.erb", ".mjs", ".mjs.erb", ".js.erb"],
     modules: [path.resolve(__dirname, "../../node_modules")]
   }
 }
@@ -51,5 +55,7 @@ options.plugins.push(
 )
 
 const config = merge({}, baseWebpackConfig, options)
+
+console.log(config.module.rules)
 
 module.exports = config
