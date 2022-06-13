@@ -51,10 +51,12 @@ private
       {api_maker_type: :date, value: object.iso8601}
     elsif object.is_a?(Time)
       {api_maker_type: :time, value: object.utc.iso8601}
+    elsif object.is_a?(ApiMaker::CollectionSerializer) || object.is_a?(ApiMaker::Serializer)
+      parse_object(object.as_json)
     elsif object.is_a?(Class) && object < ApiMaker::BaseResource
       {api_maker_type: :resource, name: object.short_name}
-    elsif object.is_a?(ApiMaker::CollectionSerializer) || object.is_a?(ApiMaker::Serializer) || object.is_a?(ActiveRecord::Base)
-      parse_object(object.as_json)
+    elsif object.is_a?(ActiveRecord::Base)
+      parse_active_record(object)
     else
       object
     end
