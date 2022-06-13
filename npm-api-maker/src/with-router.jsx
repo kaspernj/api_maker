@@ -116,9 +116,10 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
   render() {
     const {path, routes, routeDefinitions, ...restProps} = this.props
     const matchingRoute = this.findMatchingRoute()
+    const params = matchingRoute?.params || {}
     const match = {
       matchingRoute,
-      params: matchingRoute.params
+      params
     }
 
     return (
