@@ -31,7 +31,7 @@
     "@kaspernj/api-maker-inputs": "1.0.83",
     "classnames": "^2.3.1",
     "debounce": "^1.2.1",
-    "diggerize": "^1.0.4",
+    "diggerize": "^1.0.5",
     "inflection": "^1.13.2",
     "prop-types": "^15.8.1",
     "set-state-compare": "^1.0.18",
