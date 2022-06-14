@@ -15,7 +15,7 @@ end
 
 def wait_for_publish
   puts "Waiting for publish"
-  sleep 2
+  sleep 5
   puts "Done waiting"
 end
 
