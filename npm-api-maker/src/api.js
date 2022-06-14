@@ -21,8 +21,9 @@ export default class Api {
   }
 
   static request ({data, headers, method, path, pathParams}) {
-    let requestPath = `${config.getHost()}${path}`
-
+    let requestPath = ""
+    if (config.getHost()) requestPath += config.getHost()
+    requestPath += path
 
     if (pathParams) {
       const pathParamsString = qs.stringify(pathParams, {arrayFormat: "brackets"})
