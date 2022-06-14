@@ -1,4 +1,4 @@
-const Api = require("./api.mjs")
+const Api = require("./api.js").default
 const CommandSubmitData = require("./command-submit-data.cjs")
 const CustomError = require("./custom-error.cjs")
 const DestroyError = require("./destroy-error.cjs")

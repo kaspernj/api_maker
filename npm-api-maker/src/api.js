@@ -5,32 +5,33 @@ import qs from "qs"
 
 export default class Api {
   static get (path, pathParams = null) {
-    return this.requestLocal({path, pathParams, method: "GET"})
+    return Api.requestLocal({path, pathParams, method: "GET"})
   }
 
   static delete (path, pathParams = null) {
-    return this.requestLocal({path, pathParams, method: "DELETE"})
+    return Api.requestLocal({path, pathParams, method: "DELETE"})
   }
 
   static patch (path, data = {}) {
-    return this.requestLocal({path, data, method: "PATCH"})
+    return Api.requestLocal({path, data, method: "PATCH"})
   }
 
   static post (path, data = {}) {
-    return this.requestLocal({path, data, method: "POST"})
+    return Api.requestLocal({path, data, method: "POST"})
   }
 
-  static request ({data, headers, method, path, pathParams, headers}) {
-    let path = `${config.getHost()}${path}`
+  static request ({data, headers, method, path, pathParams}) {
+    let requestPath = `${config.getHost()}${path}`
 
-    if (args.pathParams) {
+
+    if (pathParams) {
       const pathParamsString = qs.stringify(pathParams, {arrayFormat: "brackets"})
-      path += `?${pathParamsString}`
+      requestPath += `?${pathParamsString}`
     }
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
-      xhr.open(method, path, true)
+      xhr.open(method, requestPath, true)
 
       if (headers) {
         for (const headerName in headers) {
