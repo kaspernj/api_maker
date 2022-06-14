@@ -11,6 +11,10 @@ class ApiMakerConfig {
     return this.global.currenciesCollection
   }
 
+  getHost() {
+    return this.global.host
+  }
+
   getRouteDefinitions() {
     return this.global.routeDefinitions
   }
@@ -25,6 +29,10 @@ class ApiMakerConfig {
 
   setHistory(history) {
     this.global.history = history
+  }
+
+  setHost(host) {
+    this.global.host = host
   }
 
   setRouteDefinitions(routeDefinitions) {

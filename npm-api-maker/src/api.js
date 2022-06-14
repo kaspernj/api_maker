@@ -1,39 +1,42 @@
-const CustomError = require("./custom-error.cjs")
-const FormDataObjectizer = require("form-data-objectizer")
-const qs = require("qs")
+import config from "./config.js"
+import CustomError from "./custom-error.cjs"
+import FormDataObjectizer from "form-data-objectizer"
+import qs from "qs"
 
-module.exports = class Api {
+export default class Api {
   static get (path, pathParams = null) {
-    return this.requestLocal({path, pathParams, method: "GET"})
+    return Api.requestLocal({path, pathParams, method: "GET"})
   }
 
   static delete (path, pathParams = null) {
-    return this.requestLocal({path, pathParams, method: "DELETE"})
+    return Api.requestLocal({path, pathParams, method: "DELETE"})
   }
 
   static patch (path, data = {}) {
-    return this.requestLocal({path, data, method: "PATCH"})
+    return Api.requestLocal({path, data, method: "PATCH"})
   }
 
   static post (path, data = {}) {
-    return this.requestLocal({path, data, method: "POST"})
+    return Api.requestLocal({path, data, method: "POST"})
   }
 
-  static request (args) {
-    let path = args.path
+  static request ({data, headers, method, path, pathParams}) {
+    let requestPath = ""
+    if (config.getHost()) requestPath += config.getHost()
+    requestPath += path
 
-    if (args.pathParams) {
-      const pathParamsString = qs.stringify(args.pathParams, {arrayFormat: "brackets"})
-      path += `?${pathParamsString}`
+    if (pathParams) {
+      const pathParamsString = qs.stringify(pathParams, {arrayFormat: "brackets"})
+      requestPath += `?${pathParamsString}`
     }
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
-      xhr.open(args.method, path, true)
+      xhr.open(method, requestPath, true)
 
-      if (args.headers) {
-        for (const headerName in args.headers) {
-          xhr.setRequestHeader(headerName, args.headers[headerName])
+      if (headers) {
+        for (const headerName in headers) {
+          xhr.setRequestHeader(headerName, headers[headerName])
         }
       }
 
@@ -45,17 +48,17 @@ module.exports = class Api {
         } else {
           const customError = new CustomError(`Request failed with code: ${xhr.status}`, {response, xhr})
 
-          if (args.data instanceof FormData) {
-            customError.peakflowParameters = FormDataObjectizer.toObject(args.data)
+          if (data instanceof FormData) {
+            customError.peakflowParameters = FormDataObjectizer.toObject(data)
           } else {
-            customError.peakflowParameters = args.data
+            customError.peakflowParameters = data
           }
 
           reject(customError)
         }
       }
 
-      xhr.send(args.data)
+      xhr.send(data)
     })
   }
 
