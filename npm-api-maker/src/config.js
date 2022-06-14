@@ -12,7 +12,11 @@ class ApiMakerConfig {
   }
 
   getHost() {
-    return this.global.host
+    const host = this.global.host
+
+    if (typeof host == "function") return host()
+
+    return host
   }
 
   getRouteDefinitions() {
