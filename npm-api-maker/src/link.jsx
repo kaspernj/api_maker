@@ -5,17 +5,23 @@ export default class Link extends React.PureComponent {
     const {to, onClick, ...restProps} = this.props
 
     return (
-      <a href={to} {...restProps} onClick={onClick || this.onLinkClicked} />
+      <a href={to} {...restProps} onClick={this.onLinkClicked} />
     )
   }
 
-  onLinkClicked = (e) => {
-    e.preventDefault()
+  onLinkClicked = (e, ...restArgs) => {
+    const {onClick} = this.props
 
-    const history = global.apiMakerConfigGlobal?.history
+    if (onClick) onClick(e, ...restArgs)
 
-    if (!history) throw new Error("History hasn't been set in the API maker configuration")
+    if (!e.defaultPrevented) {
+      e.preventDefault()
 
-    history.push(this.props.to)
+      const history = global.apiMakerConfigGlobal?.history
+
+      if (!history) throw new Error("History hasn't been set in the API maker configuration")
+
+      history.push(this.props.to)
+    }
   }
 }
