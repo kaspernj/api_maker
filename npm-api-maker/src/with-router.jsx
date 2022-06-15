@@ -8,8 +8,8 @@ import shouldComponentUpdate from "set-state-compare/src/should-component-update
 export default (WrapperComponent) => class WithRouter extends React.Component {
   static propTypes = {
     path: PropTypes.string,
-    routes: PropTypes.object,
-    routeDefinitions: PropTypes.object
+    routeDefinitions: PropTypes.object,
+    routes: PropTypes.object
   }
 
   parsedRouteDefinitions = this.parseRouteDefinitions()
@@ -18,7 +18,7 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
     return shouldComponentUpdate(this, nextProps, nextState)
   }
 
-  findRouteParams (routeDefinition) {
+  findRouteParams(routeDefinition) {
     const result = []
     const parts = routeDefinition.path.split("/")
 
@@ -33,13 +33,18 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
   path() {
     let path = this.props.path || window.location.pathname
 
-    path = path.replace(/[\/]+$/, "")
+    path = path.replace(/[/]+$/, "")
 
     return path
   }
 
-  routeDefinitions() { return this.props.routeDefinitions || config.getRouteDefinitions() }
-  routes() { return this.props.routes || config.getRoutes() }
+  routeDefinitions() {
+    return this.props.routeDefinitions || config.getRouteDefinitions()
+  }
+
+  routes() {
+    return this.props.routes || config.getRoutes()
+  }
 
   parseRouteDefinitions() {
     const Locales = require("shared/locales").default
@@ -58,10 +63,9 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
         if (!(routePathName in routes))
           throw new Error(`${routePathName} not found in routes: ${Object.keys(routes, ", ")}`)
 
-        const routePath = routes[routePathName](...params).replace(/[\/]+$/, "")
+        const routePath = routes[routePathName](...params).replace(/[/]+$/, "")
         const groups = []
-
-        let pathRegexString = '^'
+        let pathRegexString = "^"
 
         pathRegexString += escapeStringRegexp(routePath)
 
@@ -74,10 +78,10 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
 
           groups.push(variableName)
 
-          pathRegexString = pathRegexString.replace(match[0], `([^\/]+)`)
+          pathRegexString = pathRegexString.replace(match[0], "([^/]+)")
         }
 
-        pathRegexString += '$'
+        pathRegexString += "$"
 
         const pathRegex = new RegExp(pathRegexString)
 
