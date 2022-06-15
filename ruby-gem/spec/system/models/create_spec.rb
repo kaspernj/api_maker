@@ -29,7 +29,7 @@ describe "model create" do
       wait_for_browser { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
     end
 
-    expect { visit_action.call }.to raise_error(RuntimeError, "UnhandledRejection: Command failed: No access to create Project")
+    expect { visit_action.call }.to raise_error(RuntimeError, "UnhandledRejection: No access to create Project")
     sleep 1 # Some stuff in JS may be going on - give it some time to wrap up
   end
 end
