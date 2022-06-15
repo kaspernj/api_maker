@@ -6,7 +6,11 @@ class BaseError extends Error {
     let messageToUse = message
 
     if (typeof args.response == "object" && dig(args, "response", "errors")) {
-      messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
+      if (message) {
+        messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
+      } else {
+        messageToUse = errorMessages(args).join(". ")
+      }
     }
 
     super(messageToUse)

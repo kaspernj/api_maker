@@ -162,7 +162,11 @@ module.exports = class ApiMakerCommandsPool {
       })
       error = new ValidationError(validationErrors, {response: commandResponseData})
     } else {
-      error = new CustomError(`Command failed`, {response: commandResponseData})
+      let errorMessage
+
+      if (!commandResponseData.errors) { errorMessage = "Command failed" }
+
+      error = new CustomError(errorMessage, {response: commandResponseData})
     }
 
     commandData.reject(error)
