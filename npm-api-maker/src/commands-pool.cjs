@@ -47,7 +47,7 @@ module.exports = class ApiMakerCommandsPool {
     this.pool = {}
     this.poolData = {}
     this.currentId = 1
-    this.globalRequestData = null
+    this.globalRequestData = {}
   }
 
   addCommand (data) {
@@ -107,7 +107,7 @@ module.exports = class ApiMakerCommandsPool {
     try {
       const submitData = {pool: currentPoolData}
 
-      if (this.globalRequestData)
+      if (Object.keys(this.globalRequestData).length > 0)
         submitData.global = this.globalRequestData
 
       const commandSubmitData = new CommandSubmitData(submitData)
