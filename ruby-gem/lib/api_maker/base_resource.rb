@@ -7,6 +7,7 @@ class ApiMaker::BaseResource
 
   CRUD = [:create, :create_events, :read, :update, :update_events, :destroy, :destroy_events].freeze
   READ = [:create_events, :destroy_events, :read, :update_events].freeze
+  WRITE = [:create, :update, :destroy].freeze
 
   def self.attribute(attribute_name, **args)
     # Automatically add a columns argument if the attribute name matches a column name on the models table
