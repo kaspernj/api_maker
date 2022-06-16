@@ -21,6 +21,16 @@ Or install it yourself as:
 $ gem install api_maker_table
 ```
 
+Install migrations:
+```bash
+rails api_maker_table:install:migrations
+```
+
+Run migrations:
+```bash
+rails db:migrate
+```
+
 ## Contributing
 Contribution directions go here.
 
