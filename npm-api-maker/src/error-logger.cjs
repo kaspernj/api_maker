@@ -6,6 +6,7 @@ module.exports = class ErrorLogger {
     this.debug = true
     this.errorOccurred = false
     this.errors = []
+    this.isHandlingError = false
     this.sourceMapsLoader = new SourceMapsLoader()
     this.sourceMapsLoader.loadSourceMapsForScriptTags((script) => {
       const src = script.getAttribute("src")
