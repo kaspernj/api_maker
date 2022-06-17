@@ -53,8 +53,8 @@ module ApiMaker::SpecHelper
 
     # Wait until error logger has finished loading source maps and parsed errors
     loop do
-      loading_source_maps = execute_script("return window.errorLogger.isWorkingOnError()")
-      break unless loading_source_maps
+      is_working_on_error = execute_script("return window.errorLogger.isWorkingOnError()")
+      break unless is_working_on_error
 
       sleep 0.1
     end
