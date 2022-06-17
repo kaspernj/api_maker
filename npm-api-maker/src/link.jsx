@@ -14,7 +14,7 @@ export default class Link extends React.PureComponent {
 
     if (onClick) onClick(e, ...restArgs)
 
-    if (!e.defaultPrevented) {
+    if (!e.defaultPrevented && !e.ctrlKey && !e.metaKey) {
       e.preventDefault()
 
       const history = global.apiMakerConfigGlobal?.history
