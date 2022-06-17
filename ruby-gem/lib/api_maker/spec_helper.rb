@@ -55,6 +55,7 @@ module ApiMaker::SpecHelper
     loop do
       loading_source_maps = execute_script("return window.errorLogger.isWorkingOnError()")
       break unless loading_source_maps
+
       sleep 0.1
     end
 
