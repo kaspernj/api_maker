@@ -31,6 +31,7 @@ module.exports = class SourceMapsLoader {
     if (error) sources = sources.concat(this.getSourcesFromError(error))
 
     return uniqunize(sources)
+      .filter((source) => source != "\u003Canonymous>")
   }
 
   async loadSourceMaps (error) {
