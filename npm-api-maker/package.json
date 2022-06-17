@@ -50,6 +50,7 @@
     "qs": ">= 6.9.3",
     "replaceall": ">= 0.1.6",
     "strftime": ">= 0.10.0",
+    "uniqunize": "^1.0.1",
     "wake-event": ">= 0.0.1"
   },
   "peerDependencies": {
