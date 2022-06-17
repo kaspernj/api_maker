@@ -44,9 +44,23 @@ module ApiMaker::SpecHelper
     page.driver.browser.switch_to.alert.accept
   end
 
+  def error_logger_present?
+    execute_script("return Boolean(window.errorLogger)")
+  end
+
   def expect_no_browser_window_errors
-    errors = execute_script("if (window.errorLogger) { return window.errorLogger.getErrors() }")
-    return if !errors.is_a?(Array) || errors.empty?
+    raise "API maker: Error logger hasn't been set up on window, so we can't delegate JS errors to Ruby" unless error_logger_present?
+
+    # Wait until error logger has finished loading source maps and parsed errors
+    loop do
+      loading_source_maps = execute_script("return window.errorLogger.isWorkingOnError()")
+      break unless loading_source_maps
+      sleep 0.1
+    end
+
+    errors = execute_script("return window.errorLogger.getErrors()")
+
+    return if errors.empty?
 
     last_error = errors.last
 

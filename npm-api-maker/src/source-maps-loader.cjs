@@ -1,5 +1,6 @@
 const stackTraceParser = require("stacktrace-parser")
 const {SourceMapConsumer} = require("source-map")
+const uniqunize = require("uniqunize")
 
 // Sometimes this needs to be called and sometimes not
 if (SourceMapConsumer.initialize) {
@@ -10,6 +11,8 @@ if (SourceMapConsumer.initialize) {
 
 module.exports = class SourceMapsLoader {
   constructor () {
+    this.debug = false
+    this.isLoadingSourceMaps = false
     this.sourceMaps = []
     this.srcLoaded = {}
   }
@@ -22,22 +25,61 @@ module.exports = class SourceMapsLoader {
     this.sourceMapForSourceCallback = callback
   }
 
-  async loadSourceMaps () {
+  getSources(error) {
+    let sources = this.getSourcesFromScripts()
+
+    if (error) sources = sources.concat(this.getSourcesFromError(error))
+
+    return uniqunize(sources)
+  }
+
+  async loadSourceMaps (error) {
+    this.isLoadingSourceMaps = true
+
+    try {
+      const promises = []
+      const sources = this.getSources(error)
+
+      for(const src of sources) {
+        if (src && !this.srcLoaded[src]) {
+          this.srcLoaded[src] = true
+
+          const promise = this.loadSourceMapForSource(src)
+          promises.push(promise)
+        }
+      }
+
+      await Promise.all(promises)
+    } finally {
+      this.isLoadingSourceMaps = false
+    }
+  }
+
+  getSourcesFromError(error) {
+    const stack = stackTraceParser.parse(error.stack)
+    const sources = []
+
+    for (const trace of stack) {
+      sources.push(trace.file)
+    }
+
+    return sources
+  }
+
+  getSourcesFromScripts() {
     const scripts = document.querySelectorAll("script")
-    const promises = []
+    const sources = []
 
     for (const script of scripts) {
       const src = this.loadSourceMapsForScriptTagsCallback(script)
 
-      if (src && !this.srcLoaded[src]) {
+      if (src) {
         this.srcLoaded[src] = true
-
-        const promise = this.loadSourceMapForSource(src)
-        promises.push(promise)
+        sources.push(src)
       }
     }
 
-    await Promise.all(promises)
+    return sources
   }
 
   async loadSourceMapForSource (src) {
@@ -90,6 +132,7 @@ module.exports = class SourceMapsLoader {
 
     for (const trace of stack) {
       const sourceMapData = this.sourceMaps.find((sourceMapData) => sourceMapData.originalUrl == trace.file)
+
       let filePath, fileString, original
 
       if (sourceMapData) {
@@ -100,7 +143,7 @@ module.exports = class SourceMapsLoader {
       }
 
       if (original && original.source) {
-        filePath = original.source.replace(/^webpack:\/\/\//, "")
+        filePath = original.source.replace(/^webpack:\/\/(app|)\//, "")
         fileString = `${filePath}:${original.line}`
 
         if (original.column) {

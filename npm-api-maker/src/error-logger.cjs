@@ -1,7 +1,10 @@
+const {digg} = require("diggerize")
 const SourceMapsLoader = require("./source-maps-loader.cjs")
 
 module.exports = class ErrorLogger {
   constructor () {
+    this.debug = true
+    this.errorOccurred = false
     this.errors = []
     this.sourceMapsLoader = new SourceMapsLoader()
     this.sourceMapsLoader.loadSourceMapsForScriptTags((script) => {
@@ -23,8 +26,22 @@ module.exports = class ErrorLogger {
     return this.errors
   }
 
+  hasErrorOccurred() {
+    return digg(this, "errorOccurred")
+  }
+
+  isLoadingSourceMaps() {
+    return digg(this, "sourceMapsLoader", "isLoadingSourceMaps")
+  }
+
+  isWorkingOnError() {
+    return digg(this, "isHandlingError") || this.isLoadingSourceMaps()
+  }
+
   connectOnError () {
     global.addEventListener("error", (event) => {
+      this.errorOccurred = true
+
       if (!this.isHandlingError) {
         this.isHandlingError = true
         this.onError(event).finally(() => {
@@ -36,6 +53,8 @@ module.exports = class ErrorLogger {
 
   connectUnhandledRejection () {
     global.addEventListener("unhandledrejection", (event) => {
+      this.errorOccurred = true
+
       if (!this.isHandlingError) {
         this.isHandlingError = true
         this.onUnhandledRejection(event).finally(() => {
@@ -46,7 +65,8 @@ module.exports = class ErrorLogger {
   }
 
   async onError (event) {
-    await this.sourceMapsLoader.loadSourceMaps()
+    this.errorOccurred = true
+    await this.sourceMapsLoader.loadSourceMaps(event.error)
 
     if (event.error && event.error.stack) {
       const backtrace = this.sourceMapsLoader.parseStackTrace(event.error.stack)
@@ -66,7 +86,7 @@ module.exports = class ErrorLogger {
   }
 
   async onUnhandledRejection (event) {
-    await this.sourceMapsLoader.loadSourceMaps()
+    await this.sourceMapsLoader.loadSourceMaps(event.reason)
 
     if (event.reason.stack) {
       const backtrace = this.sourceMapsLoader.parseStackTrace(event.reason.stack)
@@ -74,7 +94,7 @@ module.exports = class ErrorLogger {
       this.errors.push({
         errorClass: "UnhandledRejection",
         message: event.reason.message || "Unhandled promise rejection",
-        backtrace: backtrace
+        backtrace
       })
     } else {
       this.errors.push({
