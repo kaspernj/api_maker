@@ -23,7 +23,7 @@
     "babel-loader": "8",
     "babel-plugin-macros": "^3.1.0",
     "classnames": "^2.3.1",
-    "compression-webpack-plugin": "9",
+    "compression-webpack-plugin": "10",
     "css-loader": "^6.7.1",
     "debounce": "^1.2.1",
     "diggerize": "^1.0.4",
