@@ -30,8 +30,7 @@ module.exports = class SourceMapsLoader {
 
     if (error) sources = sources.concat(this.getSourcesFromError(error))
 
-    return uniqunize(sources)
-      .filter((source) => source != "\u003Canonymous>")
+    return uniqunize(sources, (source) => source.originalUrl)
   }
 
   async loadSourceMaps (error) {
@@ -41,11 +40,11 @@ module.exports = class SourceMapsLoader {
       const promises = []
       const sources = this.getSources(error)
 
-      for(const src of sources) {
-        if (src && !this.srcLoaded[src]) {
-          this.srcLoaded[src] = true
+      for(const source of sources) {
+        if (source.originalUrl && !this.srcLoaded[source.originalUrl]) {
+          this.srcLoaded[source.originalUrl] = true
 
-          const promise = this.loadSourceMapForSource(src)
+          const promise = this.loadSourceMapForSource(source)
           promises.push(promise)
         }
       }
@@ -61,7 +60,13 @@ module.exports = class SourceMapsLoader {
     const sources = []
 
     for (const trace of stack) {
-      sources.push(trace.file)
+      const file = trace.file
+
+      if (file != "\u003Canonymous>") {
+        const sourceMapUrl = this.getMapURL({src: file})
+
+        if (sourceMapUrl) sources.push({originalUrl: file, sourceMapUrl})
+      }
     }
 
     return sources
@@ -72,40 +77,41 @@ module.exports = class SourceMapsLoader {
     const sources = []
 
     for (const script of scripts) {
-      const src = this.loadSourceMapsForScriptTagsCallback(script)
+      const sourceMapUrl = this.getMapURL({script, src: script.src})
 
-      if (src) {
-        this.srcLoaded[src] = true
-        sources.push(src)
-      }
+      if (sourceMapUrl) sources.push({originalUrl: script.src, sourceMapUrl})
     }
 
     return sources
   }
 
-  async loadSourceMapForSource (src) {
+  getMapURL({script, src}) {
     const url = this.loadUrl(src)
     const originalUrl = `${url.origin}${url.pathname}`
 
-    let mapUrl
-
     if (this.sourceMapForSourceCallback) {
       // Use custom callback to resolve which map-file to download
-      mapUrl = this.sourceMapForSourceCallback({src, url})
-    } else {
+      return this.sourceMapForSourceCallback({originalUrl, script, src, url})
+    } else if (this.includeMapURL(src)) {
       // Default to original URL with '.map' appended
-      mapUrl = `${originalUrl}.map`
+      return `${originalUrl}.map`
     }
+  }
 
+  includeMapURL(src) {
+    return src.includes("/packs/") || src.includes("/assets/")
+  }
+
+  async loadSourceMapForSource ({originalUrl, sourceMapUrl}) {
     const xhr = new XMLHttpRequest()
 
-    xhr.open("GET", mapUrl, true)
+    xhr.open("GET", sourceMapUrl, true)
 
     await this.loadXhr(xhr)
 
     const consumer = await new SourceMapConsumer(xhr.responseText)
 
-    this.sourceMaps.push({consumer, originalUrl, src})
+    this.sourceMaps.push({consumer, originalUrl})
   }
 
   loadUrl (url) {
