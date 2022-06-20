@@ -1058,6 +1058,16 @@
     diggerize ">= 1.0.5"
     inflection ">= 1.12.0"
 
+"@kaspernj/api-maker-inputs@1.0.97":
+  version "1.0.97"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.97.tgz#a0c72b87d4000b3f83ee6f7fafc606db38f4bd9d"
+  integrity sha512-fqORUuHi4qoQdxhe4btgkJq0Uff83Kq1yOu3ROfZfMjiURgoS4NKLmKmi5gsra5+SazqmYzpnxbEsDBl+XJ+gQ==
+  dependencies:
+    "@kaspernj/api-maker" "1.0.190"
+    classnames ">= 2.2.6"
+    diggerize ">= 1.0.5"
+    inflection ">= 1.12.0"
+
 "@kaspernj/api-maker-table@1.0.18":
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-table/-/api-maker-table-1.0.18.tgz#22a293d525b67d254586399db951a6e7bf4c8197"
@@ -1182,6 +1192,29 @@
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
     strftime ">= 0.10.0"
+    wake-event ">= 0.0.1"
+
+"@kaspernj/api-maker@1.0.190":
+  version "1.0.190"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.190.tgz#0501600e30210253abbd109aa833964fb9b9bbb1"
+  integrity sha512-pcih/4uu9Qgkzxadh/HcuUqsyhalS6HnUn7KTaF3gBeR1c5JQTi+Lcq+vueR8EINi1Q9P/Na3vgCKgkgioZTWA==
+  dependencies:
+    "@rails/actioncable" ">= 6.1.0"
+    clone-deep ">= 4.0.1"
+    debounce ">= 1.2.1"
+    diggerize ">= 1.0.5"
+    epic-locks ">= 1.0.1"
+    form-data-objectizer ">= 1.0.0"
+    form-serialize ">= 0.7.2"
+    format-number ">= 3.0.0"
+    inflection ">= 1.12.0"
+    js-money ">= 0.6.3"
+    numberable ">= 1.0.0"
+    object-to-formdata ">= 4.1.0"
+    qs ">= 6.9.3"
+    replaceall ">= 0.1.6"
+    strftime ">= 0.10.0"
+    uniqunize "^1.0.1"
     wake-event ">= 0.0.1"
 
 "@leichtgewicht/ip-codec@^2.0.1":
@@ -2024,15 +2057,10 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-"diggerize@>= 1.0.5", diggerize@^1.0.5:
+"diggerize@>= 1.0.5", diggerize@^1.0.3, diggerize@^1.0.4, diggerize@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.5.tgz#268fd91f204959ee85bc7a0ee776178870a470f2"
   integrity sha512-DQZM0okJRCslVWAuyR6GCZfb9vdPApymlIq//ax53KxUAwvnUTLegYFIyvPm3oXBYGTdbaUV/iZ4K+NDSahDAA==
-
-diggerize@^1.0.3, diggerize@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.4.tgz#21a7d1bc215999376eb86a024276236059fcf2bd"
-  integrity sha512-vC545+jn4Z55AswKUzpAPcDbkuu1S97MlOjBVoNkVUjwj1fnNdNi75XeOKLIaMLpT3uygCCmh5w8xDlAEboPwg==
 
 dns-equal@^1.0.0:
   version "1.0.0"
