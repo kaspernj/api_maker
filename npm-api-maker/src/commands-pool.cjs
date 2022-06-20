@@ -69,7 +69,7 @@ module.exports = class ApiMakerCommandsPool {
 
       let args
 
-      if (data.args.nodeName == "FORM") {
+      if (data.args?.nodeName == "FORM") {
         const formData = new FormData(data.args)
 
         args = FormDataObjectizer.toObject(formData)
