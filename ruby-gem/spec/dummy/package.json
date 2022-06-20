@@ -18,7 +18,7 @@
     "@babel/runtime": "7",
     "@kaspernj/api-maker": "1.0.177",
     "@kaspernj/api-maker-bootstrap": "1.0.104",
-    "@kaspernj/api-maker-inputs": "1.0.89",
+    "@kaspernj/api-maker-inputs": "1.0.97",
     "@kaspernj/api-maker-table": "1.0.18",
     "babel-loader": "8",
     "babel-plugin-macros": "^3.1.0",
