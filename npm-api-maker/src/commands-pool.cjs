@@ -11,8 +11,6 @@ const {ValidationErrors} = require("./validation-errors.cjs")
 
 module.exports = class ApiMakerCommandsPool {
   static addCommand (data, args = {}) {
-    console.log("addCommand", {data, args})
-
     let pool
 
     if (args.instant) {
