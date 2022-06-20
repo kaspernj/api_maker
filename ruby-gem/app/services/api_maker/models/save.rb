@@ -14,7 +14,7 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
 
     first_model.transaction do
       each_model_with_params do |model, params|
-        model.assign_attributes(params)
+        model.assign_attributes(params) if params
 
         next if model.save
 
