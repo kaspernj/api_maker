@@ -1,8 +1,8 @@
-import babel from "./loaders/babel"
-import erb from "./loaders/erb"
-import path from "path"
-import webpack from "webpack"
-import { webpackConfig: baseWebpackConfig, merge } from "shakapacker"
+const babel = require("./loaders/babel")
+const erb = require("./loaders/erb")
+const path = require("path")
+const webpack = require("webpack")
+const {webpackConfig, merge} = require("shakapacker")
 
 const options = {
   devtool: "source-map",
@@ -35,7 +35,7 @@ options.plugins.push(
   new webpack.ProvidePlugin({
     FlashMessage: ["shared/flash-message", "default"],
     Hash: ["shared/hash", "default"],
-    I18n: "shared/i18n.mjs",
+    I18n: "shared/i18n.js",
     Layout: ["components/layout", "default"],
     Params: ["@kaspernj/api-maker", "Params"],
     React: "react",
@@ -47,13 +47,13 @@ options.plugins.push(
     Input: ["@kaspernj/api-maker-bootstrap", "Input"],
     Select: ["@kaspernj/api-maker-bootstrap", "Select"],
 
-    Account: ["@kaspernj/api-maker/src/models.mjs", "Account"],
+    Account: ["@kaspernj/api-maker/src/models.mjs.erb", "Account"],
     Project: ["@kaspernj/api-maker/src/models.mjs", "Project"],
     Task: ["@kaspernj/api-maker/src/models.mjs", "Task"],
     User: ["@kaspernj/api-maker/src/models.mjs", "User"]
   })
 )
 
-const config = merge({}, baseWebpackConfig, options)
+const config = merge({}, webpackConfig, options)
 
 module.exports = config

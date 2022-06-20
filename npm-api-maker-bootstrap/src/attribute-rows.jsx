@@ -1,4 +1,4 @@
-import AttributeRow from "./attribute-row".default
+import AttributeRow from "./attribute-row"
 import {digs} from "diggerize"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"

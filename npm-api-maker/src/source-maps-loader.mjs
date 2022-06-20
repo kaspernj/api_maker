@@ -1,4 +1,4 @@
-import stackTraceParser from "stacktrace-parser"
+import {parse as stackTraceParser} from "stacktrace-parser"
 import {SourceMapConsumer} from "source-map"
 import uniqunize from "uniqunize"
 

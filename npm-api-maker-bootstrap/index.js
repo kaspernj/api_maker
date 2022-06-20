@@ -1,15 +1,15 @@
-import AttributeRow from "./src/attribute-row".default
-import AttributeRows from "./src/attribute-rows".default
-import Card from "./src/card".default
-import Checkbox from "./src/checkbox".default
-import Checkboxes from "./src/checkboxes".default
-import Input from "./src/input".default
-import InvalidFeedback from "./src/invalid-feedback".default
-import LiveTable from "./src/live-table".default
-import Paginate from "./src/paginate".default
-import RadioButtons from "./src/radio-buttons".default
-import Select from "./src/select".default
-import SortLink from "./src/sort-link".default
+import AttributeRow from "./src/attribute-row.jsx"
+import AttributeRows from "./src/attribute-rows.jsx"
+import Card from "./src/card.jsx"
+import Checkbox from "./src/checkbox.jsx"
+import Checkboxes from "./src/checkboxes.jsx"
+import Input from "./src/input.jsx"
+import InvalidFeedback from "./src/invalid-feedback.jsx"
+import LiveTable from "./src/live-table.jsx"
+import Paginate from "./src/paginate.jsx"
+import RadioButtons from "./src/radio-buttons.jsx"
+import Select from "./src/select.jsx"
+import SortLink from "./src/sort-link.jsx"
 
 export {
   AttributeRow,

@@ -1,9 +1,9 @@
 import Collection from "@kaspernj/api-maker/src/collection"
 import {debounce} from "debounce"
 import {digg, digs} from "diggerize"
-import EventCreated from "@kaspernj/api-maker/src/event-created".default
-import EventDestroyed from "@kaspernj/api-maker/src/event-destroyed".default
-import EventUpdated from "@kaspernj/api-maker/src/event-updated".default
+import EventCreated from "@kaspernj/api-maker/src/event-created"
+import EventDestroyed from "@kaspernj/api-maker/src/event-destroyed"
+import EventUpdated from "@kaspernj/api-maker/src/event-updated"
 import instanceOfClassName from "@kaspernj/api-maker/src/instance-of-class-name"
 import Params from "@kaspernj/api-maker/src/params"
 import PropTypes from "prop-types"

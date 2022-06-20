@@ -1,5 +1,5 @@
 import Serializer from "../src/serializer.mjs"
-import User from "./support/user"
+import User from "./support/user.mjs"
 
 describe("Serializer", () => {
   test("it serializes model classes", () => {

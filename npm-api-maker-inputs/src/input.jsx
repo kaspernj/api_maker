@@ -1,9 +1,9 @@
 import AutoSubmit from "./auto-submit.mjs"
-import Config from "@kaspernj/api-maker/src/config".default
+import Config from "@kaspernj/api-maker/src/config"
 import {dig, digg, digs} from "diggerize"
-import EventUpdated from "@kaspernj/api-maker/src/event-updated".default
-import inputWrapper from "./input-wrapper".default
-import Money from "./money".default
+import EventUpdated from "@kaspernj/api-maker/src/event-updated"
+import inputWrapper from "./input-wrapper"
+import Money from "./money"
 import PropTypes from "prop-types"
 import React from "react"
 import replaceall from "replaceall"

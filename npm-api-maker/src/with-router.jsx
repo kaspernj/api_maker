@@ -47,7 +47,7 @@ export default (WrapperComponent) => class WithRouter extends React.Component {
   }
 
   parseRouteDefinitions() {
-    import Locales from "shared/locales".default
+    const Locales = require("shared/locales").default
     const routeDefinitions = this.routeDefinitions()
     const routes = this.routes()
     const regex = /:([A-z\d_]+)/

@@ -1,5 +1,5 @@
 import {dig} from "diggerize"
-import inputWrapper from "./input-wrapper".default
+import inputWrapper from "./input-wrapper"
 import PropTypes from "prop-types"
 import React from "react"
 

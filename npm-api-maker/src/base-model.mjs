@@ -14,20 +14,20 @@ import {ValidationErrors} from "./validation-errors.mjs"
 
 const shared = {}
 
-const newCustomEvent = (validationErrors) => {
-  return new CustomEvent("validation-errors", {detail: validationErrors})
-}
-
-const sendValidationErrorsEvent = (validationErrors, options) => {
-  if (options && options.form) {
-    const event = newCustomEvent(validationErrors)
-    options.form.dispatchEvent(event)
-  }
-}
-
 class BaseModel {
   static modelClassData () {
     throw new Error("modelClassData should be overriden by child")
+  }
+
+  static newCustomEvent = (validationErrors) => {
+    return new CustomEvent("validation-errors", {detail: validationErrors})
+  }
+
+  static sendValidationErrorsEvent = (validationErrors, options) => {
+    if (options && options.form) {
+      const event = BaseModel.newCustomEvent(validationErrors)
+      options.form.dispatchEvent(event)
+    }
   }
 
   static async find (id) {
@@ -319,7 +319,7 @@ class BaseModel {
       validationErrors: digg(error, "args", "response", "validation_errors")
     })
 
-    sendValidationErrorsEvent(validationErrors, options)
+    BaseModel.sendValidationErrorsEvent(validationErrors, options)
 
     if (!options || options.throwValidationError != false) {
       throw new ValidationError(validationErrors, digg(error, "args"))

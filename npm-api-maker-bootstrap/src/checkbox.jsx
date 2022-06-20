@@ -1,8 +1,8 @@
 import {Checkbox} from "@kaspernj/api-maker-inputs/src/checkbox"
 import classNames from "classnames"
 import {digs} from "diggerize"
-import inputWrapper from "@kaspernj/api-maker-inputs/src/input-wrapper".default
-import InvalidFeedback from "./invalid-feedback".default
+import inputWrapper from "@kaspernj/api-maker-inputs/src/input-wrapper"
+import InvalidFeedback from "./invalid-feedback"
 import PropTypes from "prop-types"
 import React from "react"
 

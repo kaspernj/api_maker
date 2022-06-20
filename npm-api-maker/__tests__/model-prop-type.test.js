@@ -1,6 +1,6 @@
 import ModelPropType from "../src/model-prop-type.mjs"
-import Task from "./support/task"
-import User from "./support/user"
+import Task from "./support/task.mjs"
+import User from "./support/user.mjs"
 
 describe("ModelPropType", () => {
   describe("ofModel", () => {

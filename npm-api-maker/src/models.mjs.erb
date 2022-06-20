@@ -4,4 +4,6 @@ import ModelRecipesLoader from "./model-recipes-loader.mjs"
 const loader = new ModelRecipesLoader({recipes: modelRecipes})
 const result = loader.load()
 
-export default result
+<% ApiMaker::ModelClassesJavaScriptGeneratorService.new.resources.each do |resource| %>
+  const <%= resource.short_name %> =
+<% end %>

@@ -1,8 +1,8 @@
 import {digs} from "diggerize"
-import inputWrapper from "@kaspernj/api-maker-inputs/src/input-wrapper".default
+import inputWrapper from "@kaspernj/api-maker-inputs/src/input-wrapper"
 import {Input} from "@kaspernj/api-maker-inputs/src/input"
-import InvalidFeedback from "./invalid-feedback".default
-import Money from "@kaspernj/api-maker-inputs/src/money".default
+import InvalidFeedback from "./invalid-feedback"
+import Money from "@kaspernj/api-maker-inputs/src/money"
 import PropTypes from "prop-types"
 import React from "react"
 

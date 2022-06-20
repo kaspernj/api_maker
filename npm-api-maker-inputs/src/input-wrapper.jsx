@@ -1,5 +1,5 @@
 import {dig, digg, digs} from "diggerize"
-import EventListener from "@kaspernj/api-maker/src/event-listener".default
+import EventListener from "@kaspernj/api-maker/src/event-listener"
 import React from "react"
 import idForComponent from "./id-for-component.mjs"
 import nameForComponent from "./name-for-component.mjs"

@@ -1,4 +1,5 @@
 import CanCan from "../src/can-can.mjs"
+import {jest} from "@jest/globals"
 
 jest.mock("../src/services.mjs")
 

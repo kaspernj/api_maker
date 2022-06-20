@@ -1,10 +1,10 @@
-import Checkbox from "./src/checkbox".default
+import Checkbox from "./src/checkbox"
 import idForComponent from "./src/id-for-component.mjs"
-import Input from "./src/input".default
-import Money from "./src/money".default
+import Input from "./src/input"
+import Money from "./src/money"
 import nameForComponent from "./src/name-for-component.mjs"
-import Select from "./src/select".default
-import inputWrapper from "./src/input-wrapper".default
+import Select from "./src/select"
+import inputWrapper from "./src/input-wrapper"
 
 export {
   Checkbox,
