@@ -1,14 +1,15 @@
+import BaseModel from "../src/base-model.mjs"
+import CustomError from "../src/custom-error.mjs"
+import {JSDOM} from "jsdom"
+import ValidationError from "../src/validation-error.mjs"
+import User from "./support/user"
+
 jest.mock("@rails/actioncable", () => ({
   createConsumer: () => ({})
 }))
 
-const BaseModel = require("../src/base-model.cjs")
-const CustomError = require("../src/custom-error.cjs")
-const {JSDOM} = require("jsdom")
 const {window} = new JSDOM()
 const document = window.document
-const ValidationError = require("../src/validation-error.cjs")
-const User = require("./support/user")
 
 describe("BaseModel", () => {
   describe("identifierKey", () => {

@@ -1,4 +1,4 @@
-const {merge} = require("../src/merge.cjs")
+import {merge} from "../src/merge.mjs"
 
 describe("merge", () => {
   it("merges an empty object and changes nothing", () => {

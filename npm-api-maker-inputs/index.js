@@ -1,10 +1,10 @@
-const Checkbox = require("./src/checkbox").default
-const idForComponent = require("./src/id-for-component.cjs")
-const Input = require("./src/input").default
-const Money = require("./src/money").default
-const nameForComponent = require("./src/name-for-component.cjs")
-const Select = require("./src/select").default
-const inputWrapper = require("./src/input-wrapper").default
+import Checkbox from "./src/checkbox".default
+import idForComponent from "./src/id-for-component.mjs"
+import Input from "./src/input".default
+import Money from "./src/money".default
+import nameForComponent from "./src/name-for-component.mjs"
+import Select from "./src/select".default
+import inputWrapper from "./src/input-wrapper".default
 
 export {
   Checkbox,

@@ -1,7 +1,7 @@
 jest.mock("@rails/actioncable", () => ({
   createConsumer: () => ({})
 }))
-const CableSubscriptionPool = require("../src/cable-subscription-pool.cjs")
+import CableSubscriptionPool from "../src/cable-subscription-pool.mjs"
 
 describe("CableSubscriptionPool", () => {
   describe("onUnsubscribe", () => {

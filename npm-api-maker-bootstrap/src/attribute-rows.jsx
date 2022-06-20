@@ -1,8 +1,8 @@
-const AttributeRow = require("./attribute-row").default
-const {digs} = require("diggerize")
-const PropTypes = require("prop-types")
-const propTypesExact = require("prop-types-exact")
-const React = require("react")
+import AttributeRow from "./attribute-row".default
+import {digs} from "diggerize"
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
+import React from "react"
 
 export default class ApiMakerBootstrapAttributeRows extends React.PureComponent {
   static defaultProps = {

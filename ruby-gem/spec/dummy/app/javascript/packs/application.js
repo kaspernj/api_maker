@@ -5,7 +5,7 @@ import { definitionsFromContext } from "stimulus/webpack-helpers"
 Devise.addUserScope("user")
 
 require("shared/error-logger")
-require("shared/i18n.cjs")
+require("shared/i18n.mjs")
 
 const application = Application.start()
 const context = require.context("controllers", true, /.js$/)

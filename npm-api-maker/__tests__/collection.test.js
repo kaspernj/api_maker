@@ -1,4 +1,4 @@
-const Collection = require("../src/collection.cjs")
+import Collection from "../src/collection.mjs"
 
 describe("Collection", () => {
   describe("count", () => {

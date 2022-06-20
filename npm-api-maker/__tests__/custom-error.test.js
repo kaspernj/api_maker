@@ -1,4 +1,4 @@
-const CustomError = require("../src/custom-error.cjs")
+import CustomError from "../src/custom-error.mjs"
 
 describe("CustomError", () => {
   it("handles when response is a string", () => {

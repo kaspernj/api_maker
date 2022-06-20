@@ -1,3 +1,4 @@
-module.exports = {
-  testRegex: "__tests__/.*\.test\.js$" // eslint-disable-line no-useless-escape
+export default {
+  testRegex: "__tests__/.*\.test\.(m|)js$", // eslint-disable-line no-useless-escape
+  transform: {}
 }

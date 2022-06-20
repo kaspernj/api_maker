@@ -1,4 +1,4 @@
-const RoutesNative = require("../src/routes-native.cjs")
+import RoutesNative from "../src/routes-native.mjs"
 const testRoutes = () => ({
   routes: [
     {"name": "blank", "path": "/blank", "component": "blank"},

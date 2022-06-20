@@ -1,7 +1,7 @@
-const {digg, digs} = require("diggerize")
-const inflection = require("inflection")
-const MoneyFormatter = require("@kaspernj/api-maker/src/money-formatter")
-const PropTypes = require("prop-types")
+import {digg, digs} from "diggerize"
+import inflection from "inflection"
+import MoneyFormatter from "@kaspernj/api-maker/src/money-formatter"
+import PropTypes from "prop-types"
 
 import Link from "@kaspernj/api-maker/src/link"
 

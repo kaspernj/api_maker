@@ -1,5 +1,5 @@
-import BaseModel from "./base-model.cjs"
-import Collection from "./collection.cjs"
+import BaseModel from "./base-model.mjs"
+import Collection from "./collection.mjs"
 import {digg, digs} from "diggerize"
 import inflection from "inflection"
 

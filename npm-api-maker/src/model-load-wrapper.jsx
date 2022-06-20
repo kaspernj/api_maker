@@ -1,5 +1,5 @@
 import EventUpdated from "./event-updated"
-import Params from "./params.cjs"
+import Params from "./params.mjs"
 import React from "react"
 
 export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapper extends React.PureComponent {

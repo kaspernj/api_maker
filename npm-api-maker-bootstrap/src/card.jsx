@@ -1,6 +1,6 @@
-const {digs} = require("diggerize")
-const PropTypes = require("prop-types")
-const React = require("react")
+import {digs} from "diggerize"
+import PropTypes from "prop-types"
+import React from "react"
 
 export default class ApiMakerBootstrapCard extends React.PureComponent {
   static defaultProps = {

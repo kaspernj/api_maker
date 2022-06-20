@@ -1,9 +1,9 @@
-const {digs} = require("diggerize")
-const inputWrapper = require("@kaspernj/api-maker-inputs/src/input-wrapper").default
-const InvalidFeedback = require("./invalid-feedback").default
-const PropTypes = require("prop-types")
-const propTypesExact = require("prop-types-exact")
-const React = require("react")
+import {digs} from "diggerize"
+import inputWrapper from "@kaspernj/api-maker-inputs/src/input-wrapper".default
+import InvalidFeedback from "./invalid-feedback".default
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
+import React from "react"
 
 class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   static propTypes = propTypesExact({

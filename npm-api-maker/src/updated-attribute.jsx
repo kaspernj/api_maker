@@ -1,8 +1,8 @@
-const {digg} = require("diggerize")
-const ModelEvents = require("./model-events.cjs")
-const PropTypes = require("prop-types")
-const propTypesExact = require("prop-types-exact")
-const React = require("react")
+import {digg} from "diggerize"
+import ModelEvents from "./model-events.mjs"
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
+import React from "react"
 
 export default class ApiMakerUpdatedAttribute extends React.PureComponent {
   static propTypes = propTypesExact({

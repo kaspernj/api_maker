@@ -23,6 +23,6 @@ Devise.addUserScope("user")
 
 // Rest of app
 require("shared/error-logger")
-require("shared/i18n.cjs")
+require("shared/i18n.mjs")
 require("shared/react-app")
 require("stylesheets/application")

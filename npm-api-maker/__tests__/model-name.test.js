@@ -1,6 +1,7 @@
-const I18nOnSteroids = require("i18n-on-steroids")
+import I18nOnSteroids from "i18n-on-steroids"
+import ModelName from "../src/model-name.mjs"
+
 const i18n = new I18nOnSteroids()
-const ModelName = require("../src/model-name.cjs")
 
 const initializeI18n = () => {
   i18n.scanObject({

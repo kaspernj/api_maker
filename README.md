@@ -9,7 +9,7 @@ Add this line to your application's Gemfile:
 gem "api_maker", git: "https://github.com/kaspernj/api_maker.git"
 ```
 
-Add the extension `.cjs` to `webpacker.yml`.
+Add the extension `.mjs` to `webpacker.yml`.
 
 ApiMaker requires [Webpacker](https://github.com/rails/webpacker), so make sure you have that set up as well. It also uses an extension called [qs](https://www.npmjs.com/package/qs), that you should add to your packages, but that is probally already there by default.
 
@@ -229,7 +229,7 @@ end
 ### Creating a new model from JavaScript
 
 ```js
-import {Task} from "@kaspernj/api-maker/src/models.cjs"
+import {Task} from "@kaspernj/api-maker/src/models.mjs"
 
 const task = new Task()
 task.assignAttributes({name: "New task"})

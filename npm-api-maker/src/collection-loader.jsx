@@ -1,13 +1,13 @@
-const Collection = require("@kaspernj/api-maker/src/collection")
-const {debounce} = require("debounce")
-const {digg, digs} = require("diggerize")
-const EventCreated = require("@kaspernj/api-maker/src/event-created").default
-const EventDestroyed = require("@kaspernj/api-maker/src/event-destroyed").default
-const EventUpdated = require("@kaspernj/api-maker/src/event-updated").default
-const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-name")
-const Params = require("@kaspernj/api-maker/src/params")
-const PropTypes = require("prop-types")
-const React = require("react")
+import Collection from "@kaspernj/api-maker/src/collection"
+import {debounce} from "debounce"
+import {digg, digs} from "diggerize"
+import EventCreated from "@kaspernj/api-maker/src/event-created".default
+import EventDestroyed from "@kaspernj/api-maker/src/event-destroyed".default
+import EventUpdated from "@kaspernj/api-maker/src/event-updated".default
+import instanceOfClassName from "@kaspernj/api-maker/src/instance-of-class-name"
+import Params from "@kaspernj/api-maker/src/params"
+import PropTypes from "prop-types"
+import React from "react"
 
 import {LocationChanged} from "on-location-changed/src/location-changed-component"
 

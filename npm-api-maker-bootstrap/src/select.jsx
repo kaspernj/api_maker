@@ -1,9 +1,9 @@
-const {digs} = require("diggerize")
-const inputWrapper = require("@kaspernj/api-maker-inputs/src/input-wrapper").default
-const {Select} = require("@kaspernj/api-maker-inputs/src/select")
-const InvalidFeedback = require("./invalid-feedback").default
-const PropTypes = require("prop-types")
-const React = require("react")
+import {digs} from "diggerize"
+import inputWrapper from "@kaspernj/api-maker-inputs/src/input-wrapper".default
+import {Select} from "@kaspernj/api-maker-inputs/src/select"
+import InvalidFeedback from "./invalid-feedback".default
+import PropTypes from "prop-types"
+import React from "react"
 
 class ApiMakerBootstrapSelect extends React.PureComponent {
   static propTypes = {

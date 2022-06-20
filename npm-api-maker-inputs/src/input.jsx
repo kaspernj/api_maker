@@ -1,13 +1,13 @@
-const AutoSubmit = require("./auto-submit.cjs")
-const Config = require("@kaspernj/api-maker/src/config").default
-const {dig, digg, digs} = require("diggerize")
-const EventUpdated = require("@kaspernj/api-maker/src/event-updated").default
-const inputWrapper = require("./input-wrapper").default
-const Money = require("./money").default
-const PropTypes = require("prop-types")
-const React = require("react")
-const replaceall = require("replaceall")
-const strftime = require("strftime")
+import AutoSubmit from "./auto-submit.mjs"
+import Config from "@kaspernj/api-maker/src/config".default
+import {dig, digg, digs} from "diggerize"
+import EventUpdated from "@kaspernj/api-maker/src/event-updated".default
+import inputWrapper from "./input-wrapper".default
+import Money from "./money".default
+import PropTypes from "prop-types"
+import React from "react"
+import replaceall from "replaceall"
+import strftime from "strftime"
 
 class ApiMakerInputsInput extends React.PureComponent {
   static defaultProps = {

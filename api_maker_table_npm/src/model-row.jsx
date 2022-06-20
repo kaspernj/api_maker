@@ -1,12 +1,11 @@
-const classNames = require("classnames")
-const {digg, digs} = require("diggerize")
-const inflection = require("inflection")
-const PropTypes = require("prop-types")
-
+import classNames from "classnames"
 import columnIdentifier from "./column-identifier"
 import columnVisible from "./column-visible"
+import {digg, digs} from "diggerize"
+import inflection from "inflection"
 import Link from "@kaspernj/api-maker/src/link"
 import MoneyFormatter from "@kaspernj/api-maker/src/money-formatter"
+import PropTypes from "prop-types"
 
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
   static propTypes = {

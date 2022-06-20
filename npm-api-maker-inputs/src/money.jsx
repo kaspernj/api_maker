@@ -1,11 +1,11 @@
-const classNames = require("classnames")
-const Config = require("@kaspernj/api-maker/src/config").default
-const {digg} = require("diggerize")
-const idForComponent = require("./id-for-component.cjs")
-const inflection = require("inflection")
-const MoneyFormatter = require("@kaspernj/api-maker/src/money-formatter")
-const PropTypes = require("prop-types")
-const React = require("react")
+import classNames from "classnames"
+import Config from "@kaspernj/api-maker/src/config".default
+import {digg} from "diggerize"
+import idForComponent from "./id-for-component.mjs"
+import inflection from "inflection"
+import MoneyFormatter from "@kaspernj/api-maker/src/money-formatter"
+import PropTypes from "prop-types"
+import React from "react"
 
 export default class ApiMakerInputsMoney extends React.PureComponent {
   static defaultProps = {

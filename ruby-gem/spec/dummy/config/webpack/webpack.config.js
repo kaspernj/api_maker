@@ -1,8 +1,8 @@
-const babel = require("./loaders/babel")
-const erb = require("./loaders/erb")
-const path = require("path")
-const webpack = require("webpack")
-const { webpackConfig: baseWebpackConfig, merge } = require("shakapacker")
+import babel from "./loaders/babel"
+import erb from "./loaders/erb"
+import path from "path"
+import webpack from "webpack"
+import { webpackConfig: baseWebpackConfig, merge } from "shakapacker"
 
 const options = {
   devtool: "source-map",
@@ -23,7 +23,7 @@ const options = {
   },
   plugins: [],
   resolve: {
-    extensions: [".css", ".scss", ".cjs", ".cjs.erb", ".mjs", ".mjs.erb", ".js.erb"],
+    extensions: [".css", ".scss", ".mjs", ".mjs.erb", ".mjs", ".mjs.erb", ".js.erb"],
     modules: [path.resolve(__dirname, "../../node_modules")]
   }
 }
@@ -35,7 +35,7 @@ options.plugins.push(
   new webpack.ProvidePlugin({
     FlashMessage: ["shared/flash-message", "default"],
     Hash: ["shared/hash", "default"],
-    I18n: "shared/i18n.cjs",
+    I18n: "shared/i18n.mjs",
     Layout: ["components/layout", "default"],
     Params: ["@kaspernj/api-maker", "Params"],
     React: "react",
@@ -47,10 +47,10 @@ options.plugins.push(
     Input: ["@kaspernj/api-maker-bootstrap", "Input"],
     Select: ["@kaspernj/api-maker-bootstrap", "Select"],
 
-    Account: ["@kaspernj/api-maker/src/models.cjs", "Account"],
-    Project: ["@kaspernj/api-maker/src/models.cjs", "Project"],
-    Task: ["@kaspernj/api-maker/src/models.cjs", "Task"],
-    User: ["@kaspernj/api-maker/src/models.cjs", "User"]
+    Account: ["@kaspernj/api-maker/src/models.mjs", "Account"],
+    Project: ["@kaspernj/api-maker/src/models.mjs", "Project"],
+    Task: ["@kaspernj/api-maker/src/models.mjs", "Task"],
+    User: ["@kaspernj/api-maker/src/models.mjs", "User"]
   })
 )
 

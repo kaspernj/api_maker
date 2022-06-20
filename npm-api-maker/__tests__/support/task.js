@@ -1,4 +1,4 @@
-module.exports = class Task {
+export default class Task {
   static modelClassData () {
     return {
       attributes: [],
