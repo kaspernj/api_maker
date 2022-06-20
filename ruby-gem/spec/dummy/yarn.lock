@@ -1084,28 +1084,6 @@
     set-state-compare "^1.0.18"
     uniqunize "^1.0.1"
 
-"@kaspernj/api-maker@1.0.177":
-  version "1.0.177"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.177.tgz#e2c6dcda6de5f6e9d99f079e76e8eef4bf45b368"
-  integrity sha512-l6qikbCKScXbwa95QaY+F0LwdN9kqUHI3A3qCeascaVi+sXjJc0K6b/CGg4CUTLS76aa2zM/alxJuF/UJC20YA==
-  dependencies:
-    "@rails/actioncable" ">= 6.1.0"
-    clone-deep ">= 4.0.1"
-    debounce ">= 1.2.1"
-    diggerize ">= 1.0.5"
-    epic-locks ">= 1.0.1"
-    form-data-objectizer ">= 1.0.0"
-    form-serialize ">= 0.7.2"
-    format-number ">= 3.0.0"
-    inflection ">= 1.12.0"
-    js-money ">= 0.6.3"
-    numberable ">= 1.0.0"
-    object-to-formdata ">= 4.1.0"
-    qs ">= 6.9.3"
-    replaceall ">= 0.1.6"
-    strftime ">= 0.10.0"
-    wake-event ">= 0.0.1"
-
 "@kaspernj/api-maker@1.0.178":
   version "1.0.178"
   resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.178.tgz#5ba8a68b47b14b4020409437e1e28397c33395a6"
