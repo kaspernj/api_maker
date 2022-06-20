@@ -16,7 +16,7 @@
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
     "@babel/runtime": "7",
-    "@kaspernj/api-maker": "1.0.177",
+    "@kaspernj/api-maker": "1.0.190",
     "@kaspernj/api-maker-bootstrap": "1.0.104",
     "@kaspernj/api-maker-inputs": "1.0.97",
     "@kaspernj/api-maker-table": "1.0.18",
