@@ -2306,15 +2306,10 @@ diff-sequences@^28.1.1:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-28.1.1.tgz#9989dc731266dc2903457a70e996f3a041913ac6"
   integrity sha512-FU0iFaH/E23a+a718l8Qa/19bF9p06kgE0KipMOMadwa3SjnaElKzPaUC0vnibs6/B/9ni97s61mcejk8W1fQw==
 
-"diggerize@>= 1.0.5":
+"diggerize@>= 1.0.5", diggerize@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.5.tgz#268fd91f204959ee85bc7a0ee776178870a470f2"
   integrity sha512-DQZM0okJRCslVWAuyR6GCZfb9vdPApymlIq//ax53KxUAwvnUTLegYFIyvPm3oXBYGTdbaUV/iZ4K+NDSahDAA==
-
-diggerize@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.3.tgz#1c08fb9f461c2ed1af9416c83142539f041350a3"
-  integrity sha512-sqZM36ZDSizaGTkjs+CZjjPlccDaz+Khozw/9+fnYJ2oS2n6is2JPoycofSnWTi0JDKEKVI86IKsMxwWzbrG1Q==
 
 dir-glob@^3.0.1:
   version "3.0.1"
@@ -3004,11 +2999,11 @@ human-signals@^2.1.0:
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
 i18n-on-steroids@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.2.tgz#facb994d440fd64998b3bc61bea7e3955dd054c5"
-  integrity sha512-wmRt37/C7Ctmi0EsxQaTAQ8NcX3+TC6LogOPLx61s7nwLDpw0Vvc+Dk8aRJVLNVVXWZxYEZlB1qXlh4z6M67lA==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.3.tgz#116380e3783e40ee60c900eb8994364074dfa27b"
+  integrity sha512-Hi4BRNJsmUxosPmzQzdo3JZ7T+zzdGSVNj02G0ejad2xrhp8XUMRijQWPvAJUKeZwcEr+sj6E/j9/efMfR6SuA==
   dependencies:
-    diggerize "^1.0.3"
+    diggerize "^1.0.5"
     numberable "^1.0.0"
     strftime "^0.10.0"
 
