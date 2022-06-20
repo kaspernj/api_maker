@@ -182,13 +182,22 @@ class ApiMaker::BaseCommand
   end
 
   def save_models_or_fail(*models, simple_model_errors: false)
-    response = ApiMaker::Models::Save.execute(models: models, simple_model_errors: simple_model_errors)
+    result = ApiMaker::Models::Save.execute!(models: models, simple_model_errors: simple_model_errors, succeed_with_errors: true)
 
-    if response.success?
+    if result.fetch(:failed)
+      failed_model_with_params = result.fetch(:failed_models).find { |failed_model| failed_model.is_a?(Hash) }
+
+      if failed_model_with_params
+        failure_save_response(
+          model: failed_model_with_params.fetch(:model),
+          params: failed_model_with_params.fetch(:params)
+        )
+      else
+        fail!(errors: result.fetch(:errors).map { |error| {message: error, type: :validation_error} })
+      end
+    else
       succeed!(success: true)
       true
-    else
-      fail!(errors: response.error_messages.map { |error| {message: error, type: :validation_error} })
     end
   end
 

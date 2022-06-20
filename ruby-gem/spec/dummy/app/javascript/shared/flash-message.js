@@ -12,7 +12,13 @@ export default class FlashMessage {
   }
 
   static errorResponse(error) {
-    if (error instanceof CustomError) {
+    if (error instanceof ValidationError) {
+      if (error.hasUnhandledErrors()) {
+        FlashMessage.alert(error.message)
+      } else {
+        FlashMessage.error(I18n.t("js.flash_message.couldnt_submit_because_of_validation_errors"))
+      }
+    } else if (error instanceof CustomError) {
       const errors = error.args.response.errors
       const errorMessages = errors.map((error) => {
         if (typeof error == "string") {
@@ -23,9 +29,6 @@ export default class FlashMessage {
       })
 
       FlashMessage.alert(errorMessages.map((error) => error.message).join(". "))
-    } else if (error instanceof ValidationError) {
-      if (error.hasUnhandledErrors())
-      FlashMessage.alert(error.message)
     } else {
       console.error("Didnt know what to do with this", error)
     }

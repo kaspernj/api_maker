@@ -62,6 +62,8 @@ en:
     api_maker_bootstrap:
       live_table:
         filter: Filter
+    flash_message:
+      couldnt_submit_because_of_validation_errors: Couldn't submit because of validation errors
     shared:
       are_you_sure: Are you sure?
   models:

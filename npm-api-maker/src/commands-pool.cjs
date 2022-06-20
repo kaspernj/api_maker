@@ -11,6 +11,8 @@ const {ValidationErrors} = require("./validation-errors.cjs")
 
 module.exports = class ApiMakerCommandsPool {
   static addCommand (data, args = {}) {
+    console.log("addCommand", {data, args})
+
     let pool
 
     if (args.instant) {
@@ -61,18 +63,17 @@ module.exports = class ApiMakerCommandsPool {
 
       this.pool[id] = {resolve, reject}
 
-      if (!this.poolData[commandType])
-        this.poolData[commandType] = {}
-
-      if (!this.poolData[commandType][collectionName])
-        this.poolData[commandType][collectionName] = {}
-
-      if (!this.poolData[commandType][collectionName][commandName])
-        this.poolData[commandType][collectionName][commandName] = {}
+      if (!this.poolData[commandType]) this.poolData[commandType] = {}
+      if (!this.poolData[commandType][collectionName]) this.poolData[commandType][collectionName] = {}
+      if (!this.poolData[commandType][collectionName][commandName]) this.poolData[commandType][collectionName][commandName] = {}
 
       let args
 
-      if (data.args instanceof FormData) {
+      if (data.args?.nodeName == "FORM") {
+        const formData = new FormData(data.args)
+
+        args = FormDataObjectizer.toObject(formData)
+      } else if (data.args instanceof FormData) {
         args = FormDataObjectizer.toObject(data.args)
       } else {
         args = Serializer.serialize(data.args)

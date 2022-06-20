@@ -14,6 +14,17 @@ const {ValidationErrors} = require("./validation-errors.cjs")
 
 const shared = {}
 
+const newCustomEvent = (validationErrors) => {
+  return new CustomEvent("validation-errors", {detail: validationErrors})
+}
+
+const sendValidationErrorsEvent = (validationErrors, options) => {
+  if (options && options.form) {
+    const event = newCustomEvent(validationErrors)
+    options.form.dispatchEvent(event)
+  }
+}
+
 class BaseModel {
   static modelClassData () {
     throw new Error("modelClassData should be overriden by child")
@@ -177,7 +188,7 @@ class BaseModel {
         {}
       )
     } catch (error) {
-      this.parseValidationErrors(error, options)
+      BaseModel.parseValidationErrors({error, model: this, options})
       throw error
     }
 
@@ -190,7 +201,7 @@ class BaseModel {
   }
 
   async createRaw (rawData, options = {}) {
-    const objectData = this._objectDataFromGivenRawData(rawData, options)
+    const objectData = BaseModel._objectDataFromGivenRawData(rawData, options)
 
     let response
 
@@ -208,7 +219,7 @@ class BaseModel {
         {}
       )
     } catch (error) {
-      this.parseValidationErrors(error, options)
+      BaseModel.parseValidationErrors({error, model: this, options})
       throw error
     }
 
@@ -284,7 +295,7 @@ class BaseModel {
   }
 
   handleResponseError (response) {
-    this.parseValidationErrors(response)
+    BaseModel.parseValidationErrors({model: this, response})
     throw new new CustomError("Response wasn't successful", {model: this, response})
   }
 
@@ -299,31 +310,20 @@ class BaseModel {
     return false
   }
 
-  parseValidationErrors (error, options) {
+  static parseValidationErrors ({error, model, options}) {
     if (!(error instanceof CustomError)) return
     if (!error.args.response.validation_errors) return
 
     const validationErrors = new ValidationErrors({
-      model: this,
+      model,
       validationErrors: digg(error, "args", "response", "validation_errors")
     })
 
-    this.sendValidationErrorsEvent(validationErrors, options)
+    sendValidationErrorsEvent(validationErrors, options)
 
     if (!options || options.throwValidationError != false) {
       throw new ValidationError(validationErrors, digg(error, "args"))
     }
-  }
-
-  sendValidationErrorsEvent (validationErrors, options) {
-    if (options && options.form) {
-      const event = this.newCustomEvent(validationErrors)
-      options.form.dispatchEvent(event)
-    }
-  }
-
-  newCustomEvent (validationErrors) {
-    return new CustomEvent("validation-errors", {detail: validationErrors})
   }
 
   static humanAttributeName (attributeName) {
@@ -517,7 +517,7 @@ class BaseModel {
         {}
       )
     } catch (error) {
-      this.parseValidationErrors(error, options)
+      BaseModel.parseValidationErrors({error, model: this, options})
       throw error
     }
 
@@ -549,7 +549,7 @@ class BaseModel {
     this.setNewModelData(newModel)
   }
 
-  _objectDataFromGivenRawData (rawData, options) {
+  static _objectDataFromGivenRawData (rawData, options) {
     if (rawData instanceof FormData || rawData.nodeName == "FORM") {
       const formData = FormDataObjectizer.formDataFromObject(rawData, options)
 
@@ -560,8 +560,7 @@ class BaseModel {
   }
 
   async updateRaw (rawData, options = {}) {
-    const objectData = this._objectDataFromGivenRawData(rawData, options)
-
+    const objectData = BaseModel._objectDataFromGivenRawData(rawData, options)
     let response
 
     try {
@@ -579,7 +578,7 @@ class BaseModel {
         {}
       )
     } catch (error) {
-      this.parseValidationErrors(error, options)
+      BaseModel.parseValidationErrors({error, model: this, options})
       throw error
     }
 
@@ -636,8 +635,18 @@ class BaseModel {
     return this.uniqueKeyValue
   }
 
-  static _callCollectionCommand (args, commandArgs) {
-    return CommandsPool.addCommand(args, commandArgs)
+  static async _callCollectionCommand (args, commandArgs) {
+    const formOrDataObject = args.args
+
+    try {
+      return await CommandsPool.addCommand(args, commandArgs)
+    } catch (error) {
+      if (formOrDataObject.nodeName == "FORM") {
+        BaseModel.parseValidationErrors({error, options: {form: formOrDataObject}})
+      }
+
+      throw error
+    }
   }
 
   _callMemberCommand (args, commandArgs) {
