@@ -72,6 +72,6 @@
     "eslint-plugin-react": "^7.23.2",
     "i18n-on-steroids": "^1.0.2",
     "jest": "^28.0.3",
-    "jsdom": "^19.0.0"
+    "jsdom": "^20.0.0"
   }
 }
