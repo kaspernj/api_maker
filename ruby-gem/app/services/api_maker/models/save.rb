@@ -57,7 +57,7 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
   end
 
   def first_model
-    each_model_with_params do |model|
+    each_model_with_params do |model| # rubocop:disable Lint/UnreachableLoop
       return model
     end
 
