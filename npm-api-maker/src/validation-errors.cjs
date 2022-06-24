@@ -96,8 +96,7 @@ class ValidationErrors {
     return this.validationErrors
   }
 
-  getValidationErrorsForInput (args) {
-    const {attribute, inputName, onMatchValidationError} = args
+  getValidationErrorsForInput ({attribute, inputName, onMatchValidationError}) {
     const validationErrors = this.validationErrors.filter((validationError) => {
       if (onMatchValidationError) {
         return onMatchValidationError(validationError)

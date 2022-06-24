@@ -17,7 +17,7 @@ export default class Link extends React.PureComponent {
     if (!e.defaultPrevented && !e.ctrlKey && !e.metaKey) {
       e.preventDefault()
 
-      const history = global.apiMakerConfigGlobal?.history
+      const history = globalThis.apiMakerConfigGlobal?.history
 
       if (!history) throw new Error("History hasn't been set in the API maker configuration")
 
