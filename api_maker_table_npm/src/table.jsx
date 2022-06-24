@@ -353,7 +353,7 @@ export default class ApiMakerTable extends React.PureComponent {
           </tr>
         </thead>
         <tbody>
-          {models.map((model) =>
+          {models.map((model, modelIndex) =>
             <ModelRow key={model.id()} liveTable={this} model={model} preparedColumns={preparedColumns} />
           )}
         </tbody>
