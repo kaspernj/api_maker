@@ -49,7 +49,10 @@ module ApiMaker::SpecHelper
   end
 
   def expect_no_browser_window_errors
-    raise "API maker: Error logger hasn't been set up on window, so we can't delegate JS errors to Ruby" unless error_logger_present?
+    unless error_logger_present?
+      Rails.logger.error "API maker: Error logger hasn't been set up on window, so we can't delegate JS errors to Ruby"
+      return
+    end
 
     # Wait until error logger has finished loading source maps and parsed errors
     loop do

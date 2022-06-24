@@ -19,8 +19,10 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
     return if model.errors.empty?
 
     model.errors.details.each do |attribute_name, _errors|
+      # Errors on nested attributes contain dots - they should be caught here again later when scanning the nested relationship
+      next if attribute_name.to_s.include?(".")
+
       attribute_type = attribute_type(model, attribute_name)
-      next unless attribute_type
 
       attribute_path = path + [attribute_name]
       input_name = path_to_attribute_name(attribute_path)

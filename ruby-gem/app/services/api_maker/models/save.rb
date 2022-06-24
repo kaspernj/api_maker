@@ -13,8 +13,8 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
     failed_models = []
 
     first_model.transaction do
-      each_model_with_params do |model, params|
-        model.assign_attributes(params) if params
+      each_model_with_params do |model:, params:, assign:|
+        model.assign_attributes(params) if params && assign
 
         next if model.save
 
@@ -46,18 +46,20 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
   def each_model_with_params
     models.each do |model_or_hash|
       if model_or_hash.is_a?(Hash)
-        params = model_or_hash.fetch(:params)
-        model = model_or_hash.fetch(:model)
+        yield_params = model_or_hash
       else
-        model = model_or_hash
+        yield_params = {model: model, params: nil, assign: false}
       end
 
-      yield model, params
+      yield_params[:params] = nil unless yield_params.key?(:params)
+      yield_params[:assign] = false unless yield_params.key?(:assign)
+
+      yield(**yield_params)
     end
   end
 
   def first_model
-    each_model_with_params do |model| # rubocop:disable Lint/UnreachableLoop
+    each_model_with_params do |model:, params:, assign:| # rubocop:disable Lint/UnreachableLoop
       return model
     end
 

@@ -21,6 +21,7 @@ const options = {
       }
     ]
   },
+  node: {global: true},
   plugins: [],
   resolve: {
     extensions: [".css", ".scss", ".cjs", ".cjs.erb", ".mjs", ".mjs.erb", ".js.erb"],
