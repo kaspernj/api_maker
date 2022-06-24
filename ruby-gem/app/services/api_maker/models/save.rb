@@ -48,7 +48,7 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
       if model_or_hash.is_a?(Hash)
         yield_params = model_or_hash
       else
-        yield_params = {model: model, params: nil, assign: false}
+        yield_params = {model: model_or_hash, params: nil, assign: false}
       end
 
       yield_params[:params] = nil unless yield_params.key?(:params)
