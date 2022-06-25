@@ -311,7 +311,7 @@ class BaseModel {
   }
 
   static parseValidationErrors ({error, model, options}) {
-    if (!(error instanceof CustomError)) return
+    if (!(error instanceof ValidationError)) return
     if (!error.args.response.validation_errors) return
 
     const validationErrors = new ValidationErrors({

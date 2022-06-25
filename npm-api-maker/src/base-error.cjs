@@ -5,11 +5,15 @@ class BaseError extends Error {
   constructor (message, args = {}) {
     let messageToUse = message
 
-    if (typeof args.response == "object" && dig(args, "response", "errors")) {
-      if (message) {
-        messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
-      } else {
-        messageToUse = errorMessages(args).join(". ")
+    if ("addResponseErrorsToErrorMessage" in args && !args.addResponseErrorsToErrorMessage) {
+      messageToUse = message
+    } else {
+      if (typeof args.response == "object" && dig(args, "response", "errors")) {
+        if (message) {
+          messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
+        } else {
+          messageToUse = errorMessages(args).join(". ")
+        }
       }
     }
 
@@ -17,8 +21,7 @@ class BaseError extends Error {
     this.args = args
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
-    if (Error.captureStackTrace)
-      Error.captureStackTrace(this, BaseError)
+    if (Error.captureStackTrace) Error.captureStackTrace(this, BaseError)
   }
 
   errorMessages () {
