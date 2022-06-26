@@ -28,11 +28,14 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     if (editModelPath && model.can("edit")) editPath = editModelPath(this.modelCallbackArgs)
     if (viewModelPath && model.can("show")) viewPath = viewModelPath(this.modelCallbackArgs)
 
+    const RowComponent = this.props.rowComponent
+    const ColumnComponent = this.props.columnComponent
+
     return (
-      <tr className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()}>
+      <RowComponent className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()}>
         {columns && this.columnsContentFromColumns(model)}
         {!columns && columnsContent && columnsContent(this.modelCallbackArgs)}
-        <td className="actions-column text-end text-nowrap text-right">
+        <ColumnComponent className="actions-column text-end text-nowrap text-right">
           {actionsContent && actionsContent(this.modelCallbackArgs)}
           {viewPath &&
             <Link className="view-button" to={viewPath}>
@@ -49,8 +52,8 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
               <i className="fa fa-trash la la-trash" />
             </a>
           }
-        </td>
-      </tr>
+        </ColumnComponent>
+      </RowComponent>
     )
   }
 
@@ -67,16 +70,17 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
 
   columnsContentFromColumns (model) {
     const {preparedColumns} = digs(this.props, "preparedColumns")
+    const ColumnComponent = this.props.columnComponent
 
     return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
-      <td
+      <ColumnComponent
         className={classNames(this.columnClassNamesForColumn(column))}
         data-identifier={columnIdentifier(column)}
         key={columnIdentifier(column)}
       >
         {column.content && this.columnContentFromContentArg(column, model)}
         {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
-      </td>
+      </ColumnComponent>
     )
   }
 

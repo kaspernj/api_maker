@@ -1,50 +1,35 @@
+import inflection from "inflection"
+
+const accessors = {
+  breakPoints: {required: true},
+  currenciesCollection: {required: true},
+  history: {required: false},
+  host: {required: false},
+  routes: {required: false},
+  routeDefinitions: {required: false}
+}
+
 class ApiMakerConfig {
   constructor() {
     if (!global.apiMakerConfigGlobal) global.apiMakerConfigGlobal = {}
 
     this.global = global.apiMakerConfigGlobal
   }
+}
 
-  getCurrenciesCollection() {
-    if (!this.global.currenciesCollection) throw new Error("Currencies collection hasn't been set")
+for (const accessorName in accessors) {
+  const accessorData = accessors[accessorName]
+  const camelizedAccessor = inflection.camelize(accessorName)
 
-    return this.global.currenciesCollection
-  }
+  ApiMakerConfig.prototype[`set${camelizedAccessor}`] = function (newValue) { this.global[accessorName] = newValue }
+  ApiMakerConfig.prototype[`get${camelizedAccessor}`] = function (...args) {
+    if (accessorData.required && !this.global[accessorName]) throw new Error(`${accessorName} hasn't been set`)
 
-  getHost() {
-    const host = this.global.host
+    const value = this.global[accessorName]
 
-    if (typeof host == "function") return host()
+    if (typeof value == "function") return value(...args)
 
-    return host
-  }
-
-  getRouteDefinitions() {
-    return this.global.routeDefinitions
-  }
-
-  getRoutes() {
-    return this.global.routes
-  }
-
-  setCurrenciesCollection(newCurrenciesCollection) {
-    this.global.currenciesCollection = newCurrenciesCollection
-  }
-
-  setHistory(history) {
-    this.global.history = history
-  }
-
-  setHost(host) {
-    this.global.host = host
-  }
-
-  setRouteDefinitions(routeDefinitions) {
-    this.global.routeDefinitions = routeDefinitions
-  }
-
-  setRoutes(routes) {
-    this.global.routes = routes
+    return value
   }
 }
 
