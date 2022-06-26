@@ -95,6 +95,10 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}']"
   end
 
+  def model_row_edit_button_selector(model)
+    "#{model_row_selector(model)} .edit-button"
+  end
+
   def pretty_html
     require "htmlbeautifier"
     HtmlBeautifier.beautify(page.html)
