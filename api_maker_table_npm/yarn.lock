@@ -2471,12 +2471,7 @@ semver@^7.3.7:
   dependencies:
     lru-cache "^6.0.0"
 
-set-state-compare@^1.0.17:
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.17.tgz#8d70ad67540fbb308fbb6718dc1a6e94e5129145"
-  integrity sha512-cF57j0+gJb6lDerGfrX+2qRfmXNL27WMzTMoHrSMQoPZgwigfbDYUPVeLfSyXM5iEqbaoqTrTK9YKvwfaY7tKA==
-
-set-state-compare@^1.0.18:
+set-state-compare@^1.0.17, set-state-compare@^1.0.18:
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.18.tgz#2cecd74fd6042aa6f1f2de690a5b346877f09d48"
   integrity sha512-Hp37pr5Rv4dYbFg9Y7yXXnTcDIJkXeamkz8w3v8CqP4Dpn5T2QNM8DP4LRl0UDlmIDQBsCVQvrGVz4yU9fZJIg==
