@@ -32,10 +32,10 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     const ColumnComponent = this.props.columnComponent
 
     return (
-      <RowComponent className={`${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()}>
+      <RowComponent className={`live-table-row ${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()}>
         {columns && this.columnsContentFromColumns(model)}
         {!columns && columnsContent && columnsContent(this.modelCallbackArgs)}
-        <ColumnComponent className="actions-column text-end text-nowrap text-right">
+        <ColumnComponent className="actions-column">
           {actionsContent && actionsContent(this.modelCallbackArgs)}
           {viewPath &&
             <Link className="view-button" to={viewPath}>
@@ -62,8 +62,6 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
 
     if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
     if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
-    if (column.textCenter) classNames.push("text-center")
-    if (column.textRight) classNames.push("text-end text-right")
 
     return classNames
   }
@@ -77,9 +75,15 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
         className={classNames(this.columnClassNamesForColumn(column))}
         data-identifier={columnIdentifier(column)}
         key={columnIdentifier(column)}
+        {...this.props.liveTable.columnProps(column)}
       >
-        {column.content && this.columnContentFromContentArg(column, model)}
-        {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
+        <div className="live-table-column-label">
+          {this.props.liveTable.headerLabelForColumn(column)}
+        </div>
+        <div className="live-table-column-value">
+          {column.content && this.columnContentFromContentArg(column, model)}
+          {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
+        </div>
       </ColumnComponent>
     )
   }

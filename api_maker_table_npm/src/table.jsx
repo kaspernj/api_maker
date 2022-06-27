@@ -364,7 +364,7 @@ class ApiMakerTable extends React.PureComponent {
     return (
       <>
         <HeadComponent>
-          <RowComponent>
+          <RowComponent className="live-table-header-row">
             {this.headersContentFromColumns()}
             <ColumnInHeadComponent />
           </RowComponent>
@@ -395,6 +395,15 @@ class ApiMakerTable extends React.PureComponent {
     return classNames.join(" ")
   }
 
+  columnProps(column) {
+    const props = {}
+
+    if (column.textCenter) props["data-text-align"] = "center"
+    if (column.textRight) props["data-text-align"] = "right"
+
+    return props
+  }
+
   isSmallScreen() {
     if (this.props.breakPoint == "xs" || this.props.breakPoint == "sm") return true
 
@@ -415,6 +424,7 @@ class ApiMakerTable extends React.PureComponent {
         className={classNames(...this.headerClassNameForColumn(column))}
         data-identifier={tableSettingColumn.identifier()}
         key={tableSettingColumn.identifier()}
+        {...this.columnProps(column)}
       >
         {tableSettingColumn.hasSortKey() && query &&
           <SortLink attribute={tableSettingColumn.sortKey()} query={query} title={this.headerLabelForColumn(column)} />
@@ -431,8 +441,6 @@ class ApiMakerTable extends React.PureComponent {
 
     if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
     if (column.headerProps && column.headerProps.className) classNames.push(column.headerProps.className)
-    if (column.textCenter) classNames.push("text-center")
-    if (column.textRight) classNames.push("text-end text-right")
 
     return classNames
   }

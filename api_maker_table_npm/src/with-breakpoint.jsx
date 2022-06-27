@@ -13,11 +13,7 @@ export default (WrappedComponent) => class WithBreakPoint extends React.Componen
       const breakPoint = breakPointData[0]
       const width = breakPointData[1]
 
-      if (windowWidth >= width) {
-        console.log({windowWidth, width, breakPoint})
-
-        return breakPoint
-      }
+      if (windowWidth >= width) return breakPoint
     }
 
     throw new Error(`Couldn't not find breakPoint from window width: ${windowWidth}`)
