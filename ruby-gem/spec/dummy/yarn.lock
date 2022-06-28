@@ -1023,13 +1023,13 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker-bootstrap@1.0.195":
-  version "1.0.195"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.195.tgz#b5315adaecac458c584e997af82a1d845a2ac0fd"
-  integrity sha512-XFezcq+kktyzyJntlITSoicNS+LZa83Gx2mD/y2wMCuLFpMlgAN8GQrGF53gwROyljsz9uTUDc2I9tT8Tx6PNg==
+"@kaspernj/api-maker-bootstrap@1.0.196":
+  version "1.0.196"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.196.tgz#ec90bd3cf2432ba4ceba7b2df76aa306d9756d10"
+  integrity sha512-W/LNIQYCfpXiWIqbgxouMfqKGrayuCfFDAX1sPZRfWqtUYtcrts0RmVaX5Pe5H5Bq9fRZ3h/677JEoXY+UqAYw==
   dependencies:
-    "@kaspernj/api-maker" "1.0.195"
-    "@kaspernj/api-maker-inputs" "1.0.195"
+    "@kaspernj/api-maker" "1.0.196"
+    "@kaspernj/api-maker-inputs" "1.0.196"
     debounce ">= 1.2.0"
     diggerize ">= 1.0.5"
     inflection ">= 1.12.0"
@@ -1038,24 +1038,24 @@
     set-state-compare "^1.0.17"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@1.0.195":
-  version "1.0.195"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.195.tgz#cd7c460e600d76fc9ef34f2acf15589ffbfd332f"
-  integrity sha512-EacuHRR7oN/INtpB+q6CdnIFNXw97HNcDKQvjSVaA7f18TKthu0GKX+cu8nePuN+7NhlaDKHiHjLKnlP541m1g==
+"@kaspernj/api-maker-inputs@1.0.196":
+  version "1.0.196"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.196.tgz#f48e4707c754affa263e2f21482eecc65071e8dc"
+  integrity sha512-bibD8JThMpym/9Jq3Y1UH49AhjBEbn6/sdIZBX/aT+3RaHrca3kb/7DLEjzcZGTCxpMaDSaIx618i0aomYVWkQ==
   dependencies:
-    "@kaspernj/api-maker" "1.0.195"
+    "@kaspernj/api-maker" "1.0.196"
     classnames ">= 2.2.6"
     diggerize ">= 1.0.5"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker-table@1.0.195":
-  version "1.0.195"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-table/-/api-maker-table-1.0.195.tgz#84908d7d5de6d0f7bda4c2eba94d322b4afbbc49"
-  integrity sha512-z5od7CuFpnYfQUot9O8E7JP92BOYlk4EL+JOPHhJGRLbDI9ePj9/oqf3sO791wMlUahCRACYwjOTjx+VtXRVhw==
+"@kaspernj/api-maker-table@1.0.196":
+  version "1.0.196"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-table/-/api-maker-table-1.0.196.tgz#dfed2262d9d6a7199ad5ef0c357b5bc6320ecef7"
+  integrity sha512-L67b8NzP+IoioC6dNzDpS0wdFR+XYgRfODn4Oy57Zce9YOF4t86qEBCBXaU6tDtB6RkMHtSCzQh7Ie5lUEyt+A==
   dependencies:
-    "@kaspernj/api-maker" "1.0.195"
-    "@kaspernj/api-maker-bootstrap" "1.0.195"
-    "@kaspernj/api-maker-inputs" "1.0.195"
+    "@kaspernj/api-maker" "1.0.196"
+    "@kaspernj/api-maker-bootstrap" "1.0.196"
+    "@kaspernj/api-maker-inputs" "1.0.196"
     classnames "^2.3.1"
     debounce "^1.2.1"
     diggerize "^1.0.5"
@@ -1064,10 +1064,10 @@
     set-state-compare "^1.0.18"
     uniqunize "^1.0.1"
 
-"@kaspernj/api-maker@1.0.195":
-  version "1.0.195"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.195.tgz#73d8cd033fcec11aeb4b9c432bd4461e5ab18eea"
-  integrity sha512-GGyEP8ENHIiuGi+mUSc3O+R5p4wrpTu4gz1wvkiSEepxz8W2+nIS/6o6w79OJOHxk3/e4QwfjDKmiSqHeVaLzg==
+"@kaspernj/api-maker@1.0.196":
+  version "1.0.196"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.196.tgz#c9153c8065feb37386513f6b53d55dff0b4c8413"
+  integrity sha512-SHL23lhOnVeMM7K3D8QE5lKVNiiYPzlg1FP2FaWxEG8873JIJQvxbtfUT4ys8m2tQZX6n0/83PxSmNq+SRQ5Lw==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
