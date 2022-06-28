@@ -99,7 +99,7 @@ module.exports = class SourceMapsLoader {
   }
 
   includeMapURL(src) {
-    return src.includes("/packs/") || src.includes("/assets/")
+    return src.includes("/packs/")
   }
 
   async loadSourceMapForSource ({originalUrl, sourceMapUrl}) {
