@@ -1,7 +1,17 @@
 import inflection from "inflection"
 
 const accessors = {
-  breakPoints: {required: true},
+  breakPoints: {
+    default: [
+      ["xxl", 1400],
+      ["xl", 1200],
+      ["lg", 992],
+      ["md", 768],
+      ["sm", 576],
+      ["xs", 0]
+    ],
+    required: true
+  },
   currenciesCollection: {required: true},
   history: {required: false},
   host: {required: false},
@@ -23,7 +33,10 @@ for (const accessorName in accessors) {
 
   ApiMakerConfig.prototype[`set${camelizedAccessor}`] = function (newValue) { this.global[accessorName] = newValue }
   ApiMakerConfig.prototype[`get${camelizedAccessor}`] = function (...args) {
-    if (accessorData.required && !this.global[accessorName]) throw new Error(`${accessorName} hasn't been set`)
+    if (!this.global[accessorName]) {
+      if (accessorData.default) return accessorData.default
+      if (accessorData.required) throw new Error(`${accessorName} hasn't been set`)
+    }
 
     const value = this.global[accessorName]
 
