@@ -1,19 +1,19 @@
-const classNames = require("classnames")
-const Collection = require("@kaspernj/api-maker/src/collection")
-const {debounce} = require("debounce")
-const {digg, digs} = require("diggerize")
-const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-name")
-const Params = require("@kaspernj/api-maker/src/params")
-const PropTypes = require("prop-types")
-const React = require("react")
-
+import "./style"
 import Card from "@kaspernj/api-maker-bootstrap/src/card"
+import classNames from "classnames"
+import Collection from "@kaspernj/api-maker/src/collection"
 import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
 import columnVisible from "./column-visible"
+import {debounce} from "debounce"
+import {digg, digs} from "diggerize"
 import inflection from "inflection"
+import instanceOfClassName from "@kaspernj/api-maker/src/instance-of-class-name"
 import modelClassRequire from "@kaspernj/api-maker/src/model-class-require.cjs"
 import ModelRow from "./model-row"
 import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
+import Params from "@kaspernj/api-maker/src/params"
+import PropTypes from "prop-types"
+import React from "react"
 import Shape from "set-state-compare/src/shape"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 import TableSettings from "./table-settings"
