@@ -279,6 +279,8 @@ class ApiMakerTable extends React.PureComponent {
       headerContent = header({models, qParams, query, result})
     } else if (header) {
       headerContent = header
+    } else {
+      headerContent = modelClass.modelName().human({count: 2})
     }
 
     if (!paginateContent) {
