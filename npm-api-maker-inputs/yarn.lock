@@ -1690,10 +1690,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker@1.0.200":
-  version "1.0.200"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.200.tgz#3dca6e8bf2f4bffeca64b4cd6e7c1c4bc5dcf75f"
-  integrity sha512-Nrh9gl2299p5wbBTVOk+yIdLaqj3JwzCBzdSry7svqGchyIOlDOzoBNgf70A9qOvbaZjaNG2WH2X4TjJI17Vmw==
+"@kaspernj/api-maker@1.0.201":
+  version "1.0.201"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.201.tgz#0c9c0f31923b8d3a07c959a660c68035f2192d9d"
+  integrity sha512-xaDyACYK+MX/psrevA2gIS7waqNzV27VwotLbyKkONGZ4FzrDQA4GBrYqriO3V7UoQwIHoEi1VHYEPHXjtDHSg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
