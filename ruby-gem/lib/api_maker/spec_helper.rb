@@ -95,6 +95,10 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}']"
   end
 
+  def model_row_destroy_button_selector(model)
+    "#{model_row_selector(model)} .destroy-button"
+  end
+
   def model_row_edit_button_selector(model)
     "#{model_row_selector(model)} .edit-button"
   end

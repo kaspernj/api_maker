@@ -94,8 +94,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return this.props.columns
   }
 
-  submitFilterDebounce = debounce(() => this.submitFilter())
-
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
     const {collection, defaultParams, preloads, select, selectColumns} = this.props
@@ -395,4 +393,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
     Params.changeParams(changeParamsParams, {appHistory})
   }
+
+  submitFilterDebounce = debounce(digg(this, "submitFilter"))
 }
