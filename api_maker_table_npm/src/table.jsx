@@ -121,8 +121,6 @@ class ApiMakerTable extends React.PureComponent {
     return this.props.columns
   }
 
-  submitFilterDebounce = debounce(() => this.submitFilter())
-
   mergedPreloads(preload) {
     const {preloads} = this.props
     let mergedPreloads = []
@@ -492,6 +490,8 @@ class ApiMakerTable extends React.PureComponent {
 
     Params.changeParams(changeParamsParams, {appHistory})
   }
+
+  submitFilterDebounce = debounce(digg(this, "submitFilter"))
 }
 
 export default withBreakpoint(ApiMakerTable)
