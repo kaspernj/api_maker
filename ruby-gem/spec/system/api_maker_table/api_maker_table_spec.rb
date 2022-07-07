@@ -52,7 +52,7 @@ describe "bootstrap - live table" do
     updated_at_column = created_table_setting.columns.find_by!(identifier: updated_at_identifier)
     expect(updated_at_column).to have_attributes(
       attribute_name: "updatedAt",
-      visible: false
+      visible: nil
     )
   end
 

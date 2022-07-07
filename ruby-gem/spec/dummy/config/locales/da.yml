@@ -16,6 +16,10 @@ da:
     errors:
       messages:
         blank: kan ikke være blank
+    models:
+      task:
+        one: Opgave
+        other: Opgaver
   js:
     api_maker_bootstrap:
       live_table:
