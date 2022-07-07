@@ -1,4 +1,4 @@
-const I18nOnSteroids = require("i18n-on-steroids")
+const I18nOnSteroids = require("i18n-on-steroids").default
 const BaseModel = require("@kaspernj/api-maker/src/base-model")
 const i18n = new I18nOnSteroids()
 const ymlFiles = require.context("../../../config/locales", true, /^(.+).yml$/)
