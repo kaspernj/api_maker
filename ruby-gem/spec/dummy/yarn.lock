@@ -2703,12 +2703,12 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-i18n-on-steroids@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.2.tgz#facb994d440fd64998b3bc61bea7e3955dd054c5"
-  integrity sha512-wmRt37/C7Ctmi0EsxQaTAQ8NcX3+TC6LogOPLx61s7nwLDpw0Vvc+Dk8aRJVLNVVXWZxYEZlB1qXlh4z6M67lA==
+i18n-on-steroids@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.3.tgz#116380e3783e40ee60c900eb8994364074dfa27b"
+  integrity sha512-Hi4BRNJsmUxosPmzQzdo3JZ7T+zzdGSVNj02G0ejad2xrhp8XUMRijQWPvAJUKeZwcEr+sj6E/j9/efMfR6SuA==
   dependencies:
-    diggerize "^1.0.3"
+    diggerize "^1.0.5"
     numberable "^1.0.0"
     strftime "^0.10.0"
 
