@@ -45,6 +45,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     editModelPath: PropTypes.func,
     filterCard: PropTypes.bool.isRequired,
     filterContent: PropTypes.func,
+    filterSubmitButton: PropTypes.bool.isRequired,
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func,
     header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
