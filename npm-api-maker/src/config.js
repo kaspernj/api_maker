@@ -15,6 +15,7 @@ const accessors = {
   currenciesCollection: {required: true},
   history: {required: false},
   host: {required: false},
+  i18n: {required: false},
   routes: {required: false},
   routeDefinitions: {required: false}
 }

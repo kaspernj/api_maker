@@ -1,3 +1,5 @@
+const Config = require("@kaspernj/api-maker/src/config").default
+
 module.exports = class ModelName {
   constructor (data) {
     this.data = data
@@ -22,7 +24,7 @@ module.exports = class ModelName {
 
     const key = `activerecord.models.${this.data.modelClassData.i18nKey}.${countKey}`
 
-    return this.data.i18n.t(key)
+    return Config.getI18n().t(key)
   }
 
   paramKey() {
