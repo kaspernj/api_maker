@@ -8,9 +8,6 @@ describe "model belongs to relationships" do
   it "finds the parent model" do
     login_as user
     visit models_has_one_path(project_id: project.id)
-
-    binding.pry
-
     wait_for_path models_has_one_path
     wait_for_browser { find("[data-controller='models--has-one']", visible: false)["data-has-one-completed"] == "true" }
 
