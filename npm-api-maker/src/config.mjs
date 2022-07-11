@@ -22,9 +22,9 @@ const accessors = {
 
 class ApiMakerConfig {
   constructor() {
-    if (!global.apiMakerConfigGlobal) global.apiMakerConfigGlobal = {}
+    if (!globalThis.apiMakerConfigGlobal) globalThis.apiMakerConfigGlobal = {}
 
-    this.global = global.apiMakerConfigGlobal
+    this.global = globalThis.apiMakerConfigGlobal
   }
 }
 

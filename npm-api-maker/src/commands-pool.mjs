@@ -9,6 +9,8 @@ import Serializer from "./serializer.mjs"
 import ValidationError from "./validation-error.mjs"
 import {ValidationErrors} from "./validation-errors.mjs"
 
+const shared = {}
+
 export default class ApiMakerCommandsPool {
   static addCommand (data, args = {}) {
     let pool
@@ -31,11 +33,9 @@ export default class ApiMakerCommandsPool {
   }
 
   static current () {
-    if (!global.currentApiMakerCommandsPool) {
-      global.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
-    }
+    if (!shared.currentApiMakerCommandsPool) shared.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
 
-    return global.currentApiMakerCommandsPool
+    return shared.currentApiMakerCommandsPool
   }
 
   static flush () {

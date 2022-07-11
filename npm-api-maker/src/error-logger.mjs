@@ -40,7 +40,7 @@ export default class ErrorLogger {
   }
 
   connectOnError () {
-    global.addEventListener("error", (event) => {
+    globalThis.addEventListener("error", (event) => {
       this.errorOccurred = true
 
       if (!this.isHandlingError) {
@@ -53,7 +53,7 @@ export default class ErrorLogger {
   }
 
   connectUnhandledRejection () {
-    global.addEventListener("unhandledrejection", (event) => {
+    globalThis.addEventListener("unhandledrejection", (event) => {
       this.errorOccurred = true
 
       if (!this.isHandlingError) {

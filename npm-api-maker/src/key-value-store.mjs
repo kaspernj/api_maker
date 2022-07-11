@@ -1,11 +1,12 @@
 import Params from "./params.mjs"
 
+const shared = {}
+
 export default class KeyValueStore {
   static current () {
-    if (!global.currentKeyValueStore)
-      global.currentKeyValueStore = new KeyValueStore()
+    if (!shared.currentKeyValueStore) shared.currentKeyValueStore = new KeyValueStore()
 
-    return global.currentKeyValueStore
+    return shared.currentKeyValueStore
   }
 
   static get (key) {

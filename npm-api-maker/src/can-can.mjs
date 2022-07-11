@@ -4,13 +4,13 @@ import inflection from "inflection"
 import {ReadersWriterLock} from "epic-locks"
 import Services from "./services.mjs"
 
+const shared = {}
+
 export default class ApiMakerCanCan {
   static current () {
-    if (!global.currentApiMakerCanCan) {
-      global.currentApiMakerCanCan = new ApiMakerCanCan()
-    }
+    if (!shared.currentApiMakerCanCan) shared.currentApiMakerCanCan = new ApiMakerCanCan()
 
-    return global.currentApiMakerCanCan
+    return shared.currentApiMakerCanCan
   }
 
   constructor () {

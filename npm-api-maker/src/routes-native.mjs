@@ -141,15 +141,15 @@ export default class ApiMakerRoutesNative {
   addHostToRoute ({host, port, protocol, translatedRoute}) {
     let fullUrl = ""
 
-    const hostToUse = host || global.location && global.location.host
-    const portToUse = port || global.location && global.location.port
+    const hostToUse = host || globalThis.location && globalThis.location.host
+    const portToUse = port || globalThis.location && globalThis.location.port
 
     if (!hostToUse) throw new Error("Unable to detect host")
 
     if (protocol) {
       fullUrl += `${protocol}://`
-    } else if (global.location && global.location.protocol) {
-      fullUrl += `${global.location.protocol}//`
+    } else if (globalThis.location && globalThis.location.protocol) {
+      fullUrl += `${globalThis.location.protocol}//`
     } else {
       fullUrl += "https://"
     }

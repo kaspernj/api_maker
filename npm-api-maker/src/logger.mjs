@@ -1,11 +1,13 @@
+const shared = {}
+
 export default class ApiMakerLogger {
   static current () {
-    if (!global.apiMakerLogger) {
-      global.apiMakerLogger = new ApiMakerLogger()
-      // global.apiMakerLogger.setDebug(true)
+    if (!shared.apiMakerLogger) {
+      shared.apiMakerLogger = new ApiMakerLogger()
+      // shared.apiMakerLogger.setDebug(true)
     }
 
-    return global.apiMakerLogger
+    return shared.apiMakerLogger
   }
 
   static log (message) {

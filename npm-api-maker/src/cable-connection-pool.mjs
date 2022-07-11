@@ -2,12 +2,13 @@ import CableSubscriptionPool from "./cable-subscription-pool.mjs"
 import CableSubscription from "./cable-subscription.mjs"
 import {dig} from "diggerize"
 
+const shared = {}
+
 export default class ApiMakerCableConnectionPool {
   static current () {
-    if (!global.apiMakerCableConnectionPool)
-      global.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
+    if (!shared.apiMakerCableConnectionPool) shared.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
 
-    return global.apiMakerCableConnectionPool
+    return shared.apiMakerCableConnectionPool
   }
 
   constructor () {

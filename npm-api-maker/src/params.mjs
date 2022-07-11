@@ -4,7 +4,7 @@ import qs from "qs"
 
 export default class Params {
   static parse () {
-    return qs.parse(global.location.search.substr(1))
+    return qs.parse(globalThis.location.search.substr(1))
   }
 
   static change (given) {

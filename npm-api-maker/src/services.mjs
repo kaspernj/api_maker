@@ -1,12 +1,12 @@
 import CommandsPool from "./commands-pool.mjs"
 
+const shared = {}
+
 export default class ApiMakerServices {
   static current () {
-    if (!global.currentApiMakerService) {
-      global.currentApiMakerService = new ApiMakerServices()
-    }
+    if (!shared.currentApiMakerService) shared.currentApiMakerService = new ApiMakerServices()
 
-    return global.currentApiMakerService
+    return shared.currentApiMakerService
   }
 
   sendRequest (serviceName, args) {
