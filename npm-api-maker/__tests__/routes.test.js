@@ -1,4 +1,4 @@
-const Routes = require("../src/routes.cjs")
+import Routes from "../src/routes.mjs"
 const testRoutes = {
   routes: [
     {"name": "blank", "path": "/blank", "component": "blank"},

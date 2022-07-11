@@ -1,6 +1,6 @@
-const BaseModel = require("../../src/base-model.cjs")
+import BaseModel from "../../src/base-model.mjs"
 
-module.exports = class User extends BaseModel {
+export default class User extends BaseModel {
   static modelClassData () {
     return {
       attributes: [],

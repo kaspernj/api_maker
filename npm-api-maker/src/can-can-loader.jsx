@@ -1,9 +1,9 @@
 import ApiMakerEventEmitterListener from "./event-emitter-listener"
 import {digg, digs} from "diggerize"
-const CanCan = require("./can-can.cjs")
-const PropTypes = require("prop-types")
-const propTypesExact = require("prop-types-exact")
-const React = require("react")
+import CanCan from "./can-can.mjs"
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
+import React from "react"
 
 export default class ApiMakerCanCanLoader extends React.PureComponent {
   static propTypes = propTypesExact({

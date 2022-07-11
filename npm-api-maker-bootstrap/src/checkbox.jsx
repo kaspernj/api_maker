@@ -1,10 +1,10 @@
-const {Checkbox} = require("@kaspernj/api-maker-inputs/src/checkbox")
-const classNames = require("classnames")
-const {digs} = require("diggerize")
-const inputWrapper = require("@kaspernj/api-maker-inputs/src/input-wrapper").default
-const InvalidFeedback = require("./invalid-feedback").default
-const PropTypes = require("prop-types")
-const React = require("react")
+import {Checkbox} from "@kaspernj/api-maker-inputs/src/checkbox"
+import classNames from "classnames"
+import {digs} from "diggerize"
+import inputWrapper from "@kaspernj/api-maker-inputs/src/input-wrapper"
+import InvalidFeedback from "./invalid-feedback"
+import PropTypes from "prop-types"
+import React from "react"
 
 class ApiMakerBootstrapCheckbox extends React.PureComponent {
   static defaultProps = {

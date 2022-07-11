@@ -1,7 +1,8 @@
 import {digg} from "diggerize"
 import FlashMessage from "shared/flash-message"
 import Params from "@kaspernj/api-maker/src/params"
-import {User} from "@kaspernj/api-maker/src/models.cjs"
+import React from "react"
+import {User} from "@kaspernj/api-maker/src/models.mjs.erb"
 
 export default class ModelsValidationErrors extends React.PureComponent {
   // This ensures that it doesn't crash if the checkbox is passed an inputRef

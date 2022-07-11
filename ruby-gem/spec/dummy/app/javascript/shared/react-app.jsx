@@ -1,4 +1,4 @@
-import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config"
+import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config.mjs"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"
 import React from "react"
@@ -8,7 +8,7 @@ import withPathname from "on-location-changed/src/with-path"
 
 const NotFoundComponent = () => <div>Not found</div>
 const requireComponent = ({routeDefinition}) => React.lazy(() => import(/* webpackChunkName: "[request]" */ `routes/${routeDefinition.component}`))
-const routeDefinitions = require("./route-definitions.json")
+import routeDefinitions from "./route-definitions.json"
 const RouterWithLocation = withPathname(Router)
 
 ApiMakerConfig.setRoutes(Routes)

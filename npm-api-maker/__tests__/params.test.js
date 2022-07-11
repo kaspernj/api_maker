@@ -1,4 +1,4 @@
-const Params = require("../src/params.cjs")
+import Params from "../src/params.mjs"
 
 describe("Params", () => {
   describe("change", () => {

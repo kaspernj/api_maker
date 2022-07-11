@@ -1,10 +1,10 @@
-const {digs} = require("diggerize")
-const inputWrapper = require("@kaspernj/api-maker-inputs/src/input-wrapper").default
-const {Input} = require("@kaspernj/api-maker-inputs/src/input")
-const InvalidFeedback = require("./invalid-feedback").default
-const Money = require("@kaspernj/api-maker-inputs/src/money").default
-const PropTypes = require("prop-types")
-const React = require("react")
+import {digs} from "diggerize"
+import inputWrapper from "@kaspernj/api-maker-inputs/src/input-wrapper"
+import {Input} from "@kaspernj/api-maker-inputs/src/input"
+import InvalidFeedback from "./invalid-feedback"
+import Money from "@kaspernj/api-maker-inputs/src/money"
+import PropTypes from "prop-types"
+import React from "react"
 
 class ApiMakerBootstrapInput extends React.PureComponent {
   static propTypes = {

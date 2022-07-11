@@ -1,8 +1,8 @@
-const {digg, digs} = require("diggerize")
-const inflection = require("inflection")
-const PropTypes = require("prop-types")
-const qs = require("qs")
-const React = require("react")
+import {digg, digs} from "diggerize"
+import inflection from "inflection"
+import PropTypes from "prop-types"
+import qs from "qs"
+import React from "react"
 
 import Link from "@kaspernj/api-maker/src/link"
 import PureComponent from "set-state-compare/src/pure-component"

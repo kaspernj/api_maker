@@ -1,7 +1,7 @@
-const {dig} = require("diggerize")
-const inputWrapper = require("./input-wrapper").default
-const PropTypes = require("prop-types")
-const React = require("react")
+import {dig} from "diggerize"
+import inputWrapper from "./input-wrapper"
+import PropTypes from "prop-types"
+import React from "react"
 
 class ApiMakerInputsSelect extends React.PureComponent {
   static propTypes = {

@@ -1,9 +1,9 @@
-const AutoSubmit = require("./auto-submit.cjs")
-const {digg, digs} = require("diggerize")
-const EventUpdated = require("@kaspernj/api-maker/src/event-updated").default
-const inputWrapper = require("./input-wrapper").default
-const PropTypes = require("prop-types")
-const React = require("react")
+import AutoSubmit from "./auto-submit.mjs"
+import {digg, digs} from "diggerize"
+import EventUpdated from "@kaspernj/api-maker/src/event-updated"
+import inputWrapper from "./input-wrapper"
+import PropTypes from "prop-types"
+import React from "react"
 
 class ApiMakerInputsCheckbox extends React.PureComponent {
   static defaultProps = {

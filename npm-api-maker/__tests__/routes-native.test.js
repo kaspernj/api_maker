@@ -1,4 +1,4 @@
-const RoutesNative = require("../src/routes-native.cjs")
+import RoutesNative from "../src/routes-native.mjs"
 const testRoutes = () => ({
   routes: [
     {"name": "blank", "path": "/blank", "component": "blank"},
@@ -76,10 +76,10 @@ describe("RoutesNative", () => {
   })
 
   it("generates urls", () => {
-    if (!global.location) global.location = {} // eslint-disable-line jest/no-if
+    if (!globalThis.location) globalThis.location = {} // eslint-disable-line jest/no-if
 
-    global.location.host = "localhost"
-    global.location.protocol = "http:"
+    globalThis.location.host = "localhost"
+    globalThis.location.protocol = "http:"
 
     const test = routesNative({args: {localized: true}, currentLocale: "en"})
     const daRoute = test.editDrinkUrl(5, {drink: {name: "Pina Colada"}, locale: "da"})

@@ -1,7 +1,7 @@
-const {digs} = require("diggerize")
-const PropTypes = require("prop-types")
-const propTypesExact = require("prop-types-exact")
-const React = require("react")
+import {digs} from "diggerize"
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
+import React from "react"
 
 export default class ApiMakerBootstrapInvalidFeedback extends React.PureComponent {
   static propTypes = propTypesExact({

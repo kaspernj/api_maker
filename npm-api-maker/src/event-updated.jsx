@@ -1,8 +1,8 @@
-const debounce = require("debounce")
-const ModelEvents = require("./model-events.cjs")
-const PropTypes = require("prop-types")
-const propTypesExact = require("prop-types-exact")
-const React = require("react")
+import debounce from "debounce"
+import ModelEvents from "./model-events.mjs"
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
+import React from "react"
 
 export default class ApiMakerEventUpdated extends React.PureComponent {
   static defaultProps = {

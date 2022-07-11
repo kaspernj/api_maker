@@ -17,12 +17,13 @@
   "license": "ISC",
   "main": "index.js",
   "name": "@kaspernj/api-maker-inputs",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kaspernj/api_maker.git"
   },
   "scripts": {
-    "eslint": "eslint --ext .cjs,.js,.jsx"
+    "eslint": "eslint --ext .mjs,.js,.jsx"
   },
   "version": "1.0.204",
   "dependencies": {

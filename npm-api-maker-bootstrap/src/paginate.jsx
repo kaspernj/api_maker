@@ -1,8 +1,8 @@
-const instanceOfClassName = require("@kaspernj/api-maker/src/instance-of-class-name")
-const PropTypes = require("prop-types")
-const propTypesExact = require("prop-types-exact")
-const qs = require("qs")
-const React = require("react")
+import instanceOfClassName from "@kaspernj/api-maker/src/instance-of-class-name"
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
+import qs from "qs"
+import React from "react"
 
 import Link from "@kaspernj/api-maker/src/link"
 import Result from "@kaspernj/api-maker/src/result"

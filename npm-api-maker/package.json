@@ -17,6 +17,7 @@
   },
   "name": "@kaspernj/api-maker",
   "version": "1.0.204",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -30,7 +31,7 @@
   },
   "homepage": "https://github.com/kaspernj/api_maker",
   "scripts": {
-    "eslint": "eslint --ext .cjs,.js,.jsx",
+    "eslint": "eslint --ext .mjs,.js,.jsx",
     "eslint-find-rules": "eslint-find-rules",
     "test": "jest"
   },

@@ -177,7 +177,7 @@ builds:
   build_23:
     name: API maker ESLint find rules
     script:
-      - cd npm-api-maker && yarn eslint-find-rules -u .eslintrc.js
+      - cd npm-api-maker && yarn eslint-find-rules -u .eslintrc.cjs
   build_24:
     name: API maker Bootstrap ESLint
     script:
@@ -185,7 +185,7 @@ builds:
   build_25:
     name: API maker Bootstrap ESLint find rules
     script:
-      - cd npm-api-maker-bootstrap && yarn eslint-find-rules -u .eslintrc.js
+      - cd npm-api-maker-bootstrap && yarn eslint-find-rules -u .eslintrc.cjs
   build_26:
     name: API maker Inputs ESLint
     script:
@@ -193,4 +193,4 @@ builds:
   build_27:
     name: API maker Inputs ESLint find rules
     script:
-      - cd npm-api-maker-inputs && yarn eslint-find-rules -u .eslintrc.js
+      - cd npm-api-maker-inputs && yarn eslint-find-rules -u .eslintrc.cjs

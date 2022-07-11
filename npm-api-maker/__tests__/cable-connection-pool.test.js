@@ -1,9 +1,11 @@
+import CableConnectionPool from "../src/cable-connection-pool.mjs"
+import CableSubscriptionPool from "../src/cable-subscription-pool.mjs"
+import {digg} from "diggerize"
+import {jest} from "@jest/globals"
+
 jest.mock("@rails/actioncable", () => ({
   createConsumer: () => ({})
 }))
-const CableConnectionPool = require("../src/cable-connection-pool.cjs")
-const CableSubscriptionPool = require("../src/cable-subscription-pool.cjs")
-const {digg} = require("diggerize")
 
 describe("CableConnectionPool", () => {
   describe("connectCreated", () => {

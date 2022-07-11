@@ -1,9 +1,9 @@
-const {dig, digg, digs} = require("diggerize")
-const EventListener = require("@kaspernj/api-maker/src/event-listener").default
-const React = require("react")
-const idForComponent = require("./id-for-component.cjs")
-const nameForComponent = require("./name-for-component.cjs")
-const strftime = require("strftime")
+import {dig, digg, digs} from "diggerize"
+import EventListener from "@kaspernj/api-maker/src/event-listener"
+import React from "react"
+import idForComponent from "./id-for-component.mjs"
+import nameForComponent from "./name-for-component.mjs"
+import strftime from "strftime"
 
 const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
   return class ApiMakerInputWrapper extends React.PureComponent {

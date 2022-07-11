@@ -1,10 +1,10 @@
-import CanCan from "./can-can.cjs"
-import Deserializer from "./deserializer.cjs"
+import CanCan from "./can-can.mjs"
+import Deserializer from "./deserializer.mjs"
 import {digg} from "diggerize"
 import EventEmitter from "events"
 import inflection from "inflection"
-import modelClassRequire from "./model-class-require.cjs"
-import Services from "./services.cjs"
+import modelClassRequire from "./model-class-require.mjs"
+import Services from "./services.mjs"
 
 export default class ApiMakerDevise {
   static callSignOutEvent (args) {

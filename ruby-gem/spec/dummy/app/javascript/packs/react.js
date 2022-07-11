@@ -13,7 +13,7 @@ const context = require.context("controllers", true, /.js$/)
 application.load(definitionsFromContext(context))
 
 // API maker
-import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config"
+import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config.mjs"
 ApiMakerConfig.setHistory(history)
 
 // Devise
@@ -23,6 +23,6 @@ Devise.addUserScope("user")
 
 // Rest of app
 require("shared/error-logger")
-require("shared/i18n.cjs")
+require("shared/i18n.js")
 require("shared/react-app")
 require("stylesheets/application")

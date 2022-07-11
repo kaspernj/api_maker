@@ -1,9 +1,9 @@
-const classNames = require("classnames")
-const {digg} = require("diggerize")
-const MoneyFormatter = require("@kaspernj/api-maker/src/money-formatter")
-const PropTypes = require("prop-types")
-const React = require("react")
-const strftime = require("strftime")
+import classNames from "classnames"
+import {digg} from "diggerize"
+import MoneyFormatter from "@kaspernj/api-maker/src/money-formatter"
+import PropTypes from "prop-types"
+import React from "react"
+import strftime from "strftime"
 
 export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
   static defaultProps = {

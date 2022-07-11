@@ -1,4 +1,4 @@
-import apiMakerConfig from "@kaspernj/api-maker/src/config"
+import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
 import React from "react"
 
 export default (WrappedComponent) => class WithBreakPoint extends React.Component {

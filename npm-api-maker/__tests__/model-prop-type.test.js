@@ -1,6 +1,6 @@
-const ModelPropType = require("../src/model-prop-type.cjs")
-const Task = require("./support/task")
-const User = require("./support/user")
+import ModelPropType from "../src/model-prop-type.mjs"
+import Task from "./support/task.mjs"
+import User from "./support/user.mjs"
 
 describe("ModelPropType", () => {
   describe("ofModel", () => {

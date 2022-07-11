@@ -1,4 +1,4 @@
-import config from "./config"
+import config from "./config.mjs"
 import escapeStringRegexp from "escape-string-regexp"
 import inflection from "inflection"
 import PropTypes from "prop-types"
