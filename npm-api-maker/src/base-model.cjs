@@ -1,6 +1,7 @@
 const AttributeNotLoadedError = require("./attribute-not-loaded-error.cjs")
 const Collection = require("./collection.cjs")
 const CommandsPool = require("./commands-pool.cjs")
+const Config = require("@kaspernj/api-maker/src/config").default
 const CustomError = require("./custom-error.cjs")
 const {digg} = require("diggerize")
 const FormDataObjectizer = require("form-data-objectizer")
@@ -11,8 +12,6 @@ const objectToFormData = require("object-to-formdata").serialize
 const Services = require("./services.cjs")
 const ValidationError = require("./validation-error.cjs")
 const {ValidationErrors} = require("./validation-errors.cjs")
-
-const shared = {}
 
 const newCustomEvent = (validationErrors) => {
   return new CustomEvent("validation-errors", {detail: validationErrors})
@@ -56,15 +55,11 @@ class BaseModel {
   }
 
   static modelName () {
-    return new ModelName({i18n: shared.i18n, modelClassData: this.modelClassData()})
+    return new ModelName({modelClassData: this.modelClassData()})
   }
 
   static ransack (query = {}) {
     return new Collection({modelClass: this}, {ransack: query})
-  }
-
-  static setI18n (i18n) {
-    shared.i18n = i18n
   }
 
   constructor (args = {}) {
@@ -328,8 +323,9 @@ class BaseModel {
 
   static humanAttributeName (attributeName) {
     const keyName = digg(this.modelClassData(), "i18nKey")
+    const i18n = Config.getI18n()
 
-    if (shared.i18n) return shared.i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`, {defaultValue: attributeName})
+    if (i18n) return i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`, {defaultValue: attributeName})
 
     return inflection.humanize(attributeName)
   }
