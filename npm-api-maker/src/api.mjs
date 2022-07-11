@@ -1,4 +1,4 @@
-import config from "./config.js"
+import config from "./config.mjs"
 import CustomError from "./custom-error.mjs"
 import FormDataObjectizer from "form-data-objectizer"
 import qs from "qs"
