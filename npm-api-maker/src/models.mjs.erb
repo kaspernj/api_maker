@@ -1,9 +1,15 @@
+/* rails-erb-loader-dependencies api_maker/resources/ models/ */
+
 import modelRecipes from "./model-recipes.mjs.erb"
 import ModelRecipesLoader from "./model-recipes-loader.mjs"
 
 const loader = new ModelRecipesLoader({recipes: modelRecipes})
 const result = loader.load()
 
+<% model_class_names = [] %>
 <% ApiMaker::ModelClassesJavaScriptGeneratorService.new.resources.each do |resource| %>
-  const <%= resource.short_name %> =
+  <% model_class_names << resource.short_name %>
+  const <%= resource.short_name %> = digg(result, "<%= resource.short_name %>")
 <% end %>
+
+export {<%= model_class_names.join(", ") %>}

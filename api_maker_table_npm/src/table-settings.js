@@ -1,9 +1,9 @@
-import columnIdentifier from "@kaspernj/api-maker-table/src/column-identifier"
-import columnVisible from "./column-visible"
+import columnIdentifier from "./column-identifier.mjs"
+import columnVisible from "./column-visible.mjs"
 import {digg} from "diggerize"
 import inflection from "inflection"
 import {serialize as objectToFormData} from "object-to-formdata"
-import {TableSetting} from "@kaspernj/api-maker/src/models.mjs"
+import {TableSetting} from "@kaspernj/api-maker/src/models.mjs.erb"
 
 export default class ApiMakerTableSettings {
   constructor({table}) {

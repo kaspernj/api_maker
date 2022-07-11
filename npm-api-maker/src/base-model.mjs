@@ -1,8 +1,7 @@
-<<<<<<< HEAD:npm-api-maker/src/base-model.mjs
 import AttributeNotLoadedError from "./attribute-not-loaded-error.mjs"
 import Collection from "./collection.mjs"
 import CommandsPool from "./commands-pool.mjs"
-import Config from "@kaspernj/api-maker/src/config"
+import Config from "@kaspernj/api-maker/src/config.mjs"
 import CustomError from "./custom-error.mjs"
 import {digg} from "diggerize"
 import FormDataObjectizer from "form-data-objectizer"

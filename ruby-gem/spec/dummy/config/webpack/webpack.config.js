@@ -45,9 +45,9 @@ options.plugins.push(
     Select: ["@kaspernj/api-maker-bootstrap", "Select"],
 
     Account: ["@kaspernj/api-maker/src/models.mjs.erb", "Account"],
-    Project: ["@kaspernj/api-maker/src/models.mjs", "Project"],
-    Task: ["@kaspernj/api-maker/src/models.mjs", "Task"],
-    User: ["@kaspernj/api-maker/src/models.mjs", "User"]
+    Project: ["@kaspernj/api-maker/src/models.mjs.erb", "Project"],
+    Task: ["@kaspernj/api-maker/src/models.mjs.erb", "Task"],
+    User: ["@kaspernj/api-maker/src/models.mjs.erb", "User"]
   })
 )
 

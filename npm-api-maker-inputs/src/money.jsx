@@ -1,5 +1,5 @@
 import classNames from "classnames"
-import Config from "@kaspernj/api-maker/src/config"
+import Config from "@kaspernj/api-maker/src/config.mjs"
 import {digg} from "diggerize"
 import idForComponent from "./id-for-component.mjs"
 import inflection from "inflection"

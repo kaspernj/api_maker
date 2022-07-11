@@ -13,7 +13,7 @@ const context = require.context("controllers", true, /.js$/)
 application.load(definitionsFromContext(context))
 
 // API maker
-import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config"
+import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config.mjs"
 ApiMakerConfig.setHistory(history)
 
 // Devise

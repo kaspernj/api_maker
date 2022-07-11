@@ -1,4 +1,4 @@
-import Config from "@kaspernj/api-maker/src/config"
+import Config from "@kaspernj/api-maker/src/config.mjs"
 
 export default class ModelName {
   constructor(data) {

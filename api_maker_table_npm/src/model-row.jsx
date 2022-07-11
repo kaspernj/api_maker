@@ -1,6 +1,6 @@
 import classNames from "classnames"
-import columnIdentifier from "./column-identifier"
-import columnVisible from "./column-visible"
+import columnIdentifier from "./column-identifier.mjs"
+import columnVisible from "./column-visible.mjs"
 import {digg, digs} from "diggerize"
 import inflection from "inflection"
 import Link from "@kaspernj/api-maker/src/link"

@@ -1,4 +1,4 @@
-import BaseError from "./base-error.cjs"
+import BaseError from "./base-error.mjs"
 import inflection from "inflection"
 
 class ValidationError extends BaseError {
