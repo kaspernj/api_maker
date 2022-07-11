@@ -1,6 +1,6 @@
 require "waitutil"
 
-module ApiMaker::SpecHelper
+module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   autoload :ExecuteCollectionCommand, "#{__dir__}/spec_helper/execute_collection_command"
   autoload :ExecuteMemberCommand, "#{__dir__}/spec_helper/execute_member_command"
 
@@ -49,7 +49,10 @@ module ApiMaker::SpecHelper
   end
 
   def expect_no_browser_window_errors
-    raise "API maker: Error logger hasn't been set up on window, so we can't delegate JS errors to Ruby" unless error_logger_present?
+    unless error_logger_present?
+      Rails.logger.error "API maker: Error logger hasn't been set up on window, so we can't delegate JS errors to Ruby"
+      return
+    end
 
     # Wait until error logger has finished loading source maps and parsed errors
     loop do
@@ -90,6 +93,14 @@ module ApiMaker::SpecHelper
 
   def model_row_selector(model)
     ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}']"
+  end
+
+  def model_row_destroy_button_selector(model)
+    "#{model_row_selector(model)} .destroy-button"
+  end
+
+  def model_row_edit_button_selector(model)
+    "#{model_row_selector(model)} .edit-button"
   end
 
   def pretty_html

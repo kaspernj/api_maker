@@ -45,6 +45,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     editModelPath: PropTypes.func,
     filterCard: PropTypes.bool.isRequired,
     filterContent: PropTypes.func,
+    filterSubmitButton: PropTypes.bool.isRequired,
     filterSubmitLabel: PropTypes.node,
     headersContent: PropTypes.func,
     header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
@@ -94,11 +95,9 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     return this.props.columns
   }
 
-  submitFilterDebounce = debounce(() => this.submitFilter())
-
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, defaultParams, preloads, select, selectColumns} = this.props
+    const {collection, defaultParams, onModelsLoaded, preloads, select, selectColumns} = this.props
     const {
       overallCount,
       qParams,
@@ -128,6 +127,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
           modelClass={modelClass}
           noRecordsAvailableContent={noRecordsAvailableContent}
           noRecordsFoundContent={noRecordsFoundContent}
+          onModelsLoaded={onModelsLoaded}
           preloads={preloads}
           select={select}
           selectColumns={selectColumns}
@@ -395,4 +395,6 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
 
     Params.changeParams(changeParamsParams, {appHistory})
   }
+
+  submitFilterDebounce = debounce(digg(this, "submitFilter"))
 }

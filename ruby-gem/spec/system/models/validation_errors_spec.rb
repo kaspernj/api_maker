@@ -36,6 +36,9 @@ describe "models - validation errors" do
     wait_for_selector ".project-name-3 .invalid-feedback", text: "can't be blank"
     wait_for_selector ".project-illegal-3 .invalid-feedback", text: "can't be true"
 
+    # It shows errors for virtual attributes like the password added by Devise
+    wait_for_selector ".user-password-input .invalid-feedback", exact_text: "can't be blank"
+
     # All validation errors should have been handled so no message should be shown
     wait_for_no_selector ".ui-pnotify-text"
 

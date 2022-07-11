@@ -1,5 +1,7 @@
+import Config from "@kaspernj/api-maker/src/config"
+
 export default class ModelName {
-  constructor (data) {
+  constructor(data) {
     this.data = data
   }
 
@@ -7,10 +9,10 @@ export default class ModelName {
     return this.data.modelClassData.camelizedLower
   }
 
-  human (args) {
+  human(args) {
     let argsToUse = args
 
-    if (!argsToUse) argsToUse = {count: 1}
+    if (!argsToUse) argsToUse = { count: 1 }
 
     let countKey
 
@@ -22,7 +24,7 @@ export default class ModelName {
 
     const key = `activerecord.models.${this.data.modelClassData.i18nKey}.${countKey}`
 
-    return this.data.i18n.t(key)
+    return Config.getI18n().t(key)
   }
 
   paramKey() {

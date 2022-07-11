@@ -14,13 +14,10 @@ const options = {
         test: /\.ya?ml$/,
         exclude: /node_modules/,
         use: "js-yaml-loader"
-      },
-      {
-        test: /\.(sass|scss|css)$/,
-        use: ["style-loader", "css-loader"]
       }
     ]
   },
+  node: {global: true},
   plugins: [],
   resolve: {
     extensions: [".css", ".scss", ".mjs", ".mjs.erb", ".mjs", ".mjs.erb", ".js.erb"],

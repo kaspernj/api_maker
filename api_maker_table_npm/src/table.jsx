@@ -1,25 +1,26 @@
+import "./style"
+import Card from "@kaspernj/api-maker-bootstrap/src/card"
 import classNames from "classnames"
 import Collection from "@kaspernj/api-maker/src/collection"
+import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
+import columnVisible from "./column-visible"
 import {debounce} from "debounce"
 import {digg, digs} from "diggerize"
+import inflection from "inflection"
 import instanceOfClassName from "@kaspernj/api-maker/src/instance-of-class-name"
+import modelClassRequire from "@kaspernj/api-maker/src/model-class-require.cjs"
+import ModelRow from "./model-row"
+import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
 import Params from "@kaspernj/api-maker/src/params"
 import PropTypes from "prop-types"
 import React from "react"
-
-import Card from "@kaspernj/api-maker-bootstrap/src/card"
-import CollectionLoader from "@kaspernj/api-maker/src/collection-loader"
-import columnVisible from "./column-visible"
-import inflection from "inflection"
-import modelClassRequire from "@kaspernj/api-maker/src/model-class-require.mjs"
-import ModelRow from "./model-row"
-import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
 import Shape from "set-state-compare/src/shape"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
+import withBreakpoint from "./with-breakpoint"
 
-export default class ApiMakerTable extends React.PureComponent {
+class ApiMakerTable extends React.PureComponent {
   static defaultProps = {
     card: true,
     destroyEnabled: true,
@@ -119,8 +120,6 @@ export default class ApiMakerTable extends React.PureComponent {
 
     return this.props.columns
   }
-
-  submitFilterDebounce = debounce(() => this.submitFilter())
 
   mergedPreloads(preload) {
     const {preloads} = this.props
@@ -232,6 +231,7 @@ export default class ApiMakerTable extends React.PureComponent {
       abilities,
       actionsContent,
       appHistory,
+      breakPoint,
       card,
       className,
       collection,
@@ -277,6 +277,8 @@ export default class ApiMakerTable extends React.PureComponent {
       headerContent = header({models, qParams, query, result})
     } else if (header) {
       headerContent = header
+    } else {
+      headerContent = modelClass.modelName().human({count: 2})
     }
 
     if (!paginateContent) {
@@ -286,6 +288,8 @@ export default class ApiMakerTable extends React.PureComponent {
         PaginationComponent = Paginate
       }
     }
+
+    const TableComponent = this.responsiveComponent("table")
 
     return (
       <>
@@ -298,14 +302,14 @@ export default class ApiMakerTable extends React.PureComponent {
           this.filterForm()
         }
         {card &&
-          <Card className={classNames("mb-4", className)} controls={controlsContent} header={headerContent} table {...restProps}>
+          <Card className={classNames("mb-4", className)} controls={controlsContent} header={headerContent} table={!this.isSmallScreen()} {...restProps}>
             {this.tableContent()}
           </Card>
         }
         {!card &&
-          <table className={className} {...restProps}>
+          <TableComponent className={className} {...restProps}>
             {this.tableContent()}
-          </table>
+          </TableComponent>
         }
         {result && PaginationComponent &&
           <PaginationComponent result={result} />
@@ -342,21 +346,42 @@ export default class ApiMakerTable extends React.PureComponent {
   }
 
   tableContent () {
+    const {breakPoint} = digs(this.props, "breakPoint")
     const {models, preparedColumns} = digs(this.shape, "models", "preparedColumns")
+    const ColumnInHeadComponent = this.columnInHeadComponent()
+    const RowComponent = this.rowComponent()
+
+    let BodyComponent, HeadComponent
+
+    if (this.isSmallScreen()) {
+      BodyComponent = "div"
+      HeadComponent = "div"
+    } else {
+      BodyComponent = "tbody"
+      HeadComponent = "thead"
+    }
 
     return (
       <>
-        <thead>
-          <tr>
+        <HeadComponent>
+          <RowComponent className="live-table-header-row">
             {this.headersContentFromColumns()}
-            <th />
-          </tr>
-        </thead>
-        <tbody>
+            <ColumnInHeadComponent />
+          </RowComponent>
+        </HeadComponent>
+        <BodyComponent>
           {models.map((model) =>
-            <ModelRow key={model.id()} liveTable={this} model={model} preparedColumns={preparedColumns} />
+            <ModelRow
+              breakPoint={breakPoint}
+              columnComponent={this.columnComponent()}
+              key={model.id()}
+              liveTable={this}
+              model={model}
+              preparedColumns={preparedColumns}
+              rowComponent={this.rowComponent()}
+            />
           )}
-        </tbody>
+        </BodyComponent>
       </>
     )
   }
@@ -370,14 +395,36 @@ export default class ApiMakerTable extends React.PureComponent {
     return classNames.join(" ")
   }
 
+  columnProps(column) {
+    const props = {}
+
+    if (column.textCenter) props["data-text-align"] = "center"
+    if (column.textRight) props["data-text-align"] = "right"
+
+    return props
+  }
+
+  isSmallScreen() {
+    if (this.props.breakPoint == "xs" || this.props.breakPoint == "sm") return true
+
+    return false
+  }
+
+  columnComponent = () => this.responsiveComponent("td")
+  columnInHeadComponent = () => this.responsiveComponent("th")
+  responsiveComponent = (largeComponent) => this.isSmallScreen() ? "div" : largeComponent
+  rowComponent = () => this.responsiveComponent("tr")
+
   headersContentFromColumns () {
     const {preparedColumns, query} = digs(this.shape, "preparedColumns", "query")
+    const ColumnInHeadComponent = this.columnInHeadComponent()
 
     return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
-      <th
+      <ColumnInHeadComponent
         className={classNames(...this.headerClassNameForColumn(column))}
         data-identifier={tableSettingColumn.identifier()}
         key={tableSettingColumn.identifier()}
+        {...this.columnProps(column)}
       >
         {tableSettingColumn.hasSortKey() && query &&
           <SortLink attribute={tableSettingColumn.sortKey()} query={query} title={this.headerLabelForColumn(column)} />
@@ -385,7 +432,7 @@ export default class ApiMakerTable extends React.PureComponent {
         {(!tableSettingColumn.hasSortKey() || !query) &&
           this.headerLabelForColumn(column)
         }
-      </th>
+      </ColumnInHeadComponent>
     )
   }
 
@@ -394,8 +441,6 @@ export default class ApiMakerTable extends React.PureComponent {
 
     if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
     if (column.headerProps && column.headerProps.className) classNames.push(column.headerProps.className)
-    if (column.textCenter) classNames.push("text-center")
-    if (column.textRight) classNames.push("text-end text-right")
 
     return classNames
   }
@@ -445,4 +490,8 @@ export default class ApiMakerTable extends React.PureComponent {
 
     Params.changeParams(changeParamsParams, {appHistory})
   }
+
+  submitFilterDebounce = debounce(digg(this, "submitFilter"))
 }
+
+export default withBreakpoint(ApiMakerTable)

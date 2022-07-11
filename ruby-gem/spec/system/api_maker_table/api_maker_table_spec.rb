@@ -23,7 +23,7 @@ describe "bootstrap - live table" do
 
     # It shows the expected rows and columns
     wait_for_selector model_row_selector(task1)
-    wait_for_selector model_column_selector(task1, created_at_identifier), exact_text: "17/06-85 10:30"
+    wait_for_selector "#{model_column_selector(task1, created_at_identifier)} .live-table-column-value", exact_text: "17/06-85 10:30"
 
     wait_for_selector model_row_selector(task2)
     wait_for_selector model_column_selector(task2, created_at_identifier), exact_text: "18/03-89 14:00"
@@ -52,7 +52,7 @@ describe "bootstrap - live table" do
     updated_at_column = created_table_setting.columns.find_by!(identifier: updated_at_identifier)
     expect(updated_at_column).to have_attributes(
       attribute_name: "updatedAt",
-      visible: false
+      visible: nil
     )
   end
 

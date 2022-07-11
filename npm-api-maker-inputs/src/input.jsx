@@ -1,5 +1,4 @@
 import AutoSubmit from "./auto-submit.mjs"
-import Config from "@kaspernj/api-maker/src/config"
 import {dig, digg, digs} from "diggerize"
 import EventUpdated from "@kaspernj/api-maker/src/event-updated"
 import inputWrapper from "./input-wrapper"

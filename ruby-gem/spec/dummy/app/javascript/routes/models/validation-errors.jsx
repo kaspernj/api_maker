@@ -59,6 +59,7 @@ export default class ModelsValidationErrors extends React.PureComponent {
       <div className="content-container">
         <form onSubmit={e => this.onSubmit(e)}>
           <Input attribute="email" label="Email" model={user} />
+          <Input attribute="password" defaultValue="" label="Password" model={user} wrapperClassName="user-password-input" />
 
           {tasks.map(task =>
             <div className="my-4" key={task.uniqueKey()}>

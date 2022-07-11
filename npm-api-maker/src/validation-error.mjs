@@ -1,9 +1,13 @@
-import CustomError from "./custom-error.mjs"
+import BaseError from "./base-error.cjs"
 import inflection from "inflection"
 
-class ValidationError extends CustomError {
+class ValidationError extends BaseError {
   constructor (validationErrors, args) {
-    super(validationErrors.getUnhandledErrorMessage() || validationErrors.getErrorMessage(), args)
+    const errorMessage = validationErrors.getUnhandledErrorMessage() || validationErrors.getErrorMessage()
+    const forwardedArgs = {addResponseErrorsToErrorMessage: false}
+    const newArgs = Object.assign({}, args, forwardedArgs)
+
+    super(errorMessage, newArgs)
     this.validationErrors = validationErrors
   }
 

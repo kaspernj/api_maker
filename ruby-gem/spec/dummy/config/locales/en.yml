@@ -9,6 +9,10 @@ en:
       user:
         email: Email
         updated_at: Updated at
+    models:
+      task:
+        one: Task
+        other: Tasks
   date:
     formats:
       default: "%e. %B %Y"

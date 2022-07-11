@@ -56,7 +56,7 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     if (!pageKey)
       pageKey = "page"
 
-    const currentParams = qs.parse(global.location.search.substr(1))
+    const currentParams = qs.parse(globalThis.location.search.substr(1))
     currentParams[pageKey] = pageNumber
     const newParams = qs.stringify(currentParams)
     const newPath = `${location.pathname}?${newParams}`

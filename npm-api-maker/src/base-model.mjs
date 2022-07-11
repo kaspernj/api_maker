@@ -1,6 +1,8 @@
+<<<<<<< HEAD:npm-api-maker/src/base-model.mjs
 import AttributeNotLoadedError from "./attribute-not-loaded-error.mjs"
 import Collection from "./collection.mjs"
 import CommandsPool from "./commands-pool.mjs"
+import Config from "@kaspernj/api-maker/src/config"
 import CustomError from "./custom-error.mjs"
 import {digg} from "diggerize"
 import FormDataObjectizer from "form-data-objectizer"
@@ -11,8 +13,6 @@ import objectToFormData from "object-to-formdata"
 import Services from "./services.mjs"
 import ValidationError from "./validation-error.mjs"
 import {ValidationErrors} from "./validation-errors.mjs"
-
-const shared = {}
 
 class BaseModel {
   static modelClassData () {
@@ -56,15 +56,11 @@ class BaseModel {
   }
 
   static modelName () {
-    return new ModelName({i18n: shared.i18n, modelClassData: this.modelClassData()})
+    return new ModelName({modelClassData: this.modelClassData()})
   }
 
   static ransack (query = {}) {
     return new Collection({modelClass: this}, {ransack: query})
-  }
-
-  static setI18n (i18n) {
-    shared.i18n = i18n
   }
 
   constructor (args = {}) {
@@ -311,7 +307,7 @@ class BaseModel {
   }
 
   static parseValidationErrors ({error, model, options}) {
-    if (!(error instanceof CustomError)) return
+    if (!(error instanceof ValidationError)) return
     if (!error.args.response.validation_errors) return
 
     const validationErrors = new ValidationErrors({
@@ -328,8 +324,9 @@ class BaseModel {
 
   static humanAttributeName (attributeName) {
     const keyName = digg(this.modelClassData(), "i18nKey")
+    const i18n = Config.getI18n()
 
-    if (shared.i18n) return shared.i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`, {defaultValue: attributeName})
+    if (i18n) return i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`, {defaultValue: attributeName})
 
     return inflection.humanize(attributeName)
   }

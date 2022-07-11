@@ -11,8 +11,6 @@ import {ValidationErrors} from "./validation-errors.mjs"
 
 export default class ApiMakerCommandsPool {
   static addCommand (data, args = {}) {
-    console.log("addCommand", {data, args})
-
     let pool
 
     if (args.instant) {

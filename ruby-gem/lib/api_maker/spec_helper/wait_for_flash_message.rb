@@ -16,6 +16,6 @@ module ApiMaker::SpecHelper::WaitForFlashMessage
 
     expect_no_browser_errors
   rescue WaitUtil::TimeoutError
-    expect(received_messages.uniq.compact_blank.reject(&:blank?)).to eq include expected_message # rubocop:disable Rails/CompactBlank
+    expect(received_messages.uniq.reject(&:blank?)).to eq include expected_message # rubocop:disable Rails/CompactBlank
   end
 end

@@ -185,13 +185,10 @@ class ApiMaker::BaseCommand
     result = ApiMaker::Models::Save.execute!(models: models, simple_model_errors: simple_model_errors, succeed_with_errors: true)
 
     if result.fetch(:failed)
-      failed_model_with_params = result.fetch(:failed_models).find { |failed_model| failed_model.is_a?(Hash) }
+      failed_model_with_params = result.fetch(:failed_models).find { |failed_model| failed_model.is_a?(Hash) && failed_model[:params] }
 
       if failed_model_with_params
-        failure_save_response(
-          model: failed_model_with_params.fetch(:model),
-          params: failed_model_with_params.fetch(:params)
-        )
+        failure_save_response(**failed_model_with_params)
       else
         fail!(errors: result.fetch(:errors).map { |error| {message: error, type: :validation_error} })
       end

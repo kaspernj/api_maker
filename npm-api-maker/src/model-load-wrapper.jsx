@@ -12,10 +12,14 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
   }
 
   componentDidMount() {
+    this.loadModel()
+  }
+
+  loadModel = async () => {
     if (args.newIfNoId && !this.getModelId()) {
-      this.loadNewModel()
+      return await this.loadNewModel()
     } else if (!args.optional || this.getModelId()) {
-      this.loadExistingModel()
+      return await this.loadExistingModel()
     }
   }
 
@@ -23,7 +27,7 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
     return this.props.match.params[this.paramsVariableName] || this.props.match.params.id
   }
 
-  async loadExistingModel() {
+  loadExistingModel = async () => {
     const {modelId} = digs(this.state, "modelId")
     const query = await ModelClass.ransack({id_eq: modelId})
 
@@ -57,6 +61,7 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
   }
 
   render() {
+    const {onUpdated, reloadModel} = digs(this, "onUpdated", "reloadModel")
     const {model, modelId} = digs(this.state, "model", "modelId")
     const wrappedComponentProps = {}
 
@@ -65,13 +70,17 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
 
     return (
       <>
+        {args.events &&
+          <EventEmitterListener event="reloadModel" events={args.events} onCalled={reloadModel} />
+        }
         {model && args.eventUpdated &&
-          <EventUpdated model={model} onUpdated={digg(this, "onUpdated")} />
+          <EventUpdated model={model} onUpdated={onUpdated} />
         }
         <WrappedComponent {...wrappedComponentProps} {...this.props} />
       </>
     )
   }
 
-  onUpdated = () => this.loadExistingModel()
+  reloadModel = () => this.loadModel()
+  onUpdated = this.loadExistingModel
 }

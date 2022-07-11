@@ -35,10 +35,12 @@ export default class ApiMakerEventCreated extends React.PureComponent {
 
   debounce () {
     if (!this.debounceInstance) {
+      const {onCreated} = digs(this.props, "onCreated")
+
       if (typeof this.props.debounce == "number") {
-        this.debounceInstance = debounce(this.props.onCreated, this.props.debounce)
+        this.debounceInstance = debounce(onCreated, this.props.debounce)
       } else {
-        this.debounceInstance = debounce(this.props.onCreated)
+        this.debounceInstance = debounce(onCreated)
       }
     }
 

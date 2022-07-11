@@ -14,6 +14,7 @@ import {LocationChanged} from "on-location-changed/src/location-changed-componen
 export default class CollectionLoader extends React.PureComponent {
   static defaultProps = {
     destroyEnabled: true,
+    groupBy: ["id"],
     noRecordsAvailableContent: undefined,
     noRecordsFoundContent: undefined,
     preloads: [],
@@ -93,16 +94,14 @@ export default class CollectionLoader extends React.PureComponent {
     this.shape.set({qParams})
   }
 
-  loadModelsDebounce = debounce(this.loadModels)
-
   loadModels = async () => {
     const params = Params.parse()
     const {abilities, collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
     const {qParams, queryPageName, queryQName} = digs(this.shape, "qParams", "queryPageName", "queryQName")
 
-    let query = collection?.clone() || modelClass
+    let query = collection?.clone() || modelClass.ransack()
 
-    if (groupBy) query = query.groupBy(groupBy)
+    if (groupBy) query = query.groupBy(...groupBy)
 
     query = query
       .ransack(qParams)
@@ -136,7 +135,8 @@ export default class CollectionLoader extends React.PureComponent {
     })
   }
 
-  onModelCreated = () => this.loadModels()
+  loadModelsDebounce = debounce(digg(this, "loadModels"))
+  onModelCreated = digg(this, "loadModels")
 
   onModelDestroyed = (args) => {
     const {models} = digs(this.shape, "models")
