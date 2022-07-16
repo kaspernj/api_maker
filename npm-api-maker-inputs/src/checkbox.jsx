@@ -52,7 +52,7 @@ class ApiMakerInputsCheckbox extends React.PureComponent {
           <EventUpdated model={model} onUpdated={digg(this, "onModelUpdated")} />
         }
         {zeroInput && inputProps.name &&
-          <input defaultValue="0" name={inputProps.name} type="hidden" type="hidden" />
+          <input defaultValue="0" name={inputProps.name} type="hidden" />
         }
         <input
           {...inputProps}
