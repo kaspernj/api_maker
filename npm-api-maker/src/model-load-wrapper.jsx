@@ -8,7 +8,8 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
 
   state = {
     model: undefined,
-    modelId: this.props.match.params[this.paramsVariableName] || this.props.match.params.id
+    modelId: this.props.match.params[this.paramsVariableName] || this.props.match.params.id,
+    notFound: undefined
   }
 
   componentDidMount() {
@@ -37,7 +38,10 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
 
     const model = await query.first()
 
-    this.setState({model})
+    this.setState({
+      model,
+      notFound: !model
+    })
   }
 
   async loadNewModel() {
@@ -62,11 +66,12 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
 
   render() {
     const {onUpdated, reloadModel} = digs(this, "onUpdated", "reloadModel")
-    const {model, modelId} = digs(this.state, "model", "modelId")
+    const {model, modelId, notFound} = digs(this.state, "model", "modelId", "notFound")
     const wrappedComponentProps = {}
 
     wrappedComponentProps[this.camelizedLower] = model
     wrappedComponentProps[`${this.camelizedLower}Id`] = modelId
+    wrappedComponentProps[`${this.camelizedLower}NotFound`] = notFound
 
     return (
       <>
