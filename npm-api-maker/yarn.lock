@@ -3080,17 +3080,10 @@ imurmurhash@^0.1.4:
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha1-khi5srkoojixPcT7a21XbyMUU+o=
 
-"incorporator@>= 1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/incorporator/-/incorporator-1.0.1.tgz#465f7b59ed49953c180c9976b578c2142920a20e"
-  integrity sha512-RS9zpILtMiw9vHi0I41vRNp5JbFldS8vjJZeaOPzoqcaKFg7trJMID/tnqL5+Uchoj/I6n1rLJi8Rwju3AaZjw==
-  dependencies:
-    incorporator "^1.0.0"
-
-incorporator@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/incorporator/-/incorporator-1.0.0.tgz#95abbb8a5e0e9d482689523740557346ce4bd645"
-  integrity sha512-zLMbWDH7oiHLF2NKgFUGp54QvJCWYkDQpgQgByBFj7dV1PCQOxZfn8UIDogvC7ZvluIVdyQfzJOLRKHYGxledA==
+"incorporator@>= 1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/incorporator/-/incorporator-1.0.2.tgz#32e31850c6a56dbce2989b8ce9ed1148ad9373a4"
+  integrity sha512-yGcm0Qv9u+mEonyYZx6E0kkEciOgUN6MjB9x8wlqGSGi6NaLoXhpAiGWpBZEdBEMZ3AZ9/KA7VWZjqSDu3dqhw==
 
 "inflection@>= 1.12.0":
   version "1.13.2"
