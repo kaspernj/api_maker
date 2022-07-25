@@ -2,7 +2,7 @@ import cloneDeep from "clone-deep"
 import CommandsPool from "./commands-pool.mjs"
 import {digg} from "diggerize"
 import inflection from "inflection"
-import {merge} from "./merge.mjs"
+import {incorporate} from "incorporator"
 import modelClassRequire from "./model-class-require.mjs"
 import Result from "./result.mjs"
 
@@ -111,7 +111,7 @@ class ApiMakerCollection {
   params () {
     let params = {}
 
-    if (this.queryArgs.params) params = merge(params, this.queryArgs.params)
+    if (this.queryArgs.params) params = incorporate(params, this.queryArgs.params)
     if (this.queryArgs.abilities) params.abilities = this.queryArgs.abilities
     if (this.queryArgs.accessibleBy) params.accessible_by = inflection.underscore(this.queryArgs.accessibleBy)
     if (this.queryArgs.count) params.count = this.queryArgs.count
@@ -230,7 +230,7 @@ class ApiMakerCollection {
   }
 
   _merge (newQueryArgs) {
-    merge(this.queryArgs, newQueryArgs)
+    incorporate(this.queryArgs, newQueryArgs)
 
     return this
   }
