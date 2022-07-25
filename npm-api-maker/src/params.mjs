@@ -1,5 +1,5 @@
 import formSerialize from "form-serialize"
-import {merge} from "./merge.mjs"
+import Incorporator from "incorporator"
 import qs from "qs"
 
 export default class Params {
@@ -8,7 +8,11 @@ export default class Params {
   }
 
   static change (given) {
-    return merge(Params.parse(), given)
+    const incorporator = new Incorporator({objects: [Params.parse(), given]})
+
+    incorporator.replaceArrayIfExists(true)
+
+    return incorporator.merge()
   }
 
   static changeParams (given, opts = {}) {
