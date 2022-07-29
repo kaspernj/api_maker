@@ -8,12 +8,22 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
 
   state = {
     model: undefined,
-    modelId: this.props.match.params[this.paramsVariableName] || this.props.match.params.id,
+    modelId: this.getModelId(),
     notFound: undefined
   }
 
   componentDidMount() {
     this.loadModel()
+  }
+
+  componentDidUpdate() {
+    const newModelId = this.getModelId()
+
+    // The model ID was changed in the URL and a different model should be loaded
+    if (newModelId != this.state.modelId) {
+      this.setState({model: undefined, modelId: newModelId})
+      this.loadExistingModel()
+    }
   }
 
   loadModel = async () => {
@@ -29,7 +39,7 @@ export default (WrappedComponent, ModelClass, args = {}) => class modelLoadWrapp
   }
 
   loadExistingModel = async () => {
-    const {modelId} = digs(this.state, "modelId")
+    const modelId = this.getModelId()
     const query = await ModelClass.ransack({id_eq: modelId})
 
     if (args.abilities) query.abilities(args.abilities)
