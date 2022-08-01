@@ -637,7 +637,7 @@ class BaseModel {
     try {
       return await CommandsPool.addCommand(args, commandArgs)
     } catch (error) {
-      if (formOrDataObject.nodeName == "FORM") {
+      if (formOrDataObject?.nodeName == "FORM") {
         BaseModel.parseValidationErrors({error, options: {form: formOrDataObject}})
       }
 
