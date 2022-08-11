@@ -10,7 +10,7 @@
     ]
   },
   "name": "@kaspernj/api-maker-table",
-  "version": "1.0.211",
+  "version": "1.0.212",
   "type": "module",
   "description": "",
   "main": "index.js",
@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/kaspernj/api_maker_table#readme",
   "dependencies": {
-    "@kaspernj/api-maker": "1.0.211",
-    "@kaspernj/api-maker-bootstrap": "1.0.211",
-    "@kaspernj/api-maker-inputs": "1.0.211",
+    "@kaspernj/api-maker": "1.0.212",
+    "@kaspernj/api-maker-bootstrap": "1.0.212",
+    "@kaspernj/api-maker-inputs": "1.0.212",
     "classnames": "^2.3.1",
     "debounce": "^1.2.1",
     "diggerize": "^1.0.5",
