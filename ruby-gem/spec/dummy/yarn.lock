@@ -1093,13 +1093,13 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker-bootstrap@1.0.211":
-  version "1.0.211"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.211.tgz#0acac7cbff6b28e4740dd1e367687a620bde30d4"
-  integrity sha512-xvryLT00dx7sH8eg+8uFjEUkQ80VOaFclfMKy/27sQeXXhwCCxEpAEl8CH0NPYIPJOoeg9vtR1fwjRHwzr9EHw==
+"@kaspernj/api-maker-bootstrap@1.0.212":
+  version "1.0.212"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.212.tgz#853997956c343f390cc1e76c0dcc8d894dadf0f1"
+  integrity sha512-jXWSyoE+LTA+lblhCB2PExDdww7Nudw/AWYLIHy3W+cvxvKB2eGRZCX62gB22ayXV+GS2wSWdS1M/Y3Zob3M2g==
   dependencies:
-    "@kaspernj/api-maker" "1.0.211"
-    "@kaspernj/api-maker-inputs" "1.0.211"
+    "@kaspernj/api-maker" "1.0.212"
+    "@kaspernj/api-maker-inputs" "1.0.212"
     debounce ">= 1.2.0"
     diggerize ">= 1.0.5"
     inflection ">= 1.12.0"
@@ -1108,24 +1108,24 @@
     set-state-compare "^1.0.17"
     strftime ">= 0.10.0"
 
-"@kaspernj/api-maker-inputs@1.0.211":
-  version "1.0.211"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.211.tgz#4b4de95e3aba0a067fcdc8d8b1a49365860bde2a"
-  integrity sha512-d6oiAElzfciaBybt5SUoQeqIU03wHY7wN3VB2bFHhrd5W46+KXCbZSh6A5X4NnfAAm2Va3h1P83VRCw8io+JQQ==
+"@kaspernj/api-maker-inputs@1.0.212":
+  version "1.0.212"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.212.tgz#aa116392dfebcc177951eeb3566007ea5258bc65"
+  integrity sha512-hVklW2lQXt74YU9sXIvQuq1jzKPhy6Ho3Ezct/Cbgs/iGK/M7hZ36lbWqkR5T1A8G+StWEOJMt7YMwZ7gafSug==
   dependencies:
-    "@kaspernj/api-maker" "1.0.211"
+    "@kaspernj/api-maker" "1.0.212"
     classnames ">= 2.2.6"
     diggerize ">= 1.0.5"
     inflection ">= 1.12.0"
 
-"@kaspernj/api-maker-table@1.0.211":
-  version "1.0.211"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-table/-/api-maker-table-1.0.211.tgz#b248dc8d8bcd238ef451ff4144a6dde95e674b7f"
-  integrity sha512-eouU/gPZ06pPOQzswpmqnB9vATlUQQUNSnKcxj8FyZSI53c9e0TjgT9dPCOouk3p7Tb4nbEqQ84hibz7CLSX7A==
+"@kaspernj/api-maker-table@1.0.212":
+  version "1.0.212"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-table/-/api-maker-table-1.0.212.tgz#99cbb82bc8ba920a7b4526dac3d94c1f7fe3f36f"
+  integrity sha512-RAqfCNhGZA8Huzt6icfuqp/aKFHt9tX6ZHzLn5l2ycmh8bnckjELKkW05LZhN3vA5OX9QCDv/3268FrLiX7tOw==
   dependencies:
-    "@kaspernj/api-maker" "1.0.211"
-    "@kaspernj/api-maker-bootstrap" "1.0.211"
-    "@kaspernj/api-maker-inputs" "1.0.211"
+    "@kaspernj/api-maker" "1.0.212"
+    "@kaspernj/api-maker-bootstrap" "1.0.212"
+    "@kaspernj/api-maker-inputs" "1.0.212"
     classnames "^2.3.1"
     debounce "^1.2.1"
     diggerize "^1.0.5"
@@ -1134,10 +1134,10 @@
     set-state-compare "^1.0.18"
     uniqunize "^1.0.1"
 
-"@kaspernj/api-maker@1.0.211":
-  version "1.0.211"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.211.tgz#44383df37fab04aed93c0c20ebef37b03932c72c"
-  integrity sha512-o7FubIRfGrGeIg9GZmAd/vguJ7zdgwaTKqY08hYLPpA2tikefH2pth5yqMvxmlwNNFzEro3MjlJyirZeRlgVyQ==
+"@kaspernj/api-maker@1.0.212":
+  version "1.0.212"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.212.tgz#9047d7a86f92a8821990b2fd57f64c2b88da702f"
+  integrity sha512-hXcWMFcksJqoz5XXcDGinPhleVnjPAafyk3sIqBvG1aae4lZ8ASlwOOKvEwO/SQOxNCKQrEJztqFsqIWNqPMjg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -4403,10 +4403,10 @@ sass-loader@^13.0.2:
     klona "^2.0.4"
     neo-async "^2.6.2"
 
-sass@^1.54.3:
-  version "1.54.3"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.54.3.tgz#37baa2652f7f1fdadb73240ee9a2b9b81fabb5c4"
-  integrity sha512-fLodey5Qd41Pxp/Tk7Al97sViYwF/TazRc5t6E65O7JOk4XF8pzwIW7CvCxYVOfJFFI/1x5+elDyBIixrp+zrw==
+sass@^1.54.4:
+  version "1.54.4"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.54.4.tgz#803ff2fef5525f1dd01670c3915b4b68b6cba72d"
+  integrity sha512-3tmF16yvnBwtlPrNBHw/H907j8MlOX8aTBnlNX1yrKx24RKcJGPyLhFUwkoKBKesR3unP93/2z14Ll8NicwQUA==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
