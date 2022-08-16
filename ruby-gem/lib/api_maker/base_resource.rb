@@ -190,7 +190,18 @@ class ApiMaker::BaseResource
 
     can abilities, model_class, [exists_sql] do |model|
       if !reflection.options[:polymorphic] || model.__send__(reflection.foreign_type) == query.klass.name
-        model.class.where(id: model.id).where(exists_sql).exists?
+        if model.new_record?
+          case reflection.macro
+          when :belongs_to
+            query.exists?(query.primary_key => model.__send__(reflection.foreign_key))
+          when :has_many, :has_one
+            query.exists?(reflection.foreign_key => model.__send__(model_class.primary_key))
+          else
+            raise "Unhandled macro: #{reflection.macro}"
+          end
+        else
+          model.class.where(id: model.id).where(exists_sql).exists?
+        end
       end
     end
   end

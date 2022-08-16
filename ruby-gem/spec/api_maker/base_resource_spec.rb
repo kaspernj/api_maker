@@ -37,6 +37,22 @@ describe ApiMaker::BaseResource do
       expect_not_to_be_able_to user_ability, comment3, ApiMaker::BaseResource::CRUD
     end
 
+    it "grants access through polymorphic belongs_to relationships on new models" do
+      comment2 = build :comment, author: comment2_author, id: 2, resource: task2
+      comment3 = build :comment, author: comment3_author, id: 3, resource: task3
+
+      expect_any_instance_of(Resources::TaskResource).to receive(:abilities) do |task_resource|
+        task_resource.can ApiMaker::BaseResource::READ, Task, id: 2
+      end
+
+      expect_any_instance_of(Resources::CommentResource).to receive(:abilities) do |comment_resource|
+        comment_resource.can_access_through_accessible_model ApiMaker::BaseResource::READ, :resource, Task
+      end
+
+      expect_to_be_able_to user_ability, comment2, ApiMaker::BaseResource::READ
+      expect_not_to_be_able_to user_ability, comment3, ApiMaker::BaseResource::CRUD
+    end
+
     it "grants access through belongs_to relationships" do
       expect_any_instance_of(Resources::TaskResource).to receive(:abilities) do |task_resource|
         task_resource.can ApiMaker::BaseResource::READ, Task, id: 2
