@@ -151,7 +151,7 @@ class ApiMaker::BaseResource
     end
   end
 
-  def can_access_through_accessible_model(abilities, relationship_name, sub_query = nil) # rubocop:disable Metrics/AbcSize
+  def can_access_through_accessible_model(abilities, relationship_name, sub_query = nil, additional_sql: nil) # rubocop:disable Metrics/AbcSize
     reflection = model_class.reflections[relationship_name.to_s]
 
     raise "No reflection named '#{relationship_name}' in #{model_class.reflections.keys}" unless reflection
@@ -185,16 +185,12 @@ class ApiMaker::BaseResource
       )
     end
 
-    can abilities, model_class, ["EXISTS (#{exists_query.to_sql})"] do |model|
+    exists_sql = "EXISTS (#{exists_query.to_sql})"
+    exists_sql << additional_sql if additional_sql
+
+    can abilities, model_class, [exists_sql] do |model|
       if !reflection.options[:polymorphic] || model.__send__(reflection.foreign_type) == query.klass.name
-        case reflection.macro
-        when :belongs_to
-          query.exists?(query.primary_key => model.__send__(reflection.foreign_key))
-        when :has_many, :has_one
-          query.exists?(reflection.foreign_key => model.__send__(model_class.primary_key))
-        else
-          raise "Unhandled macro: #{reflection.macro}"
-        end
+        model.class.where(exists_sql).exists?
       end
     end
   end
