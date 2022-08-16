@@ -190,7 +190,7 @@ class ApiMaker::BaseResource
 
     can abilities, model_class, [exists_sql] do |model|
       if !reflection.options[:polymorphic] || model.__send__(reflection.foreign_type) == query.klass.name
-        model.class.where(exists_sql).exists?
+        model.class.where(id: model.id).where(exists_sql).exists?
       end
     end
   end
