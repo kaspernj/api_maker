@@ -14,6 +14,7 @@ import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
 import Params from "@kaspernj/api-maker/src/params"
 import PropTypes from "prop-types"
 import React from "react"
+import selectCalculator from "./select-calculator"
 import Shape from "set-state-compare/src/shape"
 import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
 import TableSettings from "./table-settings"
@@ -167,7 +168,7 @@ class ApiMakerTable extends React.PureComponent {
             noRecordsAvailableContent={noRecordsAvailableContent}
             noRecordsFoundContent={noRecordsFoundContent}
             preloads={preload}
-            select={select}
+            select={selectCalculator({table: this})}
             selectColumns={selectColumns}
           />
         }
