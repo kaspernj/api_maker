@@ -1,5 +1,5 @@
 class Resources::TaskResource < Resources::ApplicationResource
-  attributes :created_at, :custom_id, :finished, :id, :name, :priority, :project_id, :state, :translated_state, :user_id
+  attributes :created_at, :custom_id, :finished, :id, :name, :priority, :project_id, :state, :translated_state, :updated_at, :user_id
   collection_commands :command_serialize, :test_collection
   member_commands :test_member
   relationships :account, :comments, :project, :user
