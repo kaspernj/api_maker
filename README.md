@@ -649,6 +649,11 @@ Run a spec with all configurations.
 bundle exec appraisal rspec
 ```
 
+Its kinda fucked up to run system specs, but this command should work from the ruby-gem directory:
+```bash
+rm -rf spec/dummy/public/packs/ && cd spec/dummy/ && bin/webpacker && cd ../.. && xvfb-run bundle exec appraisal will_paginate rspec spec/system/api_maker_table/api_maker_table_spec.rb
+```
+
 ## Contributing
 Contribution directions go here.
 
