@@ -81,9 +81,9 @@ export default class BootstrapLiveTable extends React.PureComponent {
       sortKey: "createdAt"
     },
     {
-      attribute: "updatedAt",
+      attribute: "finished",
       defaultVisible: false,
-      sortKey: "updatedAt"
+      sortKey: "finished"
     }
   ]
 }
