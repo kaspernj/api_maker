@@ -12,7 +12,7 @@ describe "bootstrap - live table" do
   let(:no_tasks_found_content) { ".no-tasks-found-content" }
 
   let(:created_at_identifier) { "attribute-createdAt--sort-key-createdAt" }
-  let(:updated_at_identifier) { "attribute-updatedAt--sort-key-updatedAt" }
+  let(:finished_identifier) { "attribute-finsihed--sort-key-finsihed" }
 
   it "renders a table with rows" do
     task1
@@ -29,8 +29,8 @@ describe "bootstrap - live table" do
     wait_for_selector model_column_selector(task2, created_at_identifier), exact_text: "18/03-89 14:00"
 
     # It doesnt show columns with defaultVisible: false
-    wait_for_no_selector model_column_selector(task1, updated_at_identifier)
-    wait_for_no_selector model_column_selector(task2, updated_at_identifier)
+    wait_for_no_selector model_column_selector(task1, finsihed_identifier)
+    wait_for_no_selector model_column_selector(task2, finsihed_identifier)
 
     # It doesn't show the no-tasks-found-content when tasks are found
     wait_for_no_selector no_tasks_found_content
@@ -49,9 +49,9 @@ describe "bootstrap - live table" do
       visible: nil
     )
 
-    updated_at_column = created_table_setting.columns.find_by!(identifier: updated_at_identifier)
-    expect(updated_at_column).to have_attributes(
-      attribute_name: "updatedAt",
+    finsihed_column = created_table_setting.columns.find_by!(identifier: finsihed_identifier)
+    expect(finsihed_column).to have_attributes(
+      attribute_name: "finsihed",
       visible: nil
     )
   end
