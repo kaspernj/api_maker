@@ -42,11 +42,21 @@ class ApiMaker::BaseResource
     end
   end
 
+  def self.collection_name
+    @collection_name ||= plural_name.underscore
+  end
+
   def self.column_exists_on_model?(model_class, column_name)
     model_class.column_names.include?(column_name.to_s)
   rescue ActiveRecord::StatementInvalid
     # This happens if the table or column doesn't exist - like if we are running during a migration
     false
+  end
+
+  def self.default_select
+    _attributes.select do |_attribute_name, args|
+      !args.fetch(:args).key?(:selected_by_default) || args.fetch(:args).fetch(:selected_by_default)
+    end
   end
 
   def self.member_commands(*list)
@@ -84,14 +94,26 @@ class ApiMaker::BaseResource
     ApiMaker::MemoryStorage.current.storage_for(self, :relationships)
   end
 
-  def self.collection_name
-    @collection_name ||= plural_name.underscore
+  def self.translated_attributes(*attribute_names)
+    attribute_names.each do |attribute_name|
+      # Not selected by default because it requires an extra db-query to look up
+      attribute attribute_name, selected_by_default: false
+
+      I18n.available_locales.each do |locale|
+        attribute "#{attribute_name}_#{locale}".to_sym, selected_by_default: false
+      end
+    end
   end
 
-  def self.default_select
-    _attributes.select do |_attribute_name, args|
-      !args.fetch(:args).key?(:selected_by_default) || args.fetch(:args).fetch(:selected_by_default)
+  def translated_attribute_names(*attribute_names)
+    list = []
+    attribute_names.each do |attribute_name|
+      I18n.available_locales.each do |locale|
+        list << "#{attribute_name}_#{I18n.locale}".to_sym
+      end
     end
+
+    list
   end
 
   def self.plural_name
