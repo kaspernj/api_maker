@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 class ApiMaker::BaseResource
   ApiMaker::IncludeHelpers.execute!(klass: self)
 
@@ -109,7 +110,7 @@ class ApiMaker::BaseResource
     list = []
     attribute_names.each do |attribute_name|
       I18n.available_locales.each do |locale|
-        list << "#{attribute_name}_#{I18n.locale}".to_sym
+        list << "#{attribute_name}_#{locale}".to_sym
       end
     end
 
@@ -173,7 +174,7 @@ class ApiMaker::BaseResource
     end
   end
 
-  def can_access_through_accessible_model(abilities, relationship_name, sub_query = nil, additional_sql: nil) # rubocop:disable Metrics/AbcSize
+  def can_access_through_accessible_model(abilities, relationship_name, sub_query = nil, additional_sql: nil)
     reflection = model_class.reflections[relationship_name.to_s]
 
     raise "No reflection named '#{relationship_name}' in #{model_class.reflections.keys}" unless reflection
@@ -289,3 +290,4 @@ private
     end
   end
 end
+# rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
