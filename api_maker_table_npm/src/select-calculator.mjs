@@ -15,7 +15,7 @@ class SelectCalculator {
     for (const preparedColumn of preparedColumns) {
       const {column} = digs(preparedColumn, "column")
 
-      if (!column.attribute) continue
+      if (!column?.attribute) continue // 'column' might not exist if has been removed in code but still saved in DB
 
       const {attribute} = digs(column, "attribute")
       const {path} = column
