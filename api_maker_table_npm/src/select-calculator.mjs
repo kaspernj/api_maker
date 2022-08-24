@@ -27,6 +27,8 @@ class SelectCalculator {
           const relationships = digg(currentModelClass.modelClassData(), "relationships")
           const relationship = relationships.find((relationshipInArray) => relationshipInArray.name == inflection.underscore(pathPart))
 
+          if (!relationship) throw new Error(`No such relationship: ${currentModelClass.modelClassData().name}#${pathPart}`)
+
           currentModelClass = modelClassRequire(digg(relationship, "className"))
         }
       }
