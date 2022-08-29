@@ -67,7 +67,7 @@
     "@babel/eslint-parser": "^7.16.3",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
-    "babel-jest": "^28.0.3",
+    "babel-jest": "^29.0.1",
     "eslint": "^8.2.0",
     "eslint-find-rules": "^4.0.0",
     "eslint-plugin-jest": "^27.0.1",
