@@ -5,27 +5,34 @@ import idForComponent from "./id-for-component.mjs"
 import inflection from "inflection"
 import MoneyFormatter from "@kaspernj/api-maker/src/money-formatter"
 import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class ApiMakerInputsMoney extends React.PureComponent {
   static defaultProps = {
+    disabled: false,
     showCurrencyOptions: true
   }
 
-  static propTypes = {
+  static propTypes = PropTypesExact({
     attribute: PropTypes.string,
+    centsInputName: PropTypes.string,
     className: PropTypes.string,
     currenciesCollection: PropTypes.array,
     currencyName: PropTypes.string,
+    defaultValue: PropTypes.object,
+    disabled: PropTypes.bool.isRequired,
     id: PropTypes.string,
     inputRef: PropTypes.object,
+    label: PropTypes.node,
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,
     placeholder: PropTypes.node,
     showCurrencyOptions: PropTypes.bool,
-    small: PropTypes.bool
-  }
+    small: PropTypes.bool,
+    type: PropTypes.string
+  })
 
   inputRef = React.createRef()
 
@@ -34,7 +41,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
   }
 
   render () {
-    const {attribute, className, model, showCurrencyOptions} = this.props
+    const {attribute, className, disabled, model, showCurrencyOptions} = this.props
     let {currenciesCollection} = this.props
 
     if (!currenciesCollection) currenciesCollection = Config.getCurrenciesCollection()
@@ -45,10 +52,11 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
         <input
           className={classNames("money-cents", className)}
           defaultValue={this.inputDefaultValue()}
+          disabled={disabled}
           id={this.inputId()}
-          onBlur={this.setAmount}
-          onChange={this.setCents}
-          onKeyUp={this.setCents}
+          onBlur={digg(this, "setAmount")}
+          onChange={digg(this, "setCents")}
+          onKeyUp={digg(this, "setCents")}
           placeholder={this.props.placeholder}
           ref="whole"
           type="text"
@@ -57,9 +65,10 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
           <select
             className="money-currency"
             defaultValue={this.inputCurrencyValue()}
+            disabled={disabled}
             id={this.inputCurrencyId()}
             name={this.inputCurrencyName()}
-            onChange={this.onCurrencyChanged}
+            onChange={digg(this, "onCurrencyChanged")}
             ref="currency"
           >
             <option></option>
@@ -80,7 +89,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
   }
 
   inputCurrencyName () {
-    if (this.props.currencyName)
+    if ("currencyName" in this.props)
       return this.props.currencyName
 
     return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}_currency]`
@@ -121,7 +130,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
   }
 
   inputCentsName () {
-    if (this.props.name)
+    if ("name" in this.props)
       return this.props.name
 
     return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}_cents]`
