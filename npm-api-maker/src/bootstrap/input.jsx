@@ -1,5 +1,5 @@
 import {digs} from "diggerize"
-import inputWrapper from "../input-wrapper"
+import inputWrapper from "../inputs/input-wrapper"
 import {Input} from "../inputs/input"
 import InvalidFeedback from "./invalid-feedback"
 import Money from "../inputs/money"

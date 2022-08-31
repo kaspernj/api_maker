@@ -1,5 +1,5 @@
 import {digs} from "diggerize"
-import inputWrapper from "../input-wrapper"
+import inputWrapper from "../inputs/input-wrapper"
 import {Select} from "../inputs/select"
 import InvalidFeedback from "./invalid-feedback"
 import PropTypes from "prop-types"
