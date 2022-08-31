@@ -6,26 +6,8 @@ before_script:
   - cd npm-api-maker && yarn install --network-timeout 120000
   - cd npm-api-maker && yarn link
 
-  - cd npm-api-maker-inputs && yarn install --network-timeout 120000
-  - cd npm-api-maker-inputs && yarn link @kaspernj/api-maker
-  - cd npm-api-maker-inputs && yarn link
-
-  - cd npm-api-maker-bootstrap && yarn install --network-timeout 120000
-  - cd npm-api-maker-bootstrap && yarn link @kaspernj/api-maker
-  - cd npm-api-maker-bootstrap && yarn link @kaspernj/api-maker-inputs
-  - cd npm-api-maker-bootstrap && yarn link
-
-  - cd api_maker_table_npm && yarn install --network-timeout 120000
-  - cd api_maker_table_npm && yarn link @kaspernj/api-maker
-  - cd api_maker_table_npm && yarn link @kaspernj/api-maker-bootstrap
-  - cd api_maker_table_npm && yarn link @kaspernj/api-maker-inputs
-  - cd api_maker_table_npm && yarn link
-
   - cd ruby-gem/spec/dummy && yarn install --network-timeout 120000
   - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker
-  - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-bootstrap
-  - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-inputs
-  - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker-table
   - cd ruby-gem/spec/dummy && yarn
   - cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
   - cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
@@ -159,7 +141,7 @@ builds:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/webpacker
       - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
   build_19:
-    name: NPM API maker Jest
+    name: Jest
     script:
       - cd npm-api-maker && yarn test
   build_20:
@@ -171,26 +153,10 @@ builds:
     script:
       - cd ruby-gem && bundle exec rails_best_practices
   build_22:
-    name: API maker ESLint
+    name: ESLint
     script:
       - cd npm-api-maker && yarn eslint .
   build_23:
-    name: API maker ESLint find rules
+    name: ESLint find rules
     script:
       - cd npm-api-maker && yarn eslint-find-rules -u .eslintrc.cjs
-  build_24:
-    name: API maker Bootstrap ESLint
-    script:
-      - cd npm-api-maker-bootstrap && yarn eslint .
-  build_25:
-    name: API maker Bootstrap ESLint find rules
-    script:
-      - cd npm-api-maker-bootstrap && yarn eslint-find-rules -u .eslintrc.cjs
-  build_26:
-    name: API maker Inputs ESLint
-    script:
-      - cd npm-api-maker-inputs && yarn eslint .
-  build_27:
-    name: API maker Inputs ESLint find rules
-    script:
-      - cd npm-api-maker-inputs && yarn eslint-find-rules -u .eslintrc.cjs
