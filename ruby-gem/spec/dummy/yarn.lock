@@ -1085,51 +1085,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker-bootstrap@1.0.215":
-  version "1.0.215"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-bootstrap/-/api-maker-bootstrap-1.0.215.tgz#9a3fcab95c768dcefa50896bb5f1a34fa33cafc6"
-  integrity sha512-ebXo7nlYO9vpRaLK15+Nz3XGwfGeOo2qoi0HJ1s2pXPGg5DxCVGCkw6X9ehHkNJGXG1gEJcN50QDYEPy6Hnfyg==
-  dependencies:
-    "@kaspernj/api-maker" "1.0.215"
-    "@kaspernj/api-maker-inputs" "1.0.215"
-    debounce ">= 1.2.0"
-    diggerize ">= 1.0.5"
-    inflection ">= 1.12.0"
-    on-location-changed ">= 1.0.2"
-    qs ">= 6.9.3"
-    set-state-compare "^1.0.17"
-    strftime ">= 0.10.0"
-
-"@kaspernj/api-maker-inputs@1.0.215":
-  version "1.0.215"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-inputs/-/api-maker-inputs-1.0.215.tgz#c82bcafa0eec20b4be24485ccbe2e5459971d07d"
-  integrity sha512-kMv6Y+czczBVVyUlolZK/bHJPgdacZ7siA9lwf+LlZo/5lEqMmh/YvxrqHcgoDx/gTJryrdiWqAxnBgrL6KMUQ==
-  dependencies:
-    "@kaspernj/api-maker" "1.0.215"
-    classnames ">= 2.2.6"
-    diggerize ">= 1.0.5"
-    inflection ">= 1.12.0"
-
-"@kaspernj/api-maker-table@1.0.215":
-  version "1.0.215"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker-table/-/api-maker-table-1.0.215.tgz#9b44217e7bff4429d1deccf60f63bfb91ac25f96"
-  integrity sha512-R7kUWwKRfKqKjjM4pzPXnTCmrq5kNFKbpsK+NGcYQO8F7Ek4KK3GCqnz0fFRZaPiMaAlPnAKaxsIbGJV9U133A==
-  dependencies:
-    "@kaspernj/api-maker" "1.0.215"
-    "@kaspernj/api-maker-bootstrap" "1.0.215"
-    "@kaspernj/api-maker-inputs" "1.0.215"
-    classnames "^2.3.1"
-    debounce "^1.2.1"
-    diggerize "^1.0.5"
-    inflection "^1.13.2"
-    prop-types "^15.8.1"
-    set-state-compare "^1.0.18"
-    uniqunize "^1.0.1"
-
-"@kaspernj/api-maker@1.0.215":
-  version "1.0.215"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.215.tgz#ffa3499849f3b46f4999183f0f37119aec9da9da"
-  integrity sha512-ICTpzCkCZFDKVpJl4D1iC9AIKzXZtwuA4+PtC7z/zCznZ+y7oijDltxnhrutFPUjuAZNlb3KI17Y3oRjZfKvpQ==
+"@kaspernj/api-maker@1.0.216":
+  version "1.0.216"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.216.tgz#e283cd24d25bde504cb6bd154932a326497d4a23"
+  integrity sha512-IFiBqVYaJN6nD7Gs+IRYrckw+5A+JPmScy+56jPJS8J0UIG8aWWhWG+coPNyo5Sn6GMNlNmaDZYDo+MvYdv5JA==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -1816,7 +1775,7 @@ chrome-trace-event@^1.0.2:
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-1.0.3.tgz#1015eced4741e15d06664a957dbbf50d041e26ac"
   integrity sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==
 
-"classnames@>= 2.2.6", classnames@^2.3.1:
+classnames@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
   integrity sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==
@@ -2160,7 +2119,7 @@ csso@^4.2.0:
   dependencies:
     css-tree "^1.1.2"
 
-"debounce@>= 1.2.0", "debounce@>= 1.2.1", debounce@^1.2.1:
+"debounce@>= 1.2.1", debounce@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
   integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
@@ -2231,7 +2190,7 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-"diggerize@>= 1.0.5", diggerize@^1.0.3, diggerize@^1.0.4, diggerize@^1.0.5:
+"diggerize@>= 1.0.5", diggerize@^1.0.4, diggerize@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.5.tgz#268fd91f204959ee85bc7a0ee776178870a470f2"
   integrity sha512-DQZM0okJRCslVWAuyR6GCZfb9vdPApymlIq//ax53KxUAwvnUTLegYFIyvPm3oXBYGTdbaUV/iZ4K+NDSahDAA==
@@ -3354,14 +3313,6 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.2":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.7.tgz#cc25332e9bc2d6d5dcd52590052131c9770e8eb6"
-  integrity sha512-toc4vDfz58LMS6BRWCDJmva8MCkgK4R+VGUljCXF44uXBDVUxU6oodhAB27mW/5+cwJHMyWPdOWjbpGJ2m4z0g==
-  dependencies:
-    diggerize "^1.0.3"
-    qs "^6.10.5"
-
 once@^1.3.0, once@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
@@ -4118,7 +4069,7 @@ qs@6.10.3:
   dependencies:
     side-channel "^1.0.4"
 
-"qs@>= 6.9.3", qs@^6.10.5:
+"qs@>= 6.9.3":
   version "6.10.5"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.5.tgz#974715920a80ff6a262264acd2c7e6c2a53282b4"
   integrity sha512-O5RlPh0VFtR78y79rgcgKK4wbAI0C5zGVLztOIdpWX6ep368q5Hv6XRxDvXuZ9q3C6v+e3n8UfZZJw7IIG27eQ==
@@ -4517,7 +4468,7 @@ serve-static@1.15.0:
     parseurl "~1.3.3"
     send "0.18.0"
 
-set-state-compare@^1.0.17, set-state-compare@^1.0.18:
+set-state-compare@^1.0.18:
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.18.tgz#2cecd74fd6042aa6f1f2de690a5b346877f09d48"
   integrity sha512-Hp37pr5Rv4dYbFg9Y7yXXnTcDIJkXeamkz8w3v8CqP4Dpn5T2QNM8DP4LRl0UDlmIDQBsCVQvrGVz4yU9fZJIg==
