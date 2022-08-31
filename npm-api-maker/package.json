@@ -49,6 +49,7 @@
     "js-money": ">= 0.6.3",
     "numberable": ">= 1.0.0",
     "object-to-formdata": ">= 4.1.0",
+    "on-location-changed": ">= 1.0.7",
     "qs": ">= 6.9.3",
     "replaceall": ">= 0.1.6",
     "strftime": ">= 0.10.0",

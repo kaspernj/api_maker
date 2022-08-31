@@ -5,11 +5,10 @@ import EventCreated from "./event-created"
 import EventDestroyed from "./event-destroyed"
 import EventUpdated from "./event-updated"
 import instanceOfClassName from "./instance-of-class-name"
+import {LocationChanged} from "on-location-changed/src/location-changed-component"
 import Params from "./params"
 import PropTypes from "prop-types"
 import React from "react"
-
-import {LocationChanged} from "on-location-changed/src/location-changed-component"
 
 export default class CollectionLoader extends React.PureComponent {
   static defaultProps = {
