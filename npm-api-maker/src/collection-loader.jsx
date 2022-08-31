@@ -1,15 +1,14 @@
-import Collection from "@kaspernj/api-maker/src/collection"
+import Collection from "./collection"
 import {debounce} from "debounce"
 import {digg, digs} from "diggerize"
-import EventCreated from "@kaspernj/api-maker/src/event-created"
-import EventDestroyed from "@kaspernj/api-maker/src/event-destroyed"
-import EventUpdated from "@kaspernj/api-maker/src/event-updated"
-import instanceOfClassName from "@kaspernj/api-maker/src/instance-of-class-name"
-import Params from "@kaspernj/api-maker/src/params"
+import EventCreated from "./event-created"
+import EventDestroyed from "./event-destroyed"
+import EventUpdated from "./event-updated"
+import instanceOfClassName from "./instance-of-class-name"
+import {LocationChanged} from "on-location-changed/src/location-changed-component"
+import Params from "./params"
 import PropTypes from "prop-types"
 import React from "react"
-
-import {LocationChanged} from "on-location-changed/src/location-changed-component"
 
 export default class CollectionLoader extends React.PureComponent {
   static defaultProps = {

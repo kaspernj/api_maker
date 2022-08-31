@@ -1,5 +1,3 @@
-api_maker_table_npm/node_modules
-
 api_maker_table_rubygem/.bundle/
 api_maker_table_rubygem/doc/
 api_maker_table_rubygem/log/*.log
@@ -12,8 +10,6 @@ api_maker_table_rubygem/spec/dummy/storage/
 api_maker_table_rubygem/spec/dummy/tmp/
 
 npm-api-maker/node_modules
-npm-api-maker-bootstrap/node_modules
-npm-api-maker-inputs/node_modules
 
 ruby-gem/.bundle/
 ruby-gem/.env.test.local

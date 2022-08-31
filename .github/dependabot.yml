@@ -21,29 +21,8 @@ updates:
     time: "01:00"
     timezone: Europe/Copenhagen
   open-pull-requests-limit: 99
-- package-ecosystem: npm
-  directory: "/npm-api-maker-bootstrap"
-  schedule:
-    interval: weekly
-    time: "01:00"
-    timezone: Europe/Copenhagen
-  open-pull-requests-limit: 99
-- package-ecosystem: npm
-  directory: "/npm-api-maker-inputs"
-  schedule:
-    interval: weekly
-    time: "01:00"
-    timezone: Europe/Copenhagen
-  open-pull-requests-limit: 99
-- package-ecosystem: npm
-  directory: "/api_maker_table_npm"
-  schedule:
-    interval: weekly
-    time: "01:00"
-    timezone: Europe/Copenhagen
-  open-pull-requests-limit: 99
 - package-ecosystem: bundler
-  directory: "/api_maker_table_npm_rubygem"
+  directory: "/api_maker_table_rubygem"
   schedule:
     interval: weekly
     time: "01:00"

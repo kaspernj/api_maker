@@ -1,7 +1,7 @@
-import Paginate from "@kaspernj/api-maker-bootstrap/src/paginate"
+import Paginate from "@kaspernj/api-maker/src/bootstrap/paginate"
 import PropTypes from "prop-types"
 import PureComponent from "set-state-compare/src/pure-component"
-import SortLink from "@kaspernj/api-maker-bootstrap/src/sort-link"
+import SortLink from "@kaspernj/api-maker/src/bootstrap/sort-link"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
 class ModelsPaginate extends PureComponent {
