@@ -1,0 +1,103 @@
+@import "stylesheets/variables";
+
+.components--admin--layout--menu {
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  background: #1b1c1e;
+  color: #fff;
+
+  @media (max-width: $sm-to) {
+    width: 100%;
+    max-width: 250px;
+    max-height: 100vh;
+    overflow-y: auto;
+
+    &[data-triggered="false"] {
+      display: none;
+    }
+  }
+
+  @media (min-width: $md-from) {
+    width: 250px;
+  }
+
+  @media (min-width: $lg-from) {
+    width: 290px;
+  }
+
+  .menu-logo {
+    overflow: hidden;
+    width: 80%;
+    margin-top: 25px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 42px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .menu-logo-link {
+    &:link,
+    &:visited {
+      color: #dededf;
+      text-decoration: none;
+    }
+  }
+
+  .menu-items-center {
+    margin-top: 25px;
+  }
+
+  .menu-items-bottom {
+    margin-top: auto;
+    margin-bottom: 25px;
+  }
+
+  .menu-user-section {
+    display: flex;
+    align-items: center;
+    margin-right: 25px;
+    margin-bottom: 25px;
+    margin-left: 25px;
+  }
+
+  .menu-user-icon {
+    display: flex;
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    background: #abbcd0;
+    border-radius: 50%;
+  }
+
+  .menu-user-name {
+    flex-shrink: 1;
+    margin-left: 8px;
+  }
+
+  .menu-user-name-container {
+    overflow: hidden;
+    max-width: 140px;
+  }
+
+  .menu-user-items {
+    position: relative;
+    margin-left: auto;
+  }
+
+  .menu-user-items-link {
+    &:link,
+    &:visited {
+      color: #dededf;
+    }
+  }
+}
