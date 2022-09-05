@@ -25,9 +25,24 @@ export default class ApiMakerSuperAdminIndexPage extends React.PureComponent {
   }
 
   columns = () => {
-    return [
+    const {modelClass} = digs(this.props, "modelClass")
+    const attributes = modelClass.attributes()
+    const columns = []
 
-    ]
+    for (const attribute of attributes) {
+      if (!attribute.isSelectedByDefault()) continue
+
+      const camelizedName = inflection.camelize(attribute.name(), true)
+      const column = {
+        attribute: camelizedName
+      }
+
+      if (attribute.isColumn()) column.sortKey = camelizedName
+
+      columns.push(column)
+    }
+
+    return columns
   }
 
   viewModelPath = (args) => {

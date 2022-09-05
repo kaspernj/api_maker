@@ -15,8 +15,25 @@ private
 
   def attributes
     attributes = {}
-    resource._attributes.map do |attribute, _data|
-      attributes[attribute] = {name: attribute}
+    resource._attributes.map do |attribute, attribute_data|
+      begin
+        column = model_class.columns.find { |column| column.name == attribute.to_s }
+      rescue ActiveRecord::StatementInvalid
+        # This happens if the table or column doesn't exist - like if we are running during a migration
+      end
+
+      if column
+        column_data = {
+          name: column.name,
+          type: column.type
+        }
+      end
+
+      attributes[attribute] = {
+        column: column_data,
+        name: attribute,
+        selected_by_default: attribute_data.dig(:args, :selected_by_default)
+      }
     end
     attributes
   end
