@@ -1,6 +1,9 @@
 import "./style"
+import Link from "../../../../link"
+import PropTypes from "prop-types"
+import React from "react"
 
-export default class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
+export default class ComponentsAdminLayoutMenuMenuItem extends React.PureComponent {
   static propTypes = {
     active: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     className: PropTypes.string,

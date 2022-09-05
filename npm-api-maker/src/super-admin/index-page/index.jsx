@@ -1,5 +1,7 @@
 import {digg, digs} from "diggerize"
 import Params from "../../params"
+import PropTypes from "prop-types"
+import React from "react"
 import Table from "../../table/table"
 
 export default class ApiMakerSuperAdminIndexPage extends React.PureComponent {
@@ -13,14 +15,12 @@ export default class ApiMakerSuperAdminIndexPage extends React.PureComponent {
     const {currentUser, modelClass} = digs(this.props, "currentUser", "modelClass")
 
     return (
-      <div>
-        <Table
-          columns={digg(this, "columns")}
-          currentUser={currentUser}
-          modelClass={modelClass}
-          viewModelPath={digg(this, "viewModelPath")}
-        />
-      </div>
+      <Table
+        columns={digg(this, "columns")}
+        currentUser={currentUser}
+        modelClass={modelClass}
+        viewModelPath={digg(this, "viewModelPath")}
+      />
     )
   }
 

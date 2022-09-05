@@ -1,6 +1,9 @@
 import "./style"
+import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
+import React from "react"
 
-export default class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
+export default class ApiMakerSuperAdminLayoutHeader extends React.PureComponent {
   static propTypes = PropTypesExact({
     actions: PropTypes.node,
     onTriggerMenu: PropTypes.func.isRequired,
@@ -8,13 +11,13 @@ export default class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
   })
 
   headerActionsRef = React.createRef()
-  shape = new Shape(this, {headerActionsActive: false})
+  state = {headerActionsActive: false}
 
   render() {
     const {headerActionsRef} = digs(this, "headerActionsRef")
     const {onGearsClicked} = digs(this, "onGearsClicked")
     const {actions, onTriggerMenu, title} = this.props
-    const {headerActionsActive} = digs(this.shape, "headerActionsActive")
+    const {headerActionsActive} = digs(this.state, "headerActionsActive")
 
     return (
       <div className="components--admin--layout--header">
@@ -45,16 +48,16 @@ export default class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
 
   onGearsClicked = (e) => {
     e.preventDefault()
-    this.shape.set({
-      headerActionsActive: !this.shape.headerActionsActive
+    this.setState({
+      headerActionsActive: !this.state.headerActionsActive
     })
   }
 
   onWindowMouseUp = (e) => {
     const {headerActionsRef} = digs(this, "headerActionsRef")
-    const {headerActionsActive} = digs(this.shape, "headerActionsActive")
+    const {headerActionsActive} = digs(this.state, "headerActionsActive")
 
     // Close the header actions menu if clicked happened outside
-    if (headerActionsActive && headerActionsRef.current && !headerActionsRef.current.contains(e.target)) this.shape.set({headerActionsActive: false})
+    if (headerActionsActive && headerActionsRef.current && !headerActionsRef.current.contains(e.target)) this.state.set({headerActionsActive: false})
   }
 }

@@ -1,9 +1,12 @@
 import "./style"
+import classNames from "classnames"
 import CommandsPool from "@kaspernj/api-maker/src/commands-pool"
 import Header from "./header"
 import Menu from "./menu"
+import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
+import withCurrentUser from "../../with-current-user"
 
-const UsersSignIn = React.lazy(() => import("components/users/sign-in"))
 const NoAccess = React.lazy(() => import("./no-access"))
 
 class ApiMakerSuperAdminLayout extends React.PureComponent {
@@ -96,7 +99,6 @@ class ApiMakerSuperAdminLayout extends React.PureComponent {
                   <div className="mb-4">
                     {I18n.t("js.components.app_layout.try_signing_in")}
                   </div>
-                  <UsersSignIn />
                 </>
               }
             </>

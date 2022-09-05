@@ -1,4 +1,4 @@
-class ComponentsAdminLayoutNoAccess extends BaseComponent {
+class ComponentsAdminLayoutNoAccess extends React.PureComponent {
   render() {
     const {currentUser} = digs(this.props, "currentUser")
 
