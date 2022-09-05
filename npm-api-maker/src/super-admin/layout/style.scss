@@ -1,0 +1,25 @@
+@import "stylesheets/variables";
+
+.components--admin--layout {
+  width: 100%;
+  min-height: 100vh;
+  background: #fff;
+  color: #000;
+
+  .app-layout-content-container {
+    min-height: 100vh;
+    background: #f7f7f7;
+
+    @media (max-width: $sm-to) {
+      padding: 130px 30px 30px;
+    }
+
+    @media (min-width: $md-from) {
+      padding: 130px 30px 30px 280px;
+    }
+
+    @media (min-width: $lg-from) {
+      padding: 130px 30px 30px 320px;
+    }
+  }
+}
