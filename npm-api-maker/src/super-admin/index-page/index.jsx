@@ -34,8 +34,6 @@ export default class ApiMakerSuperAdminIndexPage extends React.PureComponent {
     const argName = digg(this.props.modelClass.modelClassData(), "camelizedLower")
     const model = digg(args, argName)
 
-    console.log({args, model})
-
     return Params.withParams({
       model: this.props.modelClass.modelClassData().name,
       model_id: model.primaryKey()
