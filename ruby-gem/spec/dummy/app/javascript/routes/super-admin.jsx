@@ -1,3 +1,4 @@
+import {digs} from "diggerize"
 import PropTypes from "prop-types"
 import React from "react"
 import SuperAdmin from "@kaspernj/api-maker/src/super-admin"

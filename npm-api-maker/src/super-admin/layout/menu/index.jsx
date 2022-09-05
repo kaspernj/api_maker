@@ -1,4 +1,5 @@
 import "./style"
+import {digg, digs} from "diggerize"
 import Link from "../../../link"
 import MenuContent from "./menu-content"
 import MenuItem from "./menu-item"
@@ -34,7 +35,7 @@ class ComponentsAdminLayoutMenu extends React.PureComponent {
     return (
       <div className="components--admin--layout--menu" data-triggered={triggered} ref={rootRef}>
         <div className="menu-logo">
-          <Link className="menu-logo-link" to={Routes.adminRootPath()}>
+          <Link className="menu-logo-link" to={Params.withParams({})}>
             Admin
           </Link>
         </div>

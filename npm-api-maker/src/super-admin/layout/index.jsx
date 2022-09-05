@@ -1,7 +1,9 @@
 import "./style"
 import classNames from "classnames"
-import CommandsPool from "@kaspernj/api-maker/src/commands-pool"
+import CommandsPool from "../../commands-pool"
+import {digg, digs} from "diggerize"
 import Header from "./header"
+import Link from "../../link"
 import Menu from "./menu"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
@@ -10,10 +12,6 @@ import withCurrentUser from "../../with-current-user"
 const NoAccess = React.lazy(() => import("./no-access"))
 
 class ApiMakerSuperAdminLayout extends React.PureComponent {
-  static defaultProps = {
-    requireAdmin: true
-  }
-
   static propTypes = PropTypesExact({
     actions: PropTypes.node,
     active: PropTypes.string,
@@ -23,8 +21,7 @@ class ApiMakerSuperAdminLayout extends React.PureComponent {
     currentCustomerId: PropTypes.string,
     currentUser: PropTypes.instanceOf(User),
     headTitle: PropTypes.string,
-    headerTitle: PropTypes.string,
-    requireAdmin: PropTypes.bool.isRequired
+    headerTitle: PropTypes.string
   })
 
   componentDidMount() {
@@ -48,9 +45,9 @@ class ApiMakerSuperAdminLayout extends React.PureComponent {
     }
   }
 
-  shape = new Shape(this, {
+  state = {
     menuTriggered: false
-  })
+  }
 
   render() {
     const {
@@ -63,10 +60,9 @@ class ApiMakerSuperAdminLayout extends React.PureComponent {
       currentUser,
       headerTitle,
       menu,
-      requireAdmin,
       ...restProps
     } = this.props
-    const {menuTriggered} = digs(this.shape, "menuTriggered")
+    const {menuTriggered} = digs(this.state, "menuTriggered")
     const noAccess = this.noAccess()
 
     return (
@@ -87,11 +83,6 @@ class ApiMakerSuperAdminLayout extends React.PureComponent {
                   <div className="mb-4">
                     {I18n.t("js.components.app_layout.try_signing_out_and_in_with_a_different_user")}
                   </div>
-                  {(isCurrentUserA("teacher") || isCurrentUserA("student")) &&
-                    <div className="mb-4">
-                      {this.clickHereToAccessTheUserUniverse()}
-                    </div>
-                  }
                 </>
               }
               {!currentUser &&
@@ -109,47 +100,18 @@ class ApiMakerSuperAdminLayout extends React.PureComponent {
     )
   }
 
-  clickHereToAccessTheUserUniverse() {
-    const replaces = [
-      {
-        component: (
-          <Link key="here-user-universe-link" to={Routes.userRootPath()}>
-            {I18n.t("js.components.app_layout.here")}
-          </Link>
-        ),
-        text: "%{here}"
-      },
-      {
-        component: (
-          <Link key="user-universe-link" to={Routes.userRootPath()}>
-            {I18n.t("js.components.app_layout.user_universe")}
-          </Link>
-        ),
-        text: "%{user_universe}"
-      }
-    ]
-
-    return (
-      <TextComponentReplace
-        replaces={replaces}
-        text={I18n.t("js.components.app_layout.click_here_to_access_the_user_universe")}
-      />
-    )
-  }
-
-  onRequestMenuClose = () => this.shape.set({menuTriggered: false})
+  onRequestMenuClose = () => this.setState({menuTriggered: false})
 
   onTriggerMenu = (e) => {
     e.preventDefault()
 
-    this.shape.set({menuTriggered: !this.shape.menuTriggered})
+    this.setState({menuTriggered: !this.state.menuTriggered})
   }
 
   noAccess() {
-    const {currentUser, requireAdmin} = digs(this.props, "currentUser", "requireAdmin")
+    const {currentUser} = digs(this.props, "currentUser")
 
-    if (requireAdmin && currentUser && !isCurrentUserA("admin") && !isCurrentUserA("hacker")) return true
-    if (requireAdmin && !currentUser) return true
+    if (!currentUser) return true
 
     return false
   }
