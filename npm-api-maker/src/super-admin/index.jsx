@@ -1,4 +1,4 @@
-import {digs} from "diggerize"
+import {digg, digs} from "diggerize"
 import IndexPage from "./index-page"
 import Layout from "./layout"
 import * as modelsModule from "@kaspernj/api-maker/src/models.mjs.erb"

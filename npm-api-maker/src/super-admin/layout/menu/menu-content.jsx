@@ -1,5 +1,5 @@
 import CanCanLoader from "@kaspernj/api-maker/src/can-can-loader"
-import {digs} from "diggerize"
+import {digg, digs} from "diggerize"
 import MenuItem from "./menu-item"
 import Params from "../../../params"
 import PropTypes from "prop-types"
@@ -42,7 +42,7 @@ export default class ComponentsAdminLayoutMenuContent extends React.PureComponen
           <MenuItem
             active={active}
             icon="sitemap"
-            identifier="check-ins"
+            identifier={digg(model.modelClassData(), "name")}
             label={model.modelName().human({count: 2})}
             key={model.modelClassData().name}
             to={Params.withParams({model: model.modelClassData().name})}

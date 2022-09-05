@@ -6,7 +6,7 @@ describe "super admin - show" do
 
   it "renders the page" do
     login_as user_admin
-    visit super_admin_path(model_class: "Task", model_id: taks.id)
-    wait_for_attribute_row attribute: "id", exact_text: task.id
+    visit super_admin_path(model: "Task", model_id: task.id)
+    wait_for_selector ".super-admin--show-page"
   end
 end

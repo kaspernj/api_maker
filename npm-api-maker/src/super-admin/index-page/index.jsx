@@ -1,4 +1,5 @@
 import {digg, digs} from "diggerize"
+import inflection from "inflection"
 import Params from "../../params"
 import PropTypes from "prop-types"
 import React from "react"
