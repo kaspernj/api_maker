@@ -15,6 +15,13 @@ export default class Params {
     return incorporator.merge()
   }
 
+  static withParams (params, opts = {}) {
+    const newParams = qs.stringify(params)
+    const newPath = `${location.pathname}?${newParams}`
+
+    return newPath
+  }
+
   static changeParams (given, opts = {}) {
     const params = Params.change(given)
     const newParams = qs.stringify(params)

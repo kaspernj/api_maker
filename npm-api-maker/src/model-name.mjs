@@ -1,4 +1,5 @@
 import Config from "./config.mjs"
+import inflection from "inflection"
 
 export default class ModelName {
   constructor(data) {
@@ -23,8 +24,11 @@ export default class ModelName {
     }
 
     const key = `activerecord.models.${this.data.modelClassData.i18nKey}.${countKey}`
+    let defaultModelName = this.data.modelClassData.name
 
-    return Config.getI18n().t(key)
+    if (args?.count > 1) defaultModelName = inflection.pluralize(defaultModelName)
+
+    return Config.getI18n().t(key, {defaultValue: defaultModelName})
   }
 
   paramKey() {
