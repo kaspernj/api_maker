@@ -12,9 +12,6 @@ describe "super admin - index" do
     visit super_admin_path(model: "Task")
     wait_for_selector model_row_selector(task)
 
-    # Wait for rendering to be complete
-    sleep 1
-
     wait_for_and_find(".components--admin--layout--menu--menu-item[data-identifier='Project']").click
     wait_for_selector model_row_selector(project)
   end
