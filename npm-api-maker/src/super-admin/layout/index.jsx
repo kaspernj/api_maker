@@ -81,14 +81,14 @@ class ApiMakerSuperAdminLayout extends React.PureComponent {
               {currentUser &&
                 <>
                   <div className="mb-4">
-                    {I18n.t("js.components.app_layout.try_signing_out_and_in_with_a_different_user")}
+                    {I18n.t("js.api_maker.super_admin.layout.try_signing_out_and_in_with_a_different_user")}
                   </div>
                 </>
               }
               {!currentUser &&
                 <>
                   <div className="mb-4">
-                    {I18n.t("js.components.app_layout.try_signing_in")}
+                    {I18n.t("js.api_maker.super_admin.layout.try_signing_in")}
                   </div>
                 </>
               }

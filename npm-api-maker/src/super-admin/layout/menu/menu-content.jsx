@@ -1,4 +1,5 @@
 import CanCanLoader from "@kaspernj/api-maker/src/can-can-loader"
+import {digs} from "diggerize"
 import MenuItem from "./menu-item"
 import Params from "../../../params"
 import PropTypes from "prop-types"
@@ -26,13 +27,13 @@ export default class ComponentsAdminLayoutMenuContent extends React.PureComponen
     active: PropTypes.string
   })
 
-  shape = new Shape(this, {
+  state = {
     canCan: undefined
-  })
+  }
 
   render() {
     const {active} = digs(this.props, "active")
-    const {canCan} = digs(this.shape, "canCan")
+    const {canCan} = digs(this.state, "canCan")
 
     return (
       <>

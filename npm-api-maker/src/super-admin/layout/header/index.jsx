@@ -1,4 +1,6 @@
 import "./style"
+import {digg, digs} from "diggerize"
+import EventListener from "../../../event-listener"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"

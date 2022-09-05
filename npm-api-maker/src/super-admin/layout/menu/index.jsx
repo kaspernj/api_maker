@@ -62,7 +62,7 @@ class ComponentsAdminLayoutMenu extends React.PureComponent {
               active
               className="sign-out-menu-item"
               icon="sign-out-alt"
-              label={I18n.t("js.components.admin.layout.menu.sign_out")}
+              label={I18n.t("js.api_maker.super_admin.layout.menu.sign_out", {defaultValue: "Sign out"})}
               onClick={digg(this, "onSignOutClicked")}
             />
           }
@@ -76,7 +76,7 @@ class ComponentsAdminLayoutMenu extends React.PureComponent {
 
     try {
       await Devise.signOut()
-      FlashMessage.success(I18n.t("js.components.admin.layout.menu.you_have_been_signed_out"))
+      FlashMessage.success(I18n.t("js.api_maker.super_admin.layout.menu.you_have_been_signed_out", {defaultValue: "You have been signed out"}))
     } catch (error) {
       FlashMessage.errorResponse(error)
     }
