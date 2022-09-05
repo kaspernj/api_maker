@@ -13,8 +13,44 @@ import Services from "./services.mjs"
 import ValidationError from "./validation-error.mjs"
 import {ValidationErrors} from "./validation-errors.mjs"
 
+class ApiMakerAttribute {
+  constructor(attributeData) {
+    this.attributeData = attributeData
+  }
+
+  isColumn() {
+    return Boolean(digg(this, "attributeData", "column"))
+  }
+
+  isSelectedByDefault() {
+    const isSelectedByDefault = digg(this, "attributeData", "selected_by_default")
+
+    if (isSelectedByDefault || isSelectedByDefault === null) return true
+
+    return false
+  }
+
+  name() {
+    return digg(this, "attributeData", "name")
+  }
+}
+
 class BaseModel {
-  static modelClassData () {
+  static attributes() {
+    const attributes = digg(this.modelClassData(), "attributes")
+    const result = []
+
+    for (const attributeKey in attributes) {
+      const attributeData = attributes[attributeKey]
+      const attribute = new ApiMakerAttribute(attributeData)
+
+      result.push(attribute)
+    }
+
+    return result
+  }
+
+  static modelClassData() {
     throw new Error("modelClassData should be overriden by child")
   }
 
