@@ -17,7 +17,7 @@ private
     attributes = {}
     resource._attributes.map do |attribute, attribute_data|
       begin
-        column = model_class.columns.find { |column| column.name == attribute.to_s }
+        column = model_class.columns.find { |model_class_column| model_class_column.name == attribute.to_s }
       rescue ActiveRecord::StatementInvalid
         # This happens if the table or column doesn't exist - like if we are running during a migration
       end

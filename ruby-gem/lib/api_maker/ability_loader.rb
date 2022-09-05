@@ -23,7 +23,7 @@ class ApiMaker::AbilityLoader
     if resource_instance.respond_to?(:abilities)
       resource_instance.abilities
     else
-      Rails.logger.debug "#{resource_class.name} haven't implemented any abilities to load"
+      Rails.logger.debug { "#{resource_class.name} haven't implemented any abilities to load" }
     end
 
     loaded_model_names[resource_class.model_class_name] = true
