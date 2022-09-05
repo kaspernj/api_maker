@@ -151,9 +151,9 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     } else if (MoneyFormatter.isMoney(value)) {
       return MoneyFormatter.format(value)
     } else if (typeof value == "boolean") {
-      if (value) return I18n.t("js.shared.yes")
+      if (value) return I18n.t("js.shared.yes", {defaultValue: "Yes"})
 
-      return I18n.t("js.shared.no")
+      return I18n.t("js.shared.no", {defaultValue: "No"})
     } else if (Array.isArray(value)) {
       return value
         .map((valuePart) => this.presentColumnValue(valuePart))

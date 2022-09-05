@@ -15,7 +15,7 @@ export default class Params {
     return incorporator.merge()
   }
 
-  static withParams (params, opts = {}) {
+  static withParams (params) {
     const newParams = qs.stringify(params)
     const newPath = `${location.pathname}?${newParams}`
 

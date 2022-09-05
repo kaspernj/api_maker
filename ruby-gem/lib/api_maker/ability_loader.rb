@@ -15,10 +15,17 @@ class ApiMaker::AbilityLoader
     load_resource(resource)
   end
 
-  def load_resource(resource)
-    return if loaded_model_names.key?(resource.model_class_name)
+  def load_resource(resource_class)
+    return if loaded_model_names.key?(resource_class.model_class_name)
 
-    resource.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: nil).abilities
-    loaded_model_names[resource.model_class_name] = true
+    resource_instance = resource_class.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: nil)
+
+    if resource_instance.respond_to?(:abilities)
+      resource_instance.abilities
+    else
+      Rails.logger.debug { "#{resource_class.name} haven't implemented any abilities to load" }
+    end
+
+    loaded_model_names[resource_class.model_class_name] = true
   end
 end

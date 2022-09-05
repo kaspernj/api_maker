@@ -39,6 +39,8 @@
     {"name": "new_task", "path": "/tasks/new", "component": "tasks/edit"},
     {"name": "edit_task", "path": "/tasks/:id/edit", "component": "tasks/edit"},
 
+    {"name": "super_admin", "path": "/super_admin", "component": "super-admin"},
+
     {"name": "root", "path": "/", "component": "sessions/new"}
   ]
 }

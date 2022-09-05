@@ -1,7 +1,8 @@
-import {digs} from "diggerize"
+import {digg, digs} from "diggerize"
 import IndexPage from "./index-page"
 import Layout from "./layout"
 import * as modelsModule from "@kaspernj/api-maker/src/models.mjs.erb"
+import PropTypes from "prop-types"
 import ShowPage from "./show-page"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
@@ -21,10 +22,19 @@ class ApiMakerSuperAdmin extends React.PureComponent {
     return (
       <Layout>
         {pageToShow == "index" &&
-          <IndexPage currentUser={currentUser} modelClass={modelClass} queryParams={queryParams} />
+          <IndexPage
+            currentUser={currentUser}
+            key={`index-page-${digg(modelClass.modelClassData(), "name")}`}
+            modelClass={modelClass}
+            queryParams={queryParams}
+          />
         }
         {pageToShow == "show" &&
-          <ShowPage modelClass={modelClass} modelId={queryParams.modelId} />
+          <ShowPage
+            key={`show-page-${digg(modelClass.modelClassData(), "name")}`}
+            modelClass={modelClass}
+            modelId={queryParams.modelId}
+          />
         }
       </Layout>
     )

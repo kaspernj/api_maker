@@ -1,6 +1,9 @@
 import CanCanLoader from "@kaspernj/api-maker/src/can-can-loader"
-import MenuItem from "components/admin/layout/menu/menu-item"
+import {digg, digs} from "diggerize"
+import MenuItem from "./menu-item"
 import Params from "../../../params"
+import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import * as modelsModule from "@kaspernj/api-maker/src/models.mjs.erb"
 
 const models = []
@@ -19,18 +22,18 @@ for (const model of models) {
   )
 }
 
-export default class ComponentsAdminLayoutMenuContent extends BaseComponent {
+export default class ComponentsAdminLayoutMenuContent extends React.PureComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.string
   })
 
-  shape = new Shape(this, {
+  state = {
     canCan: undefined
-  })
+  }
 
   render() {
     const {active} = digs(this.props, "active")
-    const {canCan} = digs(this.shape, "canCan")
+    const {canCan} = digs(this.state, "canCan")
 
     return (
       <>
@@ -39,7 +42,7 @@ export default class ComponentsAdminLayoutMenuContent extends BaseComponent {
           <MenuItem
             active={active}
             icon="sitemap"
-            identifier="check-ins"
+            identifier={digg(model.modelClassData(), "name")}
             label={model.modelName().human({count: 2})}
             key={model.modelClassData().name}
             to={Params.withParams({model: model.modelClassData().name})}

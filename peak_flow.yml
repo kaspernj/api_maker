@@ -1,4 +1,5 @@
 artifact_dirs:
+  - ruby-gem/spec/dummy/tmp/capybara
   - ruby-gem/spec/dummy/tmp/screenshots
 before_script:
   - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
