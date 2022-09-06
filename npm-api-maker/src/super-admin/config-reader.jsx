@@ -20,6 +20,26 @@ export default class ApiMakerSuperAdminConfigReader {
     this.modelConfig = modelConfig
   }
 
+  attributesToShow() {
+    const {modelConfig} = digs(this, "modelConfig")
+
+    if (modelConfig?.show?.attributesToShow) {
+      return modelConfig.show.attributesToShow()
+    }
+
+    return this.defaultAttributesToShow()
+  }
+
+  defaultAttributesToShow() {
+    const attributesToShow = []
+
+    for (const column of this.defaultTableColumns()) {
+      attributesToShow.push(digg(column, "attribute"))
+    }
+
+    return attributesToShow
+  }
+
   tableColumns() {
     const {modelConfig} = digs(this, "modelConfig")
 
