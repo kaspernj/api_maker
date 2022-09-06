@@ -82,6 +82,7 @@ private
       i18nKey: model_class.model_name.i18n_key,
       camelizedLower: model_class.model_name.name.camelize(:lower),
       name: resource.short_name,
+      nameDasherized: resource.short_name.underscore.dasherize,
       pluralName: model_class.model_name.plural,
       relationships: reflections_for_model_class_data,
       paramKey: model_class.model_name.param_key,

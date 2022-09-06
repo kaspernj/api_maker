@@ -1,18 +1,10 @@
 import CanCanLoader from "@kaspernj/api-maker/src/can-can-loader"
 import {digg, digs} from "diggerize"
 import MenuItem from "./menu-item"
+import models from "../../models"
 import Params from "../../../params"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import * as modelsModule from "@kaspernj/api-maker/src/models.mjs.erb"
-
-const models = []
-
-for (const modelKey of Object.keys(modelsModule)) {
-  const model = modelsModule[modelKey]
-
-  models.push(model)
-}
 
 const abilities = []
 
