@@ -79,6 +79,7 @@ export default (WrappedComponent, mdelClassArg, args = {}) => {
 
     async loadNewModel() {
       const params = Params.parse()
+      const ModelClass = digg(this, "modelClass")
       const paramKey = ModelClass.modelName().paramKey()
       const modelDataFromParams = params[paramKey] || {}
 
