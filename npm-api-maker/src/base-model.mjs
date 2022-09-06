@@ -94,6 +94,10 @@ class BaseModel {
     return new ModelName({modelClassData: this.modelClassData()})
   }
 
+  static primaryKey() {
+    return digg(this.modelClassData(), "primaryKey")
+  }
+
   static ransack (query = {}) {
     return new Collection({modelClass: this}, {ransack: query})
   }

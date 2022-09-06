@@ -20,7 +20,7 @@ class ApiMakerSuperAdmin extends React.PureComponent {
     if (queryParams.model) modelClass = modelsModule[queryParams.model]
 
     return (
-      <Layout>
+      <Layout headerTitle={modelClass?.modelName()?.human({count: 2})}>
         {pageToShow == "index" &&
           <IndexPage
             currentUser={currentUser}
