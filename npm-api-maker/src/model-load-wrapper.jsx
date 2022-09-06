@@ -24,7 +24,7 @@ export default (WrappedComponent, mdelClassArg, args = {}) => {
     resolveModelClass(modelClassArg) {
       const {queryParams} = digs(this.props, "queryParams")
 
-      if (typeof modelClassArg == "function") return modelClassArg({queryParams})
+      if (typeof modelClassArg == "object") return modelClassArg.callback({queryParams})
 
       return modelClassArg
     }

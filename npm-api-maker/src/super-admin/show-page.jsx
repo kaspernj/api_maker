@@ -33,12 +33,12 @@ class ApiMakerSuperAdminShowPage extends React.PureComponent {
   }
 }
 
-const modelClassResolver = ({queryParams}) => {
+const modelClassResolver = {callback: ({queryParams}) => {
   const modelClassName = digg(queryParams, "model")
   const modelClass = digg(require("../models.mjs.erb"), modelClassName)
 
   return modelClass
-}
+}}
 
 export default modelLoadWrapper(
   ApiMakerSuperAdminShowPage,
