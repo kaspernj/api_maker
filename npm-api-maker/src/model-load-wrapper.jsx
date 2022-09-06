@@ -1,22 +1,32 @@
+import {digg, digs} from "diggerize"
 import EventUpdated from "./event-updated"
 import Params from "./params.mjs"
 import PropTypes from "prop-types"
 import React from "react"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
-export default (WrappedComponent, ModelClass, args = {}) => {
+export default (WrappedComponent, mdelClassArg, args = {}) => {
   class ModelLoadWrapper extends React.PureComponent {
     static propTypes = {
       queryParams: PropTypes.object
     }
 
-    camelizedLower = ModelClass.modelName().camelizedLower()
-    paramsVariableName = `${ModelClass.modelName().paramKey()}_id`
+    modelClass = this.resolveModelClass(mdelClassArg)
+    camelizedLower = this.modelClass.modelName().camelizedLower()
+    paramsVariableName = `${this.modelClass.modelName().paramKey()}_id`
 
     state = {
       model: undefined,
       modelId: this.getModelId(),
       notFound: undefined
+    }
+
+    resolveModelClass(modelClassArg) {
+      const {queryParams} = digs(this.props, "queryParams")
+
+      if (typeof modelClassArg == "function") return modelClassArg({queryParams})
+
+      return modelClassArg
     }
 
     componentDidMount() {
@@ -50,6 +60,7 @@ export default (WrappedComponent, ModelClass, args = {}) => {
 
     loadExistingModel = async () => {
       const modelId = this.getModelId()
+      const ModelClass = digg(this, "modelClass")
       const query = await ModelClass.ransack({id_eq: modelId})
 
       if (args.abilities) query.abilities(args.abilities)

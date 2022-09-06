@@ -71,10 +71,9 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
     if (value instanceof Date) {
       return strftime("%Y-%m-%d %H:%M", value)
     } else if (typeof value === "boolean") {
-      if (value)
-        return I18n.t("js.shared.yes")
+      if (value) return I18n.t("js.shared.yes", {defaultValue: "Yes"})
 
-      return I18n.t("js.shared.no")
+      return I18n.t("js.shared.no", {defaultValue: "No"})
     } else if (MoneyFormatter.isMoney(value)) {
       return MoneyFormatter.format(value)
     } else {
