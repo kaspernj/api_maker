@@ -1,13 +1,15 @@
-import {digs} from "diggerize"
+import {digg, digs} from "diggerize"
 import Link from "../link"
+import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 
 export default class ApiMakerSuperAdminShowNav extends React.PureComponent {
-  static propTypes = {
+  static propTypes = PropTypesExact({
     model: PropTypes.object.isRequired,
     modelClass: PropTypes.func.isRequired,
     queryParams: PropTypes.object.isRequired
-  }
+  })
 
   render() {
     const {model, modelClass, queryParams} = digs(this.props, "model", "modelClass", "queryParams")

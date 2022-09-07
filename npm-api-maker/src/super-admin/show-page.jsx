@@ -2,6 +2,7 @@ import AttributeRows from "../bootstrap/attribute-rows"
 import ConfigReader from "./config-reader"
 import {digg, digs} from "diggerize"
 import modelLoadWrapper from "../model-load-wrapper"
+import PropTypes from "prop-types"
 import React from "react"
 import ShowNav from "./show-nav"
 
