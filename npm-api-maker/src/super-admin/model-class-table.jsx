@@ -1,11 +1,11 @@
-import ConfigReader from "../config-reader"
+import ConfigReader from "./config-reader"
 import {digg, digs} from "diggerize"
-import Params from "../../params"
+import Params from "../params"
 import PropTypes from "prop-types"
 import React from "react"
-import Table from "../../table/table"
+import Table from "../table/table"
 
-export default class ApiMakerSuperAdminIndexPage extends React.PureComponent {
+export default class ApiMakerSuperAdminModelClassTable extends React.PureComponent {
   static propTypes = {
     currentUser: PropTypes.object,
     modelClass: PropTypes.func.isRequired,
@@ -13,7 +13,7 @@ export default class ApiMakerSuperAdminIndexPage extends React.PureComponent {
   }
 
   render() {
-    const {currentUser, modelClass} = digs(this.props, "currentUser", "modelClass")
+    const {currentUser, modelClass, queryParams, ...restProps} = this.props
 
     return (
       <Table
@@ -21,6 +21,7 @@ export default class ApiMakerSuperAdminIndexPage extends React.PureComponent {
         currentUser={currentUser}
         modelClass={modelClass}
         viewModelPath={digg(this, "viewModelPath")}
+        {...restProps}
       />
     )
   }

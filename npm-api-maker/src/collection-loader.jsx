@@ -24,10 +24,7 @@ export default class CollectionLoader extends React.PureComponent {
     abilities: PropTypes.object,
     appHistory: PropTypes.object,
     className: PropTypes.string,
-    collection: PropTypes.oneOfType([
-      instanceOfClassName("ApiMakerCollection"),
-      PropTypes.instanceOf(Collection)
-    ]),
+    collection: PropTypes.instanceOf(Collection),
     component: PropTypes.object,
     defaultParams: PropTypes.object,
     groupBy: PropTypes.array,

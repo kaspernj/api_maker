@@ -6,6 +6,7 @@ import CustomError from "./custom-error.mjs"
 import {digg} from "diggerize"
 import FormDataObjectizer from "form-data-objectizer"
 import inflection from "inflection"
+import modelClassRequire from "./model-class-require.mjs"
 import ModelName from "./model-name.mjs"
 import NotLoadedError from "./not-loaded-error.mjs"
 import objectToFormData from "object-to-formdata"
@@ -32,6 +33,26 @@ class ApiMakerAttribute {
 
   name() {
     return digg(this, "attributeData", "name")
+  }
+}
+
+class ApiMakerReflection {
+  constructor(reflectionData) {
+    this.reflectionData = reflectionData
+  }
+
+  macro() {
+    return digg(this, "reflectionData", "macro")
+  }
+
+  modelClass() {
+    const modelClass = modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "name"))))
+
+    return modelClass
+  }
+
+  name() {
+    return inflection.camelize(digg(this, "reflectionData", "name"), true)
   }
 }
 
@@ -65,10 +86,10 @@ class BaseModel {
     }
   }
 
-  static async find (id) {
-    const primaryKeyName = this.modelClassData().primaryKey
+  static async find(id) {
     const query = {}
-    query[`${primaryKeyName}_eq`] = id
+
+    query[`${this.primaryKey()}_eq`] = id
 
     const model = await this.ransack(query).first()
 
@@ -79,7 +100,7 @@ class BaseModel {
     }
   }
 
-  static async findOrCreateBy (findOrCreateByArgs, args = {}) {
+  static async findOrCreateBy(findOrCreateByArgs, args = {}) {
     const result = await Services.current().sendRequest("Models::FindOrCreateBy", {
       additional_data: args.additionalData,
       find_or_create_by_args: findOrCreateByArgs,
@@ -90,7 +111,7 @@ class BaseModel {
     return model
   }
 
-  static modelName () {
+  static modelName() {
     return new ModelName({modelClassData: this.modelClassData()})
   }
 
@@ -98,8 +119,21 @@ class BaseModel {
     return digg(this.modelClassData(), "primaryKey")
   }
 
-  static ransack (query = {}) {
+  static ransack(query = {}) {
     return new Collection({modelClass: this}, {ransack: query})
+  }
+
+  static reflections() {
+    const relationships = digg(this.modelClassData(), "relationships")
+    const reflections = []
+
+    for (const relationshipData of relationships) {
+      const reflection = new ApiMakerReflection(relationshipData)
+
+      reflections.push(reflection)
+    }
+
+    return reflections
   }
 
   constructor (args = {}) {
@@ -302,7 +336,7 @@ class BaseModel {
 
     // Load the missing abilities if any
     if (abilitiesToLoad.length > 0) {
-      const primaryKeyName = this.modelClassData().primaryKey
+      const primaryKeyName = this.constructor.primaryKey()
       const ransackParams = {}
       ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
 
@@ -483,9 +517,8 @@ class BaseModel {
 
   async reload () {
     const params = this.collection && this.collection.params()
-    const primaryKeyName = this.modelClassData().primaryKey
     const ransackParams = {}
-    ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
+    ransackParams[`${this.constructor.primaryKey()}_eq`] = this.primaryKey()
 
     let query = this.constructor.ransack(ransackParams)
 
@@ -866,7 +899,7 @@ class BaseModel {
   }
 
   primaryKey () {
-    return this.readAttributeUnderscore(digg(this.modelClassData(), "primaryKey"))
+    return this.readAttributeUnderscore(this.constructor.primaryKey())
   }
 
   static _token () {
