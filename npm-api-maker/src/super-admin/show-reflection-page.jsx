@@ -1,38 +1,43 @@
-import AttributeRows from "../bootstrap/attribute-rows"
-import ConfigReader from "./config-reader"
 import {digg, digs} from "diggerize"
 import modelLoadWrapper from "../model-load-wrapper"
+import PropTypes from "prop-types"
 import React from "react"
+import ModelClassTable from "./model-class-table"
 import ShowNav from "./show-nav"
 
-class ApiMakerSuperAdminShowPage extends React.PureComponent {
+class ApiMakerSuperAdminShowReflectionPage extends React.PureComponent {
   static propTypes = {
+    currentUser: PropTypes.object,
     modelClass: PropTypes.func.isRequired,
     queryParams: PropTypes.object.isRequired
   }
 
   render() {
-    const {modelClass, queryParams} = digs(this.props, "modelClass", "queryParams")
-    const attributes = this.attributes()
+    const {currentUser, modelClass, queryParams} = digs(this.props, "currentUser", "modelClass", "queryParams")
     const model = this.model()
+    const reflections = modelClass.reflections()
+    const reflection = reflections.find((reflectionI) => reflectionI.name() == queryParams.model_reflection)
+    const reflectionModelClass = reflection.modelClass()
+    let collection
+
+    if (model) collection = model[reflection.name()]()
 
     return (
       <div className="super-admin--show-page">
         {model &&
           <ShowNav model={model} modelClass={modelClass} queryParams={queryParams} />
         }
-        {attributes && model &&
-          <AttributeRows attributes={attributes} model={model} />
+        {collection &&
+          <ModelClassTable
+            collection={collection}
+            currentUser={currentUser}
+            key={reflectionModelClass.modelName().human()}
+            modelClass={reflectionModelClass}
+            queryParams={queryParams}
+          />
         }
       </div>
     )
-  }
-
-  attributes() {
-    const {modelClass} = digs(this.props, "modelClass")
-    const configReader = ConfigReader.forModel(modelClass)
-
-    return configReader.attributesToShow()
   }
 
   model() {
@@ -51,7 +56,7 @@ const modelClassResolver = {callback: ({queryParams}) => {
 }}
 
 export default modelLoadWrapper(
-  ApiMakerSuperAdminShowPage,
+  ApiMakerSuperAdminShowReflectionPage,
   modelClassResolver,
   {
     loadByQueryParam: ({props}) => props.queryParams.model_id

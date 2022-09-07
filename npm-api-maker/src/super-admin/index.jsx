@@ -4,11 +4,13 @@ import Layout from "./layout"
 import * as modelsModule from "@kaspernj/api-maker/src/models.mjs.erb"
 import PropTypes from "prop-types"
 import ShowPage from "./show-page"
+import ShowReflectionPage from "./show-reflection-page"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
 class ApiMakerSuperAdmin extends React.PureComponent {
   static propTypes = {
-    currentUser: PropTypes.object
+    currentUser: PropTypes.object,
+    queryParams: PropTypes.object.isRequired
   }
 
   render() {
@@ -31,9 +33,19 @@ class ApiMakerSuperAdmin extends React.PureComponent {
         }
         {pageToShow == "show" &&
           <ShowPage
-            key={`show-page-${digg(modelClass.modelClassData(), "name")}`}
+            key={`show-page-${digg(modelClass.modelClassData(), "name")}-${queryParams.modelId}`}
             modelClass={modelClass}
             modelId={queryParams.modelId}
+            queryParams={queryParams}
+          />
+        }
+        {pageToShow == "show_reflection" &&
+          <ShowReflectionPage
+            currentUser={currentUser}
+            key={`show-reflection-page-${digg(modelClass.modelClassData(), "name")}-${queryParams.modelId}`}
+            modelClass={modelClass}
+            modelId={queryParams.modelId}
+            queryParams={queryParams}
           />
         }
       </Layout>
@@ -43,7 +55,9 @@ class ApiMakerSuperAdmin extends React.PureComponent {
   pageToShow() {
     const {queryParams} = digs(this.props, "queryParams")
 
-    if (queryParams.model && queryParams.model_id) {
+    if (queryParams.model && queryParams.model_id && queryParams.model_reflection) {
+      return "show_reflection"
+    } else if (queryParams.model && queryParams.model_id) {
       return "show"
     } else if (queryParams.model) {
       return "index"

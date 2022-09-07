@@ -39,10 +39,7 @@ class ApiMakerTable extends React.PureComponent {
     appHistory: PropTypes.object,
     card: PropTypes.bool.isRequired,
     className: PropTypes.string,
-    collection: PropTypes.oneOfType([
-      instanceOfClassName("ApiMakerCollection"),
-      PropTypes.instanceOf(Collection)
-    ]),
+    collection: PropTypes.instanceOf(Collection),
     columns: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
     columnsContent: PropTypes.func,
     controls: PropTypes.func,
@@ -134,7 +131,7 @@ class ApiMakerTable extends React.PureComponent {
 
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, defaultParams, select, selectColumns} = this.props
+    const {collection, defaultParams, selectColumns} = this.props
     const {
       overallCount,
       preload,

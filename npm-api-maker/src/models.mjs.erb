@@ -10,7 +10,10 @@ const result = loader.load()
 <% model_class_names = [] %>
 <% ApiMaker::ModelClassesJavaScriptGeneratorService.new.resources.each do |resource| %>
   <% model_class_names << resource.short_name %>
-  const <%= resource.short_name %> = digg(result, "<%= resource.short_name %>")
+
+  const <%= resource.short_name %>ModelClass = digg(result, "<%= resource.short_name %>")
+
+  class <%= resource.short_name %> extends <%= resource.short_name %>ModelClass {}
 <% end %>
 
 export {<%= model_class_names.join(", ") %>}
