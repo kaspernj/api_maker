@@ -1,7 +1,9 @@
 import {dig, digg} from "diggerize"
 import errorMessages from "./error-messages.mjs"
 
-class BaseError extends Error {
+export default class BaseError extends Error {
+  static apiMakerType = "BaseError"
+
   constructor (message, args = {}) {
     let messageToUse = message
 
@@ -34,7 +36,3 @@ class BaseError extends Error {
     }
   }
 }
-
-BaseError.apiMakerType = "BaseError"
-
-export default BaseError
