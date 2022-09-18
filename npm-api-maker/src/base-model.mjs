@@ -1,3 +1,4 @@
+import Attribute from "./base-model/attribute.mjs"
 import AttributeNotLoadedError from "./attribute-not-loaded-error.mjs"
 import Collection from "./collection.mjs"
 import CommandsPool from "./commands-pool.mjs"
@@ -6,64 +7,24 @@ import CustomError from "./custom-error.mjs"
 import {digg} from "diggerize"
 import FormDataObjectizer from "form-data-objectizer"
 import inflection from "inflection"
-import modelClassRequire from "./model-class-require.mjs"
 import ModelName from "./model-name.mjs"
 import NotLoadedError from "./not-loaded-error.mjs"
 import objectToFormData from "object-to-formdata"
+import Reflection from "./base-model/reflection.mjs"
 import Services from "./services.mjs"
 import ValidationError from "./validation-error.mjs"
 import {ValidationErrors} from "./validation-errors.mjs"
 
-class ApiMakerAttribute {
-  constructor(attributeData) {
-    this.attributeData = attributeData
-  }
+export default class BaseModel {
+  static apiMakerType = "BaseModel"
 
-  isColumn() {
-    return Boolean(digg(this, "attributeData", "column"))
-  }
-
-  isSelectedByDefault() {
-    const isSelectedByDefault = digg(this, "attributeData", "selected_by_default")
-
-    if (isSelectedByDefault || isSelectedByDefault === null) return true
-
-    return false
-  }
-
-  name() {
-    return digg(this, "attributeData", "name")
-  }
-}
-
-class ApiMakerReflection {
-  constructor(reflectionData) {
-    this.reflectionData = reflectionData
-  }
-
-  macro() {
-    return digg(this, "reflectionData", "macro")
-  }
-
-  modelClass() {
-    const modelClass = modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "name"))))
-
-    return modelClass
-  }
-
-  name() {
-    return inflection.camelize(digg(this, "reflectionData", "name"), true)
-  }
-}
-
-class BaseModel {
   static attributes() {
     const attributes = digg(this.modelClassData(), "attributes")
     const result = []
 
     for (const attributeKey in attributes) {
       const attributeData = attributes[attributeKey]
-      const attribute = new ApiMakerAttribute(attributeData)
+      const attribute = new Attribute(attributeData)
 
       result.push(attribute)
     }
@@ -128,7 +89,7 @@ class BaseModel {
     const reflections = []
 
     for (const relationshipData of relationships) {
-      const reflection = new ApiMakerReflection(relationshipData)
+      const reflection = new Reflection(relationshipData)
 
       reflections.push(reflection)
     }
@@ -910,7 +871,3 @@ class BaseModel {
     }
   }
 }
-
-BaseModel.apiMakerType = "BaseModel"
-
-export default BaseModel
