@@ -3304,9 +3304,9 @@ imurmurhash@^0.1.4:
   integrity sha512-yGcm0Qv9u+mEonyYZx6E0kkEciOgUN6MjB9x8wlqGSGi6NaLoXhpAiGWpBZEdBEMZ3AZ9/KA7VWZjqSDu3dqhw==
 
 "inflection@>= 1.12.0":
-  version "1.13.2"
-  resolved "https://registry.yarnpkg.com/inflection/-/inflection-1.13.2.tgz#15e8c797c6c3dadf31aa658f8df8a4ea024798b0"
-  integrity sha512-cmZlljCRTBFouT8UzMzrGcVEvkv6D/wBdcdKG7J1QH5cXjtU75Dm+P27v9EKu/Y43UYyCJd1WC4zLebRrC8NBw==
+  version "1.13.4"
+  resolved "https://registry.yarnpkg.com/inflection/-/inflection-1.13.4.tgz#65aa696c4e2da6225b148d7a154c449366633a32"
+  integrity sha512-6I/HUDeYFfuNCVS3td055BaXBwKYuzw7K3ExVMStBowKo9oOAMJIXIHvdyR3iboTCp1b+1i5DSkIZTcwIktuDw==
 
 inflight@^1.0.4, inflight@^1.0.6:
   version "1.0.6"
