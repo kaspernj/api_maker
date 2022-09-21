@@ -13,7 +13,7 @@ export default class ApiMakerSuperAdminShowPageBelongsToAttributeRow extends Rea
 
     return (
       <AttributeRow label={modelClass.humanAttributeName(inflection.camelize(reflection.name(), true))}>
-        {model &&
+        {subModel &&
           <Link to={Params.withParams({model: subModel.modelClassData().name, model_id: subModel.primaryKey()})}>
             {subModel && "name" in subModel && subModel.name()}
             {subModel && !("name" in subModel) && subModel?.id()}
