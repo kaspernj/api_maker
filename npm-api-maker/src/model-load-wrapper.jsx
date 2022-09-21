@@ -5,13 +5,14 @@ import PropTypes from "prop-types"
 import React from "react"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
-export default (WrappedComponent, mdelClassArg, args = {}) => {
+export default (WrappedComponent, modelClassArg, argsArg = {}) => {
   class ModelLoadWrapper extends React.PureComponent {
     static propTypes = {
       queryParams: PropTypes.object
     }
 
-    modelClass = this.resolveModelClass(mdelClassArg)
+    modelClass = this.resolveModelClass(modelClassArg)
+    args = this.resolveArgs()
     camelizedLower = this.modelClass.modelName().camelizedLower()
     paramsVariableName = `${this.modelClass.modelName().paramKey()}_id`
 
@@ -19,6 +20,16 @@ export default (WrappedComponent, mdelClassArg, args = {}) => {
       model: undefined,
       modelId: this.getModelId(),
       notFound: undefined
+    }
+
+    resolveArgs() {
+      if (typeof argsArg == "function") {
+        return argsArg({
+          modelClass: this.modelClass
+        })
+      }
+
+      return argsArg
     }
 
     resolveModelClass(modelClassArg) {
@@ -46,16 +57,16 @@ export default (WrappedComponent, mdelClassArg, args = {}) => {
     }
 
     loadModel = async () => {
-      if (args.newIfNoId && !this.getModelId()) {
+      if (this.args.newIfNoId && !this.getModelId()) {
         return await this.loadNewModel()
-      } else if (!args.optional || this.getModelId()) {
+      } else if (!this.args.optional || this.getModelId()) {
         return await this.loadExistingModel()
       }
     }
 
     getModelId() {
-      if (args.loadByQueryParam)
-        return args.loadByQueryParam({props: this.props})
+      if (this.args.loadByQueryParam)
+        return this.args.loadByQueryParam({props: this.props})
 
       return this.props.match.params[this.paramsVariableName] || this.props.match.params.id
     }
@@ -65,9 +76,9 @@ export default (WrappedComponent, mdelClassArg, args = {}) => {
       const ModelClass = digg(this, "modelClass")
       const query = await ModelClass.ransack({id_eq: modelId})
 
-      if (args.abilities) query.abilities(args.abilities)
-      if (args.preload) query.preload(args.preload)
-      if (args.select) query.select(args.select)
+      if (this.args.abilities) query.abilities(this.args.abilities)
+      if (this.args.preload) query.preload(this.args.preload)
+      if (this.args.select) query.select(this.args.select)
 
       const model = await query.first()
 
@@ -85,11 +96,11 @@ export default (WrappedComponent, mdelClassArg, args = {}) => {
 
       let defaults = {}
 
-      if (args.newIfNoId?.defaults) {
-        defaults = await args.newIfNoId.defaults()
+      if (this.args.newIfNoId?.defaults) {
+        defaults = await this.args.newIfNoId.defaults()
       }
 
-      const modelData = Object.assign(defaults, args.newAttributes, modelDataFromParams)
+      const modelData = Object.assign(defaults, this.args.newAttributes, modelDataFromParams)
       const model = new ModelClass({
         isNewRecord: true,
         data: {a: modelData}
@@ -109,10 +120,10 @@ export default (WrappedComponent, mdelClassArg, args = {}) => {
 
       return (
         <>
-          {args.events &&
-            <EventEmitterListener event="reloadModel" events={args.events} onCalled={reloadModel} />
+          {this.args.events &&
+            <EventEmitterListener event="reloadModel" events={this.args.events} onCalled={reloadModel} />
           }
-          {model && args.eventUpdated &&
+          {model && this.args.eventUpdated &&
             <EventUpdated model={model} onUpdated={onUpdated} />
           }
           <WrappedComponent {...wrappedComponentProps} {...this.props} />
@@ -124,7 +135,5 @@ export default (WrappedComponent, mdelClassArg, args = {}) => {
     onUpdated = this.loadExistingModel
   }
 
-  if (args.loadByQueryParam) return withQueryParams(ModelLoadWrapper)
-
-  return ModelLoadWrapper
+  return withQueryParams(ModelLoadWrapper)
 }
