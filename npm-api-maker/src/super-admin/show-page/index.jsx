@@ -61,7 +61,6 @@ export default modelLoadWrapper(
   ({modelClass}) => {
     const preload = []
     const select = {}
-    const modelClassMethods = Object.getOwnPropertySymbols(Object.getPrototypeOf(modelClass.prototype))
 
     for (const reflection of modelClass.reflections()) {
       if (reflection.macro() != "belongs_to") continue
