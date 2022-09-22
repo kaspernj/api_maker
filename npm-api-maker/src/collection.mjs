@@ -6,7 +6,9 @@ import {incorporate} from "incorporator"
 import modelClassRequire from "./model-class-require.mjs"
 import Result from "./result.mjs"
 
-class ApiMakerCollection {
+export default class ApiMakerCollection {
+  static apiMakerType = "Collection"
+
   constructor (args, queryArgs = {}) {
     this.queryArgs = queryArgs
     this.args = args
@@ -249,7 +251,3 @@ class ApiMakerCollection {
     )
   }
 }
-
-ApiMakerCollection.apiMakerType = "Collection"
-
-export default ApiMakerCollection
