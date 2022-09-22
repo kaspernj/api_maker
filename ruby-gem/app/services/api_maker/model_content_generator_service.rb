@@ -139,6 +139,7 @@ private
       {
         className: reflection.class_name,
         collectionName: resource.collection_name,
+        foreignKey: reflection.foreign_key,
         name: reflection.name,
         macro: reflection.macro,
         resource_name: resource.short_name

@@ -2,6 +2,7 @@ import AttributeRows from "../../bootstrap/attribute-rows"
 import BelongsToAttributeRow from "./belongs-to-attribute-row"
 import ConfigReader from "../config-reader"
 import {digg, digs} from "diggerize"
+import inflection from "inflection"
 import modelLoadWrapper from "../../model-load-wrapper"
 import PropTypes from "prop-types"
 import React from "react"
@@ -13,10 +14,16 @@ class ApiMakerSuperAdminShowPage extends React.PureComponent {
     queryParams: PropTypes.object.isRequired
   }
 
+  configReader = ConfigReader.forModel(digg(this, "props", "modelClass"))
+
   render() {
     const {modelClass, queryParams} = digs(this.props, "modelClass", "queryParams")
     const attributes = this.attributes()
     const model = this.model()
+    const extraContent = this.configReader.modelConfig?.show?.extraContent
+    const modelArgs = {}
+
+    modelArgs[inflection.camelize(modelClass.modelClassData().name, true)] = model
 
     return (
       <div className="super-admin--show-page">
@@ -29,16 +36,12 @@ class ApiMakerSuperAdminShowPage extends React.PureComponent {
         {model && modelClass.reflections().filter((reflection) => reflection.macro() == "belongs_to").map((reflection) =>
           <BelongsToAttributeRow key={reflection.name()} model={model} modelClass={modelClass} reflection={reflection} />
         )}
+        {model && extraContent && extraContent(modelArgs)}
       </div>
     )
   }
 
-  attributes() {
-    const {modelClass} = digs(this.props, "modelClass")
-    const configReader = ConfigReader.forModel(modelClass)
-
-    return configReader.attributesToShow()
-  }
+  attributes = () => this.configReader.attributesToShow()
 
   model() {
     const {modelClass} = digs(this.props, "modelClass")
@@ -60,7 +63,19 @@ export default modelLoadWrapper(
   modelClassResolver,
   ({modelClass}) => {
     const preload = []
-    const select = {}
+    const configReader = ConfigReader.forModel(modelClass)
+    const select = configReader.modelConfig?.show?.extraSelect || {}
+    const modelClassName = modelClass.modelClassData().name
+    const modelClassSelect = select[modelClassName] || []
+    const primaryKeyName = modelClass.primaryKey()
+
+    if (!(modelClassName in select)) select[modelClassName] = modelClassSelect
+    if (!modelClassSelect.includes(primaryKeyName)) modelClassSelect.push(primaryKeyName)
+
+    // Select all attributes selected by default because they will be shown by default
+    for (const attribute of modelClass.attributes()) {
+      if (attribute.isSelectedByDefault() && !modelClassSelect.includes(attribute.name())) modelClassSelect.push(attribute.name())
+    }
 
     for (const reflection of modelClass.reflections()) {
       if (reflection.macro() != "belongs_to") continue
@@ -75,6 +90,9 @@ export default modelLoadWrapper(
       if (!(reflectionModelClassName in select)) select[reflectionModelClassName] = []
       if (!select[reflectionModelClassName].includes("id")) select[reflectionModelClassName].push("id")
       if (nameAttribute && !select[reflectionModelClassName].includes("name")) select[reflectionModelClassName].push("name")
+
+      // The foreign key is needed to look up any belongs-to-relationships
+      if (!modelClassSelect.includes(reflection.foreignKey())) modelClassSelect.push(reflection.foreignKey())
     }
 
     return {
