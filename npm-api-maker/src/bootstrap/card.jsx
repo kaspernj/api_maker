@@ -18,6 +18,7 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     defaultExpanded: PropTypes.bool.isRequired,
     expandable: PropTypes.bool.isRequired,
     expandableHide: PropTypes.bool.isRequired,
+    footer: PropTypes.node,
     header: PropTypes.node,
     striped: PropTypes.bool,
     responsiveTable: PropTypes.bool.isRequired,
@@ -39,6 +40,7 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
       defaultExpanded,
       expandable,
       expandableHide,
+      footer,
       header,
       responsiveTable,
       striped,
@@ -48,7 +50,7 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     const {expanded} = digs(this.state, "expanded")
 
     return (
-      <div className={this.classNames()} ref="card" {...restProps}>
+      <div className={this.classNames()} data-has-footer={Boolean(footer)} ref="card" {...restProps}>
         {(controls || expandable || header) &&
           <div className={`card-header d-flex ${!expanded && "border-bottom-0"}`}>
             <div style={{alignSelf: "center", marginRight: "auto"}}>
@@ -79,6 +81,11 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
               </table>
             }
             {!table && children}
+          </div>
+        }
+        {footer &&
+          <div className="card-footer">
+            {footer}
           </div>
         }
       </div>

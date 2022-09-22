@@ -7,7 +7,6 @@ import columnVisible from "./column-visible.mjs"
 import {debounce} from "debounce"
 import {digg, digs} from "diggerize"
 import inflection from "inflection"
-import instanceOfClassName from "../instance-of-class-name"
 import modelClassRequire from "../model-class-require.mjs"
 import ModelRow from "./model-row"
 import Paginate from "../bootstrap/paginate"
@@ -300,7 +299,7 @@ class ApiMakerTable extends React.PureComponent {
           this.filterForm()
         }
         {card &&
-          <Card className={classNames("mb-4", className)} controls={controlsContent} header={headerContent} table={!this.isSmallScreen()} {...restProps}>
+          <Card className={classNames("mb-4", className)} controls={controlsContent} header={headerContent} footer={this.tableFooter()} table={!this.isSmallScreen()} {...restProps}>
             {this.tableContent()}
           </Card>
         }
@@ -384,7 +383,25 @@ class ApiMakerTable extends React.PureComponent {
     )
   }
 
-  className () {
+  tableFooter() {
+    const {result} = digs(this.shape, "result")
+    const currentPage = result.currentPage()
+    const totalCount = result.totalCount()
+    const perPage = result.perPage()
+    const to = Math.min(currentPage * perPage, totalCount)
+    const defaultValue = "Showing %{from} to %{to} out of %{total_count} total"
+    let from = ((currentPage - 1) * perPage) + 1
+
+    if (to === 0) from = 0
+
+    return (
+      <div style={{marginTop: "10px"}}>
+        {I18n.t("js.api_maker.table.showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
+      </div>
+    )
+  }
+
+  className() {
     const classNames = ["component-api-maker-live-table"]
 
     if (this.props.className)
