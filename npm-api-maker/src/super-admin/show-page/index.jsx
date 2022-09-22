@@ -65,7 +65,7 @@ export default modelLoadWrapper(
     const configReader = ConfigReader.forModel(modelClass)
     const select = configReader.modelConfig?.show?.extraSelect || {}
     const modelClassName = modelClass.modelClassData().name
-    const modelClassSelect = select[modelClassName] || {}
+    const modelClassSelect = select[modelClassName] || []
     const primaryKeyName = modelClass.primaryKey()
 
     if (!(modelClassName in select)) select[modelClassName] = modelClassSelect
