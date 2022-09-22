@@ -19,7 +19,7 @@ class ApiMakerSuperAdminShowPage extends React.PureComponent {
     const {modelClass, queryParams} = digs(this.props, "modelClass", "queryParams")
     const attributes = this.attributes()
     const model = this.model()
-    const extraContent = this.configReader.modelConfig.show?.extraContent
+    const extraContent = this.configReader.modelConfig?.show?.extraContent
     const modelArgs = {}
 
     modelArgs[inflection.camelize(modelClass.modelClassData().name, true)] = model
@@ -63,7 +63,7 @@ export default modelLoadWrapper(
   ({modelClass}) => {
     const preload = []
     const configReader = ConfigReader.forModel(modelClass)
-    const select = configReader.modelConfig.show?.extraSelect || {}
+    const select = configReader.modelConfig?.show?.extraSelect || {}
     const modelClassName = modelClass.modelClassData().name
     const modelClassSelect = select[modelClassName] || {}
     const primaryKeyName = modelClass.primaryKey()
