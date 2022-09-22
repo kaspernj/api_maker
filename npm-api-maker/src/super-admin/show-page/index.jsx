@@ -70,7 +70,7 @@ export default modelLoadWrapper(
       const reflectionModelClassAttributes = reflectionModelClass.attributes()
       const nameAttribute = reflectionModelClassAttributes.find((attribute) => attribute.name() == "name")
 
-      preload.push(reflection.name())
+      preload.push(inflection.underscore(reflection.name()))
 
       if (!(reflectionModelClassName in select)) select[reflectionModelClassName] = []
       if (!select[reflectionModelClassName].includes("id")) select[reflectionModelClassName].push("id")
