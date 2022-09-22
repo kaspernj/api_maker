@@ -7,6 +7,10 @@ export default class ApiMakerBaseModelReflection {
     this.reflectionData = reflectionData
   }
 
+  foreignKey() {
+    return digg(this, "reflectionData", "foreignKey")
+  }
+
   macro() {
     return digg(this, "reflectionData", "macro")
   }
