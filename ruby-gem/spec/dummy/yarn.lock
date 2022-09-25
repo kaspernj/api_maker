@@ -22,11 +22,6 @@
   resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.19.1.tgz#72d647b4ff6a4f82878d184613353af1dd0290f9"
   integrity sha512-72a9ghR0gnESIa7jBN53U32FOVCEoztyIlKaNoU05zRhEecduGK9L9c3ww7Mp06JiR+0ls0GBPFJQwwtjn9ksg==
 
-"@babel/compat-data@^7.19.1":
-  version "7.19.1"
-  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.19.1.tgz#72d647b4ff6a4f82878d184613353af1dd0290f9"
-  integrity sha512-72a9ghR0gnESIa7jBN53U32FOVCEoztyIlKaNoU05zRhEecduGK9L9c3ww7Mp06JiR+0ls0GBPFJQwwtjn9ksg==
-
 "@babel/core@7":
   version "7.19.1"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.19.1.tgz#c8fa615c5e88e272564ace3d42fbc8b17bfeb22b"
@@ -1107,10 +1102,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker@1.0.227":
-  version "1.0.227"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.227.tgz#91623248f3cbee511fdcf48ccd49ebaffcbae30b"
-  integrity sha512-ESD+vDwXwGJwomD0SQwYS6S9rYTLrxB41Wg5WiCS30v68Y0KY+8I6QP9pXvjsPkrAr6H7Rb76Zbud8nBw3i+6g==
+"@kaspernj/api-maker@1.0.230":
+  version "1.0.230"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.230.tgz#13320319113d3f13883850b0c458e9076126edbb"
+  integrity sha512-pgf/nFikLjCKouHcmB+pErAhQFriwYoMoUl6V6rgWpA+5UnLoid3nSKyPd4qiO+yuZDJgqURMR8KAOsAWqGhWg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
