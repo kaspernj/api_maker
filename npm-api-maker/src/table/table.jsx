@@ -273,13 +273,7 @@ class ApiMakerTable extends React.PureComponent {
     } = this.props
     const {models, qParams, query, result} = digs(this.shape, "models", "qParams", "query", "result")
 
-    let controlsContent, headerContent, PaginationComponent
-
-    if (controls) {
-      controlsContent = controls({models, qParams, query, result})
-    }
-
-    controlsContent += this.tableControls()
+    let headerContent, PaginationComponent
 
     if (typeof header == "function") {
       headerContent = header({models, qParams, query, result})
@@ -359,14 +353,14 @@ class ApiMakerTable extends React.PureComponent {
     return (
       <>
         {controls && controls({models, qParams, query, result})}
-        <a href="#" onClick={digg(this, "onNewFilterClick")}>
-          <i className="fa fa-fw fa-magnifying-glass" />
+        <a className="filter-button" href="#" onClick={digg(this, "onFilterClicked")}>
+          <i className="fa fa-fw fa-magnifying-glass la la-fw la-search" />
         </a>
       </>
     )
   }
 
-  onNewFilterClick = (e) => {
+  onFilterClicked = (e) => {
     e.preventDefault()
     this.shape.set({showFilters: !this.shape.showFilters})
   }

@@ -1,5 +1,6 @@
 import Attribute from "../../base-model/attribute"
-import {digs} from "diggerize"
+import {digg, digs} from "diggerize"
+import inflection from "inflection"
 import Input from "../../inputs/input"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
@@ -10,13 +11,13 @@ import Services from "../../services.mjs"
 import Shape from "set-state-compare/src/shape"
 
 class AttributeElement extends React.PureComponent {
-  static propTypes = {
+  static propTypes = PropTypesExact({
     active: PropTypes.bool.isRequired,
     attribute: PropTypes.instanceOf(Attribute).isRequired,
     currentModelClass: PropTypes.func.isRequired,
     fikter: PropTypes.object,
     onClick: PropTypes.func.isRequired
-  }
+  })
 
   render() {
     const {active, attribute, currentModelClass} = digs(this.props, "active", "attribute", "currentModelClass")
@@ -25,7 +26,13 @@ class AttributeElement extends React.PureComponent {
     if (active) style.fontWeight = "bold"
 
     return (
-      <div onClick={digg(this, "onAttributeClicked")} style={style}>
+      <div
+        className="attribute-element"
+        data-attribute-name={attribute.name()}
+        data-model-class={currentModelClass.modelClassData().name}
+        onClick={digg(this, "onAttributeClicked")}
+        style={style}
+      >
         {currentModelClass.humanAttributeName(inflection.camelize(attribute.name(), true))}
       </div>
     )
@@ -39,17 +46,23 @@ class AttributeElement extends React.PureComponent {
 }
 
 class ReflectionElement extends React.PureComponent {
-  static propTypes = {
+  static propTypes = PropTypesExact({
     currentModelClass: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
     reflection: PropTypes.instanceOf(Reflection).isRequired
-  }
+  })
 
   render() {
     const {currentModelClass, reflection} = digs(this.props, "currentModelClass", "reflection")
 
     return (
-      <div key={reflection.name()} onClick={digg(this, "onReflectionClicked")}>
+      <div
+        className="reflection-element"
+        data-model-class={currentModelClass.modelClassData().name}
+        data-reflection-name={reflection.name()}
+        key={reflection.name()}
+        onClick={digg(this, "onReflectionClicked")}
+      >
         {currentModelClass.humanAttributeName(reflection.name())}
       </div>
     )
@@ -103,7 +116,7 @@ export default class ApiMakerTableFiltersRelationshipSelect extends React.PureCo
     const {attribute, predicate, predicates, value} = digs(this.shape, "attribute", "predicate", "predicates", "value")
 
     return (
-      <div className="api-maker--table--filters--relationship-select">
+      <div className="api-maker--table--filters--filter-form">
         <form onSubmit={digg(this, "onSubmit")}>
           <div>
             {this.currentPathParts().map(({translation}, pathPartIndex) =>
@@ -147,6 +160,7 @@ export default class ApiMakerTableFiltersRelationshipSelect extends React.PureCo
             <div>
               {predicates &&
                 <Select
+                  className="predicate-select"
                   defaultValue={predicate?.name}
                   includeBlank
                   onChange={digg(this, "onPredicateChanged")}
@@ -156,14 +170,14 @@ export default class ApiMakerTableFiltersRelationshipSelect extends React.PureCo
             </div>
             <div>
               {attribute && predicate &&
-                <Input defaultValue={value} inputRef={valueInputRef} />
+                <Input className="value-input" defaultValue={value} inputRef={valueInputRef} />
               }
             </div>
           </div>
           <div>
-            <Button disabled={!attribute || !predicate}>
+            <button className="apply-filter-button" disabled={!attribute || !predicate}>
               {I18n.t("js.api_maker.table.filters.relationship_select.apply", {defaultValue: "Apply"})}
-            </Button>
+            </button>
           </div>
         </form>
       </div>
