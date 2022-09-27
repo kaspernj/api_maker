@@ -132,7 +132,9 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     ransack_params = {}
 
     params[:search].each do |search_param|
-      ransack_key = "#{search_param[:p].join("_")}_#{search_param[:a]}_#{search_param[:pre]}"
+      ransack_key = ""
+      ransack_key << "#{search_param[:p].join("_")}_" if search_param[:p].length > 0
+      ransack_key << "#{search_param[:a]}_#{search_param[:pre]}"
       ransack_params[ransack_key] = search_param[:v]
     end
 

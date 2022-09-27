@@ -1,3 +1,4 @@
+import {digg, digs} from "diggerize"
 import PropTypes from "prop-types"
 import React from "react"
 import FilterForm from "./filter-form"
@@ -50,8 +51,8 @@ class ApiMakerTableFilters extends React.PureComponent {
     const currentFilters = this.currentFilters()
 
     return (
-      <div className="api-maker--table--filters--edit">
-        <button onClick={digg(this, "onAddFilterClicked")}>
+      <div className="api-maker--table--filters">
+        <button className="add-new-filter-button" onClick={digg(this, "onAddFilterClicked")}>
           {I18n.t("js.api_maker.table.filters.add_new_filter", {defaultValue: "Add new filter"})}
         </button>
         {filter &&

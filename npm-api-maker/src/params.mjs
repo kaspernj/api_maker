@@ -1,3 +1,4 @@
+import config from "./config.mjs"
 import formSerialize from "form-serialize"
 import Incorporator from "incorporator"
 import qs from "qs"
@@ -26,8 +27,7 @@ export default class Params {
     const params = Params.change(given)
     const newParams = qs.stringify(params)
     const newPath = `${location.pathname}?${newParams}`
-
-    let appHistory = opts.appHistory || AppHistory
+    const appHistory = opts.appHistory || config.getHistory() || AppHistory
 
     appHistory.push(newPath)
   }
