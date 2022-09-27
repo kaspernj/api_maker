@@ -15,11 +15,14 @@ import Params from "../params"
 import PropTypes from "prop-types"
 import React from "react"
 import selectCalculator from "./select-calculator"
+import Select from "../inputs/select"
 import Shape from "set-state-compare/src/shape"
 import SortLink from "../bootstrap/sort-link"
 import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
 import withBreakpoint from "./with-breakpoint"
+
+const paginationOptions = [30, 60, 90, ["All", "all"]]
 
 class ApiMakerTable extends React.PureComponent {
   static defaultProps = {
@@ -86,6 +89,7 @@ class ApiMakerTable extends React.PureComponent {
       identifier: this.props.identifier || `${collectionKey}-default`,
       models: undefined,
       overallCount: undefined,
+      perPage: 30,
       preload: undefined,
       preparedColumns: undefined,
       query: undefined,
@@ -347,6 +351,22 @@ class ApiMakerTable extends React.PureComponent {
     )
   }
 
+  onFilterClicked = (e) => {
+    e.preventDefault()
+    this.shape.set({showFilters: !this.shape.showFilters})
+  }
+
+  onPerPageChanged = (e) => {
+    const {queryName} = digs(this.shape, "queryName")
+    const newPerPageValue = digg(e, "target", "value")
+    const perKey = `${queryName}_per`
+    const paramsChange = {}
+
+    paramsChange[perKey] = newPerPageValue
+
+    Params.changeParams(paramsChange)
+  }
+
   tableControls() {
     const {controls} = this.props
 
@@ -358,11 +378,6 @@ class ApiMakerTable extends React.PureComponent {
         </a>
       </>
     )
-  }
-
-  onFilterClicked = (e) => {
-    e.preventDefault()
-    this.shape.set({showFilters: !this.shape.showFilters})
   }
 
   tableContent () {
@@ -418,8 +433,18 @@ class ApiMakerTable extends React.PureComponent {
     if (to === 0) from = 0
 
     return (
-      <div style={{marginTop: "10px"}}>
-        {I18n.t("js.api_maker.table.showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
+      <div style={{display: "flex", justifyContent: "space-between", marginTop: "10px"}}>
+        <div>
+          {I18n.t("js.api_maker.table.showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
+        </div>
+        <div>
+          <Select
+            className="per-page-select"
+            defaultValue={perPage}
+            onChange={digg(this, "onPerPageChanged")}
+            options={paginationOptions}
+          />
+        </div>
       </div>
     )
   }

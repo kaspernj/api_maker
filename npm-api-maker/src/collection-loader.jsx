@@ -103,7 +103,30 @@ export default class CollectionLoader extends React.PureComponent {
   loadModels = async () => {
     const params = Params.parse()
     const {abilities, collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
-    const {qParams, queryPageName, queryQName, searchParams} = digs(this.shape, "qParams", "queryPageName", "queryQName", "searchParams")
+    const {
+      qParams,
+      queryName,
+      queryPageName,
+      queryQName,
+      searchParams
+    } = digs(
+      this.shape,
+      "qParams",
+      "queryName",
+      "queryPageName",
+      "queryQName",
+      "searchParams"
+    )
+    const perKey = `${queryName}_per`
+    let per = params[perKey] || 30
+
+    if (per == "all") {
+      per = 999_999_999
+    } else {
+      per = Number(per)
+    }
+
+    console.log({per, perKey})
 
     let query = collection?.clone() || modelClass.ransack()
 
@@ -115,6 +138,8 @@ export default class CollectionLoader extends React.PureComponent {
       .searchKey(queryQName)
       .page(params[queryPageName])
       .pageKey(queryPageName)
+      .per(per)
+      .perKey(perKey)
       .preload(preloads)
       .select(select)
 
