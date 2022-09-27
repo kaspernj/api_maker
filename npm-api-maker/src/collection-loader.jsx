@@ -4,7 +4,6 @@ import {digg, digs} from "diggerize"
 import EventCreated from "./event-created"
 import EventDestroyed from "./event-destroyed"
 import EventUpdated from "./event-updated"
-import instanceOfClassName from "./instance-of-class-name"
 import {LocationChanged} from "on-location-changed/src/location-changed-component"
 import Params from "./params"
 import PropTypes from "prop-types"
@@ -54,9 +53,11 @@ export default class CollectionLoader extends React.PureComponent {
       query: undefined,
       queryName,
       queryQName: `${queryName}_q`,
+      querySName: `${queryName}_s`,
       queryPageName: `${queryName}_page`,
       qParams: undefined,
       result: undefined,
+      searchParams: undefined,
       showNoRecordsAvailableContent: false,
       showNoRecordsFoundContent: false
     })
@@ -83,17 +84,26 @@ export default class CollectionLoader extends React.PureComponent {
   }
 
   loadQParams () {
-    const {queryQName} = digs(this.shape, "queryQName")
+    const {queryQName, querySName} = digs(this.shape, "queryQName", "querySName")
     const params = Params.parse()
     const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
+    const searchParams = []
 
-    this.shape.set({qParams})
+    if (params[querySName]) {
+      for (const rawSearchParam of params[querySName]) {
+        const parsedSearchParam = JSON.parse(rawSearchParam)
+
+        searchParams.push(parsedSearchParam)
+      }
+    }
+
+    this.shape.set({qParams, searchParams})
   }
 
   loadModels = async () => {
     const params = Params.parse()
     const {abilities, collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
-    const {qParams, queryPageName, queryQName} = digs(this.shape, "qParams", "queryPageName", "queryQName")
+    const {qParams, queryPageName, queryQName, searchParams} = digs(this.shape, "qParams", "queryPageName", "queryQName", "searchParams")
 
     let query = collection?.clone() || modelClass.ransack()
 
@@ -101,6 +111,7 @@ export default class CollectionLoader extends React.PureComponent {
 
     query = query
       .ransack(qParams)
+      .search(searchParams)
       .searchKey(queryQName)
       .page(params[queryPageName])
       .pageKey(queryPageName)
@@ -151,11 +162,7 @@ export default class CollectionLoader extends React.PureComponent {
   }
 
   onLocationChanged = () => {
-    const {queryQName} = digs(this.shape, "queryQName")
-    const params = Params.parse()
-    const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
-
-    this.shape.set({qParams})
+    this.loadQParams()
     this.loadModels()
   }
 

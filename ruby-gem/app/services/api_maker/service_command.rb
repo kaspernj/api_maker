@@ -5,7 +5,12 @@ class ApiMaker::ServiceCommand < ApiMaker::BaseCommand
     ApiMaker::Configuration.profile(-> { "ServiceCommand: #{service_name}" }) do
       service_constant_name = "Services::#{service_name}"
       service_constant = service_constant_name.constantize
-      service_args = args.fetch(:service_args)&.permit!&.to_h
+      service_args = if args[:service_args]
+        args.fetch(:service_args)&.permit!&.to_h
+      else
+        {}
+      end
+
       response = service_constant.execute(args: service_args, controller: controller)
 
       if response.success?

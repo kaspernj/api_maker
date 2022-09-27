@@ -1,4 +1,5 @@
-import {digs} from "diggerize"
+import classNames from "classnames"
+import {digg, digs} from "diggerize"
 import PropTypes from "prop-types"
 import React from "react"
 
@@ -48,11 +49,14 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
       ...restProps
     } = this.props
     const {expanded} = digs(this.state, "expanded")
+    const cardHeaderStyle = {display: "flex"}
+
+    if (!expanded) cardHeaderStyle["borderBottom"] = "0"
 
     return (
-      <div className={this.classNames()} data-has-footer={Boolean(footer)} ref="card" {...restProps}>
+      <div className={classNames("component-bootstrap-card", "card", "card-default", className)} data-has-footer={Boolean(footer)} ref="card" {...restProps}>
         {(controls || expandable || header) &&
-          <div className={`card-header d-flex ${!expanded && "border-bottom-0"}`}>
+          <div className="card-header" style={cardHeaderStyle}>
             <div style={{alignSelf: "center", marginRight: "auto"}}>
               {header}
             </div>
@@ -60,13 +64,13 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
               <div style={{alignSelf: "center"}}>
                 {controls}
                 {expandable && expanded &&
-                  <a className="collapse-card-button text-muted" href="#" onClick={this.onCollapseClicked}>
-                    <i className="la la-angle-up" />
+                  <a className="collapse-card-button text-muted" href="#" onClick={digg(this, "onCollapseClicked")}>
+                    <i className="fa fa-angle-up" />
                   </a>
                 }
                 {expandable && !expanded &&
-                  <a className="expand-card-button text-muted" href="#" onClick={this.onExpandClicked}>
-                    <i className="la la-angle-down" />
+                  <a className="expand-card-button text-muted" href="#" onClick={digg(this, "onExpandClicked")}>
+                    <i className="fa fa-angle-down" />
                   </a>
                 }
               </div>
@@ -90,15 +94,6 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
         }
       </div>
     )
-  }
-
-  classNames () {
-    const classNames = ["component-bootstrap-card", "card", "card-default"]
-
-    if (this.props.className)
-      classNames.push(this.props.className)
-
-    return classNames.join(" ")
   }
 
   bodyClassNames () {

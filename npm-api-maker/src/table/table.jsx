@@ -6,6 +6,7 @@ import CollectionLoader from "../collection-loader"
 import columnVisible from "./column-visible.mjs"
 import {debounce} from "debounce"
 import {digg, digs} from "diggerize"
+import Filters from "./filters"
 import inflection from "inflection"
 import modelClassRequire from "../model-class-require.mjs"
 import ModelRow from "./model-row"
@@ -93,6 +94,7 @@ class ApiMakerTable extends React.PureComponent {
       queryPageName: `${queryName}_page`,
       qParams: undefined,
       result: undefined,
+      showFilters: false,
       showNoRecordsAvailableContent: false,
       showNoRecordsFoundContent: false
     })
@@ -136,8 +138,10 @@ class ApiMakerTable extends React.PureComponent {
       preload,
       qParams,
       query,
+      queryName,
       result,
       models,
+      showFilters,
       showNoRecordsAvailableContent,
       showNoRecordsFoundContent
     } = digs(
@@ -146,8 +150,10 @@ class ApiMakerTable extends React.PureComponent {
       "preload",
       "qParams",
       "query",
+      "queryName",
       "result",
       "models",
+      "showFilters",
       "showNoRecordsAvailableContent",
       "showNoRecordsFoundContent"
     )
@@ -177,6 +183,9 @@ class ApiMakerTable extends React.PureComponent {
           <div className="live-table--no-records-found-content">
             {noRecordsFoundContent({models, qParams, overallCount})}
           </div>
+        }
+        {showFilters &&
+          <Filters modelClass={modelClass} queryName={queryName} />
         }
         {qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
           this.cardOrTable()
@@ -270,6 +279,8 @@ class ApiMakerTable extends React.PureComponent {
       controlsContent = controls({models, qParams, query, result})
     }
 
+    controlsContent += this.tableControls()
+
     if (typeof header == "function") {
       headerContent = header({models, qParams, query, result})
     } else if (header) {
@@ -299,7 +310,7 @@ class ApiMakerTable extends React.PureComponent {
           this.filterForm()
         }
         {card &&
-          <Card className={classNames("mb-4", className)} controls={controlsContent} header={headerContent} footer={this.tableFooter()} table={!this.isSmallScreen()} {...restProps}>
+          <Card className={classNames("mb-4", className)} controls={this.tableControls()} header={headerContent} footer={this.tableFooter()} table={!this.isSmallScreen()} {...restProps}>
             {this.tableContent()}
           </Card>
         }
@@ -340,6 +351,24 @@ class ApiMakerTable extends React.PureComponent {
         }
       </form>
     )
+  }
+
+  tableControls() {
+    const {controls} = this.props
+
+    return (
+      <>
+        {controls && controls({models, qParams, query, result})}
+        <a href="#" onClick={digg(this, "onNewFilterClick")}>
+          <i className="fa fa-fw fa-magnifying-glass" />
+        </a>
+      </>
+    )
+  }
+
+  onNewFilterClick = (e) => {
+    e.preventDefault()
+    this.shape.set({showFilters: !this.shape.showFilters})
   }
 
   tableContent () {

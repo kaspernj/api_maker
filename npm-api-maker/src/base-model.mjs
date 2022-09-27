@@ -11,6 +11,7 @@ import ModelName from "./model-name.mjs"
 import NotLoadedError from "./not-loaded-error.mjs"
 import objectToFormData from "object-to-formdata"
 import Reflection from "./base-model/reflection.mjs"
+import Scope from "./base-model/scope.mjs"
 import Services from "./services.mjs"
 import ValidationError from "./validation-error.mjs"
 import {ValidationErrors} from "./validation-errors.mjs"
@@ -82,6 +83,41 @@ export default class BaseModel {
 
   static ransack(query = {}) {
     return new Collection({modelClass: this}, {ransack: query})
+  }
+
+  static ransackableAssociations() {
+    const relationships = digg(this.modelClassData(), "ransackable_associations")
+    const reflections = []
+
+    for (const relationshipData of relationships) {
+      reflections.push(new Reflection(relationshipData))
+    }
+
+    return reflections
+  }
+
+  static ransackableAttributes() {
+    const attributes = digg(this.modelClassData(), "ransackable_attributes")
+    const result = []
+
+    for (const attributeData of attributes) {
+      result.push(new Attribute(attributeData))
+    }
+
+    return result
+  }
+
+  static ransackableScopes() {
+    const ransackableScopes = digg(this.modelClassData(), "ransackable_scopes")
+    const result = []
+
+    for (const scopeData of ransackableScopes) {
+      const scope = new Scope(scopeData)
+
+      result.push(scope)
+    }
+
+    return result
   }
 
   static reflections() {

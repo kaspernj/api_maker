@@ -124,5 +124,18 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     @query = @query.page(params[:page]) if params[:page].present?
     @query = @query.per_page(params[:per]) if params[:per].present?
     @query = filter_custom_accessible_by(@query)
+
+    filter_query_with_search_params if params[:search]
+  end
+
+  def filter_query_with_search_params
+    ransack_params = {}
+
+    params[:search].each do |search_param|
+      ransack_key = "#{search_param[:p].join("_")}_#{search_param[:a]}_#{search_param[:pre]}"
+      ransack_params[ransack_key] = search_param[:v]
+    end
+
+    @query = @query.ransack(ransack_params).result
   end
 end
