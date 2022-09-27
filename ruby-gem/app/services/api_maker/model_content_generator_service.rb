@@ -16,7 +16,7 @@ private
   def attributes
     attributes = {}
     resource._attributes.map do |attribute, attribute_data|
-      column = columns.find { |model_class_column| model_class_column.name == attribute.to_s }
+      column = columns[attribute.to_s]
       column_data = _column_data(column) if column
 
       attributes[attribute] = {
@@ -51,7 +51,12 @@ private
 
   def columns
     @columns ||= begin
-      model_class.columns
+      result = {}
+      model_class.columns.each do |column|
+        result[column.name] = column
+      end
+
+      result
     rescue ActiveRecord::StatementInvalid
       # This happens if the table or column doesn't exist - like if we are running during a migration
       []
@@ -115,7 +120,7 @@ private
 
   def ransackable_attributes
     model_class.ransackable_attributes.map do |attribute_name|
-      column = columns.find { |column| column.name == attribute_name }
+      column = columns[attribute_name.to_s]
       column_data = _column_data(column) if column
 
       {
