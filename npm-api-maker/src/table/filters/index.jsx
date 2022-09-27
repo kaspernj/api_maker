@@ -28,7 +28,7 @@ class ApiMakerTableFilter extends React.PureComponent {
           {a} {pre} {v}
         </span>
         <span>
-          <a href="#" onClick={digg(this, "onRemoveFilterClicked")}>
+          <a className="remove-filter-button" href="#" onClick={digg(this, "onRemoveFilterClicked")}>
             <i className="fa fa-remove la la-remove" />
           </a>
         </span>
