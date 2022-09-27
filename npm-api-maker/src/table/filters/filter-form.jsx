@@ -75,10 +75,11 @@ class ReflectionElement extends React.PureComponent {
   }
 }
 
-export default class ApiMakerTableFiltersRelationshipSelect extends React.PureComponent {
+export default class ApiMakerTableFiltersFilterForm extends React.PureComponent {
   static propTypes = PropTypesExact({
     filter: PropTypes.object,
     modelClass: PropTypes.func.isRequired,
+    onApplyClicked: PropTypes.func.isRequired,
     querySearchName: PropTypes.string.isRequired
   })
 
@@ -269,6 +270,8 @@ export default class ApiMakerTableFiltersRelationshipSelect extends React.PureCo
     newParams[querySearchName] = searchParams
 
     Params.changeParams(newParams)
+
+    this.props.onApplyClicked()
   }
 
   reflectionsWithModelClass(reflections) {
