@@ -69,8 +69,6 @@ export default class ApiMakerTableFiltersRelationshipSelect extends React.PureCo
     querySearchName: PropTypes.string.isRequired
   })
 
-  test = console.log({props: this.props})
-
   shape = new Shape(this, {
     attribute: this.currentModelClassFromPath(this.props.filter.p || []).ransackableAttributes().find((attribute) => attribute.name() == this.props.filter.a),
     path: this.props.filter.p || [],
@@ -245,9 +243,6 @@ export default class ApiMakerTableFiltersRelationshipSelect extends React.PureCo
     const searchParams = Params.parse()[querySearchName] || {}
     const value = digg(this, "valueInputRef", "current", "value")
 
-    console.log("Params before", Params.parse())
-    console.log({attribute, path, predicate, filterIndex})
-
     searchParams[filterIndex] = JSON.stringify({
       a: attribute.name(),
       p: path,
@@ -260,8 +255,6 @@ export default class ApiMakerTableFiltersRelationshipSelect extends React.PureCo
     newParams[querySearchName] = searchParams
 
     Params.changeParams(newParams)
-
-    console.log("Params after", Params.parse())
   }
 
   reflectionsWithModelClass(reflections) {

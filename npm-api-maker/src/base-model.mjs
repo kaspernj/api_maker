@@ -86,17 +86,11 @@ export default class BaseModel {
   }
 
   static ransackableAssociations() {
-    console.log({modelClassData: this.modelClassData()})
-
     const relationships = digg(this.modelClassData(), "ransackable_associations")
     const reflections = []
 
     for (const relationshipData of relationships) {
-      console.log({relationshipData})
-
-      const reflection = new Reflection(relationshipData)
-
-      reflections.push(reflection)
+      reflections.push(new Reflection(relationshipData))
     }
 
     return reflections
@@ -107,9 +101,7 @@ export default class BaseModel {
     const result = []
 
     for (const attributeData of attributes) {
-      const attribute = new Attribute(attributeData)
-
-      result.push(attribute)
+      result.push(new Attribute(attributeData))
     }
 
     return result

@@ -162,11 +162,7 @@ export default class CollectionLoader extends React.PureComponent {
   }
 
   onLocationChanged = () => {
-    const {queryQName} = digs(this.shape, "queryQName")
-    const params = Params.parse()
-    const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
-
-    this.shape.set({qParams})
+    this.loadQParams()
     this.loadModels()
   }
 
