@@ -16,18 +16,8 @@ private
   def attributes
     attributes = {}
     resource._attributes.map do |attribute, attribute_data|
-      begin
-        column = model_class.columns.find { |model_class_column| model_class_column.name == attribute.to_s }
-      rescue ActiveRecord::StatementInvalid
-        # This happens if the table or column doesn't exist - like if we are running during a migration
-      end
-
-      if column
-        column_data = {
-          name: column.name,
-          type: column.type
-        }
-      end
+      column = columns.find { |model_class_column| model_class_column.name == attribute.to_s }
+      column_data = _column_data(column) if column
 
       attributes[attribute] = {
         column: column_data,
@@ -48,6 +38,24 @@ private
     end
 
     result
+  end
+
+  def _column_data(column)
+    {
+      default: column.default,
+      name: column.name,
+      null: column.null,
+      type: column.type
+    }
+  end
+
+  def columns
+    @columns ||= begin
+      model_class.columns
+    rescue ActiveRecord::StatementInvalid
+      # This happens if the table or column doesn't exist - like if we are running during a migration
+      []
+    end
   end
 
   def member_commands
@@ -84,10 +92,43 @@ private
       name: resource.short_name,
       nameDasherized: resource.short_name.underscore.dasherize,
       pluralName: model_class.model_name.plural,
+      ransackable_associations: ransackable_associations,
+      ransackable_attributes: ransackable_attributes,
+      ransackable_scopes: model_class.ransackable_scopes,
       relationships: reflections_for_model_class_data,
       paramKey: model_class.model_name.param_key,
       primaryKey: model_class.primary_key
     }
+  end
+
+  def ransackable_associations
+    model_class.ransackable_associations.map do |association_name|
+      reflection = model_class.reflections[association_name]
+
+      unless reflection
+        raise "Couldnt find reflection by that name: #{name} on the model: #{model_class.name}. Reflections found: #{model_class.reflections.keys.join(", ")}"
+      end
+
+      _reflection_data(reflection, ignore_resource_not_found: true)
+    end
+  end
+
+  def ransackable_attributes
+    model_class.ransackable_attributes.map do |attribute_name|
+      column = columns.find { |column| column.name == attribute_name }
+      column_data = _column_data(column) if column
+
+      {
+        name: attribute_name,
+        column: column_data
+      }
+    end
+  end
+
+  def ransackable_scopes
+    model_class.ransackable_scopes.map do |scope_name|
+      {name: scope_name}
+    end
   end
 
   def monetized_attributes
@@ -96,7 +137,7 @@ private
 
   def reflections
     @reflections ||= resource._relationships.map do |name, _data|
-      reflection = model_class.reflections.values.find { |reflection_i| reflection_i.name == name }
+      reflection = model_class.reflections[name.to_s]
 
       unless reflection
         raise "Couldnt find reflection by that name: #{name} on the model: #{model_class.name}. Reflections found: #{model_class.reflections.keys.join(", ")}"
@@ -134,16 +175,25 @@ private
 
   def reflections_for_model_class_data
     @reflections_for_model_class_data ||= reflections.map do |reflection|
-      resource = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass)
-
-      {
-        className: reflection.class_name,
-        collectionName: resource.collection_name,
-        foreignKey: reflection.foreign_key,
-        name: reflection.name,
-        macro: reflection.macro,
-        resource_name: resource.short_name
-      }
+      _reflection_data(reflection)
     end
+  end
+
+  def _reflection_data(reflection, ignore_resource_not_found: false)
+    begin
+      resource = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass)
+    rescue ApiMaker::MemoryStorage::ResourceNotFoundError, ArgumentError => e
+      # ArgumentError because polymorphic associations works differently
+      raise e unless ignore_resource_not_found
+    end
+
+    {
+      className: reflection.class_name,
+      collectionName: resource&.collection_name,
+      foreignKey: reflection.foreign_key,
+      name: reflection.name,
+      macro: reflection.macro,
+      resource_name: resource&.short_name
+    }
   end
 end

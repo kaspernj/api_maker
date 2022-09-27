@@ -124,6 +124,7 @@ export default class ApiMakerCollection {
     if (this.queryArgs.preload) params.preload = this.queryArgs.preload
     if (this.queryArgs.page) params.page = this.queryArgs.page
     if (this.queryArgs.per) params.per = this.queryArgs.per
+    if (this.queryArgs.search) params.search = this.queryArgs.search
     if (this.queryArgs.select) params.select = this.queryArgs.select
     if (this.queryArgs.selectColumns) params.select_columns = this.queryArgs.selectColumns
 
@@ -139,10 +140,7 @@ export default class ApiMakerCollection {
   }
 
   ransack (params) {
-    if (params) {
-      this._merge({ransack: params})
-    }
-
+    if (params) this._merge({ransack: params})
     return this
   }
 
@@ -157,11 +155,16 @@ export default class ApiMakerCollection {
     return result
   }
 
-  searchKey (searchKey) {
+  search(params) {
+    if (params) this._merge({search: params})
+    return this
+  }
+
+  searchKey(searchKey) {
     return this._merge({searchKey})
   }
 
-  select (originalSelect) {
+  select(originalSelect) {
     const newSelect = {}
 
     for (const originalModelName in originalSelect) {
@@ -180,7 +183,7 @@ export default class ApiMakerCollection {
     return this._merge({select: newSelect})
   }
 
-  selectColumns (originalSelect) {
+  selectColumns(originalSelect) {
     const newSelect = {}
 
     for (const originalModelName in originalSelect) {

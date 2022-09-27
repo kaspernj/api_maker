@@ -1,4 +1,6 @@
 class ApiMaker::MemoryStorage
+  class ResourceNotFoundError < RuntimeError; end
+
   attr_reader :model_class_for_data, :storage
 
   def self.current
@@ -56,7 +58,7 @@ class ApiMaker::MemoryStorage
 
     unless resource_class
       if resources_loaded?
-        raise "Resource couldn't be found from model: #{model_class}"
+        raise ResourceNotFoundError, "Resource couldn't be found from model: #{model_class}"
       else
         load_all_resources # Some resources with custom model class won't have been loaded at this point
         return resource_for_model(model_class)
