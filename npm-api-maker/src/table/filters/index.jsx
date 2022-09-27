@@ -10,6 +10,7 @@ class ApiMakerTableFilter extends React.PureComponent {
     a: PropTypes.string.isRequired,
     filterIndex: PropTypes.number.isRequired,
     onClick: PropTypes.func.isRequired,
+    onRemoveClicked: PropTypes.func.isRequired,
     p: PropTypes.array.isRequired,
     pre: PropTypes.string.isRequired,
     v: PropTypes.string.isRequired
@@ -19,8 +20,18 @@ class ApiMakerTableFilter extends React.PureComponent {
     const {a, p, pre, v} = digs(this.props, "a", "p", "pre", "v")
 
     return (
-      <div onClick={digg(this, "onFilterClicked")} style={{display: "inline-block", backgroundColor: "grey", padding: "10px 6px"}}>
-        {p.join(".")}.{a} {pre} {v}
+      <div style={{display: "inline-block", backgroundColor: "grey", padding: "10px 6px"}}>
+        <span className="filter-label" onClick={digg(this, "onFilterClicked")} style={{cursor: "pointer"}}>
+          {p.length > 0 &&
+            `${p.join(".")}.`
+          }
+          {a} {pre} {v}
+        </span>
+        <span>
+          <a className="remove-filter-button" href="#" onClick={digg(this, "onRemoveFilterClicked")}>
+            <i className="fa fa-remove la la-remove" />
+          </a>
+        </span>
       </div>
     )
   }
@@ -31,6 +42,14 @@ class ApiMakerTableFilter extends React.PureComponent {
     const {a, filterIndex, p, pre, v} = digs(this.props, "a", "filterIndex", "p", "pre", "v")
 
     this.props.onClick({a, filterIndex, p, pre, v})
+  }
+
+  onRemoveFilterClicked = (e) => {
+    e.preventDefault()
+
+    const {filterIndex} = digs(this.props, "filterIndex")
+
+    this.props.onRemoveClicked({filterIndex})
   }
 }
 
@@ -60,11 +79,18 @@ class ApiMakerTableFilters extends React.PureComponent {
             filter={filter}
             key={`filter-${filter.filterIndex}`}
             modelClass={modelClass}
+            onApplyClicked={digg(this, "onApplyClicked")}
             querySearchName={this.querySearchName()}
           />
         }
         {currentFilters?.map((filterData, filterIndex) =>
-          <ApiMakerTableFilter key={filterIndex} filterIndex={filterIndex} onClick={digg(this, "onFilterClicked")} {...JSON.parse(filterData)} />
+          <ApiMakerTableFilter
+            key={filterIndex}
+            filterIndex={filterIndex}
+            onClick={digg(this, "onFilterClicked")}
+            onRemoveClicked={digg(this, "onRemoveClicked")}
+            {...JSON.parse(filterData)}
+          />
         )}
       </div>
     )
@@ -86,6 +112,24 @@ class ApiMakerTableFilters extends React.PureComponent {
       filter: {
         filterIndex: newFilterIndex
       }
+    })
+  }
+
+  onApplyClicked = () => this.shape.set({filter: undefined})
+
+  onRemoveClicked = ({filterIndex}) => {
+    const searchParams = Params.parse()[this.querySearchName()] || {}
+
+    delete searchParams[filterIndex]
+
+    const newParams = {}
+
+    newParams[this.querySearchName()] = searchParams
+
+    Params.changeParams(newParams)
+
+    this.shape.set({
+      filter: undefined
     })
   }
 

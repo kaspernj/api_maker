@@ -32,6 +32,11 @@ describe "bootstrap - live table - filter" do
     wait_for_and_find(".apply-filter-button").click
     wait_for_no_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
+
+    # It removes a filter
+    wait_for_and_find(".remove-filter-button").click
+    wait_for_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
   end
 
   it "filters through a relationship" do
