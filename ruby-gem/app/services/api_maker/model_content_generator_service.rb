@@ -86,7 +86,7 @@ private
     }
   end
 
-  def model_class_data
+  def model_class_data # rubocop:disable Metrics/AbcSize
     {
       attributes: attributes,
       className: model_class.name,
