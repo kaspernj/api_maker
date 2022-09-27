@@ -126,8 +126,6 @@ export default class CollectionLoader extends React.PureComponent {
       per = Number(per)
     }
 
-    console.log({per, perKey})
-
     let query = collection?.clone() || modelClass.ransack()
 
     if (groupBy) query = query.groupBy(...groupBy)
