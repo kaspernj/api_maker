@@ -308,7 +308,7 @@ class ApiMakerTable extends React.PureComponent {
           this.filterForm()
         }
         {card &&
-          <Card className={classNames("mb-4", className)} controls={this.tableControls()} header={headerContent} footer={this.tableFooter()} table={!this.isSmallScreen()} {...restProps}>
+          <Card className={classNames("live-table--table-card", "mb-4", className)} controls={this.tableControls()} header={headerContent} footer={this.tableFooter()} table={!this.isSmallScreen()} {...restProps}>
             {this.tableContent()}
           </Card>
         }
