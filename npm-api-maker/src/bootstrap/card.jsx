@@ -57,11 +57,11 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
       <div className={classNames("component-bootstrap-card", "card", "card-default", className)} data-has-footer={Boolean(footer)} ref="card" {...restProps}>
         {(controls || expandable || header) &&
           <div className="card-header" style={cardHeaderStyle}>
-            <div style={{alignSelf: "center", marginRight: "auto"}}>
+            <div className="card-header-label" style={{alignSelf: "center", marginRight: "auto"}}>
               {header}
             </div>
             {(controls || expandable) &&
-              <div style={{alignSelf: "center"}}>
+              <div className="card-header-actions" style={{alignSelf: "center"}}>
                 {controls}
                 {expandable && expanded &&
                   <a className="collapse-card-button text-muted" href="#" onClick={digg(this, "onCollapseClicked")}>
