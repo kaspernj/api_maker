@@ -30,7 +30,7 @@
     "inflection": "^1.13.4",
     "js-yaml-loader": "^1.2.2",
     "mini-css-extract-plugin": "^2.6.1",
-    "postcss": "^8.4.16",
+    "postcss": "^8.4.17",
     "postcss-cssnext": "^3.1.1",
     "postcss-import": "^15.0.0",
     "postcss-loader": "^7.0.1",
