@@ -100,6 +100,7 @@ module.exports = {
     "line-comment-position": "off",
     "lines-around-comment": "error",
     "lines-between-class-members": "off",
+    "logical-assignment-operators": "error",
     "max-classes-per-file": "off",
     "max-depth": "error",
     "max-nested-callbacks": "error",
