@@ -4,6 +4,7 @@ import {digg} from "diggerize"
 import inflection from "inflection"
 import {serialize as objectToFormData} from "object-to-formdata"
 import {TableSetting} from "../models.mjs.erb"
+import {v4 as uuidv4} from "uuid"
 
 export default class ApiMakerTableSettings {
   constructor({table}) {
@@ -67,8 +68,8 @@ export default class ApiMakerTableSettings {
     const tableSetting = await TableSetting
       .ransack({
         identifier_eq: this.identifier(),
-        user_id_eq: this.currentUser().id(),
-        user_type_eq: digg(this.currentUser().modelClassData(), "name")
+        user_id_eq: this.currentUserIdOrFallback(),
+        user_type_eq: this.currentUserTypeOrFallback()
       })
       .preload("columns")
       .first()
@@ -76,11 +77,39 @@ export default class ApiMakerTableSettings {
     return tableSetting
   }
 
+  currentUserIdOrFallback() {
+    const currentUser = this.currentUser()
+
+    if (currentUser) return currentUser.id()
+
+    return this.anonymouseUserId()
+  }
+
+  currentUserTypeOrFallback() {
+    const currentUser = this.currentUser()
+
+    if (currentUser) return digg(currentUser.modelClassData(), "name")
+
+    return null
+  }
+
+  anonymouseUserId() {
+    const variableName = `ApiMakerTableAnonymousUserId-${this.identifier()}`
+
+    if (!(variableName in localStorage)) {
+      const generatedId = uuidv4()
+
+      localStorage[variableName] = generatedId
+    }
+
+    return digg(localStorage, variableName)
+  }
+
   createInitialTableSetting = async () => {
     const tableSettingData = {
       identifier: this.identifier(),
-      user_id: this.currentUser().id(),
-      user_type: digg(this.currentUser().modelClassData(), "name"),
+      user_id: this.currentUserIdOrFallback(),
+      user_type: this.currentUserTypeOrFallback(),
       columns_attributes: {}
     }
 

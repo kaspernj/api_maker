@@ -5,6 +5,10 @@ class Resources::TableSettingColumnResource < ApiMaker::BaseResource
   relationships :table_setting
 
   def abilities
-    can CRUD, ApiMakerTable::TableSettingColumn, table_setting: {user_id: current_user.id, user_type: current_user.class.name} if current_user
+    if current_user
+      can CRUD, ApiMakerTable::TableSettingColumn, table_setting: {user_id: current_user.id, user_type: current_user.class.name}
+    else
+      can CRUD, ApiMakerTable::TableSettingColumn, table_setting: {user_type: [nil, ""]}
+    end
   end
 end

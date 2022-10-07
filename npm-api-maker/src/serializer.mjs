@@ -16,7 +16,7 @@ export default class Serializer {
   }
 
   serializeArgument (arg) {
-    if (typeof arg == "object" && arg.constructor.apiMakerType == "BaseModel") {
+    if (typeof arg == "object" && arg && arg.constructor.apiMakerType == "BaseModel") {
       return {
         api_maker_type: "model",
         model_class_name: digg(arg.modelClassData(), "name"),
@@ -44,7 +44,7 @@ export default class Serializer {
       }
     } else if (Array.isArray(arg)) {
       return this.serializeArray(arg)
-    } else if (typeof arg == "object" && arg.constructor && arg.constructor.apiMakerType == "Collection") {
+    } else if (typeof arg == "object" && arg && arg.constructor && arg.constructor.apiMakerType == "Collection") {
       return {
         api_maker_type: "collection",
         value: this.serializeObject(arg)
