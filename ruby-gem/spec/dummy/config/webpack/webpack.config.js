@@ -18,6 +18,9 @@ const options = {
     ]
   },
   node: {global: true},
+  optimization: {
+    runtimeChunk: false
+  },
   plugins: [],
   resolve: {
     extensions: [".css", ".scss", ".mjs", ".mjs.erb", ".mjs", ".mjs.erb", ".js.erb"],
