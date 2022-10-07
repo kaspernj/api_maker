@@ -62,7 +62,7 @@ export default class ApiMakerTableSettings {
   }
 
   loadTableSetting = async () => {
-    if (!TableSetting) throw new Error("TableSetting model couldn't be imported")
+    if (!TableSetting) throw new Error("TableSetting model isn't globally available")
 
     const tableSetting = await TableSetting
       .ransack({
@@ -116,9 +116,6 @@ export default class ApiMakerTableSettings {
   }
 
   updateTableSetting = async (tableSetting) => {
-    // This should remove columns no longer found
-    // This should update columns that have changed
-
     const columns = this.columns()
     const columnsData = {}
     const tableSettingData = {columns_attributes: columnsData}
@@ -149,7 +146,7 @@ export default class ApiMakerTableSettings {
       const column = columns.find((column) => columnIdentifier(column) == tableSettingColumn.identifier())
 
       if (column) {
-        // Update column if changed
+        // TODO: Update column if changed
       } else {
         // Removed saved columns no longer found
         const columnKey = ++columnsKeyCount
@@ -158,6 +155,7 @@ export default class ApiMakerTableSettings {
           id: tableSettingColumn.id(),
           _destroy: true
         }
+        changed = true
       }
     }
 
@@ -165,9 +163,6 @@ export default class ApiMakerTableSettings {
       const tableSettingFormData = objectToFormData({table_setting: tableSettingData})
 
       await tableSetting.saveRaw(tableSettingFormData)
-
-      // Maybe not necessary?
-      // tableSetting = this.loadTableSetting()
     }
 
     return tableSetting
