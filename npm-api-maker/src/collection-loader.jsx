@@ -4,12 +4,11 @@ import {digg, digs} from "diggerize"
 import EventCreated from "./event-created"
 import EventDestroyed from "./event-destroyed"
 import EventUpdated from "./event-updated"
-import {LocationChanged} from "on-location-changed/src/location-changed-component"
-import Params from "./params"
 import PropTypes from "prop-types"
 import React from "react"
+import withQueryParams from "on-location-changed/src/with-query-params"
 
-export default class CollectionLoader extends React.PureComponent {
+class CollectionLoader extends React.PureComponent {
   static defaultProps = {
     destroyEnabled: true,
     groupBy: ["id"],
@@ -52,6 +51,7 @@ export default class CollectionLoader extends React.PureComponent {
       overallCount: undefined,
       query: undefined,
       queryName,
+      queryPerKey: `${queryName}_per`,
       queryQName: `${queryName}_q`,
       querySName: `${queryName}_s`,
       queryPageName: `${queryName}_page`,
@@ -72,6 +72,27 @@ export default class CollectionLoader extends React.PureComponent {
     if (noRecordsAvailableContent) this.loadOverallCount()
   }
 
+  componentDidUpdate(prevProps) {
+    const {queryPageName, queryPerKey, queryQName, querySName} = digs(this.shape, "queryPageName", "queryPerKey", "queryQName", "querySName")
+    let changed = false
+
+    // Only load models again if certain things in the URL changes
+    if (prevProps.queryParams[queryQName] != this.props.queryParams[queryQName]) {
+      changed = true
+    } else if (prevProps.queryParams[queryPageName] != this.props.queryParams[queryPageName]) {
+      changed = true
+    } else if (prevProps.queryParams[queryPerKey] != this.props.queryParams[queryPerKey]) {
+      changed = true
+    } else if (prevProps.queryParams[querySName] != this.props.queryParams[querySName]) {
+      changed = true
+    }
+
+    if (changed) {
+      this.loadQParams()
+      this.loadModels()
+    }
+  }
+
   async loadOverallCount () {
     const baseQuery = this.props.collection || this.props.modelClass.all()
     const overallCount = await baseQuery.count()
@@ -83,14 +104,32 @@ export default class CollectionLoader extends React.PureComponent {
     })
   }
 
+  hasQParams() {
+    const {queryParams} = digs(this.props, "queryParams")
+    const {queryQName} = digs(this.shape, "queryQName")
+
+    if (queryQName in queryParams) return true
+
+    return false
+  }
+
+  qParams() {
+    const {queryParams} = digs(this.props, "queryParams")
+    const {queryQName} = digs(this.shape, "queryQName")
+
+    if (this.hasQParams()) return JSON.parse(digg(queryParams, queryQName))
+
+    return {}
+  }
+
   loadQParams () {
-    const {queryQName, querySName} = digs(this.shape, "queryQName", "querySName")
-    const params = Params.parse()
-    const qParams = Object.assign({}, this.props.defaultParams, params[queryQName])
+    const {queryParams} = digs(this.props, "queryParams")
+    const {querySName} = digs(this.shape, "querySName")
+    const qParams = this.hasQParams() ? this.qParams() : Object.assign({}, this.props.defaultParams)
     const searchParams = []
 
-    if (params[querySName]) {
-      for (const rawSearchParam of params[querySName]) {
+    if (queryParams[querySName]) {
+      for (const rawSearchParam of queryParams[querySName]) {
         const parsedSearchParam = JSON.parse(rawSearchParam)
 
         searchParams.push(parsedSearchParam)
@@ -101,24 +140,24 @@ export default class CollectionLoader extends React.PureComponent {
   }
 
   loadModels = async () => {
-    const params = Params.parse()
+    const {queryParams} = digs(this.props, "queryParams")
     const {abilities, collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
     const {
       qParams,
-      queryName,
       queryPageName,
+      queryPerKey,
       queryQName,
       searchParams
     } = digs(
       this.shape,
       "qParams",
-      "queryName",
       "queryPageName",
+      "queryPerKey",
       "queryQName",
       "searchParams"
     )
-    const perKey = `${queryName}_per`
-    let per = params[perKey] || 30
+    const page = queryParams[queryPageName] || 1
+    let per = queryParams[queryPerKey] || 30
 
     if (per == "all") {
       per = 999_999_999
@@ -134,10 +173,10 @@ export default class CollectionLoader extends React.PureComponent {
       .ransack(qParams)
       .search(searchParams)
       .searchKey(queryQName)
-      .page(params[queryPageName])
+      .page(page)
       .pageKey(queryPageName)
       .per(per)
-      .perKey(perKey)
+      .perKey(queryPerKey)
       .preload(preloads)
       .select(select)
 
@@ -182,11 +221,6 @@ export default class CollectionLoader extends React.PureComponent {
     const foundModel = models.find((model) => model.id() == updatedModel.id())
 
     if (foundModel) this.loadModelsDebounce()
-  }
-
-  onLocationChanged = () => {
-    this.loadQParams()
-    this.loadModels()
   }
 
   showNoRecordsAvailableContent (args) {
@@ -239,7 +273,6 @@ export default class CollectionLoader extends React.PureComponent {
     return (
       <>
         <EventCreated modelClass={modelClass} onCreated={digg(this, "onModelCreated")} />
-        <LocationChanged onChanged={digg(this, "onLocationChanged")} />
         {models && models.map((model) =>
           <React.Fragment key={model.id()}>
             <EventDestroyed model={model} onDestroyed={digg(this, "onModelDestroyed")} />
@@ -250,3 +283,5 @@ export default class CollectionLoader extends React.PureComponent {
     )
   }
 }
+
+export default withQueryParams(CollectionLoader)

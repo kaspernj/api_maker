@@ -90,7 +90,7 @@ describe "bootstrap - live table" do
       task2
 
       login_as user_admin
-      visit bootstrap_live_table_path(no_records_available_content: true, no_records_found_content: true, tasks_q: {id_null: true})
+      visit bootstrap_live_table_path(no_records_available_content: true, no_records_found_content: true, tasks_q: JSON.generate(id_null: true))
       wait_for_selector no_tasks_found_content, text: "No tasks were found!"
       wait_for_no_selector no_tasks_available_content
     end
