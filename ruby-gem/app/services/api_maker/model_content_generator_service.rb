@@ -99,7 +99,7 @@ private
       pluralName: model_class.model_name.plural,
       ransackable_associations: ransackable_associations,
       ransackable_attributes: ransackable_attributes,
-      ransackable_scopes: model_class.ransackable_scopes,
+      ransackable_scopes: ransackable_scopes,
       relationships: reflections_for_model_class_data,
       paramKey: model_class.model_name.param_key,
       primaryKey: model_class.primary_key
