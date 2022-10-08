@@ -29,7 +29,8 @@ class BootstrapSortLink extends PureComponent {
 
   loadTasks = async () => {
     const params = Params.parse()
-    const query = Task.ransack(params.q)
+    const qParams = params.q ? JSON.parse(params.q) : {}
+    const query = Task.ransack(qParams)
     const result = await query.result()
 
     this.setState({

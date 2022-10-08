@@ -73,7 +73,7 @@ class CollectionLoader extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const {queryPageName, queryPerKey, queryQName} = digs(this.shape, "queryPageName", "queryPerKey", "queryQName")
+    const {queryPageName, queryPerKey, queryQName, querySName} = digs(this.shape, "queryPageName", "queryPerKey", "queryQName", "querySName")
     let changed = false
 
     // Only load models again if certain things in the URL changes
@@ -82,6 +82,8 @@ class CollectionLoader extends React.PureComponent {
     } else if (prevProps.queryParams[queryPageName] != this.props.queryParams[queryPageName]) {
       changed = true
     } else if (prevProps.queryParams[queryPerKey] != this.props.queryParams[queryPerKey]) {
+      changed = true
+    } else if (prevProps.queryParams[querySName] != this.props.queryParams[querySName]) {
       changed = true
     }
 

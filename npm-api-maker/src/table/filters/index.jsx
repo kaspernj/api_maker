@@ -57,6 +57,7 @@ class ApiMakerTableFilters extends React.PureComponent {
   static propTypes = {
     modelClass: PropTypes.func.isRequired,
     queryName: PropTypes.string.isRequired,
+    querySName: PropTypes.string.isRequired,
     queryParams: PropTypes.object.isRequired
   }
 
@@ -65,7 +66,7 @@ class ApiMakerTableFilters extends React.PureComponent {
   })
 
   render() {
-    const {modelClass} = this.props
+    const {modelClass, querySName} = digs(this.props, "modelClass", "querySName")
     const {filter} = digs(this.shape, "filter")
     const currentFilters = this.currentFilters()
 
@@ -80,7 +81,7 @@ class ApiMakerTableFilters extends React.PureComponent {
             key={`filter-${filter.filterIndex}`}
             modelClass={modelClass}
             onApplyClicked={digg(this, "onApplyClicked")}
-            querySearchName={this.querySearchName()}
+            querySearchName={querySName}
           />
         }
         {currentFilters?.map((filterData, filterIndex) =>
@@ -97,8 +98,8 @@ class ApiMakerTableFilters extends React.PureComponent {
   }
 
   currentFilters() {
-    const {queryParams} = this.props
-    const currentFilters = queryParams[this.querySearchName()] || []
+    const {queryParams, querySName} = digs(this.props, "queryParams", "querySName")
+    const currentFilters = queryParams[querySName] || []
 
     return currentFilters
   }
@@ -118,13 +119,14 @@ class ApiMakerTableFilters extends React.PureComponent {
   onApplyClicked = () => this.shape.set({filter: undefined})
 
   onRemoveClicked = ({filterIndex}) => {
-    const searchParams = Params.parse()[this.querySearchName()] || {}
+    const {querySName} = digs(this.props, "querySName")
+    const searchParams = Params.parse()[querySName] || {}
 
     delete searchParams[filterIndex]
 
     const newParams = {}
 
-    newParams[this.querySearchName()] = searchParams
+    newParams[querySName] = searchParams
 
     Params.changeParams(newParams)
 
@@ -134,7 +136,6 @@ class ApiMakerTableFilters extends React.PureComponent {
   }
 
   onFilterClicked = (args) => this.shape.set({filter: args})
-  querySearchName = () => `${this.props.queryName}_s`
 }
 
 export default withQueryParams(ApiMakerTableFilters)

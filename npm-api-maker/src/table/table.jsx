@@ -96,6 +96,7 @@ class ApiMakerTable extends React.PureComponent {
       queryName,
       queryQName: `${queryName}_q`,
       queryPageName: `${queryName}_page`,
+      querySName: `${queryName}_s`,
       qParams: undefined,
       result: undefined,
       showFilters: false,
@@ -143,6 +144,7 @@ class ApiMakerTable extends React.PureComponent {
       qParams,
       query,
       queryName,
+      querySName,
       result,
       models,
       showFilters,
@@ -155,6 +157,7 @@ class ApiMakerTable extends React.PureComponent {
       "qParams",
       "query",
       "queryName",
+      "querySName",
       "result",
       "models",
       "showFilters",
@@ -189,7 +192,7 @@ class ApiMakerTable extends React.PureComponent {
           </div>
         }
         {showFilters &&
-          <Filters modelClass={modelClass} queryName={queryName} />
+          <Filters modelClass={modelClass} queryName={queryName} querySName={querySName} />
         }
         {qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
           this.cardOrTable()
