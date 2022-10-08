@@ -51,6 +51,7 @@ class CollectionLoader extends React.PureComponent {
       overallCount: undefined,
       query: undefined,
       queryName,
+      queryPerKey: `${queryName}_per`,
       queryQName: `${queryName}_q`,
       querySName: `${queryName}_s`,
       queryPageName: `${queryName}_page`,
@@ -72,13 +73,15 @@ class CollectionLoader extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const {queryPageName, queryQName} = digs(this.shape, "queryPageName", "queryQName")
+    const {queryPageName, queryPerKey, queryQName} = digs(this.shape, "queryPageName", "queryPerKey", "queryQName")
     let changed = false
 
     // Only load models again if certain things in the URL changes
     if (prevProps.queryParams[queryQName] != this.props.queryParams[queryQName]) {
       changed = true
     } else if (prevProps.queryParams[queryPageName] != this.props.queryParams[queryPageName]) {
+      changed = true
+    } else if (prevProps.queryParams[queryPerKey] != this.props.queryParams[queryPerKey]) {
       changed = true
     }
 
@@ -139,21 +142,20 @@ class CollectionLoader extends React.PureComponent {
     const {abilities, collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
     const {
       qParams,
-      queryName,
       queryPageName,
+      queryPerKey,
       queryQName,
       searchParams
     } = digs(
       this.shape,
       "qParams",
-      "queryName",
       "queryPageName",
+      "queryPerKey",
       "queryQName",
       "searchParams"
     )
     const page = queryParams[queryPageName] || 1
-    const perKey = `${queryName}_per`
-    let per = queryParams[perKey] || 30
+    let per = queryParams[queryPerKey] || 30
 
     if (per == "all") {
       per = 999_999_999
@@ -172,7 +174,7 @@ class CollectionLoader extends React.PureComponent {
       .page(page)
       .pageKey(queryPageName)
       .per(per)
-      .perKey(perKey)
+      .perKey(queryPerKey)
       .preload(preloads)
       .select(select)
 
