@@ -153,7 +153,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
                 />
               )}
               {currentModelClass.ransackableScopes().map((scope) =>
-                <div>
+                <div key={scope.name()}>
                   {scope.name()}
                 </div>
               )}
