@@ -546,10 +546,10 @@ class ApiMakerTable extends React.PureComponent {
     const filterForm = digg(filterFormRef, "current")
     const {appHistory} = this.props
     const qParams = Params.serializeForm(filterForm)
-    const {queryQName} = this.shape
+    const {queryQName} = digs(this.shape, "queryQName")
     const changeParamsParams = {}
 
-    changeParamsParams[queryQName] = qParams
+    changeParamsParams[queryQName] = JSON.stringify(qParams)
 
     Params.changeParams(changeParamsParams, {appHistory})
   }

@@ -26,12 +26,13 @@ class ApiMakerBootstrapSortLink extends PureComponent {
   }
 
   href () {
+    const qParams = this.qParams()
     const {queryParams} = digs(this.props, "queryParams")
     const {searchKey} = digs(this, "searchKey")
 
-    if (!queryParams[searchKey]) queryParams[searchKey] = {}
+    qParams.s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
 
-    queryParams[searchKey].s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
+    queryParams[searchKey] = JSON.stringify(qParams)
 
     const newParams = qs.stringify(queryParams)
     const newPath = `${location.pathname}?${newParams}`
@@ -40,9 +41,7 @@ class ApiMakerBootstrapSortLink extends PureComponent {
   }
 
   isSortedByAttribute () {
-    const {queryParams} = digs(this.props, "queryParams")
-    const {searchKey} = digs(this, "searchKey")
-    const params = queryParams[searchKey] || {}
+    const params = this.qParams()
 
     if (params.s == this.attribute()) return true
     if (params.s == `${this.attribute()} asc`) return true
@@ -81,6 +80,15 @@ class ApiMakerBootstrapSortLink extends PureComponent {
     if (this.props.linkComponent) return this.props.linkComponent
 
     return Link
+  }
+
+  qParams() {
+    const {queryParams} = digs(this.props, "queryParams")
+    const {searchKey} = digs(this, "searchKey")
+
+    if (searchKey in queryParams) return JSON.parse(queryParams[searchKey])
+
+    return {}
   }
 
   sortMode () {
