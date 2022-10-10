@@ -390,7 +390,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     const {queryQName} = this.shape
 
     const changeParamsParams = {}
-    changeParamsParams[queryQName] = qParams
+    changeParamsParams[queryQName] = JSON.stringify(qParams)
 
     Params.changeParams(changeParamsParams, {appHistory})
   }
