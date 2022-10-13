@@ -59,7 +59,7 @@ private
       result
     rescue ActiveRecord::StatementInvalid
       # This happens if the table or column doesn't exist - like if we are running during a migration
-      []
+      {}
     end
   end
 
