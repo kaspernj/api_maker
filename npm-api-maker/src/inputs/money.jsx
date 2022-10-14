@@ -165,7 +165,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     let cents = parseInt(whole * 100, 10)
     let oldCents = parseInt(inputElement.value, 10)
 
-    if (cents) {
+    if (typeof cents == "number") {
       inputElement.value = cents
     } else {
       inputElement.value = ''
