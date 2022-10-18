@@ -16,7 +16,7 @@
     "@babel/preset-env": "^7.19.3",
     "@babel/preset-react": "^7.18.6",
     "@babel/runtime": "7",
-    "@kaspernj/api-maker": "1.0.238",
+    "@kaspernj/api-maker": "1.0.240",
     "babel-loader": "8",
     "babel-plugin-macros": "^3.1.0",
     "classnames": "^2.3.2",
