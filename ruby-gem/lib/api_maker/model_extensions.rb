@@ -60,10 +60,11 @@ module ApiMaker::ModelExtensions
       @api_maker_resource ||= ApiMaker::MemoryStorage.current.resource_for_model(self)
     end
 
-    def translated_collection(collection_name, &blk)
+    def translated_collection(collection_name, helper_methods: true, &blk)
       ApiMaker::TranslatedCollections.add(
         blk: blk,
         collection_name: collection_name,
+        helper_methods: helper_methods,
         model_class: self
       )
     end
