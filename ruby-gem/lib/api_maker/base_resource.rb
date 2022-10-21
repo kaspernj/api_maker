@@ -10,6 +10,24 @@ class ApiMaker::BaseResource
   READ = [:create_events, :destroy_events, :read, :update_events].freeze
   WRITE = [:create, :update, :destroy].freeze
 
+  def self.attachment_attribute(attribute_name)
+    attributes(
+      "#{attribute_name}_content_type".to_sym,
+      "#{attribute_name}_url".to_sym,
+      selected_by_default: false
+    )
+
+    define_method("#{attribute_name}_content_type") do
+      model.__send__(attribute_name).content_type
+    end
+
+    define_method("#{attribute_name}_url") do
+      if model.__send__(attribute_name).attached?
+        Rails.application.routes.url_helpers.rails_blob_path(model.__send__(attribute_name).attachment, only_path: true)
+      end
+    end
+  end
+
   def self.attribute(attribute_name, **args)
     # Automatically add a columns argument if the attribute name matches a column name on the models table
     args[:requires_columns] = [attribute_name] if !args.key?(:requires_columns) && column_exists_on_model?(model_class, attribute_name)
