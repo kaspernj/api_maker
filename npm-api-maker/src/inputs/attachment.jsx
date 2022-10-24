@@ -21,7 +21,7 @@ export default class ApiMakerInputsAttachment extends BaseComponent {
         }
         {this.getUrl() &&
           <div className="input-checkbox" style={{paddingTop: "15px", paddingBottom: "15px"}}>
-            <Checkbox inputProps={{id: this.getPurgeInputId(), name: this.getPurgeInputName(), value: 1}} {...restProps} />
+            <Checkbox inputProps={{id: this.getPurgeInputId(), name: this.getPurgeInputName(), value: 1}} />
             <label className="checkbox-label" htmlFor={this.getPurgeInputId()}>
               {I18n.t("js.shared.delete")}
             </label>
