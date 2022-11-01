@@ -75,6 +75,7 @@ module.exports = {
     "jest/no-if": "error",
     "jest/no-large-snapshots": "error",
     "jest/no-restricted-matchers": "error",
+    "jest/no-restricted-jest-methods": "error",
     "jest/no-test-return-statement": "error",
     "jest/prefer-comparison-matcher": "error",
     "jest/prefer-each": "error",
