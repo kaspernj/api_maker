@@ -196,7 +196,16 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
     let currentModelClass = modelClass
 
     for (const pathPart of path) {
-      currentModelClass = currentModelClass.ransackableAssociations().find((reflection) => reflection.name() == pathPart).modelClass()
+      const camelizedPathPart = inflection.camelize(pathPart, true)
+      const association = currentModelClass.ransackableAssociations().find((reflection) => reflection.name() == camelizedPathPart)
+
+      if (!association) {
+        const ransackableAssociationNames = currentModelClass.ransackableAssociations().map((reflection) => reflection.name()).join(", ")
+
+        throw new Error(`Could not find a Ransackable association by that name: ${camelizedPathPart} in ${ransackableAssociationNames}`)
+      }
+
+      currentModelClass = association.modelClass()
     }
 
     return currentModelClass
@@ -214,9 +223,10 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
     })
 
     for (const pathPart of path) {
-      const pathPartTranslation = currentModelClass.humanAttributeName(pathPart)
+      const camelizedPathPart = inflection.camelize(pathPart, true)
+      const pathPartTranslation = currentModelClass.humanAttributeName(camelizedPathPart)
 
-      currentModelClass = currentModelClass.ransackableAssociations().find((reflection) => reflection.name() == pathPart).modelClass()
+      currentModelClass = currentModelClass.ransackableAssociations().find((reflection) => reflection.name() == camelizedPathPart).modelClass()
 
       result.push({
         modelClass: currentModelClass,
@@ -239,7 +249,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
   }
 
   onReflectionClicked = ({reflection}) => {
-    const newPath = this.shape.path.concat([reflection.name()])
+    const newPath = this.shape.path.concat([inflection.underscore(reflection.name())])
 
     this.shape.set({
       attribute: undefined,

@@ -16,7 +16,7 @@ export default class ApiMakerBaseModelReflection {
   }
 
   modelClass() {
-    const modelClass = modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "name"))))
+    const modelClass = modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "resource_name"))))
 
     return modelClass
   }
