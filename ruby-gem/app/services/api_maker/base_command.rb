@@ -56,6 +56,8 @@ class ApiMaker::BaseCommand
       end
 
       if threadded
+        Rails.logger.debug { "API maker: Running #{const_get(:CollectionInstance).name}" }
+
         # Goldiloader doesn't work with threads (loads all relationships for each thread)
         collection = collection.auto_include(false) if ApiMaker::BaseCommand.goldiloader?
 
@@ -82,6 +84,8 @@ class ApiMaker::BaseCommand
   def self.each_command(collection:, command_response:, commands:, controller:, threadded:, &blk)
     commands.each do |command_id, command_data|
       if threadded
+        Rails.logger.debug { "API maker: Running #{name} threadded" }
+
         command_response.with_thread do
           run_command(
             command_id: command_id,
@@ -93,6 +97,8 @@ class ApiMaker::BaseCommand
           )
         end
       else
+        Rails.logger.debug { "API maker: Running #{name} non-threadded" }
+
         run_command(
           command_id: command_id,
           command_data: command_data,
