@@ -3,7 +3,7 @@ import SourceMapsLoader from "./source-maps-loader.mjs"
 
 export default class ErrorLogger {
   constructor () {
-    this.debug = true
+    this.debugging = true
     this.errorOccurred = false
     this.errors = []
     this.isHandlingError = false
