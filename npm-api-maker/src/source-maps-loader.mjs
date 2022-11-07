@@ -11,10 +11,14 @@ if (SourceMapConsumer.initialize) {
 
 export default class SourceMapsLoader {
   constructor () {
-    this.debug = false
+    this.debugging = false
     this.isLoadingSourceMaps = false
     this.sourceMaps = []
     this.srcLoaded = {}
+  }
+
+  debug(messageCallback) {
+    if (this.debugging) console.log(`API maker / Source maps loader:`, messageCallback.call())
   }
 
   loadSourceMapsForScriptTags (callback) {
@@ -25,15 +29,9 @@ export default class SourceMapsLoader {
     this.sourceMapForSourceCallback = callback
   }
 
-  getSources(error) {
-    let sources = this.getSourcesFromScripts()
-
-    if (error) sources = sources.concat(this.getSourcesFromError(error))
-
-    return uniqunize(sources, (source) => source.originalUrl)
-  }
-
   async loadSourceMaps (error) {
+    if (!error) throw new Error("No error was given to SourceMapsLoader#loadSourceMaps")
+
     this.isLoadingSourceMaps = true
 
     try {
@@ -55,6 +53,14 @@ export default class SourceMapsLoader {
     }
   }
 
+  getSources(error) {
+    let sources = this.getSourcesFromScripts()
+
+    if (error) sources = sources.concat(this.getSourcesFromError(error))
+
+    return uniqunize(sources, (source) => source.originalUrl)
+  }
+
   getSourcesFromError(error) {
     const stack = stackTraceParser.parse(error.stack)
     const sources = []
@@ -65,7 +71,13 @@ export default class SourceMapsLoader {
       if (file != "\u003Canonymous>") {
         const sourceMapUrl = this.getMapURL({src: file})
 
-        if (sourceMapUrl) sources.push({originalUrl: file, sourceMapUrl})
+        if (sourceMapUrl) {
+          this.debug(() => `Found source map from error: ${sourceMapUrl}`)
+
+          sources.push({originalUrl: file, sourceMapUrl})
+        } else {
+          this.debug(() => `Coudn't get source map from: ${file}`)
+        }
       }
     }
 
@@ -79,7 +91,10 @@ export default class SourceMapsLoader {
     for (const script of scripts) {
       const sourceMapUrl = this.getMapURL({script, src: script.src})
 
-      if (sourceMapUrl) sources.push({originalUrl: script.src, sourceMapUrl})
+      if (sourceMapUrl) {
+        this.debug(() => `Found source map from script: ${sourceMapUrl}`)
+        sources.push({originalUrl: script.src, sourceMapUrl})
+      }
     }
 
     return sources
