@@ -1,7 +1,7 @@
 const shared = {}
 
 export default class ApiMakerLogger {
-  static current () {
+  static current() {
     if (!shared.apiMakerLogger) {
       shared.apiMakerLogger = new ApiMakerLogger()
       // shared.apiMakerLogger.setDebug(true)
@@ -10,16 +10,20 @@ export default class ApiMakerLogger {
     return shared.apiMakerLogger
   }
 
-  static log (message) {
+  static log(message) {
     ApiMakerLogger.current().log(message)
   }
 
-  log (message) {
+  log(message) {
     if (this.debug)
       console.log("ApiMaker", message)
   }
 
-  setDebug (value) {
+  getDebug() {
+    return this.debug
+  }
+
+  setDebug(value) {
     this.debug = value
   }
 }

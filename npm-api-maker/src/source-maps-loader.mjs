@@ -1,4 +1,5 @@
 import * as stackTraceParser from "stacktrace-parser"
+import Logger from "./logger.mjs"
 import {SourceMapConsumer} from "source-map"
 import uniqunize from "uniqunize"
 
@@ -11,14 +12,13 @@ if (SourceMapConsumer.initialize) {
 
 export default class SourceMapsLoader {
   constructor () {
-    this.debugging = false
     this.isLoadingSourceMaps = false
     this.sourceMaps = []
     this.srcLoaded = {}
   }
 
   debug(messageCallback) {
-    if (this.debugging) console.log(`API maker / Source maps loader:`, messageCallback.call())
+    if (Logger.current().getDebug()) Logger.log(`API maker / SourceMapsLoader: ${messageCallback.call()}`)
   }
 
   loadSourceMapsForScriptTags (callback) {

@@ -1,5 +1,6 @@
 import Devise from "./devise.mjs"
 import inflection from "inflection"
+import Logger from "./logger.mjs"
 import wakeEvent from "wake-event"
 
 export default class ApiMakerSessionStatusUpdater {
@@ -11,7 +12,6 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   constructor (args = {}) {
-    this.debugging = args.debug || false
     this.events = {}
     this.timeout = args.timeout || 600000
 
@@ -28,8 +28,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   debug (message) {
-    if (this.debugging)
-      console.log(`ApiMakerSessionStatusUpdater: ${message}`)
+    Logger.log(`API maker / SessionStatusUpdater: ${message}`)
   }
 
   async sessionStatus () {
