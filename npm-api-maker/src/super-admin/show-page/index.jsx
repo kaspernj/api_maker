@@ -3,10 +3,10 @@ import BelongsToAttributeRow from "./belongs-to-attribute-row"
 import ConfigReader from "../config-reader"
 import {digg, digs} from "diggerize"
 import inflection from "inflection"
-import modelLoadWrapper from "../../model-load-wrapper"
 import PropTypes from "prop-types"
 import React from "react"
 import ShowNav from "../show-nav"
+import withModel from "../../with-model"
 
 class ApiMakerSuperAdminShowPage extends React.PureComponent {
   static propTypes = {
@@ -58,7 +58,7 @@ const modelClassResolver = {callback: ({queryParams}) => {
   return modelClass
 }}
 
-export default modelLoadWrapper(
+export default withModel(
   ApiMakerSuperAdminShowPage,
   modelClassResolver,
   ({modelClass}) => {

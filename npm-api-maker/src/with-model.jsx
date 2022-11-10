@@ -6,7 +6,7 @@ import React from "react"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
 export default (WrappedComponent, modelClassArg, argsArg = {}) => {
-  class ModelLoadWrapper extends React.PureComponent {
+  class ApiMakerWithModel extends React.PureComponent {
     static propTypes = {
       queryParams: PropTypes.object
     }
@@ -135,5 +135,5 @@ export default (WrappedComponent, modelClassArg, argsArg = {}) => {
     onUpdated = this.loadExistingModel
   }
 
-  return withQueryParams(ModelLoadWrapper)
+  return withQueryParams(ApiMakerWithModel)
 }

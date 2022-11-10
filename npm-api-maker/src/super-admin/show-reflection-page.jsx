@@ -1,9 +1,9 @@
 import {digg, digs} from "diggerize"
-import modelLoadWrapper from "../model-load-wrapper"
 import PropTypes from "prop-types"
 import React from "react"
 import ModelClassTable from "./model-class-table"
 import ShowNav from "./show-nav"
+import withModel from "../with-model"
 
 class ApiMakerSuperAdminShowReflectionPage extends React.PureComponent {
   static propTypes = {
@@ -55,7 +55,7 @@ const modelClassResolver = {callback: ({queryParams}) => {
   return modelClass
 }}
 
-export default modelLoadWrapper(
+export default withModel(
   ApiMakerSuperAdminShowReflectionPage,
   modelClassResolver,
   {
