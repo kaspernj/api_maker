@@ -206,17 +206,9 @@ class ApiMakerTable extends React.PureComponent {
     const {abilities, modelClass} = this.props
     const ownAbilities = []
 
-    if (this.props.destroyEnabled) {
-      ownAbilities.push("destroy")
-    }
-
-    if (this.props.editModelPath) {
-      ownAbilities.push("edit")
-    }
-
-    if (this.props.viewModelPath) {
-      ownAbilities.push("show")
-    }
+    if (this.props.destroyEnabled) ownAbilities.push("destroy")
+    if (this.props.editModelPath) ownAbilities.push("edit")
+    if (this.props.viewModelPath) ownAbilities.push("show")
 
     if (ownAbilities.length > 0) {
       const modelClassName = digg(modelClass.modelClassData(), "name")

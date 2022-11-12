@@ -20,13 +20,21 @@ private
   end
 
   def render_error(error)
-    puts error.inspect
-    puts Rails.backtrace_cleaner.clean(error.backtrace)
+    if error.is_a?(ActionController::InvalidAuthenticityToken)
+      render json: {
+        message: error.message,
+        success: false,
+        type: :invalid_authenticity_token
+      }
+    else
+      puts error.inspect
+      puts Rails.backtrace_cleaner.clean(error.backtrace)
 
-    logger.error error.inspect
-    logger.error Rails.backtrace_cleaner.clean(error.backtrace).join("\n")
+      logger.error error.inspect
+      logger.error Rails.backtrace_cleaner.clean(error.backtrace).join("\n")
 
-    raise error
+      raise error
+    end
   end
 
   def set_locale

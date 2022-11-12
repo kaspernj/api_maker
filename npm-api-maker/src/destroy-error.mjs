@@ -1,6 +1,6 @@
-import BaseError from "./base-error.mjs"
+import CustomError from "./custom-error.mjs"
 
-class DestroyError extends BaseError {}
+class DestroyError extends CustomError {}
 
 DestroyError.apiMakerType = "DestroyError"
 
