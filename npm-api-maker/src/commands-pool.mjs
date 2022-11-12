@@ -6,6 +6,7 @@ import Deserializer from "./deserializer.mjs"
 import {dig, digg} from "diggerize"
 import FormDataObjectizer from "form-data-objectizer"
 import Serializer from "./serializer.mjs"
+import SessionStatusUpdater from "./session-status-updater.mjs"
 import ValidationError from "./validation-error.mjs"
 import {ValidationErrors} from "./validation-errors.mjs"
 
@@ -89,6 +90,27 @@ export default class ApiMakerCommandsPool {
     return Object.keys(this.pool)
   }
 
+  async sendRequest ({commandSubmitData, url}) {
+    let response
+
+    for (let i = 0; i < 3; i++) {
+      if (commandSubmitData.getFilesCount() > 0) {
+        response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()})
+      } else {
+        response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()})
+      }
+
+      if (response.success === false && response.type == "invalid_authenticity_token") {
+        console.error("invalid_authenticity_token - try again")
+        await SessionStatusUpdater.current().updateSessionStatus()
+        continue;
+      }
+
+      console.error(`Request succeeded after ${i} tries`)
+      return response
+    }
+  }
+
   async flush () {
     if (this.commandsCount() == 0) {
       return
@@ -111,14 +133,7 @@ export default class ApiMakerCommandsPool {
 
       const commandSubmitData = new CommandSubmitData(submitData)
       const url = "/api_maker/commands"
-
-      let response
-
-      if (commandSubmitData.getFilesCount() > 0) {
-        response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()})
-      } else {
-        response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()})
-      }
+      const response = await this.sendRequest({commandSubmitData, url})
 
       for (const commandId in response.responses) {
         const commandResponse = response.responses[commandId]
