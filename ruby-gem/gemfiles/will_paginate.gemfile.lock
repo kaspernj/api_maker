@@ -398,7 +398,7 @@ DEPENDENCIES
   rubocop-rspec
   selenium-webdriver (>= 4.1.0)
   sexp_processor (>= 4.16.0)
-  shakapacker (= 6.5.2)
+  shakapacker
   sqlite3
   tzinfo-data
   webdrivers
