@@ -1,5 +1,5 @@
 import {Input as ApiMakerInput} from "@kaspernj/api-maker/src/inputs/input"
-import {Checkbox} from "components/inputs/checkbox"
+import {Checkbox} from "./checkbox"
 
 export default class ApiMakerInputsAttachment extends BaseComponent {
   static propTypes = {
@@ -8,7 +8,8 @@ export default class ApiMakerInputsAttachment extends BaseComponent {
   }
 
   render() {
-    const {className, inputProps, model, wrapperOpts, ...restProps} = this.props
+    const {checkboxComponent, className, inputProps, model, wrapperOpts, ...restProps} = this.props
+    const CheckboxComponent = checkboxComponent || Checkbox
 
     inputProps.type = "file"
 
@@ -21,7 +22,7 @@ export default class ApiMakerInputsAttachment extends BaseComponent {
         }
         {this.getUrl() &&
           <div className="input-checkbox" style={{paddingTop: "15px", paddingBottom: "15px"}}>
-            <Checkbox inputProps={{id: this.getPurgeInputId(), name: this.getPurgeInputName(), value: 1}} />
+            <CheckboxComponent inputProps={{id: this.getPurgeInputId(), name: this.getPurgeInputName()}} />
             <label className="checkbox-label" htmlFor={this.getPurgeInputId()}>
               {I18n.t("js.shared.delete")}
             </label>
