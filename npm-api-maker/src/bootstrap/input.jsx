@@ -71,16 +71,10 @@ class ApiMakerBootstrapInput extends React.PureComponent {
         }
         {type == "money" &&
           <Money
-            attribute={attribute}
-            currenciesCollection={currenciesCollection}
-            currencyName={currencyName}
-            model={model}
             name={inputProps.name}
             className={this.inputClassName()}
-            onChange={this.props.onChange}
-            placeholder={this.props.placeholder}
-            small={this.props.small}
             ref="money"
+            {...this.moneyProps()}
           />
         }
         {type != "money" &&
@@ -145,6 +139,17 @@ class ApiMakerBootstrapInput extends React.PureComponent {
       classNames.push(this.props.labelClassName)
 
     return classNames.join(" ")
+  }
+
+  moneyProps() {
+    const moneyProps = {}
+    const forwardedProps = ["attribute", "currenciesCollection", "currencyName", "model", "onChange", "placeholder", "small"]
+
+    for (const forwardedProp of forwardedProps) {
+      if (forwardedProp in this.props) moneyProps[forwardedProp] = this.props[forwardedProp]
+    }
+
+    return moneyProps
   }
 
   wrapperClassName () {
