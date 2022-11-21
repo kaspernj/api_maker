@@ -81,7 +81,9 @@ export default class ApiMakerRoutesNative {
     let options
 
     // Extract options from args if any
-    if (typeof args[args.length - 1] == "object") {
+    const lastArg = args[args.length - 1]
+
+    if (lastArg && typeof lastArg == "object") {
       options = args.pop()
     } else {
       options = {}
