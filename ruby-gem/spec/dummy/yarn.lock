@@ -1130,10 +1130,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kaspernj/api-maker@1.0.249":
-  version "1.0.249"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.249.tgz#3ddeb05935ef7c103a3dce9a1e9b3f0e6055120a"
-  integrity sha512-BhhfNp6XufA1WV2PPXxkulLVXx9NlW+4IyZzzjGZHO2mlpJAr0kJC8FfNBRpN4bwR9/HOTDTwaZ1dhUXoKCC7g==
+"@kaspernj/api-maker@1.0.251":
+  version "1.0.251"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.251.tgz#6e24c93717d2e9ef3a531fab36bb8cf47891f053"
+  integrity sha512-27GYLWlGso8n8NiYq7LvHHj60WwaH7ZEA7HCTX8jZCK3EV6fG/XyGOHcrrFL84mSgZr8ZejwXfkV/hlaatMYDg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -3096,10 +3096,10 @@ mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-mini-css-extract-plugin@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-2.6.1.tgz#9a1251d15f2035c342d99a468ab9da7a0451b71e"
-  integrity sha512-wd+SD57/K6DiV7jIR34P+s3uckTRuQvx0tKPcvjFlrEylk6P4mQ2KSWk1hblj1Kxaqok7LogKOieygXqBczNlg==
+mini-css-extract-plugin@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-2.7.0.tgz#d7d9ba0c5b596d155e36e2b174082fc7f010dd64"
+  integrity sha512-auqtVo8KhTScMsba7MbijqZTfibbXiBNlPAQbsVt7enQfcDYLdgG57eGxMqwVU3mfeWANY4F1wUg+rMF+ycZgw==
   dependencies:
     schema-utils "^4.0.0"
 
