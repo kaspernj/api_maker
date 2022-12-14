@@ -2,7 +2,7 @@ import ChannelsConsumer from "./channels-consumer.mjs"
 import CommandsPool from "./commands-pool.mjs"
 import Deserializer from "./deserializer.mjs"
 import {digg} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import Logger from "./logger.mjs"
 
 export default class ApiMakerCableSubscriptionPool {

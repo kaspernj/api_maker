@@ -1,5 +1,5 @@
 import {dig, digg, digs} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import qs from "qs"
 
 export default class ApiMakerRoutesNative {

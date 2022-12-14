@@ -1,6 +1,6 @@
 import {digg} from "diggerize"
 import EventEmitter from "events"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import {ReadersWriterLock} from "epic-locks"
 import Services from "./services.mjs"
 

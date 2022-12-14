@@ -1,7 +1,7 @@
 import classNames from "classnames"
 import {digs} from "diggerize"
 import inputWrapper from "./input-wrapper"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import InvalidFeedback from "../bootstrap/invalid-feedback"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"

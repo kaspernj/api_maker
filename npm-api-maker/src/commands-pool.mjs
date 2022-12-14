@@ -109,7 +109,7 @@ export default class ApiMakerCommandsPool {
       return response
     }
 
-    throw new Error("Could successfully execute request")
+    throw new Error("Couldnt successfully execute request")
   }
 
   async flush () {

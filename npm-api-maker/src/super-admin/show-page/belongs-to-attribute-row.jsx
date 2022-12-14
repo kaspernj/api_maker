@@ -1,6 +1,6 @@
 import AttributeRow from "../../bootstrap/attribute-row"
 import {digs} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import Link from "../../link"
 import Params from "../../params"
 import React from "react"

@@ -1,5 +1,5 @@
 import Devise from "./devise.mjs"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import Logger from "./logger.mjs"
 import wakeEvent from "wake-event"
 

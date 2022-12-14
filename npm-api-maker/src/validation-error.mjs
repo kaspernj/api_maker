@@ -1,5 +1,5 @@
 import BaseError from "./base-error.mjs"
-import inflection from "inflection"
+import * as inflection from "inflection"
 
 class ValidationError extends BaseError {
   constructor (validationErrors, args) {

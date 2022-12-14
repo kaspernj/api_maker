@@ -1,5 +1,5 @@
 import {digg} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 
 export default class ApiMakerInputsAutoSubmit {
   constructor ({component}) {
