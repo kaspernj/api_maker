@@ -1,6 +1,6 @@
 import Attribute from "../../base-model/attribute"
 import {digg, digs} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import Input from "../../inputs/input"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"

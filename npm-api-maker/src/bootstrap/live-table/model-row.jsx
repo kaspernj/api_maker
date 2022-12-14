@@ -1,5 +1,5 @@
 import {digg, digs} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import MoneyFormatter from "../../money-formatter"
 import PropTypes from "prop-types"
 

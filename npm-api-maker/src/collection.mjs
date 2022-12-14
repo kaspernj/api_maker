@@ -1,7 +1,7 @@
 import cloneDeep from "clone-deep"
 import CommandsPool from "./commands-pool.mjs"
 import {digg} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import {incorporate} from "incorporator"
 import modelClassRequire from "./model-class-require.mjs"
 import Result from "./result.mjs"

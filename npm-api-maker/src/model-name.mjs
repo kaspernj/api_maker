@@ -1,5 +1,5 @@
 import Config from "./config.mjs"
-import inflection from "inflection"
+import * as inflection from "inflection"
 
 export default class ModelName {
   constructor(data) {

@@ -1,4 +1,4 @@
-import inflection from "inflection"
+import * as inflection from "inflection"
 import modelClassRequire from "./model-class-require.mjs"
 import Preloaded from "./preloaded.mjs"
 

@@ -1,6 +1,6 @@
 import config from "./config.mjs"
 import escapeStringRegexp from "escape-string-regexp"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import React from "react"
 import shouldComponentUpdate from "set-state-compare/src/should-component-update"

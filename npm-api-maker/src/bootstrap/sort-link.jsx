@@ -1,5 +1,5 @@
 import {digg, digs} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import qs from "qs"
 import React from "react"

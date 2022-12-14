@@ -1,5 +1,5 @@
 import {digg, digs} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import modelClassRequire from "./model-class-require.mjs"
 
 class ValidationError {

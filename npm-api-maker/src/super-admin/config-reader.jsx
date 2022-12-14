@@ -1,5 +1,5 @@
 import {digg, digs} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 
 export default class ApiMakerSuperAdminConfigReader {
   static forModel(modelClass) {

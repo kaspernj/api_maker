@@ -1,4 +1,4 @@
-import inflection from "inflection"
+import * as inflection from "inflection"
 
 export default function apiMakerNameForComponent (component) {
   if ("name" in component.props) {

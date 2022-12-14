@@ -2,7 +2,7 @@ import CanCan from "./can-can.mjs"
 import Deserializer from "./deserializer.mjs"
 import {digg} from "diggerize"
 import EventEmitter from "events"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import modelClassRequire from "./model-class-require.mjs"
 import Services from "./services.mjs"
 

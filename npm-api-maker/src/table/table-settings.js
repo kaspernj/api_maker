@@ -1,7 +1,7 @@
 import columnIdentifier from "./column-identifier.mjs"
 import columnVisible from "./column-visible.mjs"
 import {digg} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import {serialize as objectToFormData} from "object-to-formdata"
 import {TableSetting} from "../models.mjs.erb"
 import {v4 as uuidv4} from "uuid"
