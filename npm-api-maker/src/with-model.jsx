@@ -126,6 +126,9 @@ export default (WrappedComponent, modelClassArg, argsArg = {}) => {
           {model && this.args.eventUpdated &&
             <EventUpdated model={model} onUpdated={onUpdated} />
           }
+          {model && this.args.onDestroyed &&
+            <EventDestroyed model={model} onDestroyed={this.args.onDestroyed} />
+          }
           <WrappedComponent {...wrappedComponentProps} {...this.props} />
         </>
       )
