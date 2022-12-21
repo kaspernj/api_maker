@@ -13,6 +13,7 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
   }
 
   static propTypes = {
+    cardRef: PropTypes.object,
     className: PropTypes.string,
     children: PropTypes.node,
     controls: PropTypes.node,
@@ -26,6 +27,8 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     table: PropTypes.bool.isRequired
   }
 
+  cardRef = React.createRef()
+
   constructor (props) {
     super(props)
     this.state = {
@@ -35,6 +38,7 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
 
   render () {
     const {
+      cardRef,
       children,
       className,
       controls,
@@ -50,11 +54,17 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     } = this.props
     const {expanded} = digs(this.state, "expanded")
     const cardHeaderStyle = {display: "flex"}
+    const cardRefToUse = cardRef || this.cardRef
 
     if (!expanded) cardHeaderStyle["borderBottom"] = "0"
 
     return (
-      <div className={classNames("component-bootstrap-card", "card", "card-default", className)} data-has-footer={Boolean(footer)} ref="card" {...restProps}>
+      <div
+        className={classNames("component-bootstrap-card", "card", "card-default", className)}
+        data-has-footer={Boolean(footer)}
+        ref={cardRefToUse}
+        {...restProps}
+      >
         {(controls || expandable || header) &&
           <div className="card-header" style={cardHeaderStyle}>
             <div className="card-header-label" style={{alignSelf: "center", marginRight: "auto"}}>

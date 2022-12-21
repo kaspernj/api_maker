@@ -4,11 +4,17 @@ import {Checkbox} from "./checkbox"
 export default class ApiMakerInputsAttachment extends BaseComponent {
   static propTypes = {
     className: PropTypes.string,
-    model: PropTypes.object.isRequired
+    model: PropTypes.object.isRequired,
+    onPurgeChanged: PropTypes.func,
+    purgeName: PropTypes.string
+  }
+
+  state = {
+    purgeChecked: false
   }
 
   render() {
-    const {checkboxComponent, className, inputProps, model, wrapperOpts, ...restProps} = this.props
+    const {attribute, checkboxComponent, className, inputProps, label, model, name, onPurgeChanged, purgeName, wrapperOpts, ...restProps} = this.props
     const CheckboxComponent = checkboxComponent || Checkbox
 
     inputProps.type = "file"
@@ -22,17 +28,19 @@ export default class ApiMakerInputsAttachment extends BaseComponent {
         }
         {this.getUrl() &&
           <div className="input-checkbox" style={{paddingTop: "15px", paddingBottom: "15px"}}>
-            <CheckboxComponent inputProps={{id: this.getPurgeInputId(), name: this.getPurgeInputName()}} />
+            <CheckboxComponent inputProps={{id: this.getPurgeInputId(), name: this.getPurgeInputName()}} onChange={this.props.onPurgeChanged} />
             <label className="checkbox-label" htmlFor={this.getPurgeInputId()}>
               {I18n.t("js.shared.delete")}
             </label>
           </div>
         }
-        <ApiMakerInput
-          defaultValue={null}
-          inputProps={inputProps}
-          model={model}
-        />
+        {!this.state.purgeChecked &&
+          <ApiMakerInput
+            defaultValue={null}
+            inputProps={inputProps}
+            model={model}
+          />
+        }
       </div>
     )
   }
@@ -53,7 +61,12 @@ export default class ApiMakerInputsAttachment extends BaseComponent {
   }
 
   getPurgeInputName() {
+    if ("purgeName" in this.props) return this.props.purgeName
+
     const {inputProps} = digs(this.props, "inputProps")
+
+    if (!inputProps.name) return null
+
     const match = inputProps.name.match(/^(.+)\[(.+?)\]$/)
     const purgeInputName = `${match[1]}[${match[2]}_purge]`
 
@@ -71,5 +84,11 @@ export default class ApiMakerInputsAttachment extends BaseComponent {
 
   isImage() {
     return this.getContentType()?.startsWith("image/")
+  }
+
+  onPurgeChanged = (e) => {
+    this.setState({purgeChecked: digg(e, "target", "checked")})
+
+    if (this.props.onPurgeChanged) this.props.onPurgeChanged(e)
   }
 }
