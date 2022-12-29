@@ -364,6 +364,7 @@ class ApiMakerTable extends React.PureComponent {
 
   tableControls() {
     const {controls} = this.props
+    const {models, qParams, query, result} = digs(this.shape, "models", "qParams", "query", "result")
 
     return (
       <>
