@@ -137,7 +137,7 @@ class ApiMakerTable extends React.PureComponent {
 
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, defaultParams, selectColumns} = this.props
+    const {collection, defaultParams, onModelsLoaded, selectColumns} = this.props
     const {
       overallCount,
       preload,
@@ -174,6 +174,7 @@ class ApiMakerTable extends React.PureComponent {
             collection={collection}
             component={this}
             modelClass={modelClass}
+            onModelsLoaded={onModelsLoaded}
             noRecordsAvailableContent={noRecordsAvailableContent}
             noRecordsFoundContent={noRecordsFoundContent}
             preloads={preload}
