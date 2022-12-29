@@ -329,8 +329,13 @@ class ApiMakerTable extends React.PureComponent {
     const {filterSubmitLabel} = this.props
     const {qParams} = digs(this.shape, "qParams")
 
+    console.log({qParams})
+
     return (
       <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref={filterFormRef}>
+        {"s" in qParams &&
+          <input name="s" type="hidden" value={qParams.s} />
+        }
         {filterContent({
           onFilterChanged: submitFilter,
           onFilterChangedWithDelay: submitFilterDebounce,
