@@ -9,18 +9,19 @@ import PropTypes from "prop-types"
 
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
   static propTypes = {
+    cacheKey: PropTypes.string.isRequired,
     model: PropTypes.object.isRequired,
     liveTable: PropTypes.object.isRequired,
     preparedColumns: PropTypes.array
   }
 
-  modelCallbackArgs = this._modelCallbackArgs()
-
   render() {
-    const {model} = digs(this.props, "model")
+    const {cacheKey, model} = digs(this.props, "cacheKey", "model")
     const {modelClass} = digs(this.props.liveTable.props, "modelClass")
     const {actionsContent, columnsContent, destroyEnabled, editModelPath, viewModelPath} = digg(this, "props", "liveTable", "props")
     const {columns} = digg(this, "props", "liveTable", "shape")
+
+    this.modelCallbackArgs = this._modelCallbackArgs() // 'model' can change so this needs to be re-cached for every render
 
     let editPath, viewPath
 

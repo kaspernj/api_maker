@@ -405,6 +405,7 @@ class ApiMakerTable extends React.PureComponent {
           {models.map((model) =>
             <ModelRow
               breakPoint={breakPoint}
+              cacheKey={model.cacheKey()}
               columnComponent={this.columnComponent()}
               key={model.id()}
               liveTable={this}

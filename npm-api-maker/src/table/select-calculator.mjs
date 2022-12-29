@@ -21,6 +21,13 @@ class SelectCalculator {
     if (!select[className].includes(primaryKeyColumnName)) select[className].push(primaryKeyColumnName)
 
 
+    // Ensure 'updatedAt' is selected if defined as an attribute, because it is used for cacheKey and updates in the table
+    if (modelClass.hasAttribute("updatedAt")) {
+      if (!(className in select)) select[className] = []
+      if (!select[className].includes("updatedAt")) select[className].push("updatedAt")
+    }
+
+
     // Ensure columns used for columns are loaded
     for (const preparedColumn of preparedColumns) {
       const {column} = digs(preparedColumn, "column")
