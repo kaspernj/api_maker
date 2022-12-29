@@ -137,7 +137,7 @@ class ApiMakerTable extends React.PureComponent {
 
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, defaultParams, selectColumns} = this.props
+    const {collection, defaultParams, onModelsLoaded, selectColumns} = this.props
     const {
       overallCount,
       preload,
@@ -174,6 +174,7 @@ class ApiMakerTable extends React.PureComponent {
             collection={collection}
             component={this}
             modelClass={modelClass}
+            onModelsLoaded={onModelsLoaded}
             noRecordsAvailableContent={noRecordsAvailableContent}
             noRecordsFoundContent={noRecordsFoundContent}
             preloads={preload}
@@ -364,6 +365,7 @@ class ApiMakerTable extends React.PureComponent {
 
   tableControls() {
     const {controls} = this.props
+    const {models, qParams, query, result} = digs(this.shape, "models", "qParams", "query", "result")
 
     return (
       <>
@@ -403,6 +405,7 @@ class ApiMakerTable extends React.PureComponent {
           {models.map((model) =>
             <ModelRow
               breakPoint={breakPoint}
+              cacheKey={model.cacheKey()}
               columnComponent={this.columnComponent()}
               key={model.id()}
               liveTable={this}

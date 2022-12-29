@@ -33,6 +33,15 @@ export default class BaseModel {
     return result
   }
 
+  static hasAttribute(attributeName) {
+    const attributes = digg(this.modelClassData(), "attributes")
+    const lowerCaseAttributeName = inflection.underscore(attributeName)
+
+    if (lowerCaseAttributeName in attributes) return true
+
+    return false
+  }
+
   static modelClassData() {
     throw new Error("modelClassData should be overriden by child")
   }
