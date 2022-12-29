@@ -16,7 +16,7 @@
     ]
   },
   "name": "@kaspernj/api-maker",
-  "version": "1.0.257",
+  "version": "1.0.258",
   "type": "module",
   "description": "",
   "main": "index.js",
