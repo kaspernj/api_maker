@@ -40,7 +40,7 @@
     "set-state-compare": "^1.0.18",
     "shakapacker": "6.5.6",
     "stacktrace-parser": "^0.1.10",
-    "stimulus": "^3.0.1",
+    "stimulus": "^3.2.1",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "5",
     "uuid": "^9.0.0",
