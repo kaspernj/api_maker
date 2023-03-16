@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.description = "A Rails gem for generating a JavaScript API automatically based on your ActiveRecord models."
   s.license     = "MIT"
   s.required_ruby_version = ">= 2.6.0"
+  s.metadata["rubygems_mfa_required"] = "true"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
@@ -57,5 +58,4 @@ Gem::Specification.new do |s|
   # Needed to make Ruby 3 work on CI
   s.add_development_dependency "minitest", ">= 5.15"
   s.add_development_dependency "sexp_processor", ">= 4.16.0"
-  s.metadata["rubygems_mfa_required"] = "true"
 end
