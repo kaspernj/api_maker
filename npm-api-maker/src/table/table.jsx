@@ -177,6 +177,7 @@ class ApiMakerTable extends React.PureComponent {
             onModelsLoaded={onModelsLoaded}
             noRecordsAvailableContent={noRecordsAvailableContent}
             noRecordsFoundContent={noRecordsFoundContent}
+            pagination
             preloads={preload}
             select={selectCalculator({table: this})}
             selectColumns={selectColumns}

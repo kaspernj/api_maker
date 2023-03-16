@@ -127,6 +127,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
           noRecordsAvailableContent={noRecordsAvailableContent}
           noRecordsFoundContent={noRecordsFoundContent}
           onModelsLoaded={onModelsLoaded}
+          pagination
           preloads={preloads}
           select={select}
           selectColumns={selectColumns}
