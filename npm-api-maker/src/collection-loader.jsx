@@ -14,6 +14,7 @@ class CollectionLoader extends React.PureComponent {
     groupBy: ["id"],
     noRecordsAvailableContent: undefined,
     noRecordsFoundContent: undefined,
+    pagination: false,
     preloads: [],
     select: {}
   }
@@ -30,6 +31,7 @@ class CollectionLoader extends React.PureComponent {
     noRecordsAvailableContent: PropTypes.func,
     noRecordsFoundContent: PropTypes.func,
     onModelsLoaded: PropTypes.func,
+    pagination: PropTypes.bool.isRequired,
     paginateContent: PropTypes.func,
     preloads: PropTypes.array.isRequired,
     queryName: PropTypes.string,
@@ -140,7 +142,7 @@ class CollectionLoader extends React.PureComponent {
   }
 
   loadModels = async () => {
-    const {queryParams} = digs(this.props, "queryParams")
+    const {pagination, queryParams} = digs(this.props, "pagination", "queryParams")
     const {abilities, collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
     const {
       qParams,
@@ -156,16 +158,21 @@ class CollectionLoader extends React.PureComponent {
       "queryQName",
       "searchParams"
     )
-    const page = queryParams[queryPageName] || 1
-    let per = queryParams[queryPerKey] || 30
-
-    if (per == "all") {
-      per = 999_999_999
-    } else {
-      per = Number(per)
-    }
 
     let query = collection?.clone() || modelClass.ransack()
+
+    if (pagination) {
+      const page = queryParams[queryPageName] || 1
+      let per = queryParams[queryPerKey] || 30
+
+      if (per == "all") {
+        per = 999_999_999
+      } else {
+        per = Number(per)
+      }
+
+      query.page(page).per(per)
+    }
 
     if (groupBy) query = query.groupBy(...groupBy)
 
@@ -173,9 +180,7 @@ class CollectionLoader extends React.PureComponent {
       .ransack(qParams)
       .search(searchParams)
       .searchKey(queryQName)
-      .page(page)
       .pageKey(queryPageName)
-      .per(per)
       .perKey(queryPerKey)
       .preload(preloads)
       .select(select)
