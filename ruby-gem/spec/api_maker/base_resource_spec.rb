@@ -23,13 +23,13 @@ describe ApiMaker::BaseResource do
       serializer = ApiMaker::Serializer.new(model: task2)
       attributes = serializer.attributes
 
-      expect(attributes.keys).not_to include :updated_at
+      expect(attributes.keys).not_to include :created_at
 
       # It includes the attribute if signed in
       serializer = ApiMaker::Serializer.new(api_maker_args: api_maker_args, model: task2)
       attributes = serializer.attributes
 
-      expect(attributes.keys).to include :updated_at
+      expect(attributes.keys).to include :created_at
     end
   end
 
