@@ -98,7 +98,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     const {attribute} = digs(column, "attribute")
     const currentModelClass = this.props.modelClass
     const path = column.path || []
-
+    let value
     let currentModel = model
 
     if (path.length > 0) {
@@ -109,8 +109,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     }
 
     if (!(attribute in currentModel)) throw new Error(`${currentModelClass.modelName().name} doesn't respond to ${attribute}`)
-
-    const value = currentModel[attribute]()
+    if (currentModel.isAttributeLoaded(attribute)) value = currentModel[attribute]()
 
     return this.presentColumnValue(value)
   }
