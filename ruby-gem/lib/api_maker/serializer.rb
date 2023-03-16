@@ -26,8 +26,13 @@ class ApiMaker::Serializer
       result = {}
       attributes_to_read.each do |attribute, data|
         if (if_name = data.dig(:args, :if))
-          condition_result = attribute_value(if_name)
-          next unless condition_result
+          if if_name.is_a?(Symbol)
+            next unless attribute_value(if_name)
+          elsif if_name.is_a?(Proc)
+            next unless resource_instance.instance_eval(&if_name)
+          else
+            raise "Unknown type: #{if_name.class.name}"
+          end
         end
 
         result[attribute] = attribute_value(attribute)
