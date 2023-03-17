@@ -4,13 +4,14 @@ module ApiMaker::SpecHelper::WaitForFlashMessage
 
     WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: delay_sec) do
       expect_no_browser_errors
-      current_message = flash_message_text
-      received_messages << current_message
+      current_messages = flash_message_text
+      current_messages = [current_messages] unless current_messages.is_a?(Array)
+      received_messages += current_messages
 
-      if current_message.is_a?(Array)
-        current_message.include?(expected_message)
+      if expected_message.is_a?(Regexp)
+        current_messages.any? { |current_message| expected_message.match?(current_message) }
       else
-        current_message == expected_message
+        current_messages.include?(expected_message)
       end
     end
 
