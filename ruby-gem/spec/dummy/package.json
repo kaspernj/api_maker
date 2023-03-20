@@ -29,7 +29,7 @@
     "i18n-on-steroids": "^1.0.5",
     "inflection": "^2.0.1",
     "js-yaml-loader": "^1.2.2",
-    "mini-css-extract-plugin": "^2.7.3",
+    "mini-css-extract-plugin": "^2.7.5",
     "prop-types": "^15.8.1",
     "prop-types-exact": "^1.2.0",
     "rails-erb-loader": "^5.5.2",
