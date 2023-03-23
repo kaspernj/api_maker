@@ -41,7 +41,7 @@
     "shakapacker": "6.6.0",
     "stacktrace-parser": "^0.1.10",
     "stimulus": "^3.2.1",
-    "style-loader": "^3.3.1",
+    "style-loader": "^3.3.2",
     "terser-webpack-plugin": "5",
     "uuid": "^9.0.0",
     "webpack": "5",
