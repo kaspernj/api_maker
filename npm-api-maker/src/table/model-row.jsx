@@ -117,7 +117,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
   _modelCallbackArgs () {
     const {model} = digs(this.props, "model")
     const modelArgName = inflection.camelize(this.props.liveTable.props.modelClass.modelClassData().name, true)
-    const modelCallbackArgs = {}
+    const modelCallbackArgs = {model}
 
     modelCallbackArgs[modelArgName] = model
 
