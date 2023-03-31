@@ -32,6 +32,7 @@ class ApiMaker::TranslatedCollections
     add_collection_values_method(model_class, plural_name, collection_values)
     add_translated_method(model_class, collection_name, inverted_translated_collection_name)
     add_with_scope(model_class, collection_name, plural_name, collection_values_as_strings)
+    add_without_scope(model_class, collection_name, plural_name, collection_values_as_strings)
 
     model_class.validates collection_name, inclusion: {in: collection_values}
   end
@@ -58,6 +59,17 @@ class ApiMaker::TranslatedCollections
       end
 
       where(collection_name => options)
+    }
+  end
+
+  def self.add_without_scope(model_class, collection_name, plural_name, collection_values_as_strings)
+    model_class.scope "without_#{plural_name}".to_sym, lambda { |*options|
+      # Check that options are valid
+      options.each do |option|
+        raise InvalidCollectionValueError, "Invalid option for #{collection_name}: #{option}" if collection_values_as_strings.exclude?(option.to_s)
+      end
+
+      where.not(collection_name => options)
     }
   end
 
