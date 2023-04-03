@@ -20,16 +20,16 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
       this.setForm()
     }
 
-    render() {
-      const {errors, form} = digs(this.state, "errors", "form")
-      const type = this.inputType()
-      const inputProps = {
-        id: idForComponent(this),
-        name: nameForComponent(this),
-        ref: this.inputRef()
-      }
-
-      if (!inputProps.ref) throw new Error("No input ref?")
+    inputProps() {
+      const givenInputProps = this.props.inputProps || {}
+      const inputProps = Object.assign(
+        {
+          id: idForComponent(this),
+          name: nameForComponent(this),
+          ref: this.inputRef()
+        },
+        givenInputProps
+      )
 
       if (this.handleAsCheckbox()) {
         inputProps.defaultChecked = this.inputDefaultChecked()
@@ -37,6 +37,16 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
         inputProps.defaultValue = this.inputDefaultValue()
       }
 
+      return inputProps
+    }
+
+    render() {
+      const {inputProps: oldInputProps, ...restProps} = this.props
+      const {errors, form} = digs(this.state, "errors", "form")
+      const type = this.inputType()
+      const inputProps = this.inputProps()
+
+      if (!inputProps.ref) throw new Error("No input ref?")
       if (!this.handleAsSelect()) inputProps.type = type
 
       const wrapperOpts = {
@@ -53,7 +63,7 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
           <WrapperComponentClass
             inputProps={inputProps}
             wrapperOpts={wrapperOpts}
-            {...this.props}
+            {...restProps}
           />
         </>
       )
