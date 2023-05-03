@@ -1,5 +1,5 @@
 class Resources::WorkplaceLinkResource < Resources::ApplicationResource
-  self.model_class = WorkerPlugins::WorkplaceLink
+  self.model_class_name = "WorkerPlugins::WorkplaceLink"
 
   attributes :id, :resource_id, :resource_type
 

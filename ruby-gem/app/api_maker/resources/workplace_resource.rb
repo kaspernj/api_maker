@@ -1,5 +1,5 @@
 class Resources::WorkplaceResource < Resources::ApplicationResource
-  self.model_class = WorkerPlugins::Workplace
+  self.model_class_name = "WorkerPlugins::Workplace"
 
   attributes :id
   collection_commands :destroy_links, :create_link, :current, :link_for, :switch_query_on_workplace
