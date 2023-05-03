@@ -7,6 +7,8 @@ import Link from "../link"
 import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
 
+const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox"))
+
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
   static propTypes = {
     cacheKey: PropTypes.string.isRequired,
@@ -16,10 +18,10 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
   }
 
   render() {
-    const {cacheKey, model} = digs(this.props, "cacheKey", "model")
-    const {modelClass} = digs(this.props.liveTable.props, "modelClass")
+    const {model} = digs(this.props, "model")
+    const {modelClass, workplace} = digs(this.props.liveTable.props, "modelClass", "workplace")
     const {actionsContent, columnsContent, destroyEnabled, editModelPath, viewModelPath} = digg(this, "props", "liveTable", "props")
-    const {columns} = digg(this, "props", "liveTable", "shape")
+    const {columns, currentWorkplace} = digg(this, "props", "liveTable", "shape")
 
     this.modelCallbackArgs = this._modelCallbackArgs() // 'model' can change so this needs to be re-cached for every render
 
@@ -33,6 +35,11 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
 
     return (
       <RowComponent className={`live-table-row ${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()}>
+        {workplace &&
+          <ColumnComponent className="workplace-column">
+            <WorkerPluginsCheckbox currentWorkplace={currentWorkplace} model={model} />
+          </ColumnComponent>
+        }
         {columns && this.columnsContentFromColumns(model)}
         {!columns && columnsContent && columnsContent(this.modelCallbackArgs)}
         <ColumnComponent className="actions-column">
