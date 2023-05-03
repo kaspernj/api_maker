@@ -33,7 +33,8 @@ class ApiMakerTable extends React.PureComponent {
     noRecordsAvailableContent: undefined,
     noRecordsFoundContent: undefined,
     preloads: [],
-    select: {}
+    select: {},
+    workplace: false
   }
 
   static propTypes = {
@@ -69,7 +70,8 @@ class ApiMakerTable extends React.PureComponent {
     queryName: PropTypes.string,
     select: PropTypes.object,
     selectColumns: PropTypes.object,
-    viewModelPath: PropTypes.func
+    viewModelPath: PropTypes.func,
+    workplace: PropTypes.bool.isRequired
   }
 
   filterFormRef = React.createRef()
@@ -86,6 +88,7 @@ class ApiMakerTable extends React.PureComponent {
 
     this.shape = new Shape(this, {
       columns: columnsAsArray,
+      currentWorkplace: undefined,
       identifier: this.props.identifier || `${collectionKey}-default`,
       models: undefined,
       overallCount: undefined,
@@ -105,6 +108,16 @@ class ApiMakerTable extends React.PureComponent {
     })
 
     this.loadTableSetting()
+
+    if (this.props.workplace) this.loadCurrentWorkplace()
+  }
+
+  async loadCurrentWorkplace() {
+    const Workplace = modelClassRequire("Workplace")
+    const result = await Workplace.current()
+    const currentWorkplace = digg(result, "current", 0)
+
+    this.shape.set({currentWorkplace})
   }
 
   async loadTableSetting() {
@@ -270,6 +283,7 @@ class ApiMakerTable extends React.PureComponent {
       select,
       selectColumns,
       viewModelPath,
+      workplace,
       ...restProps
     } = this.props
     const {models, qParams, query, result} = digs(this.shape, "models", "qParams", "query", "result")
@@ -382,7 +396,7 @@ class ApiMakerTable extends React.PureComponent {
   }
 
   tableContent () {
-    const {breakPoint} = digs(this.props, "breakPoint")
+    const {breakPoint, workplace} = digs(this.props, "breakPoint", "workplace")
     const {models, preparedColumns} = digs(this.shape, "models", "preparedColumns")
     const ColumnInHeadComponent = this.columnInHeadComponent()
     const RowComponent = this.rowComponent()
@@ -401,6 +415,9 @@ class ApiMakerTable extends React.PureComponent {
       <>
         <HeadComponent>
           <RowComponent className="live-table-header-row">
+            {workplace &&
+              <ColumnInHeadComponent />
+            }
             {this.headersContentFromColumns()}
             <ColumnInHeadComponent />
           </RowComponent>

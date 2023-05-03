@@ -86,7 +86,7 @@ class ApiMaker::BaseResource
 
   def self.model_class=(klass)
     # Set the name to avoid reloading issues with Rails
-    @model_class_name ||= klass.name
+    self.model_class_name = klass.name
     ApiMaker::MemoryStorage.current.model_class_for(resource: self, klass: klass)
   end
 

@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 6.0.0"
   s.add_dependency "waitutil"
+  s.add_dependency "worker_plugins"
 
   s.add_runtime_dependency "active_record_better_dependent_error_messages", ">= 0.0.3"
   s.add_runtime_dependency "active_record_query_fixer", ">= 0.0.15"

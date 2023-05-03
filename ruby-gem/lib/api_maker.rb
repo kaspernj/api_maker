@@ -5,6 +5,7 @@ require "active_record_query_fixer"
 require "cancancan"
 require "ransack"
 require "service_pattern"
+require "worker_plugins"
 
 require_relative "api_maker/action_controller_base_extensions"
 
