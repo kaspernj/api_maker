@@ -21,7 +21,6 @@ import SortLink from "../bootstrap/sort-link"
 import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
 import withBreakpoint from "./with-breakpoint"
-import withCurrentUser from "../with-current-user"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 
@@ -577,4 +576,4 @@ class ApiMakerTable extends React.PureComponent {
   submitFilterDebounce = debounce(digg(this, "submitFilter"))
 }
 
-export default withBreakpoint(withCurrentUser(ApiMakerTable))
+export default withBreakpoint(ApiMakerTable)
