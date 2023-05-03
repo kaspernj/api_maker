@@ -90,10 +90,6 @@ class ApiMaker::BaseResource
     ApiMaker::MemoryStorage.current.model_class_for(resource: self, klass: klass)
   end
 
-  def self.model_class_name=(class_name)
-    @model_class_name ||= class_name
-  end
-
   def self.model_class
     # Use the name to constantize to avoid reloading issues with Rails
     model_class_name.constantize
