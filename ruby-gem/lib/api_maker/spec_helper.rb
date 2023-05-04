@@ -10,6 +10,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   require_relative "spec_helper/wait_for_expect"
   require_relative "spec_helper/wait_for_flash_message"
   require_relative "spec_helper/wait_for_selector"
+  require_relative "spec_helper/worker_plugins_helpers"
   include BrowserLogs
   include ApiMaker::ExpectToBeAbleToHelper
   include AttributeRowHelpers
@@ -17,6 +18,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   include WaitForExpect
   include WaitForFlashMessage
   include WaitForSelector
+  include WorkerPluginsHelpers
 
   class JavaScriptError < RuntimeError; end
   class SelectorNotFoundError < RuntimeError; end
