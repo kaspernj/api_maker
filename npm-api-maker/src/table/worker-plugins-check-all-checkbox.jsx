@@ -11,7 +11,7 @@ export default class ApiMakerTableWorkerPluginsCheckAllCheckbox extends BaseComp
 
     return (
       <input
-        className={classNames("api-maker--table--worker-plugins-checkbox", className)}
+        className={classNames("api-maker--table--worker-plugins-check-all-checkbox", className)}
         onChange={this.onCheckedChanged}
         type="checkbox"
       />
