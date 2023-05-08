@@ -21,9 +21,9 @@ import SortLink from "../bootstrap/sort-link"
 import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
 import withBreakpoint from "./with-breakpoint"
-import WorkerPluginsCheckAllCheckbox from "./worker-plugins-check-all-checkbox"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
+const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
 
 class ApiMakerTable extends React.PureComponent {
   static defaultProps = {
