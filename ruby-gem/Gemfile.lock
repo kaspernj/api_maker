@@ -10,13 +10,13 @@ PATH
       ransack
       service_pattern (>= 1.0.5)
       waitutil
-      worker_plugins
 
 PATH
   remote: /home/dev/Development/api_maker/api_maker_table_rubygem
   specs:
     api_maker_table (0.1.1)
       rails (>= 6.0.0)
+      worker_plugins
 
 GEM
   remote: https://rubygems.org/

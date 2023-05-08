@@ -3,7 +3,7 @@ import SourceMapsLoader from "./source-maps-loader.mjs"
 
 export default class ErrorLogger {
   constructor () {
-    this.debugging = true
+    this.debugging = false
     this.errorOccurred = false
     this.errors = []
     this.isHandlingError = false
@@ -18,7 +18,12 @@ export default class ErrorLogger {
     })
   }
 
+  debug(...output) {
+    if (this.debugging) console.error(`ApiMaker ErrorLogger:`, ...output)
+  }
+
   enable () {
+    this.debug("Enable called")
     this.connectOnError()
     this.connectUnhandledRejection()
   }
@@ -40,7 +45,8 @@ export default class ErrorLogger {
   }
 
   connectOnError () {
-    globalThis.addEventListener("error", (event) => {
+    window.addEventListener("error", (event) => {
+      if (this.debugging) this.debug(`Error:`, event.message)
       this.errorOccurred = true
 
       if (!this.isHandlingError) {
@@ -53,7 +59,8 @@ export default class ErrorLogger {
   }
 
   connectUnhandledRejection () {
-    globalThis.addEventListener("unhandledrejection", (event) => {
+    window.addEventListener("unhandledrejection", (event) => {
+      if (this.debugging) this.debug(`Unhandled rejection:`, event.reason.message)
       this.errorOccurred = true
 
       if (!this.isHandlingError) {
