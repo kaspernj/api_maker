@@ -23,6 +23,7 @@ import uniqunize from "uniqunize"
 import withBreakpoint from "./with-breakpoint"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
+const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
 
 class ApiMakerTable extends React.PureComponent {
   static defaultProps = {
@@ -397,7 +398,7 @@ class ApiMakerTable extends React.PureComponent {
 
   tableContent () {
     const {breakPoint, workplace} = digs(this.props, "breakPoint", "workplace")
-    const {models, preparedColumns} = digs(this.shape, "models", "preparedColumns")
+    const {currentWorkplace, models, preparedColumns, query} = digs(this.shape, "currentWorkplace", "models", "preparedColumns", "query")
     const ColumnInHeadComponent = this.columnInHeadComponent()
     const RowComponent = this.rowComponent()
 
@@ -415,8 +416,10 @@ class ApiMakerTable extends React.PureComponent {
       <>
         <HeadComponent>
           <RowComponent className="live-table-header-row">
-            {workplace &&
-              <ColumnInHeadComponent />
+            {workplace && currentWorkplace &&
+              <ColumnInHeadComponent>
+                <WorkerPluginsCheckAllCheckbox currentWorkplace={currentWorkplace} query={query} />
+              </ColumnInHeadComponent>
             }
             {this.headersContentFromColumns()}
             <ColumnInHeadComponent />
@@ -469,7 +472,7 @@ class ApiMakerTable extends React.PureComponent {
   }
 
   className() {
-    const classNames = ["component-api-maker-live-table"]
+    const classNames = ["api-maker--table"]
 
     if (this.props.className)
       classNames.push(this.props.className)
