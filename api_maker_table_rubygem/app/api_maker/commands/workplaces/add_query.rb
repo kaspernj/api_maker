@@ -1,8 +1,8 @@
-class Commands::Workplaces::AddCollection < Commands::ApplicationCommand
+class Commands::Workplaces::AddQuery < Commands::ApplicationCommand
   alias workplace model
 
   def execute!
-    result = WorkerPlugins::AddCollection.execute!(
+    result = WorkerPlugins::AddQuery.execute!(
       query: query,
       workplace: workplace
     )

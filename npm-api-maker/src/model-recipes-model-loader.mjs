@@ -36,7 +36,7 @@ export default class ApiMakerModelRecipesModelLoader {
 
     this.addAttributeMethodsToModelClass(ModelClass, attributes)
     this.addRelationshipsToModelClass(ModelClass, modelClassData, relationships)
-    this.addCollectionCommandsToModelClass(ModelClass, collectionCommands)
+    this.addQueryCommandsToModelClass(ModelClass, collectionCommands)
     this.addMemberCommandsToModelClass(ModelClass, memberCommands)
 
     return ModelClass
@@ -61,7 +61,7 @@ export default class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  addCollectionCommandsToModelClass (ModelClass, collectionCommands) {
+  addQueryCommandsToModelClass (ModelClass, collectionCommands) {
     for (const collectionCommandName in collectionCommands) {
       const methodName = inflection.camelize(collectionCommandName, true)
 

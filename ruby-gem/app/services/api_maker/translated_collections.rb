@@ -29,7 +29,7 @@ class ApiMaker::TranslatedCollections
     add_helper_methods(model_class, collection_name, collection_values_as_strings) if helper_methods
     add_translated_collection_method(model_class, plural_name, collections)
     add_translated_inverted_collection_method(model_class, inverted_translated_collection_name, collections)
-    add_collection_values_method(model_class, plural_name, collection_values)
+    add_query_values_method(model_class, plural_name, collection_values)
     add_translated_method(model_class, collection_name, inverted_translated_collection_name)
     add_with_scope(model_class, collection_name, plural_name, collection_values_as_strings)
     add_without_scope(model_class, collection_name, plural_name, collection_values_as_strings)
@@ -85,7 +85,7 @@ class ApiMaker::TranslatedCollections
     end
   end
 
-  def self.add_collection_values_method(model_class, plural_name, collection_values)
+  def self.add_query_values_method(model_class, plural_name, collection_values)
     model_class.define_singleton_method(plural_name) do
       collection_values
     end

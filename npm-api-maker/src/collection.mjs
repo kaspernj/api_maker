@@ -148,7 +148,7 @@ export default class ApiMakerCollection {
     const response = await this._response()
     const models = digg(response, "collection")
 
-    this._addCollectionToModels(models)
+    this._addQueryToModels(models)
 
     const result = new Result({collection: this, models, response})
 
@@ -210,7 +210,7 @@ export default class ApiMakerCollection {
     const response = await this._response()
     const models = digg(response, "collection")
 
-    this._addCollectionToModels(models)
+    this._addQueryToModels(models)
 
     return models
   }
@@ -228,7 +228,7 @@ export default class ApiMakerCollection {
   }
 
   // This is needed when reloading a version of the model with the same selected attributes and preloads
-  _addCollectionToModels(models) {
+  _addQueryToModels(models) {
     for(const model of models) {
       model.collection = this
     }
