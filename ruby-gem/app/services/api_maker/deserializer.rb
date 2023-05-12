@@ -26,7 +26,7 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
       preload: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["preload"]),
       ransack: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["ransack"]),
       resource_class: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("args").fetch("modelClass")),
-      search: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs").fetch("search"))
+      search: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["search"])
     )
   end
 
