@@ -16,6 +16,7 @@ PATH
   specs:
     api_maker_table (0.1.1)
       rails (>= 6.0.0)
+      worker_plugins (>= 0.0.5)
 
 GEM
   remote: https://rubygems.org/
@@ -375,6 +376,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    worker_plugins (0.0.5)
     wref (0.0.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
