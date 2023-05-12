@@ -34,6 +34,7 @@ module ApiMaker
   autoload :RelationshipPreloader, "#{dir}/relationship_preloader"
   autoload :ResourceRouting, "#{dir}/resource_routing"
   autoload :ResultParser, "#{dir}/result_parser"
+  autoload :SearchToRansackParams, "#{dir}/search_to_ransack_params"
   autoload :Serializer, "#{dir}/serializer"
   autoload :SpecHelper, "#{dir}/spec_helper"
 end

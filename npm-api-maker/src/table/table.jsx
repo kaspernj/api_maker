@@ -456,7 +456,7 @@ class ApiMakerTable extends React.PureComponent {
 
     return (
       <div style={{display: "flex", justifyContent: "space-between", marginTop: "10px"}}>
-        <div>
+        <div className="showing-counts">
           {I18n.t("js.api_maker.table.showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
         </div>
         <div>

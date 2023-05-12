@@ -23,9 +23,10 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
     permitted_arg = arg.permit!.to_h
 
     ApiMaker::Collection.new(
-      ransack: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["ransack"]),
       preload: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["preload"]),
-      resource_class: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("args").fetch("modelClass"))
+      ransack: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["ransack"]),
+      resource_class: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("args").fetch("modelClass")),
+      search: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs").fetch("search"))
     )
   end
 
