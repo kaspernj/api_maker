@@ -716,9 +716,15 @@ export default class BaseModel {
     try {
       return await CommandsPool.addCommand(args, commandArgs)
     } catch (error) {
-      if (formOrDataObject?.nodeName == "FORM") {
-        BaseModel.parseValidationErrors({error, options: {form: formOrDataObject}})
+      let form
+
+      if (commandArgs.form) {
+        form = commandArgs.form
+      } else if (formOrDataObject?.nodeName == "FORM") {
+        form = formOrDataObject
       }
+
+      if (form) BaseModel.parseValidationErrors({error, options: {form}})
 
       throw error
     }
