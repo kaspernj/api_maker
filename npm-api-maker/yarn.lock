@@ -4316,9 +4316,9 @@ object-keys@^1.0.12, object-keys@^1.1.1:
   integrity sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
 
 "object-to-formdata@>= 4.1.0":
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/object-to-formdata/-/object-to-formdata-4.4.2.tgz#f89013f90493c58cb5f6ab9f50b7aeec30745ea6"
-  integrity sha512-fu6UDjsqIfFUu/B3GXJ2IFnNAL/YbsC1PPzqDIFXcfkhdYjTD3K4zqhyD/lZ6+KdP9O/64YIPckIOiS5ouXwLA==
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/object-to-formdata/-/object-to-formdata-4.5.1.tgz#b6955a9c505b58df15852fee5f844b418b3eb6fe"
+  integrity sha512-QiM9D0NiU5jV6J6tjE1g7b4Z2tcUnKs1OPUi4iMb2zH+7jwlcUrASghgkFk9GtzqNNq8rTQJtT8AzjBAvLoNMw==
 
 object.assign@^4.1.2:
   version "4.1.2"
