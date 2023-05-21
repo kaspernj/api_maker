@@ -137,7 +137,7 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
-    sqlite3 (1.6.2-x86_64-linux)
+    sqlite3 (1.6.3-x86_64-linux)
     thor (1.2.1)
     timeout (0.3.2)
     tzinfo (2.0.6)
