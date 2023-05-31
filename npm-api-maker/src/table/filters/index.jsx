@@ -17,7 +17,8 @@ class ApiMakerTableFilter extends React.PureComponent {
   }
 
   render() {
-    const {a, p, pre, v} = digs(this.props, "a", "p", "pre", "v")
+    const {p, v} = digs(this.props, "p", "v")
+    const {a, pre, sc} = this.props
 
     return (
       <div style={{display: "inline-block", backgroundColor: "grey", padding: "10px 6px"}}>
@@ -25,7 +26,7 @@ class ApiMakerTableFilter extends React.PureComponent {
           {p.length > 0 &&
             `${p.join(".")}.`
           }
-          {a} {pre} {v}
+          {a} {sc} {pre} {v}
         </span>
         <span>
           <a className="remove-filter-button" href="#" onClick={digg(this, "onRemoveFilterClicked")}>
