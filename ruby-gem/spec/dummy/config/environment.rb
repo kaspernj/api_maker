@@ -4,4 +4,4 @@ require_relative "application"
 # Initialize the Rails application.
 Rails.application.initialize!
 
-require "webpacker"
+require "shakapacker"

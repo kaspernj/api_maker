@@ -2,7 +2,8 @@ const babel = require("./loaders/babel")
 const erb = require("./loaders/erb")
 const path = require("path")
 const webpack = require("webpack")
-const {webpackConfig, merge} = require("shakapacker")
+const {generateWebpackConfig, merge} = require("shakapacker")
+const webpackConfig = generateWebpackConfig()
 
 const options = {
   devtool: "source-map",
