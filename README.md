@@ -9,9 +9,9 @@ Add this line to your application's Gemfile:
 gem "api_maker", git: "https://github.com/kaspernj/api_maker.git"
 ```
 
-Add the extension `.mjs` to `webpacker.yml`.
+Add the extension `.mjs` to `shakapacker.yml`.
 
-ApiMaker requires [Webpacker](https://github.com/rails/webpacker), so make sure you have that set up as well. It also uses an extension called [qs](https://www.npmjs.com/package/qs), that you should add to your packages, but that is probally already there by default.
+ApiMaker requires [Shakapacker](https://github.com/shakacode/shakapacker), so make sure you have that set up as well. It also uses an extension called [qs](https://www.npmjs.com/package/qs), that you should add to your packages, but that is probally already there by default.
 
 ApiMaker makes use of [CanCanCan](https://github.com/CanCanCommunity/cancancan) to keep track of what models a given user should have access to. Each resource defines its own abilities under `app/api_maker/resources/user_resource` like this:
 ```ruby
@@ -651,7 +651,7 @@ bundle exec appraisal rspec
 
 Its kinda fucked up to run system specs, but this command should work from the ruby-gem directory:
 ```bash
-rm -rf spec/dummy/public/packs/ && cd spec/dummy/ && bin/webpacker && cd ../.. && xvfb-run bundle exec appraisal will_paginate rspec spec/system/api_maker_table/api_maker_table_spec.rb
+rm -rf spec/dummy/public/packs/ && cd spec/dummy/ && bin/shakapacker && cd ../.. && xvfb-run bundle exec appraisal will_paginate rspec spec/system/api_maker_table/api_maker_table_spec.rb
 ```
 
 ## Contributing

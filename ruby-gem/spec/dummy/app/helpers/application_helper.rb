@@ -1,3 +1,3 @@
 module ApplicationHelper
-  include Webpacker::Helper
+  include Shakapacker::Helper
 end
