@@ -46,6 +46,8 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
 
       error_data[:input_name] = input_name unless attribute_type == :base
 
+      binding.pry
+
       result << error_data
     end
   end

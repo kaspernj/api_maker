@@ -19,10 +19,14 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
         next if model.save
 
         if simple_model_errors
-          errors += ApiMaker::SimpleModelErrors.execute!(model: model)
+          more_errors = ApiMaker::SimpleModelErrors.execute!(model: model)
+          errors += more_errors
         else
-          errors += model.errors.full_messages
+          more_errors = model.errors.full_messages
+          errors += more_errors
         end
+
+        binding.pry if more_errors.any?
 
         failed = true
         failed_models << {model: model, params: params}
@@ -33,6 +37,8 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
 
       raise ActiveRecord::Rollback if errors.any?
     end
+
+    binding.pry
 
     fail! errors.uniq if errors.any? && !succeed_with_errors
 
