@@ -9,7 +9,7 @@ class ApiMaker::UpdateCommand < ApiMaker::BaseCommand
       if command.model.update(sanitized_parameters)
         success_response
       else
-        failure_save_response(model: model, params: sanitized_parameters)
+        failure_save_response(model: model, params: sanitized_parameters, simple_model_errors: simple_model_errors?)
       end
     end
   end

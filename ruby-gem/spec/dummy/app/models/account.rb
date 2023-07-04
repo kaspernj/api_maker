@@ -9,4 +9,6 @@ class Account < ApplicationRecord
   has_many :users, through: :tasks
 
   has_one :commune, through: :customer
+
+  accepts_nested_attributes_for :projects
 end

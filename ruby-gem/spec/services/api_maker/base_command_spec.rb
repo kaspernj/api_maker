@@ -51,7 +51,7 @@ describe ApiMaker::BaseCommand do
       expect(result).to include(
         errors: [
           {
-            message: "Project base Navn kan ikke være Hans",
+            message: "Project Navn kan ikke være Hans",
             type: :validation_error
           }
         ]

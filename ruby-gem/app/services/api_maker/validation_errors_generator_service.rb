@@ -44,9 +44,22 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
         end
       }
 
-      error_data[:input_name] = input_name unless attribute_type == :base
+      if attribute_type == :base
+        # Remove duplicates coming from reflections that Rails might have added because of autosave
+        remove_duplicate_errors_from_reflections(result, error_data)
+      else
+        error_data[:input_name] = input_name
+      end
 
       result << error_data
+    end
+  end
+
+  def remove_duplicate_errors_from_reflections(result, error_data)
+    result.reject! do |other_error_data|
+      other_error_data[:attribute_name] != :base &&
+        other_error_data[:attribute_type] == :reflection &&
+        other_error_data[:error_messages] == error_data[:error_messages]
     end
   end
 

@@ -13,7 +13,7 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
       elsif model.save
         success_response
       else
-        failure_save_response(model: model, params: sanitized_parameters)
+        failure_save_response(model: model, params: sanitized_parameters, simple_model_errors: simple_model_errors?)
       end
     end
   end
