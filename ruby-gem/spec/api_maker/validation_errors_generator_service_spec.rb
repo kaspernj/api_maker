@@ -128,11 +128,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
   end
 
   it "handles nested errors that are added to base" do
-    params = {
-      name: "Hans"
-    }
-
-
+    params = {name: "Hans"}
 
     project.assign_attributes(params)
 
@@ -156,9 +152,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
   end
 
   it "handles validations that are added multiple times" do
-    params = {
-      name: nil
-    }
+    params = {name: nil}
 
     project.assign_attributes(params)
 
