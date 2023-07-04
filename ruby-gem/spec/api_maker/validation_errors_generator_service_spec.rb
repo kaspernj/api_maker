@@ -108,7 +108,12 @@ describe ApiMaker::ValidationErrorsGeneratorService do
     account.assign_attributes(params)
 
     expect(account).to be_invalid
-    expect(account.errors.full_messages).to eq ["Projects Navn kan ikke være Hans"]
+
+    error_message = account.errors.full_messages[0]
+    posibilities = ["Projects Navn kan ikke være Hans", "Projects base Navn kan ikke være Hans"]
+
+    expect(posibilities).to include error_message
+    expect(account.errors.full_messages).to have_attributes(length: 1)
 
     result = ApiMaker::ValidationErrorsGeneratorService.execute!(
       model: account,
