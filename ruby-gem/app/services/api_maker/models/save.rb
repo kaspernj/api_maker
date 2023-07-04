@@ -19,11 +19,9 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
         next if model.save
 
         if simple_model_errors
-          more_errors = ApiMaker::SimpleModelErrors.execute!(model: model)
-          errors += more_errors
+          errors += ApiMaker::SimpleModelErrors.execute!(model: model)
         else
-          more_errors = model.errors.full_messages
-          errors += more_errors
+          errors += model.errors.full_messages
         end
 
         failed = true
