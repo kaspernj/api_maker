@@ -643,7 +643,8 @@ export default class BaseModel {
         {
           args: {
             query_params: this.collection && this.collection.params(),
-            save: objectData
+            save: objectData,
+            simple_model_errors: options?.simpleModelErrors
           },
           command: `${this.modelClassData().collectionName}-update`,
           collectionName: this.modelClassData().collectionName,

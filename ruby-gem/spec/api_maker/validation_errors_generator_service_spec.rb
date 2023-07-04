@@ -1,7 +1,8 @@
 require "rails_helper"
 
 describe ApiMaker::ValidationErrorsGeneratorService do
-  let(:project) { create :project }
+  let(:account) { create :account, id: 1001 }
+  let(:project) { create :project, account: account, id: 2001 }
 
   it "handles monetized attributes" do
     project.price_per_hour = "asd"
@@ -96,8 +97,38 @@ describe ApiMaker::ValidationErrorsGeneratorService do
 
   it "handles errors that are added to base" do
     params = {
-      name: "Hans"
+      projects_attributes: {
+        0 => {
+          id: project.id,
+          name: "Hans"
+        }
+      }
     }
+
+    account.assign_attributes(params)
+
+    expect(account).to be_invalid
+    expect(account.errors.full_messages).to eq ["Projects Navn kan ikke være Hans"]
+
+    result = ApiMaker::ValidationErrorsGeneratorService.execute!(
+      model: account,
+      params: params
+    )
+
+    expect(result).to eq [
+      {
+        attribute_name: :base,
+        attribute_type: :base,
+        id: project.id,
+        model_name: "project",
+        error_messages: ["Navn kan ikke være Hans"],
+        error_types: [:custom_error]
+      }
+    ]
+  end
+
+  it "handles nested errors that are added to base" do
+    params = {name: "Hans"}
 
     project.assign_attributes(params)
 
@@ -121,9 +152,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
   end
 
   it "handles validations that are added multiple times" do
-    params = {
-      name: nil
-    }
+    params = {name: nil}
 
     project.assign_attributes(params)
 

@@ -213,6 +213,10 @@ class ApiMaker::BaseCommand
     end
   end
 
+  def simple_model_errors?
+    ActiveModel::Type::Boolean.new.cast(args[:simple_model_errors])
+  end
+
   def fail!(*args, &blk)
     if args.length == 1 && args[0].is_a?(Hash) && args[0].key?(:errors)
       error_messages = args[0].fetch(:errors).map do |error|
