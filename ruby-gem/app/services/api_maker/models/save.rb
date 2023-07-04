@@ -26,8 +26,6 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
           errors += more_errors
         end
 
-        binding.pry if more_errors.any?
-
         failed = true
         failed_models << {model: model, params: params}
 
@@ -37,8 +35,6 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
 
       raise ActiveRecord::Rollback if errors.any?
     end
-
-    binding.pry
 
     fail! errors.uniq if errors.any? && !succeed_with_errors
 

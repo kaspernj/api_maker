@@ -214,7 +214,6 @@ class ApiMaker::BaseCommand
   end
 
   def simple_model_errors?
-    binding.pry
     ActiveModel::Type::Boolean.new.cast(args[:simple_model_errors])
   end
 
