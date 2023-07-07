@@ -868,14 +868,15 @@ export default class BaseModel {
   }
 
   _readHasOneReflection ({reflectionName}) {
-    if (args.reflectionName in this.relationships) {
-      return this.relationships[args.reflectionName]
-    } else if (args.reflectionName in this.relationshipsCache) {
-      return this.relationshipsCache[args.reflectionName]
+    if (reflectionName in this.relationships) {
+      return this.relationships[reflectionName]
+    } else if (reflectionName in this.relationshipsCache) {
+      return this.relationshipsCache[reflectionName]
     }
 
-    if (this.isNewRecord())
+    if (this.isNewRecord()) {
       return null
+    }
 
     const loadedRelationships = Object.keys(this.relationshipsCache)
     const modelClassName = digg(this.modelClassData(), "name")
