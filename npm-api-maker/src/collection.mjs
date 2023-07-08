@@ -87,13 +87,42 @@ export default class ApiMakerCollection {
     return this._merge({limit: amount})
   }
 
-  loaded () {
+  preloaded () {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
       throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
     }
 
     return this.args.model.relationshipsCache[this.args.reflectionName]
   }
+
+  loaded () {
+    if (this.args.reflectionName in this.args.model.relationships) {
+      return this.args.model.relationships[this.args.reflectionName]
+    } else if (this.args.reflectionName in this.args.model.relationshipsCache) {
+      return this.args.model.relationshipsCache[this.args.reflectionName]
+    } else {
+      throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
+    }
+  }
+
+  // Replaces the relationships with the given new collection.
+  set(newCollection) {
+    this.args.model.relationships[this.args.reflectionName] = newCollection
+  }
+
+  // Pushes another model onto the given collection.
+  push(newModel) {
+    if (!(this.args.reflectionName in this.args.model.relationships)) {
+      this.args.model.relationships[this.args.reflectionName] = []
+    }
+
+    this.args.model.relationships[this.args.reflectionName].push(newModel)
+  }
+
+  // Array shortcuts
+  find = (...args) => this.loaded().find(...args)
+  forEach = (...args) => this.loaded().forEach(...args)
+  map = (...args) => this.loaded().map(...args)
 
   preload (preloadValue) {
     return this._merge({preload: preloadValue})

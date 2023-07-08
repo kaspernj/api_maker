@@ -1,5 +1,6 @@
 import Attribute from "./base-model/attribute.mjs"
 import AttributeNotLoadedError from "./attribute-not-loaded-error.mjs"
+import CacheKeyGenerator from "./cache-key-generator.mjs"
 import Collection from "./collection.mjs"
 import CommandsPool from "./commands-pool.mjs"
 import Config from "./config.mjs"
@@ -146,6 +147,7 @@ export default class BaseModel {
     this.changes = {}
     this.newRecord = args.isNewRecord
     this.relationshipsCache = {}
+    this.relationships = {}
 
     if (args && args.data && args.data.a) {
       this._readModelDataFromArgs(args)
@@ -207,6 +209,7 @@ export default class BaseModel {
 
     clone.abilities = {...this.abilities}
     clone.modelData = {...this.modelData}
+    clone.relationships = {...this.relationships}
     clone.relationshipsCache = {...this.relationshipsCache}
 
     return clone
@@ -235,6 +238,12 @@ export default class BaseModel {
     } else {
       return this.uniqueKey()
     }
+  }
+
+  fullCacheKey() {
+    const cacheKeyGenerator = new CacheKeyGenerator(this)
+
+    return cacheKeyGenerator.cacheKey()
   }
 
   static all () {
@@ -385,6 +394,12 @@ export default class BaseModel {
     return false
   }
 
+  isAssociationPresent (associationName) {
+    if (this.isAssociationLoaded(associationName)) return true
+    if (associationName in this.relationships) return true
+    return false
+  }
+
   static parseValidationErrors ({error, model, options}) {
     if (!(error instanceof ValidationError)) return
     if (!error.args.response.validation_errors) return
@@ -489,6 +504,7 @@ export default class BaseModel {
 
   setNewModel (model) {
     this.setNewModelData(model)
+    this.relationships = digg(model, "relationships")
     this.relationshipsCache = digg(model, "relationshipsCache")
   }
 
@@ -698,6 +714,7 @@ export default class BaseModel {
 
   preloadRelationship (relationshipName, model) {
     this.relationshipsCache[BaseModel.snakeCase(relationshipName)] = model
+    this.relationships[BaseModel.snakeCase(relationshipName)] = model
   }
 
   uniqueKey () {
@@ -793,7 +810,9 @@ export default class BaseModel {
   }
 
   async _loadBelongsToReflection (args, queryArgs = {}) {
-    if (args.reflectionName in this.relationshipsCache) {
+    if (args.reflectionName in this.relationships) {
+      return this.relationships[args.reflectionName]
+    } else if (args.reflectionName in this.relationshipsCache) {
       return this.relationshipsCache[args.reflectionName]
     } else {
       const collection = new Collection(args, queryArgs)
@@ -804,21 +823,24 @@ export default class BaseModel {
   }
 
   _readBelongsToReflection ({reflectionName}) {
-    if (!(reflectionName in this.relationshipsCache)) {
-      if (this.isNewRecord())
-        return null
-
-      const loadedRelationships = Object.keys(this.relationshipsCache)
-      const modelClassName = digg(this.modelClassData(), "name")
-
-      throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
+    if (reflectionName in this.relationships) {
+      return this.relationships[reflectionName]
+    } else if (reflectionName in this.relationshipsCache) {
+      return this.relationshipsCache[reflectionName]
     }
 
-    return this.relationshipsCache[reflectionName]
+    if (this.isNewRecord()) return null
+
+    const loadedRelationships = Object.keys(this.relationshipsCache)
+    const modelClassName = digg(this.modelClassData(), "name")
+
+    throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
   }
 
   async _loadHasManyReflection (args, queryArgs = {}) {
-    if (args.reflectionName in this.relationshipsCache) {
+    if (args.reflectionName in this.relationships) {
+      return this.relationships[args.reflectionName]
+    } else if (args.reflectionName in this.relationshipsCache) {
       return this.relationshipsCache[args.reflectionName]
     }
 
@@ -831,7 +853,9 @@ export default class BaseModel {
   }
 
   async _loadHasOneReflection (args, queryArgs = {}) {
-    if (args.reflectionName in this.relationshipsCache) {
+    if (args.reflectionName in this.relationships) {
+      return this.relationships[args.reflectionName]
+    } else if (args.reflectionName in this.relationshipsCache) {
       return this.relationshipsCache[args.reflectionName]
     } else {
       const collection = new Collection(args, queryArgs)
@@ -844,17 +868,20 @@ export default class BaseModel {
   }
 
   _readHasOneReflection ({reflectionName}) {
-    if (!(reflectionName in this.relationshipsCache)) {
-      if (this.isNewRecord())
-        return null
-
-      const loadedRelationships = Object.keys(this.relationshipsCache)
-      const modelClassName = digg(this.modelClassData(), "name")
-
-      throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
+    if (reflectionName in this.relationships) {
+      return this.relationships[reflectionName]
+    } else if (reflectionName in this.relationshipsCache) {
+      return this.relationshipsCache[reflectionName]
     }
 
-    return this.relationshipsCache[reflectionName]
+    if (this.isNewRecord()) {
+      return null
+    }
+
+    const loadedRelationships = Object.keys(this.relationshipsCache)
+    const modelClassName = digg(this.modelClassData(), "name")
+
+    throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
   }
 
   _readModelDataFromArgs (args) {
@@ -894,19 +921,22 @@ export default class BaseModel {
 
       if (!relationshipData) {
         this.relationshipsCache[relationshipName] = null
+        this.relationships[relationshipName] = null
       } else if (Array.isArray(relationshipData)) {
-        const result = []
+        this.relationshipsCache[relationshipName] = []
+        this.relationships[relationshipName] = []
 
         for (const relationshipId of relationshipData) {
           const model = preloaded.getModel(relationshipType, relationshipId)
 
-          result.push(model)
+          this.relationshipsCache[relationshipName].push(model)
+          this.relationships[relationshipName].push(model)
         }
-
-        this.relationshipsCache[relationshipName] = result
       } else {
         const model = preloaded.getModel(relationshipType, relationshipData)
+
         this.relationshipsCache[relationshipName] = model
+        this.relationships[relationshipName] = model
       }
     }
   }
