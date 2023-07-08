@@ -143,6 +143,16 @@ export default class BaseModel {
     return reflections
   }
 
+  static reflection(name) {
+    const foundReflection = this.reflections().find((reflection) => reflection.name() == name)
+
+    if (!foundReflection) {
+      throw new Error(`No such reflection: ${name} in ${this.reflections().map((reflection) => reflection.name()).join(", ")}`)
+    }
+
+    return foundReflection
+  }
+
   constructor (args = {}) {
     this.changes = {}
     this.newRecord = args.isNewRecord

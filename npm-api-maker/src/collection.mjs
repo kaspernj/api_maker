@@ -96,12 +96,21 @@ export default class ApiMakerCollection {
   }
 
   loaded () {
-    if (this.args.reflectionName in this.args.model.relationships) {
-      return this.args.model.relationships[this.args.reflectionName]
-    } else if (this.args.reflectionName in this.args.model.relationshipsCache) {
-      return this.args.model.relationshipsCache[this.args.reflectionName]
+    const {model, reflectionName} = this.args
+
+    if (reflectionName in model.relationships) {
+      return model.relationships[reflectionName]
+    } else if (reflectionName in model.relationshipsCache) {
+      return model.relationshipsCache[reflectionName]
+    } else if (model.isNewRecord()) {
+      const reflectionNameUnderscore = inflection.underscore(reflectionName)
+
+      // Initialize as empty and try again to return the empty result
+      this.set([])
+
+      return digg(model.relationships, reflectionNameUnderscore)
     } else {
-      throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
+      throw new Error(`${reflectionName} hasnt been loaded yet`)
     }
   }
 
