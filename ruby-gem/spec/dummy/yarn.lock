@@ -1137,10 +1137,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@kaspernj/api-maker@1.0.268":
-  version "1.0.268"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.268.tgz#83a9960bb8bfbd842505c0767e76ba8ff19e1d98"
-  integrity sha512-fZBw4awon597Goy/rOuelHe+uW7HaulYyD3SehkC513vfPBEQRfdQf74U6hOuYxnt0Ni/aciolpqlGCrvs4pdw==
+"@kaspernj/api-maker@1.0.270":
+  version "1.0.270"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.270.tgz#55fede555f28ec59aef1bb6c602c3b796798ec32"
+  integrity sha512-aifoOjr8C9cbz7gc6PcxEbD7o/NzWgxowO6gc5l5u09M9qS1T6m0yTL+I0GcVeMea4dQAFI5rMQZoINTNPncug==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -1158,6 +1158,7 @@
     on-location-changed ">= 1.0.7"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
+    spark-md5 "^3.0.2"
     strftime ">= 0.10.0"
     uniqunize "^1.0.1"
     wake-event ">= 0.0.1"
@@ -4149,6 +4150,11 @@ source-map@^0.6.0:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
+
+spark-md5@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/spark-md5/-/spark-md5-3.0.2.tgz#7952c4a30784347abcee73268e473b9c0167e3fc"
+  integrity sha512-wcFzz9cDfbuqe0FZzfi2or1sgyIrsDwmPwfZC4hiNidPdPINjeUwNfv5kldczoEAcjl9Y1L3SM7Uz2PUEQzxQw==
 
 spdy-transport@^3.0.0:
   version "3.0.0"
