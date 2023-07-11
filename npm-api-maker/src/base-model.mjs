@@ -727,6 +727,14 @@ export default class BaseModel {
     this.relationships[BaseModel.snakeCase(relationshipName)] = model
   }
 
+  markForDestruction() {
+    this._markedForDestruction = true
+  }
+
+  markedForDestruction() {
+    return this._markedForDestruction
+  }
+
   uniqueKey () {
     if (!this.uniqueKeyValue) {
       const min = 5000000000000000
