@@ -45,17 +45,22 @@ export default class CacheKeyGenerator {
     const md5 = new SparkMD5()
 
     for (const model of this.allModels) {
-      md5.append("-model-")
+      md5.append("--model--")
       md5.append(model.modelClassData().name)
-      md5.append("-unique-key-")
+      md5.append("--unique-key--")
       md5.append(model.id() || model.uniqueKey())
+
+      if (model.markedForDestruction()) {
+        md5.append("--marked-for-destruction--")
+      }
+
       md5.append("-attributes-")
 
       const attributes = model.attributes()
 
       for (const attributeName in attributes) {
         md5.append(attributeName)
-        md5.append("-attribute-")
+        md5.append("--attribute--")
         md5.append(`${model.readAttributeUnderscore(attributeName)}`)
       }
     }
