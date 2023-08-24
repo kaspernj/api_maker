@@ -119,7 +119,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def wait_for_action_cable_to_connect
-    sleep 0.5
+    sleep 1
   end
 
   def wait_for_and_find(selector, *args, **opts)
