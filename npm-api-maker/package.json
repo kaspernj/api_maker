@@ -33,7 +33,7 @@
   "scripts": {
     "eslint": "eslint --ext .mjs,.js,.jsx",
     "eslint-find-rules": "eslint-find-rules",
-    "test": "jest"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
   },
   "dependencies": {
     "@rails/actioncable": ">= 6.1.0",
