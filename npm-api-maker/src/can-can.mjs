@@ -7,18 +7,16 @@ import Services from "./services.mjs"
 const shared = {}
 
 export default class ApiMakerCanCan {
+  abilities = []
+  abilitiesToLoad = []
+  abilitiesToLoadData = []
+  events = new EventEmitter()
+  lock = new ReadersWriterLock()
+
   static current () {
     if (!shared.currentApiMakerCanCan) shared.currentApiMakerCanCan = new ApiMakerCanCan()
 
     return shared.currentApiMakerCanCan
-  }
-
-  constructor () {
-    this.abilities = []
-    this.abilitiesToLoad = []
-    this.abilitiesToLoadData = []
-    this.events = new EventEmitter()
-    this.lock = new ReadersWriterLock()
   }
 
   can (ability, subject) {

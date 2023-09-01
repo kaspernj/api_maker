@@ -5,17 +5,15 @@ import {dig} from "diggerize"
 const shared = {}
 
 export default class ApiMakerCableConnectionPool {
+  cableSubscriptionPools = []
+  connections = {}
+  upcomingSubscriptionData = {}
+  upcomingSubscriptions = {}
+
   static current () {
     if (!shared.apiMakerCableConnectionPool) shared.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
 
     return shared.apiMakerCableConnectionPool
-  }
-
-  constructor () {
-    this.cableSubscriptionPools = []
-    this.connections = {}
-    this.upcomingSubscriptionData = {}
-    this.upcomingSubscriptions = {}
   }
 
   connectEventToExistingSubscription ({path, subscription, value}) {
@@ -103,27 +101,13 @@ export default class ApiMakerCableConnectionPool {
     return subscription
   }
 
-  connectCreated (modelName, callback) {
-    return this.connectModelEvent({callback, value: true, path: [modelName, "creates"]})
-  }
+  connectCreated = (modelName, callback) => this.connectModelEvent({callback, value: true, path: [modelName, "creates"]})
+  connectEvent = (modelName, modelId, eventName, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "events", eventName]})
+  connectDestroyed = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "destroys"]})
+  connectModelClassEvent = (modelName, eventName, callback) => this.connectModelEvent({callback, value: eventName, path: [modelName, "model_class_events"]})
+  connectUpdate = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})
 
-  connectEvent (modelName, modelId, eventName, callback) {
-    return this.connectModelEvent({callback, value: modelId, path: [modelName, "events", eventName]})
-  }
-
-  connectDestroyed (modelName, modelId, callback) {
-    return this.connectModelEvent({callback, value: modelId, path: [modelName, "destroys"]})
-  }
-
-  connectModelClassEvent (modelName, eventName, callback) {
-    return this.connectModelEvent({callback, value: eventName, path: [modelName, "model_class_events"]})
-  }
-
-  connectUpdate (modelName, modelId, callback) {
-    return this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})
-  }
-
-  connectUpcoming () {
+  connectUpcoming = () => {
     const subscriptionData = this.upcomingSubscriptionData
     const subscriptions = this.upcomingSubscriptions
 
@@ -142,6 +126,6 @@ export default class ApiMakerCableConnectionPool {
     if (this.scheduleConnectUpcomingTimeout)
       clearTimeout(this.scheduleConnectUpcomingTimeout)
 
-    this.scheduleConnectUpcomingTimeout = setTimeout(() => this.connectUpcoming(), 0)
+    this.scheduleConnectUpcomingTimeout = setTimeout(this.connectUpcoming, 0)
   }
 }

@@ -7,13 +7,8 @@ export default class ApiMakerCommandSubmitData {
     this.jsonData = this.traverseObject(this.data, "json")
   }
 
-  getFilesCount () {
-    return this.filesCount
-  }
-
-  getJsonData () {
-    return this.jsonData
-  }
+  getFilesCount = () => this.filesCount
+  getJsonData = () => this.jsonData
 
   getRawData () {
     if (!this.rawData) {

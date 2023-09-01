@@ -26,7 +26,5 @@ export default class ApiMakerEventEmitterListener extends React.PureComponent {
     this.props.onCalled.apply(null, ...args)
   }
 
-  render () {
-    return null
-  }
+  render = () => null
 }

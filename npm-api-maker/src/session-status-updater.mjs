@@ -3,6 +3,8 @@ import * as inflection from "inflection"
 import Logger from "./logger.mjs"
 import wakeEvent from "wake-event"
 
+const logger = new Logger({name: "ApiMaker / SessionStatusUpdater"})
+
 export default class ApiMakerSessionStatusUpdater {
   static current () {
     if (!globalThis.apiMakerSessionStatusUpdater)
@@ -27,9 +29,7 @@ export default class ApiMakerSessionStatusUpdater {
     wakeEvent(() => this.updateSessionStatus())
   }
 
-  debug (message) {
-    Logger.log(`API maker / SessionStatusUpdater: ${message}`)
-  }
+  debug = (message) => logger.log(() => message)
 
   async sessionStatus () {
     return new Promise((resolve) => {

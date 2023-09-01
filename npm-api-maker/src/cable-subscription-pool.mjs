@@ -5,6 +5,8 @@ import {digg} from "diggerize"
 import * as inflection from "inflection"
 import Logger from "./logger.mjs"
 
+const logger = new Logger({name: "ApiMaker / CableSubscriptionPool"})
+
 export default class ApiMakerCableSubscriptionPool {
   constructor () {
     this.activeSubscriptions = 0
@@ -14,6 +16,8 @@ export default class ApiMakerCableSubscriptionPool {
   connect (subscriptionData) {
     const globalData = CommandsPool.current().globalRequestData
 
+    logger.log(() => ["Creating subscription", {subscriptionData}])
+
     this.subscription = ChannelsConsumer.subscriptions.create(
       {
         channel: "ApiMaker::SubscriptionsChannel",
@@ -21,8 +25,9 @@ export default class ApiMakerCableSubscriptionPool {
         subscription_data: subscriptionData
       },
       {
-        connected: () => this.onConnected(),
-        received: (data) => this.onReceived(data)
+        connected: this.onConnected,
+        received: this.onReceived,
+        subscribed: this.onSubscribed
       }
     )
     this.connected = true
@@ -69,17 +74,15 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
-  isConnected () {
-    return digg(this, "connected")
-  }
+  isConnected = () => digg(this, "connected")
 
-  onConnected () {
+  onConnected = () => {
     this.forEachSubscription(({subscription}) => {
       subscription.events.emit("connected")
     })
   }
 
-  onReceived (rawData) {
+  onReceived = (rawData) => {
     const data = Deserializer.parse(rawData)
     const {a: args, e: eventName, m: model, mi: modelId, mt: modelType, t: type} = data
     const subscriptions = digg(this, "subscriptions")
@@ -124,13 +127,17 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
+  onSubscribed = () => {
+    logger.log("onSubscribed")
+  }
+
   onUnsubscribe () {
-    Logger.log(`activeSubscriptions before unsub: ${this.activeSubscriptions}`)
+    logger.log(() => `activeSubscriptions before unsub: ${this.activeSubscriptions}`)
     this.activeSubscriptions -= 1
-    Logger.log(`activeSubscriptions after unsub: ${this.activeSubscriptions}`)
+    logger.log(() => `activeSubscriptions after unsub: ${this.activeSubscriptions}`)
 
     if (this.activeSubscriptions <= 0) {
-      Logger.log("Unsubscribe from ActionCable subscription")
+      logger.log("Unsubscribe from ActionCable subscription")
       this.subscription.unsubscribe()
       this.connected = false
     }
@@ -139,8 +146,7 @@ export default class ApiMakerCableSubscriptionPool {
   registerSubscriptions (subscriptions) {
     this.subscriptions = subscriptions
 
-    Logger.log(`registerSubscriptions: ${subscriptions.length}`)
-    Logger.log(subscriptions)
+    logger.log(() => ["registerSubscriptions", {subscriptions}])
 
     for (const modelName in subscriptions) {
       if (subscriptions[modelName].creates) {
@@ -170,13 +176,12 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   connectUnsubscriptionForSubscription (subscription) {
-    Logger.log("Connecting to unsubscribe on subscription")
-    Logger.log({subscription})
+    logger.log(() => ["Connecting to unsubscribe on subscription", {subscription}])
 
     this.activeSubscriptions += 1
 
     subscription.events.addListener("unsubscribed", () => {
-      Logger.log("Call onUnsubscribe on self")
+      logger.log("Call onUnsubscribe on self")
 
       this.onUnsubscribe(subscription)
     })

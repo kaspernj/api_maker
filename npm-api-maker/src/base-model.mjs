@@ -153,6 +153,14 @@ export default class BaseModel {
     return foundReflection
   }
 
+  static _token () {
+    const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
+
+    if (csrfTokenElement) {
+      return csrfTokenElement.getAttribute("content")
+    }
+  }
+
   constructor (args = {}) {
     this.changes = {}
     this.newRecord = args.isNewRecord
@@ -718,9 +726,7 @@ export default class BaseModel {
     return {valid: response.valid, errors: response.errors}
   }
 
-  modelClass () {
-    return this.constructor
-  }
+  modelClass = () => this.constructor
 
   preloadRelationship (relationshipName, model) {
     this.relationshipsCache[BaseModel.snakeCase(relationshipName)] = model
@@ -731,9 +737,7 @@ export default class BaseModel {
     this._markedForDestruction = true
   }
 
-  markedForDestruction() {
-    return this._markedForDestruction
-  }
+  markedForDestruction = () => this._markedForDestruction
 
   uniqueKey () {
     if (!this.uniqueKeyValue) {
@@ -766,9 +770,7 @@ export default class BaseModel {
     }
   }
 
-  _callMemberCommand (args, commandArgs) {
-    return CommandsPool.addCommand(args, commandArgs)
-  }
+  _callMemberCommand = (args, commandArgs) => CommandsPool.addCommand(args, commandArgs)
 
   static _postDataFromArgs (args) {
     let postData
@@ -959,15 +961,5 @@ export default class BaseModel {
     }
   }
 
-  primaryKey () {
-    return this.readAttributeUnderscore(this.constructor.primaryKey())
-  }
-
-  static _token () {
-    const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
-
-    if (csrfTokenElement) {
-      return csrfTokenElement.getAttribute("content")
-    }
-  }
+  primaryKey = () => this.readAttributeUnderscore(this.constructor.primaryKey())
 }

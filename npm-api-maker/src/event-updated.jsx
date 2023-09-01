@@ -68,7 +68,5 @@ export default class ApiMakerEventUpdated extends React.PureComponent {
     }
   }
 
-  render () {
-    return null
-  }
+  render = () => null
 }
