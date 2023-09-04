@@ -28,9 +28,7 @@ export default class ErrorLogger {
     this.connectUnhandledRejection()
   }
 
-  getErrors () {
-    return this.errors
-  }
+  getErrors = () => this.errors
 
   hasErrorOccurred() {
     return digg(this, "errorOccurred")

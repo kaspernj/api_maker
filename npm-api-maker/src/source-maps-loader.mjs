@@ -10,15 +10,13 @@ if (SourceMapConsumer.initialize) {
   })
 }
 
+const logger = new Logger({name: "ApiMaker / SourceMapsLoader"})
+
 export default class SourceMapsLoader {
   constructor () {
     this.isLoadingSourceMaps = false
     this.sourceMaps = []
     this.srcLoaded = {}
-  }
-
-  debug(messageCallback) {
-    if (Logger.current().getDebug()) Logger.log(`API maker / SourceMapsLoader: ${messageCallback.call()}`)
   }
 
   loadSourceMapsForScriptTags (callback) {
@@ -72,11 +70,11 @@ export default class SourceMapsLoader {
         const sourceMapUrl = this.getMapURL({src: file})
 
         if (sourceMapUrl) {
-          this.debug(() => `Found source map from error: ${sourceMapUrl}`)
+          logger.debug(() => `Found source map from error: ${sourceMapUrl}`)
 
           sources.push({originalUrl: file, sourceMapUrl})
         } else {
-          this.debug(() => `Coudn't get source map from: ${file}`)
+          logger.debug(() => `Coudn't get source map from: ${file}`)
         }
       }
     }
@@ -92,7 +90,7 @@ export default class SourceMapsLoader {
       const sourceMapUrl = this.getMapURL({script, src: script.src})
 
       if (sourceMapUrl) {
-        this.debug(() => `Found source map from script: ${sourceMapUrl}`)
+        logger.debug(() => `Found source map from script: ${sourceMapUrl}`)
         sources.push({originalUrl: script.src, sourceMapUrl})
       }
     }

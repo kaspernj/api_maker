@@ -1,29 +1,32 @@
 const shared = {}
 
 export default class ApiMakerLogger {
-  static current() {
-    if (!shared.apiMakerLogger) {
-      shared.apiMakerLogger = new ApiMakerLogger()
-      // shared.apiMakerLogger.setDebug(true)
-    }
+  static getGlobalDebug = () => shared.isDebugging
 
-    return shared.apiMakerLogger
+  static setGlobalDebug(newValue) {
+    shared.isDebugging = newValue
   }
 
-  static log(message) {
-    ApiMakerLogger.current().log(message)
+  constructor(args = {}) {
+    this.name = args.name
+  }
+
+  debug(message) {
+    if (this.getDebug()) this.log(message)
   }
 
   log(message) {
-    if (this.debug)
-      console.log("ApiMaker", message)
+    if (!this.debug && !ApiMakerLogger.getGlobalDebug()) return
+    if (typeof message == "function") message = message()
+    if (!Array.isArray(message)) message = [message]
+    if (this.name) message.unshift(`${this.name}:`)
+
+    console.log(...message)
   }
 
-  getDebug() {
-    return this.debug
-  }
+  getDebug = () => this.isDebugging
 
   setDebug(value) {
-    this.debug = value
+    this.isDebugging = value
   }
 }

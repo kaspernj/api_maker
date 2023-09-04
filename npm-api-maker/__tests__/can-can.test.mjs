@@ -1,5 +1,6 @@
 import CanCan from "../src/can-can.mjs"
 import {jest} from "@jest/globals"
+import Services from "../src/services.mjs"
 
 jest.mock("../src/services.mjs")
 
@@ -8,7 +9,6 @@ describe("CanCan", () => {
 
   describe("resetAbilities", () => {
     test("that reset abilities and load abilities not have concurrency issues", async () => {
-      import Services from "../src/services.mjs"
       const mockedCurrent = jest.fn().mockReturnValue({
         sendRequest: async () => ({abilities: ["loaded"]})
       })

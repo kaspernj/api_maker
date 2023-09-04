@@ -23,7 +23,5 @@ export default class ApiMakerEventDestroyed extends React.PureComponent {
     this.connectDestroyed = ModelEvents.connectDestroyed(this.props.model, this.props.onDestroyed)
   }
 
-  render () {
-    return null
-  }
+  render = () => null
 }

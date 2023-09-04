@@ -1,4 +1,5 @@
 import RoutesNative from "../src/routes-native.mjs"
+
 const testRoutes = () => ({
   routes: [
     {"name": "blank", "path": "/blank", "component": "blank"},

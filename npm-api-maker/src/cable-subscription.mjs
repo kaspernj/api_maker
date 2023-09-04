@@ -1,6 +1,8 @@
 import EventEmitter from "events"
 import Logger from "./logger.mjs"
 
+const logger = new Logger({name: "ApiMaker / CableSubscription"})
+
 export default class ApiMakerCableSubscription {
   constructor () {
     this.events = new EventEmitter()
@@ -9,13 +11,13 @@ export default class ApiMakerCableSubscription {
 
   unsubscribe () {
     if (!this.subscribed) {
-      Logger.log("Unsubscribed already called")
+      logger.log("Unsubscribed already called")
       return
     }
 
-    Logger.log("Unsubscribe called for subscription")
+    logger.log("Unsubscribe called for subscription")
 
-    this.events.emit("unsubscribed")
     this.subscribed = false
+    this.events.emit("unsubscribed")
   }
 }
