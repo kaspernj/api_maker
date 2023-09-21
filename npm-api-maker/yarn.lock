@@ -2540,10 +2540,10 @@ entities@^4.4.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.4.0.tgz#97bdaba170339446495e653cfd2db78962900174"
   integrity sha512-oYp7156SP8LkeGD0GF85ad1X9Ai79WtRsZ2gxJqtBuzH+98YUV6jkHEKlZkMbcrjJjIVJNIDP/3WL9wQkoPbWA==
 
-"epic-locks@>= 1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/epic-locks/-/epic-locks-1.0.1.tgz#67f65bfe35c83920f45b2dcae806f6f80951fa7b"
-  integrity sha512-5T+g7+BKe0u0E5NMH+yjpvuUzvByr2TQhtr0H76yVan1EneYmd63UKWkJ0PMCqxRfFuftN7gX1ruTOxfju0Ecg==
+"epic-locks@>= 1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/epic-locks/-/epic-locks-1.0.2.tgz#23a5f957d14a49a450b4c4e1dfa1cde6c49b5a10"
+  integrity sha512-mv7xMtLEZgqECf6knXoNMbUSPte213UAelmfvYKqjsCL4iU4i5C2KSazkrSDyklrBl6vOg0nYFoyM1L5UZgUHQ==
 
 error-ex@^1.3.1:
   version "1.3.2"
