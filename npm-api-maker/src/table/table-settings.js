@@ -66,7 +66,7 @@ export default class ApiMakerTableSettings {
   }
 
   loadExistingOrCreateTableSettings = async () => {
-    await this.tableSettingsLock.write(async () => {
+    return await this.tableSettingsLock.write(async () => {
       let tableSetting = await this.loadTableSetting()
 
       if (tableSetting) {
