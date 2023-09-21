@@ -2,13 +2,28 @@ import columnIdentifier from "./column-identifier.mjs"
 import columnVisible from "./column-visible.mjs"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
+import {ReadersWriterLock} from "epic-locks"
 import {serialize as objectToFormData} from "object-to-formdata"
 import {TableSetting} from "../models.mjs.erb"
 import {v4 as uuidv4} from "uuid"
 
+// Have a lock for each unique table identifier
+const tableSettingsLocks = {}
+
 export default class ApiMakerTableSettings {
   constructor({table}) {
     this.table = table
+    this.setTableSettingsLock()
+  }
+
+  setTableSettingsLock() {
+    const identifier = this.identifier()
+
+    if (!(identifier in tableSettingsLocks)) {
+      tableSettingsLocks[identifier] = new ReadersWriterLock()
+    }
+
+    this.tableSettingsLock = digg(tableSettingsLocks, identifier)
   }
 
   columns = () => digg(this, "table", "columnsAsArray")()
@@ -51,15 +66,17 @@ export default class ApiMakerTableSettings {
   }
 
   loadExistingOrCreateTableSettings = async () => {
-    let tableSetting = await this.loadTableSetting()
+    await this.tableSettingsLock.write(async () => {
+      let tableSetting = await this.loadTableSetting()
 
-    if (tableSetting) {
-      tableSetting = await this.updateTableSetting(tableSetting)
-    } else {
-      tableSetting = await this.createInitialTableSetting()
-    }
+      if (tableSetting) {
+        tableSetting = await this.updateTableSetting(tableSetting)
+      } else {
+        tableSetting = await this.createInitialTableSetting()
+      }
 
-    return tableSetting
+      return tableSetting
+    })
   }
 
   loadTableSetting = async () => {
