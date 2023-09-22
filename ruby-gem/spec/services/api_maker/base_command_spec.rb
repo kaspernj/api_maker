@@ -48,14 +48,25 @@ describe ApiMaker::BaseCommand do
         }
       )
 
-      expect(result).to include(
-        errors: [
-          {
-            message: "Project Navn kan ikke være Hans",
-            type: :validation_error
-          }
-        ]
-      )
+      if Rails::VERSION::STRING.start_with?("6")
+        expect(result).to include(
+          errors: [
+            {
+              message: "Project base Navn kan ikke være Hans",
+              type: :validation_error
+            }
+          ]
+        )
+      else
+        expect(result).to include(
+          errors: [
+            {
+              message: "Project Navn kan ikke være Hans",
+              type: :validation_error
+            }
+          ]
+        )
+      end
     end
 
     it "handles additional attributes" do

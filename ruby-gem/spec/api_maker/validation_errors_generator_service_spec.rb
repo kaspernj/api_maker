@@ -108,7 +108,12 @@ describe ApiMaker::ValidationErrorsGeneratorService do
     account.assign_attributes(params)
 
     expect(account).to be_invalid
-    expect(account.errors.full_messages).to eq ["Projects Navn kan ikke være Hans"]
+
+    if Rails::VERSION::STRING.start_with?("6")
+      expect(account.errors.full_messages).to eq ["Projects base Navn kan ikke være Hans"]
+    else
+      expect(account.errors.full_messages).to eq ["Projects Navn kan ikke være Hans"]
+    end
 
     result = ApiMaker::ValidationErrorsGeneratorService.execute!(
       model: account,
