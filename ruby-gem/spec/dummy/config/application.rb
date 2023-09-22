@@ -28,8 +28,6 @@ require "api_maker_table"
 require "cancancan"
 require "devise"
 require "js-routes"
-require "kaminari" if Gem.loaded_specs["kaminari"]
-require "will_paginate" if Gem.loaded_specs["will_paginate"]
 
 module Dummy; end
 

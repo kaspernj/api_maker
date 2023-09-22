@@ -18,87 +18,87 @@ builds:
   build_1:
     environment:
       RUBY_VERSION: 2.7.8
-    name: RSpec Kaminari Ruby 2.7.8
+    name: RSpec Rails 6 Ruby 2.7.8
     script:
-      - cd ruby-gem && bundle exec appraisal kaminari rspec --format documentation spec/api_maker spec/services
+      - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services
   build_2:
     environment:
       RUBY_VERSION: 3.2.2
-    name: RSpec Kaminari Ruby 3.2.2
+    name: RSpec Rails 6 Ruby 3.2.2
     script:
-      - cd ruby-gem && bundle exec appraisal kaminari rspec --format documentation spec/api_maker spec/services
+      - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services
   build_3:
     environment:
       RUBY_VERSION: 2.7.8
-    name: RSpec WillPaginate Ruby 2.7.8
+    name: RSpec Rails 7 Ruby 2.7.8
     script:
-      - cd ruby-gem && bundle exec appraisal will_paginate rspec --format documentation spec/api_maker spec/services
+      - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services
   build_4:
     environment:
       RUBY_VERSION: 3.2.2
-    name: RSpec WillPaginate Ruby 3.2.2
+    name: RSpec Rails 7 Ruby 3.2.2
     script:
-      - cd ruby-gem && bundle exec appraisal will_paginate rspec --format documentation spec/api_maker spec/services
+      - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services
   build_5:
     environment:
       RUBY_VERSION: 2.7.8
-    name: Chrome Kaminari Ruby 2.7.8
+    name: Chrome Rails 6 Ruby 2.7.8
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
   build_6:
     environment:
       RUBY_VERSION: 3.2.2
-    name: Chrome Kaminari Ruby 3.2.2
+    name: Chrome Rails 6 Ruby 3.2.2
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
   build_7:
     environment:
       RUBY_VERSION: 2.7.8
-    name: Chrome WillPaginate Ruby 2.7.8
+    name: Chrome Rails 7 Ruby 2.7.8
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
   build_8:
     environment:
       RUBY_VERSION: 3.2.2
-    name: Chrome WillPaginate Ruby 3.2.2
+    name: Chrome Rails 7 Ruby 3.2.2
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
   build_9:
-    name: Firefox Kaminari Ruby 2.7.8
+    name: Firefox Rails 6 Ruby 2.7.8
     environment:
       RUBY_VERSION: 2.7.8
       SELENIUM_DRIVER: firefox
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
   build_10:
-    name: Firefox Kaminari Ruby 3.2.2
+    name: Firefox Rails 6 Ruby 3.2.2
     environment:
       RUBY_VERSION: 3.2.2
       SELENIUM_DRIVER: firefox
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal kaminari rspec --format documentation spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
   build_11:
-    name: Firefox WillPaginate Ruby 2.7.8
+    name: Firefox Rails 7 Ruby 2.7.8
     environment:
       RUBY_VERSION: 2.7.8
       SELENIUM_DRIVER: firefox
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
   build_12:
-    name: Firefox WillPaginate Ruby 3.2.2
+    name: Firefox Rails 7 Ruby 3.2.2
     environment:
       RUBY_VERSION: 3.2.2
       SELENIUM_DRIVER: firefox
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal will_paginate rspec --format documentation spec/system
+      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
   build_13:
     name: Jest
     script:

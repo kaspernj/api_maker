@@ -1,7 +1,7 @@
-appraise "kaminari" do
-  gem "kaminari"
+appraise "rails 6" do
+  gem "rails", "6.1.7.6"
 end
 
-appraise "will_paginate" do
-  gem "will_paginate", ">= 3.1.7"
+appraise "rails 7" do
+  gem "rails", "7.0.8"
 end
