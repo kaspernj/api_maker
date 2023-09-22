@@ -162,6 +162,7 @@ export default class ApiMakerTableSettings {
   }
 
   updateTableSetting = async (tableSetting) => {
+    const changedAttributesList = ["attributeName","sortKey"]
     const columns = this.columns()
     const columnsData = {}
     const tableSettingData = {columns_attributes: columnsData}
@@ -193,6 +194,25 @@ export default class ApiMakerTableSettings {
 
       if (column) {
         // TODO: Update column if changed
+        let columnChanged = false
+
+        for (const changedAttribute of changedAttributesList) {
+          if (tableSettingColumn[changedAttribute]() != column[changedAttribute]) {
+            columnChanged = true
+          }
+        }
+
+        if (columnChanged) {
+          const columnKey = ++columnsKeyCount
+
+          changed = true
+          columnsData[columnKey] = {
+            attribute_name: column.attributeName,
+            id: tableSettingColumn.id(),
+            path: column.path,
+            sort_key: column.sortKey
+          }
+        }
       } else {
         // Removed saved columns no longer found
         const columnKey = ++columnsKeyCount
