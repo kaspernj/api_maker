@@ -81,14 +81,14 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     countable_collection = collection.except(:distinct).except(:group).except(:select).except(:order)
 
     Rails.logger.debug { "API maker: CollectionLoader total pages for #{model_class.name}" }
-    total_pages = countable_collection.total_pages
+    total_pages = ApiMaker::TotalPages.execute!(query: countable_collection)
 
     Rails.logger.debug { "API maker: CollectionLoader total count for #{model_class.name}" }
-    total_count = countable_collection.try(:total_count) || countable_collection.total_entries
+    total_count = ApiMaker::TotalCount.execute!(query: countable_collection)
 
     response[:meta] = {
-      currentPage: collection.current_page,
-      perPage: collection.try(:per_page) || collection.limit_value,
+      currentPage: ApiMaker::CurrentPage.execute!(query: collection),
+      perPage: ApiMaker::PerPage.execute!(query: collection),
       totalCount: total_count,
       totalPages: total_pages
     }
@@ -121,8 +121,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     distinct_query
     @query = @query.ransack(params[:q]).result
     limit_query
-    @query = @query.page(params[:page]) if params[:page].present?
-    @query = @query.per_page(params[:per]) if params[:per].present?
+    @query = ApiMaker::Paginate.execute!(page: params[:page].to_i, per_page: params[:per], query: @query) if params[:page].present?
     @query = filter_custom_accessible_by(@query)
 
     filter_query_with_search_params if params[:search]

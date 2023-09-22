@@ -82,7 +82,7 @@ module ApiMaker::ModelExtensions
         t: :e
       }
     )
-    ActionCable.server.broadcast(channel_name, data_to_broadcast)
+    ActionCable.server.broadcast(channel_name, **data_to_broadcast)
   end
 
   def api_maker_event_channel_name(event_name)
