@@ -4,7 +4,7 @@ class ApiMaker::TotalPages < ApiMaker::ApplicationService
   def perform
     limit = query.values[:limit] || 30
 
-    count = query.except(:limit, :offset).count
+    count = query.except(:limit, :offset).size
     count = count.size if count.respond_to?(:size) && !count.is_a?(Integer)
 
     total_pages = (count / limit) + 1
