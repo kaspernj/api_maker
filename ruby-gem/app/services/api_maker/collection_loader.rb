@@ -13,7 +13,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     set_query
 
     if params[:count]
-      count = @query.count
+      count = @query.size
       count = count.length if count.is_a?(Hash)
 
       succeed!(count: count)
