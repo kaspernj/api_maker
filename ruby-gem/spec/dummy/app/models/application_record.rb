@@ -5,4 +5,9 @@ class ApplicationRecord < ActiveRecord::Base
   include AwesomeTranslations::TranslateFunctionality
 
   self.abstract_class = true
+
+  def self.inherited(child)
+    super
+    child.include AllRansackable
+  end
 end
