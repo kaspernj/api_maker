@@ -121,7 +121,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     distinct_query
     @query = @query.ransack(params[:q]).result
     limit_query
-    @query = ApiMaker::Paginate.execute!(page: params[:page], per_page: params[:per], query: @query) if params[:page].present?
+    @query = ApiMaker::Paginate.execute!(page: params[:page].to_i, per_page: params[:per], query: @query) if params[:page].present?
     @query = filter_custom_accessible_by(@query)
 
     filter_query_with_search_params if params[:search]
