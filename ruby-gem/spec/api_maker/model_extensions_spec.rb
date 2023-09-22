@@ -14,19 +14,23 @@ describe ApiMaker::ModelExtensions do
 
       expect(ActionCable.server).to receive(:broadcast).with(
         "api_maker_events_Task_#{task1.id}_test-event",
-        a: {name: "Kasper"},
-        e: "test-event",
-        mi: task1.id,
-        mt: "tasks",
-        t: :e
+        {
+          a: {name: "Kasper"},
+          e: "test-event",
+          mi: task1.id,
+          mt: "tasks",
+          t: :e
+        }
       )
       expect(ActionCable.server).to receive(:broadcast).with(
         "api_maker_events_Task_#{task2.id}_test-event",
-        a: {name: "Kasper"},
-        e: "test-event",
-        mi: task2.id,
-        mt: "tasks",
-        t: :e
+        {
+          a: {name: "Kasper"},
+          e: "test-event",
+          mi: task2.id,
+          mt: "tasks",
+          t: :e
+        }
       )
 
       task1.api_maker_event("test-event", name: "Kasper")
