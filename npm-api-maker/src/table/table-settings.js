@@ -210,7 +210,7 @@ export default class ApiMakerTableSettings {
           }
 
           const oldAttributeValue = tableSettingColumn[changedAttribute]()
-          const newAttributeValue = digg(column, columnAttributeName)
+          const newAttributeValue = column[columnAttributeName]
 
           if (oldAttributeValue != newAttributeValue) {
             logger.debug(() => `${changedAttribute} changed from ${oldAttributeValue} to ${newAttributeValue} on column: ${column.label}`)
