@@ -70,7 +70,7 @@ export default class ApiMakerSessionStatusUpdater {
 
     const result = await this.sessionStatus()
 
-    logger.debug(`Result: ${JSON.stringify(result, null, 2)}`)
+    logger.debug(() => `Result: ${JSON.stringify(result, null, 2)}`)
     this.updateMetaElementsFromResult(result)
     this.updateUserSessionsFromResult(result)
   }
@@ -80,7 +80,7 @@ export default class ApiMakerSessionStatusUpdater {
     const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
     if (csrfTokenElement) {
-      logger.debug(`Changing token from "${csrfTokenElement.getAttribute("content")}" to "${result.csrf_token}"`)
+      logger.debug(() => `Changing token from "${csrfTokenElement.getAttribute("content")}" to "${result.csrf_token}"`)
       csrfTokenElement.setAttribute("content", result.csrf_token)
     } else {
       logger.debug("csrf token element couldn't be found")
@@ -104,7 +104,7 @@ export default class ApiMakerSessionStatusUpdater {
     const signedInOnBackend = scope.signed_in
 
     if (currentlySignedIn && !signedInOnBackend) {
-      logger.debug(`${inflection.camelize(scopeName)} signed in on frontend but not in backend!`)
+      logger.debug(() => `${inflection.camelize(scopeName)} signed in on frontend but not in backend!`)
 
       Devise.setSignedOut({scope: scopeName})
       Devise.callSignOutEvent({scope: scopeName})
