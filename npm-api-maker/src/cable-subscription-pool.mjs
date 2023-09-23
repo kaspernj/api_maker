@@ -16,7 +16,7 @@ export default class ApiMakerCableSubscriptionPool {
   connect (subscriptionData) {
     const globalData = CommandsPool.current().globalRequestData
 
-    logger.log(() => ["Creating subscription", {subscriptionData}])
+    logger.debug(() => ["Creating subscription", {subscriptionData}])
 
     this.subscription = ChannelsConsumer.subscriptions.create(
       {
@@ -128,16 +128,16 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   onSubscribed = () => {
-    logger.log("onSubscribed")
+    logger.debug("onSubscribed")
   }
 
   onUnsubscribe () {
-    logger.log(() => `activeSubscriptions before unsub: ${this.activeSubscriptions}`)
+    logger.debug(() => `activeSubscriptions before unsub: ${this.activeSubscriptions}`)
     this.activeSubscriptions -= 1
-    logger.log(() => `activeSubscriptions after unsub: ${this.activeSubscriptions}`)
+    logger.debug(() => `activeSubscriptions after unsub: ${this.activeSubscriptions}`)
 
     if (this.activeSubscriptions <= 0) {
-      logger.log("Unsubscribe from ActionCable subscription")
+      logger.debug("Unsubscribe from ActionCable subscription")
       this.subscription.unsubscribe()
       this.connected = false
     }
@@ -146,7 +146,7 @@ export default class ApiMakerCableSubscriptionPool {
   registerSubscriptions (subscriptions) {
     this.subscriptions = subscriptions
 
-    logger.log(() => ["registerSubscriptions", {subscriptions}])
+    logger.debug(() => ["registerSubscriptions", {subscriptions}])
 
     for (const modelName in subscriptions) {
       if (subscriptions[modelName].creates) {
@@ -176,12 +176,12 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   connectUnsubscriptionForSubscription (subscription) {
-    logger.log(() => ["Connecting to unsubscribe on subscription", {subscription}])
+    logger.debug(() => ["Connecting to unsubscribe on subscription", {subscription}])
 
     this.activeSubscriptions += 1
 
     subscription.events.addListener("unsubscribed", () => {
-      logger.log("Call onUnsubscribe on self")
+      logger.debug("Call onUnsubscribe on self")
 
       this.onUnsubscribe(subscription)
     })
