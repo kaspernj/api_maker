@@ -2,10 +2,13 @@ import columnIdentifier from "./column-identifier.mjs"
 import columnVisible from "./column-visible.mjs"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
+import Logger from "../logger.mjs"
 import {ReadersWriterLock} from "epic-locks"
 import {serialize as objectToFormData} from "object-to-formdata"
 import {TableSetting} from "../models.mjs.erb"
 import {v4 as uuidv4} from "uuid"
+
+const logger = new Logger({name: "ApiMaker / TableSettings"})
 
 // Have a lock for each unique table identifier
 const tableSettingsLocks = {}
@@ -162,7 +165,7 @@ export default class ApiMakerTableSettings {
   }
 
   updateTableSetting = async (tableSetting) => {
-    const changedAttributesList = ["attributeName","sortKey"]
+    const changedAttributesList = ["attributeName", "sortKey"]
     const columns = this.columns()
     const columnsData = {}
     const tableSettingData = {columns_attributes: columnsData}
@@ -185,6 +188,7 @@ export default class ApiMakerTableSettings {
           }
         )
 
+        logger.debug(() => `Changed because of new column: ${column.label}`)
         changed = true
       }
     }
@@ -197,9 +201,29 @@ export default class ApiMakerTableSettings {
         let columnChanged = false
 
         for (const changedAttribute of changedAttributesList) {
-          if (tableSettingColumn[changedAttribute]() != column[changedAttribute]) {
+          let columnAttributeName
+
+          if (changedAttribute == "attributeName") {
+            columnAttributeName = "attribute"
+          } else {
+            columnAttributeName = changedAttribute
+          }
+
+          const oldAttributeValue = tableSettingColumn[changedAttribute]()
+          const newAttributeValue = digg(column, columnAttributeName)
+
+          if (oldAttributeValue != newAttributeValue) {
+            logger.debug(() => `${changedAttribute} changed from ${oldAttributeValue} to ${newAttributeValue} on column: ${column.label}`)
             columnChanged = true
           }
+        }
+
+        const columnPathAsString = JSON.stringify(column.path)
+        const tableSettingColumnPathAsString = tableSettingColumn.path()
+
+        if (columnPathAsString != tableSettingColumnPathAsString) {
+          logger.debug(() => `Path changed on ${column.label} from ${columnPathAsString} to ${tableSettingColumnPathAsString}`)
+          columnChanged = true
         }
 
         if (columnChanged) {
@@ -222,6 +246,8 @@ export default class ApiMakerTableSettings {
           _destroy: true
         }
         changed = true
+
+        logger.debug(() => `Column got removed: ${tableSettingColumn.identifier()}`)
       }
     }
 

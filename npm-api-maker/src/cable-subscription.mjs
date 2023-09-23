@@ -11,11 +11,11 @@ export default class ApiMakerCableSubscription {
 
   unsubscribe () {
     if (!this.subscribed) {
-      logger.log("Unsubscribed already called")
+      logger.debug("Unsubscribed already called")
       return
     }
 
-    logger.log("Unsubscribe called for subscription")
+    logger.debug("Unsubscribe called for subscription")
 
     this.subscribed = false
     this.events.emit("unsubscribed")

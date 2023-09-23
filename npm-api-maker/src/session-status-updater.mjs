@@ -29,8 +29,6 @@ export default class ApiMakerSessionStatusUpdater {
     wakeEvent(() => this.updateSessionStatus())
   }
 
-  debug = (message) => logger.log(() => message)
-
   async sessionStatus () {
     return new Promise((resolve) => {
       const xhr = new XMLHttpRequest()
@@ -48,7 +46,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   startTimeout () {
-    this.debug("startTimeout")
+    logger.debug("startTimeout")
 
     if (this.updateTimeout)
       clearTimeout(this.updateTimeout)
@@ -68,24 +66,24 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   async updateSessionStatus () {
-    this.debug("updateSessionStatus")
+    logger.debug("updateSessionStatus")
 
     const result = await this.sessionStatus()
 
-    this.debug(`Result: ${JSON.stringify(result, null, 2)}`)
+    logger.debug(() => `Result: ${JSON.stringify(result, null, 2)}`)
     this.updateMetaElementsFromResult(result)
     this.updateUserSessionsFromResult(result)
   }
 
   updateMetaElementsFromResult (result) {
-    this.debug("updateMetaElementsFromResult")
+    logger.debug("updateMetaElementsFromResult")
     const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
     if (csrfTokenElement) {
-      this.debug(`Changing token from "${csrfTokenElement.getAttribute("content")}" to "${result.csrf_token}"`)
+      logger.debug(() => `Changing token from "${csrfTokenElement.getAttribute("content")}" to "${result.csrf_token}"`)
       csrfTokenElement.setAttribute("content", result.csrf_token)
     } else {
-      this.debug("csrf token element couldn't be found")
+      logger.debug("csrf token element couldn't be found")
     }
   }
 
@@ -106,7 +104,7 @@ export default class ApiMakerSessionStatusUpdater {
     const signedInOnBackend = scope.signed_in
 
     if (currentlySignedIn && !signedInOnBackend) {
-      this.debug(`${inflection.camelize(scopeName)} signed in on frontend but not in backend!`)
+      logger.debug(() => `${inflection.camelize(scopeName)} signed in on frontend but not in backend!`)
 
       Devise.setSignedOut({scope: scopeName})
       Devise.callSignOutEvent({scope: scopeName})
