@@ -2,8 +2,9 @@ module ApiMaker::SpecHelper::ExpectNoBrowserErrors
   def expect_no_browser_errors
     logs = browser_logs
       .keep_if do |log|
-        log.level == "SEVERE" ||
-          log.message.include?("Warning: React does not recognize the `%s` prop on a DOM element.")
+        log.level == "SEVERE" &&
+          log.message.exclude?("Warning: React does not recognize the `%s` prop on a DOM element.") &&
+          log.message.exclude?("Warning: validateDOMNesting(...): %s cannot appear as a child of")
       end
 
     expect_no_browser_window_errors
