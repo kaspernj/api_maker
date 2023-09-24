@@ -101,9 +101,9 @@ export default class ApiMakerCommandsPool {
       }
 
       if (response.success === false && response.type == "invalid_authenticity_token") {
-        console.error("Invalid authenticity token - try again")
+        console.log("Invalid authenticity token - try again")
         await SessionStatusUpdater.current().updateSessionStatus()
-        continue;
+        continue
       }
 
       return response
