@@ -23,7 +23,7 @@ class ColumnRow extends React.PureComponent {
   }
 
   render() {
-    const {column, tableSettingColumn} = this.props
+    const {column, table, tableSettingColumn} = this.props
     const checkboxProps = {}
 
     if (tableSettingColumn.visible() === true) {
@@ -35,8 +35,15 @@ class ColumnRow extends React.PureComponent {
     return (
       <div className="api-maker--table--settings--column-row">
         <label>
-          <input onChange={this.onCheckboxChange} ref={this.checkboxRef} type="checkbox" {...checkboxProps} />
-          {column.label}
+          <input
+            className="api-maker--table--setings--column-checkbox"
+            data-identifier={columnIdentifier(column)}
+            onChange={this.onCheckboxChange}
+            ref={this.checkboxRef}
+            type="checkbox"
+            {...checkboxProps}
+          />
+          {table.headerLabelForColumn(column)}
         </label>
       </div>
     )

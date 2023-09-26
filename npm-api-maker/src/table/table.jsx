@@ -133,11 +133,11 @@ class ApiMakerTable extends React.PureComponent {
       preparedColumns: columns,
       preload: this.mergedPreloads(preload),
       tableSetting,
-      tableSettingsFullCacheKey: tableSetting.fullCacheKey()
+      tableSettingFullCacheKey: tableSetting.fullCacheKey()
     })
   }
 
-  updateSettingsFullCacheKey = () => this.shape.set({tableSettingsFullCacheKey: this.shape.tableSetting.fullCacheKey()})
+  updateSettingsFullCacheKey = () => this.shape.set({tableSettingFullCacheKey: this.shape.tableSetting.fullCacheKey()})
 
   columnsAsArray = () => {
     if (typeof this.props.columns == "function") return this.props.columns()
@@ -412,7 +412,20 @@ class ApiMakerTable extends React.PureComponent {
 
   tableContent () {
     const {breakPoint, workplace} = digs(this.props, "breakPoint", "workplace")
-    const {currentWorkplace, models, preparedColumns, query} = digs(this.shape, "currentWorkplace", "models", "preparedColumns", "query")
+    const {
+      currentWorkplace,
+      models,
+      preparedColumns,
+      query,
+      tableSettingFullCacheKey
+    } = digs(
+      this.shape,
+      "currentWorkplace",
+      "models",
+      "preparedColumns",
+      "query",
+      "tableSettingFullCacheKey"
+    )
     const ColumnInHeadComponent = this.columnInHeadComponent()
     const RowComponent = this.rowComponent()
 
@@ -450,6 +463,7 @@ class ApiMakerTable extends React.PureComponent {
               model={model}
               preparedColumns={preparedColumns}
               rowComponent={this.rowComponent()}
+              tableSettingFullCacheKey={tableSettingFullCacheKey}
             />
           )}
         </BodyComponent>

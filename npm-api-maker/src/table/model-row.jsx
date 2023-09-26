@@ -14,7 +14,8 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     cacheKey: PropTypes.string.isRequired,
     model: PropTypes.object.isRequired,
     liveTable: PropTypes.object.isRequired,
-    preparedColumns: PropTypes.array
+    preparedColumns: PropTypes.array,
+    tableSettingFullCacheKey: PropTypes.string.isRequired
   }
 
   render() {
