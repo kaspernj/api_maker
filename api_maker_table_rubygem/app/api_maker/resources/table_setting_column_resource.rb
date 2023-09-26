@@ -11,4 +11,8 @@ class Resources::TableSettingColumnResource < ApiMaker::BaseResource
       can CRUD, ApiMakerTable::TableSettingColumn, table_setting: {user_type: [nil, ""]}
     end
   end
+
+  def permitted_params(arg)
+    arg.params.require(:table_setting_column).permit(:visible)
+  end
 end

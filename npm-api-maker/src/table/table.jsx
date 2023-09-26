@@ -16,6 +16,7 @@ import PropTypes from "prop-types"
 import React from "react"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
+import Settings from "./settings"
 import Shape from "set-state-compare/src/shape"
 import SortLink from "../bootstrap/sort-link"
 import TableSettings from "./table-settings"
@@ -105,7 +106,8 @@ class ApiMakerTable extends React.PureComponent {
       result: undefined,
       showFilters: false,
       showNoRecordsAvailableContent: false,
-      showNoRecordsFoundContent: false
+      showNoRecordsFoundContent: false,
+      showSettings: false
     })
 
     this.loadTableSetting()
@@ -384,7 +386,7 @@ class ApiMakerTable extends React.PureComponent {
 
   tableControls() {
     const {controls} = this.props
-    const {models, qParams, query, result} = digs(this.shape, "models", "qParams", "query", "result")
+    const {models, qParams, query, result, showSettings} = digs(this.shape, "models", "qParams", "query", "result", "showSettings")
 
     return (
       <>
@@ -392,6 +394,14 @@ class ApiMakerTable extends React.PureComponent {
         <a className="filter-button" href="#" onClick={digg(this, "onFilterClicked")}>
           <i className="fa fa-fw fa-magnifying-glass la la-fw la-search" />
         </a>
+        <span style={{position: "relative"}}>
+          {showSettings &&
+            <Settings table={this} />
+          }
+          <a className="settings-button" href="#" onClick={digg(this, "onSettingsClicked")}>
+            <i className="fa fa-fw fa-gear la la-fw la-gear" />
+          </a>
+        </span>
       </>
     )
   }
@@ -561,6 +571,14 @@ class ApiMakerTable extends React.PureComponent {
   onFilterFormSubmit = (e) => {
     e.preventDefault()
     this.submitFilter()
+  }
+
+  onSettingsClicked = (e) => {
+    e.preventDefault()
+
+    const {showSettings} = digs(this.shape, "showSettings")
+
+    this.shape.set({showSettings: !showSettings})
   }
 
   submitFilter = () => {
