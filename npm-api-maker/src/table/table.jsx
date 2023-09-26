@@ -131,9 +131,13 @@ class ApiMakerTable extends React.PureComponent {
 
     this.shape.set({
       preparedColumns: columns,
-      preload: this.mergedPreloads(preload)
+      preload: this.mergedPreloads(preload),
+      tableSetting,
+      tableSettingsFullCacheKey: tableSetting.fullCacheKey()
     })
   }
+
+  updateSettingsFullCacheKey = () => this.shape.set({tableSettingsFullCacheKey: this.shape.tableSetting.fullCacheKey()})
 
   columnsAsArray = () => {
     if (typeof this.props.columns == "function") return this.props.columns()
@@ -396,7 +400,7 @@ class ApiMakerTable extends React.PureComponent {
         </a>
         <span style={{position: "relative"}}>
           {showSettings &&
-            <Settings table={this} />
+            <Settings onRequestClose={this.onRequestCloseSettings} table={this} />
           }
           <a className="settings-button" href="#" onClick={digg(this, "onSettingsClicked")}>
             <i className="fa fa-fw fa-gear la la-fw la-gear" />
@@ -572,6 +576,8 @@ class ApiMakerTable extends React.PureComponent {
     e.preventDefault()
     this.submitFilter()
   }
+
+  onRequestCloseSettings = () => this.shape.set({showSettings: false})
 
   onSettingsClicked = (e) => {
     e.preventDefault()

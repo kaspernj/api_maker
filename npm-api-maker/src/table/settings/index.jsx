@@ -1,10 +1,13 @@
 import "./style"
 import columnIdentifier from "../column-identifier.mjs"
+import EventListener from "../../event-listener.jsx"
+import PropTypes from "prop-types"
 import React from "react"
 
 class ColumnRow extends React.PureComponent {
   static propTypes = {
     column: PropTypes.object.isRequired,
+    table: PropTypes.object.isRequired,
     tableSettingColumn: PropTypes.object.isRequired
   }
 
@@ -15,13 +18,13 @@ class ColumnRow extends React.PureComponent {
     this.updateCheckboxChecked()
   }
 
+  componentDidUpdate() {
+    this.updateCheckboxChecked()
+  }
+
   render() {
     const {column, tableSettingColumn} = this.props
     const checkboxProps = {}
-
-    console.log({column, tableSettingColumn})
-
-    console.log("What was visible then?", {visible: tableSettingColumn.visible()})
 
     if (tableSettingColumn.visible() === true) {
       checkboxProps.checked = "checked"
@@ -39,7 +42,7 @@ class ColumnRow extends React.PureComponent {
     )
   }
 
-  onCheckboxChange = (e) => {
+  onCheckboxChange = () => {
     const {checked} = this
 
     if (checked === true) {
@@ -64,29 +67,44 @@ class ColumnRow extends React.PureComponent {
       this.checkboxRef.current.checked = undefined
       this.checkboxRef.current.indeterminate = true
     } else {
-      this.checkboxRef.current.checked = false
+      this.checkboxRef.current.checked = undefined
       this.checkboxRef.current.indeterminate = undefined
     }
   }
 
   async updateTableSettingColumn() {
-    const {tableSettingColumn} = this.props
+    const {table, tableSettingColumn} = this.props
 
     await tableSettingColumn.update({visible: this.checked})
+    table.updateSettingsFullCacheKey()
   }
 }
 
 export default class ApiMakerTableSettings extends React.PureComponent {
+  static propTypes = {
+    onRequestClose: PropTypes.func.isRequired,
+    table: PropTypes.object.isRequired
+  }
+
+  rootRef = React.createRef()
+
   render() {
     const {table} = this.props
     const {preparedColumns} = table.shape
 
     return (
-      <div className="api-maker--table--settings">
+      <div className="api-maker--table--settings" ref={this.rootRef}>
+        <EventListener event="mouseup" onCalled={this.onWindowMouseUp} target={window} />
         {preparedColumns?.map(({column, tableSettingColumn}) =>
-          <ColumnRow column={column} key={columnIdentifier(column)} tableSettingColumn={tableSettingColumn} />
+          <ColumnRow column={column} key={columnIdentifier(column)} table={table} tableSettingColumn={tableSettingColumn} />
         )}
       </div>
     )
+  }
+
+  onWindowMouseUp = (e) => {
+    if (this.rootRef.current && !this.rootRef.current.contains(e.target)) {
+      this.props.onRequestClose()
+    }
   }
 }
