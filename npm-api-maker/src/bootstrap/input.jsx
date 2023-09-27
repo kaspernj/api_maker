@@ -149,6 +149,12 @@ class ApiMakerBootstrapInput extends React.PureComponent {
       if (forwardedProp in this.props) moneyProps[forwardedProp] = this.props[forwardedProp]
     }
 
+    const forwardedInputProps = ["defaultValue"]
+
+    for (const forwardedInputProp of forwardedInputProps) {
+      if (forwardedInputProp in this.props.inputProps) moneyProps[forwardedInputProp] = this.props.inputProps[forwardedInputProp]
+    }
+
     return moneyProps
   }
 
