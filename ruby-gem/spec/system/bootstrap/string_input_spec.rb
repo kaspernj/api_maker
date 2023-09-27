@@ -63,6 +63,11 @@ describe "bootstrap - string input" do
     wait_for_selector ".content-container"
     wait_for_selector "label[for='project_price_per_hour']"
 
+    # It pre-fills the input
+    wait_for_selector "#project_price_per_hour[value='100.00']", visible: false
+    wait_for_expect { expect(wait_for_and_find("#project_price_per_hour_currency").value).to eq "USD" }
+
+    # It fills in new values
     fill_in "project_price_per_hour", with: 500
     select "American Dollars", from: "project_price_per_hour_currency"
 
