@@ -63,9 +63,12 @@ export default class ApiMakerDevise {
     return {model, response}
   }
 
-  static updateSession (model) {
-    const scope = digg(model.modelClassData(), "name")
-    const camelizedScopeName = inflection.camelize(scope, true)
+  static updateSession (model, args = {}) {
+    if (!args.scope) {
+      args.scope = digg(model.modelClassData(), "name")
+    }
+
+    const camelizedScopeName = inflection.camelize(args.scope, true)
 
     ApiMakerDevise.current().currents[camelizedScopeName] = model
   }
@@ -75,8 +78,9 @@ export default class ApiMakerDevise {
   }
 
   static async signOut (args = {}) {
-    if (!args.scope)
+    if (!args.scope) {
       args.scope = "user"
+    }
 
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
 
