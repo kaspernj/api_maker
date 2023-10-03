@@ -184,13 +184,14 @@ export default class BaseModel {
   assignAttributes (newAttributes) {
     for (const key in newAttributes) {
       const newValue = newAttributes[key]
+      const attributeUnderscore = inflection.underscore(key)
 
       let applyChange = true
       let deleteChange = false
 
       if (this.isAttributeLoaded(key)) {
-        const oldValue = this.readAttributeUnderscore(key)
-        const originalValue = this.modelData[key]
+        const oldValue = this.readAttribute(key)
+        const originalValue = this.modelData[attributeUnderscore]
 
         if (newValue == oldValue) {
           applyChange = false
@@ -201,9 +202,9 @@ export default class BaseModel {
       }
 
       if (applyChange) {
-        this.changes[key] = newValue
+        this.changes[attributeUnderscore] = newValue
       } else if (deleteChange) {
-        delete this.changes[key]
+        delete this.changes[attributeUnderscore]
       }
     }
   }
