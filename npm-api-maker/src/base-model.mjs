@@ -17,6 +17,18 @@ import Services from "./services.mjs"
 import ValidationError from "./validation-error.mjs"
 import {ValidationErrors} from "./validation-errors.mjs"
 
+const objectToUnderscore = (object) => {
+  const newObject = {}
+
+  for (const key in object) {
+    const underscoreKey = inflection.underscore(key)
+
+    newObject[underscoreKey] = object[key]
+  }
+
+  return newObject
+}
+
 export default class BaseModel {
   static apiMakerType = "BaseModel"
 
@@ -171,10 +183,10 @@ export default class BaseModel {
       this._readModelDataFromArgs(args)
     } else if (args.a) {
       this.abilities = args.b || {}
-      this.modelData = args.a
+      this.modelData = objectToUnderscore(args.a)
     } else if (args) {
       this.abilities = {}
-      this.modelData = args
+      this.modelData = objectToUnderscore(args)
     } else {
       this.abilities = {}
       this.modelData = {}
@@ -908,7 +920,7 @@ export default class BaseModel {
   _readModelDataFromArgs (args) {
     this.abilities = args.data.b || {}
     this.collection = args.collection
-    this.modelData = args.data.a
+    this.modelData = objectToUnderscore(args.data.a)
     this.preloadedRelationships = args.data.r
   }
 
