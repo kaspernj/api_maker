@@ -110,7 +110,9 @@ export default class ApiMakerCollection {
 
       return digg(model.relationships, reflectionNameUnderscore)
     } else {
-      throw new Error(`${reflectionName} hasnt been loaded yet`)
+      const relationshipsLoaded = uniqunize(Object.keys(model.relationships).concat(Object.keys(model.relationshipsCache)))
+
+      throw new Error(`${reflectionName} hasnt been loaded yet on ${model.modelClassData().name}. Loaded was: ${relationshipsLoaded.join(", ")}`)
     }
   }
 

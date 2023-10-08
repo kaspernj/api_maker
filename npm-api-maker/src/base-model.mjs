@@ -420,8 +420,9 @@ export default class BaseModel {
     return this._identifierKey
   }
 
-  isAssociationLoaded (associationName) {
-    if (associationName in this.relationshipsCache) return true
+  isAssociationLoaded = (associationName) => this.isAssociationLoadedUnderscore(inflection.underscore(associationName))
+  isAssociationLoadedUnderscore (associationNameUnderscore) {
+    if (associationNameUnderscore in this.relationshipsCache) return true
     return false
   }
 
