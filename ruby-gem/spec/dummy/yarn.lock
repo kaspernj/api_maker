@@ -1191,10 +1191,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@kaspernj/api-maker@1.0.280":
-  version "1.0.280"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.280.tgz#a12e3984775c43d62f25388799062b3fdefe1f07"
-  integrity sha512-QK0Zo/wFQ441l7YDyQk0WF0qocDrA8ZoCClGmOg5o+IRM0xby5iKhddsfc4kYuSx0rg4gUrqLFyQPdHJkB/+eA==
+"@kaspernj/api-maker@1.0.283":
+  version "1.0.283"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.283.tgz#c71ebc635f4a2282421b3cd99c95523857d1d8d3"
+  integrity sha512-QQyTcFeaDEAsK1RtelXW0yLgKyVP1RTIKhS5GCOyQRIuotbZhrCAnEjB0pT2eFtElW1nnZmzuUFkYJxL19zRSQ==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -4039,10 +4039,10 @@ sass-loader@^13.3.2:
   dependencies:
     neo-async "^2.6.2"
 
-sass@^1.68.0:
-  version "1.68.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.68.0.tgz#0034b0cc9a50248b7d1702ac166fd25990023669"
-  integrity sha512-Lmj9lM/fef0nQswm1J2HJcEsBUba4wgNx2fea6yJHODREoMFnwRpZydBnX/RjyXw2REIwdkbqE4hrTo4qfDBUA==
+sass@^1.69.0:
+  version "1.69.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.69.0.tgz#5195075371c239ed556280cf2f5944d234f42679"
+  integrity sha512-l3bbFpfTOGgQZCLU/gvm1lbsQ5mC/WnLz3djL2v4WCJBDrWm58PO+jgngcGRNnKUh6wSsdm50YaovTqskZ0xDQ==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
