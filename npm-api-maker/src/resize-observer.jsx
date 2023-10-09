@@ -1,5 +1,6 @@
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
+import React from "react"
 
 export default class ApiMakerResizeObserver extends React.PureComponent {
   static propTypes = PropTypesExact({
