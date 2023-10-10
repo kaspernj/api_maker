@@ -222,7 +222,17 @@ export default class BaseModel {
   }
 
   attributes () {
-    return digg(this, "modelData")
+    const result = {}
+
+    for (const key in this.modelData) {
+      result[key] = this.modelData[key]
+    }
+
+    for (const key in this.changes) {
+      result[key] = this.changes[key]
+    }
+
+    return result
   }
 
   can (givenAbilityName) {
@@ -269,6 +279,12 @@ export default class BaseModel {
     } else {
       return this.uniqueKey()
     }
+  }
+
+  localCacheKey() {
+    const cacheKeyGenerator = new CacheKeyGenerator(this)
+
+    return cacheKeyGenerator.local()
   }
 
   fullCacheKey() {
