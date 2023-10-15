@@ -10,6 +10,28 @@ class ApiMaker::BaseResource
   READ = [:create_events, :destroy_events, :read, :update_events].freeze
   WRITE = [:create, :update, :destroy].freeze
 
+  def self.aasm_state_machine
+    state_columns = [:state]
+    state_columns.each do |state_column|
+      model_class.aasm(state_column).states.each do |state|
+        attributes(:"has_state_#{state.name}")
+
+        define_method(:"has_state_#{state.name}") do
+          model.__send__(state_column).to_s == state.name.to_s
+        end
+      end
+
+      model_class.aasm(state_column).events.each do |state_event|
+        event_name = state_event.name
+        attributes :"#{state_column}_may_#{event_name}", selected_by_default: false
+
+        define_method(:"#{state_column}_may_#{event_name}") do
+          model.__send__("may_#{event_name}?")
+        end
+      end
+    end
+  end
+
   def self.attachment_attribute(attribute_name)
     attributes(
       "#{attribute_name}_content_type".to_sym,
