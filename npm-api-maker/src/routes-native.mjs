@@ -33,8 +33,10 @@ export default class ApiMakerRoutesNative {
 
             if (variableMatch) {
               localizedPathParts.push({type: "variable", count: variableCount++})
-            } else {
-              localizedPathParts.push({type: "pathPart", name: dig(this.routeTranslationParts, locale, pathPart) || pathPart})
+            } else if (pathPart) {
+              const name = this.i18n.t(`routes.${pathPart}`, null, {default: pathPart, locale})
+
+              localizedPathParts.push({type: "pathPart", name})
             }
           }
 
@@ -63,6 +65,7 @@ export default class ApiMakerRoutesNative {
   }
 
   loadRouteTranslations (i18n) {
+    this.i18n = i18n
     const locales = digg(i18n, "locales")
 
     for (const locale in locales) {
