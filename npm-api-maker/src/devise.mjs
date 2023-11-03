@@ -12,8 +12,9 @@ export default class ApiMakerDevise {
   }
 
   static current () {
-    if (!globalThis.currentApiMakerDevise)
-    globalThis.currentApiMakerDevise = new ApiMakerDevise()
+    if (!globalThis.currentApiMakerDevise) {
+      globalThis.currentApiMakerDevise = new ApiMakerDevise()
+    }
 
     return globalThis.currentApiMakerDevise
   }
