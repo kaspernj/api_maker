@@ -151,7 +151,7 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
     label() {
       if ("label" in this.props) {
         return this.props.label
-      } else if (this.props.model) {
+      } else if (this.props.attribute && this.props.model) {
         return this.props.model.modelClass().humanAttributeName(this.props.attribute)
       }
     }
