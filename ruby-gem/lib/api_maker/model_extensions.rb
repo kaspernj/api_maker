@@ -62,7 +62,7 @@ module ApiMaker::ModelExtensions
 
     def translated_collection(collection_name, allow_blank: false, helper_methods: true, &blk)
       ApiMaker::TranslatedCollections.add(
-        allow_blank:,
+        allow_blank: allow_blank,
         blk: blk,
         collection_name: collection_name,
         helper_methods: helper_methods,
