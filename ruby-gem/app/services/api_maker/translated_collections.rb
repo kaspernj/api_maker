@@ -1,7 +1,7 @@
 class ApiMaker::TranslatedCollections
   class InvalidCollectionValueError < RuntimeError; end
 
-  def self.add(blk:, collection_name:, helper_methods:, model_class:) # rubocop:disable Metrics/AbcSize
+  def self.add(allow_blank:, blk:, collection_name:, helper_methods:, model_class:) # rubocop:disable Metrics/AbcSize
     @translated_collections ||= {}
     collections = {}
     model_class_name = model_class.name
@@ -34,7 +34,7 @@ class ApiMaker::TranslatedCollections
     add_with_scope(model_class, collection_name, plural_name, collection_values_as_strings)
     add_without_scope(model_class, collection_name, plural_name, collection_values_as_strings)
 
-    model_class.validates collection_name, inclusion: {in: collection_values}
+    model_class.validates collection_name, allow_blank:, inclusion: {in: collection_values}
   end
 
   def self.add_helper_methods(model_class, collection_name, collection_values_as_strings)
