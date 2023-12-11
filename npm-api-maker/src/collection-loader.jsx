@@ -1,5 +1,5 @@
 import Collection from "./collection"
-import {debounce} from "debounce"
+import debounce from "debounce"
 import {digg, digs} from "diggerize"
 import EventCreated from "./event-created"
 import EventDestroyed from "./event-destroyed"
