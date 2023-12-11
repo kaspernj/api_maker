@@ -87,6 +87,8 @@ class CollectionLoader extends React.PureComponent {
       changed = true
     } else if (prevProps.queryParams[querySName] != this.props.queryParams[querySName]) {
       changed = true
+    } else if (prevProps.collection != this.props.collection) {
+      changed = true
     }
 
     if (changed) {
