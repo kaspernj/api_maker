@@ -1199,14 +1199,14 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@kaspernj/api-maker@1.0.287":
-  version "1.0.287"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.287.tgz#c2dbb10bf180450f737e068422f694a41a42eb20"
-  integrity sha512-js4pk3z7BOKTABDPeqBtWdcqX3ix8OrKJigqQKqcBZuMqVWxKPx2ZhKKRnVISZO3ol+ak0LNHkG7KXZyVpItTw==
+"@kaspernj/api-maker@1.0.289":
+  version "1.0.289"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.289.tgz#ea0dec09580afdf74ced276efe59cd7e4023fdc8"
+  integrity sha512-2NCl772jsjIFcP9XAxqjGkrTJyBcJHUZHRKE3KnKEh01nsFpbMHDKinyA/1ans6vCne4/ADeS/xCXFhluxBO8g==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
-    debounce ">= 1.2.1"
+    debounce ">= 2.0.0"
     diggerize ">= 1.0.5"
     epic-locks ">= 1.0.2"
     form-data-objectizer ">= 1.0.0"
@@ -2198,7 +2198,7 @@ csso@^5.0.5:
   dependencies:
     css-tree "~2.2.0"
 
-"debounce@>= 1.2.1", debounce@^2.0.0:
+"debounce@>= 2.0.0", debounce@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-2.0.0.tgz#b2f914518a1481466f4edaee0b063e4d473ad549"
   integrity sha512-xRetU6gL1VJbs85Mc4FoEGSjQxzpdxRyFhe3lmWFyy2EzydIcD4xzUvRJMD+NPDfMwKNhxa3PvsIOU32luIWeA==
