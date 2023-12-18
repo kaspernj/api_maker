@@ -365,6 +365,7 @@ class ApiMakerTable extends React.PureComponent {
           <input
             className="btn btn-primary live-table--submit-filter-button"
             type="submit"
+            style={{marginTop: "8px"}}
             value={filterSubmitLabel || I18n.t("js.api_maker_bootstrap.live_table.filter")}
           />
         }
