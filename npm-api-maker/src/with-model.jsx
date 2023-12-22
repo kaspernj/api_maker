@@ -76,7 +76,7 @@ export default (WrappedComponent, modelClassArg, argsArg = {}) => {
       const ModelClass = digg(this, "modelClass")
       const query = await ModelClass.ransack({id_eq: modelId})
 
-      if (!modelId) throw new Error(`No model ID was given: ${modelId}`)
+      if (!modelId) throw new Error(`No model ID was given: ${modelId} by '${this.paramsVariableName}' in query params: ${Object.keys(this.props.match.params).join(", ")}`)
       if (this.args.abilities) query.abilities(this.args.abilities)
       if (this.args.preload) query.preload(this.args.preload)
       if (this.args.select) query.select(this.args.select)
