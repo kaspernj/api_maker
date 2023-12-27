@@ -5,7 +5,7 @@ class Resources::WorkplaceLinkResource < Resources::ApplicationResource
 
   def abilities
     workplace_args = {user_id: current_user.id}
-    workplace_args[:user_type] = "User" if WorkerPlugins::Workplace.columns_hash.key?("user_type")
+    workplace_args[:user_type] = "User" if WorkerPlugins::UserRelationshipPolymorphic.execute!
 
     can [:destroy, :read], workplace: workplace_args if signed_in?
   end

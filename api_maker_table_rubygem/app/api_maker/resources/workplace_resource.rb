@@ -28,7 +28,7 @@ class Resources::WorkplaceResource < Resources::ApplicationResource
 
     if signed_in?
       workplace_args = {user_id: current_user.id}
-      workplace_args[:user_type] = "User" if WorkerPlugins::Workplace.columns_hash.key?("user_type")
+      workplace_args[:user_type] = "User" if WorkerPlugins::UserRelationshipPolymorphic.execute!
 
       can USER_ABILITIES, WorkerPlugins::Workplace, workplace_args
     end
