@@ -10,13 +10,7 @@ PATH
       ransack
       service_pattern (>= 1.0.5)
       waitutil
-
-PATH
-  remote: /home/dev/Development/api_maker/api_maker_table_rubygem
-  specs:
-    api_maker_table (0.1.1)
-      rails (>= 6.0.0)
-      worker_plugins (>= 0.0.5)
+      with_advisory_lock
 
 GEM
   remote: https://rubygems.org/
@@ -363,7 +357,8 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    worker_plugins (0.0.5)
+    with_advisory_lock (5.0.0)
+      activerecord (>= 6.1)
     wref (0.0.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
@@ -374,7 +369,6 @@ PLATFORMS
 
 DEPENDENCIES
   api_maker!
-  api_maker_table!
   appraisal
   awesome_translations (>= 0.0.62)
   best_practice_project

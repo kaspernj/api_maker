@@ -27,7 +27,10 @@ class Resources::WorkplaceResource < Resources::ApplicationResource
     can [:create_link, :current, :switch_query_on_workplace], WorkerPlugins::Workplace
 
     if signed_in?
-      can USER_ABILITIES, WorkerPlugins::Workplace, user_id: current_user.id, user_type: "User"
+      workplace_args = {user_id: current_user.id}
+      workplace_args[:user_type] = "User" if WorkerPlugins::Workplace.columns_hash.key?("user_type")
+
+      can USER_ABILITIES, WorkerPlugins::Workplace, workplace_args
     end
   end
 end

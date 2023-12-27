@@ -1,5 +1,6 @@
 import EventConnection from "../event-connection"
 import modelClassRequire from "../model-class-require.mjs"
+import PropTypesExact from "prop-types-exact"
 
 const Workplace = modelClassRequire("Workplace")
 
