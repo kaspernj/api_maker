@@ -1,5 +1,6 @@
 import Collection from "../collection.mjs"
 import EventConnection from "../event-connection"
+import PropTypesExact from "prop-types-exact"
 import {simpleObjectDifferent} from "set-state-compare/src/diff-utils"
 import {useEffect, useRef} from "react"
 
