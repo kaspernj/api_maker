@@ -185,7 +185,7 @@ class ApiMakerTable extends React.PureComponent {
       "showNoRecordsFoundContent"
     )
 
-    if (collection && collection.args.modelClass != modelClass) {
+    if (collection && collection.args.modelClass.modelClassData().name != modelClass.modelClassData().name) {
       throw new Error(
         `Model class from collection '${collection.args.modelClass.modelClassData().name}' ` +
         `didn't match model class on table: '${modelClass.modelClassData().name}'`
