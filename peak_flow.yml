@@ -23,8 +23,8 @@ builds:
       - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services
   build_2:
     environment:
-      RUBY_VERSION: 3.2.2
-    name: RSpec Rails 6 Ruby 3.2.2
+      RUBY_VERSION: 3.3.0
+    name: RSpec Rails 6 Ruby 3.3.0
     script:
       - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services
   build_3:
@@ -35,8 +35,8 @@ builds:
       - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services
   build_4:
     environment:
-      RUBY_VERSION: 3.2.2
-    name: RSpec Rails 7 Ruby 3.2.2
+      RUBY_VERSION: 3.3.0
+    name: RSpec Rails 7 Ruby 3.3.0
     script:
       - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services
   build_5:
@@ -48,8 +48,8 @@ builds:
       - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
   build_6:
     environment:
-      RUBY_VERSION: 3.2.2
-    name: Chrome Rails 6 Ruby 3.2.2
+      RUBY_VERSION: 3.3.0
+    name: Chrome Rails 6 Ruby 3.3.0
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
       - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
@@ -62,8 +62,8 @@ builds:
       - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
   build_8:
     environment:
-      RUBY_VERSION: 3.2.2
-    name: Chrome Rails 7 Ruby 3.2.2
+      RUBY_VERSION: 3.3.0
+    name: Chrome Rails 7 Ruby 3.3.0
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
       - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
@@ -76,9 +76,9 @@ builds:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
       - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
   build_10:
-    name: Firefox Rails 6 Ruby 3.2.2
+    name: Firefox Rails 6 Ruby 3.3.0
     environment:
-      RUBY_VERSION: 3.2.2
+      RUBY_VERSION: 3.3.0
       SELENIUM_DRIVER: firefox
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
@@ -92,9 +92,9 @@ builds:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
       - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
   build_12:
-    name: Firefox Rails 7 Ruby 3.2.2
+    name: Firefox Rails 7 Ruby 3.3.0
     environment:
-      RUBY_VERSION: 3.2.2
+      RUBY_VERSION: 3.3.0
       SELENIUM_DRIVER: firefox
     script:
       - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
