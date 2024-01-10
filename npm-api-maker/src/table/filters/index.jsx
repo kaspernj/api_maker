@@ -1,7 +1,9 @@
+import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
 import {digg, digs} from "diggerize"
+import Input from "../../bootstrap/input"
+import FilterForm from "./filter-form"
 import PropTypes from "prop-types"
 import React from "react"
-import FilterForm from "./filter-form"
 import Shape from "set-state-compare/src/shape"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
@@ -63,19 +65,18 @@ class ApiMakerTableFilters extends React.PureComponent {
   }
 
   shape = new Shape(this, {
-    filter: undefined
+    filter: undefined,
+    showSaveSearchModal: false
   })
 
   render() {
     const {modelClass, querySName} = digs(this.props, "modelClass", "querySName")
-    const {filter} = digs(this.shape, "filter")
+    const {filter, showSaveSearchModal} = digs(this.shape, "filter", "showSaveSearchModal")
     const currentFilters = this.currentFilters()
+    const Modal = apiMakerConfig.getModal()
 
     return (
       <div className="api-maker--table--filters">
-        <button className="add-new-filter-button" onClick={digg(this, "onAddFilterClicked")}>
-          {I18n.t("js.api_maker.table.filters.add_new_filter", {defaultValue: "Add new filter"})}
-        </button>
         {filter &&
           <FilterForm
             filter={filter}
@@ -84,6 +85,18 @@ class ApiMakerTableFilters extends React.PureComponent {
             onApplyClicked={digg(this, "onApplyClicked")}
             querySearchName={querySName}
           />
+        }
+        {showSaveSearchModal &&
+          <Modal onRequestClose={digg(this, "onRequestCloseSaveSearchModal")}>
+            <form onSubmit={digg(this, "onSaveSearchSubmit")}>
+              <Input
+                label={I18n.t("js.api_maker.table.filters.search_name", {defaultValue: "Search name"})}
+              />
+              <button className="save-search-submit-button">
+                {I18n.t("js.api_maker.table.filters.save", {defaultValue: "Save"})}
+              </button>
+            </form>
+          </Modal>
         }
         {currentFilters?.map((filterData, filterIndex) =>
           <ApiMakerTableFilter
@@ -94,6 +107,14 @@ class ApiMakerTableFilters extends React.PureComponent {
             {...JSON.parse(filterData)}
           />
         )}
+        <div className="filter-actions">
+          <button className="add-new-filter-button" onClick={digg(this, "onAddFilterClicked")}>
+            {I18n.t("js.api_maker.table.filters.add_new_filter", {defaultValue: "Add new filter"})}
+          </button>
+          <button className="save-search-button" onClick={digg(this, "onSaveSearchClicked")}>
+            {I18n.t("js.api_maker.table.filters.save_search", {defaultValue: "Save search"})}
+          </button>
+        </div>
       </div>
     )
   }
@@ -118,6 +139,7 @@ class ApiMakerTableFilters extends React.PureComponent {
   }
 
   onApplyClicked = () => this.shape.set({filter: undefined})
+  onFilterClicked = (args) => this.shape.set({filter: args})
 
   onRemoveClicked = ({filterIndex}) => {
     const {querySName} = digs(this.props, "querySName")
@@ -136,7 +158,25 @@ class ApiMakerTableFilters extends React.PureComponent {
     })
   }
 
-  onFilterClicked = (args) => this.shape.set({filter: args})
+  onRequestCloseSaveSearchModal = () => this.shape.set({showSaveSearchModal: false})
+
+  onSaveSearchClicked = (e) => {
+    e.preventDefault()
+    this.shape.set({showSaveSearchModal: true})
+  }
+
+  onSaveSearchSubmit = async (e) => {
+    e.preventDefault()
+
+    const form = digg(e, "target")
+
+    try {
+      await TableSearch.saveRaw(form)
+      this.shape.set({showSaveSearchModal: false})
+    } catch (error) {
+      FlashMessage.errorResponse(error)
+    }
+  }
 }
 
 export default withQueryParams(ApiMakerTableFilters)
