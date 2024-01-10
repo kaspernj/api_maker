@@ -10,13 +10,14 @@ PATH
       ransack
       service_pattern (>= 1.0.5)
       waitutil
+      with_advisory_lock
 
 PATH
   remote: /home/dev/Development/api_maker/api_maker_table_rubygem
   specs:
     api_maker_table (0.1.1)
       rails (>= 6.0.0)
-      worker_plugins (>= 0.0.5)
+      worker_plugins (>= 0.0.6)
 
 GEM
   remote: https://rubygems.org/
@@ -214,9 +215,10 @@ GEM
     net-smtp (0.4.0)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.15.4-x86_64-linux)
+    nokogiri (1.16.0-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    package_json (0.1.0)
     parallel (1.23.0)
     parser (3.2.2.3)
       ast (~> 2.4.1)
@@ -234,7 +236,7 @@ GEM
     public_suffix (5.0.3)
     puma (6.4.0)
       nio4r (~> 2.0)
-    racc (1.7.1)
+    racc (1.7.3)
     rack (2.2.8)
     rack-proxy (0.7.7)
       rack
@@ -345,13 +347,14 @@ GEM
     semantic_range (3.0.0)
     service_pattern (1.0.10)
     sexp_processor (4.17.0)
-    shakapacker (7.1.0)
+    shakapacker (7.2.1)
       activesupport (>= 5.2)
+      package_json
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
     simple_delegate (0.0.4)
-    sqlite3 (1.6.6-x86_64-linux)
+    sqlite3 (1.7.0-x86_64-linux)
     string-cases (0.0.4)
     thor (1.2.2)
     timeout (0.4.0)
@@ -371,7 +374,9 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    worker_plugins (0.0.5)
+    with_advisory_lock (5.0.0)
+      activerecord (>= 6.1)
+    worker_plugins (0.0.6)
     wref (0.0.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
@@ -407,7 +412,7 @@ DEPENDENCIES
   rubocop-rspec
   selenium-webdriver (>= 4.1.0)
   sexp_processor (>= 4.16.0)
-  shakapacker (= 7.1.0)
+  shakapacker (= 7.2.1)
   sqlite3
   tzinfo-data
   webdrivers

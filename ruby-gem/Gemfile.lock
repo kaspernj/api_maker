@@ -13,7 +13,7 @@ PATH
       with_advisory_lock
 
 PATH
-  remote: /home/dev/api_maker/api_maker_table_rubygem
+  remote: /home/dev/Development/api_maker/api_maker_table_rubygem
   specs:
     api_maker_table (0.1.1)
       rails (>= 6.0.0)
@@ -194,7 +194,7 @@ GEM
     matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
+    mini_portile2 (2.8.5)
     minitest (5.18.1)
     monetize (1.12.0)
       money (~> 6.12)
@@ -215,10 +215,11 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.15.2)
+    nokogiri (1.16.0)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    package_json (0.1.0)
     parallel (1.22.1)
     parser (3.1.2.0)
       ast (~> 2.4.1)
@@ -235,7 +236,7 @@ GEM
     public_suffix (4.0.7)
     puma (5.6.4)
       nio4r (~> 2.0)
-    racc (1.7.1)
+    racc (1.7.3)
     rack (2.2.7)
     rack-proxy (0.7.7)
       rack
@@ -338,8 +339,9 @@ GEM
     semantic_range (3.0.0)
     service_pattern (1.0.10)
     sexp_processor (4.16.1)
-    shakapacker (7.1.0)
+    shakapacker (7.2.1)
       activesupport (>= 5.2)
+      package_json
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
@@ -401,7 +403,7 @@ DEPENDENCIES
   rubocop-rspec
   selenium-webdriver (>= 4.1.0)
   sexp_processor (>= 4.16.0)
-  shakapacker (= 7.1.0)
+  shakapacker (= 7.2.1)
   sqlite3
   tzinfo-data
   webdrivers
