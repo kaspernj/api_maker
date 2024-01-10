@@ -3,9 +3,9 @@ class Resources::TableSearchResource < ApiMaker::BaseResource
 
   def abilities
     if current_user
-      can CRUD, ApiMakerTable::TableSearch, table_setting: {user_id: current_user.id, user_type: current_user.class.name}
+      can CRUD, ApiMakerTable::TableSearch, user_id: current_user.id, user_type: current_user.class.name
     else
-      can CRUD, ApiMakerTable::TableSearch, table_setting: {user_type: [nil, ""]}
+      can CRUD, ApiMakerTable::TableSearch, user_type: [nil, ""]
     end
   end
 

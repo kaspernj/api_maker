@@ -5,6 +5,7 @@ import FilterForm from "./filter-form"
 import PropTypes from "prop-types"
 import React from "react"
 import Shape from "set-state-compare/src/shape"
+import {TableSearch} from "../../models.mjs.erb"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
 class ApiMakerTableFilter extends React.PureComponent {
@@ -91,6 +92,7 @@ class ApiMakerTableFilters extends React.PureComponent {
             <form onSubmit={digg(this, "onSaveSearchSubmit")}>
               <Input
                 label={I18n.t("js.api_maker.table.filters.search_name", {defaultValue: "Search name"})}
+                name="table_search[name]"
               />
               <button className="save-search-submit-button">
                 {I18n.t("js.api_maker.table.filters.save", {defaultValue: "Save"})}
@@ -169,9 +171,14 @@ class ApiMakerTableFilters extends React.PureComponent {
     e.preventDefault()
 
     const form = digg(e, "target")
+    const formData = new FormData(form)
+    const currentFilters = this.currentFilters()
+    const tableSearch = new TableSearch()
+
+    formData.append("table_search[query_params]", JSON.stringify(currentFilters))
 
     try {
-      await TableSearch.saveRaw(form)
+      await tableSearch.saveRaw(formData, {form})
       this.shape.set({showSaveSearchModal: false})
     } catch (error) {
       FlashMessage.errorResponse(error)
