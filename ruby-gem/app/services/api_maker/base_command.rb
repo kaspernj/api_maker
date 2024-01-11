@@ -2,6 +2,7 @@ class ApiMaker::BaseCommand
   ApiMaker::IncludeHelpers.execute!(klass: self)
 
   attr_reader :api_maker_args, :collection, :collection_instance, :command, :commands, :command_response, :controller, :current_ability
+  attr_accessor :execute_service_or_fail_response
 
   delegate :args, :model, :model_id, to: :command
   delegate :result_for_command, to: :command_response
@@ -144,13 +145,17 @@ class ApiMaker::BaseCommand
   end
 
   def execute_service_or_fail(service_class, *args, **opts, &blk)
-    response = service_class.execute(*args, **opts, &blk)
+    self.execute_service_or_fail_response = service_class.execute(*args, **opts, &blk)
 
-    if response.success?
+    if execute_service_or_fail_response.success?
       succeed!(success: true)
     else
-      fail_command_from_service_error_response(response)
+      fail_command_from_service_error_response(execute_service_or_fail_response)
     end
+  end
+
+  def execute_service_or_fail_result
+    execute_service_or_fail_response.result
   end
 
   def fail_command_from_service_error_response(response)
