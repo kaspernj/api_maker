@@ -41,7 +41,7 @@ class ApiMaker::TranslatedCollections
     methods = model_class.methods
 
     collection_values_as_strings.each do |value|
-      method_name = :"#{value}?"
+      method_name = :"#{collection_name}_#{value}?"
 
       raise "Helper method #{method_name} is already defined on #{model_class.name}" if methods.include?(method_name)
 
