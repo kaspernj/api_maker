@@ -16,6 +16,7 @@ const accessors = {
   history: {required: false},
   host: {required: false},
   i18n: {required: false},
+  modal: {required: false},
   routes: {required: false},
   routeDefinitions: {required: false}
 }

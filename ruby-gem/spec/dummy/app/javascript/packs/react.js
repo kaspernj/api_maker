@@ -13,8 +13,17 @@ const context = require.context("controllers", true, /.js$/)
 application.load(definitionsFromContext(context))
 
 // API maker
+const Modal = (props) => {
+  const {onRequestClose, ...restProps} = props
+
+  return (
+    <div className="api-maker-dummy-fake-modal" {...restProps} />
+  )
+}
+
 import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config.mjs"
 ApiMakerConfig.setHistory(history)
+ApiMakerConfig.setModal(() => Modal)
 
 // Devise
 import Devise from "@kaspernj/api-maker/src/devise"

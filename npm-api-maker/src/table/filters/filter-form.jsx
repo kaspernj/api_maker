@@ -339,8 +339,6 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
       throw new Error("Dont know if should search for attribute or scope?")
     }
 
-    console.log({newSearchParams})
-
     searchParams[filterIndex] = JSON.stringify(newSearchParams)
 
     const newParams = {}

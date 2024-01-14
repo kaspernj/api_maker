@@ -24,6 +24,21 @@ class Resources::UserResource < Resources::ApplicationResource
 end
 ```
 
+If you want to use the table modules:
+```ruby
+gem "api_maker_table", git: "https://github.com/kaspernj/api_maker.git"
+```
+
+Run this command:
+```bash
+rails api_maker_table:install:migrations
+```
+
+Run the migrations
+```bash
+rails db:migrate
+```
+
 Add an `api_maker_args` method to your application controller. This controls what arguments will be passed to the CanCan ability and the serializers:
 ```ruby
 class ApplicationController
