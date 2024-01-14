@@ -4,6 +4,7 @@ class CreateTableSearches < ActiveRecord::Migration[7.0]
       t.string :name, null: false
       t.text :query_params, null: false
       t.references :user, polymorphic: true
+      t.boolean :public, default: false, null: false
       t.timestamps
     end
   end

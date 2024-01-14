@@ -32,11 +32,16 @@ const ApiMakerTableFiltersSaveSearchModal = (props) => {
       <form onSubmit={onSaveSearchSubmit}>
         <Input
           id="table_search_name"
-          label={I18n.t("js.api_maker.table.filters.search_name", {defaultValue: "Search name"})}
+          label={I18n.t("js.api_maker.table.filters.save_search_modal.search_name", {defaultValue: "Search name"})}
           name="table_search[name]"
         />
+        <Checkbox
+          id="table_search_public"
+          label={I18n.t("js.api_maker.table.filters.save_search_modal.public", {defaultValue: "Public"})}
+          name="table_search[public]"
+        />
         <button className="save-search-submit-button">
-          {I18n.t("js.api_maker.table.filters.save", {defaultValue: "Save"})}
+          {I18n.t("js.api_maker.table.filters.save_search_modal.save_search", {defaultValue: "Save search"})}
         </button>
       </form>
     </Modal>

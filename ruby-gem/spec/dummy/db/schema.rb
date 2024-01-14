@@ -120,6 +120,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_14_113251) do
     t.text "query_params", null: false
     t.string "user_type"
     t.integer "user_id"
+    t.boolean "public", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_type", "user_id"], name: "index_table_searches_on_user"
