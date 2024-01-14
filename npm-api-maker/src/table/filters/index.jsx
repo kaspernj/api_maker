@@ -117,7 +117,7 @@ class ApiMakerTableFilters extends React.PureComponent {
               <button className="save-search-button" onClick={digg(this, "onSaveSearchClicked")}>
                 {I18n.t("js.api_maker.table.filters.save_search", {defaultValue: "Save search"})}
               </button>
-              <button className="load-search-submit-button" onClick={digg(this, "onLoadSearchClicked")}>
+              <button className="load-search-button" onClick={digg(this, "onLoadSearchClicked")}>
                 {I18n.t("js.api_maker.table.filters.load_search", {defaultValue: "Load search"})}
               </button>
             </>

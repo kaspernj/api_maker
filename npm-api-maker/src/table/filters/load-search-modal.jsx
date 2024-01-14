@@ -12,7 +12,7 @@ const SearchLink = (props) => {
   })
 
   return (
-    <a href="#" key={search.id()} onClick={onSearchClicked} style={{display: "block"}}>
+    <a className="load-search-link" href="#" key={search.id()} onClick={onSearchClicked} style={{display: "block"}}>
       {search.name()}
     </a>
   )

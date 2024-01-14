@@ -12,15 +12,6 @@ describe "table - filter" do
   let(:project2) { create :project, account: account2, name: "Project 2" }
   let(:user_admin) { create :user, admin: true }
 
-  let(:filter_card_selector) { ".live-table--filter-card" }
-  let(:filter_form_selector) { ".live-table--filter-form" }
-  let(:filter_submit_button_selector) { ".live-table--submit-filter-button" }
-  let(:no_tasks_available_content) { ".no-tasks-available-content" }
-  let(:no_tasks_found_content) { ".no-tasks-found-content" }
-
-  let(:created_at_identifier) { "attribute-createdAt--sort-key-createdAt" }
-  let(:finished_identifier) { "attribute-finished--sort-key-finished" }
-
   it "filters through directly on the model" do
     task1
     task2
@@ -50,5 +41,18 @@ describe "table - filter" do
       user_id: user_admin.id,
       user_type: "User"
     )
+
+    # It visits the initial page and shows all records
+    visit bootstrap_live_table_path
+    wait_for_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
+
+    # It loads the newly saved filter
+    wait_for_and_find(".filter-button").click
+    wait_for_and_find(".load-search-button").click
+    wait_for_and_find(".load-search-link", exact_text: "Test search").click
+
+    wait_for_no_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
   end
 end
