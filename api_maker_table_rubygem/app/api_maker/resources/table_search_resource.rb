@@ -1,6 +1,8 @@
 class Resources::TableSearchResource < ApiMaker::BaseResource
   self.model_class_name = "ApiMakerTable::TableSearch"
 
+  attributes :created_at, :id, :name, :query_params, :updated_at, :user_id, :user_type
+
   def abilities
     if current_user
       can CRUD, ApiMakerTable::TableSearch, user_id: current_user.id, user_type: current_user.class.name
@@ -10,6 +12,6 @@ class Resources::TableSearchResource < ApiMaker::BaseResource
   end
 
   def permitted_params(arg)
-    arg.params.require(:table_search).permit(:name, :query_params)
+    arg.params.require(:table_search).permit(:name, :query_params, :user_id, :user_type)
   end
 end

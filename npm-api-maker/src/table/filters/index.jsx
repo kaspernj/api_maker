@@ -1,11 +1,10 @@
-import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
 import {digg, digs} from "diggerize"
-import Input from "../../bootstrap/input"
 import FilterForm from "./filter-form"
+import LoadSearchModal from "./load-search-modal"
+import SaveSearchModal from "./save-search-modal"
 import PropTypes from "prop-types"
 import React from "react"
 import Shape from "set-state-compare/src/shape"
-import {TableSearch} from "../../models.mjs.erb"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
 class ApiMakerTableFilter extends React.PureComponent {
@@ -59,6 +58,7 @@ class ApiMakerTableFilter extends React.PureComponent {
 
 class ApiMakerTableFilters extends React.PureComponent {
   static propTypes = {
+    currentUser: PropTypes.object,
     modelClass: PropTypes.func.isRequired,
     queryName: PropTypes.string.isRequired,
     querySName: PropTypes.string.isRequired,
@@ -67,14 +67,15 @@ class ApiMakerTableFilters extends React.PureComponent {
 
   shape = new Shape(this, {
     filter: undefined,
+    showLoadSearchModal: false,
     showSaveSearchModal: false
   })
 
   render() {
     const {modelClass, querySName} = digs(this.props, "modelClass", "querySName")
-    const {filter, showSaveSearchModal} = digs(this.shape, "filter", "showSaveSearchModal")
+    const {currentUser} = this.props
+    const {filter, showLoadSearchModal, showSaveSearchModal} = digs(this.shape, "filter", "showLoadSearchModal", "showSaveSearchModal")
     const currentFilters = this.currentFilters()
-    const Modal = apiMakerConfig.getModal()
 
     return (
       <div className="api-maker--table--filters">
@@ -87,18 +88,16 @@ class ApiMakerTableFilters extends React.PureComponent {
             querySearchName={querySName}
           />
         }
+        {showLoadSearchModal &&
+          <LoadSearchModal
+            currentUser={currentUser}
+            modelClass={modelClass}
+            onRequestClose={digg(this, "onRequestCloseLoadSearchModal")}
+            querySearchName={querySName}
+          />
+        }
         {showSaveSearchModal &&
-          <Modal onRequestClose={digg(this, "onRequestCloseSaveSearchModal")}>
-            <form onSubmit={digg(this, "onSaveSearchSubmit")}>
-              <Input
-                label={I18n.t("js.api_maker.table.filters.search_name", {defaultValue: "Search name"})}
-                name="table_search[name]"
-              />
-              <button className="save-search-submit-button">
-                {I18n.t("js.api_maker.table.filters.save", {defaultValue: "Save"})}
-              </button>
-            </form>
-          </Modal>
+          <SaveSearchModal currentFilters={digg(this, "currentFilters")} currentUser={currentUser} onRequestClose={digg(this, "onRequestCloseSaveSearchModal")} />
         }
         {currentFilters?.map((filterData, filterIndex) =>
           <ApiMakerTableFilter
@@ -106,26 +105,33 @@ class ApiMakerTableFilters extends React.PureComponent {
             filterIndex={filterIndex}
             onClick={digg(this, "onFilterClicked")}
             onRemoveClicked={digg(this, "onRemoveClicked")}
-            {...JSON.parse(filterData)}
+            {...filterData}
           />
         )}
         <div className="filter-actions">
           <button className="add-new-filter-button" onClick={digg(this, "onAddFilterClicked")}>
             {I18n.t("js.api_maker.table.filters.add_new_filter", {defaultValue: "Add new filter"})}
           </button>
-          <button className="save-search-button" onClick={digg(this, "onSaveSearchClicked")}>
-            {I18n.t("js.api_maker.table.filters.save_search", {defaultValue: "Save search"})}
-          </button>
+          {currentUser &&
+            <>
+              <button className="save-search-button" onClick={digg(this, "onSaveSearchClicked")}>
+                {I18n.t("js.api_maker.table.filters.save_search", {defaultValue: "Save search"})}
+              </button>
+              <button className="load-search-submit-button" onClick={digg(this, "onLoadSearchClicked")}>
+                {I18n.t("js.api_maker.table.filters.load_search", {defaultValue: "Load search"})}
+              </button>
+            </>
+          }
         </div>
       </div>
     )
   }
 
-  currentFilters() {
+  currentFilters = () => {
     const {queryParams, querySName} = digs(this.props, "queryParams", "querySName")
     const currentFilters = queryParams[querySName] || []
 
-    return currentFilters
+    return currentFilters.map((currentFilter) => JSON.parse(currentFilter))
   }
 
   onAddFilterClicked = (e) => {
@@ -142,6 +148,13 @@ class ApiMakerTableFilters extends React.PureComponent {
 
   onApplyClicked = () => this.shape.set({filter: undefined})
   onFilterClicked = (args) => this.shape.set({filter: args})
+
+  onLoadSearchClicked = (e) => {
+    e.preventDefault()
+    this.shape.set({
+      showLoadSearchModal: true
+    })
+  }
 
   onRemoveClicked = ({filterIndex}) => {
     const {querySName} = digs(this.props, "querySName")
@@ -160,30 +173,20 @@ class ApiMakerTableFilters extends React.PureComponent {
     })
   }
 
+  onRequestCloseLoadSearchModal = () => this.shape.set({showLoadSearchModal: false})
   onRequestCloseSaveSearchModal = () => this.shape.set({showSaveSearchModal: false})
 
   onSaveSearchClicked = (e) => {
     e.preventDefault()
-    this.shape.set({showSaveSearchModal: true})
-  }
 
-  onSaveSearchSubmit = async (e) => {
-    e.preventDefault()
-
-    const form = digg(e, "target")
-    const formData = new FormData(form)
-    const currentFilters = this.currentFilters()
-    const tableSearch = new TableSearch()
-
-    formData.append("table_search[query_params]", JSON.stringify(currentFilters))
-
-    try {
-      await tableSearch.saveRaw(formData, {form})
-      this.shape.set({showSaveSearchModal: false})
-    } catch (error) {
-      FlashMessage.errorResponse(error)
+    if (this.hasAnyFilters()) {
+      this.shape.set({showSaveSearchModal: true})
+    } else {
+      FlashMessage.alert(I18n.t("js.api_maker.table.filters.no_filters_has_been_set", {defaultValue: "No filters has been set"}))
     }
   }
+
+  hasAnyFilters = () => Object.keys(this.currentFilters()).length > 0
 }
 
 export default withQueryParams(ApiMakerTableFilters)

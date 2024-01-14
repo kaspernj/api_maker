@@ -157,7 +157,7 @@ class ApiMakerTable extends React.PureComponent {
 
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, defaultParams, onModelsLoaded, selectColumns} = this.props
+    const {collection, currentUser, defaultParams, onModelsLoaded, selectColumns} = this.props
     const {
       overallCount,
       preload,
@@ -221,7 +221,7 @@ class ApiMakerTable extends React.PureComponent {
           </div>
         }
         {showFilters &&
-          <Filters modelClass={modelClass} queryName={queryName} querySName={querySName} />
+          <Filters currentUser={currentUser} modelClass={modelClass} queryName={queryName} querySName={querySName} />
         }
         {qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
           this.cardOrTable()
