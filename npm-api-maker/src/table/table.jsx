@@ -585,7 +585,7 @@ class ApiMakerTable extends React.PureComponent {
         const relationships = digg(currentModelClass.modelClassData(), "relationships")
         const relationship = relationships.find((relationshipInArray) => relationshipInArray.name == inflection.underscore(pathPart))
 
-        currentModelClass = modelClassRequire(digg(relationship, "className"))
+        currentModelClass = modelClassRequire(digg(relationship, "resource_name"))
       }
     }
 

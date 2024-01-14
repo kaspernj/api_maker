@@ -46,7 +46,7 @@ class SelectCalculator {
 
           if (!relationship) throw new Error(`No such relationship: ${currentModelClass.modelClassData().name}#${pathPart}`)
 
-          currentModelClass = modelClassRequire(digg(relationship, "className"))
+          currentModelClass = modelClassRequire(digg(relationship, "resource_name"))
         }
       }
 
