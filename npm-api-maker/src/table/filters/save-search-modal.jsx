@@ -2,6 +2,7 @@ import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
 import {digg} from "diggerize"
 import Input from "../../bootstrap/input"
 import {TableSearch} from "../../models.mjs.erb"
+import {useCallback} from "react"
 
 const ApiMakerTableFiltersSaveSearchModal = (props) => {
   const {currentFilters, currentUser, onRequestClose, ...restProps} = props
@@ -30,6 +31,7 @@ const ApiMakerTableFiltersSaveSearchModal = (props) => {
     <Modal onRequestClose={onRequestClose} {...restProps}>
       <form onSubmit={onSaveSearchSubmit}>
         <Input
+          id="table_search_name"
           label={I18n.t("js.api_maker.table.filters.search_name", {defaultValue: "Search name"})}
           name="table_search[name]"
         />

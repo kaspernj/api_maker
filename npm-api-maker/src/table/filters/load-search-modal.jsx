@@ -2,7 +2,7 @@ import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
 import classNames from "classnames"
 import {digg} from "diggerize"
 import {TableSearch} from "../../models.mjs.erb"
-import {useEffect} from "react"
+import {useCallback, useEffect, useState} from "react"
 
 const SearchLink = (props) => {
   const {onClick, search} = props

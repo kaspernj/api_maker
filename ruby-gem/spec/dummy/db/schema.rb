@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_01_093509) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_14_113251) do
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "task_id", null: false
@@ -113,6 +113,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_01_093509) do
     t.boolean "public", default: false, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["deleted_at"], name: "index_projects_on_deleted_at"
+  end
+
+  create_table "table_searches", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "query_params", null: false
+    t.string "user_type"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_type", "user_id"], name: "index_table_searches_on_user"
   end
 
   create_table "table_setting_columns", force: :cascade do |t|
