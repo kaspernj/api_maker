@@ -69,6 +69,7 @@ class ApiMakerTable extends React.PureComponent {
     paginateContent: PropTypes.func,
     paginationComponent: PropTypes.func,
     preloads: PropTypes.array.isRequired,
+    queryMethod: PropTypes.func,
     queryName: PropTypes.string,
     select: PropTypes.object,
     selectColumns: PropTypes.object,
@@ -157,7 +158,7 @@ class ApiMakerTable extends React.PureComponent {
 
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, currentUser, defaultParams, onModelsLoaded, selectColumns} = this.props
+    const {collection, currentUser, defaultParams, onModelsLoaded, queryMethod, selectColumns} = this.props
     const {
       overallCount,
       preload,
@@ -206,6 +207,7 @@ class ApiMakerTable extends React.PureComponent {
             noRecordsFoundContent={noRecordsFoundContent}
             pagination
             preloads={preload}
+            queryMethod={queryMethod}
             select={selectCalculator({table: this})}
             selectColumns={selectColumns}
           />
@@ -293,6 +295,7 @@ class ApiMakerTable extends React.PureComponent {
       paginateContent,
       paginationComponent,
       preloads,
+      queryMethod,
       queryName,
       select,
       selectColumns,
