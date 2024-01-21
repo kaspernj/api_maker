@@ -7,6 +7,6 @@ class Resources::WorkplaceLinkResource < Resources::ApplicationResource
     workplace_args = {user_id: current_user.id}
     workplace_args[:user_type] = "User" if WorkerPlugins::UserRelationshipPolymorphic.execute!
 
-    can [:destroy, :read], workplace: workplace_args if signed_in?
+    can READ + [:destroy], WorkerPlugins::WorkplaceLink, workplace: workplace_args if signed_in?
   end
 end

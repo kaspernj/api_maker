@@ -1,12 +1,11 @@
 class Resources::WorkplaceResource < Resources::ApplicationResource
-  USER_ABILITIES = [
+  USER_ABILITIES = READ + [
     :add_query,
     :delete_all_links,
     :destroy_links,
     :event_workplace_links_created,
     :event_workplace_links_destroyed,
     :link_for,
-    :read,
     :query_links_status,
     :remove_query
   ].freeze
