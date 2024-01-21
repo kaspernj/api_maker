@@ -21,14 +21,17 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
 
   def deserialize_api_maker_collection(arg)
     permitted_arg = arg.permit!.to_h
+    query_args = permitted_arg.fetch("value").fetch("queryArgs")
+    collection_args = {
+      query_params: {},
+      resource_class: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("args").fetch("modelClass"))
+    }
 
-    ApiMaker::Collection.new(
-      preload: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["preload"]),
-      ransack: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["ransack"]),
-      resource_class: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("args").fetch("modelClass")),
-      search: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["search"]),
-      select: ApiMaker::Deserializer.execute!(arg: permitted_arg.fetch("value").fetch("queryArgs")["select"])
-    )
+    query_args.each do |key, value|
+      collection_args[:query_params][key.underscore.to_sym] = ApiMaker::Deserializer.execute!(arg: value)
+    end
+
+    ApiMaker::Collection.new(**collection_args)
   end
 
   def deserialize_hash(arg)

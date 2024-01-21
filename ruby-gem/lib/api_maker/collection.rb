@@ -1,12 +1,9 @@
 class ApiMaker::Collection
-  attr_reader :preload, :ransack, :resource_class, :search, :select
+  attr_reader :query_params, :resource_class
 
-  def initialize(preload:, ransack:, resource_class:, search:, select:)
+  def initialize(query_params:, resource_class:)
     @resource_class = resource_class
-    @preload = preload
-    @ransack = ransack
-    @search = search
-    @select = select
+    @query_params = query_params
   end
 
   def query
@@ -20,12 +17,19 @@ class ApiMaker::Collection
     query
   end
 
-  def query_params
-    {
-      preload: preload,
-      ransack: ransack,
-      search: search,
-      select: select
-    }
+  def preload
+    @query_params[:preload]
+  end
+
+  def ransack
+    @query_params[:ransack]
+  end
+
+  def search
+    @query_params[:search]
+  end
+
+  def select
+    @query_params[:select]
   end
 end
