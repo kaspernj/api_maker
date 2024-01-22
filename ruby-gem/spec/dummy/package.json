@@ -38,7 +38,7 @@
     "rails-erb-loader": "^5.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sass": "^1.69.7",
+    "sass": "^1.70.0",
     "sass-loader": "^14.0.0",
     "set-state-compare": "^1.0.19",
     "shakapacker": "7.2.1",
