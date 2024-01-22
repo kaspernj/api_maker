@@ -39,7 +39,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.69.7",
-    "sass-loader": "^13.3.3",
+    "sass-loader": "^14.0.0",
     "set-state-compare": "^1.0.19",
     "shakapacker": "7.2.1",
     "stacktrace-parser": "^0.1.10",
