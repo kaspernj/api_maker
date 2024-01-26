@@ -1,5 +1,6 @@
 import ConfigReader from "./config-reader"
 import {digg, digs} from "diggerize"
+import * as inflection from "inflection"
 import Params from "../params"
 import PropTypes from "prop-types"
 import React from "react"
@@ -34,7 +35,7 @@ export default class ApiMakerSuperAdminModelClassTable extends React.PureCompone
   }
 
   viewModelPath = (args) => {
-    const argName = digg(this.props.modelClass.modelClassData(), "camelizedLower")
+    const argName = inflection.camelize(digg(this.props.modelClass.modelClassData(), "name"), true)
     const model = digg(args, argName)
 
     return Params.withParams({

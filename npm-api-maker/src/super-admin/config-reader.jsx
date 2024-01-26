@@ -10,7 +10,7 @@ export default class ApiMakerSuperAdminConfigReader {
       modelConfig = require(`super-admin/model-configs/${modelNameCamelized}`).default
     } catch (error) {
       if (error.message.includes("Cannot find module")) {
-        console.log(`No model-config for ${modelClass.modelClassData().name}`)
+        console.debug(`No model-config for ${modelClass.modelClassData().name}`)
       } else {
         throw error
       }
