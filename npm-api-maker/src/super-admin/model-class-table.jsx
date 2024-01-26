@@ -1,5 +1,6 @@
 import ConfigReader from "./config-reader"
 import {digg, digs} from "diggerize"
+import * as inflection from "inflection"
 import Params from "../params"
 import PropTypes from "prop-types"
 import React from "react"
