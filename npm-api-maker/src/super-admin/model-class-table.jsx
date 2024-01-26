@@ -34,7 +34,7 @@ export default class ApiMakerSuperAdminModelClassTable extends React.PureCompone
   }
 
   viewModelPath = (args) => {
-    const argName = digg(this.props.modelClass.modelClassData(), "camelizedLower")
+    const argName = inflection.camelize(digg(this.props.modelClass.modelClassData(), "name"), true)
     const model = digg(args, argName)
 
     return Params.withParams({

@@ -14,7 +14,7 @@ class SelectCalculator {
 
 
     // Ensure the primary key column is loader for the primary model class
-    const className = digg(modelClass.modelClassData(), "className")
+    const className = digg(modelClass.modelClassData(), "name")
     const primaryKeyColumnName = modelClass.primaryKey()
 
     if (!(className in select)) select[className] = []
