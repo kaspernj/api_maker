@@ -1,7 +1,7 @@
 class ApiMaker::TranslatedCollections
   class InvalidCollectionValueError < RuntimeError; end
 
-  def self.add(allow_blank:, blk:, collection_name:, helper_methods:, model_class:) # rubocop:disable Metrics/AbcSize
+  def self.add(allow_blank:, blk:, collection_name:, helper_methods:, helper_methods_prepend: false, model_class:) # rubocop:disable Metrics/AbcSize
     @translated_collections ||= {}
     collections = {}
     model_class_name = model_class.name
@@ -26,7 +26,7 @@ class ApiMaker::TranslatedCollections
     inverted_translated_collection_name = "translated_#{plural_name}_inverted"
     collection_values_as_strings = collection_values.map(&:to_s)
 
-    add_helper_methods(model_class, collection_name, collection_values_as_strings) if helper_methods
+    add_helper_methods(model_class, collection_name, collection_values_as_strings, helper_methods_prepend) if helper_methods
     add_translated_collection_method(model_class, plural_name, collections)
     add_translated_inverted_collection_method(model_class, inverted_translated_collection_name, collections)
     add_query_values_method(model_class, plural_name, collection_values)
@@ -37,11 +37,15 @@ class ApiMaker::TranslatedCollections
     model_class.validates collection_name, allow_blank: allow_blank, inclusion: {in: collection_values}
   end
 
-  def self.add_helper_methods(model_class, collection_name, collection_values_as_strings)
+  def self.add_helper_methods(model_class, collection_name, collection_values_as_strings, helper_methods_prepend)
     methods = model_class.methods
 
     collection_values_as_strings.each do |value|
-      method_name = :"#{value}?"
+      method_name = if helper_methods_prepend
+        :"#{collection_name}_#{value}?"
+      else
+        :"#{value}?"
+      end
 
       raise "Helper method #{method_name} is already defined on #{model_class.name}" if methods.include?(method_name)
 

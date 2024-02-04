@@ -5,6 +5,7 @@ import EventCreated from "./event-created"
 import EventDestroyed from "./event-destroyed"
 import EventUpdated from "./event-updated"
 import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import React from "react"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
@@ -19,13 +20,14 @@ class CollectionLoader extends React.PureComponent {
     select: {}
   }
 
-  static propTypes = {
+  static propTypes = PropTypesExact({
     abilities: PropTypes.object,
     appHistory: PropTypes.object,
     className: PropTypes.string,
     collection: PropTypes.instanceOf(Collection),
     component: PropTypes.object,
     defaultParams: PropTypes.object,
+    destroyEnabled: PropTypes.bool.isRequired,
     groupBy: PropTypes.array,
     modelClass: PropTypes.func.isRequired,
     noRecordsAvailableContent: PropTypes.func,
@@ -34,10 +36,12 @@ class CollectionLoader extends React.PureComponent {
     pagination: PropTypes.bool.isRequired,
     paginateContent: PropTypes.func,
     preloads: PropTypes.array.isRequired,
+    queryMethod: PropTypes.func,
     queryName: PropTypes.string,
+    queryParams: PropTypes.object,
     select: PropTypes.object,
     selectColumns: PropTypes.object
-  }
+  })
 
   shape = digg(this, "props", "component", "shape")
 
@@ -145,7 +149,7 @@ class CollectionLoader extends React.PureComponent {
 
   loadModels = async () => {
     const {pagination, queryParams} = digs(this.props, "pagination", "queryParams")
-    const {abilities, collection, groupBy, modelClass, onModelsLoaded, preloads, select, selectColumns} = this.props
+    const {abilities, collection, groupBy, modelClass, onModelsLoaded, preloads, queryMethod, select, selectColumns} = this.props
     const {
       qParams,
       queryPageName,
@@ -190,7 +194,14 @@ class CollectionLoader extends React.PureComponent {
     if (abilities) query = query.abilities(abilities)
     if (selectColumns) query = query.selectColumns(selectColumns)
 
-    const result = await query.result()
+    let result
+
+    if (queryMethod) {
+      result = await queryMethod({query})
+    } else {
+      result = await query.result()
+    }
+
     const models = result.models()
 
     if (onModelsLoaded) {

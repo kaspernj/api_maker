@@ -32,7 +32,13 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
       )
 
       if (this.handleAsCheckbox()) {
-        inputProps.defaultChecked = this.inputDefaultChecked()
+        if ("checked" in this.props) {
+          inputProps.checked = this.props.checked
+        }
+
+        if ("defaultChecked" in this.props || (this.props.attribute && this.props.model)) {
+          inputProps.defaultChecked = this.inputDefaultChecked()
+        }
       } else {
         inputProps.defaultValue = this.inputDefaultValue()
       }

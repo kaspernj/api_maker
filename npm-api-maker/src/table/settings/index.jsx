@@ -34,7 +34,7 @@ class ColumnRow extends React.PureComponent {
 
     return (
       <div className="api-maker--table--settings--column-row">
-        <label>
+        <label style={{whiteSpace: "nowrap"}}>
           <input
             className="api-maker--table--setings--column-checkbox"
             data-identifier={columnIdentifier(column)}

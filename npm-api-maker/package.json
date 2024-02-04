@@ -16,7 +16,7 @@
     ]
   },
   "name": "@kaspernj/api-maker",
-  "version": "1.0.291",
+  "version": "1.0.294",
   "type": "module",
   "description": "",
   "main": "index.js",
@@ -76,6 +76,6 @@
     "eslint-plugin-react": "^7.23.2",
     "i18n-on-steroids": "^1.0.7",
     "jest": "^29.0.1",
-    "jsdom": "^23.0.0"
+    "jsdom": "^24.0.0"
   }
 }

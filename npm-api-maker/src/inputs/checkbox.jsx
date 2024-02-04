@@ -33,6 +33,7 @@ class ApiMakerInputsCheckbox extends React.PureComponent {
       attribute,
       autoRefresh,
       autoSubmit,
+      checked,
       defaultChecked,
       defaultValue,
       id,

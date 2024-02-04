@@ -69,6 +69,7 @@ class ApiMakerTable extends React.PureComponent {
     paginateContent: PropTypes.func,
     paginationComponent: PropTypes.func,
     preloads: PropTypes.array.isRequired,
+    queryMethod: PropTypes.func,
     queryName: PropTypes.string,
     select: PropTypes.object,
     selectColumns: PropTypes.object,
@@ -157,7 +158,7 @@ class ApiMakerTable extends React.PureComponent {
 
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, defaultParams, onModelsLoaded, selectColumns} = this.props
+    const {collection, currentUser, defaultParams, onModelsLoaded, queryMethod, selectColumns} = this.props
     const {
       overallCount,
       preload,
@@ -206,6 +207,7 @@ class ApiMakerTable extends React.PureComponent {
             noRecordsFoundContent={noRecordsFoundContent}
             pagination
             preloads={preload}
+            queryMethod={queryMethod}
             select={selectCalculator({table: this})}
             selectColumns={selectColumns}
           />
@@ -221,7 +223,7 @@ class ApiMakerTable extends React.PureComponent {
           </div>
         }
         {showFilters &&
-          <Filters modelClass={modelClass} queryName={queryName} querySName={querySName} />
+          <Filters currentUser={currentUser} modelClass={modelClass} queryName={queryName} querySName={querySName} />
         }
         {qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
           this.cardOrTable()
@@ -293,6 +295,7 @@ class ApiMakerTable extends React.PureComponent {
       paginateContent,
       paginationComponent,
       preloads,
+      queryMethod,
       queryName,
       select,
       selectColumns,
@@ -586,7 +589,7 @@ class ApiMakerTable extends React.PureComponent {
         const relationships = digg(currentModelClass.modelClassData(), "relationships")
         const relationship = relationships.find((relationshipInArray) => relationshipInArray.name == inflection.underscore(pathPart))
 
-        currentModelClass = modelClassRequire(digg(relationship, "className"))
+        currentModelClass = modelClassRequire(digg(relationship, "resource_name"))
       }
     }
 

@@ -14,7 +14,7 @@ class SelectCalculator {
 
 
     // Ensure the primary key column is loader for the primary model class
-    const className = digg(modelClass.modelClassData(), "className")
+    const className = digg(modelClass.modelClassData(), "name")
     const primaryKeyColumnName = modelClass.primaryKey()
 
     if (!(className in select)) select[className] = []
@@ -46,7 +46,7 @@ class SelectCalculator {
 
           if (!relationship) throw new Error(`No such relationship: ${currentModelClass.modelClassData().name}#${pathPart}`)
 
-          currentModelClass = modelClassRequire(digg(relationship, "className"))
+          currentModelClass = modelClassRequire(digg(relationship, "resource_name"))
         }
       }
 
