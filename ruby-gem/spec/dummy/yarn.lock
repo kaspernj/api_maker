@@ -4174,10 +4174,10 @@ serve-static@1.15.0:
     parseurl "~1.3.3"
     send "0.18.0"
 
-set-state-compare@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.19.tgz#5c5dfca912fd45098d514905206ad95fa783692d"
-  integrity sha512-+x19TrIvPG+b0ZAHx3gvLMu38tuGtIVpN55lYjnV6l0XiUkKvfBfOWUf2MFjEh4PJ4bl0/y/e26rLgtwa68b1Q==
+set-state-compare@^1.0.21:
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.21.tgz#7dfb8164971e2107b7645831413f022f85ed1ed3"
+  integrity sha512-rj9QGZNlidXfCOnsey/xDEiF3bcfla1RzK9GAPQEV+Bb78xZ/J/JdS8B/2+vVj82AF7IYVWTwgZuVx2i6c4c2A==
 
 setprototypeof@1.1.0:
   version "1.1.0"
