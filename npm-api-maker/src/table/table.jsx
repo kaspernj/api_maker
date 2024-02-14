@@ -195,9 +195,6 @@ class ApiMakerTable extends React.PureComponent {
 
     return (
       <div className={this.className()}>
-        <div>
-          queryQName: {this.shape.queryQName}
-        </div>
         {preload !== undefined &&
           <CollectionLoader
             abilities={this.abilitiesToLoad()}
