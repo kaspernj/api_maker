@@ -13,10 +13,9 @@ module ApiMaker::SpecHelper::BrowserLogs
   end
 
   def chrome_logs
-    if Gem.loaded_specs["selenium-webdriver"].version > Gem::Version.new("4.0.0")
+    page.driver.browser.manage.try(:logs).try(:get, :browser) ||
       page.driver.browser.logs.get(:browser)
-    else
-      page.driver.browser.manage.logs.get(:browser)
-    end
+  rescue NoMethodError => e
+    raise NoMethodError, "undefined method `logs' - try '--headless=new' instead of just '--headless'"
   end
 end

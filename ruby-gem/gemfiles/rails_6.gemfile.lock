@@ -416,7 +416,7 @@ DEPENDENCIES
   shakapacker (= 7.2.1)
   sqlite3
   tzinfo-data
-  webdrivers
+  webdrivers (>= 5.3.1)
 
 BUNDLED WITH
    2.3.15

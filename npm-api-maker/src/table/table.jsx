@@ -195,6 +195,9 @@ class ApiMakerTable extends React.PureComponent {
 
     return (
       <div className={this.className()}>
+        <div>
+          queryQName: {this.shape.queryQName}
+        </div>
         {preload !== undefined &&
           <CollectionLoader
             abilities={this.abilitiesToLoad()}
@@ -540,6 +543,7 @@ class ApiMakerTable extends React.PureComponent {
   rowComponent = () => this.responsiveComponent("tr")
 
   headersContentFromColumns () {
+    const {defaultParams} = this.props
     const {preparedColumns, query} = digs(this.shape, "preparedColumns", "query")
     const ColumnInHeadComponent = this.columnInHeadComponent()
 
@@ -551,7 +555,7 @@ class ApiMakerTable extends React.PureComponent {
         {...this.columnProps(column)}
       >
         {tableSettingColumn.hasSortKey() && query &&
-          <SortLink attribute={tableSettingColumn.sortKey()} query={query} title={this.headerLabelForColumn(column)} />
+          <SortLink attribute={tableSettingColumn.sortKey()} defaultParams={defaultParams} query={query} title={this.headerLabelForColumn(column)} />
         }
         {(!tableSettingColumn.hasSortKey() || !query) &&
           this.headerLabelForColumn(column)

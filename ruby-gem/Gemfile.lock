@@ -13,7 +13,7 @@ PATH
       with_advisory_lock
 
 PATH
-  remote: /home/dev/api_maker/api_maker_table_rubygem
+  remote: /home/dev/Development/api_maker/api_maker_table_rubygem
   specs:
     api_maker_table (0.1.1)
       rails (>= 6.0.0)
@@ -358,10 +358,10 @@ GEM
     waitutil (0.2.1)
     warden (1.2.9)
       rack (>= 2.0.9)
-    webdrivers (5.0.0)
+    webdrivers (5.3.1)
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
-      selenium-webdriver (~> 4.0)
+      selenium-webdriver (~> 4.0, < 4.11)
     websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
@@ -406,7 +406,7 @@ DEPENDENCIES
   shakapacker (= 7.2.1)
   sqlite3
   tzinfo-data
-  webdrivers
+  webdrivers (>= 5.3.1)
 
 BUNDLED WITH
    2.3.15

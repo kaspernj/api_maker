@@ -12,6 +12,7 @@ class ApiMakerBootstrapSortLink extends PureComponent {
   static propTypes = {
     attribute: PropTypes.string.isRequired,
     className: PropTypes.string,
+    defaultParams: PropTypes.object,
     linkComponent: PropTypes.object,
     onChanged: PropTypes.func,
     query: PropTypes.object.isRequired,
@@ -51,7 +52,7 @@ class ApiMakerBootstrapSortLink extends PureComponent {
 
   render () {
     const LinkComponent = this.linkComponent()
-    const {attribute, className, linkComponent, onChanged, query, queryParams, title, ...restProps} = this.props
+    const {attribute, className, defaultParams, linkComponent, onChanged, query, queryParams, title, ...restProps} = this.props
 
     return (
       <>
@@ -83,10 +84,15 @@ class ApiMakerBootstrapSortLink extends PureComponent {
   }
 
   qParams() {
+    const {defaultParams} = this.props
     const {queryParams} = digs(this.props, "queryParams")
     const {searchKey} = digs(this, "searchKey")
 
-    if (searchKey in queryParams) return JSON.parse(queryParams[searchKey])
+    if (searchKey in queryParams) {
+      return JSON.parse(queryParams[searchKey])
+    } else if (defaultParams) {
+      return {...defaultParams}
+    }
 
     return {}
   }
