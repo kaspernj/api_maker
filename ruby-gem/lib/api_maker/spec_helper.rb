@@ -92,11 +92,16 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def model_column_selector(model, identifier)
-    ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}'] .live-table-column[data-identifier='#{identifier}']"
+    "#{model_row_selector(model)} .live-table-column[data-identifier='#{identifier}']"
+  end
+
+  def model_row_class_name(model)
+    resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
+    "#{resource.short_name.underscore.dasherize}-row"
   end
 
   def model_row_selector(model)
-    ".#{model.model_name.singular.dasherize}-row[data-model-id='#{model.id}']"
+    ".#{model_row_class_name(model)}[data-model-id='#{model.id}']"
   end
 
   def model_row_destroy_button_selector(model)
