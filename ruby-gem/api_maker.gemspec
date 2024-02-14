@@ -54,7 +54,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "shakapacker", "7.2.1"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "tzinfo-data"
-  s.add_development_dependency "webdrivers"
+  s.add_development_dependency "webdrivers", ">= 5.3.1"
 
   # Needed to make Ruby 3 work on CI
   s.add_development_dependency "minitest", ">= 5.15"
