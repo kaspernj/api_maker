@@ -208,6 +208,7 @@ class ApiMakerTable extends React.PureComponent {
             pagination
             preloads={preload}
             queryMethod={queryMethod}
+            queryName={queryName}
             select={selectCalculator({table: this})}
             selectColumns={selectColumns}
           />
