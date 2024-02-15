@@ -13,7 +13,7 @@ export default (WrappedComponent, modelClassArg, argsArg = {}) => {
 
     modelClass = this.resolveModelClass(modelClassArg)
     args = this.resolveArgs()
-    paramKey = this.modelClass.modelName().paramKey()
+    modelVariableName = inflection.camelize(this.modelClass.modelClassData().name, true)
     paramsVariableName = `${this.modelClass.modelName().paramKey()}_id`
 
     state = {
@@ -115,9 +115,9 @@ export default (WrappedComponent, modelClassArg, argsArg = {}) => {
       const {model, modelId, notFound} = digs(this.state, "model", "modelId", "notFound")
       const wrappedComponentProps = {}
 
-      wrappedComponentProps[this.paramKey] = model
-      wrappedComponentProps[`${this.paramKey}Id`] = modelId
-      wrappedComponentProps[`${this.paramKey}NotFound`] = notFound
+      wrappedComponentProps[this.modelVariableName] = model
+      wrappedComponentProps[`${this.modelVariableName}Id`] = modelId
+      wrappedComponentProps[`${this.modelVariableName}NotFound`] = notFound
 
       return (
         <>

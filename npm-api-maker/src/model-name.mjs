@@ -6,9 +6,7 @@ export default class ModelName {
     this.data = data
   }
 
-  camelizedLower() {
-    return this.data.modelClassData.camelizedLower
-  }
+  camelizedLower = () => this.data.modelClassData.camelizedLower
 
   human(args) {
     let argsToUse = args
@@ -31,7 +29,5 @@ export default class ModelName {
     return Config.getI18n().t(key, {defaultValue: defaultModelName})
   }
 
-  paramKey() {
-    return this.data.modelClassData.paramKey
-  }
+  paramKey = () => this.data.modelClassData.paramKey
 }
