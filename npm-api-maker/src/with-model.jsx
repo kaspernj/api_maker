@@ -16,8 +16,6 @@ export default (WrappedComponent, modelClassArg, argsArg = {}) => {
     paramKey = this.modelClass.modelName().paramKey()
     paramsVariableName = `${this.modelClass.modelName().paramKey()}_id`
 
-    nothing = console.error(this.modelClass.modelName())
-
     state = {
       model: undefined,
       modelId: this.getModelId(),
