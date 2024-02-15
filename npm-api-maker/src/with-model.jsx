@@ -13,8 +13,10 @@ export default (WrappedComponent, modelClassArg, argsArg = {}) => {
 
     modelClass = this.resolveModelClass(modelClassArg)
     args = this.resolveArgs()
-    camelizedLower = this.modelClass.modelName().camelizedLower()
+    paramKey = this.modelClass.modelName().paramKey()
     paramsVariableName = `${this.modelClass.modelName().paramKey()}_id`
+
+    nothing = console.error(this.modelClass.modelName())
 
     state = {
       model: undefined,
@@ -115,9 +117,9 @@ export default (WrappedComponent, modelClassArg, argsArg = {}) => {
       const {model, modelId, notFound} = digs(this.state, "model", "modelId", "notFound")
       const wrappedComponentProps = {}
 
-      wrappedComponentProps[this.camelizedLower] = model
-      wrappedComponentProps[`${this.camelizedLower}Id`] = modelId
-      wrappedComponentProps[`${this.camelizedLower}NotFound`] = notFound
+      wrappedComponentProps[this.paramKey] = model
+      wrappedComponentProps[`${this.paramKey}Id`] = modelId
+      wrappedComponentProps[`${this.paramKey}NotFound`] = notFound
 
       return (
         <>
