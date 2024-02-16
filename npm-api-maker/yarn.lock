@@ -4383,10 +4383,10 @@ object.values@^1.1.6:
     define-properties "^1.1.4"
     es-abstract "^1.20.4"
 
-"on-location-changed@>= 1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.7.tgz#cc25332e9bc2d6d5dcd52590052131c9770e8eb6"
-  integrity sha512-toc4vDfz58LMS6BRWCDJmva8MCkgK4R+VGUljCXF44uXBDVUxU6oodhAB27mW/5+cwJHMyWPdOWjbpGJ2m4z0g==
+"on-location-changed@>= 1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.8.tgz#5e806383f39cf8036128dcc4e4f7d0d7233faecf"
+  integrity sha512-5xYe0/ygrgpEo+V+O+RvTC+M88QZ9y/nJYf801cRXJBqK+npzH6PUp65p9v5hzgshWRfUNESLZgUEpJvUy6rBQ==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
