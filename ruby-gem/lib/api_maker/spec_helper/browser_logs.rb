@@ -16,6 +16,10 @@ module ApiMaker::SpecHelper::BrowserLogs
     page.driver.browser.manage.try(:logs).try(:get, :browser) ||
       page.driver.browser.logs.get(:browser)
   rescue NoMethodError => e
-    raise NoMethodError, "undefined method `logs' - try '--headless=new' instead of just '--headless'"
+    if e.message.start_with?("undefined method `logs'")
+      raise NoMethodError, "undefined method `logs' - try '--headless=new' instead of just '--headless'"
+    else
+      raise e
+    end
   end
 end
