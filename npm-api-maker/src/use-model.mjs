@@ -1,14 +1,14 @@
 import ModelEvents from "./model-events.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 
-const useModel = (match, modelClassArg, argsArg) => {
+const useModel = (match, modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
   let args, modelClass
 
   if (typeof argsArg == "function") {
     args = argsArg({modelClass})
   } else {
-    args  = argsArg
+    args = argsArg
   }
 
   if (typeof modelClassArg == "object") {
@@ -29,9 +29,13 @@ const useModel = (match, modelClassArg, argsArg) => {
 
   const modelId = getModelId()
   const modelVariableName = inflection.camelize(modelClass.modelClassData().name, true)
-  const cacheArgs = [modelId, ...args.cacheArgs]
+  const cacheArgs = [modelId]
   const [model, setModel] = useState(undefined)
   const [notFound, setNotFound] = useState(undefined)
+
+  if (args.cacheArgs) {
+    cacheArgs.push(...args.cacheArgs)
+  }
 
   const loadExistingModel = async () => {
     const query = await modelClass.ransack({id_eq: modelId})
