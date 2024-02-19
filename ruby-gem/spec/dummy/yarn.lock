@@ -1204,10 +1204,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kaspernj/api-maker@1.0.295":
-  version "1.0.295"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.295.tgz#49f164db1c3f45c0be83cbc046aa99d1d3792bd9"
-  integrity sha512-udMc9Oihz7HEGAFepflVI6NK3qsWS0NBPv20TCS44RfkSeZRuB04CEaKOOTkqavVA+XcoxwqvTQHdkdK1BTZAQ==
+"@kaspernj/api-maker@1.0.303":
+  version "1.0.303"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.303.tgz#6c66d36fd7c8874979a4a440b7230eec33c72b90"
+  integrity sha512-DBkQM9Iqoqql6y9DgLHVVTR+/GOpcBk5saSoKBUWA4n/FYeWJwbA23F/AAkMF5uOg8r0ttLzT2g1rOPXZEGRhg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -1222,7 +1222,7 @@
     js-money ">= 0.6.3"
     numberable ">= 1.0.0"
     object-to-formdata ">= 4.1.0"
-    on-location-changed ">= 1.0.7"
+    on-location-changed ">= 1.0.8"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
     spark-md5 "^3.0.2"
@@ -3351,10 +3351,10 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.7.tgz#cc25332e9bc2d6d5dcd52590052131c9770e8eb6"
-  integrity sha512-toc4vDfz58LMS6BRWCDJmva8MCkgK4R+VGUljCXF44uXBDVUxU6oodhAB27mW/5+cwJHMyWPdOWjbpGJ2m4z0g==
+"on-location-changed@>= 1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.8.tgz#5e806383f39cf8036128dcc4e4f7d0d7233faecf"
+  integrity sha512-5xYe0/ygrgpEo+V+O+RvTC+M88QZ9y/nJYf801cRXJBqK+npzH6PUp65p9v5hzgshWRfUNESLZgUEpJvUy6rBQ==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
