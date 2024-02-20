@@ -1,7 +1,7 @@
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
