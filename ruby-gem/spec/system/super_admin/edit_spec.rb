@@ -15,11 +15,9 @@ describe "super admin - edit" do
     wait_for_and_find("#task_project_id").set(project.id)
     wait_for_and_find("#task_user_id").set(user_admin.id)
     wait_for_and_find("button").click
-    wait_for_expect { expect(Task.count).to eq 1 }
+    wait_for_expect { expect(task.reload.name).to eq "Edit task name" }
 
-    created_task = Task.last!
-
-    expect(created_task).to have_attributes(
+    expect(task.reload).to have_attributes(
       name: "Edit task name",
       project_id: project.id
     )
