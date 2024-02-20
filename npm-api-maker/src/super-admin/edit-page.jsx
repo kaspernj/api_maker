@@ -59,7 +59,7 @@ const EditPage = ({modelClass, ...restProps}) => {
   }, [model])
 
   return (
-    <>
+    <div className="super-admin--edit-page">
       <form onSubmit={onSubmit}>
         {model && attributes?.map((attribute) =>
           <div key={attribute.attribute}>
@@ -67,6 +67,7 @@ const EditPage = ({modelClass, ...restProps}) => {
               <div key={locale}>
                 <Input
                   attribute={attribute.attribute}
+                  id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}_${locale}`}
                   label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
                   model={model}
                   name={`${camelizedLower}[${inflection.underscore(attribute.attribute)}_${locale}]`}
@@ -76,6 +77,7 @@ const EditPage = ({modelClass, ...restProps}) => {
             {!attribute.translated &&
               <Input
                 attribute={attribute.attribute}
+                id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}`}
                 label={modelClass.humanAttributeName(attribute.attribute)}
                 model={model}
                 name={`${camelizedLower}[${inflection.underscore(attribute.attribute)}]`}
@@ -88,7 +90,7 @@ const EditPage = ({modelClass, ...restProps}) => {
           Submit
         </button>
       </form>
-    </>
+    </div>
   )
 }
 
