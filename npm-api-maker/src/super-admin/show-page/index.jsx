@@ -4,7 +4,7 @@ import ConfigReader from "../config-reader"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
-import React from "react"
+import {memo} from "react"
 import ShowNav from "../show-nav"
 import withModel from "../../with-model"
 
