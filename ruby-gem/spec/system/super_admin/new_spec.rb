@@ -13,6 +13,7 @@ describe "super admin - new" do
     wait_for_selector ".super-admin--edit-page"
     wait_for_and_find("#task_name").set("New task name")
     wait_for_and_find("#task_project_id").set(project.id)
+    wait_for_and_find("#task_user_id").set(user_admin.id)
     wait_for_and_find("button").click
     wait_for_expect { expect(Task.count).to eq 1 }
 
