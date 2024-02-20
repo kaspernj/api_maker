@@ -3,6 +3,8 @@
 .components--admin--layout--menu {
   position: fixed;
   z-index: 9;
+  overflow-y: auto;
+  overflow-x: hidden;
   top: 0;
   left: 0;
   display: flex;

@@ -1,51 +1,40 @@
-import {digg, digs} from "diggerize"
+import {digg} from "diggerize"
 import PropTypes from "prop-types"
-import React from "react"
+import React, {memo} from "react"
 import ModelClassTable from "./model-class-table"
 import ShowNav from "./show-nav"
+import useQueryParams from "on-location-changed/src/use-query-params"
 import withModel from "../with-model"
 
-class ApiMakerSuperAdminShowReflectionPage extends React.PureComponent {
-  static propTypes = {
-    currentUser: PropTypes.object,
-    modelClass: PropTypes.func.isRequired,
-    queryParams: PropTypes.object.isRequired
-  }
+const ApiMakerSuperAdminShowReflectionPage = ({modelClass, restProps}) => {
+  const queryParams = useQueryParams()
+  const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
+  const model = digg(restProps, camelizedLower)
+  const reflections = modelClass.reflections()
+  const reflection = reflections.find((reflectionI) => reflectionI.name() == queryParams.model_reflection)
+  const reflectionModelClass = reflection.modelClass()
+  let collection
 
-  render() {
-    const {currentUser, modelClass, queryParams} = digs(this.props, "currentUser", "modelClass", "queryParams")
-    const model = this.model()
-    const reflections = modelClass.reflections()
-    const reflection = reflections.find((reflectionI) => reflectionI.name() == queryParams.model_reflection)
-    const reflectionModelClass = reflection.modelClass()
-    let collection
+  if (model) collection = model[reflection.name()]()
 
-    if (model) collection = model[reflection.name()]()
+  return (
+    <div className="super-admin--show-page">
+      {model &&
+        <ShowNav model={model} modelClass={modelClass} />
+      }
+      {collection &&
+        <ModelClassTable
+          collection={collection}
+          key={reflectionModelClass.modelName().human()}
+          modelClass={reflectionModelClass}
+        />
+      }
+    </div>
+  )
+}
 
-    return (
-      <div className="super-admin--show-page">
-        {model &&
-          <ShowNav model={model} modelClass={modelClass} queryParams={queryParams} />
-        }
-        {collection &&
-          <ModelClassTable
-            collection={collection}
-            currentUser={currentUser}
-            key={reflectionModelClass.modelName().human()}
-            modelClass={reflectionModelClass}
-            queryParams={queryParams}
-          />
-        }
-      </div>
-    )
-  }
-
-  model() {
-    const {modelClass} = digs(this.props, "modelClass")
-    const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
-
-    return digg(this, "props", camelizedLower)
-  }
+ApiMakerSuperAdminShowReflectionPage.propTypes = {
+  modelClass: PropTypes.func.isRequired
 }
 
 const modelClassResolver = {callback: ({queryParams}) => {
@@ -56,7 +45,7 @@ const modelClassResolver = {callback: ({queryParams}) => {
 }}
 
 export default withModel(
-  ApiMakerSuperAdminShowReflectionPage,
+  memo(ApiMakerSuperAdminShowReflectionPage),
   modelClassResolver,
   {
     loadByQueryParam: ({props}) => props.queryParams.model_id
