@@ -5,6 +5,7 @@ import MenuContent from "./menu-content"
 import MenuItem from "./menu-item"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
+import {useCallback, useRef} from "react"
 import useCurrentUser from "../../../use-current-user"
 
 const ComponentsAdminLayoutMenu = ({active, noAccess, triggered}) => {
