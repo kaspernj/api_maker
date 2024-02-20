@@ -1,54 +1,41 @@
 import AttributeRows from "../../bootstrap/attribute-rows"
 import BelongsToAttributeRow from "./belongs-to-attribute-row"
 import ConfigReader from "../config-reader"
-import {digg, digs} from "diggerize"
+import {digg} from "diggerize"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import React from "react"
 import ShowNav from "../show-nav"
 import withModel from "../../with-model"
 
-class ApiMakerSuperAdminShowPage extends React.PureComponent {
-  static propTypes = {
-    modelClass: PropTypes.func.isRequired,
-    queryParams: PropTypes.object.isRequired
-  }
+const ApiMakerSuperAdminShowPage = ({modelClass, ...restProps}) => {
+  const configReader = ConfigReader.forModel(modelClass)
+  const attributes = configReader.attributesToShow()
+  const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
+  const model = digg(restProps, camelizedLower)
+  const extraContent = configReader.modelConfig?.show?.extraContent
+  const modelArgs = {}
 
-  configReader = ConfigReader.forModel(digg(this, "props", "modelClass"))
+  modelArgs[inflection.camelize(modelClass.modelClassData().name, true)] = model
 
-  render() {
-    const {modelClass, queryParams} = digs(this.props, "modelClass", "queryParams")
-    const attributes = this.attributes()
-    const model = this.model()
-    const extraContent = this.configReader.modelConfig?.show?.extraContent
-    const modelArgs = {}
+  return (
+    <div className="super-admin--show-page">
+      {model &&
+        <ShowNav model={model} modelClass={modelClass} />
+      }
+      {attributes && model &&
+        <AttributeRows attributes={attributes} model={model} />
+      }
+      {model && modelClass.reflections().filter((reflection) => reflection.macro() == "belongs_to").map((reflection) =>
+        <BelongsToAttributeRow key={reflection.name()} model={model} modelClass={modelClass} reflection={reflection} />
+      )}
+      {model && extraContent && extraContent(modelArgs)}
+    </div>
+  )
+}
 
-    modelArgs[inflection.camelize(modelClass.modelClassData().name, true)] = model
-
-    return (
-      <div className="super-admin--show-page">
-        {model &&
-          <ShowNav model={model} modelClass={modelClass} queryParams={queryParams} />
-        }
-        {attributes && model &&
-          <AttributeRows attributes={attributes} model={model} />
-        }
-        {model && modelClass.reflections().filter((reflection) => reflection.macro() == "belongs_to").map((reflection) =>
-          <BelongsToAttributeRow key={reflection.name()} model={model} modelClass={modelClass} reflection={reflection} />
-        )}
-        {model && extraContent && extraContent(modelArgs)}
-      </div>
-    )
-  }
-
-  attributes = () => this.configReader.attributesToShow()
-
-  model() {
-    const {modelClass} = digs(this.props, "modelClass")
-    const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
-
-    return digg(this, "props", camelizedLower)
-  }
+ApiMakerSuperAdminShowPage.propTypes = {
+  modelClass: PropTypes.func.isRequired
 }
 
 const modelClassResolver = {callback: ({queryParams}) => {
@@ -59,7 +46,7 @@ const modelClassResolver = {callback: ({queryParams}) => {
 }}
 
 export default withModel(
-  ApiMakerSuperAdminShowPage,
+  memo(ApiMakerSuperAdminShowPage),
   modelClassResolver,
   ({modelClass}) => {
     const preload = []

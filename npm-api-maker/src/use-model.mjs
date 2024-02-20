@@ -1,7 +1,7 @@
 import ModelEvents from "./model-events.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 
-const useModel = (match, modelClassArg, argsArg = {}) => {
+const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
   let args, modelClass
 
@@ -24,7 +24,9 @@ const useModel = (match, modelClassArg, argsArg = {}) => {
       return args.loadByQueryParam({queryParams})
     }
 
-    return match.params[paramsVariableName] || match.params.id
+    if (!args.match) throw new Error("Both 'loadByQueryParam' and 'match' wasn't given")
+
+    return args.match.params[paramsVariableName] || args.match.params.id
   }
 
   const modelId = getModelId()
@@ -53,17 +55,17 @@ const useModel = (match, modelClassArg, argsArg = {}) => {
 
   const loadNewModel = async () => {
     const params = Params.parse()
-    const ModelClass = digg(this, "modelClass")
+    const ModelClass = modelClass
     const paramKey = ModelClass.modelName().paramKey()
     const modelDataFromParams = params[paramKey] || {}
 
     let defaults = {}
 
-    if (this.args.newIfNoId?.defaults) {
-      defaults = await this.args.newIfNoId.defaults()
+    if (args.newIfNoId?.defaults) {
+      defaults = await args.newIfNoId.defaults()
     }
 
-    const modelData = Object.assign(defaults, this.args.newAttributes, modelDataFromParams)
+    const modelData = Object.assign(defaults, args.newAttributes, modelDataFromParams)
     const model = new ModelClass({
       isNewRecord: true,
       data: {a: modelData}

@@ -1,46 +1,44 @@
 import ConfigReader from "./config-reader"
-import {digg, digs} from "diggerize"
+import {digg} from "diggerize"
 import * as inflection from "inflection"
 import Params from "../params"
 import PropTypes from "prop-types"
-import React from "react"
+import {memo, useCallback} from "react"
 import Table from "../table/table"
+import useCurrentUser from "../use-current-user"
 
-export default class ApiMakerSuperAdminModelClassTable extends React.PureComponent {
-  static propTypes = {
-    currentUser: PropTypes.object,
-    modelClass: PropTypes.func.isRequired,
-    queryParams: PropTypes.object.isRequired
-  }
+const ApiMakerSuperAdminModelClassTable = ({modelClass, ...restProps}) => {
+  const currentUser = useCurrentUser()
 
-  render() {
-    const {currentUser, modelClass, queryParams, ...restProps} = this.props
-
-    return (
-      <Table
-        columns={digg(this, "columns")}
-        currentUser={currentUser}
-        modelClass={modelClass}
-        viewModelPath={digg(this, "viewModelPath")}
-        {...restProps}
-      />
-    )
-  }
-
-  columns = () => {
-    const {modelClass} = digs(this.props, "modelClass")
+  const columns = useCallback(() => {
     const configReader = ConfigReader.forModel(modelClass)
 
     return configReader.tableColumns()
-  }
+  }, [modelClass])
 
-  viewModelPath = (args) => {
-    const argName = inflection.camelize(digg(this.props.modelClass.modelClassData(), "name"), true)
+  const viewModelPath = useCallback((args) => {
+    const argName = inflection.camelize(digg(modelClass.modelClassData(), "name"), true)
     const model = digg(args, argName)
 
     return Params.withParams({
-      model: this.props.modelClass.modelClassData().name,
+      model: modelClass.modelClassData().name,
       model_id: model.primaryKey()
     })
-  }
+  }, [modelClass])
+
+  return (
+    <Table
+      columns={columns}
+      currentUser={currentUser}
+      modelClass={modelClass}
+      viewModelPath={viewModelPath}
+      {...restProps}
+    />
+  )
 }
+
+ApiMakerSuperAdminModelClassTable.propTypes = {
+  modelClass: PropTypes.func.isRequired
+}
+
+export default memo(ApiMakerSuperAdminModelClassTable)
