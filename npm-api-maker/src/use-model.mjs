@@ -1,3 +1,4 @@
+import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 
