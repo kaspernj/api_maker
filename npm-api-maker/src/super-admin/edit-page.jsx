@@ -7,7 +7,7 @@ import useCurrentUser from "../use-current-user"
 import useModel from "../use-model"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
-const EditPage = ({modelClass, ...restProps}) => {
+const EditPage = ({modelClass}) => {
   const availableLocales = Locales.availableLocales()
   const currentUser = useCurrentUser()
   const queryParams = useQueryParams()
