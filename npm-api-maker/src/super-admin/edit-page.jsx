@@ -1,6 +1,6 @@
 import ConfigReader from "./config-reader"
 import {digg} from "diggerize"
-import inflection from "inflection"
+import * as inflection from "inflection"
 import Input from "../bootstrap/input"
 import Locales from "shared/locales"
 import {useCallback, memo} from "react"
