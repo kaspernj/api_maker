@@ -1,6 +1,7 @@
 import ConfigReader from "./config-reader"
 import {digg} from "diggerize"
 import Input from "../bootstrap/input"
+import Locales from "shared/locales"
 import {memo} from "react"
 import useCurrentUser from "../use-current-user"
 import useModel from "../use-model"
