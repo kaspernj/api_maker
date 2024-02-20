@@ -30,7 +30,7 @@ const ApiMakerSuperAdmin = () => {
   const actions = useMemo(
     () => <>
       {modelClass && pageToShow == "index" &&
-        <Link to={Params.withParams({model: modelClass.modelClassData().name, mode: "new"})}>
+        <Link className="create-new-model-link" to={Params.withParams({model: modelClass.modelClassData().name, mode: "new"})}>
           Create new
         </Link>
       }
