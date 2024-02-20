@@ -1,6 +1,6 @@
 import CanCan from "../../../can-can"
 import {digg} from "diggerize"
-import {memo} from "react"
+import {memo, useMemo} from "react"
 import MenuItem from "./menu-item"
 import models from "../../models"
 import Params from "../../../params"
