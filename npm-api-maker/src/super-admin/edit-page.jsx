@@ -52,12 +52,11 @@ const EditPage = ({modelClass, ...restProps}) => {
 
     try {
       await model.saveRaw(formData)
+      Params.changeParams({mode: undefined, model_id: model.id()})
     } catch (error) {
       FlashMessage.errorResponse(error)
     }
   }, [model])
-
-  console.log({selectedAttributes, selectedModelAttributes, model, newRecord: model?.isNewRecord()})
 
   return (
     <>
