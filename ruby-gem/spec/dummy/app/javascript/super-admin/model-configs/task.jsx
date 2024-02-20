@@ -1,7 +1,8 @@
 export default {
   edit: {
     attributes: [
-      {attribute: "name"}
+      {attribute: "name"},
+      {attribute: "projectId"}
     ]
   }
 }
