@@ -27,7 +27,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     expect { model.reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  def super_admin_test_new(model_class, inputs:)
+  def super_admin_test_new(model_class, inputs:, expect: nil)
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model_class)
 
     visit super_admin_path(model: resource.short_name)
@@ -35,7 +35,13 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     wait_for_selector ".super-admin--edit-page"
 
     inputs.each do |input_name, value|
-      wait_for_and_find("##{resource.underscore_name.singularize}_#{input_name}").set(value)
+      base_input_name = resource.underscore_name.singularize
+
+      if value.is_a?(Hash) && value[:haya_select]
+        haya_select("#{base_input_name}_#{input_name}").select(value)
+      else
+        wait_for_and_find("##{base_input_name}_#{input_name}").set(value)
+      end
     end
 
     wait_for_and_find("button").click
@@ -43,7 +49,9 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     created_model = model_class.last!
 
-    expect(created_model).to have_attributes(inputs)
+    expect_attributes = expect || inputs
+
+    expect(created_model).to have_attributes(expect_attributes)
   end
 
   def super_admin_test_edit(model, inputs:)
