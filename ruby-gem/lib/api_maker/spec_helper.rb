@@ -8,6 +8,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   require_relative "spec_helper/browser_logs"
   require_relative "spec_helper/expect_no_browser_errors"
   require_relative "spec_helper/query_params"
+  require_relative "spec_helper/super_admin_helpers"
   require_relative "spec_helper/wait_for_expect"
   require_relative "spec_helper/wait_for_flash_message"
   require_relative "spec_helper/wait_for_selector"
@@ -17,6 +18,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   include AttributeRowHelpers
   include ExpectNoBrowserErrors
   include QueryParams
+  include SuperAdminHelpers
   include WaitForExpect
   include WaitForFlashMessage
   include WaitForSelector

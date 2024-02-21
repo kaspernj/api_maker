@@ -15,6 +15,9 @@ const ApiMakerSuperAdmin = () => {
 
   if (queryParams.model) modelClass = modelsModule[queryParams.model]
 
+  const modelId = queryParams.model_id
+  const modelName = modelClass?.modelClassData()?.name
+
   if (queryParams.model && queryParams.model_id && queryParams.model_reflection) {
     pageToShow = "show_reflection"
   } else if (queryParams.model && queryParams.model_id && queryParams.mode == "edit") {
@@ -29,17 +32,38 @@ const ApiMakerSuperAdmin = () => {
     pageToShow = "welcome"
   }
 
+  const onDestroyClicked = useCallback(async (e) => {
+    e.preventDefault()
+
+    if (!confirm("Are you sure?")) {
+      return
+    }
+
+    try {
+      const model = await modelClass.find(modelId)
+
+      await model.destroy()
+    } catch (error) {
+      FlashMessage.errorResponse(error)
+    }
+  }, [modelName, modelId])
+
   const actions = useMemo(
     () => <>
       {modelClass && pageToShow == "index" &&
-        <Link className="create-new-model-link" to={Params.withParams({model: modelClass.modelClassData().name, mode: "new"})}>
+        <Link className="create-new-model-link" to={Params.withParams({model: modelName, mode: "new"})}>
           Create new
         </Link>
       }
       {modelClass && pageToShow == "show" &&
-        <Link to={Params.withParams({model: modelClass.modelClassData().name, model_id: queryParams.model_id, mode: "edit"})}>
-          Edit
-        </Link>
+        <>
+          <Link to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
+            Edit
+          </Link>
+          <a href="#" onClick={onDestroyClicked}>
+            Delete
+          </a>
+        </>
       }
     </>,
     [modelClass, pageToShow]
@@ -49,27 +73,27 @@ const ApiMakerSuperAdmin = () => {
     <Layout actions={actions} active={queryParams.model} headerTitle={modelClass?.modelName()?.human({count: 2})}>
       {pageToShow == "index" &&
         <IndexPage
-          key={`index-page-${digg(modelClass.modelClassData(), "name")}`}
+          key={`index-page-${modelName}`}
           modelClass={modelClass}
         />
       }
       {pageToShow == "show" &&
         <ShowPage
-          key={`show-page-${digg(modelClass.modelClassData(), "name")}-${queryParams.modelId}`}
+          key={`show-page-${modelName}-${modelId}`}
           modelClass={modelClass}
-          modelId={queryParams.modelId}
+          modelId={modelId}
         />
       }
       {pageToShow == "show_reflection" &&
         <ShowReflectionPage
-          key={`show-reflection-page-${digg(modelClass.modelClassData(), "name")}-${queryParams.modelId}`}
+          key={`show-reflection-page-${modelName}-${modelId}`}
           modelClass={modelClass}
-          modelId={queryParams.modelId}
+          modelId={modelId}
         />
       }
       {pageToShow == "edit" &&
         <EditPage
-          key={`edit-page-${digg(modelClass.modelClassData(), "name")}-${queryParams.modelId}`}
+          key={`edit-page-${modelName}-${modelId}`}
           modelClass={modelClass}
         />
       }
