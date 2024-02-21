@@ -7,9 +7,12 @@ describe "super admin - show" do
 
   it "renders the page" do
     login_as user_admin
-    visit super_admin_path(model: "Task", model_id: task.id)
-    wait_for_selector ".super-admin--show-page"
-    wait_for_attribute_row attribute: "id", value: task.id
+    super_admin_test_show_render(
+      task,
+      attributes: {
+        id: task.id
+      }
+    )
 
     # It shows 'belongs_to'-relationships as attributes
     wait_for_selector ".attribute-row-value", exact_text: "Test project"

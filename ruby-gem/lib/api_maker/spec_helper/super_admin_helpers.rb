@@ -1,0 +1,88 @@
+module ApiMaker::SpecHelper::SuperAdminHelpers
+  def super_admin_test_index_render(model)
+    resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
+
+    visit super_admin_path(model: resource.short_name)
+    wait_for_selector model_row_selector(model)
+  end
+
+  def super_admin_test_index_destroy(model)
+    resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
+
+    visit super_admin_path(model: resource.short_name)
+    wait_for_selector model_row_selector(model)
+    wait_for_action_cable_to_connect
+
+    destroy_action = proc do
+      accept_confirm do
+        wait_for_and_find("#{model_row_selector(model)} .destroy-button").click
+      end
+
+      wait_for_no_selector model_row_selector(model) # If the row disappears it got deleted
+    end
+
+    expect { destroy_action.call }
+      .to change(model.class, :count).by(-1)
+
+    expect { model.reload }.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  def super_admin_test_new(model_class, inputs:)
+    resource = ApiMaker::MemoryStorage.current.resource_for_model(model_class)
+
+    visit super_admin_path(model: resource.short_name)
+    wait_for_and_find(".create-new-model-link").click
+    wait_for_selector ".super-admin--edit-page"
+
+    inputs.each do |input_name, value|
+      wait_for_and_find("##{resource.underscore_name.singularize}_#{input_name}").set(value)
+    end
+
+    wait_for_and_find("button").click
+    wait_for_expect { expect(model_class.count).to eq 1 }
+
+    created_model = model_class.last!
+
+    expect(created_model).to have_attributes(inputs)
+  end
+
+  def super_admin_test_edit(model, inputs:)
+    resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
+
+    visit super_admin_path(model: resource.short_name)
+    wait_for_and_find(".edit-button").click
+    wait_for_selector ".super-admin--edit-page"
+
+    inputs.each do |input_name, value|
+      wait_for_and_find("##{resource.underscore_name.singularize}_#{input_name}").set(value)
+    end
+
+    wait_for_and_find("button").click
+
+    wait_for_expect do
+      expect(task.reload).to have_attributes(inputs)
+    end
+  end
+
+  def super_admin_test_show_render(model, attributes:)
+    resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
+
+    visit super_admin_path(model: resource.short_name, model_id: model.id)
+    wait_for_selector ".super-admin--show-page"
+
+    attributes.each do |attribute_name, value|
+      wait_for_attribute_row attribute: attribute_name.to_s, value: value
+    end
+  end
+
+  def super_admin_test_show_destroy(model)
+    resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
+
+    visit super_admin_path(model: resource.short_name, model_id: model.id)
+    wait_for_selector ".super-admin--show-page"
+
+    attributes.each do |attribute_name, value|
+      wait_for_attribute_row attribute: attribute_name.to_s, value: value
+    end
+  end
+end

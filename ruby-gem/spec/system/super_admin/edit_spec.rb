@@ -10,18 +10,13 @@ describe "super admin - edit" do
     task
 
     login_as user_admin
-    visit super_admin_path(model: "Task")
-    wait_for_and_find(".edit-button").click
-    wait_for_selector ".super-admin--edit-page"
-    wait_for_and_find("#task_name").set("Edit task name")
-    wait_for_and_find("#task_project_id").set(project.id)
-    wait_for_and_find("#task_user_id").set(user_admin.id)
-    wait_for_and_find("button").click
-    wait_for_expect { expect(task.reload.name).to eq "Edit task name" }
-
-    expect(task.reload).to have_attributes(
-      name: "Edit task name",
-      project_id: project.id
+    super_admin_test_edit(
+      task,
+      inputs: {
+        name: "Edit task name",
+        project_id: project.id,
+        user_id: user_admin.id
+      }
     )
   end
 end
