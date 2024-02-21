@@ -17,6 +17,8 @@ const ApiMakerSuperAdmin = () => {
 
   if (queryParams.model && queryParams.model_id && queryParams.model_reflection) {
     pageToShow = "show_reflection"
+  } else if (queryParams.model && queryParams.model_id && queryParams.mode == "edit") {
+    pageToShow = "edit"
   } else if (queryParams.model && queryParams.model_id) {
     pageToShow = "show"
   } else if (queryParams.model && queryParams.mode == "new") {
@@ -32,6 +34,11 @@ const ApiMakerSuperAdmin = () => {
       {modelClass && pageToShow == "index" &&
         <Link className="create-new-model-link" to={Params.withParams({model: modelClass.modelClassData().name, mode: "new"})}>
           Create new
+        </Link>
+      }
+      {modelClass && pageToShow == "show" &&
+        <Link to={Params.withParams({model: modelClass.modelClassData().name, model_id: queryParams.model_id, mode: "edit"})}>
+          Edit
         </Link>
       }
     </>,

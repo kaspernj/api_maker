@@ -16,6 +16,17 @@ const ApiMakerSuperAdminModelClassTable = ({modelClass, ...restProps}) => {
     return configReader.tableColumns()
   }, [modelClass])
 
+  const editModelPath = useCallback((args) => {
+    const argName = inflection.camelize(digg(modelClass.modelClassData(), "name"), true)
+    const model = digg(args, argName)
+
+    return Params.withParams({
+      model: modelClass.modelClassData().name,
+      model_id: model.primaryKey(),
+      mode: "edit"
+    })
+  })
+
   const viewModelPath = useCallback((args) => {
     const argName = inflection.camelize(digg(modelClass.modelClassData(), "name"), true)
     const model = digg(args, argName)
@@ -30,6 +41,7 @@ const ApiMakerSuperAdminModelClassTable = ({modelClass, ...restProps}) => {
     <Table
       columns={columns}
       currentUser={currentUser}
+      editModelPath={editModelPath}
       modelClass={modelClass}
       viewModelPath={viewModelPath}
       {...restProps}

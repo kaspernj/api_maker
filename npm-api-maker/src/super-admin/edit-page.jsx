@@ -19,7 +19,7 @@ const EditPage = ({modelClass}) => {
   const modelVarName = inflection.camelize(modelClass.modelClassData().name, true)
   const extraContent = configReader.modelConfig?.edit?.extraContentconst
   const attributes = configReader.modelConfig?.edit?.attributes
-  const selectedModelAttributes = []
+  const selectedModelAttributes = ["id"]
   const selectedAttributes = {}
 
   selectedAttributes[modelClassName] = selectedModelAttributes
@@ -37,7 +37,8 @@ const EditPage = ({modelClass}) => {
   const useModelResult = useModel(modelClass, {
     cacheArgs: [currentUser?.id()],
     loadByQueryParam: (props) => props.queryParams.model_id,
-    newIfNoId: true
+    newIfNoId: true,
+    select: selectedAttributes
   })
 
   const model = digg(useModelResult, modelVarName)
@@ -68,7 +69,7 @@ const EditPage = ({modelClass}) => {
             {attribute.translated && availableLocales.map((locale) =>
               <div key={locale}>
                 <Input
-                  attribute={attribute.attribute}
+                  attribute={`${attribute.attribute}${inflection.camelize(locale)}`}
                   id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}_${locale}`}
                   label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
                   model={model}
