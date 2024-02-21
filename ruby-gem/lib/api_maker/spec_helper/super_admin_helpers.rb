@@ -80,11 +80,13 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     visit super_admin_path(model: resource.short_name, model_id: model.id)
     wait_for_selector ".super-admin--show-page"
+    wait_for_selector ".destroy-model-link"
+    wait_for_action_cable_to_connect
+    sleep 1
 
     destroy_action = proc do
       accept_confirm do
         wait_for_and_find(".destroy-model-link").click
-        sleep 1
       end
 
       wait_for_expect { expect { model.reload }.to raise_error(ActiveRecord::RecordNotFound) }
