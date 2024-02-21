@@ -60,7 +60,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     wait_for_and_find("button").click
 
     wait_for_expect do
-      expect(task.reload).to have_attributes(inputs)
+      expect(model.reload).to have_attributes(inputs)
     end
   end
 
