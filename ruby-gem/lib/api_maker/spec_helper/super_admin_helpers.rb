@@ -84,10 +84,10 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     wait_for_action_cable_to_connect
 
     destroy_action = proc do
-      Tretry.try(errors: [Capybara::ModalNotFound]) do
-        accept_confirm do
-          wait_for_and_find(".destroy-model-link").click
-        end
+      accept_confirm do
+        sleep 1
+        wait_for_and_find(".destroy-model-link").click
+        sleep 1
       end
 
       wait_for_expect { expect { model.reload }.to raise_error(ActiveRecord::RecordNotFound) }
