@@ -1,32 +1,88 @@
-import AttributeRows from "../../bootstrap/attribute-rows"
+import AttributeRow from "../../bootstrap/attribute-row"
 import BelongsToAttributeRow from "./belongs-to-attribute-row"
 import ConfigReader from "../config-reader"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import Link from "../../link"
 import PropTypes from "prop-types"
 import {memo} from "react"
 import ShowNav from "../show-nav"
-import withModel from "../../with-model"
+import useModel from "../../use-model"
 
-const ApiMakerSuperAdminShowPage = ({modelClass, ...restProps}) => {
+const AttributePresenter = ({attribute, model, modelArgs}) => {
+  const attributeRowProps = {}
+
+  if (typeof attribute == "object") {
+    attributeRowProps.attribute = attribute.attribute
+    if (attribute.content) attributeRowProps.children = attribute.content(modelArgs)
+  } else {
+    attributeRowProps.attribute = attribute
+  }
+
+  console.log({attributeRowProps})
+
+  return (
+    <AttributeRow model={model} {...attributeRowProps} />
+  )
+}
+
+const ApiMakerSuperAdminShowPage = ({modelClass}) => {
   const configReader = ConfigReader.forModel(modelClass)
+  const showConfig = configReader.modelConfig?.show
   const attributes = configReader.attributesToShow()
+  const extraContent = showConfig?.extraContent
+  const modelClassName = modelClass.modelClassData().name
+  const primaryKeyName = modelClass.primaryKey()
+  const preload = []
+  const select = showConfig?.extraSelect || {}
+  const modelClassSelect = select[modelClassName] || []
+
+  if (!(modelClassName in select)) select[modelClassName] = modelClassSelect
+  if (!modelClassSelect.includes(primaryKeyName)) modelClassSelect.push(primaryKeyName)
+
+  // Select all attributes selected by default because they will be shown by default
+  for (const attribute of modelClass.attributes()) {
+    if (attribute.isSelectedByDefault() && !modelClassSelect.includes(attribute.name())) modelClassSelect.push(attribute.name())
+  }
+
+  for (const reflection of modelClass.reflections()) {
+    if (reflection.macro() != "belongs_to") continue
+
+    const reflectionModelClass = reflection.modelClass()
+    const reflectionModelClassName = reflectionModelClass.modelClassData().name
+    const reflectionModelClassAttributes = reflectionModelClass.attributes()
+    const nameAttribute = reflectionModelClassAttributes.find((attribute) => attribute.name() == "name")
+
+    preload.push(inflection.underscore(reflection.name()))
+
+    if (!(reflectionModelClassName in select)) select[reflectionModelClassName] = []
+    if (!select[reflectionModelClassName].includes("id")) select[reflectionModelClassName].push("id")
+    if (nameAttribute && !select[reflectionModelClassName].includes("name")) select[reflectionModelClassName].push("name")
+
+    // The foreign key is needed to look up any belongs-to-relationships
+    if (!modelClassSelect.includes(reflection.foreignKey())) modelClassSelect.push(reflection.foreignKey())
+  }
+
+  const useModelResult = useModel(modelClass, {
+    loadByQueryParam: ({queryParams}) => queryParams.model_id,
+    preload,
+    select
+  })
   const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
-  const model = digg(restProps, camelizedLower)
-  const extraContent = configReader.modelConfig?.show?.extraContent
+  const model = digg(useModelResult, camelizedLower)
   const modelArgs = {}
 
   modelArgs[inflection.camelize(modelClass.modelClassData().name, true)] = model
+
+  console.log({attributes})
 
   return (
     <div className="super-admin--show-page">
       {model &&
         <ShowNav model={model} modelClass={modelClass} />
       }
-      {attributes && model &&
-        <AttributeRows attributes={attributes} model={model} />
-      }
+      {attributes && model && attributes.map((attribute) =>
+        <AttributePresenter attribute={attribute} key={attribute.attribute || attribute} modelArgs={modelArgs} model={model} />
+      )}
       {model && modelClass.reflections().filter((reflection) => reflection.macro() == "belongs_to").map((reflection) =>
         <BelongsToAttributeRow key={reflection.name()} model={model} modelClass={modelClass} reflection={reflection} />
       )}
@@ -39,54 +95,4 @@ ApiMakerSuperAdminShowPage.propTypes = {
   modelClass: PropTypes.func.isRequired
 }
 
-const modelClassResolver = {callback: ({queryParams}) => {
-  const modelClassName = digg(queryParams, "model")
-  const modelClass = digg(require("../../models.mjs.erb"), modelClassName)
-
-  return modelClass
-}}
-
-export default withModel(
-  memo(ApiMakerSuperAdminShowPage),
-  modelClassResolver,
-  ({modelClass}) => {
-    const preload = []
-    const configReader = ConfigReader.forModel(modelClass)
-    const select = configReader.modelConfig?.show?.extraSelect || {}
-    const modelClassName = modelClass.modelClassData().name
-    const modelClassSelect = select[modelClassName] || []
-    const primaryKeyName = modelClass.primaryKey()
-
-    if (!(modelClassName in select)) select[modelClassName] = modelClassSelect
-    if (!modelClassSelect.includes(primaryKeyName)) modelClassSelect.push(primaryKeyName)
-
-    // Select all attributes selected by default because they will be shown by default
-    for (const attribute of modelClass.attributes()) {
-      if (attribute.isSelectedByDefault() && !modelClassSelect.includes(attribute.name())) modelClassSelect.push(attribute.name())
-    }
-
-    for (const reflection of modelClass.reflections()) {
-      if (reflection.macro() != "belongs_to") continue
-
-      const reflectionModelClass = reflection.modelClass()
-      const reflectionModelClassName = reflectionModelClass.modelClassData().name
-      const reflectionModelClassAttributes = reflectionModelClass.attributes()
-      const nameAttribute = reflectionModelClassAttributes.find((attribute) => attribute.name() == "name")
-
-      preload.push(inflection.underscore(reflection.name()))
-
-      if (!(reflectionModelClassName in select)) select[reflectionModelClassName] = []
-      if (!select[reflectionModelClassName].includes("id")) select[reflectionModelClassName].push("id")
-      if (nameAttribute && !select[reflectionModelClassName].includes("name")) select[reflectionModelClassName].push("name")
-
-      // The foreign key is needed to look up any belongs-to-relationships
-      if (!modelClassSelect.includes(reflection.foreignKey())) modelClassSelect.push(reflection.foreignKey())
-    }
-
-    return {
-      loadByQueryParam: ({props}) => props.queryParams.model_id,
-      preload,
-      select
-    }
-  }
-)
+export default memo(ApiMakerSuperAdminShowPage)

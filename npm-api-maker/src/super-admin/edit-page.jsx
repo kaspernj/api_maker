@@ -8,12 +8,52 @@ import useCurrentUser from "../use-current-user"
 import useModel from "../use-model"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
+const EditAttribute = ({attribute, model, modelArgs, modelClass}) => {
+  const availableLocales = Locales.availableLocales()
+  const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
+  const contentArgs = () => {
+    const contentArgsResult = {
+      inputProps: {
+        attribute: attribute.attribute,
+        model
+      }
+    }
+
+    return contentArgsResult
+  }
+
+  return (
+    <>
+      {attribute.content && attribute.content(contentArgs())}
+      {!attribute.content && attribute.translated && availableLocales.map((locale) =>
+        <React.Fragment key={locale}>
+          <Input
+            attribute={`${attribute.attribute}${inflection.camelize(locale)}`}
+            id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}_${locale}`}
+            label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
+            model={model}
+            name={`${camelizedLower}[${inflection.underscore(attribute.attribute)}_${locale}]`}
+          />
+        </React.Fragment>
+      )}
+      {!attribute.content && !attribute.translated &&
+        <Input
+          attribute={attribute.attribute}
+          id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}`}
+          label={modelClass.humanAttributeName(attribute.attribute)}
+          model={model}
+          name={`${camelizedLower}[${inflection.underscore(attribute.attribute)}]`}
+        />
+      }
+    </>
+  )
+}
+
 const EditPage = ({modelClass}) => {
   const availableLocales = Locales.availableLocales()
   const currentUser = useCurrentUser()
   const queryParams = useQueryParams()
   const configReader = ConfigReader.forModel(modelClass)
-  const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
   const modelClassName = modelClass.modelClassData().name
   const modelIdVarName = `${inflection.camelize(modelClass.modelClassData().name, true)}Id`
   const modelVarName = inflection.camelize(modelClass.modelClassData().name, true)
@@ -65,28 +105,7 @@ const EditPage = ({modelClass}) => {
     <div className="super-admin--edit-page">
       <form onSubmit={onSubmit}>
         {model && attributes?.map((attribute) =>
-          <div key={attribute.attribute}>
-            {attribute.translated && availableLocales.map((locale) =>
-              <div key={locale}>
-                <Input
-                  attribute={`${attribute.attribute}${inflection.camelize(locale)}`}
-                  id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}_${locale}`}
-                  label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
-                  model={model}
-                  name={`${camelizedLower}[${inflection.underscore(attribute.attribute)}_${locale}]`}
-                />
-              </div>
-            )}
-            {!attribute.translated &&
-              <Input
-                attribute={attribute.attribute}
-                id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}`}
-                label={modelClass.humanAttributeName(attribute.attribute)}
-                model={model}
-                name={`${camelizedLower}[${inflection.underscore(attribute.attribute)}]`}
-              />
-            }
-          </div>
+          <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelArgs={modelArgs} modelClass={modelClass} />
         )}
         {extraContent && extraContent(modelArgs)}
         <button style={{marginTop: "10px"}} type="submit">

@@ -85,9 +85,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     destroy_action = proc do
       accept_confirm do
-        sleep 1
         wait_for_and_find(".destroy-model-link").click
-        sleep 1
       end
 
       wait_for_expect { expect { model.reload }.to raise_error(ActiveRecord::RecordNotFound) }
