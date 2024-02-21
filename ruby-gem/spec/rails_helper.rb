@@ -25,6 +25,7 @@ require "public_activity"
 require "puma"
 require "rspec/retry" if ENV["CI"]
 require "shakapacker"
+require "tretry"
 require "waitutil"
 require "webdrivers"
 

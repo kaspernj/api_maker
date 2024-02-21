@@ -350,6 +350,7 @@ GEM
     string-cases (0.0.4)
     thor (1.2.2)
     timeout (0.4.0)
+    tretry (0.0.4)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2022.1)
@@ -405,6 +406,7 @@ DEPENDENCIES
   sexp_processor (>= 4.16.0)
   shakapacker (= 7.2.1)
   sqlite3
+  tretry
   tzinfo-data
   webdrivers (>= 5.3.1)
 
