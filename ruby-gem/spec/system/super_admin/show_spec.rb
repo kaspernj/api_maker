@@ -17,4 +17,9 @@ describe "super admin - show" do
     # It shows 'belongs_to'-relationships as attributes
     wait_for_selector ".attribute-row-value", exact_text: "Test project"
   end
+
+  it "destroys the record" do
+    login_as user_admin
+    super_admin_test_show_destroy(task)
+  end
 end

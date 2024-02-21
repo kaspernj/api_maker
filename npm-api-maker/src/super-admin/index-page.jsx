@@ -4,9 +4,11 @@ import {memo} from "react"
 
 const ApiMakerSuperAdminIndexPage = ({modelClass}) => {
   return (
-    <ModelClassTable
-      modelClass={modelClass}
-    />
+    <div className="super-admin--index-page">
+      <ModelClassTable
+        modelClass={modelClass}
+      />
+    </div>
   )
 }
 

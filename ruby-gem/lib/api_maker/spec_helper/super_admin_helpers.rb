@@ -80,9 +80,22 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     visit super_admin_path(model: resource.short_name, model_id: model.id)
     wait_for_selector ".super-admin--show-page"
+    wait_for_selector ".destroy-model-link"
+    wait_for_action_cable_to_connect
 
-    attributes.each do |attribute_name, value|
-      wait_for_attribute_row attribute: attribute_name.to_s, value: value
+    destroy_action = proc do
+      accept_confirm do
+        sleep 1
+        wait_for_and_find(".destroy-model-link").click
+        sleep 1
+      end
+
+      wait_for_expect { expect { model.reload }.to raise_error(ActiveRecord::RecordNotFound) }
     end
+
+    expect { destroy_action.call }.to change(model.class, :count).by(-1)
+
+    # It redirects to the index page
+    wait_for_selector ".super-admin--index-page"
   end
 end
