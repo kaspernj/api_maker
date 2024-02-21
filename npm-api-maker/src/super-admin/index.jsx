@@ -43,6 +43,8 @@ const ApiMakerSuperAdmin = () => {
       const model = await modelClass.find(modelId)
 
       await model.destroy()
+
+      Params.changeParams({mode: undefined, model_id: undefined})
     } catch (error) {
       FlashMessage.errorResponse(error)
     }
@@ -57,10 +59,10 @@ const ApiMakerSuperAdmin = () => {
       }
       {modelClass && pageToShow == "show" &&
         <>
-          <Link to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
+          <Link className="edit-model-link" to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
             Edit
           </Link>
-          <a href="#" onClick={onDestroyClicked}>
+          <a className="destroy-model-link" href="#" onClick={onDestroyClicked}>
             Delete
           </a>
         </>
