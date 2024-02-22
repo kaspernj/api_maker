@@ -1,48 +1,72 @@
 import ConfigReader from "./config-reader"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import Input from "../bootstrap/input"
+import {Pressable, Text, TextInput, View} from "react-native"
 import Locales from "shared/locales"
-import {useCallback, memo} from "react"
+import {memo, useCallback, useEffect, useMemo, useState} from "react"
 import useCurrentUser from "../use-current-user"
 import useModel from "../use-model"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
-const EditAttribute = ({attribute, model, modelArgs, modelClass}) => {
+const EditAttributeInput = ({attributeName, id, inputs, label, model, name}) => {
+  const defaultValue = useCallback(() => model[attributeName]() || "")
+  const [value, setValue] = useState(() => defaultValue())
+
+  useEffect(() => {
+    inputs[name] = defaultValue()
+  }, [])
+
+  const onChangeText = useCallback((newValue) => {
+    inputs[name] = newValue
+    setValue(newValue)
+  }, [])
+
+  return (
+    <View style={{marginBottom: 12}}>
+      <Text>{label}</Text>
+      <View>
+        <TextInput
+          dataSet={{
+            attribute: attributeName,
+            id,
+            name
+          }}
+          onChangeText={onChangeText}
+          style={{paddingTop: 9, paddingRight: 13, paddingBottom: 9, paddingLeft: 13, borderRadius: 5, backgroundColor: "#fff", border: "1px solid #cecece"}}
+          value={value}
+        />
+      </View>
+    </View>
+  )
+}
+
+const EditAttribute = ({attribute, inputs, model, modelClass}) => {
   const availableLocales = Locales.availableLocales()
   const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
-  const contentArgs = () => {
-    const contentArgsResult = {
-      inputProps: {
-        attribute: attribute.attribute,
-        model
-      }
-    }
-
-    return contentArgsResult
-  }
+  const contentArgs = () => ({inputProps: {attribute: attribute.attribute, model}})
 
   return (
     <>
       {attribute.content && attribute.content(contentArgs())}
       {!attribute.content && attribute.translated && availableLocales.map((locale) =>
-        <React.Fragment key={locale}>
-          <Input
-            attribute={`${attribute.attribute}${inflection.camelize(locale)}`}
-            id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}_${locale}`}
-            label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
-            model={model}
-            name={`${camelizedLower}[${inflection.underscore(attribute.attribute)}_${locale}]`}
-          />
-        </React.Fragment>
+        <EditAttributeInput
+          attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
+          id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}_${locale}`}
+          inputs={inputs}
+          label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
+          model={model}
+          name={`${inflection.underscore(attribute.attribute)}_${locale}`}
+          key={locale}
+        />
       )}
       {!attribute.content && !attribute.translated &&
-        <Input
-          attribute={attribute.attribute}
+        <EditAttributeInput
+          attributeName={attribute.attribute}
           id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}`}
+          inputs={inputs}
           label={modelClass.humanAttributeName(attribute.attribute)}
           model={model}
-          name={`${camelizedLower}[${inflection.underscore(attribute.attribute)}]`}
+          name={inflection.underscore(attribute.attribute)}
         />
       }
     </>
@@ -54,6 +78,7 @@ const EditPage = ({modelClass}) => {
   const currentUser = useCurrentUser()
   const queryParams = useQueryParams()
   const configReader = ConfigReader.forModel(modelClass)
+  const inputs = useMemo(() => ({}))
   const modelClassName = modelClass.modelClassData().name
   const modelIdVarName = `${inflection.camelize(modelClass.modelClassData().name, true)}Id`
   const modelVarName = inflection.camelize(modelClass.modelClassData().name, true)
@@ -87,14 +112,11 @@ const EditPage = ({modelClass}) => {
 
   modelArgs[modelIdVarName] = modelId
 
-  const onSubmit = useCallback(async (e) => {
-    e.preventDefault()
-
-    const form = digg(e, "target")
-    const formData = new FormData(form)
-
+  const onSubmit = useCallback(async () => {
     try {
-      await model.saveRaw(formData)
+      model.assignAttributes(inputs)
+
+      await model.save(inputs)
       Params.changeParams({mode: undefined, model_id: model.id()})
     } catch (error) {
       FlashMessage.errorResponse(error)
@@ -102,17 +124,29 @@ const EditPage = ({modelClass}) => {
   }, [model])
 
   return (
-    <div className="super-admin--edit-page">
-      <form onSubmit={onSubmit}>
-        {model && attributes?.map((attribute) =>
-          <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelArgs={modelArgs} modelClass={modelClass} />
-        )}
-        {extraContent && extraContent(modelArgs)}
-        <button style={{marginTop: "10px"}} type="submit">
+    <View dataSet={{class: "super-admin--edit-page"}}>
+      {model && attributes?.map((attribute) =>
+        <EditAttribute attribute={attribute} inputs={inputs} key={attribute.attribute} model={model} modelClass={modelClass} />
+      )}
+      {extraContent && extraContent(modelArgs)}
+      <Pressable
+        dataSet={{class: "submit-button"}}
+        onPress={onSubmit}
+        style={{
+          paddingTop: 18,
+          paddingRight: 24,
+          paddingBottom: 18,
+          paddingLeft: 24,
+          borderRadius: 10,
+          backgroundColor: "#4c93ff",
+          marginTop: "10px"
+        }}
+      >
+        <Text style={{color: "#fff"}}>
           Submit
-        </button>
-      </form>
-    </div>
+        </Text>
+      </Pressable>
+    </View>
   )
 }
 

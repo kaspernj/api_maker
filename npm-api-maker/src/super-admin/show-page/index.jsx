@@ -18,8 +18,6 @@ const AttributePresenter = ({attribute, model, modelArgs}) => {
     attributeRowProps.attribute = attribute
   }
 
-  console.log({attributeRowProps})
-
   return (
     <AttributeRow model={model} {...attributeRowProps} />
   )
@@ -72,8 +70,6 @@ const ApiMakerSuperAdminShowPage = ({modelClass}) => {
   const modelArgs = {}
 
   modelArgs[inflection.camelize(modelClass.modelClassData().name, true)] = model
-
-  console.log({attributes})
 
   return (
     <div className="super-admin--show-page">
