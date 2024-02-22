@@ -13,7 +13,7 @@ const EditAttributeInput = ({attributeName, id, inputs, label, model, name}) => 
   const [value, setValue] = useState(() => defaultValue())
 
   useEffect(() => {
-    inputs[name] = defaultValue()
+    inputs[name] = value
   }, [])
 
   const onChangeText = useCallback((newValue) => {
@@ -40,14 +40,45 @@ const EditAttributeInput = ({attributeName, id, inputs, label, model, name}) => 
   )
 }
 
+const EditAttributeContent = ({attribute, id, inputs, model, name}) => {
+  const defaultValue = useCallback(() => model[attribute.attribute]() || "")
+  const [value, setValue] = useState(() => defaultValue())
+  const onChangeValue = useCallback((newValue) => {
+    inputs[name] = newValue
+    setValue(newValue)
+  })
+  useEffect(() => {
+    inputs[name] = value
+  }, [])
+
+  const contentArgs = () => ({
+    inputProps: {
+      attribute: attribute.attribute,
+      defaultValue: defaultValue(),
+      id,
+      model
+    },
+    onChangeValue
+  })
+
+  return attribute.content(contentArgs())
+}
+
 const EditAttribute = ({attribute, inputs, model, modelClass}) => {
   const availableLocales = Locales.availableLocales()
   const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
-  const contentArgs = () => ({inputProps: {attribute: attribute.attribute, model}})
 
   return (
     <>
-      {attribute.content && attribute.content(contentArgs())}
+      {attribute.content &&
+        <EditAttributeContent
+          attribute={attribute}
+          id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}`}
+          inputs={inputs}
+          model={model}
+          name={inflection.underscore(attribute.attribute)}
+        />
+      }
       {!attribute.content && attribute.translated && availableLocales.map((locale) =>
         <EditAttributeInput
           attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}

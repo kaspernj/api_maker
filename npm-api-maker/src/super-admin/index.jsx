@@ -4,7 +4,7 @@ import Layout from "./layout"
 import Link from "../link"
 import {memo, useMemo} from "react"
 import * as modelsModule from "@kaspernj/api-maker/src/models.mjs.erb"
-import {useCallback} from "react"
+import {useCallback, useEffect, useState} from "react"
 import ShowPage from "./show-page"
 import ShowReflectionPage from "./show-reflection-page"
 import useQueryParams from "on-location-changed/src/use-query-params"
@@ -17,6 +17,27 @@ const ApiMakerSuperAdmin = () => {
 
   const modelId = queryParams.model_id
   const modelName = modelClass?.modelClassData()?.name
+  const [model, setModel] = useState()
+
+  const loadModel = useCallback(async () => {
+    if (modelId && modelClass) {
+      const abilities = {}
+      const abilitiesForModel = ["destroy", "edit"]
+
+      abilities[modelName] = abilitiesForModel
+
+      const model = await modelClass
+        .ransack({id_eq: modelId})
+        .abilities(abilities)
+        .first()
+
+      setModel(model)
+    } else {
+      setModel(undefined)
+    }
+  })
+
+  useEffect(() => { loadModel() }, [modelId])
 
   if (queryParams.model && queryParams.model_id && queryParams.model_reflection) {
     pageToShow = "show_reflection"
@@ -40,15 +61,13 @@ const ApiMakerSuperAdmin = () => {
     }
 
     try {
-      const model = await modelClass.find(modelId)
-
       await model.destroy()
 
       Params.changeParams({mode: undefined, model_id: undefined})
     } catch (error) {
       FlashMessage.errorResponse(error)
     }
-  }, [modelName, modelId])
+  }, [model])
 
   const actions = useMemo(
     () => <>
@@ -57,18 +76,22 @@ const ApiMakerSuperAdmin = () => {
           Create new
         </Link>
       }
-      {modelClass && pageToShow == "show" &&
+      {model && pageToShow == "show" &&
         <>
-          <Link className="edit-model-link" to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
-            Edit
-          </Link>
-          <a className="destroy-model-link" href="#" onClick={onDestroyClicked}>
-            Delete
-          </a>
+          {model.can("edit") &&
+            <Link className="edit-model-link" to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
+              Edit
+            </Link>
+          }
+          {model.can("destroy") &&
+            <a className="destroy-model-link" href="#" onClick={onDestroyClicked}>
+              Delete
+            </a>
+          }
         </>
       }
     </>,
-    [modelClass, pageToShow]
+    [model, pageToShow]
   )
 
   return (
