@@ -59,13 +59,13 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     visit super_admin_path(model: resource.short_name)
     wait_for_and_find(".edit-button").click
-    wait_for_selector ".super-admin--edit-page"
+    wait_for_selector "[data-class='super-admin--edit-page']"
 
     inputs.each do |input_name, value|
-      wait_for_and_find("##{resource.underscore_name.singularize}_#{input_name}").set(value)
+      wait_for_and_find("input[data-id='#{resource.underscore_name.singularize}_#{input_name}']").set(value)
     end
 
-    wait_for_and_find("button").click
+    wait_for_and_find("[data-class='submit-button']").click
 
     wait_for_expect do
       expect(model.reload).to have_attributes(inputs)

@@ -24,6 +24,9 @@ const options = {
   },
   plugins: [],
   resolve: {
+    alias: {
+      "react-native$": "react-native-web"
+    },
     extensions: [".css", ".scss", ".mjs", ".mjs.erb", ".mjs", ".mjs.erb", ".js.erb"],
     modules: [path.resolve(__dirname, "../../node_modules")]
   }

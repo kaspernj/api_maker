@@ -1,15 +1,15 @@
 import ConfigReader from "./config-reader"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import {Button, Text, TextInput, View} from "react-native"
+import {Pressable, Text, TextInput, View} from "react-native"
 import Locales from "shared/locales"
-import {memo, useCallback, useMemo, useState} from "react"
+import {memo, useCallback, useEffect, useMemo, useState} from "react"
 import useCurrentUser from "../use-current-user"
 import useModel from "../use-model"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
 const EditAttributeInput = ({attributeName, id, inputs, label, model, name}) => {
-  const defaultValue = useCallback(() => model[attributeName]())
+  const defaultValue = useCallback(() => model[attributeName]() || "")
   const [value, setValue] = useState(() => defaultValue())
 
   useEffect(() => {
@@ -129,7 +129,23 @@ const EditPage = ({modelClass}) => {
         <EditAttribute attribute={attribute} inputs={inputs} key={attribute.attribute} model={model} modelClass={modelClass} />
       )}
       {extraContent && extraContent(modelArgs)}
-      <Button onPress={onSubmit} style={{marginTop: "10px"}} title="Submit" />
+      <Pressable
+        dataSet={{class: "submit-button"}}
+        onPress={onSubmit}
+        style={{
+          paddingTop: 18,
+          paddingRight: 24,
+          paddingBottom: 18,
+          paddingLeft: 24,
+          borderRadius: 10,
+          backgroundColor: "#4c93ff",
+          marginTop: "10px"
+        }}
+      >
+        <Text style={{color: "#fff"}}>
+          Submit
+        </Text>
+      </Pressable>
     </View>
   )
 }
