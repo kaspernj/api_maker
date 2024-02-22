@@ -17,6 +17,23 @@ const ApiMakerSuperAdmin = () => {
 
   const modelId = queryParams.model_id
   const modelName = modelClass?.modelClassData()?.name
+  const [model, setModel] = useState()
+
+  const loadModel = useCallback(async () => {
+    const abilities = {}
+    const abilitiesForModel = ["destroy", "edit"]
+
+    abilities[modelName] = abilitiesForModel
+
+    const model = await modelClass
+      .ransack({id_eq: modelId})
+      .abilities(abilities)
+      .first()
+
+    setModel(model)
+  })
+
+  useEffect(() => { loadModel() }, [modelId])
 
   if (queryParams.model && queryParams.model_id && queryParams.model_reflection) {
     pageToShow = "show_reflection"
@@ -40,15 +57,13 @@ const ApiMakerSuperAdmin = () => {
     }
 
     try {
-      const model = await modelClass.find(modelId)
-
       await model.destroy()
 
       Params.changeParams({mode: undefined, model_id: undefined})
     } catch (error) {
       FlashMessage.errorResponse(error)
     }
-  }, [modelName, modelId])
+  }, [model])
 
   const actions = useMemo(
     () => <>
@@ -57,18 +72,22 @@ const ApiMakerSuperAdmin = () => {
           Create new
         </Link>
       }
-      {modelClass && pageToShow == "show" &&
+      {model && pageToShow == "show" &&
         <>
-          <Link className="edit-model-link" to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
-            Edit
-          </Link>
-          <a className="destroy-model-link" href="#" onClick={onDestroyClicked}>
-            Delete
-          </a>
+          {model.can("edit") &&
+            <Link className="edit-model-link" to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
+              Edit
+            </Link>
+          }
+          {model.can("destroy") &&
+            <a className="destroy-model-link" href="#" onClick={onDestroyClicked}>
+              Delete
+            </a>
+          }
         </>
       }
     </>,
-    [modelClass, pageToShow]
+    [model, pageToShow]
   )
 
   return (
