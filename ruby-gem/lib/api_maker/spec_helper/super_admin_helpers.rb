@@ -33,17 +33,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     visit super_admin_path(model: resource.short_name)
     wait_for_and_find(".create-new-model-link").click
     wait_for_selector "[data-class='super-admin--edit-page']"
-
-    inputs.each do |input_name, value|
-      base_input_name = resource.underscore_name.singularize
-
-      if value.is_a?(Hash) && value[:haya_select]
-        haya_select("#{base_input_name}_#{input_name}").select(value)
-      else
-        wait_for_and_find("input[data-id='#{resource.underscore_name.singularize}_#{input_name}']").set(value)
-      end
-    end
-
+    super_admin_test_fill_inputs(resource, inputs)
     wait_for_and_find("[data-class='submit-button']").click
     wait_for_expect { expect(model_class.count).to eq 1 }
 
@@ -54,21 +44,31 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     expect(created_model).to have_attributes(expect_attributes)
   end
 
-  def super_admin_test_edit(model, inputs:)
+  def super_admin_test_fill_inputs(resource, inputs)
+    base_input_name = resource.underscore_name.singularize
+
+    inputs.each do |input_name, value|
+      if value.is_a?(Hash) && value[:haya_select]
+        haya_select("#{base_input_name}_#{input_name}").select(value.fetch(:haya_select))
+      else
+        wait_for_and_find("input[data-id='#{resource.underscore_name.singularize}_#{input_name}']").set(value)
+      end
+    end
+  end
+
+  def super_admin_test_edit(model, inputs:, expect: nil)
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
 
     visit super_admin_path(model: resource.short_name)
     wait_for_and_find(".edit-button").click
     wait_for_selector "[data-class='super-admin--edit-page']"
-
-    inputs.each do |input_name, value|
-      wait_for_and_find("input[data-id='#{resource.underscore_name.singularize}_#{input_name}']").set(value)
-    end
-
+    super_admin_test_fill_inputs(resource, inputs)
     wait_for_and_find("[data-class='submit-button']").click
 
+    expect_attributes = expect || inputs
+
     wait_for_expect do
-      expect(model.reload).to have_attributes(inputs)
+      expect(model.reload).to have_attributes(expect_attributes)
     end
   end
 
