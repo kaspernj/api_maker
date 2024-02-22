@@ -20,17 +20,21 @@ const ApiMakerSuperAdmin = () => {
   const [model, setModel] = useState()
 
   const loadModel = useCallback(async () => {
-    const abilities = {}
-    const abilitiesForModel = ["destroy", "edit"]
+    if (modelId && modelClass) {
+      const abilities = {}
+      const abilitiesForModel = ["destroy", "edit"]
 
-    abilities[modelName] = abilitiesForModel
+      abilities[modelName] = abilitiesForModel
 
-    const model = await modelClass
-      .ransack({id_eq: modelId})
-      .abilities(abilities)
-      .first()
+      const model = await modelClass
+        .ransack({id_eq: modelId})
+        .abilities(abilities)
+        .first()
 
-    setModel(model)
+      setModel(model)
+    } else {
+      setModel(undefined)
+    }
   })
 
   useEffect(() => { loadModel() }, [modelId])
