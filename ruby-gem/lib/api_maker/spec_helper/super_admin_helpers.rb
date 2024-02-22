@@ -32,7 +32,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     visit super_admin_path(model: resource.short_name)
     wait_for_and_find(".create-new-model-link").click
-    wait_for_selector ".super-admin--edit-page"
+    wait_for_selector "[data-class='super-admin--edit-page']"
 
     inputs.each do |input_name, value|
       base_input_name = resource.underscore_name.singularize
@@ -40,11 +40,11 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
       if value.is_a?(Hash) && value[:haya_select]
         haya_select("#{base_input_name}_#{input_name}").select(value)
       else
-        wait_for_and_find("##{base_input_name}_#{input_name}").set(value)
+        wait_for_and_find("input[data-id='#{resource.underscore_name.singularize}_#{input_name}']").set(value)
       end
     end
 
-    wait_for_and_find("button").click
+    wait_for_and_find("[data-class='submit-button']").click
     wait_for_expect { expect(model_class.count).to eq 1 }
 
     created_model = model_class.last!
