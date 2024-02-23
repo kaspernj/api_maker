@@ -3,7 +3,7 @@ import EventListener from "../../../event-listener"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo, useCallback, useRef, useState} from "react"
-import useShape from "set-state-compare/src/use-shape"
+import useShape from "set-state-compare/src/use-shape.js"
 
 const ApiMakerSuperAdminLayoutHeader = ({actions, onTriggerMenu, title}) => {
   const shape = useShape()

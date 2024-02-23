@@ -1,30 +1,23 @@
-import CanCanLoader from "@kaspernj/api-maker/src/can-can-loader"
-import {digs} from "diggerize"
-import Shape from "set-state-compare/src/shape"
+import {memo} from "react"
+import useCanCan from "@kaspernj/api-maker/src/use-can-can"
 
-export default class CanCanWithShape extends React.PureComponent {
-  shape = new Shape(this, {
-    canCan: undefined
-  })
+const CanCanWithShape = () => {
+  const canCan = useCanCan(() => [[Account, ["sum"]]])
 
-  render() {
-    const {canCan} = digs(this.shape, "canCan")
-
-    return (
-      <div className="components-can-can-loader-with-shape">
-        <CanCanLoader abilities={[[Account, ["sum"]]]} component={this} />
-
-        {canCan && canCan.can("sum", Account) &&
-          <div className="can-access-admin">
-            can access admin
-          </div>
-        }
-        {canCan && !canCan.can("sum", Account) &&
-          <div className="cannot-access-admin">
-            can not access admin
-          </div>
-        }
-      </div>
-    )
-  }
+  return (
+    <div className="components-can-can-loader-with-shape">
+      {canCan?.can("sum", Account) &&
+        <div className="can-access-admin">
+          can access admin
+        </div>
+      }
+      {canCan && !canCan.can("sum", Account) &&
+        <div className="cannot-access-admin">
+          can not access admin
+        </div>
+      }
+    </div>
+  )
 }
+
+export default memo(CanCanWithShape)

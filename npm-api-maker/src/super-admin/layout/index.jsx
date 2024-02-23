@@ -8,7 +8,7 @@ import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo, useCallback, useEffect, useState} from "react"
 import useCurrentUser from "../../use-current-user"
-import useShape from "set-state-compare/src/use-shape"
+import useShape from "set-state-compare/src/use-shape.js"
 
 const NoAccess = React.lazy(() => import("./no-access"))
 
