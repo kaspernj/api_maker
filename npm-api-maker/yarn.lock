@@ -2894,6 +2894,11 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "2.1.1"
 
+"fetching-object@>= 1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/fetching-object/-/fetching-object-1.0.1.tgz#0182826488d05b9008b5cc70b7d92bf4b9f908b4"
+  integrity sha512-TzN9rlL9ZGzTbHClKAT+bPYLgKmb4pDTyIJWWmVWQYwVROSXe12dO+l/rosN2+NBLOMDjMu3neTRNhjyj6UMRg==
+
 file-entry-cache@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/file-entry-cache/-/file-entry-cache-6.0.1.tgz#211b2dd9659cb0394b073e7323ac3c933d522027"
@@ -4833,6 +4838,13 @@ semver@^7.3.5, semver@^7.5.3, semver@^7.5.4:
   integrity sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==
   dependencies:
     lru-cache "^6.0.0"
+
+"set-state-compare@>= 1.0.25":
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.25.tgz#e4690d6466754d8d6eed5607038088b088abbc01"
+  integrity sha512-JWrJhHoZaQrwVNAbOENs+srJ9mMemI4nJ//X1rwna5AUbHO35Pn0il5IGAjefzZXjFZL5MzWN3XiAT9ODWypKw==
+  dependencies:
+    fetching-object ">= 1.0.1"
 
 shallow-clone@^3.0.0:
   version "3.0.1"

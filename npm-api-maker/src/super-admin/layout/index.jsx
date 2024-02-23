@@ -1,12 +1,14 @@
 import "./style"
 import classNames from "classnames"
 import CommandsPool from "../../commands-pool"
+import config from "super-admin/config"
 import Header from "./header"
 import Menu from "./menu"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo, useCallback, useEffect, useState} from "react"
 import useCurrentUser from "../../use-current-user"
+import useShape from "set-state-compare/src/use-shape"
 
 const NoAccess = React.lazy(() => import("./no-access"))
 
@@ -21,6 +23,7 @@ const ApiMakerSuperAdminLayout = ({
   menu,
   ...restProps
 }) => {
+  const shape = useShape()
   const currentUser = useCurrentUser()
 
   useEffect(() => {
@@ -36,22 +39,21 @@ const ApiMakerSuperAdminLayout = ({
     document.title = "Wooftech"
   }
 
-  const [menuTriggered, setMenuTriggered] = useState(false)
+  const setMenuTriggered = shape.useState("menuTriggered", false)
   const noAccess = !currentUser
   const onRequestMenuClose = useCallback(() => setMenuTriggered(false), [])
   const onTriggerMenu = useCallback((e) => {
     e.preventDefault()
-
-    setMenuTriggered(!menuTriggered)
-  }, [menuTriggered])
+    setMenuTriggered(!shape.state.menuTriggered)
+  }, [])
 
   return (
-    <div className={classNames("components--admin--layout", className)} data-menu-triggered={menuTriggered} {...restProps}>
+    <div className={classNames("components--admin--layout", className)} data-menu-triggered={shape.state.menuTriggered} {...restProps}>
       <Menu
         active={active}
         noAccess={noAccess}
         onRequestMenuClose={onRequestMenuClose}
-        triggered={menuTriggered}
+        triggered={shape.state.menuTriggered}
       />
       <Header actions={actions} onTriggerMenu={onTriggerMenu} title={headerTitle} />
       <div className="app-layout-content-container">
@@ -70,6 +72,7 @@ const ApiMakerSuperAdminLayout = ({
                 <div className="mb-4">
                   {I18n.t("js.api_maker.super_admin.layout.try_signing_in", {defaultValue: "Try signing in."})}
                 </div>
+                {config.signInContent()}
               </>
             }
           </>

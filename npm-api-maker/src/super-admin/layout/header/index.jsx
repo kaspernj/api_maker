@@ -3,19 +3,21 @@ import EventListener from "../../../event-listener"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo, useCallback, useRef, useState} from "react"
+import useShape from "set-state-compare/src/use-shape"
 
 const ApiMakerSuperAdminLayoutHeader = ({actions, onTriggerMenu, title}) => {
+  const shape = useShape()
   const headerActionsRef = useRef()
-  const [headerActionsActive, setHeaderActionsActive] = useState(false)
+  const setHeaderActionsActive = shape.useState("headerActionsActive", false)
   const onGearsClicked = useCallback((e) => {
     e.preventDefault()
-    setHeaderActionsActive(!headerActionsActive)
-  }, [headerActionsActive])
+    setHeaderActionsActive(!shape.state.headerActionsActive)
+  }, [])
 
   const onWindowMouseUp = useCallback((e) => {
     // Close the header actions menu if clicked happened outside
-    if (headerActionsActive && headerActionsRef.current && !headerActionsRef.current.contains(e.target)) setHeaderActionsActive(false)
-  }, [headerActionsActive, headerActionsRef])
+    if (shape.state.headerActionsActive && headerActionsRef.current && !headerActionsRef.current.contains(e.target)) setHeaderActionsActive(false)
+  }, [])
 
   return (
     <div className="components--admin--layout--header">
@@ -24,7 +26,7 @@ const ApiMakerSuperAdminLayoutHeader = ({actions, onTriggerMenu, title}) => {
         {title}
       </div>
       {actions &&
-        <div className="header-actions-container" data-active={headerActionsActive}>
+        <div className="header-actions-container" data-active={shape.state.headerActionsActive}>
           <div className="header-actions" ref={headerActionsRef}>
             {actions}
           </div>
