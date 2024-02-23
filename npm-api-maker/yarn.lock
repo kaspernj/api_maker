@@ -4834,6 +4834,11 @@ semver@^7.3.5, semver@^7.5.3, semver@^7.5.4:
   dependencies:
     lru-cache "^6.0.0"
 
+set-state-compare@^1.0.24:
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.24.tgz#50bc77860c838f748e5d82964e57f0d68a71b8c4"
+  integrity sha512-yQXQhAWJ9nAYXCYqGpW7jY/3AHyDGyeaidF4n0tkKlFHp8lA4Dxfyqlp9r3aZBrpze/qBLTrXjvlkjSz2RUWLg==
+
 shallow-clone@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/shallow-clone/-/shallow-clone-3.0.1.tgz#8f2981ad92531f55035b01fb230769a40e02efa3"
