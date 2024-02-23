@@ -1,40 +1,32 @@
-import CanCanLoader from "@kaspernj/api-maker/src/can-can-loader"
 import classNames from "classnames"
-import {digs} from "diggerize"
 import PropTypes from "prop-types"
+import useCanCan from "@kaspernj/api-maker/src/use-can-can"
 
-export default class CanCanWithState extends React.PureComponent {
-  static propTypes = {
-    className: PropTypes.string
-  }
+const CanCanWithState = ({className, ...restProps}) => {
+  const canCan = useCanCan(() => [[Account, ["sum"]]])
 
-  state = {
-    canCan: undefined
-  }
+  return (
+    <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>
+      {!canCan &&
+        "can can not loaded"
+      }
 
-  render() {
-    const {className, ...restProps} = this.props
-    const {canCan} = digs(this.state, "canCan")
-
-    return (
-      <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>
-        <CanCanLoader abilities={[[Account, ["sum"]]]} component={this} />
-
-        {!canCan &&
-          "can can not loaded"
-        }
-
-        {canCan && canCan.can("sum", Account) &&
-          <div className="can-access-admin">
-            can access admin
-          </div>
-        }
-        {canCan && !canCan.can("sum", Account) &&
-          <div className="cannot-access-admin">
-            can not access admin
-          </div>
-        }
-      </div>
-    )
-  }
+      {canCan && canCan.can("sum", Account) &&
+        <div className="can-access-admin">
+          can access admin
+        </div>
+      }
+      {canCan && !canCan.can("sum", Account) &&
+        <div className="cannot-access-admin">
+          can not access admin
+        </div>
+      }
+    </div>
+  )
 }
+
+CanCanWithState.propTypes = {
+  className: PropTypes.string
+}
+
+export default CanCanWithState

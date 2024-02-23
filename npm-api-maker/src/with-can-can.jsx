@@ -1,16 +1,12 @@
-import CanCanLoader from "./can-can-loader"
+import useCanCan from "./use-can-can.mjs"
+import {memo} from "react"
 
-export default (WrappedComponent, abilities) => class WithCanCan extends React.PureComponent {
-  state = {
-    canCan: undefined
+export default (WrappedComponent, abilities) => {
+  const WithCanCan = (props) => {
+    const canCan = useCanCan(() => abilities)
+
+    return <WrappedComponent canCan={canCan} {...props} />
   }
 
-  render() {
-    return (
-      <>
-        <CanCanLoader abilities={abilities} component={this} />
-        <WrappedComponent canCan={this.state.canCan} {...this.props} />
-      </>
-    )
-  }
+  return memo(WithCanCan)
 }
