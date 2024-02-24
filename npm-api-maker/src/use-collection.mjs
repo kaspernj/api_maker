@@ -57,7 +57,16 @@ const useCollection = ({
   const setShowNoRecordsFoundContent = s.useState("showNoRecordsFoundContent", false)
   const queryParams = useQueryParams()
   const modelIds = s.s.models?.map((model) => model.id())
-  const modelIdsCacheString = modelIds?.join("---") || "no-models"
+
+  let modelIdsCacheString
+
+  if (s.s.models === undefined) {
+    modelIdsCacheString = "models-undefined"
+  } else if (s.s.models.length === 0) {
+    modelIdsCacheString = "no-models"
+  } else {
+    modelIdsCacheString = modelIds?.join("---")
+  }
 
   s.updateMeta({queryParams})
 
