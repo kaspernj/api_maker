@@ -4839,10 +4839,10 @@ semver@^7.3.5, semver@^7.5.3, semver@^7.5.4:
   dependencies:
     lru-cache "^6.0.0"
 
-"set-state-compare@>= 1.0.25":
-  version "1.0.25"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.25.tgz#e4690d6466754d8d6eed5607038088b088abbc01"
-  integrity sha512-JWrJhHoZaQrwVNAbOENs+srJ9mMemI4nJ//X1rwna5AUbHO35Pn0il5IGAjefzZXjFZL5MzWN3XiAT9ODWypKw==
+"set-state-compare@>= 1.0.26":
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.26.tgz#a7fa1e081d62d3fc861e0c50d9d77769d796cdfd"
+  integrity sha512-meN7lG6+RmwfPFjec2qSv71ITPAiBkS+66iItDwSF04mMirNXHn64gaM5zyIcahf7KGJHEUC8l45hsMfXkyUqg==
   dependencies:
     fetching-object ">= 1.0.1"
 
