@@ -56,6 +56,8 @@ const useCollection = ({
   const setShowNoRecordsAvailableContent = s.useState("showNoRecordsAvailableContent", false)
   const setShowNoRecordsFoundContent = s.useState("showNoRecordsFoundContent", false)
   const queryParams = useQueryParams()
+  const modelIds = s.s.models?.map((model) => model.id())
+  const modelIdsCacheString = modelIds?.join("---") || "no-models"
 
   s.updateMeta({queryParams})
 
@@ -227,18 +229,24 @@ const useCollection = ({
     }
   }, [])
 
-  return {
-    models: s.s.models
-  }
+  useEffect(() => {
+    const connections = []
 
-  /*
-    {s.s.models && s.s.models.map((model) =>
-      <React.Fragment key={model.id()}>
-        <EventDestroyed model={model} onDestroyed={onModelDestroyed} />
-        <EventUpdated model={model} onUpdated={onModelUpdated} />
-      </React.Fragment>
-    )}
-  */
+    if (s.s.models) {
+      for(const model of s.s.models) {
+        connections.push(ModelEvents.connectUpdated(model, onModelUpdated))
+        connections.push(ModelEvents.connectDestroyed(model, onModelUpdated))
+      }
+    }
+
+    return () => {
+      for(const connection of connections) {
+        connection.unsubscribe()
+      }
+    }
+  }, [modelIdsCacheString])
+
+  return s.state
 }
 
 useCollection.propTypes = PropTypesExact({
