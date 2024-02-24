@@ -4,16 +4,16 @@ import useCollection from "./use-collection"
 import useShape from "set-state-compare/src/use-shape.js"
 
 const CollectionLoader = (props) => {
-  const shape = useShape()
+  const s = useShape(props)
   const useCollectionResult = useCollection(props)
 
-  shape.updateMeta({useCollectionResult})
+  s.updateMeta({useCollectionResult})
 
   useEffect(() => {
-    const componentShape = digg(this, "props", "component", "shape")
+    const componentShape = digg(s.p.component, "shape")
 
-    componentShape.set(s.s.useCollectionResult)
-  }, useCollectionResult.modelIdsCacheString)
+    componentShape.set(s.m.useCollectionResult)
+  }, [digg(useCollectionResult, "modelIdsCacheString")])
 
   return null
 }

@@ -61,18 +61,6 @@ const useCollection = ({
 
   s.updateMeta({queryParams})
 
-  useEffect(() => {
-    loadQParams()
-    loadModels()
-
-    if (s.p.noRecordsAvailableContent) loadOverallCount()
-  }, [])
-
-  useEffect(() => {
-    loadQParams()
-    loadModels()
-  }, [queryParams[s.s.queryQName], queryParams[s.s.queryPageName], queryParams[s.s.queryPerKey], queryParams[s.s.querySName], collection])
-
   const loadOverallCount = useCallback(async () => {
     const baseQuery = s.p.collection || s.p.modelClass.all()
     const overallCount = await baseQuery.count()
@@ -95,7 +83,7 @@ const useCollection = ({
   }, [])
 
   const loadQParams = useCallback(() => {
-    const qParams = hasQParams() ? qParams() : Object.assign({}, s.p.defaultParams)
+    const qParamsToSet = hasQParams() ? qParams() : Object.assign({}, s.p.defaultParams)
     const searchParams = []
 
     if (s.m.queryParams[s.s.querySName]) {
@@ -106,7 +94,7 @@ const useCollection = ({
       }
     }
 
-    setQParams(qParams)
+    setQParams(qParamsToSet)
     setSearchParams(searchParams)
   }, [])
 
@@ -167,8 +155,6 @@ const useCollection = ({
   }, [])
 
   const loadModelsDebounce = useCallback(debounce(loadModels), [])
-  const onModelCreated = loadModels
-
   const onModelDestroyed = useCallback((args) => {
     setModels(s.s.models.filter((model) => model.id() != args.model.id()))
   }, [])
@@ -222,7 +208,16 @@ const useCollection = ({
   }, [])
 
   useEffect(() => {
-    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, onModelCreated)
+    loadQParams()
+    loadModels()
+  }, [queryParams[s.s.queryQName], queryParams[s.s.queryPageName], queryParams[s.s.queryPerKey], queryParams[s.s.querySName], collection])
+
+  useEffect(() => {
+    if (s.p.noRecordsAvailableContent) loadOverallCount()
+  }, [])
+
+  useEffect(() => {
+    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, loadModels)
 
     return () => {
       connectCreated.unsubscribe()
@@ -235,7 +230,7 @@ const useCollection = ({
     if (s.s.models) {
       for(const model of s.s.models) {
         connections.push(ModelEvents.connectUpdated(model, onModelUpdated))
-        connections.push(ModelEvents.connectDestroyed(model, onModelUpdated))
+        connections.push(ModelEvents.connectDestroyed(model, onModelDestroyed))
       }
     }
 
@@ -246,15 +241,16 @@ const useCollection = ({
     }
   }, [modelIdsCacheString])
 
-  return s.state
+  const result = Object.assign({}, s.state)
+
+  result.modelIdsCacheString = modelIdsCacheString
+
+  return result
 }
 
 useCollection.propTypes = PropTypesExact({
   abilities: PropTypes.object,
-  appHistory: PropTypes.object,
-  className: PropTypes.string,
   collection: PropTypes.instanceOf(Collection),
-  component: PropTypes.object,
   defaultParams: PropTypes.object,
   groupBy: PropTypes.array,
   modelClass: PropTypes.func.isRequired,
@@ -262,11 +258,9 @@ useCollection.propTypes = PropTypesExact({
   noRecordsFoundContent: PropTypes.func,
   onModelsLoaded: PropTypes.func,
   pagination: PropTypes.bool.isRequired,
-  paginateContent: PropTypes.func,
   preloads: PropTypes.array.isRequired,
   queryMethod: PropTypes.func,
   queryName: PropTypes.string,
-  queryParams: PropTypes.object,
   select: PropTypes.object,
   selectColumns: PropTypes.object
 })
