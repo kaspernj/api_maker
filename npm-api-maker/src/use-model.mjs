@@ -121,7 +121,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
   }, [args.eventUpdated, model?.id()])
 
   const onDestroyed = useCallback(({model}) => {
-    const forwardArgs = {}
+    const forwardArgs = {model}
 
     forwardArgs[s.m.modelVariableName] = model
 
