@@ -3249,12 +3249,13 @@ human-signals@^2.1.0:
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
 i18n-on-steroids@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.7.tgz#652e14a0d4b2700bb8f78bb228f10b83b7c8e964"
-  integrity sha512-38KF59zy2E3nUtKyNeWOV/mmzU8ibq9IOIQpha1HJkTw1SerD7pNgLbDlT1OA2FSz6FOSTemVU8KfFpq1jxIRw==
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.10.tgz#123d3747fb96ea044c7334cc69f41d2daa668f9a"
+  integrity sha512-vN0wty4XuEMyaaYMa2NyOq8rWj6+vZvaHbFDcpln54/KIJUNIEI9a1VStZnO1TZiTdxGoAXXzC8CmuDX1cQVXw==
   dependencies:
     diggerize "^1.0.5"
     numberable "^1.0.0"
+    set-state-compare "^1.0.26"
     strftime "^0.10.0"
 
 iconv-lite@0.6.3:
@@ -4839,7 +4840,7 @@ semver@^7.3.5, semver@^7.5.3, semver@^7.5.4:
   dependencies:
     lru-cache "^6.0.0"
 
-"set-state-compare@>= 1.0.26":
+"set-state-compare@>= 1.0.26", set-state-compare@^1.0.26:
   version "1.0.26"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.26.tgz#a7fa1e081d62d3fc861e0c50d9d77769d796cdfd"
   integrity sha512-meN7lG6+RmwfPFjec2qSv71ITPAiBkS+66iItDwSF04mMirNXHn64gaM5zyIcahf7KGJHEUC8l45hsMfXkyUqg==
