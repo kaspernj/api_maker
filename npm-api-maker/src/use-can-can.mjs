@@ -3,7 +3,7 @@ import {useCallback, useEffect, useState} from "react"
 import useShape from "set-state-compare/src/use-shape.js"
 
 const useCanCan = (abilitiesCallback, dependencies) => {
-  const shape = useShape({abilitiesCallback})
+  const s = useShape({abilitiesCallback})
   const [canCan, setCanCan] = useState()
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const useCanCan = (abilitiesCallback, dependencies) => {
 
   const loadAbilities = useCallback(async () => {
     const canCan = CanCan.current()
-    const abilities = shape.props.abilitiesCallback()
+    const abilities = s.p.abilitiesCallback()
 
     await canCan.loadAbilities(abilities)
 
