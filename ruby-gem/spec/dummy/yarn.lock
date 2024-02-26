@@ -1204,10 +1204,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kaspernj/api-maker@1.0.303":
-  version "1.0.303"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.303.tgz#6c66d36fd7c8874979a4a440b7230eec33c72b90"
-  integrity sha512-DBkQM9Iqoqql6y9DgLHVVTR+/GOpcBk5saSoKBUWA4n/FYeWJwbA23F/AAkMF5uOg8r0ttLzT2g1rOPXZEGRhg==
+"@kaspernj/api-maker@1.0.313":
+  version "1.0.313"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.313.tgz#89d5f48811971937e60fa0029457f9849d1ba3a3"
+  integrity sha512-LpI28S7b31Cqb2uzDIam5SMEoIwHxWlfZbEdrJIEP5DvsCKTFaSZWaIfKlX5OVJ5gY13OUnHdQ73J0mycq/ryQ==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -1225,6 +1225,7 @@
     on-location-changed ">= 1.0.8"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
+    set-state-compare ">= 1.0.26"
     spark-md5 "^3.0.2"
     strftime ">= 0.10.0"
     uniqunize "^1.0.1"
@@ -4273,7 +4274,7 @@ serve-static@1.15.0:
     parseurl "~1.3.3"
     send "0.18.0"
 
-set-state-compare@^1.0.25, set-state-compare@^1.0.26:
+"set-state-compare@>= 1.0.26", set-state-compare@^1.0.25, set-state-compare@^1.0.26:
   version "1.0.26"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.26.tgz#a7fa1e081d62d3fc861e0c50d9d77769d796cdfd"
   integrity sha512-meN7lG6+RmwfPFjec2qSv71ITPAiBkS+66iItDwSF04mMirNXHn64gaM5zyIcahf7KGJHEUC8l45hsMfXkyUqg==
