@@ -1,7 +1,8 @@
+import {useCallback, useEffect, useState} from "react"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
-import {useEffect, useState} from "react"
+import useShape from "set-state-compare/src/use-shape.js"
 
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
@@ -13,6 +14,8 @@ const useModel = (modelClassArg, argsArg = {}) => {
     args = argsArg
   }
 
+  const s = useShape(args)
+
   if (typeof modelClassArg == "object") {
     modelClass = modelClassArg.callback({queryParams})
   } else {
@@ -20,18 +23,16 @@ const useModel = (modelClassArg, argsArg = {}) => {
   }
 
   const paramsVariableName = `${modelClass.modelName().paramKey()}_id`
+  let modelId
 
-  const getModelId = () => {
-    if (args.loadByQueryParam) {
-      return args.loadByQueryParam({queryParams})
-    }
-
+  if (args.loadByQueryParam) {
+    modelId = args.loadByQueryParam({queryParams})
+  } else {
     if (!args.match) throw new Error("Both 'loadByQueryParam' and 'match' wasn't given")
 
-    return args.match.params[paramsVariableName] || args.match.params.id
+    modelId = args.match.params[paramsVariableName] || args.match.params.id
   }
 
-  const modelId = getModelId()
   const modelVariableName = inflection.camelize(modelClass.modelClassData().name, true)
   const cacheArgs = [modelId]
   const [model, setModel] = useState(undefined)
@@ -41,48 +42,52 @@ const useModel = (modelClassArg, argsArg = {}) => {
     cacheArgs.push(...args.cacheArgs)
   }
 
-  const loadExistingModel = async () => {
-    const query = await modelClass.ransack({id_eq: modelId})
+  s.updateMeta({modelId, modelVariableName, queryParams})
 
-    if (!modelId) throw new Error(`No model ID was given: ${modelId} by '${paramsVariableName}' in query params: ${Object.keys(match.params).join(", ")}`)
-    if (args.abilities) query.abilities(args.abilities)
-    if (args.preload) query.preload(args.preload)
-    if (args.select) query.select(args.select)
+  const loadExistingModel = useCallback(async () => {
+    const query = await modelClass.ransack({id_eq: s.m.modelId})
+
+    if (!modelId) {
+      throw new Error(`No model ID was given: ${s.m.modelId} by '${paramsVariableName}' in query params: ${Object.keys(s.props.match.params).join(", ")}`)
+    }
+
+    if (s.props.abilities) query.abilities(s.p.abilities)
+    if (s.props.preload) query.preload(s.p.preload)
+    if (s.props.select) query.select(s.p.select)
 
     const model = await query.first()
 
     setModel(model)
     setNotFound(!model)
-  }
+  }, [])
 
-  const loadNewModel = async () => {
-    const params = Params.parse()
+  const loadNewModel = useCallback(async () => {
     const ModelClass = modelClass
     const paramKey = ModelClass.modelName().paramKey()
-    const modelDataFromParams = params[paramKey] || {}
+    const modelDataFromParams = s.m.queryParams[paramKey] || {}
 
     let defaults = {}
 
-    if (args.newIfNoId?.defaults) {
-      defaults = await args.newIfNoId.defaults()
+    if (s.props.newIfNoId?.defaults) {
+      defaults = await s.props.newIfNoId.defaults()
     }
 
-    const modelData = Object.assign(defaults, args.newAttributes, modelDataFromParams)
+    const modelData = Object.assign(defaults, s.props.newAttributes, modelDataFromParams)
     const model = new ModelClass({
       isNewRecord: true,
       data: {a: modelData}
     })
 
     setModel(model)
-  }
+  }, [])
 
-  const loadModel = async () => {
-    if (args.newIfNoId && !modelId) {
+  const loadModel = useCallback(async () => {
+    if (s.props.newIfNoId && !s.m.modelId) {
       return await loadNewModel()
-    } else if (!args.optional || modelId) {
+    } else if (!s.props.optional || s.m.modelId) {
       return await loadExistingModel()
     }
-  }
+  }, [])
 
   useEffect(
     () => { loadModel() },
@@ -115,11 +120,19 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.eventUpdated, model?.id()])
 
+  const onDestroyed = useCallback(({model}) => {
+    const forwardArgs = {}
+
+    forwardArgs[s.m.modelVariableName] = model
+
+    s.p.onDestroyed(forwardArgs)
+  }, [])
+
   useEffect(() => {
     let connectDestroyed
 
     if (model && args.onDestroyed) {
-      connectDestroyed = ModelEvents.connectDestroyed(model, loadModel)
+      connectDestroyed = ModelEvents.connectDestroyed(model, onDestroyed)
     }
 
     return () => {
