@@ -1,4 +1,5 @@
 import {useCallback, useEffect, useState} from "react"
+import Devise from "./devise.mjs"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
@@ -119,6 +120,24 @@ const useModel = (modelClassArg, argsArg = {}) => {
       connectUpdated?.unsubscribe()
     }
   }, [args.eventUpdated, model?.id()])
+
+  const onSignedIn = useCallback(() => {
+    loadModel()
+  }, [])
+
+  const onSignedOut = useCallback(() => {
+    loadModel()
+  }, [])
+
+  useEffect(() => {
+    Devise.events().addListener("onDeviseSignIn", onSignedIn)
+    Devise.events().addListener("onDeviseSignOut", onSignedOut)
+
+    return () => {
+      Devise.events().removeListener("onDeviseSignIn", onSignedIn)
+      Devise.events().removeListener("onDeviseSignOut", onSignedOut)
+    }
+  })
 
   const onDestroyed = useCallback(({model}) => {
     const forwardArgs = {model}
