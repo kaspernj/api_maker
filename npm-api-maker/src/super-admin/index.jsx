@@ -6,6 +6,7 @@ import {memo, useMemo} from "react"
 import * as modelsModule from "@kaspernj/api-maker/src/models.mjs.erb"
 import {useCallback, useEffect, useState} from "react"
 import ShowPage from "./show-page"
+import ShowReflectionActions from "./show-reflection-actions"
 import ShowReflectionPage from "./show-reflection-page"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
@@ -90,8 +91,11 @@ const ApiMakerSuperAdmin = () => {
           }
         </>
       }
+      {pageToShow == "show_reflection" &&
+        <ShowReflectionActions model={model} modelClass={modelClass} reflectionName={queryParams.model_reflection} />
+      }
     </>,
-    [model, pageToShow]
+    [model, modelClass, pageToShow]
   )
 
   return (
