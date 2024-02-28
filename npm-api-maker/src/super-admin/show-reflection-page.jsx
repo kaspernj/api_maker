@@ -9,7 +9,8 @@ import withModel from "../with-model"
 const ApiMakerSuperAdminShowReflectionPage = ({modelClass, restProps}) => {
   const queryParams = useQueryParams()
   const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
-  const model = digg(restProps, camelizedLower)
+  const useModelResult = useModel(modelClass, {loadByQueryParam: ({queryParams}) => digg(queryParams, "model_id")})
+  const model = digg(useModelResult, camelizedLower)
   const reflections = modelClass.reflections()
   const reflection = reflections.find((reflectionI) => reflectionI.name() == queryParams.model_reflection)
   const reflectionModelClass = reflection.modelClass()
@@ -37,17 +38,4 @@ ApiMakerSuperAdminShowReflectionPage.propTypes = {
   modelClass: PropTypes.func.isRequired
 }
 
-const modelClassResolver = {callback: ({queryParams}) => {
-  const modelClassName = digg(queryParams, "model")
-  const modelClass = digg(require("../models.mjs.erb"), modelClassName)
-
-  return modelClass
-}}
-
-export default withModel(
-  memo(ApiMakerSuperAdminShowReflectionPage),
-  modelClassResolver,
-  {
-    loadByQueryParam: ({props}) => props.queryParams.model_id
-  }
-)
+export default memo(ApiMakerSuperAdminShowReflectionPage)

@@ -7,21 +7,8 @@ export default class ApiMakerBaseModelReflection {
     this.reflectionData = reflectionData
   }
 
-  foreignKey() {
-    return digg(this, "reflectionData", "foreignKey")
-  }
-
-  macro() {
-    return digg(this, "reflectionData", "macro")
-  }
-
-  modelClass() {
-    const modelClass = modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "resource_name"))))
-
-    return modelClass
-  }
-
-  name() {
-    return inflection.camelize(digg(this, "reflectionData", "name"), true)
-  }
+  foreignKey = () => digg(this, "reflectionData", "foreignKey")
+  macro = () => digg(this, "reflectionData", "macro")
+  modelClass = () => modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "resource_name"))))
+  name = () => inflection.camelize(digg(this, "reflectionData", "name"), true)
 }

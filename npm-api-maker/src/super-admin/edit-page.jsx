@@ -9,6 +9,10 @@ import useModel from "../use-model"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
 const EditAttributeInput = ({attributeName, id, inputs, label, model, name}) => {
+  if (!(attributeName in model)) {
+    throw new Error(`${attributeName} isn't set on the resource ${model.modelClassData().name}`)
+  }
+
   const defaultValue = useCallback(() => model[attributeName]() || "")
   const [value, setValue] = useState(() => defaultValue())
 
@@ -41,6 +45,10 @@ const EditAttributeInput = ({attributeName, id, inputs, label, model, name}) => 
 }
 
 const EditAttributeContent = ({attribute, id, inputs, model, name}) => {
+  if (!(attribute.attribute in model)) {
+    throw new Error(`${attribute.attribute} isn't set on the resource ${model.modelClassData().name}`)
+  }
+
   const defaultValue = useCallback(() => model[attribute.attribute]() || "")
   const [value, setValue] = useState(() => defaultValue())
   const onChangeValue = useCallback((newValue) => {
