@@ -6,6 +6,7 @@ const SuperAdminShowReflectionActions = ({model, modelClass, reflectionName}) =>
   const modelClassName = digg(reflection, "reflectionData", "className")
   const modelData = {}
   const dataParamName = inflection.singularize(reflection.reflectionData.collectionName)
+  const canCan = useCanCan(() => [[reflection.modelClass(), ["new"]]])
 
   modelData[reflection.foreignKey()] = model?.id()
 
@@ -17,9 +18,13 @@ const SuperAdminShowReflectionActions = ({model, modelClass, reflectionName}) =>
   linkParams[dataParamName] = modelData
 
   return (
-    <Link className="create-new-model-link" to={Params.withParams(linkParams)}>
-      Create new
-    </Link>
+    <>
+      {canCan?.can("new", reflection.modelClass()) &&
+        <Link className="create-new-model-link" to={Params.withParams(linkParams)}>
+          Create new
+        </Link>
+      }
+    </>
   )
 }
 

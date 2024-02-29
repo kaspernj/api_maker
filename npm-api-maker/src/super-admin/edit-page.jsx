@@ -8,7 +8,7 @@ import useCurrentUser from "../use-current-user"
 import useModel from "../use-model"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
-const EditAttributeInput = ({attributeName, id, inputs, label, model, name}) => {
+const EditAttributeInput = memo(({attributeName, id, inputs, label, model, name}) => {
   if (!(attributeName in model)) {
     throw new Error(`${attributeName} isn't set on the resource ${model.modelClassData().name}`)
   }
@@ -42,9 +42,9 @@ const EditAttributeInput = ({attributeName, id, inputs, label, model, name}) => 
       </View>
     </View>
   )
-}
+})
 
-const EditAttributeContent = ({attribute, id, inputs, model, name}) => {
+const EditAttributeContent = memo(({attribute, id, inputs, model, name}) => {
   if (!(attribute.attribute in model)) {
     throw new Error(`${attribute.attribute} isn't set on the resource ${model.modelClassData().name}`)
   }
@@ -70,9 +70,9 @@ const EditAttributeContent = ({attribute, id, inputs, model, name}) => {
   })
 
   return attribute.content(contentArgs())
-}
+})
 
-const EditAttribute = ({attribute, inputs, model, modelClass}) => {
+const EditAttribute = memo(({attribute, inputs, model, modelClass}) => {
   const availableLocales = Locales.availableLocales()
   const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
 
@@ -81,7 +81,7 @@ const EditAttribute = ({attribute, inputs, model, modelClass}) => {
       {attribute.content &&
         <EditAttributeContent
           attribute={attribute}
-          id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}`}
+          id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}`}
           inputs={inputs}
           model={model}
           name={inflection.underscore(attribute.attribute)}
@@ -90,7 +90,7 @@ const EditAttribute = ({attribute, inputs, model, modelClass}) => {
       {!attribute.content && attribute.translated && availableLocales.map((locale) =>
         <EditAttributeInput
           attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
-          id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}_${locale}`}
+          id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}_${locale}`}
           inputs={inputs}
           label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
           model={model}
@@ -101,7 +101,7 @@ const EditAttribute = ({attribute, inputs, model, modelClass}) => {
       {!attribute.content && !attribute.translated &&
         <EditAttributeInput
           attributeName={attribute.attribute}
-          id={`${camelizedLower}_${inflection.underscore(attribute.attribute)}`}
+          id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}`}
           inputs={inputs}
           label={modelClass.humanAttributeName(attribute.attribute)}
           model={model}
@@ -110,7 +110,7 @@ const EditAttribute = ({attribute, inputs, model, modelClass}) => {
       }
     </>
   )
-}
+})
 
 const EditPage = ({modelClass}) => {
   const availableLocales = Locales.availableLocales()
@@ -127,6 +127,10 @@ const EditPage = ({modelClass}) => {
   const selectedAttributes = {}
 
   selectedAttributes[modelClassName] = selectedModelAttributes
+
+  if (!attributes) {
+    throw new Error(`No 'attributes' given from edit config for ${modelClass.modelClassData().name}`)
+  }
 
   for (const attribute of attributes) {
     if (attribute.translated) {

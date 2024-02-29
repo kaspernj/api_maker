@@ -8,6 +8,7 @@ import {useCallback, useEffect, useState} from "react"
 import ShowPage from "./show-page"
 import ShowReflectionActions from "./show-reflection-actions"
 import ShowReflectionPage from "./show-reflection-page"
+import useCanCan from "../use-can-can"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
 const ApiMakerSuperAdmin = () => {
@@ -19,6 +20,7 @@ const ApiMakerSuperAdmin = () => {
   const modelId = queryParams.model_id
   const modelName = modelClass?.modelClassData()?.name
   const [model, setModel] = useState()
+  const canCan = useCanCan(() => [[modelClass, ["new"]]])
 
   const loadModel = useCallback(async () => {
     if (modelId && modelClass) {
@@ -73,9 +75,13 @@ const ApiMakerSuperAdmin = () => {
   const actions = useMemo(
     () => <>
       {modelClass && pageToShow == "index" &&
-        <Link className="create-new-model-link" to={Params.withParams({model: modelName, mode: "new"})}>
-          Create new
-        </Link>
+        <>
+          {canCan?.can("new", modelClass) &&
+            <Link className="create-new-model-link" to={Params.withParams({model: modelName, mode: "new"})}>
+              Create new
+            </Link>
+          }
+        </>
       }
       {model && pageToShow == "show" &&
         <>
@@ -95,7 +101,7 @@ const ApiMakerSuperAdmin = () => {
         <ShowReflectionActions model={model} modelClass={modelClass} reflectionName={queryParams.model_reflection} />
       }
     </>,
-    [model, modelClass, pageToShow]
+    [canCan, model, modelClass, pageToShow]
   )
 
   return (
