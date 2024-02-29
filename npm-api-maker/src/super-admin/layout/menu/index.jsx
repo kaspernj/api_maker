@@ -63,7 +63,6 @@ const ComponentsAdminLayoutMenu = ({active, noAccess, triggered}) => {
 
 ComponentsAdminLayoutMenu.propTypes = PropTypesExact({
   active: PropTypes.string,
-  currentUser: PropTypes.instanceOf(User),
   noAccess: PropTypes.bool.isRequired,
   onRequestMenuClose: PropTypes.func.isRequired,
   triggered: PropTypes.bool.isRequired

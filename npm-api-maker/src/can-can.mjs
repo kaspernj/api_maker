@@ -81,6 +81,9 @@ export default class ApiMakerCanCan {
       for (const abilityData of abilities) {
         const subject = abilityData[0]
 
+        if (!subject) throw new Error(`Invalid subject given in abilities: ${subject} - ${JSON.stringify(abilities)}`)
+        if (!Array.isArray(abilityData[1])) throw new Error(`Expected an array of abilities but got: ${typeof abilityData[1]}: ${abilityData[1]}`)
+
         for (const ability of abilityData[1]) {
           const promise = this.loadAbility(ability, subject)
 
@@ -119,7 +122,7 @@ export default class ApiMakerCanCan {
       clearTimeout(this.queueAbilitiesRequestTimeout)
     }
 
-    this.queueAbilitiesRequestTimeout = setTimeout(() => this.sendAbilitiesRequest(), 0)
+    this.queueAbilitiesRequestTimeout = setTimeout(this.sendAbilitiesRequest, 0)
   }
 
   async resetAbilities () {
@@ -129,7 +132,7 @@ export default class ApiMakerCanCan {
     this.events.emit("onResetAbilities")
   }
 
-  async sendAbilitiesRequest () {
+  sendAbilitiesRequest = async () => {
     const abilitiesToLoad = this.abilitiesToLoad
     const abilitiesToLoadData = this.abilitiesToLoadData
 

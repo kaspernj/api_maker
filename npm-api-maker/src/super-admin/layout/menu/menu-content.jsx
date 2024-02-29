@@ -1,4 +1,3 @@
-import CanCan from "../../../can-can"
 import {digg} from "diggerize"
 import {memo, useMemo} from "react"
 import MenuItem from "./menu-item"
@@ -6,20 +5,13 @@ import models from "../../models"
 import Params from "../../../params"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import withCanCan from "@kaspernj/api-maker/src/with-can-can"
+import useCanCan from "../../../use-can-can"
 
-const abilities = []
-
-for (const model of models) {
-  abilities.push(
-    [model, ["index"]]
-  )
-}
-
-const ComponentsAdminLayoutMenuContent = ({active, canCan}) => {
+const ComponentsAdminLayoutMenuContent = ({active}) => {
+  const canCan = useCanCan(() => models.map((model) => [model, ["index"]]))
   const sortedModels = useMemo(
     () => models.sort((a, b) => a.modelName().human({count: 2}).toLowerCase().localeCompare(b.modelName().human({count: 2}).toLowerCase())),
-    []
+    [I18n.locale]
   )
 
   return (
@@ -39,8 +31,7 @@ const ComponentsAdminLayoutMenuContent = ({active, canCan}) => {
 }
 
 ComponentsAdminLayoutMenuContent.propTypes = PropTypesExact({
-  active: PropTypes.string,
-  canCan: PropTypes.instanceOf(CanCan)
+  active: PropTypes.string
 })
 
-export default withCanCan(memo(ComponentsAdminLayoutMenuContent), abilities)
+export default memo(ComponentsAdminLayoutMenuContent)
