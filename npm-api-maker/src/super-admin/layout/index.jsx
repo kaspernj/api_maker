@@ -8,7 +8,7 @@ import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo, useCallback, useEffect, useState} from "react"
 import useCurrentUser from "../../use-current-user"
-import useShape from "set-state-compare/src/use-shape.js"
+import useShape from "set-state-compare/src/use-s.js"
 
 const NoAccess = React.lazy(() => import("./no-access"))
 
@@ -23,7 +23,7 @@ const ApiMakerSuperAdminLayout = ({
   menu,
   ...restProps
 }) => {
-  const shape = useShape()
+  const s = useShape()
   const currentUser = useCurrentUser()
 
   useEffect(() => {
@@ -39,21 +39,21 @@ const ApiMakerSuperAdminLayout = ({
     document.title = "Wooftech"
   }
 
-  const setMenuTriggered = shape.useState("menuTriggered", false)
+  const setMenuTriggered = s.useState("menuTriggered", false)
   const noAccess = !currentUser
   const onRequestMenuClose = useCallback(() => setMenuTriggered(false), [])
   const onTriggerMenu = useCallback((e) => {
     e.preventDefault()
-    setMenuTriggered(!shape.state.menuTriggered)
+    setMenuTriggered(!s.state.menuTriggered)
   }, [])
 
   return (
-    <div className={classNames("components--admin--layout", className)} data-menu-triggered={shape.state.menuTriggered} {...restProps}>
+    <div className={classNames("components--admin--layout", className)} data-menu-triggered={s.state.menuTriggered} {...restProps}>
       <Menu
         active={active}
         noAccess={noAccess}
         onRequestMenuClose={onRequestMenuClose}
-        triggered={shape.state.menuTriggered}
+        triggered={s.state.menuTriggered}
       />
       <Header actions={actions} onTriggerMenu={onTriggerMenu} title={headerTitle} />
       <div className="app-layout-content-container">
