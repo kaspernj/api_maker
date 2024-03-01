@@ -6,7 +6,7 @@ import Header from "./header"
 import Menu from "./menu"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {memo, useCallback, useEffect, useState} from "react"
+import {memo, useCallback, useEffect} from "react"
 import useCurrentUser from "../../use-current-user"
 import useShape from "set-state-compare/src/use-s.js"
 
@@ -29,7 +29,7 @@ const ApiMakerSuperAdminLayout = ({
   useEffect(() => {
     CommandsPool.current().globalRequestData.layout = "admin"
     CommandsPool.current().globalRequestData.locale = I18n.locale
-  }, [])
+  }, [I18n.locale])
 
   const headTitle = headTitle || headerTitle
 
