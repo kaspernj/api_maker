@@ -7,7 +7,7 @@ class Resources::TableSearchResource < ApiMaker::BaseResource
     can READ, ApiMakerTable::TableSearch, public: true
 
     if current_user
-      can CRUD, ApiMakerTable::TableSearch, user_id: current_user.id, user_type: current_user.class.name
+      can CRUD, ApiMakerTable::TableSearch, user_id: current_user.id, user_type: current_user.model_name.name
     else
       can CRUD, ApiMakerTable::TableSearch, user_type: [nil, ""]
     end
