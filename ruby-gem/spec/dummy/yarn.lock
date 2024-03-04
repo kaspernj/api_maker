@@ -4274,10 +4274,10 @@ serve-static@1.15.0:
     parseurl "~1.3.3"
     send "0.18.0"
 
-"set-state-compare@>= 1.0.26", set-state-compare@^1.0.25, set-state-compare@^1.0.26:
-  version "1.0.26"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.26.tgz#a7fa1e081d62d3fc861e0c50d9d77769d796cdfd"
-  integrity sha512-meN7lG6+RmwfPFjec2qSv71ITPAiBkS+66iItDwSF04mMirNXHn64gaM5zyIcahf7KGJHEUC8l45hsMfXkyUqg==
+"set-state-compare@>= 1.0.26", set-state-compare@^1.0.26, set-state-compare@^1.0.28:
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.28.tgz#f9a3cf6c32e8c68480b510f77e74c0164c3fe314"
+  integrity sha512-SGoPVKGRG99OvJ16Dr4k50OpcTPj+HlnvThJzfzVeytxO08dlwJv63d42c3HYqz5EGQuzbWbbqkdmrMkyEc4ZQ==
   dependencies:
     fetching-object ">= 1.0.1"
 
