@@ -6,7 +6,7 @@ class Resources::TableSettingResource < ApiMaker::BaseResource
 
   def abilities
     if current_user
-      can CRUD, ApiMakerTable::TableSetting, user_id: current_user.id, user_type: current_user.class.name
+      can CRUD, ApiMakerTable::TableSetting, user_id: current_user.id, user_type: current_user.model_name.name
     else
       can CRUD, ApiMakerTable::TableSetting, user_type: [nil, ""]
     end

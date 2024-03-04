@@ -1,6 +1,7 @@
 import Collection from "./collection.mjs"
 import debounce from "debounce"
 import {digg} from "diggerize"
+import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
@@ -8,22 +9,25 @@ import {useCallback, useEffect} from "react"
 import useShape from "set-state-compare/src/use-shape.js"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 
-const useCollection = ({
-  abilities,
-  collection,
-  defaultParams,
-  groupBy = ["id"],
-  modelClass,
-  noRecordsAvailableContent = undefined,
-  noRecordsFoundContent = undefined,
-  onModelsLoaded,
-  pagination = false,
-  preloads = [],
-  queryMethod,
-  queryName,
-  select = {},
-  selectColumns
-}) => {
+const useCollection = (
+  {
+    abilities,
+    collection,
+    defaultParams,
+    groupBy = ["id"],
+    modelClass,
+    noRecordsAvailableContent = undefined,
+    noRecordsFoundContent = undefined,
+    onModelsLoaded,
+    pagination = false,
+    preloads = [],
+    queryMethod,
+    queryName,
+    select = {},
+    selectColumns
+  },
+  cacheKeys = []
+) => {
   const s = useShape({
     abilities,
     collection,
@@ -216,10 +220,13 @@ const useCollection = ({
     if (models.length === 0 && s.p.noRecordsFoundContent) return true
   }, [])
 
-  useEffect(() => {
-    loadQParams()
-    loadModels()
-  }, [queryParams[s.s.queryQName], queryParams[s.s.queryPageName], queryParams[s.s.queryPerKey], queryParams[s.s.querySName], collection])
+  useEffect(
+    () => {
+      loadQParams()
+      loadModels()
+    },
+    [queryParams[s.s.queryQName], queryParams[s.s.queryPageName], queryParams[s.s.queryPerKey], queryParams[s.s.querySName], collection].concat(cacheKeys)
+  )
 
   useEffect(() => {
     if (s.p.noRecordsAvailableContent) loadOverallCount()
@@ -251,8 +258,10 @@ const useCollection = ({
   }, [modelIdsCacheString])
 
   const result = Object.assign({}, s.state)
+  const modelVariableName = inflection.pluralize(inflection.camelize(modelClass.modelClassData().name, true))
 
   result.modelIdsCacheString = modelIdsCacheString
+  result[modelVariableName] = s.s.models
 
   return result
 }
