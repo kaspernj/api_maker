@@ -1,6 +1,7 @@
 import Collection from "./collection.mjs"
 import debounce from "debounce"
 import {digg} from "diggerize"
+import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
