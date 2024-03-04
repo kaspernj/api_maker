@@ -65,7 +65,7 @@ const useCollection = ({
   } else if (s.s.models.length === 0) {
     modelIdsCacheString = "no-models"
   } else {
-    modelIdsCacheString = modelIds?.join("---")
+    modelIdsCacheString = s.s.models.map((model) => model.cacheKey())?.join("---")
   }
 
   s.updateMeta({queryParams})
