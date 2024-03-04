@@ -46,21 +46,23 @@ const useCollection = (
 
   if (!queryName) queryName = digg(modelClass.modelClassData(), "collectionKey")
 
-  const setModels = s.useState("models")
-  const setOverallCount = s.useState("overallCount")
-  const setQuery = s.useState("query")
-  const setQueryName = s.useState("queryName", queryName)
-  const setQueryPerKey = s.useState("queryPerKey", `${s.s.queryName}_per`)
-  const setQueryQName = s.useState("queryQName", `${s.s.queryName}_q`)
-  const setQuerySName = s.useState("querySName", `${s.s.queryName}_s`)
-  const setQueryPageName = s.useState("queryPageName", `${s.s.queryName}_page`)
-  const setQParams = s.useState("qParams")
-  const setResult = s.useState("result")
-  const setSearchParams = s.useState("searchParams")
-  const setShowNoRecordsAvailableContent = s.useState("showNoRecordsAvailableContent", false)
-  const setShowNoRecordsFoundContent = s.useState("showNoRecordsFoundContent", false)
+  s.useStates({
+    models: undefined,
+    overallCount: undefined,
+    query: undefined,
+    queryName,
+    queryPerKey: `${queryName}_per`,
+    queryQName: `${queryName}_q`,
+    querySName: `${queryName}_s`,
+    queryPageName: `${queryName}_page`,
+    qParams: undefined,
+    result: undefined,
+    searchParams: undefined,
+    showNoRecordsAvailableContent: false,
+    showNoRecordsFoundContent: false
+  })
+
   const queryParams = useQueryParams()
-  const modelIds = s.s.models?.map((model) => model.id())
 
   let modelIdsCacheString
 
@@ -78,9 +80,11 @@ const useCollection = (
     const baseQuery = s.p.collection || s.p.modelClass.all()
     const overallCount = await baseQuery.count()
 
-    setOverallCount(overallCount)
-    setShowNoRecordsAvailableContent(showNoRecordsAvailableContent({overallCount}))
-    setShowNoRecordsFoundContent(showNoRecordsFoundContent({overallCount}))
+    s.set({
+      overallCount,
+      showNoRecordsAvailableContent: showNoRecordsAvailableContent({overallCount}),
+      showNoRecordsFoundContent: showNoRecordsFoundContent({overallCount})
+    })
   }, [])
 
   const hasQParams = useCallback(() => {
@@ -107,8 +111,10 @@ const useCollection = (
       }
     }
 
-    setQParams(qParamsToSet)
-    setSearchParams(searchParams)
+    s.set({
+      qParams: qParamsToSet,
+      searchParams
+    })
   }, [])
 
   const loadModels = useCallback(async () => {
@@ -160,11 +166,13 @@ const useCollection = (
       })
     }
 
-    setQuery(query)
-    setResult(result)
-    setModels(result.models())
-    setShowNoRecordsAvailableContent(showNoRecordsAvailableContent({models}))
-    setShowNoRecordsFoundContent(showNoRecordsFoundContent({models}))
+    s.set({
+      models: result.models(),
+      query,
+      result,
+      showNoRecordsAvailableContent: showNoRecordsAvailableContent({models}),
+      showNoRecordsFoundContent: showNoRecordsFoundContent({models})
+    })
   }, [])
 
   const loadModelsDebounce = useCallback(debounce(loadModels), [])
