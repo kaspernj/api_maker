@@ -177,7 +177,9 @@ const useCollection = (
 
   const loadModelsDebounce = useCallback(debounce(loadModels), [])
   const onModelDestroyed = useCallback((args) => {
-    setModels(s.s.models.filter((model) => model.id() != args.model.id()))
+    s.set({
+      models: s.s.models.filter((model) => model.id() != args.model.id())
+    })
   }, [])
 
   const onModelUpdated = useCallback((args) => {
