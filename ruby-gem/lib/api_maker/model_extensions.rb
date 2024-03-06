@@ -96,7 +96,7 @@ module ApiMaker::ModelExtensions
     data_to_broadcast = ApiMaker::ResultParser.parse(
       {
         m: self,
-        mcn: self.model_name.name,
+        mcn: model_name.name,
         mi: id,
         mt: serializer.resource.collection_name,
         t: :c
