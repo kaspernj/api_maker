@@ -5,7 +5,7 @@ class ApiMakerTable::TableSearch < ApiMakerTable::ApplicationRecord
 
   validates :name, :query_params, presence: true
 
-  serialize :query_params, JSON
+  serialize :query_params, coder: JSON
 
   def query_params=(new_query_params)
     new_query_params = JSON.parse(new_query_params) if new_query_params.is_a?(String)
