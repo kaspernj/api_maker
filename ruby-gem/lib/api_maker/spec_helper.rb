@@ -61,11 +61,13 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     end
 
     # Wait until error logger has finished loading source maps and parsed errors
-    loop do
-      is_working_on_error = execute_script("return window.errorLogger.isWorkingOnError()")
-      break unless is_working_on_error
+    Timeout.timeout(3) do
+      loop do
+        is_working_on_error = execute_script("return window.errorLogger.isWorkingOnError()")
+        break unless is_working_on_error
 
-      sleep 0.1
+        sleep 0.1
+      end
     end
 
     errors = execute_script("return window.errorLogger.getErrors()")
