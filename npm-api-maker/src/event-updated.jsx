@@ -10,7 +10,7 @@ const ApiMakerEventUpdated = ({model, onUpdated, ...restProps}) => {
 }
 
 ApiMakerEventUpdated.propTypes = propTypesExact({
-  active: PropTypes.bool.isRequired,
+  active: PropTypes.bool,
   debounce: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.number
