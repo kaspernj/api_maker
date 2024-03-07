@@ -51,4 +51,4 @@ ApiMakerUseCreatedEvent.propTypes = propTypesExact({
   onCreated: PropTypes.func.isRequired
 })
 
-export default memo(ApiMakerUseCreatedEvent)
+export default ApiMakerUseCreatedEvent
