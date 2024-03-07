@@ -8,7 +8,7 @@ import useShape from "set-state-compare/src/use-shape.js"
 
 const CollectionLoader = ({component, restProps}) => {
   const s = useShape(restProps)
-  const useCollectionResult = useCollection(props)
+  const useCollectionResult = useCollection(restProps)
   const cachePartsKeys = [
     "modelIdsCacheString",
     "overallCount",
