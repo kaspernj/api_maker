@@ -2,9 +2,10 @@ import debounceFunction from "debounce"
 import ModelEvents from "./model-events.mjs"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {memo} from "react"
+import {useCallback, useEffect, memo} from "react"
+import useShape from "set-state-compare/src/use-shape.js"
 
-const ApiMakerUseCreatedEvent = ({active = true, debounce, modelClass, onCreated}) => {
+const ApiMakerUseCreatedEvent = (modelClass, onCreated, {active = true, debounce}) => {
   const s = useShape({active, debounce, modelClass, onCreated})
 
   const eventDebounce = useCallback(() => {
@@ -19,7 +20,7 @@ const ApiMakerUseCreatedEvent = ({active = true, debounce, modelClass, onCreated
     return s.meta.debounceInstance
   }, [])
 
-  const onCreated = useCallback((...args) => {
+  const onCreatedCallback = useCallback((...args) => {
     if (!s.p.active) {
       return
     }
@@ -32,7 +33,7 @@ const ApiMakerUseCreatedEvent = ({active = true, debounce, modelClass, onCreated
   }, [])
 
   useEffect(() => {
-    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, (...args) => onCreated(...args))
+    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, (...args) => onCreatedCallback(...args))
 
     return () => {
       connectCreated.unsubscribe()
