@@ -3,6 +3,12 @@ import propTypesExact from "prop-types-exact"
 import {memo} from "react"
 import useUpdatedEvent from "./use-updated-event.mjs"
 
+const ApiMakerEventUpdated = ({model, onUpdated, ...restProps}) => {
+  useUpdatedEvent(model, onUpdated, restProps)
+
+  return null
+}
+
 ApiMakerEventUpdated.propTypes = propTypesExact({
   active: PropTypes.bool.isRequired,
   debounce: PropTypes.oneOfType([
@@ -13,11 +19,5 @@ ApiMakerEventUpdated.propTypes = propTypesExact({
   onConnected: PropTypes.func,
   onUpdated: PropTypes.func.isRequired
 })
-
-const ApiMakerEventUpdated = ({model, onUpdated, ...restProps}) => {
-  useUpdatedEvent(model, onUpdated, restProps)
-
-  return null
-}
 
 export default memo(ApiMakerEventUpdated)
