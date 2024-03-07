@@ -8,29 +8,27 @@ const ApiMakerUseUpdatedEvent = (model, onUpdated, {active = true, debounce, onC
     throw new Error(`Unknown props given to useUpdatedEvent: ${Object.keys(restProps).join(", ")}`)
   }
 
-  const s = useShape({active, debounce, model})
+  const s = useShape({active, debounce, model, onUpdated})
 
-  const debounceCallback = useCallback(() => {
-    if (!s.meta.debounceInstance) {
-      if (typeof s.p.debounce == "number") {
-        s.meta.debounceInstance = debounceFunction(onUpdated, s.p.debounce)
-      } else {
-        s.meta.debounceInstance = debounceFunction(onUpdated)
-      }
+  const debounceCallback = useMemo(() => {
+    if (typeof debounce == "number") {
+      return debounceFunction(s.p.onUpdated, debounce)
+    } else {
+      return debounceFunction(s.p.onUpdated)
     }
+  }, [debounce])
 
-    return s.m.debounceInstance
-  }, [])
+  s.updateMeta({debounceCallback})
 
-  const onUpdated = useCallback((...args) => {
+  const onUpdatedCallback = useCallback((...args) => {
     if (!s.p.active) {
       return
     }
 
     if (s.p.debounce) {
-      debounceCallback()(...args)
+      s.m.debounceCallback(...args)
     } else {
-      onUpdated(...args)
+      s.p.onUpdated(...args)
     }
   }, [])
 
@@ -38,7 +36,7 @@ const ApiMakerUseUpdatedEvent = (model, onUpdated, {active = true, debounce, onC
     let connectUpdated, onConnectedListener
 
     if (model) {
-      connectUpdated = ModelEvents.connectUpdated(model, onUpdated)
+      connectUpdated = ModelEvents.connectUpdated(model, onUpdatedCallback)
 
       if (onConnected) {
         onConnectedListener = connectUpdated.events.addListener("connected", onConnected)
@@ -54,7 +52,7 @@ const ApiMakerUseUpdatedEvent = (model, onUpdated, {active = true, debounce, onC
         connectUpdated.unsubscribe()
       }
     }
-  }, [model?.id(), onUpdated, onConnected])
+  }, [model?.id()])
 }
 
 export default ApiMakerUseUpdatedEvent
