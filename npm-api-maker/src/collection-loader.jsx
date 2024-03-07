@@ -1,5 +1,6 @@
 import {digg} from "diggerize"
 import {memo, useEffect} from "react"
+import PropTypes from "prop-types"
 import useCollection from "./use-collection"
 import useShape from "set-state-compare/src/use-shape.js"
 
@@ -35,5 +36,22 @@ const CollectionLoader = (props) => {
 
   return null
 }
+
+CollectionLoader.propTypes = PropTypes.exact({
+  abilities: PropTypes.object,
+  collection: PropTypes.instanceOf(Collection),
+  defaultParams: PropTypes.object,
+  groupBy: PropTypes.array,
+  modelClass: PropTypes.func.isRequired,
+  noRecordsAvailableContent: PropTypes.func,
+  noRecordsFoundContent: PropTypes.func,
+  onModelsLoaded: PropTypes.func,
+  pagination: PropTypes.bool.isRequired,
+  preloads: PropTypes.array.isRequired,
+  queryMethod: PropTypes.func,
+  queryName: PropTypes.string,
+  select: PropTypes.object,
+  selectColumns: PropTypes.object
+})
 
 export default memo(CollectionLoader)
