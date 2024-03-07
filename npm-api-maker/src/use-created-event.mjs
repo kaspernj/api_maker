@@ -2,7 +2,7 @@ import debounceFunction from "debounce"
 import ModelEvents from "./model-events.mjs"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {useCallback, useEffect, memo} from "react"
+import {useCallback, useEffect} from "react"
 import useShape from "set-state-compare/src/use-shape.js"
 
 const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {}) => {
