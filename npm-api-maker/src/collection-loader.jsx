@@ -1,11 +1,14 @@
+import Collection from "./collection.mjs"
 import {digg} from "diggerize"
 import {memo, useEffect} from "react"
+import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import useCollection from "./use-collection"
 import useShape from "set-state-compare/src/use-shape.js"
 
-const CollectionLoader = (props) => {
-  const s = useShape(props)
-  const useCollectionResult = useCollection(props)
+const CollectionLoader = ({component, ...restProps}) => {
+  const s = useShape(restProps)
+  const useCollectionResult = useCollection(restProps)
   const cachePartsKeys = [
     "modelIdsCacheString",
     "overallCount",
@@ -25,15 +28,34 @@ const CollectionLoader = (props) => {
     cacheParts.push(digg(useCollectionResult, cachePartsKey))
   }
 
-  s.updateMeta({useCollectionResult})
+  s.updateMeta({component, useCollectionResult})
 
   useEffect(() => {
-    const componentShape = digg(s.p.component, "shape")
+    const componentShape = digg(s.m.component, "shape")
 
     componentShape.set(s.m.useCollectionResult)
   }, cacheParts)
 
   return null
 }
+
+CollectionLoader.propTypes = PropTypesExact({
+  abilities: PropTypes.object,
+  collection: PropTypes.instanceOf(Collection),
+  component: PropTypes.object.isRequired,
+  defaultParams: PropTypes.object,
+  groupBy: PropTypes.array,
+  modelClass: PropTypes.func.isRequired,
+  noRecordsAvailableContent: PropTypes.func,
+  noRecordsFoundContent: PropTypes.func,
+  onModelsLoaded: PropTypes.func,
+  pagination: PropTypes.bool.isRequired,
+  preloads: PropTypes.array.isRequired,
+  queryMethod: PropTypes.func,
+  queryName: PropTypes.string,
+  ransack: PropTypes.object,
+  select: PropTypes.object,
+  selectColumns: PropTypes.object
+})
 
 export default memo(CollectionLoader)

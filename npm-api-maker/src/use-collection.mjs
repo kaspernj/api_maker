@@ -1,10 +1,7 @@
-import Collection from "./collection.mjs"
 import debounce from "debounce"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
-import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
 import {useCallback, useEffect} from "react"
 import useShape from "set-state-compare/src/use-shape.js"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
@@ -23,11 +20,17 @@ const useCollection = (
     preloads = [],
     queryMethod,
     queryName,
+    ransack,
     select = {},
-    selectColumns
+    selectColumns,
+    ...restProps
   },
   cacheKeys = []
 ) => {
+  if (Object.keys(restProps).length > 0) {
+    throw new Error(`Unknown props given to useCollection: ${Object.keys(restProps).join(", ")}`)
+  }
+
   const s = useShape({
     abilities,
     collection,
@@ -40,52 +43,14 @@ const useCollection = (
     pagination,
     preloads,
     queryMethod,
+    ransack,
     select,
     selectColumns
   })
 
+  s.meta.queryParams = useQueryParams()
+
   if (!queryName) queryName = digg(modelClass.modelClassData(), "collectionKey")
-
-  s.useStates({
-    models: undefined,
-    overallCount: undefined,
-    query: undefined,
-    queryName,
-    queryPerKey: `${queryName}_per`,
-    queryQName: `${queryName}_q`,
-    querySName: `${queryName}_s`,
-    queryPageName: `${queryName}_page`,
-    qParams: undefined,
-    result: undefined,
-    searchParams: undefined,
-    showNoRecordsAvailableContent: false,
-    showNoRecordsFoundContent: false
-  })
-
-  const queryParams = useQueryParams()
-
-  let modelIdsCacheString
-
-  if (s.s.models === undefined) {
-    modelIdsCacheString = "models-undefined"
-  } else if (s.s.models.length === 0) {
-    modelIdsCacheString = "no-models"
-  } else {
-    modelIdsCacheString = s.s.models.map((model) => model.cacheKey())?.join("---")
-  }
-
-  s.updateMeta({queryParams})
-
-  const loadOverallCount = useCallback(async () => {
-    const baseQuery = s.p.collection || s.p.modelClass.all()
-    const overallCount = await baseQuery.count()
-
-    s.set({
-      overallCount,
-      showNoRecordsAvailableContent: showNoRecordsAvailableContent({overallCount}),
-      showNoRecordsFoundContent: showNoRecordsFoundContent({overallCount})
-    })
-  }, [])
 
   const hasQParams = useCallback(() => {
     if (s.s.queryQName in s.m.queryParams) return true
@@ -97,6 +62,45 @@ const useCollection = (
     if (hasQParams()) return JSON.parse(digg(s.m.queryParams, s.s.queryQName))
 
     return {}
+  }, [])
+
+  s.useStates({
+    models: undefined,
+    overallCount: undefined,
+    query: undefined,
+    queryName,
+    queryPerKey: `${queryName}_per`,
+    queryQName: `${queryName}_q`,
+    querySName: `${queryName}_s`,
+    queryPageName: `${queryName}_page`,
+    result: undefined,
+    searchParams: undefined,
+    showNoRecordsAvailableContent: false,
+    showNoRecordsFoundContent: false
+  })
+  s.useStates({
+    qParams: qParams()
+  })
+
+  let modelIdsCacheString
+
+  if (s.s.models === undefined) {
+    modelIdsCacheString = "models-undefined"
+  } else if (s.s.models.length === 0) {
+    modelIdsCacheString = "no-models"
+  } else {
+    modelIdsCacheString = s.s.models.map((model) => model.cacheKey())?.join("---")
+  }
+
+  const loadOverallCount = useCallback(async () => {
+    const baseQuery = s.p.collection || s.p.modelClass.all()
+    const overallCount = await baseQuery.count()
+
+    s.set({
+      overallCount,
+      showNoRecordsAvailableContent: showNoRecordsAvailableContent({overallCount}),
+      showNoRecordsFoundContent: showNoRecordsFoundContent({overallCount})
+    })
   }, [])
 
   const loadQParams = useCallback(() => {
@@ -137,6 +141,7 @@ const useCollection = (
 
     query = query
       .ransack(s.s.qParams)
+      .ransack(s.props.ransack)
       .search(s.s.searchParams)
       .searchKey(s.s.queryQName)
       .pageKey(s.s.queryPageName)
@@ -235,7 +240,13 @@ const useCollection = (
       loadQParams()
       loadModels()
     },
-    [queryParams[s.s.queryQName], queryParams[s.s.queryPageName], queryParams[s.s.queryPerKey], queryParams[s.s.querySName], collection].concat(cacheKeys)
+    [
+      s.m.queryParams[s.s.queryQName],
+      s.m.queryParams[s.s.queryPageName],
+      s.m.queryParams[s.s.queryPerKey],
+      s.m.queryParams[s.s.querySName],
+      collection
+    ].concat(cacheKeys)
   )
 
   useEffect(() => {
@@ -275,22 +286,5 @@ const useCollection = (
 
   return result
 }
-
-useCollection.propTypes = PropTypesExact({
-  abilities: PropTypes.object,
-  collection: PropTypes.instanceOf(Collection),
-  defaultParams: PropTypes.object,
-  groupBy: PropTypes.array,
-  modelClass: PropTypes.func.isRequired,
-  noRecordsAvailableContent: PropTypes.func,
-  noRecordsFoundContent: PropTypes.func,
-  onModelsLoaded: PropTypes.func,
-  pagination: PropTypes.bool.isRequired,
-  preloads: PropTypes.array.isRequired,
-  queryMethod: PropTypes.func,
-  queryName: PropTypes.string,
-  select: PropTypes.object,
-  selectColumns: PropTypes.object
-})
 
 export default useCollection
