@@ -1,25 +1,10 @@
-import EventEmitter from "events"
-import PropTypes from "prop-types"
-import React from "react"
+import {memo} from "react"
+import useEventEmitter from "./use-event-emitter.mjs"
 
-export default class ApiMakerEventEmitterListener extends React.PureComponent {
-  static propTypes = {
-    event: PropTypes.string.isRequired,
-    events: PropTypes.instanceOf(EventEmitter).isRequired,
-    onCalled: PropTypes.func.isRequired
-  }
+const ApiMakerEventEmitterListener = ({events, event, onCalled}) => {
+  useEventEmitter(events, event, onCalled)
 
-  componentDidMount () {
-    this.props.events.addListener(this.props.event, this.onCalled)
-  }
-
-  componentWillUnmount () {
-    this.props.events.removeListener(this.props.event, this.onCalled)
-  }
-
-  onCalled = (...args) => {
-    this.props.onCalled.apply(null, ...args)
-  }
-
-  render = () => null
+  return null
 }
+
+export default memo(ApiMakerEventEmitterListener)
