@@ -1,3 +1,4 @@
+import Collection from "./collection.mjs"
 import {digg} from "diggerize"
 import {memo, useEffect} from "react"
 import PropTypes from "prop-types"
