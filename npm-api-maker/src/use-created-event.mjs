@@ -5,7 +5,8 @@ import propTypesExact from "prop-types-exact"
 import {useCallback, useEffect, memo} from "react"
 import useShape from "set-state-compare/src/use-shape.js"
 
-const ApiMakerUseCreatedEvent = (modelClass, onCreated, {active = true, debounce}) => {
+const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {}) => {
+  const {active = true, debounce} = args
   const s = useShape({active, debounce, modelClass, onCreated})
 
   const eventDebounce = useCallback(() => {
