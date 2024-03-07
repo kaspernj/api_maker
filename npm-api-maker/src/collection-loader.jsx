@@ -6,8 +6,8 @@ import PropTypesExact from "prop-types-exact"
 import useCollection from "./use-collection"
 import useShape from "set-state-compare/src/use-shape.js"
 
-const CollectionLoader = (props) => {
-  const s = useShape(props)
+const CollectionLoader = ({component, restProps}) => {
+  const s = useShape(restProps)
   const useCollectionResult = useCollection(props)
   const cachePartsKeys = [
     "modelIdsCacheString",
@@ -28,10 +28,10 @@ const CollectionLoader = (props) => {
     cacheParts.push(digg(useCollectionResult, cachePartsKey))
   }
 
-  s.updateMeta({useCollectionResult})
+  s.updateMeta({component, useCollectionResult})
 
   useEffect(() => {
-    const componentShape = digg(s.p.component, "shape")
+    const componentShape = digg(s.m.component, "shape")
 
     componentShape.set(s.m.useCollectionResult)
   }, cacheParts)
