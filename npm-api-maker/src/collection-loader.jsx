@@ -2,6 +2,7 @@ import Collection from "./collection.mjs"
 import {digg} from "diggerize"
 import {memo, useEffect} from "react"
 import PropTypes from "prop-types"
+import PropTypesExact from "prop-types-exact"
 import useCollection from "./use-collection"
 import useShape from "set-state-compare/src/use-shape.js"
 
@@ -38,7 +39,7 @@ const CollectionLoader = (props) => {
   return null
 }
 
-CollectionLoader.propTypes = PropTypes.exact({
+CollectionLoader.propTypes = PropTypesExact({
   abilities: PropTypes.object,
   collection: PropTypes.instanceOf(Collection),
   defaultParams: PropTypes.object,
