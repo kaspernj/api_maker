@@ -6,7 +6,7 @@ import PropTypesExact from "prop-types-exact"
 import useCollection from "./use-collection"
 import useShape from "set-state-compare/src/use-shape.js"
 
-const CollectionLoader = ({component, restProps}) => {
+const CollectionLoader = ({component, ...restProps}) => {
   const s = useShape(restProps)
   const useCollectionResult = useCollection(restProps)
   const cachePartsKeys = [
@@ -42,6 +42,7 @@ const CollectionLoader = ({component, restProps}) => {
 CollectionLoader.propTypes = PropTypesExact({
   abilities: PropTypes.object,
   collection: PropTypes.instanceOf(Collection),
+  component: PropTypes.object.isRequired,
   defaultParams: PropTypes.object,
   groupBy: PropTypes.array,
   modelClass: PropTypes.func.isRequired,
@@ -52,6 +53,7 @@ CollectionLoader.propTypes = PropTypesExact({
   preloads: PropTypes.array.isRequired,
   queryMethod: PropTypes.func,
   queryName: PropTypes.string,
+  ransack: PropTypes.object,
   select: PropTypes.object,
   selectColumns: PropTypes.object
 })
