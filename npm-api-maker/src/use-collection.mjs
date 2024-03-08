@@ -12,6 +12,7 @@ const useCollection = (
     collection,
     defaultParams,
     groupBy = ["id"],
+    limit,
     modelClass,
     noRecordsAvailableContent = undefined,
     noRecordsFoundContent = undefined,
@@ -36,6 +37,7 @@ const useCollection = (
     collection,
     defaultParams,
     groupBy,
+    limit,
     modelClass,
     noRecordsAvailableContent,
     noRecordsFoundContent,
@@ -150,6 +152,7 @@ const useCollection = (
       .select(s.p.select)
 
     if (s.p.abilities) query = query.abilities(s.p.abilities)
+    if (s.p.limit !== undefined) query = query.limit(s.p.limit)
     if (s.p.selectColumns) query = query.selectColumns(s.p.selectColumns)
 
     let result
