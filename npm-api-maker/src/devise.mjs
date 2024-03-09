@@ -6,44 +6,38 @@ import * as inflection from "inflection"
 import modelClassRequire from "./model-class-require.mjs"
 import Services from "./services.mjs"
 
+const events = new EventEmitter()
+const shared = {}
+
+events.setMaxListeners(1000)
+
+export {events}
+
 export default class ApiMakerDevise {
   static callSignOutEvent (args) {
-    ApiMakerDevise.events().emit("onDeviseSignOut", {args})
+    events.emit("onDeviseSignOut", {args})
   }
 
   static current () {
-    if (!globalThis.currentApiMakerDevise) {
-      globalThis.currentApiMakerDevise = new ApiMakerDevise()
+    if (!shared.currentApiMakerDevise) {
+      shared.currentApiMakerDevise = new ApiMakerDevise()
     }
 
-    return globalThis.currentApiMakerDevise
+    return shared.currentApiMakerDevise
   }
 
   static events () {
-    if (!globalThis.apiMakerDeviseEvents) {
-      globalThis.apiMakerDeviseEvents = new EventEmitter()
-      globalThis.apiMakerDeviseEvents.setMaxListeners(1000)
-    }
-
-    return globalThis.apiMakerDeviseEvents
+    return events
   }
 
   static addUserScope (scope) {
     const currentMethodName = `current${inflection.camelize(scope)}`
 
-    ApiMakerDevise[currentMethodName] = function () {
-      return ApiMakerDevise.current().getCurrentScope(scope)
-    }
+    ApiMakerDevise[currentMethodName] = () => ApiMakerDevise.current().getCurrentScope(scope)
 
     const isSignedInMethodName = `is${inflection.camelize(scope)}SignedIn`
 
-    ApiMakerDevise[isSignedInMethodName] = function () {
-      if (ApiMakerDevise.current().getCurrentScope(scope)) {
-        return true
-      }
-
-      return false
-    }
+    ApiMakerDevise[isSignedInMethodName] = () => Boolean(ApiMakerDevise.current().getCurrentScope(scope))
   }
 
   static async signIn (username, password, args = {}) {
@@ -59,7 +53,7 @@ export default class ApiMakerDevise {
     await CanCan.current().resetAbilities()
 
     ApiMakerDevise.updateSession(model)
-    ApiMakerDevise.events().emit("onDeviseSignIn", Object.assign({username}, args))
+    events.emit("onDeviseSignIn", Object.assign({username}, args))
 
     return {model, response}
   }
@@ -88,8 +82,8 @@ export default class ApiMakerDevise {
     await CanCan.current().resetAbilities()
 
     // Cannot use the class because they would both import each other
-    if (globalThis.apiMakerSessionStatusUpdater) {
-      globalThis.apiMakerSessionStatusUpdater.updateSessionStatus()
+    if (shared.apiMakerSessionStatusUpdater) {
+      shared.apiMakerSessionStatusUpdater.updateSessionStatus()
     }
 
     ApiMakerDevise.setSignedOut(args)
@@ -103,8 +97,9 @@ export default class ApiMakerDevise {
   }
 
   getCurrentScope (scope) {
-    if (!(scope in this.currents))
+    if (!(scope in this.currents)) {
       this.currents[scope] = this.loadCurrentScope(scope)
+    }
 
     return this.currents[scope]
   }
