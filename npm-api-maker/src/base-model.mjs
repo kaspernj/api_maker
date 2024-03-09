@@ -552,15 +552,24 @@ export default class BaseModel {
 
   setNewModel (model) {
     this.setNewModelData(model)
-    this.relationships = digg(model, "relationships")
-    this.relationshipsCache = digg(model, "relationshipsCache")
+
+    for(const relationshipName in model.relationships) {
+      this.relationships[relationshipName] = model.relationships[relationshipName]
+    }
+
+    for(const relationshipCacheName in model.relationshipsCache) {
+      this.relationshipsCache[relationshipCacheName] = model.relationshipsCache[name]
+    }
   }
 
   setNewModelData (model) {
     if (!("modelData" in model)) throw new Error(`No modelData in model: ${JSON.stringify(model)}`)
 
-    this.previousModelData = digg(this, "modelData")
-    this.modelData = digg(model, "modelData")
+    this.previousModelData = Object.assign({}, digg(this, "modelData"))
+
+    for(const attributeName in model.modelData) {
+      this.modelData[attributeName] = model.modelData[attributeName]
+    }
   }
 
   _isDateChanged (oldValue, newValue) {
