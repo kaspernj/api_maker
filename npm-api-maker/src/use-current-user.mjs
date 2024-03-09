@@ -5,7 +5,7 @@ const useCurrentUser = () => {
   const [currentUser, setCurrentUser] = useState(Devise.currentUser())
   const updateCurrentUser = useCallback(() => {
     setCurrentUser(Devise.currentUser())
-  })
+  }, [])
 
   useEffect(() => {
     Devise.events().addListener("onDeviseSignIn", updateCurrentUser)

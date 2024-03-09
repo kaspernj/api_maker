@@ -4389,10 +4389,10 @@ object.values@^1.1.6:
     define-properties "^1.1.4"
     es-abstract "^1.20.4"
 
-"on-location-changed@>= 1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.9.tgz#947e712f63c79067b8031e5b4647d8f9c5f6a0ac"
-  integrity sha512-QXePh0SoLpukfEqe9ArtB9jkRsYI6jwY1pYz/4CCrIfE3Uw52lB5PU2Gbso465W05O7d05rUEQdclwCzOZoKDA==
+"on-location-changed@>= 1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.10.tgz#8f9ffad7ce1fb0a3cca65e0bc690b14018660618"
+  integrity sha512-GZqDJTGQsGayeE752F6Yp1pjwaIGpSUDY+g56KjaYn6dZR8Cqr+gPevuxSwT2lTtqjsm24pucT5lFWNXG1BP6w==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
