@@ -2,7 +2,7 @@ import {memo} from "react"
 import useCanCan from "@kaspernj/api-maker/src/use-can-can"
 
 const CanCanWithShape = () => {
-  const canCan = useCanCan(() => [[Account, ["sum"]]])
+  const {canCan} = useCanCan(() => [[Account, ["sum"]]])
 
   return (
     <div className="components-can-can-loader-with-shape">

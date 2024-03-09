@@ -7,6 +7,7 @@ const useCanCan = (abilitiesCallback, dependencies) => {
   const currentUser = useCurrentUser()
   const s = useShape({abilitiesCallback})
   const [canCan, setCanCan] = useState()
+  const [lastUpdate, setLastUpdate] = useState(new Date())
 
   if (!dependencies) {
     dependencies = [currentUser?.id()]
@@ -14,15 +15,15 @@ const useCanCan = (abilitiesCallback, dependencies) => {
 
   const loadAbilities = useCallback(async () => {
     const canCan = CanCan.current()
-    const abilities = s.p.abilitiesCallback()
-
-    await canCan.loadAbilities(abilities)
+    await canCan.loadAbilities(s.p.abilitiesCallback())
 
     setCanCan(canCan)
+    setLastUpdate(new Date())
   }, [])
 
   const onResetAbilities = useCallback(() => {
     setCanCan(undefined)
+    setLastUpdate(new Date())
     loadAbilities()
   }, [])
 
@@ -38,7 +39,7 @@ const useCanCan = (abilitiesCallback, dependencies) => {
     }
   }, [])
 
-  return canCan
+  return {canCan, lastUpdate}
 }
 
 export default useCanCan
