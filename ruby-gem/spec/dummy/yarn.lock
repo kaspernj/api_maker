@@ -1204,10 +1204,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kaspernj/api-maker@1.0.323":
-  version "1.0.323"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.323.tgz#3deea4a8f440d967816d84db872cb4859467d551"
-  integrity sha512-fOtYPZJte5oISnr+QBTuPBy/b18ZzBe4ReyVceALumVdcjDHN32bzCzwx80Srk8uCYoB/e63VjGdUc3yM0m3YA==
+"@kaspernj/api-maker@1.0.328":
+  version "1.0.328"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.328.tgz#d30c965f34aa9e2ff8efa6217d8e55e0ebaaa3cd"
+  integrity sha512-bNFWbu6PCDHJYuCt68DgNeLPwEOyz0gvio2gOiZZYlI/t8SZUyHEcSEQEQ1C5Y9n5dvAdp819JXdMUiscJJuAQ==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -1222,7 +1222,7 @@
     js-money ">= 0.6.3"
     numberable ">= 1.0.0"
     object-to-formdata ">= 4.1.0"
-    on-location-changed ">= 1.0.8"
+    on-location-changed ">= 1.0.10"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
     set-state-compare ">= 1.0.28"
@@ -3435,10 +3435,10 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.8.tgz#5e806383f39cf8036128dcc4e4f7d0d7233faecf"
-  integrity sha512-5xYe0/ygrgpEo+V+O+RvTC+M88QZ9y/nJYf801cRXJBqK+npzH6PUp65p9v5hzgshWRfUNESLZgUEpJvUy6rBQ==
+"on-location-changed@>= 1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.10.tgz#8f9ffad7ce1fb0a3cca65e0bc690b14018660618"
+  integrity sha512-GZqDJTGQsGayeE752F6Yp1pjwaIGpSUDY+g56KjaYn6dZR8Cqr+gPevuxSwT2lTtqjsm24pucT5lFWNXG1BP6w==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
