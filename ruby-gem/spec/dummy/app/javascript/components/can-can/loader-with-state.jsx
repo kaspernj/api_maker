@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import useCanCan from "@kaspernj/api-maker/src/use-can-can"
 
 const CanCanWithState = ({className, ...restProps}) => {
-  const canCan = useCanCan(() => [[Account, ["sum"]]])
+  const {canCan} = useCanCan(() => [[Account, ["sum"]]])
 
   return (
     <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>

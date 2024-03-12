@@ -20,7 +20,7 @@ const ApiMakerSuperAdmin = () => {
   const modelId = queryParams.model_id
   const modelName = modelClass?.modelClassData()?.name
   const [model, setModel] = useState()
-  const canCan = useCanCan(() => {
+  const {canCan} = useCanCan(() => {
     const abilities = []
 
     if (modelClass) abilities.push([modelClass, ["new"]])

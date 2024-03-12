@@ -8,7 +8,7 @@ import PropTypesExact from "prop-types-exact"
 import useCanCan from "../../../use-can-can"
 
 const ComponentsAdminLayoutMenuContent = ({active}) => {
-  const canCan = useCanCan(() => models.map((model) => [model, ["index"]]))
+  const {canCan} = useCanCan(() => models.map((model) => [model, ["index"]]))
   const sortedModels = useMemo(
     () => models.sort((a, b) => a.modelName().human({count: 2}).toLowerCase().localeCompare(b.modelName().human({count: 2}).toLowerCase())),
     [I18n.locale]
