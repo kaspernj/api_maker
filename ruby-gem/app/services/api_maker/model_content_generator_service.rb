@@ -201,7 +201,8 @@ private
       foreignKey: reflection.foreign_key,
       name: reflection.name,
       macro: reflection.macro,
-      resource_name: resource&.short_name
+      resource_name: resource&.short_name,
+      through: reflection.options[:through]
     }
   end
 end

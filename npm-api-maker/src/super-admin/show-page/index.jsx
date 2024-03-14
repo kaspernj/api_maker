@@ -69,8 +69,8 @@ const ApiMakerSuperAdminShowPage = ({modelClass}) => {
       if (!select[reflectionModelClassName].includes("id")) select[reflectionModelClassName].push("id")
       if (nameAttribute && !select[reflectionModelClassName].includes("name")) select[reflectionModelClassName].push("name")
 
-      // The foreign key is needed to look up any belongs-to-relationships
-      if (!modelClassSelect.includes(reflection.foreignKey()) && !select[reflectionModelClassName].includes(reflection.foreignKey())) {
+      // The foreign key is needed to look up any has-one-relationships
+      if (!modelClassSelect.includes(reflection.foreignKey()) && !select[reflectionModelClassName].includes(reflection.foreignKey()) && !reflection.through()) {
         select[reflectionModelClassName].push(reflection.foreignKey())
       }
     }
