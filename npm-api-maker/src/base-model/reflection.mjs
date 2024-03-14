@@ -11,4 +11,5 @@ export default class ApiMakerBaseModelReflection {
   macro = () => digg(this, "reflectionData", "macro")
   modelClass = () => modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "resource_name"))))
   name = () => inflection.camelize(digg(this, "reflectionData", "name"), true)
+  through = () => digg(this, "reflectionData", "through")
 }

@@ -43,21 +43,37 @@ const ApiMakerSuperAdminShowPage = ({modelClass}) => {
   }
 
   for (const reflection of modelClass.reflections()) {
-    if (reflection.macro() != "belongs_to") continue
+    if (reflection.macro() == "belongs_to") {
+      const reflectionModelClass = reflection.modelClass()
+      const reflectionModelClassName = reflectionModelClass.modelClassData().name
+      const reflectionModelClassAttributes = reflectionModelClass.attributes()
+      const nameAttribute = reflectionModelClassAttributes.find((attribute) => attribute.name() == "name")
 
-    const reflectionModelClass = reflection.modelClass()
-    const reflectionModelClassName = reflectionModelClass.modelClassData().name
-    const reflectionModelClassAttributes = reflectionModelClass.attributes()
-    const nameAttribute = reflectionModelClassAttributes.find((attribute) => attribute.name() == "name")
+      preload.push(inflection.underscore(reflection.name()))
 
-    preload.push(inflection.underscore(reflection.name()))
+      if (!(reflectionModelClassName in select)) select[reflectionModelClassName] = []
+      if (!select[reflectionModelClassName].includes("id")) select[reflectionModelClassName].push("id")
+      if (nameAttribute && !select[reflectionModelClassName].includes("name")) select[reflectionModelClassName].push("name")
 
-    if (!(reflectionModelClassName in select)) select[reflectionModelClassName] = []
-    if (!select[reflectionModelClassName].includes("id")) select[reflectionModelClassName].push("id")
-    if (nameAttribute && !select[reflectionModelClassName].includes("name")) select[reflectionModelClassName].push("name")
+      // The foreign key is needed to look up any belongs-to-relationships
+      if (!modelClassSelect.includes(reflection.foreignKey())) modelClassSelect.push(reflection.foreignKey())
+    } else if (reflection.macro() == "has_one") {
+      const reflectionModelClass = reflection.modelClass()
+      const reflectionModelClassName = reflectionModelClass.modelClassData().name
+      const reflectionModelClassAttributes = reflectionModelClass.attributes()
+      const nameAttribute = reflectionModelClassAttributes.find((attribute) => attribute.name() == "name")
 
-    // The foreign key is needed to look up any belongs-to-relationships
-    if (!modelClassSelect.includes(reflection.foreignKey())) modelClassSelect.push(reflection.foreignKey())
+      preload.push(inflection.underscore(reflection.name()))
+
+      if (!(reflectionModelClassName in select)) select[reflectionModelClassName] = []
+      if (!select[reflectionModelClassName].includes("id")) select[reflectionModelClassName].push("id")
+      if (nameAttribute && !select[reflectionModelClassName].includes("name")) select[reflectionModelClassName].push("name")
+
+      // The foreign key is needed to look up any has-one-relationships
+      if (!modelClassSelect.includes(reflection.foreignKey()) && !select[reflectionModelClassName].includes(reflection.foreignKey()) && !reflection.through()) {
+        select[reflectionModelClassName].push(reflection.foreignKey())
+      }
+    }
   }
 
   const useModelResult = useModel(modelClass, {
@@ -79,7 +95,7 @@ const ApiMakerSuperAdminShowPage = ({modelClass}) => {
       {attributes && model && attributes.map((attribute) =>
         <AttributePresenter attribute={attribute} key={attribute.attribute || attribute} modelArgs={modelArgs} model={model} />
       )}
-      {model && modelClass.reflections().filter((reflection) => reflection.macro() == "belongs_to").map((reflection) =>
+      {model && modelClass.reflections().filter((reflection) => reflection.macro() == "belongs_to" || reflection.macro() == "has_one").map((reflection) =>
         <BelongsToAttributeRow key={reflection.name()} model={model} modelClass={modelClass} reflection={reflection} />
       )}
       {model && extraContent && extraContent(modelArgs)}
