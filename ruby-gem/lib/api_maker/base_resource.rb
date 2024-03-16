@@ -147,16 +147,7 @@ class ApiMaker::BaseResource
   end
 
   def translated_attribute_names(*attribute_names)
-    list = []
-    attribute_names.each do |attribute_name|
-      list << attribute_name
-
-      I18n.available_locales.each do |locale|
-        list << "#{attribute_name}_#{locale}".to_sym
-      end
-    end
-
-    list
+    ApiMaker::TranslatedAttributeNames.execute!(attribute_names:)
   end
 
   def self.plural_name
