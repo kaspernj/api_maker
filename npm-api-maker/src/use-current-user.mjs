@@ -23,7 +23,7 @@ const useCurrentUser = (args) => {
 
   const defaultCurrentUser = useCallback(() => {
     if (s.m.scope in currentUserData) {
-      return currentUserData[scope]
+      return currentUserData[s.m.scope]
     }
   }, [])
 
