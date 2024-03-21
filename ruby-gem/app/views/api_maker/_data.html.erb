@@ -16,10 +16,6 @@
       %>
         window.apiMakerDeviseCurrent["<%= scope[0] %>"] = <%= model ? serializer.to_json(result_parser: true).html_safe : null %>
       <%
-    else
-      %>
-        window.apiMakerDeviseCurrent["<%= scope[0] %>"] = null
-      <%
     end
   %>
 </script>
