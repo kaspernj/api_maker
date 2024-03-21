@@ -8,22 +8,30 @@ const currentUserData = {}
 
 const useCurrentUser = (args) => {
   const s = useShape()
+  const scope = args?.scope || "user"
 
-  s.meta.scope = args?.scope || "user"
-  s.meta.scopeName = `current${camelize(s.m.scope)}`
+  s.meta.scope = scope
+  s.meta.scopeName = useMemo(() => `current${camelize(s.m.scope)}`, [scope])
 
   const loadCurrentUserFromRequest = useCallback(async () => {
-    const result = await Services.current().sendRequest("Devise::Current", {scope: s.m.scope})
+    const {scope, scopeName} = s.m.scope
+    const result = await Services.current().sendRequest("Devise::Current", {scope})
     const current = digg(result, "current")
 
     currentUserData[scope] = current
 
-    s.setStates[s.m.scopeName](current)
+    s.setStates[scopeName](current)
   }, [])
 
   const defaultCurrentUser = useCallback(() => {
-    if (s.m.scope in currentUserData) {
-      return currentUserData[s.m.scope]
+    const {scope, scopeName} = s.m
+
+    if (scope in currentUserData) {
+      return currentUserData[scope]
+    } else if (Devise.current().hasCurrentScope(scope)) {
+      currentUserData[scope] = Devise[scopeName]()
+
+      return currentUserData[scope]
     }
   }, [])
 
@@ -35,11 +43,7 @@ const useCurrentUser = (args) => {
 
   useEffect(() => {
     if (!(s.m.scope in currentUserData)) {
-      if (Devise.current().hasCurrentScope(s.m.scope)) {
-        currentUserData[s.m.scope] = Devise[s.m.scopeName]()
-      } else {
-        loadCurrentUserFromRequest()
-      }
+      loadCurrentUserFromRequest()
     }
   }, [])
 
