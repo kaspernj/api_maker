@@ -9,16 +9,19 @@ const currentUserData = {}
 const useCurrentUser = (args) => {
   const s = useShape()
   const scope = args?.scope || "user"
+  const scopeName = useMemo(() => `current${camelize(scope)}`, [scope])
 
   s.meta.scope = scope
-  s.meta.scopeName = useMemo(() => `current${camelize(s.m.scope)}`, [scope])
+  s.meta.scopeName = scopeName
 
   const loadCurrentUserFromRequest = useCallback(async () => {
-    const {scope, scopeName} = s.m.scope
+    const {scope, scopeName} = s.m
     const result = await Services.current().sendRequest("Devise::Current", {scope})
     const current = digg(result, "current")
 
     currentUserData[scope] = current
+
+    if (!(scopeName in s.setStates)) throw new Error(`'${scopeName}' not found in setStates`)
 
     s.setStates[scopeName](current)
   }, [])
@@ -35,10 +38,18 @@ const useCurrentUser = (args) => {
     }
   }, [])
 
-  s.useStates({currentUser: defaultCurrentUser()})
+  const useStatesArgument = {}
+
+  useStatesArgument[scopeName] = defaultCurrentUser()
+
+  s.useStates(useStatesArgument)
 
   const updateCurrentUser = useCallback(() => {
-    s.set({currentUser: Devise[s.m.scopeName]()})
+    const setStatesArgument = {}
+
+    setStatesArgument[s.m.scopeName] = Devise[s.m.scopeName]()
+
+    s.set(setStatesArgument)
   }, [])
 
   useEffect(() => {
@@ -63,7 +74,7 @@ const useCurrentUser = (args) => {
     }
   }, [])
 
-  return s.s.currentUser
+  return s.s[scopeName]
 }
 
 export default useCurrentUser
