@@ -2,14 +2,13 @@ import {useCallback, useEffect, useMemo} from "react"
 import {camelize} from "inflection"
 import Devise from "./devise.mjs"
 import Services from "./services.mjs"
+import useEventEmitter from "./use-event-emitter.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
-
-const currentUserData = {}
 
 const useCurrentUser = (args) => {
   const s = useShape(args || {})
   const scope = args?.scope || "user"
-  const scopeName = useMemo(() => `current${camelize(scope)}`, [scope])
+  const scopeName = `current${camelize(scope)}`
 
   s.meta.scope = scope
   s.meta.scopeName = scopeName
@@ -32,8 +31,6 @@ const useCurrentUser = (args) => {
     const result = await Services.current().sendRequest("Devise::Current", {scope})
     const current = digg(result, "current")
 
-    currentUserData[scope] = current
-
     if (!(scopeName in s.setStates)) throw new Error(`'${scopeName}' not found in setStates`)
 
     s.setStates[scopeName](current)
@@ -42,14 +39,10 @@ const useCurrentUser = (args) => {
   const defaultCurrentUser = useCallback(() => {
     const {scope, scopeName} = s.m
 
-    if (scope in currentUserData) {
-      return currentUserData[scope]
-    } else if (Devise.current().hasCurrentScope(scope)) {
+    if (Devise.current().hasCurrentScope(scope)) {
       debugs(() => `Setting ${scope} from current scope`)
 
-      currentUserData[scope] = Devise[scopeName]()
-
-      return currentUserData[scope]
+      return Devise[scopeName]()
     }
   }, [])
 
@@ -68,26 +61,15 @@ const useCurrentUser = (args) => {
   }, [])
 
   useEffect(() => {
-    if (!(s.m.scope in currentUserData) && !Devise.current().hasCurrentScope(s.m.scope)) {
+    if (!Devise.current().hasCurrentScope(s.m.scope)) {
       loadCurrentUserFromRequest()
     }
   }, [])
 
-  useEffect(() => {
-    Devise.events().addListener("onDeviseSignIn", updateCurrentUser)
+  useEventEmitter(Devise.events(), "onDeviseSignIn", updateCurrentUser)
+  useEventEmitter(Devise.events(), "onDeviseSignOut", updateCurrentUser)
 
-    return () => {
-      Devise.events().removeListener("onDeviseSignIn", updateCurrentUser)
-    }
-  }, [])
-
-  useEffect(() => {
-    Devise.events().addListener("onDeviseSignOut", updateCurrentUser)
-
-    return () => {
-      Devise.events().removeListener("onDeviseSignOut", updateCurrentUser)
-    }
-  }, [])
+  console.error(`DEBUG: Keys: ${Object.keys(s.s).map((key) => `${key}: ${s.s[key]?.id()}`).join(", ")}`)
 
   return s.s[scopeName]
 }
