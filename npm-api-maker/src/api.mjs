@@ -4,23 +4,23 @@ import FormDataObjectizer from "form-data-objectizer"
 import qs from "qs"
 
 export default class Api {
-  static get (path, pathParams = null) {
+  static get(path, pathParams = null) {
     return Api.requestLocal({path, pathParams, method: "GET"})
   }
 
-  static delete (path, pathParams = null) {
+  static delete(path, pathParams = null) {
     return Api.requestLocal({path, pathParams, method: "DELETE"})
   }
 
-  static patch (path, data = {}) {
+  static patch(path, data = {}) {
     return Api.requestLocal({path, data, method: "PATCH"})
   }
 
-  static post (path, data = {}) {
+  static post(path, data = {}) {
     return Api.requestLocal({path, data, method: "POST"})
   }
 
-  static request ({data, headers, method, path, pathParams}) {
+  static request({data, headers, method, path, pathParams}) {
     let requestPath = ""
     if (config.getHost()) requestPath += config.getHost()
     requestPath += path
@@ -62,7 +62,7 @@ export default class Api {
     })
   }
 
-  static requestLocal (args) {
+  static requestLocal(args) {
     if (!args.headers) {
       args.headers = {}
     }
@@ -85,18 +85,18 @@ export default class Api {
     return this.request(args)
   }
 
-  static put (path, data = {}) {
+  static put(path, data = {}) {
     return this.requestLocal({path, data, method: "PUT"})
   }
 
-  static _token () {
+  static _token() {
     const tokenElement = document.querySelector("meta[name='csrf-token']")
 
     if (tokenElement)
       return tokenElement.getAttribute("content")
   }
 
-  static _parseResponse (xhr) {
+  static _parseResponse(xhr) {
     const responseType = xhr.getResponseHeader("content-type")
 
     if (responseType && responseType.startsWith("application/json")) {

@@ -140,9 +140,7 @@ const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => {
       return this._inputRefBackup
     }
 
-    inputRef() {
-      return this.props.inputRef || this.inputRefBackup()
-    }
+    inputRef = () => this.props.inputRef || this.inputRefBackup()
 
     inputType() {
       if ("type" in this.props) {

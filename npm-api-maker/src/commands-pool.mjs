@@ -4,6 +4,7 @@ import CustomError from "./custom-error.mjs"
 import DestroyError from "./destroy-error.mjs"
 import Deserializer from "./deserializer.mjs"
 import {dig, digg} from "diggerize"
+import events from "./events.mjs"
 import FormDataObjectizer from "form-data-objectizer"
 import Serializer from "./serializer.mjs"
 import SessionStatusUpdater from "./session-status-updater.mjs"
@@ -176,6 +177,8 @@ export default class ApiMakerCommandsPool {
         validationErrors: digg(commandResponseData, "validation_errors")
       })
       error = new ValidationError(validationErrors, {response: commandResponseData})
+
+      events.emit("onValidationErrors", validationErrors)
     } else {
       let errorMessage
 
