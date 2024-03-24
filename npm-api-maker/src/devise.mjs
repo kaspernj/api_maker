@@ -104,7 +104,19 @@ export default class ApiMakerDevise {
     return this.currents[scope]
   }
 
+  hasCurrentScope(scope) {
+    if (globalThis.apiMakerDeviseCurrent && scope in globalThis.apiMakerDeviseCurrent) {
+      return true
+    }
+
+    return false
+  }
+
   loadCurrentScope (scope) {
+    if (!this.hasCurrentScope(scope)) {
+      return null
+    }
+
     const scopeData = globalThis.apiMakerDeviseCurrent[scope]
 
     if (!scopeData) return null
