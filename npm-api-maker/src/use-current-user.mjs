@@ -69,8 +69,6 @@ const useCurrentUser = (args) => {
   useEventEmitter(Devise.events(), "onDeviseSignIn", updateCurrentUser)
   useEventEmitter(Devise.events(), "onDeviseSignOut", updateCurrentUser)
 
-  console.error(`DEBUG: Keys: ${Object.keys(s.s).map((key) => `${key}: ${s.s[key]?.id()}`).join(", ")}`)
-
   return s.s[scopeName]
 }
 
