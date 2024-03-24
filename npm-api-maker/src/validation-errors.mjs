@@ -30,13 +30,8 @@ class ValidationError {
     return false
   }
 
-  getAttributeName() {
-    return digg(this, "attributeName")
-  }
-
-  getErrorMessages() {
-    return digg(this, "errorMessages")
-  }
+  getAttributeName = () => digg(this, "attributeName")
+  getErrorMessages = () => digg(this, "errorMessages")
 
   getFullErrorMessages() {
     const {attributeType} = digs(this, "attributeType")
@@ -55,13 +50,8 @@ class ValidationError {
     }
   }
 
-  getHandled() {
-    return digg(this, "handled")
-  }
-
-  getInputName() {
-    return digg(this, "inputName")
-  }
+  getHandled = () => digg(this, "handled")
+  getInputName = () => digg(this, "inputName")
 
   getModelClass() {
     const modelName = inflection.classify(digg(this, "modelName"))
@@ -92,9 +82,7 @@ class ValidationErrors {
     return fullErrorMessages.join(". ")
   }
 
-  getValidationErrors() {
-    return this.validationErrors
-  }
+  getValidationErrors = () => this.validationErrors
 
   getValidationErrorsForInput ({attribute, inputName, onMatchValidationError}) {
     const validationErrors = this.validationErrors.filter((validationError) => {

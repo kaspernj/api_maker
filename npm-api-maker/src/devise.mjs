@@ -1,17 +1,12 @@
 import CanCan from "./can-can.mjs"
 import Deserializer from "./deserializer.mjs"
 import {digg} from "diggerize"
-import EventEmitter from "events"
+import events from "./events.mjs"
 import * as inflection from "inflection"
 import modelClassRequire from "./model-class-require.mjs"
 import Services from "./services.mjs"
 
-const events = new EventEmitter()
 const shared = {}
-
-events.setMaxListeners(1000)
-
-export {events}
 
 export default class ApiMakerDevise {
   static callSignOutEvent (args) {
