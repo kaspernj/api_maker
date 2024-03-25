@@ -4481,9 +4481,9 @@ object.values@^1.1.7:
     es-abstract "^1.22.1"
 
 "on-location-changed@>= 1.0.10":
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.10.tgz#8f9ffad7ce1fb0a3cca65e0bc690b14018660618"
-  integrity sha512-GZqDJTGQsGayeE752F6Yp1pjwaIGpSUDY+g56KjaYn6dZR8Cqr+gPevuxSwT2lTtqjsm24pucT5lFWNXG1BP6w==
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.12.tgz#a8038f3a476956e5f01b82e668be69a57ada1405"
+  integrity sha512-seGFq9BmKf/7bO/gCfvX1mOtmInrDEig1STeSLoZfnkwKpWtXwtvwJqlIVMZLN0kMFJ/OjN445g90wtfR7/J+w==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
