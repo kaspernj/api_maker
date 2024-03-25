@@ -1,5 +1,3 @@
-import EventEmitter from "events"
-import PropTypes from "prop-types"
 import {useCallback, useEffect} from "react"
 
 const ApiMakerUseEventEmitter = (events, event, onCalled) => {
@@ -14,12 +12,6 @@ const ApiMakerUseEventEmitter = (events, event, onCalled) => {
       events.removeListener(event, onCalledCallback)
     }
   }, [events, event, onCalled])
-}
-
-ApiMakerUseEventEmitter.propTypes = {
-  event: PropTypes.string.isRequired,
-  events: PropTypes.instanceOf(EventEmitter).isRequired,
-  onCalled: PropTypes.func.isRequired
 }
 
 export default ApiMakerUseEventEmitter
