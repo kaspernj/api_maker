@@ -32,8 +32,8 @@ const useCurrentUser = (args) => {
     const current = digg(result, "current")
 
     if (!(scopeName in s.setStates)) throw new Error(`'${scopeName}' not found in setStates`)
+    if (current) Devise.updateSession(current)
 
-    Devise.updateSession(current)
     s.setStates[scopeName](current)
 
     if (s.props.onCurrentUserLoaded) setTimeout(() => s.props.onCurrentUserLoaded(current), 0)
