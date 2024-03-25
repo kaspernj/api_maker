@@ -42,7 +42,7 @@
     "sass": "^1.72.0",
     "sass-loader": "^14.1.1",
     "set-state-compare": "^1.0.25",
-    "shakapacker": "7.2.1",
+    "shakapacker": "7.2.3",
     "stacktrace-parser": "^0.1.10",
     "stimulus": "^3.2.2",
     "style-loader": "^3.3.4",
