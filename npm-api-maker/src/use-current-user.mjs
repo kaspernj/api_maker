@@ -33,16 +33,23 @@ const useCurrentUser = (args) => {
 
     if (!(scopeName in s.setStates)) throw new Error(`'${scopeName}' not found in setStates`)
 
+    Devise.updateSession(current)
     s.setStates[scopeName](current)
+
+    if (s.props.onCurrentUserLoaded) setTimeout(() => s.props.onCurrentUserLoaded(current), 0)
   }, [])
 
   const defaultCurrentUser = useCallback(() => {
     const {scope, scopeName} = s.m
 
     if (Devise.current().hasCurrentScope(scope)) {
-      debugs(() => `Setting ${scope} from current scope`)
+      const current = Devise[scopeName]()
 
-      return Devise[scopeName]()
+      debugs(() => `Setting ${scope} from current scope: ${current?.id()}`)
+
+      if (s.props.onCurrentUserLoaded) setTimeout(() => s.props.onCurrentUserLoaded(current), 0)
+
+      return current
     }
   }, [])
 
