@@ -2,7 +2,7 @@ import {useCallback, useEffect} from "react"
 
 const ApiMakerUseEventEmitter = (events, event, onCalled) => {
   const onCalledCallback = useCallback((...args) => {
-    onCalled.apply(null, ...args)
+    onCalled(...args)
   }, [events, event, onCalled])
 
   useEffect(() => {
