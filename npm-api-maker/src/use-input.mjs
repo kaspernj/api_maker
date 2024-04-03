@@ -1,5 +1,5 @@
 import {dig, digg} from "diggerize"
-import {useCallback, useEffect} from "react"
+import {useCallback, useEffect, useMemo} from "react"
 import idForComponent from "./inputs/id-for-component.mjs"
 import nameForComponent from "./inputs/name-for-component.mjs"
 import strftime from "strftime"
@@ -72,12 +72,6 @@ const useInput = ({props, wrapperOptions}) => {
     }
   }, [])
 
-  const inputName = useCallback(() => {
-    if (s.state.blankInputName) return ""
-
-    return getName()
-  }, [])
-
   const inputRefBackup = useCallback(() => {
     if (!s.meta._inputRefBackup) s.meta._inputRefBackup = React.createRef()
 
@@ -146,11 +140,14 @@ const useInput = ({props, wrapperOptions}) => {
   const type = inputType()
 
   s.meta.inputProps = getInputProps()
+  s.meta.inputNameWithoutId = useMemo(() => s.m.inputProps.name.replace(/\[(.+)_id\]$/, "[$1]"), [s.m.inputProps.name])
 
   if (!s.m.inputProps.ref) throw new Error("No input ref?")
   if (!handleAsSelect()) s.m.inputProps.type = type
 
-  const {validationErrors} = useValidationErrors((validationError) => validationError.inputName == s.m.inputProps.name)
+  const {validationErrors} = useValidationErrors((validationError) =>
+    validationError.inputName == s.m.inputProps.name || validationError.inputName == s.m.inputNameWithoutId
+  )
 
   const wrapperOpts = {
     errors: validationErrors,
