@@ -6,10 +6,12 @@ const ApiMakerUseEventListener = (target, event, onCalled) => {
   }, [target, event, onCalled])
 
   useEffect(() => {
-    target.addEventListener(event, onCalledCallback)
+    if (target) {
+      target.addEventListener(event, onCalledCallback)
 
-    return () => {
-      target.removeEventListener(event, onCalledCallback)
+      return () => {
+        target.removeEventListener(event, onCalledCallback)
+      }
     }
   }, [target, event, onCalled])
 }
