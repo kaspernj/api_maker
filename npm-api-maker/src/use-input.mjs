@@ -126,7 +126,7 @@ const useInput = ({props, wrapperOptions}) => {
     let form
 
     if (inputElement) form = dig(inputElement, "form")
-    if (form && form != s.state.form) s.set({form})
+    if (form && form != s.s.form) s.set({form})
   }, [])
 
   const getId = useCallback(() => idForComponent(fakeComponent), [])
@@ -159,7 +159,6 @@ const useInput = ({props, wrapperOptions}) => {
   }, [])
 
   const {inputProps: oldInputProps, ...restProps} = props
-  const {errors, form} = digs(s.state, "errors", "form")
   const type = inputType()
   const inputProps = getInputProps()
 
@@ -167,12 +166,12 @@ const useInput = ({props, wrapperOptions}) => {
   if (!handleAsSelect()) inputProps.type = type
 
   const wrapperOpts = {
-    errors,
-    form,
+    errors: s.s.errors,
+    form: s.s.form,
     label: label()
   }
 
-  useEventListener(form, "validation-errors", onValidationErrors)
+  useEventListener(s.s.form, "validation-errors", onValidationErrors)
 
   return {
     inputProps,
