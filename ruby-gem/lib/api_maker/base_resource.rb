@@ -147,7 +147,7 @@ class ApiMaker::BaseResource
   end
 
   def translated_attribute_names(*attribute_names)
-    ApiMaker::TranslatedAttributeNames.execute!(attribute_names:)
+    ApiMaker::TranslatedAttributeNames.execute!(attribute_names: attribute_names)
   end
 
   def self.plural_name
