@@ -1,6 +1,6 @@
 import * as inflection from "inflection"
 
-export default function apiMakerIdForComponent (component) {
+export default function apiMakerIdForComponent(component) {
   if ("id" in component.props) {
     return component.props.id
   } else if (component.props.attribute && component.props.model) {
