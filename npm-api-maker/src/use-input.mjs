@@ -1,16 +1,15 @@
-import {dig, digg, digs} from "diggerize"
-import {useCallback, useEffect, useMemo} from "react"
+import {dig, digg} from "diggerize"
+import {useCallback, useEffect} from "react"
 import idForComponent from "./inputs/id-for-component.mjs"
 import nameForComponent from "./inputs/name-for-component.mjs"
 import strftime from "strftime"
-import useEventListener from "./use-event-listener.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
+import useValidationErrors from "./use-validation-errors.mjs"
 
 const useInput = ({props, wrapperOptions}) => {
   const s = useShape(props)
 
   s.useStates({
-    errors: [],
     form: undefined
   })
 
@@ -105,16 +104,6 @@ const useInput = ({props, wrapperOptions}) => {
     }
   }, [])
 
-  const onValidationErrors = useCallback((event) => {
-    const errors = event.detail.getValidationErrorsForInput({
-      attribute: s.props.attribute,
-      inputName: inputName(),
-      onMatchValidationError: s.props.onMatchValidationError
-    })
-
-    s.set({errors})
-  }, [])
-
   const setForm = useCallback(() => {
     const inputElement = inputRef().current
 
@@ -155,21 +144,22 @@ const useInput = ({props, wrapperOptions}) => {
 
   const {inputProps: oldInputProps, ...restProps} = props
   const type = inputType()
-  const inputProps = getInputProps()
 
-  if (!inputProps.ref) throw new Error("No input ref?")
-  if (!handleAsSelect()) inputProps.type = type
+  s.meta.inputProps = getInputProps()
+
+  if (!s.m.inputProps.ref) throw new Error("No input ref?")
+  if (!handleAsSelect()) s.m.inputProps.type = type
+
+  const {validationErrors} = useValidationErrors((validationError) => validationError.inputName == s.m.inputProps.name)
 
   const wrapperOpts = {
-    errors: s.s.errors,
+    errors: validationErrors,
     form: s.s.form,
     label: label()
   }
 
-  useEventListener(s.s.form, "validation-errors", onValidationErrors)
-
   return {
-    inputProps,
+    inputProps: s.m.inputProps,
     wrapperOpts,
     restProps
   }
