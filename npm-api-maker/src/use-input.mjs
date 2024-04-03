@@ -1,5 +1,5 @@
 import {dig, digg, digs} from "diggerize"
-import React from "react"
+import {useCallback, useEffect, useMemo} from "react"
 import idForComponent from "./inputs/id-for-component.mjs"
 import nameForComponent from "./inputs/name-for-component.mjs"
 import strftime from "strftime"
