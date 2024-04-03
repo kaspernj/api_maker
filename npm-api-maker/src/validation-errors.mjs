@@ -89,7 +89,7 @@ class ValidationErrors {
       if (onMatchValidationError) {
         return onMatchValidationError(validationError)
       } else {
-        return validationError.matchesAttributeAndInputName(attribute, inputName, onMatchValidationError)
+        return validationError.matchesAttributeAndInputName(attribute, inputName)
       }
     })
 

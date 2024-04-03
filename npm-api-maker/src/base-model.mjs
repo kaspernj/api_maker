@@ -460,7 +460,7 @@ export default class BaseModel {
     BaseModel.sendValidationErrorsEvent(validationErrors, options)
 
     if (!options || options.throwValidationError != false) {
-      throw new ValidationError(validationErrors, digg(error, "args"))
+      throw error
     }
   }
 

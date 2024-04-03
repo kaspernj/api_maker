@@ -1,4 +1,5 @@
 import events from "./events.mjs"
+import {useCallback} from "react"
 import useEventEmitter from "./use-event-emitter.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
 

@@ -11,6 +11,9 @@ class ValidationError extends BaseError {
     this.validationErrors = validationErrors
   }
 
+  getUnhandledErrors = () => this.validationErrors.getValidationErrors().filter((validationError) => !validationError.getHandled())
+  getValidationErrors = () => digg(this, "validationErrors")
+
   hasUnhandledErrors() {
     const unhandledError = this.validationErrors.getValidationErrors().find((validationError) => !validationError.getHandled())
 
