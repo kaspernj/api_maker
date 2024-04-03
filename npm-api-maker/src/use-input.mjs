@@ -18,12 +18,7 @@ const useInput = ({props, wrapperOptions}) => {
     setForm()
   }, [s.props.inputRef?.current])
 
-  const fakeComponent = useMemo(
-    () => ({
-      props
-    }),
-    []
-  )
+  s.meta.fakeComponent = {props}
 
   const formatValue = useCallback((value) => {
     const {formatValue} = s.props
@@ -129,8 +124,8 @@ const useInput = ({props, wrapperOptions}) => {
     if (form && form != s.s.form) s.set({form})
   }, [])
 
-  const getId = useCallback(() => idForComponent(fakeComponent), [])
-  const getName = useCallback(() => nameForComponent(fakeComponent), [])
+  const getId = useCallback(() => idForComponent(s.m.fakeComponent), [])
+  const getName = useCallback(() => nameForComponent(s.m.fakeComponent), [])
 
   const getInputProps = useCallback(() => {
     const givenInputProps = s.props.inputProps || {}
