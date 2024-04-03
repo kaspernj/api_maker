@@ -140,7 +140,7 @@ const useInput = ({props, wrapperOptions}) => {
   const type = inputType()
 
   s.meta.inputProps = getInputProps()
-  s.meta.inputNameWithoutId = useMemo(() => s.m.inputProps.name.replace(/\[(.+)_id\]$/, "[$1]"), [s.m.inputProps.name])
+  s.meta.inputNameWithoutId = useMemo(() => s.m.inputProps.name?.replace(/\[(.+)_id\]$/, "[$1]"), [s.m.inputProps.name])
 
   if (!s.m.inputProps.ref) throw new Error("No input ref?")
   if (!handleAsSelect()) s.m.inputProps.type = type
