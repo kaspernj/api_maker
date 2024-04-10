@@ -8,7 +8,7 @@ import useShape from "set-state-compare/src/use-shape.js"
 
 const logger = new Logger({name: "ApiMaker / useCurrentUser"})
 
-logger.setDebug(true)
+// logger.setDebug(true)
 
 const useCurrentUser = (args) => {
   const s = useShape(args || {})
