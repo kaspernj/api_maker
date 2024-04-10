@@ -70,7 +70,7 @@
     "babel-jest": "^29.0.1",
     "eslint": "^8.2.0",
     "eslint-find-rules": "^4.0.0",
-    "eslint-plugin-jest": "^27.0.1",
+    "eslint-plugin-jest": "^28.2.0",
     "eslint-plugin-react": "^7.23.2",
     "i18n-on-steroids": "^1.0.7",
     "jest": "^29.0.1",
