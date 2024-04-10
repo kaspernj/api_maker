@@ -32,7 +32,7 @@ export default class ApiMakerSessionStatusUpdater {
 
   async sessionStatus () {
     return new Promise((resolve) => {
-      const requestPath = ""
+      let requestPath = ""
 
       if (config.getHost()) requestPath += config.getHost()
 
