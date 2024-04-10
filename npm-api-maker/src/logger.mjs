@@ -12,7 +12,13 @@ export default class ApiMakerLogger {
   }
 
   debug(message) {
-    if (this.getDebug()) this.log(message)
+    if (this.getDebug()) {
+      this.log(message)
+    }
+  }
+
+  error(message) {
+    console.error(message)
   }
 
   log(message) {

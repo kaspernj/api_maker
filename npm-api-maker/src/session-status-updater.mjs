@@ -37,7 +37,7 @@ export default class ApiMakerSessionStatusUpdater {
 
   async getCsrfToken() {
     if (this.csrfToken) {
-      logger.debug("Get CSRF token from set variable")
+      logger.debug(`Get CSRF token from set variable: ${this.csrfToken}`)
 
       return this.csrfToken
     }
@@ -46,7 +46,7 @@ export default class ApiMakerSessionStatusUpdater {
       const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
       if (csrfTokenElement) {
-        logger.debug("Get CSRF token from meta element")
+        logger.debug(() => `Get CSRF token from meta element: ${csrfTokenElement.getAttribute("content")}`)
 
         this.csrfToken = csrfTokenElement.getAttribute("content")
 
@@ -58,7 +58,7 @@ export default class ApiMakerSessionStatusUpdater {
     await this.updateSessionStatus()
 
     if (this.csrfToken) {
-      logger.debug("Returning CSRF token after updating session status")
+      logger.debug(() => `Returning CSRF token after updating session status: ${this.csrfToken}`)
 
       return this.csrfToken
     }

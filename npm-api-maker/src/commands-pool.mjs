@@ -6,15 +6,19 @@ import Deserializer from "./deserializer.mjs"
 import {dig, digg} from "diggerize"
 import events from "./events.mjs"
 import FormDataObjectizer from "form-data-objectizer"
+import Logger from "./logger.mjs"
 import Serializer from "./serializer.mjs"
 import SessionStatusUpdater from "./session-status-updater.mjs"
 import ValidationError from "./validation-error.mjs"
 import {ValidationErrors} from "./validation-errors.mjs"
 
 const shared = {}
+const logger = new Logger({name: "ApiMaker / CommandsPool"})
+
+// logger.setDebug(true)
 
 export default class ApiMakerCommandsPool {
-  static addCommand (data, args = {}) {
+  static addCommand(data, args = {}) {
     let pool
 
     if (args.instant) {
@@ -34,17 +38,17 @@ export default class ApiMakerCommandsPool {
     return promiseResult
   }
 
-  static current () {
+  static current() {
     if (!shared.currentApiMakerCommandsPool) shared.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
 
     return shared.currentApiMakerCommandsPool
   }
 
-  static flush () {
+  static flush() {
     ApiMakerCommandsPool.current().flush()
   }
 
-  constructor () {
+  constructor() {
     this.flushCount = 0
     this.pool = {}
     this.poolData = {}
@@ -52,7 +56,7 @@ export default class ApiMakerCommandsPool {
     this.globalRequestData = {}
   }
 
-  addCommand (data) {
+  addCommand(data) {
     return new Promise((resolve, reject) => {
       const id = this.currentId
       this.currentId += 1
@@ -87,11 +91,11 @@ export default class ApiMakerCommandsPool {
     })
   }
 
-  commandsCount () {
+  commandsCount() {
     return Object.keys(this.pool)
   }
 
-  async sendRequest ({commandSubmitData, url}) {
+  async sendRequest({commandSubmitData, url}) {
     let response
 
     for (let i = 0; i < 3; i++) {
@@ -102,7 +106,7 @@ export default class ApiMakerCommandsPool {
       }
 
       if (response.success === false && response.type == "invalid_authenticity_token") {
-        console.log("Invalid authenticity token - try again")
+        logger.error("Invalid authenticity token - try again")
         await SessionStatusUpdater.current().updateSessionStatus()
         continue
       }
@@ -113,7 +117,7 @@ export default class ApiMakerCommandsPool {
     throw new Error("Couldnt successfully execute request")
   }
 
-  async flush () {
+  async flush() {
     if (this.commandsCount() == 0) {
       return
     }
@@ -166,7 +170,7 @@ export default class ApiMakerCommandsPool {
     }
   }
 
-  handleFailedResponse (commandData, commandResponseData) {
+  handleFailedResponse(commandData, commandResponseData) {
     let error
 
     if (commandResponseData.error_type == "destroy_error") {
@@ -190,13 +194,13 @@ export default class ApiMakerCommandsPool {
     commandData.reject(error)
   }
 
-  clearTimeout () {
+  clearTimeout() {
     if (this.flushTimeout) {
       clearTimeout(this.flushTimeout)
     }
   }
 
-  isActive () {
+  isActive() {
     if (this.commandsCount() > 0) {
       return true
     }
@@ -208,7 +212,7 @@ export default class ApiMakerCommandsPool {
     return false
   }
 
-  setFlushTimeout () {
+  setFlushTimeout() {
     this.clearTimeout()
     this.flushTimeout = setTimeout(() => this.flush(), 0)
   }
