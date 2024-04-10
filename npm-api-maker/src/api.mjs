@@ -1,8 +1,13 @@
 import config from "./config.mjs"
 import CustomError from "./custom-error.mjs"
 import FormDataObjectizer from "form-data-objectizer"
+import Logger from "./logger.mjs"
 import qs from "qs"
 import SessionStatusUpdater from "./session-status-updater.mjs"
+
+const logger = new Logger({name: "ApiMaker / Api"})
+
+// logger.setDebug(true)
 
 export default class Api {
   static get(path, pathParams = null) {
@@ -69,6 +74,8 @@ export default class Api {
     }
 
     const token = await this._token()
+
+    logger.debug(() => `Got token: ${token}`)
 
     if (token) {
       args.headers["X-CSRF-Token"] = token
