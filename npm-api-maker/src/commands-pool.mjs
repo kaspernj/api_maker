@@ -6,16 +6,12 @@ import Deserializer from "./deserializer.mjs"
 import {dig, digg} from "diggerize"
 import events from "./events.mjs"
 import FormDataObjectizer from "form-data-objectizer"
-import Logger from "./logger.mjs"
 import Serializer from "./serializer.mjs"
 import SessionStatusUpdater from "./session-status-updater.mjs"
 import ValidationError from "./validation-error.mjs"
 import {ValidationErrors} from "./validation-errors.mjs"
 
 const shared = {}
-const logger = new Logger({name: "ApiMaker / CommandsPool"})
-
-// logger.setDebug(true)
 
 export default class ApiMakerCommandsPool {
   static addCommand(data, args = {}) {
@@ -106,7 +102,7 @@ export default class ApiMakerCommandsPool {
       }
 
       if (response.success === false && response.type == "invalid_authenticity_token") {
-        logger.error("Invalid authenticity token - try again")
+        console.log("Invalid authenticity token - try again")
         await SessionStatusUpdater.current().updateSessionStatus()
         continue
       }
