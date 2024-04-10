@@ -68,9 +68,10 @@ export default class ApiMakerSessionStatusUpdater {
 
   sessionStatus() {
     return new Promise((resolve) => {
+      const host = config.getHost()
       let requestPath = ""
 
-      if (config.getHost()) requestPath += config.getHost()
+      if (host) requestPath += host
 
       requestPath += "/api_maker/session_statuses"
 

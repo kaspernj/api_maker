@@ -1,9 +1,14 @@
 import {useCallback, useEffect, useMemo} from "react"
 import {camelize} from "inflection"
 import Devise from "./devise.mjs"
+import Logger from "./logger.mjs"
 import Services from "./services.mjs"
 import useEventEmitter from "./use-event-emitter.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
+
+const logger = new Logger({name: "ApiMaker / useCurrentUser"})
+
+logger.setDebug(true)
 
 const useCurrentUser = (args) => {
   const s = useShape(args || {})
@@ -13,20 +18,10 @@ const useCurrentUser = (args) => {
   s.meta.scope = scope
   s.meta.scopeName = scopeName
 
-  const debugs = useCallback((debugCallback) => {
-    if (s.props.debug) {
-      let debugArgs = debugCallback()
-
-      if (!Array.isArray(debugArgs)) debugArgs = [debugArgs]
-
-      console.log("useCurrentUser", ...debugArgs)
-    }
-  })
-
   const loadCurrentUserFromRequest = useCallback(async () => {
     const {scope, scopeName} = s.m
 
-    debugs(() => `Loading ${scope} with request`)
+    logger.debug(() => `Loading ${scope} with request`)
 
     const result = await Services.current().sendRequest("Devise::Current", {scope})
     const current = digg(result, "current")
@@ -41,21 +36,28 @@ const useCurrentUser = (args) => {
 
   const defaultCurrentUser = useCallback(() => {
     const {scope, scopeName} = s.m
+    let current
 
-    if (Devise.current().hasCurrentScope(scope)) {
-      const current = Devise[scopeName]()
+    if (Devise.current().hasCurrentScope(s.m.scope)) {
+      current = Devise.current().getCurrentScope(scope)
 
-      debugs(() => `Setting ${scope} from current scope: ${current?.id()}`)
+      logger.debug(() => `Setting ${scope} from current scope: ${current?.id()}`)
+    } else if (Devise.current().hasGlobalCurrentScope(scope)) {
+      current = Devise[scopeName]()
 
-      if (s.props.onCurrentUserLoaded) setTimeout(() => s.props.onCurrentUserLoaded(current), 0)
-
-      return current
+      logger.debug(() => `Setting ${scope} from global current scope: ${current?.id()}`)
     }
+
+    if (current && s.props.onCurrentUserLoaded) {
+      setTimeout(() => s.props.onCurrentUserLoaded(current), 0)
+    }
+
+    return current
   }, [])
 
   const useStatesArgument = {}
 
-  useStatesArgument[scopeName] = defaultCurrentUser()
+  useStatesArgument[scopeName] = () => defaultCurrentUser()
 
   s.useStates(useStatesArgument)
 
@@ -68,7 +70,8 @@ const useCurrentUser = (args) => {
   }, [])
 
   useEffect(() => {
-    if (!Devise.current().hasCurrentScope(s.m.scope)) {
+    if (!Devise.current().hasGlobalCurrentScope(s.m.scope) && !Devise.current().hasCurrentScope(s.m.scope)) {
+      logger.debug(() => `Devise hasn't got current scope ${s.m.scope} so loading from request`)
       loadCurrentUserFromRequest()
     }
   }, [])
