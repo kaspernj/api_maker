@@ -5,32 +5,68 @@ import Logger from "./logger.mjs"
 import wakeEvent from "wake-event"
 
 const logger = new Logger({name: "ApiMaker / SessionStatusUpdater"})
+const shared = {}
+
+// logger.setDebug(true)
 
 export default class ApiMakerSessionStatusUpdater {
-  static current () {
-    if (!globalThis.apiMakerSessionStatusUpdater)
-      globalThis.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater()
+  static current(args) {
+    if (!shared.apiMakerSessionStatusUpdater) {
+      shared.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater(args)
+    }
 
-    return globalThis.apiMakerSessionStatusUpdater
+    return shared.apiMakerSessionStatusUpdater
   }
 
-  constructor (args = {}) {
+  constructor(args = {}) {
     this.events = {}
     this.timeout = args.timeout || 600000
+    this.useMetaElement = ("useMetaElement" in args) ? args.useMetaElement : true
 
     this.connectOnlineEvent()
     this.connectWakeEvent()
   }
 
-  connectOnlineEvent () {
+  connectOnlineEvent() {
     window.addEventListener("online", this.updateSessionStatus, false)
   }
 
-  connectWakeEvent () {
+  connectWakeEvent() {
     wakeEvent(this.updateSessionStatus)
   }
 
-  async sessionStatus () {
+  async getCsrfToken() {
+    if (this.csrfToken) {
+      logger.debug("Get CSRF token from set variable")
+
+      return this.csrfToken
+    }
+
+    if (this.useMetaElement) {
+      const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
+
+      if (csrfTokenElement) {
+        logger.debug("Get CSRF token from meta element")
+
+        this.csrfToken = csrfTokenElement.getAttribute("content")
+
+        return this.csrfToken
+      }
+    }
+
+    logger.debug("Updating session status because no CSRF token set yet")
+    await this.updateSessionStatus()
+
+    if (this.csrfToken) {
+      logger.debug("Returning CSRF token after updating session status")
+
+      return this.csrfToken
+    }
+
+    throw new Error("CSRF token hasn't been set")
+  }
+
+  sessionStatus() {
     return new Promise((resolve) => {
       let requestPath = ""
 
@@ -48,11 +84,11 @@ export default class ApiMakerSessionStatusUpdater {
     })
   }
 
-  onSignedOut (callback) {
+  onSignedOut(callback) {
     this.addEvent("onSignedOut", callback)
   }
 
-  startTimeout () {
+  startTimeout() {
     logger.debug("startTimeout")
 
     if (this.updateTimeout)
@@ -67,7 +103,7 @@ export default class ApiMakerSessionStatusUpdater {
     )
   }
 
-  stopTimeout () {
+  stopTimeout() {
     if (this.updateTimeout)
       clearTimeout(this.updateTimeout)
   }
@@ -82,25 +118,30 @@ export default class ApiMakerSessionStatusUpdater {
     this.updateUserSessionsFromResult(result)
   }
 
-  updateMetaElementsFromResult (result) {
+  updateMetaElementsFromResult(result) {
     logger.debug("updateMetaElementsFromResult")
-    const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
-    if (csrfTokenElement) {
-      logger.debug(() => `Changing token from "${csrfTokenElement.getAttribute("content")}" to "${result.csrf_token}"`)
-      csrfTokenElement.setAttribute("content", result.csrf_token)
-    } else {
-      logger.debug("csrf token element couldn't be found")
+    this.csrfToken = result.csrf_token
+
+    if (this.useMetaElement) {
+      const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
+
+      if (csrfTokenElement) {
+        logger.debug(() => `Changing token from "${csrfTokenElement.getAttribute("content")}" to "${result.csrf_token}"`)
+        csrfTokenElement.setAttribute("content", result.csrf_token)
+      } else {
+        logger.debug("csrf token element couldn't be found")
+      }
     }
   }
 
-  updateUserSessionsFromResult (result) {
+  updateUserSessionsFromResult(result) {
     for (const scopeName in result.scopes) {
       this.updateUserSessionScopeFromResult(scopeName, result.scopes[scopeName])
     }
   }
 
-  updateUserSessionScopeFromResult (scopeName, scope) {
+  updateUserSessionScopeFromResult(scopeName, scope) {
     const deviseIsSignedInMethodName = `is${inflection.camelize(scopeName)}SignedIn`
 
     if (!(deviseIsSignedInMethodName in Devise)) {
