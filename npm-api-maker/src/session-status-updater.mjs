@@ -1,3 +1,4 @@
+import config from "./config.mjs"
 import Devise from "./devise.mjs"
 import * as inflection from "inflection"
 import Logger from "./logger.mjs"
@@ -22,17 +23,23 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   connectOnlineEvent () {
-    window.addEventListener("online", () => this.updateSessionStatus(), false)
+    window.addEventListener("online", this.updateSessionStatus, false)
   }
 
   connectWakeEvent () {
-    wakeEvent(() => this.updateSessionStatus())
+    wakeEvent(updateSessionStatus)
   }
 
   async sessionStatus () {
     return new Promise((resolve) => {
+      const requestPath = ""
+
+      if (config.getHost()) requestPath += config.getHost()
+
+      requestPath += "/api_maker/session_statuses"
+
       const xhr = new XMLHttpRequest()
-      xhr.open("POST", "/api_maker/session_statuses", true)
+      xhr.open("POST", requestPath, true)
       xhr.onload = () => {
         const response = JSON.parse(xhr.responseText)
         resolve(response)
@@ -65,7 +72,7 @@ export default class ApiMakerSessionStatusUpdater {
       clearTimeout(this.updateTimeout)
   }
 
-  async updateSessionStatus () {
+  updateSessionStatus = async () => {
     logger.debug("updateSessionStatus")
 
     const result = await this.sessionStatus()
