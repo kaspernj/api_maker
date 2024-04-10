@@ -27,7 +27,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   connectWakeEvent () {
-    wakeEvent(updateSessionStatus)
+    wakeEvent(this.updateSessionStatus)
   }
 
   async sessionStatus () {
