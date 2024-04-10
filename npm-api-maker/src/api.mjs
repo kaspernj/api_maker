@@ -2,6 +2,7 @@ import config from "./config.mjs"
 import CustomError from "./custom-error.mjs"
 import FormDataObjectizer from "form-data-objectizer"
 import qs from "qs"
+import SessionStatusUpdater from "./session-status-updater.mjs"
 
 export default class Api {
   static get(path, pathParams = null) {
@@ -62,12 +63,12 @@ export default class Api {
     })
   }
 
-  static requestLocal(args) {
+  static async requestLocal(args) {
     if (!args.headers) {
       args.headers = {}
     }
 
-    const token = this._token()
+    const token = await this._token()
 
     if (token) {
       args.headers["X-CSRF-Token"] = token
@@ -82,19 +83,14 @@ export default class Api {
       args.data = args.rawData
     }
 
-    return this.request(args)
+    return await this.request(args)
   }
 
   static put(path, data = {}) {
     return this.requestLocal({path, data, method: "PUT"})
   }
 
-  static _token() {
-    const tokenElement = document.querySelector("meta[name='csrf-token']")
-
-    if (tokenElement)
-      return tokenElement.getAttribute("content")
-  }
+  static _token = async () => await SessionStatusUpdater.current().getCsrfToken()
 
   static _parseResponse(xhr) {
     const responseType = xhr.getResponseHeader("content-type")
