@@ -107,6 +107,10 @@ export default class BaseModel {
     return new Collection({modelClass: this}, {ransack: query})
   }
 
+  static select(select) {
+    return this.ransack().select(select)
+  }
+
   static ransackableAssociations() {
     const relationships = digg(this.modelClassData(), "ransackable_associations")
     const reflections = []
