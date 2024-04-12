@@ -39,7 +39,7 @@ const ApiMakerSuperAdminModelClassTable = (props) => {
 
   const tableProps = {}
 
-  if (tableConfig.query) tableProps.collection = tableConfig.query
+  if (tableConfig?.query) tableProps.collection = tableConfig.query
 
   return (
     <Table
