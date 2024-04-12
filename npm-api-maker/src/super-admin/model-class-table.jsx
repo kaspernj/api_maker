@@ -14,7 +14,7 @@ const ApiMakerSuperAdminModelClassTable = (props) => {
   const currentUser = useCurrentUser()
   const configReader = useMemo(() => ConfigReader.forModel(modelClass), [modelClass])
   const columns = useMemo(() => configReader.tableColumns(), [modelClass])
-  const tableConfig = configReader.modelConfig.table
+  const tableConfig = configReader.modelConfig?.table
 
   const editModelPath = useCallback((args) => {
     const argName = inflection.camelize(digg(s.p.modelClass.modelClassData(), "name"), true)
