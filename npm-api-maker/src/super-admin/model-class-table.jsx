@@ -6,6 +6,7 @@ import PropTypes from "prop-types"
 import {memo, useCallback} from "react"
 import Table from "../table/table"
 import useCurrentUser from "../use-current-user"
+import useShape from "set-state-compare/src/use-shape.js"
 
 const ApiMakerSuperAdminModelClassTable = (props) => {
   const s = useShape(props)
