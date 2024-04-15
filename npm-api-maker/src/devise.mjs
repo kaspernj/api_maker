@@ -54,9 +54,7 @@ export default class ApiMakerDevise {
   }
 
   static updateSession(model, args = {}) {
-    if (!args.scope) {
-      args.scope = digg(model.modelClassData(), "name")
-    }
+    if (!args.scope) args.scope = "user"
 
     const camelizedScopeName = inflection.camelize(args.scope, true)
 

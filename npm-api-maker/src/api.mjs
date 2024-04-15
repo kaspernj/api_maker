@@ -10,23 +10,12 @@ const logger = new Logger({name: "ApiMaker / Api"})
 // logger.setDebug(true)
 
 export default class Api {
-  static get(path, pathParams = null) {
-    return Api.requestLocal({path, pathParams, method: "GET"})
-  }
+  static get = async (path, pathParams = null) =>  await Api.requestLocal({path, pathParams, method: "GET"})
+  static delete = async (path, pathParams = null) => await Api.requestLocal({path, pathParams, method: "DELETE"})
+  static patch = async (path, data = {}) => await Api.requestLocal({path, data, method: "PATCH"})
+  static post = async (path, data = {}) => await Api.requestLocal({path, data, method: "POST"})
 
-  static delete(path, pathParams = null) {
-    return Api.requestLocal({path, pathParams, method: "DELETE"})
-  }
-
-  static patch(path, data = {}) {
-    return Api.requestLocal({path, data, method: "PATCH"})
-  }
-
-  static post(path, data = {}) {
-    return Api.requestLocal({path, data, method: "POST"})
-  }
-
-  static request({data, headers, method, path, pathParams}) {
+  static async request({data, headers, method, path, pathParams}) {
     let requestPath = ""
     if (config.getHost()) requestPath += config.getHost()
     requestPath += path
@@ -36,16 +25,24 @@ export default class Api {
       requestPath += `?${pathParamsString}`
     }
 
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest()
-      xhr.open(method, requestPath, true)
+    const xhr = new XMLHttpRequest()
 
-      if (headers) {
-        for (const headerName in headers) {
-          xhr.setRequestHeader(headerName, headers[headerName])
-        }
+    xhr.open(method, requestPath, true)
+    xhr.withCredentials = true
+
+    if (headers) {
+      for (const headerName in headers) {
+        xhr.setRequestHeader(headerName, headers[headerName])
       }
+    }
 
+    const response = await Api.executeXhr(xhr, data)
+
+    return response
+  }
+
+  static executeXhr(xhr, data) {
+    return new Promise((resolve, reject) => {
       xhr.onload = () => {
         const response = this._parseResponse(xhr)
 
@@ -93,8 +90,8 @@ export default class Api {
     return await this.request(args)
   }
 
-  static put(path, data = {}) {
-    return this.requestLocal({path, data, method: "PUT"})
+  static async put(path, data = {}) {
+    return await this.requestLocal({path, data, method: "PUT"})
   }
 
   static _token = async () => await SessionStatusUpdater.current().getCsrfToken()
