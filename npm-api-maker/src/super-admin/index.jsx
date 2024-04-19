@@ -10,7 +10,7 @@ import ShowPage from "./show-page"
 import ShowReflectionActions from "./show-reflection-actions"
 import ShowReflectionPage from "./show-reflection-page"
 import useCanCan from "../use-can-can"
-import useCurrentUser from "./use-current-user.mjs"
+import useCurrentUser from "../use-current-user.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
 const ApiMakerSuperAdmin = () => {
