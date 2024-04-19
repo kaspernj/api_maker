@@ -1,4 +1,4 @@
-import ConfigReader from "./config-reader"
+import ConfigReader from "./config-reader.jsx"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import {Pressable, Text, TextInput, View} from "react-native"
