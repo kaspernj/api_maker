@@ -27,6 +27,7 @@ const useCanCan = (abilitiesCallback, dependencies) => {
   }, [])
 
   useEffect(() => {
+    setCanCan(undefined)
     loadAbilities()
   }, dependencies)
 

@@ -1,5 +1,6 @@
-import ConfigReader from "./config-reader"
+import ConfigReader from "./config-reader.jsx"
 import {digg} from "diggerize"
+import hasEditConfig from "./has-edit-config.js"
 import * as inflection from "inflection"
 import Params from "../params"
 import PropTypes from "prop-types"
@@ -45,7 +46,7 @@ const ApiMakerSuperAdminModelClassTable = (props) => {
     <Table
       columns={columns}
       currentUser={currentUser}
-      editModelPath={editModelPath}
+      editModelPath={hasEditConfig(modelClass) ? editModelPath : undefined}
       modelClass={modelClass}
       viewModelPath={viewModelPath}
       {...tableProps}
