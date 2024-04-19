@@ -1,4 +1,5 @@
 import EditPage from "./edit-page"
+import hasEditConfig from "./has-edit-config.js"
 import IndexPage from "./index-page"
 import Layout from "./layout"
 import Link from "../link"
@@ -9,9 +10,11 @@ import ShowPage from "./show-page"
 import ShowReflectionActions from "./show-reflection-actions"
 import ShowReflectionPage from "./show-reflection-page"
 import useCanCan from "../use-can-can"
+import useCurrentUser from "../use-current-user.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
 const ApiMakerSuperAdmin = () => {
+  const currentUser = useCurrentUser()
   const queryParams = useQueryParams()
   let modelClass, pageToShow
 
@@ -20,13 +23,16 @@ const ApiMakerSuperAdmin = () => {
   const modelId = queryParams.model_id
   const modelName = modelClass?.modelClassData()?.name
   const [model, setModel] = useState()
-  const canCan = useCanCan(() => {
-    const abilities = []
+  const canCan = useCanCan(
+    () => {
+      const abilities = []
 
-    if (modelClass) abilities.push([modelClass, ["new"]])
+      if (modelClass) abilities.push([modelClass, ["new"]])
 
-    return abilities
-  })
+      return abilities
+    },
+    [currentUser?.id(), modelClass]
+  )
 
   const loadModel = useCallback(async () => {
     if (modelId && modelClass) {
@@ -82,7 +88,7 @@ const ApiMakerSuperAdmin = () => {
     () => <>
       {modelClass && pageToShow == "index" &&
         <>
-          {canCan?.can("new", modelClass) &&
+          {canCan?.can("new", modelClass) && hasEditConfig(modelClass) &&
             <Link className="create-new-model-link" to={Params.withParams({model: modelName, mode: "new"})}>
               Create new
             </Link>
@@ -91,7 +97,7 @@ const ApiMakerSuperAdmin = () => {
       }
       {model && pageToShow == "show" &&
         <>
-          {model.can("edit") &&
+          {model.can("edit") && hasEditConfig(modelClass) &&
             <Link className="edit-model-link" to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
               Edit
             </Link>

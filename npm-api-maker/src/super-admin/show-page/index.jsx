@@ -1,6 +1,6 @@
 import AttributeRow from "../../bootstrap/attribute-row"
 import BelongsToAttributeRow from "./belongs-to-attribute-row"
-import ConfigReader from "../config-reader"
+import ConfigReader from "../config-reader.jsx"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
