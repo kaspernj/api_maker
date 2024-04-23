@@ -1241,10 +1241,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kaspernj/api-maker@1.0.350":
-  version "1.0.350"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.350.tgz#ba3d3e7f7113a16667b00d886add4d664b24d333"
-  integrity sha512-wE35Idg/K8aEhy+/IGT3Az4PfgmMpj4Fd1JOStZ0u5Ld0UhfWUUKShnAzkcxg63KnN6R2yh/jT9QwceqJaLw5g==
+"@kaspernj/api-maker@1.0.352":
+  version "1.0.352"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.352.tgz#8769b71a6ad2efd88e98d1a9a80dfa48dbfd8f3f"
+  integrity sha512-aEzoJSgtxF/EzHDLYG2guuDXIJicn76kThpiFJed7IeD2hU7ZNLPL7nugt64uuXdJnV5fL5qrWEaIu6U9qKfwg==
   dependencies:
     "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
@@ -3341,10 +3341,10 @@ mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-mini-css-extract-plugin@^2.8.1:
-  version "2.8.1"
-  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-2.8.1.tgz#75245f3f30ce3a56dbdd478084df6fe475f02dc7"
-  integrity sha512-/1HDlyFRxWIZPI1ZpgqlZ8jMw/1Dp/dl3P0L1jtZ+zVcHqwPhGwaJwKL00WVgfnBy6PWCde9W65or7IIETImuA==
+mini-css-extract-plugin@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-2.9.0.tgz#c73a1327ccf466f69026ac22a8e8fd707b78a235"
+  integrity sha512-Zs1YsZVfemekSZG+44vBsYTLQORkPMwnlv+aehcxK/NLKC+EGhDB39/YePYYqx/sTk6NnYpuqikhSn7+JIevTA==
   dependencies:
     schema-utils "^4.0.0"
     tapable "^2.2.1"
@@ -4214,10 +4214,10 @@ safe-buffer@5.2.1, safe-buffer@>=5.1.0, safe-buffer@^5.1.0, safe-buffer@~5.2.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass-loader@^14.2.0:
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-14.2.0.tgz#0d4440170fd9c9d93684e274a5ef73dbf55f414b"
-  integrity sha512-jxmjDXD9OYNDb2bp9JvopdE6QjecQY9beTWik/6sEHrsMxyo90Gyc471A4NUz60NLs4WsAh6yVtIvhLwEZcXeg==
+sass-loader@^14.2.1:
+  version "14.2.1"
+  resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-14.2.1.tgz#db9ad96b56dc1c1ea546101e76375d5b008fec70"
+  integrity sha512-G0VcnMYU18a4N7VoNDegg2OuMjYtxnqzQWARVWCIVSZwJeiL9kg8QMsuIZOplsJgTzZLF6jGxI3AClj8I9nRdQ==
   dependencies:
     neo-async "^2.6.2"
 
@@ -4329,10 +4329,10 @@ serve-static@1.15.0:
     parseurl "~1.3.3"
     send "0.18.0"
 
-"set-state-compare@>= 1.0.30", set-state-compare@^1.0.26, set-state-compare@^1.0.30:
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.30.tgz#c1fc2047bda3cddc5f5cf4339076280854f93227"
-  integrity sha512-3kLqADa1tIpL59tSOwH8jZmwD6JRVQEnMSqdXmAMUo4fvtH67iDkzzDld5A+UHJA7F5d4VFnIvQpbwIzSyijPA==
+"set-state-compare@>= 1.0.30", set-state-compare@^1.0.26, set-state-compare@^1.0.31:
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.31.tgz#16522f2e65e1ed2fec2bfb40e26300782cb3d292"
+  integrity sha512-Rf6YFyoVM1O3IwPyFOe8UsNnIpzEXXw6N482uGUEB6So8hDYFQKJ5eEHtIQgmMdei8LWVu3niZ6P7ETJfgDrYg==
   dependencies:
     fetching-object ">= 1.0.1"
 
