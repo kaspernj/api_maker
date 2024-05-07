@@ -116,6 +116,10 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     "#{model_row_selector(model)} .edit-button"
   end
 
+  def model_row_view_button_selector(model)
+    "#{model_row_selector(model)} .view-button"
+  end
+
   def pretty_html
     require "htmlbeautifier"
     HtmlBeautifier.beautify(page.html)
