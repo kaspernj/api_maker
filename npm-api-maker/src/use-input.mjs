@@ -129,7 +129,7 @@ const useInput = ({props, wrapperOptions}) => {
       if ("defaultChecked" in s.props || (s.props.attribute && s.props.model)) {
         inputProps.defaultChecked = inputDefaultChecked()
       }
-    } else {
+    } else if (!("value" in s.props)) {
       inputProps.defaultValue = inputDefaultValue()
     }
 
