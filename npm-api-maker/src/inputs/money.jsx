@@ -6,9 +6,10 @@ import * as inflection from "inflection"
 import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import React from "react"
+import React, {useRef} from "react"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 
-export default class ApiMakerInputsMoney extends React.PureComponent {
+export default shapeComponent(class ApiMakerInputsMoney extends ShapeComponent {
   static defaultProps = {
     disabled: false,
     showCurrencyOptions: true
@@ -20,6 +21,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     className: PropTypes.string,
     currenciesCollection: PropTypes.array,
     currencyName: PropTypes.string,
+    currencyRef: PropTypes.object,
     defaultValue: PropTypes.object,
     disabled: PropTypes.bool.isRequired,
     id: PropTypes.string,
@@ -31,10 +33,17 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     placeholder: PropTypes.node,
     showCurrencyOptions: PropTypes.bool,
     small: PropTypes.bool,
-    type: PropTypes.string
+    type: PropTypes.string,
+    wholeRef: PropTypes.object
   })
 
-  inputRef = React.createRef()
+  setup() {
+    this.inputRef = useRef()
+    this.currencyRefBackup = useRef()
+    this.currencyRef = this.props.currencyRef || this.currencyRefBackup
+    this.wholeRefBackup = useRef()
+    this.wholeRef = this.props.wholeRef || this.wholeRefBackup
+  }
 
   getInputRef () {
     return this.props.inputRef || this.inputRef
@@ -58,7 +67,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
           onChange={digg(this, "setCents")}
           onKeyUp={digg(this, "setCents")}
           placeholder={this.props.placeholder}
-          ref="whole"
+          ref={this.wholeRef}
           type="text"
         />
         {showCurrencyOptions &&
@@ -69,7 +78,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
             id={this.inputCurrencyId()}
             name={this.inputCurrencyName()}
             onChange={digg(this, "onCurrencyChanged")}
-            ref="currency"
+            ref={this.currencyRef}
           >
             <option></option>
             {currenciesCollection.map((option) => (
@@ -149,19 +158,19 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     const inputElement = this.getInputRef().current
 
     if (!inputElement.value && inputElement.value == "") {
-      this.refs.whole.value = ""
+      this.wholeRef.current.value = ""
     } else {
       const cents = parseFloat(inputElement.value)
       const formatted = MoneyFormatter.fromMoney({amount: cents, currency: this.inputCurrencyValue()}, {decimals: 2, excludeCurrency: true}).toString()
 
-      this.refs.whole.value = formatted
+      this.wholeRef.current.value = formatted
     }
   }
 
   setCents = () => {
     const inputElement = this.getInputRef().current
 
-    let whole = MoneyFormatter.stringToFloat(this.refs.whole.value)
+    let whole = MoneyFormatter.stringToFloat(this.wholeRef.current.value)
     let cents = parseInt(whole * 100, 10)
     let oldCents = parseInt(inputElement.value, 10)
 
@@ -174,4 +183,4 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     if (this.props.onChange && oldCents != cents)
       this.props.onChange()
   }
-}
+})
