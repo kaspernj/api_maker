@@ -20,6 +20,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     className: PropTypes.string,
     currenciesCollection: PropTypes.array,
     currencyName: PropTypes.string,
+    currencyRef: PropTypes.object,
     defaultValue: PropTypes.object,
     disabled: PropTypes.bool.isRequired,
     id: PropTypes.string,
@@ -31,7 +32,8 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
     placeholder: PropTypes.node,
     showCurrencyOptions: PropTypes.bool,
     small: PropTypes.bool,
-    type: PropTypes.string
+    type: PropTypes.string,
+    wholeRef: PropTypes.object
   })
 
   inputRef = React.createRef()
@@ -58,7 +60,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
           onChange={digg(this, "setCents")}
           onKeyUp={digg(this, "setCents")}
           placeholder={this.props.placeholder}
-          ref="whole"
+          ref={this.props.wholeRef}
           type="text"
         />
         {showCurrencyOptions &&
@@ -69,7 +71,7 @@ export default class ApiMakerInputsMoney extends React.PureComponent {
             id={this.inputCurrencyId()}
             name={this.inputCurrencyName()}
             onChange={digg(this, "onCurrencyChanged")}
-            ref="currency"
+            ref={this.props.currencyRef}
           >
             <option></option>
             {currenciesCollection.map((option) => (

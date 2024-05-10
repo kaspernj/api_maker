@@ -30,7 +30,7 @@ export default class BootstrapCheckboxes extends React.PureComponent {
   content() {
     return (
       <div className="content-container">
-        <form onSubmit={this.onSubmit} ref="form">
+        <form onSubmit={this.onSubmit} ref={this.props.formRef}>
           <Checkboxes
             defaultValue={this.state.account.tasks().loaded().map(task => task.id())}
             label="Choose tasks"

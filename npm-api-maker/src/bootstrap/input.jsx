@@ -5,8 +5,9 @@ import InvalidFeedback from "./invalid-feedback"
 import Money from "../inputs/money"
 import PropTypes from "prop-types"
 import React from "react"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 
-class ApiMakerBootstrapInput extends React.PureComponent {
+const ApiMakerBootstrapInput = shapeComponent(class ApiMakerBootstrapInput extends ShapeComponent {
   static propTypes = {
     append: PropTypes.node,
     appendText: PropTypes.node,
@@ -58,7 +59,7 @@ class ApiMakerBootstrapInput extends React.PureComponent {
     const {errors} = digs(wrapperOpts, "errors")
 
     return (
-      <div className={this.wrapperClassName()} ref="wrapper">
+      <div className={this.wrapperClassName()} ref={this.props.wrapperRef}>
         {wrapperOpts.label &&
           <label className={this.labelClassName()} htmlFor={inputProps.id}>
             {wrapperOpts.label}
@@ -73,7 +74,7 @@ class ApiMakerBootstrapInput extends React.PureComponent {
           <Money
             name={inputProps.name}
             className={this.inputClassName()}
-            ref="money"
+            ref={this.props.moneyRef}
             {...this.moneyProps()}
           />
         }
@@ -166,6 +167,6 @@ class ApiMakerBootstrapInput extends React.PureComponent {
 
     return classNames.join(" ")
   }
-}
+})
 
 export default inputWrapper(ApiMakerBootstrapInput)

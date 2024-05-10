@@ -6,9 +6,10 @@ import Money from "./money"
 import PropTypes from "prop-types"
 import React from "react"
 import replaceall from "replaceall"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import strftime from "strftime"
 
-class ApiMakerInputsInput extends React.PureComponent {
+const ApiMakerInputsInput = shapeComponent(class ApiMakerInputsInput extends ShapeComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
@@ -30,9 +31,12 @@ class ApiMakerInputsInput extends React.PureComponent {
     type: PropTypes.string
   }
 
-  visibleInputRef = React.createRef()
   state = {
     blankInputName: digg(this, "props", "inputProps", "type") == "file"
+  }
+
+  setup() {
+    this.visibleInputRef = useRef()
   }
 
   render () {
@@ -132,9 +136,7 @@ class ApiMakerInputsInput extends React.PureComponent {
     return value
   }
 
-  autoSubmit = () => {
-    new AutoSubmit({component: this}).autoSubmit()
-  }
+  autoSubmit = () => new AutoSubmit({component: this}).autoSubmit()
 
   formatValue (value) {
     const {formatValue, type} = this.props
@@ -180,9 +182,7 @@ class ApiMakerInputsInput extends React.PureComponent {
     return this.props.inputProps.name
   }
 
-  inputReference() {
-    return digg(this, "props", "inputProps", "ref")
-  }
+  inputReference = () => digg(this, "props", "inputProps", "ref")
 
   onModelUpdated = (args) => {
     const inputRef = this.inputReference()
@@ -229,7 +229,7 @@ class ApiMakerInputsInput extends React.PureComponent {
     if (this.props.inputProps.type == "file" && value == "")
       return true
   }
-}
+})
 
 export {ApiMakerInputsInput as Input}
 export default inputWrapper(ApiMakerInputsInput)
