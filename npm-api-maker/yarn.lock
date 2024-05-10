@@ -5085,7 +5085,14 @@ set-function-name@^2.0.0, set-function-name@^2.0.1:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-"set-state-compare@>= 1.0.30", set-state-compare@^1.0.26:
+"set-state-compare@>= 1.0.38":
+  version "1.0.38"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.38.tgz#39f84f9d10373d21ea14d047eb7091085a99ed52"
+  integrity sha512-FpsXR3YidWd3xnWg1VfaRMF/MyXIdHPl1lGjg7Df3FAIWwvesreX1zKS3AyAhwsHu0SqHgVyK8oS0mb89GLAVg==
+  dependencies:
+    fetching-object ">= 1.0.1"
+
+set-state-compare@^1.0.26:
   version "1.0.36"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.36.tgz#e424be858150cb78b6e3529acffbd50c64e5ffce"
   integrity sha512-Ra7Vhipf+hvo8QnU8svpcVDoUU6kqSvQXssdQ5Tzr72oFX36M5la+/cFNCVu3tydAxUCgsXnQc+nzt//sclNLQ==
@@ -5546,6 +5553,11 @@ url-parse@^1.5.3:
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
+
+use-did-mount@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/use-did-mount/-/use-did-mount-1.0.3.tgz#b9b05cd2c576d5ba559daa28ff8d6b6460380677"
+  integrity sha512-1fFzeBM69BLhORgMEhaA3c933SUA/NH7BaU5hSvfrK/4aSTJZBXt4QcupppUJ+PFgvPDkPTdAz0HDuJub8nZaQ==
 
 v8-to-istanbul@^9.0.1:
   version "9.0.1"

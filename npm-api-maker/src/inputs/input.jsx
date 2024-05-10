@@ -4,7 +4,7 @@ import EventUpdated from "../event-updated"
 import inputWrapper from "./input-wrapper"
 import Money from "./money"
 import PropTypes from "prop-types"
-import React from "react"
+import React, {useRef} from "react"
 import replaceall from "replaceall"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import strftime from "strftime"
@@ -31,12 +31,12 @@ const ApiMakerInputsInput = shapeComponent(class ApiMakerInputsInput extends Sha
     type: PropTypes.string
   }
 
-  state = {
-    blankInputName: digg(this, "props", "inputProps", "type") == "file"
-  }
-
   setup() {
     this.visibleInputRef = useRef()
+
+    this.useStates({
+      blankInputName: digg(this, "props", "inputProps", "type") == "file"
+    })
   }
 
   render () {
