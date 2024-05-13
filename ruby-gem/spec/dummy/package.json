@@ -37,7 +37,7 @@
     "prop-types-exact": "^1.2.0",
     "rails-erb-loader": "^5.5.2",
     "react": "^18.3.1",
-    "react-dom": "^18.2.0",
+    "react-dom": "^18.3.1",
     "react-native-web": "^0.19.11",
     "sass": "^1.77.1",
     "sass-loader": "^14.2.1",
