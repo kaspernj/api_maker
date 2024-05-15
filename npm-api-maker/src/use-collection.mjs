@@ -126,7 +126,7 @@ const useCollection = (
   const loadModels = useCallback(async () => {
     let query = s.p.collection?.clone() || s.p.modelClass.ransack()
 
-    if (s.p.pagination) {
+    if (s.props.pagination) {
       const page = s.m.queryParams[s.s.queryPageName] || 1
       let per = s.m.queryParams[s.s.queryPerKey] || 30
 
