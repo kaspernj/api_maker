@@ -107,7 +107,7 @@ const useCollection = (props, cacheKeys = []) => {
   }, [])
 
   const loadModels = useCallback(async () => {
-    let query = s.p.collection?.clone() || s.p.modelClass.ransack()
+    let query = s.props.collection?.clone() || s.p.modelClass.ransack()
 
     if (s.props.pagination) {
       const page = s.m.queryParams[s.s.queryPageName] || 1
@@ -126,7 +126,6 @@ const useCollection = (props, cacheKeys = []) => {
 
     query = query
       .ransack(s.s.qParams)
-      .ransack(s.props.ransack)
       .search(s.s.searchParams)
       .searchKey(s.s.queryQName)
       .pageKey(s.s.queryPageName)
@@ -135,6 +134,7 @@ const useCollection = (props, cacheKeys = []) => {
     if (s.props.abilities) query.abilities(s.p.abilities)
     if (s.props.limit !== undefined) query.limit(s.p.limit)
     if (s.props.preloads) query.preload(s.p.preloads)
+    if (s.props.ransack) query.ransack(s.props.ransack)
     if (s.props.select) query.select(s.p.select)
     if (s.props.selectColumns) query.selectColumns(s.p.selectColumns)
 
