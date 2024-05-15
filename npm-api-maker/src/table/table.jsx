@@ -2,7 +2,6 @@ import "./style"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
 import Collection from "../collection"
-import CollectionLoader from "../collection-loader"
 import columnVisible from "./column-visible.mjs"
 import debounce from "debounce"
 import {digg, digs} from "diggerize"
@@ -13,7 +12,7 @@ import ModelRow from "./model-row"
 import Paginate from "../bootstrap/paginate"
 import Params from "../params"
 import PropTypes from "prop-types"
-import React from "react"
+import React, {useEffect, useRef} from "react"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
 import Settings from "./settings"
@@ -22,6 +21,7 @@ import SortLink from "../bootstrap/sort-link"
 import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
 import useBreakpoint from "./use-breakpoint"
+import useCollection from "../use-collection"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
@@ -96,7 +96,6 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
       columns: columnsAsArray,
       currentWorkplace: undefined,
       identifier: this.props.identifier || `${collectionKey}-default`,
-      overallCount: undefined,
       perPage: 30,
       preload: undefined,
       preparedColumns: undefined,
@@ -107,8 +106,6 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
       qParams: undefined,
       result: undefined,
       showFilters: false,
-      showNoRecordsAvailableContent: false,
-      showNoRecordsFoundContent: false,
       showSettings: false,
       tableSetting: undefined,
       tableSettingFullCacheKey: undefined
@@ -192,23 +189,25 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
     const {collection, currentUser} = this.props
+    const {queryName, querySName, showFilters} = digs(this.state, "queryName", "querySName", "showFilters")
     const {
+      models,
       overallCount,
-      queryName,
-      querySName,
-      showFilters,
+      qParams,
+      query,
+      result,
       showNoRecordsAvailableContent,
       showNoRecordsFoundContent
     } = digs(
-      this.state,
+      this.collection,
+      "models",
       "overallCount",
-      "queryName",
-      "querySName",
-      "showFilters",
+      "qParams",
+      "query",
+      "result",
       "showNoRecordsAvailableContent",
       "showNoRecordsFoundContent"
     )
-    const {models, qParams, query, result} = this.collection
 
     if (collection && collection.args.modelClass.modelClassData().name != modelClass.modelClassData().name) {
       throw new Error(
@@ -309,7 +308,7 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
       workplace,
       ...restProps
     } = this.props
-    const {models, qParams, query, result} = this.collection
+    const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
 
     let headerContent, PaginationComponent
 
@@ -365,7 +364,7 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
     const {filterFormRef, submitFilter, submitFilterDebounce} = digs(this, "filterFormRef", "submitFilter", "submitFilterDebounce")
     const {filterContent, filterSubmitButton} = digs(this.props, "filterContent", "filterSubmitButton")
     const {filterSubmitLabel} = this.props
-    const {qParams} = digs(this.state, "qParams")
+    const {qParams} = digs(this.collection, "qParams")
 
     return (
       <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref={filterFormRef}>
@@ -408,7 +407,7 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
   tableControls() {
     const {controls} = this.props
     const {qParams, showSettings} = digs(this.state, "qParams", "showSettings")
-    const {models, query, result} = this.collection
+    const {models, query, result} = digs(this.collection, "models", "query", "result")
 
     return (
       <>
@@ -431,17 +430,8 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
   tableContent () {
     const {workplace} = digs(this.props, "workplace")
     const {breakpoint} = digs(this, "breakpoint")
-    const {
-      currentWorkplace,
-      preparedColumns,
-      tableSettingFullCacheKey
-    } = digs(
-      this.state,
-      "currentWorkplace",
-      "preparedColumns",
-      "tableSettingFullCacheKey"
-    )
-    const {models, query} = this.collection
+    const {currentWorkplace, preparedColumns, tableSettingFullCacheKey} = digs(this.state, "currentWorkplace", "preparedColumns", "tableSettingFullCacheKey")
+    const {models, query} = digs(this.collection, "models", "query")
     const ColumnInHeadComponent = this.columnInHeadComponent()
     const RowComponent = this.rowComponent()
 
