@@ -17,16 +17,16 @@ import React from "react"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
 import Settings from "./settings"
-import Shape from "set-state-compare/src/shape"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import SortLink from "../bootstrap/sort-link"
 import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
-import withBreakpoint from "./with-breakpoint"
+import useBreakpoint from "./use-breakpoint"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
 
-class ApiMakerTable extends React.PureComponent {
+export default shapeComponent(class ApiMakerTable extends ShapeComponent {
   static defaultProps = {
     card: true,
     destroyEnabled: true,
@@ -77,28 +77,29 @@ class ApiMakerTable extends React.PureComponent {
     workplace: PropTypes.bool.isRequired
   }
 
-  filterFormRef = React.createRef()
+  setup() {
+    const {breakpoint} = useBreakpoint()
 
-  constructor (props) {
-    super(props)
+    this.setInstance({
+      breakpoint,
+      filterFormRef: useRef()
+    })
 
-    const collectionKey = digg(props.modelClass.modelClassData(), "collectionKey")
-    let queryName = props.queryName
+    const collectionKey = digg(this.props.modelClass.modelClassData(), "collectionKey")
+    let queryName = this.props.queryName
 
     if (!queryName) queryName = collectionKey
 
     const columnsAsArray = this.columnsAsArray()
 
-    this.shape = new Shape(this, {
+    this.useStates({
       columns: columnsAsArray,
       currentWorkplace: undefined,
       identifier: this.props.identifier || `${collectionKey}-default`,
-      models: undefined,
       overallCount: undefined,
       perPage: 30,
       preload: undefined,
       preparedColumns: undefined,
-      query: undefined,
       queryName,
       queryQName: `${queryName}_q`,
       queryPageName: `${queryName}_page`,
@@ -108,12 +109,44 @@ class ApiMakerTable extends React.PureComponent {
       showFilters: false,
       showNoRecordsAvailableContent: false,
       showNoRecordsFoundContent: false,
-      showSettings: false
+      showSettings: false,
+      tableSetting: undefined,
+      tableSettingFullCacheKey: undefined
     })
 
-    this.loadTableSetting()
+    useEffect(() => {
+      this.loadTableSetting()
 
-    if (this.props.workplace) this.loadCurrentWorkplace()
+      if (this.props.workplace) this.loadCurrentWorkplace()
+    }, [])
+
+    let collectionReady = true
+    let select
+
+    if (!this.state.preparedColumns) {
+      collectionReady = false
+    }
+
+    if (collectionReady) {
+      select = selectCalculator({table: this})
+    }
+
+    this.collection = useCollection({
+      abilities: this.abilitiesToLoad(),
+      defaultParams: this.props.defaultParams,
+      collection: this.props.collection,
+      ifCondition: collectionReady,
+      modelClass: this.props.modelClass,
+      onModelsLoaded: this.props.onModelsLoaded,
+      noRecordsAvailableContent: this.props.noRecordsAvailableContent,
+      noRecordsFoundContent: this.props.noRecordsFoundContent,
+      pagination: true,
+      preloads: this.state.preload,
+      queryMethod: this.props.queryMethod,
+      queryName,
+      select,
+      selectColumns: this.props.selectColumns
+    })
   }
 
   async loadCurrentWorkplace() {
@@ -121,7 +154,7 @@ class ApiMakerTable extends React.PureComponent {
     const result = await Workplace.current()
     const currentWorkplace = digg(result, "current", 0)
 
-    this.shape.set({currentWorkplace})
+    this.setState({currentWorkplace})
   }
 
   async loadTableSetting() {
@@ -130,7 +163,7 @@ class ApiMakerTable extends React.PureComponent {
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
     const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
 
-    this.shape.set({
+    this.setState({
       preparedColumns: columns,
       preload: this.mergedPreloads(preload),
       tableSetting,
@@ -138,7 +171,7 @@ class ApiMakerTable extends React.PureComponent {
     })
   }
 
-  updateSettingsFullCacheKey = () => this.shape.set({tableSettingFullCacheKey: this.shape.tableSetting.fullCacheKey()})
+  updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.state.tableSetting.fullCacheKey()})
 
   columnsAsArray = () => {
     if (typeof this.props.columns == "function") return this.props.columns()
@@ -158,33 +191,24 @@ class ApiMakerTable extends React.PureComponent {
 
   render () {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
-    const {collection, currentUser, defaultParams, onModelsLoaded, queryMethod, selectColumns} = this.props
+    const {collection, currentUser} = this.props
     const {
       overallCount,
-      preload,
-      qParams,
-      query,
       queryName,
       querySName,
-      result,
-      models,
       showFilters,
       showNoRecordsAvailableContent,
       showNoRecordsFoundContent
     } = digs(
-      this.shape,
+      this.state,
       "overallCount",
-      "preload",
-      "qParams",
-      "query",
       "queryName",
       "querySName",
-      "result",
-      "models",
       "showFilters",
       "showNoRecordsAvailableContent",
       "showNoRecordsFoundContent"
     )
+    const {models, qParams, query, result} = this.collection
 
     if (collection && collection.args.modelClass.modelClassData().name != modelClass.modelClassData().name) {
       throw new Error(
@@ -195,24 +219,6 @@ class ApiMakerTable extends React.PureComponent {
 
     return (
       <div className={this.className()}>
-        {preload !== undefined &&
-          <CollectionLoader
-            abilities={this.abilitiesToLoad()}
-            defaultParams={defaultParams}
-            collection={collection}
-            component={this}
-            modelClass={modelClass}
-            onModelsLoaded={onModelsLoaded}
-            noRecordsAvailableContent={noRecordsAvailableContent}
-            noRecordsFoundContent={noRecordsFoundContent}
-            pagination
-            preloads={preload}
-            queryMethod={queryMethod}
-            queryName={queryName}
-            select={selectCalculator({table: this})}
-            selectColumns={selectColumns}
-          />
-        }
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
@@ -268,7 +274,6 @@ class ApiMakerTable extends React.PureComponent {
       abilities,
       actionsContent,
       appHistory,
-      breakPoint,
       card,
       className,
       collection,
@@ -304,7 +309,7 @@ class ApiMakerTable extends React.PureComponent {
       workplace,
       ...restProps
     } = this.props
-    const {models, qParams, query, result} = digs(this.shape, "models", "qParams", "query", "result")
+    const {models, qParams, query, result} = this.collection
 
     let headerContent, PaginationComponent
 
@@ -360,7 +365,7 @@ class ApiMakerTable extends React.PureComponent {
     const {filterFormRef, submitFilter, submitFilterDebounce} = digs(this, "filterFormRef", "submitFilter", "submitFilterDebounce")
     const {filterContent, filterSubmitButton} = digs(this.props, "filterContent", "filterSubmitButton")
     const {filterSubmitLabel} = this.props
-    const {qParams} = digs(this.shape, "qParams")
+    const {qParams} = digs(this.state, "qParams")
 
     return (
       <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref={filterFormRef}>
@@ -386,11 +391,11 @@ class ApiMakerTable extends React.PureComponent {
 
   onFilterClicked = (e) => {
     e.preventDefault()
-    this.shape.set({showFilters: !this.shape.showFilters})
+    this.setState({showFilters: !this.state.showFilters})
   }
 
   onPerPageChanged = (e) => {
-    const {queryName} = digs(this.shape, "queryName")
+    const {queryName} = digs(this.state, "queryName")
     const newPerPageValue = digg(e, "target", "value")
     const perKey = `${queryName}_per`
     const paramsChange = {}
@@ -402,7 +407,8 @@ class ApiMakerTable extends React.PureComponent {
 
   tableControls() {
     const {controls} = this.props
-    const {models, qParams, query, result, showSettings} = digs(this.shape, "models", "qParams", "query", "result", "showSettings")
+    const {qParams, showSettings} = digs(this.state, "qParams", "showSettings")
+    const {models, query, result} = this.collection
 
     return (
       <>
@@ -423,21 +429,19 @@ class ApiMakerTable extends React.PureComponent {
   }
 
   tableContent () {
-    const {breakPoint, workplace} = digs(this.props, "breakPoint", "workplace")
+    const {workplace} = digs(this.props, "workplace")
+    const {breakpoint} = digs(this, "breakpoint")
     const {
       currentWorkplace,
-      models,
       preparedColumns,
-      query,
       tableSettingFullCacheKey
     } = digs(
-      this.shape,
+      this.state,
       "currentWorkplace",
-      "models",
       "preparedColumns",
-      "query",
       "tableSettingFullCacheKey"
     )
+    const {models, query} = this.collection
     const ColumnInHeadComponent = this.columnInHeadComponent()
     const RowComponent = this.rowComponent()
 
@@ -467,7 +471,7 @@ class ApiMakerTable extends React.PureComponent {
         <BodyComponent>
           {models.map((model) =>
             <ModelRow
-              breakPoint={breakPoint}
+              breakPoint={breakpoint}
               cacheKey={model.cacheKey()}
               columnComponent={this.columnComponent()}
               key={model.id()}
@@ -484,7 +488,7 @@ class ApiMakerTable extends React.PureComponent {
   }
 
   tableFooter() {
-    const {result} = digs(this.shape, "result")
+    const {result} = digs(this.collection, "result")
     const currentPage = result.currentPage()
     const totalCount = result.totalCount()
     const perPage = result.perPage()
@@ -530,7 +534,7 @@ class ApiMakerTable extends React.PureComponent {
   }
 
   isSmallScreen() {
-    if (this.props.breakPoint == "xs" || this.props.breakPoint == "sm") return true
+    if (this.props.breakpoint == "xs" || this.props.breakpoint == "sm") return true
 
     return false
   }
@@ -542,7 +546,8 @@ class ApiMakerTable extends React.PureComponent {
 
   headersContentFromColumns () {
     const {defaultParams} = this.props
-    const {preparedColumns, query} = digs(this.shape, "preparedColumns", "query")
+    const {preparedColumns} = digs(this.state, "preparedColumns")
+    const {query} = digs(this.collection, "query")
     const ColumnInHeadComponent = this.columnInHeadComponent()
 
     return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
@@ -604,14 +609,14 @@ class ApiMakerTable extends React.PureComponent {
     this.submitFilter()
   }
 
-  onRequestCloseSettings = () => this.shape.set({showSettings: false})
+  onRequestCloseSettings = () => this.setState({showSettings: false})
 
   onSettingsClicked = (e) => {
     e.preventDefault()
 
-    const {showSettings} = digs(this.shape, "showSettings")
+    const {showSettings} = digs(this.state, "showSettings")
 
-    this.shape.set({showSettings: !showSettings})
+    this.setState({showSettings: !showSettings})
   }
 
   submitFilter = () => {
@@ -619,7 +624,7 @@ class ApiMakerTable extends React.PureComponent {
     const filterForm = digg(filterFormRef, "current")
     const {appHistory} = this.props
     const qParams = Params.serializeForm(filterForm)
-    const {queryQName} = digs(this.shape, "queryQName")
+    const {queryQName} = digs(this.state, "queryQName")
     const changeParamsParams = {}
 
     changeParamsParams[queryQName] = JSON.stringify(qParams)
@@ -628,6 +633,4 @@ class ApiMakerTable extends React.PureComponent {
   }
 
   submitFilterDebounce = debounce(digg(this, "submitFilter"))
-}
-
-export default withBreakpoint(ApiMakerTable)
+})

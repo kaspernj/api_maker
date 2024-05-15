@@ -49,6 +49,7 @@ const ApiMakerSuperAdminModelClassTable = (props) => {
       editModelPath={hasEditConfig(modelClass) ? editModelPath : undefined}
       modelClass={modelClass}
       viewModelPath={viewModelPath}
+      workplace
       {...tableProps}
       {...restProps}
     />

@@ -31,7 +31,7 @@ export default class ApiMakerTableSettings {
 
   columns = () => digg(this, "table", "columnsAsArray")()
   currentUser = () => digg(this, "table", "props", "currentUser")
-  identifier = () => digg(this, "table", "shape", "identifier")
+  identifier = () => digg(this, "table", "state", "identifier")
 
   preparedColumns = (tableSetting) => {
     const columns = this.table.columnsAsArray()
