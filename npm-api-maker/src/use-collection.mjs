@@ -12,6 +12,7 @@ const useCollection = (
     collection,
     defaultParams,
     groupBy = ["id"],
+    ifCondition,
     limit,
     modelClass,
     noRecordsAvailableContent = undefined,
@@ -37,6 +38,7 @@ const useCollection = (
     collection,
     defaultParams,
     groupBy,
+    ifCondition,
     limit,
     modelClass,
     noRecordsAvailableContent,
@@ -240,10 +242,13 @@ const useCollection = (
 
   useEffect(
     () => {
-      loadQParams()
-      loadModels()
+      if (!("ifCondition" in s.props) || s.props.ifCondition) {
+        loadQParams()
+        loadModels()
+      }
     },
     [
+      s.props.ifCondition,
       s.m.queryParams[s.s.queryQName],
       s.m.queryParams[s.s.queryPageName],
       s.m.queryParams[s.s.queryPerKey],
@@ -256,8 +261,12 @@ const useCollection = (
     if (s.p.noRecordsAvailableContent) loadOverallCount()
   }, [])
 
+  const onCreated = useCallback(() => {
+    loadModels()
+  }, [])
+
   useEffect(() => {
-    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, loadModels)
+    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, onCreated)
 
     return () => {
       connectCreated.unsubscribe()

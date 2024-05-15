@@ -6,10 +6,11 @@ import * as inflection from "inflection"
 import Link from "../link"
 import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 
 const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox"))
 
-export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
+export default shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends ShapeComponent {
   static propTypes = {
     cacheKey: PropTypes.string.isRequired,
     model: PropTypes.object.isRequired,
@@ -22,7 +23,7 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
     const {model} = digs(this.props, "model")
     const {modelClass, workplace} = digs(this.props.liveTable.props, "modelClass", "workplace")
     const {actionsContent, columnsContent, destroyEnabled, editModelPath, viewModelPath} = digg(this, "props", "liveTable", "props")
-    const {columns, currentWorkplace} = digg(this, "props", "liveTable", "shape")
+    const {columns, currentWorkplace} = digg(this, "props", "liveTable", "state")
 
     this.modelCallbackArgs = this._modelCallbackArgs() // 'model' can change so this needs to be re-cached for every render
 
@@ -187,4 +188,4 @@ export default class ApiMakerBootStrapLiveTableModelRow extends React.PureCompon
       throw new Error(`Unhandled type: ${apiMakerType}`)
     }
   }
-}
+})

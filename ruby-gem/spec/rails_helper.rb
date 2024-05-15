@@ -28,6 +28,7 @@ require "shakapacker"
 require "tretry"
 require "waitutil"
 require "webdrivers"
+require "with_advisory_lock"
 
 Capybara.register_driver :headless_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new

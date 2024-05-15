@@ -1,21 +1,29 @@
+import classNames from "classnames"
+import {digg} from "diggerize"
 import EventConnection from "../event-connection"
 import modelClassRequire from "../model-class-require.mjs"
+import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
+import React, {useEffect} from "react"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 
 const Workplace = modelClassRequire("Workplace")
 
-export default class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
+export default shapeComponent(class ApiMakerTableWorkerPluginsCheckbox extends ShapeComponent {
   static propTypes = PropTypesExact({
     currentWorkplace: PropTypes.object,
     model: PropTypes.object.isRequired
   })
 
-  shape = new Shape(this, {
-    checked: false
-  })
+  setup() {
+    this.useStates({
+      checked: false,
+      linkLoaded: false
+    })
 
-  componentDidMount() {
-    this.loadCurrentLink()
+    useEffect(() => {
+      this.loadCurrentLink()
+    }, [])
   }
 
   async loadCurrentLink() {
@@ -23,7 +31,7 @@ export default class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
     const response = await Workplace.linkFor({model_class: model.modelClassData().name, model_id: model.id()})
     const link = digg(response, "link")
 
-    this.shape.set({
+    this.setState({
       checked: Boolean(link),
       linkLoaded: true
     })
@@ -31,7 +39,7 @@ export default class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
 
   render() {
     const {className, currentWorkplace, model} = this.props
-    const {checked, linkLoaded} = this.shape
+    const {checked, linkLoaded} = this.state
 
     if (!linkLoaded) {
       return null
@@ -81,7 +89,7 @@ export default class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
     const modelClassName = model.modelClassData().name
 
     if (args.created[modelClassName] && args.created[modelClassName].includes(id)) {
-      this.shape.set({checked: true})
+      this.setState({checked: true})
     }
   }
 
@@ -91,7 +99,7 @@ export default class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
     const modelClassName = model.modelClassData().name
 
     if (args.destroyed[modelClassName] && args.destroyed[modelClassName].includes(id)) {
-      this.shape.set({checked: false})
+      this.setState({checked: false})
     }
   }
-}
+})

@@ -97,7 +97,7 @@ export default class ApiMakerTableSettings extends React.PureComponent {
 
   render() {
     const {table} = this.props
-    const {preparedColumns} = table.shape
+    const {preparedColumns} = table.state
 
     return (
       <div className="api-maker--table--settings" ref={this.rootRef}>
