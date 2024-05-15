@@ -96,15 +96,12 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
       columns: columnsAsArray,
       currentWorkplace: undefined,
       identifier: this.props.identifier || `${collectionKey}-default`,
-      perPage: 30,
       preload: undefined,
       preparedColumns: undefined,
       queryName,
       queryQName: `${queryName}_q`,
       queryPageName: `${queryName}_page`,
       querySName: `${queryName}_s`,
-      qParams: undefined,
-      result: undefined,
       showFilters: false,
       showSettings: false,
       tableSetting: undefined,
@@ -406,8 +403,8 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
 
   tableControls() {
     const {controls} = this.props
-    const {qParams, showSettings} = digs(this.state, "qParams", "showSettings")
-    const {models, query, result} = digs(this.collection, "models", "query", "result")
+    const {showSettings} = digs(this.state, "showSettings")
+    const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
 
     return (
       <>
