@@ -5542,6 +5542,11 @@ url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
+use-did-mount@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/use-did-mount/-/use-did-mount-1.0.3.tgz#b9b05cd2c576d5ba559daa28ff8d6b6460380677"
+  integrity sha512-1fFzeBM69BLhORgMEhaA3c933SUA/NH7BaU5hSvfrK/4aSTJZBXt4QcupppUJ+PFgvPDkPTdAz0HDuJub8nZaQ==
+
 v8-to-istanbul@^9.0.1:
   version "9.0.1"
   resolved "https://registry.npmjs.org/v8-to-istanbul/-/v8-to-istanbul-9.0.1.tgz"

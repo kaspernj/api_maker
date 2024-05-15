@@ -1,6 +1,6 @@
 {
   "name": "@kaspernj/api-maker",
-  "version": "1.0.352",
+  "version": "1.0.353",
   "type": "module",
   "description": "",
   "main": "index.js",
@@ -39,6 +39,7 @@
     "spark-md5": "^3.0.2",
     "strftime": ">= 0.10.0",
     "uniqunize": "^1.0.1",
+    "use-did-mount": "^1.0.3",
     "wake-event": ">= 0.0.1"
   },
   "devDependencies": {
