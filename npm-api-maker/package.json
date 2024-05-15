@@ -35,7 +35,7 @@
     "on-location-changed": ">= 1.0.10",
     "qs": ">= 6.9.3",
     "replaceall": ">= 0.1.6",
-    "set-state-compare": ">= 1.0.41",
+    "set-state-compare": "^1.0.41",
     "spark-md5": "^3.0.2",
     "strftime": ">= 0.10.0",
     "uniqunize": "^1.0.1",
