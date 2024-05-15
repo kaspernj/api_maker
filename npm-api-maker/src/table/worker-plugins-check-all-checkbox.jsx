@@ -1,6 +1,9 @@
+import classNames from "classnames"
 import Collection from "../collection.mjs"
 import EventConnection from "../event-connection"
+import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
+import React from "react"
 import {simpleObjectDifferent} from "set-state-compare/src/diff-utils"
 import {useEffect, useRef} from "react"
 
@@ -17,7 +20,7 @@ const Checkbox = (props) => {
   )
 }
 
-export default class ApiMakerTableWorkerPluginsCheckAllCheckbox extends BaseComponent {
+export default class ApiMakerTableWorkerPluginsCheckAllCheckbox extends React.PureComponent {
   static propTypes = PropTypesExact({
     currentWorkplace: PropTypes.object,
     query: PropTypes.instanceOf(Collection)

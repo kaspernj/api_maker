@@ -1,10 +1,11 @@
 import EventConnection from "../event-connection"
 import modelClassRequire from "../model-class-require.mjs"
 import PropTypesExact from "prop-types-exact"
+import React from "react"
 
 const Workplace = modelClassRequire("Workplace")
 
-export default class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
+export default class ApiMakerTableWorkerPluginsCheckbox extends React.PureComponent {
   static propTypes = PropTypesExact({
     currentWorkplace: PropTypes.object,
     model: PropTypes.object.isRequired
