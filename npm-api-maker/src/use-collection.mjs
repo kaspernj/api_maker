@@ -11,7 +11,7 @@ const useCollection = (props, cacheKeys = []) => {
     abilities,
     collection,
     defaultParams,
-    groupBy = ["id"],
+    groupBy,
     ifCondition,
     limit,
     modelClass,
