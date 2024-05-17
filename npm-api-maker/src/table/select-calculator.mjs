@@ -12,8 +12,6 @@ class SelectCalculator {
     const select = this.table.props.select || {}
     const {preparedColumns} = digs(this.table.state, "preparedColumns")
 
-    console.log({preparedColumns})
-
 
     // Ensure the primary key column is loader for the primary model class
     const className = digg(modelClass.modelClassData(), "name")
