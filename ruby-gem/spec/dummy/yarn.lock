@@ -1274,12 +1274,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kaspernj/api-maker@1.0.354":
-  version "1.0.354"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.354.tgz#c3c4834d513e2f94b720cea97c0c3bce111b9d28"
-  integrity sha512-WuZDQpeGgXQzt5Zs30zkdbAemr8ATbR/fAEZgvR2rCaD72m8mR/lpV3faAHDuQwPMS2qNL2iDg6dc62FqSPLHw==
+"@kaspernj/api-maker@1.0.358":
+  version "1.0.358"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.358.tgz#d76de8a3bfb6735d1ede650b39881278715aaea8"
+  integrity sha512-4wd5SO/SDDkS0dDMMlUHcEYtVowVbjVxTD/wDflQuhGVRA1Dci6KFMNKi9IFiQuKH9YLJLqoJTwqRPtMmvpRKA==
   dependencies:
-    "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
     diggerize ">= 1.0.5"
@@ -1295,7 +1294,7 @@
     on-location-changed ">= 1.0.10"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
-    set-state-compare ">= 1.0.38"
+    set-state-compare "^1.0.41"
     spark-md5 "^3.0.2"
     strftime ">= 0.10.0"
     uniqunize "^1.0.1"
@@ -1306,11 +1305,6 @@
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
-
-"@rails/actioncable@>= 6.1.0":
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.3.tgz#71f08e958883af64f6a20489318b5e95d2c6dc5b"
-  integrity sha512-Iefl21FZD+ck1di6xSHMYzSzRiNJTHV4NrAzCfDfqc/wPz4xncrP8f2/fJ+2jzwKIaDn76UVMsALh7R5OzsF8Q==
 
 "@react-native/normalize-colors@^0.74.1":
   version "0.74.81"
@@ -4356,10 +4350,10 @@ serve-static@1.15.0:
     parseurl "~1.3.3"
     send "0.18.0"
 
-"set-state-compare@>= 1.0.38", set-state-compare@^1.0.26, set-state-compare@^1.0.36:
-  version "1.0.38"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.38.tgz#39f84f9d10373d21ea14d047eb7091085a99ed52"
-  integrity sha512-FpsXR3YidWd3xnWg1VfaRMF/MyXIdHPl1lGjg7Df3FAIWwvesreX1zKS3AyAhwsHu0SqHgVyK8oS0mb89GLAVg==
+set-state-compare@^1.0.26, set-state-compare@^1.0.36, set-state-compare@^1.0.41:
+  version "1.0.41"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.41.tgz#a9798f27a5ee7cdf74d563f8879d640084d64508"
+  integrity sha512-PjlVhqOQIZcli6mpVZ8RhDcIspB140TU+PZ8+kxf3eq74LXDSXby8eh5Fvxm0wBSsp2MysmG2kjxKTsBYGcwfw==
   dependencies:
     fetching-object ">= 1.0.1"
 
