@@ -1,10 +1,6 @@
 {
   "name": "@kaspernj/api-maker",
-<<<<<<< HEAD
-  "version": "1.0.354",
-=======
-  "version": "1.0.357",
->>>>>>> origin/master
+  "version": "1.0.358",
   "type": "module",
   "description": "",
   "main": "index.js",
