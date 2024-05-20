@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gem "rails", "6.1.7.6"
 
 group :test do
-  gem "api_maker_table", path: "/home/dev/api_maker/api_maker_table_rubygem"
+  gem "api_maker_table", path: "/home/dev/Development/api_maker/api_maker_table_rubygem"
 end
 
 gemspec path: "../"

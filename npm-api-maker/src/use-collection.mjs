@@ -6,12 +6,13 @@ import {useCallback, useEffect} from "react"
 import useShape from "set-state-compare/src/use-shape.js"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 
-const useCollection = (
-  {
+const useCollection = (props, cacheKeys = []) => {
+  const {
     abilities,
     collection,
     defaultParams,
-    groupBy = ["id"],
+    groupBy,
+    ifCondition,
     limit,
     modelClass,
     noRecordsAvailableContent = undefined,
@@ -20,39 +21,21 @@ const useCollection = (
     pagination = false,
     preloads = [],
     queryMethod,
-    queryName,
+    queryName: initialQueryName,
     ransack,
     select = {},
     selectColumns,
     ...restProps
-  },
-  cacheKeys = []
-) => {
+  } = props
+
   if (Object.keys(restProps).length > 0) {
     throw new Error(`Unknown props given to useCollection: ${Object.keys(restProps).join(", ")}`)
   }
 
-  const s = useShape({
-    abilities,
-    collection,
-    defaultParams,
-    groupBy,
-    limit,
-    modelClass,
-    noRecordsAvailableContent,
-    noRecordsFoundContent,
-    onModelsLoaded,
-    pagination,
-    preloads,
-    queryMethod,
-    ransack,
-    select,
-    selectColumns
-  })
+  const s = useShape(props)
+  const queryName = initialQueryName || digg(modelClass.modelClassData(), "collectionKey")
 
   s.meta.queryParams = useQueryParams()
-
-  if (!queryName) queryName = digg(modelClass.modelClassData(), "collectionKey")
 
   const hasQParams = useCallback(() => {
     if (s.s.queryQName in s.m.queryParams) return true
@@ -106,7 +89,7 @@ const useCollection = (
   }, [])
 
   const loadQParams = useCallback(() => {
-    const qParamsToSet = hasQParams() ? qParams() : Object.assign({}, s.p.defaultParams)
+    const qParamsToSet = hasQParams() ? qParams() : Object.assign({}, s.props.defaultParams)
     const searchParams = []
 
     if (s.m.queryParams[s.s.querySName]) {
@@ -124,7 +107,7 @@ const useCollection = (
   }, [])
 
   const loadModels = useCallback(async () => {
-    let query = s.p.collection?.clone() || s.p.modelClass.ransack()
+    let query = s.props.collection?.clone() || s.p.modelClass.ransack()
 
     if (s.props.pagination) {
       const page = s.m.queryParams[s.s.queryPageName] || 1
@@ -139,25 +122,25 @@ const useCollection = (
       query.page(page).per(per)
     }
 
-    if (s.p.groupBy) query = query.groupBy(...s.p.groupBy)
+    if (s.props.groupBy) query = query.groupBy(...s.p.groupBy)
 
     query = query
       .ransack(s.s.qParams)
-      .ransack(s.props.ransack)
       .search(s.s.searchParams)
       .searchKey(s.s.queryQName)
       .pageKey(s.s.queryPageName)
       .perKey(s.s.queryPerKey)
-      .preload(s.p.preloads)
-      .select(s.p.select)
 
-    if (s.p.abilities) query = query.abilities(s.p.abilities)
-    if (s.p.limit !== undefined) query = query.limit(s.p.limit)
-    if (s.p.selectColumns) query = query.selectColumns(s.p.selectColumns)
+    if (s.props.abilities) query.abilities(s.p.abilities)
+    if (s.props.limit !== undefined) query.limit(s.p.limit)
+    if (s.props.preloads) query.preload(s.p.preloads)
+    if (s.props.ransack) query.ransack(s.props.ransack)
+    if (s.props.select) query.select(s.p.select)
+    if (s.props.selectColumns) query.selectColumns(s.p.selectColumns)
 
     let result
 
-    if (s.p.queryMethod) {
+    if (s.props.queryMethod) {
       result = await s.p.queryMethod({query})
     } else {
       result = await query.result()
@@ -165,7 +148,7 @@ const useCollection = (
 
     const models = result.models()
 
-    if (s.p.onModelsLoaded) {
+    if (s.props.onModelsLoaded) {
       s.p.onModelsLoaded({
         models,
         qParams: s.s.qParams,
@@ -231,19 +214,22 @@ const useCollection = (
       overallCount = s.s.overallCount
     }
 
-    if (models === undefined || s.p.noRecordsFoundContent === undefined) return false
+    if (models === undefined || s.props.noRecordsFoundContent === undefined) return false
 
     // Dont show noRecordsAvailableContent together with noRecordsAvailableContent
-    if (models.length === 0 && overallCount === 0 && s.p.noRecordsAvailableContent) return false
-    if (models.length === 0 && s.p.noRecordsFoundContent) return true
+    if (models.length === 0 && overallCount === 0 && s.props.noRecordsAvailableContent) return false
+    if (models.length === 0 && s.props.noRecordsFoundContent) return true
   }, [])
 
   useEffect(
     () => {
-      loadQParams()
-      loadModels()
+      if (!("ifCondition" in s.props) || s.props.ifCondition) {
+        loadQParams()
+        loadModels()
+      }
     },
     [
+      s.props.ifCondition,
       s.m.queryParams[s.s.queryQName],
       s.m.queryParams[s.s.queryPageName],
       s.m.queryParams[s.s.queryPerKey],
@@ -253,11 +239,15 @@ const useCollection = (
   )
 
   useEffect(() => {
-    if (s.p.noRecordsAvailableContent) loadOverallCount()
+    if (s.props.noRecordsAvailableContent) loadOverallCount()
+  }, [])
+
+  const onCreated = useCallback(() => {
+    loadModels()
   }, [])
 
   useEffect(() => {
-    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, loadModels)
+    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, onCreated)
 
     return () => {
       connectCreated.unsubscribe()

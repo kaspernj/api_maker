@@ -31,9 +31,7 @@ const CollectionLoader = ({component, ...restProps}) => {
   s.updateMeta({component, useCollectionResult})
 
   useEffect(() => {
-    const componentShape = digg(s.m.component, "shape")
-
-    componentShape.set(s.m.useCollectionResult)
+    s.m.component.setState(s.m.useCollectionResult)
   }, cacheParts)
 
   return null

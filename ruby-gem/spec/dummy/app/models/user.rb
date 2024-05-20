@@ -6,6 +6,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
     :recoverable, :rememberable, :trackable, :validatable
 
+  belongs_to :current_workplace, class_name: "WorkerPlugins::Workplace", optional: true
+
   has_many :comments, dependent: :restrict_with_error, foreign_key: :author_id
   has_many :tasks, dependent: :destroy
   has_many :supported_tasks, class_name: "Task", foreign_key: :support_email, primary_key: :email
