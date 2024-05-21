@@ -5,8 +5,8 @@ import {callbacksHandler} from "on-location-changed/src/callbacks-handler"
 callbacksHandler.connectReactRouterHistory(history)
 
 // Stimulus
-import { Application } from "stimulus"
-import { definitionsFromContext } from "stimulus/webpack-helpers"
+import {Application} from "stimulus"
+import {definitionsFromContext} from "stimulus/webpack-helpers"
 
 const application = Application.start()
 const context = require.context("controllers", true, /.js$/)
@@ -14,10 +14,10 @@ application.load(definitionsFromContext(context))
 
 // API maker
 const Modal = (props) => {
-  const {onRequestClose, ...restProps} = props
+  const {className, onRequestClose, ...restProps} = props
 
   return (
-    <div className="api-maker-dummy-fake-modal" {...restProps} />
+    <div className={`api-maker-dummy-fake-modal ${className}`} {...restProps} />
   )
 }
 

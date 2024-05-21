@@ -9,11 +9,11 @@ import ModelRow from "./live-table/model-row"
 import Paginate from "./paginate"
 import Params from "../params"
 import PropTypes from "prop-types"
-import React from "react"
-import Shape from "set-state-compare/src/shape"
+import React, {memo} from "react"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import SortLink from "./sort-link"
 
-export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapLiveTable extends ShapeComponent {
   static defaultProps = {
     card: true,
     destroyEnabled: true,
@@ -62,17 +62,15 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     viewModelPath: PropTypes.func
   }
 
-  constructor (props) {
-    super(props)
-
-    let queryName = props.queryName
+  setup() {
+    let queryName = this.props.queryName
 
     if (!queryName) {
-      queryName = digg(props.modelClass.modelClassData(), "collectionKey")
+      queryName = digg(this.props.modelClass.modelClassData(), "collectionKey")
     }
 
-    this.shape = new Shape(this, {
-      columns: this.columnsAsArray(),
+    this.useStates({
+      columns: () => this.columnsAsArray(),
       models: undefined,
       overallCount: undefined,
       query: undefined,
@@ -106,7 +104,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       showNoRecordsAvailableContent,
       showNoRecordsFoundContent
     } = digs(
-      this.shape,
+      this.state,
       "overallCount",
       "qParams",
       "query",
@@ -222,7 +220,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
       viewModelPath,
       ...restProps
     } = this.props
-    const {models, qParams, query, result} = digs(this.shape, "models", "qParams", "query", "result")
+    const {models, qParams, query, result} = digs(this.state, "models", "qParams", "query", "result")
 
     let controlsContent, headerContent, PaginationComponent
 
@@ -278,7 +276,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
     const {submitFilterDebounce} = digs(this, "submitFilterDebounce")
     const {filterContent, filterSubmitButton} = digs(this.props, "filterContent", "filterSubmitButton")
     const {filterSubmitLabel} = this.props
-    const {qParams} = digs(this.shape, "qParams")
+    const {qParams} = digs(this.state, "qParams")
 
     return (
       <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref="filterForm">
@@ -299,13 +297,13 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   tableContent () {
-    const {query, models} = this.shape
+    const {query, models} = this.state
 
     return (
       <>
         <thead>
           <tr>
-            {this.shape.columns && this.headersContentFromColumns()}
+            {this.state.columns && this.headersContentFromColumns()}
             {this.props.headersContent && this.props.headersContent({query})}
             <th />
           </tr>
@@ -329,7 +327,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   headersContentFromColumns () {
-    const {columns} = digs(this.shape, "columns")
+    const {columns} = digs(this.state, "columns")
 
     return columns.map((column) =>
       <th
@@ -337,10 +335,10 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
         data-identifier={this.identifierForColumn(column)}
         key={this.identifierForColumn(column)}
       >
-        {column.sortKey && this.shape.query &&
-          <SortLink attribute={column.sortKey} query={this.shape.query} title={this.headerLabelForColumn(column)} />
+        {column.sortKey && this.state.query &&
+          <SortLink attribute={column.sortKey} query={this.state.query} title={this.headerLabelForColumn(column)} />
         }
-        {(!column.sortKey || !this.shape.query) &&
+        {(!column.sortKey || !this.state.query) &&
           this.headerLabelForColumn(column)
         }
       </th>
@@ -388,7 +386,7 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   submitFilter = () => {
     const {appHistory} = this.props
     const qParams = Params.serializeForm(this.refs.filterForm)
-    const {queryQName} = this.shape
+    const {queryQName} = this.state
 
     const changeParamsParams = {}
     changeParamsParams[queryQName] = JSON.stringify(qParams)
@@ -397,4 +395,4 @@ export default class ApiMakerBootstrapLiveTable extends React.PureComponent {
   }
 
   submitFilterDebounce = debounce(digg(this, "submitFilter"))
-}
+}))
