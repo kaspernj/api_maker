@@ -40,7 +40,7 @@
     "react-native-web": "^0.19.11",
     "sass": "^1.77.1",
     "sass-loader": "^14.2.1",
-    "set-state-compare": "^1.0.36",
+    "set-state-compare": "^1.0.42",
     "shakapacker": "7.2.1",
     "stacktrace-parser": "^0.1.10",
     "stimulus": "^3.2.2",
