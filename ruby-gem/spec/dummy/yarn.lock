@@ -1255,12 +1255,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kaspernj/api-maker@1.0.354":
-  version "1.0.354"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.354.tgz#c3c4834d513e2f94b720cea97c0c3bce111b9d28"
-  integrity sha512-WuZDQpeGgXQzt5Zs30zkdbAemr8ATbR/fAEZgvR2rCaD72m8mR/lpV3faAHDuQwPMS2qNL2iDg6dc62FqSPLHw==
+"@kaspernj/api-maker@1.0.361":
+  version "1.0.361"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.361.tgz#d33856ac7ce8ebdd841c7e7eb8fad70de27b8c4c"
+  integrity sha512-wQ1JJ9yTF946tPc2S0Iv3PNbbCbYUGx2jhaNvovYACqIUzntaZQq6gkE43Z/tPUKnc/MAKkt1tX3aOEc1vvmRw==
   dependencies:
-    "@rails/actioncable" ">= 6.1.0"
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
     diggerize ">= 1.0.5"
@@ -1276,11 +1275,10 @@
     on-location-changed ">= 1.0.10"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
-    set-state-compare ">= 1.0.38"
+    set-state-compare "^1.0.41"
     spark-md5 "^3.0.2"
     strftime ">= 0.10.0"
     uniqunize "^1.0.1"
-    use-did-mount "^1.0.3"
     wake-event ">= 0.0.1"
 
 "@leichtgewicht/ip-codec@^2.0.1":
@@ -1288,10 +1286,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@rails/actioncable@>= 6.1.0":
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.3.tgz#71f08e958883af64f6a20489318b5e95d2c6dc5b"
-  integrity sha512-Iefl21FZD+ck1di6xSHMYzSzRiNJTHV4NrAzCfDfqc/wPz4xncrP8f2/fJ+2jzwKIaDn76UVMsALh7R5OzsF8Q==
+"@rails/actioncable@^7.0.8-3":
+  version "7.0.8-3"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.8-3.tgz#e5102f9e745bdb4092d6a2f8c4b76af5b16967b3"
+  integrity sha512-DU90ZH2Rc2SUbDcCIaoqGR3ZQQ5ZLpwV0qeJcLE1z3lv5FGLG4a7lv6UJKj9Fb06CWEg52Bg9elaehEhBmh4bQ==
 
 "@react-native/normalize-colors@^0.74.1":
   version "0.74.81"
@@ -3868,7 +3866,7 @@ serve-static@1.15.0:
     parseurl "~1.3.3"
     send "0.18.0"
 
-"set-state-compare@>= 1.0.38", set-state-compare@^1.0.26, set-state-compare@^1.0.42:
+set-state-compare@^1.0.26, set-state-compare@^1.0.41, set-state-compare@^1.0.42:
   version "1.0.42"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.42.tgz#38997971dafb2a76bcf8d9a20a36f26635c51220"
   integrity sha512-q/GLqm87Er0+qpK6JUt6Lr2YYJFdLBnxGcP3GyPiY5yWRHBj735MWbxuPsGTUHz/jjB6LWQp7/x6ZeSPMYFSJg==
@@ -4228,11 +4226,6 @@ uri-js@^4.2.2:
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
-
-use-did-mount@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/use-did-mount/-/use-did-mount-1.0.3.tgz#b9b05cd2c576d5ba559daa28ff8d6b6460380677"
-  integrity sha512-1fFzeBM69BLhORgMEhaA3c933SUA/NH7BaU5hSvfrK/4aSTJZBXt4QcupppUJ+PFgvPDkPTdAz0HDuJub8nZaQ==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
