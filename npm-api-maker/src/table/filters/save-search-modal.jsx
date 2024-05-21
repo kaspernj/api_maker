@@ -1,4 +1,5 @@
 import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
+import Checkbox from "@kaspernj/api-maker/src/bootstrap/checkbox"
 import {digg} from "diggerize"
 import Input from "../../bootstrap/input"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"

@@ -1,3 +1,5 @@
+import Input from "@kaspernj/api-maker/src/bootstrap/input"
+
 export default class BootstrapStringInputDateObject extends React.PureComponent {
   render() {
     return (

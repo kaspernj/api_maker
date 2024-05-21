@@ -1,3 +1,4 @@
+import Checkbox from "@kaspernj/api-maker/src/bootstrap/checkbox"
 import {digg, digs} from "diggerize"
 import Params from "@kaspernj/api-maker/src/params"
 
