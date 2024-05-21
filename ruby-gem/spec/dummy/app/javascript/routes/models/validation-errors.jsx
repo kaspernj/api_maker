@@ -1,7 +1,10 @@
+import Checkbox from "@kaspernj/api-maker/src/bootstrap/checkbox"
 import {digg} from "diggerize"
 import FlashMessage from "shared/flash-message"
+import Input from "@kaspernj/api-maker/src/bootstrap/input"
 import Params from "@kaspernj/api-maker/src/params"
 import React from "react"
+import Select from "@kaspernj/api-maker/src/bootstrap/select"
 import {User} from "@kaspernj/api-maker/src/models.mjs.erb"
 
 export default class ModelsValidationErrors extends React.PureComponent {

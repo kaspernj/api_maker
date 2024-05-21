@@ -12,7 +12,7 @@ import ModelRow from "./model-row"
 import Paginate from "../bootstrap/paginate"
 import Params from "../params"
 import PropTypes from "prop-types"
-import React, {useEffect, useRef} from "react"
+import React, {memo, useEffect, useRef} from "react"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
 import Settings from "./settings"
@@ -26,7 +26,7 @@ import useCollection from "../use-collection"
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
 
-export default shapeComponent(class ApiMakerTable extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
   static defaultProps = {
     card: true,
     destroyEnabled: true,
@@ -620,4 +620,4 @@ export default shapeComponent(class ApiMakerTable extends ShapeComponent {
   }
 
   submitFilterDebounce = debounce(digg(this, "submitFilter"))
-})
+}))

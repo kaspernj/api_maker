@@ -46,11 +46,6 @@ options.plugins.push(
     Routes: ["shared/routes", "default"],
     setStateAsync: ["shared/set-state-async", "default"],
 
-    Checkbox: ["@kaspernj/api-maker/src/bootstrap/checkbox.jsx", "default"],
-    Checkboxes: ["@kaspernj/api-maker/src/bootstrap/checkboxes.jsx", "default"],
-    Input: ["@kaspernj/api-maker/src/bootstrap/input.jsx", "default"],
-    Select: ["@kaspernj/api-maker/src/bootstrap/select.jsx", "default"],
-
     Account: ["@kaspernj/api-maker/src/models.mjs.erb", "Account"],
     Project: ["@kaspernj/api-maker/src/models.mjs.erb", "Project"],
     Task: ["@kaspernj/api-maker/src/models.mjs.erb", "Task"],

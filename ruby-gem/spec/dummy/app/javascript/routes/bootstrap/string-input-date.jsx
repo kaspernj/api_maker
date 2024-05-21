@@ -1,4 +1,5 @@
 import Devise from "@kaspernj/api-maker/src/devise"
+import Input from "@kaspernj/api-maker/src/bootstrap/input"
 
 export default class BootstrapStringInputDatetimeLocal extends React.PureComponent {
   state = {

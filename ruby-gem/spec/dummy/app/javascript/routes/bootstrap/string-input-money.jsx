@@ -1,4 +1,5 @@
-import { digg } from "diggerize"
+import {digg} from "diggerize"
+import Input from "@kaspernj/api-maker/src/bootstrap/input"
 import Params from "@kaspernj/api-maker/src/params"
 import React from "react"
 
