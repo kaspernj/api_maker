@@ -56,12 +56,12 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends Shape
   pagePath (pageNumber) {
     let pageKey = this.props.result.data.collection.queryArgs.pageKey
 
-    if (!pageKey)
+    if (!pageKey) {
       pageKey = "page"
+    }
 
     const currentParams = qs.parse(globalThis.location.search.substr(1))
     currentParams[pageKey] = pageNumber
-    currentParams.test = "&asd=qwe"
     const newParams = qs.stringify(currentParams, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
 
