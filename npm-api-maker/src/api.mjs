@@ -4,6 +4,7 @@ import FormDataObjectizer from "form-data-objectizer"
 import Logger from "./logger.mjs"
 import qs from "qs"
 import SessionStatusUpdater from "./session-status-updater.mjs"
+import urlEncode from "./url-encode.mjs"
 
 const logger = new Logger({name: "ApiMaker / Api"})
 
@@ -21,7 +22,7 @@ export default class Api {
     requestPath += path
 
     if (pathParams) {
-      const pathParamsString = qs.stringify(pathParams, {arrayFormat: "brackets"})
+      const pathParamsString = qs.stringify(pathParams, {arrayFormat: "brackets", encoder: urlEncode})
       requestPath += `?${pathParamsString}`
     }
 

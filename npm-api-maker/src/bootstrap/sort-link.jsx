@@ -3,6 +3,7 @@ import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import qs from "qs"
 import React from "react"
+import urlEncode from "../url-encode.mjs"
 
 import Link from "../link"
 import PureComponent from "set-state-compare/src/pure-component"
@@ -35,7 +36,7 @@ class ApiMakerBootstrapSortLink extends PureComponent {
 
     queryParams[searchKey] = JSON.stringify(qParams)
 
-    const newParams = qs.stringify(queryParams)
+    const newParams = qs.stringify(queryParams, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
 
     return newPath

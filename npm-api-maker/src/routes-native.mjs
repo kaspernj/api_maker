@@ -1,6 +1,7 @@
 import {dig, digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import qs from "qs"
+import urlEncode from "./url-encode.mjs"
 
 export default class ApiMakerRoutesNative {
   constructor ({getLocale}) {
@@ -111,7 +112,7 @@ export default class ApiMakerRoutesNative {
         .join("/")
 
       if (restOptions && Object.keys(restOptions).length > 0) {
-        translatedRoute += `?${qs.stringify(restOptions)}`
+        translatedRoute += `?${qs.stringify(restOptions, {encoder: urlEncode})}`
       }
 
       if (url) return this.addHostToRoute({host, port, protocol, translatedRoute})
@@ -132,7 +133,7 @@ export default class ApiMakerRoutesNative {
         .join("/")
 
       if (restOptions && Object.keys(restOptions).length > 0) {
-        translatedRoute += `?${qs.stringify(restOptions)}`
+        translatedRoute += `?${qs.stringify(restOptions, {encoder: urlEncode})}`
       }
 
       if (url) return this.addHostToRoute({host, port, protocol, translatedRoute})
