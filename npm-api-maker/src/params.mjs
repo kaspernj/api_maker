@@ -2,6 +2,7 @@ import config from "./config.mjs"
 import formSerialize from "form-serialize"
 import Incorporator from "incorporator"
 import qs from "qs"
+import urlEncode from "./url-encode.mjs"
 
 export default class Params {
   static parse () {
@@ -17,7 +18,7 @@ export default class Params {
   }
 
   static withParams (params) {
-    const newParams = qs.stringify(params)
+    const newParams = qs.stringify(params, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
 
     return newPath
@@ -25,7 +26,7 @@ export default class Params {
 
   static changeParams (given, opts = {}) {
     const params = Params.change(given)
-    const newParams = qs.stringify(params)
+    const newParams = qs.stringify(params, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
     const appHistory = opts.appHistory || config.getHistory() || AppHistory
 

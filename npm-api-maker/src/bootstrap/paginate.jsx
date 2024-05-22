@@ -3,10 +3,12 @@ import Link from "../link"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import qs from "qs"
-import React from "react"
+import React, {memo} from "react"
 import Result from "../result"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import urlEncode from "../url-encode.mjs"
 
-export default class ApiMakerBootstrapPaginate extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends ShapeComponent {
   static propTypes = propTypesExact({
     result: PropTypes.oneOfType([
       instanceOfClassName("ApiMakerResult"),
@@ -14,8 +16,10 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
     ]).isRequired
   })
 
-  state = {
-    pages: this.pages()
+  setup() {
+    this.useStates({
+      pages: () => this.pages()
+    })
   }
 
   componentDidUpdate (prevProps) {
@@ -52,12 +56,13 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
   pagePath (pageNumber) {
     let pageKey = this.props.result.data.collection.queryArgs.pageKey
 
-    if (!pageKey)
+    if (!pageKey) {
       pageKey = "page"
+    }
 
     const currentParams = qs.parse(globalThis.location.search.substr(1))
     currentParams[pageKey] = pageNumber
-    const newParams = qs.stringify(currentParams)
+    const newParams = qs.stringify(currentParams, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
 
     return newPath
@@ -150,4 +155,4 @@ export default class ApiMakerBootstrapPaginate extends React.PureComponent {
       </>
     )
   }
-}
+}))
