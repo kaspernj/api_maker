@@ -10,8 +10,8 @@ describe "bootstrap - sort link" do
     visit bootstrap_sort_link_path
     wait_for_selector ".component-bootstrap-sort-link .content-container"
 
-    asc_params = ERB::Util.url_encode(JSON.generate(s: "id asc"))
-    desc_params = ERB::Util.url_encode(JSON.generate(s: "id desc"))
+    asc_params = "{\"s\":\"id+asc\"}"
+    desc_params = "{\"s\":\"id+desc\"}"
 
     wait_for_selector ".component-api-maker-bootstrap-sort-link[href='/bootstrap/sort-link?q=#{asc_params}']"
     wait_for_and_find(".component-api-maker-bootstrap-sort-link").click
