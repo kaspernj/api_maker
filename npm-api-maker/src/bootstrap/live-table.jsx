@@ -9,7 +9,7 @@ import ModelRow from "./live-table/model-row"
 import Paginate from "./paginate"
 import Params from "../params"
 import PropTypes from "prop-types"
-import React, {memo} from "react"
+import {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import SortLink from "./sort-link"
 

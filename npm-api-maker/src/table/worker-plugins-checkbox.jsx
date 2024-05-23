@@ -4,12 +4,12 @@ import EventConnection from "../event-connection"
 import modelClassRequire from "../model-class-require.mjs"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import React, {useEffect} from "react"
+import {memo, useEffect} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 
 const Workplace = modelClassRequire("Workplace")
 
-export default shapeComponent(class ApiMakerTableWorkerPluginsCheckbox extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox extends ShapeComponent {
   static propTypes = PropTypesExact({
     currentWorkplace: PropTypes.object,
     model: PropTypes.object.isRequired
@@ -102,4 +102,4 @@ export default shapeComponent(class ApiMakerTableWorkerPluginsCheckbox extends S
       this.setState({checked: false})
     }
   }
-})
+}))

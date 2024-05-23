@@ -4,12 +4,12 @@ import EventUpdated from "../event-updated"
 import inputWrapper from "./input-wrapper"
 import Money from "./money"
 import PropTypes from "prop-types"
-import React, {useRef} from "react"
+import {memo, useRef} from "react"
 import replaceall from "replaceall"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import strftime from "strftime"
 
-const ApiMakerInputsInput = shapeComponent(class ApiMakerInputsInput extends ShapeComponent {
+const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extends ShapeComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
@@ -229,7 +229,7 @@ const ApiMakerInputsInput = shapeComponent(class ApiMakerInputsInput extends Sha
     if (this.props.inputProps.type == "file" && value == "")
       return true
   }
-})
+}))
 
 export {ApiMakerInputsInput as Input}
 export default inputWrapper(ApiMakerInputsInput)

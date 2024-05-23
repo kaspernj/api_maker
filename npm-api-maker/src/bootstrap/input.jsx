@@ -4,10 +4,10 @@ import {Input} from "../inputs/input"
 import InvalidFeedback from "./invalid-feedback"
 import Money from "../inputs/money"
 import PropTypes from "prop-types"
-import React from "react"
+import {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 
-const ApiMakerBootstrapInput = shapeComponent(class ApiMakerBootstrapInput extends ShapeComponent {
+const ApiMakerBootstrapInput = memo(shapeComponent(class ApiMakerBootstrapInput extends ShapeComponent {
   static propTypes = {
     append: PropTypes.node,
     appendText: PropTypes.node,
@@ -167,6 +167,6 @@ const ApiMakerBootstrapInput = shapeComponent(class ApiMakerBootstrapInput exten
 
     return classNames.join(" ")
   }
-})
+}))
 
 export default inputWrapper(ApiMakerBootstrapInput)

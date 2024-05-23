@@ -6,10 +6,10 @@ import * as inflection from "inflection"
 import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import React, {useRef} from "react"
+import {memo, useRef} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 
-export default shapeComponent(class ApiMakerInputsMoney extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeComponent {
   static defaultProps = {
     disabled: false,
     showCurrencyOptions: true
@@ -183,4 +183,4 @@ export default shapeComponent(class ApiMakerInputsMoney extends ShapeComponent {
     if (this.props.onChange && oldCents != cents)
       this.props.onChange()
   }
-})
+}))
