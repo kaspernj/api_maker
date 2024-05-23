@@ -6,11 +6,12 @@ import * as inflection from "inflection"
 import Link from "../link"
 import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
+import {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 
 const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox"))
 
-export default shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends ShapeComponent {
   static propTypes = {
     cacheKey: PropTypes.string.isRequired,
     model: PropTypes.object.isRequired,
@@ -188,4 +189,4 @@ export default shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends S
       throw new Error(`Unhandled type: ${apiMakerType}`)
     }
   }
-})
+}))
