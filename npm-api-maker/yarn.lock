@@ -4601,9 +4601,9 @@ object.values@^1.1.7:
     es-abstract "^1.22.1"
 
 "on-location-changed@>= 1.0.10":
-  version "1.0.12"
-  resolved "https://registry.npmjs.org/on-location-changed/-/on-location-changed-1.0.12.tgz"
-  integrity sha512-seGFq9BmKf/7bO/gCfvX1mOtmInrDEig1STeSLoZfnkwKpWtXwtvwJqlIVMZLN0kMFJ/OjN445g90wtfR7/J+w==
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.13.tgz#2aba53f5c7c8ef545f8c96462f6b295c852317f6"
+  integrity sha512-6j3gq95X8PNdLopSa9h7ohBywu0YJV5gxkyDZjndPl0JBhwgxt8dxAY5UrngI2RINxNhczYn/usyC6+Gy897Eg==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
