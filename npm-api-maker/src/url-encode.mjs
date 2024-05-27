@@ -1,7 +1,8 @@
 const replaces = {
   " ": "+",
   "&": "%26",
-  "#": "%23"
+  "#": "%23",
+  "/": "%2F"
 }
 
 const urlEncode = (string) => {
