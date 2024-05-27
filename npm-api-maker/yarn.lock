@@ -5080,17 +5080,10 @@ set-function-name@^2.0.0, set-function-name@^2.0.1:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@^1.0.26:
-  version "1.0.41"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.41.tgz#a9798f27a5ee7cdf74d563f8879d640084d64508"
-  integrity sha512-PjlVhqOQIZcli6mpVZ8RhDcIspB140TU+PZ8+kxf3eq74LXDSXby8eh5Fvxm0wBSsp2MysmG2kjxKTsBYGcwfw==
-  dependencies:
-    fetching-object ">= 1.0.1"
-
-set-state-compare@^1.0.42:
-  version "1.0.42"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.42.tgz#38997971dafb2a76bcf8d9a20a36f26635c51220"
-  integrity sha512-q/GLqm87Er0+qpK6JUt6Lr2YYJFdLBnxGcP3GyPiY5yWRHBj735MWbxuPsGTUHz/jjB6LWQp7/x6ZeSPMYFSJg==
+set-state-compare@^1.0.26, set-state-compare@^1.0.42:
+  version "1.0.44"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.44.tgz#5d3df1cf07a860fba4a1a718670d75dc86841b6d"
+  integrity sha512-b7ah8kjKqsE9LtBXyihWVPYADlDb67iUNaJ3cO8zf4fHEjgjiJ/54LS4LOCTicDCD9j5JmLSpLmomx3P/6lQ+w==
   dependencies:
     fetching-object ">= 1.0.1"
 
