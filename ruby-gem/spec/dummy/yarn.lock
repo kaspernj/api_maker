@@ -2960,14 +2960,13 @@ hyphenate-style-name@^1.0.3:
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz#691879af8e220aea5750e8827db4ef62a54e361d"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
 
-i18n-on-steroids@^1.0.12:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.12.tgz#a91504df1ecc2762f9f204d58930c081e1285d45"
-  integrity sha512-Ul72jez5jId7P1aMkMJQgeVK1of+AWODif8GZPoj7JdsC0aCtEIKyqsbyNe/Wa4K6VPs8KHijVI1+KZi1pgNPg==
+i18n-on-steroids@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.14.tgz#82bf8fbea0fe68a14ce3aab23d3f203af8641543"
+  integrity sha512-yo/hnm6w3NeTHLGwh3aYbCcrTwlBmd47MeTjYgB1Q9sI0f7dbPgDVG4tKPJcpIibGPT/7G3l/3S/zTCmH2c0rw==
   dependencies:
     diggerize "^1.0.5"
     numberable "^1.0.0"
-    set-state-compare "^1.0.26"
     strftime "^0.10.0"
 
 iconv-lite@0.4.24:
@@ -4331,7 +4330,7 @@ set-function-name@^2.0.1:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@^1.0.26, set-state-compare@^1.0.41, set-state-compare@^1.0.44:
+set-state-compare@^1.0.41, set-state-compare@^1.0.44:
   version "1.0.44"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.44.tgz#5d3df1cf07a860fba4a1a718670d75dc86841b6d"
   integrity sha512-b7ah8kjKqsE9LtBXyihWVPYADlDb67iUNaJ3cO8zf4fHEjgjiJ/54LS4LOCTicDCD9j5JmLSpLmomx3P/6lQ+w==
