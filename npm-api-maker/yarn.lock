@@ -3367,10 +3367,10 @@ human-signals@^2.1.0:
   resolved "https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-i18n-on-steroids@^1.0.12:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.14.tgz#82bf8fbea0fe68a14ce3aab23d3f203af8641543"
-  integrity sha512-yo/hnm6w3NeTHLGwh3aYbCcrTwlBmd47MeTjYgB1Q9sI0f7dbPgDVG4tKPJcpIibGPT/7G3l/3S/zTCmH2c0rw==
+i18n-on-steroids@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.15.tgz#0c5172ff6b2f2bf9395fa4475ca641f4edf3427c"
+  integrity sha512-XNa2AI1J0tOwBHk/6WVUmHpwTY9737r6EnqYizQWWtK7BhNv8GPZdJYrAkfa3RgGivfQBHyabCpSYC8XNUEaPw==
   dependencies:
     diggerize "^1.0.5"
     numberable "^1.0.0"

@@ -29,7 +29,7 @@
     "debounce": "^2.1.0",
     "diggerize": "^1.0.4",
     "history": "^5.3.0",
-    "i18n-on-steroids": "^1.0.14",
+    "i18n-on-steroids": "^1.0.15",
     "inflection": "^3.0.0",
     "js-yaml-loader": "^1.2.2",
     "mini-css-extract-plugin": "^2.9.0",
