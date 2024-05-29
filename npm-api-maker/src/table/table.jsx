@@ -129,6 +129,7 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
       abilities: this.abilitiesToLoad(),
       defaultParams: this.props.defaultParams,
       collection: this.props.collection,
+      groupBy: this.props.groupBy,
       ifCondition: collectionReady,
       modelClass: this.props.modelClass,
       onModelsLoaded: this.props.onModelsLoaded,
