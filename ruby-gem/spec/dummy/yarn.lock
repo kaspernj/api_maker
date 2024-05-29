@@ -2889,10 +2889,10 @@ hyphenate-style-name@^1.0.3:
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz#691879af8e220aea5750e8827db4ef62a54e361d"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
 
-i18n-on-steroids@^1.0.14:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.14.tgz#82bf8fbea0fe68a14ce3aab23d3f203af8641543"
-  integrity sha512-yo/hnm6w3NeTHLGwh3aYbCcrTwlBmd47MeTjYgB1Q9sI0f7dbPgDVG4tKPJcpIibGPT/7G3l/3S/zTCmH2c0rw==
+i18n-on-steroids@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.15.tgz#0c5172ff6b2f2bf9395fa4475ca641f4edf3427c"
+  integrity sha512-XNa2AI1J0tOwBHk/6WVUmHpwTY9737r6EnqYizQWWtK7BhNv8GPZdJYrAkfa3RgGivfQBHyabCpSYC8XNUEaPw==
   dependencies:
     diggerize "^1.0.5"
     numberable "^1.0.0"

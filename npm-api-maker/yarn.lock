@@ -3367,14 +3367,13 @@ human-signals@^2.1.0:
   resolved "https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-i18n-on-steroids@^1.0.12:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.12.tgz#a91504df1ecc2762f9f204d58930c081e1285d45"
-  integrity sha512-Ul72jez5jId7P1aMkMJQgeVK1of+AWODif8GZPoj7JdsC0aCtEIKyqsbyNe/Wa4K6VPs8KHijVI1+KZi1pgNPg==
+i18n-on-steroids@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.15.tgz#0c5172ff6b2f2bf9395fa4475ca641f4edf3427c"
+  integrity sha512-XNa2AI1J0tOwBHk/6WVUmHpwTY9737r6EnqYizQWWtK7BhNv8GPZdJYrAkfa3RgGivfQBHyabCpSYC8XNUEaPw==
   dependencies:
     diggerize "^1.0.5"
     numberable "^1.0.0"
-    set-state-compare "^1.0.26"
     strftime "^0.10.0"
 
 iconv-lite@0.6.3:
@@ -5000,7 +4999,7 @@ set-function-name@^2.0.0, set-function-name@^2.0.1:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@^1.0.26, set-state-compare@^1.0.42:
+set-state-compare@^1.0.42:
   version "1.0.44"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.44.tgz#5d3df1cf07a860fba4a1a718670d75dc86841b6d"
   integrity sha512-b7ah8kjKqsE9LtBXyihWVPYADlDb67iUNaJ3cO8zf4fHEjgjiJ/54LS4LOCTicDCD9j5JmLSpLmomx3P/6lQ+w==
