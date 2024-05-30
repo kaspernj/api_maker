@@ -1,19 +1,18 @@
+import escapeStringRegexp from "escape-string-regexp"
+
 const replaces = {
   " ": "+",
   "&": "%26",
   "#": "%23",
+  "+": "%2B",
   "/": "%2F",
   "?": "%3F"
 }
 
-const urlEncode = (string) => {
-  return `${string}`.replaceAll(/( |&|#|\/|\?)/g, (character) => {
-    if (!(character in replaces)) {
-      throw new Error(`Didn't exist in replaces: "${character}"`)
-    }
+const regexp = new RegExp(`(${Object.keys(replaces).map(escapeStringRegexp).join("|")})`, "g")
 
-    return replaces[character]
-  })
+const urlEncode = (string) => {
+  return String(string).replaceAll(regexp, (character) => replaces[character])
 }
 
 export default urlEncode
