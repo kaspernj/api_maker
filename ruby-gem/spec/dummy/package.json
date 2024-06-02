@@ -39,7 +39,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-native-web": "^0.19.12",
-    "sass": "^1.77.2",
+    "sass": "^1.77.4",
     "sass-loader": "^14.2.1",
     "set-state-compare": "^1.0.44",
     "shakapacker": "7.2.1",
