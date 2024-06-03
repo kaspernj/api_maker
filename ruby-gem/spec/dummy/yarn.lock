@@ -1210,10 +1210,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kaspernj/api-maker@1.0.362":
-  version "1.0.362"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.362.tgz#057f97497ad842fad1bb171e82e7be644e8f9503"
-  integrity sha512-oVDV0VzQYTK48cLiqkD8ylqPhBnQCLWnE30VqaSfqpSocDlMJW2DKKnzec6+MNVieI1ba4MqhH+LrB3p4cgl5A==
+"@kaspernj/api-maker@1.0.366":
+  version "1.0.366"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.366.tgz#053de1ed3238658aff9129ed2f46bbbcd8fb001e"
+  integrity sha512-Ije6Ra+s+U2HmmaseQbLtQRAm2+8kfQeK+Ag+FrsOWPBELQEWgsAn4P/JxG1ezQvjnI4JgbS/PpFbUYpODNVoQ==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -1230,7 +1230,7 @@
     on-location-changed ">= 1.0.10"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
-    set-state-compare "^1.0.41"
+    set-state-compare "^1.0.42"
     spark-md5 "^3.0.2"
     strftime ">= 0.10.0"
     uniqunize "^1.0.1"
@@ -4259,10 +4259,10 @@ set-function-name@^2.0.1:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@^1.0.41, set-state-compare@^1.0.44:
-  version "1.0.44"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.44.tgz#5d3df1cf07a860fba4a1a718670d75dc86841b6d"
-  integrity sha512-b7ah8kjKqsE9LtBXyihWVPYADlDb67iUNaJ3cO8zf4fHEjgjiJ/54LS4LOCTicDCD9j5JmLSpLmomx3P/6lQ+w==
+set-state-compare@^1.0.42, set-state-compare@^1.0.44:
+  version "1.0.45"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.45.tgz#12ef420cdad57f67cd716e1e2f8b6dbf7087d84b"
+  integrity sha512-qDx0hJ8J3Z0p9iRAhuaVJoTr8Mv221vcf0nniL++1M3F0W7KIUJrSiJMVQT3J7PhismYdOpCgexfNhn92cgmrg==
   dependencies:
     fetching-object ">= 1.0.1"
 
