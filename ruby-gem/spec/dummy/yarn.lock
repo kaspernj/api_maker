@@ -1241,10 +1241,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@rails/actioncable@^7.0.8-3":
-  version "7.0.8-3"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.8-3.tgz#e5102f9e745bdb4092d6a2f8c4b76af5b16967b3"
-  integrity sha512-DU90ZH2Rc2SUbDcCIaoqGR3ZQQ5ZLpwV0qeJcLE1z3lv5FGLG4a7lv6UJKj9Fb06CWEg52Bg9elaehEhBmh4bQ==
+"@rails/actioncable@^7.1.3":
+  version "7.1.3"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.1.3.tgz#4db480347775aeecd4dde2405659eef74a458881"
+  integrity sha512-ojNvnoZtPN0pYvVFtlO7dyEN9Oml1B6IDM+whGKVak69MMYW99lC2NOWXWeE3bmwEydbP/nn6ERcpfjHVjYQjA==
 
 "@react-native/normalize-colors@^0.74.1":
   version "0.74.81"
