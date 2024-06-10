@@ -3,7 +3,7 @@ import debounceFunction from "debounce"
 import ModelEvents from "./model-events.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
 
-const ApiMakerUseDestroyedEvent = (model, onDestroyed, props) => {
+const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => {
   const {active = true, debounce, onConnected, ...restProps} = props || {}
 
   if (Object.keys(restProps).length > 0) {
@@ -57,4 +57,4 @@ const ApiMakerUseDestroyedEvent = (model, onDestroyed, props) => {
   }, [model?.id()])
 }
 
-export default ApiMakerUseDestroyedEvent
+export default apiMakerUseDestroyedEvent
