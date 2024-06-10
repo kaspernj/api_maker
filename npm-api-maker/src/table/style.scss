@@ -28,7 +28,9 @@
 
   @media (min-width: $md-from) {
     .actions-column {
-      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: end;
     }
 
     .live-table-header:not(:first-child),
