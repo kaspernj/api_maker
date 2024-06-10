@@ -2,7 +2,7 @@ import {memo} from "react"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
-import useUpdatedEvent from "./use-updated-event.mjs"
+import useDestroyedEvent from "./use-destroyed-event.mjs"
 
 export default memo(shapeComponent(class ApiMakerEventDestroyed extends ShapeComponent {
   static propTypes = propTypesExact({
@@ -18,7 +18,7 @@ export default memo(shapeComponent(class ApiMakerEventDestroyed extends ShapeCom
 
   render() {
     const {model, onDestroyed, ...restProps} = this.props
-    useUpdatedEvent(model, onDestroyed, restProps)
+    useDestroyedEvent(model, onDestroyed, restProps)
 
     return null
   }
