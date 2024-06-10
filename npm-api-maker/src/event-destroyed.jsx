@@ -1,27 +1,25 @@
-import ModelEvents from "./model-events.mjs"
+import {memo} from "react"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import React from "react"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import useUpdatedEvent from "./use-updated-event.mjs"
 
-export default class ApiMakerEventDestroyed extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerEventDestroyed extends ShapeComponent {
   static propTypes = propTypesExact({
+    active: PropTypes.bool,
+    debounce: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number
+    ]),
     model: PropTypes.object.isRequired,
-    onDestroyed: PropTypes.func.isRequired
+    onConnected: PropTypes.func,
+    onUpdated: PropTypes.func.isRequired
   })
 
-  componentDidMount () {
-    this.connect()
-  }
+  render() {
+    const {model, onDestroyed, ...restProps} = this.props
+    useUpdatedEvent(model, onDestroyed, restProps)
 
-  componentWillUnmount () {
-    if (this.connectDestroyed) {
-      this.connectDestroyed.unsubscribe()
-    }
+    return null
   }
-
-  connect () {
-    this.connectDestroyed = ModelEvents.connectDestroyed(this.props.model, this.props.onDestroyed)
-  }
-
-  render = () => null
-}
+}))
