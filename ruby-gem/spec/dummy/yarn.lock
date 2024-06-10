@@ -1331,10 +1331,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kaspernj/api-maker@1.0.366":
-  version "1.0.366"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.366.tgz#053de1ed3238658aff9129ed2f46bbbcd8fb001e"
-  integrity sha512-Ije6Ra+s+U2HmmaseQbLtQRAm2+8kfQeK+Ag+FrsOWPBELQEWgsAn4P/JxG1ezQvjnI4JgbS/PpFbUYpODNVoQ==
+"@kaspernj/api-maker@1.0.367":
+  version "1.0.367"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.367.tgz#9902ade3bf71241eae43f2189b169f1456c4e4e7"
+  integrity sha512-C151kmEAN9kXoL9PFTcRSmEayKpHROVqg4Bl1EHQ+4PxlIRBhqg4DDYdlVEmxdPgeNrMKoAFOW5tnPn8wSgdkA==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
