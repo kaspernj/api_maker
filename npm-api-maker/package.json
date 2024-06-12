@@ -37,6 +37,7 @@
     "replaceall": ">= 0.1.6",
     "set-state-compare": "^1.0.42",
     "spark-md5": "^3.0.2",
+    "stacktrace-parser": "^0.1.10",
     "strftime": ">= 0.10.0",
     "uniqunize": "^1.0.1",
     "wake-event": ">= 0.0.1"
