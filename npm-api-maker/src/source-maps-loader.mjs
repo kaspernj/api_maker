@@ -13,21 +13,21 @@ if (SourceMapConsumer.initialize) {
 const logger = new Logger({name: "ApiMaker / SourceMapsLoader"})
 
 export default class SourceMapsLoader {
-  constructor () {
+  constructor() {
     this.isLoadingSourceMaps = false
     this.sourceMaps = []
     this.srcLoaded = {}
   }
 
-  loadSourceMapsForScriptTags (callback) {
+  loadSourceMapsForScriptTags(callback) {
     this.loadSourceMapsForScriptTagsCallback = callback
   }
 
-  sourceMapForSource (callback) {
+  sourceMapForSource(callback) {
     this.sourceMapForSourceCallback = callback
   }
 
-  async loadSourceMaps (error) {
+  async loadSourceMaps(error) {
     if (!error) throw new Error("No error was given to SourceMapsLoader#loadSourceMaps")
 
     this.isLoadingSourceMaps = true
@@ -111,11 +111,9 @@ export default class SourceMapsLoader {
     }
   }
 
-  includeMapURL(src) {
-    return src.includes("/packs/")
-  }
+  includeMapURL = (src) => src.includes("/packs/")
 
-  async loadSourceMapForSource ({originalUrl, sourceMapUrl}) {
+  async loadSourceMapForSource({originalUrl, sourceMapUrl}) {
     const xhr = new XMLHttpRequest()
 
     xhr.open("GET", sourceMapUrl, true)
@@ -127,26 +125,27 @@ export default class SourceMapsLoader {
     this.sourceMaps.push({consumer, originalUrl})
   }
 
-  loadUrl (url) {
+  loadUrl(url) {
     const parser = document.createElement("a")
+
     parser.href = url
 
     return parser
   }
 
-  loadXhr (xhr, postData) {
+  loadXhr(xhr, postData) {
     return new Promise((resolve) => {
       xhr.onload = () => resolve()
       xhr.send(postData)
     })
   }
 
-  parseStackTrace (stackTrace) {
+  parseStackTrace(stackTrace) {
     return this.getStackTraceData(stackTrace)
       .map((traceData) => `at ${traceData.methodName} (${traceData.fileString})`)
   }
 
-  getStackTraceData (stackTrace) {
+  getStackTraceData(stackTrace) {
     const stack = stackTraceParser.parse(stackTrace)
     const newSourceMap = []
 
