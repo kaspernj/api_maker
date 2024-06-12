@@ -158,7 +158,8 @@ export default class ApiMakerCommandsPool {
         } else if (responseType == "error") {
           const error = new CustomError("Command error", {response: commandResponseData})
 
-          error.stack += commandData.stack
+          error.stack += "\n"
+          error.stack += commandData.stack.split("\n").slice(1).join("\n")
 
           commandData.reject(error)
         } else if (responseType == "failed") {
