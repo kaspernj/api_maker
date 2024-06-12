@@ -53,6 +53,8 @@ export default class ApiMakerCommandsPool {
   }
 
   addCommand(data) {
+    const stack = Error().stack
+
     return new Promise((resolve, reject) => {
       const id = this.currentId
       this.currentId += 1
@@ -61,7 +63,7 @@ export default class ApiMakerCommandsPool {
       const commandName = data.command
       const collectionName = data.collectionName
 
-      this.pool[id] = {resolve, reject}
+      this.pool[id] = {resolve, reject, stack}
 
       if (!this.poolData[commandType]) this.poolData[commandType] = {}
       if (!this.poolData[commandType][collectionName]) this.poolData[commandType][collectionName] = {}
@@ -154,7 +156,11 @@ export default class ApiMakerCommandsPool {
         if (responseType == "success") {
           commandData.resolve(commandResponseData)
         } else if (responseType == "error") {
-          commandData.reject(new CustomError("Command error", {response: commandResponseData}))
+          const error = new CustomError("Command error", {response: commandResponseData})
+
+          error.stack += commandData.stack
+
+          commandData.reject(error)
         } else if (responseType == "failed") {
           this.handleFailedResponse(commandData, commandResponseData)
         } else {
