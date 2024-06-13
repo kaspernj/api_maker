@@ -1,6 +1,7 @@
 import CableSubscriptionPool from "./cable-subscription-pool.mjs"
 import CableSubscription from "./cable-subscription.mjs"
 import {dig} from "diggerize"
+import RunLast from "./run-last.mjs"
 
 const shared = {}
 
@@ -96,7 +97,7 @@ export default class ApiMakerCableConnectionPool {
       currentSubscription[value].push(subscription)
     }
 
-    this.scheduleConnectUpcoming()
+    this.scheduleConnectUpcomingRunLast.queue()
 
     return subscription
   }
@@ -122,10 +123,5 @@ export default class ApiMakerCableConnectionPool {
     this.cableSubscriptionPools.push(cableSubscriptionPool)
   }
 
-  scheduleConnectUpcoming () {
-    if (this.scheduleConnectUpcomingTimeout)
-      clearTimeout(this.scheduleConnectUpcomingTimeout)
-
-    this.scheduleConnectUpcomingTimeout = setTimeout(this.connectUpcoming, 0)
-  }
+  scheduleConnectUpcomingRunLast = new RunLast(this.connectUpcoming)
 }
