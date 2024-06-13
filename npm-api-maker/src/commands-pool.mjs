@@ -6,6 +6,7 @@ import Deserializer from "./deserializer.mjs"
 import {dig, digg} from "diggerize"
 import events from "./events.mjs"
 import FormDataObjectizer from "form-data-objectizer"
+import RunLast from "./run-last.mjs"
 import Serializer from "./serializer.mjs"
 import SessionStatusUpdater from "./session-status-updater.mjs"
 import ValidationError from "./validation-error.mjs"
@@ -26,9 +27,9 @@ export default class ApiMakerCommandsPool {
     const promiseResult = pool.addCommand(data)
 
     if (args.instant) {
-      pool.flush()
+      pool.flushRunLast.run()
     } else {
-      pool.setFlushTimeout()
+      pool.flushRunLast.queue()
     }
 
     return promiseResult
@@ -115,12 +116,10 @@ export default class ApiMakerCommandsPool {
     throw new Error("Couldnt successfully execute request")
   }
 
-  async flush() {
+  flush = async () => {
     if (this.commandsCount() == 0) {
       return
     }
-
-    this.clearTimeout()
 
     const currentPool = this.pool
     const currentPoolData = this.poolData
@@ -197,12 +196,6 @@ export default class ApiMakerCommandsPool {
     commandData.reject(error)
   }
 
-  clearTimeout() {
-    if (this.flushTimeout) {
-      clearTimeout(this.flushTimeout)
-    }
-  }
-
   isActive() {
     if (this.commandsCount() > 0) {
       return true
@@ -215,24 +208,5 @@ export default class ApiMakerCommandsPool {
     return false
   }
 
-  // Try to batch calls to backend while waiting for the event-queue-call to clear any other jobs before the request and reset on every flush call
-  // If only waiting a single time, then other event-queue-jobs might be before us and queue other jobs that might queue calls to the backend
-  setFlushTimeout() {
-    this.flushTriggerCount = 0
-    this.clearTimeout()
-    this.flushTrigger()
-  }
-
-  flushTrigger = () => {
-    if (this.flushTriggerCount >= 10) {
-      this.flush()
-    } else {
-      this.flushTriggerCount++
-      this.flushTriggerQueue()
-    }
-  }
-
-  flushTriggerQueue() {
-    this.flushTimeout = setTimeout(this.flushTrigger, 0)
-  }
+  flushRunLast = new RunLast(this.flush)
 }
