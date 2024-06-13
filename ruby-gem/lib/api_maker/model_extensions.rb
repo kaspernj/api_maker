@@ -68,7 +68,7 @@ module ApiMaker::ModelExtensions
         helper_methods: helper_methods,
         helper_methods_prepend: helper_methods_prepend,
         model_class: self,
-        validate_inclusion:
+        validate_inclusion: validate_inclusion
       )
     end
   end
