@@ -1,4 +1,5 @@
 import {digg, digs} from "diggerize"
+import Filter from "./filter"
 import FilterForm from "./filter-form"
 import LoadSearchModal from "./load-search-modal"
 import SaveSearchModal from "./save-search-modal"
@@ -7,55 +8,6 @@ import {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
-
-const ApiMakerTableFilter = memo(shapeComponent(class ApiMakerTableFilter extends ShapeComponent {
-  static propTypes = {
-    a: PropTypes.string.isRequired,
-    filterIndex: PropTypes.number.isRequired,
-    onClick: PropTypes.func.isRequired,
-    onRemoveClicked: PropTypes.func.isRequired,
-    p: PropTypes.array.isRequired,
-    pre: PropTypes.string.isRequired,
-    v: PropTypes.string.isRequired
-  }
-
-  render() {
-    const {p, v} = digs(this.props, "p", "v")
-    const {a, pre, sc} = this.props
-
-    return (
-      <div style={{display: "inline-block", backgroundColor: "grey", padding: "10px 6px"}}>
-        <span className="filter-label" onClick={digg(this, "onFilterClicked")} style={{cursor: "pointer"}}>
-          {p.length > 0 &&
-            `${p.join(".")}.`
-          }
-          {a} {sc} {pre} {v}
-        </span>
-        <span>
-          <a className="remove-filter-button" href="#" onClick={digg(this, "onRemoveFilterClicked")}>
-            <i className="fa fa-remove la la-remove" />
-          </a>
-        </span>
-      </div>
-    )
-  }
-
-  onFilterClicked = (e) => {
-    e.preventDefault()
-
-    const {a, filterIndex, p, pre, v} = digs(this.props, "a", "filterIndex", "p", "pre", "v")
-
-    this.props.onClick({a, filterIndex, p, pre, v})
-  }
-
-  onRemoveFilterClicked = (e) => {
-    e.preventDefault()
-
-    const {filterIndex} = digs(this.props, "filterIndex")
-
-    this.props.onRemoveClicked({filterIndex})
-  }
-}))
 
 export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeComponent {
   static propTypes = {
@@ -110,7 +62,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
           />
         }
         {currentFilters?.map((filterData, filterIndex) =>
-          <ApiMakerTableFilter
+          <Filter
             key={filterIndex}
             filterIndex={filterIndex}
             onClick={digg(this, "onFilterClicked")}

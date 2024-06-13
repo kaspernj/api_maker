@@ -1,116 +1,17 @@
-import Attribute from "../../base-model/attribute"
+import AttributeElement from "./attribute-element"
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import Input from "../../inputs/input"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import React from "react"
-import Reflection from "../../base-model/reflection"
+import {memo, useMemo, useRef} from "react"
+import ReflectionElement from "./reflection-element"
+import ScopeElement from "./scope-element"
 import Select from "../../inputs/select"
 import Services from "../../services.mjs"
-import Shape from "set-state-compare/src/shape"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 
-class AttributeElement extends React.PureComponent {
-  static propTypes = PropTypesExact({
-    active: PropTypes.bool.isRequired,
-    attribute: PropTypes.instanceOf(Attribute).isRequired,
-    currentModelClass: PropTypes.func.isRequired,
-    fikter: PropTypes.object,
-    onClick: PropTypes.func.isRequired
-  })
-
-  render() {
-    const {active, attribute, currentModelClass} = digs(this.props, "active", "attribute", "currentModelClass")
-    const style = {}
-
-    if (active) style.fontWeight = "bold"
-
-    return (
-      <div
-        className="attribute-element"
-        data-attribute-name={attribute.name()}
-        data-model-class={currentModelClass.modelClassData().name}
-        onClick={digg(this, "onAttributeClicked")}
-        style={style}
-      >
-        {currentModelClass.humanAttributeName(inflection.camelize(attribute.name(), true))}
-      </div>
-    )
-  }
-
-  onAttributeClicked = (e) => {
-    e.preventDefault()
-
-    this.props.onClick({attribute: digg(this, "props", "attribute")})
-  }
-}
-
-class ReflectionElement extends React.PureComponent {
-  static propTypes = PropTypesExact({
-    currentModelClass: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
-    reflection: PropTypes.instanceOf(Reflection).isRequired
-  })
-
-  render() {
-    const {currentModelClass, reflection} = digs(this.props, "currentModelClass", "reflection")
-
-    return (
-      <div
-        className="reflection-element"
-        data-model-class={currentModelClass.modelClassData().name}
-        data-reflection-name={reflection.name()}
-        onClick={digg(this, "onReflectionClicked")}
-      >
-        {currentModelClass.humanAttributeName(reflection.name())}
-      </div>
-    )
-  }
-
-  onReflectionClicked = (e) => {
-    e.preventDefault()
-
-    this.props.onClick({reflection: digg(this, "props", "reflection")})
-  }
-}
-
-class ScopeElement extends React.PureComponent {
-  static defaultProps = {
-    active: false
-  }
-
-  static propTypes = {
-    active: PropTypes.bool.isRequired,
-    scope: PropTypes.object.isRequired
-  }
-
-  render() {
-    const {active, scope} = this.props
-    const style = {}
-
-    if (active) style.fontWeight = "bold"
-
-    return (
-      <div
-        className="scope-element"
-        key={scope.name()}
-        onClick={digg(this, "onScopeClicked")}
-        style={style}
-      >
-        {scope.name()}
-      </div>
-    )
-  }
-
-  onScopeClicked = (e) => {
-    e.preventDefault()
-
-    this.props.onScopeClicked({scope: this.props.scope})
-  }
-}
-
-
-export default class ApiMakerTableFiltersFilterForm extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends ShapeComponent {
   static propTypes = PropTypesExact({
     filter: PropTypes.object,
     modelClass: PropTypes.func.isRequired,
@@ -118,18 +19,22 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
     querySearchName: PropTypes.string.isRequired
   })
 
-  shape = new Shape(this, {
-    attribute: this.currentModelClassFromPath(this.props.filter.p || []).ransackableAttributes().find((attribute) => attribute.name() == this.props.filter.a),
-    path: this.props.filter.p || [],
-    predicate: undefined,
-    predicates: undefined,
-    scope: this.props.filter.sc,
-    value: this.props.filter.v
-  })
-  valueInputRef = React.createRef()
+  setup() {
+    this.useStates({
+      attribute: () => this.currentModelClassFromPath(this.props.filter.p || [])
+        .ransackableAttributes()
+        .find((attribute) => attribute.name() == this.props.filter.a),
+      path: this.props.filter.p || [],
+      predicate: undefined,
+      predicates: undefined,
+      scope: this.props.filter.sc,
+      value: this.props.filter.v
+    })
+    this.valueInputRef = useRef()
 
-  componentDidMount() {
-    this.loadRansackPredicates()
+    useMemo(() => {
+      this.loadRansackPredicates()
+    }, [])
   }
 
   async loadRansackPredicates() {
@@ -141,7 +46,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
       currentPredicate = predicates.find((predicate) => predicate.name == this.props.filter.pre)
     }
 
-    this.shape.set({
+    this.setState({
       predicate: currentPredicate,
       predicates
     })
@@ -150,7 +55,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
   render() {
     const {valueInputRef} = digs(this, "valueInputRef")
     const currentModelClass = this.currentModelClass()
-    const {attribute, predicate, predicates, scope, value} = digs(this.shape, "attribute", "predicate", "scope", "predicates", "value")
+    const {attribute, predicate, predicates, scope, value} = digs(this.state, "attribute", "predicate", "scope", "predicates", "value")
     let submitEnabled = false
 
     if (attribute && predicate) {
@@ -188,7 +93,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
             <div>
               {this.sortedByName(currentModelClass.ransackableAttributes(), currentModelClass).map((attribute) =>
                 <AttributeElement
-                  active={attribute.name() == this.shape.attribute?.name()}
+                  active={attribute.name() == this.state.attribute?.name()}
                   attribute={attribute}
                   currentModelClass={currentModelClass}
                   key={attribute.name()}
@@ -197,7 +102,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
               )}
               {currentModelClass.ransackableScopes().map((scope) =>
                 <ScopeElement
-                  active={scope.name() == this.shape.scope?.name()}
+                  active={scope.name() == this.state.scope?.name()}
                   key={scope.name()}
                   scope={scope}
                   onScopeClicked={digg(this, "onScopeClicked")}
@@ -205,7 +110,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
               )}
             </div>
             <div>
-              {predicates && !this.shape.scope &&
+              {predicates && !this.state.scope &&
                 <Select
                   className="predicate-select"
                   defaultValue={predicate?.name}
@@ -232,7 +137,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
   }
 
   currentModelClass() {
-    const {path} = digs(this.shape, "path")
+    const {path} = digs(this.state, "path")
 
     return this.currentModelClassFromPath(path)
   }
@@ -259,7 +164,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
 
   currentPathParts() {
     const {modelClass} = digs(this.props, "modelClass")
-    const {path} = digs(this.shape, "path")
+    const {path} = digs(this.state, "path")
     const result = []
     let currentModelClass = modelClass
 
@@ -284,7 +189,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
   }
 
   onAttributeClicked = ({attribute}) => {
-    this.shape.set({
+    this.setState({
       attribute,
       predicate: undefined,
       scope: undefined
@@ -293,15 +198,15 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
 
   onPredicateChanged = (e) => {
     const chosenPredicateName = digg(e, "target", "value")
-    const predicate = this.shape.predicates.find((predicate) => predicate.name == chosenPredicateName)
+    const predicate = this.state.predicates.find((predicate) => predicate.name == chosenPredicateName)
 
-    this.shape.set({predicate})
+    this.setState({predicate})
   }
 
   onReflectionClicked = ({reflection}) => {
-    const newPath = this.shape.path.concat([inflection.underscore(reflection.name())])
+    const newPath = this.state.path.concat([inflection.underscore(reflection.name())])
 
-    this.shape.set({
+    this.setState({
       attribute: undefined,
       path: newPath,
       predicate: undefined
@@ -311,7 +216,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
   }
 
   onScopeClicked = ({scope}) => {
-    this.shape.set({
+    this.setState({
       attribute: undefined,
       scope
     })
@@ -321,7 +226,7 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
     e.preventDefault()
 
     const {filter, querySearchName} = digs(this.props, "filter", "querySearchName")
-    const {attribute, path, predicate, scope} = digs(this.shape, "attribute", "path", "predicate", "scope")
+    const {attribute, path, predicate, scope} = digs(this.state, "attribute", "path", "predicate", "scope")
     const {filterIndex} = digs(filter, "filterIndex")
     const searchParams = Params.parse()[querySearchName] || {}
     const value = digg(this, "valueInputRef", "current", "value")
@@ -367,4 +272,4 @@ export default class ApiMakerTableFiltersFilterForm extends React.PureComponent 
       currentModelClass.humanAttributeName(a.name()).toLowerCase().localeCompare(currentModelClass.humanAttributeName(b.name()).toLowerCase())
     )
   }
-}
+}))

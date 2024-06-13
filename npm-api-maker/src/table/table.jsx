@@ -22,6 +22,7 @@ import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
 import useBreakpoint from "./use-breakpoint"
 import useCollection from "../use-collection"
+import useQueryParams from "on-location-changed/src/use-query-params.js"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
@@ -79,6 +80,7 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
 
   setup() {
     const {breakpoint} = useBreakpoint()
+    const queryParams = useQueryParams()
 
     this.setInstance({
       breakpoint,
@@ -91,18 +93,19 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
     if (!queryName) queryName = collectionKey
 
     const columnsAsArray = this.columnsAsArray()
+    const querySName = `${queryName}_s`
 
     this.useStates({
       columns: columnsAsArray,
       currentWorkplace: undefined,
-      identifier: this.props.identifier || `${collectionKey}-default`,
+      identifier: () => this.props.identifier || `${collectionKey}-default`,
       preload: undefined,
       preparedColumns: undefined,
       queryName,
-      queryQName: `${queryName}_q`,
-      queryPageName: `${queryName}_page`,
-      querySName: `${queryName}_s`,
-      showFilters: false,
+      queryQName: () => `${queryName}_q`,
+      queryPageName: () => `${queryName}_page`,
+      querySName,
+      showFilters: () => Boolean(queryParams[querySName]),
       showSettings: false,
       tableSetting: undefined,
       tableSettingFullCacheKey: undefined
