@@ -3,7 +3,7 @@ import {digg} from "diggerize"
 import * as inflection from "inflection"
 import MoneyFormatter from "../../money-formatter"
 import PropTypes from "prop-types"
-import {memo} from "react"
+import {memo, useMemo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import strftime from "strftime"
 
