@@ -7,7 +7,13 @@ export default class ApiMakerBaseModelAttribute {
   }
 
   getColumn() {
-    if (!this.column) this.column = new Column(digg(this, "attributeData", "column"))
+    if (!this.column) {
+      const columnData = digg(this, "attributeData", "column")
+
+      if (columnData) {
+        this.column = new Column(columnData)
+      }
+    }
 
     return this.column
   }
