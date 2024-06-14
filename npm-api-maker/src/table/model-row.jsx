@@ -105,8 +105,8 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   columnsContentFromAttributeAndPath (column, model) {
-    const {attribute} = digs(column, "attribute")
-    const currentModelClass = this.props.modelClass
+    const {attribute: attributeName} = digs(column, "attribute")
+    const attributeNameUnderscore = inflection.underscore(attributeName)
     const path = column.path || []
     let value
     let currentModel = model
@@ -118,8 +118,18 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
       }
     }
 
-    if (!(attribute in currentModel)) throw new Error(`${currentModelClass.modelName().name} doesn't respond to ${attribute}`)
-    if (currentModel.isAttributeLoaded(attribute)) value = currentModel[attribute]()
+    if (!(attributeName in currentModel)) {
+      throw new Error(`${currentModel.constructor.modelName().human()} doesn't respond to ${attributeName}`)
+    }
+
+    if (currentModel.isAttributeLoaded(attributeName)) value = currentModel[attributeName]()
+
+    const attribute = currentModel.constructor.attributes().find((attribute) => attribute.name() == attributeNameUnderscore)
+    const modelColumn = attribute?.getColumn()
+
+    if (modelColumn?.getType() == "date") {
+      return this.presentDateTime({apiMakerType: "date", value})
+    }
 
     return this.presentColumnValue(value)
   }
@@ -155,9 +165,9 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     }
   }
 
-  presentColumnValue (value) {
+  presentColumnValue(value) {
     if (value instanceof Date) {
-      return this.presentDateTime(value)
+      return this.presentDateTime({value})
     } else if (MoneyFormatter.isMoney(value)) {
       return MoneyFormatter.format(value)
     } else if (typeof value == "boolean") {
@@ -174,15 +184,13 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     return value
   }
 
-  presentDateTime(value) {
-    const apiMakerType = value.apiMakerType || "time"
-
-    if (apiMakerType == "time") {
+  presentDateTime({apiMakerType, value}) {
+    if (!apiMakerType || apiMakerType == "time") {
       const dateTimeFormatName = this.props.liveTable.props.defaultDateTimeFormatName || "time.formats.default"
 
       return I18n.l(dateTimeFormatName, value)
     } else if (apiMakerType == "date") {
-      const dateFormatName = this.props.liveTable.props.defaultDateTimeFormatName || "date.formats.default"
+      const dateFormatName = this.props.liveTable.props.defaultDateFormatName || "date.formats.default"
 
       return I18n.l(dateFormatName, value)
     } else {

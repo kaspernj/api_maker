@@ -1,11 +1,13 @@
 import classNames from "classnames"
 import {digg} from "diggerize"
+import * as inflection from "inflection"
 import MoneyFormatter from "../../money-formatter"
 import PropTypes from "prop-types"
-import React from "react"
+import {memo, useMemo} from "react"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import strftime from "strftime"
 
-export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends ShapeComponent {
   static defaultProps = {
     checkIfAttributeLoaded: false
   }
@@ -18,6 +20,13 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
     label: PropTypes.node,
     model: PropTypes.object,
     value: PropTypes.node
+  }
+
+  setup() {
+    this.attribute = useMemo(
+      () => this.props.model?.constructor?.attributes()?.find((attribute) => attribute.name() == inflection.underscore(this.props.attribute)),
+      [this.props.attribute, this.props.model]
+    )
   }
 
   render () {
@@ -68,7 +77,11 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
   }
 
   valueContent(value) {
-    if (value instanceof Date) {
+    const columnType = this.attribute?.getColumn()?.getType()
+
+    if (columnType == "date") {
+      return I18n.l("date.formats.default", value)
+    } else if (value instanceof Date) {
       return strftime("%Y-%m-%d %H:%M", value)
     } else if (typeof value === "boolean") {
       if (value) return I18n.t("js.shared.yes", {defaultValue: "Yes"})
@@ -80,4 +93,4 @@ export default class ApiMakerBootstrapAttributeRow extends React.PureComponent {
       return value
     }
   }
-}
+}))
