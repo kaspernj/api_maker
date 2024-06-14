@@ -185,7 +185,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   presentDateTime({apiMakerType, value}) {
-    if (apiMakerType == "time") {
+    if (!apiMakerType || apiMakerType == "time") {
       const dateTimeFormatName = this.props.liveTable.props.defaultDateTimeFormatName || "time.formats.default"
 
       return I18n.l(dateTimeFormatName, value)
