@@ -6,8 +6,9 @@ class ApiMaker::BaseResource
 
   delegate :can, :can?, allow_nil: true, to: :ability
 
-  CRUD = [:create, :create_events, :read, :update, :update_events, :destroy, :destroy_events].freeze
+  CREATE = [:create, :create_events]
   READ = [:create_events, :destroy_events, :read, :update_events].freeze
+  CRUD = CREATE + READ + [:update, :destroy].freeze
   WRITE = [:create, :update, :destroy].freeze
 
   def self.aasm_state_machine
