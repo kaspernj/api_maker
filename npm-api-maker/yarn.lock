@@ -5235,9 +5235,9 @@ stacktrace-parser@^0.1.10:
     type-fest "^0.7.1"
 
 "strftime@>= 0.10.0", strftime@^0.10.0:
-  version "0.10.2"
-  resolved "https://registry.npmjs.org/strftime/-/strftime-0.10.2.tgz"
-  integrity sha512-Y6IZaTVM80chcMe7j65Gl/0nmlNdtt+KWPle5YeCAjmsBfw+id2qdaJ5MDrxUq+OmHKab+jHe7mUjU/aNMSZZg==
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/strftime/-/strftime-0.10.3.tgz#d801427a07f794c1e16a622371efe660fa72123f"
+  integrity sha512-DZrDUeIF73eKJ4/GgGuv8UHWcUQPYDYfDeQFj3jrx+JZl6GQE656MbHIpvbo4mEG9a5DgS8GRCc5DxJXD2udDQ==
 
 string-length@^4.0.1:
   version "4.0.1"
@@ -5828,9 +5828,9 @@ write-file-atomic@^4.0.2:
     signal-exit "^3.0.7"
 
 ws@^8.17.0:
-  version "8.17.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.17.0.tgz#d145d18eca2ed25aaf791a183903f7be5e295fea"
-  integrity sha512-uJq6108EgZMAl20KagGkzCKfMEjxmKvZHG7Tlq0Z6nOky7YF7aq4mOx6xK8TJ/i1LeK4Qus7INktacctDgY8Ow==
+  version "8.17.1"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.17.1.tgz#9293da530bb548febc95371d90f9c878727d919b"
+  integrity sha512-6XQFvXTkbfUOZOKKILFG1PDK2NDQs4azKQl26T0YS5CxqWLgXajbPZ+h4gZekJyRqFU8pvnbAbbs/3TgRPy+GQ==
 
 xml-name-validator@^5.0.0:
   version "5.0.0"
