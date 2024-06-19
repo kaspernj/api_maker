@@ -1,7 +1,7 @@
 class Resources::TableSearchResource < ApiMaker::BaseResource
   self.model_class_name = "ApiMakerTable::TableSearch"
 
-  attributes :created_at, :id, :name, :query_params, :updated_at, :user_id, :user_type
+  attributes :created_at, :id, :name, :public, :query_params, :updated_at, :user_id, :user_type
 
   def abilities
     can READ, ApiMakerTable::TableSearch, public: true

@@ -1,9 +1,8 @@
 import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
 import Checkbox from "@kaspernj/api-maker/src/bootstrap/checkbox"
-import {digg} from "diggerize"
+import {digg, digs} from "diggerize"
 import Input from "../../bootstrap/input"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
-import {TableSearch} from "../../models.mjs.erb"
 import {memo} from "react"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
@@ -15,18 +14,20 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
   }
 
   render() {
-    const {currentFilters, currentUser, onRequestClose, ...restProps} = this.props
+    const {currentFilters, currentUser, onRequestClose, search, ...restProps} = this.props
     const Modal = apiMakerConfig.getModal()
 
     return (
       <Modal onRequestClose={onRequestClose} {...restProps}>
         <form onSubmit={this.onSaveSearchSubmit}>
           <Input
+            defaultValue={search.name()}
             id="table_search_name"
             label={this.t(".search_name", {defaultValue: "Search name"})}
             name="table_search[name]"
           />
           <Checkbox
+            defaultChecked={search.public()}
             id="table_search_public"
             label={this.t(".public", {defaultValue: "Public"})}
             name="table_search[public]"
@@ -44,15 +45,18 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
 
     const form = digg(e, "target")
     const formData = new FormData(form)
-    const tableSearch = new TableSearch()
+    const {currentFilters, currentUser, onRequestClose, search} = digs(this.props, "currentFilters", "currentUser", "onRequestClose", "search")
 
-    formData.append("table_search[query_params]", JSON.stringify(this.props.currentFilters()))
-    formData.append("table_search[user_type]", digg(this.props.currentUser.modelClassData(), "className"))
-    formData.append("table_search[user_id]", this.props.currentUser.id())
+    if (search.isNewRecord()) {
+      formData.append("table_search[query_params]", JSON.stringify(currentFilters()))
+    }
+
+    formData.append("table_search[user_type]", digg(currentUser.modelClassData(), "className"))
+    formData.append("table_search[user_id]", currentUser.id())
 
     try {
-      await tableSearch.saveRaw(formData, {form})
-      this.props.onRequestClose()
+      await search.saveRaw(formData, {form})
+      onRequestClose()
     } catch (error) {
       FlashMessage.errorResponse(error)
     }

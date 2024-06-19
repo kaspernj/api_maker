@@ -6,6 +6,7 @@ import SaveSearchModal from "./save-search-modal"
 import PropTypes from "prop-types"
 import {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {TableSearch} from "../../models.mjs.erb"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
@@ -24,7 +25,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
     this.t = t
     this.useStates({
       filter: undefined,
-      showLoadSearchModal: false,
+      showLoadSearchModal: undefined,
       showSaveSearchModal: false
     })
   }
@@ -50,6 +51,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
           <LoadSearchModal
             currentUser={currentUser}
             modelClass={modelClass}
+            onEditSearchPressed={digg(this, "onEditSearchPressed")}
             onRequestClose={digg(this, "onRequestCloseLoadSearchModal")}
             querySearchName={querySName}
           />
@@ -59,6 +61,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
             currentFilters={digg(this, "currentFilters")}
             currentUser={currentUser}
             onRequestClose={digg(this, "onRequestCloseSaveSearchModal")}
+            search={showSaveSearchModal}
           />
         }
         {currentFilters?.map((filterData, filterIndex) =>
@@ -109,12 +112,23 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
   }
 
   onApplyClicked = () => this.setState({filter: undefined})
+
+  onEditSearchPressed = ({search}) => {
+    console.log("onEditSearchPressed", {search})
+
+    this.onRequestCloseLoadSearchModal()
+    this.setState({
+      showSaveSearchModal: search
+    })
+  }
+
   onFilterClicked = (args) => this.setState({filter: args})
 
   onLoadSearchClicked = (e) => {
     e.preventDefault()
+
     this.setState({
-      showLoadSearchModal: true
+      showLoadSearchModal: new TableSearch()
     })
   }
 
@@ -136,7 +150,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
   }
 
   onRequestCloseLoadSearchModal = () => this.setState({showLoadSearchModal: false})
-  onRequestCloseSaveSearchModal = () => this.setState({showSaveSearchModal: false})
+  onRequestCloseSaveSearchModal = () => this.setState({showSaveSearchModal: undefined})
 
   onSaveSearchClicked = (e) => {
     e.preventDefault()
