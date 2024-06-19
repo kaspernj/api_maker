@@ -9,6 +9,7 @@
     ]
   },
   "name": "dummy",
+  "packageManager": "yarn@1.22.22",
   "private": true,
   "dependencies": {
     "@babel/core": "7",
