@@ -9,6 +9,7 @@ import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-compon
 import {TableSearch} from "../../models.mjs.erb"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeComponent {
   static propTypes = {
