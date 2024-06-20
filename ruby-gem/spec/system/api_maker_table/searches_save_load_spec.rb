@@ -37,6 +37,8 @@ describe "table - filter" do
     wait_for_and_find(".save-search-submit-button").click
     wait_for_expect { ApiMakerTable::TableSearch.count == 1 }
 
+    sleep 1
+
     created_table_search = ApiMakerTable::TableSearch.last!
 
     expect(created_table_search).to have_attributes(
