@@ -11,19 +11,64 @@ const SearchLink = memo(shapeComponent(class SearchLink extends ShapeComponent {
     const {search} = this.props
 
     return (
-      <View>
-        <Pressable dataSet={{class: "load-search-link"}} onPress={this.onSearchClicked}>
+      <View style={{flexDirection: "row", width: "100%"}}>
+        <Pressable dataSet={{class: "load-search-link"}} onPress={this.onSearchClicked} style={{justifyContent: "center"}}>
           <Text>
             {search.name()}
           </Text>
         </Pressable>
-        <Pressable dataSet={{class: "edit-search-link"}} onPress={this.onEditPressed}>
-          <Text>
-            edit
-          </Text>
-        </Pressable>
+        <View style={{flexDirection: "row", marginLeft: "auto"}}>
+          <Pressable
+            dataSet={{class: "edit-search-link"}}
+            onPress={this.onEditPressed}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: 25,
+              height: 25,
+              backgroundColor: "#fff",
+              border: "1px solid #007bff",
+              borderRadius: 5,
+              color: "#007bff"
+            }}
+          >
+            <Text>
+              &#x270E;
+            </Text>
+          </Pressable>
+          <Pressable
+            dataSet={{class: "delete-search-link"}}
+            onPress={this.onDeletePressed}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: 5,
+              width: 25,
+              height: 25,
+              backgroundColor: "#fff",
+              border: "1px solid #dc3545",
+              borderRadius: 5,
+              color: "#dc3545"
+            }}
+          >
+            <Text>
+              &#x2715;
+            </Text>
+          </Pressable>
+        </View>
       </View>
     )
+  }
+
+  onDeletePressed = async () => {
+    if (!confirm("Are you sure?")) {
+      return
+    }
+
+    const {search} = this.props
+
+    await search.destroy()
+    this.props.onDeleted({search})
   }
 
   onEditPressed = () => this.props.onEditPressed({search: this.props.search})
@@ -32,10 +77,13 @@ const SearchLink = memo(shapeComponent(class SearchLink extends ShapeComponent {
 
 export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal extends ShapeComponent {
   setup() {
+    const {t} = useI18n({namespace: "js.api_maker.table.filters.load_search_modal"})
+
     this.useStates({
       editSearch: undefined,
       searches: undefined
     })
+    this.setInstance({t})
 
     useEffect(() => {
       this.loadSearches()
@@ -53,16 +101,19 @@ export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal ext
   }
 
   render() {
+    const {t} = this
     const {className, currentUser, modelClass, onEditSearchPressed, onRequestClose, querySearchName, ...restProps} = this.props
     const Modal = apiMakerConfig.getModal()
 
     return (
       <Modal className={classNames("api-maker--table--filters--load-search-modal", className)} onRequestClose={onRequestClose} {...restProps}>
-        <div>
-          {I18n.t("js.api_maker.table.filters.load_search_modal.choose_a_search", {defaultValue: "Choose a search"})}
-        </div>
+        <View>
+          <Text>
+            {t(".choose_a_search", {defaultValue: "Choose a search"})}
+          </Text>
+        </View>
         {this.state.searches?.map((search) =>
-          <SearchLink key={search.id()} onClick={this.onSearchClicked} onEditPressed={onEditSearchPressed} search={search} />
+          <SearchLink key={search.id()} onClick={this.onSearchClicked} onDeleted={this.onSearchDeleted} onEditPressed={onEditSearchPressed} search={search} />
         )}
       </Modal>
     )
@@ -77,5 +128,11 @@ export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal ext
     Params.changeParams(newParams)
 
     onRequestClose()
+  }
+
+  onSearchDeleted = ({search}) => {
+    this.setState({
+      searches: this.state.searches.filter((existingSearch) => existingSearch.id() != search.id())
+    })
   }
 }))

@@ -37,7 +37,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
     const currentFilters = this.currentFilters()
 
     return (
-      <div className="api-maker--table--filters">
+      <View dataSet={{class: "api-maker--table--filters"}}>
         {filter &&
           <FilterForm
             filter={filter}
@@ -88,7 +88,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
             </>
           }
         </div>
-      </div>
+      </View>
     )
   }
 
