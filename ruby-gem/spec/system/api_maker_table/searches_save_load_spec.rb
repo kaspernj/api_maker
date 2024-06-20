@@ -54,7 +54,7 @@ describe "table - filter" do
     # It loads the newly saved filter
     wait_for_and_find(".filter-button").click
     wait_for_and_find(".load-search-button").click
-    wait_for_and_find(".load-search-link", exact_text: "Test search").click
+    wait_for_and_find("[data-class='load-search-link']", exact_text: "Test search").click
 
     wait_for_no_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)

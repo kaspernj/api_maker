@@ -73,7 +73,7 @@ const SearchLink = memo(shapeComponent(class SearchLink extends ShapeComponent {
   }
 
   onEditPressed = () => this.props.onEditPressed({search: this.props.search})
-  onSearchClicked = () => this.props.onClick({search})
+  onSearchClicked = () => this.props.onClick({search: this.props.search})
 }))
 
 export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal extends ShapeComponent {
@@ -121,6 +121,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal ext
   }
 
   onSearchClicked = ({search}) => {
+    const {onRequestClose, querySearchName} = this.props
     const queryParams = search.queryParams()
     const newParams = {}
 
