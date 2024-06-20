@@ -115,8 +115,6 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
   onApplyClicked = () => this.setState({filter: undefined})
 
   onEditSearchPressed = ({search}) => {
-    console.log("onEditSearchPressed", {search})
-
     this.onRequestCloseLoadSearchModal()
     this.setState({
       showSaveSearchModal: search
@@ -129,7 +127,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
     e.preventDefault()
 
     this.setState({
-      showLoadSearchModal: new TableSearch()
+      showLoadSearchModal: true
     })
   }
 
@@ -157,7 +155,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
     e.preventDefault()
 
     if (this.hasAnyFilters()) {
-      this.setState({showSaveSearchModal: true})
+      this.setState({showSaveSearchModal: new TableSearch()})
     } else {
       FlashMessage.alert(this.t(".no_filters_has_been_set", {defaultValue: "No filters has been set"}))
     }

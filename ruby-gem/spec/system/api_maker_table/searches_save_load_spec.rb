@@ -59,40 +59,24 @@ describe "table - filter" do
   end
 
   it "deletes a search" do
-    puts "Create table search"
     task1
     task2
     table_search
     search_row_selector = "[data-class='search-row'][data-search-id='#{table_search.id}']"
 
-    puts "Sign in"
     login_as user_admin
-
-    puts "Visit"
     visit bootstrap_live_table_path
-
-    puts "Wait for row 1"
     wait_for_selector model_row_selector(task1)
-
-    puts "Wait for row 2"
     wait_for_selector model_row_selector(task2)
-
-    puts "Filter"
     wait_for_and_find(".filter-button").click
-
-    puts "Load"
     wait_for_and_find(".load-search-button").click
     wait_for_selector search_row_selector
 
     accept_confirm do
-      puts "Click destroy"
       wait_for_and_find("[data-class='delete-search-button'][data-search-id='#{table_search.id}']").click
-
-      puts "Wait for row to disappear"
-      wait_for_no_selector search_row_selector
     end
 
-    puts "Expect table search to be gone"
+    wait_for_no_selector search_row_selector
     expect { table_search.reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
 end

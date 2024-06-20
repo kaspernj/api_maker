@@ -5,6 +5,7 @@ import {memo, useEffect} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import {TableSearch} from "../../models.mjs.erb"
 import {Pressable, Text, View} from "react-native"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const SearchLink = memo(shapeComponent(class SearchLink extends ShapeComponent {
   render() {
