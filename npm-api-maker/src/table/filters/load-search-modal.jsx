@@ -20,7 +20,7 @@ const SearchLink = memo(shapeComponent(class SearchLink extends ShapeComponent {
         </Pressable>
         <View style={{flexDirection: "row", marginLeft: "auto"}}>
           <Pressable
-            dataSet={{class: "edit-search-link"}}
+            dataSet={{class: "edit-search-button"}}
             onPress={this.onEditPressed}
             style={{
               alignItems: "center",
@@ -38,7 +38,7 @@ const SearchLink = memo(shapeComponent(class SearchLink extends ShapeComponent {
             </Text>
           </Pressable>
           <Pressable
-            dataSet={{class: "delete-search-button", searchId: search.id()}}
+            dataSet={{class: "delete-search-button"}}
             onPress={this.onDeletePressed}
             style={{
               alignItems: "center",

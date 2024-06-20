@@ -58,6 +58,25 @@ describe "table - filter" do
     wait_for_selector model_row_selector(task2)
   end
 
+  it "edits a search" do
+    task1
+    task2
+    table_search
+    search_row_selector = "[data-class='search-row'][data-search-id='#{table_search.id}']"
+
+    login_as user_admin
+    visit bootstrap_live_table_path
+    wait_for_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
+    wait_for_and_find(".filter-button").click
+    wait_for_and_find(".load-search-button").click
+    wait_for_selector search_row_selector
+    wait_for_and_find("#{search_row_selector} [data-class='edit-search-button']").click
+    wait_for_and_find("#table_search_name").set("Test search")
+    wait_for_and_find(".save-search-submit-button").click
+    wait_for_expect { expect(table_search.reload).to have_attributes(name: "Test search") }
+  end
+
   it "deletes a search" do
     task1
     task2
@@ -73,7 +92,7 @@ describe "table - filter" do
     wait_for_selector search_row_selector
 
     accept_confirm do
-      wait_for_and_find("[data-class='delete-search-button'][data-search-id='#{table_search.id}']").click
+      wait_for_and_find("#{search_row_selector} [data-class='delete-search-button']").click
     end
 
     wait_for_no_selector search_row_selector
