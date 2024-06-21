@@ -522,7 +522,7 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
   }
 
   isSmallScreen() {
-    if (this.props.breakpoint == "xs" || this.props.breakpoint == "sm") return true
+    if (this.breakpoint == "xs" || this.breakpoint == "sm") return true
 
     return false
   }
