@@ -1,63 +1,62 @@
+import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader.jsx"
 import {digg} from "diggerize"
 import hasEditConfig from "./has-edit-config.js"
 import * as inflection from "inflection"
 import Params from "../params"
 import PropTypes from "prop-types"
-import {memo, useCallback, useMemo} from "react"
+import {memo, useMemo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import Table from "../table/table"
 import useCurrentUser from "../use-current-user"
-import useShape from "set-state-compare/src/use-shape.js"
 
-const ApiMakerSuperAdminModelClassTable = (props) => {
-  const s = useShape(props)
-  const {modelClass, ...restProps} = props
-  const currentUser = useCurrentUser()
-  const configReader = useMemo(() => ConfigReader.forModel(modelClass), [modelClass])
-  const columns = useMemo(() => configReader.tableColumns(), [modelClass])
-  const tableConfig = configReader.modelConfig?.table
+export default memo(shapeComponent(class ApiMakerSuperAdminModelClassTable extends BaseComponent {
+  static propTypes = {
+    modelClass: PropTypes.func.isRequired
+  }
 
-  const editModelPath = useCallback((args) => {
-    const argName = inflection.camelize(digg(s.p.modelClass.modelClassData(), "name"), true)
+  render() {
+    const {modelClass, ...restProps} = this.props
+    const currentUser = useCurrentUser()
+    const configReader = useMemo(() => ConfigReader.forModel(modelClass), [modelClass])
+    const columns = useMemo(() => configReader.tableColumns(), [modelClass])
+    const tableConfig = configReader.modelConfig?.table
+    const tableProps = {}
+
+    if (tableConfig?.query) tableProps.collection = tableConfig.query
+
+    return (
+      <Table
+        columns={columns}
+        currentUser={currentUser}
+        editModelPath={hasEditConfig(modelClass) ? this.tt.editModelPath : undefined}
+        modelClass={modelClass}
+        viewModelPath={this.tt.viewModelPath}
+        workplace
+        {...tableProps}
+        {...restProps}
+      />
+    )
+  }
+
+  editModelPath = (args) => {
+    const argName = inflection.camelize(digg(this.p.modelClass.modelClassData(), "name"), true)
     const model = digg(args, argName)
 
     return Params.withParams({
-      model: s.p.modelClass.modelClassData().name,
+      model: this.p.modelClass.modelClassData().name,
       model_id: model.primaryKey(),
       mode: "edit"
     })
-  }, [])
+  }
 
-  const viewModelPath = useCallback((args) => {
-    const argName = inflection.camelize(digg(s.p.modelClass.modelClassData(), "name"), true)
+  viewModelPath = (args) => {
+    const argName = inflection.camelize(digg(this.p.modelClass.modelClassData(), "name"), true)
     const model = digg(args, argName)
 
     return Params.withParams({
-      model: s.p.modelClass.modelClassData().name,
+      model: this.p.modelClass.modelClassData().name,
       model_id: model.primaryKey()
     })
-  }, [])
-
-  const tableProps = {}
-
-  if (tableConfig?.query) tableProps.collection = tableConfig.query
-
-  return (
-    <Table
-      columns={columns}
-      currentUser={currentUser}
-      editModelPath={hasEditConfig(modelClass) ? editModelPath : undefined}
-      modelClass={modelClass}
-      viewModelPath={viewModelPath}
-      workplace
-      {...tableProps}
-      {...restProps}
-    />
-  )
-}
-
-ApiMakerSuperAdminModelClassTable.propTypes = {
-  modelClass: PropTypes.func.isRequired
-}
-
-export default memo(ApiMakerSuperAdminModelClassTable)
+  }
+}))
