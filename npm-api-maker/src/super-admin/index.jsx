@@ -43,10 +43,14 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     this.useStates({
       model: undefined
     })
+    useEffect(
+      () => { this.loadModel() },
+      [this.modelId]
+    )
   }
 
   loadModel = async () => {
-    const {modelClass, modelId} = this.tt
+    const {modelClass, modelId, modelName} = this.tt
 
     if (modelId && modelClass) {
       const abilities = {}
@@ -63,11 +67,6 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     } else {
       this.setState({model: undefined})
     }
-
-    useEffect(
-      () => { this.loadModel() },
-      [this.modelId]
-    )
   }
 
   render() {
@@ -108,7 +107,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
               </Link>
             }
             {model.can("destroy") &&
-              <a className="destroy-model-link" href="#" onClick={onDestroyClicked}>
+              <a className="destroy-model-link" href="#" onClick={this.tt.onDestroyClicked}>
                 Delete
               </a>
             }
