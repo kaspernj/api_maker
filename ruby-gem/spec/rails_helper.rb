@@ -30,6 +30,9 @@ require "waitutil"
 require "webdrivers"
 require "with_advisory_lock"
 
+FactoryBot.definition_file_paths << "#{__dir__}/factories"
+FactoryBot.find_definitions
+
 Capybara.register_driver :headless_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
   options.add_argument("--disable-dev-shm-usage")
