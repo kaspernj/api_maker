@@ -48,9 +48,15 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPage extends Base
     const extraContent = showConfig?.extraContent
     const modelClassName = modelClass.modelClassData().name
     const primaryKeyName = modelClass.primaryKey()
-    const preload = [].concat(showConfig.preload)
+    const preload = []
     const select = showConfig?.extraSelect || {}
     const modelClassSelect = select[modelClassName] || []
+
+    if (showConfig.preload) {
+      for (const showConfigPreload of showConfig.preload) {
+        preload.push(showConfigPreload)
+      }
+    }
 
     if (!(modelClassName in select)) select[modelClassName] = modelClassSelect
     if (!modelClassSelect.includes(primaryKeyName)) modelClassSelect.push(primaryKeyName)
