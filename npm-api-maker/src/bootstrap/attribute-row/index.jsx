@@ -17,14 +17,18 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
     checkIfAttributeLoaded: PropTypes.bool.isRequired,
     children: PropTypes.node,
     identifier: PropTypes.string,
-    label: PropTypes.node,
+    label: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
     model: PropTypes.object,
     value: PropTypes.node
   }
 
   setup() {
     this.attribute = useMemo(
-      () => this.props.model?.constructor?.attributes()?.find((attribute) => attribute.name() == inflection.underscore(this.props.attribute)),
+      () => {
+        if (this.props.attribute) {
+          return this.props.model?.constructor?.attributes()?.find((attribute) => attribute.name() == inflection.underscore(this.props.attribute))
+        }
+      },
       [this.props.attribute, this.props.model]
     )
   }

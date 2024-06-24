@@ -1,19 +1,21 @@
+import BaseComponent from "../base-component"
+import {memo} from "react"
 import ModelClassTable from "./model-class-table"
 import PropTypes from "prop-types"
-import {memo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
-const ApiMakerSuperAdminIndexPage = ({modelClass}) => {
-  return (
-    <div className="super-admin--index-page">
-      <ModelClassTable
-        modelClass={modelClass}
-      />
-    </div>
-  )
-}
+export default memo(shapeComponent(class ApiMakerSuperAdminIndexPage extends BaseComponent {
+  static propTypes = {
+    modelClass: PropTypes.func.isRequired
+  }
 
-ApiMakerSuperAdminIndexPage.propTypes = {
-  modelClass: PropTypes.func.isRequired
-}
+  render() {
+    const {modelClass} = this.props
 
-export default memo(ApiMakerSuperAdminIndexPage)
+    return (
+      <div className="super-admin--index-page">
+        <ModelClassTable modelClass={modelClass} />
+      </div>
+    )
+  }
+}))
