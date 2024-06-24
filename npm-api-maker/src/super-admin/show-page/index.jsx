@@ -52,7 +52,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPage extends Base
     const select = showConfig?.extraSelect || {}
     const modelClassSelect = select[modelClassName] || []
 
-    if (showConfig.preload) {
+    if (showConfig?.preload) {
       for (const showConfigPreload of showConfig.preload) {
         preload.push(showConfigPreload)
       }
