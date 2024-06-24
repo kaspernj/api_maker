@@ -2,10 +2,10 @@ require "rails_helper"
 
 describe "models index distinct" do
   let!(:account) { create :account }
-  let!(:account_market_task1) { create :account_marked_task, account: account, task: task }
-  let!(:account_market_task2) { create :account_marked_task, account: account, task: task }
-  let!(:project) { create :project, account: account }
-  let!(:task) { create :task, project: project, user: user }
+  let!(:account_market_task1) { create :account_marked_task, account:, task: }
+  let!(:account_market_task2) { create :account_marked_task, account:, task: }
+  let!(:project) { create :project, account: }
+  let!(:task) { create :task, project:, user: }
   let!(:user) { create :user }
 
   it "reacts on destroy events" do

@@ -58,8 +58,8 @@ class ApiMaker::Serializer
     end
   end
 
-  def fetch(*args, &blk)
-    result.fetch(*args, &blk)
+  def fetch(*, &)
+    result.fetch(*, &)
   end
 
   def load_ability(ability_name, value)
@@ -79,7 +79,7 @@ class ApiMaker::Serializer
 
   def resource_instance
     @resource_instance ||= profile("resource_instance") do
-      resource.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model)
+      resource.new(ability:, api_maker_args:, locals:, model:)
     end
   end
 
@@ -93,7 +93,7 @@ class ApiMaker::Serializer
   def as_json(options = nil)
     profile("as_json") do
       if options && options[:result_parser]
-        ApiMaker::ResultParser.new(result, ability: ability, api_maker_args: api_maker_args).result
+        ApiMaker::ResultParser.new(result, ability:, api_maker_args:).result
       else
         result
       end
@@ -116,7 +116,7 @@ class ApiMaker::Serializer
 
 private
 
-  def profile(message, &blk)
-    ApiMaker::Configuration.profile(-> { "Serializer for #{model.class.name}: #{message}" }, &blk)
+  def profile(message, &)
+    ApiMaker::Configuration.profile(-> { "Serializer for #{model.class.name}: #{message}" }, &)
   end
 end

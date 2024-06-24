@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "model belongs to relationships" do
   let!(:project) { create :project }
-  let!(:task) { create :task, project: project, user: user }
+  let!(:task) { create :task, project:, user: }
   let(:user) { create :user }
 
   it "finds the parent model" do

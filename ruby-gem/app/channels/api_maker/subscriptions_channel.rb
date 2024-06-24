@@ -49,7 +49,7 @@ private
     channel_name = model_class.api_maker_broadcast_create_channel_name
     stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
       ApiMaker::Configuration.current.before_create_event_callbacks.each do |callback|
-        callback.call(data: data)
+        callback.call(data:)
       end
 
       # We need to look the model up to evaluate if the user has access
@@ -90,7 +90,7 @@ private
   end
 
   def connect_event(model_name, model_ids, event_name)
-    ability_name = "event_#{event_name}".to_sym
+    ability_name = :"event_#{event_name}"
     model_class = model_for_resource_name(model_name)
 
     Rails.logger.debug { "API maker: ConnectEvents for #{model_class.name} #{event_name}" }
@@ -110,7 +110,7 @@ private
   end
 
   def connect_model_class_event(model_name, event_name)
-    ability_name = "model_class_event_#{event_name}".to_sym
+    ability_name = :"model_class_event_#{event_name}"
     model_class = model_for_resource_name(model_name)
     channel_name = model_class.api_maker_model_class_event_name(event_name)
 

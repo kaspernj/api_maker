@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :customer_relationship do
-    association :child, factory: :customer
-    association :parent, factory: :customer
+    child factory: %i[customer]
+    parent factory: %i[customer]
     relationship_type { "commune" }
   end
 end

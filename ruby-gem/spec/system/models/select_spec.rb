@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "models select" do
-  let!(:task) { create :task, id: 29, name: "Test task", user: user }
+  let!(:task) { create :task, id: 29, name: "Test task", user: }
   let!(:user) { create :user }
 
   it "only gets the defined attributes" do

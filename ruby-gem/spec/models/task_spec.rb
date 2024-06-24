@@ -4,7 +4,7 @@ describe Task do
   it "adds a validation model when given a blank translated collection value" do
     task = build(:task, state: "")
 
-    expect(task).to be_invalid
+    expect(task).not_to be_valid
     expect(task.errors.full_messages).to eq ["State is not included in the list"]
     expect(task.translated_state).to be_nil
   end

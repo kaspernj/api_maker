@@ -10,7 +10,7 @@ class ApiMaker::Collection
     query = resource_class.model_class.ransack(ransack).result
 
     if search
-      search_ransack_params = ApiMaker::SearchToRansackParams.new(search: search).perform
+      search_ransack_params = ApiMaker::SearchToRansackParams.new(search:).perform
       query = query.ransack(search_ransack_params).result
     end
 

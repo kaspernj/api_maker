@@ -15,9 +15,7 @@ class ApiMaker::PreloaderBase
   end
 
   def collection_ids
-    @collection_ids ||= collection.map do |collection_model|
-      collection_model[reflection.active_record.primary_key]
-    end
+    @collection_ids ||= collection.pluck(reflection.active_record.primary_key)
   end
 
   def underscore_name
@@ -42,11 +40,11 @@ class ApiMaker::PreloaderBase
     end
 
     ApiMaker::SelectColumnsOnCollection.execute!(
-      collection: collection,
+      collection:,
       model_class: reflection.klass,
       select_attributes: select,
-      select_columns: select_columns,
-      table_name: table_name
+      select_columns:,
+      table_name:
     )
   end
 

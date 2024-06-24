@@ -10,11 +10,11 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
         command_model_data.each do |command_name, command_data|
           ApiMaker.const_get("#{command_type.camelize}CommandService").execute!(
             ability: current_ability,
-            api_maker_args: api_maker_args,
-            command_response: command_response,
+            api_maker_args:,
+            command_response:,
             commands: command_data,
-            command_name: command_name,
-            controller: controller,
+            command_name:,
+            controller:,
             resource_name: resource_plural_name
           )
         end

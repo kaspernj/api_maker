@@ -62,7 +62,7 @@ describe ApiMaker::TranslatedCollections do
   it "validates state" do
     task.state = "invalid"
 
-    expect(task).to be_invalid
+    expect(task).not_to be_valid
     expect(task.errors.full_messages).to eq ["State is not included in the list"]
   end
 

@@ -2,8 +2,8 @@ require "rails_helper"
 
 describe ApiMaker::Serializer do
   let(:account) { create :account }
-  let!(:project) { create :project, account: account }
-  let!(:task) { create :task, project: project, user: user }
+  let!(:project) { create :project, account: }
+  let!(:task) { create :task, project:, user: }
   let!(:user) { create :user }
 
   it "serializes custom attributes" do

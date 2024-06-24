@@ -16,7 +16,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
       count = @query.size
       count = count.length if count.is_a?(Hash)
 
-      succeed!(count: count)
+      succeed!(count:)
     else
       collection = collection_from_query(@query)
       response = {
@@ -36,10 +36,10 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   def collection_from_query(collection)
     ApiMaker::CollectionSerializer
       .new(
-        ability: ability,
-        api_maker_args: api_maker_args,
-        collection: collection,
-        locals: locals,
+        ability:,
+        api_maker_args:,
+        collection:,
+        locals:,
         query_params: params
       )
       .result

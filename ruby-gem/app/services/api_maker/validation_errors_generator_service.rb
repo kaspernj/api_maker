@@ -12,13 +12,13 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
 
     inspect_model(model, path)
     inspect_params(model, params, path)
-    ServicePattern::Response.new(result: result)
+    ServicePattern::Response.new(result:)
   end
 
   def inspect_model(model, path)
     return if model.errors.empty?
 
-    model.errors.details.each do |attribute_name, _errors|
+    model.errors.details.each_key do |attribute_name|
       # Errors on nested attributes contain dots - they should be caught here again later when scanning the nested relationship
       next if attribute_name.to_s.include?(".")
 
@@ -28,8 +28,8 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
       input_name = path_to_attribute_name(attribute_path)
 
       error_data = {
-        attribute_name: attribute_name,
-        attribute_type: attribute_type,
+        attribute_name:,
+        attribute_type:,
         id: model.id,
         model_name: model.model_name.param_key,
         error_messages: model.errors.messages.fetch(attribute_name).to_a,

@@ -5,7 +5,7 @@ class ApiMaker::CollectionSerializer
     raise "No collection was given" unless collection
 
     @query_params = query_params || {}
-    @ability = ability || ApiMaker::Ability.new(api_maker_args: api_maker_args)
+    @ability = ability || ApiMaker::Ability.new(api_maker_args:)
     @api_maker_args = api_maker_args
     @collection = collection
     @locals = locals || api_maker_args&.dig(:locals) || {}
@@ -43,7 +43,7 @@ class ApiMaker::CollectionSerializer
       serializer = models.values.first
       abilities = query_params.dig(:abilities, serializer.resource.require_name)
 
-      ApiMaker::AbilitiesLoader.execute!(abilities: abilities, ability: ability, serializers: serializers) if abilities && serializers
+      ApiMaker::AbilitiesLoader.execute!(abilities:, ability:, serializers:) if abilities && serializers
     end
   end
 
@@ -91,10 +91,10 @@ class ApiMaker::CollectionSerializer
   def parsed_collection
     @parsed_collection ||= begin
       new_collection = ApiMaker::SelectColumnsOnCollection.execute!(
-        collection: collection,
-        model_class: model_class,
+        collection:,
+        model_class:,
         select_attributes: select,
-        select_columns: select_columns
+        select_columns:
       )
       new_collection = new_collection.fix if !new_collection.is_a?(Array) && ApiMaker::DatabaseType.postgres?
       new_collection
@@ -103,16 +103,16 @@ class ApiMaker::CollectionSerializer
 
   def preload_collection(data, records)
     preloader = ApiMaker::Preloader.new(
-      ability: ability,
-      api_maker_args: api_maker_args,
+      ability:,
+      api_maker_args:,
       collection: parsed_collection,
-      data: data,
-      locals: locals,
-      preload_param: preload_param,
-      model_class: model_class,
-      records: records,
-      select: select,
-      select_columns: select_columns
+      data:,
+      locals:,
+      preload_param:,
+      model_class:,
+      records:,
+      select:,
+      select_columns:
     )
     preloader.fill_data
   end
@@ -122,7 +122,7 @@ class ApiMaker::CollectionSerializer
   end
 
   def serializer_for_model(model)
-    ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model, select: select_for(model))
+    ApiMaker::Serializer.new(ability:, api_maker_args:, locals:, model:, select: select_for(model))
   end
 
   def to_json(options = nil)

@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "super admin - show" do
   let(:project) { create :project, name: "Test project" }
-  let(:task) { create :task, project: project }
+  let(:task) { create :task, project: }
   let(:user_admin) { create :user, admin: true }
 
   it "renders the page" do

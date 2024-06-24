@@ -4,7 +4,7 @@ describe "bootstrap - sort link" do
   let(:user) { create :user }
 
   it "sorts the tasks" do
-    create_list :task, 5, user: user
+    create_list(:task, 5, user:)
 
     login_as user
     visit bootstrap_sort_link_path

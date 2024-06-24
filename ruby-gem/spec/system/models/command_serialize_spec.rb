@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "models - command serialize" do
-  let(:task) { create :task, user: user }
+  let(:task) { create :task, user: }
   let(:user) { create :user }
 
   it "serializes and de-serializes automatically" do

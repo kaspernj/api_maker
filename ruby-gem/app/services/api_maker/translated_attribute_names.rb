@@ -7,7 +7,7 @@ class ApiMaker::TranslatedAttributeNames < ApiMaker::ApplicationService
       list << attribute_name
 
       I18n.available_locales.each do |locale|
-        list << "#{attribute_name}_#{locale}".to_sym
+        list << :"#{attribute_name}_#{locale}"
       end
     end
 

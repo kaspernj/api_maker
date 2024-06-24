@@ -13,8 +13,8 @@ class ApiMaker::CommandSpecHelper
 
     commands[id] = {
       args: ActionController::Parameters.new(args),
-      id: id,
-      primary_key: primary_key
+      id:,
+      primary_key:
     }
 
     AddedCommand.new(id, response)
@@ -29,22 +29,22 @@ class ApiMaker::CommandSpecHelper
 
       individual_command = ApiMaker::IndividualCommand.new(
         args: ApiMaker::Deserializer.execute!(arg: command_data[:args]),
-        collection: collection,
+        collection:,
         command: self,
         id: command_id,
         primary_key: command_data[:primary_key],
-        response: response
+        response:
       )
 
       command_class.new(
         ability: controller.__send__(:current_ability),
         api_maker_args: controller.__send__(:api_maker_args),
-        collection: collection,
-        collection_instance: collection_instance,
+        collection:,
+        collection_instance:,
         command: individual_command,
-        commands: commands,
+        commands:,
         command_response: response,
-        controller: controller
+        controller:
       )
     end
   end
@@ -54,10 +54,10 @@ class ApiMaker::CommandSpecHelper
       command_class.const_get(:CollectionInstance).new(
         ability: controller.__send__(:current_ability),
         api_maker_args: controller.__send__(:api_maker_args),
-        collection: collection,
-        commands: commands,
+        collection:,
+        commands:,
         command_response: response,
-        controller: controller
+        controller:
       )
     end
   end

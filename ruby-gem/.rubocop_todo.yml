@@ -12,7 +12,7 @@ Metrics/AbcSize:
 
 # Offense count: 3
 # Configuration parameters: CustomTransform, IgnoreMethods.
-RSpec/FilePath:
+Rails/FilePath:
   Exclude:
     - 'spec/services/model_content_generator_service_spec.rb'
     - 'spec/services/models_finder_service_spec.rb'

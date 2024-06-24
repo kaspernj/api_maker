@@ -2,16 +2,16 @@ require "rails_helper"
 
 describe ApiMaker::SimpleModelErrors do
   let(:account) { create :account }
-  let(:project) { create :project, account: account }
+  let(:project) { create :project, account: }
 
   it "handles models on deeply nested models" do
     account = build :account
     project = account.projects.build(name: "Test project")
     task = project.tasks.build
 
-    expect(task).to be_invalid
-    expect(project).to be_invalid
-    expect(account).to be_invalid
+    expect(task).not_to be_valid
+    expect(project).not_to be_valid
+    expect(account).not_to be_valid
 
     result = ApiMaker::SimpleModelErrors.execute!(model: account)
 
@@ -24,9 +24,9 @@ describe ApiMaker::SimpleModelErrors do
       project = account.projects.build(name: "Test project")
       task = project.tasks.build
 
-      expect(task).to be_invalid
-      expect(project).to be_invalid
-      expect(account).to be_invalid
+      expect(task).not_to be_valid
+      expect(project).not_to be_valid
+      expect(account).not_to be_valid
 
       result = ApiMaker::SimpleModelErrors.execute!(model: account)
 
@@ -38,7 +38,7 @@ describe ApiMaker::SimpleModelErrors do
     task = build :task
     task.project.name = ""
 
-    expect(task).to be_invalid
+    expect(task).not_to be_valid
 
     errors = ApiMaker::SimpleModelErrors.execute!(model: task)
 

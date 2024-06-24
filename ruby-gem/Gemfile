@@ -14,11 +14,48 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
+group :development, :test do
+  # gem "api_maker_table", ">= 0.1.1"
+  gem "appraisal"
+  gem "awesome_translations", ">= 0.0.62"
+  gem "best_practice_project"
+  gem "capybara"
+  gem "devise"
+  gem "dotenv-rails"
+  gem "factory_bot_rails"
+  gem "htmlbeautifier"
+  gem "js-routes", "2.0.8"
+  gem "money-rails"
+  gem "pry-rails"
+  gem "public_activity"
+  gem "puma"
+  gem "rails_best_practices"
+  gem "rspec-rails"
+  gem "rspec-retry"
+  gem "rubocop", ">= 1.64.1"
+  gem "rubocop-capybara", ">= 2.21.0"
+  gem "rubocop-factory_bot", ">= 2.26.1"
+  gem "rubocop-performance", ">= 1.21.1"
+  gem "rubocop-rails", ">= 2.25.0"
+  gem "rubocop-rspec", ">= 3.0.1"
+  gem "rubocop-rspec_rails", ">= 2.30.0"
+  gem "selenium-webdriver", ">= 4.1.0"
+  gem "shakapacker", "8.0.0"
+  gem "sqlite3"
+  gem "tretry"
+  gem "tzinfo-data"
+  gem "webdrivers", ">= 5.3.1"
+
+  # Needed to make Ruby 3 work on CI
+  gem "minitest", ">= 5.15"
+  gem "sexp_processor", ">= 4.16.0"
+end
+
 group :test do
   if File.exist?("/home/build/project/api_maker_table_rubygem")
     gem "api_maker_table", path: "/home/build/project/api_maker_table_rubygem"
-  elsif File.exist?("/home/dev/api_maker/api_maker_table_rubygem")
-    gem "api_maker_table", path: "/home/dev/api_maker/api_maker_table_rubygem"
+  elsif File.exist?("/home/dev/Development/api_maker/api_maker_table_rubygem")
+    gem "api_maker_table", path: "/home/dev/Development/api_maker/api_maker_table_rubygem"
   elsif File.exist?("/home/dev/api_maker/api_maker_table_rubygem")
     gem "api_maker_table", path: "/home/dev/api_maker/api_maker_table_rubygem"
   end

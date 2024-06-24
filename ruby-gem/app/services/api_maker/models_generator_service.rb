@@ -16,7 +16,7 @@ private
       base_model_target_path = File.join(target_path, file)
 
       base_model_target_dir = File.dirname(base_model_target_path)
-      FileUtils.mkdir_p(base_model_target_dir) unless File.exist?(base_model_target_dir)
+      FileUtils.mkdir_p(base_model_target_dir)
 
       if File.exist?(base_model_source_path)
         content = File.read(base_model_source_path)
