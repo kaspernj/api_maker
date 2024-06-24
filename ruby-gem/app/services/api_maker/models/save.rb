@@ -19,13 +19,13 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
         next if model.save
 
         if simple_model_errors
-          errors += ApiMaker::SimpleModelErrors.execute!(model: model)
+          errors += ApiMaker::SimpleModelErrors.execute!(model:)
         else
           errors += model.errors.full_messages
         end
 
         failed = true
-        failed_models << {model: model, params: params}
+        failed_models << {model:, params:}
 
         # The other models might be dependent on this one saving and it could lead to actual crashes and not just validation errors
         break if failed
@@ -37,9 +37,9 @@ class ApiMaker::Models::Save < ApiMaker::ApplicationService
     fail! errors.uniq if errors.any? && !succeed_with_errors
 
     succeed!(
-      failed: failed,
-      failed_models: failed_models,
-      errors: errors
+      failed:,
+      failed_models:,
+      errors:
     )
   end
 

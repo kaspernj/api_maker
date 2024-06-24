@@ -4,7 +4,7 @@ describe "api maker paginate" do
   let(:user) { create :user }
 
   before do
-    create_list(:task, 80, user: user)
+    create_list(:task, 80, user:)
   end
 
   it "changes page successfully" do

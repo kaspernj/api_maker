@@ -13,7 +13,7 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
       elsif model.save
         success_response
       else
-        failure_save_response(model: model, params: sanitized_parameters, simple_model_errors: simple_model_errors?)
+        failure_save_response(model:, params: sanitized_parameters, simple_model_errors: simple_model_errors?)
       end
     end
   end
@@ -35,7 +35,7 @@ class ApiMaker::CreateCommand < ApiMaker::BaseCommand
   end
 
   def sanitize_parameters
-    serializer.resource_instance.permitted_params(ApiMaker::PermittedParamsArgument.new(command: self, model: model))
+    serializer.resource_instance.permitted_params(ApiMaker::PermittedParamsArgument.new(command: self, model:))
   end
 
   def success_response

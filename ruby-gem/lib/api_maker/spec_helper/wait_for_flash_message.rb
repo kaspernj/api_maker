@@ -2,7 +2,7 @@ module ApiMaker::SpecHelper::WaitForFlashMessage
   def wait_for_flash_message(expected_message, delay_sec: 0.2, timeout_sec: 6)
     received_messages = []
 
-    WaitUtil.wait_for_condition("wait for flash message", timeout_sec: timeout_sec, delay_sec: delay_sec) do
+    WaitUtil.wait_for_condition("wait for flash message", timeout_sec:, delay_sec:) do
       expect_no_browser_errors
       current_messages = flash_message_text
       current_messages = [current_messages] unless current_messages.is_a?(Array)

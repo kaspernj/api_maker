@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe "models - update event" do
-  let(:finished_task) { create :task, finished: true, user: user }
-  let(:unfinished_task) { create :task, finished: false, user: user }
+  let(:finished_task) { create :task, finished: true, user: }
+  let(:unfinished_task) { create :task, finished: false, user: }
   let(:user) { create :user }
 
   it "ignores updates from other models" do

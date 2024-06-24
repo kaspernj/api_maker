@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe ApiMaker::ValidationErrorsGeneratorService do
   let(:account) { create :account, id: 1001 }
-  let(:project) { create :project, account: account, id: 2001 }
+  let(:project) { create :project, account:, id: 2001 }
 
   it "handles monetized attributes" do
     project.price_per_hour = "asd"
@@ -43,11 +43,11 @@ describe ApiMaker::ValidationErrorsGeneratorService do
 
     project.assign_attributes(params)
 
-    expect(project).to be_invalid
+    expect(project).not_to be_valid
 
     result = ApiMaker::ValidationErrorsGeneratorService.execute!(
       model: project,
-      params: params
+      params:
     )
 
     expect(result).to eq [
@@ -75,11 +75,11 @@ describe ApiMaker::ValidationErrorsGeneratorService do
 
     project.assign_attributes(params)
 
-    expect(project).to be_invalid
+    expect(project).not_to be_valid
 
     result = ApiMaker::ValidationErrorsGeneratorService.execute!(
       model: project,
-      params: params
+      params:
     )
 
     expect(result).to eq [
@@ -107,7 +107,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
 
     account.assign_attributes(params)
 
-    expect(account).to be_invalid
+    expect(account).not_to be_valid
 
     if Rails::VERSION::STRING.start_with?("6")
       expect(account.errors.full_messages).to eq ["Projects base Navn kan ikke være Hans"]
@@ -117,7 +117,7 @@ describe ApiMaker::ValidationErrorsGeneratorService do
 
     result = ApiMaker::ValidationErrorsGeneratorService.execute!(
       model: account,
-      params: params
+      params:
     )
 
     expect(result).to eq [
@@ -137,11 +137,11 @@ describe ApiMaker::ValidationErrorsGeneratorService do
 
     project.assign_attributes(params)
 
-    expect(project).to be_invalid
+    expect(project).not_to be_valid
 
     result = ApiMaker::ValidationErrorsGeneratorService.execute!(
       model: project,
-      params: params
+      params:
     )
 
     expect(result).to eq [
@@ -161,11 +161,11 @@ describe ApiMaker::ValidationErrorsGeneratorService do
 
     project.assign_attributes(params)
 
-    expect(project).to be_invalid
+    expect(project).not_to be_valid
 
     result = ApiMaker::ValidationErrorsGeneratorService.execute!(
       model: project,
-      params: params
+      params:
     )
 
     expect(result).to eq [{
@@ -186,11 +186,11 @@ describe ApiMaker::ValidationErrorsGeneratorService do
     }
 
     user = User.new(params)
-    expect(user).to be_invalid
+    expect(user).not_to be_valid
 
     result = ApiMaker::ValidationErrorsGeneratorService.execute!(
       model: user,
-      params: params
+      params:
     )
 
     expect(result).to eq [{

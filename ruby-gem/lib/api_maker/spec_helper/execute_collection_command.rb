@@ -19,13 +19,13 @@ class ApiMaker::SpecHelper::ExecuteCollectionCommand < ApiMaker::ApplicationServ
   end
 
   def ability
-    @ability ||= ApiMaker::Ability.new(api_maker_args: api_maker_args)
+    @ability ||= ApiMaker::Ability.new(api_maker_args:)
   end
 
   def fake_controller
     @fake_controller ||= instance_double(
       ApiMaker::BaseController,
-      api_maker_args: api_maker_args,
+      api_maker_args:,
       current_ability: ability
     )
   end
@@ -33,14 +33,14 @@ class ApiMaker::SpecHelper::ExecuteCollectionCommand < ApiMaker::ApplicationServ
   def helper
     @helper ||= ApiMaker::CommandSpecHelper.new(
       collection: model_class,
-      command: command,
+      command:,
       controller: fake_controller
     )
   end
 
   def helper_command
     @helper_command ||= helper.add_command(
-      args: args
+      args:
     )
   end
 end

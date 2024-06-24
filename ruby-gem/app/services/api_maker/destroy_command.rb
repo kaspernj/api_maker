@@ -12,7 +12,7 @@ class ApiMaker::DestroyCommand < ApiMaker::BaseCommand
   end
 
   def errors_for_model
-    ActiveRecordBetterDependentErrorMessages::DestroyValidator.(model: model) if model.errors.full_messages.empty?
+    ActiveRecordBetterDependentErrorMessages::DestroyValidator.(model:) if model.errors.full_messages.empty?
     model.errors.full_messages
   end
 

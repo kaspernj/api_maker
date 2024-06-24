@@ -79,7 +79,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     wait_for_selector ".super-admin--show-page"
 
     attributes.each do |attribute_name, value|
-      wait_for_attribute_row attribute: attribute_name.to_s, value: value
+      wait_for_attribute_row attribute: attribute_name.to_s, value:
     end
   end
 

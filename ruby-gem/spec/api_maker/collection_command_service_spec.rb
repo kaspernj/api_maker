@@ -6,22 +6,22 @@ describe ApiMaker::CollectionCommandService do
   let(:fake_controller) { double }
   let(:service) do
     ApiMaker::CollectionCommandService.new(
-      ability: ability,
+      ability:,
       api_maker_args: {},
       command_name: "asd",
       commands: [],
-      command_response: command_response,
+      command_response:,
       controller: fake_controller,
       resource_name: "activities"
     )
   end
   let(:account_marked_task_service) do
     ApiMaker::CollectionCommandService.new(
-      ability: ability,
+      ability:,
       api_maker_args: {},
       command_name: "asd",
       commands: [],
-      command_response: command_response,
+      command_response:,
       controller: fake_controller,
       resource_name: "account-marked-tasks"
     )

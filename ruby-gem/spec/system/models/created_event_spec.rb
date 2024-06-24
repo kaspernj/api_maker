@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "models created event" do
-  let(:task) { create :task, id: 1, name: "test create task", user: user }
+  let(:task) { create :task, id: 1, name: "test create task", user: }
   let(:task_from_other_user) { create :task }
   let(:user) { create :user }
 

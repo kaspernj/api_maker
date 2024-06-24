@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :comment do
-    association :author, factory: :user
-    association :resource, factory: :task
+    author factory: %i[user]
+    resource factory: %i[task]
     comment { "Comment" }
   end
 end

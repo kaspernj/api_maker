@@ -137,8 +137,8 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     sleep 1.5
   end
 
-  def wait_for_and_find(selector, *args, **opts)
-    element = find(selector, *args, **opts)
+  def wait_for_and_find(selector, *, **)
+    element = find(selector, *, **)
     expect_no_browser_errors
     element
   rescue Capybara::ElementNotFound => e
@@ -147,7 +147,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def wait_for_browser(delay_sec: 0.2, message: "wait for browser", timeout_sec: 6)
-    WaitUtil.wait_for_condition(message, timeout_sec: timeout_sec, delay_sec: delay_sec) do
+    WaitUtil.wait_for_condition(message, timeout_sec:, delay_sec:) do
       expect_no_browser_errors
       yield
     end

@@ -42,12 +42,12 @@ class ApiMaker::BaseCommand
     command_response.with_thread do
       if const_defined?(:CollectionInstance)
         collection_instance = const_get(:CollectionInstance).new(
-          ability: ability,
-          api_maker_args: api_maker_args,
-          collection: collection,
-          commands: commands,
-          command_response: command_response,
-          controller: controller
+          ability:,
+          api_maker_args:,
+          collection:,
+          commands:,
+          command_response:,
+          controller:
         )
 
         collection = collection_instance.custom_collection if collection_instance.respond_to?(:custom_collection)
@@ -66,16 +66,16 @@ class ApiMaker::BaseCommand
         collection.load
       end
 
-      each_command(collection: collection, command_response: command_response, commands: commands, controller: controller, threadded: threadded) do |command|
+      each_command(collection:, command_response:, commands:, controller:, threadded:) do |command|
         command_instance = new(
-          ability: ability,
-          api_maker_args: api_maker_args,
-          collection: collection,
-          collection_instance: collection_instance,
-          command: command,
+          ability:,
+          api_maker_args:,
+          collection:,
+          collection_instance:,
+          command:,
           commands: command,
-          command_response: command_response,
-          controller: controller
+          command_response:,
+          controller:
         )
         command_instance.execute_with_response
       end
@@ -89,11 +89,11 @@ class ApiMaker::BaseCommand
 
         command_response.with_thread do
           run_command(
-            command_id: command_id,
-            command_data: command_data,
-            command_response: command_response,
-            collection: collection,
-            controller: controller,
+            command_id:,
+            command_data:,
+            command_response:,
+            collection:,
+            controller:,
             &blk
           )
         end
@@ -101,11 +101,11 @@ class ApiMaker::BaseCommand
         Rails.logger.debug { "API maker: Running #{name} non-threadded" }
 
         run_command(
-          command_id: command_id,
-          command_data: command_data,
-          command_response: command_response,
-          collection: collection,
-          controller: controller,
+          command_id:,
+          command_data:,
+          command_response:,
+          collection:,
+          controller:,
           &blk
         )
       end
@@ -115,7 +115,7 @@ class ApiMaker::BaseCommand
   def self.run_command(collection:, command_id:, command_data:, command_response:, controller:)
     command = ApiMaker::IndividualCommand.new(
       args: ApiMaker::Deserializer.execute!(arg: command_data[:args]),
-      collection: collection,
+      collection:,
       command: self,
       id: command_id,
       primary_key: command_data[:primary_key],
@@ -134,8 +134,8 @@ class ApiMaker::BaseCommand
       Rails.logger.error Rails.backtrace_cleaner.clean(e.backtrace).join("\n")
 
       ApiMaker::Configuration.current.report_error(
-        command: command,
-        controller: controller,
+        command:,
+        controller:,
         error: e,
         response: error_response
       )
@@ -144,8 +144,8 @@ class ApiMaker::BaseCommand
     end
   end
 
-  def execute_service_or_fail(service_class, *args, **opts, &blk)
-    self.execute_service_or_fail_response = service_class.execute(*args, **opts, &blk)
+  def execute_service_or_fail(service_class, ...)
+    self.execute_service_or_fail_response = service_class.execute(...)
 
     if execute_service_or_fail_response.success?
       succeed!(success: true)
@@ -166,7 +166,7 @@ class ApiMaker::BaseCommand
     fail!(
       model: serialized_model(model),
       success: false,
-      errors: errors
+      errors:
     )
   end
 
@@ -174,7 +174,7 @@ class ApiMaker::BaseCommand
     raise "Cannot receive additional attributes unless simple model errors" if !additional_attributes.empty? && !simple_model_errors
 
     error_messages = if simple_model_errors
-      ApiMaker::SimpleModelErrors.execute!(additional_attributes: additional_attributes, model: model)
+      ApiMaker::SimpleModelErrors.execute!(additional_attributes:, model:)
     else
       model.errors.full_messages
     end
@@ -184,7 +184,7 @@ class ApiMaker::BaseCommand
       errors: error_messages.map { |error_message| {message: error_message, type: :validation_error} },
       model: serialized_model(model),
       success: false,
-      validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model: model, params: params)
+      validation_errors: ApiMaker::ValidationErrorsGeneratorService.execute!(model:, params:)
     )
   end
 
@@ -193,7 +193,7 @@ class ApiMaker::BaseCommand
   end
 
   def save_models_or_fail(*models, simple_model_errors: false)
-    result = ApiMaker::Models::Save.execute!(models: models, simple_model_errors: simple_model_errors, succeed_with_errors: true)
+    result = ApiMaker::Models::Save.execute!(models:, simple_model_errors:, succeed_with_errors: true)
 
     if result.fetch(:failed)
       failed_model_with_params = result.fetch(:failed_models).find { |failed_model| failed_model.is_a?(Hash) && failed_model[:params] }
@@ -248,8 +248,8 @@ class ApiMaker::BaseCommand
     raise error
   end
 
-  def succeed!(*args, &blk)
-    command.result(*args, &blk)
+  def succeed!(*, &)
+    command.result(*, &)
   end
 
   def inspect
@@ -261,7 +261,7 @@ private
   def serialized_model(model)
     collection_serializer = ApiMaker::CollectionSerializer.new(
       ability: current_ability,
-      api_maker_args: api_maker_args,
+      api_maker_args:,
       collection: [model],
       model_class: model.class,
       query_params: args&.dig(:query_params)
@@ -270,6 +270,6 @@ private
   end
 
   def serialized_resource(model)
-    ApiMaker::Serializer.new(ability: current_ability, api_maker_args: api_maker_args, model: model)
+    ApiMaker::Serializer.new(ability: current_ability, api_maker_args:, model:)
   end
 end

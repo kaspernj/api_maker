@@ -11,7 +11,7 @@ class ApiMaker::ServiceCommand < ApiMaker::BaseCommand
         {}
       end
 
-      response = service_constant.execute(args: service_args, controller: controller)
+      response = service_constant.execute(args: service_args, controller:)
 
       if response.success?
         succeed!(response.result)
@@ -20,7 +20,7 @@ class ApiMaker::ServiceCommand < ApiMaker::BaseCommand
           {message: error.message, type: error.type}
         end
 
-        fail!(errors: errors)
+        fail!(errors:)
       end
     end
   end

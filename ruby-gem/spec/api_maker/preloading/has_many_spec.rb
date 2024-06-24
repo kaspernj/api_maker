@@ -2,8 +2,8 @@ require "rails_helper"
 
 describe "preloading - has many" do
   let(:account) { create :account }
-  let(:project) { create :project, account: account }
-  let(:task) { create :task, project: project, user: user }
+  let(:project) { create :project, account: }
+  let(:task) { create :task, project:, user: }
 
   let(:other_task) { create :task }
 
@@ -20,11 +20,11 @@ describe "preloading - has many" do
     preloader = ApiMaker::PreloaderHasOne.new(
       ability: user_ability,
       api_maker_args: {},
-      collection: collection,
+      collection:,
       data: {},
       locals: {},
       records: collection.to_a,
-      reflection: reflection,
+      reflection:,
       select: nil,
       select_columns: nil
     )
@@ -34,7 +34,7 @@ describe "preloading - has many" do
     expect(preloader.models).to eq [task]
     expect(sql).to include "JOIN tasks AS accessible_table ON accessible_table.id = tasks.id"
     expect(sql).to include "EXISTS (SELECT 1 FROM \"tasks\" WHERE ((" \
-                           "EXISTS (SELECT 1 FROM account_marked_tasks WHERE account_marked_tasks.task_id = tasks.id AND (account_marked_tasks.id = 5))) OR "\
+                           "EXISTS (SELECT 1 FROM account_marked_tasks WHERE account_marked_tasks.task_id = tasks.id AND (account_marked_tasks.id = 5))) OR " \
                            "((tasks.name = 'Some readable task') OR (\"tasks\".\"user_id\" = 1))) AND (tasks.id = accessible_table.id)"
   end
 
@@ -49,11 +49,11 @@ describe "preloading - has many" do
     preloader = ApiMaker::PreloaderHasOne.new(
       ability: user_ability,
       api_maker_args: {},
-      collection: collection,
+      collection:,
       data: {},
       locals: {},
       records: collection.to_a,
-      reflection: reflection,
+      reflection:,
       select: nil,
       select_columns: nil
     )
@@ -94,11 +94,11 @@ describe "preloading - has many" do
       preloader = ApiMaker::PreloaderHasMany.new(
         ability: user_ability,
         api_maker_args: {},
-        collection: collection,
-        data: data,
+        collection:,
+        data:,
         locals: {},
-        records: records,
-        reflection: reflection,
+        records:,
+        reflection:,
         select: nil,
         select_columns: nil
       )

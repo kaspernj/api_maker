@@ -15,9 +15,9 @@ class Services::CanCan::LoadAbilities < ApiMaker::BaseService
 
       can = current_ability.can?(ability.to_sym, subject_to_check)
       result << {
-        ability: ability,
-        can: can,
-        subject: subject
+        ability:,
+        can:,
+        subject:
       }
     end
 

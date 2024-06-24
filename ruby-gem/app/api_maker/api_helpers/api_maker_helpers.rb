@@ -4,6 +4,6 @@ module ApiHelpers::ApiMakerHelpers
   end
 
   def locals
-    @locals ||= ApiMaker::LocalsFromController.execute!(controller: controller)
+    @locals ||= ApiMaker::LocalsFromController.execute!(controller:)
   end
 end

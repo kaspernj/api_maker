@@ -7,7 +7,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
         origin_data = origin_data_for_model(model)
         origin_data.fetch(:r)[reflection.name] = model_id
 
-        serializer = ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model, select: select&.dig(model.class))
+        serializer = ApiMaker::Serializer.new(ability:, api_maker_args:, locals:, model:, select: select&.dig(model.class))
         underscore_name = serializer.resource.underscore_name
 
         data.fetch(:preloaded)[underscore_name] ||= {}
@@ -29,7 +29,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
         collection: query,
         model_class: reflection.klass,
         select_attributes: select,
-        select_columns: select_columns,
+        select_columns:,
         table_name: query.klass.table_name
       )
       query = query.fix if ApiMaker::DatabaseType.postgres?

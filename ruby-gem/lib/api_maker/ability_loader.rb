@@ -18,7 +18,7 @@ class ApiMaker::AbilityLoader
   def load_resource(resource_class)
     return if loaded_model_names.key?(resource_class.model_class_name)
 
-    resource_instance = resource_class.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: nil)
+    resource_instance = resource_class.new(ability:, api_maker_args:, locals:, model: nil)
 
     if resource_instance.respond_to?(:abilities)
       resource_instance.abilities

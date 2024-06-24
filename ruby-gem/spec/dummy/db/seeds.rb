@@ -10,5 +10,5 @@ end
 user.save! if user.changed?
 
 account = Account.find_or_create_by!(name: "Test account")
-project = Project.find_or_create_by!(account: account, name: "Test project")
-Task.find_or_create_by!(name: "Test task", project: project, user: user)
+project = Project.find_or_create_by!(account:, name: "Test project")
+Task.find_or_create_by!(name: "Test task", project:, user:)

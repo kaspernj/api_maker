@@ -77,18 +77,18 @@ private
 
   def model_content
     {
-      attributes: attributes,
-      collection_commands: collection_commands,
-      member_commands: member_commands,
-      model_class_data: model_class_data,
-      monetized_attributes: monetized_attributes,
-      relationships: relationships
+      attributes:,
+      collection_commands:,
+      member_commands:,
+      model_class_data:,
+      monetized_attributes:,
+      relationships:
     }
   end
 
   def model_class_data # rubocop:disable Metrics/AbcSize
     {
-      attributes: attributes,
+      attributes:,
       className: model_class.name,
       collectionKey: model_class.model_name.collection,
       collectionName: resource.collection_name,
@@ -97,9 +97,9 @@ private
       name: resource.short_name,
       nameDasherized: resource.short_name.underscore.dasherize,
       pluralName: model_class.model_name.plural,
-      ransackable_associations: ransackable_associations,
-      ransackable_attributes: ransackable_attributes,
-      ransackable_scopes: ransackable_scopes,
+      ransackable_associations:,
+      ransackable_attributes:,
+      ransackable_scopes:,
       relationships: reflections_for_model_class_data,
       paramKey: model_class.model_name.param_key,
       primaryKey: model_class.primary_key

@@ -20,7 +20,7 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
   end
 
   def ability
-    @ability ||= ApiMaker::Ability.new(api_maker_args: api_maker_args)
+    @ability ||= ApiMaker::Ability.new(api_maker_args:)
   end
 
   def collection
@@ -30,15 +30,15 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
   def fake_controller
     @fake_controller ||= instance_double(
       ApiMaker::BaseController,
-      api_maker_args: api_maker_args,
+      api_maker_args:,
       current_ability: ability
     )
   end
 
   def helper
     @helper ||= ApiMaker::CommandSpecHelper.new(
-      collection: collection,
-      command: command,
+      collection:,
+      command:,
       controller: fake_controller
     )
   end
@@ -46,7 +46,7 @@ class ApiMaker::SpecHelper::ExecuteMemberCommand < ApiMaker::ApplicationService
   def helper_command
     @helper_command ||= helper.add_command(
       primary_key: model.id,
-      args: args
+      args:
     )
   end
 end

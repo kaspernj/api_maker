@@ -14,11 +14,11 @@ class ApiMaker::GenerateReactNativeApiService < ApiMaker::ApplicationService
   def check_if_root_folder_defined
     raise "No root folder detected" if root_folder.blank?
 
-    Dir.mkdir(model_path) unless Dir.exist?(model_path)
+    FileUtils.mkdir_p(model_path)
   end
 
   def create_root_folder
-    Dir.mkdir(root_folder) unless Dir.exist?(root_folder)
+    FileUtils.mkdir_p(root_folder)
   end
 
   def model_generator_service

@@ -7,12 +7,12 @@ describe ApiMaker::UpdateCommand do
   let(:ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
   let(:collection) { User.accessible_by(ability).where(id: user.id) }
-  let(:controller) { instance_double(ApplicationController, api_maker_args: api_maker_args, current_ability: ability, current_user: user) }
+  let(:controller) { instance_double(ApplicationController, api_maker_args:, current_ability: ability, current_user: user) }
   let(:helper) do
     ApiMaker::CommandSpecHelper.new(
-      collection: collection,
+      collection:,
       command: ApiMaker::UpdateCommand,
-      controller: controller
+      controller:
     )
   end
 

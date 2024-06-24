@@ -22,7 +22,7 @@ private
         collection: query,
         model_class: reflection.klass,
         select_attributes: select,
-        select_columns: select_columns,
+        select_columns:,
         table_name: query.klass.table_name
       )
       query
@@ -47,7 +47,7 @@ private
     reflection_data = origin_data.fetch(:r)[reflection.name] ||= []
     reflection_data << model_id unless reflection_data.include?(model_id)
 
-    serializer = ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, locals: locals, model: model, select: select&.dig(model.class))
+    serializer = ApiMaker::Serializer.new(ability:, api_maker_args:, locals:, model:, select: select&.dig(model.class))
     underscore_name = serializer.resource.underscore_name
 
     data.fetch(:preloaded)[underscore_name] ||= {}

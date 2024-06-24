@@ -4,18 +4,18 @@ describe ApiMaker::DestroyCommand do
   let(:ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
   let(:collection) { Account.accessible_by(ability).where(id: account.id) }
-  let(:controller) { instance_double(ApplicationController, api_maker_args: api_maker_args, current_ability: ability, current_user: user) }
+  let(:controller) { instance_double(ApplicationController, api_maker_args:, current_ability: ability, current_user: user) }
   let(:helper) do
     ApiMaker::CommandSpecHelper.new(
-      collection: collection,
+      collection:,
       command: ApiMaker::DestroyCommand,
-      controller: controller
+      controller:
     )
   end
 
   let!(:account) { create :account }
-  let!(:project) { create :project, account: account }
-  let!(:task) { create :task, project: project }
+  let!(:project) { create :project, account: }
+  let!(:task) { create :task, project: }
   let!(:user) { create :user }
 
   describe "#errors_for_model" do
@@ -23,7 +23,7 @@ describe ApiMaker::DestroyCommand do
       expect_any_instance_of(ApiMaker::DestroyCommand).to receive(:errors_for_model).and_call_original
 
       project = create :project
-      create :project_secret, id: 4849, project: project
+      create(:project_secret, id: 4849, project:)
 
       result = ApiMaker::SpecHelper::ExecuteMemberCommand.execute!(command: ApiMaker::DestroyCommand, model: project)
 

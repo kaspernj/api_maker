@@ -8,7 +8,7 @@ class ApiMaker::SessionStatusesController < ActionController::Base # rubocop:dis
         timeout_in: Devise.timeout_in.to_i
       },
       csrf_token: form_authenticity_token,
-      scopes: scopes
+      scopes:
     }
 
     Devise.mappings.each do |scope|
@@ -24,7 +24,7 @@ class ApiMaker::SessionStatusesController < ActionController::Base # rubocop:dis
 
       scopes[param_key] = {
         primary_key: model_pk,
-        signed_in: signed_in
+        signed_in:
       }
     end
 

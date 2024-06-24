@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe Resources::TaskDetailResource do
   let(:task) { create :task, name: "Some readable task" }
-  let(:task_detail) { create :task_detail, task: task }
+  let(:task_detail) { create :task_detail, task: }
   let(:task_detail2) { create :task_detail }
 
   it "reads a task detail for a readable task" do

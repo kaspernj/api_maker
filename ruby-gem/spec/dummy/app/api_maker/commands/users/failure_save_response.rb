@@ -9,7 +9,7 @@ class Commands::Users::FailureSaveResponse < Commands::ApplicationCommand
     failure_save_response(
       additional_attributes: args.fetch(:additional_attributes),
       model: user,
-      params: params,
+      params:,
       simple_model_errors: args.fetch(:simple_model_errors)
     )
   end
