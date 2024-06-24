@@ -2,8 +2,8 @@ require "rails_helper"
 
 describe "model has many relationships" do
   let!(:project) { create :project }
-  let!(:task_to_find) { create :task, project: project, user: user }
-  let!(:task_not_to_find) { create :task, user: user }
+  let!(:task_to_find) { create :task, project:, user: }
+  let!(:task_not_to_find) { create :task, user: }
   let(:user) { create :user }
 
   it "finds the sub models" do

@@ -5,7 +5,7 @@ class ApiMaker::ModelClassesJavaScriptGeneratorService < ApiMaker::ApplicationSe
     }
 
     resources.each do |resource|
-      result[:models][resource.short_name] = ApiMaker::ModelContentGeneratorService.execute!(resource: resource)
+      result[:models][resource.short_name] = ApiMaker::ModelContentGeneratorService.execute!(resource:)
     end
 
     succeed! result

@@ -22,7 +22,7 @@ class ApiMaker::MemoryStorage
 
     @storage[klass_name] ||= {}
     @storage[klass_name][mode] ||= {}
-    @storage[klass_name][mode][data] = {data: data, args: args} unless @storage[klass_name][mode].key?(data)
+    @storage[klass_name][mode][data] = {data:, args:} unless @storage[klass_name][mode].key?(data)
   end
 
   def load_all_resources

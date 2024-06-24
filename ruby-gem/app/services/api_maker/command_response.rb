@@ -29,7 +29,7 @@ class ApiMaker::CommandResponse
 
   def respond_to_command(id, data, type)
     @mutex.synchronize do
-      @result[id] = {type: type, data: data}
+      @result[id] = {type:, data:}
     end
   end
 
@@ -37,11 +37,11 @@ class ApiMaker::CommandResponse
     ApiMaker::Configuration.current.threadding
   end
 
-  def with_thread(&blk)
+  def with_thread(&)
     if Rails.env.test? || !threadding?
       yield
     else
-      spawn_thread(&blk)
+      spawn_thread(&)
     end
   end
 
@@ -55,7 +55,7 @@ private
 
       Rails.application.executor.wrap do
         ApiMaker::Configuration.current.on_thread_callbacks&.each do |on_thread_callback|
-          on_thread_callback.call(parent_thread: parent_thread, child_thread: child_thread)
+          on_thread_callback.call(parent_thread:, child_thread:)
         end
 
         I18n.with_locale(locale, &blk)
@@ -69,7 +69,7 @@ private
 
       ApiMaker::Configuration.current.report_error(
         command: nil,
-        controller: controller,
+        controller:,
         error: e,
         response: nil
       )

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe "models destroy event" do
-  let!(:task1) { create :task, user: user }
-  let!(:task2) { create :task, user: user }
+  let!(:task1) { create :task, user: }
+  let!(:task2) { create :task, user: }
   let!(:user) { create :user }
 
   it "reacts on destroy events" do

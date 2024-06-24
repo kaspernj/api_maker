@@ -5,7 +5,7 @@ class Commands::Projects::CreateProject < Commands::ApplicationCommand
     if project.save
       succeed!
     else
-      failure_save_response(model: project, params: params)
+      failure_save_response(model: project, params:)
     end
   end
 

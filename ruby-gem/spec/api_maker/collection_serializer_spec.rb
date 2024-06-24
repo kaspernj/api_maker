@@ -1,22 +1,22 @@
 require "rails_helper"
 
 describe ApiMaker::CollectionSerializer do
-  let!(:account) { create :account, customer: customer, id: 1, name: "Account 1" }
+  let!(:account) { create :account, customer:, id: 1, name: "Account 1" }
   let!(:customer) { create :customer, id: 5, name: "Test customer" }
-  let!(:project) { create :project, account: account, id: 2, name: "Test project" }
-  let!(:project_detail) { create :project_detail, project: project, id: 6, details: "Test project details" }
-  let!(:task) { create :task, id: 3, name: "Test task", project: project, user: user }
+  let!(:project) { create :project, account:, id: 2, name: "Test project" }
+  let!(:project_detail) { create :project_detail, project:, id: 6, details: "Test project details" }
+  let!(:task) { create :task, id: 3, name: "Test task", project:, user: }
   let!(:user) { create :user, id: 4 }
   let(:ability) { ApiMaker::Ability.new(api_maker_args: args) }
   let(:args) { {current_user: user} }
 
-  let(:task_with_same_project) { create :task, project: project }
+  let(:task_with_same_project) { create :task, project: }
 
   it "preloads relationships" do
     collection = User.where(id: user.id)
     collection_serializer = ApiMaker::CollectionSerializer.new(
-      ability: ability,
-      collection: collection,
+      ability:,
+      collection:,
       query_params: {
         preload: ["tasks.project.account", "tasks.account"]
       }
@@ -47,7 +47,7 @@ describe ApiMaker::CollectionSerializer do
 
   it "preloads has one relationships" do
     collection = Project.where(id: project.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection:, query_params: {preload: ["project_detail"]}).to_json)
 
     expect(result.dig("preloaded", "projects", "2", "r", "project_detail")).to eq 6
     expect(result.dig("preloaded", "project_details", "6", "a", "details")).to eq "Test project details"
@@ -57,7 +57,7 @@ describe ApiMaker::CollectionSerializer do
     project_detail.destroy!
 
     collection = Project.where(id: project.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection:, query_params: {preload: ["project_detail"]}).to_json)
 
     expect(result.dig!("preloaded", "projects", "2", "r", "project_detail")).to be_nil
   end
@@ -66,14 +66,14 @@ describe ApiMaker::CollectionSerializer do
     task.destroy!
 
     collection = Project.where(id: project.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, query_params: {preload: ["tasks"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability:, collection:, query_params: {preload: ["tasks"]}).to_json)
 
     expect(result.dig("preloaded", "projects", "2", "r", "tasks")).to eq []
   end
 
   it "preloads has one through relationships" do
     collection = User.where(id: user.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, query_params: {preload: ["tasks.customer"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability:, collection:, query_params: {preload: ["tasks.customer"]}).to_json)
 
     expect(result.dig("preloaded", "users", "4", "a", "id")).to eq 4
     expect(result.dig("preloaded", "users", "4", "r", "tasks")).to eq [3]
@@ -87,7 +87,7 @@ describe ApiMaker::CollectionSerializer do
 
   it "preloads like on commoditrader listing company" do
     collection = User.where(id: user.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability: ability, collection: collection, query_params: {preload: ["tasks.project_detail"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(ability:, collection:, query_params: {preload: ["tasks.project_detail"]}).to_json)
 
     expect(result.dig!("data", "users")).to eq [user.id]
     expect(result.dig!("preloaded", "users", user.id.to_s, "r", "tasks")).to eq [3]
@@ -101,7 +101,7 @@ describe ApiMaker::CollectionSerializer do
 
   it "preloads a relationship through another relationship on the same model" do
     collection = Task.where(id: task.id)
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["customer"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection:, query_params: {preload: ["customer"]}).to_json)
 
     customer_preload = result.dig!("preloaded", "customers").fetch("5")
 
@@ -112,7 +112,7 @@ describe ApiMaker::CollectionSerializer do
 
   it "only includes the same relationship once for belongs to relationships" do
     collection = Task.where(id: [task.id, task_with_same_project.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(api_maker_args: args, collection: collection, query_params: {preload: ["project"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(api_maker_args: args, collection:, query_params: {preload: ["project"]}).to_json)
 
     expect(result.dig!("data", "tasks")).to eq [task.id, task_with_same_project.id]
     expect(result.dig!("preloaded", "projects", project.id.to_s, "a", "id")).to eq project.id
@@ -121,7 +121,7 @@ describe ApiMaker::CollectionSerializer do
 
   it "only includes the same relationship once for has one through" do
     collection = Task.where(id: [task.id, task_with_same_project.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["account", "project.account"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection:, query_params: {preload: ["account", "project.account"]}).to_json)
 
     expect(result.dig!("data", "tasks").length).to eq 2
     expect(result.dig!("preloaded", "accounts", account.id.to_s, "a", "id")).to eq account.id
@@ -130,10 +130,10 @@ describe ApiMaker::CollectionSerializer do
 
   it "applies the scope of the original relationship on has-many-relationships" do
     account = create(:account)
-    create(:project, account: account, deleted_at: 5.minutes.ago)
+    create(:project, account:, deleted_at: 5.minutes.ago)
 
     collection = Account.where(id: [account.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["projects"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection:, query_params: {preload: ["projects"]}).to_json)
 
     expect(result.dig!("data", "accounts").length).to eq 1
     expect(result.dig!("preloaded", "accounts", account.id.to_s, "r", "projects")).to eq []
@@ -141,10 +141,10 @@ describe ApiMaker::CollectionSerializer do
 
   it "applies the scope of the original relationship on has-one-relationships" do
     project = create(:project)
-    create(:project_detail, deleted_at: 5.minutes.ago, project: project)
+    create(:project_detail, deleted_at: 5.minutes.ago, project:)
 
     collection = Project.where(id: [project.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["project_detail"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection:, query_params: {preload: ["project_detail"]}).to_json)
 
     expect(result.dig!("data", "projects").length).to eq 1
     expect(result.dig!("preloaded", "projects", project.id.to_s, "r", "project_detail")).to be_nil
@@ -154,7 +154,7 @@ describe ApiMaker::CollectionSerializer do
     project = create(:project)
     collection = Project.where(id: [project.id])
     collection_serializer = ApiMaker::CollectionSerializer.new(
-      collection: collection,
+      collection:,
       query_params: {
         preload: nil,
         select: {
@@ -175,7 +175,7 @@ describe ApiMaker::CollectionSerializer do
     user = create :user, first_name: "Donald", last_name: "Duck"
     collection = User.where(id: [user.id])
     collection_serializer = ApiMaker::CollectionSerializer.new(
-      collection: collection,
+      collection:,
       query_params: {
         preload: nil,
         select: {
@@ -195,7 +195,7 @@ describe ApiMaker::CollectionSerializer do
     user = create :user, first_name: "Donald", last_name: "Duck"
     collection = User.where(id: [user.id])
     collection_serializer = ApiMaker::CollectionSerializer.new(
-      collection: collection,
+      collection:,
       query_params: {
         preload: nil,
         select: {

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "member command" do
-  let(:task) { create :task, user: user }
+  let(:task) { create :task, user: }
   let(:user) { create :user }
 
   it "calls the correct command and responds" do

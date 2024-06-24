@@ -8,7 +8,7 @@ class ApiMaker::BaseController < ApplicationController
 private
 
   def current_ability
-    @current_ability ||= ApiMaker::Configuration.current.ability_class.new(api_maker_args: api_maker_args, locals: api_maker_locals)
+    @current_ability ||= ApiMaker::Configuration.current.ability_class.new(api_maker_args:, locals: api_maker_locals)
   end
 
   def reset_current_ability

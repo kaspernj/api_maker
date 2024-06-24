@@ -3,20 +3,20 @@ require "rails_helper"
 describe ApiMaker::IndexCommand do
   let(:ability) { ApiMaker::Ability.new(api_maker_args: {current_user: user}) }
   let(:api_maker_args) { {current_user: user} }
-  let!(:another_task) { create :task, user: user }
+  let!(:another_task) { create :task, user: }
   let(:collection) { Task.accessible_by(ability) }
-  let(:controller) { double(api_maker_args: api_maker_args, current_ability: ability, current_user: user) }
+  let(:controller) { double(api_maker_args:, current_ability: ability, current_user: user) }
   let(:helper) do
     ApiMaker::CommandSpecHelper.new(
-      collection: collection,
+      collection:,
       command: ApiMaker::IndexCommand,
-      controller: controller
+      controller:
     )
   end
 
   let!(:account) { create :account }
-  let!(:project) { create :project, account: account }
-  let!(:task) { create :task, project: project, user: user }
+  let!(:project) { create :project, account: }
+  let!(:task) { create :task, project:, user: }
   let!(:user) { create :user }
 
   describe "#execute!" do
@@ -47,8 +47,8 @@ describe ApiMaker::IndexCommand do
     end
 
     it "handels the distinct argument" do
-      create :account_marked_task, account: account, task: task
-      create :account_marked_task, account: account, task: task
+      create(:account_marked_task, account:, task:)
+      create(:account_marked_task, account:, task:)
 
       command = helper.add_command(args: {distinct: true, q: {account_marked_tasks_account_id_eq: account.id}})
       helper.execute!

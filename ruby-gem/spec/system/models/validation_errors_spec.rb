@@ -9,9 +9,9 @@ describe "models - validation errors" do
   let!(:project2) { create :project, account: account2, name: "Project 2" }
   let!(:project3) { create :project, account: account3, name: "Project 3" }
 
-  let!(:task1) { create :task, name: "Task 1", project: project1, user: user }
-  let!(:task2) { create :task, name: "Task 2", project: project2, user: user }
-  let!(:task3) { create :task, name: "Task 3", project: project3, user: user }
+  let!(:task1) { create :task, name: "Task 1", project: project1, user: }
+  let!(:task2) { create :task, name: "Task 2", project: project2, user: }
+  let!(:task3) { create :task, name: "Task 3", project: project3, user: }
 
   let!(:user) { create :user }
 

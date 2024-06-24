@@ -5,10 +5,10 @@ describe ApiMaker::Preloader do
   let(:admin_ability) { ApiMaker::Ability.new(api_maker_args: {current_user: admin_user}) }
 
   let(:account) { create :account }
-  let(:account_marked_task) { create :account_marked_task, account: account, task: task_marked_on_account }
-  let(:project) { create :project, account: account }
+  let(:account_marked_task) { create :account_marked_task, account:, task: task_marked_on_account }
+  let(:project) { create :project, account: }
   let(:task_marked_on_account) { create :task, project: create(:project) }
-  let(:task_user_assigned_to) { create :task, project: project, user: user }
+  let(:task_user_assigned_to) { create :task, project:, user: }
   let(:user) { create :user }
 
   describe "#fill_empty_relationships_for_key" do
@@ -19,7 +19,7 @@ describe ApiMaker::Preloader do
       collection = User.where(id: user.id)
       collection_serializer = ApiMaker::CollectionSerializer.new(
         ability: admin_ability,
-        collection: collection,
+        collection:,
         query_params: {
           preload: [
             "tasks.account.account_marked_tasks.task",

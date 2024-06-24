@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "model preload" do
-  let!(:task) { create :task, name: "test-task", project: project, user: user }
+  let!(:task) { create :task, name: "test-task", project:, user: }
   let!(:project) { create :project, name: "test-project" }
   let(:user) { create :user }
 

@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "model find" do
   let!(:project) { create :project }
-  let!(:task) { create :task, project: project }
+  let!(:task) { create :task, project: }
   let(:user) { create :user }
 
   it "finds the model" do

@@ -5,9 +5,9 @@ class ApiMaker::IndexCommand < ApiMaker::BaseCommand
 
       result = ApiMaker::CollectionLoader.execute!(
         ability: current_ability,
-        api_maker_args: api_maker_args,
-        collection: collection,
-        locals: locals,
+        api_maker_args:,
+        collection:,
+        locals:,
         params: command.args || {}
       )
       succeed!(result)

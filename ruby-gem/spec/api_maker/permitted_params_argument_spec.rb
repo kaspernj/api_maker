@@ -11,7 +11,7 @@ describe ApiMaker::PermittedParamsArgument do
         primary_key: 10,
         response: nil
       )
-      permitted_params_argument = ApiMaker::PermittedParamsArgument.new(command: command, model: nil)
+      permitted_params_argument = ApiMaker::PermittedParamsArgument.new(command:, model: nil)
 
       expect(permitted_params_argument.params).to eq({})
     end

@@ -1,12 +1,12 @@
 class ApiMaker::UpdateCommandService < ApiMaker::CommandService
   def perform
     ApiMaker::UpdateCommand.execute_in_thread!(
-      ability: ability,
-      api_maker_args: api_maker_args,
-      collection: collection,
-      commands: commands,
-      command_response: command_response,
-      controller: controller
+      ability:,
+      api_maker_args:,
+      collection:,
+      commands:,
+      command_response:,
+      controller:
     )
     succeed!
   end

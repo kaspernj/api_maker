@@ -3,7 +3,7 @@ require "rails_helper"
 describe Resources::TaskResource do
   let(:task) { create :task }
   let(:task2) { create :task }
-  let(:account_marked_task) { create :account_marked_task, id: 5, task: task }
+  let(:account_marked_task) { create :account_marked_task, id: 5, task: }
   let(:account_marked_task2) { create :account_marked_task, task: task2 }
 
   it "reads tasks through account marked tasks using a raw SQL rule" do

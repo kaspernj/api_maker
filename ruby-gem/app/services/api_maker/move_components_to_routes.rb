@@ -22,7 +22,7 @@ class ApiMaker::MoveComponentsToRoutes < ApiMaker::ApplicationService
 
       if File.exist?(full_path_with_jsx)
         new_dir = File.dirname(new_path_with_jsx)
-        FileUtils.mkdir_p(new_dir) unless File.exist?(new_dir)
+        FileUtils.mkdir_p(new_dir)
         File.rename(full_path_with_jsx, new_path_with_jsx)
       end
 

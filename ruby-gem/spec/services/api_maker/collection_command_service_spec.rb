@@ -11,7 +11,7 @@ describe ApiMaker::CollectionCommandService do
       response: nil
     )
   end
-  let(:command_response) { ApiMaker::CommandResponse.new(controller: controller) }
+  let(:command_response) { ApiMaker::CommandResponse.new(controller:) }
   let(:controller) { instance_double(ApplicationController, api_maker_args: {}, current_ability: ability) }
   let(:user) { create :user }
 
@@ -19,7 +19,7 @@ describe ApiMaker::CollectionCommandService do
     expect(ability).to receive(:can?).with(:test_collection, Task).and_return(false)
 
     ApiMaker::CollectionCommandService.execute!(
-      ability: ability,
+      ability:,
       api_maker_args: {},
       commands: {
         9 => {
@@ -28,8 +28,8 @@ describe ApiMaker::CollectionCommandService do
         }
       },
       command_name: "test_collection",
-      command_response: command_response,
-      controller: controller,
+      command_response:,
+      controller:,
       resource_name: "Tasks"
     )
 
