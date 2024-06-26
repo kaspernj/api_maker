@@ -1,10 +1,10 @@
 import BaseComponent from "../base-component"
-import {digg} from "diggerize"
 import Link from "../link"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import ShowReflectionLink from "./show-reflection-link"
 import useQueryParams from "on-location-changed/src/use-query-params"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseComponent {
@@ -27,9 +27,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseC
         </div>
         {model && reflections.filter((reflection) => reflection.macro() == "has_many").map((reflection) =>
           <div key={reflection.name()}>
-            <Link to={Params.withParams({model: digg(modelClass.modelClassData(), "name"), model_id: model.primaryKey(), model_reflection: reflection.name()})}>
-              {modelClass.humanAttributeName(reflection.name())}
-            </Link>
+            <ShowReflectionLink model={model} modelClass={modelClass} reflection={reflection} />
           </div>
         )}
       </div>
