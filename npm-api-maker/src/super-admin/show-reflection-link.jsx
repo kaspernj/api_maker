@@ -1,5 +1,6 @@
 import BaseComponent from "../base-component"
 import {digg} from "diggerize"
+import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {useMemo} from "react"
 
