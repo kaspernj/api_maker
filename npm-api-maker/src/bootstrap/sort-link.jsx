@@ -3,7 +3,7 @@ import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import qs from "qs"
-import React from "react"
+import {memo} from "react"
 import urlEncode from "../url-encode.mjs"
 
 import Link from "../link"
