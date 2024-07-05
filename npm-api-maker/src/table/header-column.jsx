@@ -1,4 +1,5 @@
 import BaseComponent from "../base-component"
+import {memo} from "react"
 import {Pressable, Text} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
