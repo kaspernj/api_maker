@@ -1,17 +1,18 @@
+import BaseComponent from "../base-component"
 import classNames from "classnames"
 import columnIdentifier from "./column-identifier.mjs"
 import columnVisible from "./column-visible.mjs"
-import {digg, digs} from "diggerize"
+import {digs} from "diggerize"
 import * as inflection from "inflection"
 import Link from "../link"
 import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
 import {memo} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 
 const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox"))
 
-export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
   static propTypes = {
     cacheKey: PropTypes.string.isRequired,
     model: PropTypes.object.isRequired,
@@ -21,10 +22,10 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   render() {
-    const {model} = digs(this.props, "model")
-    const {modelClass, workplace} = digs(this.props.liveTable.props, "modelClass", "workplace")
-    const {actionsContent, columnsContent, destroyEnabled, editModelPath, viewModelPath} = digg(this, "props", "liveTable", "props")
-    const {columns, currentWorkplace} = digg(this, "props", "liveTable", "state")
+    const {model} = this.p
+    const {modelClass, workplace} = this.p.liveTable.p
+    const {actionsContent, columnsContent, destroyEnabled, editModelPath, viewModelPath} = this.p.liveTable.props
+    const {columns, currentWorkplace} = this.p.liveTable.state
 
     this.modelCallbackArgs = this._modelCallbackArgs() // 'model' can change so this needs to be re-cached for every render
 
@@ -77,7 +78,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   columnsContentFromColumns (model) {
-    const {preparedColumns} = digs(this.props, "preparedColumns")
+    const {preparedColumns} = this.p
     const ColumnComponent = this.props.columnComponent
 
     return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
@@ -98,7 +99,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     )
   }
 
-  columnContentFromContentArg (column, model) {
+  columnContentFromContentArg (column, _model) {
     const value = column.content(this.modelCallbackArgs)
 
     return this.presentColumnValue(value)
@@ -135,7 +136,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   _modelCallbackArgs () {
-    const {model} = digs(this.props, "model")
+    const {model} = this.p
     const modelArgName = inflection.camelize(this.props.liveTable.props.modelClass.modelClassData().name, true)
     const modelCallbackArgs = {model}
 
@@ -147,8 +148,8 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   onDestroyClicked = async (e) => {
     e.preventDefault()
 
-    const {destroyMessage} = digg(this, "props", "liveTable", "props")
-    const {model} = digs(this.props, "model")
+    const {destroyMessage} = this.p.liveTable.props
+    const {model} = this.p
 
     if (!confirm(I18n.t("js.shared.are_you_sure"))) {
       return
