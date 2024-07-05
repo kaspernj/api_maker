@@ -1,6 +1,6 @@
 module ApiMaker::SpecHelper::WaitForSelector
-  def wait_for_selector(selector, *args, **opts)
-    expect(page).to have_selector selector, *args, **opts
+  def wait_for_selector(selector, *, **)
+    expect(page).to have_selector(selector, *, **)
     expect_no_browser_errors
   rescue ::RSpec::Expectations::ExpectationNotMetError => e
     expect_no_browser_errors
@@ -13,8 +13,8 @@ module ApiMaker::SpecHelper::WaitForSelector
     end
   end
 
-  def wait_for_no_selector(selector, *args, **opts)
-    expect(page).to have_no_selector selector, *args, **opts
+  def wait_for_no_selector(selector, *, **)
+    expect(page).to have_no_selector(selector, *, **)
     expect_no_browser_errors
   rescue ::RSpec::Expectations::ExpectationNotMetError => e
     expect_no_browser_errors

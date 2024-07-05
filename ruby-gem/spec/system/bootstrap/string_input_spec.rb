@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "bootstrap - string input" do
-  let(:task) { create :task, created_at: "1985-06-17 10:30:00", user: user }
+  let(:task) { create :task, created_at: "1985-06-17 10:30:00", user: }
   let(:project) { create :project, price_per_hour: Money.new(100_00, "USD") }
   let(:user) { create :user, birthday_at: "1985-06-17" }
 

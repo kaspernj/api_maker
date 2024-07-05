@@ -27,6 +27,6 @@ Rails.application.routes.draw do
     get :validate
   end
 
-  routes = JSON.parse(File.read(Rails.root.join("app/javascript/shared/route-definitions.json")))
+  routes = JSON.parse(Rails.root.join("app/javascript/shared/route-definitions.json").read)
   ApiMaker::ResourceRouting.install_resource_routes(self, route_definitions: routes)
 end

@@ -6,7 +6,7 @@ class ApiMaker::BaseResource
 
   delegate :can, :can?, allow_nil: true, to: :ability
 
-  CREATE = [:create, :create_events]
+  CREATE = [:create, :create_events].freeze
   READ = [:create_events, :destroy_events, :read, :update_events].freeze
   CRUD = CREATE + READ + [:update, :destroy].freeze
   WRITE = [:create, :update, :destroy].freeze
@@ -27,7 +27,7 @@ class ApiMaker::BaseResource
         attributes :"#{state_column}_may_#{event_name}", selected_by_default: false
 
         define_method(:"#{state_column}_may_#{event_name}") do
-          model.__send__("may_#{event_name}?")
+          model.__send__(:"may_#{event_name}?")
         end
       end
     end
@@ -35,16 +35,16 @@ class ApiMaker::BaseResource
 
   def self.attachment_attribute(attribute_name)
     attributes(
-      "#{attribute_name}_content_type".to_sym,
-      "#{attribute_name}_url".to_sym,
+      :"#{attribute_name}_content_type",
+      :"#{attribute_name}_url",
       selected_by_default: false
     )
 
-    define_method("#{attribute_name}_content_type") do
+    define_method(:"#{attribute_name}_content_type") do
       model.__send__(attribute_name).content_type
     end
 
-    define_method("#{attribute_name}_url") do
+    define_method(:"#{attribute_name}_url") do
       if model.__send__(attribute_name).attached?
         Rails.application.routes.url_helpers.rails_blob_path(model.__send__(attribute_name).attachment, only_path: true)
       end
@@ -110,7 +110,7 @@ class ApiMaker::BaseResource
   def self.model_class=(klass)
     # Set the name to avoid reloading issues with Rails
     self.model_class_name = klass.name
-    ApiMaker::MemoryStorage.current.model_class_for(resource: self, klass: klass)
+    ApiMaker::MemoryStorage.current.model_class_for(resource: self, klass:)
   end
 
   def self.model_class
@@ -142,13 +142,13 @@ class ApiMaker::BaseResource
       attribute attribute_name, selected_by_default: false
 
       I18n.available_locales.each do |locale|
-        attribute "#{attribute_name}_#{locale}".to_sym, selected_by_default: false
+        attribute :"#{attribute_name}_#{locale}", selected_by_default: false
       end
     end
   end
 
   def translated_attribute_names(*attribute_names)
-    ApiMaker::TranslatedAttributeNames.execute!(attribute_names: attribute_names)
+    ApiMaker::TranslatedAttributeNames.execute!(attribute_names:)
   end
 
   def self.plural_name
@@ -188,17 +188,17 @@ class ApiMaker::BaseResource
     relevant_rules.each do |relevant_rule|
       if relevant_rule.conditions.empty?
         handle_empty_conditions(
-          model_class: model_class,
-          reflection: reflection,
-          relationship: relationship,
-          target_model_class: target_model_class
+          model_class:,
+          reflection:,
+          relationship:,
+          target_model_class:
         )
       elsif relevant_rule.conditions.is_a?(Array)
         handle_array_condition_rule(
-          ability: ability,
-          model_class: model_class,
-          reflection: reflection,
-          relevant_rule: relevant_rule
+          ability:,
+          model_class:,
+          reflection:,
+          relevant_rule:
         )
       else
         can ability, model_class, {
@@ -287,9 +287,9 @@ private
   def handle_array_condition_rule(ability:, model_class:, reflection:, relevant_rule:)
     if raw_supported_macro?(reflection.macro)
       nested_sql = nested_raw_sql(
-        model_class: model_class,
-        relevant_rule: relevant_rule,
-        reflection: reflection
+        model_class:,
+        relevant_rule:,
+        reflection:
       )
 
       can ability, model_class, [nested_sql] do |model|
@@ -311,7 +311,7 @@ private
       "SELECT 1 " \
       "FROM #{reflection.klass.table_name} " \
       "WHERE " \
-      "#{nested_raw_sql_condition(model_class: model_class, reflection: reflection)} AND " \
+      "#{nested_raw_sql_condition(model_class:, reflection:)} AND " \
       "(#{relationship_sql})" \
       ")"
   end

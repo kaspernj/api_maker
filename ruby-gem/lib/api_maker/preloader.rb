@@ -48,12 +48,12 @@ class ApiMaker::Preloader
         preload_class
           .new(
             ability: @ability,
-            api_maker_args: api_maker_args,
+            api_maker_args:,
             collection: @collection,
             data: @data,
-            locals: locals,
+            locals:,
             records: @records,
-            reflection: reflection,
+            reflection:,
             select: @select,
             select_columns: @select_columns
           )
@@ -68,11 +68,11 @@ class ApiMaker::Preloader
       ApiMaker::Preloader
         .new(
           ability: @ability,
-          api_maker_args: api_maker_args,
+          api_maker_args:,
           data: @data,
           collection: preload_result,
           key_path: key_path.dup,
-          locals: locals,
+          locals:,
           preload_param: value,
           model_class: reflection.klass,
           records: @data.fetch(:preloaded),

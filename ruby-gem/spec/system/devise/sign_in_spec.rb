@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Devise sign in" do
   let!(:user) { create :user, email: "test@example.com" }
-  let(:user_role) { create :user_role, role: "partner", user: user }
+  let(:user_role) { create :user_role, role: "partner", user: }
 
   it "signs in" do
     visit devise_specs_sign_in_path

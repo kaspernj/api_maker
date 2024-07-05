@@ -62,13 +62,13 @@ module ApiMaker::ModelExtensions
 
     def translated_collection(collection_name, allow_blank: false, helper_methods: true, helper_methods_prepend: false, validate_inclusion: true, &blk)
       ApiMaker::TranslatedCollections.add(
-        allow_blank: allow_blank,
-        blk: blk,
-        collection_name: collection_name,
-        helper_methods: helper_methods,
-        helper_methods_prepend: helper_methods_prepend,
+        allow_blank:,
+        blk:,
+        collection_name:,
+        helper_methods:,
+        helper_methods_prepend:,
         model_class: self,
-        validate_inclusion: validate_inclusion
+        validate_inclusion:
       )
     end
   end

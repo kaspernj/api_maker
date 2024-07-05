@@ -6,7 +6,7 @@ class Commands::Tasks::FailureSaveResponse < Commands::ApplicationCommand
 
     raise "Model is valid" unless task.invalid?
 
-    failure_save_response(model: task, params: params, simple_model_errors: args.fetch(:simple_model_errors))
+    failure_save_response(model: task, params:, simple_model_errors: args.fetch(:simple_model_errors))
   end
 
   def params

@@ -19,7 +19,7 @@ describe ApiMaker::ServiceCommand do
           response: command_response
         ),
         commands: nil,
-        command_response: command_response,
+        command_response:,
         controller: nil
       )
       .execute_with_response

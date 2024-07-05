@@ -1,23 +1,23 @@
 require "rails_helper"
 
 describe ApiMaker::PreloaderBelongsTo do
-  let!(:account) { create :account, customer: customer, id: 1 }
+  let!(:account) { create :account, customer:, id: 1 }
   let!(:customer) { create :customer, id: 5, name: "Test customer" }
-  let!(:project) { create :project, account: account, id: 2, name: "Test project" }
-  let!(:project_detail) { create :project_detail, project: project, id: 6, details: "Test project details" }
-  let!(:task) { create :task, id: 3, name: "Test task", project: project, user: user }
+  let!(:project) { create :project, account:, id: 2, name: "Test project" }
+  let!(:project_detail) { create :project_detail, project:, id: 6, details: "Test project details" }
+  let!(:task) { create :task, id: 3, name: "Test task", project:, user: }
   let!(:user) { create :user, id: 4 }
   let(:ability) { ApiMaker::Ability.new(api_maker_args: args) }
   let(:args) { {current_user: user} }
 
-  let(:task_with_same_project) { create :task, project: project }
+  let(:task_with_same_project) { create :task, project: }
 
   it "applies the scope of the original relationship on belongs-to-relationships" do
     account = create(:account, deleted_at: 5.minutes.ago)
-    project = create(:project, account: account)
+    project = create(:project, account:)
 
     collection = Project.where(id: [project.id])
-    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection: collection, query_params: {preload: ["account"]}).to_json)
+    result = JSON.parse(ApiMaker::CollectionSerializer.new(collection:, query_params: {preload: ["account"]}).to_json)
 
     expect(result.dig!("data", "projects").length).to eq 1
     expect(result.dig!("preloaded", "projects", project.id.to_s, "r", "account")).to be_nil
@@ -27,7 +27,7 @@ describe ApiMaker::PreloaderBelongsTo do
     collection = Project.where(id: [project.id])
 
     collection_serializer = ApiMaker::CollectionSerializer.new(
-      collection: collection,
+      collection:,
       query_params: {
         preload: ["account"],
         select_columns: {
@@ -52,13 +52,13 @@ describe ApiMaker::PreloaderBelongsTo do
     reflection = Task.reflections.fetch("user")
 
     preloader = ApiMaker::PreloaderBelongsTo.new(
-      ability: ability,
+      ability:,
       api_maker_args: {},
-      collection: collection,
+      collection:,
       data: {},
       locals: {},
       records: collection.to_a,
-      reflection: reflection,
+      reflection:,
       select: nil,
       select_columns: nil
     )

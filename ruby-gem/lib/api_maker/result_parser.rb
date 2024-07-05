@@ -1,8 +1,8 @@
 class ApiMaker::ResultParser
   attr_reader :ability, :api_maker_args
 
-  def self.parse(*args, **opts)
-    ApiMaker::ResultParser.new(*args, **opts).result
+  def self.parse(*, **)
+    ApiMaker::ResultParser.new(*, **).result
   end
 
   def initialize(object, ability: nil, api_maker_args: nil, controller: nil)
@@ -18,7 +18,7 @@ class ApiMaker::ResultParser
 private
 
   def parse_active_record(object)
-    serializer = ApiMaker::Serializer.new(ability: ability, api_maker_args: api_maker_args, model: object)
+    serializer = ApiMaker::Serializer.new(ability:, api_maker_args:, model: object)
 
     {
       api_maker_type: :model,

@@ -3,7 +3,7 @@ require "rails_helper"
 describe "model ransack" do
   let!(:project_to_find) { create :project, name: "test-ransack-kasper" }
   let!(:project_not_to_find) { create :project, name: "kasper" }
-  let!(:sub_task) { create :task, name: "test-project-task", project: project_to_find, user: user }
+  let!(:sub_task) { create :task, name: "test-project-task", project: project_to_find, user: }
   let(:user) { create :user }
 
   it "finds the model" do

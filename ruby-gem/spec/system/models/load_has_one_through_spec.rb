@@ -2,16 +2,16 @@ require "rails_helper"
 
 describe "models - load has one through" do
   let(:account) { create :account, id: 22 }
-  let(:project) { create :project, account: account, id: 23 }
-  let(:task) { create :task, id: 24, project: project, user: user }
+  let(:project) { create :project, account:, id: 23 }
+  let(:task) { create :task, id: 24, project:, user: }
   let(:user) { create :user }
 
   before do
     # Create some data to expose ID issues
     10.times do
       account = create(:account)
-      project = create(:project, account: account)
-      create(:task, project: project, user: user)
+      project = create(:project, account:)
+      create(:task, project:, user:)
     end
   end
 

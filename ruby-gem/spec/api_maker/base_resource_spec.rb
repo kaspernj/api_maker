@@ -14,7 +14,7 @@ describe ApiMaker::BaseResource do
   let(:comment3_author) { create :user, id: 3 }
 
   let(:user) { create :user }
-  let(:user_ability) { ApiMaker::Ability.new(api_maker_args: api_maker_args) }
+  let(:user_ability) { ApiMaker::Ability.new(api_maker_args:) }
   let(:api_maker_args) { {current_user: user} }
 
   describe "#attributes" do
@@ -26,7 +26,7 @@ describe ApiMaker::BaseResource do
       expect(attributes.keys).not_to include :created_at
 
       # It includes the attribute if signed in
-      serializer = ApiMaker::Serializer.new(api_maker_args: api_maker_args, model: task2)
+      serializer = ApiMaker::Serializer.new(api_maker_args:, model: task2)
       attributes = serializer.attributes
 
       expect(attributes.keys).to include :created_at

@@ -2,9 +2,9 @@ require "rails_helper"
 
 describe "bootstrap - checkboxes" do
   let(:account) { create :account }
-  let(:account_market_task1) { create :account_marked_task, account: account, task: task1 }
-  let(:task1) { create :task, user: user }
-  let(:task2) { create :task, user: user }
+  let(:account_market_task1) { create :account_marked_task, account:, task: task1 }
+  let(:task1) { create :task, user: }
+  let(:task2) { create :task, user: }
   let(:user) { create :user }
 
   it "adds a new relationships" do
@@ -17,9 +17,9 @@ describe "bootstrap - checkboxes" do
     check task1.name
     wait_for_and_find("input[type=submit]").click
 
-    wait_for_browser { AccountMarkedTask.where(account: account, task: task1).any? }
+    wait_for_browser { AccountMarkedTask.where(account:, task: task1).any? }
 
-    expect(AccountMarkedTask.where(account: account, task: task2).any?).to be false
+    expect(AccountMarkedTask.where(account:, task: task2).any?).to be false
   end
 
   it "deletes the last relationship" do

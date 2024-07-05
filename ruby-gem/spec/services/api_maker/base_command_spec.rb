@@ -132,7 +132,7 @@ describe ApiMaker::BaseCommand do
   end
 
   it "executes a collection command" do
-    result = ::ApiMaker::SpecHelper::ExecuteCollectionCommand.execute!(
+    result = ApiMaker::SpecHelper::ExecuteCollectionCommand.execute!(
       api_maker_args: {passed: true},
       command: Commands::Tasks::TestCollection,
       model_class: Task

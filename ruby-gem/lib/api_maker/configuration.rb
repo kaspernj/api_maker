@@ -18,9 +18,9 @@ class ApiMaker::Configuration
     yield ApiMaker::Configuration.current
   end
 
-  def self.profile(name_block, &blk)
+  def self.profile(name_block, &)
     if ApiMaker::Configuration.current.profiling
-      Rack::MiniProfiler.step("AM #{name_block.call}", &blk)
+      Rack::MiniProfiler.step("AM #{name_block.call}", &)
     else
       yield
     end
@@ -53,9 +53,9 @@ class ApiMaker::Configuration
     @on_thread_callbacks << blk
   end
 
-  def report_error(*args, **opts, &blk)
+  def report_error(...)
     @on_error.each do |on_error|
-      on_error.call(*args, **opts, &blk)
+      on_error.call(...)
     end
   end
 end

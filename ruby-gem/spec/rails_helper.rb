@@ -30,6 +30,9 @@ require "waitutil"
 require "webdrivers"
 require "with_advisory_lock"
 
+FactoryBot.definition_file_paths << "#{__dir__}/factories"
+FactoryBot.find_definitions
+
 Capybara.register_driver :headless_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
   options.add_argument("--disable-dev-shm-usage")
@@ -57,7 +60,7 @@ end
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[File.join(__dir__, "support", "**", "*.rb")].sort.each { |f| require f }
+Dir[File.join(__dir__, "support", "**", "*.rb")].each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -123,7 +126,7 @@ RSpec.configure do |config|
     Warden.test_reset!
   end
 
-  config.before(:each, system: true) do
+  config.before(:each, :system) do
     browser_logs # Clear the logs
   end
 end

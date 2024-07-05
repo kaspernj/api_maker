@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "boootstrap - checkbox" do
-  let(:task) { create :task, user: user }
+  let(:task) { create :task, user: }
   let(:user) { create :user }
 
   it "renders a boolean based checkbox by default" do

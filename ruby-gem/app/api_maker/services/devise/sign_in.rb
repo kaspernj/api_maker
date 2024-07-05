@@ -10,7 +10,7 @@ class Services::Devise::SignIn < ApiMaker::BaseService
     if !model.active_for_authentication?
       fail! inactive_message, type: :inactive
     elsif model.valid_password?(args[:password])
-      controller.sign_in(model, scope: scope)
+      controller.sign_in(model, scope:)
       remember_me(model) if args.dig(:args, :rememberMe)
       reset_current_ability
       succeed!(model: sign_in_model_result)
@@ -55,7 +55,7 @@ class Services::Devise::SignIn < ApiMaker::BaseService
   end
 
   def serializer
-    @serializer ||= ApiMaker::Serializer.new(ability: current_ability, api_maker_args: api_maker_args, model: model)
+    @serializer ||= ApiMaker::Serializer.new(ability: current_ability, api_maker_args:, model:)
   end
 
   def sign_in_model_result
@@ -63,7 +63,7 @@ class Services::Devise::SignIn < ApiMaker::BaseService
       if (load_query = args.dig(:args, :loadQuery))
         ApiMaker::CollectionSerializer.new(
           ability: current_ability,
-          api_maker_args: api_maker_args,
+          api_maker_args:,
           collection: [model],
           locals: api_maker_locals,
           model_class: model.class,
