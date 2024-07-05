@@ -15,7 +15,7 @@ describe ApiMaker::ModelsFinderService do
     it "excludes non resource files" do
       service = ApiMaker::ModelsFinderService.new
 
-      expect(Rails.root.glob("app/api_maker/resources/**/*.rb")).to include end_with "bogus.rb"
+      expect(Rails.root.glob("app/api_maker/resources/**/*.rb").map(&:to_s)).to include end_with "bogus.rb"
       expect(service.__send__(:files)).not_to include end_with "bogus.rb"
     end
   end
