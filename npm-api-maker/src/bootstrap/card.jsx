@@ -1,9 +1,11 @@
+import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digg, digs} from "diggerize"
 import PropTypes from "prop-types"
-import React from "react"
+import {memo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
-export default class ApiMakerBootstrapCard extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseComponent {
   static defaultProps = {
     defaultExpanded: true,
     expandable: false,
@@ -27,13 +29,12 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
     table: PropTypes.bool.isRequired
   }
 
-  cardRef = React.createRef()
+  setup() {
+    this.cardRef = useRef()
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      expanded: props.defaultExpanded
-    }
+    this.useStates({
+      expanded: this.props.defaultExpanded
+    })
   }
 
   render () {
@@ -144,4 +145,4 @@ export default class ApiMakerBootstrapCard extends React.PureComponent {
 
     return classNames.join(" ")
   }
-}
+}))

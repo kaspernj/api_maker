@@ -1,3 +1,4 @@
+import BaseComponent from "../base-component"
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
@@ -6,10 +7,9 @@ import React from "react"
 import urlEncode from "../url-encode.mjs"
 
 import Link from "../link"
-import PureComponent from "set-state-compare/src/pure-component"
-import withQueryParams from "on-location-changed/src/with-query-params"
+import useQueryParams from "on-location-changed/src/use-query-params"
 
-class ApiMakerBootstrapSortLink extends PureComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseComponent {
   static propTypes = {
     attribute: PropTypes.string.isRequired,
     className: PropTypes.string,
@@ -17,8 +17,11 @@ class ApiMakerBootstrapSortLink extends PureComponent {
     linkComponent: PropTypes.object,
     onChanged: PropTypes.func,
     query: PropTypes.object.isRequired,
-    queryParams: PropTypes.object.isRequired,
     title: PropTypes.node
+  }
+
+  setup() {
+    this.queryParams = useQueryParams()
   }
 
   searchKey = digg(this, "props", "query", "queryArgs").searchKey || "q"
@@ -29,7 +32,7 @@ class ApiMakerBootstrapSortLink extends PureComponent {
 
   href () {
     const qParams = this.qParams()
-    const {queryParams} = digs(this.props, "queryParams")
+    const {queryParams} = this.tt
     const {searchKey} = digs(this, "searchKey")
 
     qParams.s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
@@ -53,7 +56,7 @@ class ApiMakerBootstrapSortLink extends PureComponent {
 
   render () {
     const LinkComponent = this.linkComponent()
-    const {attribute, className, defaultParams, linkComponent, onChanged, query, queryParams, title, ...restProps} = this.props
+    const {attribute, className, defaultParams, linkComponent, onChanged, query, title, ...restProps} = this.props
 
     return (
       <>
@@ -86,7 +89,7 @@ class ApiMakerBootstrapSortLink extends PureComponent {
 
   qParams() {
     const {defaultParams} = this.props
-    const {queryParams} = digs(this.props, "queryParams")
+    const {queryParams} = this.tt
     const {searchKey} = digs(this, "searchKey")
 
     if (searchKey in queryParams) {
@@ -112,6 +115,4 @@ class ApiMakerBootstrapSortLink extends PureComponent {
 
     return query.modelClass().humanAttributeName(attribute)
   }
-}
-
-export default withQueryParams(ApiMakerBootstrapSortLink)
+}))

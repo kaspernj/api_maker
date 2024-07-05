@@ -1,3 +1,4 @@
+import BaseComponent from "../base-component"
 import instanceOfClassName from "../instance-of-class-name"
 import Link from "../link"
 import PropTypes from "prop-types"
@@ -5,10 +6,10 @@ import propTypesExact from "prop-types-exact"
 import qs from "qs"
 import {memo} from "react"
 import Result from "../result"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import urlEncode from "../url-encode.mjs"
 
-export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseComponent {
   static propTypes = propTypesExact({
     result: PropTypes.oneOfType([
       instanceOfClassName("ApiMakerResult"),
@@ -17,34 +18,38 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends Shape
   })
 
   setup() {
-    this.useStates({
-      pages: () => this.pages()
-    })
+    const {result} = this.p
+
+    useMemo(() => {
+      console.log({
+        result,
+        count: this.p.result.count(),
+        perPage: this.p.result.perPage()
+      })
+
+      this.totalPages = this.calculateTotalPages()
+      this.pages = this.calculatePages()
+    }, [result.currentPage(), result.totalCount(), result.totalPages()])
   }
 
-  componentDidUpdate (prevProps) {
-    if (prevProps.result != this.props.result) {
-      this.setState({pages: this.pages()})
-    }
-  }
+  calculateTotalPages = () => Math.ceil(this.p.result.count() / this.p.result.perPage())
 
-  isPageActiveClass (pageNumber) {
-    if (this.props.result.currentPage() == pageNumber)
-      return "active"
-  }
-
-  pages () {
-    const currentPage = this.props.result.currentPage()
+  calculatePages () {
+    const {result} = this.p
+    const {totalPages} = this.tt
+    const currentPage = result.currentPage()
     const pages = []
-    const totalPages = this.props.result.totalPages()
+
     let pagesFrom = currentPage - 5
     let pagesTo = currentPage + 5
 
-    if (pagesFrom < 1)
+    if (pagesFrom < 1) {
       pagesFrom = 1
+    }
 
-    if (pagesTo > totalPages)
+    if (pagesTo > totalPages) {
       pagesTo = totalPages
+    }
 
     for (let i = pagesFrom; i <= pagesTo; i++) {
       pages.push(i)
@@ -53,8 +58,10 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends Shape
     return pages
   }
 
+  isPageActiveClass = (pageNumber) => this.p.result.currentPage() == pageNumber ? "active" : "not-active"
+
   pagePath (pageNumber) {
-    let pageKey = this.props.result.data.collection.queryArgs.pageKey
+    let pageKey = this.p.result.data.collection.queryArgs.pageKey
 
     if (!pageKey) {
       pageKey = "page"
@@ -69,87 +76,106 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends Shape
   }
 
   previousPagePath () {
+    const {result} = this.p
     let previousPage
 
-    if (this.props.result.currentPage() > 1) {
-      previousPage = this.props.result.currentPage() - 1
+    if (result.currentPage() > 1) {
+      previousPage = result.currentPage() - 1
     } else {
-      previousPage = this.props.result.currentPage()
+      previousPage = result.currentPage()
     }
 
     return this.pagePath(previousPage)
   }
 
   nextPagePath () {
+    const {result} = this.p
     let nextPage
 
-    if (this.props.result.currentPage() < this.props.result.totalPages()) {
-      nextPage = this.props.result.currentPage() + 1
+    if (result.currentPage() < this.tt.totalPages) {
+      nextPage = result.currentPage() + 1
     } else {
-      nextPage = this.props.result.currentPage()
+      nextPage = result.currentPage()
     }
 
     return this.pagePath(nextPage)
   }
 
-  showBackwardsDots () {
-    const currentPage = this.props.result.currentPage()
-    return (currentPage - 5 > 1)
-  }
-
-  showForwardsDots () {
-    const currentPage = this.props.result.currentPage()
-    const totalPages = this.props.result.totalPages()
-    return (currentPage + 5 < totalPages)
-  }
+  showBackwardsDots = () => (this.p.result.currentPage() - 5 > 1)
+  showForwardsDots = () => (this.p.result.currentPage() + 5 < this.tt.totalPages)
 
   render () {
-    const {result} = this.props
-    const {pages} = this.state
+    const {result} = this.p
+    const {pages, totalPages} = this.tt
+    const showNextPage = result.currentPage() < totalPages
+    const showLastPage = result.currentPage() < totalPages
+    const showPreviousPage = result.currentPage() > 1
+    const showFirstPage = result.currentPage() > 1
 
     return (
       <>
         <ul className="pagination" data-pages-length={pages.length}>
-          <li className={`page-item ${result.currentPage() <= 1 ? "disabled" : ""}`} key="page-first">
-            <Link className="page-link" to={this.pagePath(1)}>
-              ⇤
-            </Link>
+          <li className={`page-item ${!showPreviousPage ? "disabled" : ""}`} key="page-first">
+            {!showPreviousPage &&
+              "⇤"
+            }
+            {showPreviousPage &&
+              <Link className="page-link" to={this.pagePath(1)}>
+                ⇤
+              </Link>
+            }
           </li>
-          <li className={`page-item ${result.currentPage() <= 1 ? "disabled" : ""}`} key="page-previous">
-            <Link className="page-link" to={this.previousPagePath()}>
-              ←
-            </Link>
+          <li className={`page-item ${!showFirstPage ? "disabled" : ""}`} key="page-previous">
+            {!showFirstPage &&
+              "←"
+            }
+            {showFirstPage &&
+              <Link className="page-link" to={this.previousPagePath()}>
+                ←
+              </Link>
+            }
           </li>
           {this.showBackwardsDots() &&
-            <li className="page-item">
-              <a className="page-link disabled" href="#">
-                &hellip;
-              </a>
+            <li className="page-item disabled">
+              &hellip;
             </li>
           }
           {pages.map((page) =>
             <li className={`page-item ${this.isPageActiveClass(page)}`} key={`page-${page}`}>
-              <Link className="page-link" to={this.pagePath(page)}>
-                {page}
-              </Link>
+              {this.isPageActiveClass(page) == "active" &&
+                page
+              }
+              {this.isPageActiveClass(page) == "not-active" &&
+                <Link className="page-link" to={this.pagePath(page)}>
+                  {page}
+                </Link>
+              }
             </li>
           )}
           {this.showForwardsDots() &&
-            <li className="page-item">
-              <a className="page-link disabled" href="#">
-                &hellip;
-              </a>
+            <li className="page-item disabled">
+              &hellip;
             </li>
           }
-          <li className={`page-item ${result.currentPage() >= result.totalPages() ? "disabled" : ""}`} key="page-next">
-            <Link className="page-link" to={this.nextPagePath()}>
-              →
-            </Link>
+          <li className={`page-item ${!showNextPage ? "disabled" : ""}`} key="page-next">
+            {!showNextPage &&
+              "→"
+            }
+            {showNextPage &&
+              <Link className="page-link" to={this.nextPagePath()}>
+                →
+              </Link>
+            }
           </li>
-          <li className={`page-item ${result.currentPage() >= result.totalPages() ? "disabled" : ""}`} key="page-last">
-            <Link className="page-link" to={this.pagePath(result.totalPages())}>
-              ⇥
-            </Link>
+          <li className={`page-item ${!showLastPage ? "disabled" : ""}`} key="page-last">
+            {!showLastPage &&
+              "⇥"
+            }
+            {showLastPage &&
+              <Link className="page-link" to={this.pagePath(totalPages)}>
+                ⇥
+              </Link>
+            }
           </li>
         </ul>
       </>
