@@ -137,7 +137,12 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
             </li>
           }
           {pages.map((page) =>
-            <li className={`page-item ${this.isPageActiveClass(page)}`} key={`page-${page}`}>
+            <li
+              className={`page-item ${this.isPageActiveClass(page)}`}
+              data-active={this.isPageActiveClass(page) == "active"}
+              data-page={page}
+              key={`page-${page}`}
+            >
               {this.isPageActiveClass(page) == "active" &&
                 page
               }
