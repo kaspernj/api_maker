@@ -99,6 +99,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     this.useStates({
       columns: columnsAsArray,
       currentWorkplace: undefined,
+      fixedTableLayout: undefined,
       identifier: () => this.props.identifier || `${collectionKey}-default`,
       preload: undefined,
       preparedColumns: undefined,
@@ -163,6 +164,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
 
     this.setState({
+      fixedTableLayout: tableSetting.fixedTableLayout(),
       preparedColumns: columns,
       preload: this.mergedPreloads(preload),
       tableSetting,
@@ -219,7 +221,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
 
     return (
-      <div className={this.className()}>
+      <div className={this.className()} data-fixed-table-layout={this.s.fixedTableLayout}>
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
@@ -395,6 +397,10 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     this.setState({showFilters: !this.state.showFilters})
   }
 
+  onFixedTableLayoutChanged = (fixedTableLayout) => {
+    this.setState({fixedTableLayout})
+  }
+
   onPerPageChanged = (e) => {
     const {queryName} = this.s
     const newPerPageValue = digg(e, "target", "value")
@@ -419,7 +425,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         </a>
         <span style={{position: "relative"}}>
           {showSettings &&
-            <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
+            <Settings onFixedTableLayoutChanged={this.tt.onFixedTableLayoutChanged} onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
           <a className="settings-button" href="#" onClick={this.tt.onSettingsClicked}>
             <i className="fa fa-fw fa-gear la la-fw la-gear" />
@@ -431,7 +437,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   tableContent () {
     const {workplace} = this.p
-    const {breakpoint} = this.tt
     const {currentWorkplace, preparedColumns, tableSettingFullCacheKey} = this.s
     const {models, query} = digs(this.collection, "models", "query")
     const ColumnInHeadComponent = this.columnInHeadComponent()
@@ -463,7 +468,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         <BodyComponent>
           {models.map((model) =>
             <ModelRow
-              breakPoint={breakpoint}
               cacheKey={model.cacheKey()}
               columnComponent={this.columnComponent()}
               key={model.id()}
@@ -537,7 +541,13 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   rowComponent = () => this.responsiveComponent("tr")
 
   headersContentFromColumns = () => this.s.preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
-    <HeaderColumn column={column} key={tableSettingColumn.identifier()} table={this} tableSettingColumn={tableSettingColumn} />
+    <HeaderColumn
+      column={column}
+      fixedTableLayout={this.s.fixedTableLayout}
+      key={tableSettingColumn.identifier()}
+      table={this}
+      tableSettingColumn={tableSettingColumn}
+    />
   )
 
   headerClassNameForColumn (column) {

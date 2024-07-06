@@ -7,22 +7,31 @@ import * as inflection from "inflection"
 import Link from "../link"
 import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
 const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox"))
 
 export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
-  static propTypes = {
+  static propTypes = propTypesExact({
     cacheKey: PropTypes.string.isRequired,
+    columnComponent: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.string
+    ]).isRequired,
     model: PropTypes.object.isRequired,
     liveTable: PropTypes.object.isRequired,
     preparedColumns: PropTypes.array,
+    rowComponent: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.string
+    ]).isRequired,
     tableSettingFullCacheKey: PropTypes.string.isRequired
-  }
+  })
 
   render() {
-    const {model} = this.p
+    const {columnComponent: ColumnComponent, model, rowComponent: RowComponent} = this.p
     const {modelClass, workplace} = this.p.liveTable.p
     const {actionsContent, columnsContent, destroyEnabled, editModelPath, viewModelPath} = this.p.liveTable.props
     const {columns, currentWorkplace} = this.p.liveTable.state
@@ -33,9 +42,6 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
 
     if (editModelPath && model.can("edit")) editPath = editModelPath(this.modelCallbackArgs)
     if (viewModelPath && model.can("show")) viewPath = viewModelPath(this.modelCallbackArgs)
-
-    const RowComponent = this.props.rowComponent
-    const ColumnComponent = this.props.columnComponent
 
     return (
       <RowComponent className={`live-table-row ${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()}>

@@ -2,10 +2,7 @@
 import history from "shared/application-history"
 import {callbacksHandler} from "on-location-changed/src/callbacks-handler"
 
-callbacksHandler.connectInterval()
 callbacksHandler.connectReactRouterHistory(history)
-callbacksHandler.connectMutationObserver()
-callbacksHandler.connectWindowEvents()
 
 // Stimulus
 import {Application} from "stimulus"

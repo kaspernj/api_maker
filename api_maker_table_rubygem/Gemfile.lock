@@ -3,6 +3,7 @@ PATH
   specs:
     api_maker_table (0.1.1)
       rails (>= 6.0.0)
+      service_pattern
       worker_plugins (>= 0.0.6)
 
 GEM
@@ -168,6 +169,7 @@ GEM
       psych (>= 4.0.0)
     reline (0.5.7)
       io-console (~> 0.5)
+    service_pattern (1.0.10)
     sqlite3 (1.7.3-x86_64-linux)
     stringio (3.1.0)
     thor (1.3.1)
