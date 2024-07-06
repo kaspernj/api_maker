@@ -452,7 +452,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         <HeadComponent>
           <RowComponent className="live-table-header-row">
             {workplace && currentWorkplace &&
-              <ColumnInHeadComponent>
+              <ColumnInHeadComponent style={{width: 25, textAlign: "center"}}>
                 <WorkerPluginsCheckAllCheckbox currentWorkplace={currentWorkplace} query={query} />
               </ColumnInHeadComponent>
             }
@@ -536,13 +536,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   responsiveComponent = (largeComponent) => this.isSmallScreen() ? "div" : largeComponent
   rowComponent = () => this.responsiveComponent("tr")
 
-  headersContentFromColumns () {
-    const {preparedColumns} = this.s
-
-    return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
-      <HeaderColumn column={column} key={tableSettingColumn.identifier()} table={this} tableSettingColumn={tableSettingColumn} />
-    )
-  }
+  headersContentFromColumns = () => this.s.preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
+    <HeaderColumn column={column} key={tableSettingColumn.identifier()} table={this} tableSettingColumn={tableSettingColumn} />
+  )
 
   headerClassNameForColumn (column) {
     const classNames = ["live-table-header"]

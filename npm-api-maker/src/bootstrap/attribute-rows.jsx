@@ -1,10 +1,11 @@
 import AttributeRow from "./attribute-row"
-import {digs} from "diggerize"
+import BaseComponent from "../base-component"
+import {memo} from "react"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import React from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
-export default class ApiMakerBootstrapAttributeRows extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapAttributeRows extends BaseComponent {
   static defaultProps = {
     checkIfAttributeLoaded: false
   }
@@ -15,13 +16,13 @@ export default class ApiMakerBootstrapAttributeRows extends React.PureComponent 
     model: PropTypes.object.isRequired
   })
 
-  classObject = this.props.model.modelClass()
+  classObject = this.p.model.modelClass()
 
   render () {
-    const {attributes, checkIfAttributeLoaded, model} = digs(this.props, "attributes", "checkIfAttributeLoaded", "model")
+    const {attributes, checkIfAttributeLoaded, model} = this.p
 
     return attributes.map((attribute) =>
       <AttributeRow attribute={attribute} checkIfAttributeLoaded={checkIfAttributeLoaded} key={`attribute-${attribute}`} model={model} />
     )
   }
-}
+}))

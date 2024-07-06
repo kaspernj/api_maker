@@ -1,15 +1,15 @@
-import {digg, digs} from "diggerize"
+import BaseComponent from "../base-component"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import qs from "qs"
-import React from "react"
+import {memo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import urlEncode from "../url-encode.mjs"
 
 import Link from "../link"
-import PureComponent from "set-state-compare/src/pure-component"
-import withQueryParams from "on-location-changed/src/with-query-params"
+import useQueryParams from "on-location-changed/src/use-query-params"
 
-class ApiMakerBootstrapSortLink extends PureComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseComponent {
   static propTypes = {
     attribute: PropTypes.string.isRequired,
     className: PropTypes.string,
@@ -17,26 +17,26 @@ class ApiMakerBootstrapSortLink extends PureComponent {
     linkComponent: PropTypes.object,
     onChanged: PropTypes.func,
     query: PropTypes.object.isRequired,
-    queryParams: PropTypes.object.isRequired,
     title: PropTypes.node
   }
 
-  searchKey = digg(this, "props", "query", "queryArgs").searchKey || "q"
-
-  attribute () {
-    return inflection.underscore(this.props.attribute)
+  setup() {
+    this.queryParams = useQueryParams()
+    this.searchKey = this.p.query.queryArgs.searchKey || "q"
   }
+
+  attribute = () => inflection.underscore(this.p.attribute)
 
   href () {
     const qParams = this.qParams()
-    const {queryParams} = digs(this.props, "queryParams")
-    const {searchKey} = digs(this, "searchKey")
+    const {queryParams, searchKey} = this.tt
+    const newQueryParams = {...queryParams}
 
     qParams.s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
 
-    queryParams[searchKey] = JSON.stringify(qParams)
+    newQueryParams[searchKey] = JSON.stringify(qParams)
 
-    const newParams = qs.stringify(queryParams, {encoder: urlEncode})
+    const newParams = qs.stringify(newQueryParams, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
 
     return newPath
@@ -53,20 +53,18 @@ class ApiMakerBootstrapSortLink extends PureComponent {
 
   render () {
     const LinkComponent = this.linkComponent()
-    const {attribute, className, defaultParams, linkComponent, onChanged, query, queryParams, title, ...restProps} = this.props
+    const {attribute, className, defaultParams, linkComponent, onChanged, query, title, ...restProps} = this.props
 
     return (
-      <>
-        <LinkComponent
-          className={this.className()}
-          data-attribute={attribute}
-          data-sort-mode={this.sortMode()}
-          to={this.href()}
-          {...restProps}
-        >
-          {this.title()}
-        </LinkComponent>
-      </>
+      <LinkComponent
+        className={this.className()}
+        data-attribute={attribute}
+        data-sort-mode={this.sortMode()}
+        to={this.href()}
+        {...restProps}
+      >
+        {this.title()}
+      </LinkComponent>
     )
   }
 
@@ -78,16 +76,11 @@ class ApiMakerBootstrapSortLink extends PureComponent {
     return classNames.join(" ")
   }
 
-  linkComponent () {
-    if (this.props.linkComponent) return this.props.linkComponent
-
-    return Link
-  }
+  linkComponent = () => this.props.linkComponent || Link
 
   qParams() {
     const {defaultParams} = this.props
-    const {queryParams} = digs(this.props, "queryParams")
-    const {searchKey} = digs(this, "searchKey")
+    const {queryParams, searchKey} = this.tt
 
     if (searchKey in queryParams) {
       return JSON.parse(queryParams[searchKey])
@@ -105,13 +98,11 @@ class ApiMakerBootstrapSortLink extends PureComponent {
   }
 
   title () {
-    const {attribute, query} = digs(this.props, "attribute", "query")
+    const {attribute, query} = this.p
     const {title} = this.props
 
     if (title) return title
 
     return query.modelClass().humanAttributeName(attribute)
   }
-}
-
-export default withQueryParams(ApiMakerBootstrapSortLink)
+}))

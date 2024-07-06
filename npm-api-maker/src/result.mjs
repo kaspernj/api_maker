@@ -3,27 +3,11 @@ export default class ApiMakerResult {
     this.data = data
   }
 
-  currentPage () {
-    return this.data.response.meta.currentPage
-  }
-
-  models () {
-    return this.data.models
-  }
-
-  modelClass () {
-    return this.data.collection.modelClass()
-  }
-
-  perPage () {
-    return this.data.response.meta.perPage
-  }
-
-  totalCount () {
-    return this.data.response.meta.totalCount
-  }
-
-  totalPages () {
-    return this.data.response.meta.totalPages
-  }
+  count = () => this.data.response.meta.count
+  currentPage = () => this.data.response.meta.currentPage
+  models = () => this.data.models
+  modelClass = () => this.data.collection.modelClass()
+  perPage = () => this.data.response.meta.perPage
+  totalCount = () => this.data.response.meta.totalCount
+  totalPages = () => this.data.response.meta.totalPages
 }

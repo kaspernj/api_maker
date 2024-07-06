@@ -1,4 +1,5 @@
 import AttributeElement from "./attribute-element"
+import BaseComponent from "../../base-component"
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import Input from "../../inputs/input"
@@ -9,9 +10,9 @@ import ReflectionElement from "./reflection-element"
 import ScopeElement from "./scope-element"
 import Select from "../../inputs/select"
 import Services from "../../services.mjs"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 
-export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
   static propTypes = PropTypesExact({
     filter: PropTypes.object,
     modelClass: PropTypes.func.isRequired,
@@ -55,7 +56,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   render() {
     const {valueInputRef} = digs(this, "valueInputRef")
     const currentModelClass = this.currentModelClass()
-    const {attribute, predicate, predicates, scope, value} = digs(this.state, "attribute", "predicate", "scope", "predicates", "value")
+    const {attribute, predicate, predicates, scope, value} = this.s
     let submitEnabled = false
 
     if (attribute && predicate) {
@@ -66,7 +67,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
 
     return (
       <div className="api-maker--table--filters--filter-form">
-        <form onSubmit={digg(this, "onSubmit")}>
+        <form onSubmit={this.tt.onSubmit}>
           <div>
             {this.currentPathParts().map(({translation}, pathPartIndex) =>
               <span key={`${pathPartIndex}-${translation}`}>
@@ -85,7 +86,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                 <ReflectionElement
                   currentModelClass={currentModelClass}
                   key={reflection.name()}
-                  onClick={digg(this, "onReflectionClicked")}
+                  onClick={this.tt.onReflectionClicked}
                   reflection={reflection}
                 />
               )}
@@ -97,7 +98,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                   attribute={attribute}
                   currentModelClass={currentModelClass}
                   key={attribute.name()}
-                  onClick={digg(this, "onAttributeClicked")}
+                  onClick={this.tt.onAttributeClicked}
                 />
               )}
               {currentModelClass.ransackableScopes().map((scope) =>
@@ -105,7 +106,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                   active={scope.name() == this.state.scope?.name()}
                   key={scope.name()}
                   scope={scope}
-                  onScopeClicked={digg(this, "onScopeClicked")}
+                  onScopeClicked={this.tt.onScopeClicked}
                 />
               )}
             </div>
@@ -115,7 +116,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                   className="predicate-select"
                   defaultValue={predicate?.name}
                   includeBlank
-                  onChange={digg(this, "onPredicateChanged")}
+                  onChange={this.tt.onPredicateChanged}
                   options={predicates.map((predicate) => digg(predicate, "name"))}
                 />
               }
@@ -136,14 +137,10 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     )
   }
 
-  currentModelClass() {
-    const {path} = digs(this.state, "path")
-
-    return this.currentModelClassFromPath(path)
-  }
+  currentModelClass = () => this.currentModelClassFromPath(this.s.path)
 
   currentModelClassFromPath(path) {
-    const {modelClass} = digs(this.props, "modelClass")
+    const {modelClass} = this.p
     let currentModelClass = modelClass
 
     for (const pathPart of path) {
@@ -163,8 +160,8 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   }
 
   currentPathParts() {
-    const {modelClass} = digs(this.props, "modelClass")
-    const {path} = digs(this.state, "path")
+    const {modelClass} = this.p
+    const {path} = this.s
     const result = []
     let currentModelClass = modelClass
 
@@ -225,11 +222,11 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   onSubmit = (e) => {
     e.preventDefault()
 
-    const {filter, querySearchName} = digs(this.props, "filter", "querySearchName")
-    const {attribute, path, predicate, scope} = digs(this.state, "attribute", "path", "predicate", "scope")
+    const {filter, querySearchName} = this.p
+    const {attribute, path, predicate, scope} = this.s
     const {filterIndex} = digs(filter, "filterIndex")
     const searchParams = Params.parse()[querySearchName] || {}
-    const value = digg(this, "valueInputRef", "current", "value")
+    const value = digg(this.tt.valueInputRef, "current", "value")
     const newSearchParams = {
       p: path,
       v: value

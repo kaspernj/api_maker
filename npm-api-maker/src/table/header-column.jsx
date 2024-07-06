@@ -25,10 +25,9 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
 
     this.useStates({
       cursorX: undefined,
-      cursorY: undefined,
       originalWidth: undefined,
       resizing: false,
-      width: "auto"
+      width: this.p.tableSettingColumn.width()
     })
   }
 
@@ -56,9 +55,9 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               {table.headerLabelForColumn(column)}
             </Text>
           }
-          <Pressable onPressIn={this.tt.onResizePressIn} onPressOut={this.tt.onResizePressOut} style={{marginLeft: "auto", width: 20, cursor: "pointer"}}>
+          <Pressable onPressIn={this.tt.onResizePressIn} style={{marginLeft: "auto", cursor: "col-resize"}}>
             <Text>
-              &nbsp;
+              |
             </Text>
           </Pressable>
         </View>
@@ -67,8 +66,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   }
 
   onResizeEnd = async () => {
-    console.log("onResizeEnd")
-    this.setState({cursorX: undefined, cursorY: undefined, resizing: false})
+    this.setState({cursorX: undefined, resizing: false})
 
     await this.p.tableSettingColumn.update({
       width: this.s.width
@@ -76,52 +74,33 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   }
 
   onResizePressIn = (e) => {
-    console.log("onResizePressIn", {e})
-
     e.preventDefault()
     e.stopPropagation()
 
-    const width = this.tt.columnRef.current.offsetWidth
+    const originalWidth = this.s.width || this.tt.columnRef.current.offsetWidth
     const cursorX = e.nativeEvent.pageX
-    const cursorY = e.nativeEvent.pageY
-
-    console.log({width, cursorX, cursorY})
 
     this.setState({
       cursorX,
-      cursorY,
-      originalWidth: width,
-      resizing: true,
-      width
+      originalWidth,
+      resizing: true
     })
   }
 
-  onResizePressOut = () => {
-    console.log("onResizePressOut")
-  }
-
   onWindowMouseMove = (e) => {
-    const {cursorX, cursorY, resizing, originalWidth} = this.s
+    const {cursorX, resizing, originalWidth} = this.s
 
     if (resizing) {
       const newCursorX = e.pageX
-      const newCursorY = e.pageY
       const diffX = newCursorX - cursorX
-      const diffY = newCursorY - cursorY
       const newWidth = originalWidth + diffX
-
-      console.log("onWindowMouseMove", {diffX, cursorX, cursorY, originalWidth, newWidth})
 
       this.setState({width: newWidth})
     }
   }
 
   onWindowMouseUp = () => {
-    console.log("onWindowMouseUp")
-
-    const {resizing} = this.s
-
-    if (resizing) {
+    if (this.s.resizing) {
       this.onResizeEnd()
     }
   }

@@ -6,6 +6,8 @@ AllCops:
   Exclude:
     - db/data_schema.rb
     - db/schema.rb
+    - gemfiles/rails_6.gemfile
+    - gemfiles/rails_7.gemfile
     - node_modules/**/*
     - spec/dummy/db/schema.rb
     - spec/dummy/node_modules/**/*

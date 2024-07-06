@@ -87,6 +87,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     total_count = ApiMaker::TotalCount.execute!(query: countable_collection)
 
     response[:meta] = {
+      count: query_count,
       currentPage: ApiMaker::CurrentPage.execute!(query: collection),
       perPage: ApiMaker::PerPage.execute!(query: collection),
       totalCount: total_count,
@@ -131,5 +132,11 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   def filter_query_with_search_params
     ransack_params = ApiMaker::SearchToRansackParams.new(search: params[:search]).perform
     @query = @query.ransack(ransack_params).result
+  end
+
+  def query_count
+    count = @query.except(:limit).except(:offset).count
+    count = count.length if count.is_a?(Hash)
+    count
   end
 end

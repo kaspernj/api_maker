@@ -41,7 +41,6 @@ export default class BootstrapLiveTable extends React.PureComponent {
           defaultDateTimeFormatName="time.formats.short"
           defaultParams={{s: "name asc"}}
           filterContent={this.filterContent}
-          headersContent={this.headersContent}
           modelClass={Task}
           {...liveTableProps}
         />

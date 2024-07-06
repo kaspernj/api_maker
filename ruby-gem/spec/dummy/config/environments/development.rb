@@ -54,4 +54,5 @@ Rails.application.configure do
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.hosts << "development"
+  config.hosts << "app.wooftech.development"
 end
