@@ -40,7 +40,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     return (
       <RowComponent className={`live-table-row ${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()}>
         {workplace &&
-          <ColumnComponent className="workplace-column">
+          <ColumnComponent className="workplace-column" style={{width: 25, textAlign: "center"}}>
             <WorkerPluginsCheckbox currentWorkplace={currentWorkplace} model={model} />
           </ColumnComponent>
         }

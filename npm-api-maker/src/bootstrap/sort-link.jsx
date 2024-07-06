@@ -3,7 +3,7 @@ import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import qs from "qs"
-import {memo} from "react"
+import {memo, useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import urlEncode from "../url-encode.mjs"
 
@@ -23,18 +23,14 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
 
   setup() {
     this.queryParams = useQueryParams()
+    this.searchKey = this.p.query.queryArgs.searchKey || "q"
   }
 
-  searchKey = digg(this, "props", "query", "queryArgs").searchKey || "q"
-
-  attribute () {
-    return inflection.underscore(this.props.attribute)
-  }
+  attribute = () => inflection.underscore(this.p.attribute)
 
   href () {
     const qParams = this.qParams()
-    const {queryParams} = this.tt
-    const {searchKey} = digs(this, "searchKey")
+    const {queryParams, searchKey} = this.tt
 
     qParams.s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
 
