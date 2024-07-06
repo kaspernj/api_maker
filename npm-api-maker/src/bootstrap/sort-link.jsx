@@ -1,9 +1,8 @@
 import BaseComponent from "../base-component"
-import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import qs from "qs"
-import {memo, useMemo} from "react"
+import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import urlEncode from "../url-encode.mjs"
 
@@ -31,12 +30,13 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
   href () {
     const qParams = this.qParams()
     const {queryParams, searchKey} = this.tt
+    const newQueryParams = {...queryParams}
 
     qParams.s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
 
-    queryParams[searchKey] = JSON.stringify(qParams)
+    newQueryParams[searchKey] = JSON.stringify(qParams)
 
-    const newParams = qs.stringify(queryParams, {encoder: urlEncode})
+    const newParams = qs.stringify(newQueryParams, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
 
     return newPath
@@ -57,6 +57,9 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
 
     return (
       <>
+        <div>
+          queryParams: {JSON.stringify(this.tt.queryParams, null, 2)}
+        </div>
         <LinkComponent
           className={this.className()}
           data-attribute={attribute}
@@ -78,16 +81,11 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
     return classNames.join(" ")
   }
 
-  linkComponent () {
-    if (this.props.linkComponent) return this.props.linkComponent
-
-    return Link
-  }
+  linkComponent = () => this.props.linkComponent || Link
 
   qParams() {
     const {defaultParams} = this.props
-    const {queryParams} = this.tt
-    const {searchKey} = digs(this, "searchKey")
+    const {queryParams, searchKey} = this.tt
 
     if (searchKey in queryParams) {
       return JSON.parse(queryParams[searchKey])
@@ -105,7 +103,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
   }
 
   title () {
-    const {attribute, query} = digs(this.props, "attribute", "query")
+    const {attribute, query} = this.p
     const {title} = this.props
 
     if (title) return title

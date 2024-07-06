@@ -1,9 +1,8 @@
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
+import Link from "../../link"
 import MoneyFormatter from "../../money-formatter"
 import PropTypes from "prop-types"
-
-import Link from "../../link"
 
 export default class ApiMakerBootStrapLiveTableModelRow extends React.PureComponent {
   static propTypes = {
