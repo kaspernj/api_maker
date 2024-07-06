@@ -2,14 +2,13 @@ import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digs} from "diggerize"
 import {memo} from "react"
-import {Pressable, Text} from "react-native"
+import {Pressable, Text, View} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import SortLink from "../bootstrap/sort-link"
 import useEventListener from "../use-event-listener.mjs"
 import {useRef} from "react"
-import {Text, View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
