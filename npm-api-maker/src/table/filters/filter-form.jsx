@@ -1,4 +1,5 @@
 import AttributeElement from "./attribute-element"
+import BaseComponent from "../../base-component"
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import Input from "../../inputs/input"
@@ -9,9 +10,9 @@ import ReflectionElement from "./reflection-element"
 import ScopeElement from "./scope-element"
 import Select from "../../inputs/select"
 import Services from "../../services.mjs"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 
-export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
   static propTypes = PropTypesExact({
     filter: PropTypes.object,
     modelClass: PropTypes.func.isRequired,

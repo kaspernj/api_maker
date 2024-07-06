@@ -1,3 +1,4 @@
+import BaseComponent from "../../base-component"
 import {digg, digs} from "diggerize"
 import Filter from "./filter"
 import FilterForm from "./filter-form"
@@ -5,13 +6,13 @@ import LoadSearchModal from "./load-search-modal"
 import SaveSearchModal from "./save-search-modal"
 import PropTypes from "prop-types"
 import {memo} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {TableSearch} from "../../models.mjs.erb"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
 import {View} from "react-native"
 
-export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTableFilters extends BaseComponent {
   static propTypes = {
     currentUser: PropTypes.object,
     modelClass: PropTypes.func.isRequired,
@@ -38,7 +39,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
     const currentFilters = this.currentFilters()
 
     return (
-      <View dataSet={{class: "api-maker--table--filters"}}>
+      <View dataSet={{class: "api-maker--table--filters"}} style={{alignItems: "flex-start"}}>
         {filter &&
           <FilterForm
             filter={filter}
@@ -74,21 +75,21 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends ShapeCompo
             {...filterData}
           />
         )}
-        <div className="filter-actions">
-          <button className="add-new-filter-button" onClick={digg(this, "onAddFilterClicked")}>
+        <View className="filter-actions" style={{flexDirection: "row", marginTop: 10}}>
+          <button className="add-new-filter-button" onClick={this.tt.onAddFilterClicked}>
             {this.t(".add_new_filter", {defaultValue: "Add new filter"})}
           </button>
           {currentUser &&
             <>
-              <button className="save-search-button" onClick={digg(this, "onSaveSearchClicked")}>
+              <button className="save-search-button" onClick={this.tt.onSaveSearchClicked} style={{marginLeft: 10}}>
                 {this.t(".save_search", {defaultValue: "Save search"})}
               </button>
-              <button className="load-search-button" onClick={digg(this, "onLoadSearchClicked")}>
+              <button className="load-search-button" onClick={this.tt.onLoadSearchClicked} style={{marginLeft: 10}}>
                 {this.t(".load_search", {defaultValue: "Load search"})}
               </button>
             </>
           }
-        </div>
+        </View>
       </View>
     )
   }
