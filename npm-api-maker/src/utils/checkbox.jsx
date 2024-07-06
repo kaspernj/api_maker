@@ -1,5 +1,5 @@
 import BaseComponent from "../base-component"
-import {CheckBox, View} from "react-native"
+import {CheckBox, Text, View} from "react-native"
 import {memo} from "react"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
