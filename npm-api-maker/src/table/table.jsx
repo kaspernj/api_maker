@@ -1,4 +1,5 @@
 import "./style"
+import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
 import Collection from "../collection"
@@ -6,6 +7,7 @@ import columnVisible from "./column-visible.mjs"
 import debounce from "debounce"
 import {digg, digs} from "diggerize"
 import Filters from "./filters"
+import HeaderColumn from "./header-column"
 import * as inflection from "inflection"
 import modelClassRequire from "../model-class-require.mjs"
 import ModelRow from "./model-row"
@@ -16,8 +18,7 @@ import React, {memo, useEffect, useRef} from "react"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
 import Settings from "./settings"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import SortLink from "../bootstrap/sort-link"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
 import useBreakpoint from "./use-breakpoint"
@@ -27,7 +28,7 @@ import useQueryParams from "on-location-changed/src/use-query-params.js"
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
 
-export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   static defaultProps = {
     card: true,
     destroyEnabled: true,
@@ -87,7 +88,7 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
       filterFormRef: useRef()
     })
 
-    const collectionKey = digg(this.props.modelClass.modelClassData(), "collectionKey")
+    const collectionKey = digg(this.p.modelClass.modelClassData(), "collectionKey")
     let queryName = this.props.queryName
 
     if (!queryName) queryName = collectionKey
@@ -188,9 +189,9 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
   }
 
   render () {
-    const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = digs(this.props, "modelClass", "noRecordsAvailableContent", "noRecordsFoundContent")
+    const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = this.p
     const {collection, currentUser} = this.props
-    const {queryName, querySName, showFilters} = digs(this.state, "queryName", "querySName", "showFilters")
+    const {queryName, querySName, showFilters} = this.s
     const {
       models,
       overallCount,
@@ -362,8 +363,8 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
   }
 
   filterForm = () => {
-    const {filterFormRef, submitFilter, submitFilterDebounce} = digs(this, "filterFormRef", "submitFilter", "submitFilterDebounce")
-    const {filterContent, filterSubmitButton} = digs(this.props, "filterContent", "filterSubmitButton")
+    const {filterFormRef, submitFilter, submitFilterDebounce} = this.tt
+    const {filterContent, filterSubmitButton} = this.p
     const {filterSubmitLabel} = this.props
     const {qParams} = digs(this.collection, "qParams")
 
@@ -395,7 +396,7 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
   }
 
   onPerPageChanged = (e) => {
-    const {queryName} = digs(this.state, "queryName")
+    const {queryName} = this.s
     const newPerPageValue = digg(e, "target", "value")
     const perKey = `${queryName}_per`
     const paramsChange = {}
@@ -407,20 +408,20 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
 
   tableControls() {
     const {controls} = this.props
-    const {showSettings} = digs(this.state, "showSettings")
+    const {showSettings} = this.s
     const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
 
     return (
       <>
         {controls && controls({models, qParams, query, result})}
-        <a className="filter-button" href="#" onClick={digg(this, "onFilterClicked")}>
+        <a className="filter-button" href="#" onClick={this.tt.onFilterClicked}>
           <i className="fa fa-fw fa-magnifying-glass la la-fw la-search" />
         </a>
         <span style={{position: "relative"}}>
           {showSettings &&
-            <Settings onRequestClose={this.onRequestCloseSettings} table={this} />
+            <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
-          <a className="settings-button" href="#" onClick={digg(this, "onSettingsClicked")}>
+          <a className="settings-button" href="#" onClick={this.tt.onSettingsClicked}>
             <i className="fa fa-fw fa-gear la la-fw la-gear" />
           </a>
         </span>
@@ -429,9 +430,9 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
   }
 
   tableContent () {
-    const {workplace} = digs(this.props, "workplace")
-    const {breakpoint} = digs(this, "breakpoint")
-    const {currentWorkplace, preparedColumns, tableSettingFullCacheKey} = digs(this.state, "currentWorkplace", "preparedColumns", "tableSettingFullCacheKey")
+    const {workplace} = this.p
+    const {breakpoint} = this.tt
+    const {currentWorkplace, preparedColumns, tableSettingFullCacheKey} = this.s
     const {models, query} = digs(this.collection, "models", "query")
     const ColumnInHeadComponent = this.columnInHeadComponent()
     const RowComponent = this.rowComponent()
@@ -498,7 +499,7 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
           <Select
             className="per-page-select"
             defaultValue={perPage}
-            onChange={digg(this, "onPerPageChanged")}
+            onChange={this.tt.onPerPageChanged}
             options={paginationOptions}
           />
         </div>
@@ -536,25 +537,10 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
   rowComponent = () => this.responsiveComponent("tr")
 
   headersContentFromColumns () {
-    const {defaultParams} = this.props
-    const {preparedColumns} = digs(this.state, "preparedColumns")
-    const {query} = digs(this.collection, "query")
-    const ColumnInHeadComponent = this.columnInHeadComponent()
+    const {preparedColumns} = this.s
 
     return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
-      <ColumnInHeadComponent
-        className={classNames(...this.headerClassNameForColumn(column))}
-        data-identifier={tableSettingColumn.identifier()}
-        key={tableSettingColumn.identifier()}
-        {...this.columnProps(column)}
-      >
-        {tableSettingColumn.hasSortKey() && query &&
-          <SortLink attribute={tableSettingColumn.sortKey()} defaultParams={defaultParams} query={query} title={this.headerLabelForColumn(column)} />
-        }
-        {(!tableSettingColumn.hasSortKey() || !query) &&
-          this.headerLabelForColumn(column)
-        }
-      </ColumnInHeadComponent>
+      <HeaderColumn column={column} key={tableSettingColumn.identifier()} table={this} tableSettingColumn={tableSettingColumn} />
     )
   }
 
@@ -568,7 +554,7 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
   }
 
   headerLabelForColumn (column) {
-    const {modelClass} = digs(this.props, "modelClass")
+    const {modelClass} = this.p
 
     if ("label" in column) {
       if (typeof column.label == "function") {
@@ -605,17 +591,16 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
   onSettingsClicked = (e) => {
     e.preventDefault()
 
-    const {showSettings} = digs(this.state, "showSettings")
+    const {showSettings} = this.s
 
     this.setState({showSettings: !showSettings})
   }
 
   submitFilter = () => {
-    const {filterFormRef} = digs(this, "filterFormRef")
-    const filterForm = digg(filterFormRef, "current")
+    const filterForm = digg(this.tt.filterFormRef, "current")
     const {appHistory} = this.props
     const qParams = Params.serializeForm(filterForm)
-    const {queryQName} = digs(this.state, "queryQName")
+    const {queryQName} = this.s
     const changeParamsParams = {}
 
     changeParamsParams[queryQName] = JSON.stringify(qParams)
@@ -623,5 +608,5 @@ export default memo(shapeComponent(class ApiMakerTable extends ShapeComponent {
     Params.changeParams(changeParamsParams, {appHistory})
   }
 
-  submitFilterDebounce = debounce(digg(this, "submitFilter"))
+  submitFilterDebounce = debounce(this.tt.submitFilter)
 }))
