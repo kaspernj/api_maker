@@ -17,6 +17,7 @@ PATH
   specs:
     api_maker_table (0.1.1)
       rails (>= 6.0.0)
+      service_pattern
       worker_plugins (>= 0.0.6)
 
 GEM

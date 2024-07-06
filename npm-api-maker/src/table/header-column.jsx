@@ -13,6 +13,7 @@ import {useRef} from "react"
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
     column: PropTypes.object.isRequired,
+    fixedTableLayout: PropTypes.bool.isRequired,
     table: PropTypes.object.isRequired,
     tableSettingColumn: PropTypes.object.isRequired
   })
@@ -32,7 +33,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   }
 
   render() {
-    const {column, table, tableSettingColumn} = this.p
+    const {column, fixedTableLayout, table, tableSettingColumn} = this.p
     const {width} = this.s
     const {defaultParams} = table.props
     const {query} = digs(table.collection, "query")
@@ -55,11 +56,13 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               {table.headerLabelForColumn(column)}
             </Text>
           }
-          <Pressable onPressIn={this.tt.onResizePressIn} style={{marginLeft: "auto", cursor: "col-resize"}}>
-            <Text>
-              |
-            </Text>
-          </Pressable>
+          {fixedTableLayout &&
+            <Pressable onPressIn={this.tt.onResizePressIn} style={{marginLeft: "auto", cursor: "col-resize"}}>
+              <Text>
+                |
+              </Text>
+            </Pressable>
+          }
         </View>
       </ColumnInHeadComponent>
     )

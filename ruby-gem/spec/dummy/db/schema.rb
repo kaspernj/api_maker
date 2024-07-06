@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_06_083440) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_06_143133) do
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "task_id", null: false
@@ -148,6 +148,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_06_083440) do
     t.string "identifier", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "fixed_table_layout", default: false, null: false
     t.index ["identifier"], name: "index_table_settings_on_identifier"
     t.index ["user_id", "user_type", "identifier"], name: "index_table_settings_on_user_id_and_user_type_and_identifier", unique: true
     t.index ["user_type", "user_id"], name: "index_table_settings_on_user"
