@@ -9,7 +9,7 @@ import {shapeComponent} from "set-state-compare/src/shape-component"
 import SortLink from "../bootstrap/sort-link"
 import useEventListener from "../use-event-listener.mjs"
 import {useRef} from "react"
-import {View} from "react-native"
+import {Text, View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
@@ -53,7 +53,9 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
             <SortLink attribute={tableSettingColumn.sortKey()} defaultParams={defaultParams} query={query} title={table.headerLabelForColumn(column)} />
           }
           {(!tableSettingColumn.hasSortKey() || !query) &&
-            table.headerLabelForColumn(column)
+            <Text>
+              {table.headerLabelForColumn(column)}
+            </Text>
           }
           <Pressable onPressIn={this.tt.onResizePressIn} onPressOut={this.tt.onResizePressOut} style={{marginLeft: "auto", width: 20, cursor: "pointer"}}>
             <Text>
