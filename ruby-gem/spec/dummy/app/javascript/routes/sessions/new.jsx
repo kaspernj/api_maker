@@ -1,5 +1,7 @@
+import Checkbox from "@kaspernj/api-maker/src/bootstrap/checkbox"
 import Devise from "@kaspernj/api-maker/src/devise"
 import FlashMessage from "shared/flash-message"
+import Input from "@kaspernj/api-maker/src/bootstrap/input"
 import EventEmitterListener from "@kaspernj/api-maker/src/event-emitter-listener"
 import React from "react"
 

@@ -27,7 +27,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
       cursorX: undefined,
       originalWidth: undefined,
       resizing: false,
-      width: "auto"
+      width: this.p.tableSettingColumn.width()
     })
   }
 
@@ -55,7 +55,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               {table.headerLabelForColumn(column)}
             </Text>
           }
-          <Pressable onPressIn={this.tt.onResizePressIn} onPressOut={this.tt.onResizePressOut} style={{marginLeft: "auto", cursor: "col-resize"}}>
+          <Pressable onPressIn={this.tt.onResizePressIn} style={{marginLeft: "auto", cursor: "col-resize"}}>
             <Text>
               |
             </Text>
@@ -77,19 +77,14 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     e.preventDefault()
     e.stopPropagation()
 
-    const width = this.tt.columnRef.current.offsetWidth
+    const originalWidth = this.s.width || this.tt.columnRef.current.offsetWidth
     const cursorX = e.nativeEvent.pageX
 
     this.setState({
       cursorX,
-      originalWidth: width,
-      resizing: true,
-      width
+      originalWidth,
+      resizing: true
     })
-  }
-
-  onResizePressOut = () => {
-    console.log("onResizePressOut")
   }
 
   onWindowMouseMove = (e) => {
@@ -105,11 +100,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   }
 
   onWindowMouseUp = () => {
-    console.log("onWindowMouseUp")
-
-    const {resizing} = this.s
-
-    if (resizing) {
+    if (this.s.resizing) {
       this.onResizeEnd()
     }
   }

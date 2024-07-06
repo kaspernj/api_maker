@@ -18,6 +18,8 @@ describe "bootstrap - sort link" do
     wait_for_path "/bootstrap/sort-link?q=#{asc_params}", ignore_query: false
     wait_for_order_of_elements ".task-row", ->(element) { element["data-task-id"] }, %w[1 2 3 4 5]
 
+    binding.pry
+
     wait_for_selector ".component-api-maker-bootstrap-sort-link[href='/bootstrap/sort-link?q=#{desc_params}']"
     wait_for_and_find(".component-api-maker-bootstrap-sort-link").click
     wait_for_path "/bootstrap/sort-link?q=#{desc_params}", ignore_query: false

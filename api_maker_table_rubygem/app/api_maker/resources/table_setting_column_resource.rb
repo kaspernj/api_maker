@@ -1,7 +1,7 @@
 class Resources::TableSettingColumnResource < ApiMaker::BaseResource
   self.model_class_name = "ApiMakerTable::TableSettingColumn"
 
-  attributes :attribute_name, :id, :identifier, :path, :position, :sort_key, :visible
+  attributes :attribute_name, :id, :identifier, :path, :position, :sort_key, :visible, :width
   relationships :table_setting
 
   def abilities
