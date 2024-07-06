@@ -4,6 +4,7 @@ import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import qs from "qs"
 import {memo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import urlEncode from "../url-encode.mjs"
 
 import Link from "../link"
