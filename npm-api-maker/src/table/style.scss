@@ -1,6 +1,10 @@
 @import "./variables";
 
 .api-maker--table {
+  table {
+    table-layout: fixed;
+  }
+
   .live-table-header {
     text-align: left;
   }

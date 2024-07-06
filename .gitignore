@@ -13,11 +13,12 @@ npm-api-maker/node_modules
 
 ruby-gem/.bundle/
 ruby-gem/.env.test.local
+ruby-gem/.lock*
 ruby-gem/log/*.log
 ruby-gem/node_modules
 ruby-gem/pkg/
+ruby-gem/spec/dummy/db/*.sqlite3*
 ruby-gem/spec/dummy/db/*.sqlite3
-ruby-gem/spec/dummy/db/*.sqlite3-journal
 ruby-gem/spec/dummy/log/*.log
 ruby-gem/spec/dummy/node_modules/
 ruby-gem/spec/dummy/public/packs/
