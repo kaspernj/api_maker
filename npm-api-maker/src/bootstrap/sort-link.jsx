@@ -56,20 +56,15 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
     const {attribute, className, defaultParams, linkComponent, onChanged, query, title, ...restProps} = this.props
 
     return (
-      <>
-        <div>
-          queryParams: {JSON.stringify(this.tt.queryParams, null, 2)}
-        </div>
-        <LinkComponent
-          className={this.className()}
-          data-attribute={attribute}
-          data-sort-mode={this.sortMode()}
-          to={this.href()}
-          {...restProps}
-        >
-          {this.title()}
-        </LinkComponent>
-      </>
+      <LinkComponent
+        className={this.className()}
+        data-attribute={attribute}
+        data-sort-mode={this.sortMode()}
+        to={this.href()}
+        {...restProps}
+      >
+        {this.title()}
+      </LinkComponent>
     )
   }
 
