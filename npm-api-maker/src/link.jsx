@@ -1,6 +1,6 @@
-import React from "react"
+import {PureComponent} from "react"
 
-export default class Link extends React.PureComponent {
+export default class Link extends PureComponent {
   render() {
     const {to, onClick, ...restProps} = this.props
 

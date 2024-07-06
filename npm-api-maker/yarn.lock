@@ -4660,7 +4660,7 @@ object.values@^1.2.0:
     define-properties "^1.2.1"
     es-object-atoms "^1.0.0"
 
-"on-location-changed@>= 1.0.10":
+"on-location-changed@>= 1.0.13":
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.13.tgz#2aba53f5c7c8ef545f8c96462f6b295c852317f6"
   integrity sha512-6j3gq95X8PNdLopSa9h7ohBywu0YJV5gxkyDZjndPl0JBhwgxt8dxAY5UrngI2RINxNhczYn/usyC6+Gy897Eg==
