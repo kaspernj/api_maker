@@ -1,13 +1,14 @@
 import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
+import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
-import {memo, useEffect} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {memo, useMemo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {TableSearch} from "../../models.mjs.erb"
 import {Pressable, Text, View} from "react-native"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
-const SearchLink = memo(shapeComponent(class SearchLink extends ShapeComponent {
+const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
   render() {
     const {search} = this.props
 
@@ -76,7 +77,7 @@ const SearchLink = memo(shapeComponent(class SearchLink extends ShapeComponent {
   onSearchClicked = () => this.props.onClick({search: this.props.search})
 }))
 
-export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal extends BaseComponent {
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table.filters.load_search_modal"})
 
@@ -86,7 +87,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal ext
     })
     this.setInstance({t})
 
-    useEffect(() => {
+    useMemo(() => {
       this.loadSearches()
     }, [])
   }

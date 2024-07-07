@@ -1,12 +1,13 @@
 import Attribute from "../../base-model/attribute"
+import BaseComponent from "../../base-component"
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 
-export default memo(shapeComponent(class AttributeElement extends ShapeComponent {
+export default memo(shapeComponent(class AttributeElement extends BaseComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.bool.isRequired,
     attribute: PropTypes.instanceOf(Attribute).isRequired,
@@ -16,7 +17,7 @@ export default memo(shapeComponent(class AttributeElement extends ShapeComponent
   })
 
   render() {
-    const {active, attribute, currentModelClass} = digs(this.props, "active", "attribute", "currentModelClass")
+    const {active, attribute, currentModelClass} = this.p
     const style = {}
 
     if (active) style.fontWeight = "bold"
@@ -37,6 +38,6 @@ export default memo(shapeComponent(class AttributeElement extends ShapeComponent
   onAttributeClicked = (e) => {
     e.preventDefault()
 
-    this.props.onClick({attribute: digg(this, "props", "attribute")})
+    this.p.onClick({attribute: this.p.attribute})
   }
 }))

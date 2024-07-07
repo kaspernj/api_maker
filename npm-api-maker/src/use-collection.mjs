@@ -2,7 +2,8 @@ import debounce from "debounce"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
-import {useCallback, useEffect} from "react"
+import {useCallback, useMemo} from "react"
+import useCreatedEvent from "./use-created-event.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 
@@ -64,7 +65,7 @@ const useCollection = (props, cacheKeys = []) => {
     showNoRecordsFoundContent: false
   })
   s.useStates({
-    qParams: qParams()
+    qParams: () => qParams()
   })
 
   let modelIdsCacheString
@@ -221,7 +222,11 @@ const useCollection = (props, cacheKeys = []) => {
     if (models.length === 0 && s.props.noRecordsFoundContent) return true
   }, [])
 
-  useEffect(
+  const onCreated = useCallback(() => {
+    loadModels()
+  }, [])
+
+  useMemo(
     () => {
       if (!("ifCondition" in s.props) || s.props.ifCondition) {
         loadQParams()
@@ -238,23 +243,15 @@ const useCollection = (props, cacheKeys = []) => {
     ].concat(cacheKeys)
   )
 
-  useEffect(() => {
-    if (s.props.noRecordsAvailableContent) loadOverallCount()
-  }, [])
-
-  const onCreated = useCallback(() => {
-    loadModels()
-  }, [])
-
-  useEffect(() => {
-    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, onCreated)
-
-    return () => {
-      connectCreated.unsubscribe()
+  useMemo(() => {
+    if (s.props.noRecordsAvailableContent) {
+      loadOverallCount()
     }
   }, [])
 
-  useEffect(() => {
+  useCreatedEvent(s.p.modelClass, onCreated)
+
+  useMemo(() => {
     const connections = []
 
     if (s.s.models) {

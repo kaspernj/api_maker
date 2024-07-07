@@ -21,12 +21,12 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
     const {result} = this.p
 
     this.totalPages = useMemo(
-      () => Math.ceil(this.p.result.count() / this.p.result.perPage()),
-      [result.currentPage(), result.totalCount(), result.totalPages()]
+      () => Math.ceil(result.count() / result.perPage()),
+      [result.count(), result.perPage()]
     )
     this.pages = useMemo(
       () => this.calculatePages(),
-      [result.currentPage(), result.totalCount(), result.totalPages()]
+      [result.currentPage(), this.totalPages]
     )
   }
 

@@ -1,12 +1,13 @@
 import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
-import Checkbox from "@kaspernj/api-maker/src/bootstrap/checkbox"
+import BaseComponent from "../../base-component"
+import Checkbox from "../../bootstrap/checkbox"
 import {digg, digs} from "diggerize"
 import Input from "../../bootstrap/input"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {memo} from "react"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
-export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal extends BaseComponent {
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table.filters.save_search_modal"})
 
@@ -45,7 +46,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
 
     const form = digg(e, "target")
     const formData = new FormData(form)
-    const {currentFilters, currentUser, onRequestClose, search} = digs(this.props, "currentFilters", "currentUser", "onRequestClose", "search")
+    const {currentFilters, currentUser, onRequestClose, search} = this.p
 
     if (search.isNewRecord()) {
       formData.append("table_search[query_params]", JSON.stringify(currentFilters()))

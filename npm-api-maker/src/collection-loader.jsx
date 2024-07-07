@@ -1,6 +1,6 @@
 import Collection from "./collection.mjs"
 import {digg} from "diggerize"
-import {memo, useEffect} from "react"
+import {memo, useMemo} from "react"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import useCollection from "./use-collection"
@@ -30,7 +30,7 @@ const CollectionLoader = ({component, ...restProps}) => {
 
   s.updateMeta({component, useCollectionResult})
 
-  useEffect(() => {
+  useMemo(() => {
     s.m.component.setState(s.m.useCollectionResult)
   }, cacheParts)
 

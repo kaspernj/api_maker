@@ -10,7 +10,6 @@ import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import ShowPage from "./show-page"
 import ShowReflectionActions from "./show-reflection-actions"
 import ShowReflectionPage from "./show-reflection-page"
-import {useEffect} from "react"
 import useCanCan from "../use-can-can"
 import useCurrentUser from "../use-current-user.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
@@ -43,7 +42,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     this.useStates({
       model: undefined
     })
-    useEffect(
+    useMemo(
       () => { this.loadModel() },
       [this.modelId]
     )

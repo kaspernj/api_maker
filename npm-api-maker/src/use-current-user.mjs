@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo} from "react"
+import {useCallback, useMemo} from "react"
 import {camelize} from "inflection"
 import Devise from "./devise.mjs"
 import Logger from "./logger.mjs"
@@ -69,7 +69,7 @@ const useCurrentUser = (args) => {
     s.set(setStatesArgument)
   }, [])
 
-  useEffect(() => {
+  useMemo(() => {
     if (!Devise.current().hasGlobalCurrentScope(s.m.scope) && !Devise.current().hasCurrentScope(s.m.scope)) {
       logger.debug(() => `Devise hasn't got current scope ${s.m.scope} so loading from request`)
       loadCurrentUserFromRequest()

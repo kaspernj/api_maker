@@ -3,7 +3,7 @@ import {digg} from "diggerize"
 import * as inflection from "inflection"
 import {Pressable, Text, TextInput, View} from "react-native"
 import Locales from "shared/locales"
-import {memo, useCallback, useEffect, useMemo, useState} from "react"
+import {memo, useCallback, useMemo, useState} from "react"
 import useCurrentUser from "../use-current-user"
 import useModel from "../use-model"
 import useQueryParams from "on-location-changed/src/use-query-params"
@@ -16,7 +16,7 @@ const EditAttributeInput = memo(({attributeName, id, inputs, label, model, name}
   const defaultValue = useCallback(() => model[attributeName]() || "")
   const [value, setValue] = useState(() => defaultValue())
 
-  useEffect(() => {
+  useMemo(() => {
     inputs[name] = value
   }, [])
 
@@ -55,7 +55,7 @@ const EditAttributeContent = memo(({attribute, id, inputs, model, name}) => {
     inputs[name] = newValue
     setValue(newValue)
   })
-  useEffect(() => {
+  useMemo(() => {
     inputs[name] = value
   }, [])
 

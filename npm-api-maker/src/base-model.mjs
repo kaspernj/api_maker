@@ -169,7 +169,7 @@ export default class BaseModel {
     return foundReflection
   }
 
-  static _token () {
+  static _token() {
     const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
     if (csrfTokenElement) {
@@ -177,7 +177,7 @@ export default class BaseModel {
     }
   }
 
-  constructor (args = {}) {
+  constructor(args = {}) {
     this.changes = {}
     this.newRecord = args.isNewRecord
     this.relationshipsCache = {}
@@ -197,7 +197,7 @@ export default class BaseModel {
     }
   }
 
-  assignAttributes (newAttributes) {
+  assignAttributes(newAttributes) {
     for (const key in newAttributes) {
       const newValue = newAttributes[key]
       const attributeUnderscore = inflection.underscore(key)
@@ -225,7 +225,7 @@ export default class BaseModel {
     }
   }
 
-  attributes () {
+  attributes() {
     const result = {}
 
     for (const key in this.modelData) {
@@ -239,7 +239,7 @@ export default class BaseModel {
     return result
   }
 
-  can (givenAbilityName) {
+  can(givenAbilityName) {
     const abilityName = inflection.underscore(givenAbilityName)
 
     if (!(abilityName in this.abilities)) {
@@ -249,7 +249,7 @@ export default class BaseModel {
     return this.abilities[abilityName]
   }
 
-  clone () {
+  clone() {
     const clone = new this.constructor()
 
     clone.abilities = {...this.abilities}
@@ -260,7 +260,7 @@ export default class BaseModel {
     return clone
   }
 
-  cacheKey () {
+  cacheKey() {
     if (this.isPersisted()) {
       const keyParts = [
         this.modelClassData().paramKey,
@@ -297,11 +297,11 @@ export default class BaseModel {
     return cacheKeyGenerator.cacheKey()
   }
 
-  static all () {
+  static all() {
     return this.ransack()
   }
 
-  async create (attributes, options) {
+  async create(attributes, options) {
     if (attributes) this.assignAttributes(attributes)
     const paramKey = this.modelClassData().paramKey
     const modelData = this.getAttributes()
@@ -335,7 +335,7 @@ export default class BaseModel {
     return {model: this, response}
   }
 
-  async createRaw (rawData, options = {}) {
+  async createRaw(rawData, options = {}) {
     const objectData = BaseModel._objectDataFromGivenRawData(rawData, options)
 
     let response
@@ -366,7 +366,7 @@ export default class BaseModel {
     return {model: this, response}
   }
 
-  async destroy () {
+  async destroy() {
     const response = await CommandsPool.addCommand(
       {
         args: {query_params: this.collection && this.collection.params()},
@@ -390,7 +390,7 @@ export default class BaseModel {
     }
   }
 
-  async ensureAbilities (listOfAbilities) {
+  async ensureAbilities(listOfAbilities) {
     // Populate an array with a list of abilities currently not loaded
     const abilitiesToLoad = []
 
@@ -425,16 +425,14 @@ export default class BaseModel {
     }
   }
 
-  getAttributes () {
-    return Object.assign(this.modelData, this.changes)
-  }
+  getAttributes = () => Object.assign(this.modelData, this.changes)
 
-  handleResponseError (response) {
+  handleResponseError(response) {
     BaseModel.parseValidationErrors({model: this, response})
     throw new new CustomError("Response wasn't successful", {model: this, response})
   }
 
-  identifierKey () {
+  identifierKey() {
     if (!this._identifierKey) this._identifierKey = this.isPersisted() ? this.primaryKey() : this.uniqueKey()
 
     return this._identifierKey
@@ -446,13 +444,13 @@ export default class BaseModel {
     return false
   }
 
-  isAssociationPresent (associationName) {
+  isAssociationPresent(associationName) {
     if (this.isAssociationLoaded(associationName)) return true
     if (associationName in this.relationships) return true
     return false
   }
 
-  static parseValidationErrors ({error, model, options}) {
+  static parseValidationErrors({error, model, options}) {
     if (!(error instanceof ValidationError)) return
     if (!error.args.response.validation_errors) return
 
@@ -468,7 +466,7 @@ export default class BaseModel {
     }
   }
 
-  static humanAttributeName (attributeName) {
+  static humanAttributeName(attributeName) {
     const keyName = digg(this.modelClassData(), "i18nKey")
     const i18n = Config.getI18n()
 
@@ -477,7 +475,7 @@ export default class BaseModel {
     return inflection.humanize(attributeName)
   }
 
-  isAttributeChanged (attributeName) {
+  isAttributeChanged(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
     const attributeData = this.modelClassData().attributes.find((attribute) => digg(attribute, "name") == attributeNameUnderscore)
 
@@ -500,7 +498,7 @@ export default class BaseModel {
     return changedMethod(oldValue, newValue)
   }
 
-  isChanged () {
+  isChanged() {
     const keys = Object.keys(this.changes)
 
     if (keys.length > 0) {
@@ -510,7 +508,7 @@ export default class BaseModel {
     }
   }
 
-  isNewRecord () {
+  isNewRecord() {
     if (this.newRecord !== undefined) {
       return this.newRecord
     } else if ("id" in this.modelData && this.modelData.id) {
@@ -520,15 +518,11 @@ export default class BaseModel {
     }
   }
 
-  isPersisted () {
-    return !this.isNewRecord()
-  }
+  isPersisted = () => !this.isNewRecord()
 
-  static snakeCase (string) {
-    return inflection.underscore(string)
-  }
+  static snakeCase = (string) => inflection.underscore(string)
 
-  savedChangeToAttribute (attributeName) {
+  savedChangeToAttribute(attributeName) {
     if (!this.previousModelData)
       return false
 
@@ -554,7 +548,7 @@ export default class BaseModel {
     return changedMethod(oldValue, newValue)
   }
 
-  setNewModel (model) {
+  setNewModel(model) {
     this.setNewModelData(model)
 
     for(const relationshipName in model.relationships) {
@@ -566,7 +560,7 @@ export default class BaseModel {
     }
   }
 
-  setNewModelData (model) {
+  setNewModelData(model) {
     if (!("modelData" in model)) throw new Error(`No modelData in model: ${JSON.stringify(model)}`)
 
     this.previousModelData = Object.assign({}, digg(this, "modelData"))
@@ -576,12 +570,12 @@ export default class BaseModel {
     }
   }
 
-  _isDateChanged (oldValue, newValue) {
+  _isDateChanged(oldValue, newValue) {
     if (Date.parse(oldValue) != Date.parse(newValue))
       return true
   }
 
-  _isIntegerChanged (oldValue, newValue) {
+  _isIntegerChanged(oldValue, newValue) {
     if (parseInt(oldValue, 10) != parseInt(newValue, 10))
       return true
   }
@@ -594,11 +588,9 @@ export default class BaseModel {
       return true
   }
 
-  modelClassData () {
-    return this.constructor.modelClassData()
-  }
+  modelClassData = () => this.constructor.modelClassData()
 
-  async reload () {
+  async reload() {
     const params = this.collection && this.collection.params()
     const ransackParams = {}
     ransackParams[`${this.constructor.primaryKey()}_eq`] = this.primaryKey()
@@ -624,7 +616,7 @@ export default class BaseModel {
     this.changes = {}
   }
 
-  save () {
+  save() {
     if (this.isNewRecord()) {
       return this.create()
     } else {
@@ -632,7 +624,7 @@ export default class BaseModel {
     }
   }
 
-  saveRaw (rawData, options = {}) {
+  saveRaw(rawData, options = {}) {
     if (this.isNewRecord()) {
       return this.createRaw(rawData, options)
     } else {
@@ -640,9 +632,10 @@ export default class BaseModel {
     }
   }
 
-  async update (newAttributes, options) {
-    if (newAttributes)
+  async update(newAttributes, options) {
+    if (newAttributes) {
       this.assignAttributes(newAttributes)
+    }
 
     if (Object.keys(this.changes).length == 0) {
       return {model: this}
@@ -685,7 +678,7 @@ export default class BaseModel {
     }
   }
 
-  _refreshModelFromResponse (response) {
+  _refreshModelFromResponse(response) {
     let newModel = digg(response, "model")
 
     if (Array.isArray(newModel)) newModel = newModel[0]
@@ -693,7 +686,7 @@ export default class BaseModel {
     this.setNewModel(newModel)
   }
 
-  _refreshModelDataFromResponse (response) {
+  _refreshModelDataFromResponse(response) {
     let newModel = digg(response, "model")
 
     if (Array.isArray(newModel)) newModel = newModel[0]
@@ -701,7 +694,7 @@ export default class BaseModel {
     this.setNewModelData(newModel)
   }
 
-  static _objectDataFromGivenRawData (rawData, options) {
+  static _objectDataFromGivenRawData(rawData, options) {
     if (rawData instanceof FormData || rawData.nodeName == "FORM") {
       const formData = FormDataObjectizer.formDataFromObject(rawData, options)
 
@@ -711,7 +704,7 @@ export default class BaseModel {
     return rawData
   }
 
-  async updateRaw (rawData, options = {}) {
+  async updateRaw(rawData, options = {}) {
     const objectData = BaseModel._objectDataFromGivenRawData(rawData, options)
     let response
 
@@ -743,11 +736,11 @@ export default class BaseModel {
     return {response, model: this}
   }
 
-  isValid () {
+  isValid() {
     throw new Error("Not implemented yet")
   }
 
-  async isValidOnServer () {
+  async isValidOnServer() {
     const modelData = this.getAttributes()
     const paramKey = this.modelClassData().paramKey
     const dataToUse = {}
@@ -771,7 +764,7 @@ export default class BaseModel {
 
   modelClass = () => this.constructor
 
-  preloadRelationship (relationshipName, model) {
+  preloadRelationship(relationshipName, model) {
     this.relationshipsCache[BaseModel.snakeCase(relationshipName)] = model
     this.relationships[BaseModel.snakeCase(relationshipName)] = model
   }
@@ -782,7 +775,7 @@ export default class BaseModel {
 
   markedForDestruction = () => this._markedForDestruction
 
-  uniqueKey () {
+  uniqueKey() {
     if (!this.uniqueKeyValue) {
       const min = 5000000000000000
       const max = 9007199254740991
@@ -793,7 +786,7 @@ export default class BaseModel {
     return this.uniqueKeyValue
   }
 
-  static async _callCollectionCommand (args, commandArgs) {
+  static async _callCollectionCommand(args, commandArgs) {
     const formOrDataObject = args.args
 
     try {
@@ -815,7 +808,7 @@ export default class BaseModel {
 
   _callMemberCommand = (args, commandArgs) => CommandsPool.addCommand(args, commandArgs)
 
-  static _postDataFromArgs (args) {
+  static _postDataFromArgs(args) {
     let postData
 
     if (args) {
@@ -831,13 +824,13 @@ export default class BaseModel {
     return postData
   }
 
-  readAttribute (attributeName) {
+  readAttribute(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
 
     return this.readAttributeUnderscore(attributeNameUnderscore)
   }
 
-  readAttributeUnderscore (attributeName) {
+  readAttributeUnderscore(attributeName) {
     if (attributeName in this.changes) {
       return this.changes[attributeName]
     } else if (attributeName in this.modelData) {
@@ -854,7 +847,7 @@ export default class BaseModel {
     }
   }
 
-  isAttributeLoaded (attributeName) {
+  isAttributeLoaded(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
 
     if (attributeNameUnderscore in this.changes) return true
@@ -862,7 +855,7 @@ export default class BaseModel {
     return false
   }
 
-  _isPresent (value) {
+  _isPresent(value) {
     if (!value) {
       return false
     } else if (typeof value == "string" && value.match(/^\s*$/)) {
@@ -872,7 +865,7 @@ export default class BaseModel {
     return true
   }
 
-  async _loadBelongsToReflection (args, queryArgs = {}) {
+  async _loadBelongsToReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationships) {
       return this.relationships[args.reflectionName]
     } else if (args.reflectionName in this.relationshipsCache) {
@@ -885,7 +878,7 @@ export default class BaseModel {
     }
   }
 
-  _readBelongsToReflection ({reflectionName}) {
+  _readBelongsToReflection({reflectionName}) {
     if (reflectionName in this.relationships) {
       return this.relationships[reflectionName]
     } else if (reflectionName in this.relationshipsCache) {
@@ -900,7 +893,7 @@ export default class BaseModel {
     throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
   }
 
-  async _loadHasManyReflection (args, queryArgs = {}) {
+  async _loadHasManyReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationships) {
       return this.relationships[args.reflectionName]
     } else if (args.reflectionName in this.relationshipsCache) {
@@ -915,7 +908,7 @@ export default class BaseModel {
     return models
   }
 
-  async _loadHasOneReflection (args, queryArgs = {}) {
+  async _loadHasOneReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationships) {
       return this.relationships[args.reflectionName]
     } else if (args.reflectionName in this.relationshipsCache) {
@@ -930,7 +923,7 @@ export default class BaseModel {
     }
   }
 
-  _readHasOneReflection ({reflectionName}) {
+  _readHasOneReflection({reflectionName}) {
     if (reflectionName in this.relationships) {
       return this.relationships[reflectionName]
     } else if (reflectionName in this.relationshipsCache) {
@@ -947,14 +940,14 @@ export default class BaseModel {
     throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
   }
 
-  _readModelDataFromArgs (args) {
+  _readModelDataFromArgs(args) {
     this.abilities = args.data.b || {}
     this.collection = args.collection
     this.modelData = objectToUnderscore(args.data.a)
     this.preloadedRelationships = args.data.r
   }
 
-  _readPreloadedRelationships (preloaded) {
+  _readPreloadedRelationships(preloaded) {
     if (!this.preloadedRelationships) {
       return
     }
