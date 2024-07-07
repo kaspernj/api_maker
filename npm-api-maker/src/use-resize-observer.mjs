@@ -1,4 +1,4 @@
-import {useCallback, useMemo} from "react"
+import {useCallback, useLayoutEffect, useMemo} from "react"
 import useShape from "set-state-compare/src/use-shape.js"
 
 const useResizeObserver = (element, callback) => {
@@ -8,7 +8,7 @@ const useResizeObserver = (element, callback) => {
   }, [])
   const observer = useMemo(() => new ResizeObserver(onResize), [])
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     if (element) {
       observer.observe(element)
     }

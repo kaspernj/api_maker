@@ -2,7 +2,7 @@ import debounce from "debounce"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
-import {useCallback, useMemo} from "react"
+import {useCallback, useLayoutEffect, useMemo} from "react"
 import useCreatedEvent from "./use-created-event.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
@@ -251,7 +251,7 @@ const useCollection = (props, cacheKeys = []) => {
 
   useCreatedEvent(s.p.modelClass, onCreated)
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     const connections = []
 
     if (s.s.models) {

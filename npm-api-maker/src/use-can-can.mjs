@@ -1,5 +1,5 @@
 import CanCan from "./can-can.mjs"
-import {useCallback, useMemo, useState} from "react"
+import {useCallback, useLayoutEffect, useMemo, useState} from "react"
 import useCurrentUser from "./use-current-user.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
 
@@ -31,7 +31,7 @@ const useCanCan = (abilitiesCallback, dependencies) => {
     loadAbilities()
   }, dependencies)
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     CanCan.current().events.addListener("onResetAbilities", onResetAbilities)
 
     return () => {

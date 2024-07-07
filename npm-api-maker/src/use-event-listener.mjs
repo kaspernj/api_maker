@@ -1,11 +1,11 @@
-import {useCallback, useMemo} from "react"
+import {useCallback, useLayoutEffect} from "react"
 
 const ApiMakerUseEventListener = (target, event, onCalled) => {
   const onCalledCallback = useCallback((...args) => {
     onCalled.apply(null, args)
   }, [target, event, onCalled])
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     if (target) {
       target.addEventListener(event, onCalledCallback)
 

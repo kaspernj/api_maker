@@ -1,4 +1,4 @@
-import {useCallback, useMemo} from "react"
+import {useCallback, useLayoutEffect} from "react"
 import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
 
@@ -30,7 +30,7 @@ const useBreakpoint = () => {
     breakpoint: () => calculateBreakPoint()
   })
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     window.addEventListener("resize", onCalled)
 
     return () => {

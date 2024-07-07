@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from "react"
+import {useCallback, useLayoutEffect, useMemo, useState} from "react"
 import Devise from "./devise.mjs"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.mjs"
@@ -95,7 +95,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     cacheArgs
   )
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     let reloadModelCallback
 
     if (args.events) {
@@ -109,7 +109,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.events])
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     let connectUpdated
 
     if (model && args.eventUpdated) {
@@ -129,7 +129,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     loadModel()
   }, [])
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     Devise.events().addListener("onDeviseSignIn", onSignedIn)
     Devise.events().addListener("onDeviseSignOut", onSignedOut)
 
@@ -147,7 +147,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     s.p.onDestroyed(forwardArgs)
   }, [])
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     let connectDestroyed
 
     if (model && args.onDestroyed) {
