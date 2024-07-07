@@ -4,7 +4,7 @@ import EventConnection from "../event-connection"
 import modelClassRequire from "../model-class-require.mjs"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {memo, useEffect} from "react"
+import {memo, useMemo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 
 const Workplace = modelClassRequire("Workplace")
@@ -21,7 +21,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
       linkLoaded: false
     })
 
-    useEffect(() => {
+    useMemo(() => {
       this.loadCurrentLink()
     }, [])
   }

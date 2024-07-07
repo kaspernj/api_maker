@@ -8,7 +8,7 @@ const useResizeObserver = (element, callback) => {
   }, [])
   const observer = useMemo(() => new ResizeObserver(onResize), [])
 
-  useEffect(() => {
+  useMemo(() => {
     if (element) {
       observer.observe(element)
     }

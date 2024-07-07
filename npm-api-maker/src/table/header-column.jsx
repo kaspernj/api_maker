@@ -38,6 +38,14 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     const {defaultParams} = table.props
     const {query} = digs(table.collection, "query")
     const ColumnInHeadComponent = table.columnInHeadComponent()
+    let sortLinkStyle
+    let textProps = {}
+
+    if (fixedTableLayout) {
+      sortLinkStyle = {whiteSpace: "nowrap", overflow: "hidden"}
+      textProps.ellipsizeMode="clip"
+      textProps.numberOfLines = 1
+    }
 
     return (
       <ColumnInHeadComponent
@@ -49,10 +57,16 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
       >
         <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
           {tableSettingColumn.hasSortKey() && query &&
-            <SortLink attribute={tableSettingColumn.sortKey()} defaultParams={defaultParams} query={query} title={table.headerLabelForColumn(column)} />
+            <SortLink
+              attribute={tableSettingColumn.sortKey()}
+              defaultParams={defaultParams}
+              query={query}
+              style={sortLinkStyle}
+              title={table.headerLabelForColumn(column)}
+            />
           }
           {(!tableSettingColumn.hasSortKey() || !query) &&
-            <Text>
+            <Text {...textProps}>
               {table.headerLabelForColumn(column)}
             </Text>
           }

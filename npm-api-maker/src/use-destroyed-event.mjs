@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo} from "react"
+import {useCallback, useMemo} from "react"
 import debounceFunction from "debounce"
 import ModelEvents from "./model-events.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
@@ -34,7 +34,7 @@ const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => {
     }
   }, [])
 
-  useEffect(() => {
+  useMemo(() => {
     let connectDestroyed, onConnectedListener
 
     if (model) {

@@ -14,7 +14,7 @@ import ModelRow from "./model-row"
 import Paginate from "../bootstrap/paginate"
 import Params from "../params"
 import PropTypes from "prop-types"
-import React, {memo, useEffect, useRef} from "react"
+import React, {memo, useMemo, useRef} from "react"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
 import Settings from "./settings"
@@ -113,7 +113,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       tableSettingFullCacheKey: undefined
     })
 
-    useEffect(() => {
+    useMemo(() => {
       this.loadTableSetting()
 
       if (this.props.workplace) this.loadCurrentWorkplace()

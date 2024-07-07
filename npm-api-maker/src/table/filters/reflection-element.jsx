@@ -1,11 +1,12 @@
+import BaseComponent from "../../base-component"
 import {digg, digs} from "diggerize"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
 import Reflection from "../../base-model/reflection"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 
-export default memo(shapeComponent(class ReflectionElement extends ShapeComponent {
+export default memo(shapeComponent(class ReflectionElement extends BaseComponent {
   static propTypes = PropTypesExact({
     currentModelClass: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
@@ -13,7 +14,7 @@ export default memo(shapeComponent(class ReflectionElement extends ShapeComponen
   })
 
   render() {
-    const {currentModelClass, reflection} = digs(this.props, "currentModelClass", "reflection")
+    const {currentModelClass, reflection} = this.p
 
     return (
       <div
@@ -30,6 +31,6 @@ export default memo(shapeComponent(class ReflectionElement extends ShapeComponen
   onReflectionClicked = (e) => {
     e.preventDefault()
 
-    this.props.onClick({reflection: digg(this, "props", "reflection")})
+    this.p.onClick({reflection: digg(this, "props", "reflection")})
   }
 }))

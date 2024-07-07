@@ -1,10 +1,11 @@
-import {digg, digs} from "diggerize"
+import BaseComponent from "../../base-component"
+import {digg} from "diggerize"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 
-export default memo(shapeComponent(class ApiMakerTableFilter extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTableFilter extends BaseComponent {
   static propTypes = PropTypesExact({
     a: PropTypes.string,
     filterIndex: PropTypes.number.isRequired,
@@ -17,7 +18,7 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends ShapeCompon
   })
 
   render() {
-    const {p, v} = digs(this.props, "p", "v")
+    const {p, v} = this.p
     const {a, pre, sc} = this.props
 
     return (
@@ -40,7 +41,7 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends ShapeCompon
   onFilterClicked = (e) => {
     e.preventDefault()
 
-    const {a, filterIndex, p, pre, v} = digs(this.props, "a", "filterIndex", "p", "pre", "v")
+    const {a, filterIndex, p, pre, v} = this.p
 
     this.props.onClick({a, filterIndex, p, pre, v})
   }
@@ -48,7 +49,7 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends ShapeCompon
   onRemoveFilterClicked = (e) => {
     e.preventDefault()
 
-    const {filterIndex} = digs(this.props, "filterIndex")
+    const {filterIndex} = this.p
 
     this.props.onRemoveClicked({filterIndex})
   }

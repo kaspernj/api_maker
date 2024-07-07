@@ -1,7 +1,7 @@
-import {useEffect} from "react"
+import {useMemo} from "react"
 
 const ApiMakerUseEventEmitter = (events, event, onCalled) => {
-  useEffect(() => {
+  useMemo(() => {
     if (events) {
       events.addListener(event, onCalled)
 

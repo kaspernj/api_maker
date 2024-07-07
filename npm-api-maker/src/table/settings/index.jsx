@@ -56,7 +56,7 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
   }
 
   onFixedTableChecked = async (checked) => {
-    await this.tableSetting().update({fixedTableLayout: true})
+    await this.tableSetting().update({fixed_table_layout: checked})
     this.setState({fixedTableLayout: checked})
     this.p.onFixedTableLayoutChanged(checked)
   }
