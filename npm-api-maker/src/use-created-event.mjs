@@ -2,7 +2,7 @@ import debounceFunction from "debounce"
 import ModelEvents from "./model-events.mjs"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {useCallback, useMemo} from "react"
+import {useCallback, useLayoutEffect} from "react"
 import useShape from "set-state-compare/src/use-shape.js"
 
 const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {}) => {
@@ -33,7 +33,7 @@ const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {}) => {
     }
   }, [])
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     const connectCreated = ModelEvents.connectCreated(s.p.modelClass, (...args) => onCreatedCallback(...args))
 
     return () => {

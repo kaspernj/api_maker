@@ -1,7 +1,7 @@
-import {useMemo} from "react"
+import {useLayoutEffect} from "react"
 
 const ApiMakerUseEventEmitter = (events, event, onCalled) => {
-  useMemo(() => {
+  useLayoutEffect(() => {
     if (events) {
       events.addListener(event, onCalled)
 
