@@ -1,4 +1,5 @@
 import BaseComponent from "../../base-component"
+import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class EditAttributeContent extends BaseComponent {
