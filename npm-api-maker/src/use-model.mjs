@@ -17,6 +17,11 @@ const useModel = (modelClassArg, argsArg = {}) => {
 
   const s = useShape(args)
 
+  s.useStates({
+    model: undefined,
+    notFound: undefined
+  })
+
   if (typeof modelClassArg == "object") {
     modelClass = modelClassArg.callback({queryParams})
   } else {
@@ -28,7 +33,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
 
   if (args.loadByQueryParam) {
     modelId = args.loadByQueryParam({queryParams})
-  } else {
+  } else if (!args.query) {
     if (!args.match) throw new Error("Both 'loadByQueryParam' and 'match' wasn't given")
 
     modelId = args.match.params[paramsVariableName] || args.match.params.id
@@ -36,19 +41,21 @@ const useModel = (modelClassArg, argsArg = {}) => {
 
   const modelVariableName = inflection.camelize(modelClass.modelClassData().name, true)
   const cacheArgs = [modelId]
-  const [model, setModel] = useState(undefined)
-  const [notFound, setNotFound] = useState(undefined)
 
   if (args.cacheArgs) {
     cacheArgs.push(...args.cacheArgs)
   }
 
-  s.updateMeta({modelId, modelVariableName, queryParams})
+  s.updateMeta({args, modelId, modelVariableName, queryParams})
 
   const loadExistingModel = useCallback(async () => {
-    const query = await modelClass.ransack({id_eq: s.m.modelId})
+    let query
 
-    if (!modelId) {
+    if (s.m.modelId) {
+      query = modelClass.ransack({id_eq: s.m.modelId})
+    } else if (s.m.args.query) {
+      query = s.m.args.query.clone()
+    } else {
       throw new Error(`No model ID was given: ${s.m.modelId} by '${paramsVariableName}' in query params: ${Object.keys(s.props.match.params).join(", ")}`)
     }
 
@@ -58,8 +65,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
 
     const model = await query.first()
 
-    setModel(model)
-    setNotFound(!model)
+    s.set({model, notFound: !model})
   }, [])
 
   const loadNewModel = useCallback(async () => {
@@ -79,13 +85,13 @@ const useModel = (modelClassArg, argsArg = {}) => {
       data: {a: modelData}
     })
 
-    setModel(model)
+    s.set({model})
   }, [])
 
   const loadModel = useCallback(async () => {
     if (s.props.newIfNoId && !s.m.modelId) {
       return await loadNewModel()
-    } else if (!s.props.optional || s.m.modelId) {
+    } else if (!s.props.optional || s.m.modelId | s.m.args.query) {
       return await loadExistingModel()
     }
   }, [])
@@ -112,14 +118,14 @@ const useModel = (modelClassArg, argsArg = {}) => {
   useLayoutEffect(() => {
     let connectUpdated
 
-    if (model && args.eventUpdated) {
-      connectUpdated = ModelEvents.connectUpdated(model, loadModel)
+    if (s.s.model && args.eventUpdated) {
+      connectUpdated = ModelEvents.connectUpdated(s.s.model, loadModel)
     }
 
     return () => {
       connectUpdated?.unsubscribe()
     }
-  }, [args.eventUpdated, model?.id()])
+  }, [args.eventUpdated, s.s.model?.id()])
 
   const onSignedIn = useCallback(() => {
     loadModel()
@@ -150,20 +156,20 @@ const useModel = (modelClassArg, argsArg = {}) => {
   useLayoutEffect(() => {
     let connectDestroyed
 
-    if (model && args.onDestroyed) {
-      connectDestroyed = ModelEvents.connectDestroyed(model, onDestroyed)
+    if (s.s.model && args.onDestroyed) {
+      connectDestroyed = ModelEvents.connectDestroyed(s.s.model, onDestroyed)
     }
 
     return () => {
       connectDestroyed?.unsubscribe()
     }
-  }, [args.onDestroyed, model?.id()])
+  }, [args.onDestroyed, s.s.model?.id()])
 
   const result = {}
 
-  result[modelVariableName] = model
+  result[modelVariableName] = s.s.model
   result[`${modelVariableName}Id`] = modelId
-  result[`${modelVariableName}NotFound`] = notFound
+  result[`${modelVariableName}NotFound`] = s.s.notFound
 
   return result
 }
