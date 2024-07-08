@@ -1,6 +1,7 @@
 import BaseComponent from "../../base-component"
 import EditAttributeContent from "./edit-attribute-content"
 import EditAttributeInput from "./edit-attribute-input"
+import Locales from "shared/locales"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
