@@ -1,6 +1,8 @@
 import BaseComponent from "../../base-component"
+import {digg} from "diggerize"
 import EditAttributeContent from "./edit-attribute-content"
 import EditAttributeInput from "./edit-attribute-input"
+import * as inflection from "inflection"
 import Locales from "shared/locales"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"

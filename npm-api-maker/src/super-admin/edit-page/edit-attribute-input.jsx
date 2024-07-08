@@ -53,7 +53,9 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   }
 
   onChangeText = (newValue) => {
-    inputs[this.p.name] = newValue
+    const {inputs, name} = this.p
+
+    inputs[name] = newValue
     this.setState({value: newValue})
   }
 }))
