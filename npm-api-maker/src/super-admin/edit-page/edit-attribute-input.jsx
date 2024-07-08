@@ -1,27 +1,30 @@
 import BaseComponent from "../../base-component"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {Text, TextInput, View} from "react-native"
-import {memo, useCallback, useMemo, useState} from "react"
+import {memo, useMemo} from "react"
 
 export default memo(shapeComponent(class EditAttributeInput extends BaseComponent {
+  setup() {
+    const {inputs, name} = this.p
+
+    this.useStates({
+      value: this.defaultValue()
+    })
+
+    useMemo(() => {
+      inputs[name] = this.s.value
+    }, [])
+  }
+
+  defaultValue = () => this.p.model[this.p.attributeName]() || ""
+
   render() {
-    const {attributeName, id, inputs, label, model, name} = this.props
+    const {attributeName, id, label, model, name} = this.p
+    const {value} = this.s
 
     if (!(attributeName in model)) {
       throw new Error(`${attributeName} isn't set on the resource ${model.modelClassData().name}`)
     }
-
-    const defaultValue = useCallback(() => model[attributeName]() || "")
-    const [value, setValue] = useState(() => defaultValue())
-
-    useMemo(() => {
-      inputs[name] = value
-    }, [])
-
-    const onChangeText = useCallback((newValue) => {
-      inputs[name] = newValue
-      setValue(newValue)
-    }, [])
 
     return (
       <View style={{marginBottom: 12}}>
@@ -33,12 +36,17 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               id,
               name
             }}
-            onChangeText={onChangeText}
+            onChangeText={this.tt.onChangeText}
             style={{paddingTop: 9, paddingRight: 13, paddingBottom: 9, paddingLeft: 13, borderRadius: 5, backgroundColor: "#fff", border: "1px solid #cecece"}}
             value={value}
           />
         </View>
       </View>
     )
+  }
+
+  onChangeText = (newValue) => {
+    inputs[this.p.name] = newValue
+    this.setState({value: newValue})
   }
 }))
