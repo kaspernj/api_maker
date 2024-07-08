@@ -9,7 +9,7 @@ import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import useCanCan from "../../../use-can-can"
 
-export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extends ShapeComponent {
+export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extends BaseComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.string
   })

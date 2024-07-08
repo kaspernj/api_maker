@@ -9,7 +9,7 @@ import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import useCurrentUser from "../../../use-current-user"
 
-export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends ShapeComponent {
+export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.string,
     noAccess: PropTypes.bool.isRequired,
