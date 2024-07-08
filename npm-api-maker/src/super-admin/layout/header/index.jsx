@@ -1,55 +1,64 @@
 import "./style"
+import BaseComponent from "../../../base-component"
 import EventListener from "../../../event-listener"
+import {memo, useRef} from "react"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {memo, useCallback, useRef} from "react"
-import useShape from "set-state-compare/src/use-shape.js"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
-const ApiMakerSuperAdminLayoutHeader = ({actions, onTriggerMenu, title}) => {
-  const s = useShape()
-  const headerActionsRef = useRef()
-  const setHeaderActionsActive = s.useState("headerActionsActive", false)
-  const onGearsClicked = useCallback((e) => {
-    e.preventDefault()
-    setHeaderActionsActive(!s.state.headerActionsActive)
-  }, [])
+export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
+  static propTypes = PropTypesExact({
+    actions: PropTypes.node,
+    onTriggerMenu: PropTypes.func.isRequired,
+    title: PropTypes.string
+  })
 
-  const onWindowMouseUp = useCallback((e) => {
-    // Close the header actions menu if clicked happened outside
-    if (s.state.headerActionsActive && headerActionsRef.current && !headerActionsRef.current.contains(e.target)) setHeaderActionsActive(false)
-  }, [])
+  setup() {
+    this.headerActionsRef = useRef()
+    this.useStates({
+      headerActionsActive: false
+    })
+  }
 
-  return (
-    <div className="components--admin--layout--header">
-      <EventListener event="mouseup" onCalled={onWindowMouseUp} target={window} />
-      <div className="header-title-container">
-        {title}
-      </div>
-      {actions &&
-        <div className="header-actions-container" data-active={s.state.headerActionsActive}>
-          <div className="header-actions" ref={headerActionsRef}>
-            {actions}
-          </div>
+  render() {
+    const {actions, onTriggerMenu, title} = this.props
+
+    return (
+      <div className="components--admin--layout--header">
+        <EventListener event="mouseup" onCalled={this.tt.onWindowMouseUp} target={window} />
+        <div className="header-title-container">
+          {title}
         </div>
-      }
-      <div className="burger-menu-container">
         {actions &&
-          <a className="actions-link" href="#" onClick={onGearsClicked}>
-            <i className="fa fa-gear" />
-          </a>
+          <div className="header-actions-container" data-active={this.s.headerActionsActive}>
+            <div className="header-actions" ref={this.tt.headerActionsRef}>
+              {actions}
+            </div>
+          </div>
         }
-        <a className="burger-menu-link" href="#" onClick={onTriggerMenu}>
-          <i className="fa fa-bars" />
-        </a>
+        <div className="burger-menu-container">
+          {actions &&
+            <a className="actions-link" href="#" onClick={this.tt.onGearsClicked}>
+              <i className="fa fa-gear" />
+            </a>
+          }
+          <a className="burger-menu-link" href="#" onClick={onTriggerMenu}>
+            <i className="fa fa-bars" />
+          </a>
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
 
-ApiMakerSuperAdminLayoutHeader.propTypes = PropTypesExact({
-  actions: PropTypes.node,
-  onTriggerMenu: PropTypes.func.isRequired,
-  title: PropTypes.string
-})
+  onGearsClicked = (e) => {
+    e.preventDefault()
+    this.setState({headerActionsActive: !this.s.headerActionsActive})
+  }
 
-export default memo(ApiMakerSuperAdminLayoutHeader)
+  onWindowMouseUp = (e) => {
+    // Close the header actions menu if clicked happened outside
+    if (this.s.headerActionsActive && this.tt.headerActionsRef.current && !this.tt.headerActionsRef.current.contains(e.target)) {
+      this.setState({headerActionsActive: false})
+    }
+  }
+}))

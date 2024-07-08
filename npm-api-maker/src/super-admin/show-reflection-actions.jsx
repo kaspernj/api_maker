@@ -1,31 +1,48 @@
+import BaseComponent from "../base-component"
 import {digg} from "diggerize"
-import {memo} from "react"
+import {memo, useMemo} from "react"
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
-const SuperAdminShowReflectionActions = ({model, modelClass, reflectionName}) => {
-  const reflection = modelClass.reflections().find((reflection) => reflection.name() == reflectionName)
-  const modelClassName = digg(reflection, "reflectionData", "className")
-  const modelData = {}
-  const dataParamName = inflection.singularize(reflection.reflectionData.collectionName)
-  const canCan = useCanCan(() => [[reflection.modelClass(), ["new"]]])
+export default memo(shapeComponent(class SuperAdminShowReflectionActions extends BaseComponent {
+  static propTypes = propTypesExact({
+    model: PropTypes.object,
+    modelClass: PropTypes.func,
+    reflectionName: PropTypes.string
+  })
 
-  modelData[reflection.foreignKey()] = model?.id()
+  setup() {
+    const {modelClass, reflectionName} = this.p
 
-  const linkParams = {
-    model: modelClassName,
-    mode: "new"
+    this.reflection = useMemo(() => modelClass.reflections().find((reflection) => reflection.name() == reflectionName), [modelClass, reflectionName])
+    this.canCan = useCanCan(() => [[this.reflection.modelClass(), ["new"]]])
   }
 
-  linkParams[dataParamName] = modelData
+  render() {
+    const {canCan, reflection} = this.tt
+    const {model} = this.p
+    const modelClassName = digg(reflection, "reflectionData", "className")
+    const modelData = {}
+    const dataParamName = inflection.singularize(reflection.reflectionData.collectionName)
 
-  return (
-    <>
-      {canCan?.can("new", reflection.modelClass()) &&
-        <Link className="create-new-model-link" to={Params.withParams(linkParams)}>
-          Create new
-        </Link>
-      }
-    </>
-  )
-}
+    modelData[reflection.foreignKey()] = model?.id()
 
-export default memo(SuperAdminShowReflectionActions)
+    const linkParams = {
+      model: modelClassName,
+      mode: "new"
+    }
+
+    linkParams[dataParamName] = modelData
+
+    return (
+      <>
+        {canCan?.can("new", reflection.modelClass()) &&
+          <Link className="create-new-model-link" to={Params.withParams(linkParams)}>
+            Create new
+          </Link>
+        }
+      </>
+    )
+  }
+}))
