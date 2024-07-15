@@ -1944,15 +1944,7 @@ bytes@3.1.2:
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.1.2.tgz#8b0beeb98605adf1b128fa4386403c009e0221a5"
   integrity sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==
 
-call-bind@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/call-bind/-/call-bind-1.0.2.tgz#b1d4e89e688119c3c9a903ad30abb2f6a919be3c"
-  integrity sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==
-  dependencies:
-    function-bind "^1.1.1"
-    get-intrinsic "^1.0.2"
-
-call-bind@^1.0.2, call-bind@^1.0.5, call-bind@^1.0.6, call-bind@^1.0.7:
+call-bind@^1.0.0, call-bind@^1.0.2, call-bind@^1.0.5, call-bind@^1.0.6, call-bind@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/call-bind/-/call-bind-1.0.7.tgz#06016599c40c56498c18769d2730be242b6fa3b9"
   integrity sha512-GHTSNSYICQ7scH7sZ+M2rFopRoLh8t2bLSW6BbgrtLsahOIB5iyAVJf9GjWK3cYTDaMj4XdBpM1cA6pIS0Kv2w==
@@ -4024,11 +4016,12 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types-exact@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/prop-types-exact/-/prop-types-exact-1.2.4.tgz#9010e6b844a0782f6636a597e1738ed494bf7943"
-  integrity sha512-vKfETKgBHRCLQwZgpl0pGPvMFxCX/06dAkz5jwNYHfrU0I8bgVhryaHA6O/KlqwtQi0IdnjAhDiZqzD+uJuVjA==
+prop-types-exact@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/prop-types-exact/-/prop-types-exact-1.2.5.tgz#f275e7dc0d629c2f7414782e8189b3e2d2e9e158"
+  integrity sha512-wHDhA5TSSvU07gdzsdeT/FZg6zay94K4Y7swSK4YsRG3moWB0Qsp9g1Y5BBausP1HF8K4UeVe2Xt7ZFJByKp6A==
   dependencies:
+    call-bind "^1.0.7"
     es-errors "^1.3.0"
     hasown "^2.0.2"
     isarray "^2.0.5"
