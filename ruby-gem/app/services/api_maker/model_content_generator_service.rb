@@ -31,7 +31,7 @@ private
   end
 
   def attribute_translated?(attribute_name)
-    translated_column = model_class
+    model_class
       .reflections["translations"]
       &.klass
       &.columns
