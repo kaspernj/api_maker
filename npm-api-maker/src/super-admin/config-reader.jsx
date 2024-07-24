@@ -36,8 +36,9 @@ export default class ApiMakerSuperAdminConfigReader {
 
   defaultAttributesToShow() {
     const attributesToShow = []
+    const {columns} = this.defaultTableColumns()
 
-    for (const column of this.defaultTableColumns()) {
+    for (const column of columns) {
       attributesToShow.push(digg(column, "attribute"))
     }
 
@@ -51,13 +52,19 @@ export default class ApiMakerSuperAdminConfigReader {
       return modelConfig.table.columns()
     }
 
-    return this.defaultTableColumns()
+    const {columns} = this.defaultTableColumns()
+
+    return columns
   }
 
   defaultTableColumns() {
     const {modelClass} = digs(this, "modelClass")
     const attributes = modelClass.attributes()
     const columns = []
+    const select = {}
+    const modelClassSelect = []
+
+    select[modelClass.modelClassData().name] = modelClassSelect
 
     for (const attribute of attributes) {
       if (!attribute.isSelectedByDefault() && attribute.name() != "name") {
@@ -75,9 +82,10 @@ export default class ApiMakerSuperAdminConfigReader {
         column.sortKey = `currentTranslation${camelizedName}`
       }
 
+      modelClassSelect.push(camelizedName)
       columns.push(column)
     }
 
-    return columns
+    return {columns, select}
   }
 }
