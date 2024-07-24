@@ -36,8 +36,9 @@ export default class ApiMakerSuperAdminConfigReader {
 
   defaultAttributesToShow() {
     const attributesToShow = []
+    const {columns} = this.defaultTableColumns()
 
-    for (const column of this.defaultTableColumns()) {
+    for (const column of columns) {
       attributesToShow.push(digg(column, "attribute"))
     }
 
@@ -51,7 +52,9 @@ export default class ApiMakerSuperAdminConfigReader {
       return modelConfig.table.columns()
     }
 
-    return this.defaultTableColumns()
+    const {columns} = this.defaultTableColumns()
+
+    return columns
   }
 
   defaultTableColumns() {
