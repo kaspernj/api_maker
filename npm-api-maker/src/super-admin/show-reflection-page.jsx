@@ -7,10 +7,12 @@ import ModelClassTable from "./model-class-table"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import ShowNav from "./show-nav"
 import useQueryParams from "on-location-changed/src/use-query-params"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionPage extends BaseComponent {
   static propTypes = propTypesExact({
-    modelClass: PropTypes.func.isRequired
+    modelClass: PropTypes.func.isRequired,
+    modelId: PropTypes.string.isRequired
   })
 
   render() {
@@ -27,7 +29,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionPage ex
     if (model) collection = model[reflection.name()]()
 
     return (
-      <div className="super-admin--show-page">
+      <View dataSet={{component: "super-admin--show-page"}}>
         {model &&
           <ShowNav model={model} modelClass={modelClass} />
         }
@@ -38,7 +40,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionPage ex
             modelClass={reflectionModelClass}
           />
         }
-      </div>
+      </View>
     )
   }
 }))

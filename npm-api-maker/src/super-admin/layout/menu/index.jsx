@@ -8,6 +8,8 @@ import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import useCurrentUser from "../../../use-current-user"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -17,13 +19,19 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
     triggered: PropTypes.bool.isRequired
   })
 
-  render() {
-    const {active, noAccess, triggered} = this.props
+  setup() {
+    const {t} = useI18n({namespace: "js.api_maker.super_admin.layout.menu"})
     const currentUser = useCurrentUser()
-    const rootRef = useRef()
+
+    this.setInstance({currentUser, t})
+  }
+
+  render() {
+    const {currentUser, t} = this.tt
+    const {active, noAccess, triggered} = this.props
 
     return (
-      <div className="components--admin--layout--menu" data-triggered={triggered} ref={rootRef}>
+      <View dataSet={{component: "super-admin--layout--menu", triggered}}>
         <div className="menu-logo">
           <Link className="menu-logo-link" to={Params.withParams({})}>
             Admin
@@ -52,12 +60,12 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
               active
               className="sign-out-menu-item"
               icon="sign-out-alt"
-              label={I18n.t("js.api_maker.super_admin.layout.menu.sign_out", {defaultValue: "Sign out"})}
+              label={t(".sign_out", {defaultValue: "Sign out"})}
               onClick={this.tt.onSignOutClicked}
             />
           }
         </div>
-      </div>
+      </View>
     )
   }
 
@@ -66,7 +74,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
 
     try {
       await Devise.signOut()
-      FlashMessage.success(I18n.t("js.api_maker.super_admin.layout.menu.you_have_been_signed_out", {defaultValue: "You have been signed out"}))
+      FlashMessage.success(this.t(".you_have_been_signed_out", {defaultValue: "You have been signed out"}))
     } catch (error) {
       FlashMessage.errorResponse(error)
     }

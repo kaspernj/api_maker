@@ -1,12 +1,12 @@
 @import "@kaspernj/api-maker/src/super-admin/stylesheets/variables";
 
-.components--admin--layout {
+[data-component="super-admin--layout"] {
   width: 100%;
   min-height: 100vh;
   background: #fff;
   color: #000;
 
-  .app-layout-content-container {
+  [data-class="app-layout-content-container"] {
     min-height: 100vh;
     background: #f7f7f7;
 

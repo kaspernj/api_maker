@@ -1,6 +1,6 @@
 @import "@kaspernj/api-maker/src/super-admin/stylesheets/variables";
 
-.components--admin--layout--menu {
+[data-component="super-admin--layout--menu"] {
   position: fixed;
   z-index: 9;
   overflow-y: auto;
