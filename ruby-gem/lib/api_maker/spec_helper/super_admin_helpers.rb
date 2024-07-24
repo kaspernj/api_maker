@@ -76,7 +76,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
 
     visit super_admin_path(model: resource.short_name, model_id: model.id)
-    wait_for_selector ".super-admin--show-page"
+    wait_for_selector "[data-component='super-admin--show-page']"
 
     attributes.each do |attribute_name, value|
       wait_for_attribute_row attribute: attribute_name.to_s, value:
@@ -87,7 +87,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
 
     visit super_admin_path(model: resource.short_name, model_id: model.id)
-    wait_for_selector ".super-admin--show-page"
+    wait_for_selector "[data-component='super-admin--show-page']"
     wait_for_selector ".destroy-model-link"
     wait_for_action_cable_to_connect
 
@@ -102,6 +102,6 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     expect { destroy_action.call }.to change(model.class, :count).by(-1)
 
     # It redirects to the index page
-    wait_for_selector ".super-admin--index-page"
+    wait_for_selector "[data-component='super-admin--index-page']"
   end
 end
