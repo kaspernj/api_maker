@@ -16,16 +16,26 @@ private
   def attributes
     attributes = {}
     resource._attributes.map do |attribute, attribute_data|
-      column = columns[attribute.to_s]
+      attribute_s = attribute.to_s
+      column = columns[attribute_s]
       column_data = _column_data(column) if column
 
       attributes[attribute] = {
         column: column_data,
         name: attribute,
-        selected_by_default: attribute_data.dig(:args, :selected_by_default)
+        selected_by_default: attribute_data.dig(:args, :selected_by_default),
+        translated: attribute_translated?(attribute_s)
       }
     end
     attributes
+  end
+
+  def attribute_translated?(attribute_name)
+    translated_column = model_class
+      .reflections["translations"]
+      &.klass
+      &.columns
+      &.any? { |column| column.name == attribute_name }
   end
 
   def collection_commands
