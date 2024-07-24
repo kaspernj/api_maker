@@ -60,14 +60,20 @@ export default class ApiMakerSuperAdminConfigReader {
     const columns = []
 
     for (const attribute of attributes) {
-      if (!attribute.isSelectedByDefault()) continue
+      if (!attribute.isSelectedByDefault() && attribute.name() != "name") {
+        continue
+      }
 
       const camelizedName = inflection.camelize(attribute.name(), true)
       const column = {
         attribute: camelizedName
       }
 
-      if (attribute.isColumn()) column.sortKey = camelizedName
+      if (attribute.isColumn()) {
+        column.sortKey = camelizedName
+      } else if (attribute.isTranslated()) {
+        column.sortKey = `currentTranslation${camelizedName}`
+      }
 
       columns.push(column)
     }

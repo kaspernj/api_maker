@@ -28,5 +28,6 @@ export default class ApiMakerBaseModelAttribute {
     return false
   }
 
+  isTranslated = () => digg(this, "attributeData", "translated")
   name = () => digg(this, "attributeData", "name")
 }
