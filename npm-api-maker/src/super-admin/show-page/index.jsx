@@ -9,6 +9,7 @@ import {memo, useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import ShowNav from "../show-nav"
 import useModel from "../../use-model"
+import {View} from "react-native"
 
 const AttributePresenter = memo(({attribute, model, modelArgs}) => {
   const attributeRowProps = {
