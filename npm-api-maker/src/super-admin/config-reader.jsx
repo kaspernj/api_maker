@@ -58,6 +58,10 @@ export default class ApiMakerSuperAdminConfigReader {
     const {modelClass} = digs(this, "modelClass")
     const attributes = modelClass.attributes()
     const columns = []
+    const select = {}
+    const modelClassSelect = []
+
+    select[modelClass.modelClassData().name] = modelClassSelect
 
     for (const attribute of attributes) {
       if (!attribute.isSelectedByDefault() && attribute.name() != "name") {
@@ -75,9 +79,10 @@ export default class ApiMakerSuperAdminConfigReader {
         column.sortKey = `currentTranslation${camelizedName}`
       }
 
+      modelClassSelect.push(camelizedName)
       columns.push(column)
     }
 
-    return columns
+    return {columns, select}
   }
 }

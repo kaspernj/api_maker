@@ -19,7 +19,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminModelClassTable exten
     const {modelClass, ...restProps} = this.props
     const currentUser = useCurrentUser()
     const configReader = useMemo(() => ConfigReader.forModel(modelClass), [modelClass])
-    const columns = useMemo(() => configReader.tableColumns(), [modelClass])
+    const {columns, select} = useMemo(() => configReader.tableColumns(), [modelClass])
     const tableConfig = configReader.modelConfig?.table
     const tableProps = {}
 
@@ -31,6 +31,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminModelClassTable exten
         currentUser={currentUser}
         editModelPath={hasEditConfig(modelClass) ? this.tt.editModelPath : undefined}
         modelClass={modelClass}
+        select={select}
         viewModelPath={this.tt.viewModelPath}
         workplace
         {...tableProps}
