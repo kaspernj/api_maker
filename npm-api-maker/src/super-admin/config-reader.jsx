@@ -49,12 +49,12 @@ export default class ApiMakerSuperAdminConfigReader {
     const {modelConfig} = digs(this, "modelConfig")
 
     if (modelConfig?.table?.columns) {
-      return modelConfig.table.columns()
+      return {
+        columns: modelConfig.table.columns()
+      }
+    } else {
+      return this.defaultTableColumns()
     }
-
-    const {columns} = this.defaultTableColumns()
-
-    return columns
   }
 
   defaultTableColumns() {

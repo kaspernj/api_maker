@@ -5,7 +5,9 @@ import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import ShowReflectionLink from "./show-reflection-link"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -14,23 +16,24 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseC
   })
 
   render() {
+    const {t} = useI18n({namespace: "js.api_maker.suprt_admin.show_reflection_page"})
     const {model, modelClass} = this.props
     const queryParams = useQueryParams()
     const reflections = modelClass.reflections()
 
     return (
-      <div>
-        <div>
+      <View dataSet={{component: "super-admin--show-nav"}}>
+        <View>
           <Link to={Params.withParams({model: modelClass.modelClassData().name, model_id: queryParams.model_id})}>
-            {I18n.t("js.api_maker.suprt_admin.show_reflection_page.general", {defaultValue: "General"})}
+            {t(".general", {defaultValue: "General"})}
           </Link>
-        </div>
+        </View>
         {model && reflections.filter((reflection) => reflection.macro() == "has_many").map((reflection) =>
-          <div key={reflection.name()}>
+          <View key={reflection.name()}>
             <ShowReflectionLink model={model} modelClass={modelClass} reflection={reflection} />
-          </div>
+          </View>
         )}
-      </div>
+      </View>
     )
   }
 }))

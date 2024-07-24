@@ -9,6 +9,7 @@ import {memo, useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import ShowNav from "../show-nav"
 import useModel from "../../use-model"
+import {View} from "react-native"
 
 const AttributePresenter = memo(({attribute, model, modelArgs}) => {
   const attributeRowProps = {
@@ -63,7 +64,9 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPage extends Base
 
     // Select all attributes selected by default because they will be shown by default
     for (const attribute of modelClass.attributes()) {
-      if (attribute.isSelectedByDefault() && !modelClassSelect.includes(attribute.name())) modelClassSelect.push(attribute.name())
+      if ((attribute.isSelectedByDefault() || attribute.name() == "name") && !modelClassSelect.includes(attribute.name())) {
+        modelClassSelect.push(attribute.name())
+      }
     }
 
     for (const reflection of modelClass.reflections()) {
@@ -112,7 +115,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPage extends Base
     modelArgs[inflection.camelize(modelClass.modelClassData().name, true)] = model
 
     return (
-      <div className="super-admin--show-page">
+      <View dataSet={{component: "super-admin--show-page"}}>
         {model &&
           <ShowNav model={model} modelClass={modelClass} />
         }
@@ -123,7 +126,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPage extends Base
           <BelongsToAttributeRow key={reflection.name()} model={model} modelClass={modelClass} reflection={reflection} />
         )}
         {model && extraContent && extraContent(modelArgs)}
-      </div>
+      </View>
     )
   }
 }))

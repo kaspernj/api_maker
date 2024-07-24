@@ -21,7 +21,7 @@ import Settings from "./settings"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
-import useBreakpoint from "./use-breakpoint"
+import useBreakpoint from "../use-breakpoint"
 import useCollection from "../use-collection"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 
@@ -175,7 +175,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.state.tableSetting.fullCacheKey()})
 
   columnsAsArray = () => {
-    if (typeof this.props.columns == "function") return this.props.columns()
+    if (typeof this.props.columns == "function") {
+      return this.props.columns()
+    }
 
     return this.props.columns
   }

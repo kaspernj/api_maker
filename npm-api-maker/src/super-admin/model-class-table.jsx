@@ -23,6 +23,8 @@ export default memo(shapeComponent(class ApiMakerSuperAdminModelClassTable exten
     const tableConfig = configReader.modelConfig?.table
     const tableProps = {}
 
+    if (!columns) throw new Error("No columns given")
+
     if (tableConfig?.query) tableProps.collection = tableConfig.query
 
     return (
