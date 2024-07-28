@@ -11,7 +11,7 @@ import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class EditAttribute extends BaseComponent {
   static propTypes = propTypesExact({
-    attribute: PropTypes.string,
+    attribute: PropTypes.object.isRequired,
     model: PropTypes.object,
     modelClass: PropTypes.func
   })

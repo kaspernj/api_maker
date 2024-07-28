@@ -8,6 +8,10 @@ import {useForm} from "../../form"
 
 export default memo(shapeComponent(class EditAttributeInput extends BaseComponent {
   static propTypes = propTypesExact({
+    attributeName: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    model: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired
   })
 
