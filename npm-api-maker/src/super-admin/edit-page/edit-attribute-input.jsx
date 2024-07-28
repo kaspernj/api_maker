@@ -8,12 +8,11 @@ import {memo, useMemo} from "react"
 
 export default memo(shapeComponent(class EditAttributeInput extends BaseComponent {
   static propTypes = propTypesExact({
-    inputs: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired
   })
 
   setup() {
-    const {inputs, name} = this.p
+    const {name} = this.p
 
     this.form = useForm()
     this.useStates({
@@ -21,8 +20,6 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     })
 
     useMemo(() => {
-      inputs[name] = this.s.value
-
       if (this.form) {
         this.form.setValue(name, this.s.value)
       }
@@ -59,12 +56,8 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   }
 
   onChangeText = (newValue) => {
-    const {inputs, name} = this.p
-
-    inputs[name] = newValue
-
     if (this.form) {
-      this.form.setValue(name, newValue)
+      this.form.setValue(this.p.name, newValue)
     }
 
     this.setState({value: newValue})
