@@ -1,5 +1,4 @@
 import BaseComponent from "../../base-component"
-import {FormContext} from "../../form"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
@@ -7,17 +6,12 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
   setup() {
     const {inputs, name} = this.p
 
-    this.form = useContext(FormContext)
     this.useStates({
       value: () => this.defaultValue()
     })
 
     useMemo(() => {
       inputs[name] = this.s.value
-
-      if (this.form) {
-        this.form.setValue(name, this.s.value)
-      }
     }, [])
   }
 
@@ -47,10 +41,6 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
     const {inputs, name} = this.p
 
     inputs[name] = newValue
-
-    if (this.form) {
-      this.form.setValue(name, newValue)
-    }
 
     this.setState({value: newValue})
   }

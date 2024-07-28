@@ -40,6 +40,11 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
     this.useStates({
       blankInputName: digg(this, "props", "inputProps", "type") == "file"
     })
+    useMemo(() => {
+      if ("defaultValue" in this.props) {
+        this.tt.form?.setValue(this.props.defaultValue)
+      }
+    }, [])
   }
 
   render () {
