@@ -1,11 +1,14 @@
 import AutoSubmit from "./auto-submit.mjs"
+import BaseComponent from "../base-component"
 import {digg, digs} from "diggerize"
 import EventUpdated from "../event-updated"
 import inputWrapper from "./input-wrapper"
 import PropTypes from "prop-types"
-import React from "react"
+import {memo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {useForm} from "../form"
 
-class ApiMakerInputsCheckbox extends React.PureComponent {
+const ApiMakerInputsCheckbox = memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
@@ -26,6 +29,10 @@ class ApiMakerInputsCheckbox extends React.PureComponent {
     onErrors: PropTypes.func,
     onMatchValidationError: PropTypes.func,
     zeroInput: PropTypes.bool
+  }
+
+  setup() {
+    this.form = useForm()
   }
 
   render () {
@@ -69,9 +76,11 @@ class ApiMakerInputsCheckbox extends React.PureComponent {
   }
 
   onChanged = (...args) => {
-    const {attribute, autoSubmit, model, onChange} = this.props
+    const {form} = this.tt
+    const {attribute, autoSubmit, model, name, onChange} = this.props
 
     if (attribute && autoSubmit && model) new AutoSubmit({component: this}).autoSubmit()
+    if (form && name) form.setValue(name, args[0].target.checked)
     if (onChange) onChange(...args)
   }
 
@@ -92,7 +101,7 @@ class ApiMakerInputsCheckbox extends React.PureComponent {
       inputRef.current.checked = newValue
     }
   }
-}
+}))
 
 export {ApiMakerInputsCheckbox as Checkbox}
 export default inputWrapper(ApiMakerInputsCheckbox, {type: "checkbox"})

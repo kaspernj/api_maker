@@ -5138,7 +5138,7 @@ set-function-name@^2.0.1, set-function-name@^2.0.2:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@^1.0.45:
+set-state-compare@^1.0.46:
   version "1.0.46"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.46.tgz#094fccf7f9ea9c3d34ae97381e5f4a9e1a2b3046"
   integrity sha512-QoTvoyqxh33UELsnjJBZFd1XAxuFc809NWT2EyFidZkqKUgDvuwx3//4mTQeI0ZAR3MyfKhiCR7vxGyOB5HK1Q==

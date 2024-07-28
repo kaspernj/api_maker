@@ -1,4 +1,5 @@
 import AutoSubmit from "./auto-submit.mjs"
+import BaseComponent from "../base-component"
 import {dig, digg, digs} from "diggerize"
 import EventUpdated from "../event-updated"
 import inputWrapper from "./input-wrapper"
@@ -6,10 +7,11 @@ import Money from "./money"
 import PropTypes from "prop-types"
 import {memo, useRef} from "react"
 import replaceall from "replaceall"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import strftime from "strftime"
+import {useForm} from "../form"
 
-const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extends ShapeComponent {
+const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extends BaseComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
@@ -32,6 +34,7 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   }
 
   setup() {
+    this.form = useForm()
     this.visibleInputRef = useRef()
 
     this.useStates({
@@ -204,13 +207,15 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   }
 
   onInputChanged = (e) => {
-    const {attribute, autoSubmit, inputProps, model, onChange} = this.props
+    const {form} = this.tt
+    const {attribute, autoSubmit, inputProps, model, name, onChange} = this.props
     const {localizedNumber} = digs(this.props, "localizedNumber")
 
     if (localizedNumber) this.inputReference().current.value = this.actualValue(digg(e, "target"))
 
     if (attribute && autoSubmit && model) this.delayAutoSubmit()
     if (digg(inputProps, "type") == "file") this.setState({blankInputName: this.getBlankInputName()})
+    if (form && name) form.setValue(name, e.target.value)
     if (onChange) onChange(e)
   }
 

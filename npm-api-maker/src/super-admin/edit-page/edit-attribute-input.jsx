@@ -1,4 +1,5 @@
 import BaseComponent from "../../base-component"
+import {useForm} from "../../form"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
@@ -14,12 +15,17 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   setup() {
     const {inputs, name} = this.p
 
+    this.form = useForm()
     this.useStates({
       value: this.defaultValue()
     })
 
     useMemo(() => {
       inputs[name] = this.s.value
+
+      if (this.form) {
+        this.form.setValue(name, this.s.value)
+      }
     }, [])
   }
 
@@ -56,6 +62,11 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     const {inputs, name} = this.p
 
     inputs[name] = newValue
+
+    if (this.form) {
+      this.form.setValue(name, newValue)
+    }
+
     this.setState({value: newValue})
   }
 }))

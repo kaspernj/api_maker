@@ -1,3 +1,4 @@
+import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digs} from "diggerize"
 import inputWrapper from "./input-wrapper"
@@ -5,9 +6,10 @@ import * as inflection from "inflection"
 import InvalidFeedback from "../bootstrap/invalid-feedback"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import React from "react"
+import {memo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
-class ApiMakerInputsCheckboxes extends React.PureComponent {
+const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckboxes extends BaseComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,
@@ -108,6 +110,6 @@ class ApiMakerInputsCheckboxes extends React.PureComponent {
       </div>
     )
   }
-}
+}))
 
 export default inputWrapper(ApiMakerInputsCheckboxes)

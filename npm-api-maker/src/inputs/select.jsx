@@ -1,9 +1,11 @@
-import {dig} from "diggerize"
+import BaseComponent from "../base-component"
 import inputWrapper from "./input-wrapper"
 import PropTypes from "prop-types"
-import React from "react"
+import {memo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {useForm} from "../form"
 
-class ApiMakerInputsSelect extends React.PureComponent {
+const ApiMakerInputsSelect = memo(shapeComponent(class ApiMakerInputsSelect extends BaseComponent {
   static propTypes = {
     attribute: PropTypes.string,
     children: PropTypes.node,
@@ -13,8 +15,13 @@ class ApiMakerInputsSelect extends React.PureComponent {
     inputProps: PropTypes.object.isRequired,
     model: PropTypes.object,
     name: PropTypes.string,
+    onChange: PropTypes.func,
     options: PropTypes.array,
     wrapperOpts: PropTypes.object.isRequired
+  }
+
+  setup() {
+    this.form = useForm()
   }
 
   render () {
@@ -28,13 +35,14 @@ class ApiMakerInputsSelect extends React.PureComponent {
       inputRef,
       model,
       name,
+      onChange,
       options,
       wrapperOpts,
       ...restProps
     } = this.props
 
     return (
-      <select {...inputProps} {...restProps}>
+      <select onChange={this.tt.onChange} {...inputProps} {...restProps}>
         {this.includeBlank() &&
           <option data-include-blank="true">
             {typeof includeBlank != "boolean" ? includeBlank : null}
@@ -48,6 +56,14 @@ class ApiMakerInputsSelect extends React.PureComponent {
         {children}
       </select>
     )
+  }
+
+  onChange = (e) => {
+    const {form} = this.tt
+    const {name, onChange} = this.props
+
+    if (form && name) form.setValue(name, e.target.value)
+    if (onChange) onChange(e)
   }
 
   optionKey (option) {
@@ -81,7 +97,7 @@ class ApiMakerInputsSelect extends React.PureComponent {
       return false
     }
   }
-}
+}))
 
 export {ApiMakerInputsSelect as Select}
 export default inputWrapper(ApiMakerInputsSelect)
