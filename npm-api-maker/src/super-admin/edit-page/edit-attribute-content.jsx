@@ -4,15 +4,9 @@ import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class EditAttributeContent extends BaseComponent {
   setup() {
-    const {inputs, name} = this.p
-
     this.useStates({
       value: () => this.defaultValue()
     })
-
-    useMemo(() => {
-      inputs[name] = this.s.value
-    }, [])
   }
 
   render() {
@@ -38,10 +32,6 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
   defaultValue = () => this.p.model[this.p.attribute.attribute]() || ""
 
   onChangeValue = (newValue) => {
-    const {inputs, name} = this.p
-
-    inputs[name] = newValue
-
     this.setState({value: newValue})
   }
 }))

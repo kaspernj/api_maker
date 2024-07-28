@@ -5,11 +5,19 @@ import EditAttributeInput from "./edit-attribute-input"
 import * as inflection from "inflection"
 import Locales from "shared/locales"
 import {memo} from "react"
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class EditAttribute extends BaseComponent {
+  static propTypes = propTypesExact({
+    attribute: PropTypes.string,
+    model: PropTypes.object,
+    modelClass: PropTypes.func
+  })
+
   render() {
-    const {attribute, inputs, model, modelClass} = this.props
+    const {attribute, model, modelClass} = this.props
     const availableLocales = Locales.availableLocales()
     const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
 
@@ -19,7 +27,6 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
           <EditAttributeContent
             attribute={attribute}
             id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}`}
-            inputs={inputs}
             model={model}
             name={inflection.underscore(attribute.attribute)}
           />
@@ -28,7 +35,6 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
           <EditAttributeInput
             attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
             id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}_${locale}`}
-            inputs={inputs}
             label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
             model={model}
             name={`${inflection.underscore(attribute.attribute)}_${locale}`}
@@ -39,7 +45,6 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
           <EditAttributeInput
             attributeName={attribute.attribute}
             id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}`}
-            inputs={inputs}
             label={modelClass.humanAttributeName(attribute.attribute)}
             model={model}
             name={inflection.underscore(attribute.attribute)}

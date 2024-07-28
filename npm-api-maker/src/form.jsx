@@ -25,6 +25,8 @@ class FormInputs {
   }
 
   setValue(name, value) {
+    if (!name) throw new Error("'name' is required")
+
     console.log("Form", {name, value})
 
     this.inputs[name] = value

@@ -19,8 +19,6 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     modelClass: PropTypes.func.isRequired
   })
 
-  inputs = {}
-
   setup() {
     const {modelClass} = this.p
     const modelClassName = modelClass.modelClassData().name
@@ -75,7 +73,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
       <View dataSet={{class: "super-admin--edit-page"}}>
         <Form setForm={this.setStates.form}>
           {model && attributes?.map((attribute) =>
-            <EditAttribute attribute={attribute} inputs={this.inputs} key={attribute.attribute} model={model} modelClass={modelClass} />
+            <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelClass={modelClass} />
           )}
           {extraContent && extraContent(modelArgs)}
           <Pressable
@@ -102,16 +100,13 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
 
   onSubmit = async () => {
     try {
-      const {inputs, model} = this.tt
-      const {form} = this.s
+      const {model} = this.tt
+      const formObject = this.s.form.asObject()
 
-      const formObject = form.asObject()
-      const allInputs = Object.assign({}, inputs, formObject)
+      console.log({formObject})
 
-      console.log({allInputs})
-
-      model.assignAttributes(allInputs)
-      await model.save(this.inputs)
+      model.assignAttributes(formObject)
+      await model.save()
       Params.changeParams({mode: undefined, model_id: model.id()})
     } catch (error) {
       FlashMessage.errorResponse(error)
