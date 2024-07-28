@@ -1,10 +1,10 @@
+import {memo, useMemo} from "react"
+import {Text, TextInput, View} from "react-native"
 import BaseComponent from "../../base-component"
-import {useForm} from "../../form"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {Text, TextInput, View} from "react-native"
-import {memo, useMemo} from "react"
+import {useForm} from "../../form"
 
 export default memo(shapeComponent(class EditAttributeInput extends BaseComponent {
   static propTypes = propTypesExact({
