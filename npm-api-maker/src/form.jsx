@@ -6,7 +6,7 @@ import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 const FormContext = createContext(null)
 
-class FormClass {
+class FormInputs {
   constructor() {
     this.inputs = {}
   }
@@ -42,7 +42,7 @@ class FormClass {
 const Form = memo(shapeComponent(class Form extends BaseComponent {
   render() {
     const {children, setForm, ...restProps} = this.props
-    const form = useMemo(() => new FormClass(), [])
+    const form = useMemo(() => new FormInputs(), [])
 
     useMemo(() => {
       if (setForm) {
@@ -65,4 +65,4 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
 
 const useForm = () => useContext(FormContext)
 
-export {Form, FormContext, useForm}
+export {Form, FormContext, FormInputs, useForm}
