@@ -1,5 +1,5 @@
 import BaseComponent from "../../base-component"
-import {FormContext} from "../../form"
+import {useForm} from "../../form"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
@@ -15,7 +15,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   setup() {
     const {inputs, name} = this.p
 
-    this.form = useContext(FormContext)
+    this.form = useForm()
     this.useStates({
       value: this.defaultValue()
     })
