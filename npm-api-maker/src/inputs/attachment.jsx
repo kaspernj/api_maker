@@ -1,7 +1,10 @@
+import BaseComponent from "../base-component"
 import {Input as ApiMakerInput} from "@kaspernj/api-maker/src/inputs/input"
 import {Checkbox} from "./checkbox"
+import {memo} from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
-export default class ApiMakerInputsAttachment extends BaseComponent {
+export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseComponent {
   static propTypes = {
     className: PropTypes.string,
     model: PropTypes.object.isRequired,
@@ -9,8 +12,10 @@ export default class ApiMakerInputsAttachment extends BaseComponent {
     purgeName: PropTypes.string
   }
 
-  state = {
-    purgeChecked: false
+  setup() {
+    this.useStates({
+      purgeChecked: false
+    })
   }
 
   render() {
@@ -91,4 +96,4 @@ export default class ApiMakerInputsAttachment extends BaseComponent {
 
     if (this.props.onPurgeChanged) this.props.onPurgeChanged(e)
   }
-}
+}))

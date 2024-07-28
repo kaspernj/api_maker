@@ -1,9 +1,10 @@
+import {Pressable, Text, View} from "react-native"
 import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader.jsx"
 import {digg} from "diggerize"
 import EditAttribute from "./edit-page/edit-attribute"
+import {Form} from "../form"
 import * as inflection from "inflection"
-import {Pressable, Text, View} from "react-native"
 import Locales from "shared/locales"
 import {memo} from "react"
 import PropTypes from "prop-types"
@@ -50,7 +51,8 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     const useModelResult = useModel(modelClass, {
       cacheArgs: [currentUser?.id()],
       loadByQueryParam: (props) => props.queryParams.model_id,
-      newIfNoId: true,
+      newIfNoId: this.configReader.modelConfig?.edit?.newIfNoId || true,
+      preload: this.configReader.modelConfig?.edit?.preload,
       select: selectedAttributes
     })
 
@@ -61,6 +63,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     this.modelId = queryParams.model_id
     this.modelArgs = {}
     this.modelArgs[modelIdVarName] = this.modelId
+    this.useStates({form: null})
   }
 
   render() {
@@ -70,27 +73,29 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
 
     return (
       <View dataSet={{class: "super-admin--edit-page"}}>
-        {model && attributes?.map((attribute) =>
-          <EditAttribute attribute={attribute} inputs={this.inputs} key={attribute.attribute} model={model} modelClass={modelClass} />
-        )}
-        {extraContent && extraContent(modelArgs)}
-        <Pressable
-          dataSet={{class: "submit-button"}}
-          onPress={this.tt.onSubmit}
-          style={{
-            paddingTop: 18,
-            paddingRight: 24,
-            paddingBottom: 18,
-            paddingLeft: 24,
-            borderRadius: 10,
-            backgroundColor: "#4c93ff",
-            marginTop: 10
-          }}
-        >
-          <Text style={{color: "#fff"}}>
-            Submit
-          </Text>
-        </Pressable>
+        <Form setForm={this.setStates.form}>
+          {model && attributes?.map((attribute) =>
+            <EditAttribute attribute={attribute} inputs={this.inputs} key={attribute.attribute} model={model} modelClass={modelClass} />
+          )}
+          {extraContent && extraContent(modelArgs)}
+          <Pressable
+            dataSet={{class: "submit-button"}}
+            onPress={this.tt.onSubmit}
+            style={{
+              paddingTop: 18,
+              paddingRight: 24,
+              paddingBottom: 18,
+              paddingLeft: 24,
+              borderRadius: 10,
+              backgroundColor: "#4c93ff",
+              marginTop: 10
+            }}
+          >
+            <Text style={{color: "#fff"}}>
+              Submit
+            </Text>
+          </Pressable>
+        </Form>
       </View>
     )
   }
@@ -98,8 +103,14 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
   onSubmit = async () => {
     try {
       const {inputs, model} = this.tt
+      const {form} = this.s
 
-      model.assignAttributes(inputs)
+      const formObject = form.asObject()
+      const allInputs = Object.assign({}, inputs, formObject)
+
+      console.log({allInputs})
+
+      model.assignAttributes(allInputs)
       await model.save(this.inputs)
       Params.changeParams({mode: undefined, model_id: model.id()})
     } catch (error) {
