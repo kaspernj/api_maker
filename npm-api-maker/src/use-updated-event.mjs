@@ -3,7 +3,9 @@ import debounceFunction from "debounce"
 import ModelEvents from "./model-events.mjs"
 import useShape from "set-state-compare/src/use-shape.js"
 
-const apiMakerUseUpdatedEvent = (model, onUpdated, {active = true, debounce, onConnected, ...restProps}) => {
+const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
+  const {active = true, debounce, onConnected, ...restProps} = props
+
   if (Object.keys(restProps).length > 0) {
     throw new Error(`Unknown props given to useUpdatedEvent: ${Object.keys(restProps).join(", ")}`)
   }
