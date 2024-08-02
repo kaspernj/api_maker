@@ -156,9 +156,20 @@ export default class ApiMakerCommandsPool {
           commandData.resolve(commandResponseData)
         } else if (responseType == "error") {
           const error = new CustomError("Command error", {response: commandResponseData})
+          const backendBacktrace = commandResponse.data.errors[0].backtrace
+          let stacktrace = error.stack.split("\n")
+          const stacktraceErrorMessage = stacktrace[0]
+
+          stacktrace = stacktrace.slice(1, stacktrace.length - 1)
+
+          if (backendBacktrace) {
+            error.stack = [stacktraceErrorMessage].concat(backendBacktrace.map((trace) => `    at ${trace}`)).concat(stacktrace).join("\n")
+          }
 
           error.stack += "\n"
           error.stack += commandData.stack.split("\n").slice(1).join("\n")
+
+          // throw new Error(`Stack is: ${JSON.stringify(error.stack.split("\n"), null, 2)}`)
 
           commandData.reject(error)
         } else if (responseType == "failed") {

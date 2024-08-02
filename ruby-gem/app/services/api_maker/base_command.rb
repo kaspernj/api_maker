@@ -127,7 +127,13 @@ class ApiMaker::BaseCommand
     rescue => e # rubocop:disable Style/RescueStandardError
       error_response = {
         success: false,
-        errors: [{message: command_error_message(e), type: :runtime_error}]
+        errors: [
+          {
+            backtrace: Rails.env.development? || Rails.env.test? ? Rails.backtrace_cleaner.clean(e.backtrace) : nil,
+            message: command_error_message(e),
+            type: :runtime_error
+          }
+        ]
       }
 
       Rails.logger.error e.message

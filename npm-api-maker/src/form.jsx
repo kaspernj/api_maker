@@ -24,6 +24,12 @@ class FormInputs {
     return result
   }
 
+  get(name) {
+    if (!(name in this.inputs)) throw new Error(`Input '${name}' not found`)
+
+    return this.inputs[name]
+  }
+
   setValue(name, value) {
     if (!name) throw new Error("'name' is required")
 
