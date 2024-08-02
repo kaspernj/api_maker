@@ -20,8 +20,13 @@ class ApiMaker::CollectionCommandService < ApiMaker::CommandService
     commands.each_key do |command_id|
       command_response.error_for_command(
         command_id,
-        success: false,
-        errors: [e.message]
+        errors: [
+          {
+            backtrace: Rails.env.development? || Rails.env.test? ? Rails.backtrace_cleaner.clean(Rails.e.backtrace) : nil,
+            message: e.message
+          }
+        ],
+        success: false
       )
     end
 
