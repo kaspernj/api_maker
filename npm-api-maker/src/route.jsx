@@ -88,7 +88,6 @@ const RouteGroup = memo(shapeComponent(class RouteGroup extends ShapeComponent {
 }))
 
 const RouteMatcher = memo(shapeComponent(class RouteMatcher extends ShapeComponent {
-  count = globalShared.routeMatcherCount++
   match = null
   matches = false
   newParams = null
@@ -140,6 +139,7 @@ const RouteMatcher = memo(shapeComponent(class RouteMatcher extends ShapeCompone
 
     for (const pathPartIndex in this.pathParts) {
       const pathPart = this.pathParts[pathPartIndex]
+      const translatedPathPart = I18n.t(`routes.${pathPart}`, {defaultValue: pathPart})
 
       if (!(pathPartIndex in this.routeParts)) {
         matches = false
@@ -152,7 +152,7 @@ const RouteMatcher = memo(shapeComponent(class RouteMatcher extends ShapeCompone
         const paramName = pathPart.slice(1, pathPart.length)
 
         params[paramName] = routePart
-      } else if (pathPart != routePart) {
+      } else if (translatedPathPart != routePart) {
         matches = false
         break
       } else if (!component && includeInPath) {
