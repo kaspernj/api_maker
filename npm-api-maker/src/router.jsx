@@ -1,9 +1,7 @@
-import PropTypes from "prop-types"
 import React, {memo} from "react"
-import {Suspense} from "react"
 import withRouter from "./with-router"
 
-const ApiMakerRouter = (props) => {
+const ApiMakerRouter = memo((props) => {
   const {match, ...restProps} = props
   const {matchingRoute} = match
 
@@ -24,15 +22,8 @@ const ApiMakerRouter = (props) => {
   const Component = props.requireComponent({routeDefinition: matchingRoute.parsedRouteDefinition.routeDefinition})
 
   return (
-    <Suspense fallback={<div />}>
-      <Component match={match} {...restProps} />
-    </Suspense>
+    <Component match={match} {...restProps} />
   )
-}
+})
 
-ApiMakerRouter.propTypes = {
-  notFoundComponent: PropTypes.elementType,
-  requireComponent: PropTypes.func.isRequired
-}
-
-export default withRouter(memo(ApiMakerRouter))
+export default withRouter(ApiMakerRouter)
