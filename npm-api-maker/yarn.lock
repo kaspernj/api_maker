@@ -5258,10 +5258,10 @@ set-function-name@^2.0.1, set-function-name@^2.0.2:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@^1.0.47:
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.47.tgz#b51958cd062745d570e9521068ec0e48ee345fee"
-  integrity sha512-IirZbwptV0EEU2CRfGAhybCAr4pZ5GvGBlmOUsRd3vN0WIyeLcWI26BXFVkuYEX+lkrriBD3/bJwYX6ovRJ4kg==
+set-state-compare@^1.0.49:
+  version "1.0.49"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.49.tgz#a574778834e5b09fa26cfbf5170d406e1c87b939"
+  integrity sha512-wNuY1tv3flx8vKp4wczcawlc/iYWcfK3A6JO9CjGoTVvryn/ID3knnlHAs6MNQopzMwQdv12qAvGXqgncaRmPg==
   dependencies:
     fetching-object ">= 1.0.1"
 

@@ -1,20 +1,18 @@
-import {createContext} from "react"
+import BaseComponent from "./base-component"
+import {createContext, useContext, useMemo} from "react"
 import memo from "set-state-compare/src/memo"
-import RunLast from "./run-last.mjs"
+import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 const CurrentPathContext = createContext([])
 const CurrentRouteGroupContext = createContext([])
 const ParamsContext = createContext({})
 const RequireComponentContext = createContext(null)
 const RouteContext = createContext(null)
+const useParams = () => useContext(ParamsContext)
 
-const useParams = () => {
-  const params = useContext(ParamsContext)
-
-  return params
-}
-
-const RouteGroup = memo(shapeComponent(class RouteGroup extends ShapeComponent {
+const RouteGroup = memo(shapeComponent(class RouteGroup extends BaseComponent {
   static defaultProps = {
     name: "[no name]",
     single: true
@@ -26,34 +24,29 @@ const RouteGroup = memo(shapeComponent(class RouteGroup extends ShapeComponent {
     single: PropTypes.bool
   })
 
+  pathsMatchedKeys = []
+
   setup() {
     this.useStates({
       lastUpdate: new Date(),
+      pathShown: undefined,
       pathsMatched: {}
     })
   }
 
   render() {
-    const {pathsMatched} = this.s
+    const {pathShown, pathsMatched} = this.s
 
     return (
-      <CurrentRouteGroupContext.Provider value={{pathsMatched, routeGroup: this}}>
+      <CurrentRouteGroupContext.Provider value={{pathShown, pathsMatched, routeGroup: this}}>
         {this.props.children}
       </CurrentRouteGroupContext.Provider>
     )
   }
 
-  anythingButPathMatched(path) {
-    if (!path) {
-      path = "[PATH-EMPTY]"
-    }
-
-    for (const pathMatched in this.s.pathsMatched) {
-      if (path == pathMatched) {
-        continue
-      }
-
-      const isPathMatched = this.s.pathsMatched[pathMatched]
+  pathShown(pathsMatched) {
+    for (const pathMatched of this.tt.pathsMatchedKeys) {
+      const isPathMatched = pathsMatched[pathMatched]
 
       if (isPathMatched) {
         return pathMatched
@@ -62,44 +55,62 @@ const RouteGroup = memo(shapeComponent(class RouteGroup extends ShapeComponent {
   }
 
   setPathMatched(path, matched) {
+    const {pathsMatchedKeys} = this.tt
     const {pathsMatched} = this.s
 
-    if (!path) {
-      path = "[PATH-EMPTY]"
-    }
+    if (!path) throw new Error("No 'path' given")
+    if (pathsMatched[path] == matched) return
 
-    if (pathsMatched[path] == matched) {
-      return
+    if (!pathsMatchedKeys.includes(path)) {
+      pathsMatchedKeys.push(path)
     }
 
     const newPathsMatched = {...this.s.pathsMatched}
 
     newPathsMatched[path] = matched
 
-    this.setState({pathsMatched: newPathsMatched})
-    // this.setLastUpdateLast.queue()
-  }
+    const pathShown = this.pathShown(newPathsMatched)
 
-  setLastUpdate = () => {
-    this.setState({lastUpdate: new Date()})
+    this.setState({
+      lastUpdate: Math.random() + new Date().getTime(),
+      pathShown,
+      pathsMatched: newPathsMatched
+    })
   }
-
-  setLastUpdateLast = new RunLast(this.setLastUpdate)
 }))
 
-const RouteMatcher = memo(shapeComponent(class RouteMatcher extends ShapeComponent {
+const Route = memo(shapeComponent(class Route extends BaseComponent {
+  static defaultProps = {
+    exact: false,
+    fallback: false,
+    includeInPath: true
+  }
+
+  static propTypes = propTypesExact({
+    component: PropTypes.string,
+    componentPath: PropTypes.string,
+    exact: PropTypes.bool.isRequired,
+    fallback: PropTypes.bool.isRequired,
+    includeInPath: PropTypes.bool.isRequired,
+    onMatch: PropTypes.func,
+    path: PropTypes.string
+  })
+
   match = null
-  matches = false
   newParams = null
   pathParts = null
 
   setup() {
-    const {path, route: givenRoute} = this.props
+    const {path} = this.props
     const {pathsMatched, routeGroup} = useContext(CurrentRouteGroupContext)
+    const givenRoute = useContext(RouteContext)
+    const {pathShown} = routeGroup.s
 
+    this.requireComponent = useContext(RequireComponentContext)
     this.currentParams = useContext(ParamsContext)
     this.currentPath = useContext(CurrentPathContext)
     this.routeGroup = routeGroup
+
     this.routeParts = useMemo(() => {
       let routeParts = givenRoute?.split("/")
 
@@ -123,15 +134,50 @@ const RouteMatcher = memo(shapeComponent(class RouteMatcher extends ShapeCompone
       [givenRoute].concat(this.pathParts)
     )
 
-    this.useStates({Component: null})
+    this.useStates({Component: null, componentNotFound: null, matches: false})
+
     useMemo(() => {
       this.loadMatches()
     }, [givenRoute, path, pathsMatched])
+
+    useMemo(() => {
+      const pathId = this.pathId()
+      let matched = false
+
+      if (pathShown && pathShown == pathId) {
+        matched = true
+      }
+
+      if (matched && !this.s.Component && this.s.matches) {
+        if (this.props.onMatch) {
+          this.props.onMatch()
+        }
+
+        this.loadComponent()
+      }
+    }, [path, pathShown, this.s.matches])
+  }
+
+  pathId() {
+    const {fallback} = this.p
+    const {path} = this.props
+    let pathId
+
+    if (fallback) {
+      pathId = "[FALLBACK]"
+    } else if (!path) {
+      pathId = "[PATH-EMPTY]"
+    } else {
+      pathId = path
+    }
+
+    return pathId
   }
 
   loadMatches() {
     const {newRouteParts} = this.tt
-    const {component, exact, includeInPath = true, path} = this.props
+    const {component, path} = this.props
+    const {exact, includeInPath, fallback} = this.p
 
     let matches = true
     const params = {}
@@ -168,10 +214,10 @@ const RouteMatcher = memo(shapeComponent(class RouteMatcher extends ShapeCompone
       matches = true
     }
 
-    const alreadyMatchedPath = this.routeGroup?.anythingButPathMatched(path)
+    const matchId = this.pathId()
 
-    if (matches && alreadyMatchedPath) {
-      matches = false
+    if (!matches && fallback) {
+      matches = true
     }
 
     if (matches) {
@@ -181,39 +227,51 @@ const RouteMatcher = memo(shapeComponent(class RouteMatcher extends ShapeCompone
 
       const newParams = Object.assign(this.currentParams, params)
 
-      this.setInstance({componentPathParts, match: {params}, matches, newParams})
-      this.loadComponent()
-      this.routeGroup?.setPathMatched(path, true)
+      this.setInstance({componentPathParts, match: {params}, newParams})
+      this.setState({matches})
+      this.routeGroup?.setPathMatched(matchId, true)
     } else {
-      this.setInstance({componentPathParts: null, match: null, matches, newParams: null})
-      this.routeGroup?.setPathMatched(path, false)
+      this.setInstance({componentPathParts: null, match: null, newParams: null})
+      this.setState({matches})
+      this.routeGroup?.setPathMatched(matchId, false)
     }
   }
 
   async loadComponent() {
-    const {componentPath, requireComponent} = this.p
-    const {componentPathParts} = this.tt
-    const actualComponentPath = componentPath || componentPathParts.join("/")
-    const Component = await requireComponent({routeDefinition: {component: actualComponentPath}})
+    const actualComponentPath = this.props.componentPath || this.tt.componentPathParts.join("/")
+    let Component
 
-    this.setState({Component: Component.default})
+    try {
+      const componentImport = await this.tt.requireComponent({routeDefinition: {component: actualComponentPath}})
+
+      Component = componentImport.default
+    } catch (error) {
+      console.error(`Couldn't find component: ${actualComponentPath}`)
+    }
+
+    this.setState({Component, componentNotFound: !Component})
   }
 
   render() {
-    const {componentPathParts, match, matches, newParams, newRouteParts} = this.tt
+    const {componentPathParts, match, newParams, newRouteParts} = this.tt
     const {component, path} = this.props
-    const {Component} = this.s
+    const {Component, componentNotFound, matches} = this.s
 
     if (!matches) {
       // Route isn't matching and shouldn't be rendered at all.
       return null
     }
 
-    if (!Component) {
+    if (!Component && !componentNotFound) {
       // Route is matching but hasn't been loaded yet.
       return (
         <div>Loading {component || componentPathParts.join("/")}</div>
       )
+    }
+
+    if (!Component && componentNotFound) {
+      // Don't render anything if the component couldn't be found.
+      return null
     }
 
     return (
@@ -230,25 +288,5 @@ const RouteMatcher = memo(shapeComponent(class RouteMatcher extends ShapeCompone
   }
 }))
 
-export default memo(shapeComponent(class ApiMakerRoute extends ShapeComponent {
-  render() {
-    const {component, componentPath, exact, includeInPath = true, path} = this.props
-    const requireComponent = useContext(RequireComponentContext)
-    const route = useContext(RouteContext)
-    const memoedRoute = useMemo(() => route, [route])
-
-    return (
-      <RouteMatcher
-        component={component}
-        componentPath={componentPath}
-        exact={exact}
-        includeInPath={includeInPath}
-        path={path}
-        requireComponent={requireComponent}
-        route={memoedRoute}
-      />
-    )
-  }
-}))
-
 export {RequireComponentContext, RouteContext, RouteGroup, useParams}
+export default Route

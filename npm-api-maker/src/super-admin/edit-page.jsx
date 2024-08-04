@@ -103,8 +103,6 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
       const {model} = this.tt
       const formObject = this.s.form.asObject()
 
-      console.log({formObject})
-
       model.assignAttributes(formObject)
       await model.save()
       Params.changeParams({mode: undefined, model_id: model.id()})
