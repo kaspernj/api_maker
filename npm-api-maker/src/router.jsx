@@ -8,11 +8,12 @@ import useRouter from "./use-router"
 
 export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
   static propTypes = propTypesExact({
+    history: PropTypes.object,
     notFoundComponent: PropTypes.elementType,
     path: PropTypes.string,
     requireComponent: PropTypes.func.isRequired,
-    routeDefinitions: PropTypes.array,
-    routes: PropTypes.array
+    routeDefinitions: PropTypes.object,
+    routes: PropTypes.object
   })
 
   render() {
