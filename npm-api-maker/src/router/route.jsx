@@ -1,83 +1,16 @@
-import BaseComponent from "./base-component"
+import BaseComponent from "../base-component"
 import {createContext, useContext, useMemo} from "react"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import Switch, {CurrentSwitchContext} from "./switch"
 
 const CurrentPathContext = createContext([])
-const CurrentRouteGroupContext = createContext([])
 const ParamsContext = createContext({})
 const RequireComponentContext = createContext(null)
 const RouteContext = createContext(null)
 const useParams = () => useContext(ParamsContext)
-
-const RouteGroup = memo(shapeComponent(class RouteGroup extends BaseComponent {
-  static defaultProps = {
-    name: "[no name]",
-    single: true
-  }
-
-  static propTypes = propTypesExact({
-    children: PropTypes.node,
-    name: PropTypes.string,
-    single: PropTypes.bool
-  })
-
-  pathsMatchedKeys = []
-
-  setup() {
-    this.useStates({
-      lastUpdate: new Date(),
-      pathShown: undefined,
-      pathsMatched: {}
-    })
-  }
-
-  render() {
-    const {pathShown, pathsMatched} = this.s
-
-    return (
-      <CurrentRouteGroupContext.Provider value={{pathShown, pathsMatched, routeGroup: this}}>
-        {this.props.children}
-      </CurrentRouteGroupContext.Provider>
-    )
-  }
-
-  pathShown(pathsMatched) {
-    for (const pathMatched of this.tt.pathsMatchedKeys) {
-      const isPathMatched = pathsMatched[pathMatched]
-
-      if (isPathMatched) {
-        return pathMatched
-      }
-    }
-  }
-
-  setPathMatched(path, matched) {
-    const {pathsMatchedKeys} = this.tt
-    const {pathsMatched} = this.s
-
-    if (!path) throw new Error("No 'path' given")
-    if (pathsMatched[path] == matched) return
-
-    if (!pathsMatchedKeys.includes(path)) {
-      pathsMatchedKeys.push(path)
-    }
-
-    const newPathsMatched = {...this.s.pathsMatched}
-
-    newPathsMatched[path] = matched
-
-    const pathShown = this.pathShown(newPathsMatched)
-
-    this.setState({
-      lastUpdate: Math.random() + new Date().getTime(),
-      pathShown,
-      pathsMatched: newPathsMatched
-    })
-  }
-}))
 
 const Route = memo(shapeComponent(class Route extends BaseComponent {
   static defaultProps = {
@@ -102,14 +35,14 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
 
   setup() {
     const {path} = this.props
-    const {pathsMatched, routeGroup} = useContext(CurrentRouteGroupContext)
+    const {pathsMatched, switchGroup} = useContext(CurrentSwitchContext)
     const givenRoute = useContext(RouteContext)
-    const {pathShown} = routeGroup.s
+    const {pathShown} = switchGroup.s
 
     this.requireComponent = useContext(RequireComponentContext)
     this.currentParams = useContext(ParamsContext)
     this.currentPath = useContext(CurrentPathContext)
-    this.routeGroup = routeGroup
+    this.switchGroup = switchGroup
 
     this.routeParts = useMemo(() => {
       let routeParts = givenRoute?.split("/")
@@ -141,14 +74,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     }, [givenRoute, path, pathsMatched])
 
     useMemo(() => {
-      const pathId = this.pathId()
-      let matched = false
-
-      if (pathShown && pathShown == pathId) {
-        matched = true
-      }
-
-      if (matched && !this.s.Component && this.s.matches) {
+      if (this.hasSwitchMatch() && !this.s.Component && this.s.matches) {
         if (this.props.onMatch) {
           this.props.onMatch()
         }
@@ -157,6 +83,8 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
       }
     }, [path, pathShown, this.s.matches])
   }
+
+  hasSwitchMatch = () => this.switchGroup.s.pathShown && this.switchGroup.s.pathShown == this.pathId()
 
   pathId() {
     const {fallback} = this.p
@@ -229,11 +157,11 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
 
       this.setInstance({componentPathParts, match: {params}, newParams})
       this.setState({matches})
-      this.routeGroup?.setPathMatched(matchId, true)
+      this.switchGroup?.setPathMatched(matchId, true)
     } else {
       this.setInstance({componentPathParts: null, match: null, newParams: null})
       this.setState({matches})
-      this.routeGroup?.setPathMatched(matchId, false)
+      this.switchGroup?.setPathMatched(matchId, false)
     }
   }
 
@@ -247,6 +175,8 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
       Component = componentImport.default
     } catch (error) {
       console.error(`Couldn't find component: ${actualComponentPath}`)
+
+      throw error
     }
 
     this.setState({Component, componentNotFound: !Component})
@@ -257,7 +187,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     const {component, path} = this.props
     const {Component, componentNotFound, matches} = this.s
 
-    if (!matches) {
+    if (!matches || !this.hasSwitchMatch()) {
       // Route isn't matching and shouldn't be rendered at all.
       return null
     }
@@ -265,7 +195,9 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     if (!Component && !componentNotFound) {
       // Route is matching but hasn't been loaded yet.
       return (
-        <div>Loading {component || componentPathParts.join("/")}</div>
+        <div>
+          Loading {component || this.props.componentPath || componentPathParts.join("/")}
+        </div>
       )
     }
 
@@ -278,9 +210,9 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
       <CurrentPathContext.Provider value={componentPathParts}>
         <RouteContext.Provider value={newRouteParts.join("/")}>
           <ParamsContext.Provider value={newParams}>
-            <RouteGroup name={`route-group-${path}`} single={false}>
+            <Switch name={`route-group-${path}`} single={false}>
               <Component match={match} />
-            </RouteGroup>
+            </Switch>
           </ParamsContext.Provider>
         </RouteContext.Provider>
       </CurrentPathContext.Provider>
@@ -288,5 +220,5 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
   }
 }))
 
-export {RequireComponentContext, RouteContext, RouteGroup, useParams}
+export {RequireComponentContext, RouteContext, Switch, useParams}
 export default Route
