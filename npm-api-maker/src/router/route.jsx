@@ -153,7 +153,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
         componentPathParts.push(component)
       }
 
-      const newParams = Object.assign(this.currentParams, params)
+      const newParams = Object.assign({}, this.currentParams, params)
 
       this.setInstance({componentPathParts, match: {params}, newParams})
       this.setState({matches})

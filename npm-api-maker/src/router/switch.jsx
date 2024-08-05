@@ -64,11 +64,9 @@ const Switch = memo(shapeComponent(class Switch extends BaseComponent {
 
     newPathsMatched[path] = matched
 
-    const pathShown = this.pathShown(newPathsMatched)
-
     this.setState({
       lastUpdate: Math.random() + new Date().getTime(),
-      pathShown,
+      pathShown: this.pathShown(newPathsMatched),
       pathsMatched: newPathsMatched
     })
   }
