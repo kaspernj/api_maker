@@ -1,11 +1,16 @@
+import {Pressable, Text, View} from "react-native"
 import BaseComponent from "../../base-component"
-import {digg} from "diggerize"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
 export default memo(shapeComponent(class ApiMakerTableFilter extends BaseComponent {
+  static defaultProps = {
+    a: null,
+    pre: null
+  }
+
   static propTypes = PropTypesExact({
     a: PropTypes.string,
     filterIndex: PropTypes.number.isRequired,
@@ -22,23 +27,25 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
     const {a, pre, sc} = this.props
 
     return (
-      <div style={{display: "inline-block", backgroundColor: "grey", padding: "10px 6px"}}>
-        <span className="filter-label" onClick={digg(this, "onFilterClicked")} style={{cursor: "pointer"}}>
-          {p.length > 0 &&
-            `${p.join(".")}.`
-          }
-          {a} {sc} {pre} {v}
-        </span>
-        <span>
-          <a className="remove-filter-button" href="#" onClick={digg(this, "onRemoveFilterClicked")}>
-            <i className="fa fa-remove la la-remove" />
-          </a>
-        </span>
-      </div>
+      <View style={{display: "flex", flexDirection: "row", backgroundColor: "grey", paddingVertical: 10, paddingHorizontal: 6}}>
+        <Pressable dataSet={{class: "filter-label"}} onPress={this.tt.onFilterPressed}>
+          <Text>
+            {p.length > 0 &&
+              `${p.join(".")}.`
+            }
+            {a} {sc} {pre} {v}
+          </Text>
+        </Pressable>
+        <Pressable dataSet={{class: "remove-filter-button"}} onPress={this.tt.onRemoveFilterPressed} style={{marginLeft: 6}}>
+          <Text>
+            &#10006;
+          </Text>
+        </Pressable>
+      </View>
     )
   }
 
-  onFilterClicked = (e) => {
+  onFilterPressed = (e) => {
     e.preventDefault()
 
     const {a, filterIndex, p, pre, v} = this.p
@@ -46,11 +53,9 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
     this.props.onClick({a, filterIndex, p, pre, v})
   }
 
-  onRemoveFilterClicked = (e) => {
+  onRemoveFilterPressed = (e) => {
     e.preventDefault()
 
-    const {filterIndex} = this.p
-
-    this.props.onRemoveClicked({filterIndex})
+    this.props.onRemoveClicked({filterIndex: this.p.filterIndex})
   }
 }))
