@@ -120,7 +120,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
         break
       }
 
-      const routePart = this.routeParts[pathPartIndex]
+      const routePart = decodeURIComponent(this.routeParts[pathPartIndex])
 
       if (pathPart.startsWith(":") && routePart) {
         const paramName = pathPart.slice(1, pathPart.length)
