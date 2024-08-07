@@ -39,7 +39,7 @@ describe "bootstrap - live table - filter" do
     wait_for_selector model_row_selector(task2)
 
     # It removes a filter
-    wait_for_and_find(".remove-filter-button").click
+    wait_for_and_find("[data-class='remove-filter-button']").click
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
   end
