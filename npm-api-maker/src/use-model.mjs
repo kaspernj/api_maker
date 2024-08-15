@@ -42,12 +42,6 @@ const useModel = (modelClassArg, argsArg = {}) => {
   const modelVariableName = inflection.camelize(modelClass.modelClassData().name, true)
   const cacheArgs = [modelId]
 
-  if (args.cacheArgs) {
-    cacheArgs.push(...args.cacheArgs)
-  }
-
-  s.updateMeta({args, modelId, modelVariableName, queryParams})
-
   const loadExistingModel = useCallback(async () => {
     let query
 
@@ -89,12 +83,36 @@ const useModel = (modelClassArg, argsArg = {}) => {
   }, [])
 
   const loadModel = useCallback(async () => {
-    if (s.props.newIfNoId && !s.m.modelId) {
+    if ("active" in s.props && !s.props.active) {
+      // Not active - don't do anything
+    } else if (s.props.newIfNoId && !s.m.modelId) {
       return await loadNewModel()
     } else if (!s.props.optional || s.m.modelId | s.m.args.query) {
       return await loadExistingModel()
     }
   }, [])
+
+  const onDestroyed = useCallback(({model}) => {
+    const forwardArgs = {model}
+
+    forwardArgs[s.m.modelVariableName] = model
+
+    s.p.onDestroyed(forwardArgs)
+  }, [])
+
+  const onSignedIn = useCallback(() => {
+    loadModel()
+  }, [])
+
+  const onSignedOut = useCallback(() => {
+    loadModel()
+  }, [])
+
+  if (args.cacheArgs) {
+    cacheArgs.push(...args.cacheArgs)
+  }
+
+  s.updateMeta({args, modelId, modelVariableName, queryParams})
 
   useMemo(
     () => { loadModel() },
@@ -127,14 +145,6 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.eventUpdated, s.s.model?.id()])
 
-  const onSignedIn = useCallback(() => {
-    loadModel()
-  }, [])
-
-  const onSignedOut = useCallback(() => {
-    loadModel()
-  }, [])
-
   useLayoutEffect(() => {
     Devise.events().addListener("onDeviseSignIn", onSignedIn)
     Devise.events().addListener("onDeviseSignOut", onSignedOut)
@@ -144,14 +154,6 @@ const useModel = (modelClassArg, argsArg = {}) => {
       Devise.events().removeListener("onDeviseSignOut", onSignedOut)
     }
   })
-
-  const onDestroyed = useCallback(({model}) => {
-    const forwardArgs = {model}
-
-    forwardArgs[s.m.modelVariableName] = model
-
-    s.p.onDestroyed(forwardArgs)
-  }, [])
 
   useLayoutEffect(() => {
     let connectDestroyed
