@@ -20,13 +20,14 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
   }
 
   static propTypes = propTypesExact({
+    children: PropTypes.node,
     component: PropTypes.string,
     componentPath: PropTypes.string,
     exact: PropTypes.bool.isRequired,
     fallback: PropTypes.bool.isRequired,
     includeInPath: PropTypes.bool.isRequired,
     onMatch: PropTypes.func,
-    path: PropTypes.string
+    path: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
   })
 
   match = null
@@ -39,17 +40,14 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     const givenRoute = useContext(RouteContext)
     const {pathShown} = switchGroup.s
 
+    this.debug = false
+    this.log(() => ({givenRoute}))
+
     this.requireComponent = useContext(RequireComponentContext)
     this.currentParams = useContext(ParamsContext)
     this.currentPath = useContext(CurrentPathContext)
     this.switchGroup = switchGroup
-
-    this.routeParts = useMemo(() => {
-      let routeParts = givenRoute?.split("/")
-
-      return routeParts
-    }, [path, givenRoute])
-
+    this.routeParts = useMemo(() => givenRoute?.split("/"), [path, givenRoute])
     this.pathParts = useMemo(() => path?.split("/"), [path])
 
     this.newRouteParts = useMemo(
@@ -79,7 +77,9 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
           this.props.onMatch()
         }
 
-        this.loadComponent()
+        if ((!this.props.children && this.props.path) || this.props.component || this.props.componentPath) {
+          this.loadComponent()
+        }
       }
     }, [path, pathShown, this.s.matches])
   }
@@ -111,11 +111,14 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     const params = {}
     const componentPathParts = [...this.currentPath]
 
+    this.log(() => [this.props.path, "Start generating component paths", JSON.stringify(componentPathParts)])
+
     for (const pathPartIndex in this.pathParts) {
       const pathPart = this.pathParts[pathPartIndex]
       const translatedPathPart = I18n.t(`routes.${pathPart}`, {defaultValue: pathPart})
 
       if (!(pathPartIndex in this.routeParts)) {
+        this.log(() => `No match for: ${pathPartIndex}`)
         matches = false
         break
       }
@@ -135,6 +138,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     }
 
     if (exact && newRouteParts.length > 0) {
+      this.log(() => ["Exact and more route parts", {newRouteParts, pathParts: this.pathParts, routeParts: this.routeParts}])
       matches = false
     } else if (matches && path) {
       matches = true
@@ -147,6 +151,8 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     if (!matches && fallback) {
       matches = true
     }
+
+    this.log(() => [this.props.path, "End generating component paths", JSON.stringify(componentPathParts), {matches}])
 
     if (matches) {
       if (component && includeInPath) {
@@ -169,6 +175,8 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     const actualComponentPath = this.props.componentPath || this.tt.componentPathParts.join("/")
     let Component
 
+    this.log(() => ["loadComponent", {componentPath: this.props.componentPath, componentPathParts: this.componentPathParts, actualComponentPath}])
+
     try {
       const componentImport = await this.tt.requireComponent({routeDefinition: {component: actualComponentPath}})
 
@@ -182,9 +190,19 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     this.setState({Component, componentNotFound: !Component})
   }
 
+  log(callbackArgs) {
+    if (this.debug) {
+      let args = callbackArgs()
+
+      if (!Array.isArray(args)) args = [args]
+
+      console.log(...args)
+    }
+  }
+
   render() {
     const {componentPathParts, match, newParams, newRouteParts} = this.tt
-    const {component, path} = this.props
+    const {children, component, path} = this.props
     const {Component, componentNotFound, matches} = this.s
 
     if (!matches || !this.hasSwitchMatch()) {
@@ -192,7 +210,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
       return null
     }
 
-    if (!Component && !componentNotFound) {
+    if (!Component && !children && !componentNotFound) {
       // Route is matching but hasn't been loaded yet.
       return (
         <div>
@@ -201,7 +219,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
       )
     }
 
-    if (!Component && componentNotFound) {
+    if (!Component && !children && componentNotFound) {
       // Don't render anything if the component couldn't be found.
       return null
     }
@@ -211,7 +229,8 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
         <RouteContext.Provider value={newRouteParts.join("/")}>
           <ParamsContext.Provider value={newParams}>
             <Switch name={`route-group-${path}`} single={false}>
-              <Component match={match} />
+              {Component && <Component match={match} />}
+              {children}
             </Switch>
           </ParamsContext.Provider>
         </RouteContext.Provider>
