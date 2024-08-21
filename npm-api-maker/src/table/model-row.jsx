@@ -61,13 +61,17 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
         <Column dataSet={{class: "actions-column"}}>
           {actionsContent && actionsContent(this.modelCallbackArgs)}
           {viewPath &&
-            <Link className="view-button" to={viewPath}>
-              &#x1F50D;
+            <Link dataSet={{class: "view-button"}} to={viewPath}>
+              <Text>
+                &#x1F50D;
+              </Text>
             </Link>
           }
           {editPath &&
-            <Link className="edit-button" to={editPath}>
-              &#x270E;
+            <Link dataSet={{class: "edit-button"}} to={editPath}>
+              <Text>
+                &#x270E;
+              </Text>
             </Link>
           }
           {destroyEnabled && model.can("destroy") &&

@@ -5,6 +5,7 @@ import Link from "../../../../link"
 import {memo} from "react"
 import PropTypes from "prop-types"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {Text} from "react-native"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
   static propTypes = {
@@ -19,14 +20,16 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem exten
 
     return (
       <Link
-        className={classNames("components--admin--layout--menu--menu-item", className)}
-        data-active={active === true || active == identifier}
-        data-identifier={identifier}
+        dataSet={{
+          active: active === true || active == identifier,
+          class: classNames("components--admin--layout--menu--menu-item", className),
+          identifier
+        }}
         to={to || "#"}
         {...restProps}
       >
         <i className={`fa fa-fw fa-${icon} menu-item-icon`} />
-        {children || label}
+        {children || <Text>label</Text>}
       </Link>
     )
   }

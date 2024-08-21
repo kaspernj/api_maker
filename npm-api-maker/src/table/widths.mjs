@@ -26,14 +26,20 @@ export default class TableWidths {
       }
     }
 
-    // Set widths of columns without
+    // Calculate how many columns are shown
     const columnsWithoutWidth = this.columns.filter((column) => !column.tableSettingColumn.hasWidth())
+    let amountOfColumns = columnsWithoutWidth.length
 
+    amountOfColumns++ // Actions column
+
+    if (this.table.p.workplace) amountOfColumns++
+
+    // Set widths of columns without
     for (const columnIndex in this.columns) {
       const column = this.columns[columnIndex].tableSettingColumn
 
       if (!column.hasWidth()) {
-        const newWidth = widthLeft / columnsWithoutWidth.length
+        const newWidth = widthLeft / amountOfColumns
 
         this.columns[columnIndex].width = newWidth
 

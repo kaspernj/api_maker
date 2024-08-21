@@ -1,20 +1,21 @@
 import BaseComponent from "./base-component"
+import dataSetToAttributes from "./data-set-to-attributes.mjs"
 import {memo} from "react"
 import {Platform, Pressable} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class Link extends BaseComponent {
   render() {
-    const {to, onClick, onPress, ...restProps} = this.props
+    const {dataSet, to, onClick, onPress, ...restProps} = this.props
 
     if (Platform.OS == "web") {
       return (
-        <a href={to} {...restProps} onClick={this.tt.onLinkClicked} />
+        <a {...dataSetToAttributes(dataSet)} href={to} {...restProps} onClick={this.tt.onLinkClicked} />
       )
     }
 
     return (
-      <Pressable onPress={this.tt.onPress} {...restProps} />
+      <Pressable dataSet={dataSet} onPress={this.tt.onPress} {...restProps} />
     )
   }
 

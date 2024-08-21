@@ -9,7 +9,7 @@ import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import useCurrentUser from "../../../use-current-user"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
-import {View} from "react-native"
+import {Text, View} from "react-native"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -33,8 +33,10 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
     return (
       <View dataSet={{component: "super-admin--layout--menu", triggered}}>
         <div className="menu-logo">
-          <Link className="menu-logo-link" to={Params.withParams({})}>
-            Admin
+          <Link dataSet={{class: "menu-logo-link"}} to={Params.withParams({})}>
+            <Text>
+              Admin
+            </Text>
           </Link>
         </div>
         <div className="menu-items-center">

@@ -3,6 +3,7 @@ import {digg} from "diggerize"
 import Link from "../link"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {Text} from "react-native"
 import {useMemo} from "react"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionLink extends BaseComponent {
@@ -28,7 +29,9 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionLink ex
 
     return (
       <Link to={Params.withParams({model: digg(modelClass.modelClassData(), "name"), model_id: model.primaryKey(), model_reflection: reflection.name()})}>
-        {modelClass.humanAttributeName(reflection.name())} ({count})
+        <Text>
+          {modelClass.humanAttributeName(reflection.name())} ({count})
+        </Text>
       </Link>
     )
   }
