@@ -1,6 +1,7 @@
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digs} from "diggerize"
+import Header from "./components/header"
 import {memo} from "react"
 import {Pressable, Text, View} from "react-native"
 import PropTypes from "prop-types"
@@ -8,51 +9,41 @@ import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import SortLink from "../bootstrap/sort-link"
 import useEventListener from "../use-event-listener.mjs"
-import {useRef} from "react"
+import Widths from "./widths"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
     column: PropTypes.object.isRequired,
-    fixedTableLayout: PropTypes.bool.isRequired,
     table: PropTypes.object.isRequired,
-    tableSettingColumn: PropTypes.object.isRequired
+    tableSettingColumn: PropTypes.object.isRequired,
+    width: PropTypes.number.isRequired,
+    widths: PropTypes.instanceOf(Widths).isRequired
   })
 
   setup() {
-    this.columnRef = useRef()
-
     useEventListener(window, "mousemove", this.tt.onWindowMouseMove)
     useEventListener(window, "mouseup", this.tt.onWindowMouseUp)
 
     this.useStates({
       cursorX: undefined,
       originalWidth: undefined,
-      resizing: false,
-      width: this.p.tableSettingColumn.width()
+      resizing: false
     })
   }
 
   render() {
-    const {column, fixedTableLayout, table, tableSettingColumn} = this.p
-    const {width} = this.s
+    const {column, table, tableSettingColumn, width} = this.p
     const {defaultParams} = table.props
     const {query} = digs(table.collection, "query")
-    const ColumnInHeadComponent = table.columnInHeadComponent()
-    let sortLinkStyle
-    let textProps = {}
-
-    if (fixedTableLayout) {
-      sortLinkStyle = {whiteSpace: "nowrap", overflow: "hidden"}
-      textProps.ellipsizeMode="clip"
-      textProps.numberOfLines = 1
-    }
 
     return (
-      <ColumnInHeadComponent
-        className={classNames(...table.headerClassNameForColumn(column))}
-        data-identifier={tableSettingColumn.identifier()}
-        ref={this.tt.columnRef}
-        style={{width}}
+      <Header
+        dataSet={{
+          className: classNames(...table.headerClassNameForColumn(column)),
+          identifier: tableSettingColumn.identifier()
+        }}
+        onLayout={this.tt.onLayout}
+        style={{width: `${width}%`}}
         {...table.columnProps(column)}
       >
         <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
@@ -61,40 +52,44 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               attribute={tableSettingColumn.sortKey()}
               defaultParams={defaultParams}
               query={query}
-              style={sortLinkStyle}
+              style={{whiteSpace: "nowrap", overflow: "hidden"}}
               title={table.headerLabelForColumn(column)}
             />
           }
           {(!tableSettingColumn.hasSortKey() || !query) &&
-            <Text {...textProps}>
+            <Text ellipsizeMode="clip" numberOfLines={1}>
               {table.headerLabelForColumn(column)}
             </Text>
           }
-          {fixedTableLayout &&
-            <Pressable onPressIn={this.tt.onResizePressIn} style={{marginLeft: "auto", cursor: "col-resize"}}>
-              <Text>
-                |
-              </Text>
-            </Pressable>
-          }
+          <Pressable onPressIn={this.tt.onResizePressIn} style={{marginLeft: "auto", cursor: "col-resize"}}>
+            <Text>
+              |
+            </Text>
+          </Pressable>
         </View>
-      </ColumnInHeadComponent>
+      </Header>
     )
+  }
+
+  onLayout = (e) => {
+    const {width} = e.nativeEvent.layout
+
+    this.currentWidth = width
   }
 
   onResizeEnd = async () => {
     this.setState({cursorX: undefined, resizing: false})
 
-    await this.p.tableSettingColumn.update({
-      width: this.s.width
-    })
+    const width = this.p.widths.getWidthOfColumn(this.p.tableSettingColumn.identifier())
+
+    await this.p.tableSettingColumn.update({width})
   }
 
   onResizePressIn = (e) => {
     e.preventDefault()
     e.stopPropagation()
 
-    const originalWidth = this.s.width || this.tt.columnRef.current.offsetWidth
+    const originalWidth = this.currentWidth
     const cursorX = e.nativeEvent.pageX
 
     this.setState({
@@ -112,7 +107,10 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
       const diffX = newCursorX - cursorX
       const newWidth = originalWidth + diffX
 
-      this.setState({width: newWidth})
+      this.p.widths.setWidthOfColumn({
+        identifier: this.p.tableSettingColumn.identifier(),
+        width: newWidth
+      })
     }
   }
 
