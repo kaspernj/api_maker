@@ -111,7 +111,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
               </Link>
             }
             {model.can("destroy") &&
-              <Pressable dataSet={{class: "destroy-model-link"}} onPress={this.tt.onDestroyClicked}>\
+              <Pressable dataSet={{class: "destroy-model-link"}} onPress={this.tt.onDestroyClicked}>
                 <Text>
                   Delete
                 </Text>

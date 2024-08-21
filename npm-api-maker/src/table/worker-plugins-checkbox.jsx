@@ -12,7 +12,8 @@ const Workplace = modelClassRequire("Workplace")
 export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox extends ShapeComponent {
   static propTypes = PropTypesExact({
     currentWorkplace: PropTypes.object,
-    model: PropTypes.object.isRequired
+    model: PropTypes.object.isRequired,
+    style: PropTypes.object
   })
 
   setup() {
@@ -38,7 +39,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
   }
 
   render() {
-    const {className, currentWorkplace, model} = this.props
+    const {className, currentWorkplace, model, style} = this.props
     const {checked, linkLoaded} = this.state
 
     if (!linkLoaded) {
@@ -58,7 +59,8 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
           className={classNames("api-maker--table--worker-plugins-checkbox", className)}
           data-checked={checked}
           data-model-id={model.id()}
-          onChange={this.onCheckedChanged}
+          onChange={this.tt.onCheckedChanged}
+          style={style}
           type="checkbox"
         />
       </>

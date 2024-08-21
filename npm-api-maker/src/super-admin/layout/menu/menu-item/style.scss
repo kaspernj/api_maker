@@ -1,24 +1,4 @@
-.components--admin--layout--menu--menu-item {
-  display: flex;
-  width: 80%;
-  align-items: center;
-  padding: 10px 14px;
-  margin-right: auto;
-  margin-left: auto;
-  text-decoration: none;
-
-  &:link,
-  &:visited {
-    color: #6f6f71;
-  }
-
-  &[data-active="true"],
-  &:hover {
-    background: #323435;
-    border-radius: 7px;
-    color: #b9b9bb;
-  }
-
+[data-class="components--admin--layout--menu--menu-item"] {
   .menu-item-icon {
     margin-right: 4px;
     font-size: 12px;

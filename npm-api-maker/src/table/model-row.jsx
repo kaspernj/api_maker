@@ -58,7 +58,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
         }
         {columns && this.columnsContentFromColumns(model)}
         {!columns && columnsContent && columnsContent(this.modelCallbackArgs)}
-        <Column dataSet={{class: "actions-column"}}>
+        <Column dataSet={{class: "actions-column"}} style={{flexDirection: "row"}}>
           {actionsContent && actionsContent(this.modelCallbackArgs)}
           {viewPath &&
             <Link dataSet={{class: "view-button"}} to={viewPath}>
@@ -153,7 +153,9 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     const modelColumn = attribute?.getColumn()
 
     if (modelColumn?.getType() == "date") {
-      return this.presentDateTime({apiMakerType: "date", value})
+      return (
+        <Text>{this.presentDateTime({apiMakerType: "date", value})}</Text>
+      )
     }
 
     return this.presentColumnValue(value)
@@ -211,7 +213,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
       return <Text>{value}</Text>
     }
 
-    return value
+    return <Text>{value}</Text>
   }
 
   presentDateTime({apiMakerType, value}) {

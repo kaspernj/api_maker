@@ -7,7 +7,7 @@ import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import ShowReflectionLink from "./show-reflection-link"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
-import {View} from "react-native"
+import {Text, View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -25,7 +25,9 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseC
       <View dataSet={{component: "super-admin--show-nav"}}>
         <View>
           <Link to={Params.withParams({model: modelClass.modelClassData().name, model_id: queryParams.model_id})}>
-            {t(".general", {defaultValue: "General"})}
+            <Text>
+              {t(".general", {defaultValue: "General"})}
+            </Text>
           </Link>
         </View>
         {model && reflections.filter((reflection) => reflection.macro() == "has_many").map((reflection) =>
