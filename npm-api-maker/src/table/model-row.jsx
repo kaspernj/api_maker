@@ -19,6 +19,7 @@ const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox
 export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
   static propTypes = propTypesExact({
     cacheKey: PropTypes.string.isRequired,
+    columnWidths: PropTypes.object.isRequired,
     isSmallScreen: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired,
     liveTable: PropTypes.object.isRequired,

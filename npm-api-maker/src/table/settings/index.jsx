@@ -11,7 +11,6 @@ import {Text, View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerTableSettings extends BaseComponent {
   static propTypes = propTypesExact({
-    onFixedTableLayoutChanged: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func.isRequired,
     table: PropTypes.object.isRequired
   })

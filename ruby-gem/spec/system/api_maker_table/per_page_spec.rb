@@ -15,10 +15,10 @@ describe "bootstrap - live table - per page" do
 
     login_as user_admin
     visit bootstrap_live_table_path
-    wait_for_expect { expect(all(".task-row").length).to eq 30 }
+    wait_for_expect { expect(all("[data-class='task-row']").length).to eq 30 }
     wait_for_and_find(".per-page-select").select(60)
-    wait_for_expect { expect(all(".task-row").length).to eq 60 }
+    wait_for_expect { expect(all("[data-class='task-row']").length).to eq 60 }
     wait_for_and_find(".per-page-select").select("All")
-    wait_for_expect { expect(all(".task-row").length).to eq 100 }
+    wait_for_expect { expect(all("[data-class='task-row']").length).to eq 100 }
   end
 end

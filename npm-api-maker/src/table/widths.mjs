@@ -15,8 +15,6 @@ export default class TableWidths {
 
     const updateData = []
 
-    console.log({columns: this.columns})
-
     // Set widths that are defined
     for (const columnIndex in this.columns) {
       const column = this.columns[columnIndex].tableSettingColumn
@@ -30,8 +28,6 @@ export default class TableWidths {
 
     // Set widths of columns without
     const columnsWithoutWidth = this.columns.filter((column) => !column.tableSettingColumn.hasWidth())
-
-    console.log({columnsWithoutWidth})
 
     for (const columnIndex in this.columns) {
       const column = this.columns[columnIndex].tableSettingColumn
@@ -48,7 +44,7 @@ export default class TableWidths {
       }
     }
 
-    console.log({updateData})
+    // FIXME: Should update the columns on the backend if anything changed
   }
 
   getWidthOfColumn(identifier) {
@@ -69,5 +65,7 @@ export default class TableWidths {
     column.width = widthPercent
 
     this.table.setState({lastUpdate: new Date()})
+
+    // FIXME: Should reduce / enlarge sibling columns to keep a 100% fit
   }
 }

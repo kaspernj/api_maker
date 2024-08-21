@@ -491,7 +491,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         </a>
         <span style={{position: "relative"}}>
           {showSettings &&
-            <Settings onFixedTableLayoutChanged={this.tt.onFixedTableLayoutChanged} onRequestClose={this.tt.onRequestCloseSettings} table={this} />
+            <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
           <a className="settings-button" href="#" onClick={this.tt.onSettingsClicked}>
             <i className="fa fa-fw fa-gear la la-fw la-gear" />
