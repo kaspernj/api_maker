@@ -1,3 +1,4 @@
+import {Pressable, Text, View} from "react-native"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Column from "./components/column"
@@ -35,11 +36,16 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
 
     let editPath, viewPath
 
-    if (editModelPath && model.can("edit")) editPath = editModelPath(this.modelCallbackArgs)
-    if (viewModelPath && model.can("show")) viewPath = viewModelPath(this.modelCallbackArgs)
+    if (editModelPath && model.can("edit")) {
+      editPath = editModelPath(this.modelCallbackArgs)
+    }
+
+    if (viewModelPath && model.can("show")) {
+      viewPath = viewModelPath(this.modelCallbackArgs)
+    }
 
     return (
-      <Row dataSet={{class: `inflection.dasherize(modelClass.modelClassData().paramKey)}-row`, modelId: model.id()}}>
+      <Row dataSet={{class: `${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`, modelId: model.id()}}>
         {workplace &&
           <Column dataSet={{class: "workplace-column"}} style={{width: 25}}>
             <WorkerPluginsCheckbox
@@ -64,9 +70,11 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
             </Link>
           }
           {destroyEnabled && model.can("destroy") &&
-            <a className="destroy-button" href="#" onClick={this.onDestroyClicked}>
-              &#x2715;
-            </a>
+            <Pressable dataSet={{class: "destroy-button"}} onPress={this.tt.onDestroyClicked}>
+              <Text>
+                &#x2715;
+              </Text>
+            </Pressable>
           }
         </Column>
       </Row>
@@ -74,7 +82,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   columnClassNamesForColumn (column) {
-    const classNames = ["live-table-column"]
+    const classNames = ["table--column"]
 
     if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
     if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
@@ -96,13 +104,13 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
         {...this.props.liveTable.columnProps(column)}
       >
         {isSmallScreen &&
-          <View dataSet={{class: "live-table-column-label"}}>
+          <View dataSet={{class: "table--column-label"}}>
             <Text>
               {this.props.liveTable.headerLabelForColumn(column)}
             </Text>
           </View>
         }
-        <View dataSet={{class: "live-table-column-value"}}>
+        <View dataSet={{class: "table--column-value"}}>
           {column.content && this.columnContentFromContentArg(column, model)}
           {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
         </View>
@@ -156,9 +164,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     return modelCallbackArgs
   }
 
-  onDestroyClicked = async (e) => {
-    e.preventDefault()
-
+  onDestroyClicked = async () => {
     const {destroyMessage} = this.p.liveTable.props
     const {model} = this.p
 

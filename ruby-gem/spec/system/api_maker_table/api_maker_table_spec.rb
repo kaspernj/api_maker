@@ -23,7 +23,7 @@ describe "bootstrap - live table" do
 
     # It shows the expected rows and columns
     wait_for_selector model_row_selector(task1)
-    wait_for_selector "#{model_column_selector(task1, created_at_identifier)} .live-table-column-value", exact_text: "17/06-85 10:30"
+    wait_for_selector "#{model_column_selector(task1, created_at_identifier)} [data-class='table--column-value']", exact_text: "17/06-85 10:30"
 
     wait_for_selector model_row_selector(task2)
     wait_for_selector model_column_selector(task2, created_at_identifier), exact_text: "18/03-89 14:00"
@@ -67,7 +67,7 @@ describe "bootstrap - live table" do
     wait_for_action_cable_to_connect
 
     destroy_action = proc do
-      wait_for_and_find("#{model_row_selector(task2)} .destroy-button").click
+      wait_for_and_find("#{model_row_selector(task2)} [data-class='destroy-button']").click
       confirm_accept
       wait_for_no_selector model_row_selector(task2)
     end

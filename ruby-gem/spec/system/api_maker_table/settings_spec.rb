@@ -22,7 +22,7 @@ describe "table - settings" do
     wait_for_selector model_row_selector(task2)
 
     # It shows the ID-column
-    wait_for_selector ".live-table-column[data-identifier='attribute-id--sort-key-id']"
+    wait_for_selector "[data-class='table--column][data-identifier='attribute-id--sort-key-id']"
 
     # It triggers the settings modal
     wait_for_and_find(".settings-button").click
@@ -32,6 +32,6 @@ describe "table - settings" do
     wait_for_and_find(".api-maker--table--setings--column-checkbox[data-identifier='attribute-id--sort-key-id']").click
 
     # It no longer shows the ID column
-    wait_for_no_selector ".live-table-column[data-identifier='attribute-id--sort-key-id']"
+    wait_for_no_selector "[data-class='table--column][data-identifier='attribute-id--sort-key-id']"
   end
 end

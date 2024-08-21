@@ -27,6 +27,7 @@ import uniqunize from "uniqunize"
 import useBreakpoint from "../use-breakpoint"
 import useCollection from "../use-collection"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
+import {View} from "react-native"
 import Widths from "./widths"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
