@@ -8,8 +8,8 @@ describe "super admin - dashboard" do
     visit super_admin_path
 
     # It shows menu items
-    wait_for_selector ".components--admin--layout--menu--menu-item", exact_text: "Projects"
-    wait_for_selector ".components--admin--layout--menu--menu-item", exact_text: "Tasks"
+    wait_for_selector "[data-class='components--admin--layout--menu--menu-item']", exact_text: "Projects"
+    wait_for_selector "[data-class='components--admin--layout--menu--menu-item']", exact_text: "Tasks"
 
     # It shows the user who is signed in
     wait_for_selector ".menu-user-name-container", exact_text: "Admin Adminson"

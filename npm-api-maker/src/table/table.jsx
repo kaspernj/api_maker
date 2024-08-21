@@ -7,6 +7,8 @@ import columnVisible from "./column-visible.mjs"
 import debounce from "debounce"
 import {digg, digs} from "diggerize"
 import Filters from "./filters"
+import FlatList from "./components/flat-list"
+import Header from "./components/header"
 import HeaderColumn from "./header-column"
 import * as inflection from "inflection"
 import modelClassRequire from "../model-class-require.mjs"
@@ -15,6 +17,7 @@ import Paginate from "../bootstrap/paginate"
 import Params from "../params"
 import PropTypes from "prop-types"
 import React, {memo, useMemo, useRef} from "react"
+import Row from "./components/row"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
 import Settings from "./settings"
@@ -24,6 +27,8 @@ import uniqunize from "uniqunize"
 import useBreakpoint from "../use-breakpoint"
 import useCollection from "../use-collection"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
+import {View} from "react-native"
+import Widths from "./widths"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
@@ -85,7 +90,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     this.setInstance({
       breakpoint,
-      filterFormRef: useRef()
+      filterFormRef: useRef(),
+      isSmallScreen: breakpoint == "xs" || breakpoint == "sm"
     })
 
     const collectionKey = digg(this.p.modelClass.modelClassData(), "collectionKey")
@@ -99,8 +105,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     this.useStates({
       columns: columnsAsArray,
       currentWorkplace: undefined,
-      fixedTableLayout: undefined,
+      flatListWidth: undefined,
       identifier: () => this.props.identifier || `${collectionKey}-default`,
+      lastUpdate: () => new Date(),
       preload: undefined,
       preparedColumns: undefined,
       queryName,
@@ -110,19 +117,22 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       showFilters: () => Boolean(queryParams[querySName]),
       showSettings: false,
       tableSetting: undefined,
-      tableSettingFullCacheKey: undefined
+      tableSettingFullCacheKey: undefined,
+      widths: null
     })
 
     useMemo(() => {
       this.loadTableSetting()
 
-      if (this.props.workplace) this.loadCurrentWorkplace()
+      if (this.props.workplace) {
+        this.loadCurrentWorkplace()
+      }
     }, [])
 
     let collectionReady = true
     let select
 
-    if (!this.state.preparedColumns) {
+    if (!this.s.preparedColumns) {
       collectionReady = false
     }
 
@@ -162,13 +172,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
     const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
+    const {flatListWidth} = this.s
+    const widths = new Widths({columns, flatListWidth, table: this})
 
     this.setState({
-      fixedTableLayout: tableSetting.fixedTableLayout(),
       preparedColumns: columns,
       preload: this.mergedPreloads(preload),
       tableSetting,
-      tableSettingFullCacheKey: tableSetting.fullCacheKey()
+      tableSettingFullCacheKey: tableSetting.fullCacheKey(),
+      widths
     })
   }
 
@@ -223,7 +235,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
 
     return (
-      <div className={this.className()} data-fixed-table-layout={this.s.fixedTableLayout}>
+      <div className={this.className()}>
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
@@ -334,7 +346,18 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       }
     }
 
-    const TableComponent = this.responsiveComponent("table")
+    const flatList = (
+      <FlatList
+        data={models}
+        dataSet={{class: className}}
+        extraData={this.s.lastUpdate}
+        keyExtractor={this.tt.keyExtrator}
+        ListHeaderComponent={this.tt.listHeaderComponent}
+        onLayout={this.tt.onFlatListLayout}
+        renderItem={this.tt.renderItem}
+        {...restProps}
+      />
+    )
 
     return (
       <>
@@ -347,15 +370,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           this.filterForm()
         }
         {card &&
-          <Card className={classNames("live-table--table-card", "mb-4", className)} controls={this.tableControls()} header={headerContent} footer={this.tableFooter()} table={!this.isSmallScreen()} {...restProps}>
-            {this.tableContent()}
+          <Card className={classNames("live-table--table-card", "mb-4", className)} controls={this.tableControls()} header={headerContent} footer={this.tableFooter()} {...restProps}>
+            {flatList}
           </Card>
         }
-        {!card &&
-          <TableComponent className={className} {...restProps}>
-            {this.tableContent()}
-          </TableComponent>
-        }
+        {!card && flatList}
         {result && PaginationComponent &&
           <PaginationComponent result={result} />
         }
@@ -365,6 +384,16 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       </>
     )
   }
+
+  onFlatListLayout = (e) => {
+    const {width} = e.nativeEvent.layout
+    const {widths} = this.s
+
+    this.setState({flatListWidth: width})
+    widths.flatListWidth = width
+  }
+
+  keyExtrator = (model) => model.id()
 
   filterForm = () => {
     const {filterFormRef, submitFilter, submitFilterDebounce} = this.tt
@@ -399,10 +428,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     this.setState({showFilters: !this.state.showFilters})
   }
 
-  onFixedTableLayoutChanged = (fixedTableLayout) => {
-    this.setState({fixedTableLayout})
-  }
-
   onPerPageChanged = (e) => {
     const {queryName} = this.s
     const newPerPageValue = digg(e, "target", "value")
@@ -412,6 +437,45 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     paramsChange[perKey] = newPerPageValue
 
     Params.changeParams(paramsChange)
+  }
+
+  listHeaderComponent = () => {
+    const {workplace} = this.p
+    const {currentWorkplace} = this.s
+    const {query} = digs(this.collection, "query")
+
+    return (
+      <Row dataSet={{class: "live-table-header-row"}}>
+        {workplace && currentWorkplace &&
+          <Header style={{width: 25}}>
+            <WorkerPluginsCheckAllCheckbox
+              currentWorkplace={currentWorkplace}
+              query={query}
+              style={{marginHorizontal: "auto"}}
+            />
+          </Header>
+        }
+        {this.headersContentFromColumns()}
+        <Header />
+      </Row>
+    )
+  }
+
+  renderItem = ({item: model}) => {
+    const {preparedColumns, tableSettingFullCacheKey} = this.s
+
+    return (
+      <ModelRow
+        cacheKey={model.cacheKey()}
+        columnWidths={this.columnWidths()}
+        isSmallScreen={this.tt.isSmallScreen}
+        key={model.id()}
+        liveTable={this}
+        model={model}
+        preparedColumns={preparedColumns}
+        tableSettingFullCacheKey={tableSettingFullCacheKey}
+      />
+    )
   }
 
   tableControls() {
@@ -427,60 +491,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         </a>
         <span style={{position: "relative"}}>
           {showSettings &&
-            <Settings onFixedTableLayoutChanged={this.tt.onFixedTableLayoutChanged} onRequestClose={this.tt.onRequestCloseSettings} table={this} />
+            <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
           <a className="settings-button" href="#" onClick={this.tt.onSettingsClicked}>
             <i className="fa fa-fw fa-gear la la-fw la-gear" />
           </a>
         </span>
-      </>
-    )
-  }
-
-  tableContent () {
-    const {workplace} = this.p
-    const {currentWorkplace, preparedColumns, tableSettingFullCacheKey} = this.s
-    const {models, query} = digs(this.collection, "models", "query")
-    const ColumnInHeadComponent = this.columnInHeadComponent()
-    const RowComponent = this.rowComponent()
-
-    let BodyComponent, HeadComponent
-
-    if (this.isSmallScreen()) {
-      BodyComponent = "div"
-      HeadComponent = "div"
-    } else {
-      BodyComponent = "tbody"
-      HeadComponent = "thead"
-    }
-
-    return (
-      <>
-        <HeadComponent>
-          <RowComponent className="live-table-header-row">
-            {workplace && currentWorkplace &&
-              <ColumnInHeadComponent style={{width: 25, textAlign: "center"}}>
-                <WorkerPluginsCheckAllCheckbox currentWorkplace={currentWorkplace} query={query} />
-              </ColumnInHeadComponent>
-            }
-            {this.headersContentFromColumns()}
-            <ColumnInHeadComponent />
-          </RowComponent>
-        </HeadComponent>
-        <BodyComponent>
-          {models.map((model) =>
-            <ModelRow
-              cacheKey={model.cacheKey()}
-              columnComponent={this.columnComponent()}
-              key={model.id()}
-              liveTable={this}
-              model={model}
-              preparedColumns={preparedColumns}
-              rowComponent={this.rowComponent()}
-              tableSettingFullCacheKey={tableSettingFullCacheKey}
-            />
-          )}
-        </BodyComponent>
       </>
     )
   }
@@ -497,7 +513,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     if (to === 0) from = 0
 
     return (
-      <div style={{display: "flex", justifyContent: "space-between", marginTop: "10px"}}>
+      <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: "10px"}}>
         <div className="showing-counts">
           {I18n.t("js.api_maker.table.showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
         </div>
@@ -509,15 +525,16 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
             options={paginationOptions}
           />
         </div>
-      </div>
+      </View>
     )
   }
 
   className() {
     const classNames = ["api-maker--table"]
 
-    if (this.props.className)
+    if (this.props.className) {
       classNames.push(this.props.className)
+    }
 
     return classNames.join(" ")
   }
@@ -531,24 +548,24 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return props
   }
 
-  isSmallScreen() {
-    if (this.breakpoint == "xs" || this.breakpoint == "sm") return true
+  columnWidths() {
+    const columnWidths = {}
 
-    return false
+    for (const column of this.s.preparedColumns) {
+      columnWidths[column.tableSettingColumn.identifier()] = column.width
+    }
+
+    return columnWidths
   }
 
-  columnComponent = () => this.responsiveComponent("td")
-  columnInHeadComponent = () => this.responsiveComponent("th")
-  responsiveComponent = (largeComponent) => this.isSmallScreen() ? "div" : largeComponent
-  rowComponent = () => this.responsiveComponent("tr")
-
-  headersContentFromColumns = () => this.s.preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
+  headersContentFromColumns = () => this.s.preparedColumns?.map(({column, tableSettingColumn, width}) => columnVisible(column, tableSettingColumn) &&
     <HeaderColumn
       column={column}
-      fixedTableLayout={this.s.fixedTableLayout}
       key={tableSettingColumn.identifier()}
       table={this}
       tableSettingColumn={tableSettingColumn}
+      width={width}
+      widths={this.s.widths}
     />
   )
 

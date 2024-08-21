@@ -18,7 +18,7 @@ const getWindowLayout = (width) => {
   }
 }
 
-const useScreenSize = () => {
+const useScreenLayout = () => {
   if (Platform.OS == "web") {
     const shared = useMemo(() => ({}))
 
@@ -46,4 +46,4 @@ const useScreenSize = () => {
   }
 }
 
-export default useScreenSize
+export default useScreenLayout

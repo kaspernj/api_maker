@@ -3,6 +3,7 @@ import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import qs from "qs"
 import {memo} from "react"
+import {Text} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import urlEncode from "../url-encode.mjs"
 
@@ -57,23 +58,20 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
 
     return (
       <LinkComponent
-        className={this.className()}
-        data-attribute={attribute}
-        data-sort-mode={this.sortMode()}
+        dataSet={{
+          attribute,
+          class: className,
+          component: "api-maker--bootstrap--sort-link",
+          sortMode: this.sortMode()
+        }}
         to={this.href()}
         {...restProps}
       >
-        {this.title()}
+        <Text>
+          {this.title()}
+        </Text>
       </LinkComponent>
     )
-  }
-
-  className () {
-    const classNames = ["component-api-maker-bootstrap-sort-link"]
-
-    if (this.props.className) classNames.push(this.props.className)
-
-    return classNames.join(" ")
   }
 
   linkComponent = () => this.props.linkComponent || Link

@@ -1,5 +1,7 @@
+import {Pressable, Text, View} from "react-native"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
+import Column from "./components/column"
 import columnIdentifier from "./column-identifier.mjs"
 import columnVisible from "./column-visible.mjs"
 import {digs} from "diggerize"
@@ -8,6 +10,7 @@ import Link from "../link"
 import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
+import Row from "./components/row"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
@@ -16,22 +19,16 @@ const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox
 export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
   static propTypes = propTypesExact({
     cacheKey: PropTypes.string.isRequired,
-    columnComponent: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.string
-    ]).isRequired,
+    columnWidths: PropTypes.object.isRequired,
+    isSmallScreen: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired,
     liveTable: PropTypes.object.isRequired,
     preparedColumns: PropTypes.array,
-    rowComponent: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.string
-    ]).isRequired,
     tableSettingFullCacheKey: PropTypes.string.isRequired
   })
 
   render() {
-    const {columnComponent: ColumnComponent, model, rowComponent: RowComponent} = this.p
+    const {model} = this.p
     const {modelClass, workplace} = this.p.liveTable.p
     const {actionsContent, columnsContent, destroyEnabled, editModelPath, viewModelPath} = this.p.liveTable.props
     const {columns, currentWorkplace} = this.p.liveTable.state
@@ -40,42 +37,57 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
 
     let editPath, viewPath
 
-    if (editModelPath && model.can("edit")) editPath = editModelPath(this.modelCallbackArgs)
-    if (viewModelPath && model.can("show")) viewPath = viewModelPath(this.modelCallbackArgs)
+    if (editModelPath && model.can("edit")) {
+      editPath = editModelPath(this.modelCallbackArgs)
+    }
+
+    if (viewModelPath && model.can("show")) {
+      viewPath = viewModelPath(this.modelCallbackArgs)
+    }
 
     return (
-      <RowComponent className={`live-table-row ${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`} data-model-id={model.id()}>
+      <Row dataSet={{class: `${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`, modelId: model.id()}}>
         {workplace &&
-          <ColumnComponent className="workplace-column" style={{width: 25, textAlign: "center"}}>
-            <WorkerPluginsCheckbox currentWorkplace={currentWorkplace} model={model} />
-          </ColumnComponent>
+          <Column dataSet={{class: "workplace-column"}} style={{width: 25}}>
+            <WorkerPluginsCheckbox
+              currentWorkplace={currentWorkplace}
+              model={model}
+              style={{marginHorizontal: "auto"}}
+            />
+          </Column>
         }
         {columns && this.columnsContentFromColumns(model)}
         {!columns && columnsContent && columnsContent(this.modelCallbackArgs)}
-        <ColumnComponent className="actions-column">
+        <Column dataSet={{class: "actions-column"}} style={{flexDirection: "row"}}>
           {actionsContent && actionsContent(this.modelCallbackArgs)}
           {viewPath &&
-            <Link className="view-button" to={viewPath}>
-              <i className="fa fa-search la la-search" />
+            <Link dataSet={{class: "view-button"}} to={viewPath}>
+              <Text>
+                &#x1F50D;
+              </Text>
             </Link>
           }
           {editPath &&
-            <Link className="edit-button" to={editPath}>
-              <i className="fa fa-edit la la-edit" />
+            <Link dataSet={{class: "edit-button"}} to={editPath}>
+              <Text>
+                &#x270E;
+              </Text>
             </Link>
           }
           {destroyEnabled && model.can("destroy") &&
-            <a className="destroy-button" href="#" onClick={this.onDestroyClicked}>
-              <i className="fa fa-trash la la-trash" />
-            </a>
+            <Pressable dataSet={{class: "destroy-button"}} onPress={this.tt.onDestroyClicked}>
+              <Text>
+                &#x2715;
+              </Text>
+            </Pressable>
           }
-        </ColumnComponent>
-      </RowComponent>
+        </Column>
+      </Row>
     )
   }
 
   columnClassNamesForColumn (column) {
-    const classNames = ["live-table-column"]
+    const classNames = ["table--column"]
 
     if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
     if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
@@ -84,24 +96,30 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   columnsContentFromColumns (model) {
-    const {preparedColumns} = this.p
-    const ColumnComponent = this.props.columnComponent
+    const {isSmallScreen, preparedColumns} = this.p
 
-    return preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
-      <ColumnComponent
-        className={classNames(this.columnClassNamesForColumn(column))}
-        data-identifier={columnIdentifier(column)}
+    return preparedColumns?.map(({column, tableSettingColumn, width}) => columnVisible(column, tableSettingColumn) &&
+      <Column
+        dataSet={{
+          class: classNames(this.columnClassNamesForColumn(column)),
+          identifier: columnIdentifier(column)
+        }}
         key={columnIdentifier(column)}
+        style={{width: `${width}%`}}
         {...this.props.liveTable.columnProps(column)}
       >
-        <div className="live-table-column-label">
-          {this.props.liveTable.headerLabelForColumn(column)}
-        </div>
-        <div className="live-table-column-value">
+        {isSmallScreen &&
+          <View dataSet={{class: "table--column-label"}}>
+            <Text>
+              {this.props.liveTable.headerLabelForColumn(column)}
+            </Text>
+          </View>
+        }
+        <View dataSet={{class: "table--column-value"}}>
           {column.content && this.columnContentFromContentArg(column, model)}
           {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
-        </div>
-      </ColumnComponent>
+        </View>
+      </Column>
     )
   }
 
@@ -135,7 +153,9 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     const modelColumn = attribute?.getColumn()
 
     if (modelColumn?.getType() == "date") {
-      return this.presentDateTime({apiMakerType: "date", value})
+      return (
+        <Text>{this.presentDateTime({apiMakerType: "date", value})}</Text>
+      )
     }
 
     return this.presentColumnValue(value)
@@ -151,9 +171,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     return modelCallbackArgs
   }
 
-  onDestroyClicked = async (e) => {
-    e.preventDefault()
-
+  onDestroyClicked = async () => {
     const {destroyMessage} = this.p.liveTable.props
     const {model} = this.p
 
@@ -174,21 +192,28 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
 
   presentColumnValue(value) {
     if (value instanceof Date) {
-      return this.presentDateTime({value})
+      return <Text>{this.presentDateTime({value})}</Text>
     } else if (MoneyFormatter.isMoney(value)) {
-      return MoneyFormatter.format(value)
+      return <Text>{MoneyFormatter.format(value)}</Text>
     } else if (typeof value == "boolean") {
       if (value) return I18n.t("js.shared.yes", {defaultValue: "Yes"})
 
-      return I18n.t("js.shared.no", {defaultValue: "No"})
+      return <Text>{I18n.t("js.shared.no", {defaultValue: "No"})}</Text>
     } else if (Array.isArray(value)) {
-      return value
-        .map((valuePart) => this.presentColumnValue(valuePart))
-        .filter((valuePart) => Boolean(valuePart))
-        .join(", ")
+      return (
+        <Text>
+          {value
+            .map((valuePart) => this.presentColumnValue(valuePart))
+            .filter((valuePart) => Boolean(valuePart))
+            .join(", ")
+          }
+        </Text>
+      )
+    } else if (typeof value == "string") {
+      return <Text>{value}</Text>
     }
 
-    return value
+    return <Text>{value}</Text>
   }
 
   presentDateTime({apiMakerType, value}) {

@@ -5,6 +5,7 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import qs from "qs"
 import {memo, useMemo} from "react"
+import {Text} from "react-native"
 import Result from "../result"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import urlEncode from "../url-encode.mjs"
@@ -113,21 +114,21 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
         <ul className="pagination" data-pages-length={pages.length}>
           <li className={`page-item ${!showPreviousPage ? "disabled" : ""}`} key="page-first">
             {!showPreviousPage &&
-              "⇤"
+              <Text>⇤</Text>
             }
             {showPreviousPage &&
-              <Link className="page-link" to={this.pagePath(1)}>
-                ⇤
+              <Link dataSet={{class: "page-link"}} to={this.pagePath(1)}>
+                <Text>⇤</Text>
               </Link>
             }
           </li>
           <li className={`page-item ${!showFirstPage ? "disabled" : ""}`} key="page-previous">
             {!showFirstPage &&
-              "←"
+              <Text>←</Text>
             }
             {showFirstPage &&
-              <Link className="page-link" to={this.previousPagePath()}>
-                ←
+              <Link dataSet={{class: "page-link"}} to={this.previousPagePath()}>
+                <Text>←</Text>
               </Link>
             }
           </li>
@@ -147,8 +148,8 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
                 page
               }
               {this.isPageActiveClass(page) == "not-active" &&
-                <Link className="page-link" to={this.pagePath(page)}>
-                  {page}
+                <Link dataSet={{class: "page-link"}} to={this.pagePath(page)}>
+                  <Text>{page}</Text>
                 </Link>
               }
             </li>
@@ -160,21 +161,21 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
           }
           <li className={`page-item ${!showNextPage ? "disabled" : ""}`} key="page-next">
             {!showNextPage &&
-              "→"
+              <Text>→</Text>
             }
             {showNextPage &&
-              <Link className="page-link" to={this.nextPagePath()}>
-                →
+              <Link dataSet={{class: "page-link"}} to={this.nextPagePath()}>
+                <Text>→</Text>
               </Link>
             }
           </li>
           <li className={`page-item ${!showLastPage ? "disabled" : ""}`} key="page-last">
             {!showLastPage &&
-              "⇥"
+              <Text>⇥</Text>
             }
             {showLastPage &&
-              <Link className="page-link" to={this.pagePath(totalPages)}>
-                ⇥
+              <Link dataSet={{class: "page-link"}} to={this.pagePath(totalPages)}>
+                <Text>⇥</Text>
               </Link>
             }
           </li>

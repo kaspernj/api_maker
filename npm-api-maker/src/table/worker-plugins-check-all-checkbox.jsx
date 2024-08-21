@@ -2,7 +2,7 @@ import classNames from "classnames"
 import Collection from "../collection.mjs"
 import EventConnection from "../event-connection"
 import PropTypes from "prop-types"
-import PropTypesExact from "prop-types-exact"
+import propTypesExact from "prop-types-exact"
 import React from "react"
 import {simpleObjectDifferent} from "set-state-compare/src/diff-utils"
 import {useEffect, useRef} from "react"
@@ -21,9 +21,10 @@ const Checkbox = (props) => {
 }
 
 export default class ApiMakerTableWorkerPluginsCheckAllCheckbox extends React.PureComponent {
-  static propTypes = PropTypesExact({
+  static propTypes = propTypesExact({
     currentWorkplace: PropTypes.object,
-    query: PropTypes.instanceOf(Collection)
+    query: PropTypes.instanceOf(Collection),
+    style: PropTypes.object
   })
 
   state = {
@@ -57,7 +58,7 @@ export default class ApiMakerTableWorkerPluginsCheckAllCheckbox extends React.Pu
   }
 
   render() {
-    const {className, currentWorkplace} = this.props
+    const {className, currentWorkplace, style} = this.props
     const {checked, indeterminate} = this.state
 
     return (
@@ -69,6 +70,7 @@ export default class ApiMakerTableWorkerPluginsCheckAllCheckbox extends React.Pu
           className={classNames("api-maker--table--worker-plugins-check-all-checkbox", className)}
           indeterminate={indeterminate}
           onChange={this.onCheckedChanged}
+          style={style}
         />
       </>
     )

@@ -20,13 +20,13 @@ describe "bootstrap - live table - sorting" do
       wait_for_selector model_row_selector(task)
     end
 
-    wait_for_and_find(".page-link", text: 2).click
+    wait_for_and_find("[data-class='page-link']", text: 2).click
 
     tasks.slice(40, 30).reverse_each do |task|
       wait_for_selector model_row_selector(task)
     end
 
-    wait_for_and_find(".page-link", text: 3).click
+    wait_for_and_find("[data-class='page-link']", text: 3).click
 
     tasks.slice(10, 30).reverse_each do |task|
       wait_for_selector model_row_selector(task)
@@ -58,7 +58,7 @@ describe "bootstrap - live table - sorting" do
       wait_for_selector model_row_selector(task)
     end
 
-    wait_for_and_find(".component-api-maker-bootstrap-sort-link[data-attribute='name'][data-sort-mode='asc']").click
+    wait_for_and_find("[data-component='api-maker--bootstrap--sort-link'][data-attribute='name'][data-sort-mode='asc']").click
 
     tasks.slice(70, 30).reverse_each do |task|
       wait_for_selector model_row_selector(task)

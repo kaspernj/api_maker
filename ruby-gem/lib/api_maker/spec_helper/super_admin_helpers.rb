@@ -15,7 +15,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     destroy_action = proc do
       accept_confirm do
-        wait_for_and_find("#{model_row_selector(model)} .destroy-button").click
+        wait_for_and_find("#{model_row_selector(model)} [data-class='destroy-button']").click
       end
 
       wait_for_no_selector model_row_selector(model) # If the row disappears it got deleted
@@ -31,7 +31,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model_class)
 
     visit super_admin_path(model: resource.short_name)
-    wait_for_and_find(".create-new-model-link").click
+    wait_for_and_find("[data-class='create-new-model-link']").click
     wait_for_selector "[data-class='super-admin--edit-page']"
     super_admin_test_fill_inputs(resource, inputs)
     wait_for_and_find("[data-class='submit-button']").click
@@ -60,7 +60,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
 
     visit super_admin_path(model: resource.short_name)
-    wait_for_and_find(".edit-button").click
+    wait_for_and_find("[data-class='edit-button']").click
     wait_for_selector "[data-class='super-admin--edit-page']"
     super_admin_test_fill_inputs(resource, inputs)
     wait_for_and_find("[data-class='submit-button']").click
@@ -88,12 +88,12 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     visit super_admin_path(model: resource.short_name, model_id: model.id)
     wait_for_selector "[data-component='super-admin--show-page']"
-    wait_for_selector ".destroy-model-link"
+    wait_for_selector "[data-class='destroy-model-link']"
     wait_for_action_cable_to_connect
 
     destroy_action = proc do
       accept_confirm do
-        wait_for_and_find(".destroy-model-link").click
+        wait_for_and_find("[data-class='destroy-model-link']").click
       end
 
       wait_for_expect { expect { model.reload }.to raise_error(ActiveRecord::RecordNotFound) }

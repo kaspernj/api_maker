@@ -1,3 +1,4 @@
+import {Pressable, Text} from "react-native"
 import BaseComponent from "../base-component"
 import EditPage from "./edit-page"
 import hasEditConfig from "./has-edit-config.js"
@@ -92,8 +93,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
         {modelClass && pageToShow == "index" &&
           <>
             {canCan?.can("new", modelClass) && hasEditConfig(modelClass) &&
-              <Link className="create-new-model-link" to={Params.withParams({model: modelName, mode: "new"})}>
-                Create new
+              <Link dataSet={{class: "create-new-model-link"}} to={Params.withParams({model: modelName, mode: "new"})}>
+                <Text>
+                  Create new
+                </Text>
               </Link>
             }
           </>
@@ -101,14 +104,18 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
         {model && pageToShow == "show" &&
           <>
             {model.can("edit") && hasEditConfig(modelClass) &&
-              <Link className="edit-model-link" to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
-                Edit
+              <Link dataSet={{class: "edit-model-link"}} to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
+                <Text>
+                  Edit
+                </Text>
               </Link>
             }
             {model.can("destroy") &&
-              <a className="destroy-model-link" href="#" onClick={this.tt.onDestroyClicked}>
-                Delete
-              </a>
+              <Pressable dataSet={{class: "destroy-model-link"}} onPress={this.tt.onDestroyClicked}>
+                <Text>
+                  Delete
+                </Text>
+              </Pressable>
             }
           </>
         }
@@ -151,9 +158,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     )
   }
 
-  onDestroyClicked = async (e) => {
-    e.preventDefault()
-
+  onDestroyClicked = async () => {
     if (!confirm("Are you sure?")) {
       return
     }

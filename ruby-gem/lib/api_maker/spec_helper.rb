@@ -96,7 +96,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def model_column_selector(model, identifier)
-    "#{model_row_selector(model)} .live-table-column[data-identifier='#{identifier}']"
+    "#{model_row_selector(model)} [data-class='table--column'][data-identifier='#{identifier}']"
   end
 
   def model_row_class_name(model)
@@ -105,11 +105,11 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def model_row_selector(model)
-    ".#{model_row_class_name(model)}[data-model-id='#{model.id}']"
+    "[data-class='#{model_row_class_name(model)}'][data-model-id='#{model.id}']"
   end
 
   def model_row_destroy_button_selector(model)
-    "#{model_row_selector(model)} .destroy-button"
+    "#{model_row_selector(model)} [data-class='destroy-button']"
   end
 
   def model_row_edit_button_selector(model)

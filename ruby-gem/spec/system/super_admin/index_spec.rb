@@ -12,7 +12,7 @@ describe "super admin - index" do
     super_admin_test_index_render(task)
 
     # It goes to the projects page and renders the project rows
-    wait_for_and_find(".components--admin--layout--menu--menu-item[data-identifier='Project']").click
+    wait_for_and_find("[data-class='components--admin--layout--menu--menu-item'][data-identifier='Project']").click
     wait_for_expect { expect(current_url).to end_with "/super_admin?model=Project" }
     wait_for_selector model_row_selector(project)
   end

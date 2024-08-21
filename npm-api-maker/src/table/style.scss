@@ -50,10 +50,6 @@
     }
 
     .live-table-column {
-      .live-table-column-label {
-        display: none;
-      }
-
       &[data-text-align="center"] {
         .live-table-column-value {
           text-align: center;

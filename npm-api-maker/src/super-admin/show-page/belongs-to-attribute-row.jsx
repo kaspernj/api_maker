@@ -5,6 +5,7 @@ import Link from "../../link"
 import {memo} from "react"
 import Params from "../../params"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {Text} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowPageBelongsToAttributeRow extends BaseComponent {
   render() {
@@ -16,8 +17,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPageBelongsToAttr
       <AttributeRow label={modelClass.humanAttributeName(inflection.camelize(reflection.name(), true))}>
         {subModel &&
           <Link to={Params.withParams({model: subModel.modelClassData().name, model_id: subModel.primaryKey()})}>
-            {subModel && "name" in subModel && subModel.name()}
-            {subModel && !("name" in subModel) && subModel?.id()}
+            <Text>
+              {subModel && "name" in subModel && subModel.name()}
+              {subModel && !("name" in subModel) && subModel?.id()}
+            </Text>
           </Link>
         }
       </AttributeRow>
