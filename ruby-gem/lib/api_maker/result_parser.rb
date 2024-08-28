@@ -20,9 +20,16 @@ private
   def parse_active_record(object)
     serializer = ApiMaker::Serializer.new(ability:, api_maker_args:, model: object)
 
+    begin
+      resource = serializer.resource
+    rescue ApiMaker::MemoryStorage::ResourceNotFoundError
+      # A model was given that didn't have a resource - we can't serialize it.
+      return nil
+    end
+
     {
       api_maker_type: :model,
-      model_name: serializer.resource.collection_name,
+      model_name: resource.collection_name,
       serialized: parse_object(serializer.as_json)
     }
   end
