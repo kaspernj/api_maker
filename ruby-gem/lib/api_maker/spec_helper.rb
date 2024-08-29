@@ -113,11 +113,11 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def model_row_edit_button_selector(model)
-    "#{model_row_selector(model)} .edit-button"
+    "#{model_row_selector(model)} [data-class='edit-button']"
   end
 
   def model_row_view_button_selector(model)
-    "#{model_row_selector(model)} .view-button"
+    "#{model_row_selector(model)} [data-class='view-button']"
   end
 
   def pretty_html
