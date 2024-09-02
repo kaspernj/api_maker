@@ -205,10 +205,16 @@ private
       raise e unless ignore_resource_not_found
     end
 
+    begin
+      foreign_key = reflection.foreign_key
+    rescue => e
+      raise "Could not get foreign key for #{reflection.active_record.name}##{reflection.name} because of #{e.message}"
+    end
+
     {
       className: reflection.class_name,
       collectionName: resource&.collection_name,
-      foreignKey: reflection.foreign_key,
+      foreignKey: foreign_key,
       name: reflection.name,
       macro: reflection.macro,
       resource_name: resource&.short_name,
