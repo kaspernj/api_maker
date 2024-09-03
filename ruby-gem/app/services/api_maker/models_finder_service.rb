@@ -49,6 +49,15 @@ private
     @files ||= begin
       files = []
       paths.each do |path|
+        # Try to require any 'resources'-file which might dynamically define resources
+        begin
+          resources_path = "#{path}/app/api_maker/resources"
+          require resources_path
+          Rails.logger.info "Custom resources file loaded: #{resources_path}"
+        rescue LoadError
+          # Ignore if not found
+        end
+
         files += Dir.glob("#{path}/app/api_maker/resources/**/*_resource.rb")
       end
       files
