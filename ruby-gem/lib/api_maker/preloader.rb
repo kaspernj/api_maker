@@ -54,6 +54,7 @@ class ApiMaker::Preloader
             locals:,
             records: @records,
             reflection:,
+            reflection_active_record: reflection_active_record(reflection),
             select: @select,
             select_columns: @select_columns
           )
@@ -87,6 +88,14 @@ class ApiMaker::Preloader
 
 private
 
+  def reflection_active_record(reflection)
+    @reflection_active_record ||= begin
+      reflection_active_record = reflection.active_record
+      reflection_active_record = model_class if reflection_active_record.abstract_class
+      reflection_active_record
+    end
+  end
+
   # Smoke test to make sure we aren't doing any additional and unnecessary queries
   def check_collection_loaded!
     raise "Collection wasn't loaded?" if @collection.is_a?(ActiveRecord::Relation) && !@collection.loaded?
@@ -94,7 +103,8 @@ private
 
   def fill_empty_relationships_for_key(reflection, key)
     check_collection_loaded!
-    collection_name = ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).collection_name
+    active_record = reflection_active_record(reflection)
+    collection_name = ApiMaker::MemoryStorage.current.resource_for_model(active_record).collection_name
     records_to_set = @collection.map { |model| @records.dig(collection_name, model.id) }
 
     case reflection.macro

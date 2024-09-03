@@ -1,7 +1,9 @@
 class ApiMaker::PreloaderBase
-  attr_reader :ability, :api_maker_args, :collection, :data, :locals, :records, :reflection, :reflection_name, :select, :select_columns
+  attr_reader(
+    :ability, :api_maker_args, :collection, :data, :locals, :records, :reflection, :reflection_active_record, :reflection_name, :select, :select_columns
+  )
 
-  def initialize(ability:, api_maker_args:, data:, collection:, locals:, records:, reflection:, select:, select_columns:)
+  def initialize(ability:, api_maker_args:, data:, collection:, locals:, records:, reflection:, reflection_active_record:, select:, select_columns:)
     @ability = ability
     @api_maker_args = api_maker_args
     @data = data
@@ -9,17 +11,18 @@ class ApiMaker::PreloaderBase
     @locals = locals
     @reflection = reflection
     @reflection_name = @reflection.name
+    @reflection_active_record = reflection_active_record
     @records = records
     @select = select
     @select_columns = select_columns
   end
 
   def collection_ids
-    @collection_ids ||= collection.pluck(reflection.active_record.primary_key)
+    @collection_ids ||= collection.pluck(reflection_active_record.primary_key)
   end
 
   def underscore_name
-    @underscore_name ||= ApiMaker::MemoryStorage.current.resource_for_model(reflection.active_record).underscore_name
+    @underscore_name ||= ApiMaker::MemoryStorage.current.resource_for_model(reflection_active_record).underscore_name
   end
 
   def models_with_join
@@ -49,7 +52,7 @@ class ApiMaker::PreloaderBase
   end
 
   def initial_join_query
-    reflection.active_record.joins(reflection.name)
+    reflection_active_record.joins(reflection.name)
   end
 
   def join_query_with_joined_name
@@ -61,8 +64,8 @@ class ApiMaker::PreloaderBase
       .where("#{accessible_query.klass.table_name}.#{accessible_query.klass.primary_key} = #{joined_name}.#{reflection.klass.primary_key}")
 
     initial_join_query
-      .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
-      .where(reflection.active_record.primary_key => collection_ids)
+      .select(reflection_active_record.arel_table[reflection_active_record.primary_key].as("api_maker_origin_id"))
+      .where(reflection_active_record.primary_key => collection_ids)
       .where("EXISTS (#{exists_query.to_sql})")
   end
 
@@ -71,8 +74,8 @@ class ApiMaker::PreloaderBase
   # The "WHERE id IN sub_query" version looks this simple line: .where(reflection.klass.table_name => {reflection.klass.primary_key => accessible_query})
   def join_query_with_normal_name # rubocop:disable Metrics/AbcSize
     query = initial_join_query
-      .select(reflection.active_record.arel_table[reflection.active_record.primary_key].as("api_maker_origin_id"))
-      .where(reflection.active_record.primary_key => collection_ids)
+      .select(reflection_active_record.arel_table[reflection_active_record.primary_key].as("api_maker_origin_id"))
+      .where(reflection_active_record.primary_key => collection_ids)
 
     # No reason to add all the extra SQL if the ability has unconditioned read access
     unless unconditioned_read_access?

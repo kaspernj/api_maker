@@ -47,7 +47,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
     query = reflection.klass.where(reflection.foreign_key => collection.map(&:id))
       .select(reflection.klass.arel_table[reflection.foreign_key].as("api_maker_origin_id"))
 
-    query = query.where("#{reflection.options.fetch(:as)}_type" => reflection.active_record.name) if reflection.options[:as]
+    query = query.where("#{reflection.options.fetch(:as)}_type" => reflection_active_record.name) if reflection.options[:as]
     query
   end
 end

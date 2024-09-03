@@ -13,7 +13,7 @@ private
     @models ||= if use_joined_query?
       models_with_join
     else
-      primary_key_arel_column = reflection.active_record.arel_table[reflection.active_record.primary_key]
+      primary_key_arel_column = reflection_active_record.arel_table[reflection_active_record.primary_key]
 
       query = models_initial_query.select(primary_key_arel_column.as("api_maker_origin_id"))
       query = query.instance_eval(&reflection.scope) if reflection.scope
@@ -34,7 +34,7 @@ private
   end
 
   def models_initial_query
-    raise "#{reflection.active_record.name}.#{reflection.name} didn't have an `inverse_of` instruction" unless reflection.inverse_of
+    raise "#{reflection_active_record.name}.#{reflection.name} didn't have an `inverse_of` instruction" unless reflection.inverse_of
 
     query = reflection.klass.where(reflection.foreign_key => collection.map(&primary_key_column))
     query.joins(reflection.inverse_of.name)
