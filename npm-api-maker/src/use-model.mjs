@@ -167,7 +167,11 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.onDestroyed, s.s.model?.id()])
 
-  const result = {}
+  const result = {
+    model: s.s.model,
+    modelId,
+    notFound: s.s.notFound
+  }
 
   result[modelVariableName] = s.s.model
   result[`${modelVariableName}Id`] = modelId
