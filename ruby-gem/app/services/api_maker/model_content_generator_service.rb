@@ -36,6 +36,9 @@ private
       &.klass
       &.columns
       &.any? { |column| column.name == attribute_name }
+  rescue ActiveRecord::StatementInvalid
+    # This happens if the table or column doesn't exist - like if we are running during a migration
+    false
   end
 
   def collection_commands
