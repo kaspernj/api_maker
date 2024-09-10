@@ -32,8 +32,25 @@ const options = {
   }
 }
 
-// This is necessary for the NPM packages to compile (it might be possible to get rid of with the right configuration)
-options.module.rules.push()
+// For some reason the asset/resource doesn't actually bundle the images unless changed to the file-loader
+const imagesRule = webpackConfig.module.rules.find((rule) => {
+  const fakeFileName = "images/testimage.svg"
+
+  if (rule.test && fakeFileName.match(rule.test)) {
+    return true
+  }
+})
+
+imagesRule.use = {
+  loader: "file-loader",
+  options: {
+    name: "[name]-[hash][ext][query]",
+    outputPath: "images",
+  }
+}
+
+delete imagesRule.generator
+delete imagesRule.type
 
 options.plugins.push(
   new webpack.ProvidePlugin({
@@ -53,6 +70,4 @@ options.plugins.push(
   })
 )
 
-const config = merge({}, webpackConfig, options)
-
-module.exports = config
+module.exports = merge({}, options, webpackConfig)

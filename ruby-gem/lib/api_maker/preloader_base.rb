@@ -3,7 +3,7 @@ class ApiMaker::PreloaderBase
     :ability, :api_maker_args, :collection, :data, :locals, :records, :reflection, :reflection_active_record, :reflection_name, :select, :select_columns
   )
 
-  def initialize(ability:, api_maker_args:, data:, collection:, locals:, records:, reflection:, reflection_active_record:, select:, select_columns:)
+  def initialize(ability:, api_maker_args:, data:, collection:, locals:, records:, reflection:, reflection_active_record: nil, select:, select_columns:)
     @ability = ability
     @api_maker_args = api_maker_args
     @data = data
@@ -11,7 +11,7 @@ class ApiMaker::PreloaderBase
     @locals = locals
     @reflection = reflection
     @reflection_name = @reflection.name
-    @reflection_active_record = reflection_active_record
+    @reflection_active_record = reflection_active_record || reflection.active_record
     @records = records
     @select = select
     @select_columns = select_columns

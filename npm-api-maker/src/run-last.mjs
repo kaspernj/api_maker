@@ -33,7 +33,7 @@ export default class RunLast {
   }
 
   run() {
-    clearTimeout(this.flushTimeout)
+    this.clearTimeout()
     this.callback()
   }
 }

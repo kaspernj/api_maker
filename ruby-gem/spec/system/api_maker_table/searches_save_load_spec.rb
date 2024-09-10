@@ -22,7 +22,7 @@ describe "table - filter" do
     visit bootstrap_live_table_path
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
-    wait_for_and_find(".filter-button").click
+    wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".add-new-filter-button").click
     wait_for_and_find(".attribute-element[data-model-class='Task'][data-attribute-name='name']").click
     wait_for_and_find(".predicate-select").select("eq")
@@ -52,7 +52,7 @@ describe "table - filter" do
     wait_for_selector model_row_selector(task2)
 
     # It loads the newly saved filter
-    wait_for_and_find(".filter-button").click
+    wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".load-search-button").click
     wait_for_and_find("[data-class='load-search-link']", exact_text: "Test search").click
 
@@ -70,7 +70,7 @@ describe "table - filter" do
     visit bootstrap_live_table_path
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
-    wait_for_and_find(".filter-button").click
+    wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".load-search-button").click
     wait_for_selector search_row_selector
     wait_for_and_find("#{search_row_selector} [data-class='edit-search-button']").click
@@ -89,7 +89,7 @@ describe "table - filter" do
     visit bootstrap_live_table_path
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
-    wait_for_and_find(".filter-button").click
+    wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".load-search-button").click
     wait_for_selector search_row_selector
 

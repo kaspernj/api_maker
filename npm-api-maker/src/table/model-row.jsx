@@ -5,6 +5,7 @@ import Column from "./components/column"
 import columnIdentifier from "./column-identifier.mjs"
 import columnVisible from "./column-visible.mjs"
 import {digs} from "diggerize"
+import Icon from "../icon"
 import * as inflection from "inflection"
 import Link from "../link"
 import MoneyFormatter from "../money-formatter"
@@ -62,23 +63,17 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
           {actionsContent && actionsContent(this.modelCallbackArgs)}
           {viewPath &&
             <Link dataSet={{class: "view-button"}} to={viewPath}>
-              <Text>
-                &#x1F50D;
-              </Text>
+              <Icon icon="magnifying-glass-solid" />
             </Link>
           }
           {editPath &&
             <Link dataSet={{class: "edit-button"}} to={editPath}>
-              <Text>
-                &#x270E;
-              </Text>
+              <Icon icon="pen-solid" />
             </Link>
           }
           {destroyEnabled && model.can("destroy") &&
             <Pressable dataSet={{class: "destroy-button"}} onPress={this.tt.onDestroyClicked}>
-              <Text>
-                &#x2715;
-              </Text>
+              <Icon icon="xmark-solid" />
             </Pressable>
           }
         </Column>

@@ -1,15 +1,17 @@
 import "./style"
+import {digg, digs} from "diggerize"
+import {Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
 import Collection from "../collection"
 import columnVisible from "./column-visible.mjs"
 import debounce from "debounce"
-import {digg, digs} from "diggerize"
 import Filters from "./filters"
 import FlatList from "./components/flat-list"
 import Header from "./components/header"
 import HeaderColumn from "./header-column"
+import Icon from "../icon"
 import * as inflection from "inflection"
 import modelClassRequire from "../model-class-require.mjs"
 import ModelRow from "./model-row"
@@ -27,7 +29,6 @@ import uniqunize from "uniqunize"
 import useBreakpoint from "../use-breakpoint"
 import useCollection from "../use-collection"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
-import {View} from "react-native"
 import Widths from "./widths"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
@@ -80,6 +81,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     queryName: PropTypes.string,
     select: PropTypes.object,
     selectColumns: PropTypes.object,
+    styles: PropTypes.object,
     viewModelPath: PropTypes.func,
     workplace: PropTypes.bool.isRequired
   }
@@ -235,7 +237,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
 
     return (
-      <div className={this.className()}>
+      <div className={this.className()} style={this.props.styles?.container}>
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
@@ -370,7 +372,13 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           this.filterForm()
         }
         {card &&
-          <Card className={classNames("live-table--table-card", "mb-4", className)} controls={this.tableControls()} header={headerContent} footer={this.tableFooter()} {...restProps}>
+          <Card
+            className={classNames("live-table--table-card", "mb-4", className)}
+            controls={this.tableControls()}
+            header={headerContent}
+            footer={this.tableFooter()}
+            {...restProps}
+          >
             {flatList}
           </Card>
         }
@@ -484,20 +492,20 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
 
     return (
-      <>
+      <View style={{flexDirection: "row"}}>
         {controls && controls({models, qParams, query, result})}
-        <a className="filter-button" href="#" onClick={this.tt.onFilterClicked}>
-          <i className="fa fa-fw fa-magnifying-glass la la-fw la-search" />
-        </a>
-        <span style={{position: "relative"}}>
+        <Pressable dataSet={{class: "filter-button"}} onPress={this.tt.onFilterClicked}>
+          <Icon icon="magnifying-glass-solid" />
+        </Pressable>
+        <View style={{position: "relative"}}>
           {showSettings &&
             <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
-          <a className="settings-button" href="#" onClick={this.tt.onSettingsClicked}>
-            <i className="fa fa-fw fa-gear la la-fw la-gear" />
-          </a>
-        </span>
-      </>
+          <Pressable dataSet={{class: "settings-button"}} onPress={this.tt.onSettingsClicked}>
+            <Icon icon="gear-solid" />
+          </Pressable>
+        </View>
+      </View>
     )
   }
 

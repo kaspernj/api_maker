@@ -7,10 +7,6 @@
         display: block;
         padding: 11px;
 
-        .fa {
-          margin-right: 5px;
-        }
-
         + .action-button {
           border-top: 1px solid #c9c9c9;
         }
@@ -47,7 +43,7 @@
     }
   }
 
-  .burger-menu-container {
+  [data-class="burger-menu-container"] {
     @media (max-width: $sm-to) {
       margin-left: auto;
       font-size: 28px;
@@ -55,19 +51,6 @@
 
     @media (min-width: $md-from) {
       display: none;
-    }
-  }
-
-  .actions-link {
-    margin-right: 8px;
-    font-size: 22px;
-  }
-
-  .actions-link,
-  .burger-menu-link {
-    &:link,
-    &:visited {
-      color: #1b1c1e;
     }
   }
 }
