@@ -5,7 +5,7 @@ import {memo, useRef} from "react"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {Text, View} from "react-native"
+import {Pressable, Text, View} from "react-native"
 import useBreakpoint from "../../../use-breakpoint"
 import useEventListener from "../../../use-event-listener"
 
@@ -108,11 +108,11 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
         <View dataSet={{class: "burger-menu-container"}}>
           {actions &&
             <Pressable dataSet={{class: "actions-link"}} onPress={this.tt.onGearsClicked} style={{marginRight: 8, fontSize: 22}}>
-              <Icon icon="gear-solid" />
+              <Icon icon={GearsSolid} />
             </Pressable>
           }
           <Pressable dataSet={{class: "burger-menu-link"}} onPress={onTriggerMenu}>
-            <Icon icon="bars-solid" />
+            <Icon icon={BarsSolid} />
           </Pressable>
         </View>
       </View>

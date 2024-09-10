@@ -1,10 +1,13 @@
+import BaseComponent from "./base-component"
 import {Image} from "react-native"
+import {memo, useMemo} from "react"
+import PropTypes from "prop-types"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
-export default memo(shapeComponent(class ComponentsIcon extends ShapeComponent {
-  static propTypes = propTypesExact({
-    icon: PropTypes.string.isRequired,
-    iconProps: PropTypes.object
-  })
+export default memo(shapeComponent(class ComponentsIcon extends BaseComponent {
+  static propTypes = {
+    icon: PropTypes.string.isRequired
+  }
 
   setup() {
     const {icon} = this.p
