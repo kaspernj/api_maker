@@ -29,7 +29,7 @@ describe "bootstrap - live table - filter" do
     visit bootstrap_live_table_path
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
-    wait_for_and_find(".filter-button").click
+    wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".add-new-filter-button").click
     wait_for_and_find(".attribute-element[data-model-class='Task'][data-attribute-name='name']").click
     wait_for_and_find(".predicate-select").select("eq")
@@ -52,7 +52,7 @@ describe "bootstrap - live table - filter" do
     visit bootstrap_live_table_path
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
-    wait_for_and_find(".filter-button").click
+    wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".add-new-filter-button").click
     wait_for_and_find(".reflection-element[data-model-class='Task'][data-reflection-name='project']").click
     wait_for_and_find(".attribute-element[data-model-class='Project'][data-attribute-name='name']").click
@@ -71,7 +71,7 @@ describe "bootstrap - live table - filter" do
     visit bootstrap_live_table_path
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
-    wait_for_and_find(".filter-button").click
+    wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".add-new-filter-button").click
     wait_for_and_find(".reflection-element[data-model-class='Task'][data-reflection-name='accountCustomer']").click
     wait_for_and_find(".attribute-element[data-model-class='Customer'][data-attribute-name='name']").click

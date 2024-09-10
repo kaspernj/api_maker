@@ -30,8 +30,8 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
     const {preparedColumns} = table.s
 
     return (
-      <div
-        className="api-maker--table--settings"
+      <View
+        dataSet={{class: "api-maker--table--settings"}}
         ref={this.tt.rootRef}
         style={{
           position: "absolute",
@@ -56,7 +56,7 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
         {preparedColumns?.map(({column, tableSettingColumn}) =>
           <ColumnRow column={column} key={columnIdentifier(column)} table={table} tableSettingColumn={tableSettingColumn} />
         )}
-      </div>
+      </View>
     )
   }
 

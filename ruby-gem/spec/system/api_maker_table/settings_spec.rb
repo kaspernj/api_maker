@@ -25,8 +25,8 @@ describe "table - settings" do
     wait_for_selector "[data-class='table--column'][data-identifier='attribute-id--sort-key-id']"
 
     # It triggers the settings modal
-    wait_for_and_find(".settings-button").click
-    wait_for_selector ".api-maker--table--settings"
+    wait_for_and_find("[data-class='settings-button']").click
+    wait_for_selector "[data-class='api-maker--table--settings']"
 
     # It removes the ID column
     wait_for_and_find(".api-maker--table--setings--column-checkbox[data-identifier='attribute-id--sort-key-id']").click
