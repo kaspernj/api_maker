@@ -1,4 +1,3 @@
-import "./style"
 import BaseComponent from "../../base-component"
 import columnIdentifier from "../column-identifier.mjs"
 import ColumnRow from "./column-row"
@@ -31,7 +30,19 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
     const {preparedColumns} = table.s
 
     return (
-      <div className="api-maker--table--settings" ref={this.tt.rootRef}>
+      <div
+        className="api-maker--table--settings"
+        ref={this.tt.rootRef}
+        style={{
+          position: "absolute",
+          zIndex: 1,
+          right: "0px",
+          padding: "12px",
+          backgroundColor: "#fff",
+          border: "1px solid black",
+          fontSize: "12px"
+        }}
+      >
         <View style={{marginBottom: 5}}>
           <Text style={{fontSize: 16, fontWeight: "bold"}}>
             Settings

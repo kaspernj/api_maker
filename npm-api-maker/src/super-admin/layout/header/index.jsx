@@ -1,5 +1,6 @@
 import "./style"
 import BaseComponent from "../../../base-component"
+import Icon from "../../../icon"
 import {memo, useRef} from "react"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
@@ -104,16 +105,16 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
             </View>
           </View>
         }
-        <div className="burger-menu-container">
+        <View dataSet={{class: "burger-menu-container"}}>
           {actions &&
-            <a className="actions-link" href="#" onClick={this.tt.onGearsClicked}>
-              <i className="fa fa-gear" />
-            </a>
+            <Pressable dataSet={{class: "actions-link"}} onPress={this.tt.onGearsClicked} style={{marginRight: 8, fontSize: 22}}>
+              <Icon icon="gear-solid" />
+            </Pressable>
           }
-          <a className="burger-menu-link" href="#" onClick={onTriggerMenu}>
-            <i className="fa fa-bars" />
-          </a>
-        </div>
+          <Pressable dataSet={{class: "burger-menu-link"}} onPress={onTriggerMenu}>
+            <Icon icon="bars-solid" />
+          </Pressable>
+        </View>
       </View>
     )
   }
