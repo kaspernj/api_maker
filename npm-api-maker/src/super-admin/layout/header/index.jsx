@@ -108,11 +108,11 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
         <View dataSet={{class: "burger-menu-container"}}>
           {actions &&
             <Pressable dataSet={{class: "actions-link"}} onPress={this.tt.onGearsClicked} style={{marginRight: 8, fontSize: 22}}>
-              <Icon icon={GearsSolid} />
+              <Icon icon="gear-solid" />
             </Pressable>
           }
           <Pressable dataSet={{class: "burger-menu-link"}} onPress={onTriggerMenu}>
-            <Icon icon={BarsSolid} />
+            <Icon icon="bars-solid" />
           </Pressable>
         </View>
       </View>
