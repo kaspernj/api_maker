@@ -119,10 +119,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
     )
   }
 
-  onGearsClicked = (e) => {
-    e.preventDefault()
-    this.setState({headerActionsActive: !this.s.headerActionsActive})
-  }
+  onGearsClicked = () => this.setState({headerActionsActive: !this.s.headerActionsActive})
 
   onWindowMouseUp = (e) => {
     // Close the header actions menu if clicked happened outside
