@@ -7,9 +7,9 @@ import {shapeComponent} from "set-state-compare/src/shape-component.js"
 const FormContext = createContext(null)
 
 class FormInputs {
-  constructor({onSubmit}) {
+  constructor(props) {
     this.inputs = {}
-    this.onSubmit = onSubmit
+    this.onSubmit = props?.onSubmit
   }
 
   asObject() {
