@@ -2,6 +2,7 @@ import {createContext, memo, useContext, useMemo} from "react"
 import BaseComponent from "./base-component"
 import FormDataObjectizer from "form-data-objectizer"
 import {Platform} from "react-native"
+import PropTypes from "prop-types"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 const FormContext = createContext(null)
@@ -47,8 +48,15 @@ class FormInputs {
 }
 
 const Form = memo(shapeComponent(class Form extends BaseComponent {
+  static propTypes = {
+    children: PropTypes.node,
+    formRef: PropTypes.object,
+    onSubmit: PropTypes.func,
+    setForm: PropTypes.func
+  }
+
   render() {
-    const {children, onSubmit, setForm, ...restProps} = this.props
+    const {children, formRef, onSubmit, setForm, ...restProps} = this.props
     const form = useMemo(() => new FormInputs({onSubmit}), [])
 
     useMemo(() => {
@@ -60,7 +68,7 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
     return (
       <FormContext.Provider value={form}>
         {Platform.OS == "web" &&
-          <form onSubmit={this.tt.onFormSubmit} {...restProps}>
+          <form ref={formRef} onSubmit={this.tt.onFormSubmit} {...restProps}>
             {children}
           </form>
         }
