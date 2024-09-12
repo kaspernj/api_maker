@@ -7,8 +7,9 @@ import {shapeComponent} from "set-state-compare/src/shape-component.js"
 const FormContext = createContext(null)
 
 class FormInputs {
-  constructor() {
+  constructor({onSubmit}) {
     this.inputs = {}
+    this.onSubmit = onSubmit
   }
 
   asObject() {
@@ -37,12 +38,18 @@ class FormInputs {
       return <input name={name} type="hidden" value={value !== null && value !== undefined ? value : ""} />
     }
   }
+
+  submit() {
+    if (this.onSubmit) {
+      this.onSubmit()
+    }
+  }
 }
 
 const Form = memo(shapeComponent(class Form extends BaseComponent {
   render() {
-    const {children, setForm, ...restProps} = this.props
-    const form = useMemo(() => new FormInputs(), [])
+    const {children, onSubmit, setForm, ...restProps} = this.props
+    const form = useMemo(() => new FormInputs({onSubmit}), [])
 
     useMemo(() => {
       if (setForm) {
@@ -53,13 +60,21 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
     return (
       <FormContext.Provider value={form}>
         {Platform.OS == "web" &&
-          <form {...restProps}>
+          <form onSubmit={this.tt.onFormSubmit} {...restProps}>
             {children}
           </form>
         }
         {Platform.OS != "web" && this.props.children}
       </FormContext.Provider>
     )
+  }
+
+  onFormSubmit = (e) => {
+    e.preventDefault()
+
+    if (this.props.onSubmit) {
+      this.props.onSubmit()
+    }
   }
 }))
 

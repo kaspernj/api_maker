@@ -191,7 +191,9 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     } else if (MoneyFormatter.isMoney(value)) {
       return <Text>{MoneyFormatter.format(value)}</Text>
     } else if (typeof value == "boolean") {
-      if (value) return I18n.t("js.shared.yes", {defaultValue: "Yes"})
+      if (value) {
+        return <Text>{I18n.t("js.shared.yes", {defaultValue: "Yes"})}</Text>
+      }
 
       return <Text>{I18n.t("js.shared.no", {defaultValue: "No"})}</Text>
     } else if (Array.isArray(value)) {
