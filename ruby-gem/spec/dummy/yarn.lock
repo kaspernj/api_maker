@@ -1360,10 +1360,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@1.0.404":
-  version "1.0.404"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.404.tgz#7e1499789c69d128a72c33bb98b05075ecfa67c3"
-  integrity sha512-vffqAJ7Vga9HQgYQq3kgtoFimGr27c6s1GRCcS4VMdzzaQCLGOcwJF3dN//ZqzlTrUM8L5Ete/Ar7XB3r2C1YQ==
+"@kaspernj/api-maker@1.0.408":
+  version "1.0.408"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.408.tgz#dadee4d8aebc94a02568827539f0f5e385ba40ac"
+  integrity sha512-B2OmfItHy5WnC2QyukgPvK/s4o6mz/ypuqUDXrEv1ofpC6L5bz0y5dxiOuOu5hJkQrX9HdkVeKiXfEqAEE+E5g==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -3993,19 +3993,12 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-qs@6.13.0:
+qs@6.13.0, "qs@>= 6.9.3", qs@^6.10.5:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.13.0.tgz#6ca3bd58439f7e245655798997787b0d88a51906"
   integrity sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==
   dependencies:
     side-channel "^1.0.6"
-
-"qs@>= 6.9.3", qs@^6.10.5:
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.0.tgz#fd0d963446f7a65e1367e01abd85429453f0c37a"
-  integrity sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==
-  dependencies:
-    side-channel "^1.0.4"
 
 rails-erb-loader@^5.5.2:
   version "5.5.2"
