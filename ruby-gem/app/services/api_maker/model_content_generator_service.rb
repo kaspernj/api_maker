@@ -210,7 +210,7 @@ private
 
     begin
       foreign_key = reflection.foreign_key
-    rescue => e
+    rescue => e # rubocop:disable Style/RescueStandardError
       raise "Could not get foreign key for #{reflection.active_record.name}##{reflection.name} because of #{e.message}"
     end
 
