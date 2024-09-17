@@ -55,7 +55,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     className: PropTypes.string,
     collection: PropTypes.instanceOf(Collection),
     columns: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
-    columnsContent: PropTypes.func,
     controls: PropTypes.func,
     currentUser: PropTypes.object,
     defaultDateFormatName: PropTypes.string,
@@ -297,7 +296,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       className,
       collection,
       columns,
-      columnsContent,
       controls,
       currentUser,
       defaultDateFormatName,
@@ -351,12 +349,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const flatList = (
       <FlatList
         data={models}
-        dataSet={{class: className}}
+        dataSet={{class: classNames("api-maker--table", className)}}
         extraData={this.s.lastUpdate}
         keyExtractor={this.tt.keyExtrator}
         ListHeaderComponent={this.tt.listHeaderComponent}
         onLayout={this.tt.onFlatListLayout}
         renderItem={this.tt.renderItem}
+        showsHorizontalScrollIndicator
+        style={{overflowX: "auto"}}
         {...restProps}
       />
     )
@@ -453,9 +453,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {query} = digs(this.collection, "query")
 
     return (
-      <Row dataSet={{class: "live-table-header-row"}}>
+      <Row dataSet={{class: "live-table-header-row"}} style={this.styleForRow()}>
         {workplace && currentWorkplace &&
-          <Header style={{width: 25}}>
+          <Header style={this.styleForHeader({style: {width: 41}})}>
             <WorkerPluginsCheckAllCheckbox
               currentWorkplace={currentWorkplace}
               query={query}
@@ -464,18 +464,19 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           </Header>
         }
         {this.headersContentFromColumns()}
-        <Header />
+        <Header style={this.styleForHeader({style: {}})} />
       </Row>
     )
   }
 
-  renderItem = ({item: model}) => {
+  renderItem = ({index, item: model}) => {
     const {preparedColumns, tableSettingFullCacheKey} = this.s
 
     return (
       <ModelRow
         cacheKey={model.cacheKey()}
         columnWidths={this.columnWidths()}
+        index={index}
         isSmallScreen={this.tt.isSmallScreen}
         key={model.id()}
         liveTable={this}
@@ -484,6 +485,49 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         tableSettingFullCacheKey={tableSettingFullCacheKey}
       />
     )
+  }
+
+  styleForColumn({column, columnIndex, even, style}) {
+    const actualStyle = Object.assign(
+      {
+        padding: 8,
+        backgroundColor: even ? "#f5f5f5" : undefined,
+      },
+      style
+    )
+
+    return actualStyle
+  }
+
+  styleForHeader({column, columnIndex, style}) {
+    const actualStyle = Object.assign(
+      {
+        padding: 8
+      },
+      style
+    )
+
+    return actualStyle
+  }
+
+  styleForHeaderText() {
+    const actualStyle = {fontWeight: "bold"}
+
+    return actualStyle
+  }
+
+  styleForRow({even} = {}) {
+    const actualStyle = {
+      flex: 1,
+      alignItems: "center",
+      borderBottom: "1px solid #f2f2f2"
+    }
+
+    if (even) {
+      actualStyle.backgroundColor = "#f5f5f5"
+    }
+
+    return actualStyle
   }
 
   tableControls() {

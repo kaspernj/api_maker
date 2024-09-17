@@ -54,7 +54,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
 
   render () {
     const LinkComponent = this.linkComponent()
-    const {attribute, className, defaultParams, linkComponent, onChanged, query, title, ...restProps} = this.props
+    const {attribute, className, defaultParams, linkComponent, onChanged, query, textProps, title, ...restProps} = this.props
 
     return (
       <LinkComponent
@@ -67,7 +67,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
         to={this.href()}
         {...restProps}
       >
-        <Text>
+        <Text {...textProps}>
           {this.title()}
         </Text>
       </LinkComponent>

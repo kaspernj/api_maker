@@ -34,6 +34,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   render() {
     const {column, table, tableSettingColumn, width} = this.p
     const {defaultParams} = table.props
+    const {styleForHeader, styleForHeaderText} = table.tt
     const {query} = digs(table.collection, "query")
 
     return (
@@ -43,7 +44,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
           identifier: tableSettingColumn.identifier()
         }}
         onLayout={this.tt.onLayout}
-        style={{width: `${width}%`}}
+        style={styleForHeader({style: {width: `${width}%`}})}
         {...table.columnProps(column)}
       >
         <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
@@ -53,6 +54,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               defaultParams={defaultParams}
               query={query}
               style={{whiteSpace: "nowrap", overflow: "hidden"}}
+              textProps={{ellipsizeMode: "clip", numberOfLines: 1, style: styleForHeaderText()}}
               title={table.headerLabelForColumn(column)}
             />
           }

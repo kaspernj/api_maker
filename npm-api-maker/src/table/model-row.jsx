@@ -21,6 +21,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   static propTypes = propTypesExact({
     cacheKey: PropTypes.string.isRequired,
     columnWidths: PropTypes.object.isRequired,
+    index: PropTypes.number.isRequired,
     isSmallScreen: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired,
     liveTable: PropTypes.object.isRequired,
@@ -29,10 +30,12 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   })
 
   render() {
-    const {model} = this.p
-    const {modelClass, workplace} = this.p.liveTable.p
-    const {actionsContent, columnsContent, destroyEnabled, editModelPath, viewModelPath} = this.p.liveTable.props
-    const {columns, currentWorkplace} = this.p.liveTable.state
+    const {index, liveTable, model} = this.p
+    const {modelClass, workplace} = liveTable.p
+    const {actionsContent, destroyEnabled, editModelPath, viewModelPath} = liveTable.props
+    const {columns, currentWorkplace} = liveTable.state
+    const {styleForColumn, styleForRow} = liveTable.tt
+    const even = index % 2 == 0
 
     this.modelCallbackArgs = this._modelCallbackArgs() // 'model' can change so this needs to be re-cached for every render
 
@@ -47,9 +50,12 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     }
 
     return (
-      <Row dataSet={{class: `${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`, modelId: model.id()}}>
+      <Row
+        dataSet={{class: `${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`, modelId: model.id()}}
+        style={styleForRow({even})}
+      >
         {workplace &&
-          <Column dataSet={{class: "workplace-column"}} style={{width: 25}}>
+          <Column dataSet={{class: "workplace-column"}} style={styleForColumn({even, style: {width: 41}})}>
             <WorkerPluginsCheckbox
               currentWorkplace={currentWorkplace}
               model={model}
@@ -57,9 +63,8 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
             />
           </Column>
         }
-        {columns && this.columnsContentFromColumns(model)}
-        {!columns && columnsContent && columnsContent(this.modelCallbackArgs)}
-        <Column dataSet={{class: "actions-column"}} style={{flexDirection: "row"}}>
+        {columns && this.columnsContentFromColumns(model, even)}
+        <Column dataSet={{class: "actions-column"}} style={styleForColumn({even, style: {flexDirection: "row"}})}>
           {actionsContent && actionsContent(this.modelCallbackArgs)}
           {viewPath &&
             <Link dataSet={{class: "view-button"}} to={viewPath}>
@@ -81,7 +86,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     )
   }
 
-  columnClassNamesForColumn (column) {
+  columnClassNamesForColumn(column) {
     const classNames = ["table--column"]
 
     if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
@@ -90,17 +95,17 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     return classNames
   }
 
-  columnsContentFromColumns (model) {
+  columnsContentFromColumns(model, even) {
     const {isSmallScreen, preparedColumns} = this.p
 
-    return preparedColumns?.map(({column, tableSettingColumn, width}) => columnVisible(column, tableSettingColumn) &&
+    return preparedColumns?.map(({column, tableSettingColumn, width}, columnIndex) => columnVisible(column, tableSettingColumn) &&
       <Column
         dataSet={{
           class: classNames(this.columnClassNamesForColumn(column)),
           identifier: columnIdentifier(column)
         }}
         key={columnIdentifier(column)}
-        style={{width: `${width}%`}}
+        style={this.p.liveTable.styleForColumn({column, columnIndex, even, style: {width: `${width}%`}})}
         {...this.props.liveTable.columnProps(column)}
       >
         {isSmallScreen &&
