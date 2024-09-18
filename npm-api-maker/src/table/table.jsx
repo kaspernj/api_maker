@@ -115,6 +115,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       queryQName: () => `${queryName}_q`,
       queryPageName: () => `${queryName}_page`,
       querySName,
+      resizing: false,
       showFilters: () => Boolean(queryParams[querySName]),
       showSettings: false,
       tableSetting: undefined,
@@ -356,7 +357,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         onLayout={this.tt.onFlatListLayout}
         renderItem={this.tt.renderItem}
         showsHorizontalScrollIndicator
-        style={{overflowX: "auto"}}
+        style={{border: "1px solid #dbdbdb", borderRadius: 5, overflowX: "auto"}}
         {...restProps}
       />
     )
@@ -464,7 +465,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           </Header>
         }
         {this.headersContentFromColumns()}
-        <Header style={this.styleForHeader({style: {}})} />
+        <Header style={this.styleForHeader({style: {}, type: "actions"})} />
       </Row>
     )
   }
@@ -487,23 +488,36 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     )
   }
 
-  styleForColumn({column, columnIndex, even, style}) {
+  styleForColumn({column, columnIndex, even, style, type}) {
+    const defaultStyle = {
+      justifyContent: "center",
+      padding: 8,
+      backgroundColor: even ? "#f5f5f5" : undefined
+    }
+
+    if (type != "actions") {
+      defaultStyle.borderRight = "1px solid #dbdbdb"
+    }
+
     const actualStyle = Object.assign(
-      {
-        padding: 8,
-        backgroundColor: even ? "#f5f5f5" : undefined,
-      },
+      defaultStyle,
       style
     )
 
     return actualStyle
   }
 
-  styleForHeader({column, columnIndex, style}) {
+  styleForHeader({column, columnIndex, style, type}) {
+    const defaultStyle = {
+      padding: 8
+    }
+
+    if (type != "actions") {
+      defaultStyle.borderRight = "1px solid #dbdbdb"
+    }
+
     const actualStyle = Object.assign(
-      {
-        padding: 8
-      },
+      defaultStyle,
       style
     )
 
@@ -519,8 +533,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   styleForRow({even} = {}) {
     const actualStyle = {
       flex: 1,
-      alignItems: "center",
-      borderBottom: "1px solid #f2f2f2"
+      alignItems: "stretch"
     }
 
     if (even) {
@@ -614,6 +627,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     <HeaderColumn
       column={column}
       key={tableSettingColumn.identifier()}
+      resizing={this.s.resizing}
       table={this}
       tableSettingColumn={tableSettingColumn}
       width={width}

@@ -3,7 +3,7 @@ import classNames from "classnames"
 import {digs} from "diggerize"
 import Header from "./components/header"
 import {memo} from "react"
-import {Pressable, Text, View} from "react-native"
+import {Platform, Pressable, Text, View} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
@@ -14,6 +14,7 @@ import Widths from "./widths"
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
     column: PropTypes.object.isRequired,
+    resizing: PropTypes.bool.isRequired,
     table: PropTypes.object.isRequired,
     tableSettingColumn: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
@@ -32,7 +33,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   }
 
   render() {
-    const {column, table, tableSettingColumn, width} = this.p
+    const {column, resizing, table, tableSettingColumn, width} = this.p
     const {defaultParams} = table.props
     const {styleForHeader, styleForHeaderText} = table.tt
     const {query} = digs(table.collection, "query")
@@ -44,7 +45,10 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
           identifier: tableSettingColumn.identifier()
         }}
         onLayout={this.tt.onLayout}
-        style={styleForHeader({style: {width: `${width}%`}})}
+        style={styleForHeader({style: {
+          cursor: resizing ? "col-resize" : undefined,
+          width: `${width}%`
+        }})}
         {...table.columnProps(column)}
       >
         <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
@@ -63,12 +67,20 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               {table.headerLabelForColumn(column)}
             </Text>
           }
-          <Pressable onPressIn={this.tt.onResizePressIn} style={{marginLeft: "auto", cursor: "col-resize"}}>
-            <Text>
-              |
-            </Text>
-          </Pressable>
         </View>
+        <Pressable
+          onMouseDown={Platform.OS == "web" ? this.tt.onResizeMouseDown : undefined}
+          onPressIn={this.tt.onResizePressIn}
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: 10,
+            height: "100%",
+            cursor: "col-resize",
+            zIndex: 9999
+          }}
+        />
       </Header>
     )
   }
@@ -81,10 +93,27 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
 
   onResizeEnd = async () => {
     this.setState({cursorX: undefined, resizing: false})
+    this.p.table.setState({resizing: false})
 
     const width = this.p.widths.getWidthOfColumn(this.p.tableSettingColumn.identifier())
 
     await this.p.tableSettingColumn.update({width})
+  }
+
+  // Otherwise text is selectable on web
+  onResizeMouseDown = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const originalWidth = this.currentWidth
+    const cursorX = e.nativeEvent.pageX
+
+    this.setState({
+      cursorX,
+      originalWidth,
+      resizing: true
+    })
+    this.p.table.setState({resizing: true})
   }
 
   onResizePressIn = (e) => {
@@ -99,6 +128,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
       originalWidth,
       resizing: true
     })
+    this.p.table.setState({resizing: true})
   }
 
   onWindowMouseMove = (e) => {
