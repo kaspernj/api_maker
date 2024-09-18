@@ -64,7 +64,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
           </Column>
         }
         {columns && this.columnsContentFromColumns(model, even)}
-        <Column dataSet={{class: "actions-column"}} style={styleForColumn({even, style: {flexDirection: "row"}, type: "actions"})}>
+        <Column dataSet={{class: "actions-column"}} style={styleForColumn({even, style: {}, type: "actions"})}>
           {actionsContent && actionsContent(this.modelCallbackArgs)}
           {viewPath &&
             <Link dataSet={{class: "view-button"}} to={viewPath}>

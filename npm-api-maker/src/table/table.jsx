@@ -495,7 +495,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       backgroundColor: even ? "#f5f5f5" : undefined
     }
 
-    if (type != "actions") {
+    if (type == "actions") {
+      defaultStyle.flexDirection = "row"
+      defaultStyle.alignItems = "center"
+      defaultStyle.marginLeft = "auto"
+    } else {
       defaultStyle.borderRight = "1px solid #dbdbdb"
     }
 
