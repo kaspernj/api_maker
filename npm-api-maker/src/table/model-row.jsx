@@ -96,7 +96,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   columnsContentFromColumns(model, even) {
-    const {isSmallScreen, preparedColumns} = this.p
+    const {isSmallScreen, liveTable, preparedColumns} = this.p
 
     return preparedColumns?.map(({column, tableSettingColumn, width}, columnIndex) => columnVisible(column, tableSettingColumn) &&
       <Column
@@ -105,13 +105,13 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
           identifier: columnIdentifier(column)
         }}
         key={columnIdentifier(column)}
-        style={this.p.liveTable.styleForColumn({column, columnIndex, even, style: {width: `${width}%`}})}
-        {...this.props.liveTable.columnProps(column)}
+        style={liveTable.styleForColumn({column, columnIndex, even, style: {width: `${width}%`}})}
+        {...liveTable.columnProps(column)}
       >
         {isSmallScreen &&
           <View dataSet={{class: "table--column-label"}}>
             <Text>
-              {this.props.liveTable.headerLabelForColumn(column)}
+              {liveTable.headerLabelForColumn(column)}
             </Text>
           </View>
         }
@@ -152,7 +152,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     const attribute = currentModel.constructor.attributes().find((attribute) => attribute.name() == attributeNameUnderscore)
     const modelColumn = attribute?.getColumn()
 
-    if (modelColumn?.getType() == "date") {
+    if (modelColumn?.getType() == "date" && value) {
       return (
         <Text>{this.presentDateTime({apiMakerType: "date", value})}</Text>
       )
