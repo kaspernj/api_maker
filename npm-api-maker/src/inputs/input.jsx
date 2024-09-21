@@ -216,14 +216,19 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
 
   onInputChanged = (e) => {
     const {form} = this.tt
-    const {attribute, autoSubmit, inputProps, model, name, onChange} = this.props
+    const {attribute, autoSubmit, inputProps, model, onChange} = this.props
     const {localizedNumber} = digs(this.props, "localizedNumber")
+    const {name} = inputProps
 
     if (localizedNumber) this.inputReference().current.value = this.actualValue(digg(e, "target"))
 
     if (attribute && autoSubmit && model) this.delayAutoSubmit()
     if (digg(inputProps, "type") == "file") this.setState({blankInputName: this.getBlankInputName()})
-    if (form && name) form.setValue(name, e.target.value)
+
+    if (form && name) {
+      form.setValue(name, e.target.value)
+    }
+
     if (onChange) onChange(e)
   }
 
