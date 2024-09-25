@@ -2,13 +2,13 @@ import {Pressable, Text, View} from "react-native"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Column from "./components/column"
+import ColumnContent from "./column-content"
 import columnIdentifier from "./column-identifier.mjs"
 import columnVisible from "./column-visible.mjs"
-import {digs} from "diggerize"
-import Icon from "../icon"
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import * as inflection from "inflection"
+import modelCallbackArgs from "./model-callback-args.mjs"
 import Link from "../link"
-import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import Row from "./components/row"
@@ -24,20 +24,20 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     index: PropTypes.number.isRequired,
     isSmallScreen: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired,
-    liveTable: PropTypes.object.isRequired,
+    table: PropTypes.object.isRequired,
     preparedColumns: PropTypes.array,
     tableSettingFullCacheKey: PropTypes.string.isRequired
   })
 
   render() {
-    const {index, liveTable, model} = this.p
-    const {modelClass, workplace} = liveTable.p
-    const {actionsContent, destroyEnabled, editModelPath, viewModelPath} = liveTable.props
-    const {columns, currentWorkplace} = liveTable.state
-    const {styleForColumn, styleForRow} = liveTable.tt
+    const {index, table, model} = this.p
+    const {modelClass, workplace} = table.p
+    const {actionsContent, destroyEnabled, editModelPath, viewModelPath} = table.props
+    const {columns, currentWorkplace} = table.state
+    const {styleForColumn, styleForRow} = table.tt
     const even = index % 2 == 0
 
-    this.modelCallbackArgs = this._modelCallbackArgs() // 'model' can change so this needs to be re-cached for every render
+    this.modelCallbackArgs = modelCallbackArgs(table, model) // 'model' can change so this needs to be re-cached for every render
 
     let editPath, viewPath
 
@@ -65,20 +65,20 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
         }
         {columns && this.columnsContentFromColumns(model, even)}
         <Column dataSet={{class: "actions-column"}} style={styleForColumn({even, style: {}, type: "actions"})}>
-          {actionsContent && actionsContent(this.modelCallbackArgs)}
+          {actionsContent && actionsContent(this.tt.modelCallbackArgs)}
           {viewPath &&
-            <Link dataSet={{class: "view-button"}} to={viewPath}>
-              <Icon icon="magnifying-glass-solid" />
+            <Link dataSet={{class: "view-button"}} style={{marginLeft: 2, marginRight: 2}} to={viewPath}>
+              <FontAwesomeIcon name="search" size={18} />
             </Link>
           }
           {editPath &&
-            <Link dataSet={{class: "edit-button"}} to={editPath}>
-              <Icon icon="pen-solid" />
+            <Link dataSet={{class: "edit-button"}} style={{marginLeft: 2, marginRight: 2}} to={editPath}>
+              <FontAwesomeIcon name="pencil" size={20} />
             </Link>
           }
           {destroyEnabled && model.can("destroy") &&
-            <Pressable dataSet={{class: "destroy-button"}} onPress={this.tt.onDestroyClicked}>
-              <Icon icon="xmark-solid" />
+            <Pressable dataSet={{class: "destroy-button"}} style={{marginLeft: 2, marginRight: 2}} onPress={this.tt.onDestroyClicked}>
+              <FontAwesomeIcon name="remove" size={22} />
             </Pressable>
           }
         </Column>
@@ -96,7 +96,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   columnsContentFromColumns(model, even) {
-    const {isSmallScreen, liveTable, preparedColumns} = this.p
+    const {isSmallScreen, table, preparedColumns} = this.p
 
     return preparedColumns?.map(({column, tableSettingColumn, width}, columnIndex) => columnVisible(column, tableSettingColumn) &&
       <Column
@@ -105,74 +105,25 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
           identifier: columnIdentifier(column)
         }}
         key={columnIdentifier(column)}
-        style={liveTable.styleForColumn({column, columnIndex, even, style: {width: `${width}%`}})}
-        {...liveTable.columnProps(column)}
+        style={table.styleForColumn({column, columnIndex, even, style: {width: `${width}%`}})}
+        {...table.columnProps(column)}
       >
         {isSmallScreen &&
           <View dataSet={{class: "table--column-label"}}>
             <Text>
-              {liveTable.headerLabelForColumn(column)}
+              {table.headerLabelForColumn(column)}
             </Text>
           </View>
         }
         <View dataSet={{class: "table--column-value"}}>
-          {column.content && this.columnContentFromContentArg(column, model)}
-          {!column.content && column.attribute && this.columnsContentFromAttributeAndPath(column, model)}
+          {new ColumnContent({column, model, table}).content()}
         </View>
       </Column>
     )
   }
 
-  columnContentFromContentArg (column, _model) {
-    const value = column.content(this.modelCallbackArgs)
-
-    return this.presentColumnValue(value)
-  }
-
-  columnsContentFromAttributeAndPath (column, model) {
-    const {attribute: attributeName} = digs(column, "attribute")
-    const attributeNameUnderscore = inflection.underscore(attributeName)
-    const path = column.path || []
-    let value
-    let currentModel = model
-
-    if (path.length > 0) {
-      for (const pathPart of path) {
-        currentModel = currentModel[pathPart]()
-        if (!currentModel) return
-      }
-    }
-
-    if (!(attributeName in currentModel)) {
-      throw new Error(`${currentModel.constructor.modelName().human()} doesn't respond to ${attributeName}`)
-    }
-
-    if (currentModel.isAttributeLoaded(attributeName)) value = currentModel[attributeName]()
-
-    const attribute = currentModel.constructor.attributes().find((attribute) => attribute.name() == attributeNameUnderscore)
-    const modelColumn = attribute?.getColumn()
-
-    if (modelColumn?.getType() == "date" && value) {
-      return (
-        <Text>{this.presentDateTime({apiMakerType: "date", value})}</Text>
-      )
-    }
-
-    return this.presentColumnValue(value)
-  }
-
-  _modelCallbackArgs () {
-    const {model} = this.p
-    const modelArgName = inflection.camelize(this.props.liveTable.props.modelClass.modelClassData().name, true)
-    const modelCallbackArgs = {model}
-
-    modelCallbackArgs[modelArgName] = model
-
-    return modelCallbackArgs
-  }
-
   onDestroyClicked = async () => {
-    const {destroyMessage} = this.p.liveTable.props
+    const {destroyMessage} = this.p.table.props
     const {model} = this.p
 
     if (!confirm(I18n.t("js.shared.are_you_sure"))) {
@@ -187,48 +138,6 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
       }
     } catch (error) {
       FlashMessage.errorResponse(error)
-    }
-  }
-
-  presentColumnValue(value) {
-    if (value instanceof Date) {
-      return <Text>{this.presentDateTime({value})}</Text>
-    } else if (MoneyFormatter.isMoney(value)) {
-      return <Text>{MoneyFormatter.format(value)}</Text>
-    } else if (typeof value == "boolean") {
-      if (value) {
-        return <Text>{I18n.t("js.shared.yes", {defaultValue: "Yes"})}</Text>
-      }
-
-      return <Text>{I18n.t("js.shared.no", {defaultValue: "No"})}</Text>
-    } else if (Array.isArray(value)) {
-      return (
-        <Text>
-          {value
-            .map((valuePart) => this.presentColumnValue(valuePart))
-            .filter((valuePart) => Boolean(valuePart))
-            .join(", ")
-          }
-        </Text>
-      )
-    } else if (typeof value == "string") {
-      return <Text>{value}</Text>
-    }
-
-    return <Text>{value}</Text>
-  }
-
-  presentDateTime({apiMakerType, value}) {
-    if (!apiMakerType || apiMakerType == "time") {
-      const dateTimeFormatName = this.props.liveTable.props.defaultDateTimeFormatName || "time.formats.default"
-
-      return I18n.l(dateTimeFormatName, value)
-    } else if (apiMakerType == "date") {
-      const dateFormatName = this.props.liveTable.props.defaultDateFormatName || "date.formats.default"
-
-      return I18n.l(dateFormatName, value)
-    } else {
-      throw new Error(`Unhandled type: ${apiMakerType}`)
     }
   }
 }))

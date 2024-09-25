@@ -70,4 +70,11 @@ options.plugins.push(
   })
 )
 
-module.exports = merge({}, options, webpackConfig)
+const config = merge({}, options, webpackConfig)
+
+// Make sure to try and load .web.js files before .js
+const extensions = config.resolve.extensions
+
+extensions.unshift(".web.js")
+
+module.exports = config
