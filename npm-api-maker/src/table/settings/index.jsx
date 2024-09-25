@@ -1,6 +1,7 @@
 import BaseComponent from "../../base-component"
 import columnIdentifier from "../column-identifier.mjs"
 import ColumnRow from "./column-row"
+import DownloadAction from "./download-action"
 import {memo, useRef} from "react"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -46,6 +47,7 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
               Settings
             </Text>
           </View>
+          <DownloadAction table={table} />
           <View style={{marginBottom: 5}}>
             <Text style={{fontSize: 16, fontWeight: "bold"}}>
               Columns

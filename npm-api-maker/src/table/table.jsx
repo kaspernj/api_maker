@@ -9,9 +9,9 @@ import columnVisible from "./column-visible.mjs"
 import debounce from "debounce"
 import Filters from "./filters"
 import FlatList from "./components/flat-list"
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import Header from "./components/header"
 import HeaderColumn from "./header-column"
-import Icon from "../icon"
 import * as inflection from "inflection"
 import modelClassRequire from "../model-class-require.mjs"
 import ModelRow from "./model-row"
@@ -480,9 +480,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         index={index}
         isSmallScreen={this.tt.isSmallScreen}
         key={model.id()}
-        liveTable={this}
         model={model}
         preparedColumns={preparedColumns}
+        table={this}
         tableSettingFullCacheKey={tableSettingFullCacheKey}
       />
     )
@@ -556,14 +556,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       <View style={{flexDirection: "row"}}>
         {controls && controls({models, qParams, query, result})}
         <Pressable dataSet={{class: "filter-button"}} onPress={this.tt.onFilterClicked}>
-          <Icon icon="magnifying-glass-solid" />
+          <FontAwesomeIcon name="search" size={20} />
         </Pressable>
         <View style={{position: "relative"}}>
           {showSettings &&
             <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
           <Pressable dataSet={{class: "settings-button"}} onPress={this.tt.onSettingsClicked}>
-            <Icon icon="gear-solid" />
+            <FontAwesomeIcon name="gear" size={20} />
           </Pressable>
         </View>
       </View>

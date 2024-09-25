@@ -24,6 +24,7 @@
     "debounce": ">= 2.0.0",
     "diggerize": ">= 1.0.5",
     "epic-locks": ">= 1.0.2",
+    "file-saver": "^2.0.5",
     "form-data-objectizer": ">= 1.0.0",
     "form-serialize": ">= 0.7.2",
     "format-number": ">= 3.0.0",
