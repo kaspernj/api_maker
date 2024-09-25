@@ -9,12 +9,15 @@ export default class ApiMakerTableColumnContent {
     this.column = column
     this.mode = mode
     this.model = model
-    this.modelCallbackArgs = modelCallbackArgs(table, model)
     this.table = table
   }
 
-  columnContentFromContentArg(column, _model) {
-    const value = column.content(this.modelCallbackArgs)
+  columnContentFromContentArg() {
+    const args = modelCallbackArgs(this.table, this.model)
+
+    args.mode = this.mode
+
+    const value = this.column.content(args)
 
     return this.presentColumnValue(value)
   }
@@ -60,12 +63,10 @@ export default class ApiMakerTableColumnContent {
   }
 
   content() {
-    const {column, model} = digs(this, "column", "model")
-
-    if (column.content) {
-      return this.columnContentFromContentArg(column, model)
-    } else if (!column.content && column.attribute) {
-      return this.columnsContentFromAttributeAndPath(column, model)
+    if (this.column.content) {
+      return this.columnContentFromContentArg()
+    } else if (!this.column.content && this.column.attribute) {
+      return this.columnsContentFromAttributeAndPath()
     }
   }
 
@@ -90,6 +91,9 @@ export default class ApiMakerTableColumnContent {
 
     } else if (typeof value == "string") {
       contentText = value
+    } else {
+      // Its a React node - just return it and trust the provider to be HTML compatible.
+      return value
     }
 
     if (this.mode == "html") {
