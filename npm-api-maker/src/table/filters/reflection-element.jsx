@@ -11,31 +11,27 @@ export default memo(shapeComponent(class ReflectionElement extends BaseComponent
   static propTypes = PropTypesExact({
     currentModelClass: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
-    reflection: PropTypes.instanceOf(Reflection).isRequired
+    reflectionName: PropTypes.string.isRequired
   })
 
   render() {
-    const {currentModelClass, reflection} = this.p
+    const {currentModelClass, reflectionName} = this.p
 
     return (
       <Pressable
         dataSet={{
           class: "reflection-element",
           modelClass: currentModelClass.modelClassData().name,
-          reflectionName: reflection.name()
+          reflectionName: reflectionName
         }}
         onPress={digg(this, "onReflectionClicked")}
       >
         <Text>
-          {currentModelClass.humanAttributeName(reflection.name())}
+          {currentModelClass.humanAttributeName(reflectionName)}
         </Text>
       </Pressable>
     )
   }
 
-  onReflectionClicked = (e) => {
-    e.preventDefault()
-
-    this.p.onClick({reflection: digg(this, "props", "reflection")})
-  }
+  onReflectionClicked = () => this.p.onClick({reflectionName: this.p.reflectionName})
 }))

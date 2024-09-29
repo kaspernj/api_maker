@@ -24,6 +24,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
 
   setup() {
     this.useStates({
+      associations: null,
       attribute: () => this.currentModelClassFromPath(this.props.filter.p || [])
         .ransackableAttributes()
         .find((attribute) => attribute.name() == this.props.filter.a),
@@ -33,11 +34,26 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       scope: this.props.filter.sc,
       value: this.props.filter.v
     })
-    this.valueInputRef = useRef()
+    const currentModelClass = useMemo(() => this.currentModelClassFromPath(this.s.path), [this.s.path.join("--")])
+
+    this.setInstance({
+      currentModelClass,
+      valueInputRef: useRef()
+    })
 
     useMemo(() => {
       this.loadRansackPredicates()
     }, [])
+    useMemo(() => {
+      this.loadAssociations()
+    }, [currentModelClass.modelClassData().name])
+  }
+
+  async loadAssociations() {
+    const result = await Services.current().sendRequest("Models::Associations", {resource_name: this.tt.currentModelClass.modelClassData().name})
+    const associations = result.associations.map((association) => inflection.camelize(association, true))
+
+    this.setState({associations})
   }
 
   async loadRansackPredicates() {
@@ -57,7 +73,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
 
   render() {
     const {valueInputRef} = digs(this, "valueInputRef")
-    const currentModelClass = this.currentModelClass()
+    const {currentModelClass} = this.tt
     const {attribute, predicate, predicates, scope, value} = this.s
     let submitEnabled = false
 
@@ -74,7 +90,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
             {this.currentPathParts().map(({translation}, pathPartIndex) =>
               <View key={`${pathPartIndex}-${translation}`} style={{flexDirection: "row"}}>
                 {pathPartIndex > 0 &&
-                  <Text style={{marginRight: "5px", marginLeft: "5px"}}>
+                  <Text style={{marginRight: 5, marginLeft: 5}}>
                     -
                   </Text>
                 }
@@ -86,12 +102,12 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
           </View>
           <View style={{flexDirection: "row"}}>
             <View>
-              {this.sortedByName(this.reflectionsWithModelClass(currentModelClass.ransackableAssociations()), currentModelClass).map((reflection) =>
+              {this.s.associations?.map((reflectionName) =>
                 <ReflectionElement
                   currentModelClass={currentModelClass}
-                  key={reflection.name()}
+                  key={reflectionName}
                   onClick={this.tt.onReflectionClicked}
-                  reflection={reflection}
+                  reflectionName={reflectionName}
                 />
               )}
             </View>
@@ -140,8 +156,6 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       </View>
     )
   }
-
-  currentModelClass = () => this.currentModelClassFromPath(this.s.path)
 
   currentModelClassFromPath(path) {
     const {modelClass} = this.p
@@ -204,16 +218,15 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     this.setState({predicate})
   }
 
-  onReflectionClicked = ({reflection}) => {
-    const newPath = this.state.path.concat([inflection.underscore(reflection.name())])
+  onReflectionClicked = ({reflectionName}) => {
+    const newPath = this.state.path.concat([inflection.underscore(reflectionName)])
 
     this.setState({
+      associations: null,
       attribute: undefined,
       path: newPath,
       predicate: undefined
     })
-
-    this.props.onPathChanged
   }
 
   onScopeClicked = ({scope}) => {
