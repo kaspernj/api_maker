@@ -1,7 +1,8 @@
 import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
 import BaseComponent from "../../base-component"
 import Checkbox from "../../bootstrap/checkbox"
-import {digg, digs} from "diggerize"
+import {digg} from "diggerize"
+import {Form} from "../../form"
 import Input from "../../bootstrap/input"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {memo} from "react"
@@ -12,6 +13,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
     const {t} = useI18n({namespace: "js.api_maker.table.filters.save_search_modal"})
 
     this.t = t
+    this.useStates({form: null})
   }
 
   render() {
@@ -20,7 +22,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
 
     return (
       <Modal onRequestClose={onRequestClose} {...restProps}>
-        <form onSubmit={this.onSaveSearchSubmit}>
+        <Form onSubmit={this.tt.onSaveSearchSubmit} setForm={this.setStates.form}>
           <Input
             defaultValue={search.name()}
             id="table_search_name"
@@ -36,27 +38,24 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
           <button className="save-search-submit-button">
             {this.t(".save_search", {defaultValue: "Save search"})}
           </button>
-        </form>
+        </Form>
       </Modal>
     )
   }
 
-  onSaveSearchSubmit = async (e) => {
-    e.preventDefault()
-
-    const form = digg(e, "target")
-    const formData = new FormData(form)
+  onSaveSearchSubmit = async () => {
+    const formData = this.s.form.asObject()
     const {currentFilters, currentUser, onRequestClose, search} = this.p
 
     if (search.isNewRecord()) {
-      formData.append("table_search[query_params]", JSON.stringify(currentFilters()))
+      formData.table_search.query_params = JSON.stringify(currentFilters())
     }
 
-    formData.append("table_search[user_type]", digg(currentUser.modelClassData(), "className"))
-    formData.append("table_search[user_id]", currentUser.id())
+    formData.table_search.user_type = digg(currentUser.modelClassData(), "className")
+    formData.table_search.user_id = currentUser.id()
 
     try {
-      await search.saveRaw(formData, {form})
+      await search.saveRaw(formData)
       onRequestClose()
     } catch (error) {
       FlashMessage.errorResponse(error)

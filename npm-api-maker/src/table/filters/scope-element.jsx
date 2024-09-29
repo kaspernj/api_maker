@@ -2,6 +2,7 @@ import BaseComponent from "../../base-component"
 import {digg} from "diggerize"
 import PropTypes from "prop-types"
 import {memo} from "react"
+import {Pressable, Text} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
 export default memo(shapeComponent(class ScopeElement extends BaseComponent {
@@ -22,14 +23,16 @@ export default memo(shapeComponent(class ScopeElement extends BaseComponent {
     if (active) style.fontWeight = "bold"
 
     return (
-      <div
-        className="scope-element"
+      <Pressable
+        dataSet={{class: "scope-element"}}
         key={scope.name()}
-        onClick={digg(this, "onScopeClicked")}
-        style={style}
+        onPress={digg(this, "onScopeClicked")}
+
       >
-        {scope.name()}
-      </div>
+        <Text style={style}>
+          {scope.name()}
+        </Text>
+      </Pressable>
     )
   }
 

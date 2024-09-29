@@ -31,7 +31,7 @@ describe "bootstrap - live table - filter" do
     wait_for_selector model_row_selector(task2)
     wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".add-new-filter-button").click
-    wait_for_and_find(".attribute-element[data-model-class='Task'][data-attribute-name='name']").click
+    wait_for_and_find("[data-class='attribute-element'][data-model-class='Task'][data-attribute-name='name']").click
     wait_for_and_find(".predicate-select").select("eq")
     wait_for_and_find(".value-input").set("Task 2")
     wait_for_and_find(".apply-filter-button").click
@@ -54,8 +54,8 @@ describe "bootstrap - live table - filter" do
     wait_for_selector model_row_selector(task2)
     wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".add-new-filter-button").click
-    wait_for_and_find(".reflection-element[data-model-class='Task'][data-reflection-name='project']").click
-    wait_for_and_find(".attribute-element[data-model-class='Project'][data-attribute-name='name']").click
+    wait_for_and_find("[data-class='reflection-element'][data-model-class='Task'][data-reflection-name='project']").click
+    wait_for_and_find("[data-class='attribute-element'][data-model-class='Project'][data-attribute-name='name']").click
     wait_for_and_find(".predicate-select").select("eq")
     wait_for_and_find(".value-input").set("Project 2")
     wait_for_and_find(".apply-filter-button").click
@@ -73,8 +73,8 @@ describe "bootstrap - live table - filter" do
     wait_for_selector model_row_selector(task2)
     wait_for_and_find("[data-class='filter-button']").click
     wait_for_and_find(".add-new-filter-button").click
-    wait_for_and_find(".reflection-element[data-model-class='Task'][data-reflection-name='accountCustomer']").click
-    wait_for_and_find(".attribute-element[data-model-class='Customer'][data-attribute-name='name']").click
+    wait_for_and_find("[data-class='reflection-element'][data-model-class='Task'][data-reflection-name='accountCustomer']").click
+    wait_for_and_find("[data-class='attribute-element'][data-model-class='Customer'][data-attribute-name='name']").click
     wait_for_and_find(".predicate-select").select("eq")
     wait_for_and_find(".value-input").set("Customer 2")
     wait_for_and_find(".apply-filter-button").click
