@@ -2,6 +2,7 @@ import AttributeElement from "./attribute-element"
 import BaseComponent from "../../base-component"
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
+import {Form} from "../../form"
 import Input from "../../inputs/input"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
@@ -66,22 +67,24 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     }
 
     return (
-      <div className="api-maker--table--filters--filter-form">
-        <form onSubmit={this.tt.onSubmit}>
-          <div>
+      <View dataSet={{class: "api-maker--table--filters--filter-form"}}>
+        <Form onSubmit={this.tt.onSubmit}>
+          <View style={{flexDirection: "row"}}>
             {this.currentPathParts().map(({translation}, pathPartIndex) =>
-              <span key={`${pathPartIndex}-${translation}`}>
+              <View key={`${pathPartIndex}-${translation}`} style={{flexDirection: "row"}}>
                 {pathPartIndex > 0 &&
-                  <span style={{marginRight: "5px", marginLeft: "5px"}}>
+                  <Text style={{marginRight: "5px", marginLeft: "5px"}}>
                     -
-                  </span>
+                  </Text>
                 }
-                {translation}
-              </span>
+                <Text>
+                  {translation}
+                </Text>
+              </View>
             )}
-          </div>
-          <div style={{display: "flex"}}>
-            <div>
+          </View>
+          <View style={{flexDirection: "row"}}>
+            <View>
               {this.sortedByName(this.reflectionsWithModelClass(currentModelClass.ransackableAssociations()), currentModelClass).map((reflection) =>
                 <ReflectionElement
                   currentModelClass={currentModelClass}
@@ -90,8 +93,8 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                   reflection={reflection}
                 />
               )}
-            </div>
-            <div>
+            </View>
+            <View>
               {this.sortedByName(currentModelClass.ransackableAttributes(), currentModelClass).map((attribute) =>
                 <AttributeElement
                   active={attribute.name() == this.state.attribute?.name()}
@@ -109,8 +112,8 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                   onScopeClicked={this.tt.onScopeClicked}
                 />
               )}
-            </div>
-            <div>
+            </View>
+            <View>
               {predicates && !this.state.scope &&
                 <Select
                   className="predicate-select"
@@ -120,20 +123,20 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                   options={predicates.map((predicate) => digg(predicate, "name"))}
                 />
               }
-            </div>
-            <div>
+            </View>
+            <View>
               {((attribute && predicate) || scope) &&
                 <Input className="value-input" defaultValue={value} inputRef={valueInputRef} />
               }
-            </div>
-          </div>
-          <div>
+            </View>
+          </View>
+          <View>
             <button className="apply-filter-button" disabled={!submitEnabled}>
               {I18n.t("js.api_maker.table.filters.relationship_select.apply", {defaultValue: "Apply"})}
             </button>
-          </div>
-        </form>
-      </div>
+          </View>
+        </Form>
+      </View>
     )
   }
 
@@ -219,9 +222,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     })
   }
 
-  onSubmit = (e) => {
-    e.preventDefault()
-
+  onSubmit = () => {
     const {filter, querySearchName} = this.p
     const {attribute, path, predicate, scope} = this.s
     const {filterIndex} = digs(filter, "filterIndex")

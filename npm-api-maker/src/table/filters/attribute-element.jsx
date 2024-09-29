@@ -1,10 +1,11 @@
 import Attribute from "../../base-model/attribute"
 import BaseComponent from "../../base-component"
-import {digg, digs} from "diggerize"
+import {digg} from "diggerize"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
+import {Pressable, Text} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
 export default memo(shapeComponent(class AttributeElement extends BaseComponent {
@@ -23,15 +24,18 @@ export default memo(shapeComponent(class AttributeElement extends BaseComponent 
     if (active) style.fontWeight = "bold"
 
     return (
-      <div
-        className="attribute-element"
-        data-attribute-name={attribute.name()}
-        data-model-class={currentModelClass.modelClassData().name}
-        onClick={digg(this, "onAttributeClicked")}
-        style={style}
+      <Pressable
+        dataSet={{
+          class: "attribute-element",
+          attributeName: attribute.name(),
+          modelClass: currentModelClass.modelClassData().name
+        }}
+        onPress={digg(this, "onAttributeClicked")}
       >
-        {currentModelClass.humanAttributeName(inflection.camelize(attribute.name(), true))}
-      </div>
+        <Text style={style}>
+          {currentModelClass.humanAttributeName(inflection.camelize(attribute.name(), true))}
+        </Text>
+      </Pressable>
     )
   }
 
