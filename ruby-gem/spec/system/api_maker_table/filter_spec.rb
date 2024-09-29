@@ -56,7 +56,7 @@ describe "bootstrap - live table - filter" do
     wait_for_and_find(".add-new-filter-button").click
     wait_for_and_find("[data-class='reflection-element'][data-model-class='Task'][data-reflection-name='project']").click
     wait_for_and_find("[data-class='attribute-element'][data-model-class='Project'][data-attribute-name='name']").click
-    wait_for_and_find("[data-class='predicate-select']").select("eq")
+    wait_for_and_find(".predicate-select").select("eq")
     wait_for_and_find(".value-input").set("Project 2")
     wait_for_and_find(".apply-filter-button").click
     wait_for_no_selector model_row_selector(task1)
