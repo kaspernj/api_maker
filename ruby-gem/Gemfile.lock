@@ -406,6 +406,7 @@ DEPENDENCIES
   factory_bot_rails
   htmlbeautifier
   js-routes (= 2.0.8)
+  json (= 2.7.2)
   minitest (>= 5.15)
   money-rails
   pry-rails
