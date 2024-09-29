@@ -25,7 +25,10 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "htmlbeautifier"
   gem "js-routes", "2.0.8"
+
   gem "json", "2.7.2"
+  gem "racc", "1.8.1"
+
   gem "money-rails"
   gem "pry-rails"
   gem "public_activity"

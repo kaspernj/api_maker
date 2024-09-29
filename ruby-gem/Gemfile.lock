@@ -239,7 +239,7 @@ GEM
     public_suffix (4.0.7)
     puma (5.6.4)
       nio4r (~> 2.0)
-    racc (1.8.0)
+    racc (1.8.1)
     rack (2.2.9)
     rack-proxy (0.7.7)
       rack
@@ -412,6 +412,7 @@ DEPENDENCIES
   pry-rails
   public_activity
   puma
+  racc (= 1.8.1)
   rails_best_practices
   rspec-rails
   rspec-retry
