@@ -48,11 +48,11 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
     const {currentFilters, currentUser, onRequestClose, search} = this.p
 
     if (search.isNewRecord()) {
-      formData.append("table_search[query_params]", JSON.stringify(currentFilters()))
+      formData.table_search.query_params = JSON.stringify(currentFilters())
     }
 
-    formData.append("table_search[user_type]", digg(currentUser.modelClassData(), "className"))
-    formData.append("table_search[user_id]", currentUser.id())
+    formData.table_search.user_type = digg(currentUser.modelClassData(), "className")
+    formData.table_search.user_id = currentUser.id()
 
     try {
       await search.saveRaw(formData)
