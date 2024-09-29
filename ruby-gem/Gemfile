@@ -41,7 +41,7 @@ group :development, :test do
   gem "rubocop-rspec_rails", ">= 2.30.0"
   gem "selenium-webdriver", ">= 4.1.0"
   gem "shakapacker", "8.0.1"
-  gem "sqlite3"
+  gem "sqlite3", "1.7.3"
   gem "tretry"
   gem "tzinfo-data"
   gem "webdrivers", ">= 5.3.1"
