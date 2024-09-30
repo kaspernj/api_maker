@@ -28,30 +28,33 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       attribute: () => this.currentModelClassFromPath(this.props.filter.p || [])
         .ransackableAttributes()
         .find((attribute) => attribute.name() == this.props.filter.a),
+      actualCurrentModelClass: () => ({modelClass: this.p.modelClass}),
       path: this.props.filter.p || [],
       predicate: undefined,
       predicates: undefined,
       scope: this.props.filter.sc,
       value: this.props.filter.v
     })
-    const currentModelClass = useMemo(() => this.currentModelClassFromPath(this.s.path), [this.s.path.join("--")])
 
-    this.setInstance({
-      currentModelClass,
-      valueInputRef: useRef()
-    })
+    this.setInstance({valueInputRef: useRef()})
 
     useMemo(() => {
       this.loadRansackPredicates()
     }, [])
     useMemo(() => {
       this.loadAssociations()
-    }, [currentModelClass.modelClassData().name])
+    }, [this.currentModelClass().modelClassData().name])
   }
 
+  currentModelClass = () => digg(this.s.actualCurrentModelClass, "modelClass")
+
   async loadAssociations() {
-    const result = await Services.current().sendRequest("Models::Associations", {resource_name: this.tt.currentModelClass.modelClassData().name})
-    const associations = result.associations.map((association) => inflection.camelize(association, true))
+    const result = await Services.current().sendRequest("Models::Associations", {resource_name: this.currentModelClass().modelClassData().name})
+    const associations = result.associations.map(({human_name, reflection_name, resource}) => ({
+      humanName: human_name,
+      reflectionName: inflection.camelize(reflection_name, true),
+      resource
+    }))
 
     this.setState({associations})
   }
@@ -73,8 +76,8 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
 
   render() {
     const {valueInputRef} = digs(this, "valueInputRef")
-    const {currentModelClass} = this.tt
-    const {attribute, predicate, predicates, scope, value} = this.s
+    const {attribute, path, predicate, predicates, scope, value} = this.s
+    const currentModelClass = this.currentModelClass()
     let submitEnabled = false
 
     if (attribute && predicate) {
@@ -87,27 +90,27 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       <View dataSet={{class: "api-maker--table--filters--filter-form"}}>
         <Form onSubmit={this.tt.onSubmit}>
           <View style={{flexDirection: "row"}}>
-            {this.currentPathParts().map(({translation}, pathPartIndex) =>
-              <View key={`${pathPartIndex}-${translation}`} style={{flexDirection: "row"}}>
+            {path.map(({humanName, reflectionName}, pathPartIndex) =>
+              <View key={`${pathPartIndex}-${reflectionName}`} style={{flexDirection: "row"}}>
                 {pathPartIndex > 0 &&
                   <Text style={{marginRight: 5, marginLeft: 5}}>
                     -
                   </Text>
                 }
                 <Text>
-                  {translation}
+                  {humanName}
                 </Text>
               </View>
             )}
           </View>
           <View style={{flexDirection: "row"}}>
             <View>
-              {this.s.associations?.map((reflectionName) =>
+              {this.s.associations?.map((reflection) =>
                 <ReflectionElement
                   currentModelClass={currentModelClass}
-                  key={reflectionName}
+                  key={reflection.reflectionName}
                   onClick={this.tt.onReflectionClicked}
-                  reflectionName={reflectionName}
+                  reflection={reflection}
                 />
               )}
             </View>
@@ -218,12 +221,13 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     this.setState({predicate})
   }
 
-  onReflectionClicked = ({reflectionName}) => {
-    const newPath = this.state.path.concat([inflection.underscore(reflectionName)])
+  onReflectionClicked = ({reflection}) => {
+    const newPath = this.state.path.concat([reflection])
 
     this.setState({
       associations: null,
       attribute: undefined,
+      actualCurrentModelClass: {modelClass: digg(reflection, "resource")},
       path: newPath,
       predicate: undefined
     })

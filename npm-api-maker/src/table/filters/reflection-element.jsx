@@ -1,37 +1,36 @@
 import BaseComponent from "../../base-component"
-import {digg} from "diggerize"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
 import {Pressable, Text} from "react-native"
-import Reflection from "../../base-model/reflection"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
 export default memo(shapeComponent(class ReflectionElement extends BaseComponent {
   static propTypes = PropTypesExact({
     currentModelClass: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
-    reflectionName: PropTypes.string.isRequired
+    reflection: PropTypes.object.isRequired
   })
 
   render() {
-    const {currentModelClass, reflectionName} = this.p
+    const {currentModelClass, reflection} = this.p
+    const {humanName, reflectionName} = reflection
 
     return (
       <Pressable
         dataSet={{
           class: "reflection-element",
           modelClass: currentModelClass.modelClassData().name,
-          reflectionName: reflectionName
+          reflectionName
         }}
-        onPress={digg(this, "onReflectionClicked")}
+        onPress={this.tt.onReflectionClicked}
       >
         <Text>
-          {currentModelClass.humanAttributeName(reflectionName)}
+          {humanName}
         </Text>
       </Pressable>
     )
   }
 
-  onReflectionClicked = () => this.p.onClick({reflectionName: this.p.reflectionName})
+  onReflectionClicked = () => this.p.onClick({reflection: this.p.reflection})
 }))
