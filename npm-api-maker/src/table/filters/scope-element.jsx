@@ -1,5 +1,4 @@
 import BaseComponent from "../../base-component"
-import {digg} from "diggerize"
 import PropTypes from "prop-types"
 import {memo} from "react"
 import {Pressable, Text} from "react-native"
@@ -13,7 +12,7 @@ export default memo(shapeComponent(class ScopeElement extends BaseComponent {
   static propTypes = {
     active: PropTypes.bool.isRequired,
     onScopeClicked: PropTypes.func.isRequired,
-    scope: PropTypes.object.isRequired
+    scope: PropTypes.string.isRequired
   }
 
   render() {
@@ -25,12 +24,12 @@ export default memo(shapeComponent(class ScopeElement extends BaseComponent {
     return (
       <Pressable
         dataSet={{class: "scope-element"}}
-        key={scope.name()}
-        onPress={digg(this, "onScopeClicked")}
+        key={scope}
+        onPress={this.tt.onScopeClicked}
 
       >
         <Text style={style}>
-          {scope.name()}
+          {scope}
         </Text>
       </Pressable>
     )

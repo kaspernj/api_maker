@@ -1,5 +1,6 @@
 import {Pressable, Text, View} from "react-native"
 import BaseComponent from "../../base-component"
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
@@ -27,7 +28,7 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
     const {a, pre, sc} = this.props
 
     return (
-      <View style={{display: "flex", flexDirection: "row", backgroundColor: "grey", paddingVertical: 10, paddingHorizontal: 6}}>
+      <View style={{alignItems: "center", flexDirection: "row", backgroundColor: "grey", paddingVertical: 10, paddingHorizontal: 6}}>
         <Pressable dataSet={{class: "filter-label"}} onPress={this.tt.onFilterPressed}>
           <Text>
             {p.length > 0 &&
@@ -37,9 +38,7 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
           </Text>
         </Pressable>
         <Pressable dataSet={{class: "remove-filter-button"}} onPress={this.tt.onRemoveFilterPressed} style={{marginLeft: 6}}>
-          <Text>
-            &#10006;
-          </Text>
+          <FontAwesomeIcon name="remove" />
         </Pressable>
       </View>
     )
