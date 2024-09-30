@@ -7,7 +7,7 @@ import Input from "../../inputs/input"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo, useMemo, useRef} from "react"
-import {Text, View} from "react-native"
+import {ActivityIndicator, Text, View} from "react-native"
 import ReflectionElement from "./reflection-element"
 import ScopeElement from "./scope-element"
 import Select from "../../inputs/select"
@@ -27,6 +27,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       associations: null,
       attribute: undefined,
       actualCurrentModelClass: () => ({modelClass: this.p.modelClass}),
+      loading: 0,
       modelClassName: digg(this.p.modelClass.modelClassData(), "className"),
       path: [],
       predicate: undefined,
@@ -43,7 +44,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       this.loadRansackPredicates()
 
       if (this.props.filter.v) {
-        this.loadInitialValues()
+        this.loadInitialValuesWithLoadingIndicator()
       }
     }, [])
 
@@ -70,10 +71,28 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   }
 
   async loadAssociations() {
-    const result = await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
-    const {associations, ransackableAttributes, ransackableScopes} = this.parseAssociationData(result)
+    this.increaseLoading()
 
-    this.setState({associations, ransackableAttributes, ransackableScopes})
+    try {
+      const result = await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
+      const {associations, ransackableAttributes, ransackableScopes} = this.parseAssociationData(result)
+
+      this.setState({associations, ransackableAttributes, ransackableScopes})
+    } finally {
+      this.decreaseLoading()
+    }
+  }
+
+  decreaseLoading = () => this.setState((prevState) => ({loading: prevState.loading - 1}))
+  increaseLoading = () => this.setState((prevState) => ({loading: prevState.loading + 1}))
+
+  async loadInitialValuesWithLoadingIndicator() {
+    try {
+      this.increaseLoading()
+      await this.loadInitialValues()
+    } finally {
+      this.decreaseLoading()
+    }
   }
 
   async loadInitialValues() {
@@ -103,18 +122,24 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   }
 
   async loadRansackPredicates() {
-    const response = await Services.current().sendRequest("Ransack::Predicates")
-    const predicates = digg(response, "predicates")
-    let currentPredicate
+    this.increaseLoading()
 
-    if (this.props.filter.pre) {
-      currentPredicate = predicates.find((predicate) => predicate.name == this.props.filter.pre)
+    try {
+      const response = await Services.current().sendRequest("Ransack::Predicates")
+      const predicates = digg(response, "predicates")
+      let currentPredicate
+
+      if (this.props.filter.pre) {
+        currentPredicate = predicates.find((predicate) => predicate.name == this.props.filter.pre)
+      }
+
+      this.setState({
+        predicate: currentPredicate,
+        predicates
+      })
+    } finally {
+      this.decreaseLoading()
     }
-
-    this.setState({
-      predicate: currentPredicate,
-      predicates
-    })
   }
 
   render() {
@@ -129,7 +154,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     }
 
     return (
-      <View dataSet={{class: "api-maker--table--filters--filter-form"}}>
+      <View dataSet={{class: "api-maker--table--filters--filter-form"}} style={{minWidth: 50, minHeight: 50}}>
         <Form onSubmit={this.tt.onSubmit}>
           <View style={{flexDirection: "row"}}>
             {path.map(({humanName, reflectionName}, pathPartIndex) =>
@@ -198,6 +223,19 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
             </button>
           </View>
         </Form>
+        {this.s.loading > 0 &&
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              position: "absolute",
+              width: "100%",
+              height: "100%"
+            }}
+          >
+            <ActivityIndicator size="large" />
+          </View>
+        }
       </View>
     )
   }
@@ -258,13 +296,13 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
 
   onPredicateChanged = (e) => {
     const chosenPredicateName = digg(e, "target", "value")
-    const predicate = this.state.predicates.find((predicate) => predicate.name == chosenPredicateName)
+    const predicate = this.s.predicates.find((predicate) => predicate.name == chosenPredicateName)
 
     this.setState({predicate})
   }
 
   onReflectionClicked = ({reflection}) => {
-    const newPath = this.state.path.concat([reflection])
+    const newPath = this.s.path.concat([reflection])
 
     this.setState({
       associations: null,
