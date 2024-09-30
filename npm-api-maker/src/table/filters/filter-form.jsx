@@ -25,13 +25,14 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   setup() {
     this.useStates({
       associations: null,
-      attribute: () => this.currentModelClassFromPath(this.props.filter.p || [])
-        .ransackableAttributes()
-        .find((attribute) => attribute.name() == this.props.filter.a),
+      attribute: undefined,
       actualCurrentModelClass: () => ({modelClass: this.p.modelClass}),
-      path: this.props.filter.p || [],
+      modelClassName: digg(this.p.modelClass.modelClassData(), "className"),
+      path: [],
       predicate: undefined,
       predicates: undefined,
+      ransackableAttributes: undefined,
+      ransackableScopes: undefined,
       scope: this.props.filter.sc,
       value: this.props.filter.v
     })
@@ -40,23 +41,65 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
 
     useMemo(() => {
       this.loadRansackPredicates()
+
+      if (this.props.filter.v) {
+        this.loadInitialValues()
+      }
     }, [])
+
     useMemo(() => {
       this.loadAssociations()
-    }, [this.currentModelClass().modelClassData().name])
+    }, [this.s.modelClassName])
   }
 
   currentModelClass = () => digg(this.s.actualCurrentModelClass, "modelClass")
 
-  async loadAssociations() {
-    const result = await Services.current().sendRequest("Models::Associations", {resource_name: this.currentModelClass().modelClassData().name})
-    const associations = result.associations.map(({human_name, reflection_name, resource}) => ({
+  parseAssociationData(result) {
+    const associations = result.associations.map(({human_name, model_class_name, reflection_name, resource}) => ({
       humanName: human_name,
+      modelClassName: model_class_name,
       reflectionName: inflection.camelize(reflection_name, true),
       resource
     }))
+    const ransackableAttributes = digg(result, "ransackable_attributes").map(({attribute_name: attributeName, human_name: humanName}) => ({
+      attributeName, humanName
+    }))
+    const ransackableScopes = digg(result, "ransackable_scopes")
 
-    this.setState({associations})
+    return {associations, ransackableAttributes, ransackableScopes}
+  }
+
+  async loadAssociations() {
+    const result = await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
+    const {associations, ransackableAttributes, ransackableScopes} = this.parseAssociationData(result)
+
+    this.setState({associations, ransackableAttributes, ransackableScopes})
+  }
+
+  async loadInitialValues() {
+    let result = await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
+    let data = this.parseAssociationData(result)
+    let modelClassName
+    const path = []
+
+    for (const pathPart of this.props.filter.p) {
+      const reflection = data.associations.find((association) => digg(association, "reflectionName") == inflection.camelize(pathPart, true))
+
+      if (!reflection) throw new Error(`Couldn't find association by that name ${this.s.modelClassName}#${pathPart}`)
+
+      modelClassName = digg(reflection, "modelClassName")
+
+      result = await Services.current().sendRequest("Models::Associations", {model_class_name: modelClassName})
+      data = this.parseAssociationData(result)
+
+      path.push(reflection)
+    }
+
+    const {ransackableAttributes} = data
+    const attribute = this.p.filter.a
+    const ransackableAttribute = ransackableAttributes.find((ransackableAttribute) => digg(ransackableAttribute, "attributeName") == attribute)
+
+    this.setState({attribute: ransackableAttribute, modelClassName, path})
   }
 
   async loadRansackPredicates() {
@@ -77,7 +120,6 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   render() {
     const {valueInputRef} = digs(this, "valueInputRef")
     const {attribute, path, predicate, predicates, scope, value} = this.s
-    const currentModelClass = this.currentModelClass()
     let submitEnabled = false
 
     if (attribute && predicate) {
@@ -107,27 +149,27 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
             <View>
               {this.s.associations?.map((reflection) =>
                 <ReflectionElement
-                  currentModelClass={currentModelClass}
                   key={reflection.reflectionName}
+                  modelClassName={this.s.modelClassName}
                   onClick={this.tt.onReflectionClicked}
                   reflection={reflection}
                 />
               )}
             </View>
             <View>
-              {this.sortedByName(currentModelClass.ransackableAttributes(), currentModelClass).map((attribute) =>
+              {this.s.ransackableAttributes?.map((attribute) =>
                 <AttributeElement
-                  active={attribute.name() == this.state.attribute?.name()}
+                  active={attribute.attributeName == this.s.attribute?.attributeName}
                   attribute={attribute}
-                  currentModelClass={currentModelClass}
-                  key={attribute.name()}
+                  key={attribute.attributeName}
+                  modelClassName={this.s.modelClassName}
                   onClick={this.tt.onAttributeClicked}
                 />
               )}
-              {currentModelClass.ransackableScopes().map((scope) =>
+              {this.s.ransackableScopes?.map((scope) =>
                 <ScopeElement
-                  active={scope.name() == this.state.scope?.name()}
-                  key={scope.name()}
+                  active={scope == this.s.scope}
+                  key={scope}
                   scope={scope}
                   onScopeClicked={this.tt.onScopeClicked}
                 />
@@ -228,6 +270,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       associations: null,
       attribute: undefined,
       actualCurrentModelClass: {modelClass: digg(reflection, "resource")},
+      modelClassName: digg(reflection, "modelClassName"),
       path: newPath,
       predicate: undefined
     })
@@ -246,13 +289,14 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     const {filterIndex} = digs(filter, "filterIndex")
     const searchParams = Params.parse()[querySearchName] || {}
     const value = digg(this.tt.valueInputRef, "current", "value")
+    const p = path.map((reflection) => inflection.underscore(reflection.reflectionName))
     const newSearchParams = {
-      p: path,
+      p,
       v: value
     }
 
     if (attribute) {
-      newSearchParams.a = attribute.name()
+      newSearchParams.a = digg(attribute, "attributeName")
       newSearchParams.pre = digg(predicate, "name")
     } else if (scope) {
       newSearchParams.sc = inflection.underscore(scope.name())

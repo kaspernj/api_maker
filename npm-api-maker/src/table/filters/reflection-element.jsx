@@ -7,20 +7,20 @@ import {shapeComponent} from "set-state-compare/src/shape-component"
 
 export default memo(shapeComponent(class ReflectionElement extends BaseComponent {
   static propTypes = PropTypesExact({
-    currentModelClass: PropTypes.func.isRequired,
+    modelClassName: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
     reflection: PropTypes.object.isRequired
   })
 
   render() {
-    const {currentModelClass, reflection} = this.p
+    const {modelClassName, reflection} = this.p
     const {humanName, reflectionName} = reflection
 
     return (
       <Pressable
         dataSet={{
           class: "reflection-element",
-          modelClass: currentModelClass.modelClassData().name,
+          modelClass: modelClassName,
           reflectionName
         }}
         onPress={this.tt.onReflectionClicked}

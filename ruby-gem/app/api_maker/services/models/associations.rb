@@ -1,23 +1,38 @@
 class Services::Models::Associations < ApiMaker::BaseService
   def perform
-    resource_name = args.fetch(:resource_name)
-    resource = "Resources::#{resource_name}Resource".safe_constantize
-    model_class = resource.model_class
     associations = []
     model_class.reflections.each do |reflection_name, reflection|
       begin
-        resource = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass)
+        reflection_resource = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass)
       rescue ApiMaker::MemoryStorage::ResourceNotFoundError, ArgumentError => e
         # Ignore
       end
 
       associations << {
         human_name: model_class.human_attribute_name(reflection_name),
+        model_class_name: reflection.klass.name,
         reflection_name:,
-        resource:
+        resource: reflection_resource
       }
     end
 
-    succeed!(associations:)
+    succeed!(associations:, ransackable_attributes:, ransackable_scopes:)
+  end
+
+  def model_class
+    @model_class ||= args.fetch(:model_class_name).safe_constantize
+  end
+
+  def ransackable_attributes
+    @ransackable_attributes ||= model_class.ransackable_attributes(current_ability).sort.map do |attribute_name|
+      {
+        attribute_name:,
+        human_name: model_class.human_attribute_name(attribute_name)
+      }
+    end
+  end
+
+  def ransackable_scopes
+    @ransackable_scopes ||= model_class.ransackable_scopes(current_ability).sort
   end
 end
