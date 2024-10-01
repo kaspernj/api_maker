@@ -77,7 +77,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
           this.props.onMatch()
         }
 
-        if ((!this.props.children && this.props.path) || this.props.component || this.props.componentPath) {
+        if (!this.props.children && (this.props.path || this.props.component || this.props.componentPath)) {
           this.loadComponent()
         }
       }
