@@ -63,6 +63,35 @@ describe "bootstrap - live table - filter" do
     wait_for_selector model_row_selector(task2)
   end
 
+  it "doesnt show polymorphic relationships" do
+    task1_comment1 = create(:comment, resource: task1)
+    task2_comment1 = create(:comment, resource: task2)
+
+    login_as user_admin
+    visit super_admin_path(model: "Comment")
+    wait_for_selector model_row_selector(task1_comment1)
+    wait_for_selector model_row_selector(task2_comment1)
+
+    wait_for_and_find("[data-class='filter-button']").click
+    wait_for_and_find(".add-new-filter-button").click
+
+    wait_for_expect do
+      reflections = all("[data-class='reflection-element'][data-model-class='Comment']").map do |element|
+        {
+          reflection_name: element["data-reflection-name"],
+          label: element.text
+        }
+      end
+
+      expect(reflections).to eq [
+        {
+          reflection_name: "author",
+          label: "Author"
+        }
+      ]
+    end
+  end
+
   it "filters through a relationship with a name that has multiple parts" do
     task1
     task2

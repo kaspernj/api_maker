@@ -2,6 +2,8 @@ class Services::Models::Associations < ApiMaker::BaseService
   def perform
     associations = []
     model_class.reflections.each do |reflection_name, reflection|
+      next if reflection.polymorphic?
+
       begin
         reflection_resource = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass)
       rescue ApiMaker::MemoryStorage::ResourceNotFoundError, ArgumentError => e
