@@ -1,5 +1,5 @@
 import {digg, digs} from "diggerize"
-import {Pressable, View} from "react-native"
+import {Pressable, Text, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
