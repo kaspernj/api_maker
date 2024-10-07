@@ -6,7 +6,7 @@ class Services::Models::Associations < ApiMaker::BaseService
 
       begin
         reflection_resource = ApiMaker::MemoryStorage.current.resource_for_model(reflection.klass)
-      rescue ApiMaker::MemoryStorage::ResourceNotFoundError, ArgumentError => e
+      rescue ApiMaker::MemoryStorage::ResourceNotFoundError, ArgumentError
         # Ignore
       end
 
