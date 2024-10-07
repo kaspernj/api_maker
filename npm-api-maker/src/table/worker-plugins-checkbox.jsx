@@ -1,7 +1,6 @@
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
-import EventConnection from "../event-connection"
 import modelClassRequire from "../model-class-require.mjs"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
