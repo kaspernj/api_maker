@@ -17,6 +17,60 @@ import {shapeComponent} from "set-state-compare/src/shape-component"
 
 const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox"))
 
+const ModelColumn = memo(shapeComponent(class ApiMakerTableModelColumn extends BaseComponent {
+  static propTypes = propTypesExact({
+    column: PropTypes.object.isRequired,
+    columnIndex: PropTypes.number.isRequired,
+    even: PropTypes.bool.isRequired,
+    isSmallScreen: PropTypes.bool.isRequired,
+    model: PropTypes.object.isRequired,
+    table: PropTypes.object.isRequired,
+    tableSettingColumn: PropTypes.object.isRequired,
+    width: PropTypes.number.isRequired
+  })
+
+  render() {
+    const {column, columnIndex, even, isSmallScreen, model, table, width} = this.props
+    const columnProps = table.columnProps(column)
+    const {style, ...restColumnProps} = columnProps
+    const actualStyle = Object.assign(
+      table.styleForColumn({column, columnIndex, even, style: {width: `${width}%`}}),
+      style
+    )
+
+    return (
+      <Column
+        dataSet={{
+          class: classNames(this.columnClassNamesForColumn(column)),
+          identifier: columnIdentifier(column)
+        }}
+        style={actualStyle}
+        {...restColumnProps}
+      >
+        {isSmallScreen &&
+          <View dataSet={{class: "table--column-label"}}>
+            <Text>
+              {table.headerLabelForColumn(column)}
+            </Text>
+          </View>
+        }
+        <View dataSet={{class: "table--column-value"}}>
+          {new ColumnContent({column, model, table}).content()}
+        </View>
+      </Column>
+    )
+  }
+
+  columnClassNamesForColumn(column) {
+    const classNames = ["table--column"]
+
+    if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
+    if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
+
+    return classNames
+  }
+}))
+
 export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
   static propTypes = propTypesExact({
     cacheKey: PropTypes.string.isRequired,
@@ -86,39 +140,21 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     )
   }
 
-  columnClassNamesForColumn(column) {
-    const classNames = ["table--column"]
-
-    if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
-    if (column.columnProps && column.columnProps.className) classNames.push(column.columnProps.className)
-
-    return classNames
-  }
-
   columnsContentFromColumns(model, even) {
     const {isSmallScreen, table, preparedColumns} = this.p
 
     return preparedColumns?.map(({column, tableSettingColumn, width}, columnIndex) => columnVisible(column, tableSettingColumn) &&
-      <Column
-        dataSet={{
-          class: classNames(this.columnClassNamesForColumn(column)),
-          identifier: columnIdentifier(column)
-        }}
+      <ModelColumn
+        column={column}
+        columnIndex={columnIndex}
+        even={even}
+        isSmallScreen={isSmallScreen}
         key={columnIdentifier(column)}
-        style={table.styleForColumn({column, columnIndex, even, style: {width: `${width}%`}})}
-        {...table.columnProps(column)}
-      >
-        {isSmallScreen &&
-          <View dataSet={{class: "table--column-label"}}>
-            <Text>
-              {table.headerLabelForColumn(column)}
-            </Text>
-          </View>
-        }
-        <View dataSet={{class: "table--column-value"}}>
-          {new ColumnContent({column, model, table}).content()}
-        </View>
-      </Column>
+        model={model}
+        table={table}
+        tableSettingColumn={tableSettingColumn}
+        width={width}
+      />
     )
   }
 

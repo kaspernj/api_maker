@@ -16,10 +16,6 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
 
   setup() {
     this.rootRef = useRef()
-
-    this.useStates({
-      fixedTableLayout: this.tableSetting().fixedTableLayout()
-    })
   }
 
   tableSetting = () => this.p.table.s.tableSetting
