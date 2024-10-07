@@ -37,6 +37,15 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     const {defaultParams} = table.props
     const {styleForHeader, styleForHeaderText} = table.tt
     const {query} = digs(table.collection, "query")
+    const columnProps = table.columnProps(column)
+    const {style, ...restColumnProps} = columnProps
+    const actualStyle = Object.assign(
+      {
+        cursor: resizing ? "col-resize" : undefined,
+        width: `${width}%`
+      },
+      style
+    )
 
     return (
       <Header
@@ -45,11 +54,8 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
           identifier: tableSettingColumn.identifier()
         }}
         onLayout={this.tt.onLayout}
-        style={styleForHeader({style: {
-          cursor: resizing ? "col-resize" : undefined,
-          width: `${width}%`
-        }})}
-        {...table.columnProps(column)}
+        style={styleForHeader({style: actualStyle})}
+        {...restColumnProps}
       >
         <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
           {tableSettingColumn.hasSortKey() && query &&

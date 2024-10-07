@@ -6,6 +6,7 @@ import PropTypes from "prop-types"
 import {memo, useMemo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import strftime from "strftime"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends ShapeComponent {
   static defaultProps = {
@@ -23,6 +24,9 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
   }
 
   setup() {
+    const {t} = useI18n({namespace: "js.api_maker.attribute_row"})
+
+    this.t = t
     this.attribute = useMemo(
       () => {
         if (this.props.attribute) {
@@ -88,9 +92,9 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
     } else if (value instanceof Date) {
       return strftime("%Y-%m-%d %H:%M", value)
     } else if (typeof value === "boolean") {
-      if (value) return I18n.t("js.shared.yes", {defaultValue: "Yes"})
+      if (value) return this.t("js.shared.yes", {defaultValue: "Yes"})
 
-      return I18n.t("js.shared.no", {defaultValue: "No"})
+      return this.t("js.shared.no", {defaultValue: "No"})
     } else if (MoneyFormatter.isMoney(value)) {
       return MoneyFormatter.format(value)
     } else {

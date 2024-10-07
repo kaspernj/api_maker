@@ -1,3 +1,4 @@
+import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
 import EventConnection from "../event-connection"
@@ -5,11 +6,12 @@ import modelClassRequire from "../model-class-require.mjs"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo, useMemo} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/src/shape-component"
+import useModelEvent from "../use-model-event.js"
 
 const Workplace = modelClassRequire("Workplace")
 
-export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox extends ShapeComponent {
+export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
   static propTypes = PropTypesExact({
     currentWorkplace: PropTypes.object,
     model: PropTypes.object.isRequired,
@@ -25,6 +27,9 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
     useMemo(() => {
       this.loadCurrentLink()
     }, [])
+
+    useModelEvent(this.p.currentWorkplace, "workplace_links_created", this.tt.onLinksCreated)
+    useModelEvent(this.p.currentWorkplace, "workplace_links_destroyed", this.tt.onLinksDestroyed)
   }
 
   async loadCurrentLink() {
@@ -39,7 +44,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
   }
 
   render() {
-    const {className, currentWorkplace, model, style} = this.props
+    const {className, model, style} = this.props
     const {checked, linkLoaded} = this.state
 
     if (!linkLoaded) {
@@ -47,23 +52,15 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
     }
 
     return (
-      <>
-        {currentWorkplace &&
-          <>
-            <EventConnection event="workplace_links_created" model={currentWorkplace} onCall={this.onLinksCreated} />
-            <EventConnection event="workplace_links_destroyed" model={currentWorkplace} onCall={this.onLinksDestroyed} />
-          </>
-        }
-        <input
-          checked={checked}
-          className={classNames("api-maker--table--worker-plugins-checkbox", className)}
-          data-checked={checked}
-          data-model-id={model.id()}
-          onChange={this.tt.onCheckedChanged}
-          style={style}
-          type="checkbox"
-        />
-      </>
+      <input
+        checked={checked}
+        className={classNames("api-maker--table--worker-plugins-checkbox", className)}
+        data-checked={checked}
+        data-model-id={model.id()}
+        onChange={this.tt.onCheckedChanged}
+        style={style}
+        type="checkbox"
+      />
     )
   }
 

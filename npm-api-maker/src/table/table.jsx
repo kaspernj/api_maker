@@ -1,6 +1,5 @@
-import "./style"
 import {digg, digs} from "diggerize"
-import {Pressable, View} from "react-native"
+import {Pressable, Text, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
@@ -28,6 +27,8 @@ import TableSettings from "./table-settings"
 import uniqunize from "uniqunize"
 import useBreakpoint from "../use-breakpoint"
 import useCollection from "../use-collection"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useModelEvent from "../use-model-event.js"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 import Widths from "./widths"
 
@@ -37,6 +38,7 @@ const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-
 export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   static defaultProps = {
     card: true,
+    currentUser: null,
     destroyEnabled: true,
     filterCard: true,
     filterSubmitButton: true,
@@ -86,13 +88,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   setup() {
+    const {t} = useI18n({namespace: "js.api_maker.table"})
     const {breakpoint} = useBreakpoint()
     const queryParams = useQueryParams()
 
     this.setInstance({
       breakpoint,
       filterFormRef: useRef(),
-      isSmallScreen: breakpoint == "xs" || breakpoint == "sm"
+      isSmallScreen: breakpoint == "xs" || breakpoint == "sm",
+      t
     })
 
     const collectionKey = digg(this.p.modelClass.modelClassData(), "collectionKey")
@@ -106,6 +110,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     this.useStates({
       columns: columnsAsArray,
       currentWorkplace: undefined,
+      currentWorkplaceCount: null,
       flatListWidth: undefined,
       identifier: () => this.props.identifier || `${collectionKey}-default`,
       lastUpdate: () => new Date(),
@@ -127,9 +132,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       this.loadTableSetting()
 
       if (this.props.workplace) {
-        this.loadCurrentWorkplace()
+        this.loadCurrentWorkplace().then(() => {
+          this.loadCurrentWorkplaceCount()
+        })
       }
-    }, [])
+    }, [this.p.currentUser?.id()])
+
+    useModelEvent(this.s.currentWorkplace, "workplace_links_created", this.tt.onLinksCreated)
+    useModelEvent(this.s.currentWorkplace, "workplace_links_destroyed", this.tt.onLinksDestroyed)
 
     let collectionReady = true
     let select
@@ -167,6 +177,18 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const currentWorkplace = digg(result, "current", 0)
 
     this.setState({currentWorkplace})
+  }
+
+  async loadCurrentWorkplaceCount() {
+    const WorkplaceLink = modelClassRequire("WorkplaceLink")
+    const currentWorkplaceCount = await WorkplaceLink
+      .ransack({
+        resource_type_eq: this.p.modelClass.modelClassData().name,
+        workplace_id_eq: this.s.currentWorkplace.id()
+      })
+      .count()
+
+    this.setState({currentWorkplaceCount})
   }
 
   async loadTableSetting() {
@@ -402,6 +424,30 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     widths.flatListWidth = width
   }
 
+  onLinksCreated = ({args}) => {
+    const modelClassName = this.p.modelClass.modelClassData().name
+
+    if (args.created[modelClassName]) {
+      const amountCreated = args.created[modelClassName].length
+
+      this.setState((prevState) => ({
+        currentWorkplaceCount: prevState.currentWorkplaceCount + amountCreated
+      }))
+    }
+  }
+
+  onLinksDestroyed = ({args}) => {
+    const modelClassName = this.p.modelClass.modelClassData().name
+
+    if (args.destroyed[modelClassName]) {
+      const amountDestroyed = args.destroyed[modelClassName].length
+
+      this.setState((prevState) => ({
+        currentWorkplaceCount: prevState.currentWorkplaceCount - amountDestroyed
+      }))
+    }
+  }
+
   keyExtrator = (model) => model.id()
 
   filterForm = () => {
@@ -425,7 +471,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
             className="btn btn-primary live-table--submit-filter-button"
             type="submit"
             style={{marginTop: "8px"}}
-            value={filterSubmitLabel || I18n.t("js.api_maker_bootstrap.live_table.filter")}
+            value={filterSubmitLabel || this.t(".filter", {defaultValue: "Filter"})}
           />
         }
       </form>
@@ -449,16 +495,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   listHeaderComponent = () => {
-    const {workplace} = this.p
-    const {currentWorkplace} = this.s
     const {query} = digs(this.collection, "query")
 
     return (
       <Row dataSet={{class: "live-table-header-row"}} style={this.styleForRow()}>
-        {workplace && currentWorkplace &&
+        {this.p.workplace && this.s.currentWorkplace &&
           <Header style={this.styleForHeader({style: {width: 41}})}>
             <WorkerPluginsCheckAllCheckbox
-              currentWorkplace={currentWorkplace}
+              currentWorkplace={this.s.currentWorkplace}
               query={query}
               style={{marginHorizontal: "auto"}}
             />
@@ -576,24 +620,31 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const totalCount = result.totalCount()
     const perPage = result.perPage()
     const to = Math.min(currentPage * perPage, totalCount)
-    const defaultValue = "Showing %{from} to %{to} out of %{total_count} total"
+    const defaultValue = "Showing %{from} to %{to} out of %{total_count} total."
     let from = ((currentPage - 1) * perPage) + 1
 
     if (to === 0) from = 0
 
     return (
-      <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: "10px"}}>
-        <div className="showing-counts">
-          {I18n.t("js.api_maker.table.showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
-        </div>
-        <div>
+      <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
+        <View dataSet={{class: "showing-counts"}} style={{flexDirection: "row"}}>
+          <Text>
+            {this.t(".showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
+          </Text>
+          {this.p.workplace && this.s.currentWorkplaceCount !== null &&
+            <Text style={{marginLeft: 3}}>
+              {this.t(".x_selected", {defaultValue: "%{selected} selected.", selected: this.s.currentWorkplaceCount})}
+            </Text>
+          }
+        </View>
+        <View>
           <Select
             className="per-page-select"
             defaultValue={perPage}
             onChange={this.tt.onPerPageChanged}
             options={paginationOptions}
           />
-        </div>
+        </View>
       </View>
     )
   }
@@ -611,8 +662,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   columnProps(column) {
     const props = {}
 
-    if (column.textCenter) props["data-text-align"] = "center"
-    if (column.textRight) props["data-text-align"] = "right"
+    if (column.textCenter) {
+      props.style ||= {}
+      props.style.textAlign = "center"
+    }
+
+    if (column.textRight) {
+      props.style ||= {}
+      props.style.textAlign = "right"
+    }
 
     return props
   }
@@ -639,7 +697,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     />
   )
 
-  headerClassNameForColumn (column) {
+  headerClassNameForColumn(column) {
     const classNames = ["live-table-header"]
 
     if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
@@ -648,7 +706,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return classNames
   }
 
-  headerLabelForColumn (column) {
+  headerLabelForColumn(column) {
     const {modelClass} = this.p
 
     if ("label" in column) {
