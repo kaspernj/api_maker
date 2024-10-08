@@ -1,28 +1,28 @@
 import {digg} from "diggerize"
 
 export default class TableWidths {
-  constructor({columns, flatListWidth, table}) {
+  constructor({columns, table, width}) {
     this.columns = columns
-    this.flatListWidth = flatListWidth
+    this.tableWidth = width
     this.table = table
     this.setWidths()
   }
 
   setWidths() {
-    let widthLeft = 100.0
-
     this.columnsWidths = {}
 
+    let widthLeft = this.tableWidth
     const updateData = []
 
     // Set widths that are defined
     for (const columnIndex in this.columns) {
-      const column = this.columns[columnIndex].tableSettingColumn
+      const column = this.columns[columnIndex]
+      const tableSettingColumn = column.tableSettingColumn
 
-      if (column.hasWidth()) {
-        this.columns[columnIndex].width = column.width()
+      if (tableSettingColumn.hasWidth()) {
+        column.width = tableSettingColumn.width()
 
-        widthLeft -= column.width()
+        widthLeft -= tableSettingColumn.width()
       }
     }
 
@@ -36,21 +36,26 @@ export default class TableWidths {
 
     // Set widths of columns without
     for (const columnIndex in this.columns) {
-      const column = this.columns[columnIndex].tableSettingColumn
+      const column = this.columns[columnIndex]
+      const tableSettingColumn = column.tableSettingColumn
 
-      if (!column.hasWidth()) {
-        const newWidth = widthLeft / amountOfColumns
+      if (!tableSettingColumn.hasWidth()) {
+        let newWidth = widthLeft / amountOfColumns
 
-        this.columns[columnIndex].width = newWidth
+        if (newWidth < 200) newWidth = 200
+
+        column.width = newWidth
 
         updateData << {
-          id: column.id(),
+          id: tableSettingColumn.id(),
           width: newWidth
         }
       }
     }
 
-    // FIXME: Should update the columns on the backend if anything changed
+    if (updateData.length > 0) {
+      // FIXME: Should update the columns on the backend if anything changed
+    }
   }
 
   getWidthOfColumn(identifier) {
@@ -66,12 +71,8 @@ export default class TableWidths {
 
     if (!column) throw new Error(`No such column: ${identifier}`)
 
-    const widthPercent = (width / this.flatListWidth) * 100
-
-    column.width = widthPercent
+    column.width = width
 
     this.table.setState({lastUpdate: new Date()})
-
-    // FIXME: Should reduce / enlarge sibling columns to keep a 100% fit
   }
 }

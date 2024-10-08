@@ -1,5 +1,5 @@
 import {digg, digs} from "diggerize"
-import {Pressable, Text, View} from "react-native"
+import {Pressable, StyleSheet, Text, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
@@ -34,6 +34,13 @@ import Widths from "./widths"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
+const styleSheet = StyleSheet.create({
+  flatList: {
+    border: "1px solid #dbdbdb",
+    borderRadius: 5,
+    overflowX: "auto"
+  }
+})
 
 export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   static defaultProps = {
@@ -87,6 +94,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     workplace: PropTypes.bool.isRequired
   }
 
+  tableSetting = null
+
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table"})
     const {breakpoint} = useBreakpoint()
@@ -111,7 +120,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       columns: columnsAsArray,
       currentWorkplace: undefined,
       currentWorkplaceCount: null,
-      flatListWidth: undefined,
       identifier: () => this.props.identifier || `${collectionKey}-default`,
       lastUpdate: () => new Date(),
       preload: undefined,
@@ -124,19 +132,25 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       showFilters: () => Boolean(queryParams[querySName]),
       showSettings: false,
       tableSetting: undefined,
+      tableSettingLoaded: false,
       tableSettingFullCacheKey: undefined,
+      width: undefined,
       widths: null
     })
 
     useMemo(() => {
-      this.loadTableSetting()
-
       if (this.props.workplace) {
         this.loadCurrentWorkplace().then(() => {
           this.loadCurrentWorkplaceCount()
         })
       }
     }, [this.p.currentUser?.id()])
+
+    useMemo(() => {
+      if (!this.tt.tableSetting && this.s.width) {
+        this.loadTableSetting()
+      }
+    }, [this.p.currentUser?.id(), this.s.width])
 
     useModelEvent(this.s.currentWorkplace, "workplace_links_created", this.tt.onLinksCreated)
     useModelEvent(this.s.currentWorkplace, "workplace_links_destroyed", this.tt.onLinksDestroyed)
@@ -196,13 +210,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
     const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
-    const {flatListWidth} = this.s
-    const widths = new Widths({columns, flatListWidth, table: this})
+    const {width} = this.s
+    const widths = new Widths({columns, table: this, width})
 
     this.setState({
       preparedColumns: columns,
       preload: this.mergedPreloads(preload),
       tableSetting,
+      tableSettingLoaded: true,
       tableSettingFullCacheKey: tableSetting.fullCacheKey(),
       widths
     })
@@ -259,7 +274,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
 
     return (
-      <div className={this.className()} style={this.props.styles?.container}>
+      <View dataSet={{class: this.className()}} onLayout={this.tt.onContainerLayout} style={this.props.styles?.container}>
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
@@ -276,7 +291,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         {qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
           this.cardOrTable()
         }
-      </div>
+      </View>
     )
   }
 
@@ -376,10 +391,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         extraData={this.s.lastUpdate}
         keyExtractor={this.tt.keyExtrator}
         ListHeaderComponent={this.tt.listHeaderComponent}
-        onLayout={this.tt.onFlatListLayout}
         renderItem={this.tt.renderItem}
         showsHorizontalScrollIndicator
-        style={{border: "1px solid #dbdbdb", borderRadius: 5, overflowX: "auto"}}
+        style={styleSheet.flatList}
         {...restProps}
       />
     )
@@ -416,12 +430,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     )
   }
 
-  onFlatListLayout = (e) => {
+  onContainerLayout = (e) => {
     const {width} = e.nativeEvent.layout
     const {widths} = this.s
 
-    this.setState({flatListWidth: width})
-    widths.flatListWidth = width
+    this.setState({width})
+    if (widths) widths.tableWidth = width
   }
 
   onLinksCreated = ({args}) => {
@@ -517,6 +531,16 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   renderItem = ({index, item: model}) => {
     const {preparedColumns, tableSettingFullCacheKey} = this.s
 
+    if (!this.s.tableSettingLoaded) {
+      return (
+        <View>
+          <Text>
+            Loading...
+          </Text>
+        </View>
+      )
+    }
+
     return (
       <ModelRow
         cacheKey={model.cacheKey()}
@@ -536,7 +560,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const defaultStyle = {
       justifyContent: "center",
       padding: 8,
-      backgroundColor: even ? "#f5f5f5" : undefined
+      backgroundColor: even ? "#f5f5f5" : undefined,
+      overflow: "hidden"
     }
 
     if (type == "actions") {
