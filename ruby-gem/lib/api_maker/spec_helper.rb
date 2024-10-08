@@ -96,7 +96,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def model_column_selector(model, identifier)
-    "#{model_row_selector(model)} [data-class='table--column'][data-identifier='#{identifier}']"
+    "#{model_row_selector(model)} [data-class*='table--column'][data-identifier='#{identifier}']"
   end
 
   def model_row_class_name(model)
