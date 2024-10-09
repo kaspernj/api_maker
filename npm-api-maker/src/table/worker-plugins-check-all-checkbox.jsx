@@ -8,7 +8,7 @@ import {shapeComponent} from "set-state-compare/src/shape-component"
 import {simpleObjectDifferent} from "set-state-compare/src/diff-utils"
 import useModelEvent from "../use-model-event.js"
 
-const Checkbox = memo(shapeComponent(class Checkbox extends ShapeComponent {
+const Checkbox = memo(shapeComponent(class Checkbox extends BaseComponent {
   render() {
     const {indeterminate, ...restProps} = this.props
     const checkboxRef = useRef()
