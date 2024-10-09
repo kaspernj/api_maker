@@ -2,10 +2,16 @@ class ApiMaker::Collection
   attr_reader :query_params, :resource_class
 
   ALLOWED_QUERY_PARAMS = {
+    abilities: true,
     limit: true,
+    page: true,
+    page_key: true,
+    per: true,
+    per_key: true,
     preload: true,
     ransack: true,
     search: true,
+    search_key: true,
     select: true
   }
 
@@ -14,7 +20,7 @@ class ApiMaker::Collection
     @query_params = query_params
 
     query_params.each do |key, value|
-      raise "Invalid query param: #{key}" unless ALLOWED_QUERY_PARAMS.key?(key)
+      Rails.logger.error "ApiMaker / Collection: Invalid query param: #{key}" unless ALLOWED_QUERY_PARAMS.key?(key)
     end
   end
 
@@ -26,12 +32,21 @@ class ApiMaker::Collection
       query = query.ransack(search_ransack_params).result
     end
 
+    query = ApiMaker::Paginate.execute!(page: page.to_i, per_page: per, query:) if page.present?
     query = query.limit(limit) if limit.present?
     query
   end
 
   def limit
     @query_params[:limit]
+  end
+
+  def page
+    @query_params[:page]
+  end
+
+  def per
+    @query_params[:per]
   end
 
   def preload
