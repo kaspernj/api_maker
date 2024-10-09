@@ -1,9 +1,21 @@
 class ApiMaker::Collection
   attr_reader :query_params, :resource_class
 
+  ALLOWED_QUERY_PARAMS = {
+    limit: true,
+    preload: true,
+    ransack: true,
+    search: true,
+    select: true
+  }
+
   def initialize(query_params:, resource_class:)
     @resource_class = resource_class
     @query_params = query_params
+
+    query_params.each do |key, value|
+      raise "Invalid query param: #{key}" unless ALLOWED_QUERY_PARAMS.key?(key)
+    end
   end
 
   def query
@@ -14,7 +26,12 @@ class ApiMaker::Collection
       query = query.ransack(search_ransack_params).result
     end
 
+    query = query.limit(limit) if limit.present?
     query
+  end
+
+  def limit
+    @query_params[:limit]
   end
 
   def preload
