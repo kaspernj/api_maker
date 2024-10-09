@@ -42,7 +42,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     const actualStyle = Object.assign(
       {
         cursor: resizing ? "col-resize" : undefined,
-        width: `${width}%`
+        width
       },
       style
     )
