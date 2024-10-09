@@ -183,6 +183,10 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       select,
       selectColumns: this.props.selectColumns
     })
+    this.queryWithoutPagination = useMemo(
+      () => this.collection?.query?.clone()?.except("page"),
+      [this.collection.query]
+    )
   }
 
   async loadCurrentWorkplace() {
@@ -509,7 +513,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   listHeaderComponent = () => {
-    const {query} = digs(this.collection, "query")
+    const {queryWithoutPagination} = this.tt
 
     return (
       <Row dataSet={{class: "live-table-header-row"}} style={this.styleForRow()}>
@@ -517,7 +521,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           <Header style={this.styleForHeader({style: {width: 41}})}>
             <WorkerPluginsCheckAllCheckbox
               currentWorkplace={this.s.currentWorkplace}
-              query={query}
+              query={queryWithoutPagination}
               style={{marginHorizontal: "auto"}}
             />
           </Header>

@@ -9,12 +9,12 @@ import Result from "./result.mjs"
 export default class ApiMakerCollection {
   static apiMakerType = "Collection"
 
-  constructor (args, queryArgs = {}) {
+  constructor(args, queryArgs = {}) {
     this.queryArgs = queryArgs
     this.args = args
   }
 
-  abilities (originalAbilities) {
+  abilities(originalAbilities) {
     const newAbilities = {}
 
     for (const originalAbilityName in originalAbilities) {
@@ -33,21 +33,21 @@ export default class ApiMakerCollection {
     return this._merge({abilities: newAbilities})
   }
 
-  accessibleBy (abilityName) {
+  accessibleBy(abilityName) {
     return this._merge({accessibleBy: inflection.underscore(abilityName)})
   }
 
-  async count () {
+  async count() {
     const response = await this.clone()._merge({count: true})._response()
 
     return digg(response, "count")
   }
 
-  distinct () {
+  distinct() {
     return this._merge({distinct: true})
   }
 
-  async each (callback) {
+  async each(callback) {
     const array = await this.toArray()
 
     for (const model in array) {
@@ -55,12 +55,24 @@ export default class ApiMakerCollection {
     }
   }
 
-  async first () {
+  except(...keys) {
+    for (const key of keys) {
+      if (key == "page") {
+        delete this.queryArgs[key]
+      } else {
+        throw new Error(`Unhandled key: ${key}`)
+      }
+    }
+
+    return this
+  }
+
+  async first() {
     const models = await this.toArray()
     return models[0]
   }
 
-  groupBy (...arrayOfTablesAndColumns) {
+  groupBy(...arrayOfTablesAndColumns) {
     const arrayOfTablesAndColumnsWithLowercaseColumns = arrayOfTablesAndColumns.map((tableAndColumn) => {
       if (Array.isArray(tableAndColumn)) {
         return [tableAndColumn[0], tableAndColumn[1].toLowerCase()]
@@ -76,18 +88,18 @@ export default class ApiMakerCollection {
     })
   }
 
-  isLoaded () {
+  isLoaded() {
     if (this.args.reflectionName in this.args.model.relationshipsCache)
       return true
 
     return false
   }
 
-  limit (amount) {
+  limit(amount) {
     return this._merge({limit: amount})
   }
 
-  preloaded () {
+  preloaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
       throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
     }
@@ -95,7 +107,7 @@ export default class ApiMakerCollection {
     return this.args.model.relationshipsCache[this.args.reflectionName]
   }
 
-  loaded () {
+  loaded() {
     const {model, reflectionName} = this.args
 
     if (reflectionName in model.relationships) {
@@ -135,22 +147,22 @@ export default class ApiMakerCollection {
   forEach = (...args) => this.loaded().forEach(...args)
   map = (...args) => this.loaded().map(...args)
 
-  preload (preloadValue) {
+  preload(preloadValue) {
     return this._merge({preload: preloadValue})
   }
 
-  page (page) {
+  page(page) {
     if (!page)
       page = 1
 
     return this._merge({page})
   }
 
-  pageKey (pageKey) {
+  pageKey(pageKey) {
     return this._merge({pageKey})
   }
 
-  params () {
+  params() {
     let params = {}
 
     if (this.queryArgs.params) params = incorporate(params, this.queryArgs.params)
@@ -171,20 +183,20 @@ export default class ApiMakerCollection {
     return params
   }
 
-  per (per) {
+  per(per) {
     return this._merge({per})
   }
 
-  perKey (perKey) {
+  perKey(perKey) {
     return this._merge({perKey})
   }
 
-  ransack (params) {
+  ransack(params) {
     if (params) this._merge({ransack: params})
     return this
   }
 
-  async result () {
+  async result() {
     const response = await this._response()
     const models = digg(response, "collection")
 
@@ -242,11 +254,11 @@ export default class ApiMakerCollection {
     return this._merge({selectColumns: newSelect})
   }
 
-  sort (sortBy) {
+  sort(sortBy) {
     return this._merge({ransack: {s: sortBy}})
   }
 
-  async toArray () {
+  async toArray() {
     const response = await this._response()
     const models = digg(response, "collection")
 
@@ -255,13 +267,13 @@ export default class ApiMakerCollection {
     return models
   }
 
-  modelClass () {
+  modelClass() {
     const modelName = digg(this.args.modelClass.modelClassData(), "name")
 
     return modelClassRequire(modelName)
   }
 
-  clone () {
+  clone() {
     const clonedQueryArgs = cloneDeep(this.queryArgs)
 
     return new ApiMakerCollection(this.args, clonedQueryArgs)
@@ -274,13 +286,13 @@ export default class ApiMakerCollection {
     }
   }
 
-  _merge (newQueryArgs) {
+  _merge(newQueryArgs) {
     incorporate(this.queryArgs, newQueryArgs)
 
     return this
   }
 
-  _response () {
+  _response() {
     const modelClassData = this.args.modelClass.modelClassData()
 
     return CommandsPool.addCommand(
