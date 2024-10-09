@@ -1,39 +1,47 @@
+import {memo, useEffect, useMemo, useRef} from "react"
+import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Collection from "../collection.mjs"
-import EventConnection from "../event-connection"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import React from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import {simpleObjectDifferent} from "set-state-compare/src/diff-utils"
-import {useEffect, useRef} from "react"
+import useModelEvent from "../use-model-event.js"
 
-const Checkbox = (props) => {
-  const {indeterminate, ...restProps} = props
-  const checkboxRef = useRef()
+const Checkbox = memo(shapeComponent(class Checkbox extends ShapeComponent {
+  render() {
+    const {indeterminate, ...restProps} = this.props
+    const checkboxRef = useRef()
 
-  useEffect(() => {
-    checkboxRef.current.indeterminate = indeterminate
-  })
+    useEffect(() => {
+      checkboxRef.current.indeterminate = indeterminate
+    })
 
-  return (
-    <input ref={checkboxRef} type="checkbox" {...restProps} />
-  )
-}
+    return (
+      <input ref={checkboxRef} type="checkbox" {...restProps} />
+    )
+  }
+}))
 
-export default class ApiMakerTableWorkerPluginsCheckAllCheckbox extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckAllCheckbox extends BaseComponent {
   static propTypes = propTypesExact({
     currentWorkplace: PropTypes.object,
     query: PropTypes.instanceOf(Collection),
     style: PropTypes.object
   })
 
-  state = {
-    checked: false,
-    indeterminate: false
-  }
+  setup() {
+    this.useStates({
+      checked: false,
+      indeterminate: false
+    })
 
-  componentDidMount() {
-    this.updateAllChecked()
+    useMemo(() => {
+      this.updateAllChecked()
+    }, [])
+
+    useModelEvent(this.props.currentWorkplace, "workplace_links_created", this.tt.onLinksCreated)
+    useModelEvent(this.props.currentWorkplace, "workplace_links_destroyed", this.tt.onLinksDestroyed)
   }
 
   componentDidUpdate(prevProps) {
@@ -58,21 +66,17 @@ export default class ApiMakerTableWorkerPluginsCheckAllCheckbox extends React.Pu
   }
 
   render() {
-    const {className, currentWorkplace, style} = this.props
+    const {className, style} = this.props
     const {checked, indeterminate} = this.state
 
     return (
-      <>
-        <EventConnection event="workplace_links_created" model={currentWorkplace} onCall={this.onLinksCreated} />
-        <EventConnection event="workplace_links_destroyed" model={currentWorkplace} onCall={this.onLinksDestroyed} />
-        <Checkbox
-          checked={checked}
-          className={classNames("api-maker--table--worker-plugins-check-all-checkbox", className)}
-          indeterminate={indeterminate}
-          onChange={this.onCheckedChanged}
-          style={style}
-        />
-      </>
+      <Checkbox
+        checked={checked}
+        className={classNames("api-maker--table--worker-plugins-check-all-checkbox", className)}
+        indeterminate={indeterminate}
+        onChange={this.onCheckedChanged}
+        style={style}
+      />
     )
   }
 
@@ -104,4 +108,4 @@ export default class ApiMakerTableWorkerPluginsCheckAllCheckbox extends React.Pu
       this.updateAllChecked()
     }
   }
-}
+}))
