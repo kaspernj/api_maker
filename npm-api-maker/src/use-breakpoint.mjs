@@ -1,44 +1,52 @@
 import {useCallback, useLayoutEffect} from "react"
 import apiMakerConfig from "@kaspernj/api-maker/src/config.mjs"
+import {Dimensions} from "react-native"
 import useShape from "set-state-compare/src/use-shape.js"
+
+const calculateBreakPoint = (window) => {
+  const windowWidth = window.width
+  const result = {}
+
+  for (const breakpointData of apiMakerConfig.getBreakPoints()) {
+    const breakpoint = breakpointData[0]
+    const width = breakpointData[1]
+
+    if (!result.name && windowWidth >= width) {
+      result.name = breakpoint
+    }
+
+    result[`${breakpoint}Down`] = !result.name
+    result[`${breakpoint}Up`] = Boolean(result.name)
+  }
+
+  if (result.name) {
+    return result
+  }
+
+  throw new Error(`Couldn't not find breakpoint from window width: ${windowWidth}`)
+}
 
 const useBreakpoint = () => {
   const s = useShape()
+  const onCalled = useCallback(({window}) => {
+    const breakpoint = calculateBreakPoint(window)
 
-  const calculateBreakPoint = useCallback(() => {
-    const windowWidth = window.innerWidth
-
-    for (const breakpointData of apiMakerConfig.getBreakPoints()) {
-      const breakpoint = breakpointData[0]
-      const width = breakpointData[1]
-
-      if (windowWidth >= width) return breakpoint
-    }
-
-    throw new Error(`Couldn't not find breakpoint from window width: ${windowWidth}`)
-  }, [])
-
-  const onCalled = useCallback(() => {
-    const breakpoint = calculateBreakPoint()
-
-    if (breakpoint != s.s.breakpoint) {
+    if (breakpoint.name != s.s.breakpoint.name) {
       s.set({breakpoint})
     }
   }, [])
 
   s.useStates({
-    breakpoint: () => calculateBreakPoint()
+    breakpoint: () => calculateBreakPoint(Dimensions.get("window"))
   })
 
   useLayoutEffect(() => {
-    window.addEventListener("resize", onCalled)
+    const subscription = Dimensions.addEventListener("change", onCalled)
 
-    return () => {
-      window.removeEventListener("resize", onCalled)
-    }
-  }, [])
+    return () => subscription?.remove()
+  })
 
-  return {breakpoint: s.s.breakpoint}
+  return s.s.breakpoint
 }
 
 export default useBreakpoint

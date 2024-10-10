@@ -98,7 +98,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table"})
-    const {breakpoint} = useBreakpoint()
+    const {name: breakpoint} = useBreakpoint()
     const queryParams = useQueryParams()
 
     this.setInstance({
