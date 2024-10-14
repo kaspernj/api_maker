@@ -189,7 +189,7 @@
     "@babel/traverse" "^7.25.7"
     "@babel/types" "^7.25.7"
 
-"@babel/helper-module-imports@^7.24.7", "@babel/helper-module-imports@^7.25.7":
+"@babel/helper-module-imports@^7.25.7":
   version "7.25.7"
   resolved "https://registry.yarnpkg.com/@babel/helper-module-imports/-/helper-module-imports-7.25.7.tgz#dba00d9523539152906ba49263e36d7261040472"
   integrity sha512-o0xCgpNmRohmnoWKQ0Ij8IdddjyBFE4T2kagL/x6M3+4zUgc+4qTOUBoNe4XxDskt1HPKO007ZPiMgLDq2s7Kw==
@@ -1109,7 +1109,7 @@
     debug "^4.3.1"
     globals "^11.1.0"
 
-"@babel/types@^7.18.6", "@babel/types@^7.22.5", "@babel/types@^7.24.7", "@babel/types@^7.25.7", "@babel/types@^7.4.4":
+"@babel/types@^7.18.6", "@babel/types@^7.22.5", "@babel/types@^7.25.7", "@babel/types@^7.4.4":
   version "7.25.7"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.25.7.tgz#1b7725c1d3a59f328cb700ce704c46371e6eef9b"
   integrity sha512-vwIVdXG+j+FOpkwqHRcBgHLYNL7XMkufrlaFvL9o6Ai9sJn9+PdyIL5qa0XzTZw084c+u9LOls53eoZWP/W5WQ==
@@ -1225,10 +1225,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@1.0.417":
-  version "1.0.417"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.417.tgz#c0ff91a211eecd5b2ec3a36b465932990e1696db"
-  integrity sha512-TGzt182iZdPLAi9JVWlF7WQ73ZTRqlFrD7UdyhXw/Duhbe2oY+R2bI29RyYKCWAswBILYLClajybvT8g9XCm8Q==
+"@kaspernj/api-maker@1.0.421":
+  version "1.0.421"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.421.tgz#d69c9516590393bc879b5dfc70e4789bd85496ea"
+  integrity sha512-F7FrPTBprKicQ7JPVT6NPhFDCaXZB5nSiCIOnGjp86TQl1quBn58LMvNL7XQA1Mpr+cgG9kspno+wDRnVZ/mKQ==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
