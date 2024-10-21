@@ -23,10 +23,9 @@ export default memo(shapeComponent(class ScopeElement extends BaseComponent {
 
     return (
       <Pressable
-        dataSet={{class: "scope-element"}}
+        dataSet={{class: "scope-element", scopeName: scope}}
         key={scope}
         onPress={this.tt.onScopeClicked}
-
       >
         <Text style={style}>
           {scope}
