@@ -29,7 +29,13 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
 
     return (
       <View style={{alignItems: "center", flexDirection: "row", backgroundColor: "grey", paddingVertical: 10, paddingHorizontal: 6}}>
-        <Pressable dataSet={{class: "filter-label"}} onPress={this.tt.onFilterPressed}>
+        <Pressable
+          dataSet={{
+            attribute: a,
+            class: "filter-label"
+          }}
+          onPress={this.tt.onFilterPressed}
+        >
           <Text>
             {p.length > 0 &&
               `${p.join(".")}.`

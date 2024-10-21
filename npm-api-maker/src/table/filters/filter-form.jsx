@@ -74,6 +74,8 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     this.increaseLoading()
 
     try {
+      if (!this.s.modelClassName) throw new Error("'modelClassName' not set in state")
+
       const result = await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
       const {associations, ransackableAttributes, ransackableScopes} = this.parseAssociationData(result)
 
@@ -96,9 +98,11 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   }
 
   async loadInitialValues() {
+    if (!this.s.modelClassName) throw new Error("'modelClassName' not set in state")
+
     let result = await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
     let data = this.parseAssociationData(result)
-    let modelClassName
+    let modelClassName = this.s.modelClassName
     const path = []
 
     for (const pathPart of this.props.filter.p) {
@@ -107,6 +111,12 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       if (!reflection) throw new Error(`Couldn't find association by that name ${this.s.modelClassName}#${pathPart}`)
 
       modelClassName = digg(reflection, "modelClassName")
+
+      if (!modelClassName) {
+        const pathNames = path.map((pathPart) => pathPart.name()).join(".")
+
+        throw new Error(`No model class name from ${pathNames}.${reflection.name()}`)
+      }
 
       result = await Services.current().sendRequest("Models::Associations", {model_class_name: modelClassName})
       data = this.parseAssociationData(result)
@@ -201,7 +211,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
               )}
             </View>
             <View>
-              {predicates && !this.state.scope &&
+              {predicates && !this.s.scope &&
                 <Select
                   className="predicate-select"
                   defaultValue={predicate?.name}
@@ -289,7 +299,6 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   onAttributeClicked = ({attribute}) => {
     this.setState({
       attribute,
-      predicate: undefined,
       scope: undefined
     })
   }
@@ -317,6 +326,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   onScopeClicked = ({scope}) => {
     this.setState({
       attribute: undefined,
+      predicate: undefined,
       scope
     })
   }
