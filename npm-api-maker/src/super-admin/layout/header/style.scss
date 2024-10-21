@@ -1,4 +1,4 @@
-@import "@kaspernj/api-maker/src/super-admin/stylesheets/variables";
+@use "@kaspernj/api-maker/src/super-admin/stylesheets/variables" as *;
 
 [data-component="super-admin--layout--header"] {
   @media (max-width: $sm-to) {
