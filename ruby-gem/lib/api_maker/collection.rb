@@ -13,13 +13,13 @@ class ApiMaker::Collection
     search: true,
     search_key: true,
     select: true
-  }
+  }.freeze
 
   def initialize(query_params:, resource_class:)
     @resource_class = resource_class
     @query_params = query_params
 
-    query_params.each do |key, value|
+    query_params.each_key do |key|
       Rails.logger.error "ApiMaker / Collection: Invalid query param: #{key}" unless ALLOWED_QUERY_PARAMS.key?(key)
     end
   end
