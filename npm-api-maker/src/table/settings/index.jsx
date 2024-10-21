@@ -3,10 +3,12 @@ import columnIdentifier from "../column-identifier.mjs"
 import ColumnRow from "./column-row"
 import DownloadAction from "./download-action"
 import {memo, useRef} from "react"
+import Modal from "../../modal"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {Modal, Text, View} from "react-native"
+import {Text, View} from "react-native"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 export default memo(shapeComponent(class ApiMakerTableSettings extends BaseComponent {
   static propTypes = propTypesExact({
@@ -15,24 +17,26 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
   })
 
   setup() {
+    const {t} = useI18n({namespace: "js.api_maker.table.settings"})
+
     this.rootRef = useRef()
+    this.t = t
   }
 
   tableSetting = () => this.p.table.s.tableSetting
 
   render() {
+    const {t} = this.tt
     const {table} = this.p
     const {preparedColumns} = table.s
 
     return (
-      <Modal onBackdropPress={this.p.onRequestClose} onRequestClose={this.p.onRequestClose} transparent>
+      <Modal onBackdropPress={this.p.onRequestClose} onRequestClose={this.p.onRequestClose} style={{backgroundColor: "#000"}} transparent>
         <View
           dataSet={{class: "api-maker--table--settings"}}
           style={{
             width: "100%",
             maxWidth: 800,
-            marginHorizontal: "auto",
-            marginVertical: "auto",
             padding: 20,
             backgroundColor: "#fff",
             border: "1px solid black"
@@ -40,13 +44,13 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
         >
           <View style={{marginBottom: 5}}>
             <Text style={{fontSize: 16, fontWeight: "bold"}}>
-              Settings
+              {t(".settings", {defaultValue: "Settings"})}
             </Text>
           </View>
           <DownloadAction table={table} />
           <View style={{marginBottom: 5}}>
             <Text style={{fontSize: 16, fontWeight: "bold"}}>
-              Columns
+              {t(".columns", {defaultValue: "Columns"})}
             </Text>
           </View>
           {preparedColumns?.map(({column, tableSettingColumn}) =>
