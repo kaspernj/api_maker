@@ -34,6 +34,7 @@ class ApiMaker::Configuration
     self.threadding = true
 
     @on_error = []
+    @on_test_error_log = []
   end
 
   def ability_class
@@ -42,6 +43,10 @@ class ApiMaker::Configuration
 
   def before_create_event(&blk)
     before_create_event_callbacks << blk
+  end
+
+  def on_test_error_log(&blk)
+    @on_test_error_log << blk
   end
 
   def on_error(&blk)
