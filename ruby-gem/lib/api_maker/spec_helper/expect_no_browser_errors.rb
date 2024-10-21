@@ -7,7 +7,7 @@ module ApiMaker::SpecHelper::ExpectNoBrowserErrors
         log.level == "SEVERE" &&
           log.message.exclude?("\"Warning:") &&
           log.message.exclude?("\"DEBUG: ") &&
-          on_test_error_log_procs.none? { |on_test_error_log_proc| on_test_error_log_proc.call(log:) != :ignore }
+          on_test_error_log_procs.none? { |on_test_error_log_proc| on_test_error_log_proc.call(example: self, log:) != :ignore }
       end
 
     expect_no_browser_window_errors
