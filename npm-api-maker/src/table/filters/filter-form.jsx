@@ -347,7 +347,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       newSearchParams.a = digg(attribute, "attributeName")
       newSearchParams.pre = digg(predicate, "name")
     } else if (scope) {
-      newSearchParams.sc = inflection.underscore(scope.name())
+      newSearchParams.sc = scope
     } else {
       throw new Error("Dont know if should search for attribute or scope?")
     }
