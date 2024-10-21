@@ -110,4 +110,21 @@ describe "bootstrap - live table - filter" do
     wait_for_no_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
   end
+
+  it "filters using a scope" do
+    task1
+    task2
+
+    login_as user_admin
+    visit bootstrap_live_table_path
+    wait_for_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
+    wait_for_and_find("[data-class='filter-button']").click
+    wait_for_and_find(".add-new-filter-button").click
+    wait_for_and_find("[data-class='scope-element'][data-scope-name='some_name_contains']").click
+    wait_for_and_find(".value-input").set("Account 2")
+    wait_for_and_find(".apply-filter-button").click
+    wait_for_no_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
+  end
 end

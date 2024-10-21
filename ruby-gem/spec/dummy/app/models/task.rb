@@ -21,10 +21,16 @@ class Task < ApplicationRecord
 
   accepts_nested_attributes_for :project
 
+  scope :some_name_contains, ->(name) { left_joins(:account, :project).where("accounts.name LIKE :name OR projects.name LIKE :name", name: "%#{name}%") }
+
   translated_collection :state do
     {
       t(".open") => "open",
       t(".closed") => "closed"
     }
+  end
+
+  def self.ransackable_scopes(_auth_object = nil)
+    super + [:some_name_contains]
   end
 end
