@@ -116,7 +116,9 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
 
   def check_nested_many_models_for_validation_errors(models_up_next, attribute_value, path)
     if models_up_next.length != attribute_value.keys.length
-      raise "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.keys.length}"
+      Rails.logger.error do
+        "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.keys.length} for #{path.join(".")}"
+      end
     end
 
     count = 0
@@ -133,7 +135,9 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
 
   def check_nested_many_models_for_validation_errors_on_array(models_up_next, attribute_value, path)
     if models_up_next.length != attribute_value.length
-      raise "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.length}"
+      Rails.logger.error do
+        "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.length} for #{path.join(".")}"
+      end
     end
 
     count = 0

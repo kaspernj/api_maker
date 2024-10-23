@@ -20,7 +20,7 @@ class ApiMaker::Collection
     @query_params = query_params
 
     query_params.each_key do |key|
-      Rails.logger.error "ApiMaker / Collection: Invalid query param: #{key}" unless ALLOWED_QUERY_PARAMS.key?(key)
+      Rails.logger.error { "ApiMaker / Collection: Invalid query param: #{key}" } unless ALLOWED_QUERY_PARAMS.key?(key)
     end
   end
 
