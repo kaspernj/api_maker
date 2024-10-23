@@ -1,7 +1,7 @@
 class Resources::TableSettingResource < ApiMaker::BaseResource
   self.model_class_name = "ApiMakerTable::TableSetting"
 
-  attributes :fixed_table_layout, :id, :identifier
+  attributes :id, :identifier
   relationships :columns
 
   def abilities
@@ -14,7 +14,6 @@ class Resources::TableSettingResource < ApiMaker::BaseResource
 
   def permitted_params(arg)
     arg.params.require(:table_setting).permit(
-      :fixed_table_layout,
       :identifier,
       :user_id,
       :user_type,
