@@ -22,6 +22,12 @@ const useModel = (modelClassArg, argsArg = {}) => {
     notFound: undefined
   })
 
+  if ("active" in s.props && !s.props.active) {
+    s.meta.active = false
+  } else {
+    s.meta.active = true
+  }
+
   if (typeof modelClassArg == "object") {
     modelClass = modelClassArg.callback({queryParams})
   } else {
@@ -83,7 +89,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
   }, [])
 
   const loadModel = useCallback(async () => {
-    if ("active" in s.props && !s.props.active) {
+    if (!s.m.active) {
       // Not active - don't do anything
     } else if (s.props.newIfNoId && !s.m.modelId) {
       return await loadNewModel()

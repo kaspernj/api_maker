@@ -116,13 +116,13 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
 
   def check_nested_many_models_for_validation_errors(models_up_next, attribute_value, path)
     if models_up_next.length != attribute_value.keys.length
-      raise "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.keys.length}"
+      Rails.logger.error do
+        "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.keys.length} for #{path.join(".")}"
+      end
     end
 
-    count = 0
-    attribute_value.each do |unique_key, model_attribute_values|
-      model_up_next = models_up_next.fetch(count)
-      count += 1
+    attribute_value.each_with_index do |(unique_key, model_attribute_values), index|
+      model_up_next = models_up_next.fetch(index)
 
       path << unique_key
       inspect_model(model_up_next, path)
@@ -133,15 +133,15 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
 
   def check_nested_many_models_for_validation_errors_on_array(models_up_next, attribute_value, path)
     if models_up_next.length != attribute_value.length
-      raise "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.length}"
+      Rails.logger.error do
+        "Expected same length on targets and attribute values: #{models_up_next.length}, #{attribute_value.length} for #{path.join(".")}"
+      end
     end
 
-    count = 0
-    attribute_value.each_with_index do |model_attribute_values, unique_key|
-      model_up_next = models_up_next.fetch(count)
-      count += 1
+    attribute_value.each_with_index do |model_attribute_values, index|
+      model_up_next = models_up_next.fetch(index)
 
-      path << unique_key
+      path << index
       inspect_model(model_up_next, path)
       inspect_params(model_up_next, model_attribute_values, path)
       path.pop
