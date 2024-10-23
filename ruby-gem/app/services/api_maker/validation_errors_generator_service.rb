@@ -121,8 +121,10 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
       end
     end
 
-    attribute_value.each_with_index do |(unique_key, model_attribute_values), index|
-      model_up_next = models_up_next.fetch(index)
+    count = 0
+    attribute_value.each do |unique_key, model_attribute_values|
+      model_up_next = models_up_next.fetch(count)
+      count += 1
 
       path << unique_key
       inspect_model(model_up_next, path)
@@ -138,10 +140,12 @@ class ApiMaker::ValidationErrorsGeneratorService < ApiMaker::ApplicationService
       end
     end
 
-    attribute_value.each_with_index do |model_attribute_values, index|
-      model_up_next = models_up_next.fetch(index)
+    count = 0
+    attribute_value.each_with_index do |model_attribute_values, unique_key|
+      model_up_next = models_up_next.fetch(count)
+      count += 1
 
-      path << index
+      path << unique_key
       inspect_model(model_up_next, path)
       inspect_params(model_up_next, model_attribute_values, path)
       path.pop
