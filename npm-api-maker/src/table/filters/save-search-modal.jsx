@@ -4,9 +4,12 @@ import Checkbox from "../../bootstrap/checkbox"
 import {digg} from "diggerize"
 import {Form} from "../../form"
 import Input from "../../bootstrap/input"
+import modelClassRequire from "../../model-class-require.mjs"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {memo} from "react"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+
+const TableSearch = modelClassRequire("TableSearch")
 
 export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal extends BaseComponent {
   setup() {
@@ -46,16 +49,21 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
   onSaveSearchSubmit = async () => {
     const formData = this.s.form.asObject()
     const {currentFilters, currentUser, onRequestClose, search} = this.p
+    const hasUserTypeColumn = Boolean(TableSearch.attributes().find((attribute) => attribute.name() == "user_type"))
 
     if (search.isNewRecord()) {
       formData.table_search.query_params = JSON.stringify(currentFilters())
     }
 
-    formData.table_search.user_type = digg(currentUser.modelClassData(), "className")
+    if (hasUserTypeColumn) {
+      formData.table_search.user_type = digg(currentUser.modelClassData(), "className")
+    }
+
     formData.table_search.user_id = currentUser.id()
 
     try {
       await search.saveRaw(formData)
+      FlashMessage.success(this.t(".", {defaultValue: "The search was saved."}))
       onRequestClose()
     } catch (error) {
       FlashMessage.errorResponse(error)
