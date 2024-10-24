@@ -35,7 +35,9 @@ describe "table - filter" do
     wait_for_and_find(".save-search-button").click
     wait_for_and_find("#table_search_name").set("Test search")
     wait_for_and_find(".save-search-submit-button").click
-    wait_for_expect { ApiMakerTable::TableSearch.count == 1 }
+    wait_for_flash_message "The search was saved."
+
+    wait_for_expect { expect(ApiMakerTable::TableSearch).to have_attributes(count: 1) }
 
     sleep 1 # Wait for database to behave
 

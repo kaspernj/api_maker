@@ -49,7 +49,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
   onSaveSearchSubmit = async () => {
     const formData = this.s.form.asObject()
     const {currentFilters, currentUser, onRequestClose, search} = this.p
-    const hasUserTypeColumn = Boolean(TableSearch.attributes().find((attribute) => console.log({attribute}) && attribute.name() == "user_type"))
+    const hasUserTypeColumn = Boolean(TableSearch.attributes().find((attribute) => attribute.name() == "user_type"))
 
     if (search.isNewRecord()) {
       formData.table_search.query_params = JSON.stringify(currentFilters())
@@ -63,6 +63,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
 
     try {
       await search.saveRaw(formData)
+      FlashMessage.success(this.t(".", {defaultValue: "The search was saved."}))
       onRequestClose()
     } catch (error) {
       FlashMessage.errorResponse(error)
