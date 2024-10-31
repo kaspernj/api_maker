@@ -135,7 +135,7 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   end
 
   def query_count
-    count = @query.except(:limit).except(:offset).count
+    count = @query.except(:select, :limit, :offset).count
     count = count.length if count.is_a?(Hash)
     count
   end
