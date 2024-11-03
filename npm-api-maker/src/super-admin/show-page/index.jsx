@@ -83,7 +83,15 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPage extends Base
         if (nameAttribute && !select[reflectionModelClassName].includes("name")) select[reflectionModelClassName].push("name")
 
         // The foreign key is needed to look up any belongs-to-relationships
-        if (!modelClassSelect.includes(reflection.foreignKey())) modelClassSelect.push(reflection.foreignKey())
+        if (!modelClassSelect.includes(reflection.foreignKey())) {
+          const foreignKeyAttribute = reflectionModelClassAttributes.find((attribute) => attribute.name() == reflection.foreignKey())
+
+          if (!foreignKeyAttribute) {
+            throw new Error(`${reflection.foreignKey()} wasn't defined as an attribute on ${modelClassName}`)
+          }
+
+          modelClassSelect.push(reflection.foreignKey())
+        }
       } else if (reflection.macro() == "has_one") {
         const reflectionModelClass = reflection.modelClass()
         const reflectionModelClassName = reflectionModelClass.modelClassData().name
