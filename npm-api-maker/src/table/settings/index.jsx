@@ -7,7 +7,8 @@ import Modal from "../../modal"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {Text, View} from "react-native"
+import {View} from "react-native"
+import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 export default memo(shapeComponent(class ApiMakerTableSettings extends BaseComponent {

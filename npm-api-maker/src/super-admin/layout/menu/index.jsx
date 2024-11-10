@@ -7,9 +7,10 @@ import MenuItem from "./menu-item"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import Text from "../../../utils/text"
 import useCurrentUser from "../../../use-current-user"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
-import {Text, View} from "react-native"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseComponent {
   static propTypes = PropTypesExact({

@@ -2,8 +2,9 @@ import BaseComponent from "../../base-component"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
-import {Pressable, Text} from "react-native"
+import {Pressable} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component"
+import Text from "../../utils/text"
 
 export default memo(shapeComponent(class ReflectionElement extends BaseComponent {
   static propTypes = PropTypesExact({

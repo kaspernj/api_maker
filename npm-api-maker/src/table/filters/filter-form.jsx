@@ -7,12 +7,13 @@ import Input from "../../inputs/input"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo, useMemo, useRef} from "react"
-import {ActivityIndicator, Text, View} from "react-native"
+import {ActivityIndicator, View} from "react-native"
 import ReflectionElement from "./reflection-element"
 import ScopeElement from "./scope-element"
 import Select from "../../inputs/select"
 import Services from "../../services.mjs"
 import {shapeComponent} from "set-state-compare/src/shape-component"
+import Text from "../../utils/text"
 
 export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
   static propTypes = PropTypesExact({
