@@ -3,7 +3,7 @@ import {digg} from "diggerize"
 import Link from "../link"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {Text} from "react-native"
+import Text from "../utils/text"
 import {useMemo} from "react"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionLink extends BaseComponent {

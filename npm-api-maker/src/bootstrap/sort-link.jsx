@@ -3,7 +3,7 @@ import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import qs from "qs"
 import {memo} from "react"
-import {Text} from "react-native"
+import Text from "../utils/text"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import urlEncode from "../url-encode.mjs"
 

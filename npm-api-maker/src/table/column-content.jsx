@@ -2,7 +2,7 @@ import {digs} from "diggerize"
 import * as inflection from "inflection"
 import modelCallbackArgs from "./model-callback-args.mjs"
 import MoneyFormatter from "../money-formatter"
-import {Text} from "react-native"
+import Text from "../utils/text"
 
 export default class ApiMakerTableColumnContent {
   constructor({column, mode = "react-native", model, table}) {

@@ -5,7 +5,8 @@ import {digg} from "diggerize"
 import {memo, useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {TableSearch} from "../../models.mjs.erb"
-import {Pressable, Text, View} from "react-native"
+import {Pressable, View} from "react-native"
+import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {

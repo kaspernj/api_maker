@@ -9,7 +9,8 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {renderToString} from "react-dom/server"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {Pressable, Text} from "react-native"
+import {Pressable} from "react-native"
+import Text from "../../utils/text"
 
 export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction extends BaseComponent {
   static propTypes = propTypesExact({

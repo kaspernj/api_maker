@@ -1,4 +1,4 @@
-import {Text, View} from "react-native"
+import {View} from "react-native"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Column from "./components/column"
@@ -8,6 +8,7 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
+import Text from "../utils/text"
 
 export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseComponent {
   static propTypes = propTypesExact({

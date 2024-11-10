@@ -4,7 +4,8 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {memo, useEffect, useRef} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {Text, View} from "react-native"
+import Text from "../../utils/text"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class ColumnRow extends BaseComponent {
   static propTypes = propTypesExact({
