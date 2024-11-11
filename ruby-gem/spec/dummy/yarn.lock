@@ -4409,11 +4409,12 @@ set-function-name@^2.0.1:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@^1.0.49, set-state-compare@^1.0.51:
-  version "1.0.51"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.51.tgz#42fb41a8ad9ec9342dc0cd92de8ef370b8850365"
-  integrity sha512-lIlQFQzuLHaSH/yEeFLKmgryOXXfn63Yn24KBY/dG64hNQggV72UWInIXxmiaPS4qI9yE89PsNFoRF7m6QedCw==
+set-state-compare@^1.0.49, set-state-compare@^1.0.52:
+  version "1.0.52"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.52.tgz#ba09f31a06ca2b6c3fb3a8e8c018d6ad0e9c2599"
+  integrity sha512-xa4R72TYwRgteZnlQ8HpImmbuR90f8w4zfz0kRgRrV65TmE9mtEuLtWdTuH/SCKiZt7GvagcMP9k8KVgxaE+Gw==
   dependencies:
+    diggerize "^1.0.5"
     fetching-object ">= 1.0.1"
 
 setimmediate@^1.0.5:
