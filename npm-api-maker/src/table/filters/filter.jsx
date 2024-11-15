@@ -1,10 +1,11 @@
-import {Pressable, Text, View} from "react-native"
+import {Pressable, View} from "react-native"
 import BaseComponent from "../../base-component"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
+import Text from "../../utils/text"
 
 export default memo(shapeComponent(class ApiMakerTableFilter extends BaseComponent {
   static defaultProps = {

@@ -5,7 +5,7 @@ import Link from "../../../../link"
 import {memo} from "react"
 import PropTypes from "prop-types"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {Text} from "react-native"
+import Text from "../../../../utils/text"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
   static propTypes = {

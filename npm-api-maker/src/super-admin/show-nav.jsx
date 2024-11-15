@@ -5,9 +5,10 @@ import PropTypesExact from "prop-types-exact"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import ShowReflectionLink from "./show-reflection-link"
+import Text from "../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import useQueryParams from "on-location-changed/src/use-query-params"
-import {Text, View} from "react-native"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseComponent {
   static propTypes = PropTypesExact({
