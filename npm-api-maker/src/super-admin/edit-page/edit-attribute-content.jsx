@@ -40,7 +40,13 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
     return attribute.content(contentArgs)
   }
 
-  defaultValue = () => this.p.model[this.p.attribute.attribute]() || ""
+  defaultValue = () => {
+    if (!(this.p.attribute.attribute in this.p.model)) {
+      throw new Error(`No attribute called ${this.p.attribute.attribute} in model ${this.p.model.modelClassData().name}`)
+    }
+
+    return this.p.model[this.p.attribute.attribute]() || ""
+  }
 
   onChangeValue = (newValue) => {
     this.setState({value: newValue})
