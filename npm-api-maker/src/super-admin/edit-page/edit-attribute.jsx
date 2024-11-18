@@ -7,6 +7,7 @@ import Locales from "shared/locales"
 import {memo} from "react"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
+import {View} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class EditAttribute extends BaseComponent {
@@ -22,7 +23,7 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
     const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
 
     return (
-      <>
+      <View dataSet={{component: "api-maker/super-admin/edit-page/edit-attribute"}} style={{marginBottom: attribute.translated ? undefined : 12}}>
         {attribute.content &&
           <EditAttributeContent
             attribute={attribute}
@@ -32,14 +33,15 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
           />
         }
         {!attribute.content && attribute.translated && availableLocales.map((locale) =>
-          <EditAttributeInput
-            attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
-            id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}_${locale}`}
-            label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
-            model={model}
-            name={`${inflection.underscore(attribute.attribute)}_${locale}`}
-            key={locale}
-          />
+          <View key={locale} style={{marginBottom: 12}}>
+            <EditAttributeInput
+              attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
+              id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}_${locale}`}
+              label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
+              model={model}
+              name={`${inflection.underscore(attribute.attribute)}_${locale}`}
+            />
+          </View>
         )}
         {!attribute.content && !attribute.translated &&
           <EditAttributeInput
@@ -50,7 +52,7 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
             name={inflection.underscore(attribute.attribute)}
           />
         }
-      </>
+      </View>
     )
   }
 }))

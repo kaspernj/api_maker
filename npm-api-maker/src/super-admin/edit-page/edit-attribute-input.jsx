@@ -42,7 +42,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     }
 
     return (
-      <View style={{marginBottom: 12}}>
+      <View dataSet={{component: "api-maker/super-admin/edit-page/edit-attribute-input"}}>
         <Text>{label}</Text>
         <View>
           <TextInput
