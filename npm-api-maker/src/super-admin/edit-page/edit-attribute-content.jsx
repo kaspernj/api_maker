@@ -34,8 +34,9 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
         id,
         model
       },
-      onChangeValue: this.tt.onChangeValue
-    }), [attribute.attribute, id, model])
+      onChangeValue: this.tt.onChangeValue,
+      value: this.s.value
+    }), [attribute.attribute, id, model, this.s.value])
 
     return attribute.content(contentArgs)
   }
