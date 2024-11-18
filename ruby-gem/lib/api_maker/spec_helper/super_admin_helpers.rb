@@ -51,7 +51,8 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
       if value.is_a?(Hash) && value[:haya_select]
         haya_select("#{base_input_name}_#{input_name}").select(value.fetch(:haya_select))
       else
-        wait_for_and_find("input[data-id='#{resource.underscore_name.singularize}_#{input_name}']").set(value)
+        id = "#{resource.underscore_name.singularize}_#{input_name}"
+        wait_for_and_find("input[data-id='#{id}'], textarea[data-id='#{id}']").set(value)
       end
     end
   end
