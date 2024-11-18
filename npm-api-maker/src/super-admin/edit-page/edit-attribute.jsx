@@ -7,6 +7,7 @@ import Locales from "shared/locales"
 import {memo} from "react"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
+import {View} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class EditAttribute extends BaseComponent {
