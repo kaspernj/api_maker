@@ -1,6 +1,6 @@
 import {memo, useMemo} from "react"
+import {StyleSheet, View} from "react-native"
 import Checkbox from "../../utils/checkbox"
-import {View} from "react-native"
 import BaseComponent from "../../base-component"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
