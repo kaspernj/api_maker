@@ -1,5 +1,6 @@
 import BaseComponent from "../../base-component"
 import {digg} from "diggerize"
+import EditAttributeCheckbox from "./edit-attribute-checkbox"
 import EditAttributeContent from "./edit-attribute-content"
 import EditAttributeInput from "./edit-attribute-input"
 import * as inflection from "inflection"
@@ -21,37 +22,58 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
     const {attribute, model, modelClass} = this.props
     const availableLocales = Locales.availableLocales()
     const camelizedLower = digg(modelClass.modelClassData(), "camelizedLower")
+    const modelAttribute = modelClass.attributes().find((modelAttributeI) => modelAttributeI.name() == attribute.attribute)
 
     return (
       <View dataSet={{component: "api-maker/super-admin/edit-page/edit-attribute"}} style={{marginBottom: attribute.translated ? undefined : 12}}>
-        {attribute.content &&
-          <EditAttributeContent
-            attribute={attribute}
-            id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}`}
-            model={model}
-            name={inflection.underscore(attribute.attribute)}
-          />
-        }
-        {!attribute.content && attribute.translated && availableLocales.map((locale) =>
-          <View key={locale} style={{marginBottom: 12}}>
-            <EditAttributeInput
-              attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
-              id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}_${locale}`}
-              label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
-              model={model}
-              name={`${inflection.underscore(attribute.attribute)}_${locale}`}
-            />
-          </View>
-        )}
-        {!attribute.content && !attribute.translated &&
-          <EditAttributeInput
-            attributeName={attribute.attribute}
-            id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}`}
-            label={modelClass.humanAttributeName(attribute.attribute)}
-            model={model}
-            name={inflection.underscore(attribute.attribute)}
-          />
-        }
+        {(() => {
+          if (attribute.content) {
+            return (
+              <EditAttributeContent
+                attribute={attribute}
+                id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}`}
+                model={model}
+                name={inflection.underscore(attribute.attribute)}
+              />
+            )
+          } else if (attribute.translated) {
+            return (
+              <>
+                {availableLocales.map((locale) =>
+                  <View key={locale} style={{marginBottom: 12}}>
+                    <EditAttributeInput
+                      attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
+                      id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}_${locale}`}
+                      label={`${modelClass.humanAttributeName(attribute.attribute)} (${locale})`}
+                      model={model}
+                      name={`${inflection.underscore(attribute.attribute)}_${locale}`}
+                    />
+                  </View>
+                )}
+              </>
+            )
+          } else if (modelAttribute?.getColumn()?.getType() == "boolean") {
+            return (
+              <EditAttributeCheckbox
+                attributeName={attribute.attribute}
+                id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}`}
+                label={modelClass.humanAttributeName(attribute.attribute)}
+                model={model}
+                name={inflection.underscore(attribute.attribute)}
+              />
+            )
+          } else {
+            return (
+              <EditAttributeInput
+                attributeName={attribute.attribute}
+                id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}`}
+                label={modelClass.humanAttributeName(attribute.attribute)}
+                model={model}
+                name={inflection.underscore(attribute.attribute)}
+              />
+            )
+          }
+        })()}
       </View>
     )
   }

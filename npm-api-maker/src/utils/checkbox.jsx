@@ -1,5 +1,5 @@
 import BaseComponent from "../base-component"
-import {CheckBox, View} from "react-native"
+import {CheckBox, Pressable, View} from "react-native"
 import {memo} from "react"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -13,22 +13,32 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
 
   static propTypes = propTypesExact({
     checked: PropTypes.bool.isRequired,
+    dataSet: PropTypes.object,
     label: PropTypes.string,
-    onValueChange: PropTypes.func.isRequired
+    onCheckedChange: PropTypes.func.isRequired,
+    style: PropTypes.object
   })
 
   render() {
-    const {checked, label, onValueChange} = this.p
+    const {checked, label, onCheckedChange} = this.p
+    const actualStyle = Object.assign(
+      {flexDirection: "row", alignItems: "center"},
+      this.props.style
+    )
 
     return (
-      <View dataSet={{component: "api-maker--utils--checkbox"}} style={{flexDirection: "row", alignItems: "center"}}>
-        <CheckBox onValueChange={onValueChange} value={checked} />
+      <View dataSet={{component: "api-maker--utils--checkbox"}} style={actualStyle}>
+        <CheckBox dataSet={this.props.dataSet} onValueChange={onCheckedChange} value={checked} />
         {label &&
-          <Text style={{marginLeft: 3}}>
-            {label}
-          </Text>
+          <Pressable onPress={this.tt.onLabelPressed}>
+            <Text style={{marginLeft: 3}}>
+              {label}
+            </Text>
+          </Pressable>
         }
       </View>
     )
   }
+
+  onLabelPressed = () => this.p.onCheckedChange(!this.p.checked)
 }))
