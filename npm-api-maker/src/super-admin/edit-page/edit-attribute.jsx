@@ -52,7 +52,7 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
                 )}
               </>
             )
-          } else if (modelAttribute.getColumn().getType() == "boolean") {
+          } else if (modelAttribute?.getColumn()?.getType() == "boolean") {
             return (
               <EditAttributeCheckbox
                 attributeName={attribute.attribute}
