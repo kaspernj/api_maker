@@ -1,4 +1,4 @@
-import {Pressable} from "react-native"
+import {Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader.jsx"
 import EditPage from "./edit-page"
