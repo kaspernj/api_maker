@@ -1,5 +1,6 @@
-import {Pressable} from "react-native"
+import {Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
+import ConfigReader from "./config-reader.jsx"
 import EditPage from "./edit-page"
 import hasEditConfig from "./has-edit-config.js"
 import IndexPage from "./index-page"
@@ -26,6 +27,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
       this.modelClass = null
     }
 
+    this.configReader = useMemo(() => this.modelClass && ConfigReader.forModel(this.modelClass), [this.modelClass])
     this.modelId = this.queryParams.model_id
     this.modelName = this.modelClass?.modelClassData()?.name
     this.currentUser = useCurrentUser()
@@ -51,18 +53,22 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
   }
 
   loadModel = async () => {
-    const {modelClass, modelId, modelName} = this.tt
+    const {configReader, modelClass, modelId, modelName} = this.tt
 
     if (modelId && modelClass) {
       const abilities = {}
       const abilitiesForModel = ["destroy", "edit"]
+      const layoutSelect = configReader?.modelConfig?.layout?.select
 
       abilities[modelName] = abilitiesForModel
 
-      const model = await modelClass
+      const query = await modelClass
         .ransack({id_eq: modelId})
         .abilities(abilities)
-        .first()
+
+      if (layoutSelect) query.select(layoutSelect)
+
+      const model = await query.first()
 
       this.setState({model})
     } else {
@@ -71,8 +77,9 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
   }
 
   render() {
-    const {canCan, modelClass, modelId, modelName, queryParams} = this.tt
+    const {canCan, configReader, modelClass, modelId, modelName, queryParams} = this.tt
     const {model} = this.s
+    const modelConfigActions = configReader?.modelConfig?.actions
     let pageToShow
 
     if (queryParams.model && queryParams.model_id && queryParams.model_reflection) {
@@ -90,11 +97,16 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     }
 
     const actions = useMemo(
-      () => <>
+      () => <View style={{flexDirection: "row", alignItems: "center"}}>
+        {model && modelConfigActions && modelConfigActions({model})}
         {modelClass && pageToShow == "index" &&
           <>
             {canCan?.can("new", modelClass) && hasEditConfig(modelClass) &&
-              <Link dataSet={{class: "create-new-model-link"}} to={Params.withParams({model: modelName, mode: "new"})}>
+              <Link
+                dataSet={{class: "create-new-model-link"}}
+                style={{marginLeft: 10, marginRight: 10}}
+                to={Params.withParams({model: modelName, mode: "new"})}
+              >
                 <Text>
                   Create new
                 </Text>
@@ -105,14 +117,22 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
         {model && pageToShow == "show" &&
           <>
             {model.can("edit") && hasEditConfig(modelClass) &&
-              <Link dataSet={{class: "edit-model-link"}} to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}>
+              <Link
+                dataSet={{class: "edit-model-link"}}
+                style={{marginLeft: 10, marginRight: 10}}
+                to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}
+              >
                 <Text>
                   Edit
                 </Text>
               </Link>
             }
             {model.can("destroy") &&
-              <Pressable dataSet={{class: "destroy-model-link"}} onPress={this.tt.onDestroyClicked}>
+              <Pressable
+                dataSet={{class: "destroy-model-link"}}
+                onPress={this.tt.onDestroyClicked}
+                style={{marginLeft: 10, marginRight: 10}}
+              >
                 <Text>
                   Delete
                 </Text>
@@ -123,8 +143,8 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
         {pageToShow == "show_reflection" &&
           <ShowReflectionActions model={model} modelClass={modelClass} reflectionName={queryParams.model_reflection} />
         }
-      </>,
-      [canCan, model, modelClass, pageToShow]
+      </View>,
+      [canCan, configReader?.actions, model, modelClass, pageToShow]
     )
 
     return (
