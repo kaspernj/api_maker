@@ -33,10 +33,18 @@ private
     reflection.is_a?(ActiveRecord::Reflection::ThroughReflection) || reflection.options[:as].present?
   end
 
+  def look_up_values
+    @look_up_values ||= if collection.loaded?
+      collection.map(&primary_key_column).uniq
+    else
+      collection.group(primary_key_column).pluck(primary_key_column)
+    end
+  end
+
   def models_initial_query
     raise "#{reflection_active_record.name}.#{reflection.name} didn't have an `inverse_of` instruction" unless reflection.inverse_of
 
-    query = reflection.klass.where(reflection.foreign_key => collection.map(&primary_key_column))
+    query = reflection.klass.where(reflection.foreign_key => look_up_values)
     query.joins(reflection.inverse_of.name)
   end
 
