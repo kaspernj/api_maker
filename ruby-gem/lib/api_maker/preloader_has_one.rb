@@ -44,7 +44,7 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
   end
 
   def look_up_values
-    @look_up_values ||= if collection.loaded?
+    @look_up_values ||= if collection.is_a?(Array) || collection.loaded?
       collection.map(&:id).uniq
     else
       collection.group(:id).pluck(:id)

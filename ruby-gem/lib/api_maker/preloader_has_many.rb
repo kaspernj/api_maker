@@ -34,7 +34,7 @@ private
   end
 
   def look_up_values
-    @look_up_values ||= if collection.loaded?
+    @look_up_values ||= if collection.is_a?(Array) || collection.loaded?
       collection.map(&primary_key_column).uniq
     else
       collection.group(primary_key_column).pluck(primary_key_column)
