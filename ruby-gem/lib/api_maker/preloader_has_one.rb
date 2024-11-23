@@ -43,8 +43,16 @@ class ApiMaker::PreloaderHasOne < ApiMaker::PreloaderBase
     data.dig!(:preloaded, underscore_name, origin_id)
   end
 
+  def look_up_values
+    @look_up_values ||= if collection.is_a?(Array) || collection.loaded?
+      collection.map(&:id).uniq
+    else
+      collection.group(:id).pluck(:id)
+    end
+  end
+
   def query_normal
-    query = reflection.klass.where(reflection.foreign_key => collection.map(&:id))
+    query = reflection.klass.where(reflection.foreign_key => look_up_values)
       .select(reflection.klass.arel_table[reflection.foreign_key].as("api_maker_origin_id"))
 
     query = query.where("#{reflection.options.fetch(:as)}_type" => reflection_active_record.name) if reflection.options[:as]
