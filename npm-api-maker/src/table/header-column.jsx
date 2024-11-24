@@ -9,6 +9,7 @@ import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import SortLink from "../bootstrap/sort-link"
 import Text from "../utils/text"
+import useBreakpoint from "../use-breakpoint"
 import useEventListener from "../use-event-listener.mjs"
 import Widths from "./widths"
 
@@ -23,6 +24,10 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   })
 
   setup() {
+    const {name: breakpoint, mdUp, smDown} = useBreakpoint()
+
+    this.setInstance({breakpoint, mdUp, smDown})
+
     useEventListener(window, "mousemove", this.tt.onWindowMouseMove)
     useEventListener(window, "mouseup", this.tt.onWindowMouseUp)
 
@@ -34,6 +39,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   }
 
   render() {
+    const {breakpoint, mdUp, smDown} = this.tt
     const {column, resizing, table, tableSettingColumn, width} = this.p
     const {defaultParams} = table.props
     const {styleForHeader, styleForHeaderText} = table.tt
@@ -43,7 +49,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     const actualStyle = Object.assign(
       {
         cursor: resizing ? "col-resize" : undefined,
-        width
+        width: mdUp ? width : "100%"
       },
       style
     )
@@ -75,19 +81,21 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
             </Text>
           }
         </View>
-        <Pressable
-          onMouseDown={Platform.OS == "web" ? this.tt.onResizeMouseDown : undefined}
-          onPressIn={this.tt.onResizePressIn}
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            width: 10,
-            height: "100%",
-            cursor: "col-resize",
-            zIndex: 9999
-          }}
-        />
+        {mdUp &&
+          <Pressable
+            onMouseDown={Platform.OS == "web" ? this.tt.onResizeMouseDown : undefined}
+            onPressIn={this.tt.onResizePressIn}
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: 10,
+              height: "100%",
+              cursor: "col-resize",
+              zIndex: 9999
+            }}
+          />
+        }
       </Header>
     )
   }

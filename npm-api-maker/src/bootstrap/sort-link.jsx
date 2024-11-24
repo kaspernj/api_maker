@@ -1,5 +1,6 @@
 import BaseComponent from "../base-component"
 import * as inflection from "inflection"
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import PropTypes from "prop-types"
 import qs from "qs"
 import {memo} from "react"
@@ -24,59 +25,31 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
   setup() {
     this.queryParams = useQueryParams()
     this.searchKey = this.p.query.queryArgs.searchKey || "q"
+    this.qParams = this.calculateQParams()
+    this.attribute = inflection.underscore(this.p.attribute)
+    this.calculateIsSortedByAttribute()
   }
 
-  attribute = () => inflection.underscore(this.p.attribute)
+  calculateIsSortedByAttribute () {
+    const {attribute} = this.tt
+    const params = this.tt.qParams
 
-  href () {
-    const qParams = this.qParams()
-    const {queryParams, searchKey} = this.tt
-    const newQueryParams = {...queryParams}
-
-    qParams.s = `${this.attribute()} ${this.sortMode()}` // eslint-disable-line id-length
-
-    newQueryParams[searchKey] = JSON.stringify(qParams)
-
-    const newParams = qs.stringify(newQueryParams, {encoder: urlEncode})
-    const newPath = `${location.pathname}?${newParams}`
-
-    return newPath
+    if (params.s == attribute) {
+      this.isSortedByAttribute = true
+      this.sortMode = "asc"
+    } else if (params.s == `${attribute} asc`) {
+      this.isSortedByAttribute = true
+      this.sortMode = "asc"
+    } else if (params.s == `${attribute} desc`) {
+      this.isSortedByAttribute = true
+      this.sortMode = "desc"
+    } else {
+      this.isSortedByAttribute = false
+      this.sortMode = null
+    }
   }
 
-  isSortedByAttribute () {
-    const params = this.qParams()
-
-    if (params.s == this.attribute()) return true
-    if (params.s == `${this.attribute()} asc`) return true
-
-    return false
-  }
-
-  render () {
-    const LinkComponent = this.linkComponent()
-    const {attribute, className, defaultParams, linkComponent, onChanged, query, textProps, title, ...restProps} = this.props
-
-    return (
-      <LinkComponent
-        dataSet={{
-          attribute,
-          class: className,
-          component: "api-maker--bootstrap--sort-link",
-          sortMode: this.sortMode()
-        }}
-        to={this.href()}
-        {...restProps}
-      >
-        <Text {...textProps}>
-          {this.title()}
-        </Text>
-      </LinkComponent>
-    )
-  }
-
-  linkComponent = () => this.props.linkComponent || Link
-
-  qParams() {
+  calculateQParams() {
     const {defaultParams} = this.props
     const {queryParams, searchKey} = this.tt
 
@@ -89,11 +62,52 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
     return {}
   }
 
-  sortMode () {
-    if (this.isSortedByAttribute()) return "desc"
+  href () {
+    const qParams = this.tt.qParams
+    const {attribute, queryParams, searchKey, sortMode} = this.tt
+    const newQueryParams = {...queryParams}
 
-    return "asc"
+    qParams.s = `${attribute} ${sortMode == "asc" ? "desc" : "asc"}` // eslint-disable-line id-length
+
+    newQueryParams[searchKey] = JSON.stringify(qParams)
+
+    const newParams = qs.stringify(newQueryParams, {encoder: urlEncode})
+    const newPath = `${location.pathname}?${newParams}`
+
+    return newPath
   }
+
+  render () {
+    const {isSortedByAttribute, sortMode} = this.tt
+    const LinkComponent = this.linkComponent()
+    const {attribute, className, defaultParams, linkComponent, onChanged, query, textProps, title, ...restProps} = this.props
+
+    return (
+      <LinkComponent
+        dataSet={{
+          attribute,
+          class: className,
+          component: "api-maker--bootstrap--sort-link",
+          sortMode: this.tt.sortMode
+        }}
+        style={{display: "flex", flexDirection: "row", alignItems: "center"}}
+        to={this.href()}
+        {...restProps}
+      >
+        <Text {...textProps}>
+          {this.title()}
+        </Text>
+        {isSortedByAttribute && sortMode == "asc" &&
+          <FontAwesomeIcon name="chevron-down" size={14} style={{marginLeft: 3}} />
+        }
+        {isSortedByAttribute && sortMode == "desc" &&
+          <FontAwesomeIcon name="chevron-up" size={14} style={{marginLeft: 3}} />
+        }
+      </LinkComponent>
+    )
+  }
+
+  linkComponent = () => this.props.linkComponent || Link
 
   title () {
     const {attribute, query} = this.p

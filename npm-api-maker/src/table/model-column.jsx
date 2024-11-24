@@ -9,6 +9,7 @@ import propTypesExact from "prop-types-exact"
 import {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../utils/text"
+import useBreakpoint from "../use-breakpoint"
 
 export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseComponent {
   static propTypes = propTypesExact({
@@ -23,11 +24,19 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
   })
 
   render() {
+    const {mdUp} = useBreakpoint()
     const {column, columnIndex, even, isSmallScreen, model, table, width} = this.props
     const columnProps = table.columnProps(column)
     const {style, ...restColumnProps} = columnProps
     const actualStyle = Object.assign(
-      table.styleForColumn({column, columnIndex, even, style: {width}}),
+      table.styleForColumn({
+        column,
+        columnIndex,
+        even,
+        style: {
+          width: mdUp ? width : "100%"
+        }
+      }),
       style
     )
 
@@ -42,7 +51,7 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
       >
         {isSmallScreen &&
           <View dataSet={{class: "table--column-label"}}>
-            <Text>
+            <Text style={{fontWeight: "bold"}}>
               {table.headerLabelForColumn(column)}
             </Text>
           </View>
