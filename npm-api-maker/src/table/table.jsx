@@ -99,13 +99,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table"})
-    const {name: breakpoint} = useBreakpoint()
+    const {name: breakpoint, mdUp} = useBreakpoint()
     const queryParams = useQueryParams()
 
     this.setInstance({
       breakpoint,
       filterFormRef: useRef(),
       isSmallScreen: breakpoint == "xs" || breakpoint == "sm",
+      mdUp,
       t
     })
 
@@ -517,7 +518,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {queryWithoutPagination} = this.tt
 
     return (
-      <Row dataSet={{class: "live-table-header-row"}} style={this.styleForRow()}>
+      <Row dataSet={{class: "api-maker/table/header-row"}} style={this.styleForRowHeader()}>
         {this.p.workplace && this.s.currentWorkplace &&
           <Header style={this.styleForHeader({style: {width: 41}})}>
             <WorkerPluginsCheckAllCheckbox
@@ -561,7 +562,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     )
   }
 
-  styleForColumn({column, columnIndex, even, style, type}) {
+  styleForColumn = ({column, columnIndex, even, style, type}) => {
+    const {mdUp} = this.tt
     const defaultStyle = {
       justifyContent: "center",
       padding: 8,
@@ -572,7 +574,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     if (type == "actions") {
       defaultStyle.flexDirection = "row"
       defaultStyle.alignItems = "center"
-      defaultStyle.marginLeft = "auto"
+
+      if (mdUp) {
+        defaultStyle.marginLeft = "auto"
+      } else {
+        defaultStyle.marginRight = "auto"
+      }
     } else {
       defaultStyle.borderRight = "1px solid #dbdbdb"
     }
@@ -616,6 +623,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     if (even) {
       actualStyle.backgroundColor = "#f5f5f5"
+    }
+
+    return actualStyle
+  }
+
+  styleForRowHeader() {
+    const actualStyle = {
+      flex: 1,
+      alignItems: "stretch"
     }
 
     return actualStyle
