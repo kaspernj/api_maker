@@ -25,35 +25,45 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
   setup() {
     this.queryParams = useQueryParams()
     this.searchKey = this.p.query.queryArgs.searchKey || "q"
+    this.qParams = this.calculateQParams()
     this.attribute = inflection.underscore(this.p.attribute)
     this.calculateIsSortedByAttribute()
   }
 
   calculateIsSortedByAttribute () {
     const {attribute} = this.tt
-    const params = this.qParams()
+    const params = this.tt.qParams
 
     if (params.s == attribute) {
       this.isSortedByAttribute = true
       this.sortMode = "asc"
-    }
-
-    if (params.s == `${attribute} asc`) {
+    } else if (params.s == `${attribute} asc`) {
       this.isSortedByAttribute = true
       this.sortMode = "asc"
-    }
-
-    if (params.s == `${attribute} desc`) {
+    } else if (params.s == `${attribute} desc`) {
       this.isSortedByAttribute = true
       this.sortMode = "desc"
+    } else {
+      this.isSortedByAttribute = false
+      this.sortMode = null
+    }
+  }
+
+  calculateQParams() {
+    const {defaultParams} = this.props
+    const {queryParams, searchKey} = this.tt
+
+    if (searchKey in queryParams) {
+      return JSON.parse(queryParams[searchKey])
+    } else if (defaultParams) {
+      return {...defaultParams}
     }
 
-    this.isSortedByAttribute = false
-    this.sortMode = null
+    return {}
   }
 
   href () {
-    const qParams = this.qParams()
+    const qParams = this.tt.qParams
     const {attribute, queryParams, searchKey, sortMode} = this.tt
     const newQueryParams = {...queryParams}
 
@@ -98,19 +108,6 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
   }
 
   linkComponent = () => this.props.linkComponent || Link
-
-  qParams() {
-    const {defaultParams} = this.props
-    const {queryParams, searchKey} = this.tt
-
-    if (searchKey in queryParams) {
-      return JSON.parse(queryParams[searchKey])
-    } else if (defaultParams) {
-      return {...defaultParams}
-    }
-
-    return {}
-  }
 
   title () {
     const {attribute, query} = this.p
