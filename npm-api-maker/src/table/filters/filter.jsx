@@ -33,7 +33,8 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
         <Pressable
           dataSet={{
             attribute: a,
-            class: "filter-label"
+            class: "filter-label",
+            scope: sc
           }}
           onPress={this.tt.onFilterPressed}
         >
@@ -54,9 +55,9 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
   onFilterPressed = (e) => {
     e.preventDefault()
 
-    const {a, filterIndex, p, pre, v} = this.p
+    const {a, filterIndex, p, pre, sc, v} = this.p
 
-    this.props.onClick({a, filterIndex, p, pre, v})
+    this.props.onClick({a, filterIndex, p, pre, sc, v})
   }
 
   onRemoveFilterPressed = (e) => {
