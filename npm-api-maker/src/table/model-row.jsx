@@ -11,7 +11,7 @@ import ModelColumn from "./model-column"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import Row from "./components/row"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
 const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox"))
@@ -21,7 +21,6 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     cacheKey: PropTypes.string.isRequired,
     columnWidths: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
-    isSmallScreen: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired,
     table: PropTypes.object.isRequired,
     preparedColumns: PropTypes.array,
@@ -86,14 +85,13 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   columnsContentFromColumns(model, even) {
-    const {isSmallScreen, table, preparedColumns} = this.p
+    const {table, preparedColumns} = this.p
 
     return preparedColumns?.map(({column, tableSettingColumn, width}, columnIndex) => columnVisible(column, tableSettingColumn) &&
       <ModelColumn
         column={column}
         columnIndex={columnIndex}
         even={even}
-        isSmallScreen={isSmallScreen}
         key={columnIdentifier(column)}
         model={model}
         table={table}

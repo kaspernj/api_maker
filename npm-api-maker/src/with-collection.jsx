@@ -1,5 +1,5 @@
 import {digg} from "diggerize"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import useCollection from "./use-collection"
 
 export default (WrappedComponent, withCollectionArgs) => memo(() => {

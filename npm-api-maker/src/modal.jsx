@@ -1,5 +1,5 @@
 import BaseComponent from "./base-component"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {Modal, Pressable, View} from "react-native"
 

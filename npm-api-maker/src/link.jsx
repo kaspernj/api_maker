@@ -1,10 +1,11 @@
+import {Platform, Pressable} from "react-native"
 import BaseComponent from "./base-component"
 import dataSetToAttributes from "./data-set-to-attributes.mjs"
-import {memo} from "react"
-import {Platform, Pressable} from "react-native"
+import memo from "set-state-compare/src/memo"
+import PropTypes from "prop-types"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
-export default memo(shapeComponent(class Link extends BaseComponent {
+export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   static propTypes = {
     usePressable: PropTypes.bool
   }
@@ -55,7 +56,7 @@ export default memo(shapeComponent(class Link extends BaseComponent {
     this.redirect()
   }
 
-  redirect() {
+  redirect = () => {
     const history = globalThis.apiMakerConfigGlobal?.history
 
     if (!history) throw new Error("History hasn't been set in the API maker configuration")

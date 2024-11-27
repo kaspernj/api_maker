@@ -1,6 +1,6 @@
 import BaseComponent from "../../base-component"
 import {FlatList} from "react-native"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
 export default memo(shapeComponent(class SharedTagble extends BaseComponent {

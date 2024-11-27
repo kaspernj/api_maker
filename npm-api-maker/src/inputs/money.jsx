@@ -3,10 +3,11 @@ import Config from "../config.mjs"
 import {digg} from "diggerize"
 import idForComponent from "./id-for-component.mjs"
 import * as inflection from "inflection"
+import memo from "set-state-compare/src/memo"
 import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {memo, useRef} from "react"
+import {useRef} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeComponent {

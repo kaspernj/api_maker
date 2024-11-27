@@ -1,6 +1,7 @@
 import BaseComponent from "../../../base-component"
 import {digg} from "diggerize"
-import {memo, useMemo} from "react"
+import memo from "set-state-compare/src/memo"
+import {useMemo} from "react"
 import MenuItem from "./menu-item"
 import models from "../../models"
 import Params from "../../../params"

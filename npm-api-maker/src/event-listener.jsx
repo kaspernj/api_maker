@@ -1,6 +1,6 @@
+import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {memo} from "react"
 import useEventListener from "./use-event-listener.mjs"
 
 const callEvent = (target, eventName, args = []) => {

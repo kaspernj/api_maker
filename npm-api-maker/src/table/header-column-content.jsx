@@ -1,6 +1,6 @@
 import BaseComponent from "../base-component"
 import {digs} from "diggerize"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import {View} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"

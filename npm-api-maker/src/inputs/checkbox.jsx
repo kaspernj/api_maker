@@ -4,7 +4,7 @@ import {digg, digs} from "diggerize"
 import EventUpdated from "../event-updated"
 import inputWrapper from "./input-wrapper"
 import PropTypes from "prop-types"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {useForm} from "../form"
 

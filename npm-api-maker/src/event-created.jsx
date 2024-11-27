@@ -1,4 +1,4 @@
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import useCreatedEvent from "./use-created-event.mjs"
 
 const ApiMakerEventCreated = memo((props) => {

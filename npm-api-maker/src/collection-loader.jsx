@@ -1,6 +1,7 @@
 import Collection from "./collection.mjs"
 import {digg} from "diggerize"
-import {memo, useMemo} from "react"
+import memo from "set-state-compare/src/memo"
+import {useMemo} from "react"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import useCollection from "./use-collection"

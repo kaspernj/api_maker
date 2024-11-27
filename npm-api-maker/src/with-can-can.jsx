@@ -1,5 +1,5 @@
 import useCanCan from "./use-can-can.mjs"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 
 export default (WrappedComponent, abilities) => {
   const WithCanCan = (props) => {

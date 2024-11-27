@@ -1,6 +1,6 @@
 import "./style"
 import BaseComponent from "../../../base-component"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import Link from "../../../link"
 import MenuContent from "./menu-content"
 import MenuItem from "./menu-item"
