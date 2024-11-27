@@ -70,8 +70,8 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
           <Filter
             key={filterIndex}
             filterIndex={filterIndex}
-            onClick={digg(this, "onFilterClicked")}
-            onRemoveClicked={digg(this, "onRemoveClicked")}
+            onClick={this.tt.onFilterClicked}
+            onRemoveClicked={this.tt.onRemoveClicked}
             {...filterData}
           />
         )}
@@ -122,7 +122,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
     })
   }
 
-  onFilterClicked = (args) => this.setState({filter: args})
+  onFilterClicked = (filter) => this.setState({filter})
 
   onLoadSearchClicked = (e) => {
     e.preventDefault()

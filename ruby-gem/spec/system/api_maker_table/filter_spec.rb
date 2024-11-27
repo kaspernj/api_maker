@@ -166,4 +166,39 @@ describe "bootstrap - live table - filter" do
     wait_for_no_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
   end
+
+  it "edits a scope-filter without path" do
+    task1
+    task2
+
+    login_as user_admin
+    visit bootstrap_live_table_path(tasks_s: [JSON.generate(p: [], v: "Project 1", a: nil, pre: "eq", sc: "some_name_contains")])
+    wait_for_selector model_row_selector(task1)
+    wait_for_no_selector model_row_selector(task2)
+
+    # It opens the edit form by clicking on the filter element
+    wait_for_and_find("[data-class='filter-label'][data-scope='some_name_contains']").click
+
+    # It selects a different attribute
+    wait_for_and_find(".value-input").set("Project 2")
+
+    # It saves the filter
+    wait_for_and_find(".apply-filter-button").click
+
+    tasks_params = []
+    query_params.fetch("tasks_s").each_value do |query_param|
+      tasks_params << JSON.parse(query_param)
+    end
+
+    expect(tasks_params).to eq [
+      {
+        "p" => [],
+        "v" => "Project 2",
+        "sc" => "some_name_contains"
+      }
+    ]
+
+    wait_for_selector model_row_selector(task2)
+    wait_for_no_selector model_row_selector(task1)
+  end
 end
