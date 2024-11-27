@@ -49,6 +49,7 @@ const TableContext = createContext()
 const ListHeaderComponent = memo(() => {
   const {mdUp} = useBreakpoint()
   const tableContextValue = useContext(TableContext)
+  const cacheKey = tableContextValue.cacheKey
   const table = tableContextValue.table
   const {collection, queryWithoutPagination, t} = table.tt
   const {query} = digs(collection, "query")
@@ -149,7 +150,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       mdUp,
       t
     })
-    this.tableContextValue = useMemo(() => ({table: this}), [])
 
     const collectionKey = digg(this.p.modelClass.modelClassData(), "collectionKey")
     let queryName = this.props.queryName
@@ -180,6 +180,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       width: undefined,
       widths: null
     })
+
+    this.tableContextValue = useMemo(() => ({cacheKey: this.s.tableSettingFullCacheKey, table: this}), [this.s.tableSettingFullCacheKey])
 
     useMemo(() => {
       if (this.props.workplace) {
@@ -435,7 +437,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       <TableContext.Provider value={this.tt.tableContextValue}>
         <FlatList
           data={models}
-          dataSet={{class: classNames("api-maker--table", className)}}
+          dataSet={{class: classNames("api-maker--table", className), cacheKey: this.s.tableSettingFullCacheKey}}
           extraData={this.s.lastUpdate}
           keyExtractor={this.tt.keyExtrator}
           ListHeaderComponent={ListHeaderComponent}
@@ -511,7 +513,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
   }
 
-  keyExtrator = (model) => model.id()
+  keyExtrator = (model) => `${this.s.tableSettingFullCacheKey}-${model.id()}`
 
   filterForm = () => {
     const {filterFormRef, submitFilter, submitFilterDebounce} = this.tt
