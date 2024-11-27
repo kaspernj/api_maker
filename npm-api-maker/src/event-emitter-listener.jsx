@@ -1,4 +1,4 @@
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import useEventEmitter from "./use-event-emitter.mjs"
 
 const ApiMakerEventEmitterListener = ({events, event, onCalled}) => {

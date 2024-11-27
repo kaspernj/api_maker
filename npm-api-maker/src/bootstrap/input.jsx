@@ -4,7 +4,7 @@ import {Input} from "../inputs/input"
 import InvalidFeedback from "./invalid-feedback"
 import Money from "../inputs/money"
 import PropTypes from "prop-types"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 
 const ApiMakerBootstrapInput = memo(shapeComponent(class ApiMakerBootstrapInput extends ShapeComponent {

@@ -2,7 +2,8 @@ import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digs} from "diggerize"
 import Header from "./components/header"
-import {memo} from "react"
+import HeaderColumnContent from "./header-column-content"
+import memo from "set-state-compare/src/memo"
 import {Platform, Pressable, View} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -64,23 +65,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         style={styleForHeader({style: actualStyle})}
         {...restColumnProps}
       >
-        <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-          {tableSettingColumn.hasSortKey() && query &&
-            <SortLink
-              attribute={tableSettingColumn.sortKey()}
-              defaultParams={defaultParams}
-              query={query}
-              style={{whiteSpace: "nowrap", overflow: "hidden"}}
-              textProps={{ellipsizeMode: "clip", numberOfLines: 1, style: styleForHeaderText()}}
-              title={table.headerLabelForColumn(column)}
-            />
-          }
-          {(!tableSettingColumn.hasSortKey() || !query) &&
-            <Text ellipsizeMode="clip" numberOfLines={1}>
-              {table.headerLabelForColumn(column)}
-            </Text>
-          }
-        </View>
+        <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
         {mdUp &&
           <Pressable
             onMouseDown={Platform.OS == "web" ? this.tt.onResizeMouseDown : undefined}

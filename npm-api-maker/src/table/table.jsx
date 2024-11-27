@@ -11,13 +11,15 @@ import FlatList from "./components/flat-list"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import Header from "./components/header"
 import HeaderColumn from "./header-column"
+import HeaderSelect from "./header-select"
 import * as inflection from "inflection"
+import memo from "set-state-compare/src/memo"
 import modelClassRequire from "../model-class-require.mjs"
 import ModelRow from "./model-row"
 import Paginate from "../bootstrap/paginate"
 import Params from "../params"
 import PropTypes from "prop-types"
-import React, {memo, useMemo, useRef} from "react"
+import React, {createContext, useContext, useMemo, useRef} from "react"
 import Row from "./components/row"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
@@ -41,6 +43,45 @@ const styleSheet = StyleSheet.create({
     borderRadius: 5,
     overflowX: "auto"
   }
+})
+const TableContext = createContext()
+
+const ListHeaderComponent = memo(() => {
+  const {mdUp} = useBreakpoint()
+  const tableContextValue = useContext(TableContext)
+  const table = tableContextValue.table
+  const {collection, queryWithoutPagination, t} = table.tt
+  const {query} = digs(collection, "query")
+
+  return (
+    <Row dataSet={{class: "api-maker/table/header-row"}} style={table.styleForRowHeader()}>
+      {table.p.workplace && table.s.currentWorkplace &&
+        <Header style={table.styleForHeader({style: {width: mdUp ? 41 : undefined}})}>
+          <WorkerPluginsCheckAllCheckbox
+            currentWorkplace={table.s.currentWorkplace}
+            query={queryWithoutPagination}
+            style={{marginHorizontal: "auto"}}
+          />
+          {!mdUp &&
+            <Text style={{marginLeft: 3}}>
+              {t(".select_all_found", {defaultValue: "Select all found"})}
+            </Text>
+          }
+        </Header>
+      }
+      {!mdUp &&
+        <Header style={table.styleForHeader({style: {}})}>
+          <HeaderSelect preparedColumns={table.s.preparedColumns} query={query} table={table} />
+        </Header>
+      }
+      {mdUp &&
+        <>
+          {table.headersContentFromColumns()}
+          <Header style={table.styleForHeader({style: {}, type: "actions"})} />
+        </>
+      }
+    </Row>
+  )
 })
 
 export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
@@ -105,7 +146,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     this.setInstance({
       breakpoint,
       filterFormRef: useRef(),
-      isSmallScreen: breakpoint == "xs" || breakpoint == "sm",
       mdUp,
       t
     })
@@ -139,6 +179,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       width: undefined,
       widths: null
     })
+
+    this.tableContextValue = useMemo(() => ({cacheKey: this.s.tableSettingFullCacheKey, table: this}), [this.s.tableSettingFullCacheKey])
 
     useMemo(() => {
       if (this.props.workplace) {
@@ -391,17 +433,19 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
 
     const flatList = (
-      <FlatList
-        data={models}
-        dataSet={{class: classNames("api-maker--table", className)}}
-        extraData={this.s.lastUpdate}
-        keyExtractor={this.tt.keyExtrator}
-        ListHeaderComponent={this.tt.listHeaderComponent}
-        renderItem={this.tt.renderItem}
-        showsHorizontalScrollIndicator
-        style={styleSheet.flatList}
-        {...restProps}
-      />
+      <TableContext.Provider value={this.tt.tableContextValue}>
+        <FlatList
+          data={models}
+          dataSet={{class: classNames("api-maker--table", className), cacheKey: this.s.tableSettingFullCacheKey}}
+          extraData={this.s.lastUpdate}
+          keyExtractor={this.tt.keyExtrator}
+          ListHeaderComponent={ListHeaderComponent}
+          renderItem={this.tt.renderItem}
+          showsHorizontalScrollIndicator
+          style={styleSheet.flatList}
+          {...restProps}
+        />
+      </TableContext.Provider>
     )
 
     return (
@@ -468,7 +512,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
   }
 
-  keyExtrator = (model) => model.id()
+  keyExtrator = (model) => `${this.s.tableSettingFullCacheKey}-${model.id()}`
 
   filterForm = () => {
     const {filterFormRef, submitFilter, submitFilterDebounce} = this.tt
@@ -514,26 +558,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     Params.changeParams(paramsChange)
   }
 
-  listHeaderComponent = () => {
-    const {queryWithoutPagination} = this.tt
-
-    return (
-      <Row dataSet={{class: "api-maker/table/header-row"}} style={this.styleForRowHeader()}>
-        {this.p.workplace && this.s.currentWorkplace &&
-          <Header style={this.styleForHeader({style: {width: 41}})}>
-            <WorkerPluginsCheckAllCheckbox
-              currentWorkplace={this.s.currentWorkplace}
-              query={queryWithoutPagination}
-              style={{marginHorizontal: "auto"}}
-            />
-          </Header>
-        }
-        {this.headersContentFromColumns()}
-        <Header style={this.styleForHeader({style: {}, type: "actions"})} />
-      </Row>
-    )
-  }
-
   renderItem = ({index, item: model}) => {
     const {preparedColumns, tableSettingFullCacheKey} = this.s
 
@@ -541,7 +565,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       return (
         <View>
           <Text>
-            Loading...
+            {this.t(".loading_dot_dot_dot", {defaultValue: "Loading..."})}
           </Text>
         </View>
       )
@@ -552,7 +576,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         cacheKey={model.cacheKey()}
         columnWidths={this.columnWidths()}
         index={index}
-        isSmallScreen={this.tt.isSmallScreen}
         key={model.id()}
         model={model}
         preparedColumns={preparedColumns}
@@ -563,7 +586,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   styleForColumn = ({column, columnIndex, even, style, type}) => {
-    const {mdUp} = this.tt
     const defaultStyle = {
       justifyContent: "center",
       padding: 8,
@@ -575,12 +597,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       defaultStyle.flexDirection = "row"
       defaultStyle.alignItems = "center"
 
-      if (mdUp) {
+      if (this.tt.mdUp) {
         defaultStyle.marginLeft = "auto"
       } else {
         defaultStyle.marginRight = "auto"
       }
-    } else {
+    } else if (this.tt.mdUp) {
       defaultStyle.borderRight = "1px solid #dbdbdb"
     }
 
@@ -592,12 +614,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return actualStyle
   }
 
-  styleForHeader({column, columnIndex, style, type}) {
+  styleForHeader = ({column, columnIndex, style, type}) => {
     const defaultStyle = {
+      flexDirection: "row",
+      alignItems: "center",
       padding: 8
     }
 
-    if (type != "actions") {
+    if (type != "actions" && this.tt.mdUp) {
       defaultStyle.borderRight = "1px solid #dbdbdb"
     }
 

@@ -79,6 +79,7 @@ RSpec.configure do |config|
   config.include FlashMessagesHelper, type: :system
   config.include FactoryBot::Syntax::Methods
   config.include Warden::Test::Helpers
+  config.include WindowHelpers
 
   config.backtrace_exclusion_patterns << /\/\.rvm\//
   config.infer_spec_type_from_file_location!
@@ -128,5 +129,14 @@ RSpec.configure do |config|
 
   config.before(:each, :system) do
     browser_logs # Clear the logs
+  end
+
+  config.before(:each, type: :system) do |example|
+    if example.metadata[:mobile]
+      # Size of a iPhone 12
+      resize_to(414, 985)
+    else
+      resize_to(1920, 1080)
+    end
   end
 end

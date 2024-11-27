@@ -1,4 +1,4 @@
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import useResizeObserver from "./use-resize-observer.mjs"
 
 const ApiMakerResizeObserver = memo(({element, onResize}) => {

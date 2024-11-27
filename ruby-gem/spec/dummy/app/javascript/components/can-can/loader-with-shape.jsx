@@ -1,4 +1,4 @@
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import useCanCan from "@kaspernj/api-maker/src/use-can-can"
 
 const CanCanWithShape = () => {

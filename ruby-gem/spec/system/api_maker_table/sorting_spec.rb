@@ -53,12 +53,14 @@ describe "bootstrap - live table - sorting" do
 
     login_as user_admin
     visit bootstrap_live_table_path(tasks_q: JSON.generate(s: "id asc", name_cont: "-task"))
+    wait_for_selector "[data-component='api-maker/bootstrap/sort-link'][data-attribute='id'][data-sort-mode='asc']"
 
     tasks.slice(0, 30).reverse_each do |task|
       wait_for_selector model_row_selector(task)
     end
 
-    wait_for_and_find("[data-component='api-maker--bootstrap--sort-link'][data-attribute='name']").click
+    wait_for_and_find("[data-component='api-maker/bootstrap/sort-link'][data-attribute='id']").click
+    wait_for_selector "[data-component='api-maker/bootstrap/sort-link'][data-attribute='id'][data-sort-mode='desc']"
 
     tasks.slice(70, 30).reverse_each do |task|
       wait_for_selector model_row_selector(task)
@@ -68,7 +70,7 @@ describe "bootstrap - live table - sorting" do
 
     expect(task_params).to eq(
       "name_cont" => "-task",
-      "s" => "name asc"
+      "s" => "id desc"
     )
   end
 end

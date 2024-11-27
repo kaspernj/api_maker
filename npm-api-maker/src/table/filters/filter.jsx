@@ -3,7 +3,7 @@ import BaseComponent from "../../base-component"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../../utils/text"
 

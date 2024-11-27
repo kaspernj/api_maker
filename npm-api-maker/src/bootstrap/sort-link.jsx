@@ -3,10 +3,11 @@ import * as inflection from "inflection"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import PropTypes from "prop-types"
 import qs from "qs"
-import {memo} from "react"
+import memo from "set-state-compare/src/memo"
 import Text from "../utils/text"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import urlEncode from "../url-encode.mjs"
+import useSorting from "../table/use-sorting.mjs"
 
 import Link from "../link"
 import useQueryParams from "on-location-changed/src/use-query-params"
@@ -23,47 +24,23 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
   }
 
   setup() {
+    const {attribute, defaultParams, query} = this.props
+    const {qParams, searchKey, sortAttribute, sortMode} = useSorting({defaultParams, query})
+
+    this.setInstance({
+      isSortedByAttribute: sortAttribute == attribute,
+      qParams,
+      searchKey,
+      sortMode
+    })
+
     this.queryParams = useQueryParams()
     this.searchKey = this.p.query.queryArgs.searchKey || "q"
-    this.qParams = this.calculateQParams()
     this.attribute = inflection.underscore(this.p.attribute)
-    this.calculateIsSortedByAttribute()
-  }
-
-  calculateIsSortedByAttribute () {
-    const {attribute} = this.tt
-    const params = this.tt.qParams
-
-    if (params.s == attribute) {
-      this.isSortedByAttribute = true
-      this.sortMode = "asc"
-    } else if (params.s == `${attribute} asc`) {
-      this.isSortedByAttribute = true
-      this.sortMode = "asc"
-    } else if (params.s == `${attribute} desc`) {
-      this.isSortedByAttribute = true
-      this.sortMode = "desc"
-    } else {
-      this.isSortedByAttribute = false
-      this.sortMode = null
-    }
-  }
-
-  calculateQParams() {
-    const {defaultParams} = this.props
-    const {queryParams, searchKey} = this.tt
-
-    if (searchKey in queryParams) {
-      return JSON.parse(queryParams[searchKey])
-    } else if (defaultParams) {
-      return {...defaultParams}
-    }
-
-    return {}
   }
 
   href () {
-    const qParams = this.tt.qParams
+    const qParams = Object.assign({}, this.tt.qParams)
     const {attribute, queryParams, searchKey, sortMode} = this.tt
     const newQueryParams = {...queryParams}
 
@@ -80,17 +57,25 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
   render () {
     const {isSortedByAttribute, sortMode} = this.tt
     const LinkComponent = this.linkComponent()
-    const {attribute, className, defaultParams, linkComponent, onChanged, query, textProps, title, ...restProps} = this.props
+    const {attribute, className, dataSet, defaultParams, linkComponent, onChanged, query, style, textProps, title, ...restProps} = this.props
+    const actualDataSet = Object.assign(
+      {
+        attribute,
+        class: className,
+        component: "api-maker/bootstrap/sort-link",
+        sortMode: this.tt.sortMode
+      },
+      dataSet
+    )
+    const actualStyle = Object.assign(
+      {display: "flex", flexDirection: "row", alignItems: "center"},
+      style
+    )
 
     return (
       <LinkComponent
-        dataSet={{
-          attribute,
-          class: className,
-          component: "api-maker--bootstrap--sort-link",
-          sortMode: this.tt.sortMode
-        }}
-        style={{display: "flex", flexDirection: "row", alignItems: "center"}}
+        dataSet={actualDataSet}
+        style={actualStyle}
         to={this.href()}
         {...restProps}
       >
