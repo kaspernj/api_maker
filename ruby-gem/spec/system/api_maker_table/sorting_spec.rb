@@ -58,7 +58,7 @@ describe "bootstrap - live table - sorting" do
       wait_for_selector model_row_selector(task)
     end
 
-    wait_for_and_find("[data-component='api-maker--bootstrap--sort-link'][data-attribute='name']").click
+    wait_for_and_find("[data-component='api-maker/bootstrap/sort-link'][data-attribute='name']").click
 
     tasks.slice(70, 30).reverse_each do |task|
       wait_for_selector model_row_selector(task)

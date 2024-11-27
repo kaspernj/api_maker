@@ -5,8 +5,15 @@ import {View} from "react-native"
 
 export default memo(shapeComponent(class SharedTableHeader extends BaseComponent {
   render() {
+    const {dataSet, ...restProps} = this.props
+    const {component, ...restDataSet} = dataSet || {}
+    const actualDataSet = Object.assign(
+      {component: classNames("api-maker/table/header", component)},
+      restDataSet
+    )
+
     return (
-      <View {...this.props} />
+      <View dataSet={actualDataSet} {...restProps} />
     )
   }
 }))

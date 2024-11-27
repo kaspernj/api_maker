@@ -11,6 +11,7 @@ import FlatList from "./components/flat-list"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import Header from "./components/header"
 import HeaderColumn from "./header-column"
+import HeaderSelect from "./header-select"
 import * as inflection from "inflection"
 import modelClassRequire from "../model-class-require.mjs"
 import ModelRow from "./model-row"
@@ -515,21 +516,36 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   listHeaderComponent = () => {
-    const {queryWithoutPagination} = this.tt
+    const {collection, mdUp, queryWithoutPagination, t} = this.tt
+    const {query} = digs(collection, "query")
 
     return (
       <Row dataSet={{class: "api-maker/table/header-row"}} style={this.styleForRowHeader()}>
         {this.p.workplace && this.s.currentWorkplace &&
-          <Header style={this.styleForHeader({style: {width: 41}})}>
+          <Header style={this.styleForHeader({style: {width: mdUp ? 41 : undefined}})}>
             <WorkerPluginsCheckAllCheckbox
               currentWorkplace={this.s.currentWorkplace}
               query={queryWithoutPagination}
               style={{marginHorizontal: "auto"}}
             />
+            {!mdUp &&
+              <Text style={{marginLeft: 3}}>
+                {t(".select_all_found", {defaultValue: "Select all found"})}
+              </Text>
+            }
           </Header>
         }
-        {this.headersContentFromColumns()}
-        <Header style={this.styleForHeader({style: {}, type: "actions"})} />
+        {!this.tt.mdUp &&
+          <Header style={this.styleForHeader({style: {}})}>
+            <HeaderSelect preparedColumns={this.s.preparedColumns} query={query} table={this} />
+          </Header>
+        }
+        {this.tt.mdUp &&
+          <>
+            {this.headersContentFromColumns()}
+            <Header style={this.styleForHeader({style: {}, type: "actions"})} />
+          </>
+        }
       </Row>
     )
   }
@@ -541,7 +557,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       return (
         <View>
           <Text>
-            Loading...
+            {this.t(".loading_dot_dot_dot", {defaultValue: "Loading..."})}
           </Text>
         </View>
       )
@@ -563,7 +579,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   styleForColumn = ({column, columnIndex, even, style, type}) => {
-    const {mdUp} = this.tt
     const defaultStyle = {
       justifyContent: "center",
       padding: 8,
@@ -575,12 +590,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       defaultStyle.flexDirection = "row"
       defaultStyle.alignItems = "center"
 
-      if (mdUp) {
+      if (this.tt.mdUp) {
         defaultStyle.marginLeft = "auto"
       } else {
         defaultStyle.marginRight = "auto"
       }
-    } else {
+    } else if (this.tt.mdUp) {
       defaultStyle.borderRight = "1px solid #dbdbdb"
     }
 
@@ -592,12 +607,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return actualStyle
   }
 
-  styleForHeader({column, columnIndex, style, type}) {
+  styleForHeader = ({column, columnIndex, style, type}) => {
     const defaultStyle = {
+      flexDirection: "row",
+      alignItems: "center",
       padding: 8
     }
 
-    if (type != "actions") {
+    if (type != "actions" && this.tt.mdUp) {
       defaultStyle.borderRight = "1px solid #dbdbdb"
     }
 

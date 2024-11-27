@@ -5,10 +5,14 @@ import {Platform, Pressable} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class Link extends BaseComponent {
-  render() {
-    const {dataSet, to, onClick, onPress, ...restProps} = this.props
+  static propTypes = {
+    usePressable: PropTypes.bool
+  }
 
-    if (Platform.OS == "web") {
+  render() {
+    const {dataSet, to, onClick, onPress, usePressable, ...restProps} = this.props
+
+    if (Platform.OS == "web" && !usePressable) {
       return (
         <a {...dataSetToAttributes(dataSet)} href={to} {...restProps} onClick={this.tt.onLinkClicked} />
       )
@@ -37,7 +41,7 @@ export default memo(shapeComponent(class Link extends BaseComponent {
     }
   }
 
-  onPress() {
+  onPress = () => {
     const {onClick, onPress} = this.props
 
     if (onClick) {
