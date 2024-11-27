@@ -49,7 +49,6 @@ const TableContext = createContext()
 const ListHeaderComponent = memo(() => {
   const {mdUp} = useBreakpoint()
   const tableContextValue = useContext(TableContext)
-  const cacheKey = tableContextValue.cacheKey
   const table = tableContextValue.table
   const {collection, queryWithoutPagination, t} = table.tt
   const {query} = digs(collection, "query")
