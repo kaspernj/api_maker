@@ -57,7 +57,16 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
   render () {
     const {isSortedByAttribute, sortMode} = this.tt
     const LinkComponent = this.linkComponent()
-    const {attribute, className, defaultParams, linkComponent, onChanged, query, style, textProps, title, ...restProps} = this.props
+    const {attribute, className, dataSet, defaultParams, linkComponent, onChanged, query, style, textProps, title, ...restProps} = this.props
+    const actualDataSet = Object.assign(
+      {
+        attribute,
+        class: className,
+        component: "api-maker/bootstrap/sort-link",
+        sortMode: this.tt.sortMode
+      },
+      dataSet
+    )
     const actualStyle = Object.assign(
       {display: "flex", flexDirection: "row", alignItems: "center"},
       style
@@ -65,12 +74,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
 
     return (
       <LinkComponent
-        dataSet={{
-          attribute,
-          class: className,
-          component: "api-maker/bootstrap/sort-link",
-          sortMode: this.tt.sortMode
-        }}
+        dataSet={actualDataSet}
         style={actualStyle}
         to={this.href()}
         {...restProps}
