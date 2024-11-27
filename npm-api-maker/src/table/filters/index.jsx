@@ -122,11 +122,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
     })
   }
 
-  onFilterClicked = (args) => {
-    console.log("onFilterClicked", {args})
-
-    this.setState({filter: args})
-  }
+  onFilterClicked = (filter) => this.setState({filter})
 
   onLoadSearchClicked = (e) => {
     e.preventDefault()
