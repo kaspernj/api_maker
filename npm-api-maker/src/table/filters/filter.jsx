@@ -55,7 +55,8 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
   onFilterPressed = (e) => {
     e.preventDefault()
 
-    const {a, filterIndex, p, pre, sc, v} = this.p
+    const {a, filterIndex, p, pre, v} = this.p
+    const {sc} = this.props
 
     this.props.onClick({a, filterIndex, p, pre, sc, v})
   }
