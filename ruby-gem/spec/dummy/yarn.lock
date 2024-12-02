@@ -1232,10 +1232,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@1.0.434":
-  version "1.0.434"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.434.tgz#83823d1a09e2057f8a2d56801fd616621b8fa4e7"
-  integrity sha512-t/Ls0gYtaiLbUvrVUMWXvsz6VImGjEMaH2dq9hCcsL04DbxKsOKItbNVdhNsobKGKZ1eD8uwDugkrOJ/4nfvWw==
+"@kaspernj/api-maker@1.0.436":
+  version "1.0.436"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.436.tgz#a1e9cb2ecfcceebaa58b83edb143f9e6cddffbce"
+  integrity sha512-ie+M2wnkMZPb/4fzQKHTdzQYFooOIrbl2eAIb4pitZVZ+zq/4JfGlJMFgmCOzSZEwuEeHXy0cBJOrj03tWyAMw==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -1254,7 +1254,7 @@
     qs ">= 6.9.3"
     react-native-vector-icons "^10.2.0"
     replaceall ">= 0.1.6"
-    set-state-compare "^1.0.49"
+    set-state-compare ">= 1.0.51"
     spark-md5 "^3.0.2"
     stacktrace-parser "^0.1.10"
     strftime ">= 0.10.0"
@@ -4409,7 +4409,7 @@ set-function-name@^2.0.1:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@^1.0.49, set-state-compare@^1.0.52:
+"set-state-compare@>= 1.0.51", set-state-compare@^1.0.52:
   version "1.0.52"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.52.tgz#ba09f31a06ca2b6c3fb3a8e8c018d6ad0e9c2599"
   integrity sha512-xa4R72TYwRgteZnlQ8HpImmbuR90f8w4zfz0kRgRrV65TmE9mtEuLtWdTuH/SCKiZt7GvagcMP9k8KVgxaE+Gw==
