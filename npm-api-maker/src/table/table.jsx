@@ -633,14 +633,19 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   styleForHeader = ({column, columnIndex, style, type}) => {
+    const {mdUp} = this.tt
     const defaultStyle = {
       flexDirection: "row",
       alignItems: "center",
       padding: 8
     }
 
-    if (type != "actions" && this.tt.mdUp && this.p.styleUI) {
+    if (type != "actions" && mdUp && this.p.styleUI) {
       defaultStyle.borderRight = "1px solid #dbdbdb"
+    }
+
+    if (mdUp) {
+
     }
 
     const actualStyle = Object.assign(
@@ -763,6 +768,22 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return props
   }
 
+  headerProps(column) {
+    const props = {}
+
+    if (column.textCenter) {
+      props.style ||= {}
+      props.style.justifyContent = "center"
+    }
+
+    if (column.textRight) {
+      props.style ||= {}
+      props.style.justifyContent = "end"
+    }
+
+    return props
+  }
+
   columnWidths() {
     const columnWidths = {}
 
@@ -786,7 +807,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   )
 
   headerClassNameForColumn(column) {
-    const classNames = ["live-table-header"]
+    const classNames = []
 
     if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
     if (column.headerProps && column.headerProps.className) classNames.push(column.headerProps.className)
