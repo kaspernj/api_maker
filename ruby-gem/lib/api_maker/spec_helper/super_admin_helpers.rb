@@ -34,10 +34,14 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     wait_for_and_find("[data-class='create-new-model-link']").click
     wait_for_selector "[data-class='super-admin--edit-page']"
     super_admin_test_fill_inputs(resource, inputs)
+    expected_count = model_class.count + 1
     wait_for_and_find("[data-class='submit-button']").click
-    wait_for_expect { expect(model_class.count).to eq 1 }
+    wait_for_expect { expect(model_class.count).to eq expected_count }
 
-    created_model = model_class.last!
+    uri = URI.parse(current_url)
+    params = CGI.parse(uri.query)
+    model_id = params.fetch("model_id").fetch(0)
+    created_model = model_class.find(model_id)
 
     expect_attributes = expect || inputs
 
