@@ -63,7 +63,7 @@ const useInput = ({props, wrapperOptions}) => {
   const inputDefaultValue = useCallback(() => {
     if ("defaultValue" in s.props) {
       return formatValue(s.props.defaultValue)
-    } else if (s.props.model) {
+    } else if (s.props.model && s.props.attribute) {
       if (!s.props.model[s.props.attribute]) {
         throw new Error(`No such attribute defined on resource: ${digg(s.props.model.modelClassData(), "name")}#${s.props.attribute}`)
       }
