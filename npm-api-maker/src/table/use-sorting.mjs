@@ -15,7 +15,12 @@ const useSorting = ({defaultParams, query}) => {
   const queryParams = useQueryParams()
   const searchKey = query.queryArgs.searchKey || "q"
   const qParams = calculateQParams(defaultParams, queryParams, searchKey)
-  const matchSortParam = qParams.s?.match(/^(.+?)( asc| desc|)$/)
+  let matchSortParam
+
+  if (typeof qParams.s == "string") {
+    matchSortParam = qParams.s?.match(/^(.+?)( asc| desc|)$/)
+  }
+
   const sortAttribute = matchSortParam ? camelize(matchSortParam[1], true) : null
   const sortMode = matchSortParam ? matchSortParam[2].trim() : null
 

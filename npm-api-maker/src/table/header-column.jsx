@@ -1,15 +1,12 @@
 import BaseComponent from "../base-component"
 import classNames from "classnames"
-import {digs} from "diggerize"
 import Header from "./components/header"
 import HeaderColumnContent from "./header-column-content"
 import memo from "set-state-compare/src/memo"
-import {Platform, Pressable, View} from "react-native"
+import {Platform, Pressable} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
-import SortLink from "../bootstrap/sort-link"
-import Text from "../utils/text"
 import useBreakpoint from "../use-breakpoint"
 import useEventListener from "../use-event-listener.mjs"
 import Widths from "./widths"
@@ -40,13 +37,11 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   }
 
   render() {
-    const {breakpoint, mdUp, smDown} = this.tt
+    const {mdUp} = this.tt
     const {column, resizing, table, tableSettingColumn, width} = this.p
-    const {defaultParams} = table.props
-    const {styleForHeader, styleForHeaderText} = table.tt
-    const {query} = digs(table.collection, "query")
-    const columnProps = table.columnProps(column)
-    const {style, ...restColumnProps} = columnProps
+    const {styleForHeader} = table.tt
+    const headerProps = table.headerProps(column)
+    const {style, ...restColumnProps} = headerProps
     const actualStyle = Object.assign(
       {
         cursor: resizing ? "col-resize" : undefined,

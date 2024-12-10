@@ -67,6 +67,9 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
 
     visit super_admin_path(model: resource.short_name)
+
+    binding.pry
+
     wait_for_and_find("[data-class='edit-button']").click
     wait_for_selector "[data-class='super-admin--edit-page']"
     super_admin_test_fill_inputs(resource, inputs)

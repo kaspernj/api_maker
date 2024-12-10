@@ -37,13 +37,6 @@ import Widths from "./widths"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
-const styleSheet = StyleSheet.create({
-  flatList: {
-    border: "1px solid #dbdbdb",
-    borderRadius: 5,
-    overflowX: "auto"
-  }
-})
 const TableContext = createContext()
 
 const ListHeaderComponent = memo(() => {
@@ -95,6 +88,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     noRecordsFoundContent: undefined,
     preloads: [],
     select: {},
+    styleUI: true,
     workplace: false
   }
 
@@ -132,6 +126,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     select: PropTypes.object,
     selectColumns: PropTypes.object,
     styles: PropTypes.object,
+    styleUI: PropTypes.bool.isRequired,
     viewModelPath: PropTypes.func,
     workplace: PropTypes.bool.isRequired
   }
@@ -180,7 +175,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       widths: null
     })
 
-    this.tableContextValue = useMemo(() => ({cacheKey: this.s.tableSettingFullCacheKey, table: this}), [this.s.tableSettingFullCacheKey])
+    this.tableContextValue = useMemo(
+      () => ({
+        cacheKey: this.s.tableSettingFullCacheKey,
+        lastUpdate: this.s.lastUpdate,
+        table: this
+      }),
+      [this.s.lastUpdate, this.s.tableSettingFullCacheKey]
+    )
 
     useMemo(() => {
       if (this.props.workplace) {
@@ -408,6 +410,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       queryName,
       select,
       selectColumns,
+      styleUI,
       viewModelPath,
       workplace,
       ...restProps
@@ -432,6 +435,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       }
     }
 
+    const flatListStyle = {
+      overflowX: "auto"
+    }
+
+    if (styleUI) {
+      flatListStyle.border = "1px solid #dbdbdb"
+      flatListStyle.borderRadius = 5
+    }
+
     const flatList = (
       <TableContext.Provider value={this.tt.tableContextValue}>
         <FlatList
@@ -442,7 +454,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           ListHeaderComponent={ListHeaderComponent}
           renderItem={this.tt.renderItem}
           showsHorizontalScrollIndicator
-          style={styleSheet.flatList}
+          style={flatListStyle}
           {...restProps}
         />
       </TableContext.Provider>
@@ -586,11 +598,17 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   styleForColumn = ({column, columnIndex, even, style, type}) => {
+    const {styleUI} = this.p
     const defaultStyle = {
       justifyContent: "center",
       padding: 8,
-      backgroundColor: even ? "#f5f5f5" : undefined,
       overflow: "hidden"
+    }
+
+    if (styleUI) {
+      Object.assign(defaultStyle, {
+        backgroundColor: even ? "#f5f5f5" : undefined
+      })
     }
 
     if (type == "actions") {
@@ -602,7 +620,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       } else {
         defaultStyle.marginRight = "auto"
       }
-    } else if (this.tt.mdUp) {
+    } else if (this.tt.mdUp && styleUI) {
       defaultStyle.borderRight = "1px solid #dbdbdb"
     }
 
@@ -615,14 +633,19 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   styleForHeader = ({column, columnIndex, style, type}) => {
+    const {mdUp} = this.tt
     const defaultStyle = {
       flexDirection: "row",
       alignItems: "center",
       padding: 8
     }
 
-    if (type != "actions" && this.tt.mdUp) {
+    if (type != "actions" && mdUp && this.p.styleUI) {
       defaultStyle.borderRight = "1px solid #dbdbdb"
+    }
+
+    if (mdUp) {
+
     }
 
     const actualStyle = Object.assign(
@@ -639,20 +662,20 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return actualStyle
   }
 
-  styleForRow({even} = {}) {
+  styleForRow = ({even} = {}) => {
     const actualStyle = {
       flex: 1,
       alignItems: "stretch"
     }
 
-    if (even) {
+    if (even && this.p.styleUI) {
       actualStyle.backgroundColor = "#f5f5f5"
     }
 
     return actualStyle
   }
 
-  styleForRowHeader() {
+  styleForRowHeader = () => {
     const actualStyle = {
       flex: 1,
       alignItems: "stretch"
@@ -745,6 +768,22 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return props
   }
 
+  headerProps(column) {
+    const props = {}
+
+    if (column.textCenter) {
+      props.style ||= {}
+      props.style.justifyContent = "center"
+    }
+
+    if (column.textRight) {
+      props.style ||= {}
+      props.style.justifyContent = "end"
+    }
+
+    return props
+  }
+
   columnWidths() {
     const columnWidths = {}
 
@@ -768,7 +807,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   )
 
   headerClassNameForColumn(column) {
-    const classNames = ["live-table-header"]
+    const classNames = []
 
     if (column.commonProps && column.commonProps.className) classNames.push(column.commonProps.className)
     if (column.headerProps && column.headerProps.className) classNames.push(column.headerProps.className)
