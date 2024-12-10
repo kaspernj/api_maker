@@ -13,7 +13,7 @@ PATH
       with_advisory_lock
 
 PATH
-  remote: /home/dev/Development/api_maker/api_maker_table_rubygem
+  remote: /home/dev/api_maker/api_maker_table_rubygem
   specs:
     api_maker_table (0.1.1)
       rails (>= 6.0.0)
@@ -378,7 +378,7 @@ GEM
     websocket-extensions (0.1.5)
     with_advisory_lock (5.0.0)
       activerecord (>= 6.1)
-    worker_plugins (0.0.7)
+    worker_plugins (0.0.6)
     wref (0.0.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
