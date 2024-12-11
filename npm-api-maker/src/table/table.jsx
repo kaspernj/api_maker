@@ -9,6 +9,7 @@ import debounce from "debounce"
 import Filters from "./filters"
 import FlatList from "./components/flat-list"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import {Form} from "../form"
 import Header from "./components/header"
 import HeaderColumn from "./header-column"
 import HeaderSelect from "./header-select"
@@ -157,6 +158,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       columns: columnsAsArray,
       currentWorkplace: undefined,
       currentWorkplaceCount: null,
+      filterForm: null,
       identifier: () => this.props.identifier || `${collectionKey}-default`,
       lastUpdate: () => new Date(),
       preload: undefined,
@@ -529,18 +531,20 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   filterForm = () => {
     const {filterFormRef, submitFilter, submitFilterDebounce} = this.tt
     const {filterContent, filterSubmitButton} = this.p
+    const {queryQName} = this.s
     const {filterSubmitLabel} = this.props
     const {qParams} = digs(this.collection, "qParams")
 
     return (
-      <form className="live-table--filter-form" onSubmit={this.onFilterFormSubmit} ref={filterFormRef}>
+      <Form className="live-table--filter-form" formRef={filterFormRef} onSubmit={this.onFilterFormSubmit} setForm={this.setStates.filterForm}>
         {"s" in qParams &&
           <input name="s" type="hidden" value={qParams.s} />
         }
         {filterContent({
           onFilterChanged: submitFilter,
           onFilterChangedWithDelay: submitFilterDebounce,
-          qParams
+          qParams,
+          queryQName
         })}
         {filterSubmitButton &&
           <input
@@ -550,7 +554,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
             value={filterSubmitLabel || this.t(".filter", {defaultValue: "Filter"})}
           />
         }
-      </form>
+      </Form>
     )
   }
 
@@ -843,11 +847,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     throw new Error("No 'label' or 'attribute' was given")
   }
 
-  onFilterFormSubmit = (e) => {
-    e.preventDefault()
-    this.submitFilter()
-  }
-
+  onFilterFormSubmit = () => this.submitFilter()
   onRequestCloseSettings = () => this.setState({showSettings: false})
 
   onSettingsClicked = (e) => {
