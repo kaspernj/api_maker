@@ -5,11 +5,11 @@ import qs from "qs"
 import urlEncode from "./url-encode.mjs"
 
 export default class Params {
-  static parse () {
+  static parse() {
     return qs.parse(globalThis.location.search.substr(1))
   }
 
-  static change (given) {
+  static change(given) {
     const incorporator = new Incorporator({objects: [Params.parse(), given]})
 
     incorporator.replaceArrayIfExists(true)
@@ -17,14 +17,14 @@ export default class Params {
     return incorporator.merge()
   }
 
-  static withParams (params) {
+  static withParams(params) {
     const newParams = qs.stringify(params, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
 
     return newPath
   }
 
-  static changeParams (given, opts = {}) {
+  static changeParams(given, opts = {}) {
     const params = Params.change(given)
     const newParams = qs.stringify(params, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
@@ -33,13 +33,13 @@ export default class Params {
     appHistory.push(newPath)
   }
 
-  static serializeForm (form) {
+  static serializeForm(form) {
     const hash = formSerialize(form, {empty: true, hash: true})
     return Params.setUndefined(hash)
   }
 
   // This is used to set all empty values to 'undefined' which makes qs removed those elements from the query string
-  static setUndefined (given) {
+  static setUndefined(given) {
     if (Array.isArray(given)) {
       if (given.length == 0)
         return undefined

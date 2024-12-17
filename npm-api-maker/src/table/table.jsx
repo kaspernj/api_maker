@@ -536,7 +536,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {qParams} = digs(this.collection, "qParams")
 
     return (
-      <Form className="live-table--filter-form" formRef={filterFormRef} onSubmit={this.onFilterFormSubmit} setForm={this.setStates.filterForm}>
+      <Form className="live-table--filter-form" formRef={filterFormRef} onSubmit={this.tt.onFilterFormSubmit} setForm={this.setStates.filterForm}>
         {"s" in qParams &&
           <input name="s" type="hidden" value={qParams.s} />
         }
@@ -853,9 +853,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   onSettingsClicked = (e) => {
     e.preventDefault()
 
-    const {showSettings} = this.s
-
-    this.setState({showSettings: !showSettings})
+    this.setState({showSettings: !this.s.showSettings})
   }
 
   submitFilter = () => {
