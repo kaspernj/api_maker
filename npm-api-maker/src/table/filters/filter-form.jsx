@@ -184,7 +184,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
           </View>
           <View style={{flexDirection: "row"}}>
             <View>
-              {this.s.associations?.map((reflection) =>
+              {this.s.associations && this.sortedReflectionsByName(this.s.associations).map((reflection) =>
                 <ReflectionElement
                   key={reflection.reflectionName}
                   modelClassName={this.s.modelClassName}
@@ -194,7 +194,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
               )}
             </View>
             <View>
-              {this.s.ransackableAttributes?.map((attribute) =>
+              {this.s.ransackableAttributes && this.sortedAttributesByName(this.s.ransackableAttributes)?.map((attribute) =>
                 <AttributeElement
                   active={attribute.attributeName == this.s.attribute?.attributeName}
                   attribute={attribute}
@@ -377,9 +377,23 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     })
   }
 
-  sortedByName(reflections, currentModelClass) {
+  sortedAttributesByName(attributes) {
+    return attributes.sort((a, b) =>
+      digg(a, "humanName")
+        .toLowerCase()
+        .localeCompare(
+          digg(b, "humanName").toLowerCase()
+        )
+    )
+  }
+
+  sortedReflectionsByName(reflections) {
     return reflections.sort((a, b) =>
-      currentModelClass.humanAttributeName(a.name()).toLowerCase().localeCompare(currentModelClass.humanAttributeName(b.name()).toLowerCase())
+      digg(a, "humanName")
+        .toLowerCase()
+        .localeCompare(
+          digg(b, "humanName").toLowerCase()
+        )
     )
   }
 }))
