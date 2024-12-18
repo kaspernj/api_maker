@@ -92,7 +92,7 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
   }
 
   onModelUpdated = (args) => {
-    const inputRef = digg(this, "props", "inputProps", "ref")
+    const inputRef = digg(this.tt.inputProps, "ref")
 
     if (!inputRef.current) {
       // This can happen if the component is being unmounted
