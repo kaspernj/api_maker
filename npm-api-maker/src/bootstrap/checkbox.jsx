@@ -1,5 +1,5 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
-import {Checkbox} from "../inputs/checkbox"
+import Checkbox from "../inputs/checkbox"
 import classNames from "classnames"
 import {digs} from "diggerize"
 import InvalidFeedback from "./invalid-feedback"
@@ -31,14 +31,14 @@ export default memo(shapeComponent(class ApiMakerBootstrapCheckbox extends Shape
   }
 
   setup() {
-    const {inputProps, wrapperOpts} = useInput({props: this.props, wrapperOpts: {type: "checkbox"}})
+    const {inputProps, restProps: useInputRestProps, wrapperOpts} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
 
-    this.setInstance({inputProps, wrapperOpts})
+    this.setInstance({inputProps, useInputRestProps, wrapperOpts})
   }
 
   render () {
-    const {inputProps, wrapperOpts} = this.tt
-    const {className, hint, id, inputRef, label, labelClassName, wrapperClassName, ...restProps} = this.props
+    const {inputProps, useInputRestProps, wrapperOpts} = this.tt
+    const {className, hint, id, inputRef, label, labelClassName, wrapperClassName, ...restProps} = useInputRestProps
     const {errors} = digs(wrapperOpts, "errors")
 
     return (
@@ -46,8 +46,8 @@ export default memo(shapeComponent(class ApiMakerBootstrapCheckbox extends Shape
         <div className="form-check">
           <Checkbox
             className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
-            inputProps={inputProps}
-            wrapperOpts={wrapperOpts}
+            id={id}
+            inputRef={inputRef}
             {...restProps}
           />
           {wrapperOpts.label &&

@@ -1,6 +1,6 @@
 import BaseComponent from "../base-component"
 import {Input as ApiMakerInput} from "@kaspernj/api-maker/src/inputs/input"
-import {Checkbox} from "./checkbox"
+import Checkbox from "./checkbox"
 import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
@@ -13,16 +13,19 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
   }
 
   setup() {
+    const {inputProps} = useInput({props: this.props})
+
+    this.setInstance({inputProps})
     this.useStates({
       purgeChecked: false
     })
   }
 
   render() {
-    const {attribute, checkboxComponent, className, inputProps, label, model, name, onPurgeChanged, purgeName, wrapperOpts, ...restProps} = this.props
+    const {inputProps} = this.tt
+    const {attribute, checkboxComponent, className, label, model, name, onPurgeChanged, purgeName, wrapperOpts, ...restProps} = this.props
     const CheckboxComponent = checkboxComponent || Checkbox
-
-    inputProps.type = "file"
+    const newInputProps = Object.assign({}, inputProps, {type: "file"})
 
     return (
       <div className={classNames("api-maker--inputs--attachment", "components--inputs--input", className)} {...restProps}>
@@ -33,16 +36,16 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
         }
         {this.getUrl() &&
           <div className="input-checkbox" style={{paddingTop: "15px", paddingBottom: "15px"}}>
-            <CheckboxComponent inputProps={{id: this.getPurgeInputId(), name: this.getPurgeInputName()}} onChange={this.props.onPurgeChanged} />
+            <CheckboxComponent id={this.getPurgeInputId()} name={this.getPurgeInputName()} onChange={this.props.onPurgeChanged} />
             <label className="checkbox-label" htmlFor={this.getPurgeInputId()}>
               {I18n.t("js.shared.delete")}
             </label>
           </div>
         }
-        {!this.state.purgeChecked &&
+        {!this.s.purgeChecked &&
           <ApiMakerInput
             defaultValue={null}
-            inputProps={inputProps}
+            inputProps={newInputProps}
             model={model}
           />
         }

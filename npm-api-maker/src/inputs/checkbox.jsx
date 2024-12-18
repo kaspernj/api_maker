@@ -2,13 +2,13 @@ import AutoSubmit from "./auto-submit.mjs"
 import BaseComponent from "../base-component"
 import {digg, digs} from "diggerize"
 import EventUpdated from "../event-updated"
-import inputWrapper from "./input-wrapper"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import useInput from "../use-input"
 import {useForm} from "../form"
 
-const ApiMakerInputsCheckbox = memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComponent {
+export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
@@ -32,10 +32,17 @@ const ApiMakerInputsCheckbox = memo(shapeComponent(class ApiMakerInputsCheckbox 
   }
 
   setup() {
-    this.form = useForm()
+    const {inputProps, restProps} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
+
+    this.setInstance({
+      form: useForm(),
+      inputProps,
+      restProps
+    })
   }
 
   render () {
+    const {inputProps, restProps: useInputRestProps} = this.tt
     const {
       attribute,
       autoRefresh,
@@ -44,20 +51,22 @@ const ApiMakerInputsCheckbox = memo(shapeComponent(class ApiMakerInputsCheckbox 
       defaultChecked,
       defaultValue,
       id,
-      inputProps,
       inputRef,
       model,
       name,
       onChange,
       zeroInput,
-      wrapperOpts,
       ...restProps
-    } = this.props
+    } = useInputRestProps
+
+    const {ref, ...restInputProps} = inputProps
+
+    console.log("ApiMakerInputsCheckbox", {inputProps, restProps})
 
     return (
       <>
         {autoRefresh && model &&
-          <EventUpdated model={model} onUpdated={digg(this, "onModelUpdated")} />
+          <EventUpdated model={model} onUpdated={this.tt.onModelUpdated} />
         }
         {zeroInput && inputProps.name &&
           <input defaultValue="0" name={inputProps.name} type="hidden" />
@@ -67,7 +76,7 @@ const ApiMakerInputsCheckbox = memo(shapeComponent(class ApiMakerInputsCheckbox 
           data-auto-refresh={autoRefresh}
           data-auto-submit={autoSubmit}
           defaultValue={defaultValue}
-          onChange={digg(this, "onChanged")}
+          onChange={this.tt.onChanged}
           type="checkbox"
           {...restProps}
         />
@@ -92,7 +101,7 @@ const ApiMakerInputsCheckbox = memo(shapeComponent(class ApiMakerInputsCheckbox 
       return
     }
 
-    const {attribute} = digs(this.props, "attribute")
+    const {attribute} = this.p
     const newModel = digg(args, "model")
     const currentChecked = digg(inputRef, "current", "checked")
     const newValue = newModel.readAttribute(attribute)
@@ -102,6 +111,3 @@ const ApiMakerInputsCheckbox = memo(shapeComponent(class ApiMakerInputsCheckbox 
     }
   }
 }))
-
-export {ApiMakerInputsCheckbox as Checkbox}
-export default inputWrapper(ApiMakerInputsCheckbox, {type: "checkbox"})
