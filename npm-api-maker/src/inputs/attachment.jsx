@@ -54,7 +54,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
   }
 
   getContentType() {
-    const {attribute, model} = digs(this.props, "attribute", "model")
+    const {attribute, model} = this.p
     const attributeName = `${attribute}ContentType`
 
     if (!(attributeName in model)) throw new Error(`No such method on ${model.modelClassData().name}: ${attributeName}`)
@@ -63,7 +63,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
   }
 
   getPurgeInputId() {
-    const {inputProps} = digs(this.props, "inputProps")
+    const {inputProps} = this.tt
 
     return `${inputProps.id}_purge`
   }
@@ -71,7 +71,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
   getPurgeInputName() {
     if ("purgeName" in this.props) return this.props.purgeName
 
-    const {inputProps} = digs(this.props, "inputProps")
+    const {inputProps} = this.tt
 
     if (!inputProps.name) return null
 
@@ -82,7 +82,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
   }
 
   getUrl() {
-    const {attribute, model} = digs(this.props, "attribute", "model")
+    const {attribute, model} = this.p
     const attributeName = `${attribute}Url`
 
     if (!(attributeName in model)) throw new Error(`No such method on ${model.modelClassData().name}: ${attributeName}`)
