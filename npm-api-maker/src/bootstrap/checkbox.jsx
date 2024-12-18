@@ -1,12 +1,14 @@
-import {Checkbox} from "../inputs/checkbox"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import Checkbox from "../inputs/checkbox"
 import classNames from "classnames"
 import {digs} from "diggerize"
-import inputWrapper from "../inputs/input-wrapper"
 import InvalidFeedback from "./invalid-feedback"
+import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import React from "react"
+import useInput from "../use-input"
 
-class ApiMakerBootstrapCheckbox extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapCheckbox extends ShapeComponent {
   static defaultProps = {
     defaultValue: 1,
     zeroInput: true
@@ -28,8 +30,15 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
     zeroInput: PropTypes.bool
   }
 
+  setup() {
+    const {inputProps, restProps: useInputRestProps, wrapperOpts} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
+
+    this.setInstance({inputProps, useInputRestProps, wrapperOpts})
+  }
+
   render () {
-    const {className, hint, id, inputProps, inputRef, label, labelClassName, wrapperClassName, wrapperOpts, ...restProps} = this.props
+    const {inputProps, useInputRestProps, wrapperOpts} = this.tt
+    const {className, hint, id, inputRef, label, labelClassName, wrapperClassName, ...restProps} = useInputRestProps
     const {errors} = digs(wrapperOpts, "errors")
 
     return (
@@ -37,8 +46,8 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
         <div className="form-check">
           <Checkbox
             className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
-            inputProps={inputProps}
-            wrapperOpts={wrapperOpts}
+            id={id}
+            inputRef={inputRef}
             {...restProps}
           />
           {wrapperOpts.label &&
@@ -74,6 +83,4 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
 
     return classNames.join(" ")
   }
-}
-
-export default inputWrapper(ApiMakerBootstrapCheckbox, {type: "checkbox"})
+}))

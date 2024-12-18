@@ -18,6 +18,8 @@ const useInput = ({props, wrapperOptions}) => {
   }, [s.props.inputRef?.current])
 
   s.meta.fakeComponent = {props}
+  s.meta.isCheckbox = props.type == "checkbox" || wrapperOptions?.type == "checkbox"
+  s.meta.isSelect = wrapperOptions?.type == "select"
 
   const formatValue = useCallback((value) => {
     const {formatValue} = s.props
@@ -34,19 +36,6 @@ const useInput = ({props, wrapperOptions}) => {
     }
 
     return value
-  }, [])
-
-  const handleAsCheckbox = useCallback(() => {
-    if (s.props.type == "checkbox") return true
-    if (!("type" in s.props) && wrapperOptions?.type == "checkbox") return true
-
-    return false
-  }, [])
-
-  const handleAsSelect = useCallback(() => {
-    if (wrapperOptions?.type == "select") return true
-
-    return false
   }, [])
 
   const inputDefaultChecked = useCallback(() => {
@@ -82,8 +71,10 @@ const useInput = ({props, wrapperOptions}) => {
 
   const inputType = useCallback(() => {
     if ("type" in s.props) {
+      console.log("Type in props", s.p.type)
+
       return s.props.type
-    } else if (wrapperOptions?.type == "checkbox") {
+    } else if (s.m.isCheckbox) {
       return "checkbox"
     } else {
       return "text"
@@ -121,7 +112,7 @@ const useInput = ({props, wrapperOptions}) => {
       givenInputProps
     )
 
-    if (handleAsCheckbox()) {
+    if (s.m.isCheckbox) {
       if ("checked" in s.props) {
         inputProps.checked = s.props.checked
       }
@@ -138,14 +129,14 @@ const useInput = ({props, wrapperOptions}) => {
     return inputProps
   }, [])
 
-  const {inputProps: oldInputProps, ...restProps} = props
+  const {inputProps: oldInputProps, wrapperOpts: oldWrapperOpts, ...restProps} = props
   const type = inputType()
 
   s.meta.inputProps = getInputProps()
   s.meta.inputNameWithoutId = useMemo(() => s.m.inputProps.name?.replace(/\[(.+)_id\]$/, "[$1]"), [s.m.inputProps.name])
 
   if (!s.m.inputProps.ref) throw new Error("No input ref?")
-  if (!handleAsSelect()) s.m.inputProps.type = type
+  if (!s.m.isSelect) s.m.inputProps.type = type
 
   const {validationErrors} = useValidationErrors((validationError) =>
     validationError.inputName == s.m.inputProps.name || validationError.inputName == s.m.inputNameWithoutId
