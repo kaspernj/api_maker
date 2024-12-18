@@ -1,6 +1,6 @@
 import AutoSubmit from "./auto-submit.mjs"
 import BaseComponent from "../base-component"
-import {digg, digs} from "diggerize"
+import {digg} from "diggerize"
 import EventUpdated from "../event-updated"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/src/memo"
@@ -32,17 +32,17 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
   }
 
   setup() {
-    const {inputProps, restProps} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
+    const {inputProps, restProps: useInputRestProps} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
 
     this.setInstance({
       form: useForm(),
       inputProps,
-      restProps
+      useInputRestProps
     })
   }
 
   render () {
-    const {inputProps, restProps: useInputRestProps} = this.tt
+    const {inputProps, useInputRestProps} = this.tt
     const {
       attribute,
       autoRefresh,
@@ -58,8 +58,6 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
       zeroInput,
       ...restProps
     } = useInputRestProps
-
-    const {ref, ...restInputProps} = inputProps
 
     console.log("ApiMakerInputsCheckbox", {inputProps, restProps})
 

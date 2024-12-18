@@ -17,7 +17,7 @@ export default class ApiMakerInputsAutoSubmit {
   }
 
   value () {
-    const inputRef = this.component.props.inputRef || this.component.props.inputProps.ref || this.component.inputRef
+    const inputRef = this.component.props.inputRef || this.component.props.inputProps?.ref || this.component.inputProps?.ref || this.component.inputRef
     const input = digg(inputRef, "current")
 
     if (input.type == "checkbox") {
