@@ -44,7 +44,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
           />
         }
         {(!tableSettingColumn.hasSortKey() || !query) &&
-          <Text ellipsizeMode="clip" numberOfLines={1}>
+          <Text ellipsizeMode="clip" numberOfLines={1} style={{fontWeight: "bold"}}>
             {table.headerLabelForColumn(column)}
           </Text>
         }

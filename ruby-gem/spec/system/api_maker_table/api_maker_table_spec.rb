@@ -6,7 +6,6 @@ describe "bootstrap - live table" do
   let(:user_admin) { create :user, admin: true }
 
   let(:filter_card_selector) { ".live-table--filter-card" }
-  let(:filter_form_selector) { ".live-table--filter-form" }
   let(:filter_submit_button_selector) { ".live-table--submit-filter-button" }
   let(:no_tasks_available_content) { ".no-tasks-available-content" }
   let(:no_tasks_found_content) { ".no-tasks-found-content" }
