@@ -1,12 +1,12 @@
 import {Checkbox} from "../inputs/checkbox"
 import classNames from "classnames"
 import {digs} from "diggerize"
-import inputWrapper from "../inputs/input-wrapper"
 import InvalidFeedback from "./invalid-feedback"
 import PropTypes from "prop-types"
 import React from "react"
+import useInput from "../use-input"
 
-class ApiMakerBootstrapCheckbox extends React.PureComponent {
+export default memo(shapeComponent(class ApiMakerBootstrapCheckbox extends ShapeComponent {
   static defaultProps = {
     defaultValue: 1,
     zeroInput: true
@@ -28,8 +28,15 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
     zeroInput: PropTypes.bool
   }
 
+  setup() {
+    const {inputProps, wrapperOpts} = useInput({props: this.props, wrapperOpts: {type: "checkbox"}})
+
+    this.setInstance({inputProps, wrapperOpts})
+  }
+
   render () {
-    const {className, hint, id, inputProps, inputRef, label, labelClassName, wrapperClassName, wrapperOpts, ...restProps} = this.props
+    const {inputProps, wrapperOpts} = this.tt
+    const {className, hint, id, inputRef, label, labelClassName, wrapperClassName, ...restProps} = this.props
     const {errors} = digs(wrapperOpts, "errors")
 
     return (
@@ -74,6 +81,4 @@ class ApiMakerBootstrapCheckbox extends React.PureComponent {
 
     return classNames.join(" ")
   }
-}
-
-export default inputWrapper(ApiMakerBootstrapCheckbox, {type: "checkbox"})
+}))
