@@ -6,7 +6,13 @@ import strftime from "strftime"
 import useShape from "set-state-compare/src/use-shape.js"
 import useValidationErrors from "./use-validation-errors.mjs"
 
-const useInput = ({props, wrapperOptions}) => {
+const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
+  const useInputRestPropsKeys = Object.keys(useInputRestProps)
+
+  if (useInputRestPropsKeys.length > 0) {
+    throw new Error(`Unknown props given to useInput: ${useInputRestPropsKeys.join(", ")}`)
+  }
+
   const s = useShape(props)
 
   s.useStates({
@@ -71,8 +77,6 @@ const useInput = ({props, wrapperOptions}) => {
 
   const inputType = useCallback(() => {
     if ("type" in s.props) {
-      console.log("Type in props", s.p.type)
-
       return s.props.type
     } else if (s.m.isCheckbox) {
       return "checkbox"

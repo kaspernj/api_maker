@@ -33,12 +33,19 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
 
   setup() {
     const {inputProps, restProps: useInputRestProps} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
+    const {defaultValue, name} = inputProps
 
     this.setInstance({
       form: useForm(),
       inputProps,
       useInputRestProps
     })
+
+    useMemo(() => {
+      if (name) {
+        this.tt.form?.setValue(name, defaultValue)
+      }
+    }, [])
   }
 
   render () {
@@ -58,8 +65,6 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
       zeroInput,
       ...restProps
     } = useInputRestProps
-
-    console.log("ApiMakerInputsCheckbox", {inputProps, restProps})
 
     return (
       <>
