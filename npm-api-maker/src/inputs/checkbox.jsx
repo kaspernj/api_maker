@@ -7,6 +7,7 @@ import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import useInput from "../use-input"
 import {useForm} from "../form"
+import {useMemo} from "react"
 
 export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComponent {
   static defaultProps = {
