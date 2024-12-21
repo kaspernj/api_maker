@@ -7,6 +7,7 @@ import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import useInput from "../use-input"
 import {useForm} from "../form"
+import {useMemo} from "react"
 
 export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComponent {
   static defaultProps = {
@@ -88,11 +89,22 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
   }
 
   onChanged = (...args) => {
-    const {form} = this.tt
-    const {attribute, autoSubmit, model, name, onChange} = this.props
+    const {form, inputProps} = this.tt
+    const {attribute, autoSubmit, model, onChange} = this.props
+    const {name} = inputProps
 
     if (attribute && autoSubmit && model) new AutoSubmit({component: this}).autoSubmit()
-    if (form && name) form.setValue(name, args[0].target.checked)
+
+    console.log("onChanged", {form, name})
+
+    if (form && name) {
+      const checked = args[0].target.checked
+
+      console.log("Checkbox onChanged", {checked})
+
+      form.setValue(name, checked)
+    }
+
     if (onChange) onChange(...args)
   }
 

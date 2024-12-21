@@ -6,7 +6,10 @@ import useShape from "set-state-compare/src/use-shape.js"
 const useCanCan = (abilitiesCallback, dependencies) => {
   const currentUser = useCurrentUser()
   const s = useShape({abilitiesCallback})
-  const [canCan, setCanCan] = useState()
+
+  s.useStates({
+    canCan: null
+  })
 
   if (!dependencies) {
     dependencies = [currentUser?.id()]
@@ -18,16 +21,16 @@ const useCanCan = (abilitiesCallback, dependencies) => {
 
     await canCan.loadAbilities(abilities)
 
-    setCanCan(canCan)
+    s.set({canCan})
   }, [])
 
   const onResetAbilities = useCallback(() => {
-    setCanCan(undefined)
+    s.set({canCan: null}, {silent: true})
     loadAbilities()
   }, [])
 
   useMemo(() => {
-    setCanCan(undefined)
+    s.set({canCan: null}, {silent: true})
     loadAbilities()
   }, dependencies)
 
@@ -39,7 +42,7 @@ const useCanCan = (abilitiesCallback, dependencies) => {
     }
   }, [])
 
-  return canCan
+  return s.s.canCan
 }
 
 export default useCanCan
