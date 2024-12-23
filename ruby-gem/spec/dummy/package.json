@@ -36,7 +36,7 @@
     "js-yaml-loader": "^1.2.2",
     "mini-css-extract-plugin": "^2.9.2",
     "prop-types": "^15.8.1",
-    "prop-types-exact": "^1.2.5",
+    "prop-types-exact": "^1.2.6",
     "rails-erb-loader": "^5.5.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
