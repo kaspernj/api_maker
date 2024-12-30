@@ -5055,9 +5055,9 @@ set-function-name@^2.0.1, set-function-name@^2.0.2:
     has-property-descriptors "^1.0.2"
 
 "set-state-compare@>= 1.0.53":
-  version "1.0.53"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.53.tgz#8ba9bac0c8fd317bc43f08228f7fc30019498434"
-  integrity sha512-3jwPsPcxbfrP6DVlz+BY3kx7P1Xhwl7VQRhBqLHk2XYfZGRJlZJdjLrFsZaYgcC9PYZLtAkfZdmiKNkJoViABg==
+  version "1.0.54"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.54.tgz#685a91641201f3ed086076c80dbcafb56f318037"
+  integrity sha512-NAxEpNjJk/N/g6w9nNMQm5M+zRwlBGuVEM4keXKoikchSOC7PwwZoCUkvvOWstNSzIgIShW/qyYSjieOnBbflw==
   dependencies:
     diggerize "^1.0.5"
     fetching-object ">= 1.0.1"
