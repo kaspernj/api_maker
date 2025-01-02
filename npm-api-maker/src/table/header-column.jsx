@@ -1,9 +1,10 @@
 import BaseComponent from "../base-component"
 import classNames from "classnames"
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import Header from "./components/header"
 import HeaderColumnContent from "./header-column-content"
 import memo from "set-state-compare/src/memo"
-import {Platform, Pressable} from "react-native"
+import {Platform, Pressable, TouchableOpacity} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
@@ -14,6 +15,8 @@ import Widths from "./widths"
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
     column: PropTypes.object.isRequired,
+    onDragStart: PropTypes.func.isRequired,
+    onDragEnd: PropTypes.func.isRequired,
     resizing: PropTypes.bool.isRequired,
     table: PropTypes.object.isRequired,
     tableSettingColumn: PropTypes.object.isRequired,
@@ -61,6 +64,9 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         {...restColumnProps}
       >
         <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
+        <TouchableOpacity onPressIn={this.tt.onDragStart} onPressOut={this.tt.onDragEnd}>
+          <FontAwesomeIcon name="bars" size={14} style={{marginLeft: 3}} />
+        </TouchableOpacity>
         {mdUp &&
           <Pressable
             onMouseDown={Platform.OS == "web" ? this.tt.onResizeMouseDown : undefined}
@@ -78,6 +84,18 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         }
       </Header>
     )
+  }
+
+  onDragStart = (...args) => {
+    console.log("onDragStart", args)
+
+    this.p.onDragStart(...args)
+  }
+
+  onDragEnd = (...args) => {
+    console.log("onDragEnd", args)
+
+    this.p.onDragEnd(...args)
   }
 
   onLayout = (e) => {

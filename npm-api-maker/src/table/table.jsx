@@ -1,5 +1,6 @@
 import {digg, digs} from "diggerize"
-import {Pressable, StyleSheet, View} from "react-native"
+import DragList from "react-native-draglist"
+import {Pressable, TouchableOpacity, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
@@ -159,6 +160,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       currentWorkplace: undefined,
       currentWorkplaceCount: null,
       filterForm: null,
+      columnsToShow: null,
       identifier: () => this.props.identifier || `${collectionKey}-default`,
       lastUpdate: () => new Date(),
       preload: undefined,
@@ -264,8 +266,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
     const {width} = this.s
     const widths = new Widths({columns, table: this, width})
+    const columnsToShow = columns
+      .filter(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn))
+      .sort((a, b) => a.tableSettingColumn.position() - b.tableSettingColumn.position())
 
     this.setState({
+      columnsToShow,
       preparedColumns: columns,
       preload: this.mergedPreloads(preload),
       tableSetting,
@@ -575,8 +581,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   renderItem = ({index, item: model}) => {
-    const {preparedColumns, tableSettingFullCacheKey} = this.s
-
     if (!this.s.tableSettingLoaded) {
       return (
         <View>
@@ -590,13 +594,13 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return (
       <ModelRow
         cacheKey={model.cacheKey()}
+        columns={this.s.columnsToShow}
         columnWidths={this.columnWidths()}
         index={index}
         key={model.id()}
         model={model}
-        preparedColumns={preparedColumns}
         table={this}
-        tableSettingFullCacheKey={tableSettingFullCacheKey}
+        tableSettingFullCacheKey={this.s.tableSettingFullCacheKey}
       />
     )
   }
@@ -798,17 +802,69 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return columnWidths
   }
 
-  headersContentFromColumns = () => this.s.preparedColumns?.map(({column, tableSettingColumn, width}) => columnVisible(column, tableSettingColumn) &&
-    <HeaderColumn
-      column={column}
-      key={tableSettingColumn.identifier()}
-      resizing={this.s.resizing}
-      table={this}
-      tableSettingColumn={tableSettingColumn}
-      width={width}
-      widths={this.s.widths}
-    />
-  )
+  headersContentFromColumns = () => {
+    return (
+      <DragList
+        data={this.s.columnsToShow}
+        horizontal
+        keyExtractor={this.tt.dragListkeyExtractor}
+        onReordered={this.tt.onReordered}
+        renderItem={this.tt.dragListRenderItemContent}
+      />
+    )
+  }
+
+  dragListkeyExtractor = (item) => item.tableSettingColumn.identifier()
+
+  onReordered = async ({fromIndex, toIndex}) => {
+    const {columnsToShow} = this.s
+
+    const fromColumn = columnsToShow[fromIndex].tableSettingColumn
+    const toColumn = columnsToShow[toIndex].tableSettingColumn
+
+    await fromColumn.update({position: toColumn.position()})
+
+    console.log({fromColumn, toColumn})
+
+    const newData = columnsToShow.slice()
+    newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0])
+
+    this.setState({
+      columnsToShow: newData,
+      lastUpdate: new Date()
+    })
+  }
+
+  dragListRenderItemContent = ({isActive, item, onDragStart, onDragEnd}) => {
+    const {column, tableSettingColumn, width} = item
+
+    return (
+      <TouchableOpacity
+        key={tableSettingColumn.identifier()}
+        onPressIn={onDragStart}
+        onPressOut={onDragEnd}
+        style={{
+          border: isActive ? "1px solid red" : "1px solid blue"
+        }}
+      >
+        <Text>{tableSettingColumn.identifier()}</Text>
+      </TouchableOpacity>
+    )
+
+    return (
+      <HeaderColumn
+        column={column}
+        key={tableSettingColumn.identifier()}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        resizing={this.s.resizing}
+        table={this}
+        tableSettingColumn={tableSettingColumn}
+        width={width}
+        widths={this.s.widths}
+      />
+    )
+  }
 
   headerClassNameForColumn(column) {
     const classNames = []

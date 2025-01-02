@@ -2,7 +2,6 @@ import {Pressable} from "react-native"
 import BaseComponent from "../base-component"
 import Column from "./components/column"
 import columnIdentifier from "./column-identifier.mjs"
-import columnVisible from "./column-visible.mjs"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import * as inflection from "inflection"
 import modelCallbackArgs from "./model-callback-args.mjs"
@@ -19,11 +18,11 @@ const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox
 export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
   static propTypes = propTypesExact({
     cacheKey: PropTypes.string.isRequired,
+    columns: PropTypes.array,
     columnWidths: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
     model: PropTypes.object.isRequired,
     table: PropTypes.object.isRequired,
-    preparedColumns: PropTypes.array,
     tableSettingFullCacheKey: PropTypes.string.isRequired
   })
 
@@ -85,9 +84,9 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   columnsContentFromColumns(model, even) {
-    const {table, preparedColumns} = this.p
+    const {columns, table} = this.p
 
-    return preparedColumns?.map(({column, tableSettingColumn, width}, columnIndex) => columnVisible(column, tableSettingColumn) &&
+    return columns?.map(({column, tableSettingColumn, width}, columnIndex) =>
       <ModelColumn
         column={column}
         columnIndex={columnIndex}

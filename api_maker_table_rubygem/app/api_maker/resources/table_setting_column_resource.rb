@@ -13,6 +13,6 @@ class Resources::TableSettingColumnResource < ApiMaker::BaseResource
   end
 
   def permitted_params(arg)
-    arg.params.require(:table_setting_column).permit(:visible, :width)
+    arg.params.require(:table_setting_column).permit(:position, :visible, :width)
   end
 end
