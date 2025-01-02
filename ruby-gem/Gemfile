@@ -16,6 +16,7 @@ gemspec
 
 group :development, :test do
   # gem "api_maker_table", ">= 0.1.1"
+  gem "acts_as_list"
   gem "appraisal"
   gem "awesome_translations", ">= 0.0.62"
   gem "best_practice_project"
