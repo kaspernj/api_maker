@@ -2,7 +2,7 @@ import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
-import {View} from "react-native"
+import {Animated} from "react-native"
 
 export default memo(shapeComponent(class SharedTableHeader extends BaseComponent {
   render() {
@@ -14,7 +14,7 @@ export default memo(shapeComponent(class SharedTableHeader extends BaseComponent
     )
 
     return (
-      <View dataSet={actualDataSet} {...restProps} />
+      <Animated.View dataSet={actualDataSet} {...restProps} />
     )
   }
 }))

@@ -16,6 +16,7 @@ PATH
   remote: /home/dev/api_maker/api_maker_table_rubygem
   specs:
     api_maker_table (0.1.1)
+      acts_as_list
       rails (>= 6.0.0)
       service_pattern
       worker_plugins (>= 0.0.6)
@@ -93,6 +94,9 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
+    acts_as_list (1.2.4)
+      activerecord (>= 6.1)
+      activesupport (>= 6.1)
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     appraisal (2.5.0)

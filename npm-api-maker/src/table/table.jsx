@@ -1,11 +1,14 @@
 import {digg, digs} from "diggerize"
-import {Pressable, StyleSheet, View} from "react-native"
+import React, {createContext, useContext, useMemo, useRef} from "react"
+import {Animated, Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
 import Collection from "../collection"
 import columnVisible from "./column-visible.mjs"
 import debounce from "debounce"
+import DraggableSort from "../draggable-sort/index.jsx"
+import EventEmitter from "events"
 import Filters from "./filters"
 import FlatList from "./components/flat-list"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
@@ -20,7 +23,6 @@ import ModelRow from "./model-row"
 import Paginate from "../bootstrap/paginate"
 import Params from "../params"
 import PropTypes from "prop-types"
-import React, {createContext, useContext, useMemo, useRef} from "react"
 import Row from "./components/row"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
@@ -32,6 +34,7 @@ import uniqunize from "uniqunize"
 import useBreakpoint from "../use-breakpoint"
 import useCollection from "../use-collection"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useEventEmitter from "../use-event-emitter.mjs"
 import useModelEvent from "../use-model-event.js"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 import Widths from "./widths"
@@ -40,43 +43,55 @@ const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
 const TableContext = createContext()
 
-const ListHeaderComponent = memo(() => {
-  const {mdUp} = useBreakpoint()
-  const tableContextValue = useContext(TableContext)
-  const table = tableContextValue.table
-  const {collection, queryWithoutPagination, t} = table.tt
-  const {query} = digs(collection, "query")
+const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {
+  setup() {
+    this.useStates({
+      lastUpdate: new Date()
+    })
+  }
 
-  return (
-    <Row dataSet={{class: "api-maker/table/header-row"}} style={table.styleForRowHeader()}>
-      {table.p.workplace && table.s.currentWorkplace &&
-        <Header style={table.styleForHeader({style: {width: mdUp ? 41 : undefined}})}>
-          <WorkerPluginsCheckAllCheckbox
-            currentWorkplace={table.s.currentWorkplace}
-            query={queryWithoutPagination}
-            style={{marginHorizontal: "auto"}}
-          />
-          {!mdUp &&
-            <Text style={{marginLeft: 3}}>
-              {t(".select_all_found", {defaultValue: "Select all found"})}
-            </Text>
-          }
-        </Header>
-      }
-      {!mdUp &&
-        <Header style={table.styleForHeader({style: {}})}>
-          <HeaderSelect preparedColumns={table.s.preparedColumns} query={query} table={table} />
-        </Header>
-      }
-      {mdUp &&
-        <>
-          {table.headersContentFromColumns()}
-          <Header style={table.styleForHeader({style: {}, type: "actions"})} />
-        </>
-      }
-    </Row>
-  )
-})
+  render() {
+    const {mdUp} = useBreakpoint()
+    const tableContextValue = useContext(TableContext)
+    const table = tableContextValue.table
+    const {collection, events, queryWithoutPagination, t} = table.tt
+    const {query} = digs(collection, "query")
+
+    useEventEmitter(events, "columnVisibilityUpdated", this.tt.onColumnVisibilityUpdated)
+
+    return (
+      <Row dataSet={{class: "api-maker/table/header-row"}} style={table.styleForRowHeader()}>
+        {table.p.workplace && table.s.currentWorkplace &&
+          <Header style={table.styleForHeader({style: {width: mdUp ? 41 : undefined}})}>
+            <WorkerPluginsCheckAllCheckbox
+              currentWorkplace={table.s.currentWorkplace}
+              query={queryWithoutPagination}
+              style={{marginHorizontal: "auto"}}
+            />
+            {!mdUp &&
+              <Text style={{marginLeft: 3}}>
+                {t(".select_all_found", {defaultValue: "Select all found"})}
+              </Text>
+            }
+          </Header>
+        }
+        {!mdUp &&
+          <Header style={table.styleForHeader({style: {}})}>
+            <HeaderSelect preparedColumns={table.s.preparedColumns} query={query} table={table} />
+          </Header>
+        }
+        {mdUp &&
+          <>
+            {table.headersContentFromColumns()}
+            <Header style={table.styleForHeader({style: {}, type: "actions"})} />
+          </>
+        }
+      </Row>
+    )
+  }
+
+  onColumnVisibilityUpdated = () => this.setState({lastUpdate: new Date()})
+}))
 
 export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   static defaultProps = {
@@ -132,7 +147,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     workplace: PropTypes.bool.isRequired
   }
 
-  tableSetting = null
+  draggableSortEvents = new EventEmitter()
+  events = new EventEmitter()
+  tableSettings = null
 
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table"})
@@ -151,14 +168,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     if (!queryName) queryName = collectionKey
 
-    const columnsAsArray = this.columnsAsArray()
     const querySName = `${queryName}_s`
 
     this.useStates({
-      columns: columnsAsArray,
+      columns: () => this.columnsAsArray(),
       currentWorkplace: undefined,
       currentWorkplaceCount: null,
       filterForm: null,
+      columnsToShow: null,
+      draggedColumn: null,
       identifier: () => this.props.identifier || `${collectionKey}-default`,
       lastUpdate: () => new Date(),
       preload: undefined,
@@ -181,9 +199,10 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       () => ({
         cacheKey: this.s.tableSettingFullCacheKey,
         lastUpdate: this.s.lastUpdate,
+        resizing: this.s.resizing,
         table: this
       }),
-      [this.s.lastUpdate, this.s.tableSettingFullCacheKey]
+      [this.s.lastUpdate, this.s.resizing, this.s.tableSettingFullCacheKey]
     )
 
     useMemo(() => {
@@ -195,7 +214,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }, [this.p.currentUser?.id()])
 
     useMemo(() => {
-      if (!this.tt.tableSetting && this.s.width) {
+      if (!this.tt.tableSettings && this.s.width) {
         this.loadTableSetting()
       }
     }, [this.p.currentUser?.id(), this.s.width])
@@ -235,7 +254,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       () => this.collection?.query?.clone()?.except("page"),
       [this.collection.query]
     )
+
+    useEventEmitter(this.tt.draggableSortEvents, "onDragStart", this.tt.onDragStart)
+    useEventEmitter(this.tt.draggableSortEvents, "onDragEndAnimation", this.tt.onDragEndAnimation)
+    useEventEmitter(this.tt.events, "columnVisibilityUpdated", this.tt.onColumnVisibilityUpdated)
   }
+
+  onColumnVisibilityUpdated = () => this.setState({columnsToShow: this.getColumnsToShow(this.s.columns), lastUpdate: new Date()})
+  onDragStart = ({item}) => item.animatedZIndex.setValue(9999)
+  onDragEndAnimation = ({item}) => item.animatedZIndex.setValue(0)
 
   async loadCurrentWorkplace() {
     const Workplace = modelClassRequire("Workplace")
@@ -257,6 +284,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     this.setState({currentWorkplaceCount})
   }
 
+  getColumnsToShow(columns) {
+    return columns
+      .filter(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn))
+      .sort((a, b) => a.tableSettingColumn.position() - b.tableSettingColumn.position())
+  }
+
   async loadTableSetting() {
     this.tableSettings = new TableSettings({table: this})
 
@@ -264,8 +297,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
     const {width} = this.s
     const widths = new Widths({columns, table: this, width})
+    const columnsToShow = this.getColumnsToShow(columns)
 
     this.setState({
+      columns,
+      columnsToShow,
       preparedColumns: columns,
       preload: this.mergedPreloads(preload),
       tableSetting,
@@ -450,7 +486,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       <TableContext.Provider value={this.tt.tableContextValue}>
         <FlatList
           data={models}
-          dataSet={{class: classNames("api-maker--table", className), cacheKey: this.s.tableSettingFullCacheKey}}
+          dataSet={{
+            class: classNames("api-maker--table", className),
+            cacheKey: this.s.tableSettingFullCacheKey,
+            lastUpdate: this.s.lastUpdate
+          }}
           extraData={this.s.lastUpdate}
           keyExtractor={this.tt.keyExtrator}
           ListHeaderComponent={ListHeaderComponent}
@@ -575,8 +615,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   renderItem = ({index, item: model}) => {
-    const {preparedColumns, tableSettingFullCacheKey} = this.s
-
     if (!this.s.tableSettingLoaded) {
       return (
         <View>
@@ -590,13 +628,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return (
       <ModelRow
         cacheKey={model.cacheKey()}
+        columns={this.s.columnsToShow}
         columnWidths={this.columnWidths()}
+        events={this.tt.events}
         index={index}
         key={model.id()}
         model={model}
-        preparedColumns={preparedColumns}
         table={this}
-        tableSettingFullCacheKey={tableSettingFullCacheKey}
+        tableSettingFullCacheKey={this.s.tableSettingFullCacheKey}
       />
     )
   }
@@ -611,7 +650,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     if (styleUI) {
       Object.assign(defaultStyle, {
-        backgroundColor: even ? "#f5f5f5" : undefined
+        backgroundColor: even ? "#f5f5f5" : "#fff"
       })
     }
 
@@ -646,10 +685,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     if (type != "actions" && mdUp && this.p.styleUI) {
       defaultStyle.borderRight = "1px solid #dbdbdb"
-    }
-
-    if (mdUp) {
-
     }
 
     const actualStyle = Object.assign(
@@ -798,17 +833,60 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return columnWidths
   }
 
-  headersContentFromColumns = () => this.s.preparedColumns?.map(({column, tableSettingColumn, width}) => columnVisible(column, tableSettingColumn) &&
-    <HeaderColumn
-      column={column}
-      key={tableSettingColumn.identifier()}
-      resizing={this.s.resizing}
-      table={this}
-      tableSettingColumn={tableSettingColumn}
-      width={width}
-      widths={this.s.widths}
-    />
-  )
+  headersContentFromColumns = () => {
+    return (
+      <DraggableSort
+        data={this.s.columnsToShow}
+        events={this.tt.draggableSortEvents}
+        horizontal
+        keyExtractor={this.tt.dragListkeyExtractor}
+        onItemMoved={this.tt.onItemMoved}
+        onReordered={this.tt.onReordered}
+        renderItem={this.tt.dragListRenderItemContent}
+      />
+    )
+  }
+
+  dragListCacheKeyExtractor = (item) => `${item.tableSettingColumn.identifier()}-${this.s.resizing}`
+  dragListkeyExtractor = (item) => item.tableSettingColumn.identifier()
+
+  onItemMoved = ({animationArgs, itemIndex, x, y}) => {
+    const animatedPosition = digg(this, "s", "columnsToShow", itemIndex, "animatedPosition")
+
+    if (animationArgs) {
+      Animated.timing(animatedPosition, animationArgs).start()
+    } else {
+      animatedPosition.setValue({x, y})
+    }
+  }
+
+  onReordered = async ({fromItem, fromPosition, toItem, toPosition}) => {
+    if (fromPosition == toPosition) return // Only do requests and queries if changed
+
+    const TableSettingColumn = fromItem.tableSettingColumn.constructor
+    const toColumn = await TableSettingColumn.find(toItem.tableSettingColumn.id()) // Need to load latest position because ActsAsList might have changed it
+
+    await fromItem.tableSettingColumn.update({position: toColumn.position()})
+  }
+
+  dragListRenderItemContent = ({isActive, item, touchProps}) => {
+    const {animatedWidth, animatedZIndex, column, tableSettingColumn} = item
+
+    return (
+      <HeaderColumn
+        active={isActive}
+        animatedWidth={animatedWidth}
+        animatedZIndex={animatedZIndex}
+        column={column}
+        key={tableSettingColumn.identifier()}
+        resizing={this.s.resizing}
+        table={this}
+        tableSettingColumn={tableSettingColumn}
+        touchProps={touchProps}
+        widths={this.s.widths}
+      />
+    )
+  }
 
   headerClassNameForColumn(column) {
     const classNames = []

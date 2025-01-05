@@ -1,9 +1,10 @@
-import {View} from "react-native"
+import {Animated, View} from "react-native"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Column from "./components/column"
 import ColumnContent from "./column-content"
 import columnIdentifier from "./column-identifier.mjs"
+import EventEmitter from "events"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import memo from "set-state-compare/src/memo"
@@ -13,18 +14,21 @@ import useBreakpoint from "../use-breakpoint"
 
 export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseComponent {
   static propTypes = propTypesExact({
+    animatedPosition: PropTypes.instanceOf(Animated.ValueXY).isRequired,
+    animatedWidth: PropTypes.instanceOf(Animated.Value).isRequired,
+    animatedZIndex: PropTypes.instanceOf(Animated.Value).isRequired,
     column: PropTypes.object.isRequired,
     columnIndex: PropTypes.number.isRequired,
     even: PropTypes.bool.isRequired,
+    events: PropTypes.instanceOf(EventEmitter).isRequired,
     model: PropTypes.object.isRequired,
     table: PropTypes.object.isRequired,
-    tableSettingColumn: PropTypes.object.isRequired,
-    width: PropTypes.number.isRequired
+    tableSettingColumn: PropTypes.object.isRequired
   })
 
   render() {
     const {mdUp} = useBreakpoint()
-    const {column, columnIndex, even, model, table, width} = this.props
+    const {animatedWidth, animatedZIndex, column, columnIndex, even, model, table} = this.props
     const columnProps = table.columnProps(column)
     const {style, ...restColumnProps} = columnProps
     const actualStyle = Object.assign(
@@ -33,7 +37,9 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
         columnIndex,
         even,
         style: {
-          width: mdUp ? width : "100%"
+          zIndex: animatedZIndex,
+          transform: this.p.animatedPosition.getTranslateTransform(),
+          width: mdUp ? animatedWidth : "100%"
         }
       }),
       style
