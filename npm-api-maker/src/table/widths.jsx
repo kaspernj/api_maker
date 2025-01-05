@@ -23,6 +23,7 @@ export default class TableWidths {
       if (column.animatedPosition) throw new Error("Column already had an animated position")
 
       column.animatedPosition = new Animated.ValueXY()
+      column.animatedZIndex = new Animated.Value(0)
 
       if (tableSettingColumn.hasWidth()) {
         if (column.animatedWidth) throw new Error("Column already had an animated width")

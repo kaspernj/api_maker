@@ -4,6 +4,7 @@ import classNames from "classnames"
 import Column from "./components/column"
 import ColumnContent from "./column-content"
 import columnIdentifier from "./column-identifier.mjs"
+import EventEmitter from "events"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import memo from "set-state-compare/src/memo"
@@ -15,9 +16,11 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
   static propTypes = propTypesExact({
     animatedPosition: PropTypes.instanceOf(Animated.ValueXY).isRequired,
     animatedWidth: PropTypes.instanceOf(Animated.Value).isRequired,
+    animatedZIndex: PropTypes.instanceOf(Animated.Value).isRequired,
     column: PropTypes.object.isRequired,
     columnIndex: PropTypes.number.isRequired,
     even: PropTypes.bool.isRequired,
+    events: PropTypes.instanceOf(EventEmitter).isRequired,
     model: PropTypes.object.isRequired,
     table: PropTypes.object.isRequired,
     tableSettingColumn: PropTypes.object.isRequired
@@ -25,7 +28,7 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
 
   render() {
     const {mdUp} = useBreakpoint()
-    const {animatedWidth, column, columnIndex, even, model, table} = this.props
+    const {animatedWidth, animatedZIndex, column, columnIndex, even, model, table} = this.props
     const columnProps = table.columnProps(column)
     const {style, ...restColumnProps} = columnProps
     const actualStyle = Object.assign(
@@ -34,6 +37,7 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
         columnIndex,
         even,
         style: {
+          zIndex: animatedZIndex,
           transform: this.p.animatedPosition.getTranslateTransform(),
           width: mdUp ? animatedWidth : "100%"
         }

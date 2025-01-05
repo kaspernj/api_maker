@@ -638,7 +638,6 @@ export default class BaseModel {
     }
 
     if (Object.keys(this.changes).length == 0) {
-      console.log("No changes", {newAttributes})
       return {model: this}
     }
 

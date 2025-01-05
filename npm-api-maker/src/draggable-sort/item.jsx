@@ -16,11 +16,12 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     renderItem: PropTypes.func.isRequired
   })
 
+  initialLayout = null
+
   setup() {
     this.useStates({
       active: false,
-      dragging: false,
-      initialLayout: null
+      dragging: false
     })
 
     this.events = useMemo(() => new EventEmitter(), [])
@@ -37,8 +38,8 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
       []
     )
 
-    useEventEmitter(this.p.controller.getEvents(), "draggingItem", this.tt.onDraggingItem)
-    useEventEmitter(this.p.controller.getEvents(), "dragEnd", this.tt.onDragEnd)
+    useEventEmitter(this.p.controller.getEvents(), "onDragStart", this.tt.onDragStart)
+    useEventEmitter(this.p.controller.getEvents(), "onDragEndAnimation", this.tt.onDragEndAnimation)
     useEventEmitter(this.tt.events, "move", this.tt.onMove)
     useEventEmitter(this.tt.events, "moveToPosition", this.tt.onMoveToPosition)
     useEventEmitter(this.tt.events, "resetPosition", this.tt.onResetPosition)
@@ -54,7 +55,8 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
         }
 
         if (active) {
-          style.elevation = 1
+          style.backgroundColor = "#fff"
+          style.elevation = 2
           style.zIndex = 99999
         }
 
@@ -64,13 +66,13 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     )
 
     return (
-      <Animated.View dataSet={{component: "api-maker/draggable-sort/item"}} onLayout={this.tt.onLayout} style={style}>
+      <Animated.View dataSet={{component: "draggable-sort/item"}} onLayout={this.tt.onLayout} style={style}>
         {renderItem({isActive: active, item, touchProps: this.tt.panResponder.panHandlers})}
       </Animated.View>
     )
   }
 
-  onDraggingItem = ({itemData}) => {
+  onDragStart = ({itemData}) => {
     const newState = {dragging: true}
 
     if (itemData.index == this.p.itemIndex) {
@@ -81,18 +83,21 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     this.setState(newState)
   }
 
-  onDragEnd = () => this.setState({active: false, dragging: false})
+  onDragEndAnimation = () => this.setState({active: false, dragging: false})
 
   onLayout = (e) => {
-    if (!this.s.initialLayout) {
-      this.p.controller.onItemLayout({events: this.tt.events, index: this.p.itemIndex, item: this.p.item, layout: e.nativeEvent.layout})
-      this.setState({initialLayout: e.nativeEvent.layout})
+    const {controller, item, itemIndex} = this.p
+
+    controller.onItemLayout({events: this.tt.events, index: itemIndex, item, layout: e.nativeEvent.layout})
+
+    if (!this.tt.initialLayout) {
+      this.initialLayout = e.nativeEvent.layout
     }
   }
 
   onMove = ({gestate}) => {
-    const x = gestate.dx + this.tt.baseXAtStartedDragging - this.s.initialLayout.x
-    const y = this.s.initialLayout.y
+    const x = gestate.dx + this.tt.baseXAtStartedDragging - this.tt.initialLayout.x
+    const y = this.tt.initialLayout.y
 
     this.tt.position.setValue({x, y})
 
@@ -102,8 +107,8 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
   }
 
   onMoveToPosition = ({x, y}) => {
-    const calculatedXFromStartingPosition = x - this.s.initialLayout.x
-    const animatedArgs = {
+    const calculatedXFromStartingPosition = x - this.tt.initialLayout.x
+    const animationArgs = {
       duration: 200,
       easing: Easing.inOut(Easing.linear),
       toValue: {
@@ -112,12 +117,19 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
       },
       useNativeDriver: true,
     }
+    const animationEventArgs = {animationArgs, animationType: "moveToPosition", item: this.p.item}
 
-    Animated.timing(this.tt.position, animatedArgs).start()
+    this.p.controller.events.emit("onAnimationStart", animationEventArgs)
+
+    Animated
+      .timing(this.tt.position, animationArgs)
+      .start(() => {
+        this.p.controller.events.emit("onAnimationEnd", animationEventArgs)
+      })
 
     if (this.props.onItemMoved) {
       this.p.onItemMoved({
-        animatedArgs,
+        animationArgs,
         itemIndex: this.p.itemIndex,
         x: calculatedXFromStartingPosition,
         y
@@ -127,9 +139,9 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
 
   getBaseX = () => this.p.controller.getItemDataForIndex(this.p.itemIndex).baseX
 
-  onResetPosition = () => {
-    const baseX = this.getBaseX() - this.s.initialLayout.x
-    const animatedArgs = {
+  onResetPosition = (args) => {
+    const baseX = this.getBaseX() - this.tt.initialLayout.x
+    const animationArgs = {
       duration: 200,
       easing: Easing.inOut(Easing.linear),
       toValue: {
@@ -138,12 +150,20 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
       },
       useNativeDriver: true,
     }
+    const animationEventArgs = {animationArgs, animationType: "resetPosition", item: this.p.item}
 
-    Animated.timing(this.tt.position, animatedArgs).start()
+    this.p.controller.events.emit("onAnimationStart", animationEventArgs)
+
+    Animated
+      .timing(this.tt.position, animationArgs)
+      .start(() => {
+        this.p.controller.events.emit("onAnimationEnd", animationEventArgs)
+        if (args?.callback) args.callback()
+      })
 
     if (this.props.onItemMoved) {
       this.p.onItemMoved({
-        animatedArgs,
+        animationArgs,
         itemIndex: this.p.itemIndex,
         x: baseX,
         y: 0

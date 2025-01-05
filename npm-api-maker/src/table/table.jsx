@@ -1,6 +1,6 @@
 import {digg, digs} from "diggerize"
 import React, {createContext, useContext, useMemo, useRef} from "react"
-import {Animated, Easing, Pressable, View} from "react-native"
+import {Animated, Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
@@ -8,6 +8,7 @@ import Collection from "../collection"
 import columnVisible from "./column-visible.mjs"
 import debounce from "debounce"
 import DraggableSort from "../draggable-sort/index.jsx"
+import EventEmitter from "events"
 import Filters from "./filters"
 import FlatList from "./components/flat-list"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
@@ -133,6 +134,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     workplace: PropTypes.bool.isRequired
   }
 
+  draggableSortEvents = new EventEmitter()
+  events = new EventEmitter()
   tableSettings = null
 
   setup() {
@@ -238,7 +241,13 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       () => this.collection?.query?.clone()?.except("page"),
       [this.collection.query]
     )
+
+    useEventEmitter(this.tt.draggableSortEvents, "onDragStart", this.tt.onDragStart)
+    useEventEmitter(this.tt.draggableSortEvents, "onDragEndAnimation", this.tt.onDragEndAnimation)
   }
+
+  onDragStart = ({item}) => item.animatedZIndex.setValue(9999)
+  onDragEndAnimation = ({item}) => item.animatedZIndex.setValue(0)
 
   async loadCurrentWorkplace() {
     const Workplace = modelClassRequire("Workplace")
@@ -597,6 +606,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         cacheKey={model.cacheKey()}
         columns={this.s.columnsToShow}
         columnWidths={this.columnWidths()}
+        events={this.tt.events}
         index={index}
         key={model.id()}
         model={model}
@@ -616,7 +626,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     if (styleUI) {
       Object.assign(defaultStyle, {
-        backgroundColor: even ? "#f5f5f5" : undefined
+        backgroundColor: even ? "#f5f5f5" : "#fff"
       })
     }
 
@@ -802,9 +812,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   headersContentFromColumns = () => {
     return (
       <DraggableSort
-        cacheKeyExtractor={this.tt.dragListCacheKeyExtractor}
         data={this.s.columnsToShow}
-        dataSet={{cacheKey: this.s.tableSettingFullCacheKey, resizing: this.s.resizing}}
+        events={this.tt.draggableSortEvents}
         horizontal
         keyExtractor={this.tt.dragListkeyExtractor}
         onItemMoved={this.tt.onItemMoved}
@@ -817,32 +826,33 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   dragListCacheKeyExtractor = (item) => `${item.tableSettingColumn.identifier()}-${this.s.resizing}`
   dragListkeyExtractor = (item) => item.tableSettingColumn.identifier()
 
-  onItemMoved = ({animatedArgs, itemIndex, x, y}) => {
+  onItemMoved = ({animationArgs, itemIndex, x, y}) => {
     const animatedPosition = digg(this, "s", "columnsToShow", itemIndex, "animatedPosition")
 
-    if (animatedArgs) {
-      Animated.timing(animatedPosition, animatedArgs).start()
+    if (animationArgs) {
+      Animated.timing(animatedPosition, animationArgs).start()
     } else {
       animatedPosition.setValue({x, y})
     }
   }
 
-  onReordered = async ({fromIndex, toPosition}) => {
-    console.log("onReordered", {fromIndex, toPosition})
+  onReordered = async ({fromItem, fromPosition, toItem, toPosition}) => {
+    if (fromPosition != toPosition) { // Only do requests and queries if changed
+      const TableSettingColumn = fromItem.tableSettingColumn.constructor
+      const toColumn = await TableSettingColumn.find(toItem.tableSettingColumn.id()) // Need to load latest position because ActsAsList might have changed it
 
-    const {columnsToShow} = this.s
-    const fromColumn = columnsToShow[fromIndex].tableSettingColumn
-
-    await fromColumn.update({position: toPosition})
+      await fromItem.tableSettingColumn.update({position: toColumn.position()})
+    }
   }
 
   dragListRenderItemContent = ({isActive, item, touchProps}) => {
-    const {animatedWidth, column, tableSettingColumn} = item
+    const {animatedWidth, animatedZIndex, column, tableSettingColumn} = item
 
     return (
       <HeaderColumn
         active={isActive}
         animatedWidth={animatedWidth}
+        animatedZIndex={animatedZIndex}
         column={column}
         key={tableSettingColumn.identifier()}
         resizing={this.s.resizing}

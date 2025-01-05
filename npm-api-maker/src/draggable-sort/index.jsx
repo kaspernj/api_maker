@@ -1,5 +1,6 @@
 import Controller from "./controller.mjs"
 import DraggableSortItem from "./item"
+import EventEmitter from "events"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -16,6 +17,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
     cacheKeyExtractor: PropTypes.func,
     data: PropTypes.array.isRequired,
     dataSet: PropTypes.object,
+    events: PropTypes.instanceOf(EventEmitter),
     horizontal: PropTypes.bool.isRequired,
     keyExtractor: PropTypes.func.isRequired,
     onDragItemEnd: PropTypes.func,
@@ -27,8 +29,9 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
 
   setup() {
     const {data, keyExtractor} = this.p
+    const {events} = this.props
 
-    this.controller = useMemo(() => new Controller({data, keyExtractor}), [])
+    this.controller = useMemo(() => new Controller({data, events, keyExtractor}), [])
     this.panResponder = useMemo(
       () => PanResponder.create({
         onStartShouldSetPanResponder: (e) => {
@@ -52,8 +55,8 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
       []
     )
 
-    useEventEmitter(this.controller.getEvents(), "draggingItem", this.tt.onDragItemStart)
-    useEventEmitter(this.controller.getEvents(), "dragEnd", this.tt.onDragItemEnd)
+    useEventEmitter(this.controller.getEvents(), "onDragStart", this.tt.onDragItemStart)
+    useEventEmitter(this.controller.getEvents(), "onDragEnd", this.tt.onDragItemEnd)
   }
 
   render() {
@@ -92,13 +95,13 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
     }
   }
 
-  onDragItemEnd = ({itemData, fromIndex, toPosition}) => {
-    if (toPosition !== null) {
-      this.p.onReordered({fromIndex, toPosition})
+  onDragItemEnd = (args) => {
+    if (args.toPosition !== null) {
+      this.p.onReordered(args)
     }
 
     if (this.props.onDragItemEnd) {
-      this.p.onDragItemEnd({itemData})
+      this.p.onDragItemEnd(args)
     }
   }
 }))

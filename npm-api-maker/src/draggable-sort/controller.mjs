@@ -2,10 +2,10 @@ import {digg} from "diggerize"
 import EventEmitter from "events"
 
 export default class DraggableSortController {
-  constructor({data, keyExtractor}) {
+  constructor({data, events, keyExtractor}) {
     this.data = data
     this.currentOrder = [...data]
-    this.events = new EventEmitter()
+    this.events = events || new EventEmitter()
     this.keyExtractor = keyExtractor
 
     this.draggedItem = null
@@ -40,19 +40,25 @@ export default class DraggableSortController {
       this.draggedItem = item
       this.draggedItemData = this.getItemDataForIndex(itemIndex)
       this.draggedItemIndex = itemIndex
-      this.events.emit("draggingItem", {itemData: this.draggedItemData})
+      this.draggedItemPosition = this.draggedItemData.position
+      this.events.emit("onDragStart", {item, itemData: this.draggedItemData})
     }
   }
 
   onDragEnd = () => {
     const itemData = this.draggedItemData
     const fromIndex = itemData.index
+    const fromPosition = digg(this, "draggedItemPosition")
     const toPosition = this.draggedItemNewPosition
-
-    this.draggedItemData.events.emit("resetPosition")
-
     const fromItem = this.draggedItem
     const toItem = this.draggedOverItem
+    const callbackArgs = {item: itemData.item, itemData, fromIndex, fromItem, fromPosition, toItem, toPosition}
+
+    this.draggedItemData.events.emit("resetPosition", {
+      callback: () => {
+        this.events.emit("onDragEndAnimation", callbackArgs)
+      }
+    })
 
     this.draggedItem = null
     this.draggedItemData = null
@@ -61,25 +67,30 @@ export default class DraggableSortController {
     this.draggedOverItem = null
     this.draggedOverItemData = null
 
-    this.events.emit("dragEnd", {itemData, fromIndex, fromItem, toItem, toPosition})
+    this.events.emit("onDragEnd", callbackArgs)
   }
 
   onItemLayout = ({events, index, item, layout}) => {
     if (!(index in this.itemData)) throw new Error(`Item not found for index ${index}`)
 
-    const key = this.keyExtractor(item)
+    const itemData = this.itemData[index]
 
-    this.itemData[index].baseX = layout.x
-    this.itemData[index].events = events
-    this.itemData[index].layout = layout
-    this.itemData[index].key = key
+    console.log("onItemLayout", {index, layout})
+
+    itemData.layout = layout
+
+    if (!itemData.initialLayout) {
+      itemData.baseX = layout.x
+      itemData.events = events
+      itemData.initialLayout = layout
+      itemData.key = this.keyExtractor(item)
+    }
   }
 
   onMove = ({gestate}) => {
     // Send move-event to the item being dragged so it will actually move around
     this.draggedItemData?.events?.emit("move", {gestate})
 
-    let found = false
     const moveX = gestate.dx + this.initialDragPosition.x
 
     for (const itemIndex in this.itemData) {
@@ -103,19 +114,8 @@ export default class DraggableSortController {
         this.draggedOverItemData.position = positionOfDraggedItem
 
         this.updatePositionOfItems()
-
         this.draggedItemNewPosition = positionOfOverItem
-        this.draggedOverItem = null
-        this.draggedOverItemData = null
-
-        found = true
       }
-    }
-
-    // Nothing was found - unset draggedOverItem
-    if (!found) {
-      this.draggedOverItem = null
-      this.draggedOverItemData = null
     }
   }
 

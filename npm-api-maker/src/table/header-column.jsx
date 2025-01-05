@@ -15,6 +15,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
   static propTypes = propTypesExact({
     active: PropTypes.bool.isRequired,
     animatedWidth: PropTypes.instanceOf(Animated.Value).isRequired,
+    animatedZIndex: PropTypes.instanceOf(Animated.Value).isRequired,
     column: PropTypes.object.isRequired,
     resizing: PropTypes.bool.isRequired,
     table: PropTypes.object.isRequired,
@@ -76,7 +77,8 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         const actualStyle = Object.assign(
           {
             cursor: resizing ? "col-resize" : undefined,
-            width: mdUp ? animatedWidth : "100%"
+            width: mdUp ? animatedWidth : "100%",
+            height: mdUp ? "100%" : undefined
           },
           style
         )
@@ -96,23 +98,23 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         style={styleForHeader({style: actualStyle})}
         {...restColumnProps}
       >
+        {mdUp &&
+          <FontAwesomeIcon name="bars" style={{marginRight: 3, fontSize: 12}} {...touchProps} />
+        }
         <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
         {mdUp &&
-          <>
-            <FontAwesomeIcon name="bars" style={{marginLeft: 3}} {...touchProps} />
-            <Animated.View
-              style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-                width: 10,
-                height: "100%",
-                cursor: "col-resize",
-                zIndex: 9999
-              }}
-              {...this.tt.resizePanResponder.panHandlers}
-            />
-          </>
+          <Animated.View
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: 10,
+              height: "100%",
+              cursor: "col-resize",
+              zIndex: 9999
+            }}
+            {...this.tt.resizePanResponder.panHandlers}
+          />
         }
       </Header>
     )

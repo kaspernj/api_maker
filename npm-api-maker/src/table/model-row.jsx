@@ -2,6 +2,7 @@ import {Pressable} from "react-native"
 import BaseComponent from "../base-component"
 import Column from "./components/column"
 import columnIdentifier from "./column-identifier.mjs"
+import EventEmitter from "events"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import * as inflection from "inflection"
 import modelCallbackArgs from "./model-callback-args.mjs"
@@ -20,6 +21,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     cacheKey: PropTypes.string.isRequired,
     columns: PropTypes.array,
     columnWidths: PropTypes.object.isRequired,
+    events: PropTypes.instanceOf(EventEmitter).isRequired,
     index: PropTypes.number.isRequired,
     model: PropTypes.object.isRequired,
     table: PropTypes.object.isRequired,
@@ -84,15 +86,17 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   columnsContentFromColumns(model, even) {
-    const {columns, table} = this.p
+    const {columns, events, table} = this.p
 
-    return columns?.map(({animatedPosition, animatedWidth, column, tableSettingColumn}, columnIndex) =>
+    return columns?.map(({animatedPosition, animatedWidth, animatedZIndex, column, tableSettingColumn}, columnIndex) =>
       <ModelColumn
         animatedPosition={animatedPosition}
         animatedWidth={animatedWidth}
+        animatedZIndex={animatedZIndex}
         column={column}
         columnIndex={columnIndex}
         even={even}
+        events={events}
         key={columnIdentifier(column)}
         model={model}
         table={table}
