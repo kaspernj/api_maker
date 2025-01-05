@@ -43,43 +43,55 @@ const paginationOptions = [30, 60, 90, ["All", "all"]]
 const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
 const TableContext = createContext()
 
-const ListHeaderComponent = memo(() => {
-  const {mdUp} = useBreakpoint()
-  const tableContextValue = useContext(TableContext)
-  const table = tableContextValue.table
-  const {collection, queryWithoutPagination, t} = table.tt
-  const {query} = digs(collection, "query")
+const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {
+  setup() {
+    this.useStates({
+      lastUpdate: new Date()
+    })
+  }
 
-  return (
-    <Row dataSet={{class: "api-maker/table/header-row"}} style={table.styleForRowHeader()}>
-      {table.p.workplace && table.s.currentWorkplace &&
-        <Header style={table.styleForHeader({style: {width: mdUp ? 41 : undefined}})}>
-          <WorkerPluginsCheckAllCheckbox
-            currentWorkplace={table.s.currentWorkplace}
-            query={queryWithoutPagination}
-            style={{marginHorizontal: "auto"}}
-          />
-          {!mdUp &&
-            <Text style={{marginLeft: 3}}>
-              {t(".select_all_found", {defaultValue: "Select all found"})}
-            </Text>
-          }
-        </Header>
-      }
-      {!mdUp &&
-        <Header style={table.styleForHeader({style: {}})}>
-          <HeaderSelect preparedColumns={table.s.preparedColumns} query={query} table={table} />
-        </Header>
-      }
-      {mdUp &&
-        <>
-          {table.headersContentFromColumns()}
-          <Header style={table.styleForHeader({style: {}, type: "actions"})} />
-        </>
-      }
-    </Row>
-  )
-})
+  render() {
+    const {mdUp} = useBreakpoint()
+    const tableContextValue = useContext(TableContext)
+    const table = tableContextValue.table
+    const {collection, events, queryWithoutPagination, t} = table.tt
+    const {query} = digs(collection, "query")
+
+    useEventEmitter(events, "columnVisibilityUpdated", this.tt.onColumnVisibilityUpdated)
+
+    return (
+      <Row dataSet={{class: "api-maker/table/header-row"}} style={table.styleForRowHeader()}>
+        {table.p.workplace && table.s.currentWorkplace &&
+          <Header style={table.styleForHeader({style: {width: mdUp ? 41 : undefined}})}>
+            <WorkerPluginsCheckAllCheckbox
+              currentWorkplace={table.s.currentWorkplace}
+              query={queryWithoutPagination}
+              style={{marginHorizontal: "auto"}}
+            />
+            {!mdUp &&
+              <Text style={{marginLeft: 3}}>
+                {t(".select_all_found", {defaultValue: "Select all found"})}
+              </Text>
+            }
+          </Header>
+        }
+        {!mdUp &&
+          <Header style={table.styleForHeader({style: {}})}>
+            <HeaderSelect preparedColumns={table.s.preparedColumns} query={query} table={table} />
+          </Header>
+        }
+        {mdUp &&
+          <>
+            {table.headersContentFromColumns()}
+            <Header style={table.styleForHeader({style: {}, type: "actions"})} />
+          </>
+        }
+      </Row>
+    )
+  }
+
+  onColumnVisibilityUpdated = () => this.setState({lastUpdate: new Date()})
+}))
 
 export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   static defaultProps = {
@@ -245,8 +257,10 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     useEventEmitter(this.tt.draggableSortEvents, "onDragStart", this.tt.onDragStart)
     useEventEmitter(this.tt.draggableSortEvents, "onDragEndAnimation", this.tt.onDragEndAnimation)
+    useEventEmitter(this.tt.events, "columnVisibilityUpdated", this.tt.onColumnVisibilityUpdated)
   }
 
+  onColumnVisibilityUpdated = () => this.setState({columnsToShow: this.getColumnsToShow(this.s.columns), lastUpdate: new Date()})
   onDragStart = ({item}) => item.animatedZIndex.setValue(9999)
   onDragEndAnimation = ({item}) => item.animatedZIndex.setValue(0)
 
@@ -270,6 +284,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     this.setState({currentWorkplaceCount})
   }
 
+  getColumnsToShow(columns) {
+    return columns
+      .filter(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn))
+      .sort((a, b) => a.tableSettingColumn.position() - b.tableSettingColumn.position())
+  }
+
   async loadTableSetting() {
     this.tableSettings = new TableSettings({table: this})
 
@@ -277,11 +297,10 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
     const {width} = this.s
     const widths = new Widths({columns, table: this, width})
-    const columnsToShow = columns
-      .filter(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn))
-      .sort((a, b) => a.tableSettingColumn.position() - b.tableSettingColumn.position())
+    const columnsToShow = this.getColumnsToShow(columns)
 
     this.setState({
+      columns,
       columnsToShow,
       preparedColumns: columns,
       preload: this.mergedPreloads(preload),
@@ -467,7 +486,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       <TableContext.Provider value={this.tt.tableContextValue}>
         <FlatList
           data={models}
-          dataSet={{class: classNames("api-maker--table", className), cacheKey: this.s.tableSettingFullCacheKey, lastUpdate: this.s.lastUpdate, resizing: this.s.resizing}}
+          dataSet={{
+            class: classNames("api-maker--table", className),
+            cacheKey: this.s.tableSettingFullCacheKey,
+            lastUpdate: this.s.lastUpdate
+          }}
           extraData={this.s.lastUpdate}
           keyExtractor={this.tt.keyExtrator}
           ListHeaderComponent={ListHeaderComponent}

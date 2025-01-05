@@ -87,6 +87,7 @@ export default memo(shapeComponent(class ColumnRow extends BaseComponent {
     const {table, tableSettingColumn} = this.p
 
     await tableSettingColumn.update({visible: this.checked})
-    table.updateSettingsFullCacheKey()
+
+    table.events.emit("columnVisibilityUpdated", {tableSettingColumn})
   }
 }))
