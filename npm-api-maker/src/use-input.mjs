@@ -47,7 +47,7 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   const inputDefaultChecked = useCallback(() => {
     if ("defaultChecked" in s.props) {
       return s.props.defaultChecked
-    } else if (s.props.model) {
+    } else if (s.props.attribute && s.props.model) {
       if (!s.props.model[s.props.attribute])
         throw new Error(`No such attribute: ${s.props.attribute}`)
 
