@@ -4,10 +4,7 @@ class FixTableSettingColumnsPosition < ActiveRecord::Migration[7.0]
       columns = run_query("SELECT * FROM table_setting_columns WHERE table_setting_id = '#{table_setting.fetch("id")}' ORDER BY position")
       columns.each_with_index do |column, column_index|
         position = column.fetch("position")
-
-        if position != column_index
-          run_query("UPDATE table_setting_columns SET position = '#{column_index}' WHERE id = '#{column.fetch("id")}'")
-        end
+        execute("UPDATE table_setting_columns SET position = '#{column_index}' WHERE id = '#{column.fetch("id")}'") unless position == column_index
       end
     end
   end
