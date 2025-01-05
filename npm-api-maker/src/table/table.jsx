@@ -34,6 +34,7 @@ import uniqunize from "uniqunize"
 import useBreakpoint from "../use-breakpoint"
 import useCollection from "../use-collection"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useEventEmitter from "../use-event-emitter.mjs"
 import useModelEvent from "../use-model-event.js"
 import useQueryParams from "on-location-changed/src/use-query-params.js"
 import Widths from "./widths"
@@ -837,12 +838,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   onReordered = async ({fromItem, fromPosition, toItem, toPosition}) => {
-    if (fromPosition != toPosition) { // Only do requests and queries if changed
-      const TableSettingColumn = fromItem.tableSettingColumn.constructor
-      const toColumn = await TableSettingColumn.find(toItem.tableSettingColumn.id()) // Need to load latest position because ActsAsList might have changed it
+    if (fromPosition == toPosition) return // Only do requests and queries if changed
 
-      await fromItem.tableSettingColumn.update({position: toColumn.position()})
-    }
+    const TableSettingColumn = fromItem.tableSettingColumn.constructor
+    const toColumn = await TableSettingColumn.find(toItem.tableSettingColumn.id()) // Need to load latest position because ActsAsList might have changed it
+
+    await fromItem.tableSettingColumn.update({position: toColumn.position()})
   }
 
   dragListRenderItemContent = ({isActive, item, touchProps}) => {

@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     api_maker_table (0.1.1)
+      acts_as_list
       rails (>= 6.0.0)
       service_pattern
       worker_plugins (>= 0.0.6)
@@ -86,6 +87,9 @@ GEM
       mutex_m
       securerandom (>= 0.3)
       tzinfo (~> 2.0)
+    acts_as_list (1.2.4)
+      activerecord (>= 6.1)
+      activesupport (>= 6.1)
     base64 (0.2.0)
     benchmark (0.4.0)
     bigdecimal (3.1.8)
