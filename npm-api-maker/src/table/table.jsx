@@ -1,12 +1,13 @@
 import {digg, digs} from "diggerize"
-import DragList from "react-native-draglist"
-import {Pressable, TouchableOpacity, View} from "react-native"
+import React, {createContext, useContext, useMemo, useRef} from "react"
+import {Animated, Easing, Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
 import Collection from "../collection"
 import columnVisible from "./column-visible.mjs"
 import debounce from "debounce"
+import DraggableSort from "../draggable-sort/index.jsx"
 import Filters from "./filters"
 import FlatList from "./components/flat-list"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
@@ -21,7 +22,6 @@ import ModelRow from "./model-row"
 import Paginate from "../bootstrap/paginate"
 import Params from "../params"
 import PropTypes from "prop-types"
-import React, {createContext, useContext, useMemo, useRef} from "react"
 import Row from "./components/row"
 import selectCalculator from "./select-calculator"
 import Select from "../inputs/select"
@@ -133,7 +133,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     workplace: PropTypes.bool.isRequired
   }
 
-  tableSetting = null
+  tableSettings = null
 
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table"})
@@ -152,15 +152,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     if (!queryName) queryName = collectionKey
 
-    const columnsAsArray = this.columnsAsArray()
     const querySName = `${queryName}_s`
 
     this.useStates({
-      columns: columnsAsArray,
+      columns: () => this.columnsAsArray(),
       currentWorkplace: undefined,
       currentWorkplaceCount: null,
       filterForm: null,
       columnsToShow: null,
+      draggedColumn: null,
       identifier: () => this.props.identifier || `${collectionKey}-default`,
       lastUpdate: () => new Date(),
       preload: undefined,
@@ -183,9 +183,10 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       () => ({
         cacheKey: this.s.tableSettingFullCacheKey,
         lastUpdate: this.s.lastUpdate,
+        resizing: this.s.resizing,
         table: this
       }),
-      [this.s.lastUpdate, this.s.tableSettingFullCacheKey]
+      [this.s.lastUpdate, this.s.resizing, this.s.tableSettingFullCacheKey]
     )
 
     useMemo(() => {
@@ -197,7 +198,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }, [this.p.currentUser?.id()])
 
     useMemo(() => {
-      if (!this.tt.tableSetting && this.s.width) {
+      if (!this.tt.tableSettings && this.s.width) {
         this.loadTableSetting()
       }
     }, [this.p.currentUser?.id(), this.s.width])
@@ -456,7 +457,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       <TableContext.Provider value={this.tt.tableContextValue}>
         <FlatList
           data={models}
-          dataSet={{class: classNames("api-maker--table", className), cacheKey: this.s.tableSettingFullCacheKey}}
+          dataSet={{class: classNames("api-maker--table", className), cacheKey: this.s.tableSettingFullCacheKey, lastUpdate: this.s.lastUpdate, resizing: this.s.resizing}}
           extraData={this.s.lastUpdate}
           keyExtractor={this.tt.keyExtrator}
           ListHeaderComponent={ListHeaderComponent}
@@ -652,10 +653,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       defaultStyle.borderRight = "1px solid #dbdbdb"
     }
 
-    if (mdUp) {
-
-    }
-
     const actualStyle = Object.assign(
       defaultStyle,
       style
@@ -804,63 +801,54 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   headersContentFromColumns = () => {
     return (
-      <DragList
+      <DraggableSort
+        cacheKeyExtractor={this.tt.dragListCacheKeyExtractor}
         data={this.s.columnsToShow}
+        dataSet={{cacheKey: this.s.tableSettingFullCacheKey, resizing: this.s.resizing}}
         horizontal
         keyExtractor={this.tt.dragListkeyExtractor}
+        onItemMoved={this.tt.onItemMoved}
         onReordered={this.tt.onReordered}
         renderItem={this.tt.dragListRenderItemContent}
       />
     )
   }
 
+  dragListCacheKeyExtractor = (item) => `${item.tableSettingColumn.identifier()}-${this.s.resizing}`
   dragListkeyExtractor = (item) => item.tableSettingColumn.identifier()
 
-  onReordered = async ({fromIndex, toIndex}) => {
-    const {columnsToShow} = this.s
+  onItemMoved = ({animatedArgs, itemIndex, x, y}) => {
+    const animatedPosition = digg(this, "s", "columnsToShow", itemIndex, "animatedPosition")
 
-    const fromColumn = columnsToShow[fromIndex].tableSettingColumn
-    const toColumn = columnsToShow[toIndex].tableSettingColumn
-
-    await fromColumn.update({position: toColumn.position()})
-
-    console.log({fromColumn, toColumn})
-
-    const newData = columnsToShow.slice()
-    newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0])
-
-    this.setState({
-      columnsToShow: newData,
-      lastUpdate: new Date()
-    })
+    if (animatedArgs) {
+      Animated.timing(animatedPosition, animatedArgs).start()
+    } else {
+      animatedPosition.setValue({x, y})
+    }
   }
 
-  dragListRenderItemContent = ({isActive, item, onDragStart, onDragEnd}) => {
-    const {column, tableSettingColumn, width} = item
+  onReordered = async ({fromIndex, toPosition}) => {
+    console.log("onReordered", {fromIndex, toPosition})
 
-    return (
-      <TouchableOpacity
-        key={tableSettingColumn.identifier()}
-        onPressIn={onDragStart}
-        onPressOut={onDragEnd}
-        style={{
-          border: isActive ? "1px solid red" : "1px solid blue"
-        }}
-      >
-        <Text>{tableSettingColumn.identifier()}</Text>
-      </TouchableOpacity>
-    )
+    const {columnsToShow} = this.s
+    const fromColumn = columnsToShow[fromIndex].tableSettingColumn
+
+    await fromColumn.update({position: toPosition})
+  }
+
+  dragListRenderItemContent = ({isActive, item, touchProps}) => {
+    const {animatedWidth, column, tableSettingColumn} = item
 
     return (
       <HeaderColumn
+        active={isActive}
+        animatedWidth={animatedWidth}
         column={column}
         key={tableSettingColumn.identifier()}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
         resizing={this.s.resizing}
         table={this}
         tableSettingColumn={tableSettingColumn}
-        width={width}
+        touchProps={touchProps}
         widths={this.s.widths}
       />
     )

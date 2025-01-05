@@ -86,8 +86,10 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   columnsContentFromColumns(model, even) {
     const {columns, table} = this.p
 
-    return columns?.map(({column, tableSettingColumn, width}, columnIndex) =>
+    return columns?.map(({animatedPosition, animatedWidth, column, tableSettingColumn}, columnIndex) =>
       <ModelColumn
+        animatedPosition={animatedPosition}
+        animatedWidth={animatedWidth}
         column={column}
         columnIndex={columnIndex}
         even={even}
@@ -95,7 +97,6 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
         model={model}
         table={table}
         tableSettingColumn={tableSettingColumn}
-        width={width}
       />
     )
   }

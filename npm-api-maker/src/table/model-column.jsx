@@ -1,4 +1,4 @@
-import {View} from "react-native"
+import {Animated, View} from "react-native"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Column from "./components/column"
@@ -13,18 +13,19 @@ import useBreakpoint from "../use-breakpoint"
 
 export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseComponent {
   static propTypes = propTypesExact({
+    animatedPosition: PropTypes.instanceOf(Animated.ValueXY).isRequired,
+    animatedWidth: PropTypes.instanceOf(Animated.Value).isRequired,
     column: PropTypes.object.isRequired,
     columnIndex: PropTypes.number.isRequired,
     even: PropTypes.bool.isRequired,
     model: PropTypes.object.isRequired,
     table: PropTypes.object.isRequired,
-    tableSettingColumn: PropTypes.object.isRequired,
-    width: PropTypes.number.isRequired
+    tableSettingColumn: PropTypes.object.isRequired
   })
 
   render() {
     const {mdUp} = useBreakpoint()
-    const {column, columnIndex, even, model, table, width} = this.props
+    const {animatedWidth, column, columnIndex, even, model, table} = this.props
     const columnProps = table.columnProps(column)
     const {style, ...restColumnProps} = columnProps
     const actualStyle = Object.assign(
@@ -33,7 +34,8 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
         columnIndex,
         even,
         style: {
-          width: mdUp ? width : "100%"
+          transform: this.p.animatedPosition.getTranslateTransform(),
+          width: mdUp ? animatedWidth : "100%"
         }
       }),
       style
