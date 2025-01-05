@@ -26,10 +26,6 @@ export default class DraggableSortController {
     }
   }
 
-  isOverOtherItem = ({position}) => {
-    console.log("isOverOtherItem", {position})
-  }
-
   getEvents = () => this.events
   getItemDataForItem = (item) => this.getItemDataForIndex(this.data.indexOf(item))
   getItemDataForKey = (key) => this.itemData.find((itemDataI) => digg(itemDataI, "key") == key)
@@ -74,8 +70,6 @@ export default class DraggableSortController {
     if (!(index in this.itemData)) throw new Error(`Item not found for index ${index}`)
 
     const itemData = this.itemData[index]
-
-    console.log("onItemLayout", {index, layout})
 
     itemData.layout = layout
 
