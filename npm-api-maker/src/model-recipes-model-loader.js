@@ -1,4 +1,4 @@
-import BaseModel from "./base-model.mjs/index"
+import BaseModel from "./base-model"
 import Collection from "./collection"
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"

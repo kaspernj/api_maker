@@ -1,5 +1,5 @@
 import routeDefinitions from "shared/route-definitions.json"
-import RoutesNative from "@kaspernj/api-maker/src/routes-native"
+import RoutesNative from "@kaspernj/api-maker/build/routes-native"
 
 const routes = new RoutesNative({
   getLocale: () => I18n.locale

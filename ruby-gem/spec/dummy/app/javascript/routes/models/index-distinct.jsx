@@ -1,5 +1,5 @@
 import Hash from "shared/hash"
-import Params from "@kaspernj/api-maker/src/params"
+import Params from "@kaspernj/api-maker/build/params"
 import React from "react"
 
 export default class ModelsDestroyEvent extends React.PureComponent {

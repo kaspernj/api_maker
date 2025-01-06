@@ -1,5 +1,5 @@
-import Checkboxes from "@kaspernj/api-maker/src/bootstrap/checkboxes"
-import Params from "@kaspernj/api-maker/src/params"
+import Checkboxes from "@kaspernj/api-maker/build/bootstrap/checkboxes"
+import Params from "@kaspernj/api-maker/build/params"
 
 export default class BootstrapCheckboxes extends React.PureComponent {
   state = {}

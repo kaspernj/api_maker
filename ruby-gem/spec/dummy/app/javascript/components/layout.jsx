@@ -1,16 +1,19 @@
-import Devise from "@kaspernj/api-maker/src/devise"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import Devise from "@kaspernj/api-maker/build/devise"
 import FlashMessage from "shared/flash-message"
-import EventEmitterListener from "@kaspernj/api-maker/src/event-emitter-listener"
-import Link from "@kaspernj/api-maker/src/link"
-import React from "react"
+import Link from "@kaspernj/api-maker/build/link"
+import {memo} from "react"
 import Routes from "shared/routes"
+import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter"
 
-export default class Layout extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
+export default memo(shapeComponent(class Layout extends ShapeComponent {
+  setup() {
+    this.useStates({
       isUserSignedIn: Devise.isUserSignedIn()
-    }
+    })
+
+    useEventEmitter(Devise.events(), "onDeviseSignIn", this.tt.onDeviseSigned)
+    useEventEmitter(Devise.events(), "onDeviseSignOut", this.tt.onDeviseSigned)
   }
 
   componentDidMount() {
@@ -39,9 +42,6 @@ export default class Layout extends React.PureComponent {
 
     return (
       <div className={this.className()}>
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={this.onDeviseSigned} />
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={this.onDeviseSigned} />
-
         <div>
           <Link to={Routes.sessionStatusSpecsTimeoutPath()}>
             Timeout
@@ -118,4 +118,4 @@ export default class Layout extends React.PureComponent {
       FlashMessage.errorResponse(response)
     })
   }
-}
+}))

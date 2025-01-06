@@ -1,4 +1,4 @@
-import Input from "@kaspernj/api-maker/src/bootstrap/input"
+import Input from "@kaspernj/api-maker/build/bootstrap/input"
 
 export default class BootstrapStringInput extends React.PureComponent {
   render() {

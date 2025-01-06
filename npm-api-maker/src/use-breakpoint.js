@@ -1,5 +1,5 @@
 import {useCallback, useLayoutEffect} from "react"
-import apiMakerConfig from "@kaspernj/api-maker/src/config"
+import apiMakerConfig from "@kaspernj/api-maker/build/config"
 import {Dimensions} from "react-native"
 import useShape from "set-state-compare/src/use-shape"
 

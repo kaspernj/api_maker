@@ -1,5 +1,5 @@
 import CanCan from "./can-can"
-import {useCallback, useLayoutEffect, useMemo, useState} from "react"
+import {useCallback, useLayoutEffect, useMemo} from "react"
 import useCurrentUser from "./use-current-user"
 import useShape from "set-state-compare/src/use-shape"
 

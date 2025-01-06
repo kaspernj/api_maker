@@ -1,6 +1,6 @@
 import classNames from "classnames"
 import PropTypes from "prop-types"
-import useCanCan from "@kaspernj/api-maker/src/use-can-can"
+import useCanCan from "@kaspernj/api-maker/build/use-can-can"
 
 const CanCanWithState = ({className, ...restProps}) => {
   const canCan = useCanCan(() => [[Account, ["sum"]]])

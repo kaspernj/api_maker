@@ -40,7 +40,7 @@ import useQueryParams from "on-location-changed/src/use-query-params"
 import Widths from "./widths"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
-const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox.jsx"))
+const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
 const TableContext = createContext()
 
 const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {

@@ -1,5 +1,5 @@
 import memo from "set-state-compare/src/memo"
-import useCanCan from "@kaspernj/api-maker/src/use-can-can"
+import useCanCan from "@kaspernj/api-maker/build/use-can-can"
 
 const CanCanWithShape = () => {
   const canCan = useCanCan(() => [[Account, ["sum"]]])

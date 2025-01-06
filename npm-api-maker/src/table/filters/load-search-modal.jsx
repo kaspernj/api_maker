@@ -1,14 +1,16 @@
-import apiMakerConfig from "@kaspernj/api-maker/src/config"
+import apiMakerConfig from "@kaspernj/api-maker/build/config"
 import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
 import memo from "set-state-compare/src/memo"
 import {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
-import {TableSearch} from "../../models"
+import models from "../../models"
 import {Pressable, View} from "react-native"
 import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n"
+
+const {TableSearch} = models
 
 const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
   render() {

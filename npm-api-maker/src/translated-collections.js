@@ -1,5 +1,5 @@
 import {digg} from "diggerize"
-import translatedCollectionsData from "./translated-collections-data.mjs.erb"
+import translatedCollectionsData from "../src/translated-collections-data.js.erb"
 
 export default class ApiMakerTranslatedCollections {
   static get (modelClass, collectionName) {

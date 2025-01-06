@@ -4,7 +4,7 @@
   "description": "My new module",
   "main": "build/index.js",
   "scripts": {
-    "build": "babel src --out-dir build --extensions \".js,.mjs,.jsx\" --source-maps inline",
+    "build": "babel src --out-dir build --extensions \".js,.jsx\" --source-maps inline",
     "build-expo": "expo-module build",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
@@ -14,7 +14,7 @@
     "expo-module": "expo-module",
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
-    "eslint": "eslint --ext .mjs,.js,.jsx",
+    "eslint": "eslint --ext .js,.jsx",
     "eslint-find-rules": "eslint-find-rules"
   },
   "keywords": [

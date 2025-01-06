@@ -1,5 +1,5 @@
 import BaseComponent from "../base-component"
-import {Input as ApiMakerInput} from "@kaspernj/api-maker/src/inputs/input"
+import {Input as ApiMakerInput} from "@kaspernj/api-maker/build/inputs/input"
 import Checkbox from "./checkbox"
 import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"

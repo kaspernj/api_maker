@@ -1,5 +1,5 @@
-import CustomError from "@kaspernj/api-maker/src/custom-error"
-import ValidationError from "@kaspernj/api-maker/src/validation-error"
+import CustomError from "@kaspernj/api-maker/build/custom-error"
+import ValidationError from "@kaspernj/api-maker/build/validation-error"
 import { digg } from "diggerize"
 
 export default class FlashMessage {

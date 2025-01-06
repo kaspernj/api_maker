@@ -21,12 +21,12 @@ const Modal = (props) => {
   )
 }
 
-import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config"
+import {default as ApiMakerConfig} from "@kaspernj/api-maker/build/config"
 ApiMakerConfig.setHistory(history)
 ApiMakerConfig.setModal(() => Modal)
 
 // Devise
-import Devise from "@kaspernj/api-maker/src/devise"
+import Devise from "@kaspernj/api-maker/build/devise"
 
 Devise.addUserScope("user")
 

@@ -1,9 +1,9 @@
-import Card from "@kaspernj/api-maker/src/bootstrap/card"
+import Card from "@kaspernj/api-maker/build/bootstrap/card"
 import {digg} from "diggerize"
-import Params from "@kaspernj/api-maker/src/params"
+import Params from "@kaspernj/api-maker/build/params"
 import PropTypes from "prop-types"
 import PureComponent from "set-state-compare/src/pure-component"
-import SortLink from "@kaspernj/api-maker/src/bootstrap/sort-link"
+import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
 import withQueryParams from "on-location-changed/src/with-query-params"
 
 class BootstrapSortLink extends PureComponent {

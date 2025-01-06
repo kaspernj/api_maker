@@ -1,6 +1,6 @@
-import Checkbox from "@kaspernj/api-maker/src/bootstrap/checkbox"
+import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import {digg, digs} from "diggerize"
-import Params from "@kaspernj/api-maker/src/params"
+import Params from "@kaspernj/api-maker/build/params"
 
 export default class RoutesInputsCheckbox extends React.PureComponent {
   params = Params.parse()

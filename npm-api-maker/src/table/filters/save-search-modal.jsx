@@ -1,4 +1,4 @@
-import apiMakerConfig from "@kaspernj/api-maker/src/config"
+import apiMakerConfig from "@kaspernj/api-maker/build/config"
 import BaseComponent from "../../base-component"
 import Checkbox from "../../bootstrap/checkbox"
 import {digg} from "diggerize"

@@ -2,7 +2,7 @@ import CanCan from "../src/can-can"
 import {jest} from "@jest/globals"
 import Services from "../src/services"
 
-jest.mock("../src/services.mjs")
+jest.mock("../build/services.js")
 
 describe("CanCan", () => {
   const canCan = CanCan.current()

@@ -1,4 +1,4 @@
-import Params from "@kaspernj/api-maker/src/params"
+import Params from "@kaspernj/api-maker/build/params"
 import React from "react"
 
 export default class ModelsCommandSerialize extends React.PureComponent {

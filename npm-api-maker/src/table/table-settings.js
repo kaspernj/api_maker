@@ -5,10 +5,11 @@ import * as inflection from "inflection"
 import Logger from "../logger"
 import {ReadersWriterLock} from "epic-locks"
 import {serialize as objectToFormData} from "object-to-formdata"
-import {TableSetting} from "../models"
+import models from "../models"
 import {v4 as uuidv4} from "uuid"
 
 const logger = new Logger({name: "ApiMaker / TableSettings"})
+const {TableSetting} = models
 
 // Have a lock for each unique table identifier
 const tableSettingsLocks = {}

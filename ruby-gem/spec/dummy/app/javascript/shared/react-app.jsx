@@ -1,8 +1,8 @@
-import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config"
+import {default as ApiMakerConfig} from "@kaspernj/api-maker/build/config"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"
 import React from "react"
-import Router from "@kaspernj/api-maker/src/router"
+import Router from "@kaspernj/api-maker/build/router"
 import Routes from "shared/routes"
 import withPathname from "on-location-changed/src/with-path"
 
