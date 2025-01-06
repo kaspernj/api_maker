@@ -2929,10 +2929,10 @@ import-local@^3.0.2:
   resolved "https://registry.yarnpkg.com/incorporator/-/incorporator-1.0.2.tgz#32e31850c6a56dbce2989b8ce9ed1148ad9373a4"
   integrity sha512-yGcm0Qv9u+mEonyYZx6E0kkEciOgUN6MjB9x8wlqGSGi6NaLoXhpAiGWpBZEdBEMZ3AZ9/KA7VWZjqSDu3dqhw==
 
-"inflection@>= 1.12.0", inflection@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/inflection/-/inflection-3.0.0.tgz#6a956fa90d72a27d22e6b32ec1064877593ee23b"
-  integrity sha512-1zEJU1l19SgJlmwqsEyFTbScw/tkMHFenUo//Y0i+XEP83gDFdMvPizAD/WGcE+l1ku12PcTVHQhO6g5E0UCMw==
+"inflection@>= 1.12.0", inflection@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/inflection/-/inflection-3.0.1.tgz#b1ec2fb8ab0887725d29ad6934810011eb508fa0"
+  integrity sha512-EpyF+TLa3xZPClbkp9pDJZtJFYPHouWuFYsfAQI8AfjnaPVOpmRV6GSzCs+QGelj2eZ7oQllcK23aI1vHhPVVg==
 
 inflight@^1.0.4, inflight@^1.0.6:
   version "1.0.6"
