@@ -60,7 +60,7 @@ builds:
   build_7:
     name: Jest
     script:
-      - cd npm-api-maker && yarn test
+      - cd npm-api-maker && npm run test
   build_8:
     name: Rubocop
     script:
@@ -72,8 +72,8 @@ builds:
   build_10:
     name: ESLint
     script:
-      - cd npm-api-maker && yarn eslint .
+      - cd npm-api-maker && npm run lint
   build_11:
     name: ESLint find rules
     script:
-      - cd npm-api-maker && yarn eslint-find-rules -u .eslintrc.cjs
+      - cd npm-api-maker && npm run eslint-find-rules -u .eslintrc.js
