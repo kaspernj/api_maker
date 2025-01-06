@@ -1,23 +1,27 @@
+import {useMemo} from "react"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import Header from "./components/header"
 import HeaderColumnContent from "./header-column-content"
 import memo from "set-state-compare/src/memo"
-import {Platform, Pressable} from "react-native"
+import {Animated, PanResponder} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import useBreakpoint from "../use-breakpoint"
-import useEventListener from "../use-event-listener.mjs"
 import Widths from "./widths"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
+    active: PropTypes.bool.isRequired,
+    animatedWidth: PropTypes.instanceOf(Animated.Value).isRequired,
+    animatedZIndex: PropTypes.instanceOf(Animated.Value).isRequired,
     column: PropTypes.object.isRequired,
     resizing: PropTypes.bool.isRequired,
     table: PropTypes.object.isRequired,
     tableSettingColumn: PropTypes.object.isRequired,
-    width: PropTypes.number.isRequired,
+    touchProps: PropTypes.object.isRequired,
     widths: PropTypes.instanceOf(Widths).isRequired
   })
 
@@ -25,29 +29,64 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     const {name: breakpoint, mdUp, smDown} = useBreakpoint()
 
     this.setInstance({breakpoint, mdUp, smDown})
-
-    useEventListener(window, "mousemove", this.tt.onWindowMouseMove)
-    useEventListener(window, "mouseup", this.tt.onWindowMouseUp)
-
     this.useStates({
-      cursorX: undefined,
-      originalWidth: undefined,
       resizing: false
     })
+
+    this.resizePanResponder = useMemo(
+      () => PanResponder.create({
+        onStartShouldSetPanResponder: (_e) => {
+          this.originalWidth = this.currentWidth
+          this.setState({resizing: true})
+          this.p.table.setState({resizing: true})
+
+          return true
+        },
+        onPanResponderMove: (_e, gestate) => {
+          const newWidth = this.tt.originalWidth + gestate.dx
+
+          this.p.widths.setWidthOfColumn({
+            identifier: this.p.tableSettingColumn.identifier(),
+            width: newWidth
+          })
+        },
+        onPanResponderRelease: this.tt.onResizeEnd,
+        onPanResponderTerminate: this.tt.onResizeEnd,
+        onPanResponderTerminationRequest: () => false // Don't let another PanResponder steal focus and stop resizing until release
+      }),
+      []
+    )
+  }
+
+  onResizeEnd = async () => {
+    this.p.table.setState({lastUpdate: new Date(), resizing: false})
+    this.setState({resizing: false})
+
+    const width = this.p.widths.getWidthOfColumn(this.p.tableSettingColumn.identifier())
+
+    await this.p.tableSettingColumn.update({width})
   }
 
   render() {
     const {mdUp} = this.tt
-    const {column, resizing, table, tableSettingColumn, width} = this.p
+    const {active, animatedWidth, column, resizing, table, tableSettingColumn, touchProps} = this.p
     const {styleForHeader} = table.tt
     const headerProps = table.headerProps(column)
     const {style, ...restColumnProps} = headerProps
-    const actualStyle = Object.assign(
-      {
-        cursor: resizing ? "col-resize" : undefined,
-        width: mdUp ? width : "100%"
+    const actualStyle = useMemo(
+      () => {
+        const actualStyle = Object.assign(
+          {
+            cursor: resizing ? "col-resize" : undefined,
+            width: mdUp ? animatedWidth : "100%",
+            height: mdUp ? "100%" : undefined
+          },
+          style
+        )
+
+        return actualStyle
       },
-      style
+      [active, animatedWidth, mdUp, resizing, style]
     )
 
     return (
@@ -60,11 +99,12 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         style={styleForHeader({style: actualStyle})}
         {...restColumnProps}
       >
+        {mdUp &&
+          <FontAwesomeIcon name="bars" style={{marginRight: 3, fontSize: 12}} {...touchProps} />
+        }
         <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
         {mdUp &&
-          <Pressable
-            onMouseDown={Platform.OS == "web" ? this.tt.onResizeMouseDown : undefined}
-            onPressIn={this.tt.onResizePressIn}
+          <Animated.View
             style={{
               position: "absolute",
               top: 0,
@@ -74,6 +114,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               cursor: "col-resize",
               zIndex: 9999
             }}
+            {...this.tt.resizePanResponder.panHandlers}
           />
         }
       </Header>
@@ -84,66 +125,5 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     const {width} = e.nativeEvent.layout
 
     this.currentWidth = width
-  }
-
-  onResizeEnd = async () => {
-    this.setState({cursorX: undefined, resizing: false})
-    this.p.table.setState({resizing: false})
-
-    const width = this.p.widths.getWidthOfColumn(this.p.tableSettingColumn.identifier())
-
-    await this.p.tableSettingColumn.update({width})
-  }
-
-  // Otherwise text is selectable on web
-  onResizeMouseDown = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    const originalWidth = this.currentWidth
-    const cursorX = e.nativeEvent.pageX
-
-    this.setState({
-      cursorX,
-      originalWidth,
-      resizing: true
-    })
-    this.p.table.setState({resizing: true})
-  }
-
-  onResizePressIn = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    const originalWidth = this.currentWidth
-    const cursorX = e.nativeEvent.pageX
-
-    this.setState({
-      cursorX,
-      originalWidth,
-      resizing: true
-    })
-    this.p.table.setState({resizing: true})
-  }
-
-  onWindowMouseMove = (e) => {
-    const {cursorX, resizing, originalWidth} = this.s
-
-    if (resizing) {
-      const newCursorX = e.pageX
-      const diffX = newCursorX - cursorX
-      const newWidth = originalWidth + diffX
-
-      this.p.widths.setWidthOfColumn({
-        identifier: this.p.tableSettingColumn.identifier(),
-        width: newWidth
-      })
-    }
-  }
-
-  onWindowMouseUp = () => {
-    if (this.s.resizing) {
-      this.onResizeEnd()
-    }
   }
 }))

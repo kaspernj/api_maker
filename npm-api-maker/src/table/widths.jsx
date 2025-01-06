@@ -1,3 +1,4 @@
+import {Animated, Easing} from "react-native"
 import {digg} from "diggerize"
 
 export default class TableWidths {
@@ -19,7 +20,15 @@ export default class TableWidths {
       const column = this.columns[columnIndex]
       const tableSettingColumn = column.tableSettingColumn
 
+      if (column.animatedPosition) throw new Error("Column already had an animated position")
+
+      column.animatedPosition = new Animated.ValueXY()
+      column.animatedZIndex = new Animated.Value(0)
+
       if (tableSettingColumn.hasWidth()) {
+        if (column.animatedWidth) throw new Error("Column already had an animated width")
+
+        column.animatedWidth = new Animated.Value(tableSettingColumn.width())
         column.width = tableSettingColumn.width()
 
         widthLeft -= tableSettingColumn.width()
@@ -44,6 +53,7 @@ export default class TableWidths {
 
         if (newWidth < 200) newWidth = 200
 
+        column.animatedWidth = new Animated.Value(newWidth)
         column.width = newWidth
 
         updateData << {
@@ -72,7 +82,6 @@ export default class TableWidths {
     if (!column) throw new Error(`No such column: ${identifier}`)
 
     column.width = width
-
-    this.table.setState({lastUpdate: new Date()})
+    column.animatedWidth.setValue(width)
   }
 }

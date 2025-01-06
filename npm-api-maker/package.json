@@ -49,6 +49,7 @@
     "object-to-formdata": ">= 4.1.0",
     "on-location-changed": ">= 1.0.13",
     "qs": ">= 6.9.3",
+    "react-native-draglist": "^3.8.0",
     "react-native-vector-icons": "^10.2.0",
     "replaceall": ">= 0.1.6",
     "set-state-compare": ">= 1.0.53",
