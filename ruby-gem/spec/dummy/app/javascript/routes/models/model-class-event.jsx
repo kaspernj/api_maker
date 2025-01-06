@@ -1,7 +1,7 @@
 import {digs} from "diggerize"
 import EventModelClass from "@kaspernj/api-maker/src/event-model-class"
 import React from "react"
-import {Task} from "@kaspernj/api-maker/src/models.mjs.erb"
+import {Task} from "@kaspernj/api-maker/src/models.mjs"
 
 export default class ModelsCreatedEvent extends React.PureComponent {
   state = {

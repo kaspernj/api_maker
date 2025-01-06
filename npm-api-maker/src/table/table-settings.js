@@ -5,7 +5,7 @@ import * as inflection from "inflection"
 import Logger from "../logger.mjs"
 import {ReadersWriterLock} from "epic-locks"
 import {serialize as objectToFormData} from "object-to-formdata"
-import {TableSetting} from "../models.mjs.erb"
+import {TableSetting} from "../models.mjs"
 import {v4 as uuidv4} from "uuid"
 
 const logger = new Logger({name: "ApiMaker / TableSettings"})

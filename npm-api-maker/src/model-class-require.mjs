@@ -1,5 +1,5 @@
 import * as inflection from "inflection"
-import * as models from "./models.mjs.erb"
+import * as models from "./models.mjs"
 
 export default (modelName) => {
   const requireName = inflection.camelize(modelName)

@@ -63,10 +63,10 @@ options.plugins.push(
     Routes: ["shared/routes", "default"],
     setStateAsync: ["shared/set-state-async", "default"],
 
-    Account: ["@kaspernj/api-maker/src/models.mjs.erb", "Account"],
-    Project: ["@kaspernj/api-maker/src/models.mjs.erb", "Project"],
-    Task: ["@kaspernj/api-maker/src/models.mjs.erb", "Task"],
-    User: ["@kaspernj/api-maker/src/models.mjs.erb", "User"]
+    Account: ["@kaspernj/api-maker/src/models.mjs", "Account"],
+    Project: ["@kaspernj/api-maker/src/models.mjs", "Project"],
+    Task: ["@kaspernj/api-maker/src/models.mjs", "Task"],
+    User: ["@kaspernj/api-maker/src/models.mjs", "User"]
   })
 )
 

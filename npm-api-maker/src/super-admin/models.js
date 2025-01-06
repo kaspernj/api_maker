@@ -1,4 +1,4 @@
-import * as modelsModule from "@kaspernj/api-maker/src/models.mjs.erb"
+import * as modelsModule from "@kaspernj/api-maker/src/models.mjs"
 
 const models = []
 

@@ -1,6 +1,6 @@
 import AttributeRows from "@kaspernj/api-maker/src/bootstrap/attribute-rows"
 import Card from "@kaspernj/api-maker/src/bootstrap/card"
-import {User} from "@kaspernj/api-maker/src/models.mjs.erb"
+import {User} from "@kaspernj/api-maker/src/models.mjs"
 
 export default class RouteBootstrapAttributeRows extends React.PureComponent {
   state = {

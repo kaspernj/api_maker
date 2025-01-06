@@ -244,7 +244,7 @@ end
 ### Creating a new model from JavaScript
 
 ```js
-import {Task} from "@kaspernj/api-maker/src/models.mjs.erb"
+import {Task} from "@kaspernj/api-maker/src/models.mjs"
 
 const task = new Task()
 task.assignAttributes({name: "New task"})
