@@ -1,4 +1,4 @@
-import useCurrentUser from "./use-current-user.mjs"
+import useCurrentUser from "./use-current-user"
 
 export default (WrappedComponent) => (props) => {
   const currentUser = useCurrentUser()

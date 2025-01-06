@@ -1,4 +1,4 @@
-import useCanCan from "./use-can-can.mjs"
+import useCanCan from "./use-can-can"
 import memo from "set-state-compare/src/memo"
 
 export default (WrappedComponent, abilities) => {

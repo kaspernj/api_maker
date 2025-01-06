@@ -1,4 +1,4 @@
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import Checkbox from "../inputs/checkbox"
 import classNames from "classnames"
 import {digs} from "diggerize"

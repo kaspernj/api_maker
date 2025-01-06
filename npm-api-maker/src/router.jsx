@@ -2,7 +2,7 @@ import BaseComponent from "./base-component"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React, {memo} from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import {Suspense} from "react"
 import useRouter from "./use-router"
 

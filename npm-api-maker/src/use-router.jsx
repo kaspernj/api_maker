@@ -1,9 +1,9 @@
-import config from "./config.mjs"
+import config from "./config"
 import escapeStringRegexp from "escape-string-regexp"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import {useCallback, useMemo} from "react"
-import useShape from "set-state-compare/src/use-shape.js"
+import useShape from "set-state-compare/src/use-shape"
 
 const useRouter = (props) => {
   const s = useShape(props)

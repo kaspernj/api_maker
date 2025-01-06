@@ -1,6 +1,6 @@
 import BaseComponent from "./base-component"
 import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import {Modal, Pressable, View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerModal extends BaseComponent {

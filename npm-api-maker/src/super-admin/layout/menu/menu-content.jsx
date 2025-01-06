@@ -7,7 +7,7 @@ import models from "../../models"
 import Params from "../../../params"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import useCanCan from "../../../use-can-can"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extends BaseComponent {

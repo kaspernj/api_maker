@@ -3,7 +3,7 @@ import {CheckBox, Pressable, View} from "react-native"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "./text"
 
 export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseComponent {

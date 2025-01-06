@@ -5,7 +5,7 @@ import Input from "../../../../../../../api-maker/src/bootstrap/input"
 import Params from "@kaspernj/api-maker/src/params"
 import React from "react"
 import Select from "../../../../../../../api-maker/src/bootstrap/select"
-import {User} from "@kaspernj/api-maker/src/models.mjs"
+import {User} from "@kaspernj/api-maker/src/models"
 
 export default class ModelsValidationErrors extends React.PureComponent {
   // This ensures that it doesn't crash if the checkbox is passed an inputRef

@@ -4,7 +4,7 @@ import classNames from "classnames"
 import Link from "../../../../link"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../../../../utils/text"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {

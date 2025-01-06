@@ -8,8 +8,8 @@ import qs from "qs"
 import {useMemo} from "react"
 import Text from "../utils/text"
 import Result from "../result"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import urlEncode from "../url-encode.mjs"
+import {shapeComponent} from "set-state-compare/src/shape-component"
+import urlEncode from "../url-encode"
 
 export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseComponent {
   static propTypes = propTypesExact({

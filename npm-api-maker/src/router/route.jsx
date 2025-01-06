@@ -3,7 +3,7 @@ import {createContext, useContext, useMemo} from "react"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import Switch, {CurrentSwitchContext} from "./switch"
 
 const CurrentPathContext = createContext([])

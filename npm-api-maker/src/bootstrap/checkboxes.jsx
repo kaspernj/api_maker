@@ -1,4 +1,4 @@
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import {digs} from "diggerize"
 import {useForm} from "../form"
 import * as inflection from "inflection"

@@ -1,4 +1,4 @@
-import useInput from "../use-input.mjs"
+import useInput from "../use-input"
 
 const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => (props) => {
   const {inputProps, restProps, wrapperOpts} = useInput({props, wrapperOptions})

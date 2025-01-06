@@ -5,7 +5,7 @@ import BaseComponent from "../../base-component"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import {useForm} from "../../form"
 
 const styles = StyleSheet.create({

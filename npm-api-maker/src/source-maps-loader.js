@@ -1,5 +1,5 @@
 import * as stackTraceParser from "stacktrace-parser"
-import Logger from "./logger.mjs"
+import Logger from "./logger"
 import {SourceMapConsumer} from "source-map"
 import uniqunize from "uniqunize"
 

@@ -1,6 +1,6 @@
 import {digs} from "diggerize"
 import * as inflection from "inflection"
-import modelCallbackArgs from "./model-callback-args.mjs"
+import modelCallbackArgs from "./model-callback-args"
 import MoneyFormatter from "../money-formatter"
 import Text from "../utils/text"
 

@@ -4,7 +4,7 @@ import FormDataObjectizer from "form-data-objectizer"
 import memo from "set-state-compare/src/memo"
 import {Platform} from "react-native"
 import PropTypes from "prop-types"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 
 const FormContext = createContext(null)
 

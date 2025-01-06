@@ -12,7 +12,7 @@ import {ActivityIndicator, View} from "react-native"
 import ReflectionElement from "./reflection-element"
 import ScopeElement from "./scope-element"
 import Select from "../../inputs/select"
-import Services from "../../services.mjs"
+import Services from "../../services"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../../utils/text"
 

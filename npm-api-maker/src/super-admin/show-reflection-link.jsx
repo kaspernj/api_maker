@@ -2,7 +2,7 @@ import BaseComponent from "../base-component"
 import {digg} from "diggerize"
 import Link from "../link"
 import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../utils/text"
 import {useMemo} from "react"
 

@@ -1,4 +1,4 @@
-import {Account} from "@kaspernj/api-maker/src/models.mjs"
+import {Account} from "@kaspernj/api-maker/src/models"
 import {digg, digs} from "diggerize"
 import Input from "../../../../../../../api-maker/src/bootstrap/input"
 import FlashMessage from "shared/flash-message"

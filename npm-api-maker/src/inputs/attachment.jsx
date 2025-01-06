@@ -2,7 +2,7 @@ import BaseComponent from "../base-component"
 import {Input as ApiMakerInput} from "@kaspernj/api-maker/src/inputs/input"
 import Checkbox from "./checkbox"
 import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 
 export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseComponent {
   static propTypes = {

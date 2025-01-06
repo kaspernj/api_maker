@@ -1,4 +1,4 @@
-import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config.mjs"
+import {default as ApiMakerConfig} from "@kaspernj/api-maker/src/config"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"
 import React from "react"

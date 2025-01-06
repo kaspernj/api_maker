@@ -1,5 +1,5 @@
 import BaseComponent from "../../base-component"
-import columnIdentifier from "../column-identifier.mjs"
+import columnIdentifier from "../column-identifier"
 import ColumnRow from "./column-row"
 import DownloadAction from "./download-action"
 import {useRef} from "react"
@@ -7,10 +7,10 @@ import memo from "set-state-compare/src/memo"
 import Modal from "../../modal"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import {View} from "react-native"
 import Text from "../../utils/text"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 
 export default memo(shapeComponent(class ApiMakerTableSettings extends BaseComponent {
   static propTypes = propTypesExact({
