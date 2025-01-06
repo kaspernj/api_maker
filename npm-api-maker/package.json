@@ -1,6 +1,6 @@
 {
   "name": "api-maker",
-  "version": "1.0.446",
+  "version": "1.0.447",
   "description": "My new module",
   "main": "build/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
-    "prepare": "expo-module prepare",
+    "prepare": "npm run clean && npm run build",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
     "open:ios": "xed example/ios",
