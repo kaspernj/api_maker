@@ -1,4 +1,4 @@
-import BaseModel from "../src/base-model.mjs"
+import BaseModel from "../src/base-model"
 import CustomError from "../src/custom-error.mjs"
 import {jest} from "@jest/globals"
 import {JSDOM} from "jsdom"
