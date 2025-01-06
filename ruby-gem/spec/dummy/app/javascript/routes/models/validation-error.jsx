@@ -1,6 +1,6 @@
 import {Account} from "@kaspernj/api-maker/src/models.mjs"
 import {digg, digs} from "diggerize"
-import Input from "@kaspernj/api-maker/src/bootstrap/input"
+import Input from "../../../../../../../api-maker/src/bootstrap/input"
 import FlashMessage from "shared/flash-message"
 import ValidationError from "@kaspernj/api-maker/src/validation-error"
 

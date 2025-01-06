@@ -1,10 +1,14 @@
 module.exports = {
+  root: true,
+  ignorePatterns: ['build'],
   env: {
     browser: true,
     commonjs: true,
     es2021: true
   },
   extends: [
+    'universe/native',
+    'universe/web',
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:jest/recommended"
