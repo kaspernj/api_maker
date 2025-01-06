@@ -1232,10 +1232,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@1.0.445":
-  version "1.0.445"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.445.tgz#143eb2bd74c5348ff4aba7556309bf85527be743"
-  integrity sha512-kTP5x9nUME5PwSu/0koaz6TVlF/tqo/sL1XET22Y5YSFVmhNnpDJZw6KYtK39/XhrSdo6jFTbTQPs3wknZhzvA==
+"@kaspernj/api-maker@1.0.446":
+  version "1.0.446"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.446.tgz#eb7e7b859fa35ad5333d5e8b5ada5390d320ac9d"
+  integrity sha512-rH9bSI6NEe7o/Kc/pnQi+JTBTa+CiWFdf9whc7T6brw+aleSgAwvFLVYMgS9nk0Ph+2acz/qSJF6Hl5KwdvATw==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -1252,6 +1252,7 @@
     object-to-formdata ">= 4.1.0"
     on-location-changed ">= 1.0.13"
     qs ">= 6.9.3"
+    react-native-draglist "^3.8.0"
     react-native-vector-icons "^10.2.0"
     replaceall ">= 0.1.6"
     set-state-compare ">= 1.0.53"
@@ -3792,6 +3793,11 @@ react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-native-draglist@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/react-native-draglist/-/react-native-draglist-3.8.0.tgz#b2ea51cece675ce9356ab6f1e472df8b43dda9a4"
+  integrity sha512-nmhxDk2pJhwg3zkuw6r3Gyk2hSoYDLAVa3zqy+SVpwiV/rDfMbOWi97lBgCQP1JbHWuYSVSKdYdmAfPa03jgmA==
 
 react-native-vector-icons@^10.2.0:
   version "10.2.0"
