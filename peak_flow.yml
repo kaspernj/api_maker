@@ -4,7 +4,7 @@ artifact_dirs:
 before_script:
   - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
 
-  - cd npm-api-maker && yarn install --network-timeout 120000
+  - cd npm-api-maker && npm install --network-timeout 120000
   - cd npm-api-maker && yarn link
 
   - cd ruby-gem/spec/dummy && yarn install --network-timeout 120000
