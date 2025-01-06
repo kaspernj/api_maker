@@ -1,5 +1,5 @@
 import BaseComponent from "../base-component"
-import ConfigReader from "./config-reader.jsx"
+import ConfigReader from "./config-reader"
 import {digg} from "diggerize"
 import hasEditConfig from "./has-edit-config.js"
 import * as inflection from "inflection"

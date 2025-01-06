@@ -1,4 +1,4 @@
-import ConfigReader from "./config-reader.jsx"
+import ConfigReader from "./config-reader"
 
 const hasEditConfig = (modelClass) => {
   const configReader = ConfigReader.forModel(modelClass)
