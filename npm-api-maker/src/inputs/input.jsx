@@ -16,6 +16,7 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
+    model: null,
     localizedNumber: false
   }
 
@@ -35,7 +36,7 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   }
 
   setup() {
-    const {inputProps} = this.p
+    const {autoRefresh, inputProps, model} = this.p
     const {defaultValue, name} = inputProps
 
     this.form = useForm()
@@ -51,7 +52,7 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
       }
     }, [])
 
-    useUpdatedEvent(model, this.onModelUpdated, {active: Boolean(autoRefresh && model)})
+    useUpdatedEvent(model, this.tt.onModelUpdated, {active: Boolean(autoRefresh && model)})
   }
 
   render () {

@@ -1,19 +1,18 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import Devise from "@kaspernj/api-maker/build/devise"
 import FlashMessage from "shared/flash-message"
 import Link from "@kaspernj/api-maker/build/link"
 import {memo} from "react"
 import Routes from "shared/routes"
-import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter"
+import useCurrentUser from "@kaspernj/api-maker/build/use-current-user"
 
 export default memo(shapeComponent(class Layout extends ShapeComponent {
   setup() {
+    this.currentUser = useCurrentUser()
     this.useStates({
-      isUserSignedIn: Devise.isUserSignedIn()
+      account: null,
+      project: null,
+      task: null
     })
-
-    useEventEmitter(Devise.events(), "onDeviseSignIn", this.tt.onDeviseSigned)
-    useEventEmitter(Devise.events(), "onDeviseSignOut", this.tt.onDeviseSigned)
   }
 
   componentDidMount() {
@@ -38,7 +37,8 @@ export default memo(shapeComponent(class Layout extends ShapeComponent {
   }
 
   render() {
-    const { account, project, task } = this.state
+    const {currentUser} = this.tt
+    const {account, project, task} = this.state
 
     return (
       <div className={this.className()}>
@@ -76,17 +76,17 @@ export default memo(shapeComponent(class Layout extends ShapeComponent {
           <Link to={Routes.modelsValidationErrorsPath()}>
             Validation errors (new)
           </Link>
-          {Devise.isUserSignedIn() &&
+          {currentUser &&
             <>
-              <Link to={Routes.modelsValidationErrorsPath(Devise.currentUser().id())}>
+              <Link to={Routes.modelsValidationErrorsPath(currentUser.id())}>
                 Validation errors (edit)
               </Link>
-              <a className="ml-2" href="#" onClick={this.onSignOutClicked}>
+              <a className="ml-2" href="#" onClick={this.tt.onSignOutClicked}>
                 Sign out
               </a>
             </>
           }
-          {!Devise.isUserSignedIn() &&
+          {!currentUser &&
             <Link className="ml-2" to={Routes.newSessionPath()}>
               Sign in
             </Link>
@@ -107,15 +107,14 @@ export default memo(shapeComponent(class Layout extends ShapeComponent {
     return classNames.join(" ")
   }
 
-  onDeviseSigned = () => this.setState({isUserSignedIn: Devise.isUserSignedIn()})
-
-  onSignOutClicked = (e) => {
+  onSignOutClicked = async (e) => {
     e.preventDefault()
 
-    Devise.signOut().then(() => {
+    try {
+      await Devise.signOut()
       FlashMessage.success("You were signed out")
-    }, (response) => {
-      FlashMessage.errorResponse(response)
-    })
+    } catch (error) {
+      FlashMessage.errorResponse(error)
+    }
   }
 }))

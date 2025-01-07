@@ -1,7 +1,7 @@
 import * as inflection from "inflection"
-import * as models from "./models"
+import models from "./models"
 
-export default (modelName) => {
+const modelClassRequire = (modelName) => {
   const requireName = inflection.camelize(modelName)
   const ModelClass = models[requireName]
 
@@ -13,3 +13,5 @@ export default (modelName) => {
 
   return ModelClass
 }
+
+export default modelClassRequire
