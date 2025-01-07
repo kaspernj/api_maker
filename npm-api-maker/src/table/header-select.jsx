@@ -8,7 +8,7 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../utils/text"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 import useSorting from "./use-sorting"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderSelect extends BaseComponent {

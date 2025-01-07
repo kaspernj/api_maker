@@ -1,7 +1,7 @@
 import {useCallback, useLayoutEffect, useMemo} from "react"
 import debounceFunction from "debounce"
-import ModelEvents from "./model-events.mjs"
-import useShape from "set-state-compare/src/use-shape.js"
+import ModelEvents from "./model-events"
+import useShape from "set-state-compare/src/use-shape"
 
 const apiMakerUseModelEvent = (model, event, onCallback, props) => {
   const {active = true, debounce, onConnected, ...restProps} = props || {}

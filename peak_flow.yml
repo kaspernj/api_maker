@@ -4,7 +4,7 @@ artifact_dirs:
 before_script:
   - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
 
-  - cd npm-api-maker && yarn install --network-timeout 120000
+  - cd npm-api-maker && npm install
   - cd npm-api-maker && yarn link
 
   - cd ruby-gem/spec/dummy && yarn install --network-timeout 120000
@@ -12,6 +12,7 @@ before_script:
   - cd ruby-gem/spec/dummy && yarn
   - cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
   - cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
+  - cd ruby-gem/spec/dummy && bundle exec rails runner "ApiMaker::GenerateModelRecipes.execute!"
 
 rvm: true
 builds:
@@ -60,7 +61,7 @@ builds:
   build_7:
     name: Jest
     script:
-      - cd npm-api-maker && yarn test
+      - cd npm-api-maker && npm run test
   build_8:
     name: Rubocop
     script:
@@ -72,8 +73,8 @@ builds:
   build_10:
     name: ESLint
     script:
-      - cd npm-api-maker && yarn eslint .
+      - cd npm-api-maker && npm run lint
   build_11:
     name: ESLint find rules
     script:
-      - cd npm-api-maker && yarn eslint-find-rules -u .eslintrc.cjs
+      - cd npm-api-maker && npm run eslint-find-rules -u .eslintrc.js

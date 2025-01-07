@@ -7,7 +7,7 @@ import models from "../../models"
 import Params from "../../../params"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import useCanCan from "../../../use-can-can"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extends BaseComponent {
@@ -17,7 +17,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extend
 
   render() {
     const {active} = this.p
-    const canCan = useCanCan(() => models.map((model) => [model, ["index"]]))
+    const canCan = useCanCan(() => models.map((modelClass) => [modelClass, ["index"]]))
     const sortedModels = useMemo(
       () => models.sort((a, b) => a.modelName().human({count: 2}).toLowerCase().localeCompare(b.modelName().human({count: 2}).toLowerCase())),
       [I18n.locale]

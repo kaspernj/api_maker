@@ -1,14 +1,15 @@
-import columnIdentifier from "./column-identifier.mjs"
-import columnVisible from "./column-visible.mjs"
+import columnIdentifier from "./column-identifier"
+import columnVisible from "./column-visible"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import Logger from "../logger.mjs"
+import Logger from "../logger"
 import {ReadersWriterLock} from "epic-locks"
 import {serialize as objectToFormData} from "object-to-formdata"
-import {TableSetting} from "../models.mjs.erb"
+import models from "../models"
 import {v4 as uuidv4} from "uuid"
 
 const logger = new Logger({name: "ApiMaker / TableSettings"})
+const {TableSetting} = models
 
 // Have a lock for each unique table identifier
 const tableSettingsLocks = {}

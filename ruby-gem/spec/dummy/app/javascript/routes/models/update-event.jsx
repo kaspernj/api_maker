@@ -1,14 +1,23 @@
-import EventUpdated from "@kaspernj/api-maker/src/event-updated"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {memo, useMemo} from "react"
+import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event"
 
-export default class ModelsUpdateEvent extends React.Component {
-  state = {}
+export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponent {
+  setup() {
+    this.useStates({
+      connected: null,
+      finishedTask: undefined
+    })
 
-  componentDidMount() {
-    this.loadFinishedTask()
+    useMemo(() => {
+      this.loadFinishedTask()
+    }, [])
+
+    useUpdatedEvent(this.s.finishedTask, this.tt.loadFinishedTask, {onConnected: this.tt.onConnected})
   }
 
   render() {
-    const {connected, finishedTask} = this.state
+    const {connected, finishedTask} = this.s
 
     return (
       <div className="routes-models-update-event">
@@ -17,11 +26,6 @@ export default class ModelsUpdateEvent extends React.Component {
             <div className="finished-task-name">
               {finishedTask.name()}
             </div>
-            <EventUpdated
-              onConnected={this.onConnected}
-              model={finishedTask}
-              onUpdated={this.loadFinishedTask}
-            />
           </div>
         }
       </div>
@@ -35,4 +39,4 @@ export default class ModelsUpdateEvent extends React.Component {
 
     this.setState({finishedTask})
   }
-}
+}))

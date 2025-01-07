@@ -1,11 +1,11 @@
-import Collection from "./collection.mjs"
+import Collection from "./collection"
 import {digg} from "diggerize"
 import memo from "set-state-compare/src/memo"
 import {useMemo} from "react"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import useCollection from "./use-collection"
-import useShape from "set-state-compare/src/use-shape.js"
+import useShape from "set-state-compare/src/use-shape"
 
 const CollectionLoader = ({component, ...restProps}) => {
   const s = useShape(restProps)

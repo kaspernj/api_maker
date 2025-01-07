@@ -6,11 +6,13 @@ import LoadSearchModal from "./load-search-modal"
 import SaveSearchModal from "./save-search-modal"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {TableSearch} from "../../models.mjs.erb"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import {shapeComponent} from "set-state-compare/src/shape-component"
+import models from "../../models"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 import useQueryParams from "on-location-changed/src/use-query-params"
 import {View} from "react-native"
+
+const {TableSearch} = models
 
 export default memo(shapeComponent(class ApiMakerTableFilters extends BaseComponent {
   static propTypes = {

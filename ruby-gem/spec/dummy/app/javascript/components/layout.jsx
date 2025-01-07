@@ -1,16 +1,18 @@
-import Devise from "@kaspernj/api-maker/src/devise"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import FlashMessage from "shared/flash-message"
-import EventEmitterListener from "@kaspernj/api-maker/src/event-emitter-listener"
-import Link from "@kaspernj/api-maker/src/link"
-import React from "react"
+import Link from "@kaspernj/api-maker/build/link"
+import {memo} from "react"
 import Routes from "shared/routes"
+import useCurrentUser from "@kaspernj/api-maker/build/use-current-user"
 
-export default class Layout extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isUserSignedIn: Devise.isUserSignedIn()
-    }
+export default memo(shapeComponent(class Layout extends ShapeComponent {
+  setup() {
+    this.currentUser = useCurrentUser()
+    this.useStates({
+      account: null,
+      project: null,
+      task: null
+    })
   }
 
   componentDidMount() {
@@ -35,13 +37,11 @@ export default class Layout extends React.PureComponent {
   }
 
   render() {
-    const { account, project, task } = this.state
+    const {currentUser} = this.tt
+    const {account, project, task} = this.state
 
     return (
       <div className={this.className()}>
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={this.onDeviseSigned} />
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={this.onDeviseSigned} />
-
         <div>
           <Link to={Routes.sessionStatusSpecsTimeoutPath()}>
             Timeout
@@ -76,17 +76,17 @@ export default class Layout extends React.PureComponent {
           <Link to={Routes.modelsValidationErrorsPath()}>
             Validation errors (new)
           </Link>
-          {Devise.isUserSignedIn() &&
+          {currentUser &&
             <>
-              <Link to={Routes.modelsValidationErrorsPath(Devise.currentUser().id())}>
+              <Link to={Routes.modelsValidationErrorsPath(currentUser.id())}>
                 Validation errors (edit)
               </Link>
-              <a className="ml-2" href="#" onClick={this.onSignOutClicked}>
+              <a className="ml-2" href="#" onClick={this.tt.onSignOutClicked}>
                 Sign out
               </a>
             </>
           }
-          {!Devise.isUserSignedIn() &&
+          {!currentUser &&
             <Link className="ml-2" to={Routes.newSessionPath()}>
               Sign in
             </Link>
@@ -107,15 +107,14 @@ export default class Layout extends React.PureComponent {
     return classNames.join(" ")
   }
 
-  onDeviseSigned = () => this.setState({isUserSignedIn: Devise.isUserSignedIn()})
-
-  onSignOutClicked = (e) => {
+  onSignOutClicked = async (e) => {
     e.preventDefault()
 
-    Devise.signOut().then(() => {
+    try {
+      await Devise.signOut()
       FlashMessage.success("You were signed out")
-    }, (response) => {
-      FlashMessage.errorResponse(response)
-    })
+    } catch (error) {
+      FlashMessage.errorResponse(error)
+    }
   }
-}
+}))

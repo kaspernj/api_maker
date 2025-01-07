@@ -1,14 +1,15 @@
-import Devise from "@kaspernj/api-maker/src/devise"
-import LoaderWithState from "./loader-with-state"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import Devise from "@kaspernj/api-maker/build/devise"
+import {memo, useMemo} from "react"
 
-export default class LoaderThatSignsOutOnMount extends React.PureComponent {
-  componentDidMount() {
-    Devise.signOut()
+export default memo(shapeComponent(class LoaderThatSignsOutOnMount extends ShapeComponent {
+  setup() {
+    useMemo(() => {
+      Devise.signOut()
+    }, [])
   }
 
   render() {
-    return (
-      <LoaderWithState className="components-can-can-loader-that-signs-out-on-mount"  />
-    )
+    return null
   }
-}
+}))

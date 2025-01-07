@@ -1,24 +1,38 @@
 {
-  "name": "@kaspernj/api-maker",
-  "version": "1.0.446",
-  "type": "module",
-  "description": "",
-  "main": "index.js",
+  "name": "api-maker",
+  "version": "1.0.447",
+  "description": "My new module",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "babel src --out-dir build --extensions \".js,.jsx\" --source-maps inline",
+    "build-expo": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "npm run clean && npm run build",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "xed example/ios",
+    "open:android": "open -a \"Android Studio\" example/android",
+    "eslint": "eslint --ext .js,.jsx",
+    "eslint-find-rules": "eslint-find-rules"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "api-maker",
+    "ApiMaker"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kaspernj/api_maker.git"
   },
-  "author": "kaspernj",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/kaspernj/api_maker/issues"
   },
-  "homepage": "https://github.com/kaspernj/api_maker",
-  "scripts": {
-    "eslint": "eslint --ext .mjs,.js,.jsx",
-    "eslint-find-rules": "eslint-find-rules",
-    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
-  },
+  "author": "kaspernj <kasper@diestoeckels.de> (github.com/kaspernj)",
+  "license": "MIT",
+  "homepage": "https://github.com/kaspernj/api_maker#readme",
   "dependencies": {
     "clone-deep": ">= 4.0.1",
     "debounce": ">= 2.0.0",
@@ -35,7 +49,6 @@
     "object-to-formdata": ">= 4.1.0",
     "on-location-changed": ">= 1.0.13",
     "qs": ">= 6.9.3",
-    "react-native-draglist": "^3.8.0",
     "react-native-vector-icons": "^10.2.0",
     "replaceall": ">= 0.1.6",
     "set-state-compare": ">= 1.0.53",
@@ -48,14 +61,21 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
     "@babel/preset-env": "^7.12.11",
-    "@babel/preset-react": "^7.12.10",
+    "@babel/preset-react": "^7.26.3",
     "babel-jest": "^29.0.1",
     "eslint": "^8.2.0",
     "eslint-find-rules": "^4.0.0",
     "eslint-plugin-jest": "^28.2.0",
     "eslint-plugin-react": "^7.23.2",
+    "expo": "~52.0.0",
+    "expo-module-scripts": "^4.0.2",
     "i18n-on-steroids": "^1.0.15",
     "jest": "^29.0.1",
-    "jsdom": "^25.0.0"
+    "react-native": "0.76.0"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
   }
 }

@@ -4,7 +4,7 @@ import * as inflection from "inflection"
 import Link from "../../link"
 import memo from "set-state-compare/src/memo"
 import Params from "../../params"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../../utils/text"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowPageBelongsToAttributeRow extends BaseComponent {

@@ -1,13 +1,13 @@
 import {useMemo} from "react"
 import {Animated, PanResponder} from "react-native"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
-import Controller from "./controller.mjs"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import Controller from "./controller"
 import DraggableSortItem from "./item"
 import EventEmitter from "events"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import useEventEmitter from "../use-event-emitter.mjs"
+import useEventEmitter from "../use-event-emitter"
 
 export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
   static defaultProps = {

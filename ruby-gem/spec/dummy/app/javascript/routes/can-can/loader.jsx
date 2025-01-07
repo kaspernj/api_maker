@@ -1,30 +1,31 @@
-import CanCan from "@kaspernj/api-maker/src/can-can"
-import Devise from "@kaspernj/api-maker/src/devise"
-import {digs} from "diggerize"
-import LoaderWithShape from "components/can-can/loader-with-shape"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import CanCan from "@kaspernj/api-maker/build/can-can"
+import Devise from "@kaspernj/api-maker/build/devise"
+import {memo} from "react"
 import LoaderThatSignsOutOnMount from "components/can-can/loader-that-signs-out-on-mount"
 import LoaderWithState from "components/can-can/loader-with-state"
 
-export default class RoutesCanCanLoader extends React.PureComponent {
-  state = {
-    showLoaderThatSignsOutOnMount: false
+export default memo(shapeComponent(class RoutesCanCanLoader extends ShapeComponent {
+  setup() {
+    this.useStates({
+      showLoaderThatSignsOutOnMount: false
+    })
   }
 
   render() {
-    const {showLoaderThatSignsOutOnMount} = digs(this.state, "showLoaderThatSignsOutOnMount")
+    const {showLoaderThatSignsOutOnMount} = this.s
 
     return (
       <Layout className="routes-can-can-loader">
-        <button className="reset-abilities-button" onClick={this.onResetAbilitiesClicked}>
+        <button className="reset-abilities-button" onClick={this.tt.onResetAbilitiesClicked}>
           reset abilities
         </button>
-        <button className="sign-out-button" onClick={this.onSignOutClicked}>
+        <button className="sign-out-button" onClick={this.tt.onSignOutClicked}>
           sign out
         </button>
-        <button className="show-loader-that-signs-out-on-load-button" onClick={this.onShowLoaderThatSignsOutOnMountClicked}>
+        <button className="show-loader-that-signs-out-on-load-button" onClick={this.tt.onShowLoaderThatSignsOutOnMountClicked}>
           show loader that signs out on load
         </button>
-        <LoaderWithShape />
         <LoaderWithState />
         {showLoaderThatSignsOutOnMount &&
           <LoaderThatSignsOutOnMount />
@@ -33,10 +34,10 @@ export default class RoutesCanCanLoader extends React.PureComponent {
     )
   }
 
-  onSignOutClicked = (e) => {
+  onSignOutClicked = async (e) => {
     e.preventDefault()
 
-    Devise.signOut()
+    await Devise.signOut()
   }
 
   onResetAbilitiesClicked = (e) => {
@@ -50,4 +51,4 @@ export default class RoutesCanCanLoader extends React.PureComponent {
 
     this.setState({showLoaderThatSignsOutOnMount: true})
   }
-}
+}))

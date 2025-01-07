@@ -1,4 +1,4 @@
-import "./style"
+import "../../../src/super-admin/layout/style"
 import BaseComponent from "../../base-component"
 import CommandsPool from "../../commands-pool"
 import config from "super-admin/config"
@@ -8,9 +8,9 @@ import Menu from "./menu"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {useMemo} from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import useCurrentUser from "../../use-current-user"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 import {View} from "react-native"
 
 const NoAccess = React.lazy(() => import("./no-access"))

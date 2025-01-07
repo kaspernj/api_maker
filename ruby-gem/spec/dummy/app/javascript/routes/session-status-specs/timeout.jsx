@@ -1,15 +1,17 @@
-import Devise from "@kaspernj/api-maker/src/devise"
-import EventEmitterListener from "@kaspernj/api-maker/src/event-emitter-listener"
-import SessionStatusUpdater from "@kaspernj/api-maker/src/session-status-updater"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import Devise from "@kaspernj/api-maker/build/devise"
+import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter"
+import SessionStatusUpdater from "@kaspernj/api-maker/build/session-status-updater"
 import Layout from "components/layout"
-import React from "react"
+import {memo} from "react"
 
-export default class SessionStatusSpecsTimeout extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isUserSignedIn: Devise.isUserSignedIn()
-    }
+export default memo(shapeComponent(class SessionStatusSpecsTimeout extends ShapeComponent {
+  setup() {
+    this.useStates({
+      isUserSignedIn: () => Devise.isUserSignedIn()
+    })
+
+    useEventEmitter(Devise.events(), "onDeviseSignOut", this.tt.onDeviseSignOut)
   }
 
   componentDidMount() {
@@ -24,8 +26,6 @@ export default class SessionStatusSpecsTimeout extends React.PureComponent {
   render() {
     return (
       <Layout className="component-session-status-specs-timeout">
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={this.onDeviseSignOut} />
-
         <div className="status-text">
           isUserSignedIn: {this.state.isUserSignedIn ? "Yes" : "No"}
         </div>
@@ -34,4 +34,4 @@ export default class SessionStatusSpecsTimeout extends React.PureComponent {
   }
 
   onDeviseSignOut = () => this.setState({isUserSignedIn: false})
-}
+}))

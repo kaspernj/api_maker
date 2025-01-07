@@ -1,5 +1,5 @@
 import {digg} from "diggerize"
-import ModelEvents from "./model-events.mjs"
+import ModelEvents from "./model-events"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"

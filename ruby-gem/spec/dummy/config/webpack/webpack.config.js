@@ -27,7 +27,7 @@ const options = {
     alias: {
       "react-native$": "react-native-web"
     },
-    extensions: [".css", ".scss", ".mjs", ".mjs.erb", ".mjs", ".mjs.erb", ".js.erb"],
+    extensions: [".css", ".scss", ".js.erb"],
     modules: [path.resolve(__dirname, "../../node_modules")]
   }
 }
@@ -58,15 +58,15 @@ options.plugins.push(
     Hash: ["shared/hash", "default"],
     I18n: "shared/i18n.js",
     Layout: ["components/layout", "default"],
-    Params: ["@kaspernj/api-maker/src/params.mjs", "default"],
+    Params: ["@kaspernj/api-maker/build/params.js", "default"],
     React: "react",
     Routes: ["shared/routes", "default"],
     setStateAsync: ["shared/set-state-async", "default"],
 
-    Account: ["@kaspernj/api-maker/src/models.mjs.erb", "Account"],
-    Project: ["@kaspernj/api-maker/src/models.mjs.erb", "Project"],
-    Task: ["@kaspernj/api-maker/src/models.mjs.erb", "Task"],
-    User: ["@kaspernj/api-maker/src/models.mjs.erb", "User"]
+    Account: ["@kaspernj/api-maker/build/models.js", "default", "Account"],
+    Project: ["@kaspernj/api-maker/build/models.js", "default", "Project"],
+    Task: ["@kaspernj/api-maker/build/models.js", "default", "Task"],
+    User: ["@kaspernj/api-maker/build/models.js", "default", "User"]
   })
 )
 

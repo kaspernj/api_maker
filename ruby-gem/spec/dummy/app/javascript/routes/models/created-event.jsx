@@ -1,9 +1,13 @@
-import EventCreated from "@kaspernj/api-maker/src/event-created"
-import React from "react"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event"
+import {memo} from "react"
 
-export default class ModelsCreatedEvent extends React.PureComponent {
-  state = {
-    tasks: []
+export default memo(shapeComponent(class ModelsCreatedEvent extends ShapeComponent {
+  setup() {
+    this.useStates({
+      tasks: []
+    })
+    useCreatedEvent(Task, this.tt.onCreated)
   }
 
   render() {
@@ -11,8 +15,6 @@ export default class ModelsCreatedEvent extends React.PureComponent {
 
     return (
       <Layout className="component-models-created-event">
-        <EventCreated modelClass={Task} onCreated={this.onCreated} />
-
         <table className="tasks-table">
           <tbody>
             {tasks.map(task =>
@@ -35,4 +37,4 @@ export default class ModelsCreatedEvent extends React.PureComponent {
     this.setState({
       tasks: this.state.tasks.concat([task])
     })
-}
+}))

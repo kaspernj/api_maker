@@ -1,9 +1,9 @@
-import ApiMakerTable from "@kaspernj/api-maker/src/table/table"
+import ApiMakerTable from "@kaspernj/api-maker/build/table/table"
 import ApplicationHistory from "shared/application-history"
-import Devise from "@kaspernj/api-maker/src/devise"
+import Devise from "@kaspernj/api-maker/build/devise"
 import {digg, digs} from "diggerize"
-import Input from "@kaspernj/api-maker/src/bootstrap/input"
-import Params from "@kaspernj/api-maker/src/params"
+import Input from "@kaspernj/api-maker/build/bootstrap/input"
+import Params from "@kaspernj/api-maker/build/params"
 
 export default class BootstrapLiveTable extends React.PureComponent {
   render() {

@@ -1,28 +1,27 @@
-import Checkbox from "@kaspernj/api-maker/src/bootstrap/checkbox"
-import Devise from "@kaspernj/api-maker/src/devise"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
+import Devise from "@kaspernj/api-maker/build/devise"
 import FlashMessage from "shared/flash-message"
-import Input from "@kaspernj/api-maker/src/bootstrap/input"
-import EventEmitterListener from "@kaspernj/api-maker/src/event-emitter-listener"
-import React from "react"
+import Input from "@kaspernj/api-maker/build/bootstrap/input"
+import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter"
+import {memo, useRef} from "react"
 
-export default class SessionsNew extends React.PureComponent {
-  emailRef = React.createRef()
-  passwordRef = React.createRef()
-  rememberMeRef = React.createRef()
-
-  constructor(props) {
-    super(props)
-    this.state = {
+export default memo(shapeComponent(class SessionsNew extends ShapeComponent {
+  setup() {
+    this.emailRef = useRef()
+    this.passwordRef = useRef()
+    this.rememberMeRef = useRef()
+    this.useStates({
       isUserSignedIn: Devise.isUserSignedIn()
-    }
+    })
+
+    useEventEmitter(Devise.events(), "onDeviseSignIn", this.tt.onDeviseSigned)
+    useEventEmitter(Devise.events(), "onDeviseSignOut", this.tt.onDeviseSigned)
   }
 
   render() {
     return (
       <Layout>
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignIn" onCalled={this.onDeviseSigned} />
-        <EventEmitterListener events={Devise.events()} event="onDeviseSignOut" onCalled={this.onDeviseSigned} />
-
         {Devise.isUserSignedIn() &&
           <div>
             You are signed in as {Devise.currentUser().email()}
@@ -55,4 +54,4 @@ export default class SessionsNew extends React.PureComponent {
       FlashMessage.errorResponse(response)
     })
   }
-}
+}))

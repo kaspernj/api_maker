@@ -1,4 +1,4 @@
-const Config = require("@kaspernj/api-maker/src/config.mjs").default
+const Config = require("@kaspernj/api-maker/build/config.js").default
 const I18nOnSteroids = require("i18n-on-steroids").default
 const i18n = new I18nOnSteroids()
 const ymlFiles = require.context("../../../config/locales", true, /^(.+).yml$/)

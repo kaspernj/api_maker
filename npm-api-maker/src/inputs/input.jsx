@@ -1,21 +1,22 @@
-import AutoSubmit from "./auto-submit.mjs"
+import AutoSubmit from "./auto-submit"
 import BaseComponent from "../base-component"
 import {dig, digg, digs} from "diggerize"
-import EventUpdated from "../event-updated"
 import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/src/memo"
 import Money from "./money"
 import PropTypes from "prop-types"
 import {useMemo, useRef} from "react"
 import replaceall from "replaceall"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import strftime from "strftime"
 import {useForm} from "../form"
+import useUpdatedEvent from "../use-updated-event"
 
 const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extends BaseComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
+    model: null,
     localizedNumber: false
   }
 
@@ -35,7 +36,7 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   }
 
   setup() {
-    const {inputProps} = this.p
+    const {autoRefresh, inputProps, model} = this.p
     const {defaultValue, name} = inputProps
 
     this.form = useForm()
@@ -44,11 +45,14 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
     this.useStates({
       blankInputName: digg(inputProps, "type") == "file"
     })
+
     useMemo(() => {
       if (name) {
         this.tt.form?.setValue(name, defaultValue)
       }
     }, [])
+
+    useUpdatedEvent(model, this.tt.onModelUpdated, {active: Boolean(autoRefresh && model)})
   }
 
   render () {
@@ -81,9 +85,6 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
 
     return (
       <>
-        {autoRefresh && model &&
-          <EventUpdated model={model} onUpdated={this.onModelUpdated} />
-        }
         {localizedNumber &&
           <input
             defaultValue={defaultValue}

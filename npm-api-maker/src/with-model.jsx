@@ -1,5 +1,5 @@
 import memo from "set-state-compare/src/memo"
-import useModel from "./use-model.mjs"
+import useModel from "./use-model"
 
 export default (WrappedComponent, modelClass, givenArgs) => {
   const ApiMakerWithModel = (props) => {

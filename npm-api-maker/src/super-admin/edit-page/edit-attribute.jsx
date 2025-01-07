@@ -9,7 +9,7 @@ import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {View} from "react-native"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 
 export default memo(shapeComponent(class EditAttribute extends BaseComponent {
   static propTypes = propTypesExact({
