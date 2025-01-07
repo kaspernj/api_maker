@@ -1,4 +1,4 @@
-import "./style"
+import "../../../../src/super-admin/layout/menu/style"
 import BaseComponent from "../../../base-component"
 import memo from "set-state-compare/src/memo"
 import Link from "../../../link"

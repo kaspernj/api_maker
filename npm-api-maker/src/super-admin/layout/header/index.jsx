@@ -1,4 +1,4 @@
-import "./style"
+import "../../../../src/super-admin/layout/header/style"
 import BaseComponent from "../../../base-component"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import memo from "set-state-compare/src/memo"

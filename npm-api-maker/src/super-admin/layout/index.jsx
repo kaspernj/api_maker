@@ -1,4 +1,4 @@
-import "./style"
+import "../../../src/super-admin/layout/style"
 import BaseComponent from "../../base-component"
 import CommandsPool from "../../commands-pool"
 import config from "super-admin/config"

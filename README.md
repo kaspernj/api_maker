@@ -505,18 +505,18 @@ subscription.unsubscribe()
 
 You can also use a React component if you use React and dont want to keep track of when to unsubscribe:
 ```jsx
-import EventCreated from "@kaspernj/api-maker/build/event-created"
-import EventDestroyed from "@kaspernj/api-maker/build/event-destroyed"
-import EventUpdated from "@kaspernj/api-maker/build/event-updated"
+import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event"
+import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
+import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event"
 ```
 
-```jsx
-<EventCreated modelClass={User} onCreated={this.onUserCreated} />
-<EventDestroyed model={user} onDestroyed={this.onUserDestroyed} />
-<EventUpdated model={user} onUpdated={this.onUserUpdated} />
+```js
+useCreatedEvent(User, this.onUserCreated)
+useDestroyedEvent(user, this.onUserDestroyed)
+useUpdatedEvent(user, this.onUserUpdated)
 ```
 
-```jsx
+```js
 onUserCreated = (args) => {
   this.setState({user: args.model})
 }

@@ -1,13 +1,13 @@
 import AutoSubmit from "./auto-submit"
 import BaseComponent from "../base-component"
 import {digg} from "diggerize"
-import EventUpdated from "../event-updated"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import useInput from "../use-input"
 import {useForm} from "../form"
 import {useMemo} from "react"
+import useUpdatedEvent from "../use-updated-event"
 
 export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComponent {
   static defaultProps = {
@@ -47,6 +47,8 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
         this.tt.form?.setValue(name, defaultValue)
       }
     }, [])
+
+    useUpdatedEvent(model, this.tt.onModelUpdated, {active: Boolean(autoRefresh && model)})
   }
 
   render () {
@@ -69,9 +71,6 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
 
     return (
       <>
-        {autoRefresh && model &&
-          <EventUpdated model={model} onUpdated={this.tt.onModelUpdated} />
-        }
         {zeroInput && inputProps.name &&
           <input defaultValue="0" name={inputProps.name} type="hidden" />
         }

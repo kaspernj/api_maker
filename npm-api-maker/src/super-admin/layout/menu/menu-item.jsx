@@ -1,11 +1,10 @@
-import "./style"
-import BaseComponent from "../../../../base-component"
+import BaseComponent from "../../../base-component"
 import classNames from "classnames"
-import Link from "../../../../link"
+import Link from "../../../link"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import {shapeComponent} from "set-state-compare/src/shape-component"
-import Text from "../../../../utils/text"
+import Text from "../../../utils/text"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
   static propTypes = {
@@ -59,7 +58,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem exten
         to={to || "#"}
         {...restProps}
       >
-        <i className={`fa fa-fw fa-${icon} menu-item-icon`} style={{color: textStyle.color}} />
+        <i className={`fa fa-fw fa-${icon} menu-item-icon`} style={{color: textStyle.color, marginRight: 4, fontSize: 12}} />
         {children || <Text style={textStyle}>{label}</Text>}
       </Link>
     )
