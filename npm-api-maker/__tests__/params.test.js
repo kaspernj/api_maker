@@ -1,4 +1,4 @@
-import Params from "../src/params"
+import Params from "../build/params"
 
 describe("Params", () => {
   describe("change", () => {

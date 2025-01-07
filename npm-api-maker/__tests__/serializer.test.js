@@ -1,4 +1,4 @@
-import Serializer from "../src/serializer"
+import Serializer from "../build/serializer"
 import User from "./support/user"
 
 describe("Serializer", () => {

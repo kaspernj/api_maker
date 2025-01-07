@@ -1,5 +1,5 @@
-import CableConnectionPool from "../src/cable-connection-pool"
-import CableSubscriptionPool from "../src/cable-subscription-pool"
+import CableConnectionPool from "../buikd/cable-connection-pool"
+import CableSubscriptionPool from "../build/cable-subscription-pool"
 import {digg} from "diggerize"
 import {jest} from "@jest/globals"
 

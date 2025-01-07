@@ -1,4 +1,4 @@
-import Collection from "../src/collection"
+import Collection from "../build/collection"
 
 describe("Collection", () => {
   describe("count", () => {

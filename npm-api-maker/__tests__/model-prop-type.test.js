@@ -1,4 +1,4 @@
-import ModelPropType from "../src/model-prop-type"
+import ModelPropType from "../build/model-prop-type"
 import Task from "./support/task"
 import User from "./support/user"
 

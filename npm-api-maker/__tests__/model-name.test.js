@@ -1,5 +1,5 @@
 import I18nOnSteroids from "i18n-on-steroids"
-import ModelName from "../src/model-name"
+import ModelName from "../build/model-name"
 
 const i18n = new I18nOnSteroids()
 

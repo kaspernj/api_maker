@@ -1,4 +1,4 @@
-import Routes from "../src/routes"
+import Routes from "../build/routes"
 
 const testRoutes = {
   routes: [

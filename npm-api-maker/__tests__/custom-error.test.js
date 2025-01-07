@@ -1,4 +1,4 @@
-import CustomError from "../src/custom-error"
+import CustomError from "../build/custom-error"
 
 describe("CustomError", () => {
   it("handles when response is a string", () => {

@@ -1,4 +1,4 @@
-import CableSubscriptionPool from "../src/cable-subscription-pool"
+import CableSubscriptionPool from "../build/cable-subscription-pool"
 
 jest.mock("@rails/actioncable", () => ({
   createConsumer: () => ({})
