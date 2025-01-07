@@ -1,5 +1,5 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import {memo} from "react"
+import {memo, useMemo} from "react"
 import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event"
 
 export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponent {
@@ -8,11 +8,11 @@ export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponen
       finishedTask: undefined
     })
 
-    useUpdatedEvent(this.s.finishedTask, this.tt.this.loadFinishedTask, {onConnected: this.tt.onConnected})
-  }
+    useMemo(() => {
+      this.loadFinishedTask()
+    }, [])
 
-  componentDidMount() {
-    this.loadFinishedTask()
+    useUpdatedEvent(this.s.finishedTask, this.tt.loadFinishedTask, {onConnected: this.tt.onConnected})
   }
 
   render() {

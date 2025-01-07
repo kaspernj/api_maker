@@ -14,6 +14,7 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
     autoRefresh: false,
     autoSubmit: false,
     defaultValue: 1,
+    model: null,
     zeroInput: true
   }
 
@@ -33,6 +34,7 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
   }
 
   setup() {
+    const {autoRefresh, model} = this.p
     const {inputProps, restProps: useInputRestProps} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
     const {defaultValue, name} = inputProps
 

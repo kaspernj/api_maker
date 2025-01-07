@@ -1,3 +1,15 @@
+admin_user = User.find_or_initialize_by(email: "admin@example.com")
+
+if admin_user.new_record?
+  admin_user.assign_attributes(
+    admin: true,
+    password: "password",
+    password_confirmation: "password"
+  )
+end
+
+admin_user.save! if admin_user.changed?
+
 user = User.find_or_initialize_by(email: "user@example.com")
 
 if user.new_record?

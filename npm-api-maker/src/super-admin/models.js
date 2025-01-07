@@ -1,4 +1,4 @@
-import * as modelsModule from "@kaspernj/api-maker/build/models"
+import modelsModule from "@kaspernj/api-maker/build/models"
 
 const models = []
 

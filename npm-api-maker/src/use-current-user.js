@@ -1,6 +1,7 @@
 import {useCallback, useMemo} from "react"
 import {camelize} from "inflection"
 import Devise from "./devise"
+import {digg} from "diggerize"
 import Logger from "./logger"
 import Services from "./services"
 import useEventEmitter from "./use-event-emitter"
