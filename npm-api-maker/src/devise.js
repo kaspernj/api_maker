@@ -45,8 +45,6 @@ export default class ApiMakerDevise {
 
     if (Array.isArray(model)) model = model[0]
 
-    await CanCan.current().resetAbilities()
-
     ApiMakerDevise.updateSession(model)
     events.emit("onDeviseSignIn", Object.assign({username}, args))
 
@@ -77,8 +75,6 @@ export default class ApiMakerDevise {
     }
 
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
-
-    await CanCan.current().resetAbilities()
 
     // Cannot use the class because they would both import each other
     if (shared.apiMakerSessionStatusUpdater) {

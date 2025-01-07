@@ -5,6 +5,7 @@ import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event"
 export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponent {
   setup() {
     this.useStates({
+      connected: null,
       finishedTask: undefined
     })
 
@@ -16,7 +17,7 @@ export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponen
   }
 
   render() {
-    const {connected, finishedTask} = this.state
+    const {connected, finishedTask} = this.s
 
     return (
       <div className="routes-models-update-event">

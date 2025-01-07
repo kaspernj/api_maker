@@ -1,6 +1,7 @@
 import CanCan from "./can-can"
-import {useCallback, useLayoutEffect, useMemo} from "react"
+import {useCallback, useMemo, useState} from "react"
 import useCurrentUser from "./use-current-user"
+import useEventEmitter from "./use-event-emitter"
 import useShape from "set-state-compare/src/use-shape"
 
 const useCanCan = (abilitiesCallback, dependencies) => {
@@ -8,7 +9,8 @@ const useCanCan = (abilitiesCallback, dependencies) => {
   const s = useShape({abilitiesCallback})
 
   s.useStates({
-    canCan: null
+    canCan: null,
+    lastUpdate: new Date()
   })
 
   if (!dependencies) {
@@ -21,26 +23,31 @@ const useCanCan = (abilitiesCallback, dependencies) => {
 
     await canCan.loadAbilities(abilities)
 
-    s.set({canCan})
+    s.set({canCan, lastUpdate: new Date()})
   }, [])
 
-  const onResetAbilities = useCallback(() => {
+  const onResetAbilities = useCallback(async () => {
     s.set({canCan: null}, {silent: true})
-    loadAbilities()
+    await loadAbilities()
+  }, [])
+
+  const loadAbilitiesOnNew = useCallback(async () => {
+    const canCan = s.s.canCan
+
+    s.set({canCan: null}, {silent: true})
+
+    if (canCan) {
+      await canCan?.resetAbilities()
+    } else {
+      await loadAbilities()
+    }
   }, [])
 
   useMemo(() => {
-    s.set({canCan: null}, {silent: true})
-    loadAbilities()
+    loadAbilitiesOnNew()
   }, dependencies)
 
-  useLayoutEffect(() => {
-    CanCan.current().events.addListener("onResetAbilities", onResetAbilities)
-
-    return () => {
-      CanCan.current().events.removeListener("onResetAbilities", onResetAbilities)
-    }
-  }, [])
+  useEventEmitter(CanCan.current().events, "onResetAbilities", onResetAbilities)
 
   return s.s.canCan
 }

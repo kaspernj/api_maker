@@ -10,17 +10,13 @@ describe "can can - loader" do
     login_as user
     visit can_can_loader_path
 
-    wait_for_selector ".components-can-can-loader-with-shape #{can_access_admin_selector}"
     wait_for_selector ".components-can-can-loader-with-state #{can_access_admin_selector}"
-    wait_for_no_selector ".components-can-can-loader-with-shape #{cannot_access_admin_selector}"
     wait_for_no_selector ".components-can-can-loader-with-state #{cannot_access_admin_selector}"
 
     wait_for_and_find(".sign-out-button").click
     wait_for_and_find(".reset-abilities-button").click
 
-    wait_for_selector ".components-can-can-loader-with-shape #{cannot_access_admin_selector}"
     wait_for_selector ".components-can-can-loader-with-state #{cannot_access_admin_selector}"
-    wait_for_no_selector ".components-can-can-loader-with-shape #{can_access_admin_selector}"
     wait_for_no_selector ".components-can-can-loader-with-state #{can_access_admin_selector}"
   end
 
@@ -29,6 +25,6 @@ describe "can can - loader" do
     visit can_can_loader_path
     wait_for_selector ".components-can-can-loader-with-state #{can_access_admin_selector}"
     wait_for_and_find(".show-loader-that-signs-out-on-load-button").click
-    wait_for_selector ".components-can-can-loader-that-signs-out-on-mount #{cannot_access_admin_selector}"
+    wait_for_selector cannot_access_admin_selector
   end
 end

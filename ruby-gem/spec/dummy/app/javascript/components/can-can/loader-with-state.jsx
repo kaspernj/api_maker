@@ -1,32 +1,34 @@
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import classNames from "classnames"
+import {memo} from "react"
 import PropTypes from "prop-types"
 import useCanCan from "@kaspernj/api-maker/build/use-can-can"
 
-const CanCanWithState = ({className, ...restProps}) => {
-  const canCan = useCanCan(() => [[Account, ["sum"]]])
+export default memo(shapeComponent(class CanCanWithState extends ShapeComponent {
+  static propTypes = {
+    className: PropTypes.string
+  }
 
-  return (
-    <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>
-      {!canCan &&
-        "can can not loaded"
-      }
+  render() {
+    const {className, ...restProps} = this.props
+    const canCan = useCanCan(() => [[Account, ["sum"]]])
 
-      {canCan && canCan.can("sum", Account) &&
-        <div className="can-access-admin">
-          can access admin
-        </div>
-      }
-      {canCan && !canCan.can("sum", Account) &&
-        <div className="cannot-access-admin">
-          can not access admin
-        </div>
-      }
-    </div>
-  )
-}
-
-CanCanWithState.propTypes = {
-  className: PropTypes.string
-}
-
-export default CanCanWithState
+    return (
+      <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>
+        {!canCan &&
+          "can can not loaded"
+        }
+        {canCan && canCan.can("sum", Account) &&
+          <div className="can-access-admin">
+            can access admin
+          </div>
+        }
+        {canCan && !canCan.can("sum", Account) &&
+          <div className="cannot-access-admin">
+            can not access admin
+          </div>
+        }
+      </div>
+    )
+  }
+}))
