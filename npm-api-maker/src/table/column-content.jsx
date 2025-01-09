@@ -6,8 +6,9 @@ import React from "react"
 import Text from "../utils/text"
 
 export default class ApiMakerTableColumnContent {
-  constructor({column, mode = "react-native", model, t, table}) {
+  constructor({column, l, mode = "react-native", model, t, table}) {
     this.column = column
+    this.l = l
     this.mode = mode
     this.model = model
     this.t = t
@@ -109,11 +110,11 @@ export default class ApiMakerTableColumnContent {
     if (!apiMakerType || apiMakerType == "time") {
       const dateTimeFormatName = this.table.props.defaultDateTimeFormatName || "time.formats.default"
 
-      return I18n.l(dateTimeFormatName, value)
+      return this.l(dateTimeFormatName, value)
     } else if (apiMakerType == "date") {
       const dateFormatName = this.table.props.defaultDateFormatName || "date.formats.default"
 
-      return I18n.l(dateFormatName, value)
+      return this.l(dateFormatName, value)
     } else {
       throw new Error(`Unhandled type: ${apiMakerType}`)
     }

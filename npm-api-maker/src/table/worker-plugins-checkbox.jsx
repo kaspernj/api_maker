@@ -1,3 +1,4 @@
+import React, {useMemo} from "react"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
@@ -5,7 +6,6 @@ import memo from "set-state-compare/src/memo"
 import modelClassRequire from "../model-class-require"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import useModelEvent from "../use-model-event"
 

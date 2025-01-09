@@ -1,10 +1,11 @@
+import React, {memo, useRef} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import Devise from "@kaspernj/api-maker/build/devise"
 import FlashMessage from "shared/flash-message"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
+import Layout from "components/layout"
 import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter"
-import {memo, useRef} from "react"
 
 export default memo(shapeComponent(class SessionsNew extends ShapeComponent {
   setup() {

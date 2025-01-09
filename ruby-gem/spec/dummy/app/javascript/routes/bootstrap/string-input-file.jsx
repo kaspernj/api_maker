@@ -1,5 +1,7 @@
 import Devise from "@kaspernj/api-maker/build/devise"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
+import Layout from "components/layout"
+import React from "react"
 
 export default class BootstrapStringInputFile extends React.PureComponent {
   state = {

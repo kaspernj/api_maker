@@ -4,20 +4,21 @@ import propTypesExact from "prop-types-exact"
 import React, {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import {Suspense} from "react"
+import usePath from "on-location-changed/src/use-path"
 import useRouter from "./use-router"
 
 export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
   static propTypes = propTypesExact({
     history: PropTypes.object,
     notFoundComponent: PropTypes.elementType,
-    path: PropTypes.string,
     requireComponent: PropTypes.func.isRequired,
     routeDefinitions: PropTypes.object,
     routes: PropTypes.object
   })
 
   render() {
-    const {notFoundComponent, path, requireComponent, routeDefinitions, routes} = this.props
+    const path = usePath()
+    const {notFoundComponent, requireComponent, routeDefinitions, routes} = this.props
     const {match} = useRouter({path, routes, routeDefinitions})
     const {matchingRoute} = match
 

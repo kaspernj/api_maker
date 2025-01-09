@@ -1,4 +1,4 @@
-import {createContext, useContext, useMemo} from "react"
+import React, {createContext, useContext, useMemo} from "react"
 import BaseComponent from "./base-component"
 import FormDataObjectizer from "form-data-objectizer"
 import memo from "set-state-compare/src/memo"
@@ -7,6 +7,7 @@ import PropTypes from "prop-types"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
 const FormContext = createContext(null)
+const useForm = () => useContext(FormContext)
 
 class FormInputs {
   constructor(props) {
@@ -86,7 +87,5 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
     }
   }
 }))
-
-const useForm = () => useContext(FormContext)
 
 export {Form, FormContext, FormInputs, useForm}

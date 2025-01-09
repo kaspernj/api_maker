@@ -1,7 +1,8 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import CanCan from "@kaspernj/api-maker/build/can-can"
 import Devise from "@kaspernj/api-maker/build/devise"
-import {memo} from "react"
+import React, {memo} from "react"
+import Layout from "components/layout"
 import LoaderThatSignsOutOnMount from "components/can-can/loader-that-signs-out-on-mount"
 import LoaderWithState from "components/can-can/loader-with-state"
 

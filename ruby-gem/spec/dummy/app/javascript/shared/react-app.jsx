@@ -4,12 +4,10 @@ import {createRoot} from "react-dom/client"
 import React from "react"
 import Router from "@kaspernj/api-maker/build/router"
 import Routes from "shared/routes"
-import withPathname from "on-location-changed/src/with-path"
 
 const NotFoundComponent = () => <div>Not found</div>
 const requireComponent = ({routeDefinition}) => React.lazy(() => import(/* webpackChunkName: "[request]" */ `routes/${routeDefinition.component}`))
 import routeDefinitions from "./route-definitions.json"
-const RouterWithLocation = withPathname(Router)
 
 ApiMakerConfig.setRoutes(Routes)
 ApiMakerConfig.setRouteDefinitions(routeDefinitions)
@@ -19,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = createRoot(reactRoot)
 
   root.render(
-    <RouterWithLocation
+    <Router
       history={ApplicationHistory}
       notFoundComponent={NotFoundComponent}
       requireComponent={requireComponent}

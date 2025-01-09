@@ -29,7 +29,7 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
   })
 
   render() {
-    const {t} = useI18n({namespace: "js.api_maker.table.model_column"})
+    const {l, t} = useI18n({namespace: "js.api_maker.table.model_column"})
     const {mdUp} = useBreakpoint()
     const {animatedWidth, animatedZIndex, column, columnIndex, even, model, table} = this.props
     const columnProps = table.columnProps(column)
@@ -65,7 +65,7 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
           </View>
         }
         <View dataSet={{class: "table--column-value"}}>
-          {new ColumnContent({column, model, t, table}).content()}
+          {new ColumnContent({column, l, model, t, table}).content()}
         </View>
       </Column>
     )

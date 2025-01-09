@@ -1,9 +1,9 @@
+import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import Devise from "@kaspernj/api-maker/build/devise"
+import Layout from "components/layout"
 import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter"
 import SessionStatusUpdater from "@kaspernj/api-maker/build/session-status-updater"
-import Layout from "components/layout"
-import {memo} from "react"
 
 export default memo(shapeComponent(class SessionStatusSpecsTimeout extends ShapeComponent {
   setup() {

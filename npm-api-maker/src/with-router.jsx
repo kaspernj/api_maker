@@ -1,3 +1,4 @@
+import React from "react"
 import useRouter from "./use-router"
 
 export default (WrapperComponent) => (props) => {
