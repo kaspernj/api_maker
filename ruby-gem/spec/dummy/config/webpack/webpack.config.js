@@ -52,24 +52,6 @@ imagesRule.use = {
 delete imagesRule.generator
 delete imagesRule.type
 
-options.plugins.push(
-  new webpack.ProvidePlugin({
-    FlashMessage: ["shared/flash-message", "default"],
-    Hash: ["shared/hash", "default"],
-    I18n: "shared/i18n.js",
-    Layout: ["components/layout", "default"],
-    Params: ["@kaspernj/api-maker/build/params.js", "default"],
-    React: "react",
-    Routes: ["shared/routes", "default"],
-    setStateAsync: ["shared/set-state-async", "default"],
-
-    Account: ["@kaspernj/api-maker/build/models.js", "default", "Account"],
-    Project: ["@kaspernj/api-maker/build/models.js", "default", "Project"],
-    Task: ["@kaspernj/api-maker/build/models.js", "default", "Task"],
-    User: ["@kaspernj/api-maker/build/models.js", "default", "User"]
-  })
-)
-
 const config = merge({}, options, webpackConfig)
 
 // Make sure to try and load .web.js files before .js

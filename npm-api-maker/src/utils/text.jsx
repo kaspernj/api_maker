@@ -1,4 +1,5 @@
 import memo from "set-state-compare/src/memo"
+import React from "react"
 import {Text} from "react-native"
 import {useDefaultStyle, WithDefaultStyle} from "./default-style"
 

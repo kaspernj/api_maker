@@ -1,7 +1,8 @@
 import BaseComponent from "../base-component"
 import inputWrapper from "./input-wrapper"
-import PropTypes from "prop-types"
 import memo from "set-state-compare/src/memo"
+import PropTypes from "prop-types"
+import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import {useForm} from "../form"
 

@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef} from "react"
+import React, {useEffect, useMemo, useRef} from "react"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Collection from "../collection"

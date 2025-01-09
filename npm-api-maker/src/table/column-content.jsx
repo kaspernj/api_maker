@@ -2,13 +2,15 @@ import {digs} from "diggerize"
 import * as inflection from "inflection"
 import modelCallbackArgs from "./model-callback-args"
 import MoneyFormatter from "../money-formatter"
+import React from "react"
 import Text from "../utils/text"
 
 export default class ApiMakerTableColumnContent {
-  constructor({column, mode = "react-native", model, table}) {
+  constructor({column, mode = "react-native", model, t, table}) {
     this.column = column
     this.mode = mode
     this.model = model
+    this.t = t
     this.table = table
   }
 
@@ -79,9 +81,9 @@ export default class ApiMakerTableColumnContent {
       contentText = MoneyFormatter.format(value)
     } else if (typeof value == "boolean") {
       if (value) {
-        contentText = I18n.t("js.shared.yes", {defaultValue: "Yes"})
+        contentText = this.t("js.shared.yes", {defaultValue: "Yes"})
       } else {
-        contentText = I18n.t("js.shared.no", {defaultValue: "No"})
+        contentText = this.t("js.shared.no", {defaultValue: "No"})
       }
     } else if (Array.isArray(value)) {
       contentText = value

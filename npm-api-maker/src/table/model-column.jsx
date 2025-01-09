@@ -8,9 +8,11 @@ import EventEmitter from "events"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import memo from "set-state-compare/src/memo"
+import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../utils/text"
 import useBreakpoint from "../use-breakpoint"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 
 export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseComponent {
   static propTypes = propTypesExact({
@@ -27,6 +29,7 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
   })
 
   render() {
+    const {t} = useI18n({namespace: "js.api_maker.table.model_column"})
     const {mdUp} = useBreakpoint()
     const {animatedWidth, animatedZIndex, column, columnIndex, even, model, table} = this.props
     const columnProps = table.columnProps(column)
@@ -62,7 +65,7 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
           </View>
         }
         <View dataSet={{class: "table--column-value"}}>
-          {new ColumnContent({column, model, table}).content()}
+          {new ColumnContent({column, model, t, table}).content()}
         </View>
       </Column>
     )

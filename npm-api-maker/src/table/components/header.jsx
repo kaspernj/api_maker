@@ -1,6 +1,7 @@
 import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import memo from "set-state-compare/src/memo"
+import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import {Animated} from "react-native"
 

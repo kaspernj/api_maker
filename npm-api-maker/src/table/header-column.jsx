@@ -1,4 +1,4 @@
-import {useMemo} from "react"
+import React, {useMemo} from "react"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
