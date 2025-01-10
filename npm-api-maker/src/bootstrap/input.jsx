@@ -2,9 +2,10 @@ import {digs} from "diggerize"
 import inputWrapper from "../inputs/input-wrapper"
 import {Input} from "../inputs/input"
 import InvalidFeedback from "./invalid-feedback"
+import memo from "set-state-compare/src/memo"
 import Money from "../inputs/money"
 import PropTypes from "prop-types"
-import memo from "set-state-compare/src/memo"
+import React from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 
 const ApiMakerBootstrapInput = memo(shapeComponent(class ApiMakerBootstrapInput extends ShapeComponent {

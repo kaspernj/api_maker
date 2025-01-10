@@ -1,4 +1,5 @@
 // import "../../../src/super-admin/layout/style"
+import React, {useMemo} from "react"
 import BaseComponent from "../../base-component"
 import CommandsPool from "../../commands-pool"
 import config from "super-admin/config"
@@ -7,7 +8,6 @@ import memo from "set-state-compare/src/memo"
 import Menu from "./menu"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import useCurrentUser from "../../use-current-user"
 import useI18n from "i18n-on-steroids/src/use-i18n"
@@ -21,9 +21,9 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
     active: PropTypes.string,
     children: PropTypes.node,
     className: PropTypes.string,
-    currentCustomer: PropTypes.instanceOf(User),
+    currentCustomer: PropTypes.object,
     currentCustomerId: PropTypes.string,
-    currentUser: PropTypes.instanceOf(User),
+    currentUser: PropTypes.object,
     headTitle: PropTypes.string,
     headerTitle: PropTypes.string
   })
@@ -38,7 +38,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
     useMemo(() => {
       CommandsPool.current().globalRequestData.layout = "admin"
       CommandsPool.current().globalRequestData.locale = locale
-    }, [I18n.locale])
+    }, [locale])
   }
 
   render() {

@@ -1,19 +1,26 @@
+import BaseComponent from "@kaspernj/api-maker/build/base-component"
 import Card from "@kaspernj/api-maker/build/bootstrap/card"
-import {digg} from "diggerize"
+import Layout from "components/layout"
+import memo from "set-state-compare/src/memo"
+import models from "@kaspernj/api-maker/build/models"
 import Params from "@kaspernj/api-maker/build/params"
-import PropTypes from "prop-types"
-import PureComponent from "set-state-compare/src/pure-component"
+import React from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
-import withQueryParams from "on-location-changed/src/with-query-params"
+import useQueryParams from "on-location-changed/src/use-query-params"
 
-class BootstrapSortLink extends PureComponent {
-  static propTypes = {
-    queryParams: PropTypes.object
-  }
+const {Task} = models
 
-  state = {
-    currentHref: location.href,
-    queryParamsString: JSON.stringify(digg(this, "props", "queryParams"))
+export default memo(shapeComponent(class BootstrapSortLink extends BaseComponent {
+  setup() {
+    this.queryParams = useQueryParams()
+
+    this.useStates({
+      currentHref: location.href,
+      query: null,
+      queryParamsString: () => JSON.stringify(this.tt.queryParams),
+      tasks: null
+    })
   }
 
   componentDidMount() {
@@ -21,10 +28,10 @@ class BootstrapSortLink extends PureComponent {
   }
 
   componentDidUpdate() {
-    const queryParamsString = JSON.stringify(digg(this, "props", "queryParams"))
+    const queryParamsString = JSON.stringify(this.tt.queryParams)
 
-    if (this.state.queryParamsString != queryParamsString)
-      this.setState({queryParamsString}, digg(this, "loadTasks"))
+    if (this.s.queryParamsString != queryParamsString)
+      this.setState({queryParamsString}, this.tt.loadTasks)
   }
 
   loadTasks = async () => {
@@ -40,7 +47,7 @@ class BootstrapSortLink extends PureComponent {
   }
 
   render() {
-    const { tasks } = this.state
+    const {tasks} = this.s
 
     return (
       <Layout className="component-bootstrap-sort-link">
@@ -50,7 +57,7 @@ class BootstrapSortLink extends PureComponent {
   }
 
   content() {
-    const { query, tasks } = this.state
+    const {query, tasks} = this.s
 
     return (
       <div className="content-container">
@@ -73,6 +80,4 @@ class BootstrapSortLink extends PureComponent {
       </div>
     )
   }
-}
-
-export default withQueryParams(BootstrapSortLink)
+}))

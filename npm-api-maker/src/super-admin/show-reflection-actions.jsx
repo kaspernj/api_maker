@@ -1,7 +1,7 @@
 import BaseComponent from "../base-component"
 import {digg} from "diggerize"
 import memo from "set-state-compare/src/memo"
-import {useMemo} from "react"
+import React, {useMemo} from "react"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"

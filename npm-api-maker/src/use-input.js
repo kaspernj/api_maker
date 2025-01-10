@@ -1,5 +1,5 @@
 import {dig, digg} from "diggerize"
-import {useCallback, useEffect, useMemo} from "react"
+import {useCallback, useEffect, useMemo, useRef} from "react"
 import idForComponent from "./inputs/id-for-component"
 import nameForComponent from "./inputs/name-for-component"
 import strftime from "strftime"
@@ -14,6 +14,7 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   }
 
   const s = useShape(props)
+  const backupRef = useRef()
 
   s.useStates({
     form: undefined
@@ -67,13 +68,7 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
     }
   }, [])
 
-  const inputRefBackup = useCallback(() => {
-    if (!s.meta._inputRefBackup) s.meta._inputRefBackup = React.createRef()
-
-    return s.meta._inputRefBackup
-  }, [])
-
-  const inputRef = useCallback(() => s.props.inputRef || inputRefBackup())
+  const inputRef = useCallback(() => s.props.inputRef || backupRef)
 
   const inputType = useCallback(() => {
     if ("type" in s.props) {

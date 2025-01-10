@@ -1,3 +1,5 @@
+import {useMemo, useRef} from "react"
+import {ActivityIndicator, View} from "react-native"
 import AttributeElement from "./attribute-element"
 import BaseComponent from "../../base-component"
 import {digg, digs} from "diggerize"
@@ -5,16 +7,17 @@ import * as inflection from "inflection"
 import {Form} from "../../form"
 import Input from "../../inputs/input"
 import memo from "set-state-compare/src/memo"
+import Params from "../../params"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {useMemo, useRef} from "react"
-import {ActivityIndicator, View} from "react-native"
+import React from "react"
 import ReflectionElement from "./reflection-element"
 import ScopeElement from "./scope-element"
 import Select from "../../inputs/select"
 import Services from "../../services"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../../utils/text"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 
 export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -25,6 +28,8 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   })
 
   setup() {
+    const {t} = useI18n({namespace: "js.api_maker.table.filters.filter_form"})
+
     this.useStates({
       associations: null,
       attribute: undefined,
@@ -40,7 +45,10 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
       value: this.props.filter.v
     })
 
-    this.setInstance({valueInputRef: useRef()})
+    this.setInstance({
+      t,
+      valueInputRef: useRef(),
+    })
 
     useMemo(() => {
       this.loadRansackPredicates()
@@ -155,7 +163,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   }
 
   render() {
-    const {valueInputRef} = digs(this, "valueInputRef")
+    const {t, valueInputRef} = this.tt
     const {attribute, path, predicate, predicates, scope, value} = this.s
     let submitEnabled = false
 
@@ -231,7 +239,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
           </View>
           <View>
             <button className="apply-filter-button" disabled={!submitEnabled}>
-              {I18n.t("js.api_maker.table.filters.relationship_select.apply", {defaultValue: "Apply"})}
+              {t(".apply", {defaultValue: "Apply"})}
             </button>
           </View>
         </Form>

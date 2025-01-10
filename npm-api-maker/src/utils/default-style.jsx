@@ -1,4 +1,4 @@
-import {createContext, useContext} from "react"
+import React, {createContext, useContext} from "react"
 import memo from "set-state-compare/src/memo"
 
 const DefaultStyleContext = createContext({

@@ -4,6 +4,7 @@ import * as inflection from "inflection"
 import Link from "../../link"
 import memo from "set-state-compare/src/memo"
 import Params from "../../params"
+import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../../utils/text"
 

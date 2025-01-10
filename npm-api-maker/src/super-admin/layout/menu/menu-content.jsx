@@ -1,7 +1,7 @@
+import React, {useMemo} from "react"
 import BaseComponent from "../../../base-component"
 import {digg} from "diggerize"
 import memo from "set-state-compare/src/memo"
-import {useMemo} from "react"
 import MenuItem from "./menu-item"
 import models from "../../models"
 import Params from "../../../params"
@@ -9,6 +9,7 @@ import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import useCanCan from "../../../use-can-can"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -16,11 +17,12 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extend
   })
 
   render() {
+    const {locale} = useI18n({namespace: "js.api_maker.super_admin.layout.menu.menu_content"})
     const {active} = this.p
     const canCan = useCanCan(() => models.map((modelClass) => [modelClass, ["index"]]))
     const sortedModels = useMemo(
       () => models.sort((a, b) => a.modelName().human({count: 2}).toLowerCase().localeCompare(b.modelName().human({count: 2}).toLowerCase())),
-      [I18n.locale]
+      [locale]
     )
 
     return (

@@ -5,11 +5,12 @@ import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/src/memo"
 import Money from "./money"
 import PropTypes from "prop-types"
-import {useMemo, useRef} from "react"
+import React, {useMemo, useRef} from "react"
 import replaceall from "replaceall"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import strftime from "strftime"
 import {useForm} from "../form"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 import useUpdatedEvent from "../use-updated-event"
 
 const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extends BaseComponent {
@@ -36,11 +37,13 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   }
 
   setup() {
+    const {t} = useI18n({namespace: "js.api_maker.inputs.input"})
     const {autoRefresh, inputProps, model} = this.p
     const {defaultValue, name} = inputProps
 
     this.form = useForm()
     this.visibleInputRef = useRef()
+    this.t = t
 
     this.useStates({
       blankInputName: digg(inputProps, "type") == "file"
@@ -132,12 +135,13 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   }
 
   actualValue (visibleInput) {
+    const {t} = this.tt
     const {localizedNumber} = digs(this.props, "localizedNumber")
     const value = digg(visibleInput, "value")
 
     if (localizedNumber) {
-      const decimal = I18n.t("number.currency.format.separator")
-      const integerSeparator = I18n.t("number.currency.format.delimiter")
+      const decimal = t("number.currency.format.separator")
+      const integerSeparator = t("number.currency.format.delimiter")
 
       let unformatted = replaceall(integerSeparator, "", value)
 
@@ -169,12 +173,13 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   }
 
   inputDefaultValueLocalized () {
+    const {t} = this.tt
     const {defaultValue} = this.props
     const {localizedNumber} = digs(this.props, "localizedNumber")
 
     if (localizedNumber && defaultValue !== null && defaultValue !== undefined) {
-      const separator = I18n.t("number.currency.format.separator")
-      const delimiter = I18n.t("number.currency.format.delimiter")
+      const separator = t("number.currency.format.separator")
+      const delimiter = t("number.currency.format.delimiter")
 
       let formatted = `${defaultValue}`
 

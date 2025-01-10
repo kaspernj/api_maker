@@ -1,9 +1,14 @@
+import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import FlashMessage from "shared/flash-message"
+import FlashMessage from "@kaspernj/api-maker/build/flash-message"
 import Link from "@kaspernj/api-maker/build/link"
-import {memo} from "react"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require"
 import Routes from "shared/routes"
 import useCurrentUser from "@kaspernj/api-maker/build/use-current-user"
+
+const Account = modelClassRequire("Account")
+const Project = modelClassRequire("Project")
+const Task = modelClassRequire("Task")
 
 export default memo(shapeComponent(class Layout extends ShapeComponent {
   setup() {
@@ -27,7 +32,7 @@ export default memo(shapeComponent(class Layout extends ShapeComponent {
   }
 
   async loadProject() {
-    const project = await Task.ransack().first()
+    const project = await Project.ransack().first()
     this.setState({project})
   }
 

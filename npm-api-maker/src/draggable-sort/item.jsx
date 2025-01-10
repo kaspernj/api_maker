@@ -1,4 +1,4 @@
-import {useMemo} from "react"
+import React, {useMemo} from "react"
 import {Animated, Easing, PanResponder} from "react-native"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import EventEmitter from "events"

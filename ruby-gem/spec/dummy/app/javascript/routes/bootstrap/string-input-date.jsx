@@ -1,5 +1,7 @@
 import Devise from "@kaspernj/api-maker/build/devise"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
+import Layout from "components/layout"
+import React from "react"
 
 export default class BootstrapStringInputDatetimeLocal extends React.PureComponent {
   state = {
@@ -27,15 +29,16 @@ export default class BootstrapStringInputDatetimeLocal extends React.PureCompone
     )
   }
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault()
 
-    const { user } = this.state
+    const {user} = this.state
 
-    user.saveRaw(e.target).then(() => {
+    try {
+      await user.saveRaw(e.target)
       console.log("User was saved")
-    }, (response) => {
-      console.log("Error!")
-    })
+    } catch (error) {
+      console.log("Error!", {error})
+    }
   }
 }

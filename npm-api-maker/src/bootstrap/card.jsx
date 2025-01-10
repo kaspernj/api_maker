@@ -3,7 +3,7 @@ import classNames from "classnames"
 import {digg, digs} from "diggerize"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
-import {useRef} from "react"
+import React, {useRef} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 
 export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseComponent {

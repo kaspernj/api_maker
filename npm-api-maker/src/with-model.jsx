@@ -1,4 +1,5 @@
 import memo from "set-state-compare/src/memo"
+import React from "react"
 import useModel from "./use-model"
 
 export default (WrappedComponent, modelClass, givenArgs) => {

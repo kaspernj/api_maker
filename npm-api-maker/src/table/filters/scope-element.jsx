@@ -2,6 +2,7 @@ import BaseComponent from "../../base-component"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/src/memo"
 import {Pressable} from "react-native"
+import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../../utils/text"
 

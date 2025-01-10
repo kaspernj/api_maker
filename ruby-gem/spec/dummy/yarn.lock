@@ -1232,10 +1232,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@1.0.446":
-  version "1.0.446"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.446.tgz#eb7e7b859fa35ad5333d5e8b5ada5390d320ac9d"
-  integrity sha512-rH9bSI6NEe7o/Kc/pnQi+JTBTa+CiWFdf9whc7T6brw+aleSgAwvFLVYMgS9nk0Ph+2acz/qSJF6Hl5KwdvATw==
+"@kaspernj/api-maker@1.0.450":
+  version "1.0.450"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.450.tgz#65132e5f0fa2eeaebf07f88fcfe453afff8a5053"
+  integrity sha512-4Bb6UyJ/DZDYStkXs+nnKyESTHc9cV0IA03Gb2aQdKzSvNIftr2HViqdMI6WA0s/sNCOw9QUHdmOPOuFsNwzrg==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -1250,9 +1250,8 @@
     js-money ">= 0.6.3"
     numberable ">= 1.0.0"
     object-to-formdata ">= 4.1.0"
-    on-location-changed ">= 1.0.13"
+    on-location-changed ">= 1.0.16"
     qs ">= 6.9.3"
-    react-native-draglist "^3.8.0"
     react-native-vector-icons "^10.2.0"
     replaceall ">= 0.1.6"
     set-state-compare ">= 1.0.53"
@@ -2882,10 +2881,10 @@ hyphenate-style-name@^1.0.3:
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz#691879af8e220aea5750e8827db4ef62a54e361d"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
 
-i18n-on-steroids@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.16.tgz#50a6a173f0fa52bef4a622a9d1819d4f2adeab03"
-  integrity sha512-q8jWHlfElqOp3TwQqShvNarQF55hMYuH33Rtj0RboMxR7dS8pN2LPEQUtsS8L3vk2U7JmzYMwgiXm3oLZ61U9g==
+i18n-on-steroids@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.18.tgz#5ed39b8467c071962b08de39e63ac2a92f7ad593"
+  integrity sha512-qSUp2QzY32MB8/OUN0iH3llU+FXoV4RN6TmO5yd3gr/ziUIYMHQCdws7tCoAEv0kYal0De0wlTkKRUdPX7za1A==
   dependencies:
     diggerize "^1.0.5"
     numberable "^1.0.0"
@@ -3481,10 +3480,10 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.13.tgz#2aba53f5c7c8ef545f8c96462f6b295c852317f6"
-  integrity sha512-6j3gq95X8PNdLopSa9h7ohBywu0YJV5gxkyDZjndPl0JBhwgxt8dxAY5UrngI2RINxNhczYn/usyC6+Gy897Eg==
+"on-location-changed@>= 1.0.16", on-location-changed@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.16.tgz#a345c3cb50102649cb6a37d117b96c2e8f0e416f"
+  integrity sha512-GjxEIz8iwW7f30ssHoNsWYHD8tm4h+yEH7PRJ3hm6WGiXdaHn+T221/uPS6Sf5jBUh2X/JKEW3lwLpYApk1eAA==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
@@ -3793,11 +3792,6 @@ react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
-
-react-native-draglist@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-draglist/-/react-native-draglist-3.8.0.tgz#b2ea51cece675ce9356ab6f1e472df8b43dda9a4"
-  integrity sha512-nmhxDk2pJhwg3zkuw6r3Gyk2hSoYDLAVa3zqy+SVpwiV/rDfMbOWi97lBgCQP1JbHWuYSVSKdYdmAfPa03jgmA==
 
 react-native-vector-icons@^10.2.0:
   version "10.2.0"

@@ -1,5 +1,8 @@
+import models from "@kaspernj/api-maker/build/models"
 import Params from "@kaspernj/api-maker/build/params"
 import React from "react"
+
+const {Task} = models
 
 export default class ModelsCommandSerialize extends React.PureComponent {
   state = {}

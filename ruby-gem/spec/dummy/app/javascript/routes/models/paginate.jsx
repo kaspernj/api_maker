@@ -1,16 +1,24 @@
+import BaseComponent from "@kaspernj/api-maker/build/base-component"
+import memo from "set-state-compare/src/memo"
+import models from "@kaspernj/api-maker/build/models"
 import Paginate from "@kaspernj/api-maker/build/bootstrap/paginate"
-import PropTypes from "prop-types"
-import PureComponent from "set-state-compare/src/pure-component"
+import React from "react"
+import {shapeComponent} from "set-state-compare/src/shape-component"
 import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
-import withQueryParams from "on-location-changed/src/with-query-params"
+import useQueryParams from "on-location-changed/src/use-query-params"
 
-class ModelsPaginate extends PureComponent {
-  static propTypes = {
-    queryParams: PropTypes.object.isRequired
-  }
+const {Task} = models
 
-  state = {
-    queryParamsString: JSON.stringify(this.props.queryParams)
+export default memo(shapeComponent(class ModelsPaginate extends BaseComponent {
+  setup() {
+    this.queryParams = useQueryParams()
+
+    this.useStates({
+      query: null,
+      queryParamsString: () => JSON.stringify(this.tt.queryParams),
+      result: null,
+      tasks: null
+    })
   }
 
   componentDidMount() {
@@ -18,15 +26,15 @@ class ModelsPaginate extends PureComponent {
   }
 
   componentDidUpdate() {
-    const queryParamsString = JSON.stringify(this.props.queryParams)
+    const queryParamsString = JSON.stringify(this.tt.queryParams)
 
-    if (this.state.queryParamsString != queryParamsString) {
+    if (this.s.queryParamsString != queryParamsString) {
       this.setState({queryParamsString}, this.loadTasks)
     }
   }
 
   loadTasks = async () => {
-    const {queryParams} = this.props
+    const {queryParams} = this.tt
     const query = Task.ransack(queryParams.tasks_q).searchKey("tasks_q").page(queryParams.tasks_page).pageKey("tasks_page")
     const result = await query.result()
 
@@ -46,7 +54,7 @@ class ModelsPaginate extends PureComponent {
   }
 
   content() {
-    const { query, result, tasks } = this.state
+    const {query, result, tasks} = this.s
 
     return (
       <div className="content-container">
@@ -73,6 +81,4 @@ class ModelsPaginate extends PureComponent {
       </div>
     )
   }
-}
-
-export default withQueryParams(ModelsPaginate)
+}))

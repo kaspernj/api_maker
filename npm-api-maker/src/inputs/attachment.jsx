@@ -3,6 +3,7 @@ import {Input as ApiMakerInput} from "@kaspernj/api-maker/build/inputs/input"
 import Checkbox from "./checkbox"
 import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 
 export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseComponent {
   static propTypes = {
@@ -13,16 +14,17 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
   }
 
   setup() {
+    const {t} = useI18n({namespace: "js.api_maker.inputs.attachment"})
     const {inputProps} = useInput({props: this.props})
 
-    this.setInstance({inputProps})
+    this.setInstance({inputProps, t})
     this.useStates({
       purgeChecked: false
     })
   }
 
   render() {
-    const {inputProps} = this.tt
+    const {inputProps, t} = this.tt
     const {attribute, checkboxComponent, className, label, model, name, onPurgeChanged, purgeName, wrapperOpts, ...restProps} = this.props
     const CheckboxComponent = checkboxComponent || Checkbox
     const newInputProps = Object.assign({}, inputProps, {type: "file"})
@@ -38,7 +40,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
           <div className="input-checkbox" style={{paddingTop: "15px", paddingBottom: "15px"}}>
             <CheckboxComponent id={this.getPurgeInputId()} name={this.getPurgeInputName()} onChange={this.props.onPurgeChanged} />
             <label className="checkbox-label" htmlFor={this.getPurgeInputId()}>
-              {I18n.t("js.shared.delete")}
+              {t("js.shared.delete")}
             </label>
           </div>
         }

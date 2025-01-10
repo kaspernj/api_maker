@@ -1,8 +1,11 @@
+import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import classNames from "classnames"
-import {memo} from "react"
+import models from "@kaspernj/api-maker/build/models"
 import PropTypes from "prop-types"
 import useCanCan from "@kaspernj/api-maker/build/use-can-can"
+
+const {Account} = models
 
 export default memo(shapeComponent(class CanCanWithState extends ShapeComponent {
   static propTypes = {

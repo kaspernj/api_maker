@@ -1,3 +1,4 @@
+import React from "react"
 import useInput from "../use-input"
 
 const inputWrapper = (WrapperComponentClass, wrapperOptions = {}) => (props) => {

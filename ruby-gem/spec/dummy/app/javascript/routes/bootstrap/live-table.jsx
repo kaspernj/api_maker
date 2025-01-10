@@ -3,7 +3,12 @@ import ApplicationHistory from "shared/application-history"
 import Devise from "@kaspernj/api-maker/build/devise"
 import {digg, digs} from "diggerize"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
+import Layout from "components/layout"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require"
 import Params from "@kaspernj/api-maker/build/params"
+import React from "react"
+
+const Task = modelClassRequire("Task")
 
 export default class BootstrapLiveTable extends React.PureComponent {
   render() {
