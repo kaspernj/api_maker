@@ -1,6 +1,9 @@
 import {Controller} from "stimulus"
 import Devise from "@kaspernj/api-maker/build/devise"
+import models from "@kaspernj/api-maker/build/models"
 import Params from "@kaspernj/api-maker/build/params"
+
+const {User} = models
 
 export default class DeviseSignInController extends Controller {
   static targets = ["email", "password", "remember"]

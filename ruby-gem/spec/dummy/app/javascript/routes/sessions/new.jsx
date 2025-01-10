@@ -2,7 +2,7 @@ import React, {memo, useRef} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import Devise from "@kaspernj/api-maker/build/devise"
-import FlashMessage from "shared/flash-message"
+import FlashMessage from "@kaspernj/api-maker/build/flash-message"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
 import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter"
@@ -42,17 +42,18 @@ export default memo(shapeComponent(class SessionsNew extends ShapeComponent {
 
   onDeviseSigned = () => this.setState({isUserSignedIn: Devise.isUserSignedIn()})
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault()
 
     const email = this.emailRef.current.value
     const password = this.passwordRef.current.value
     const rememberMe = this.rememberMeRef.current.checked
 
-    Devise.signIn(email, password, {rememberMe}).then(() => {
+    try {
+      await Devise.signIn(email, password, {rememberMe})
       FlashMessage.success("You were signed in")
-    }, (response) => {
-      FlashMessage.errorResponse(response)
-    })
+    } catch (error) {
+      FlashMessage.errorResponse(error)
+    }
   }
 }))

@@ -1,8 +1,12 @@
+import models from "@kaspernj/api-maker/build/models"
 import Paginate from "@kaspernj/api-maker/build/bootstrap/paginate"
 import PropTypes from "prop-types"
 import PureComponent from "set-state-compare/src/pure-component"
+import React from "react"
 import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
 import withQueryParams from "on-location-changed/src/with-query-params"
+
+const {Task} = models
 
 class ModelsPaginate extends PureComponent {
   static propTypes = {

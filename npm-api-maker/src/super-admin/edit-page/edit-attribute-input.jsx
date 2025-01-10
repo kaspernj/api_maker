@@ -1,4 +1,4 @@
-import {useMemo} from "react"
+import React, {useMemo} from "react"
 import {TextInput, View} from "react-native"
 import BaseComponent from "../../base-component"
 import memo from "set-state-compare/src/memo"

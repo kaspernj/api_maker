@@ -1,21 +1,20 @@
-import {digs} from "diggerize"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import React from "react"
 import SuperAdmin from "@kaspernj/api-maker/build/super-admin"
-import withCurrentUser from "@kaspernj/api-maker/build/with-current-user"
+import useCurrentUser from "@kaspernj/api-maker/build/use-current-user"
 
-class RoutesSuperAdmin extends React.PureComponent {
+export default memo(shapeComponent(class RoutesSuperAdmin extends ShapeComponent {
   static propTypes = {
-    currentUser: PropTypes.instanceOf(User)
+    currentUser: PropTypes.object
   }
 
   render() {
-    const {currentUser} = digs(this.props, "currentUser")
+    const currentUser = useCurrentUser()
 
     return (
       <SuperAdmin currentUser={currentUser} />
     )
   }
-}
-
-export default withCurrentUser(RoutesSuperAdmin)
+}))

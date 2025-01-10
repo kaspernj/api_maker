@@ -5,6 +5,7 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Switch, {CurrentSwitchContext} from "./switch"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 
 const CurrentPathContext = createContext([])
 const ParamsContext = createContext({})
@@ -35,6 +36,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
   pathParts = null
 
   setup() {
+    const {t} = useI18n({namespace: "js.api_maker.router.route"})
     const {path} = this.props
     const {pathsMatched, switchGroup} = useContext(CurrentSwitchContext)
     const givenRoute = useContext(RouteContext)
@@ -42,6 +44,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
 
     this.debug = false
     this.log(() => ({givenRoute}))
+    this.t = t
 
     this.requireComponent = useContext(RequireComponentContext)
     this.currentParams = useContext(ParamsContext)
@@ -103,7 +106,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
   }
 
   loadMatches() {
-    const {newRouteParts} = this.tt
+    const {newRouteParts, t} = this.tt
     const {component, path} = this.props
     const {exact, includeInPath, fallback} = this.p
 
@@ -115,7 +118,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
 
     for (const pathPartIndex in this.pathParts) {
       const pathPart = this.pathParts[pathPartIndex]
-      const translatedPathPart = I18n.t(`routes.${pathPart}`, {defaultValue: pathPart})
+      const translatedPathPart = t(`routes.${pathPart}`, {defaultValue: pathPart})
 
       if (!(pathPartIndex in this.routeParts)) {
         this.log(() => `No match for: ${pathPartIndex}`)

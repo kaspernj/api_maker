@@ -1,7 +1,10 @@
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
+import models from "@kaspernj/api-maker/build/models"
 import Params from "@kaspernj/api-maker/build/params"
 import React from "react"
+
+const {Task} = models
 
 export default class BootstrapStringInputDatetimeLocal extends React.PureComponent {
   state = {}
@@ -37,15 +40,16 @@ export default class BootstrapStringInputDatetimeLocal extends React.PureCompone
     )
   }
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault()
 
-    const { task } = this.state
+    const {task} = this.state
 
-    task.saveRaw(e.target).then(() => {
+    try {
+      await task.saveRaw(e.target)
       console.log("Task was saved")
-    }, (response) => {
-      console.log("Error!")
-    })
+    } catch (error) {
+      console.log("Error!", {error})
+    }
   }
 }

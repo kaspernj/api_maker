@@ -1,8 +1,11 @@
 import {digg} from "diggerize"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
+import models from "@kaspernj/api-maker/build/models"
 import Params from "@kaspernj/api-maker/build/params"
 import React from "react"
+
+const {Project} = models
 
 export default class BootstrapStringInputDatetimeLocal extends React.PureComponent {
   state = {

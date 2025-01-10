@@ -8,6 +8,7 @@ import Locales from "shared/locales"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
+import React from "react"
 import {View} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 

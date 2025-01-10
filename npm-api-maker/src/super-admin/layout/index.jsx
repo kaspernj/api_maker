@@ -21,9 +21,9 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
     active: PropTypes.string,
     children: PropTypes.node,
     className: PropTypes.string,
-    currentCustomer: PropTypes.instanceOf(User),
+    currentCustomer: PropTypes.object,
     currentCustomerId: PropTypes.string,
-    currentUser: PropTypes.instanceOf(User),
+    currentUser: PropTypes.object,
     headTitle: PropTypes.string,
     headerTitle: PropTypes.string
   })
@@ -38,7 +38,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
     useMemo(() => {
       CommandsPool.current().globalRequestData.layout = "admin"
       CommandsPool.current().globalRequestData.locale = locale
-    }, [I18n.locale])
+    }, [locale])
   }
 
   render() {

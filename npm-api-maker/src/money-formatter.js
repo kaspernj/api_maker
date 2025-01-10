@@ -1,3 +1,4 @@
+import I18nOnSteroids from "i18n-on-steroids"
 import Money from "js-money"
 import formatNumber from "format-number"
 import replaceall from "replaceall"
@@ -12,9 +13,9 @@ export default class MoneyFormatter {
   }
 
   static stringToFloat (moneyString) {
-    let unformatted = replaceall(I18n.t("number.currency.format.delimiter"), "", moneyString)
+    let unformatted = replaceall(I18nOnSteroids.getCurrent().t("number.currency.format.delimiter"), "", moneyString)
 
-    unformatted = replaceall(I18n.t("number.currency.format.separator"), ".", unformatted)
+    unformatted = replaceall(I18nOnSteroids.getCurrent().t("number.currency.format.separator"), ".", unformatted)
     const float = parseFloat(unformatted)
 
     return float
@@ -74,8 +75,8 @@ export default class MoneyFormatter {
     const amount = (this.amount / 100).toFixed(this.decimalDigits())
     const formatOptions = {
       prefix: this.prefix(),
-      decimal: I18n.t("number.currency.format.separator"),
-      integerSeparator: I18n.t("number.currency.format.delimiter")
+      decimal: I18nOnSteroids.getCurrent().t("number.currency.format.separator"),
+      integerSeparator: I18nOnSteroids.getCurrent().t("number.currency.format.delimiter")
     }
 
     return formatNumber(formatOptions)(amount)

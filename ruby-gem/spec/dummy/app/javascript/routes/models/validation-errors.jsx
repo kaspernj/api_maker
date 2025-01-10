@@ -1,6 +1,6 @@
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import {digg} from "diggerize"
-import FlashMessage from "shared/flash-message"
+import FlashMessage from "@kaspernj/api-maker/build/flash-message"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
 import Params from "@kaspernj/api-maker/build/params"
@@ -8,7 +8,7 @@ import React from "react"
 import Select from "@kaspernj/api-maker/build/bootstrap/select"
 import models from "@kaspernj/api-maker/build/models"
 
-const {User} = models
+const {Account, Project, Task, User} = models
 
 export default class ModelsValidationErrors extends React.PureComponent {
   // This ensures that it doesn't crash if the checkbox is passed an inputRef

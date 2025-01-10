@@ -1,6 +1,10 @@
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import Layout from "components/layout"
+import models from "@kaspernj/api-maker/build/models"
 import Params from "@kaspernj/api-maker/build/params"
+import React from "react"
+
+const {Task} = models
 
 export default class BootstrapCheckboxBoolean extends React.PureComponent {
   state = {}
@@ -34,15 +38,16 @@ export default class BootstrapCheckboxBoolean extends React.PureComponent {
     )
   }
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault()
 
-    const { task } = this.state
+    const {task} = this.state
 
-    task.saveRaw(e.target).then(() => {
+    try {
+      await task.saveRaw(e.target)
       console.log("Task was saved")
-    }, (response) => {
-      console.error("Task couldnt be saved")
-    })
+    } catch (error) {
+      console.error("Task couldnt be saved", {error})
+    }
   }
 }

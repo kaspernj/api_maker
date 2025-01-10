@@ -1,6 +1,6 @@
 import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import FlashMessage from "shared/flash-message"
+import FlashMessage from "@kaspernj/api-maker/build/flash-message"
 import Link from "@kaspernj/api-maker/build/link"
 import modelClassRequire from "@kaspernj/api-maker/build/model-class-require"
 import Routes from "shared/routes"

@@ -1,6 +1,10 @@
 import {digg} from "diggerize"
+import Hash from "shared/hash"
+import models from "@kaspernj/api-maker/build/models"
 import Layout from "components/layout"
 import React from "react"
+
+const {Project} = models
 
 export default class ModelsUpdate extends React.PureComponent {
   state = {

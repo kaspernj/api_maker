@@ -29,15 +29,16 @@ export default class BootstrapStringInputFile extends React.PureComponent {
     )
   }
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault()
 
-    const { user } = this.state
+    const {user} = this.state
 
-    user.saveRaw(e.target).then(() => {
+    try {
+      await user.saveRaw(e.target)
       console.log("User was saved")
-    }, (response) => {
-      console.log("Error!")
-    })
+    } catch (error) {
+      console.log("Error!", {error})
+    }
   }
 }

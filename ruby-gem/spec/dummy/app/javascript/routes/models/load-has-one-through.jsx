@@ -1,4 +1,7 @@
+import models from "@kaspernj/api-maker/build/models"
 import React from "react"
+
+const {Task} = models
 
 export default class ModelsLoadHasOneThrough extends React.PureComponent {
   state = {}

@@ -14,6 +14,7 @@ import React from "react"
 import Row from "./components/row"
 import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
+import useI18n from "i18n-on-steroids/src/use-i18n"
 
 const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox"))
 
@@ -28,6 +29,12 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     table: PropTypes.object.isRequired,
     tableSettingFullCacheKey: PropTypes.string.isRequired
   })
+
+  setup() {
+    const {t} = useI18n({namespace: "js.api_maker.table.model_row"})
+
+    this.t = t
+  }
 
   render() {
     const {index, table, model} = this.p
@@ -107,10 +114,11 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
   }
 
   onDestroyClicked = async () => {
+    const {t} = this.tt
     const {destroyMessage} = this.p.table.props
     const {model} = this.p
 
-    if (!confirm(I18n.t("js.shared.are_you_sure"))) {
+    if (!confirm(t("js.shared.are_you_sure"))) {
       return
     }
 

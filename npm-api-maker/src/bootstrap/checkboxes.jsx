@@ -1,4 +1,5 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import React, {useMemo} from "react"
 import {digs} from "diggerize"
 import {useForm} from "../form"
 import * as inflection from "inflection"
@@ -7,7 +8,6 @@ import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import useInput from "../use-input"
-import {useMemo} from "react"
 
 const OptionElement = memo(shapeComponent(class OptionElement extends ShapeComponent {
   render() {

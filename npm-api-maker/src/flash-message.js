@@ -1,6 +1,7 @@
 import CustomError from "@kaspernj/api-maker/build/custom-error"
+import I18nOnSteroids from "i18n-on-steroids"
 import ValidationError from "@kaspernj/api-maker/build/validation-error"
-import { digg } from "diggerize"
+import {digg} from "diggerize"
 
 export default class FlashMessage {
   static alert(message) {
@@ -16,7 +17,7 @@ export default class FlashMessage {
       if (error.hasUnhandledErrors()) {
         FlashMessage.alert(error.message)
       } else {
-        FlashMessage.error(I18n.t("js.flash_message.couldnt_submit_because_of_validation_errors"))
+        FlashMessage.error(I18nOnSteroids.getCurrent().t("js.flash_message.couldnt_submit_because_of_validation_errors"))
       }
     } else if (error instanceof CustomError) {
       const errors = error.args.response.errors
