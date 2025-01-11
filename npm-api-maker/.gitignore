@@ -55,3 +55,6 @@ yarn-error.log
 
 # Expo
 .expo/*
+
+# Project specific
+link.sh

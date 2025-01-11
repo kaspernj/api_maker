@@ -2881,10 +2881,10 @@ hyphenate-style-name@^1.0.3:
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz#691879af8e220aea5750e8827db4ef62a54e361d"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
 
-i18n-on-steroids@^1.0.18:
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.18.tgz#5ed39b8467c071962b08de39e63ac2a92f7ad593"
-  integrity sha512-qSUp2QzY32MB8/OUN0iH3llU+FXoV4RN6TmO5yd3gr/ziUIYMHQCdws7tCoAEv0kYal0De0wlTkKRUdPX7za1A==
+i18n-on-steroids@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.20.tgz#aaf8f6c2447d54bed1cc7d94642ed4387ca77e3a"
+  integrity sha512-uHnbJX9dcjy9dgFf7l1UoBXEtfgi6ZfkCUaCQresbwYjjLuNcAH0N9Ooqz47gnGJl26KXzSKhkIOIITOEcVQuw==
   dependencies:
     diggerize "^1.0.5"
     numberable "^1.0.0"
@@ -3480,10 +3480,18 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.16", on-location-changed@^1.0.16:
+"on-location-changed@>= 1.0.16":
   version "1.0.16"
   resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.16.tgz#a345c3cb50102649cb6a37d117b96c2e8f0e416f"
   integrity sha512-GjxEIz8iwW7f30ssHoNsWYHD8tm4h+yEH7PRJ3hm6WGiXdaHn+T221/uPS6Sf5jBUh2X/JKEW3lwLpYApk1eAA==
+  dependencies:
+    diggerize "^1.0.3"
+    qs "^6.10.5"
+
+on-location-changed@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.17.tgz#f234545641aba723de7797156bb8e6d6d648444e"
+  integrity sha512-m1ONgCOSdgqt0diB3pIj22jOBDLKv4hpNcKEopiAkWFs6YQUWzrfGuU4sLkA9M/L4yV3Gk9sWVv5ez+G7EZ1zw==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"

@@ -1,5 +1,5 @@
 export default function apiMakerTranslatedAttributes(attributeNames, availableLocales) {
-  translatedAttributes = []
+  const translatedAttributes = []
 
   for (const attribute of attributeNames) {
     for (const locale of availableLocales) {

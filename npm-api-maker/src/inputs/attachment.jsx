@@ -2,6 +2,7 @@ import BaseComponent from "../base-component"
 import {Input as ApiMakerInput} from "@kaspernj/api-maker/build/inputs/input"
 import Checkbox from "./checkbox"
 import memo from "set-state-compare/src/memo"
+import PropTypes from "prop-types"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import useI18n from "i18n-on-steroids/src/use-i18n"
 

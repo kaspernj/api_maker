@@ -1,6 +1,6 @@
 {
   "name": "@kaspernj/api-maker",
-  "version": "1.0.450",
+  "version": "1.0.455",
   "description": "My new module",
   "main": "build/index.js",
   "scripts": {
@@ -47,7 +47,7 @@
     "js-money": ">= 0.6.3",
     "numberable": ">= 1.0.0",
     "object-to-formdata": ">= 4.1.0",
-    "on-location-changed": ">= 1.0.16",
+    "on-location-changed": ">= 1.0.17",
     "qs": ">= 6.9.3",
     "react-native-vector-icons": "^10.2.0",
     "replaceall": ">= 0.1.6",

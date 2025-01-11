@@ -6,7 +6,7 @@ import uniqunize from "uniqunize"
 // Sometimes this needs to be called and sometimes not
 if (SourceMapConsumer.initialize) {
   SourceMapConsumer.initialize({
-    "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
+    "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.4/lib/mappings.wasm"
   })
 }
 
@@ -118,11 +118,19 @@ export default class SourceMapsLoader {
 
     xhr.open("GET", sourceMapUrl, true)
 
-    await this.loadXhr(xhr)
+    try {
+      await this.loadXhr(xhr, sourceMapUrl)
+    } catch (error) {
+      console.log(`Couldn't load source map from: ${sourceMapUrl}: ${xhr.responseText}`)
+
+      return
+    }
 
     const consumer = await new SourceMapConsumer(xhr.responseText)
 
-    this.sourceMaps.push({consumer, originalUrl})
+    if (consumer) {
+      this.sourceMaps.push({consumer, originalUrl})
+    }
   }
 
   loadUrl(url) {
@@ -133,10 +141,16 @@ export default class SourceMapsLoader {
     return parser
   }
 
-  loadXhr(xhr, postData) {
-    return new Promise((resolve) => {
-      xhr.onload = () => resolve()
-      xhr.send(postData)
+  loadXhr(xhr, url) {
+    return new Promise((resolve, reject) => {
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          resolve()
+        } else {
+          reject(new Error(`HTTP request failed with ${xhr.status} for ${url}`))
+        }
+      }
+      xhr.send()
     })
   }
 
