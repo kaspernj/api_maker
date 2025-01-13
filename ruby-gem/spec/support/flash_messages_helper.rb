@@ -1,7 +1,7 @@
 module FlashMessagesHelper
   def flash_message_text
-    find(".ui-pnotify-text").text
-  rescue Capybara::ElementNotFound
-    # Ignore - its ok that no flash message is shown
+    all("[data-class='notification-message']").map(&:text)
+  rescue Selenium::WebDriver::Error::StaleElementReferenceError
+    retry
   end
 end

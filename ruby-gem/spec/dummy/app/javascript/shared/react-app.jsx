@@ -1,6 +1,7 @@
 import {default as ApiMakerConfig} from "@kaspernj/api-maker/build/config"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"
+import {Container as Notifications} from "flash-notifications"
 import React from "react"
 import Router from "@kaspernj/api-maker/build/router"
 import Routes from "shared/routes"
@@ -17,12 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = createRoot(reactRoot)
 
   root.render(
-    <Router
-      history={ApplicationHistory}
-      notFoundComponent={NotFoundComponent}
-      requireComponent={requireComponent}
-      routes={Routes}
-      routeDefinitions={routeDefinitions}
-    />
+    <>
+      <Notifications />
+      <Router
+        history={ApplicationHistory}
+        notFoundComponent={NotFoundComponent}
+        requireComponent={requireComponent}
+        routes={Routes}
+        routeDefinitions={routeDefinitions}
+      />
+    </>
   )
 })
