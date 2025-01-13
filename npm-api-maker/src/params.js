@@ -28,7 +28,9 @@ export default class Params {
     const params = Params.change(given)
     const newParams = qs.stringify(params, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
-    const appHistory = opts.appHistory || config.getHistory() || AppHistory
+    const appHistory = opts.appHistory || config.getHistory()
+
+    if (!appHistory) throw new Error("AppHistory hasn't been set in the ApiMaker configuration")
 
     appHistory.push(newPath)
   }

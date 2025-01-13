@@ -83,7 +83,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
   }
 
   onLinksCreated = ({args}) => {
-    const {model} = digs(this.props, "model")
+    const {model} = this.p
     const id = model.id()
     const modelClassName = model.modelClassData().name
 
@@ -93,7 +93,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
   }
 
   onLinksDestroyed = ({args}) => {
-    const {model} = digs(this.props, "model")
+    const {model} = this.p
     const id = model.id()
     const modelClassName = model.modelClassData().name
 

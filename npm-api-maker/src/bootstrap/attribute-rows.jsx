@@ -17,8 +17,6 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRows extends 
     model: PropTypes.object.isRequired
   })
 
-  classObject = this.p.model.modelClass()
-
   render () {
     const {attributes, checkIfAttributeLoaded, model} = this.p
 

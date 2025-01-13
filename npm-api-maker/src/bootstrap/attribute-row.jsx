@@ -3,11 +3,13 @@ import classNames from "classnames"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import memo from "set-state-compare/src/memo"
-import MoneyFormatter from "../../money-formatter"
+import MoneyFormatter from "../money-formatter"
 import PropTypes from "prop-types"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import strftime from "strftime"
+import Text from "../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends ShapeComponent {
   static defaultProps = {
@@ -25,8 +27,9 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
   }
 
   setup() {
-    const {t} = useI18n({namespace: "js.api_maker.attribute_row"})
+    const {l, t} = useI18n({namespace: "js.api_maker.attribute_row"})
 
+    this.l = l
     this.t = t
     this.attribute = useMemo(
       () => {
@@ -39,22 +42,31 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
   }
 
   render () {
-    const {attribute, checkIfAttributeLoaded, children, className, identifier, label, model, value, ...restProps} = this.props
+    const {attribute, checkIfAttributeLoaded, children, className, identifier, label, model, style, value, ...restProps} = this.props
+    const actualStyle = Object.assign(
+      {
+        paddingVertical: 8
+      },
+      style
+    )
 
     return (
-      <div
-        className={classNames(className, "component-api-maker-attribute-row")}
-        data-attribute={attribute}
-        data-identifier={identifier}
+      <View
+        dataSet={{
+          attribute,
+          class: classNames(className, "component-api-maker-attribute-row"),
+          identifier
+        }}
+        style={actualStyle}
         {...restProps}
       >
-        <div className="attribute-row-label">
+        <Text dataSet={{class: "attribute-row-label"}} style={{fontWeight: "bold"}}>
           {this.label()}
-        </div>
-        <div className="attribute-row-value">
+        </Text>
+        <View dataSet={{class: "attribute-row-value"}} style={{marginTop: 3}}>
           {this.value()}
-        </div>
-      </div>
+        </View>
+      </View>
     )
   }
 
@@ -86,18 +98,35 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
   }
 
   valueContent(value) {
+    const {l, t} = this.tt
     const columnType = this.attribute?.getColumn()?.getType()
 
     if (columnType == "date") {
-      return I18n.l("date.formats.default", value)
+      return (
+        <Text>{l("date.formats.default", value)}</Text>
+      )
     } else if (value instanceof Date) {
-      return strftime("%Y-%m-%d %H:%M", value)
+      return (
+        <Text>{strftime("%Y-%m-%d %H:%M", value)}</Text>
+      )
     } else if (typeof value === "boolean") {
-      if (value) return this.t("js.shared.yes", {defaultValue: "Yes"})
+      if (value) {
+        return (
+          <Text>{t("js.shared.yes", {defaultValue: "Yes"})}</Text>
+        )
+      }
 
-      return this.t("js.shared.no", {defaultValue: "No"})
+      return (
+        <Text>{t("js.shared.no", {defaultValue: "No"})}</Text>
+      )
     } else if (MoneyFormatter.isMoney(value)) {
-      return MoneyFormatter.format(value)
+      return (
+        <Text>{MoneyFormatter.format(value)}</Text>
+      )
+    } else if (typeof value == "string") {
+      return (
+        <Text>{value}</Text>
+      )
     } else {
       return value
     }

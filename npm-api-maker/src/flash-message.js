@@ -5,47 +5,66 @@ import {digg} from "diggerize"
 
 export default class FlashMessage {
   static alert(message) {
-    new FlashMessage({type: "alert", text: message})
+    new FlashMessage({type: "alert", message})
   }
 
   static error(message) {
-    this.alert(message)
+    new FlashMessage({type: "error", message})
   }
 
   static errorResponse(error) {
     if (error instanceof ValidationError) {
       if (error.hasUnhandledErrors()) {
-        FlashMessage.alert(error.message)
+        FlashMessage.error(error.message)
       } else {
         FlashMessage.error(I18nOnSteroids.getCurrent().t("js.flash_message.couldnt_submit_because_of_validation_errors"))
       }
     } else if (error instanceof CustomError) {
       const errors = error.args.response.errors
-      const errorMessages = errors.map((error) => {
-        if (typeof error == "string") {
-          return error
-        }
+      const errorMessages = errors
+        .map((error) => {
+          if (typeof error == "string") {
+            return error
+          }
 
-        return digg(error, "message")
-      })
+          return digg(error, "message")
+        })
+      const errorMessage = errorMessages.join(". ")
 
-      FlashMessage.alert(errorMessages.map((error) => error.message).join(". "))
+      FlashMessage.error(errorMessage)
     } else {
       console.error("Didnt know what to do with this", error)
     }
   }
 
   static success(message) {
-    new FlashMessage({type: "success", text: message})
+    new FlashMessage({type: "success", message})
   }
 
-  constructor(args) {
-    if (!("delay" in args))
-      args["delay"] = 3000
+  constructor({message, type}) {
+    if (!message) throw new Error("No message given")
+    if (!type) throw new Error("No type given")
 
-    const pnotify = new PNotify(args)
-    pnotify.get().click(() => {
-      pnotify.remove()
+    let title
+
+    if (type == "alert") {
+      title = I18nOnSteroids.getCurrent().t("js.flash_message.alert", {defaultValue: "Alert"})
+    } else if (type == "error") {
+      title = I18nOnSteroids.getCurrent().t("js.flash_message.error", {defaultValue: "Error"})
+    } else if (type == "success") {
+      title = I18nOnSteroids.getCurrent().t("js.flash_message.success", {defaultValue: "Success"})
+    } else {
+      title = I18nOnSteroids.getCurrent().t("js.flash_message.notification", {defaultValue: "Notification"})
+    }
+
+    const event = new CustomEvent("pushNotification", {
+      detail: {
+        message,
+        title,
+        type
+      }
     })
+
+    globalThis.dispatchEvent(event)
   }
 }
