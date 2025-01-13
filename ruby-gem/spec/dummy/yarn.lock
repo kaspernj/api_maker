@@ -2881,10 +2881,10 @@ hyphenate-style-name@^1.0.3:
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz#691879af8e220aea5750e8827db4ef62a54e361d"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
 
-i18n-on-steroids@^1.0.18:
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.18.tgz#5ed39b8467c071962b08de39e63ac2a92f7ad593"
-  integrity sha512-qSUp2QzY32MB8/OUN0iH3llU+FXoV4RN6TmO5yd3gr/ziUIYMHQCdws7tCoAEv0kYal0De0wlTkKRUdPX7za1A==
+i18n-on-steroids@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.20.tgz#aaf8f6c2447d54bed1cc7d94642ed4387ca77e3a"
+  integrity sha512-uHnbJX9dcjy9dgFf7l1UoBXEtfgi6ZfkCUaCQresbwYjjLuNcAH0N9Ooqz47gnGJl26KXzSKhkIOIITOEcVQuw==
   dependencies:
     diggerize "^1.0.5"
     numberable "^1.0.0"
