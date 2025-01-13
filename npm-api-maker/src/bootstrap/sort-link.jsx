@@ -1,6 +1,6 @@
 import BaseComponent from "../base-component"
 import * as inflection from "inflection"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import Icon from "../utils/icon"
 import PropTypes from "prop-types"
 import qs from "qs"
 import memo from "set-state-compare/src/memo"
@@ -84,10 +84,10 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
           {this.title()}
         </Text>
         {isSortedByAttribute && sortMode == "asc" &&
-          <FontAwesomeIcon name="chevron-down" size={14} style={{marginLeft: 3}} />
+          <Icon name="chevron-down" size={14} style={{marginLeft: 3}} />
         }
         {isSortedByAttribute && sortMode == "desc" &&
-          <FontAwesomeIcon name="chevron-up" size={14} style={{marginLeft: 3}} />
+          <Icon name="chevron-up" size={14} style={{marginLeft: 3}} />
         }
       </LinkComponent>
     )

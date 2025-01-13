@@ -15,7 +15,7 @@ describe "super admin - show" do
     )
 
     # It shows 'belongs_to'-relationships as attributes
-    wait_for_selector ".attribute-row-value", exact_text: "Test project"
+    wait_for_selector "[data-class='attribute-row-value']", exact_text: "Test project"
   end
 
   it "destroys the record" do

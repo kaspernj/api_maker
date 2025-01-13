@@ -2289,7 +2289,7 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-"diggerize@>= 1.0.5", diggerize@^1.0.3, diggerize@^1.0.4, diggerize@^1.0.5:
+diggerize@*, "diggerize@>= 1.0.5", diggerize@^1.0.3, diggerize@^1.0.4, diggerize@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.5.tgz#268fd91f204959ee85bc7a0ee776178870a470f2"
   integrity sha512-DQZM0okJRCslVWAuyR6GCZfb9vdPApymlIq//ax53KxUAwvnUTLegYFIyvPm3oXBYGTdbaUV/iZ4K+NDSahDAA==
@@ -2602,6 +2602,15 @@ find-up@^6.3.0:
   dependencies:
     locate-path "^7.1.0"
     path-exists "^5.0.0"
+
+flash-notifications@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.15.tgz#3918788a3fd31de882ecca0614d0737b146c18b1"
+  integrity sha512-0JfyGw1jMCy+Wyce3NnR9TbK6XvhzqCii+rmR4uW8Ah4pN9md6FRtREoc3N2KQH43pps0Kk/SVUGM9cw9Fc46Q==
+  dependencies:
+    diggerize "*"
+    prop-types-exact "*"
+    set-state-compare "*"
 
 flat@^5.0.2:
   version "5.0.2"
@@ -3488,14 +3497,6 @@ on-headers@~1.0.2:
     diggerize "^1.0.3"
     qs "^6.10.5"
 
-on-location-changed@^1.0.17:
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.17.tgz#f234545641aba723de7797156bb8e6d6d648444e"
-  integrity sha512-m1ONgCOSdgqt0diB3pIj22jOBDLKv4hpNcKEopiAkWFs6YQUWzrfGuU4sLkA9M/L4yV3Gk9sWVv5ez+G7EZ1zw==
-  dependencies:
-    diggerize "^1.0.3"
-    qs "^6.10.5"
-
 once@^1.3.0, once@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
@@ -3717,7 +3718,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types-exact@^1.2.7:
+prop-types-exact@*, prop-types-exact@^1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/prop-types-exact/-/prop-types-exact-1.2.7.tgz#dba4509df22b72f79583bb82e22cce663b05f0e3"
   integrity sha512-A4RaV6mg3jocQqBYmqi2ojJ2VnV4AKTEHhl3xHsud08/u87gcVJc8DUOtgnPegoOCQv/shUqEk4eZGYibjnHzQ==
@@ -4159,7 +4160,7 @@ set-function-length@^1.2.1, set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-"set-state-compare@>= 1.0.53", set-state-compare@^1.0.52:
+set-state-compare@*, "set-state-compare@>= 1.0.53", set-state-compare@^1.0.52:
   version "1.0.54"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.54.tgz#685a91641201f3ed086076c80dbcafb56f318037"
   integrity sha512-NAxEpNjJk/N/g6w9nNMQm5M+zRwlBGuVEM4keXKoikchSOC7PwwZoCUkvvOWstNSzIgIShW/qyYSjieOnBbflw==

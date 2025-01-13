@@ -3,7 +3,7 @@ import ColumnContent from "../column-content"
 import columnIdentifier from "../column-identifier"
 import columnVisible from "../column-visible"
 import {saveAs} from "file-saver"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import Icon from "../../utils/icon"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -21,7 +21,7 @@ export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction ext
   render() {
     return (
       <Pressable onPress={this.tt.onDownloadPress} style={{flexDirection: "row", alignItems: "center"}}>
-        <FontAwesomeIcon name="download" size={20} />
+        <Icon name="download" size={20} />
         <Text style={{marginLeft: 5}}>
           Download
         </Text>

@@ -4,7 +4,7 @@ import Column from "./components/column"
 import columnIdentifier from "./column-identifier"
 import EventEmitter from "events"
 import FlashMessage from "../flash-message"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import Icon from "../utils/icon"
 import * as inflection from "inflection"
 import modelCallbackArgs from "./model-callback-args"
 import Link from "../link"
@@ -76,17 +76,17 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
           {actionsContent && actionsContent(this.tt.modelCallbackArgs)}
           {viewPath &&
             <Link dataSet={{class: "view-button"}} style={{marginLeft: 2, marginRight: 2}} to={viewPath}>
-              <FontAwesomeIcon name="search" size={18} />
+              <Icon name="search" size={18} />
             </Link>
           }
           {editPath &&
             <Link dataSet={{class: "edit-button"}} style={{marginLeft: 2, marginRight: 2}} to={editPath}>
-              <FontAwesomeIcon name="pencil" size={20} />
+              <Icon name="pencil" size={20} />
             </Link>
           }
           {destroyEnabled && model.can("destroy") &&
             <Pressable dataSet={{class: "destroy-button"}} style={{marginLeft: 2, marginRight: 2}} onPress={this.tt.onDestroyClicked}>
-              <FontAwesomeIcon name="remove" size={22} />
+              <Icon name="remove" size={22} />
             </Pressable>
           }
         </Column>

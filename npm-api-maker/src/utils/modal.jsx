@@ -1,7 +1,7 @@
 import {Modal, Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "./card"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import Icon from "../utils/icon"
 import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import useBreakpoint from "../use-breakpoint"
@@ -50,7 +50,7 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
   cardHeaderControls() {
     return (
       <Pressable onPress={this.tt.onModalClosePress} style={{marginLeft: "auto", padding: 5}}>
-        <FontAwesomeIcon name="remove" />
+        <Icon name="remove" />
       </Pressable>
     )
   }

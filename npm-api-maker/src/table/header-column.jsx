@@ -1,9 +1,9 @@
 import React, {useMemo} from "react"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import Header from "./components/header"
 import HeaderColumnContent from "./header-column-content"
+import Icon from "../utils/icon"
 import memo from "set-state-compare/src/memo"
 import {Animated, PanResponder} from "react-native"
 import PropTypes from "prop-types"
@@ -100,7 +100,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         {...restColumnProps}
       >
         {mdUp &&
-          <FontAwesomeIcon name="bars" style={{marginRight: 3, fontSize: 12}} {...touchProps} />
+          <Icon name="bars" style={{marginRight: 3, fontSize: 12}} {...touchProps} />
         }
         <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
         {mdUp &&

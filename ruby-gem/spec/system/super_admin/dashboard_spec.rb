@@ -12,6 +12,6 @@ describe "super admin - dashboard" do
     wait_for_selector "[data-class='components--admin--layout--menu--menu-item']", exact_text: "Tasks"
 
     # It shows the user who is signed in
-    wait_for_selector ".menu-user-name-container", exact_text: "Admin Adminson"
+    wait_for_selector "[data-class='menu-user-name-container']", exact_text: "Admin Adminson"
   end
 end

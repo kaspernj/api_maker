@@ -15,7 +15,8 @@
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
     "eslint": "eslint --ext .js,.jsx",
-    "eslint-find-rules": "eslint-find-rules"
+    "eslint-find-rules": "eslint-find-rules",
+    "watch": "babel src --out-dir build --extensions \".js,.jsx\" --source-maps inline --watch"
   },
   "keywords": [
     "react-native",

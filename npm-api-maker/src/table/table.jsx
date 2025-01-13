@@ -11,11 +11,11 @@ import DraggableSort from "../draggable-sort/index"
 import EventEmitter from "events"
 import Filters from "./filters"
 import FlatList from "./components/flat-list"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import {Form} from "../form"
 import Header from "./components/header"
 import HeaderColumn from "./header-column"
 import HeaderSelect from "./header-select"
+import Icon from "../utils/icon"
 import * as inflection from "inflection"
 import memo from "set-state-compare/src/memo"
 import modelClassRequire from "../model-class-require"
@@ -732,14 +732,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       <View style={{flexDirection: "row"}}>
         {controls && controls({models, qParams, query, result})}
         <Pressable dataSet={{class: "filter-button"}} onPress={this.tt.onFilterClicked}>
-          <FontAwesomeIcon name="search" size={20} />
+          <Icon name="search" size={20} />
         </Pressable>
         <View style={{position: "relative"}}>
           {showSettings &&
             <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
           <Pressable dataSet={{class: "settings-button"}} onPress={this.tt.onSettingsClicked}>
-            <FontAwesomeIcon name="gear" size={20} />
+            <Icon name="gear" size={20} />
           </Pressable>
         </View>
       </View>
