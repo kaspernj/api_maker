@@ -42,15 +42,4 @@
       }
     }
   }
-
-  [data-class="burger-menu-container"] {
-    @media (max-width: $sm-to) {
-      margin-left: auto;
-      font-size: 28px;
-    }
-
-    @media (min-width: $md-from) {
-      display: none;
-    }
-  }
 }

@@ -1,6 +1,7 @@
 import {useCallback, useLayoutEffect} from "react"
 import apiMakerConfig from "@kaspernj/api-maker/build/config"
 import {Dimensions} from "react-native"
+import * as inflection from "inflection"
 import useShape from "set-state-compare/src/use-shape"
 
 const calculateBreakPoint = (window) => {
@@ -26,6 +27,8 @@ const calculateBreakPoint = (window) => {
   throw new Error(`Couldn't not find breakpoint from window width: ${windowWidth}`)
 }
 
+const sizeTypes = ["down", "up"]
+
 const useBreakpoint = () => {
   const s = useShape()
   const onCalled = useCallback(({window}) => {
@@ -40,13 +43,34 @@ const useBreakpoint = () => {
     breakpoint: () => calculateBreakPoint(Dimensions.get("window"))
   })
 
+  const styling = useCallback((args) => {
+    const style = Object.assign({}, args.base)
+
+    for (const breakpointData of apiMakerConfig.getBreakPoints()) {
+      const breakpoint = breakpointData[0]
+
+      for (const sizeType of sizeTypes) {
+        const breakpointWithSizeType = `${breakpoint}${inflection.camelize(sizeType)}`
+
+        if (args[breakpointWithSizeType] && s.s.breakpoint[breakpointWithSizeType]) {
+          Object.assign(style, args[breakpointWithSizeType])
+        }
+      }
+    }
+
+    return style
+  }, [])
+
   useLayoutEffect(() => {
     const subscription = Dimensions.addEventListener("change", onCalled)
 
     return () => subscription?.remove()
   })
 
-  return s.s.breakpoint
+  return {
+    styling,
+    ...s.s.breakpoint
+  }
 }
 
 export default useBreakpoint

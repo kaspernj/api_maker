@@ -1,5 +1,5 @@
-// import "../../../src/super-admin/layout/style"
 import React, {useMemo} from "react"
+import {StyleSheet, View} from "react-native"
 import BaseComponent from "../../base-component"
 import CommandsPool from "../../commands-pool"
 import config from "super-admin/config"
@@ -9,11 +9,47 @@ import Menu from "./menu"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component"
+import Text from "../../utils/text"
+import useBreakpoint from "../../use-breakpoint"
 import useCurrentUser from "../../use-current-user"
 import useI18n from "i18n-on-steroids/src/use-i18n"
-import {View} from "react-native"
 
 const NoAccess = React.lazy(() => import("./no-access"))
+
+const styles = StyleSheet.create({
+  appLayoutContentContainer: {
+    base: {
+      minHeight: "100vh",
+      backgroundColor: "#f7f7f7"
+    },
+    mdDown: {
+      paddingTop: 130,
+      paddingRight: 30,
+      paddingBottom: 30
+    },
+    mdUp: {
+      paddingTop: 130,
+      paddingRight: 30,
+      paddingBottom: 30,
+      paddingLeft: 280
+    },
+    lgUp: {
+      paddingTop: 130,
+      paddingRight: 30,
+      paddingBottom: 30,
+      paddingLeft: 320
+    }
+  },
+  mb15: {
+    marginBottom: 15
+  },
+  rootView: {
+    width: "100%",
+    minHeight: "100vh",
+    backgroundColor: "#fff",
+    color: "#000"
+  }
+})
 
 export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -31,9 +67,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
   setup() {
     const currentUser = useCurrentUser()
     const {locale, t} = useI18n({namespace: "js.api_maker.super_admin.layout"})
+    const {lgUp, mdUp, mdDown} = useBreakpoint()
 
     this.useStates({menuTriggered: false})
-    this.setInstance({currentUser, t})
+    this.setInstance({currentUser, lgUp, mdUp, mdDown, t})
 
     useMemo(() => {
       CommandsPool.current().globalRequestData.layout = "admin"
@@ -42,7 +79,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
   }
 
   render() {
-    const {currentUser, t} = this.tt
+    const {currentUser, lgUp, mdUp, mdDown, t} = this.tt
     const {
       actions,
       active,
@@ -63,9 +100,17 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
     }
 
     const noAccess = !currentUser
+    const appLayoutContentContainerStyles = [styles.appLayoutContentContainer.base]
+
+    if (mdDown) appLayoutContentContainerStyles.push(styles.appLayoutContentContainer.mdDown)
+    if (mdUp) appLayoutContentContainerStyles.push(styles.appLayoutContentContainer.mdUp)
+    if (lgUp) appLayoutContentContainerStyles.push(styles.appLayoutContentContainer.lgUp)
 
     return (
-      <View dataSet={{component: "super-admin--layout", class: className, menuTriggered: this.s.menuTriggered}} {...restProps}>
+      <View
+        dataSet={{component: "super-admin--layout", class: className, menuTriggered: this.s.menuTriggered}}
+        style={styles.rootView}
+        {...restProps}>
         <Menu
           active={active}
           noAccess={noAccess}
@@ -73,22 +118,22 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
           triggered={this.s.menuTriggered}
         />
         <Header actions={actions} onTriggerMenu={this.tt.onTriggerMenu} title={headerTitle} />
-        <View dataSet={{class: "app-layout-content-container"}}>
+        <View dataSet={{class: "app-layout-content-container"}} style={appLayoutContentContainerStyles}>
           {noAccess &&
             <>
               <NoAccess />
               {currentUser &&
                 <>
-                  <div className="mb-4">
+                  <Text style={styles.mb15}>
                     {t(".try_signing_out_and_in_with_a_different_user", {defaultValue: "Try signing in with a different user."})}
-                  </div>
+                  </Text>
                 </>
               }
               {!currentUser &&
                 <>
-                  <div className="mb-4">
+                  <Text style={styles.mb15}>
                     {t(".try_signing_in", {defaultValue: "Try signing in."})}
-                  </div>
+                  </Text>
                   {config.signInContent()}
                 </>
               }
@@ -103,6 +148,6 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
   onRequestMenuClose = () => this.setState({menuTriggered: false})
   onTriggerMenu = (e) => {
     e.preventDefault()
-    setMenuTriggered(!this.s.menuTriggered)
+    this.setState({menuTriggered: !this.s.menuTriggered})
   }
 }))

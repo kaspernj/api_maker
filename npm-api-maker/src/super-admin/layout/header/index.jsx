@@ -1,11 +1,10 @@
 // import "../../../../src/super-admin/layout/header/style"
+import React, {useRef} from "react"
 import BaseComponent from "../../../base-component"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import Icon from "../../../utils/icon"
 import memo from "set-state-compare/src/memo"
-import {useRef} from "react"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../../../utils/text"
 import {Pressable, View} from "react-native"
@@ -20,10 +19,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
   })
 
   setup() {
-    const {name: breakpoint} = useBreakpoint()
+    const {name: breakpoint, mdUp} = useBreakpoint()
 
     this.headerActionsRef = useRef()
-    this.setInstance({breakpoint})
+    this.setInstance({breakpoint, mdUp})
     this.useStates({
       headerActionsActive: false
     })
@@ -32,7 +31,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
   }
 
   render() {
-    const {breakpoint} = this.tt
+    const {breakpoint, mdUp} = this.tt
     const {actions, onTriggerMenu, title} = this.props
 
     const headerStyle = {
@@ -108,21 +107,33 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
             </View>
           </View>
         }
-        <View dataSet={{class: "burger-menu-container"}}>
-          {actions &&
-            <Pressable dataSet={{class: "actions-link"}} onPress={this.tt.onGearsClicked} style={{marginRight: 8, fontSize: 22}}>
-              <FontAwesomeIcon name="gear" size={20} />
+        {!mdUp &&
+          <View
+            dataSet={{class: "burger-menu-container"}}
+            style={{
+              flexDirection: "row",
+              marginLeft: "auto"
+            }}
+          >
+            {actions &&
+              <Pressable dataSet={{class: "actions-link"}} onPress={this.tt.onGearsClicked} style={{marginRight: 8, fontSize: 22}}>
+                <Icon name="gear" size={20} />
+              </Pressable>
+            }
+            <Pressable dataSet={{class: "burger-menu-link"}} onPress={onTriggerMenu}>
+              <Icon name="bars" size={20} />
             </Pressable>
-          }
-          <Pressable dataSet={{class: "burger-menu-link"}} onPress={onTriggerMenu}>
-            <FontAwesomeIcon icon="bars" size={20} />
-          </Pressable>
-        </View>
+          </View>
+        }
       </View>
     )
   }
 
-  onGearsClicked = () => this.setState({headerActionsActive: !this.s.headerActionsActive})
+  onGearsClicked = () => {
+    console.log("onGearsClicked")
+
+    this.setState({headerActionsActive: !this.s.headerActionsActive})
+  }
 
   onWindowMouseUp = (e) => {
     // Close the header actions menu if clicked happened outside

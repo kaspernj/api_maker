@@ -2,7 +2,7 @@ module AttributeRowHelpers
   def attribute_row_selector(attribute: nil, identifier: nil)
     raise "No attribute or identifier given" if !attribute && !identifier
 
-    row_selector = ".component-api-maker-attribute-row"
+    row_selector = "[data-component='api-maker/attribute-row']"
     row_selector << "[data-attribute='#{attribute.camelize(:lower)}']" if attribute
     row_selector << "[data-identifier='#{identifier}']" if identifier
     row_selector
