@@ -1232,10 +1232,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@1.0.450":
-  version "1.0.450"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.450.tgz#65132e5f0fa2eeaebf07f88fcfe453afff8a5053"
-  integrity sha512-4Bb6UyJ/DZDYStkXs+nnKyESTHc9cV0IA03Gb2aQdKzSvNIftr2HViqdMI6WA0s/sNCOw9QUHdmOPOuFsNwzrg==
+"@kaspernj/api-maker@1.0.460":
+  version "1.0.460"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.460.tgz#de7b19b88ceb53e0fb4e96da9c9b035e71db6303"
+  integrity sha512-B23WXg0sZTNf7F8kgRXDAn2LnRhEdpXOV//4B9oqwbHD4fU5CBeRQ3CNvsy0LhGe1YJedshHBqkF4xKucXxr2A==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -1250,7 +1250,7 @@
     js-money ">= 0.6.3"
     numberable ">= 1.0.0"
     object-to-formdata ">= 4.1.0"
-    on-location-changed ">= 1.0.16"
+    on-location-changed ">= 1.0.17"
     qs ">= 6.9.3"
     react-native-vector-icons "^10.2.0"
     replaceall ">= 0.1.6"
@@ -2928,10 +2928,10 @@ import-local@^3.0.2:
   resolved "https://registry.yarnpkg.com/incorporator/-/incorporator-1.0.2.tgz#32e31850c6a56dbce2989b8ce9ed1148ad9373a4"
   integrity sha512-yGcm0Qv9u+mEonyYZx6E0kkEciOgUN6MjB9x8wlqGSGi6NaLoXhpAiGWpBZEdBEMZ3AZ9/KA7VWZjqSDu3dqhw==
 
-"inflection@>= 1.12.0", inflection@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/inflection/-/inflection-3.0.1.tgz#b1ec2fb8ab0887725d29ad6934810011eb508fa0"
-  integrity sha512-EpyF+TLa3xZPClbkp9pDJZtJFYPHouWuFYsfAQI8AfjnaPVOpmRV6GSzCs+QGelj2eZ7oQllcK23aI1vHhPVVg==
+"inflection@>= 1.12.0", inflection@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/inflection/-/inflection-3.0.2.tgz#2f591c3dad053e3fac65a03bf6431b675d829601"
+  integrity sha512-+Bg3+kg+J6JUWn8J6bzFmOWkTQ6L/NHfDRSYU+EVvuKHDxUDHAXgqixHfVlzuBQaPOTac8hn43aPhMNk6rMe3g==
 
 inflight@^1.0.4, inflight@^1.0.6:
   version "1.0.6"
@@ -3480,10 +3480,10 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.16":
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.16.tgz#a345c3cb50102649cb6a37d117b96c2e8f0e416f"
-  integrity sha512-GjxEIz8iwW7f30ssHoNsWYHD8tm4h+yEH7PRJ3hm6WGiXdaHn+T221/uPS6Sf5jBUh2X/JKEW3lwLpYApk1eAA==
+"on-location-changed@>= 1.0.17", on-location-changed@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.17.tgz#f234545641aba723de7797156bb8e6d6d648444e"
+  integrity sha512-m1ONgCOSdgqt0diB3pIj22jOBDLKv4hpNcKEopiAkWFs6YQUWzrfGuU4sLkA9M/L4yV3Gk9sWVv5ez+G7EZ1zw==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
@@ -4540,10 +4540,10 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
 
-uuid@^11.0.4:
-  version "11.0.4"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.0.4.tgz#37943977894ef806d2919a7ca3f89d6e23c60bac"
-  integrity sha512-IzL6VtTTYcAhA/oghbFJ1Dkmqev+FpQWnCBaKq/gUluLxliWvO8DPFWfIviRmYbtaavtSQe4WBL++rFjdcGWEg==
+uuid@^11.0.5:
+  version "11.0.5"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.0.5.tgz#07b46bdfa6310c92c3fb3953a8720f170427fc62"
+  integrity sha512-508e6IcKLrhxKdBbcA2b4KQZlLVp2+J5UwQ6F7Drckkc5N9ZJwFa4TgWtsww9UG8fGHbm6gbV19TdM5pQ4GaIA==
 
 uuid@^8.3.2:
   version "8.3.2"
