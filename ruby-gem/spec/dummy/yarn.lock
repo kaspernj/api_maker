@@ -3480,10 +3480,10 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.16", on-location-changed@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.16.tgz#a345c3cb50102649cb6a37d117b96c2e8f0e416f"
-  integrity sha512-GjxEIz8iwW7f30ssHoNsWYHD8tm4h+yEH7PRJ3hm6WGiXdaHn+T221/uPS6Sf5jBUh2X/JKEW3lwLpYApk1eAA==
+"on-location-changed@>= 1.0.16", on-location-changed@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.17.tgz#f234545641aba723de7797156bb8e6d6d648444e"
+  integrity sha512-m1ONgCOSdgqt0diB3pIj22jOBDLKv4hpNcKEopiAkWFs6YQUWzrfGuU4sLkA9M/L4yV3Gk9sWVv5ez+G7EZ1zw==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
