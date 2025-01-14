@@ -1,4 +1,4 @@
-import {default as ApiMakerConfig} from "@kaspernj/api-maker/build/config"
+import ApiMakerConfig from "@kaspernj/api-maker/build/config"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"
 import {Container as Notifications} from "flash-notifications"
@@ -10,6 +10,7 @@ const NotFoundComponent = () => <div>Not found</div>
 const requireComponent = ({routeDefinition}) => React.lazy(() => import(/* webpackChunkName: "[request]" */ `routes/${routeDefinition.component}`))
 import routeDefinitions from "./route-definitions.json"
 
+ApiMakerConfig.setCurrent()
 ApiMakerConfig.setRoutes(Routes)
 ApiMakerConfig.setRouteDefinitions(routeDefinitions)
 
