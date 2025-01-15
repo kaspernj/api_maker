@@ -17,7 +17,8 @@ describe "bootstrap attribute rows" do
 
     # Should show 'updated at' so it shouldn't be empty
     wait_for_expect do
-      expect(wait_for_and_find(".user-row[data-user-id='#{user_kasper.id}'] .updated-at-column [data-class='attribute-row-value']", visible: false).text).not_to eq ""
+      updated_at_selector = ".user-row[data-user-id='#{user_kasper.id}'] .updated-at-column [data-class='attribute-row-value']"
+      expect(wait_for_and_find(updated_at_selector, visible: false).text).not_to eq ""
     end
   end
 end
