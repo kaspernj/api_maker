@@ -5,10 +5,15 @@ import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
+import {useApiMaker} from "@kaspernj/api-maker/build/with-api-maker"
 
 export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   static propTypes = {
     usePressable: PropTypes.bool
+  }
+
+  setup() {
+    this.apiMaker = useApiMaker()
   }
 
   render() {
@@ -58,7 +63,7 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   }
 
   redirect = () => {
-    const history = globalThis.apiMakerConfigGlobal?.history
+    const history = this.apiMaker.config.getHistory()
 
     if (!history) throw new Error("History hasn't been set in the API maker configuration")
 

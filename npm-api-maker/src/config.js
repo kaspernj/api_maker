@@ -13,7 +13,7 @@ const accessors = {
     required: true
   },
   currenciesCollection: {required: true},
-  history: {required: false},
+  history: {required: true},
   host: {required: false},
   i18n: {required: false},
   modal: {required: false},

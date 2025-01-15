@@ -1,4 +1,4 @@
-import {default as ApiMakerConfig} from "@kaspernj/api-maker/build/config"
+import ApiMakerConfig from "@kaspernj/api-maker/build/config"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"
 import {Container as Notifications} from "flash-notifications"

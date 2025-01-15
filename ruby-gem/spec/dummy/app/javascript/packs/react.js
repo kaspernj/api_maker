@@ -23,7 +23,7 @@ const Modal = (props) => {
   )
 }
 
-import {default as ApiMakerConfig} from "@kaspernj/api-maker/build/config"
+import ApiMakerConfig from "@kaspernj/api-maker/build/config"
 ApiMakerConfig.setHistory(history)
 ApiMakerConfig.setModal(() => Modal)
 
