@@ -1,5 +1,5 @@
 import {camelize} from "inflection"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 
 const calculateQParams = (defaultParams, queryParams, searchKey) => {
   if (searchKey in queryParams) {

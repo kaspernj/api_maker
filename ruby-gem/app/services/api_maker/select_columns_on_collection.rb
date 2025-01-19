@@ -8,6 +8,9 @@ class ApiMaker::SelectColumnsOnCollection < ApiMaker::ApplicationService
     @model_class = model_class || collection.model
     @select_attributes = select_attributes&.dig(@model_class)
     @select_columns = select_columns
+
+    raise "No model class was given" unless @model_class
+
     @table_name = table_name || @model_class.table_name
   end
 

@@ -7,7 +7,7 @@ import ModelClassTable from "./model-class-table"
 import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import ShowNav from "./show-nav"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionPage extends BaseComponent {

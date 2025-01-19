@@ -7,7 +7,7 @@ import Params from "@kaspernj/api-maker/build/params"
 import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 
 const {Task} = models
 

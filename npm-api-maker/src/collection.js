@@ -5,6 +5,7 @@ import * as inflection from "inflection"
 import {incorporate} from "incorporator"
 import modelClassRequire from "./model-class-require"
 import Result from "./result"
+import uniqunize from "uniqunize"
 
 export default class ApiMakerCollection {
   static apiMakerType = "Collection"

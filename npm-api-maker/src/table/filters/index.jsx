@@ -11,7 +11,7 @@ import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import React from "react"
 import useI18n from "i18n-on-steroids/src/use-i18n"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 import {View} from "react-native"
 
 const {TableSearch} = models

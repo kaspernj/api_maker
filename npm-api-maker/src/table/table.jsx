@@ -36,7 +36,7 @@ import useCollection from "../use-collection"
 import useI18n from "i18n-on-steroids/src/use-i18n"
 import useEventEmitter from "../use-event-emitter"
 import useModelEvent from "../use-model-event"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 import Widths from "./widths"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]

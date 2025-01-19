@@ -2,7 +2,7 @@ import {useCallback, useLayoutEffect, useMemo} from "react"
 import Devise from "./devise"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 import useShape from "set-state-compare/src/use-shape"
 
 const useModel = (modelClassArg, argsArg = {}) => {

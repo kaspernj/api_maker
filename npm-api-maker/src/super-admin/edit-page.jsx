@@ -16,7 +16,7 @@ import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../utils/text"
 import useCurrentUser from "../use-current-user"
 import useModel from "../use-model"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends BaseComponent {
   static propTypes = propTypesExact({

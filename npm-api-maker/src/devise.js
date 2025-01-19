@@ -1,12 +1,12 @@
-import CanCan from "./can-can"
 import Deserializer from "./deserializer"
-import {digg} from "diggerize"
 import events from "./events"
 import * as inflection from "inflection"
 import modelClassRequire from "./model-class-require"
 import Services from "./services"
 
-const shared = {}
+if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
+
+const shared = globalThis.ApiMakerDevise
 
 export default class ApiMakerDevise {
   static callSignOutEvent(args) {
@@ -25,14 +25,14 @@ export default class ApiMakerDevise {
     return events
   }
 
-  static addUserScope(scope) {
+  static addUserScope(scope, args = {}) {
     const currentMethodName = `current${inflection.camelize(scope)}`
+    const isSignedInMethodName = `is${inflection.camelize(scope)}SignedIn`
+    const getArgsMethodName = `get${inflection.camelize(scope)}Args`
 
     ApiMakerDevise[currentMethodName] = () => ApiMakerDevise.current().getCurrentScope(scope)
-
-    const isSignedInMethodName = `is${inflection.camelize(scope)}SignedIn`
-
     ApiMakerDevise[isSignedInMethodName] = () => Boolean(ApiMakerDevise.current().getCurrentScope(scope))
+    ApiMakerDevise[getArgsMethodName] = () => args
   }
 
   static async signIn(username, password, args = {}) {

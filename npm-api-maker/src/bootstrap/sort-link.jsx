@@ -11,7 +11,7 @@ import urlEncode from "../url-encode"
 import useSorting from "../table/use-sorting"
 
 import Link from "../link"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 
 export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseComponent {
   static propTypes = {

@@ -2,7 +2,7 @@ import React from "react"
 
 // Set global.applicationHistory so that on-location-changed will listen on it
 import history from "shared/application-history"
-import {callbacksHandler} from "on-location-changed/src/callbacks-handler"
+import {callbacksHandler} from "on-location-changed/build/callbacks-handler"
 
 callbacksHandler.connectReactRouterHistory(history)
 
