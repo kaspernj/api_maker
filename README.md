@@ -58,7 +58,7 @@ end
 Make API maker able to listen for location changes by inserting this into your pack:
 ```js
 import history from "shared/history"
-import {callbacksHandler} from "on-location-changed/src/callbacks-handler"
+import {callbacksHandler} from "on-location-changed/build/callbacks-handler"
 
 callbacksHandler.connectReactRouterHistory(history)
 ```

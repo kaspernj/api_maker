@@ -21,9 +21,19 @@ export default class ApiMakerSessionStatusUpdater {
   constructor(args = {}) {
     this.events = {}
     this.timeout = args.timeout || 600000
-    this.useMetaElement = ("useMetaElement" in args) ? args.useMetaElement : true
 
-    this.connectOnlineEvent()
+    if ("useMetaElement" in args) {
+      this.useMetaElement = args.useMetaElement
+    } else if (typeof document != "undefined") {
+      this.useMetaElement = true
+    } else {
+      this.useMetaElement = false
+    }
+
+    if (typeof window != "undefined") {
+      this.connectOnlineEvent()
+    }
+
     this.connectWakeEvent()
   }
 

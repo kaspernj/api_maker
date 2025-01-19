@@ -9,7 +9,7 @@ import {shapeComponent} from "set-state-compare/src/shape-component"
 import ShowReflectionLink from "./show-reflection-link"
 import Text from "../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseComponent {

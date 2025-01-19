@@ -17,7 +17,7 @@ import ShowReflectionPage from "./show-reflection-page"
 import Text from "../utils/text"
 import useCanCan from "../use-can-can"
 import useCurrentUser from "../use-current-user"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 
 export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponent {
   setup() {

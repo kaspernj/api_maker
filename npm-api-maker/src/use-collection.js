@@ -5,7 +5,7 @@ import ModelEvents from "./model-events"
 import {useCallback, useLayoutEffect, useMemo} from "react"
 import useCreatedEvent from "./use-created-event"
 import useShape from "set-state-compare/src/use-shape"
-import useQueryParams from "on-location-changed/src/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params"
 
 const useCollection = (props, cacheKeys = []) => {
   const {

@@ -4,7 +4,7 @@ import propTypesExact from "prop-types-exact"
 import React, {memo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import {Suspense} from "react"
-import usePath from "on-location-changed/src/use-path"
+import usePath from "on-location-changed/build/use-path"
 import useRouter from "./use-router"
 
 export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {

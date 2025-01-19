@@ -2,6 +2,7 @@ import {useCallback, useMemo} from "react"
 import {camelize} from "inflection"
 import Devise from "./devise"
 import {digg} from "diggerize"
+import * as inflection from "inflection"
 import Logger from "./logger"
 import Services from "./services"
 import useEventEmitter from "./use-event-emitter"
@@ -21,11 +22,13 @@ const useCurrentUser = (args) => {
 
   const loadCurrentUserFromRequest = useCallback(async () => {
     const {scope, scopeName} = s.m
+    const getArgsMethodName = `get${inflection.camelize(scope)}Args`
+    const args = Devise[getArgsMethodName]()
 
     logger.debug(() => `Loading ${scope} with request`)
 
-    const result = await Services.current().sendRequest("Devise::Current", {scope})
-    const current = digg(result, "current")
+    const result = await Services.current().sendRequest("Devise::Current", {query: args.query, scope})
+    const current = digg(result, "current")[0]
 
     if (!(scopeName in s.setStates)) throw new Error(`'${scopeName}' not found in setStates`)
     if (current) Devise.updateSession(current)

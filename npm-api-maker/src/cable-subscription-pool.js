@@ -1,4 +1,4 @@
-import ChannelsConsumer from "./channels-consumer"
+import getChannelsConsumer from "./channels-consumer"
 import CommandsPool from "./commands-pool"
 import Deserializer from "./deserializer"
 import {digg} from "diggerize"
@@ -18,7 +18,7 @@ export default class ApiMakerCableSubscriptionPool {
 
     logger.debug(() => ["Creating subscription", {subscriptionData}])
 
-    this.subscription = ChannelsConsumer.subscriptions.create(
+    this.subscription = getChannelsConsumer().subscriptions.create(
       {
         channel: "ApiMaker::SubscriptionsChannel",
         global: globalData,

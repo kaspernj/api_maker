@@ -87,16 +87,17 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
       className,
       currentCustomer,
       currentCustomerId,
+      headTitle,
       headerTitle,
       menu,
       ...restProps
     } = this.props
-    const headTitle = headTitle || headerTitle
+    const actualHeadTitle = headTitle || headerTitle
 
-    if (headTitle) {
-      document.title = headTitle
+    if (actualHeadTitle) {
+      document.title = actualHeadTitle
     } else {
-      document.title = "Wooftech"
+      document.title = "Super Admin"
     }
 
     const noAccess = !currentUser
