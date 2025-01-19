@@ -75,8 +75,10 @@ class ApiMaker::CollectionSerializer
   def model_class
     @model_class ||= if collection.is_a?(Array)
       collection.first.class
-    else
+    elsif resource.model_class
       resource.model_class
+    else
+      raise "Not sure how to get model class"
     end
   end
 

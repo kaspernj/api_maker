@@ -5,7 +5,6 @@ class Services::Devise::Current < ApiMaker::BaseService
     model_class = devise_mapping.class_name.safe_constantize
     model_id = controller.__send__(:"current_#{scope}")&.id
     current_model = controller.__send__(:"current_#{scope}")
-    model_class = current_model&.class
     query = args[:query]
     collection_serializer = ApiMaker::CollectionSerializer.new(
       ability: current_ability,

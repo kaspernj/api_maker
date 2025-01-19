@@ -1,0 +1,46 @@
+{
+  "Task": {
+    "state": {
+      "da": {
+        "collection": {
+          "Åben": "open",
+          "Lukket": "closed"
+        },
+        "collection_array": [
+          {
+            "translation": "Åben",
+            "value": "open"
+          },
+          {
+            "translation": "Lukket",
+            "value": "closed"
+          }
+        ],
+        "inverted_collection": {
+          "open": "Åben",
+          "closed": "Lukket"
+        }
+      },
+      "en": {
+        "collection": {
+          "Open": "open",
+          "Closed": "closed"
+        },
+        "collection_array": [
+          {
+            "translation": "Open",
+            "value": "open"
+          },
+          {
+            "translation": "Closed",
+            "value": "closed"
+          }
+        ],
+        "inverted_collection": {
+          "open": "Open",
+          "closed": "Closed"
+        }
+      }
+    }
+  }
+}
