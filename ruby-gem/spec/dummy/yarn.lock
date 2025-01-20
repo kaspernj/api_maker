@@ -1232,10 +1232,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@1.0.460":
-  version "1.0.460"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.460.tgz#de7b19b88ceb53e0fb4e96da9c9b035e71db6303"
-  integrity sha512-B23WXg0sZTNf7F8kgRXDAn2LnRhEdpXOV//4B9oqwbHD4fU5CBeRQ3CNvsy0LhGe1YJedshHBqkF4xKucXxr2A==
+"@kaspernj/api-maker@1.0.463":
+  version "1.0.463"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.463.tgz#761e348d9e2c0fb4c483ac547295aa94435fe0fc"
+  integrity sha512-aOJEehURdwOc+ScemKralgsmxjk1ynp5EgVzbtR6vceV4LWllu0AMAMBp28475gyLX2MhaFJSDC626Dxb9sb+A==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -1259,6 +1259,7 @@
     stacktrace-parser "^0.1.10"
     strftime ">= 0.10.0"
     uniqunize "^1.0.1"
+    url-parse "^1.5.10"
     wake-event ">= 0.0.1"
 
 "@leichtgewicht/ip-codec@^2.0.1":
@@ -3759,6 +3760,11 @@ qs@6.13.0, "qs@>= 6.9.3", qs@^6.10.5:
   dependencies:
     side-channel "^1.0.6"
 
+querystringify@^2.1.1:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
+  integrity sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==
+
 rails-erb-loader@^5.5.2:
   version "5.5.2"
   resolved "https://registry.yarnpkg.com/rails-erb-loader/-/rails-erb-loader-5.5.2.tgz#db3fa8ac89600f09d179a1a70a2ca18c592576ea"
@@ -4530,6 +4536,14 @@ uri-js@^4.2.2:
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
+
+url-parse@^1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.10.tgz#9d3c2f736c1d75dd3bd2be507dcc111f1e2ea9c1"
+  integrity sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==
+  dependencies:
+    querystringify "^2.1.1"
+    requires-port "^1.0.0"
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
