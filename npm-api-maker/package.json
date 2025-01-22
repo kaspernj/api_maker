@@ -48,7 +48,7 @@
     "js-money": ">= 0.6.3",
     "numberable": ">= 1.0.0",
     "object-to-formdata": ">= 4.1.0",
-    "on-location-changed": ">= 1.0.17",
+    "on-location-changed": ">= 1.0.18",
     "qs": ">= 6.9.3",
     "react-native-vector-icons": "^10.2.0",
     "replaceall": ">= 0.1.6",

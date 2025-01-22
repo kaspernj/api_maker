@@ -3490,10 +3490,18 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.17", on-location-changed@^1.0.17:
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.17.tgz#f234545641aba723de7797156bb8e6d6d648444e"
-  integrity sha512-m1ONgCOSdgqt0diB3pIj22jOBDLKv4hpNcKEopiAkWFs6YQUWzrfGuU4sLkA9M/L4yV3Gk9sWVv5ez+G7EZ1zw==
+"on-location-changed@>= 1.0.17", on-location-changed@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.18.tgz#0a3ea9d35bcf2720926e4484186dcbac78632bba"
+  integrity sha512-fpBu2VPah6rkTTr+3B193+nlcISg9Op0+F4kCiB9B39i90R279Nl8daWAsNJ/U8Ri80yKA1itakDamlhNBA4FA==
+  dependencies:
+    diggerize "^1.0.3"
+    qs "^6.10.5"
+
+on-location-changed@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.18.tgz#0a3ea9d35bcf2720926e4484186dcbac78632bba"
+  integrity sha512-fpBu2VPah6rkTTr+3B193+nlcISg9Op0+F4kCiB9B39i90R279Nl8daWAsNJ/U8Ri80yKA1itakDamlhNBA4FA==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
