@@ -4037,10 +4037,10 @@ sass-loader@^16.0.4:
   dependencies:
     neo-async "^2.6.2"
 
-sass@^1.83.1:
-  version "1.83.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.83.1.tgz#dee1ab94b47a6f9993d3195d36f556bcbda64846"
-  integrity sha512-EVJbDaEs4Rr3F0glJzFSOvtg2/oy2V/YrGFPqPY24UqcLDWcI9ZY5sN+qyO3c/QCZwzgfirvhXvINiJCE/OLcA==
+sass@^1.83.4:
+  version "1.83.4"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.83.4.tgz#5ccf60f43eb61eeec300b780b8dcb85f16eec6d1"
+  integrity sha512-B1bozCeNQiOgDcLd33e2Cs2U60wZwjUUXzh900ZyQF5qUasvMdDZYbQ566LJu7cqR+sAHlAfO6RMkaID5s6qpA==
   dependencies:
     chokidar "^4.0.0"
     immutable "^5.0.2"
@@ -4160,10 +4160,10 @@ set-function-length@^1.2.1, set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@*, "set-state-compare@>= 1.0.53", set-state-compare@^1.0.52:
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.54.tgz#685a91641201f3ed086076c80dbcafb56f318037"
-  integrity sha512-NAxEpNjJk/N/g6w9nNMQm5M+zRwlBGuVEM4keXKoikchSOC7PwwZoCUkvvOWstNSzIgIShW/qyYSjieOnBbflw==
+set-state-compare@*, "set-state-compare@>= 1.0.53", set-state-compare@^1.0.55:
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.55.tgz#5bc1424b792a51f585e9f7a61aee680858bfd1dd"
+  integrity sha512-+HAgen+6ks+1nfBQCy2b5Rw3uxemU+fVPFiLURKsQlLSZ0We7T9q34QqeAjhSnYC7X/3OiCxgKXmxAkAhyricQ==
   dependencies:
     diggerize "^1.0.5"
     fetching-object ">= 1.0.1"
