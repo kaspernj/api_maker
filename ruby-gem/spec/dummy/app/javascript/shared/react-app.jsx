@@ -5,6 +5,7 @@ import {Container as Notifications} from "flash-notifications"
 import React from "react"
 import Router from "@kaspernj/api-maker/build/router"
 import Routes from "shared/routes"
+import WithLocationPath from "on-location-changed/build/with-location-path"
 
 const NotFoundComponent = () => <div>Not found</div>
 const requireComponent = ({routeDefinition}) => React.lazy(() => import(/* webpackChunkName: "[request]" */ `routes/${routeDefinition.component}`))
@@ -18,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = createRoot(reactRoot)
 
   root.render(
-    <>
+    <WithLocationPath>
       <Notifications />
       <Router
         history={ApplicationHistory}
@@ -27,6 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
         routes={Routes}
         routeDefinitions={routeDefinitions}
       />
-    </>
+    </WithLocationPath>
   )
 })
