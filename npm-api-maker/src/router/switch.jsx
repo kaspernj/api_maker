@@ -1,5 +1,5 @@
 import BaseComponent from "../base-component"
-import {createContext} from "react"
+import React, {createContext} from "react"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
