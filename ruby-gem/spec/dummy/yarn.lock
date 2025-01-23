@@ -1232,10 +1232,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@1.0.460":
-  version "1.0.460"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.460.tgz#de7b19b88ceb53e0fb4e96da9c9b035e71db6303"
-  integrity sha512-B23WXg0sZTNf7F8kgRXDAn2LnRhEdpXOV//4B9oqwbHD4fU5CBeRQ3CNvsy0LhGe1YJedshHBqkF4xKucXxr2A==
+"@kaspernj/api-maker@1.0.463":
+  version "1.0.463"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.463.tgz#761e348d9e2c0fb4c483ac547295aa94435fe0fc"
+  integrity sha512-aOJEehURdwOc+ScemKralgsmxjk1ynp5EgVzbtR6vceV4LWllu0AMAMBp28475gyLX2MhaFJSDC626Dxb9sb+A==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -1259,6 +1259,7 @@
     stacktrace-parser "^0.1.10"
     strftime ">= 0.10.0"
     uniqunize "^1.0.1"
+    url-parse "^1.5.10"
     wake-event ">= 0.0.1"
 
 "@leichtgewicht/ip-codec@^2.0.1":
@@ -3489,10 +3490,18 @@ on-headers@~1.0.2:
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
   integrity sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==
 
-"on-location-changed@>= 1.0.17", on-location-changed@^1.0.17:
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.17.tgz#f234545641aba723de7797156bb8e6d6d648444e"
-  integrity sha512-m1ONgCOSdgqt0diB3pIj22jOBDLKv4hpNcKEopiAkWFs6YQUWzrfGuU4sLkA9M/L4yV3Gk9sWVv5ez+G7EZ1zw==
+"on-location-changed@>= 1.0.17", on-location-changed@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.18.tgz#0a3ea9d35bcf2720926e4484186dcbac78632bba"
+  integrity sha512-fpBu2VPah6rkTTr+3B193+nlcISg9Op0+F4kCiB9B39i90R279Nl8daWAsNJ/U8Ri80yKA1itakDamlhNBA4FA==
+  dependencies:
+    diggerize "^1.0.3"
+    qs "^6.10.5"
+
+on-location-changed@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/on-location-changed/-/on-location-changed-1.0.18.tgz#0a3ea9d35bcf2720926e4484186dcbac78632bba"
+  integrity sha512-fpBu2VPah6rkTTr+3B193+nlcISg9Op0+F4kCiB9B39i90R279Nl8daWAsNJ/U8Ri80yKA1itakDamlhNBA4FA==
   dependencies:
     diggerize "^1.0.3"
     qs "^6.10.5"
@@ -3758,6 +3767,11 @@ qs@6.13.0, "qs@>= 6.9.3", qs@^6.10.5:
   integrity sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==
   dependencies:
     side-channel "^1.0.6"
+
+querystringify@^2.1.1:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
+  integrity sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==
 
 rails-erb-loader@^5.5.2:
   version "5.5.2"
@@ -4037,10 +4051,10 @@ sass-loader@^16.0.4:
   dependencies:
     neo-async "^2.6.2"
 
-sass@^1.83.1:
-  version "1.83.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.83.1.tgz#dee1ab94b47a6f9993d3195d36f556bcbda64846"
-  integrity sha512-EVJbDaEs4Rr3F0glJzFSOvtg2/oy2V/YrGFPqPY24UqcLDWcI9ZY5sN+qyO3c/QCZwzgfirvhXvINiJCE/OLcA==
+sass@^1.83.4:
+  version "1.83.4"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.83.4.tgz#5ccf60f43eb61eeec300b780b8dcb85f16eec6d1"
+  integrity sha512-B1bozCeNQiOgDcLd33e2Cs2U60wZwjUUXzh900ZyQF5qUasvMdDZYbQ566LJu7cqR+sAHlAfO6RMkaID5s6qpA==
   dependencies:
     chokidar "^4.0.0"
     immutable "^5.0.2"
@@ -4160,10 +4174,10 @@ set-function-length@^1.2.1, set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@*, "set-state-compare@>= 1.0.53", set-state-compare@^1.0.52:
-  version "1.0.54"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.54.tgz#685a91641201f3ed086076c80dbcafb56f318037"
-  integrity sha512-NAxEpNjJk/N/g6w9nNMQm5M+zRwlBGuVEM4keXKoikchSOC7PwwZoCUkvvOWstNSzIgIShW/qyYSjieOnBbflw==
+set-state-compare@*, "set-state-compare@>= 1.0.53", set-state-compare@^1.0.55:
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.55.tgz#5bc1424b792a51f585e9f7a61aee680858bfd1dd"
+  integrity sha512-+HAgen+6ks+1nfBQCy2b5Rw3uxemU+fVPFiLURKsQlLSZ0We7T9q34QqeAjhSnYC7X/3OiCxgKXmxAkAhyricQ==
   dependencies:
     diggerize "^1.0.5"
     fetching-object ">= 1.0.1"
@@ -4530,6 +4544,14 @@ uri-js@^4.2.2:
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
+
+url-parse@^1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.10.tgz#9d3c2f736c1d75dd3bd2be507dcc111f1e2ea9c1"
+  integrity sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==
+  dependencies:
+    querystringify "^2.1.1"
+    requires-port "^1.0.0"
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"

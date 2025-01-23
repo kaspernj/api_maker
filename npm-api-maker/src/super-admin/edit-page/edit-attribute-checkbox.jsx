@@ -1,4 +1,4 @@
-import {useMemo} from "react"
+import React, {useMemo} from "react"
 import {StyleSheet, View} from "react-native"
 import Checkbox from "../../utils/checkbox"
 import BaseComponent from "../../base-component"
