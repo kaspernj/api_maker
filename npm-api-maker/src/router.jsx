@@ -21,6 +21,8 @@ export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
     const {match} = useRouter({path, routes, routeDefinitions})
     const {matchingRoute} = match
 
+    console.log({path})
+
     if (!matchingRoute) {
       if (notFoundComponent) {
         const NotFoundComponent = notFoundComponent

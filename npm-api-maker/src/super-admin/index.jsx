@@ -8,7 +8,7 @@ import IndexPage from "./index-page"
 import Layout from "./layout/index"
 import Link from "../link"
 import memo from "set-state-compare/src/memo"
-import modelsModule from "@kaspernj/api-maker/build/models"
+import * as models from "models"
 import Params from "../params"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import ShowPage from "./show-page/index"
@@ -24,7 +24,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     this.queryParams = useQueryParams()
 
     if (this.queryParams.model) {
-      this.modelClass = modelsModule[this.queryParams.model]
+      this.modelClass = models[this.queryParams.model]
     } else {
       this.modelClass = null
     }

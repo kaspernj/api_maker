@@ -1,12 +1,10 @@
+import {Account, Project} from "models"
 import {digg, digs} from "diggerize"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import FlashMessage from "@kaspernj/api-maker/build/flash-message"
 import Layout from "components/layout"
-import models from "@kaspernj/api-maker/build/models"
 import React from "react"
 import ValidationError from "@kaspernj/api-maker/build/validation-error"
-
-const {Account, Project} = models
 
 export default class ModelsCustomValidationError extends React.PureComponent {
   state = {

@@ -1,11 +1,9 @@
 import {digs} from "diggerize"
 import Form from "components/tasks/form"
 import Layout from "components/layout"
-import models from "@kaspernj/api-maker/build/models"
 import React from "react"
 import Shape from "set-state-compare/src/shape"
-
-const {Task} = models
+import {Task} from "models"
 
 export default class RoutesTasksEdit extends React.PureComponent {
   taskId = this.props.match.params.id

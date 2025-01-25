@@ -1,10 +1,8 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import {memo, useMemo} from "react"
-import models from "@kaspernj/api-maker/build/models"
 import React from "react"
+import {Task} from "models"
 import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event"
-
-const {Task} = models
 
 export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponent {
   setup() {

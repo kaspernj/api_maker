@@ -1,7 +1,5 @@
 import {Controller} from "stimulus"
-import models from "@kaspernj/api-maker/build/models"
-
-const {Project} = models
+import {Project} from "models"
 
 export default class extends Controller {
   connect() {

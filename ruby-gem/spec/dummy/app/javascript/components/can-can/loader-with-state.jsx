@@ -1,7 +1,7 @@
 import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import classNames from "classnames"
-import models from "@kaspernj/api-maker/build/models"
+import * as models from "models"
 import PropTypes from "prop-types"
 import useCanCan from "@kaspernj/api-maker/build/use-can-can"
 

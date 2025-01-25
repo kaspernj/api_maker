@@ -1,5 +1,5 @@
 import * as inflection from "inflection"
-import models from "./models"
+import models from "models"
 
 const modelClassRequire = (modelName) => {
   const requireName = inflection.camelize(modelName)
