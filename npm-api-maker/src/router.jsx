@@ -35,7 +35,7 @@ export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
       }
     }
 
-    const Component = requireComponent({routeDefinition: matchingRoute.parsedRouteDefinition.routeDefinition})
+    const Component = requireComponent({routeDefinition: matchingRoute.parsedRouteDefinition.routeDefinition}).default
 
     return (
       <Suspense fallback={<div />}>
