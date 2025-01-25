@@ -3,6 +3,7 @@ import BaseComponent from "../base-component"
 import Card from "./card"
 import Icon from "../utils/icon"
 import memo from "set-state-compare/src/memo"
+import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import useBreakpoint from "../use-breakpoint"
 
