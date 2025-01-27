@@ -39,14 +39,24 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
   render() {
     const {isChecked} = this.tt
     const {label} = this.p
+    const {dataSet} = this.props
     const actualStyle = Object.assign(
       {flexDirection: "row", alignItems: "center"},
       this.props.style
     )
+    const actualDataSet = Object.assign(
+      {
+        checked: isChecked
+      },
+      dataSet
+    )
 
     return (
-      <View dataSet={{component: "api-maker/utils/checkbox"}} style={actualStyle}>
-        <CheckBox dataSet={this.props.dataSet} onValueChange={this.tt.onValueChange} value={isChecked} />
+      <View
+        dataSet={{component: "api-maker/utils/checkbox"}}
+        style={actualStyle}
+      >
+        <CheckBox dataSet={actualDataSet} onValueChange={this.tt.onValueChange} value={isChecked} />
         {label &&
           <Pressable onPress={this.tt.onLabelPressed}>
             <Text style={{marginLeft: 3}}>
