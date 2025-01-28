@@ -1,13 +1,11 @@
 import BaseComponent from "@kaspernj/api-maker/build/base-component"
 import memo from "set-state-compare/src/memo"
-import models from "@kaspernj/api-maker/build/models"
 import Paginate from "@kaspernj/api-maker/build/bootstrap/paginate"
 import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
+import {Task} from "models"
 import useQueryParams from "on-location-changed/build/use-query-params"
-
-const {Task} = models
 
 export default memo(shapeComponent(class ModelsPaginate extends BaseComponent {
   setup() {

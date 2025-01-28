@@ -2,6 +2,7 @@ import ApiMakerConfig from "@kaspernj/api-maker/build/config"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"
 import {Container as Notifications} from "flash-notifications"
+import Locales from "shared/locales"
 import React from "react"
 import Router from "@kaspernj/api-maker/build/router"
 import Routes from "shared/routes"
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <Notifications />
       <Router
         history={ApplicationHistory}
+        locales={Locales.availableLocales()}
         notFoundComponent={NotFoundComponent}
         requireComponent={requireComponent}
         routes={Routes}

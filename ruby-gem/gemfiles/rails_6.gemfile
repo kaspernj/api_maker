@@ -5,6 +5,7 @@ source "https://rubygems.org"
 gem "rails", "6.1.7.6"
 
 group :development, :test do
+  gem "acts_as_list"
   gem "appraisal"
   gem "awesome_translations", ">= 0.0.62"
   gem "best_practice_project"
@@ -39,7 +40,7 @@ group :development, :test do
 end
 
 group :test do
-  gem "api_maker_table", path: "/home/dev/Development/api_maker/api_maker_table_rubygem"
+  gem "api_maker_table", path: "/home/dev/api_maker/api_maker_table_rubygem"
 end
 
 gemspec path: "../"

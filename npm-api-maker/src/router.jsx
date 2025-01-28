@@ -17,8 +17,8 @@ export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
 
   render() {
     const path = usePath()
-    const {notFoundComponent, requireComponent, routeDefinitions, routes} = this.props
-    const {match} = useRouter({path, routes, routeDefinitions})
+    const {locales, notFoundComponent, requireComponent, routeDefinitions, routes} = this.props
+    const {match} = useRouter({locales, path, routes, routeDefinitions})
     const {matchingRoute} = match
 
     if (!matchingRoute) {

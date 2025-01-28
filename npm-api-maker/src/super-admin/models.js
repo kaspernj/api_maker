@@ -1,11 +1,11 @@
-import modelsModule from "@kaspernj/api-maker/build/models"
+import * as models from "models"
 
-const models = []
+const modelsAsArray = []
 
-for (const modelKey of Object.keys(modelsModule)) {
-  const model = modelsModule[modelKey]
+for (const modelKey of Object.keys(models)) {
+  const model = models[modelKey]
 
-  models.push(model)
+  modelsAsArray.push(model)
 }
 
-export default models
+export default modelsAsArray

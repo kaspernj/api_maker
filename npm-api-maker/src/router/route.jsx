@@ -183,7 +183,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     try {
       const componentImport = await this.tt.requireComponent({routeDefinition: {component: actualComponentPath}})
 
-      Component = componentImport.default
+      Component = componentImport
     } catch (error) {
       console.error(`Couldn't find component: ${actualComponentPath}`)
 

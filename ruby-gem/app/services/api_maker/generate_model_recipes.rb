@@ -18,6 +18,6 @@ class ApiMaker::GenerateModelRecipes < ApiMaker::ApplicationService
 
     erb = ERB.new(File.read(models_file_path))
     erb.filename = models_file_path
-    content = erb.result(binding)
+    erb.result(binding)
   end
 end

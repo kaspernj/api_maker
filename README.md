@@ -242,9 +242,7 @@ end
 ### Creating a new model from JavaScript
 
 ```js
-import models from "@kaspernj/api-maker/build/models"
-
-const {Task} = models
+import {Task} from "models"
 
 const task = new Task()
 task.assignAttributes({name: "New task"})
