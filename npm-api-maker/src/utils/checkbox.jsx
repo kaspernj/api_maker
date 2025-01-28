@@ -13,23 +13,50 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
   }
 
   static propTypes = propTypesExact({
-    checked: PropTypes.bool.isRequired,
+    checked: PropTypes.bool,
     dataSet: PropTypes.object,
+    defaultChecked: PropTypes.bool,
     label: PropTypes.string,
-    onCheckedChange: PropTypes.func.isRequired,
+    onCheckedChange: PropTypes.func,
     style: PropTypes.object
   })
 
+  setup() {
+    this.useStates({
+      checked: this.props.defaultChecked
+    })
+    this.isChecked = this.calculateChecked()
+  }
+
+  calculateChecked() {
+    if ("checked" in this.props) {
+      return this.p.checked
+    } else {
+      return this.s.checked
+    }
+  }
+
   render() {
-    const {checked, label, onCheckedChange} = this.p
+    const {isChecked} = this.tt
+    const {label} = this.p
+    const {dataSet} = this.props
     const actualStyle = Object.assign(
       {flexDirection: "row", alignItems: "center"},
       this.props.style
     )
+    const actualDataSet = Object.assign(
+      {
+        checked: isChecked
+      },
+      dataSet
+    )
 
     return (
-      <View dataSet={{component: "api-maker--utils--checkbox"}} style={actualStyle}>
-        <CheckBox dataSet={this.props.dataSet} onValueChange={onCheckedChange} value={checked} />
+      <View
+        dataSet={{component: "api-maker/utils/checkbox"}}
+        style={actualStyle}
+      >
+        <CheckBox dataSet={actualDataSet} onValueChange={this.tt.onValueChange} value={isChecked} />
         {label &&
           <Pressable onPress={this.tt.onLabelPressed}>
             <Text style={{marginLeft: 3}}>
@@ -41,5 +68,13 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
     )
   }
 
-  onLabelPressed = () => this.p.onCheckedChange(!this.p.checked)
+  onLabelPressed = () => this.p.onCheckedChange(!this.tt.isChecked)
+
+  onValueChange = (e) => {
+    if (this.props.onCheckedChange) {
+      this.p.onCheckedChange(e)
+    }
+
+    this.setState({checked: !this.tt.isChecked})
+  }
 }))
