@@ -32,7 +32,7 @@ const useRouter = (props) => {
   const getRoutes = useCallback(() => s.p.routes || config.getRoutes(), [])
 
   const parseRouteDefinitions = useCallback(() => {
-    const Locales = require("shared/locales").default
+    const Locales = require("shared/locales")
     const routeDefinitions = getRouteDefinitions()
     const routes = getRoutes()
     const regex = /:([A-z\d_]+)/

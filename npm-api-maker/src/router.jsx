@@ -21,8 +21,6 @@ export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
     const {match} = useRouter({path, routes, routeDefinitions})
     const {matchingRoute} = match
 
-    console.log({path})
-
     if (!matchingRoute) {
       if (notFoundComponent) {
         const NotFoundComponent = notFoundComponent
@@ -37,7 +35,11 @@ export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
       }
     }
 
-    const Component = requireComponent({routeDefinition: matchingRoute.parsedRouteDefinition.routeDefinition}).default
+    console.log("ApiMaker Router Before requireComponent")
+
+    const Component = requireComponent({routeDefinition: matchingRoute.parsedRouteDefinition.routeDefinition})
+
+    console.log("ApiMaker Router", {Component})
 
     return (
       <Suspense fallback={<div />}>

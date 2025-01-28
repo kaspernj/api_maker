@@ -1,13 +1,15 @@
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 
+const modelConfigRequireContext = require.context("super-admin/model-configs", true, /.jsx$/)
+
 export default class ApiMakerSuperAdminConfigReader {
   static forModel(modelClass) {
     const modelNameCamelized = digg(modelClass.modelClassData(), "nameDasherized")
     let modelConfig
 
     try {
-      modelConfig = require(`super-admin/model-configs/${modelNameCamelized}`).default
+      modelConfig = modelConfigRequireContext(`./${modelNameCamelized}.jsx`).default
     } catch (error) {
       if (error.message.includes("Cannot find module")) {
         console.debug(`No model-config for ${modelClass.modelClassData().name}`)
