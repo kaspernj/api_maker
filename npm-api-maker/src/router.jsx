@@ -17,8 +17,8 @@ export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
 
   render() {
     const path = usePath()
-    const {notFoundComponent, requireComponent, routeDefinitions, routes} = this.props
-    const {match} = useRouter({path, routes, routeDefinitions})
+    const {locales, notFoundComponent, requireComponent, routeDefinitions, routes} = this.props
+    const {match} = useRouter({locales, path, routes, routeDefinitions})
     const {matchingRoute} = match
 
     if (!matchingRoute) {
@@ -35,11 +35,7 @@ export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
       }
     }
 
-    console.log("ApiMaker Router Before requireComponent")
-
     const Component = requireComponent({routeDefinition: matchingRoute.parsedRouteDefinition.routeDefinition})
-
-    console.log("ApiMaker Router", {Component})
 
     return (
       <Suspense fallback={<div />}>

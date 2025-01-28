@@ -183,11 +183,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     this.log(() => ["loadComponent", {componentPath: this.props.componentPath, componentPathParts: this.componentPathParts, actualComponentPath}])
 
     try {
-      console.log("ApiMaker Route Before requireComponent")
-
       const componentImport = await this.tt.requireComponent({routeDefinition: {component: actualComponentPath}})
-
-      console.log("ApiMaker Route", {componentImport})
 
       Component = componentImport
     } catch (error) {

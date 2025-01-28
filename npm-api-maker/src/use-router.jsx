@@ -32,13 +32,12 @@ const useRouter = (props) => {
   const getRoutes = useCallback(() => s.p.routes || config.getRoutes(), [])
 
   const parseRouteDefinitions = useCallback(() => {
-    const Locales = require("shared/locales")
     const routeDefinitions = getRouteDefinitions()
     const routes = getRoutes()
     const regex = /:([A-z\d_]+)/
     const parsedRouteDefinitions = []
 
-    for (const locale of Locales.availableLocales()) {
+    for (const locale of s.p.locales) {
       for (const routeDefinition of routeDefinitions.routes) {
         const routePathName = `${inflection.camelize(routeDefinition.name, true)}Path`
         const params = findRouteParams(routeDefinition)
