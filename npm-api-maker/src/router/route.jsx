@@ -42,8 +42,6 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     const givenRoute = useContext(RouteContext)
     const {pathShown} = switchGroup.s
 
-    console.log({path})
-
     this.debug = false
     this.log(() => ({givenRoute}))
     this.t = t
