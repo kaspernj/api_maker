@@ -56,7 +56,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
         haya_select("#{base_input_name}_#{input_name}").select(value.fetch(:haya_select))
       else
         id = "#{resource.underscore_name.singularize}_#{input_name}"
-        checkbox_selector = "[data-component='api-maker--utils--checkbox'] [data-id='#{id}'] input[type='checkbox']"
+        checkbox_selector = "[data-component='api-maker-/utils/checkbox'] [data-id='#{id}'] input[type='checkbox']"
         component = wait_for_and_find("#{checkbox_selector}, input[data-id='#{id}'], textarea[data-id='#{id}']")
         component.set(value)
       end
