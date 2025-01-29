@@ -14,8 +14,6 @@ class HistoryExpo {
 
     const actualPath = url.href
 
-    console.log("HistoryExpo push", {path: actualPath, params: actualParams})
-
     router.push({pathname: actualPath, params: actualParams})
   }
 }
