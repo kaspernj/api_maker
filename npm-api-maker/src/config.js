@@ -12,6 +12,7 @@ const accessors = {
     ],
     required: true
   },
+  cableUrl: {require: false},
   currenciesCollection: {required: true},
   history: {required: true},
   host: {required: false},
