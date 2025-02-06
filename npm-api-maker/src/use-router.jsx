@@ -2,10 +2,20 @@ import config from "./config"
 import escapeStringRegexp from "escape-string-regexp"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
 import {useCallback, useMemo} from "react"
 import useShape from "set-state-compare/src/use-shape"
 
+const useRouterPropTypes = propTypesExact({
+  locales: PropTypes.array.isRequired,
+  path: PropTypes.string,
+  routeDefinitions: PropTypes.object.isRequired,
+  routes: PropTypes.object.isRequired
+})
+
 const useRouter = (props) => {
+  PropTypes.checkPropTypes(useRouterPropTypes, props, "prop", "useRouter")
+
   const s = useShape(props)
 
   const findRouteParams = useCallback((routeDefinition) => {
@@ -28,7 +38,7 @@ const useRouter = (props) => {
     return path
   }, [])
 
-  const getRouteDefinitions = useCallback(() =>  s.p.routeDefinitions || config.getRouteDefinitions(), [])
+  const getRouteDefinitions = useCallback(() => s.p.routeDefinitions || config.getRouteDefinitions(), [])
   const getRoutes = useCallback(() => s.p.routes || config.getRoutes(), [])
 
   const parseRouteDefinitions = useCallback(() => {
@@ -113,12 +123,6 @@ const useRouter = (props) => {
   }
 
   return {match}
-}
-
-useRouter.propTypes = {
-  path: PropTypes.string,
-  routeDefinitions: PropTypes.object,
-  routes: PropTypes.object
 }
 
 export default useRouter
