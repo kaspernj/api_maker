@@ -1,5 +1,4 @@
 import {useCallback, useMemo} from "react"
-import {camelize} from "inflection"
 import Devise from "./devise"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
@@ -15,7 +14,7 @@ const logger = new Logger({name: "ApiMaker / useCurrentUser"})
 const useCurrentUser = (args) => {
   const s = useShape(args || {})
   const scope = args?.scope || "user"
-  const scopeName = `current${camelize(scope)}`
+  const scopeName = `current${inflection.camelize(scope)}`
 
   s.meta.scope = scope
   s.meta.scopeName = scopeName
