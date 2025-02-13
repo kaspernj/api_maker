@@ -1,22 +1,33 @@
 import {useCallback, useLayoutEffect} from "react"
-import apiMakerConfig from "@kaspernj/api-maker/build/config"
+import config from "./config"
 import {Dimensions} from "react-native"
 import * as inflection from "inflection"
+import isExpo from "./is-expo"
 import useShape from "set-state-compare/src/use-shape"
 
-const calculateBreakPoint = (window) => {
-  const windowWidth = window.width
+const calculateBreakPoint = (windowObject) => {
+  let windowWidth
+
+  if (isExpo) {
+    windowWidth = windowObject.width
+  } else {
+    // Use 'window.innerWidth' outside Expo because sometimes window width excludes scroll
+    windowWidth = window.innerWidth
+  }
+
   const result = {}
 
-  for (const breakpointData of apiMakerConfig.getBreakPoints()) {
+  for (const breakpointData of config.getBreakPoints()) {
     const breakpoint = breakpointData[0]
     const width = breakpointData[1]
 
     if (!result.name && windowWidth >= width) {
       result.name = breakpoint
+      result[`${breakpoint}Down`] = true
+    } else {
+      result[`${breakpoint}Down`] = !result.name
     }
 
-    result[`${breakpoint}Down`] = !result.name
     result[`${breakpoint}Up`] = Boolean(result.name)
   }
 
@@ -31,8 +42,8 @@ const sizeTypes = ["down", "up"]
 
 const useBreakpoint = () => {
   const s = useShape()
-  const onCalled = useCallback(({window}) => {
-    const breakpoint = calculateBreakPoint(window)
+  const onCalled = useCallback(({window: windowObject}) => {
+    const breakpoint = calculateBreakPoint(windowObject)
 
     if (breakpoint.name != s.s.breakpoint.name) {
       s.set({breakpoint})
