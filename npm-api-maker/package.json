@@ -1,6 +1,6 @@
 {
   "name": "@kaspernj/api-maker",
-  "version": "1.0.2013",
+  "version": "1.0.2015",
   "description": "My new module",
   "main": "build/index.js",
   "scripts": {
@@ -43,7 +43,7 @@
     "form-data-objectizer": ">= 1.0.0",
     "form-serialize": ">= 0.7.2",
     "format-number": ">= 3.0.0",
-    "incorporator": ">= 1.0.2",
+    "incorporator": ">= 1.0.3",
     "inflection": ">= 1.12.0",
     "js-money": ">= 0.6.3",
     "numberable": ">= 1.0.0",

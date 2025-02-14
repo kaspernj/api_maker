@@ -1,5 +1,7 @@
 import {StyleSheet, View} from "react-native"
 import BaseComponent from "../../../base-component"
+import Devise from "../../../devise"
+import FlashMessage from "../../../flash-message"
 import Icon from "../../../utils/icon"
 import memo from "set-state-compare/src/memo"
 import Link from "../../../link"

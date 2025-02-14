@@ -1,8 +1,9 @@
-import React, {createContext, useContext} from "react"
+import React, {createContext, useContext, useMemo} from "react"
+import {incorporate} from "incorporator"
 import memo from "set-state-compare/src/memo"
 
 const DefaultStyleContext = createContext({
-  Text: {}
+  Text: []
 })
 
 const useDefaultStyle = () => {
@@ -11,15 +12,69 @@ const useDefaultStyle = () => {
   return defaultStyle
 }
 
-const WithDefaultStyle = memo((props) => {
+const useMergedStyle = (style, elementType) => {
+  const defaultStyle = useDefaultStyle()
+
+  const {newDefaultStyle, stylesList} = useMemo(() => {
+    const defaultElementStyle = defaultStyle[elementType]
+    let stylesList
+
+    if (Array.isArray(defaultElementStyle)) {
+      stylesList = [...defaultElementStyle]
+    } else if (typeof defaultElementStyle == "object") {
+      stylesList = [defaultElementStyle]
+    } else {
+      throw new Error(`Unknown type for default element type: ${typeof defaultElementStyle}`)
+    }
+
+    if (style && Array.isArray(style)) {
+      for (const styleI of style) {
+        stylesList.push(styleI)
+      }
+    } else if (style) {
+      stylesList.push(style)
+    }
+
+    return {newDefaultStyle, stylesList}
+  }, [defaultStyle[elementType], style])
+
+  const actualNewDefaultStyle = useMemo(() => {
+    const actualNewDefaultStyle = {...defaultStyle}
+
+    actualNewDefaultStyle[elementType] = stylesList
+
+    return actualNewDefaultStyle
+  }, [defaultStyle, newDefaultStyle])
+
+  return {newDefaultStyle: actualNewDefaultStyle, stylesList}
+}
+
+const WithDefaultStyle = memo(({children, style, ...restProps}) => {
+  if (Object.keys(restProps).length > 0) {
+    throw new Error(`Unhandled props: ${Object.keys(restProps).join(", ")}`)
+  }
+
   const defaultStyle = useContext(DefaultStyleContext)
-  const newDefaultStyle = Object.assign({}, defaultStyle, props.style)
+
+  const newDefaultStyle = useMemo(() => {
+    for (const key in style) {
+      if (!(key in defaultStyle)) {
+        throw new Error(`Invalid element type given: ${key}`)
+      }
+    }
+
+    const newDefaultStyle = {}
+
+    incorporate(newDefaultStyle, defaultStyle, style)
+
+    return newDefaultStyle
+  }, [defaultStyle, style])
 
   return (
     <DefaultStyleContext.Provider value={newDefaultStyle}>
-      {props.children}
+      {children}
     </DefaultStyleContext.Provider>
   )
 })
 
-export {useDefaultStyle, WithDefaultStyle}
+export {useDefaultStyle, useMergedStyle, WithDefaultStyle}

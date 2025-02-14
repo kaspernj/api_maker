@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name        = "api_maker_table"
   spec.version     = ApiMakerTable::VERSION
   spec.authors     = ["kaspernj"]
-  spec.email       = ["k@spernj.org"]
+  spec.email       = ["kasper@diestoeckels.de"]
   spec.homepage    = "https://github.com/kaspernj/api_maker"
   spec.summary     = "A Rails gem for generating a JavaScript API automatically based on your ActiveRecord models."
   spec.description = "A Rails gem for generating a JavaScript API automatically based on your ActiveRecord models."

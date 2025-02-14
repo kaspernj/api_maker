@@ -1,21 +1,40 @@
 import BaseComponent from "../base-component"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 import memo from "set-state-compare/src/memo"
-import React from "react"
+import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
-import {useDefaultStyle} from "./default-style"
+import {useMergedStyle} from "./default-style"
 
 export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent {
   render() {
-    const defaultStyle = useDefaultStyle()
     const {style, ...restProps} = this.props
-    const actualStyle = Object.assign(
-      {color: defaultStyle.Text.color},
-      style
-    )
+    const {stylesList} = useMergedStyle(style, "Text")
+
+    // Only forward some styles like color
+    const actualStylesList = useMemo(() => {
+      const actualStylesList = []
+
+      for (const style of stylesList) {
+        const newStyle = {}
+        let count = 0
+
+        for (const key in style) {
+          if (key == "color") {
+            newStyle[key] = style[key]
+            count++
+          }
+        }
+
+        if (count > 0) {
+          actualStylesList.push(newStyle)
+        }
+      }
+
+      return actualStylesList
+    }, [stylesList, style])
 
     return (
-      <FontAwesomeIcon style={actualStyle} {...restProps} />
+      <FontAwesomeIcon style={actualStylesList} {...restProps} />
     )
   }
 }))
