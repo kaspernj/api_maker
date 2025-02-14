@@ -16,19 +16,22 @@ const useMergedStyle = (style, elementType) => {
   const defaultStyle = useDefaultStyle()
 
   const {newDefaultStyle, stylesList} = useMemo(() => {
-    const textDefaultStyle = defaultStyle[elementType]
+    const defaultElementStyle = defaultStyle[elementType]
+    let stylesList
 
-    if (!style) {
-      return {newDefaultStyle: defaultStyle, stylesList: textDefaultStyle}
+    if (Array.isArray(defaultElementStyle)) {
+      stylesList = [...defaultElementStyle]
+    } else if (typeof defaultElementStyle == "object") {
+      stylesList = [defaultElementStyle]
+    } else {
+      throw new Error(`Unknown type for default element type: ${typeof defaultElementStyle}`)
     }
 
-    const stylesList = textDefaultStyle ? [...textDefaultStyle] : []
-
-    if (Array.isArray(style)) {
+    if (style && Array.isArray(style)) {
       for (const styleI of style) {
         stylesList.push(styleI)
       }
-    } else {
+    } else if (style) {
       stylesList.push(style)
     }
 
