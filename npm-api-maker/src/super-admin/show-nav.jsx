@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import memo from "set-state-compare/src/memo"
 import Params from "../params"
-import React from "react"
+import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import ShowReflectionLink from "./show-reflection-link"
 import Text from "../utils/text"
@@ -23,9 +23,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseC
     const {model, modelClass} = this.props
     const queryParams = useQueryParams()
     const reflections = modelClass.reflections()
+    const dataSet = useMemo(() => ({component: "super-admin--show-nav"}), [])
 
     return (
-      <View dataSet={{component: "super-admin--show-nav"}}>
+      <View dataSet={dataSet}>
         <View>
           <Link to={Params.withParams({model: modelClass.modelClassData().name, model_id: queryParams.model_id})}>
             <Text>

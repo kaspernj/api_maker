@@ -36,10 +36,12 @@ export default memo(shapeComponent(class SuperAdminShowReflectionActions extends
 
     linkParams[dataParamName] = modelData
 
+    const dataSet = useMemo(() => ({class: "create-new-model-link"}), [])
+
     return (
       <>
         {canCan?.can("new", reflection.modelClass()) &&
-          <Link dataSet={{class: "create-new-model-link"}} to={Params.withParams(linkParams)}>
+          <Link dataSet={dataSet} to={Params.withParams(linkParams)}>
             Create new
           </Link>
         }

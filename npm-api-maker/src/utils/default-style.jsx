@@ -15,7 +15,7 @@ const useDefaultStyle = () => {
 const useMergedStyle = (style, elementType) => {
   const defaultStyle = useDefaultStyle()
 
-  const {newDefaultStyle, stylesList} = useMemo(() => {
+  const stylesList = useMemo(() => {
     const defaultElementStyle = defaultStyle[elementType]
     let stylesList
 
@@ -35,7 +35,7 @@ const useMergedStyle = (style, elementType) => {
       stylesList.push(style)
     }
 
-    return {newDefaultStyle, stylesList}
+    return stylesList
   }, [defaultStyle[elementType], style])
 
   const actualNewDefaultStyle = useMemo(() => {
@@ -44,7 +44,7 @@ const useMergedStyle = (style, elementType) => {
     actualNewDefaultStyle[elementType] = stylesList
 
     return actualNewDefaultStyle
-  }, [defaultStyle, newDefaultStyle])
+  }, [defaultStyle, stylesList])
 
   return {newDefaultStyle: actualNewDefaultStyle, stylesList}
 }

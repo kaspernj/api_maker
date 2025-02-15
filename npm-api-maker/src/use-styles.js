@@ -13,6 +13,10 @@ const useStyles = (styles, args, dependencies = []) => {
     const listOfStyles = []
     const breakpointsReverse = [...config.getBreakPoints()].reverse()
 
+    if (!Array.isArray(args)) {
+      args = [args]
+    }
+
     for (const arg of args) {
       if (typeof arg == "string") {
         if (!(arg in styles)) {
