@@ -1,5 +1,5 @@
 import React, {useMemo} from "react"
-import {Pressable, View} from "react-native"
+import {Pressable, StyleSheet, View} from "react-native"
 import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader"
 import EditPage from "./edit-page"
@@ -18,6 +18,26 @@ import Text from "../utils/text"
 import useCanCan from "../use-can-can"
 import useCurrentUser from "../use-current-user"
 import useQueryParams from "on-location-changed/build/use-query-params"
+import useStyles from "../use-styles"
+
+const styles = StyleSheet.create({
+  actionsView: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  createNewModelLink: {
+    marginLeft: 10,
+    marginRight: 10
+  },
+  destroyModelLink: {
+    marginLeft: 10,
+    marginRight: 10
+  },
+  editModelLink: {
+    marginLeft: 10,
+    marginRight: 10
+  }
+})
 
 export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponent {
   setup() {
@@ -98,15 +118,17 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
       pageToShow = "welcome"
     }
 
+    const actionsViewStyle = useStyles(styles, "actionsView")
+
     const actions = useMemo(
-      () => <View style={{flexDirection: "row", alignItems: "center"}}>
+      () => <View style={actionsViewStyle}>
         {model && modelConfigActions && modelConfigActions({model})}
         {modelClass && pageToShow == "index" &&
           <>
             {canCan?.can("new", modelClass) && hasEditConfig(modelClass) &&
               <Link
                 dataSet={{class: "create-new-model-link"}}
-                style={{marginLeft: 10, marginRight: 10}}
+                style={styles.createNewModelLink}
                 to={Params.withParams({model: modelName, mode: "new"})}
               >
                 <Text>
@@ -121,7 +143,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
             {model.can("edit") && hasEditConfig(modelClass) &&
               <Link
                 dataSet={{class: "edit-model-link"}}
-                style={{marginLeft: 10, marginRight: 10}}
+                style={styles.editModelLink}
                 to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}
               >
                 <Text>
@@ -133,7 +155,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
               <Pressable
                 dataSet={{class: "destroy-model-link"}}
                 onPress={this.tt.onDestroyClicked}
-                style={{marginLeft: 10, marginRight: 10}}
+                style={styles.destroyModelLink}
               >
                 <Text>
                   Delete

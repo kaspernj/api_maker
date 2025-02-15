@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import memo from "set-state-compare/src/memo"
 import ModelClassTable from "./model-class-table"
-import React from "react"
+import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import ShowNav from "./show-nav"
 import useQueryParams from "on-location-changed/build/use-query-params"
@@ -29,8 +29,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionPage ex
 
     if (model) collection = model[reflection.name()]()
 
+    const dataSet = useMemo(() => ({component: "super-admin--show-page"}), [])
+
     return (
-      <View dataSet={{component: "super-admin--show-page"}}>
+      <View dataSet={dataSet}>
         {model &&
           <ShowNav model={model} modelClass={modelClass} />
         }
