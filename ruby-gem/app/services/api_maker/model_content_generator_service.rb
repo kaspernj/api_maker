@@ -120,7 +120,7 @@ private
   end
 
   def ransackable_associations
-    model_class.ransackable_associations.map do |association_name|
+    model_class.ransackable_associations.sort.map do |association_name|
       reflection = model_class.reflections[association_name]
 
       unless reflection
@@ -132,7 +132,7 @@ private
   end
 
   def ransackable_attributes
-    model_class.ransackable_attributes.map do |attribute_name|
+    model_class.ransackable_attributes.sort.map do |attribute_name|
       column = columns[attribute_name.to_s]
       column_data = _column_data(column) if column
 
@@ -147,7 +147,7 @@ private
   end
 
   def ransackable_scopes
-    model_class.ransackable_scopes.map do |scope_name|
+    model_class.ransackable_scopes.sort.map do |scope_name|
       {name: scope_name}
     end
   end
