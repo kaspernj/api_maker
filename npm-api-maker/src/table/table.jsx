@@ -1,6 +1,6 @@
 import {digg, digs} from "diggerize"
 import React, {createContext, useContext, useMemo, useRef} from "react"
-import {Animated, Pressable, View} from "react-native"
+import {Animated, Platform, Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
@@ -16,6 +16,7 @@ import Header from "./components/header"
 import HeaderColumn from "./header-column"
 import HeaderSelect from "./header-select"
 import Icon from "../utils/icon"
+import {incorporate} from "incorporator"
 import * as inflection from "inflection"
 import memo from "set-state-compare/src/memo"
 import modelClassRequire from "../model-class-require"
@@ -935,11 +936,17 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   submitFilter = () => {
-    const filterForm = digg(this.tt.filterFormRef, "current")
     const {appHistory} = this.props
-    const qParams = Params.serializeForm(filterForm)
     const {queryQName} = this.s
     const changeParamsParams = {}
+    const qParams = this.s.filterForm.asObject()
+
+    if (Platform.OS == "web") {
+      const filterForm = digg(this.tt.filterFormRef, "current")
+      const navtiveFormParams = Params.serializeForm(filterForm)
+
+      incorporate(qParams, navtiveFormParams)
+    }
 
     changeParamsParams[queryQName] = JSON.stringify(qParams)
 
