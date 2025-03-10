@@ -1,5 +1,8 @@
 import BaseComponent from "../base-component"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5"
+import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6"
+import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons"
 import memo from "set-state-compare/src/memo"
 import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
@@ -7,7 +10,7 @@ import {useMergedStyle} from "./default-style"
 
 export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent {
   render() {
-    const {style, ...restProps} = this.props
+    const {style, version = "FontAwesome", ...restProps} = this.props
     const {stylesList} = useMergedStyle(style, "Text")
 
     // Only forward some styles like color
@@ -33,8 +36,20 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
       return actualStylesList
     }, [stylesList, style])
 
-    return (
-      <FontAwesomeIcon style={actualStylesList} {...restProps} />
-    )
+    if (this.props.name == "person") {
+      console.log("Icon", {props: this.props})
+    }
+
+    if (version == "FontAwesome") {
+      return <FontAwesomeIcon style={actualStylesList} {...restProps} />
+    } else if (version == "FontAwesome5") {
+      return <FontAwesome5Icon style={actualStylesList} {...restProps} />
+    } else if (version == "FontAwesome6") {
+      return <FontAwesome6Icon style={actualStylesList} {...restProps} />
+    } else if (version == "MaterialIcons") {
+      return <MaterialIconsIcon style={actualStylesList} {...restProps} />
+    } else {
+      throw new Error(`Unknown version: ${version}`)
+    }
   }
 }))
