@@ -1,15 +1,17 @@
-import {useCallback, useLayoutEffect} from "react"
+import {useCallback} from "react"
 import config from "./config"
 import {Dimensions} from "react-native"
 import * as inflection from "inflection"
 import isExpo from "./is-expo"
+import useEventEmitter from "./use-event-emitter"
+import useEventListener from "./use-event-listener"
 import useShape from "set-state-compare/src/use-shape"
 
-const calculateBreakPoint = (windowObject) => {
+const calculateBreakPoint = (breakpoints) => {
   let windowWidth
 
   if (isExpo) {
-    windowWidth = windowObject.width
+    windowWidth = Dimensions.get("window").width
   } else {
     // Use 'window.innerWidth' outside Expo because sometimes window width excludes scroll
     windowWidth = window.innerWidth
@@ -17,7 +19,7 @@ const calculateBreakPoint = (windowObject) => {
 
   const result = {}
 
-  for (const breakpointData of config.getBreakPoints()) {
+  for (const breakpointData of breakpoints) {
     const breakpoint = breakpointData[0]
     const width = breakpointData[1]
 
@@ -40,24 +42,36 @@ const calculateBreakPoint = (windowObject) => {
 
 const sizeTypes = ["down", "up"]
 
-const useBreakpoint = () => {
-  const s = useShape()
-  const onCalled = useCallback(({window: windowObject}) => {
-    const breakpoint = calculateBreakPoint(windowObject)
+const useBreakpoint = (args = {}) => {
+  const s = useShape(args)
+
+  s.meta.breakpoints ||= config.getBreakpoints()
+
+  const checkAndUpdateBreakpoint = useCallback(() => {
+    const breakpoint = calculateBreakPoint(s.m.breakpoints)
 
     if (breakpoint.name != s.s.breakpoint.name) {
       s.set({breakpoint})
     }
   }, [])
 
+  const onDimensionsChange = useCallback(() => {
+    checkAndUpdateBreakpoint()
+  }, [])
+
+  const onBreakpointsChange = useCallback(({newValue}) => {
+    s.meta.breakpoints = newValue
+    checkAndUpdateBreakpoint()
+  }, [])
+
   s.useStates({
-    breakpoint: () => calculateBreakPoint(Dimensions.get("window"))
+    breakpoint: () => calculateBreakPoint(s.m.breakpoints)
   })
 
   const styling = useCallback((args) => {
     const style = Object.assign({}, args.base)
 
-    for (const breakpointData of apiMakerConfig.getBreakPoints()) {
+    for (const breakpointData of s.m.breakpoints) {
       const breakpoint = breakpointData[0]
 
       for (const sizeType of sizeTypes) {
@@ -72,11 +86,8 @@ const useBreakpoint = () => {
     return style
   }, [])
 
-  useLayoutEffect(() => {
-    const subscription = Dimensions.addEventListener("change", onCalled)
-
-    return () => subscription?.remove()
-  })
+  useEventEmitter(config.getEvents(), "onBreakpointsChange", onBreakpointsChange)
+  useEventListener(Dimensions, "change", onDimensionsChange)
 
   return {
     styling,
