@@ -1,5 +1,5 @@
 import CanCan from "./can-can"
-import {useCallback, useMemo, useState} from "react"
+import {useCallback, useMemo} from "react"
 import useCurrentUser from "./use-current-user"
 import useEventEmitter from "./use-event-emitter"
 import useShape from "set-state-compare/src/use-shape"

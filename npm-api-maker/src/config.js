@@ -1,7 +1,8 @@
+import EventEmitter from "events"
 import * as inflection from "inflection"
 
 const accessors = {
-  breakPoints: {
+  breakpoints: {
     default: [
       ["xxl", 1400],
       ["xl", 1200],
@@ -28,15 +29,27 @@ class ApiMakerConfig {
   constructor() {
     if (!globalThis.apiMakerConfigGlobal) globalThis.apiMakerConfigGlobal = {}
 
+    this.events = new EventEmitter()
     this.global = globalThis.apiMakerConfigGlobal
   }
+
+  getEvents = () => this.events
 }
 
 for (const accessorName in accessors) {
   const accessorData = accessors[accessorName]
   const camelizedAccessor = inflection.camelize(accessorName)
 
-  ApiMakerConfig.prototype[`set${camelizedAccessor}`] = function (newValue) { this.global[accessorName] = newValue }
+  ApiMakerConfig.prototype[`set${camelizedAccessor}`] = function (newValue) {
+    const oldValue = this.global[accessorName]
+
+    this.global[accessorName] = newValue
+
+    if (oldValue !== newValue) {
+      this.events.emit(`on${camelizedAccessor}Change`, {oldValue, newValue})
+    }
+  }
+
   ApiMakerConfig.prototype[`get${camelizedAccessor}`] = function (...args) {
     if (!this.global[accessorName]) {
       if (accessorData.default) return accessorData.default

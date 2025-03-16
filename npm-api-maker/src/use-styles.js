@@ -35,7 +35,7 @@ const useStyles = (styles, args, dependencies = []) => {
 
   const listOfStyles = useMemo(() => {
     const listOfStyles = []
-    const breakpointsReverse = [...config.getBreakPoints()].reverse()
+    const breakpointsReverse = [...config.getBreakpoints()].reverse()
 
     if (!Array.isArray(args)) {
       args = [args]
