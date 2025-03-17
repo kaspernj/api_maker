@@ -138,7 +138,9 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   if (!s.m.isSelect) s.m.inputProps.type = type
 
   const {validationErrors} = useValidationErrors((validationError) =>
-    validationError.inputName == s.m.inputProps.name || validationError.inputName == s.m.inputNameWithoutId
+    validationError.inputName &&
+      s.m.inputProps.name &&
+      (validationError.inputName == s.m.inputProps.name || validationError.inputName == s.m.inputNameWithoutId)
   )
 
   const wrapperOpts = {
