@@ -73,7 +73,7 @@ export default class ApiMakerTableColumnContent {
     }
   }
 
-  presentColumnValue(value) {
+  presentColumnValue = (value) => {
     let contentText
 
     if (value instanceof Date) {
@@ -106,7 +106,7 @@ export default class ApiMakerTableColumnContent {
     return <Text>{contentText}</Text>
   }
 
-  presentDateTime({apiMakerType, value}) {
+  presentDateTime = ({apiMakerType, value}) => {
     if (!apiMakerType || apiMakerType == "time") {
       const dateTimeFormatName = this.table.props.defaultDateTimeFormatName || "time.formats.default"
 
