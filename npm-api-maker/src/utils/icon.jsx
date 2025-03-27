@@ -36,10 +36,6 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
       return actualStylesList
     }, [stylesList, style])
 
-    if (this.props.name == "person") {
-      console.log("Icon", {props: this.props})
-    }
-
     if (version == "FontAwesome") {
       return <FontAwesomeIcon style={actualStylesList} {...restProps} />
     } else if (version == "FontAwesome5") {

@@ -33,10 +33,10 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
     const {preparedColumns} = table.s
 
     return (
-      <Modal onBackdropPress={this.p.onRequestClose} onRequestClose={this.p.onRequestClose} style={{backgroundColor: "#000"}} transparent>
+      <Modal onBackdropPress={this.p.onRequestClose} onRequestClose={this.p.onRequestClose} style={this.rootModalStyle ||= {backgroundColor: "#000"}} transparent>
         <View
-          dataSet={{class: "api-maker--table--settings"}}
-          style={{
+          dataSet={this.rootViewDataSet ||= {class: "api-maker--table--settings"}}
+          style={this.rootViewStyle ||= {
             width: "100%",
             maxWidth: 800,
             padding: 20,
@@ -44,14 +44,14 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
             border: "1px solid black"
           }}
         >
-          <View style={{marginBottom: 5}}>
-            <Text style={{fontSize: 16, fontWeight: "bold"}}>
+          <View style={this.settingsHeaderViewStyle ||= {marginBottom: 5}}>
+            <Text style={this.settingsHeaderTextSTyle ||= {fontSize: 16, fontWeight: "bold"}}>
               {t(".settings", {defaultValue: "Settings"})}
             </Text>
           </View>
           <DownloadAction table={table} />
-          <View style={{marginBottom: 5}}>
-            <Text style={{fontSize: 16, fontWeight: "bold"}}>
+          <View style={this.columnsHeaderViewStyle ||= {marginBottom: 5}}>
+            <Text style={this.columnsHeaderTextStyle ||= {fontSize: 16, fontWeight: "bold"}}>
               {t(".columns", {defaultValue: "Columns"})}
             </Text>
           </View>

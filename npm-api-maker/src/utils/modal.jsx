@@ -1,9 +1,9 @@
 import {Modal, Pressable, View} from "react-native"
+import React, {useMemo} from "react"
 import BaseComponent from "../base-component"
 import Card from "./card"
 import Icon from "../utils/icon"
 import memo from "set-state-compare/src/memo"
-import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import useBreakpoint from "../use-breakpoint"
 
@@ -11,12 +11,14 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
   render() {
     const {xs, sm} = useBreakpoint()
     const {children, dataSet, ...restProps} = this.props
-    const actualDataSet = Object.assign(
-      {
-        component: "api-maker/utils/modal"
-      },
-      dataSet
-    )
+
+    const actualDataSet = useMemo(() =>
+      Object.assign(
+        {component: "api-maker/utils/modal"},
+        dataSet
+      )
+    , [dataSet])
+
     let width, maxWidth
 
     if (xs || sm) {
@@ -26,10 +28,12 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
       maxWidth = 800
     }
 
+    const cardStyle = useMemo(() => ({width, maxWidth}), [width, maxWidth])
+
     return (
       <Modal dataSet={actualDataSet} {...restProps}>
         <View
-          style={{
+          style={this.rootViewStyle ||= {
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
@@ -39,7 +43,7 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
         >
           <Card
             controls={this.cardHeaderControls()}
-            style={{width, maxWidth}}
+            style={cardStyle}
           >
             {children}
           </Card>
@@ -50,7 +54,7 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
 
   cardHeaderControls() {
     return (
-      <Pressable onPress={this.tt.onModalClosePress} style={{marginLeft: "auto", padding: 5}}>
+      <Pressable onPress={this.tt.onModalClosePress} style={this.pressableStyle ||= {marginLeft: "auto", padding: 5}}>
         <Icon name="remove" />
       </Pressable>
     )

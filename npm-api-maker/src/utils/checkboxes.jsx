@@ -22,16 +22,17 @@ const OptionElement = memo(shapeComponent(class OptionElement extends ShapeCompo
 
   render() {
     const {checked, inputName, option} = this.p
+    const dataSet = useMemo(() => ({
+      component: "api-maker/utils/checkboxes/option",
+      name: inputName,
+      value: option[1]
+    }), [inputName, option[1]])
 
     return (
       <View >
         <Checkbox
           checked={checked}
-          dataSet={{
-            component: "api-maker/utils/checkboxes/option",
-            name: inputName,
-            value: option[1]
-          }}
+          dataSet={dataSet}
           label={option[0]}
           onCheckedChange={this.tt.onChange}
         />
@@ -88,8 +89,8 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckboxes extends ShapeCo
     const {errors} = digs(wrapperOpts, "errors")
 
     return (
-      <View dataSet={{component: "api-maker/utils/checkboxes"}}>
-        <Text style={{fontWeight: "bold"}}>
+      <View dataSet={this.rootViewDataSet ||= {component: "api-maker/utils/checkboxes"}}>
+        <Text style={this.textStyle ||= {fontWeight: "bold"}}>
           {this.tt.wrapperOpts.label}
         </Text>
         {this.props.options.map((option) =>
@@ -144,8 +145,6 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckboxes extends ShapeCo
 
       this.setState({checkedOptions: newOptions})
     }
-
-    console.log({checkedOptions: this.s.checkedOptions})
 
     if (this.props.onChange) {
       this.p.onChange({checked, option})

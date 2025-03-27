@@ -47,13 +47,21 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
         <Text>{label}</Text>
         <View>
           <TextInput
-            dataSet={{
+            dataSet={this.cache("textInputDataSet", {
               attribute: attributeName,
               id,
               name
-            }}
+            }, [attributeName, id, name])}
             onChangeText={this.tt.onChangeText}
-            style={{paddingTop: 9, paddingRight: 13, paddingBottom: 9, paddingLeft: 13, borderRadius: 5, backgroundColor: "#fff", border: "1px solid #cecece"}}
+            style={this.textInputStyle ||= {
+              paddingTop: 9,
+              paddingRight: 13,
+              paddingBottom: 9,
+              paddingLeft: 13,
+              borderRadius: 5,
+              backgroundColor: "#fff",
+              border: "1px solid #cecece"
+            }}
             value={value}
           />
         </View>

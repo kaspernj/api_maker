@@ -1,6 +1,6 @@
-import BaseComponent from "../base-component"
 import {CheckBox, Pressable, View} from "react-native"
 import React, {useMemo} from "react"
+import BaseComponent from "../base-component"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
