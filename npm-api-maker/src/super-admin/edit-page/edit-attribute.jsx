@@ -26,7 +26,10 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
     const modelAttribute = modelClass.attributes().find((modelAttributeI) => modelAttributeI.name() == attribute.attribute)
 
     return (
-      <View dataSet={{component: "api-maker/super-admin/edit-page/edit-attribute"}} style={{marginBottom: attribute.translated ? undefined : 12}}>
+      <View
+        dataSet={this.rootViewDataSet ||= {component: "api-maker/super-admin/edit-page/edit-attribute"}}
+        style={this.cache("rootViewStyle", {marginBottom: attribute.translated ? undefined : 12}, [attribute.translated])}
+      >
         {(() => {
           if (attribute.content) {
             return (
@@ -41,7 +44,7 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
             return (
               <>
                 {availableLocales.map((locale) =>
-                  <View key={locale} style={{marginBottom: 12}}>
+                  <View key={locale} style={this.localeViewStyle ||= {marginBottom: 12}}>
                     <EditAttributeInput
                       attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
                       id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}_${locale}`}

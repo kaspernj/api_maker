@@ -58,13 +58,13 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
         {...restColumnProps}
       >
         {!mdUp &&
-          <View dataSet={{class: "table--column-label"}}>
-            <Text style={{fontWeight: "bold"}}>
+          <View dataSet={this.columnLabelDataSet ||= {class: "table--column-label"}}>
+            <Text style={this.columnLabelTextStyle ||= {fontWeight: "bold"}}>
               {table.headerLabelForColumn(column)}
             </Text>
           </View>
         }
-        <View dataSet={{class: "table--column-value"}}>
+        <View dataSet={this.columnValueDataSet ||= {class: "table--column-value"}}>
           {new ColumnContent({column, l, model, t, table}).content()}
         </View>
       </Column>

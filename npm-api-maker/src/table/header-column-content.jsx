@@ -26,11 +26,11 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
 
     return (
       <View
-        dataSet={{
+        dataSet={this.cache("rootViewDataSet", {
           component: "api-maker/table/header-column-content",
           identifier: tableSettingColumn.identifier()
-        }}
-        style={{display: "flex", flexDirection: "row", alignItems: "center"}}
+        }, [tableSettingColumn.identifier()])}
+        style={this.rootViewStyle ||= {display: "flex", flexDirection: "row", alignItems: "center"}}
         {...columnProps}
       >
         {tableSettingColumn.hasSortKey() && query &&
@@ -38,14 +38,14 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
             attribute={tableSettingColumn.sortKey()}
             defaultParams={defaultParams}
             query={query}
-            style={{whiteSpace: "nowrap", overflow: "hidden"}}
+            style={this.sortLinkStyle ||= {whiteSpace: "nowrap", overflow: "hidden"}}
             textProps={{ellipsizeMode: "clip", numberOfLines: 1, style: styleForHeaderText()}}
             title={table.headerLabelForColumn(column)}
             {...this.props.sortLinkProps}
           />
         }
         {(!tableSettingColumn.hasSortKey() || !query) &&
-          <Text ellipsizeMode="clip" numberOfLines={1} style={{fontWeight: "bold"}}>
+          <Text ellipsizeMode="clip" numberOfLines={1} style={this.headerLabelStyle ||= {fontWeight: "bold"}}>
             {table.headerLabelForColumn(column)}
           </Text>
         }

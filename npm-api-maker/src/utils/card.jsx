@@ -33,12 +33,12 @@ export default memo(shapeComponent(class ApiMakerUtilsCard extends BaseComponent
     return (
       <View dataSet={actualDataSet} style={actualStyle}>
         {controls &&
-          <View style={{position: "absolute", top: 15, right: 15}}>
+          <View style={this.controlsViewStyle ||= {position: "absolute", top: 15, right: 15}}>
             {controls}
           </View>
         }
         {header &&
-          <Text style={{fontSize: 24}}>
+          <Text style={this.headerTextStyle ||= {fontSize: 24}}>
             {header}
           </Text>
         }

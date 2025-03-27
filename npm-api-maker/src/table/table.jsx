@@ -67,10 +67,10 @@ const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extend
             <WorkerPluginsCheckAllCheckbox
               currentWorkplace={table.s.currentWorkplace}
               query={queryWithoutPagination}
-              style={{marginHorizontal: "auto"}}
+              style={this.workerPlguinsCheckAllCheckboxStyle ||= {marginHorizontal: "auto"}}
             />
             {!mdUp &&
-              <Text style={{marginLeft: 3}}>
+              <Text style={this.selectAllFoundTextStyle ||= {marginLeft: 3}}>
                 {t(".select_all_found", {defaultValue: "Select all found"})}
               </Text>
             }
@@ -730,16 +730,16 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
 
     return (
-      <View style={{flexDirection: "row"}}>
+      <View style={this.rootViewStyle ||= {flexDirection: "row"}}>
         {controls && controls({models, qParams, query, result})}
         <Pressable dataSet={{class: "filter-button"}} onPress={this.tt.onFilterClicked}>
           <Icon name="search" size={20} />
         </Pressable>
-        <View style={{position: "relative"}}>
+        <View>
           {showSettings &&
             <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
-          <Pressable dataSet={{class: "settings-button"}} onPress={this.tt.onSettingsClicked}>
+          <Pressable dataSet={this.settingsButtonDataSet ||= {class: "settings-button"}} onPress={this.tt.onSettingsClicked}>
             <Icon name="gear" size={20} />
           </Pressable>
         </View>
@@ -759,13 +759,13 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     if (to === 0) from = 0
 
     return (
-      <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
-        <View dataSet={{class: "showing-counts"}} style={{flexDirection: "row"}}>
+      <View style={this.rootViewStyle ||= {flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
+        <View dataSet={this.showingCountsDataSet ||= {class: "showing-counts"}} style={this.showingCountsStyle ||= {flexDirection: "row"}}>
           <Text>
             {this.t(".showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
           </Text>
           {this.p.workplace && this.s.currentWorkplaceCount !== null &&
-            <Text style={{marginLeft: 3}}>
+            <Text style={this.xSelectedTextStyle ||= {marginLeft: 3}}>
               {this.t(".x_selected", {defaultValue: "%{selected} selected.", selected: this.s.currentWorkplaceCount})}
             </Text>
           }

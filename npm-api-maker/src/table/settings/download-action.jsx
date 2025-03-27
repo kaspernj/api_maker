@@ -20,9 +20,9 @@ export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction ext
 
   render() {
     return (
-      <Pressable onPress={this.tt.onDownloadPress} style={{flexDirection: "row", alignItems: "center"}}>
+      <Pressable onPress={this.tt.onDownloadPress} style={this.pressableStyle ||= {flexDirection: "row", alignItems: "center"}}>
         <Icon name="download" size={20} />
-        <Text style={{marginLeft: 5}}>
+        <Text style={this.textStyle ||= {marginLeft: 5}}>
           Download
         </Text>
       </Pressable>

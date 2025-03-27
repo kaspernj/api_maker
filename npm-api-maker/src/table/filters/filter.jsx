@@ -30,7 +30,7 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
     const {a, pre, sc} = this.props
 
     return (
-      <View style={{alignItems: "center", flexDirection: "row", backgroundColor: "grey", paddingVertical: 10, paddingHorizontal: 6}}>
+      <View style={this.rootViewStyle ||= {alignItems: "center", flexDirection: "row", backgroundColor: "grey", paddingVertical: 10, paddingHorizontal: 6}}>
         <Pressable
           dataSet={{
             attribute: a,
@@ -46,7 +46,11 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
             {a} {sc} {pre} {v}
           </Text>
         </Pressable>
-        <Pressable dataSet={{class: "remove-filter-button"}} onPress={this.tt.onRemoveFilterPressed} style={{marginLeft: 6}}>
+        <Pressable
+          dataSet={this.removeFilterButtonDataSet ||= {class: "remove-filter-button"}}
+          onPress={this.tt.onRemoveFilterPressed}
+          style={this.removeFilterButtonStyle ||= {marginLeft: 6}}
+        >
           <Icon name="remove" />
         </Pressable>
       </View>
