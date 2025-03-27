@@ -41,7 +41,7 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
       onPress(e, ...restArgs)
     }
 
-    if (!e.defaultPrevented && !e.ctrlKey && !e.metaKey) {
+    if (!e.defaultPrevented && !e.ctrlKey && !e.metaKey && this.props.target != "_blank") {
       e.preventDefault()
 
       this.redirect()
