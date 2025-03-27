@@ -1,11 +1,12 @@
-import BaseComponent from "../base-component"
+import React, {useMemo} from "react"
+import classNames from "classnames"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import Text from "./text"
 
-export default memo(shapeComponent(class ApiMakerUtilsCard extends BaseComponent {
+export default memo(shapeComponent(class ApiMakerUtilsCard extends ShapeComponent {
   static propTypes = propTypesExact({
     children: PropTypes.node,
     controls: PropTypes.node,
@@ -17,18 +18,24 @@ export default memo(shapeComponent(class ApiMakerUtilsCard extends BaseComponent
   render() {
     const {children, controls, dataSet, header, style} = this.props
     const {component, ...restDataSet} = dataSet || {}
-    const actualDataSet = Object.assign(
-      {component: classNames("api-maker/utils/card", component)},
-      restDataSet
-    )
-    const actualStyle = Object.assign(
-      {
-        backgroundColor: "#fff",
-        borderRadius: 15,
-        padding: 30
-      },
-      style
-    )
+
+    const actualDataSet = useMemo(() =>
+      Object.assign(
+        {component: classNames("api-maker/utils/card", component)},
+        restDataSet
+      )
+    , [component, restDataSet])
+
+    const actualStyle = useMemo(() =>
+      Object.assign(
+        {
+          backgroundColor: "#fff",
+          borderRadius: 15,
+          padding: 30
+        },
+        style
+      )
+    , [style])
 
     return (
       <View dataSet={actualDataSet} style={actualStyle}>

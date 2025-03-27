@@ -1,6 +1,6 @@
 {
   "name": "@kaspernj/api-maker",
-  "version": "1.0.2024",
+  "version": "1.0.2025",
   "description": "My new module",
   "main": "build/index.js",
   "scripts": {
@@ -64,7 +64,7 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.26.3",
     "babel-jest": "^29.0.1",
-    "eslint": "^8.2.0",
+    "eslint": "^9.23.0",
     "eslint-find-rules": "^5.0.0",
     "eslint-plugin-jest": "^28.2.0",
     "eslint-plugin-react": "^7.23.2",
