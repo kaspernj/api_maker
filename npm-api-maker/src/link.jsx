@@ -1,9 +1,9 @@
 import {Platform, Pressable} from "react-native"
-import React, {useRef} from "react"
 import BaseComponent from "./base-component"
 import dataSetToAttributes from "./data-set-to-attributes"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"
+import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import {useApiMaker} from "@kaspernj/api-maker/build/with-api-maker"
 
@@ -14,7 +14,6 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
 
   setup() {
     this.apiMaker = useApiMaker()
-    this.linkRef = useRef()
   }
 
   render() {
@@ -22,7 +21,7 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
 
     if (Platform.OS == "web" && !usePressable) {
       return (
-        <a {...dataSetToAttributes(dataSet)} href={to} {...restProps} onClick={this.tt.onLinkClicked} ref={this.tt.linkRef}  />
+        <a {...dataSetToAttributes(dataSet)} href={to} {...restProps} onClick={this.tt.onLinkClicked} />
       )
     }
 
@@ -42,7 +41,7 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
       onPress(e, ...restArgs)
     }
 
-    if (!e.defaultPrevented && !e.ctrlKey && !e.metaKey && this.tt.linkRef.current?.target != "_blank") {
+    if (!e.defaultPrevented && !e.ctrlKey && !e.metaKey && this.props.target != "_blank") {
       e.preventDefault()
 
       this.redirect()
