@@ -12,7 +12,7 @@ export default memo(shapeComponent(class ApiMakerUtilsInvalidFeedback extends Sh
 
   render() {
     return (
-      <Text style={{color: "red"}}>
+      <Text style={this.textStyle ||= {color: "red"}}>
         {this.p.message}
       </Text>
     )

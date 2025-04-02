@@ -84,10 +84,10 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
           {this.title()}
         </Text>
         {isSortedByAttribute && sortMode == "asc" &&
-          <Icon name="chevron-down" size={14} style={{marginLeft: 3}} />
+          <Icon name="chevron-down" size={14} style={this.downIconStyle ||= {marginLeft: 3}} />
         }
         {isSortedByAttribute && sortMode == "desc" &&
-          <Icon name="chevron-up" size={14} style={{marginLeft: 3}} />
+          <Icon name="chevron-up" size={14} style={this.upIconStyle ||= {marginLeft: 3}} />
         }
       </LinkComponent>
     )

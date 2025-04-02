@@ -32,29 +32,26 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
     const {data, keyExtractor} = this.p
     const {events} = this.props
 
-    this.controller = useMemo(() => new Controller({data, events, keyExtractor}), [])
-    this.panResponder = useMemo(
-      () => PanResponder.create({
-        onStartShouldSetPanResponder: (e) => {
-          const initialDragPosition = {x: e.nativeEvent.locationX, y: e.nativeEvent.locationY}
+    this.controller ||= new Controller({data, events, keyExtractor})
+    this.panResponder ||= PanResponder.create({
+      onStartShouldSetPanResponder: (e) => {
+        const initialDragPosition = {x: e.nativeEvent.locationX, y: e.nativeEvent.locationY}
 
-          this.controller.setInitialDragPosition(initialDragPosition)
+        this.controller.setInitialDragPosition(initialDragPosition)
 
-          if (this.controller.draggedItemData) {
-            return true
-          }
-        },
-        onPanResponderMove: (e, gestate) => {
-          this.tt.controller.onMove({gestate})
-        },
-        onPanResponderRelease: (e, gestate) => {
-          if (this.controller.draggedItem) {
-            this.tt.controller.onDragEnd()
-          }
+        if (this.controller.draggedItemData) {
+          return true
         }
-      }),
-      []
-    )
+      },
+      onPanResponderMove: (e, gestate) => {
+        this.tt.controller.onMove({gestate})
+      },
+      onPanResponderRelease: (e, gestate) => {
+        if (this.controller.draggedItem) {
+          this.tt.controller.onDragEnd()
+        }
+      }
+    })
 
     useEventEmitter(this.controller.getEvents(), "onDragStart", this.tt.onDragItemStart)
     useEventEmitter(this.controller.getEvents(), "onDragEnd", this.tt.onDragItemEnd)
@@ -65,16 +62,18 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
     const {cacheKeyExtractor, dataSet} = this.props
     const actualDataSet = useMemo(
       () => Object.assign(
-        {
-          component: "draggable-sort"
-        },
+        {component: "draggable-sort"},
         dataSet
       ),
       [dataSet]
     )
 
     return (
-      <Animated.View dataSet={actualDataSet} style={{flexDirection: horizontal ? "row" : "column"}} {...this.tt.panResponder.panHandlers}>
+      <Animated.View
+        dataSet={actualDataSet}
+        style={this.rootViewStyle ||= {flexDirection: horizontal ? "row" : "column"}}
+        {...this.tt.panResponder.panHandlers}
+      >
         {data.map((item, itemIndex) =>
           <DraggableSortItem
             cacheKey={cacheKeyExtractor ? cacheKeyExtractor(item) : undefined}

@@ -90,16 +90,16 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
     }
 
     return (
-      <View dataSet={{component: "super-admin--layout--header"}} style={headerStyle}>
-        <View dataSet={{class: "header-title-container"}}>
-          <Text style={{color: "#282a33", fontSize: 22}}>
+      <View dataSet={this.rootViewDataSet ||= {component: "super-admin--layout--header"}} style={headerStyle}>
+        <View dataSet={this.headerTitleViewDataSet ||= {class: "header-title-container"}}>
+          <Text style={this.headerTitleTextStyle ||= {color: "#282a33", fontSize: 22}}>
             {title}
           </Text>
         </View>
         {actions &&
           <View dataSet={{active: this.s.headerActionsActive, class: "header-actions-container"}} style={headerActionsContainerStyle}>
             <View
-              dataSet={{class: "header-actions"}}
+              dataSet={this.headerActionsViewDataSet ||= {class: "header-actions"}}
               ref={this.tt.headerActionsRef}
               style={headerActionsStyle}
             >
@@ -109,18 +109,22 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
         }
         {!mdUp &&
           <View
-            dataSet={{class: "burger-menu-container"}}
-            style={{
+            dataSet={this.burgerMenuContainerDataSet ||= {class: "burger-menu-container"}}
+            style={this.burgerMenuContainerStyle ||= {
               flexDirection: "row",
               marginLeft: "auto"
             }}
           >
             {actions &&
-              <Pressable dataSet={{class: "actions-link"}} onPress={this.tt.onGearsClicked} style={{marginRight: 8, fontSize: 22}}>
+              <Pressable
+                dataSet={this.actionsLinkDataSet ||= {class: "actions-link"}}
+                onPress={this.tt.onGearsClicked}
+                style={this.actionsLinkStyle ||= {marginRight: 8, fontSize: 22}}
+              >
                 <Icon name="gear" size={20} />
               </Pressable>
             }
-            <Pressable dataSet={{class: "burger-menu-link"}} onPress={onTriggerMenu}>
+            <Pressable dataSet={this.burgerMenuLinkDataSet ||= {class: "burger-menu-link"}} onPress={onTriggerMenu}>
               <Icon name="bars" size={20} />
             </Pressable>
           </View>
@@ -129,11 +133,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
     )
   }
 
-  onGearsClicked = () => {
-    console.log("onGearsClicked")
-
-    this.setState({headerActionsActive: !this.s.headerActionsActive})
-  }
+  onGearsClicked = () => this.setState({headerActionsActive: !this.s.headerActionsActive})
 
   onWindowMouseUp = (e) => {
     // Close the header actions menu if clicked happened outside

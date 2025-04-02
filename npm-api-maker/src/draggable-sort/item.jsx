@@ -25,19 +25,16 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
       dragging: false
     })
 
-    this.events = useMemo(() => new EventEmitter(), [])
-    this.position = useMemo(() => new Animated.ValueXY(), [])
-    this.panResponder = useMemo(
-      () => PanResponder.create({
-        onStartShouldSetPanResponder: (e, ) => {
-          this.setState({dragging: true})
-          this.p.controller.onDragStart({item: this.p.item, itemIndex: this.p.itemIndex})
+    this.events ||= new EventEmitter()
+    this.position ||= new Animated.ValueXY()
+    this.panResponder ||= PanResponder.create({
+      onStartShouldSetPanResponder: (e, ) => {
+        this.setState({dragging: true})
+        this.p.controller.onDragStart({item: this.p.item, itemIndex: this.p.itemIndex})
 
-          return false
-        }
-      }),
-      []
-    )
+        return false
+      }
+    })
 
     useEventEmitter(this.p.controller.getEvents(), "onDragStart", this.tt.onDragStart)
     useEventEmitter(this.p.controller.getEvents(), "onDragEndAnimation", this.tt.onDragEndAnimation)
@@ -67,7 +64,7 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     )
 
     return (
-      <Animated.View dataSet={{component: "draggable-sort/item"}} onLayout={this.tt.onLayout} style={style}>
+      <Animated.View dataSet={this.draggableSortItemDataSet ||= {component: "draggable-sort/item"}} onLayout={this.tt.onLayout} style={style}>
         {renderItem({isActive: active, item, touchProps: this.tt.panResponder.panHandlers})}
       </Animated.View>
     )

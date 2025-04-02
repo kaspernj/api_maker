@@ -11,7 +11,7 @@ export default memo(shapeComponent(class ApiMakerModal extends BaseComponent {
     return (
       <Modal onRequestClose={onRequestClose} {...restProps}>
         <View
-          style={{
+          style={this.rootViewStyle ||= {
             alignItems: "center",
             justifyContent: "center",
             minWidth: "100%",
@@ -20,9 +20,9 @@ export default memo(shapeComponent(class ApiMakerModal extends BaseComponent {
           }}
         >
           <Pressable
-            dataSet={{class: "modal-backdrop"}}
+            dataSet={this.pressableDataSet ||= {class: "modal-backdrop"}}
             onPress={onRequestClose}
-            style={{
+            style={this.pressableStyle ||= {
               position: "absolute",
               minWidth: "100%",
               minHeight: "100%",
