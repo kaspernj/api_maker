@@ -5,7 +5,7 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import Text from "./text"
-import View from "react-native"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerUtilsCard extends ShapeComponent {
   static propTypes = propTypesExact({

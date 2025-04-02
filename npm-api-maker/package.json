@@ -1,6 +1,6 @@
 {
   "name": "@kaspernj/api-maker",
-  "version": "1.0.2026",
+  "version": "1.0.2027",
   "description": "My new module",
   "main": "build/index.js",
   "scripts": {
