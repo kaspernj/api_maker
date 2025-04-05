@@ -223,7 +223,7 @@ const useCollection = (props, cacheKeys = []) => {
   }, [])
 
   const onCreated = useCallback(() => {
-    loadModels()
+    loadModelsDebounce()
   }, [])
 
   useMemo(

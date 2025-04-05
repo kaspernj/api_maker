@@ -1,4 +1,5 @@
 import {Animated, View} from "react-native"
+import React, {useMemo} from "react"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Column from "./components/column"
@@ -8,7 +9,6 @@ import EventEmitter from "events"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import memo from "set-state-compare/src/memo"
-import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../utils/text"
 import useBreakpoint from "../use-breakpoint"
@@ -34,26 +34,30 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
     const {animatedWidth, animatedZIndex, column, columnIndex, even, model, table} = this.props
     const columnProps = table.columnProps(column)
     const {style, ...restColumnProps} = columnProps
-    const actualStyle = Object.assign(
-      table.styleForColumn({
-        column,
-        columnIndex,
-        even,
-        style: {
-          zIndex: animatedZIndex,
-          transform: this.p.animatedPosition.getTranslateTransform(),
-          width: mdUp ? animatedWidth : "100%"
-        }
-      }),
-      style
+    const actualStyle = useMemo(() =>
+      Object.assign(
+        table.styleForColumn({
+          column,
+          columnIndex,
+          even,
+          style: {
+            zIndex: animatedZIndex,
+            transform: this.p.animatedPosition.getTranslateTransform(),
+            width: mdUp ? animatedWidth : "100%"
+          }
+        }),
+        style
+      ),
+      [column, columnIndex, even, animatedZIndex, mdUp, animatedWidth, style]
     )
+
+    const className = classNames(this.columnClassNamesForColumn(column))
+    const identifier = columnIdentifier(column)
+    const dataSet = useMemo(() => ({class: className, identifier}), [className])
 
     return (
       <Column
-        dataSet={{
-          class: classNames(this.columnClassNamesForColumn(column)),
-          identifier: columnIdentifier(column)
-        }}
+        dataSet={dataSet}
         style={actualStyle}
         {...restColumnProps}
       >

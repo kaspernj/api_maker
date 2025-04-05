@@ -21,7 +21,7 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
 
     if (Platform.OS == "web" && !usePressable) {
       return (
-        <a {...dataSetToAttributes(dataSet)} href={to} {...restProps} onClick={this.tt.onLinkClicked} />
+        <a {...dataSetToAttributes(dataSet)} href={to || "#"} {...restProps} onClick={this.tt.onLinkClicked} />
       )
     }
 
