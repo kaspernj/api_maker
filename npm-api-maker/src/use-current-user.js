@@ -1,4 +1,4 @@
-import {createContext, useCallback, useContext, useMemo} from "react"
+import React, {createContext, useCallback, useContext, useMemo} from "react"
 import Devise from "./devise"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
