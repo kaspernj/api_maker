@@ -1,4 +1,4 @@
-import {useCallback, useMemo} from "react"
+import {createContext, useCallback, useContext, useMemo} from "react"
 import Devise from "./devise"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
@@ -11,9 +11,18 @@ const logger = new Logger({name: "ApiMaker / useCurrentUser"})
 
 // logger.setDebug(true)
 
-const useCurrentUser = (args) => {
-  const s = useShape(args || {})
-  const scope = args?.scope || "user"
+const CurrentUserContext = createContext()
+const useCurrentUser = (props) => {
+  const scope = props?.scope || "user"
+  const scopeName = `current${inflection.camelize(scope)}`
+  const currentUserContext = useContext(CurrentUserContext)
+
+  return currentUserContext[scopeName]
+}
+
+const WithCurrentUser = (props) => {
+  const s = useShape(props || {})
+  const scope = props?.scope || "user"
   const scopeName = `current${inflection.camelize(scope)}`
 
   s.meta.scope = scope
@@ -82,7 +91,12 @@ const useCurrentUser = (args) => {
   useEventEmitter(Devise.events(), "onDeviseSignIn", updateCurrentUser)
   useEventEmitter(Devise.events(), "onDeviseSignOut", updateCurrentUser)
 
-  return s.s[scopeName]
+  return (
+    <CurrentUserContext.Provider value={s.state}>
+      {props.children}
+    </CurrentUserContext.Provider>
+  )
 }
 
+export {WithCurrentUser}
 export default useCurrentUser
