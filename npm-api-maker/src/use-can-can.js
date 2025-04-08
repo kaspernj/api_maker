@@ -10,12 +10,8 @@ const useCanCan = (abilitiesCallback, dependencies) => {
 
   s.useStates({
     canCan: null,
-    lastUpdate: new Date()
+    lastUpdate: () => new Date()
   })
-
-  if (!dependencies) {
-    dependencies = [currentUser?.id()]
-  }
 
   const loadAbilities = useCallback(async () => {
     const canCan = CanCan.current()
@@ -42,6 +38,10 @@ const useCanCan = (abilitiesCallback, dependencies) => {
       await loadAbilities()
     }
   }, [])
+
+  if (!dependencies) {
+    dependencies = [currentUser?.id()]
+  }
 
   useMemo(() => {
     loadAbilitiesOnNew()

@@ -1,3 +1,4 @@
+import {createContext} from "react"
 import Deserializer from "./deserializer"
 import events from "./events"
 import * as inflection from "inflection"
@@ -7,6 +8,16 @@ import Services from "./services"
 if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
 
 const shared = globalThis.ApiMakerDevise
+
+class DeviseScope {
+  constructor(scope, args) {
+    this.args = args
+    this.context = createContext()
+    this.scope = scope
+  }
+
+  getContext = () => this.context
+}
 
 export default class ApiMakerDevise {
   static callSignOutEvent(args) {
@@ -26,13 +37,24 @@ export default class ApiMakerDevise {
   }
 
   static addUserScope(scope, args = {}) {
-    const currentMethodName = `current${inflection.camelize(scope)}`
-    const isSignedInMethodName = `is${inflection.camelize(scope)}SignedIn`
-    const getArgsMethodName = `get${inflection.camelize(scope)}Args`
+    const scopeCamelized = inflection.camelize(scope)
+    const currentMethodName = `current${scopeCamelized}`
+    const isSignedInMethodName = `is${scopeCamelized}SignedIn`
+    const getArgsMethodName = `get${scopeCamelized}Args`
+    const getScopeName = `get${scopeCamelized}Scope`
+    const scopeInstance = new DeviseScope(scope, args)
 
     ApiMakerDevise[currentMethodName] = () => ApiMakerDevise.current().getCurrentScope(scope)
     ApiMakerDevise[isSignedInMethodName] = () => Boolean(ApiMakerDevise.current().getCurrentScope(scope))
     ApiMakerDevise[getArgsMethodName] = () => args
+    ApiMakerDevise[getScopeName] = () => scopeInstance
+  }
+
+  static getScope(scope) {
+    const scopeCamelized = inflection.camelize(scope)
+    const getScopeName = `get${scopeCamelized}Scope`
+
+    return ApiMakerDevise[getScopeName]()
   }
 
   static async signIn(username, password, args = {}) {
