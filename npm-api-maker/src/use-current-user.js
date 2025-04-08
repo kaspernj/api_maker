@@ -11,25 +11,26 @@ const logger = new Logger({name: "ApiMaker / useCurrentUser"})
 
 // logger.setDebug(true)
 
-const CurrentUserContext = createContext()
 const useCurrentUser = (props) => {
   const scope = props?.scope || "user"
-  const scopeName = `current${inflection.camelize(scope)}`
-  const currentUserContext = useContext(CurrentUserContext)
+  const scopeInstance = Devise.getScope(scope)
+  const currentUserContext = useContext(scopeInstance.getContext())
 
-  return currentUserContext[scopeName]
+  return currentUserContext
 }
 
 const WithCurrentUser = (props) => {
   const s = useShape(props || {})
   const scope = props?.scope || "user"
   const scopeName = `current${inflection.camelize(scope)}`
+  const scopeInstance = Devise.getScope(scope)
+  const ScopeContext = scopeInstance.getContext()
 
   s.meta.scope = scope
   s.meta.scopeName = scopeName
 
   const loadCurrentUserFromRequest = useCallback(async () => {
-    const {scope, scopeName} = s.m
+    const {scope} = s.m
     const getArgsMethodName = `get${inflection.camelize(scope)}Args`
     const args = Devise[getArgsMethodName]()
 
@@ -38,10 +39,9 @@ const WithCurrentUser = (props) => {
     const result = await Services.current().sendRequest("Devise::Current", {query: args.query, scope})
     const current = digg(result, "current")[0]
 
-    if (!(scopeName in s.setStates)) throw new Error(`'${scopeName}' not found in setStates`)
     if (current) Devise.updateSession(current)
 
-    s.setStates[scopeName](current)
+    s.set({current})
 
     if (s.props.onCurrentUserLoaded) setTimeout(() => s.props.onCurrentUserLoaded(current), 0)
   }, [])
@@ -67,18 +67,10 @@ const WithCurrentUser = (props) => {
     return current
   }, [])
 
-  const useStatesArgument = {}
-
-  useStatesArgument[scopeName] = () => defaultCurrentUser()
-
-  s.useStates(useStatesArgument)
+  s.useStates({current: () => defaultCurrentUser()})
 
   const updateCurrentUser = useCallback(() => {
-    const setStatesArgument = {}
-
-    setStatesArgument[s.m.scopeName] = Devise[s.m.scopeName]()
-
-    s.set(setStatesArgument)
+    s.set({current: Devise[s.m.scopeName]()})
   }, [])
 
   useMemo(() => {
@@ -88,13 +80,21 @@ const WithCurrentUser = (props) => {
     }
   }, [])
 
-  useEventEmitter(Devise.events(), "onDeviseSignIn", updateCurrentUser)
-  useEventEmitter(Devise.events(), "onDeviseSignOut", updateCurrentUser)
+  const onDeviseSignIn = useCallback(() => {
+    updateCurrentUser()
+  }, [])
+
+  const onDeviseSignOut = useCallback(() => {
+    updateCurrentUser()
+  }, [])
+
+  useEventEmitter(Devise.events(), "onDeviseSignIn", onDeviseSignIn)
+  useEventEmitter(Devise.events(), "onDeviseSignOut", onDeviseSignOut)
 
   return (
-    <CurrentUserContext.Provider value={s.state}>
+    <ScopeContext.Provider value={s.s.current}>
       {props.children}
-    </CurrentUserContext.Provider>
+    </ScopeContext.Provider>
   )
 }
 

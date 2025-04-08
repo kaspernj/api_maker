@@ -4,7 +4,7 @@ module.exports = {
     loader: "babel-loader",
     options: {
       cacheCompression: false,
-      cacheDirectory: true
+      cacheDirectory: false
     }
   }
 }
