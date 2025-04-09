@@ -1,27 +1,43 @@
-import React, {createContext, useCallback, useContext, useMemo} from "react"
+import React, {useCallback, useContext, useMemo} from "react"
 import Devise from "./devise"
 import {digg} from "diggerize"
+import EventEmitter from "events"
 import * as inflection from "inflection"
 import Logger from "./logger"
 import Services from "./services"
 import useEventEmitter from "./use-event-emitter"
 import useShape from "set-state-compare/src/use-shape"
 
+const events = new EventEmitter()
 const logger = new Logger({name: "ApiMaker / useCurrentUser"})
 
-// logger.setDebug(true)
+logger.setDebug(false)
 
-const useCurrentUser = (props) => {
-  const scope = props?.scope || "user"
+const useCurrentUser = (props = {}) => {
+  const {scope = "user", withData, ...restProps} = props
+
+  if (Object.keys(restProps).length > 0) {
+    throw new Error(`Unknown props given to useCurrentUser: ${Object.keys(restProps).join(", ")}`)
+  }
+
   const scopeInstance = Devise.getScope(scope)
   const currentUserContext = useContext(scopeInstance.getContext())
 
-  return currentUserContext
+  if (withData) {
+    return currentUserContext
+  } else {
+    return currentUserContext.model
+  }
 }
 
-const WithCurrentUser = (props) => {
-  const s = useShape(props || {})
-  const scope = props?.scope || "user"
+const WithCurrentUser = (props = {}) => {
+  const {children, scope = "user", ...restProps} = props
+
+  if (Object.keys(restProps).length > 0) {
+    throw new Error(`Unknown props given to WithCurrentUser: ${Object.keys(restProps).join(", ")}`)
+  }
+
+  const s = useShape(props)
   const scopeName = `current${inflection.camelize(scope)}`
   const scopeInstance = Devise.getScope(scope)
   const ScopeContext = scopeInstance.getContext()
@@ -41,9 +57,14 @@ const WithCurrentUser = (props) => {
 
     if (current) Devise.updateSession(current)
 
-    s.set({current})
+    s.set({
+      result: {
+        loaded: true,
+        model: current
+      }
+    })
 
-    if (s.props.onCurrentUserLoaded) setTimeout(() => s.props.onCurrentUserLoaded(current), 0)
+    events.emit("currentUserLoaded", {current})
   }, [])
 
   const defaultCurrentUser = useCallback(() => {
@@ -60,17 +81,27 @@ const WithCurrentUser = (props) => {
       logger.debug(() => `Setting ${scope} from global current scope: ${current?.id()}`)
     }
 
-    if (current && s.props.onCurrentUserLoaded) {
-      setTimeout(() => s.props.onCurrentUserLoaded(current), 0)
+    if (current) {
+      events.emit("currentUserLoaded", {current})
     }
 
     return current
   }, [])
 
-  s.useStates({current: () => defaultCurrentUser()})
+  s.useStates({
+    result: () => ({
+      loaded: false,
+      model: defaultCurrentUser()
+    })
+  })
 
   const updateCurrentUser = useCallback(() => {
-    s.set({current: Devise[s.m.scopeName]()})
+    s.set({
+      result: {
+        loaded: true,
+        model: Devise[s.m.scopeName]()
+      }
+    })
   }, [])
 
   useMemo(() => {
@@ -92,11 +123,11 @@ const WithCurrentUser = (props) => {
   useEventEmitter(Devise.events(), "onDeviseSignOut", onDeviseSignOut)
 
   return (
-    <ScopeContext.Provider value={s.s.current}>
-      {props.children}
+    <ScopeContext.Provider value={s.s.result}>
+      {children}
     </ScopeContext.Provider>
   )
 }
 
-export {WithCurrentUser}
+export {events, WithCurrentUser}
 export default useCurrentUser
