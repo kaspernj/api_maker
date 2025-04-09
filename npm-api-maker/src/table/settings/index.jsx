@@ -19,16 +19,17 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
   })
 
   setup() {
-    const {t} = useI18n({namespace: "js.api_maker.table.settings"})
+    const {l, t} = useI18n({namespace: "js.api_maker.table.settings"})
 
     this.rootRef = useRef()
+    this.l = l
     this.t = t
   }
 
   tableSetting = () => this.p.table.s.tableSetting
 
   render() {
-    const {t} = this.tt
+    const {l, t} = this.tt
     const {table} = this.p
     const {preparedColumns} = table.s
 
@@ -49,7 +50,7 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
               {t(".settings", {defaultValue: "Settings"})}
             </Text>
           </View>
-          <DownloadAction table={table} />
+          <DownloadAction l={l} table={table} />
           <View style={this.columnsHeaderViewStyle ||= {marginBottom: 5}}>
             <Text style={this.columnsHeaderTextStyle ||= {fontSize: 16, fontWeight: "bold"}}>
               {t(".columns", {defaultValue: "Columns"})}
