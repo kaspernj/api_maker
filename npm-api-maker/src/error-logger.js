@@ -29,20 +29,11 @@ export default class ErrorLogger {
   }
 
   getErrors = () => this.errors
+  hasErrorOccurred = () =>digg(this, "errorOccurred")
+  isLoadingSourceMaps = () => digg(this, "sourceMapsLoader", "isLoadingSourceMaps")
+  isWorkingOnError = () => digg(this, "isHandlingError") || this.isLoadingSourceMaps()
 
-  hasErrorOccurred() {
-    return digg(this, "errorOccurred")
-  }
-
-  isLoadingSourceMaps() {
-    return digg(this, "sourceMapsLoader", "isLoadingSourceMaps")
-  }
-
-  isWorkingOnError() {
-    return digg(this, "isHandlingError") || this.isLoadingSourceMaps()
-  }
-
-  connectOnError () {
+  connectOnError() {
     window.addEventListener("error", (event) => {
       if (this.debugging) this.debug(`Error:`, event.message)
       this.errorOccurred = true
@@ -56,7 +47,7 @@ export default class ErrorLogger {
     })
   }
 
-  connectUnhandledRejection () {
+  connectUnhandledRejection() {
     window.addEventListener("unhandledrejection", (event) => {
       if (this.debugging) this.debug(`Unhandled rejection:`, event.reason.message)
       this.errorOccurred = true
@@ -70,9 +61,10 @@ export default class ErrorLogger {
     })
   }
 
-  async onError (event) {
+  async onError(event) {
     this.errorOccurred = true
-    await this.sourceMapsLoader.loadSourceMaps(event.error)
+
+    if (event.error) await this.sourceMapsLoader.loadSourceMaps(event.error)
 
     if (event.error && event.error.stack) {
       const backtrace = this.sourceMapsLoader.parseStackTrace(event.error.stack)
@@ -91,8 +83,8 @@ export default class ErrorLogger {
     }
   }
 
-  async onUnhandledRejection (event) {
-    await this.sourceMapsLoader.loadSourceMaps(event.reason)
+  async onUnhandledRejection(event) {
+    if (event.reason) await this.sourceMapsLoader.loadSourceMaps(event.reason)
 
     if (event.reason.stack) {
       const backtrace = this.sourceMapsLoader.parseStackTrace(event.reason.stack)
@@ -111,7 +103,7 @@ export default class ErrorLogger {
     }
   }
 
-  testPromiseError () {
+  testPromiseError() {
     return new Promise((_resolve) => {
       throw new Error("testPromiseError")
     })
