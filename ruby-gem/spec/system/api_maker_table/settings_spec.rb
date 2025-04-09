@@ -34,4 +34,19 @@ describe "table - settings" do
     # It no longer shows the ID column
     wait_for_no_selector "[data-class='table--column'][data-identifier='attribute-id--sort-key-id']"
   end
+
+  it "downloads a version of the table" do
+    task1
+    task2
+
+    login_as user_admin
+    visit bootstrap_live_table_path
+    wait_for_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
+    wait_for_and_find("[data-class='settings-button']").click
+    wait_for_and_find("[data-component='api-maker/table/settings/download-action']").click
+
+    sleep 1
+    expect_no_errors
+  end
 end
