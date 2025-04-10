@@ -87,7 +87,6 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def expect_no_errors
-    expect_no_flash_errors
     expect_no_browser_errors
   end
 

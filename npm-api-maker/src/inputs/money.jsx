@@ -46,9 +46,7 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
     this.wholeRef = this.props.wholeRef || this.wholeRefBackup
   }
 
-  getInputRef () {
-    return this.props.inputRef || this.inputRef
-  }
+  getInputRef = () => this.props.inputRef || this.inputRef
 
   render () {
     const {attribute, className, disabled, model, showCurrencyOptions} = this.props
@@ -64,11 +62,11 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
           defaultValue={this.inputDefaultValue()}
           disabled={disabled}
           id={this.inputId()}
-          onBlur={digg(this, "setAmount")}
-          onChange={digg(this, "setCents")}
-          onKeyUp={digg(this, "setCents")}
+          onBlur={this.tt.setAmount}
+          onChange={this.tt.setCents}
+          onKeyUp={this.tt.setCents}
           placeholder={this.props.placeholder}
-          ref={this.wholeRef}
+          ref={this.tt.wholeRef}
           type="text"
         />
         {showCurrencyOptions &&
@@ -78,8 +76,8 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
             disabled={disabled}
             id={this.inputCurrencyId()}
             name={this.inputCurrencyName()}
-            onChange={digg(this, "onCurrencyChanged")}
-            ref={this.currencyRef}
+            onChange={this.tt.onCurrencyChanged}
+            ref={this.tt.currencyRef}
           >
             <option></option>
             {currenciesCollection.map((option) => (
@@ -94,13 +92,10 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
     )
   }
 
-  inputCurrencyId () {
-    return `${this.inputId()}_currency`
-  }
+  inputCurrencyId = () => `${this.inputId()}_currency`
 
   inputCurrencyName () {
-    if ("currencyName" in this.props)
-      return this.props.currencyName
+    if ("currencyName" in this.props) return this.props.currencyName
 
     return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}_currency]`
   }
@@ -135,28 +130,24 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
     }
   }
 
-  inputCentsId () {
-    return `${this.inputId()}_cents`
-  }
+  inputCentsId = () => `${this.inputId()}_cents`
 
   inputCentsName () {
-    if ("name" in this.props)
-      return this.props.name
+    if ("name" in this.props) return this.props.name
 
     return `${this.props.model.modelClassData().paramKey}[${inflection.underscore(this.props.attribute)}_cents]`
   }
 
-  inputId () {
-    return idForComponent(this)
-  }
+  inputId = () => idForComponent(this)
 
   onCurrencyChanged = () => {
-    if (this.props.onChange)
-      this.props.onChange()
+    if (this.props.onChange) this.props.onChange()
   }
 
   setAmount = () => {
     const inputElement = this.getInputRef().current
+
+    if (!inputElement) return
 
     if (!inputElement.value && inputElement.value == "") {
       this.wholeRef.current.value = ""
@@ -171,6 +162,8 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
   setCents = () => {
     const inputElement = this.getInputRef().current
 
+    if (!inputElement) return
+
     let whole = MoneyFormatter.stringToFloat(this.wholeRef.current.value)
     let cents = parseInt(whole * 100, 10)
     let oldCents = parseInt(inputElement.value, 10)
@@ -181,7 +174,6 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
       inputElement.value = ''
     }
 
-    if (this.props.onChange && oldCents != cents)
-      this.props.onChange()
+    if (this.props.onChange && oldCents != cents) this.props.onChange()
   }
 }))

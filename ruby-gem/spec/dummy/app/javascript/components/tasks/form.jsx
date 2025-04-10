@@ -2,13 +2,11 @@ import classNames from "classnames"
 import {digg, digs} from "diggerize"
 import FlashMessage from "@kaspernj/api-maker/build/flash-message"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
-import * as models from "models"
 import PropTypes from "prop-types"
 import React from "react"
 import Select from "@kaspernj/api-maker/build/bootstrap/select"
+import {Task} from "models"
 import TranslatedCollections from "@kaspernj/api-maker/build/translated-collections"
-
-const {Task} = models
 
 export default class ComponentsTasksForm extends React.PureComponent {
   static propTypes = {

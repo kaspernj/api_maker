@@ -55,5 +55,6 @@ Rails.application.configure do
 
   config.hosts << "development"
   config.hosts << "app.wooftech.development"
+  config.hosts << "awesometasks.development"
   config.hosts << "my.gbtgruppen.testhost"
 end

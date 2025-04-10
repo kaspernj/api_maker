@@ -6,29 +6,34 @@ import classNames from "classnames"
 import {digg} from "diggerize"
 import memo from "set-state-compare/src/memo"
 import {shapeComponent} from "set-state-compare/src/shape-component"
-import * as models from "models"
 import Params from "../../params"
+import {TableSearch} from "models"
 import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n"
-
-const {TableSearch} = models
 
 const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
   render() {
     const {search} = this.props
 
     return (
-      <View dataSet={{class: "search-row", searchId: search.id()}} style={{flexDirection: "row", width: "100%"}}>
-        <Pressable dataSet={{class: "load-search-link"}} onPress={this.onSearchClicked} style={{justifyContent: "center"}}>
+      <View
+        dataSet={this.cache("rootViewStyle", {class: "search-row", searchId: search.id()}, [search.id()])}
+        style={this.rootViewStyle ||= {flexDirection: "row", width: "100%"}}
+      >
+        <Pressable
+          dataSet={this.loadSearchLinkPressableDataSet ||= {class: "load-search-link"}}
+          onPress={this.tt.onSearchClicked}
+          style={this.loadSearchLinkPressableStyle ||= {justifyContent: "center"}}
+        >
           <Text>
             {search.name()}
           </Text>
         </Pressable>
-        <View style={{flexDirection: "row", marginLeft: "auto"}}>
+        <View style={this.actionsViewStyle ||= {flexDirection: "row", marginLeft: "auto"}}>
           <Pressable
-            dataSet={{class: "edit-search-button"}}
-            onPress={this.onEditPressed}
-            style={{
+            dataSet={this.editSearchButtonDataSet ||= {class: "edit-search-button"}}
+            onPress={this.tt.onEditPressed}
+            style={this.editSearchButtonStyle ||= {
               alignItems: "center",
               justifyContent: "center",
               width: 25,
@@ -44,9 +49,9 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
             </Text>
           </Pressable>
           <Pressable
-            dataSet={{class: "delete-search-button"}}
-            onPress={this.onDeletePressed}
-            style={{
+            dataSet={this.deleteSearchButtonDataSet ||= {class: "delete-search-button"}}
+            onPress={this.tt.onDeletePressed}
+            style={this.deleteSearchButtonStyle ||= {
               alignItems: "center",
               justifyContent: "center",
               marginLeft: 5,
@@ -108,7 +113,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal ext
   }
 
   render() {
-    const {t} = this
+    const {t} = this.tt
     const {className, currentUser, modelClass, onEditSearchPressed, onRequestClose, querySearchName, ...restProps} = this.props
     const Modal = apiMakerConfig.getModal()
 
@@ -120,7 +125,13 @@ export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal ext
           </Text>
         </View>
         {this.state.searches?.map((search) =>
-          <SearchLink key={search.id()} onClick={this.onSearchClicked} onDeleted={this.onSearchDeleted} onEditPressed={onEditSearchPressed} search={search} />
+          <SearchLink
+            key={search.id()}
+            onClick={this.tt.onSearchClicked}
+            onDeleted={this.tt.onSearchDeleted}
+            onEditPressed={onEditSearchPressed}
+            search={search}
+          />
         )}
       </Modal>
     )

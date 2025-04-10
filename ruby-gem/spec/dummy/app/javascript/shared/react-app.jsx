@@ -6,6 +6,7 @@ import Locales from "shared/locales"
 import React from "react"
 import Router from "@kaspernj/api-maker/build/router"
 import Routes from "shared/routes"
+import {WithCurrentUser} from "@kaspernj/api-maker/build/use-current-user"
 import WithLocationPath from "on-location-changed/build/with-location-path"
 
 const NotFoundComponent = () => <div>Not found</div>
@@ -20,16 +21,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = createRoot(reactRoot)
 
   root.render(
-    <WithLocationPath>
-      <Notifications />
-      <Router
-        history={ApplicationHistory}
-        locales={Locales.availableLocales()}
-        notFoundComponent={NotFoundComponent}
-        requireComponent={requireComponent}
-        routes={Routes}
-        routeDefinitions={routeDefinitions}
-      />
-    </WithLocationPath>
+    <WithCurrentUser>
+      <WithLocationPath>
+        <Notifications />
+        <Router
+          history={ApplicationHistory}
+          locales={Locales.availableLocales()}
+          notFoundComponent={NotFoundComponent}
+          requireComponent={requireComponent}
+          routes={Routes}
+          routeDefinitions={routeDefinitions}
+        />
+      </WithLocationPath>
+    </WithCurrentUser>
   )
 })

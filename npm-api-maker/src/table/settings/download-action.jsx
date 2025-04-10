@@ -15,12 +15,17 @@ import Text from "../../utils/text"
 
 export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction extends BaseComponent {
   static propTypes = propTypesExact({
+    l: PropTypes.func.isRequired,
     table: PropTypes.object.isRequired
   })
 
   render() {
     return (
-      <Pressable onPress={this.tt.onDownloadPress} style={this.pressableStyle ||= {flexDirection: "row", alignItems: "center"}}>
+      <Pressable
+        dataSet={this.pressableDataSet ||= {component: "api-maker/table/settings/download-action"}}
+        onPress={this.tt.onDownloadPress}
+        style={this.pressableStyle ||= {flexDirection: "row", alignItems: "center"}}
+      >
         <Icon name="download" size={20} />
         <Text style={this.textStyle ||= {marginLeft: 5}}>
           Download
@@ -30,7 +35,7 @@ export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction ext
   }
 
   onDownloadPress = () => {
-    const {table} = this.p
+    const {l, table} = this.p
     const {modelClass} = table.p
     const {collection} = table.tt
     const {models} = collection
@@ -51,7 +56,7 @@ export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction ext
             <tr key={model.id()}>
               {preparedColumns?.map(({column, tableSettingColumn}) => columnVisible(column, tableSettingColumn) &&
                 <td key={columnIdentifier(column)}>
-                  {new ColumnContent({column, mode: "html", model, table}).content()}
+                  {new ColumnContent({column, l, mode: "html", model, table}).content()}
                 </td>
               )}
             </tr>
