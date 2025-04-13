@@ -89,9 +89,24 @@ export default class ApiMakerCollection {
     })
   }
 
+  async ensureLoaded() {
+    if (!this.isLoaded()) {
+      const models = await this.toArray()
+
+      this.set(models)
+    }
+
+    return this.loaded()
+  }
+
   isLoaded() {
-    if (this.args.reflectionName in this.args.model.relationshipsCache)
+    const {model, reflectionName} = this.args
+
+    if (reflectionName in model.relationshipsCache) {
       return true
+    } else if (reflectionName in model.relationships) {
+      return true
+    }
 
     return false
   }
@@ -136,11 +151,15 @@ export default class ApiMakerCollection {
 
   // Pushes another model onto the given collection.
   push(newModel) {
-    if (!(this.args.reflectionName in this.args.model.relationships)) {
-      this.args.model.relationships[this.args.reflectionName] = []
+    const {model, reflectionName} = this.args
+
+    if (!(reflectionName in model.relationships)) {
+      model.relationships[reflectionName] = []
     }
 
-    this.args.model.relationships[this.args.reflectionName].push(newModel)
+    if (!model.relationships[reflectionName].includes(newModel)) {
+      model.relationships[reflectionName].push(newModel)
+    }
   }
 
   // Array shortcuts
@@ -153,14 +172,32 @@ export default class ApiMakerCollection {
   }
 
   page(page) {
-    if (!page)
-      page = 1
+    if (!page) page = 1
 
     return this._merge({page})
   }
 
   pageKey(pageKey) {
     return this._merge({pageKey})
+  }
+
+  isFiltered() {
+    const {queryArgs} = this
+
+    if (
+      queryArgs.accessibleBy ||
+      queryArgs.count ||
+      queryArgs.limit ||
+      queryArgs.page ||
+      queryArgs.params ||
+      queryArgs.per ||
+      queryArgs.ransack ||
+      queryArgs.search
+    ) {
+      return true
+    }
+
+    return false
   }
 
   params() {
@@ -282,7 +319,7 @@ export default class ApiMakerCollection {
 
   // This is needed when reloading a version of the model with the same selected attributes and preloads
   _addQueryToModels(models) {
-    for(const model of models) {
+    for (const model of models) {
       model.collection = this
     }
   }
