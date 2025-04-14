@@ -59,7 +59,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
 
     return (
       <Row
-        dataSet={{class: `${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`, modelId: model.id()}}
+        dataSet={this.cache("rowDataSet", {class: `${inflection.dasherize(modelClass.modelClassData().paramKey)}-row`, modelId: model.id()}, [model.id(), modelClass.modelClassData().paramKey])}
         style={styleForRow({even})}
       >
         {workplace &&
@@ -72,7 +72,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
           </Column>
         }
         {columns && this.columnsContentFromColumns(model, even)}
-        <Column dataSet={{class: "actions-column"}} style={styleForColumn({even, style: {}, type: "actions"})}>
+        <Column dataSet={this.actionsColumnDataSet ||= {class: "actions-column"}} style={styleForColumn({even, style: {}, type: "actions"})}>
           {actionsContent && actionsContent(this.tt.modelCallbackArgs)}
           {viewPath &&
             <Link dataSet={this.viewButtonDataSet ||= {class: "view-button"}} style={this.searchLinkStyle ||= {marginLeft: 2, marginRight: 2}} to={viewPath}>
