@@ -13,14 +13,22 @@ const FontAwesome5GlyphMap = FontAwesome5Icon.getRawGlyphMap()
 const FontAwesome6GlyphMap = FontAwesome6Icon.getRawGlyphMap()
 const MaterialIconsGlyphMap = MaterialIconsIcon.getRawGlyphMap()
 
+const iconMap = {
+  pencil: "FontAwesome",
+  remove: "FontAwesome",
+  search: "FontAwesome"
+}
+
 export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent {
   render() {
-    const {name, style, version, ...restProps} = this.props
+    const {dataSet, name, style, version, ...restProps} = this.props
     const {stylesList} = useMergedStyle(style, "Text")
     let actualVersion = version
 
     if (!actualVersion) {
-      if (name in FontAwesome6GlyphMap) {
+      if (name in iconMap) {
+        actualVersion = iconMap[name]
+      } else if (name in FontAwesome6GlyphMap) {
         actualVersion = "FontAwesome6"
       } else if (name in FontAwesome5GlyphMap) {
         actualVersion = "FontAwesome5"
@@ -54,14 +62,16 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
       return actualStylesList
     }, [stylesList, style])
 
+    const actualDataSet = useMemo(() => Object.assign({name, version: actualVersion}, dataSet), [actualVersion, dataSet, name])
+
     if (actualVersion == "FontAwesome") {
-      return <FontAwesomeIcon name={name} style={actualStylesList} {...restProps} />
+      return <FontAwesomeIcon dataSet={actualDataSet} name={name} style={actualStylesList} {...restProps} />
     } else if (actualVersion == "FontAwesome5") {
-      return <FontAwesome5Icon name={name} style={actualStylesList} {...restProps} />
+      return <FontAwesome5Icon dataSet={actualDataSet} name={name} style={actualStylesList} {...restProps} />
     } else if (actualVersion == "FontAwesome6") {
-      return <FontAwesome6Icon name={name} style={actualStylesList} {...restProps} />
+      return <FontAwesome6Icon dataSet={actualDataSet} name={name} style={actualStylesList} {...restProps} />
     } else if (actualVersion == "MaterialIcons") {
-      return <MaterialIconsIcon name={name} style={actualStylesList} {...restProps} />
+      return <MaterialIconsIcon dataSet={actualDataSet} name={name} style={actualStylesList} {...restProps} />
     } else {
       throw new Error(`Unknown version: ${actualVersion}`)
     }
