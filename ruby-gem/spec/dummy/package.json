@@ -21,10 +21,10 @@
     "@babel/runtime": "7",
     "@kaspernj/api-maker": "1.0.463",
     "@rails/actioncable": "^8.0.200",
-    "babel-loader": "9",
+    "babel-loader": "10",
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "babel-plugin-macros": "^3.1.0",
-    "caniuse-lite": "^1.0.30001712",
+    "caniuse-lite": "^1.0.30001713",
     "classnames": "^2.5.1",
     "compression-webpack-plugin": "11",
     "css-loader": "^7.1.2",
@@ -55,7 +55,7 @@
     "uuid": "^11.1.0",
     "webpack": "5",
     "webpack-assets-manifest": "5",
-    "webpack-cli": "5",
+    "webpack-cli": "6",
     "webpack-dev-server": "5",
     "webpack-merge": "6"
   }
