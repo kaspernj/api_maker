@@ -21,7 +21,7 @@
     "@babel/runtime": "7",
     "@kaspernj/api-maker": "1.0.463",
     "@rails/actioncable": "^8.0.200",
-    "babel-loader": "9",
+    "babel-loader": "10",
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "babel-plugin-macros": "^3.1.0",
     "caniuse-lite": "^1.0.30001712",
