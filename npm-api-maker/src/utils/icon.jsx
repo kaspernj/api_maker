@@ -36,6 +36,8 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
         actualVersion = "FontAwesome"
       } else if (name in MaterialIconsGlyphMap) {
         actualVersion =  "MaterialIcons"
+      } else {
+        actualVersion = "FontAwesome"
       }
     }
 
