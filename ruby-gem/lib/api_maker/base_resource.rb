@@ -9,6 +9,7 @@ class ApiMaker::BaseResource
   CREATE = [:create, :create_events].freeze
   READ = [:create_events, :destroy_events, :read, :update_events].freeze
   CRUD = CREATE + READ + [:update, :destroy].freeze
+  CRU = CREATE + READ + [:update].freeze
   WRITE = [:create, :update, :destroy].freeze
 
   def self.aasm_state_machine

@@ -928,7 +928,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   onFilterFormSubmit = () => this.submitFilter()
   onRequestCloseSettings = () => this.setState({showSettings: false})
-  onSettingsClicked = (e) => this.setState({showSettings: !this.s.showSettings})
+
+  onSettingsClicked = (e) => {
+    e.preventDefault()
+
+    this.setState({showSettings: !this.s.showSettings})
+  }
 
   submitFilter = () => {
     const {appHistory} = this.props
