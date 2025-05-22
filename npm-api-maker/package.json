@@ -1,6 +1,6 @@
 {
   "name": "@kaspernj/api-maker",
-  "version": "1.0.2034",
+  "version": "1.0.2036",
   "description": "My new module",
   "main": "build/index.js",
   "scripts": {
@@ -57,6 +57,7 @@
     "strftime": ">= 0.10.0",
     "uniqunize": "^1.0.1",
     "url-parse": "^1.5.10",
+    "use-ssr": "^1.0.25",
     "wake-event": ">= 0.0.1"
   },
   "devDependencies": {
