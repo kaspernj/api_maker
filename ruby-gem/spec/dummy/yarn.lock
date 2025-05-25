@@ -2590,11 +2590,12 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-flash-notifications@^0.0.15:
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.15.tgz#3918788a3fd31de882ecca0614d0737b146c18b1"
-  integrity sha512-0JfyGw1jMCy+Wyce3NnR9TbK6XvhzqCii+rmR4uW8Ah4pN9md6FRtREoc3N2KQH43pps0Kk/SVUGM9cw9Fc46Q==
+flash-notifications@^0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.16.tgz#2b8252af3a530163a1c04da92cbbd1e65dfd7bfd"
+  integrity sha512-iE5vXi1Pw+n28OTZ8xsVrZzpqTl/FN793yyl4Uf0w9gzWbU2HHlSvqK6Jsi1l3HUDaW64ObKrYikgBXLM+U4og==
   dependencies:
+    classnames "^2.5.1"
     diggerize "*"
     prop-types-exact "*"
     set-state-compare "*"
