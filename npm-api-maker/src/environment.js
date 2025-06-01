@@ -10,4 +10,4 @@ if (navigator === undefined && navigator.product == "ReactNative") {
   isServer = true
 }
 
-export default {isBrowser, isNative, isServer}
+export {isBrowser, isNative, isServer}
