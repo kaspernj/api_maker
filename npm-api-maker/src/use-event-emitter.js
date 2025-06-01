@@ -1,8 +1,7 @@
 import {useEffect, useLayoutEffect, useMemo} from "react"
-import useSSR from "use-ssr"
+import {isServer} from "./environment"
 
 const ApiMakerUseEventEmitter = (events, event, onCalled) => {
-  const {isServer} = useSSR()
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect
 
   // useMemo to instantly connect

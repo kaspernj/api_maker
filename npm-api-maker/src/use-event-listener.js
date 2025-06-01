@@ -1,8 +1,7 @@
 import {useCallback, useEffect, useLayoutEffect} from "react"
-import useSSR from "use-ssr"
+import {isServer} from "./environment"
 
 const ApiMakerUseEventListener = (target, event, onCalled) => {
-  const {isServer} = useSSR()
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect
   const onCalledCallback = useCallback((...args) => {
     onCalled.apply(null, args)
