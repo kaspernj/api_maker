@@ -63,6 +63,11 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   }
 
   redirect = () => {
+    // If no timeout is used, this can cause an "component suspended while responding to synchronous input"-error
+    setTimeout(() => { this._historyPush() }, 0)
+  }
+
+  _historyPush() {
     const history = this.apiMaker.config.getHistory()
 
     if (!history) throw new Error("History hasn't been set in the API maker configuration")
