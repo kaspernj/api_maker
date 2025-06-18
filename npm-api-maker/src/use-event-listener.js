@@ -1,7 +1,8 @@
 import {useCallback, useEffect, useLayoutEffect} from "react"
-import {isServer} from "./use-environment"
+import useEnvironment from "./use-environment"
 
 const ApiMakerUseEventListener = (target, event, onCalled) => {
+  const {isServer} = useEnvironment()
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect
   const onCalledCallback = useCallback((...args) => {
     onCalled.apply(null, args)
