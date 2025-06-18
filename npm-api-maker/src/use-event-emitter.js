@@ -1,5 +1,5 @@
 import {useEffect, useLayoutEffect, useMemo} from "react"
-import {isServer} from "./environment"
+import {isServer} from "./use-environment"
 
 const ApiMakerUseEventEmitter = (events, event, onCalled) => {
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect
