@@ -1,7 +1,8 @@
 import {useEffect, useLayoutEffect, useMemo} from "react"
-import {isServer} from "./environment"
+import useEnvironment from "./use-environment"
 
 const ApiMakerUseEventEmitter = (events, event, onCalled) => {
+  const {isServer} = useEnvironment()
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect
 
   // useMemo to instantly connect
