@@ -1,8 +1,8 @@
+import useEnvSense from "env-sense/src/use-env-sense"
 import {useEffect, useLayoutEffect, useMemo} from "react"
-import useEnvironment from "./use-environment"
 
 const ApiMakerUseEventEmitter = (events, event, onCalled) => {
-  const {isServer} = useEnvironment()
+  const {isServer} = useEnvSense()
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect
 
   // useMemo to instantly connect
