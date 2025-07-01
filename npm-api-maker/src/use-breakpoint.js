@@ -12,9 +12,11 @@ const calculateBreakPoint = (breakpoints) => {
 
   if (isExpo) {
     windowWidth = Dimensions.get("window").width
-  } else {
+  } else if (typeof window !== "undefined" && window.innerWidth !== undefined) {
     // Use 'window.innerWidth' outside Expo because sometimes window width excludes scroll
     windowWidth = window.innerWidth
+  } else {
+    throw new Error("Didn't know where to get window width from")
   }
 
   const result = {}
