@@ -48,7 +48,8 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
             filter={filter}
             key={`filter-${filter.filterIndex}`}
             modelClass={modelClass}
-            onApplyClicked={digg(this, "onApplyClicked")}
+            onApplyClicked={this.tt.onApplyClicked}
+            onRequestClose={this.tt.onFilterFormRequestClose}
             querySearchName={querySName}
           />
         }
@@ -126,6 +127,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
   }
 
   onFilterClicked = (filter) => this.setState({filter})
+  onFilterFormRequestClose = () => this.setState({filter: undefined})
 
   onLoadSearchClicked = (e) => {
     e.preventDefault()
