@@ -2,9 +2,12 @@ import {useMemo, useRef} from "react"
 import {ActivityIndicator, View} from "react-native"
 import AttributeElement from "./attribute-element"
 import BaseComponent from "../../base-component"
+import Button from "../../utils/button"
+import Card from "../../utils/card"
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import {Form} from "../../form"
+import Header from "../../utils/header"
 import Input from "../../inputs/input"
 import memo from "set-state-compare/src/memo"
 import Params from "../../params"
@@ -17,6 +20,7 @@ import Select from "../../inputs/select"
 import Services from "../../services"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import Text from "../../utils/text"
+import useBreakpoint from "../../use-breakpoint"
 import useI18n from "i18n-on-steroids/src/use-i18n"
 
 export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
@@ -24,6 +28,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     filter: PropTypes.object,
     modelClass: PropTypes.func.isRequired,
     onApplyClicked: PropTypes.func.isRequired,
+    onRequestClose: PropTypes.func.isRequired,
     querySearchName: PropTypes.string.isRequired
   })
 
@@ -46,6 +51,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     })
 
     this.setInstance({
+      breakpoint: useBreakpoint(),
       t,
       valueInputRef: useRef(),
     })
@@ -163,8 +169,9 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
   }
 
   render() {
-    const {t, valueInputRef} = this.tt
+    const {breakpoint, t, valueInputRef} = this.tt
     const {attribute, path, predicate, predicates, scope, value} = this.s
+    const {mdUp} = breakpoint
     let submitEnabled = false
 
     if (attribute && predicate) {
@@ -174,7 +181,14 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     }
 
     return (
-      <View dataSet={{class: "api-maker--table--filters--filter-form"}} style={{minWidth: 50, minHeight: 50}}>
+      <Card
+        testID="api-maker/table/filters/filter-form"
+        style={this.cache("cardStyle", {
+          width: mdUp ? undefined : "100%",
+          minWidth: 50,
+          minHeight: 50
+        }, [mdUp])}
+      >
         <Form onSubmit={this.tt.onSubmit}>
           <View style={{flexDirection: "row"}}>
             {path.map(({humanName, reflectionName}, pathPartIndex) =>
@@ -190,8 +204,11 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
               </View>
             )}
           </View>
-          <View style={{flexDirection: "row"}}>
-            <View>
+          <View style={{flexDirection: mdUp ? "row" : "column"}}>
+            <View style={{marginTop: mdUp ? undefined : 25}}>
+              <Header>
+                {t(".relationships", {defaultValue: "Relationships"})}
+              </Header>
               {this.s.associations && this.sortedReflectionsByName(this.s.associations).map((reflection) =>
                 <ReflectionElement
                   key={reflection.reflectionName}
@@ -201,7 +218,10 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                 />
               )}
             </View>
-            <View>
+            <View style={{marginTop: mdUp ? undefined : 25}}>
+              <Header>
+                {t(".attributes", {defaultValue: "Attributes"})}
+              </Header>
               {this.s.ransackableAttributes && this.sortedAttributesByName(this.s.ransackableAttributes)?.map((attribute) =>
                 <AttributeElement
                   active={attribute.attributeName == this.s.attribute?.attributeName}
@@ -220,27 +240,48 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                 />
               )}
             </View>
-            <View>
-              {predicates && !this.s.scope &&
-                <Select
-                  className="predicate-select"
-                  defaultValue={predicate?.name}
-                  includeBlank
-                  onChange={this.tt.onPredicateChanged}
-                  options={predicates.map((predicate) => digg(predicate, "name"))}
-                />
-              }
-            </View>
-            <View>
-              {((attribute && predicate) || scope) &&
-                <Input className="value-input" defaultValue={value} inputRef={valueInputRef} />
-              }
+            <View style={{marginTop: mdUp ? undefined : 25}}>
+              <Header>
+                {t(".search", {defaultValue: "Search"})}
+              </Header>
+              <View>
+                {predicates && !this.s.scope &&
+                  <Select
+                    className="predicate-select"
+                    defaultValue={predicate?.name}
+                    includeBlank
+                    onChange={this.tt.onPredicateChanged}
+                    options={predicates.map((predicate) => digg(predicate, "name"))}
+                  />
+                }
+              </View>
+              <View style={{marginTop: 10}}>
+                {((attribute && predicate) || scope) &&
+                  <Input className="value-input" defaultValue={value} inputRef={valueInputRef} />
+                }
+              </View>
             </View>
           </View>
-          <View>
-            <button className="apply-filter-button" disabled={!submitEnabled}>
-              {t(".apply", {defaultValue: "Apply"})}
-            </button>
+          <View style={{flexDirection: "row", justifyContent: "end", marginTop: 10}}>
+            <Button
+              danger
+              icon="remove"
+              label={t(".cancel", {defaultValue: "Cancel"})}
+              onPress={this.p.onRequestClose}
+              pressableProps={this.cancelButtonPressableProps ||= {
+                marginRight: 5
+              }}
+            />
+            <Button
+              disabled={!submitEnabled}
+              icon="check"
+              label={t(".apply", {defaultValue: "Apply"})}
+              pressableProps={this.appleButtonPressableProps ||= {
+                style: {marginLeft: 5},
+                testID: "apply-filter-button"
+              }}
+              submit
+            />
           </View>
         </Form>
         {this.s.loading > 0 &&
@@ -256,7 +297,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
             <ActivityIndicator size="large" />
           </View>
         }
-      </View>
+      </Card>
     )
   }
 

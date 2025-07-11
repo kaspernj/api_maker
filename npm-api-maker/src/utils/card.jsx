@@ -13,11 +13,12 @@ export default memo(shapeComponent(class ApiMakerUtilsCard extends ShapeComponen
     controls: PropTypes.node,
     dataSet: PropTypes.object,
     header: PropTypes.string,
-    style: PropTypes.object
+    style: PropTypes.object,
+    testID: PropTypes.string
   })
 
   render() {
-    const {children, controls, dataSet, header, style} = this.props
+    const {children, controls, dataSet, header, style, testID} = this.props
     const {component, ...restDataSet} = dataSet || {}
 
     const actualDataSet = useMemo(() =>
@@ -39,7 +40,7 @@ export default memo(shapeComponent(class ApiMakerUtilsCard extends ShapeComponen
     , [style])
 
     return (
-      <View dataSet={actualDataSet} style={actualStyle}>
+      <View dataSet={actualDataSet} style={actualStyle} testID={testID}>
         {controls &&
           <View style={this.controlsViewStyle ||= {position: "absolute", top: 15, right: 15}}>
             {controls}
