@@ -31,7 +31,7 @@
     "debounce": "^2.2.0",
     "diggerize": "^1.0.9",
     "file-loader": "^6.2.0",
-    "flash-notifications": "^0.0.15",
+    "flash-notifications": "^0.0.17",
     "history": "^5.3.0",
     "i18n-on-steroids": "^1.0.21",
     "inflection": "^3.0.2",
