@@ -2,7 +2,7 @@ import BaseComponent from "../../base-component"
 import {digg, digs} from "diggerize"
 import Filter from "./filter"
 import FilterForm from "./filter-form"
-import FlashMessage from "../../flash-message"
+import {FlashNotifications} from "flash-notifications"
 import LoadSearchModal from "./load-search-modal"
 import SaveSearchModal from "./save-search-modal"
 import Params from "../../params"
@@ -163,7 +163,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
     if (this.hasAnyFilters()) {
       this.setState({showSaveSearchModal: new TableSearch()})
     } else {
-      FlashMessage.alert(this.t(".no_filters_has_been_set", {defaultValue: "No filters has been set"}))
+      FlashNotifications.alert(this.t(".no_filters_has_been_set", {defaultValue: "No filters has been set"}))
     }
   }
 

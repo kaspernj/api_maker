@@ -3,7 +3,7 @@ import BaseComponent from "../base-component"
 import Column from "./components/column"
 import columnIdentifier from "./column-identifier"
 import EventEmitter from "events"
-import FlashMessage from "../flash-message"
+import {FlashNotifications} from "flash-notifications"
 import Icon from "../utils/icon"
 import * as inflection from "inflection"
 import modelCallbackArgs from "./model-callback-args"
@@ -131,10 +131,10 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
       await model.destroy()
 
       if (destroyMessage) {
-        FlashMessage.success(destroyMessage)
+        FlashNotifications.success(destroyMessage)
       }
     } catch (error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }))

@@ -3,7 +3,7 @@ import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-compon
 import {Account} from "models"
 import classNames from "classnames"
 import Devise from "@kaspernj/api-maker/build/devise"
-import FlashMessage from "@kaspernj/api-maker/build/flash-message"
+import {FlashNotifications} from "flash-notifications"
 import {Pressable} from "react-native"
 import PropTypes from "prop-types"
 import Text from "@kaspernj/api-maker/build/utils/text"
@@ -48,7 +48,7 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
     try {
       await Devise.signIn("admin@example.com", "password", {rememberMe: true})
     } catch (error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }))

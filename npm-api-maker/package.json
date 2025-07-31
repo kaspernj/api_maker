@@ -75,6 +75,7 @@
   },
   "peerDependencies": {
     "expo": "*",
+    "flash-notifications": "*",
     "i18n-on-steroids": "*",
     "react": "*",
     "react-native": "*",

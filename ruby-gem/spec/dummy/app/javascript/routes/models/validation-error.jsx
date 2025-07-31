@@ -1,7 +1,7 @@
 import {Account, Project} from "models"
 import {digg, digs} from "diggerize"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
-import FlashMessage from "@kaspernj/api-maker/build/flash-message"
+import {FlashNotifications} from "flash-notifications"
 import Layout from "components/layout"
 import React from "react"
 import ValidationError from "@kaspernj/api-maker/build/validation-error"
@@ -76,7 +76,7 @@ export default class ModelsCustomValidationError extends React.PureComponent {
       await Project.createProject(formData)
       this.setState({errorForProjectName: false})
     } catch(error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
 
       if (error instanceof ValidationError) {
         this.setState({
