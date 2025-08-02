@@ -2312,7 +2312,7 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-diggerize@*, "diggerize@>= 1.0.5", diggerize@^1.0.3, diggerize@^1.0.5, diggerize@^1.0.9:
+"diggerize@>= 1.0.5", diggerize@^1.0.3, diggerize@^1.0.5, diggerize@^1.0.9:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.9.tgz#40c8dbdf7e30cd8c3362ead8c3a57c6764814d25"
   integrity sha512-DY1H4k78K51p8Yxmm2GgKbiDdfW/fWnJY3tpBEkgPCKdirZ9YH6QwQbisgMOSsEI73QTa00ryX2pe/uRznJkXw==
@@ -2370,6 +2370,11 @@ enhanced-resolve@^5.17.2:
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
+
+env-sense@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/env-sense/-/env-sense-1.0.0.tgz#2d9d46ff7deb13d440f3d46e4872c3b312815f59"
+  integrity sha512-GhdKhpNYFNpFP82mFvB2VI7gNgovAtPG9yb0r2PNPTbPqOu5KW9ueLv1d3zwSMp/dB3FXGC86a7tLzH5Bkf/IQ==
 
 envinfo@^7.14.0:
   version "7.14.0"
@@ -2554,7 +2559,7 @@ fbjs@^3.0.4:
     setimmediate "^1.0.5"
     ua-parser-js "^1.0.35"
 
-"fetching-object@>= 1.0.2":
+"fetching-object@>= 1.0.2", fetching-object@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/fetching-object/-/fetching-object-1.0.3.tgz#a310c3d96a20a0eedc6134e6eb532193ec100436"
   integrity sha512-4keug2WljzrnY7lZ8iIGfCqpifv0MrdKXga9c9vQysCLVidwMk9zz3fLJFqj8O/CGjCLviejlei2Ipcw/rdbWw==
@@ -2608,14 +2613,17 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-flash-notifications@^0.0.15:
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.15.tgz#3918788a3fd31de882ecca0614d0737b146c18b1"
-  integrity sha512-0JfyGw1jMCy+Wyce3NnR9TbK6XvhzqCii+rmR4uW8Ah4pN9md6FRtREoc3N2KQH43pps0Kk/SVUGM9cw9Fc46Q==
+flash-notifications@^0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.21.tgz#f11b6416614c9c1129f8fc5ff373d5bfb6e16d43"
+  integrity sha512-NAvFkCp2XSH7c1jzo9NVh70YnqhYPetE4R+QwzA7MikHJJUZ7YTXyl74woGltQ2IaTP6ro26QMT0fjKGgnzlxw==
   dependencies:
-    diggerize "*"
+    classnames "^2.5.1"
+    diggerize "^1.0.9"
+    env-sense "^1.0.0"
+    fetching-object "^1.0.3"
     prop-types-exact "*"
-    set-state-compare "*"
+    set-state-compare "^1.0.57"
 
 flat@^5.0.2:
   version "5.0.2"
@@ -4163,7 +4171,7 @@ set-function-length@^1.2.1, set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-set-state-compare@*, "set-state-compare@>= 1.0.53", set-state-compare@^1.0.58:
+"set-state-compare@>= 1.0.53", set-state-compare@^1.0.57, set-state-compare@^1.0.58:
   version "1.0.58"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.58.tgz#fc8160ba2571e1c1d85df12270470b69b46c9991"
   integrity sha512-fIYVTIsAjl0p6wAV/I1epIptRzjesK+79sPS2OL9nZZYsVXDBFWXg8Oq6AVszNvyjxjbsPZK0GhM2l1ZF81T4Q==
