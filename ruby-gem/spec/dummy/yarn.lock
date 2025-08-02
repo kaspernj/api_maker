@@ -2371,10 +2371,10 @@ enhanced-resolve@^5.17.2:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
 
-env-sense@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/env-sense/-/env-sense-1.0.0.tgz#2d9d46ff7deb13d440f3d46e4872c3b312815f59"
-  integrity sha512-GhdKhpNYFNpFP82mFvB2VI7gNgovAtPG9yb0r2PNPTbPqOu5KW9ueLv1d3zwSMp/dB3FXGC86a7tLzH5Bkf/IQ==
+env-sense@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/env-sense/-/env-sense-1.0.1.tgz#375a7b5b7e0118cd00fdeb80fc004653a931629c"
+  integrity sha512-6otgggbxvN6hnAR8/9GoWQJbNfOiwXZJc66deDoECD53FXjPQx6gibScs0CbA+Us+vRBAXH8y8ktQ1G9hN5Ydg==
 
 envinfo@^7.14.0:
   version "7.14.0"
@@ -2613,14 +2613,14 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-flash-notifications@^0.0.21:
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.21.tgz#f11b6416614c9c1129f8fc5ff373d5bfb6e16d43"
-  integrity sha512-NAvFkCp2XSH7c1jzo9NVh70YnqhYPetE4R+QwzA7MikHJJUZ7YTXyl74woGltQ2IaTP6ro26QMT0fjKGgnzlxw==
+flash-notifications@^0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.22.tgz#32776930022ee1150bfa0a61df667ec6d79e5097"
+  integrity sha512-Ipes+3FeqA+Q055/kucTllRQDAXEUkS1lMwhjrfylaqPvGWVynFa60Prs+flotXEs8j7t3S9b6AgRkk9naAiiA==
   dependencies:
     classnames "^2.5.1"
     diggerize "^1.0.9"
-    env-sense "^1.0.0"
+    env-sense "^1.0.1"
     fetching-object "^1.0.3"
     prop-types-exact "*"
     set-state-compare "^1.0.57"
