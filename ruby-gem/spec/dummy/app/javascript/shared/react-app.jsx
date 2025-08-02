@@ -6,6 +6,7 @@ import Locales from "shared/locales"
 import React from "react"
 import Router from "@kaspernj/api-maker/build/router"
 import Routes from "shared/routes"
+import {SafeAreaProvider} from "react-native-safe-area-context"
 import {WithCurrentUser} from "@kaspernj/api-maker/build/use-current-user"
 import WithLocationPath from "on-location-changed/build/with-location-path"
 
@@ -21,18 +22,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = createRoot(reactRoot)
 
   root.render(
-    <WithCurrentUser>
-      <WithLocationPath>
-        <Notifications />
-        <Router
-          history={ApplicationHistory}
-          locales={Locales.availableLocales()}
-          notFoundComponent={NotFoundComponent}
-          requireComponent={requireComponent}
-          routes={Routes}
-          routeDefinitions={routeDefinitions}
-        />
-      </WithLocationPath>
-    </WithCurrentUser>
+    <SafeAreaProvider>
+      <WithCurrentUser>
+        <WithLocationPath>
+          <Notifications />
+          <Router
+            history={ApplicationHistory}
+            locales={Locales.availableLocales()}
+            notFoundComponent={NotFoundComponent}
+            requireComponent={requireComponent}
+            routes={Routes}
+            routeDefinitions={routeDefinitions}
+          />
+        </WithLocationPath>
+      </WithCurrentUser>
+    </SafeAreaProvider>
   )
 })
