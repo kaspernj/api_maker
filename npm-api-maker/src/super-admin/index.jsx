@@ -213,7 +213,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
 
       Params.changeParams({mode: undefined, model_id: undefined})
     } catch (error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }))

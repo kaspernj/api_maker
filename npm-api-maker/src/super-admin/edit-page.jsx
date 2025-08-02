@@ -3,7 +3,7 @@ import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader"
 import {digg} from "diggerize"
 import EditAttribute from "./edit-page/edit-attribute"
-import FlashMessage from "../flash-message"
+import {FlashNotifications} from "flash-notifications"
 import {Form} from "../form"
 import * as inflection from "inflection"
 import Locales from "shared/locales"
@@ -111,7 +111,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
       await model.save()
       Params.changeParams({mode: undefined, model_id: model.id()})
     } catch (error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }))

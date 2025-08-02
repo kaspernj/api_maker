@@ -2,7 +2,7 @@ import apiMakerConfig from "@kaspernj/api-maker/build/config"
 import BaseComponent from "../../base-component"
 import Checkbox from "../../bootstrap/checkbox"
 import {digg} from "diggerize"
-import FlashMessage from "../../flash-message"
+import {FlashNotifications} from "flash-notifications"
 import {Form} from "../../form"
 import Input from "../../bootstrap/input"
 import modelClassRequire from "../../model-class-require"
@@ -65,10 +65,10 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
 
     try {
       await search.saveRaw(formData)
-      FlashMessage.success(this.t(".", {defaultValue: "The search was saved."}))
+      FlashNotifications.success(this.t(".", {defaultValue: "The search was saved."}))
       onRequestClose()
     } catch (error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }))

@@ -1,6 +1,6 @@
 import classNames from "classnames"
 import {digg, digs} from "diggerize"
-import FlashMessage from "@kaspernj/api-maker/build/flash-message"
+import {FlashNotifications} from "flash-notifications"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import PropTypes from "prop-types"
 import React from "react"
@@ -41,9 +41,9 @@ export default class ComponentsTasksForm extends React.PureComponent {
 
     try {
       await task.saveRaw(form)
-      FlashMessage.success("The task was saved")
+      FlashNotifications.success("The task was saved")
     } catch (error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }

@@ -29,7 +29,7 @@ describe "models - validation errors" do
     check "project_illegal_#{project3.id}"
 
     wait_for_and_find("input[type=submit]").click
-    wait_for_flash_message "Couldn't submit because of validation errors"
+    wait_for_flash_message "Couldn't submit because of validation errors."
 
     wait_for_selector ".project-account-1 .invalid-feedback", text: "must exist"
     wait_for_selector ".task-name-2 .invalid-feedback", text: "can't be blank"
