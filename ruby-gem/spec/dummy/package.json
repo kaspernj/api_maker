@@ -45,7 +45,7 @@
     "react-dom": "^19.1.0",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-web": "^0.21.0",
-    "sass": "^1.89.2",
+    "sass": "^1.90.0",
     "sass-loader": "^16.0.5",
     "set-state-compare": "^1.0.58",
     "shakapacker": "8.2.0",
