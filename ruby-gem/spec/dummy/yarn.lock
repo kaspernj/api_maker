@@ -2613,10 +2613,10 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-flash-notifications@^0.0.22:
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.22.tgz#32776930022ee1150bfa0a61df667ec6d79e5097"
-  integrity sha512-Ipes+3FeqA+Q055/kucTllRQDAXEUkS1lMwhjrfylaqPvGWVynFa60Prs+flotXEs8j7t3S9b6AgRkk9naAiiA==
+flash-notifications@^0.0.23:
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.23.tgz#2a24a7016b0527ea7d6bdaf8f81179cbc6400400"
+  integrity sha512-9dXT4ate1Y5FNlT163SaVsPBos1eFnl0Myys8mDenP4EsGrENnTrGNzMEsqC5KWnd50xVY7spc6zYefoQrhwLA==
   dependencies:
     classnames "^2.5.1"
     diggerize "^1.0.9"
