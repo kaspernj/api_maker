@@ -17,16 +17,16 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   }
 
   render() {
-    const {dataSet, to, onClick, onPress, usePressable, ...restProps} = this.props
+    const {dataSet, to, onClick, onPress, testID, usePressable, ...restProps} = this.props
 
     if (Platform.OS == "web" && !usePressable) {
       return (
-        <a {...dataSetToAttributes(dataSet)} href={to || "#"} {...restProps} onClick={this.tt.onLinkClicked} />
+        <a {...dataSetToAttributes(Object.assign({testid: testID}, dataSet))} href={to || "#"} {...restProps} onClick={this.tt.onLinkClicked} />
       )
     }
 
     return (
-      <Pressable dataSet={dataSet} onPress={this.tt.onPress} {...restProps} />
+      <Pressable dataSet={dataSet} onPress={this.tt.onPress} testID={testID} {...restProps} />
     )
   }
 

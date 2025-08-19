@@ -1,6 +1,6 @@
 {
   "name": "@kaspernj/api-maker",
-  "version": "1.0.2045",
+  "version": "1.0.2048",
   "description": "My new module",
   "main": "build/index.js",
   "scripts": {
@@ -38,7 +38,7 @@
     "clone-deep": ">= 4.0.1",
     "debounce": ">= 2.0.0",
     "diggerize": ">= 1.0.5",
-    "env-sense": "^1.0.0",
+    "env-sense": "^1.0.1",
     "epic-locks": ">= 1.0.2",
     "file-saver": "^2.0.5",
     "form-data-objectizer": ">= 1.0.0",
@@ -75,6 +75,7 @@
   },
   "peerDependencies": {
     "expo": "*",
+    "flash-notifications": "*",
     "i18n-on-steroids": "*",
     "react": "*",
     "react-native": "*",

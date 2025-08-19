@@ -1,7 +1,7 @@
 import {StyleSheet, View} from "react-native"
 import BaseComponent from "../../../base-component"
 import Devise from "../../../devise"
-import FlashMessage from "../../../flash-message"
+import {FlashNotifications} from "flash-notifications"
 import Icon from "../../../utils/icon"
 import memo from "set-state-compare/src/memo"
 import Link from "../../../link"
@@ -165,9 +165,9 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
 
     try {
       await Devise.signOut()
-      FlashMessage.success(this.t(".you_have_been_signed_out", {defaultValue: "You have been signed out"}))
+      FlashNotifications.success(this.t(".you_have_been_signed_out", {defaultValue: "You have been signed out"}))
     } catch (error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }))

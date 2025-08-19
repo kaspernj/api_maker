@@ -1,6 +1,6 @@
 import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import FlashMessage from "@kaspernj/api-maker/build/flash-message"
+import {FlashNotifications} from "flash-notifications"
 import Link from "@kaspernj/api-maker/build/link"
 import modelClassRequire from "@kaspernj/api-maker/build/model-class-require"
 import Routes from "shared/routes"
@@ -117,9 +117,9 @@ export default memo(shapeComponent(class Layout extends ShapeComponent {
 
     try {
       await Devise.signOut()
-      FlashMessage.success("You were signed out")
+      FlashNotifications.success("You were signed out")
     } catch (error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }))

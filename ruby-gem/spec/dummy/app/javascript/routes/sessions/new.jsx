@@ -2,7 +2,7 @@ import React, {memo, useRef} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import Devise from "@kaspernj/api-maker/build/devise"
-import FlashMessage from "@kaspernj/api-maker/build/flash-message"
+import {FlashNotifications} from "flash-notifications"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
 import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter"
@@ -51,9 +51,9 @@ export default memo(shapeComponent(class SessionsNew extends ShapeComponent {
 
     try {
       await Devise.signIn(email, password, {rememberMe})
-      FlashMessage.success("You were signed in")
+      FlashNotifications.success("You were signed in")
     } catch (error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }))

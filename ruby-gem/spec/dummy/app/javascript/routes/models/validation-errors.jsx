@@ -1,7 +1,7 @@
 import {Account, Project, Task, User} from "models"
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import {digg} from "diggerize"
-import FlashMessage from "@kaspernj/api-maker/build/flash-message"
+import {FlashNotifications} from "flash-notifications"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
 import Params from "@kaspernj/api-maker/build/params"
@@ -153,7 +153,7 @@ export default class ModelsValidationErrors extends React.PureComponent {
     try {
       await user.saveRaw(e.target)
     } catch(error) {
-      FlashMessage.errorResponse(error)
+      FlashNotifications.errorResponse(error)
     }
   }
 }
