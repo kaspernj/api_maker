@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useMemo} from "react"
+import React, {createContext, useContext, useEffect, useMemo} from "react"
 import BaseComponent from "./base-component"
 import FormDataObjectizer from "form-data-objectizer"
 import memo from "set-state-compare/src/memo"
@@ -58,8 +58,18 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
   }
 
   render() {
-    const {children, formRef, onSubmit, setForm, ...restProps} = this.props
+    const {children, formObjectRef, formRef, onSubmit, setForm, ...restProps} = this.props
     const form = useMemo(() => new FormInputs({onSubmit}), [])
+
+    useMemo(() => {
+      formObjectRef.current = form
+    }, [form, formObjectRef])
+
+    useEffect(() => {
+      return () => {
+        formObjectRef.current = null
+      }
+    }, [form, formObjectRef])
 
     useMemo(() => {
       if (setForm) {
