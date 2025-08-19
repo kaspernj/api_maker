@@ -62,12 +62,16 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
     const form = useMemo(() => new FormInputs({onSubmit}), [])
 
     useMemo(() => {
-      formObjectRef.current = form
+      if (formObjectRef) {
+        formObjectRef.current = form
+      }
     }, [form, formObjectRef])
 
     useEffect(() => {
       return () => {
-        formObjectRef.current = null
+        if (formObjectRef) {
+          formObjectRef.current = null
+        }
       }
     }, [form, formObjectRef])
 
