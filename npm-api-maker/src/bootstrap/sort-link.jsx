@@ -21,7 +21,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
     linkComponent: PropTypes.object,
     onChanged: PropTypes.func,
     query: PropTypes.object.isRequired,
-    title: PropTypes.node
+    title: PropTypes.any
   }
 
   setup() {

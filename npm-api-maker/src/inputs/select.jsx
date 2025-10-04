@@ -9,10 +9,10 @@ import {useForm} from "../form"
 const ApiMakerInputsSelect = memo(shapeComponent(class ApiMakerInputsSelect extends BaseComponent {
   static propTypes = {
     attribute: PropTypes.string,
-    children: PropTypes.node,
+    children: PropTypes.any,
     defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.number, PropTypes.string]),
     id: PropTypes.string,
-    includeBlank: PropTypes.oneOfType([PropTypes.bool, PropTypes.node]),
+    includeBlank: PropTypes.oneOfType([PropTypes.bool, PropTypes.any]),
     inputProps: PropTypes.object.isRequired,
     model: PropTypes.object,
     name: PropTypes.string,

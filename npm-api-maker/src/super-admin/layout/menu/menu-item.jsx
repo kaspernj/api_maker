@@ -12,7 +12,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem exten
     active: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     className: PropTypes.string,
     icon: PropTypes.string.isRequired,
-    label: PropTypes.node
+    label: PropTypes.any
   }
 
   setup() {

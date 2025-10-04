@@ -53,9 +53,9 @@ const styles = StyleSheet.create({
 
 export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseComponent {
   static propTypes = PropTypesExact({
-    actions: PropTypes.node,
+    actions: PropTypes.any,
     active: PropTypes.string,
-    children: PropTypes.node,
+    children: PropTypes.any,
     className: PropTypes.string,
     currentCustomer: PropTypes.object,
     currentCustomerId: PropTypes.string,

@@ -13,7 +13,7 @@ import useEventListener from "../../../use-event-listener"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
   static propTypes = PropTypesExact({
-    actions: PropTypes.node,
+    actions: PropTypes.any,
     onTriggerMenu: PropTypes.func.isRequired,
     title: PropTypes.string
   })

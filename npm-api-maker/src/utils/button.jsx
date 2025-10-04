@@ -22,7 +22,7 @@ export default memo(shapeComponent(class ApiMakerUtilsButton extends ShapeCompon
   }
 
   static propTypes = propTypesExact({
-    children: PropTypes.node,
+    children: PropTypes.any,
     danger: PropTypes.bool.isRequired,
     disabled: PropTypes.bool.isRequired,
     icon: PropTypes.string,
