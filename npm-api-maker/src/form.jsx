@@ -28,6 +28,10 @@ class FormInputs {
     return result
   }
 
+  getValue(name) {
+    return this.inputs[name]
+  }
+
   setValue(name, value) {
     if (!name) throw new Error("'name' is required")
 
