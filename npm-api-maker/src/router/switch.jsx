@@ -14,7 +14,7 @@ const Switch = memo(shapeComponent(class Switch extends BaseComponent {
   }
 
   static propTypes = propTypesExact({
-    children: PropTypes.node,
+    children: PropTypes.any,
     name: PropTypes.string,
     single: PropTypes.bool
   })

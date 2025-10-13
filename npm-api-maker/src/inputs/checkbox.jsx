@@ -23,7 +23,7 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
     autoRefresh: PropTypes.bool.isRequired,
     autoSubmit: PropTypes.bool.isRequired,
     defaultChecked: PropTypes.bool,
-    defaultValue: PropTypes.node,
+    defaultValue: PropTypes.any,
     id: PropTypes.string,
     inputRef: PropTypes.object,
     model: PropTypes.object,

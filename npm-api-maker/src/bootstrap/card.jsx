@@ -18,13 +18,13 @@ export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseCompo
   static propTypes = {
     cardRef: PropTypes.object,
     className: PropTypes.string,
-    children: PropTypes.node,
-    controls: PropTypes.node,
+    children: PropTypes.any,
+    controls: PropTypes.any,
     defaultExpanded: PropTypes.bool.isRequired,
     expandable: PropTypes.bool.isRequired,
     expandableHide: PropTypes.bool.isRequired,
-    footer: PropTypes.node,
-    header: PropTypes.node,
+    footer: PropTypes.any,
+    header: PropTypes.any,
     striped: PropTypes.bool,
     responsiveTable: PropTypes.bool.isRequired,
     table: PropTypes.bool.isRequired

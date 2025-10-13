@@ -16,7 +16,7 @@ const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckbo
     defaultValue: PropTypes.array,
     id: PropTypes.string,
     inputProps: PropTypes.object.isRequired,
-    label: PropTypes.node,
+    label: PropTypes.any,
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,

@@ -19,11 +19,11 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
   static propTypes = {
     attribute: PropTypes.string,
     checkIfAttributeLoaded: PropTypes.bool.isRequired,
-    children: PropTypes.node,
+    children: PropTypes.any,
     identifier: PropTypes.string,
-    label: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+    label: PropTypes.oneOfType([PropTypes.any, PropTypes.string]),
     model: PropTypes.object,
-    value: PropTypes.node
+    value: PropTypes.any
   }
 
   setup() {

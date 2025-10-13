@@ -127,7 +127,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     editModelPath: PropTypes.func,
     filterCard: PropTypes.bool.isRequired,
     filterContent: PropTypes.func,
-    filterSubmitLabel: PropTypes.node,
+    filterSubmitLabel: PropTypes.any,
     groupBy: PropTypes.array,
     header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     identifier: PropTypes.string,

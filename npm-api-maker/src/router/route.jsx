@@ -21,7 +21,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
   }
 
   static propTypes = propTypesExact({
-    children: PropTypes.node,
+    children: PropTypes.any,
     component: PropTypes.string,
     componentPath: PropTypes.string,
     exact: PropTypes.bool.isRequired,

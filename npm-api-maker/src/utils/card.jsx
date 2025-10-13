@@ -9,8 +9,8 @@ import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerUtilsCard extends ShapeComponent {
   static propTypes = propTypesExact({
-    children: PropTypes.node,
-    controls: PropTypes.node,
+    children: PropTypes.any,
+    controls: PropTypes.any,
     dataSet: PropTypes.object,
     header: PropTypes.string,
     style: PropTypes.object,

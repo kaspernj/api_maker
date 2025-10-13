@@ -55,7 +55,7 @@ class FormInputs {
 
 const Form = memo(shapeComponent(class Form extends BaseComponent {
   static propTypes = {
-    children: PropTypes.node,
+    children: PropTypes.any,
     formRef: PropTypes.object,
     onSubmit: PropTypes.func,
     setForm: PropTypes.func
