@@ -1,5 +1,4 @@
 import React, {useMemo} from "react"
-import classNames from "classnames"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import memo from "set-state-compare/src/memo"
