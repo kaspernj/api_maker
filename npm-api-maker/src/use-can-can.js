@@ -22,9 +22,9 @@ const useCanCan = (abilitiesCallback, dependencies) => {
     s.set({canCan, lastUpdate: new Date()})
   }, [])
 
-  const onResetAbilities = useCallback(async () => {
+  const onResetAbilities = useCallback(() => {
     s.set({canCan: null}, {silent: true})
-    await loadAbilities()
+    loadAbilities()
   }, [])
 
   const loadAbilitiesOnNew = useCallback(async () => {

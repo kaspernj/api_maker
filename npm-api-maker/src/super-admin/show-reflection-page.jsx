@@ -7,6 +7,7 @@ import ModelClassTable from "./model-class-table"
 import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component"
 import ShowNav from "./show-nav"
+import useModel from "../use-model"
 import useQueryParams from "on-location-changed/build/use-query-params"
 import {View} from "react-native"
 

@@ -74,6 +74,10 @@ end
 
 Capybara.server = :puma, {Silent: true}
 
+ApiMaker::Configuration.current.on_test_error_log do |example:, log:| # rubocop:disable Lint/UnusedBlockArgument
+  :ignore if log.message.include?("Can't perform a React state update on a component that hasn't mounted yet.")
+end
+
 RSpec.configure do |config|
   config.include ApiMaker::SpecHelper
   config.include FlashMessagesHelper, type: :system
