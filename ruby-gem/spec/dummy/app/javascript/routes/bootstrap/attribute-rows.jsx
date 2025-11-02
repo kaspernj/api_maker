@@ -40,15 +40,11 @@ export default class RouteBootstrapAttributeRows extends React.PureComponent {
               <tr className="user-row" data-user-id={user.id()} key={user.cacheKey()}>
                 <td>{user.id()}</td>
                 <td className="updated-at-column">
-                  <table>
-                    <tbody>
-                      <AttributeRows
-                        attributes={["updatedAt"]}
-                        checkIfAttributeLoaded
-                        model={user}
-                      />
-                    </tbody>
-                  </table>
+                  <AttributeRows
+                    attributes={["updatedAt"]}
+                    checkIfAttributeLoaded
+                    model={user}
+                  />
                 </td>
               </tr>
             )}
