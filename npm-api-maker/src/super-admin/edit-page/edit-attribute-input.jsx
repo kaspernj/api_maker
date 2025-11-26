@@ -43,7 +43,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     }
 
     return (
-      <View dataSet={{component: "api-maker/super-admin/edit-page/edit-attribute-input"}}>
+      <View testID="api-maker/super-admin/edit-page/edit-attribute-input">
         <Text>{label}</Text>
         <View>
           <TextInput
