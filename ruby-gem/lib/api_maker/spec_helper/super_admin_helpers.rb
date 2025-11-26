@@ -32,10 +32,10 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     visit super_admin_path(model: resource.short_name)
     wait_for_and_find("[data-class='create-new-model-link']").click
-    wait_for_selector "[data-class='super-admin--edit-page']"
+    wait_for_selector "[data-testid='super-admin--edit-page']"
     super_admin_test_fill_inputs(resource, inputs)
     expected_count = model_class.count + 1
-    wait_for_and_find("[data-class='submit-button']").click
+    wait_for_and_find("[data-testid='submit-button']").click
     wait_for_expect { expect(model_class.count).to eq expected_count }
 
     uri = URI.parse(current_url)
@@ -68,9 +68,9 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     visit super_admin_path(model: resource.short_name)
     wait_for_and_find(model_row_edit_button_selector(model)).click
-    wait_for_selector "[data-class='super-admin--edit-page']"
+    wait_for_selector "[data-testid='super-admin--edit-page']"
     super_admin_test_fill_inputs(resource, inputs)
-    wait_for_and_find("[data-class='submit-button']").click
+    wait_for_and_find("[data-testid='submit-button']").click
 
     expect_attributes = expect || inputs
 

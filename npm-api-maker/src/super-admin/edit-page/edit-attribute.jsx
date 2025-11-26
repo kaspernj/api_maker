@@ -27,8 +27,8 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
 
     return (
       <View
-        dataSet={this.rootViewDataSet ||= {component: "api-maker/super-admin/edit-page/edit-attribute"}}
         style={this.cache("rootViewStyle", {marginBottom: attribute.translated ? undefined : 12}, [attribute.translated])}
+        testID="api-maker/super-admin/edit-page/edit-attribute"
       >
         {(() => {
           if (attribute.content) {

@@ -74,14 +74,13 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     const extraContent = this.configReader.modelConfig?.edit?.extraContentconst
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {class: "super-admin--edit-page"}}>
+      <View testID="super-admin--edit-page">
         <Form setForm={this.setStates.form}>
           {model && attributes?.map((attribute) =>
             <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelClass={modelClass} />
           )}
           {extraContent && extraContent(modelArgs)}
           <Pressable
-            dataSet={this.pressableDataSet ||= {class: "submit-button"}}
             onPress={this.tt.onSubmit}
             style={this.pressableStyle ||= {
               paddingTop: 18,
@@ -92,6 +91,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
               backgroundColor: "#4c93ff",
               marginTop: 10
             }}
+            testID="submit-button"
           >
             <Text style={this.buttonTextStyle ||= {color: "#fff"}}>
               Submit
