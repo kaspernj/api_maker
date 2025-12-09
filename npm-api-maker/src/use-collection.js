@@ -28,7 +28,7 @@ import useQueryParams from "on-location-changed/build/use-query-params"
  * @param {Record<string, string[]>} props.selectColumns
  * @param {any[]} cacheKeys
  * @returns {{
- *   models: import("./base-model.js").default,
+ *   models: Array<import("./base-model.js").default>,
  *   modelIdsCacheString: Array<number|string>,
  *   overallCount: number,
  *   query: import("./collection.js").default,

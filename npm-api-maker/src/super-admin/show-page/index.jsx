@@ -124,7 +124,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPage extends Base
     modelArgs[inflection.camelize(modelClass.modelClassData().name, true)] = model
 
     return (
-      <View dataSet={{component: "super-admin--show-page"}}>
+      <View testID="super-admin/show-page">
         {model &&
           <ShowNav model={model} modelClass={modelClass} />
         }
