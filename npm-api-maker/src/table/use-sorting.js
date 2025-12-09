@@ -1,6 +1,9 @@
 import {camelize} from "inflection"
 import useQueryParams from "on-location-changed/build/use-query-params"
 
+/**
+ * @returns {object}
+ */
 function calculateQParams(defaultParams, queryParams, searchKey) {
   if (searchKey in queryParams) {
     return JSON.parse(queryParams[searchKey])
@@ -11,7 +14,18 @@ function calculateQParams(defaultParams, queryParams, searchKey) {
   return {}
 }
 
-export default useSorting = ({defaultParams, query}) => {
+/**
+ * @param {object} args
+ * @param {object} args.defaultParams
+ * @param {import("../collection.js").default} args.query
+ * @returns {{
+ *   qParams: object
+ *   searchKey: string,
+ *   sortAttribute: string,
+ *   sortMode: string
+ * }}
+ */
+export default function useSorting({defaultParams, query}) {
   const queryParams = useQueryParams()
   const searchKey = query.queryArgs.searchKey || "q"
   const qParams = calculateQParams(defaultParams, queryParams, searchKey)
