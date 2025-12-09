@@ -109,6 +109,6 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     expect { destroy_action.call }.to change(model.class, :count).by(-1)
 
     # It redirects to the index page
-    wait_for_selector "[data-testid='super-admin--index-page']"
+    wait_for_selector "[data-testid='super-admin/index-page']"
   end
 end
