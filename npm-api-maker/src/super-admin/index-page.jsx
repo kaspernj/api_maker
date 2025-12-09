@@ -15,7 +15,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminIndexPage extends Bas
     const {modelClass} = this.props
 
     return (
-      <View dataSet={{component: "super-admin--index-page"}}>
+      <View testID="super-admin/index-page">
         <ModelClassTable modelClass={modelClass} />
       </View>
     )

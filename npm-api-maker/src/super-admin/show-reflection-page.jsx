@@ -30,10 +30,8 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionPage ex
 
     if (model) collection = model[reflection.name()]()
 
-    const dataSet = useMemo(() => ({component: "super-admin--show-page"}), [])
-
     return (
-      <View dataSet={dataSet}>
+      <View testID="super-admin/show-reflection-page">
         {model &&
           <ShowNav model={model} modelClass={modelClass} />
         }

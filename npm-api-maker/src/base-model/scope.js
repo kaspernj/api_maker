@@ -6,6 +6,9 @@ export default class ApiMakerBaseModelScope {
     this.scopeData = scopeData
   }
 
+  /**
+   * @returns {string}
+   */
   name() {
     return inflection.camelize(digg(this, "scopeData", "name"), true)
   }

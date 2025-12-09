@@ -5,10 +5,17 @@ import qs from "qs"
 import urlEncode from "./url-encode"
 
 export default class Params {
+  /**
+   * @returns {Record<string, any>}
+   */
   static parse() {
     return qs.parse(globalThis.location.search.substr(1))
   }
 
+  /**
+   * @param {object} given
+   * @returns {object}
+   */
   static change(given) {
     const incorporator = new Incorporator({objects: [Params.parse(), given]})
 

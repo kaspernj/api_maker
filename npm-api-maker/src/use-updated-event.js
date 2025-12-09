@@ -3,6 +3,15 @@ import debounceFunction from "debounce"
 import ModelEvents from "./model-events"
 import useShape from "set-state-compare/src/use-shape"
 
+/**
+ * @param {import("./base-model.js").default} model
+ * @param {function} onUpdated
+ * @param {object} props
+ * @param {boolean} props.active
+ * @param {number} props.debounce
+ * @param {function} props.onConnected
+ * @return {void}
+ */
 const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
   const {active = true, debounce, onConnected, ...restProps} = props
 

@@ -61,7 +61,7 @@ const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extend
     useEventEmitter(events, "columnVisibilityUpdated", this.tt.onColumnVisibilityUpdated)
 
     return (
-      <Row dataSet={{class: "api-maker/table/header-row"}} style={table.styleForRowHeader()}>
+      <Row style={table.styleForRowHeader()} testID="api-maker/table/header-row">
         {table.p.workplace && table.s.currentWorkplace &&
           <Header style={table.styleForHeader({style: {width: mdUp ? 41 : undefined}})}>
             <WorkerPluginsCheckAllCheckbox
@@ -363,7 +363,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
 
     return (
-      <View dataSet={{class: this.className()}} onLayout={this.tt.onContainerLayout} style={this.props.styles?.container}>
+      <View
+        dataSet={this.cache("rootViewDataSet", {class: this.className()}, [this.className()])}
+        onLayout={this.tt.onContainerLayout}
+        style={this.props.styles?.container}
+      >
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
@@ -377,9 +381,17 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         {showFilters &&
           <Filters currentUser={currentUser} modelClass={modelClass} queryName={queryName} querySName={querySName} />
         }
-        {qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
-          this.cardOrTable()
-        }
+        {(() => {
+          if (qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent) {
+            return this.cardOrTable()
+          } else {
+            return (
+              <View>
+                <Text>{this.t(".loading_dot_dot_dit", {defaultValue: "Loading..."})}</Text>
+              </View>
+            )
+          }
+        })()}
       </View>
     )
   }

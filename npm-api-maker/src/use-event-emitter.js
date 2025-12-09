@@ -1,6 +1,12 @@
 import useEnvSense from "env-sense/src/use-env-sense"
 import {useEffect, useLayoutEffect, useMemo} from "react"
 
+/**
+ * @param {object} events
+ * @param {string} event
+ * @param {function} onCalled
+ * @return {void}
+ */
 const ApiMakerUseEventEmitter = (events, event, onCalled) => {
   const {isServer} = useEnvSense()
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect

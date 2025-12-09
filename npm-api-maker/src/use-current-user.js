@@ -13,6 +13,12 @@ const logger = new Logger({name: "ApiMaker / useCurrentUser"})
 
 logger.setDebug(false)
 
+/**
+ * @param {object} props
+ * @param {string} props.scope
+ * @param {boolean} props.withData
+ * @returns {import("./base-model.js").default}
+ */
 const useCurrentUser = (props = {}) => {
   const {scope = "user", withData, ...restProps} = props
 
@@ -30,6 +36,12 @@ const useCurrentUser = (props = {}) => {
   }
 }
 
+/**
+ * @param {object} props
+ * @param {function} props.children
+ * @param {string} props.scope
+ * @returns {import("react").ReactNode}
+ */
 const WithCurrentUser = (props = {}) => {
   const {children, scope = "user", ...restProps} = props
 

@@ -4,7 +4,12 @@ import useCurrentUser from "./use-current-user"
 import useEventEmitter from "./use-event-emitter"
 import useShape from "set-state-compare/src/use-shape"
 
-const useCanCan = (abilitiesCallback, dependencies) => {
+/**
+ * @param {function() : Array} abilitiesCallback
+ * @param {Array} dependencies
+ * @returns {CanCan}
+ */
+export default function useCanCan(abilitiesCallback, dependencies) {
   const currentUser = useCurrentUser()
   const s = useShape({abilitiesCallback})
 
@@ -51,5 +56,3 @@ const useCanCan = (abilitiesCallback, dependencies) => {
 
   return s.s.canCan
 }
-
-export default useCanCan

@@ -9,5 +9,8 @@ export default class ApiMakerBaseModelColumn {
     this.columnData = columnData
   }
 
-  getType = () => digg(this, "columnData", "type")
+  /**
+   * @returns {string}
+   */
+  getType() { return digg(this, "columnData", "type") }
 }
