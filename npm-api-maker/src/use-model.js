@@ -5,6 +5,17 @@ import ModelEvents from "./model-events"
 import useQueryParams from "on-location-changed/build/use-query-params"
 import useShape from "set-state-compare/src/use-shape"
 
+/**
+ * @param {function|object} modelClassArg
+ * @param {object} argsArg
+ * @param {(arg: object) => function} argsArg.callback
+ * @param {(arg: object) => object} argsArg.args
+ * @param {() => number|string} argsArg.loadByQueryParam
+ * @param {any[]} argsArg.cacheArgs
+ * @param {{params: object}} argsArg.match
+ * @param {(ctx: { model: import("./base-model.js").default }) => void} argsArg.onDestroyed
+ * @param {import("./collection.js").default} argsArg.query
+ */
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
   let args, modelClass

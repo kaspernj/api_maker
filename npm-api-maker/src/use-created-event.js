@@ -5,6 +5,15 @@ import propTypesExact from "prop-types-exact"
 import {useCallback, useLayoutEffect} from "react"
 import useShape from "set-state-compare/src/use-shape"
 
+/**
+ * @param {function} modelClass
+ * @param {function} onCreated
+ * @param {object} args
+ * @param {boolean} args.active
+ * @param {number} args.debounce
+ * @param {function} args.onConnected
+ * @returns {void}
+ */
 const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {}) => {
   const {active = true, debounce} = args
   const s = useShape({active, debounce, modelClass, onCreated})

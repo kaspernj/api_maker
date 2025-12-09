@@ -3,11 +3,38 @@ export default class ApiMakerResult {
     this.data = data
   }
 
-  count = () => this.data.response.meta.count
-  currentPage = () => this.data.response.meta.currentPage
-  models = () => this.data.models
-  modelClass = () => this.data.collection.modelClass()
-  perPage = () => this.data.response.meta.perPage
-  totalCount = () => this.data.response.meta.totalCount
-  totalPages = () => this.data.response.meta.totalPages
+  /**
+   * @returns {number}
+   */
+  count() { return this.data.response.meta.count }
+
+  /**
+   * @returns {number}
+   */
+  currentPage() { return this.data.response.meta.currentPage }
+
+  /**
+   * @returns {Array<import("../base-model.js").default>}
+   */
+  models() { this.data.models }
+
+  /**
+   * @returns {typeof import("../base-model.js").default}
+   */
+  modelClass() { return this.data.collection.modelClass() }
+
+  /**
+   * @returns {number}
+   */
+  perPage() { return this.data.response.meta.perPage }
+
+  /**
+   * @returns {number}
+   */
+  totalCount() { return this.data.response.meta.totalCount }
+
+  /**
+   * @returns {number}
+   */
+  totalPages() { return this.data.response.meta.totalPages }
 }

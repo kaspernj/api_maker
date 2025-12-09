@@ -17,7 +17,7 @@ import Services from "./services"
 import ValidationError from "./validation-error"
 import {ValidationErrors} from "./validation-errors"
 
-const objectToUnderscore = (object) => {
+function objectToUnderscore(object) {
   const newObject = {}
 
   for (const key in object) {
@@ -32,6 +32,9 @@ const objectToUnderscore = (object) => {
 export default class BaseModel {
   static apiMakerType = "BaseModel"
 
+  /**
+   * @returns {Attribute[]}
+   */
   static attributes() {
     const attributes = digg(this.modelClassData(), "attributes")
     const result = []
@@ -46,6 +49,9 @@ export default class BaseModel {
     return result
   }
 
+  /**
+   * @returns {boolean}
+   */
   static hasAttribute(attributeName) {
     const attributes = digg(this.modelClassData(), "attributes")
     const lowerCaseAttributeName = inflection.underscore(attributeName)
@@ -55,6 +61,10 @@ export default class BaseModel {
     return false
   }
 
+  /**
+   * @interface
+   * @returns {object}
+   */
   static modelClassData() {
     throw new Error("modelClassData should be overriden by child")
   }
@@ -70,6 +80,9 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @returns {BaseModel}
+   */
   static async find(id) {
     const query = {}
 
@@ -95,22 +108,37 @@ export default class BaseModel {
     return model
   }
 
+  /**
+   * @returns {string}
+   */
   static modelName() {
     return new ModelName({modelClassData: this.modelClassData()})
   }
 
+  /**
+   * @returns {string}
+   */
   static primaryKey() {
     return digg(this.modelClassData(), "primaryKey")
   }
 
+  /**
+   * @returns {Collection}
+   */
   static ransack(query = {}) {
     return new Collection({modelClass: this}, {ransack: query})
   }
 
+  /**
+   * @returns {Collection}
+   */
   static select(select) {
     return this.ransack().select(select)
   }
 
+  /**
+   * @returns {Reflection[]}
+   */
   static ransackableAssociations() {
     const relationships = digg(this.modelClassData(), "ransackable_associations")
     const reflections = []
@@ -122,6 +150,9 @@ export default class BaseModel {
     return reflections
   }
 
+  /**
+   * @returns {Attribute[]}
+   */
   static ransackableAttributes() {
     const attributes = digg(this.modelClassData(), "ransackable_attributes")
     const result = []
@@ -133,6 +164,9 @@ export default class BaseModel {
     return result
   }
 
+  /**
+   * @returns {Scope[]}
+   */
   static ransackableScopes() {
     const ransackableScopes = digg(this.modelClassData(), "ransackable_scopes")
     const result = []
@@ -146,6 +180,9 @@ export default class BaseModel {
     return result
   }
 
+  /**
+   * @returns {Reflection[]}
+   */
   static reflections() {
     const relationships = digg(this.modelClassData(), "relationships")
     const reflections = []
@@ -159,6 +196,9 @@ export default class BaseModel {
     return reflections
   }
 
+  /**
+   * @returns {Reflection}
+   */
   static reflection(name) {
     const foundReflection = this.reflections().find((reflection) => reflection.name() == name)
 
@@ -169,6 +209,9 @@ export default class BaseModel {
     return foundReflection
   }
 
+  /**
+   * @returns {string}
+   */
   static _token() {
     const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
@@ -197,6 +240,10 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {Record<string, any>}
+   * @returns {void}
+   */
   assignAttributes(newAttributes) {
     for (const key in newAttributes) {
       const newValue = newAttributes[key]
@@ -225,6 +272,9 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @returns {Record<string, any>}
+   */
   attributes() {
     const result = {}
 
@@ -239,6 +289,9 @@ export default class BaseModel {
     return result
   }
 
+  /**
+   * @returns {boolean}
+   */
   can(givenAbilityName) {
     const abilityName = inflection.underscore(givenAbilityName)
 
@@ -249,6 +302,9 @@ export default class BaseModel {
     return this.abilities[abilityName]
   }
 
+  /**
+   * @returns {BaseModel}
+   */
   clone() {
     const clone = new this.constructor()
 
@@ -260,6 +316,9 @@ export default class BaseModel {
     return clone
   }
 
+  /**
+   * @returns {string}
+   */
   cacheKey() {
     if (this.isPersisted()) {
       const keyParts = [
@@ -285,22 +344,39 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @returns {string}
+   */
   localCacheKey() {
     const cacheKeyGenerator = new CacheKeyGenerator(this)
 
     return cacheKeyGenerator.local()
   }
 
+  /**
+   * @returns {string}
+   */
   fullCacheKey() {
     const cacheKeyGenerator = new CacheKeyGenerator(this)
 
     return cacheKeyGenerator.cacheKey()
   }
 
+  /**
+   * @returns {Promise<BaseModel[]>}
+   */
   static all() {
     return this.ransack()
   }
 
+  /**
+   * @param {Record<string, any>} attributes
+   * @param {object} options
+   * @returns {Promise<{
+   *   model: BaseModel,
+   *   response: object
+   * }>}
+   */
   async create(attributes, options) {
     if (attributes) this.assignAttributes(attributes)
     const paramKey = this.modelClassData().paramKey
@@ -366,6 +442,9 @@ export default class BaseModel {
     return {model: this, response}
   }
 
+  /**
+   * @returns {Promise<{model: BaseModel, response: object}>}
+   */
   async destroy() {
     const response = await CommandsPool.addCommand(
       {
@@ -425,25 +504,41 @@ export default class BaseModel {
     }
   }
 
-  getAttributes = () => Object.assign(this.modelData, this.changes)
+  /**
+   * @returns {Record<string, any>}
+   */
+  getAttributes() { return Object.assign(this.modelData, this.changes) }
 
   handleResponseError(response) {
     BaseModel.parseValidationErrors({model: this, response})
     throw new new CustomError("Response wasn't successful", {model: this, response})
   }
 
+  /**
+   * @returns {string}
+   */
   identifierKey() {
     if (!this._identifierKey) this._identifierKey = this.isPersisted() ? this.primaryKey() : this.uniqueKey()
 
     return this._identifierKey
   }
 
-  isAssociationLoaded = (associationName) => this.isAssociationLoadedUnderscore(inflection.underscore(associationName))
+  /**
+   * @returns {boolean}
+   */
+  isAssociationLoaded(associationName) { return this.isAssociationLoadedUnderscore(inflection.underscore(associationName)) }
+
+  /**
+   * @returns {boolean}
+   */
   isAssociationLoadedUnderscore (associationNameUnderscore) {
     if (associationNameUnderscore in this.relationshipsCache) return true
     return false
   }
 
+  /**
+   * @returns {boolean}
+   */
   isAssociationPresent(associationName) {
     if (this.isAssociationLoaded(associationName)) return true
     if (associationName in this.relationships) return true
@@ -475,6 +570,10 @@ export default class BaseModel {
     return inflection.humanize(attributeName)
   }
 
+  /**
+   * @param {string}
+   * @returns {boolean}
+   */
   isAttributeChanged(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
     const attributeData = this.modelClassData().attributes.find((attribute) => digg(attribute, "name") == attributeNameUnderscore)
@@ -498,6 +597,9 @@ export default class BaseModel {
     return changedMethod(oldValue, newValue)
   }
 
+  /**
+   * @returns {boolean}
+   */
   isChanged() {
     const keys = Object.keys(this.changes)
 
@@ -508,6 +610,9 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @returns {boolean}
+   */
   isNewRecord() {
     if (this.newRecord !== undefined) {
       return this.newRecord
@@ -518,10 +623,21 @@ export default class BaseModel {
     }
   }
 
-  isPersisted = () => !this.isNewRecord()
+  /**
+   * @returns {boolean}
+   */
+  isPersisted() { return !this.isNewRecord() }
 
-  static snakeCase = (string) => inflection.underscore(string)
+  /**
+   * @param {string}
+   * @returns {string}
+   */
+  static snakeCase(string) { return inflection.underscore(string) }
 
+  /**
+   * @param {string} attributeName
+   * @returns {boolean}
+   */
   savedChangeToAttribute(attributeName) {
     if (!this.previousModelData)
       return false
@@ -548,6 +664,10 @@ export default class BaseModel {
     return changedMethod(oldValue, newValue)
   }
 
+  /**
+   * @param {BaseModel} model
+   * @returns {void}
+   */
   setNewModel(model) {
     this.setNewModelData(model)
 
@@ -588,8 +708,11 @@ export default class BaseModel {
       return true
   }
 
-  modelClassData = () => this.constructor.modelClassData()
+  modelClassData() { return this.constructor.modelClassData() }
 
+  /**
+   * @returns {Promise<void>}
+   */
   async reload() {
     const params = this.collection && this.collection.params()
     const ransackParams = {}
@@ -616,6 +739,9 @@ export default class BaseModel {
     this.changes = {}
   }
 
+  /**
+   * @returns {Promise<{model: BaseModel, response: object}>}
+   */
   save() {
     if (this.isNewRecord()) {
       return this.create()
@@ -624,6 +750,9 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @returns {Promise<{model: BaseModel, response: object}>}
+   */
   saveRaw(rawData, options = {}) {
     if (this.isNewRecord()) {
       return this.createRaw(rawData, options)
@@ -762,19 +891,31 @@ export default class BaseModel {
     return {valid: response.valid, errors: response.errors}
   }
 
-  modelClass = () => this.constructor
+  /**
+   * @returns {typeof BaseModel}
+   */
+  modelClass() { return this.constructor }
 
   preloadRelationship(relationshipName, model) {
     this.relationshipsCache[BaseModel.snakeCase(relationshipName)] = model
     this.relationships[BaseModel.snakeCase(relationshipName)] = model
   }
 
+  /**
+   * @returns {void}
+   */
   markForDestruction() {
     this._markedForDestruction = true
   }
 
-  markedForDestruction = () => this._markedForDestruction
+  /**
+   * @returns {boolean}
+   */
+  markedForDestruction() { return this._markedForDestruction || false }
 
+  /**
+   * @returns {number}
+   */
   uniqueKey() {
     if (!this.uniqueKeyValue) {
       const min = 5000000000000000
@@ -824,12 +965,20 @@ export default class BaseModel {
     return postData
   }
 
+  /**
+   * @param {string} attributeName
+   * @returns {any}
+   */
   readAttribute(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
 
     return this.readAttributeUnderscore(attributeNameUnderscore)
   }
 
+  /**
+   * @param {string} attributeName
+   * @returns {any}
+   */
   readAttributeUnderscore(attributeName) {
     if (attributeName in this.changes) {
       return this.changes[attributeName]
@@ -847,6 +996,9 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @returns {boolean}
+   */
   isAttributeLoaded(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
 
@@ -997,5 +1149,8 @@ export default class BaseModel {
     }
   }
 
-  primaryKey = () => this.readAttributeUnderscore(this.constructor.primaryKey())
+  /**
+   * @returns {number|string}
+   */
+  primaryKey() { return this.readAttributeUnderscore(this.constructor.primaryKey()) }
 }

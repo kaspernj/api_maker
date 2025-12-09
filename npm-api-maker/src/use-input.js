@@ -6,6 +6,18 @@ import strftime from "strftime"
 import useShape from "set-state-compare/src/use-shape"
 import useValidationErrors from "./use-validation-errors"
 
+/**
+ * @param {object} args
+ * @param {object} args.props
+ * @param {object} args.props.inputRef
+ * @param {string} args.props.type
+ * @param {object} args.props.inputProps
+ * @param {string} args.props.inputProps.name
+ * @param {object} args.props.inputProps.wrapperOpts
+ * @param {object} args.wrapperOptions
+ * @param {string} args.wrapperOptions.type
+ * @returns {{inputProps: object, wrapperOpts: object, restProps: object}}
+ */
 const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   const useInputRestPropsKeys = Object.keys(useInputRestProps)
 

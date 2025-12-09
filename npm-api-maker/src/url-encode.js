@@ -11,8 +11,10 @@ const replaces = {
 
 const regexp = new RegExp(`(${Object.keys(replaces).map(escapeStringRegexp).join("|")})`, "g")
 
-const urlEncode = (string) => {
+/**
+ * @param {string} string
+ * @returns {string}
+ */
+export default function urlEncode(string) {
   return String(string).replaceAll(regexp, (character) => replaces[character])
 }
-
-export default urlEncode

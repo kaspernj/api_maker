@@ -3,6 +3,10 @@ import {useCallback} from "react"
 import useEventEmitter from "./use-event-emitter"
 import useShape from "set-state-compare/src/use-shape"
 
+/**
+ * @param {function} callback
+ * @returns {object}
+ */
 const useValidationErrors = (callback) => {
   const s = useShape({callback})
 

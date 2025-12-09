@@ -4,7 +4,7 @@ import * as inflection from "inflection"
 import useBreakpoint from "./use-breakpoint"
 import {useMemo} from "react"
 
-const handleStringStyle = (styles, listOfStyles, breakpoint, breakpointsReverse, arg) => {
+function handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse, arg) {
   if (!(arg in styles)) {
     throw new Error(`No such styling '${arg}' in given styles: ${Object.keys(styles).join(", ")}`)
   }
@@ -28,7 +28,7 @@ const handleStringStyle = (styles, listOfStyles, breakpoint, breakpointsReverse,
   }
 }
 
-const useStyles = (styles, args, dependencies = []) => {
+export default function useStyles(styles, args, dependencies = []) {
   const breakpoint = useBreakpoint()
   const breakpointName = digg(breakpoint, "name")
   const actualDependencies = [...dependencies, breakpointName]
@@ -62,5 +62,3 @@ const useStyles = (styles, args, dependencies = []) => {
 
   return listOfStyles
 }
-
-export default useStyles

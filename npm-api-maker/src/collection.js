@@ -34,20 +34,34 @@ export default class ApiMakerCollection {
     return this._merge({abilities: newAbilities})
   }
 
+  /**
+   * @param {string} abilityName
+   * @returns {this}
+   */
   accessibleBy(abilityName) {
     return this._merge({accessibleBy: inflection.underscore(abilityName)})
   }
 
+  /**
+   * @returns {Promise<number>}
+   */
   async count() {
     const response = await this.clone()._merge({count: true})._response()
 
     return digg(response, "count")
   }
 
+  /**
+   * @returns {this}
+   */
   distinct() {
     return this._merge({distinct: true})
   }
 
+  /**
+   * @param {function(import("./base-model.js").default) : void} callback
+   * @returns {void}
+   */
   async each(callback) {
     const array = await this.toArray()
 
@@ -56,6 +70,9 @@ export default class ApiMakerCollection {
     }
   }
 
+  /**
+   * @returns {this}
+   */
   except(...keys) {
     for (const key of keys) {
       if (key == "page") {
@@ -68,6 +85,9 @@ export default class ApiMakerCollection {
     return this
   }
 
+  /**
+   * @returns {Promise<import("./base-model.js").default>}
+   */
   async first() {
     const models = await this.toArray()
     return models[0]
@@ -99,6 +119,9 @@ export default class ApiMakerCollection {
     return this.loaded()
   }
 
+  /**
+   * @returns {boolean}
+   */
   isLoaded() {
     const {model, reflectionName} = this.args
 
@@ -111,10 +134,17 @@ export default class ApiMakerCollection {
     return false
   }
 
+  /**
+   * @param {number} amount
+   * @returns {this}
+   */
   limit(amount) {
     return this._merge({limit: amount})
   }
 
+  /**
+   * @returns {Array<import("./base-model.js").default}
+   */
   preloaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
       throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
@@ -123,6 +153,9 @@ export default class ApiMakerCollection {
     return this.args.model.relationshipsCache[this.args.reflectionName]
   }
 
+  /**
+   * @returns {import("./base-model.js").default | Array<import("./base-model.js").default>}
+   */
   loaded() {
     const {model, reflectionName} = this.args
 
@@ -167,20 +200,35 @@ export default class ApiMakerCollection {
   forEach = (...args) => this.loaded().forEach(...args)
   map = (...args) => this.loaded().map(...args)
 
+  /**
+   * @param {string[]} preloadValue
+   * @returns {this}
+   */
   preload(preloadValue) {
     return this._merge({preload: preloadValue})
   }
 
+  /**
+   * @param {number} page
+   * @returns {this}
+   */
   page(page) {
     if (!page) page = 1
 
     return this._merge({page})
   }
 
+  /**
+   * @param {string} pageKey
+   * @returns {this}
+   */
   pageKey(pageKey) {
     return this._merge({pageKey})
   }
 
+  /**
+   * @returns {boolean}
+   */
   isFiltered() {
     const {queryArgs} = this
 
@@ -200,6 +248,9 @@ export default class ApiMakerCollection {
     return false
   }
 
+  /**
+   * @returns {Record<string, any>}
+   */
   params() {
     let params = {}
 
@@ -221,19 +272,34 @@ export default class ApiMakerCollection {
     return params
   }
 
+  /**
+   * @param {number} per
+   * @returns {this}
+   */
   per(per) {
     return this._merge({per})
   }
 
+  /**
+   * @param {string} perKey
+   * @returns {this}
+   */
   perKey(perKey) {
     return this._merge({perKey})
   }
 
+  /**
+   * @param {Record<string, any>} params
+   * @returns {this}
+   */
   ransack(params) {
     if (params) this._merge({ransack: params})
     return this
   }
 
+  /**
+   * @returns {Promise<Result>}
+   */
   async result() {
     const response = await this._response()
     const models = digg(response, "collection")
@@ -245,15 +311,27 @@ export default class ApiMakerCollection {
     return result
   }
 
+  /**
+   * @param {Record<string, any>} params
+   * @returns {this}
+   */
   search(params) {
     if (params) this._merge({search: params})
     return this
   }
 
+  /**
+   * @param {string} searchKey
+   * @returns {this}
+   */
   searchKey(searchKey) {
     return this._merge({searchKey})
   }
 
+  /**
+   * @param {Record<string, string[]>} originalSelect
+   * @returns {this}
+   */
   select(originalSelect) {
     const newSelect = {}
 
@@ -273,6 +351,10 @@ export default class ApiMakerCollection {
     return this._merge({select: newSelect})
   }
 
+  /**
+   * @param {Record<string, string[]>} originalSelect
+   * @returns {this}
+   */
   selectColumns(originalSelect) {
     const newSelect = {}
 
@@ -292,10 +374,17 @@ export default class ApiMakerCollection {
     return this._merge({selectColumns: newSelect})
   }
 
+  /**
+   * @param {string} sortBy
+   * @returns {this}
+   */
   sort(sortBy) {
     return this._merge({ransack: {s: sortBy}})
   }
 
+  /**
+   * @returns {Promise<import("./base-model.js").default}
+   */
   async toArray() {
     const response = await this._response()
     const models = digg(response, "collection")
@@ -305,12 +394,18 @@ export default class ApiMakerCollection {
     return models
   }
 
+  /**
+   * @returns {typeof import("./base-model.js").default}
+   */
   modelClass() {
     const modelName = digg(this.args.modelClass.modelClassData(), "name")
 
     return modelClassRequire(modelName)
   }
 
+  /**
+   * @returns {ApiMakerCollection}
+   */
   clone() {
     const clonedQueryArgs = cloneDeep(this.queryArgs)
 

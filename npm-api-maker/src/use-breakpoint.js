@@ -7,7 +7,7 @@ import useEventEmitter from "./use-event-emitter"
 import useEventListener from "./use-event-listener"
 import useShape from "set-state-compare/src/use-shape"
 
-const calculateBreakPoint = (breakpoints) => {
+function calculateBreakPoint(breakpoints) {
   let windowWidth
 
   if (isExpo) {
