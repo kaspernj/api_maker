@@ -1,4 +1,5 @@
 import BaseError from "./base-error"
+import {digg} from "diggerize"
 import * as inflection from "inflection"
 
 class ValidationError extends BaseError {

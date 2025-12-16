@@ -1,4 +1,5 @@
 import {digg} from "diggerize"
+import * as inflection from "inflection"
 import memo from "set-state-compare/src/memo"
 import React from "react"
 import useCollection from "./use-collection"
