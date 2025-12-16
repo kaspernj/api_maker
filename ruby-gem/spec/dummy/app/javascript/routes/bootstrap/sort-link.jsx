@@ -1,11 +1,11 @@
 import BaseComponent from "@kaspernj/api-maker/build/base-component.js"
-import Card from "@kaspernj/api-maker/build/bootstrap/card.jsx"
+import Card from "@kaspernj/api-maker/build/bootstrap/card"
 import Layout from "components/layout"
 import memo from "set-state-compare/src/memo.js"
 import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link.jsx"
+import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
 import {Task} from "models.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 

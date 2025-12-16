@@ -1,9 +1,9 @@
 import React, {memo, useRef} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
-import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox.jsx"
+import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import {FlashNotifications} from "flash-notifications"
-import Input from "@kaspernj/api-maker/build/bootstrap/input.jsx"
+import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
 import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter.js"
 

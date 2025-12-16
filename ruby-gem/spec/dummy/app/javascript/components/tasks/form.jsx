@@ -1,7 +1,7 @@
 import classNames from "classnames"
 import {digg, digs} from "diggerize"
 import {FlashNotifications} from "flash-notifications"
-import Input from "@kaspernj/api-maker/build/bootstrap/input.jsx"
+import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import PropTypes from "prop-types"
 import React from "react"
 import Select from "@kaspernj/api-maker/build/bootstrap/select"

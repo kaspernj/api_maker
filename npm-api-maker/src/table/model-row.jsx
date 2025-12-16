@@ -1,23 +1,22 @@
 import {Pressable} from "react-native"
 import BaseComponent from "../base-component.js"
-import Column from "./components/column.jsx"
+import Column from "./components/column"
 import columnIdentifier from "./column-identifier.js"
 import EventEmitter from "events"
 import {FlashNotifications} from "flash-notifications"
-import Icon from "../utils/icon.jsx"
+import Icon from "../utils/icon"
 import * as inflection from "inflection"
 import modelCallbackArgs from "./model-callback-args.js"
-import Link from "../link.jsx"
-import ModelColumn from "./model-column.jsx"
+import Link from "../link"
+import ModelColumn from "./model-column"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import Row from "./components/row.jsx"
+import Row from "./components/row"
 import memo from "set-state-compare/src/memo.js"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
-
-const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox.jsx"))
+import WorkerPluginsCheckbox from "./worker-plugins-checkbox"
 
 export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
   static propTypes = propTypesExact({

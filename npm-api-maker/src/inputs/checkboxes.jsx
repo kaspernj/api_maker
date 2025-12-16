@@ -1,7 +1,7 @@
 import BaseComponent from "../base-component.js"
 import classNames from "classnames"
 import {digs} from "diggerize"
-import inputWrapper from "./input-wrapper.jsx"
+import inputWrapper from "./input-wrapper"
 import * as inflection from "inflection"
 import InvalidFeedback from "../bootstrap/invalid-feedback.js"
 import PropTypes from "prop-types"

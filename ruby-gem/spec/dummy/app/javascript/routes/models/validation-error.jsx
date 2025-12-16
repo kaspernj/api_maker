@@ -1,6 +1,6 @@
 import {Account, Project} from "models.js"
 import {digg, digs} from "diggerize"
-import Input from "@kaspernj/api-maker/build/bootstrap/input.jsx"
+import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import {FlashNotifications} from "flash-notifications"
 import Layout from "components/layout"
 import React from "react"

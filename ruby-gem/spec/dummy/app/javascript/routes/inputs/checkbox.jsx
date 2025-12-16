@@ -1,4 +1,4 @@
-import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox.jsx"
+import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import {digg, digs} from "diggerize"
 import Layout from "components/layout"
 import Params from "@kaspernj/api-maker/build/params.js"

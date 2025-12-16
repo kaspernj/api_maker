@@ -3,7 +3,7 @@ import memo from "set-state-compare/src/memo.js"
 import React from "react"
 import {View} from "react-native"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import Text from "../../utils/text.jsx"
+import Text from "../../utils/text"
 import useCurrentUser from "../../use-current-user.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 

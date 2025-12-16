@@ -5,8 +5,8 @@ import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import Text from "../../utils/text.jsx"
-import {useForm} from "../../form.jsx"
+import Text from "../../utils/text"
+import {useForm} from "../../form"
 
 export default memo(shapeComponent(class EditAttributeInput extends BaseComponent {
   static propTypes = propTypesExact({

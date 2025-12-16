@@ -1,5 +1,5 @@
 import {digs} from "diggerize"
-import Form from "components/tasks/form.jsx"
+import Form from "components/tasks/form"
 import Layout from "components/layout"
 import React from "react"
 import Shape from "set-state-compare/src/shape"

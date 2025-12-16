@@ -4,7 +4,7 @@ import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
-import Text from "./text.jsx"
+import Text from "./text"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerUtilsCard extends ShapeComponent {

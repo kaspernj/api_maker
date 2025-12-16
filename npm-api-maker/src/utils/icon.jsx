@@ -6,7 +6,7 @@ import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons.js"
 import memo from "set-state-compare/src/memo.js"
 import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {useMergedStyle} from "./default-style.jsx"
+import {useMergedStyle} from "./default-style"
 
 const FontAwesomeGlyphMap = FontAwesomeIcon.getRawGlyphMap()
 const FontAwesome5GlyphMap = FontAwesome5Icon.getRawGlyphMap()

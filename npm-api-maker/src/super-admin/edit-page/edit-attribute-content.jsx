@@ -3,7 +3,7 @@ import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import {useForm} from "../../form.jsx"
+import {useForm} from "../../form"
 import {useMemo} from "react"
 
 export default memo(shapeComponent(class EditAttributeContent extends BaseComponent {

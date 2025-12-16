@@ -1,11 +1,11 @@
 import BaseComponent from "../base-component.js"
 import {digg} from "diggerize"
-import Link from "../link.jsx"
+import Link from "../link"
 import memo from "set-state-compare/src/memo.js"
 import Params from "../params.js"
 import React from "react"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import Text from "../utils/text.jsx"
+import Text from "../utils/text"
 import {useMemo} from "react"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionLink extends BaseComponent {

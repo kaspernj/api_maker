@@ -1,5 +1,5 @@
 import {digs} from "diggerize"
-import inputWrapper from "../inputs/input-wrapper.jsx"
+import inputWrapper from "../inputs/input-wrapper"
 import InvalidFeedback from "./invalid-feedback.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"

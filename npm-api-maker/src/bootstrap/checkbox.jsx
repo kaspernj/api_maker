@@ -1,5 +1,5 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
-import Checkbox from "../inputs/checkbox.jsx"
+import Checkbox from "../inputs/checkbox"
 import classNames from "classnames"
 import {digs} from "diggerize"
 import InvalidFeedback from "./invalid-feedback.js"

@@ -1,7 +1,7 @@
 import BaseComponent from "../base-component.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import Link from "../link.jsx"
+import Link from "../link"
 import memo from "set-state-compare/src/memo.js"
 import React, {useMemo} from "react"
 import Params from "../params.js"

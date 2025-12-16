@@ -6,7 +6,7 @@ import MoneyFormatter from "../money-formatter.js"
 import PropTypes from "prop-types"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
 import strftime from "strftime"
-import Text from "../utils/text.jsx"
+import Text from "../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import {View} from "react-native"
 

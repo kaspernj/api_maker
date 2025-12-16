@@ -5,7 +5,7 @@ import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import Text from "../../utils/text.jsx"
+import Text from "../../utils/text"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ColumnRow extends BaseComponent {

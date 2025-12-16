@@ -1,5 +1,5 @@
 import AttributeRows from "@kaspernj/api-maker/build/bootstrap/attribute-rows"
-import Card from "@kaspernj/api-maker/build/bootstrap/card.jsx"
+import Card from "@kaspernj/api-maker/build/bootstrap/card"
 import Layout from "components/layout"
 import React from "react"
 import {User} from "models.js"

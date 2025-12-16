@@ -6,9 +6,7 @@
     "declaration": true,
     "jsx": "react-native",
     "outDir": "build",
-    "declarationMap": true,
-    "target": "ES2024",
-    "moduleResolution": "nodenext",
-    "module": "nodenext"
+    "rootDir": "src",
+    "declarationMap": true
   }
 }
