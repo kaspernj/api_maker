@@ -5,7 +5,7 @@
   "files": ["build/**"],
   "main": "build/index.js",
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.json || true",
+    "build": "rm -rf build && tsc -p tsconfig.json || true",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",

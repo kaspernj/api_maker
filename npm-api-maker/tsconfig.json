@@ -6,7 +6,7 @@
     "checkJs": true,
     "declaration": true,
     "jsx": "react-native",
-    "outDir": "dist",
+    "outDir": "build",
     "declarationMap": true,
     "target": "ES2024",
     "moduleResolution": "nodenext",
