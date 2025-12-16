@@ -27,7 +27,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     return (
       <View
         dataSet={this.cache("rootViewDataSet", {
-          component: "api-maker/table/header-column-content.jsx",
+          component: "api-maker/table/header-column-content",
           identifier: tableSettingColumn.identifier()
         }, [tableSettingColumn.identifier()])}
         style={this.rootViewStyle ||= {display: "flex", flexDirection: "row", alignItems: "center"}}

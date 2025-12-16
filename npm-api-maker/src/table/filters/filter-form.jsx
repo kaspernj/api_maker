@@ -182,7 +182,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
 
     return (
       <Card
-        testID="api-maker/table/filters/filter-form.jsx"
+        testID="api-maker/table/filters/filter-form"
         style={this.cache("cardStyle", {
           width: mdUp ? undefined : "100%",
           minWidth: 50,

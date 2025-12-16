@@ -14,7 +14,7 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
 
     const actualDataSet = useMemo(() =>
       Object.assign(
-        {component: "api-maker/utils/modal.jsx"},
+        {component: "api-maker/utils/modal"},
         dataSet
       )
     , [dataSet])

@@ -8,7 +8,7 @@ export default memo(shapeComponent(class SharedTableColumn extends BaseComponent
   render() {
     const {dataSet, ...restProps} = this.props
     const actualDataSet = Object.assign(
-      {component: "api-maker/table/components/column.jsx"},
+      {component: "api-maker/table/components/column"},
       dataSet
     )
 

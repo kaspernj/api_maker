@@ -63,7 +63,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
       {
         attribute,
         class: className,
-        component: "api-maker/bootstrap/sort-link.jsx",
+        component: "api-maker/bootstrap/sort-link",
         sortMode: this.tt.sortMode
       },
       dataSet

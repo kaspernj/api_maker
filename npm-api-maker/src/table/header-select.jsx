@@ -38,7 +38,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderSelect extends BaseC
     const columnLabel = column && table.headerLabelForColumn(column)
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "api-maker/table/header-select.jsx"}}>
+      <View dataSet={this.rootViewDataSet ||= {component: "api-maker/table/header-select"}}>
         {this.s.modalOpen &&
           <Modal dataSet={this.modalDataSet ||= {class: "table-header-select-modal"}} onRequestClose={this.tt.onModalRequestClose} transparent>
             {this.p.preparedColumns.map(({column, tableSettingColumn}) =>

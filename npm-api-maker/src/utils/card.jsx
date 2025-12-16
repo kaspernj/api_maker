@@ -23,7 +23,7 @@ export default memo(shapeComponent(class ApiMakerUtilsCard extends ShapeComponen
 
     const actualDataSet = useMemo(() =>
       Object.assign(
-        {component: classNames("api-maker/utils/card.jsx", component)},
+        {component: classNames("api-maker/utils/card", component)},
         restDataSet
       )
     , [component, restDataSet])

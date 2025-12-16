@@ -22,7 +22,7 @@ export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction ext
   render() {
     return (
       <Pressable
-        dataSet={this.pressableDataSet ||= {component: "api-maker/table/settings/download-action.jsx"}}
+        dataSet={this.pressableDataSet ||= {component: "api-maker/table/settings/download-action"}}
         onPress={this.tt.onDownloadPress}
         style={this.pressableStyle ||= {flexDirection: "row", alignItems: "center"}}
       >

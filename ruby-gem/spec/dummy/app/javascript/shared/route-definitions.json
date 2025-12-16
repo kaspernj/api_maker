@@ -14,7 +14,7 @@
 
     {"name": "can_can_loader", "path": "/can_can/loader", "component": "can-can/loader"},
 
-    {"name": "inputs_checkbox", "path": "/inputs/checkbox.jsx", "component": "inputs/checkbox.jsx"},
+    {"name": "inputs_checkbox", "path": "/inputs/checkbox", "component": "inputs/checkbox"},
 
     {"name": "models_command_serialize", "path": "/models/command-serialize", "component": "models/command-serialize"},
     {"name": "models_created_event", "path": "/models/created-event", "component": "models/created-event"},

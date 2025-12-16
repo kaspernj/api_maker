@@ -46,7 +46,7 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
 
     return (
       <View
-        dataSet={this.viewContainerDataSet ||= {component: "api-maker/utils/checkbox.jsx"}}
+        dataSet={this.viewContainerDataSet ||= {component: "api-maker/utils/checkbox"}}
         style={actualStyle}
       >
         <CheckBox dataSet={actualDataSet} onValueChange={this.tt.onValueChange} value={isChecked} />

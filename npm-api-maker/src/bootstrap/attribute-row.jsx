@@ -54,7 +54,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
         dataSet={{
           attribute,
           class: className,
-          component: "api-maker/attribute-row.jsx",
+          component: "api-maker/attribute-row",
           identifier
         }}
         style={actualStyle}
