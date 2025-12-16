@@ -1,10 +1,10 @@
 import React, {useMemo} from "react"
 import classNames from "classnames"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import Text from "./text"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import Text from "./text.jsx"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerUtilsCard extends ShapeComponent {
@@ -23,7 +23,7 @@ export default memo(shapeComponent(class ApiMakerUtilsCard extends ShapeComponen
 
     const actualDataSet = useMemo(() =>
       Object.assign(
-        {component: classNames("api-maker/utils/card", component)},
+        {component: classNames("api-maker/utils/card.jsx", component)},
         restDataSet
       )
     , [component, restDataSet])

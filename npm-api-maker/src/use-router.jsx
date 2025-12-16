@@ -1,10 +1,10 @@
-import config from "./config"
+import config from "./config.js"
 import escapeStringRegexp from "escape-string-regexp"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {useCallback, useMemo} from "react"
-import useShape from "set-state-compare/src/use-shape"
+import useShape from "set-state-compare/src/use-shape.js"
 
 const useRouterPropTypes = propTypesExact({
   locales: PropTypes.array.isRequired,

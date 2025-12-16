@@ -1,9 +1,9 @@
 import {useCallback, useLayoutEffect, useMemo} from "react"
-import Devise from "./devise"
+import Devise from "./devise.js"
 import * as inflection from "inflection"
-import ModelEvents from "./model-events"
-import useQueryParams from "on-location-changed/build/use-query-params"
-import useShape from "set-state-compare/src/use-shape"
+import ModelEvents from "./model-events.js"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
+import useShape from "set-state-compare/src/use-shape.js"
 
 /**
  * @param {function|object} modelClassArg

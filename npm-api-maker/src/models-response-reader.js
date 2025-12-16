@@ -1,6 +1,6 @@
 import * as inflection from "inflection"
-import modelClassRequire from "./model-class-require"
-import Preloaded from "./preloaded"
+import modelClassRequire from "./model-class-require.js"
+import Preloaded from "./preloaded.js"
 
 export default class ModelsResponseReader {
   static first (response) {

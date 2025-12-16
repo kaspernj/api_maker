@@ -1,9 +1,9 @@
 import debounceFunction from "debounce"
-import ModelEvents from "./model-events"
+import ModelEvents from "./model-events.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {useCallback, useLayoutEffect} from "react"
-import useShape from "set-state-compare/src/use-shape"
+import useShape from "set-state-compare/src/use-shape.js"
 
 /**
  * @param {function} modelClass

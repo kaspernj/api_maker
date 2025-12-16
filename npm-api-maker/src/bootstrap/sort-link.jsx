@@ -1,17 +1,17 @@
-import BaseComponent from "../base-component"
+import BaseComponent from "../base-component.js"
 import * as inflection from "inflection"
-import Icon from "../utils/icon"
+import Icon from "../utils/icon.jsx"
 import PropTypes from "prop-types"
 import qs from "qs"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/src/memo.js"
 import React from "react"
-import Text from "../utils/text"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import urlEncode from "../url-encode"
-import useSorting from "../table/use-sorting"
+import Text from "../utils/text.jsx"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import urlEncode from "../url-encode.js"
+import useSorting from "../table/use-sorting.js"
 
-import Link from "../link"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import Link from "../link.jsx"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseComponent {
   static propTypes = {
@@ -63,7 +63,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
       {
         attribute,
         class: className,
-        component: "api-maker/bootstrap/sort-link",
+        component: "api-maker/bootstrap/sort-link.jsx",
         sortMode: this.tt.sortMode
       },
       dataSet

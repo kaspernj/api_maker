@@ -1,12 +1,12 @@
-import BaseComponent from "../base-component"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
-import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5"
-import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6"
-import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons"
-import memo from "set-state-compare/src/memo"
+import BaseComponent from "../base-component.js"
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome.js"
+import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5.js"
+import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6.js"
+import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons.js"
+import memo from "set-state-compare/src/memo.js"
 import React, {useMemo} from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import {useMergedStyle} from "./default-style"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {useMergedStyle} from "./default-style.jsx"
 
 const FontAwesomeGlyphMap = FontAwesomeIcon.getRawGlyphMap()
 const FontAwesome5GlyphMap = FontAwesome5Icon.getRawGlyphMap()

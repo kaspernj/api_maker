@@ -1,13 +1,13 @@
 import React, {useEffect, useMemo, useRef} from "react"
-import BaseComponent from "../base-component"
+import BaseComponent from "../base-component.js"
 import classNames from "classnames"
-import Collection from "../collection"
-import memo from "set-state-compare/src/memo"
+import Collection from "../collection.js"
+import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import {simpleObjectDifferent} from "set-state-compare/src/diff-utils"
-import useModelEvent from "../use-model-event"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {simpleObjectDifferent} from "set-state-compare/src/diff-utils.js"
+import useModelEvent from "../use-model-event.js"
 
 const Checkbox = memo(shapeComponent(class Checkbox extends BaseComponent {
   render() {

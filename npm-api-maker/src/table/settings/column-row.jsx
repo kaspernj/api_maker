@@ -1,11 +1,11 @@
 import React, {useEffect, useRef} from "react"
-import BaseComponent from "../../base-component"
-import columnIdentifier from "../column-identifier"
-import memo from "set-state-compare/src/memo"
+import BaseComponent from "../../base-component.js"
+import columnIdentifier from "../column-identifier.js"
+import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import Text from "../../utils/text"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import Text from "../../utils/text.jsx"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ColumnRow extends BaseComponent {

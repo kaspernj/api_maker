@@ -1,7 +1,7 @@
 import {useCallback, useLayoutEffect, useMemo} from "react"
 import debounceFunction from "debounce"
-import ModelEvents from "./model-events"
-import useShape from "set-state-compare/src/use-shape"
+import ModelEvents from "./model-events.js"
+import useShape from "set-state-compare/src/use-shape.js"
 
 /**
  * @param {import("./base-model.js").default} model

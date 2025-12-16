@@ -1,4 +1,4 @@
-import Text from "./text"
+import Text from "./text.jsx"
 import React from "react"
 
 export default React.memo(function ApiMakerUtilsHeader(props) {

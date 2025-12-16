@@ -1,13 +1,13 @@
-import BaseComponent from "../base-component"
+import BaseComponent from "../base-component.js"
 import classNames from "classnames"
-import {Input as ApiMakerInput} from "@kaspernj/api-maker/build/inputs/input"
-import Checkbox from "./checkbox"
-import memo from "set-state-compare/src/memo"
+import {Input as ApiMakerInput} from "@kaspernj/api-maker/build/inputs/input.jsx"
+import Checkbox from "./checkbox.jsx"
+import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import useI18n from "i18n-on-steroids/src/use-i18n"
-import useInput from "../use-input"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useInput from "../use-input.js"
 
 export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseComponent {
   static propTypes = {

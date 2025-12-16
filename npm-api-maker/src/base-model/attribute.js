@@ -1,4 +1,4 @@
-import Column from "./column"
+import Column from "./column.js"
 import {digg} from "diggerize"
 
 export default class ApiMakerBaseModelAttribute {

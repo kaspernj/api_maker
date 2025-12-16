@@ -1,7 +1,7 @@
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/src/memo.js"
 import React from "react"
 import {Animated} from "react-native"
-import {useMergedStyle, WithDefaultStyle} from "./default-style"
+import {useMergedStyle, WithDefaultStyle} from "./default-style.jsx"
 
 export default memo((props) => {
   const {style, ...restProps} = props

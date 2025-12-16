@@ -1,11 +1,11 @@
 import debounce from "debounce"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import ModelEvents from "./model-events"
+import ModelEvents from "./model-events.js"
 import {useCallback, useLayoutEffect, useMemo} from "react"
-import useCreatedEvent from "./use-created-event"
-import useShape from "set-state-compare/src/use-shape"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import useCreatedEvent from "./use-created-event.js"
+import useShape from "set-state-compare/src/use-shape.js"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 /**
  * @param {object} props

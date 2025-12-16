@@ -1,8 +1,8 @@
-import CanCan from "./can-can"
+import CanCan from "./can-can.js"
 import {useCallback, useMemo} from "react"
-import useCurrentUser from "./use-current-user"
-import useEventEmitter from "./use-event-emitter"
-import useShape from "set-state-compare/src/use-shape"
+import useCurrentUser from "./use-current-user.js"
+import useEventEmitter from "./use-event-emitter.js"
+import useShape from "set-state-compare/src/use-shape.js"
 
 /**
  * @param {function() : Array} abilitiesCallback

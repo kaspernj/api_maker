@@ -1,11 +1,11 @@
-import columnIdentifier from "./column-identifier"
-import columnVisible from "./column-visible"
+import columnIdentifier from "./column-identifier.js"
+import columnVisible from "./column-visible.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import Logger from "../logger"
+import Logger from "../logger.js"
 import {ReadersWriterLock} from "epic-locks"
 import {serialize as objectToFormData} from "object-to-formdata"
-import {TableSetting} from "models"
+import {TableSetting} from "models.js"
 import {v4 as uuidv4} from "uuid"
 
 const logger = new Logger({name: "ApiMaker / TableSettings"})

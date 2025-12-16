@@ -1,17 +1,17 @@
-import BaseComponent from "../../base-component"
-import ColumnContent from "../column-content"
-import columnIdentifier from "../column-identifier"
-import columnVisible from "../column-visible"
+import BaseComponent from "../../base-component.js"
+import ColumnContent from "../column-content.jsx"
+import columnIdentifier from "../column-identifier.js"
+import columnVisible from "../column-visible.js"
 import {saveAs} from "file-saver"
-import Icon from "../../utils/icon"
-import memo from "set-state-compare/src/memo"
+import Icon from "../../utils/icon.jsx"
+import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import {renderToString} from "react-dom/server"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 import {Pressable} from "react-native"
-import Text from "../../utils/text"
+import Text from "../../utils/text.jsx"
 
 export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction extends BaseComponent {
   static propTypes = propTypesExact({
@@ -22,7 +22,7 @@ export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction ext
   render() {
     return (
       <Pressable
-        dataSet={this.pressableDataSet ||= {component: "api-maker/table/settings/download-action"}}
+        dataSet={this.pressableDataSet ||= {component: "api-maker/table/settings/download-action.jsx"}}
         onPress={this.tt.onDownloadPress}
         style={this.pressableStyle ||= {flexDirection: "row", alignItems: "center"}}
       >

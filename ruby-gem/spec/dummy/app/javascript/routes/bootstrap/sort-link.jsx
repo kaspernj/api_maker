@@ -1,13 +1,13 @@
-import BaseComponent from "@kaspernj/api-maker/build/base-component"
-import Card from "@kaspernj/api-maker/build/bootstrap/card"
+import BaseComponent from "@kaspernj/api-maker/build/base-component.js"
+import Card from "@kaspernj/api-maker/build/bootstrap/card.jsx"
 import Layout from "components/layout"
-import memo from "set-state-compare/src/memo"
-import Params from "@kaspernj/api-maker/build/params"
+import memo from "set-state-compare/src/memo.js"
+import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
-import {Task} from "models"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link.jsx"
+import {Task} from "models.js"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 export default memo(shapeComponent(class BootstrapSortLink extends BaseComponent {
   setup() {

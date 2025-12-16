@@ -1,11 +1,11 @@
 import {Modal, Pressable, View} from "react-native"
 import React, {useMemo} from "react"
-import BaseComponent from "../base-component"
-import Card from "./card"
-import Icon from "../utils/icon"
-import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import useBreakpoint from "../use-breakpoint"
+import BaseComponent from "../base-component.js"
+import Card from "./card.jsx"
+import Icon from "../utils/icon.jsx"
+import memo from "set-state-compare/src/memo.js"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import useBreakpoint from "../use-breakpoint.js"
 
 export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComponent {
   render() {
@@ -14,7 +14,7 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
 
     const actualDataSet = useMemo(() =>
       Object.assign(
-        {component: "api-maker/utils/modal"},
+        {component: "api-maker/utils/modal.jsx"},
         dataSet
       )
     , [dataSet])

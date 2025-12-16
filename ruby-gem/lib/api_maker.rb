@@ -16,7 +16,7 @@ module ApiMaker
   autoload :BaseCollectionInstance, "#{dir}/base_collection_instance"
   autoload :BaseResource, "#{dir}/base_resource"
   autoload :BaseService, "#{dir}/base_service"
-  autoload :Collection, "#{dir}/collection"
+  autoload :Collection, "#{dir}/collection.js"
   autoload :CollectionSerializer, "#{dir}/collection_serializer"
   autoload :CommandSpecHelper, "#{dir}/command_spec_helper"
   autoload :Configuration, "#{dir}/configuration"

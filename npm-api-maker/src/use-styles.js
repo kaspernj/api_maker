@@ -1,7 +1,7 @@
-import config from "./config"
+import config from "./config.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import useBreakpoint from "./use-breakpoint"
+import useBreakpoint from "./use-breakpoint.js"
 import {useMemo} from "react"
 
 function handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse, arg) {

@@ -1,12 +1,12 @@
 import {Pressable, View} from "react-native"
-import BaseComponent from "../../base-component"
-import Icon from "../../utils/icon"
+import BaseComponent from "../../base-component.js"
+import Icon from "../../utils/icon.jsx"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/src/memo.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import Text from "../../utils/text"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import Text from "../../utils/text.jsx"
 
 export default memo(shapeComponent(class ApiMakerTableFilter extends BaseComponent {
   static defaultProps = {

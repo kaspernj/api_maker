@@ -1,10 +1,10 @@
-import BaseComponent from "../base-component"
+import BaseComponent from "../base-component.js"
 import classNames from "classnames"
 import {digg, digs} from "diggerize"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import React, {useRef} from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
 
 export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseComponent {
   static defaultProps = {

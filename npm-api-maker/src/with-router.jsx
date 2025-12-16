@@ -1,5 +1,5 @@
 import React from "react"
-import useRouter from "./use-router"
+import useRouter from "./use-router.js"
 
 export default (WrapperComponent) => (props) => {
   const {path, routes, routeDefinitions, ...restProps} = props

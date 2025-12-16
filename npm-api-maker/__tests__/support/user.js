@@ -1,4 +1,4 @@
-import BaseModel from "../../build/base-model"
+import BaseModel from "../../build/base-model.js"
 
 export default class User extends BaseModel {
   static modelClassData () {

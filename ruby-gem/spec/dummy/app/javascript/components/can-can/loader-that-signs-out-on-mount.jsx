@@ -1,5 +1,5 @@
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import Devise from "@kaspernj/api-maker/build/devise"
+import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import Devise from "@kaspernj/api-maker/build/devise.js"
 import {memo, useMemo} from "react"
 
 export default memo(shapeComponent(class LoaderThatSignsOutOnMount extends ShapeComponent {

@@ -1,14 +1,14 @@
-import BaseComponent from "../base-component"
+import BaseComponent from "../base-component.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import Link from "../link"
-import memo from "set-state-compare/src/memo"
+import Link from "../link.jsx"
+import memo from "set-state-compare/src/memo.js"
 import React, {useMemo} from "react"
-import Params from "../params"
+import Params from "../params.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import useCanCan from "../use-can-can"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import useCanCan from "../use-can-can.js"
 
 export default memo(shapeComponent(class SuperAdminShowReflectionActions extends BaseComponent {
   static propTypes = propTypesExact({

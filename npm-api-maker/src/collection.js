@@ -1,10 +1,10 @@
 import cloneDeep from "clone-deep"
-import CommandsPool from "./commands-pool"
+import CommandsPool from "./commands-pool.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import {incorporate} from "incorporator"
-import modelClassRequire from "./model-class-require"
-import Result from "./result"
+import modelClassRequire from "./model-class-require.js"
+import Result from "./result.js"
 import uniqunize from "uniqunize"
 
 export default class ApiMakerCollection {

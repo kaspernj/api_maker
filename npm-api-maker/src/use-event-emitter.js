@@ -1,4 +1,4 @@
-import useEnvSense from "env-sense/src/use-env-sense"
+import useEnvSense from "env-sense/src/use-env-sense.js"
 import {useEffect, useLayoutEffect, useMemo} from "react"
 
 /**

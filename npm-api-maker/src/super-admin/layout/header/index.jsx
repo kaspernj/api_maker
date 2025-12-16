@@ -1,15 +1,15 @@
 // import "../../../../src/super-admin/layout/header/style"
 import React, {useRef} from "react"
-import BaseComponent from "../../../base-component"
-import Icon from "../../../utils/icon"
-import memo from "set-state-compare/src/memo"
+import BaseComponent from "../../../base-component.js"
+import Icon from "../../../utils/icon.jsx"
+import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import Text from "../../../utils/text"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import Text from "../../../utils/text.jsx"
 import {Pressable, View} from "react-native"
-import useBreakpoint from "../../../use-breakpoint"
-import useEventListener from "../../../use-event-listener"
+import useBreakpoint from "../../../use-breakpoint.js"
+import useEventListener from "../../../use-event-listener.js"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
   static propTypes = PropTypesExact({

@@ -1,11 +1,11 @@
-import BaseComponent from "../../base-component"
-import memo from "set-state-compare/src/memo"
+import BaseComponent from "../../base-component.js"
+import memo from "set-state-compare/src/memo.js"
 import React from "react"
 import {View} from "react-native"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import Text from "../../utils/text"
-import useCurrentUser from "../../use-current-user"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import Text from "../../utils/text.jsx"
+import useCurrentUser from "../../use-current-user.js"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutNoAccess extends BaseComponent {
   render() {

@@ -1,5 +1,5 @@
 import React from "react"
-import useCurrentUser from "./use-current-user"
+import useCurrentUser from "./use-current-user.js"
 
 export default (WrappedComponent) => (props) => {
   const currentUser = useCurrentUser()

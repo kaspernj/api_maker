@@ -1,13 +1,13 @@
 import React, {useMemo} from "react"
-import AutoSubmit from "./auto-submit"
-import BaseComponent from "../base-component"
+import AutoSubmit from "./auto-submit.js"
+import BaseComponent from "../base-component.js"
 import {digg} from "diggerize"
 import PropTypes from "prop-types"
-import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import useInput from "../use-input"
-import {useForm} from "../form"
-import useUpdatedEvent from "../use-updated-event"
+import memo from "set-state-compare/src/memo.js"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import useInput from "../use-input.js"
+import {useForm} from "../form.jsx"
+import useUpdatedEvent from "../use-updated-event.js"
 
 export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComponent {
   static defaultProps = {

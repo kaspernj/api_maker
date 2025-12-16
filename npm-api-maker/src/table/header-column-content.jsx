@@ -1,13 +1,13 @@
-import BaseComponent from "../base-component"
+import BaseComponent from "../base-component.js"
 import {digs} from "diggerize"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/src/memo.js"
 import {View} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import SortLink from "../bootstrap/sort-link"
-import Text from "../utils/text"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import SortLink from "../bootstrap/sort-link.jsx"
+import Text from "../utils/text.jsx"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
@@ -27,7 +27,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     return (
       <View
         dataSet={this.cache("rootViewDataSet", {
-          component: "api-maker/table/header-column-content",
+          component: "api-maker/table/header-column-content.jsx",
           identifier: tableSettingColumn.identifier()
         }, [tableSettingColumn.identifier()])}
         style={this.rootViewStyle ||= {display: "flex", flexDirection: "row", alignItems: "center"}}

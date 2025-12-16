@@ -1,12 +1,12 @@
 import React, {useCallback, useContext, useMemo} from "react"
-import Devise from "./devise"
+import Devise from "./devise.js"
 import {digg} from "diggerize"
 import EventEmitter from "events"
 import * as inflection from "inflection"
-import Logger from "./logger"
-import Services from "./services"
-import useEventEmitter from "./use-event-emitter"
-import useShape from "set-state-compare/src/use-shape"
+import Logger from "./logger.js"
+import Services from "./services.js"
+import useEventEmitter from "./use-event-emitter.js"
+import useShape from "set-state-compare/src/use-shape.js"
 
 const events = new EventEmitter()
 const logger = new Logger({name: "ApiMaker / useCurrentUser"})

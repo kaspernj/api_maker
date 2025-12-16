@@ -1,16 +1,16 @@
 import {Pressable, View} from "react-native"
-import BaseComponent from "../base-component"
-import Collection from "../collection"
-import HeaderColumnContent from "./header-column-content"
-import memo from "set-state-compare/src/memo"
-import Modal from "../utils/modal"
+import BaseComponent from "../base-component.js"
+import Collection from "../collection.js"
+import HeaderColumnContent from "./header-column-content.jsx"
+import memo from "set-state-compare/src/memo.js"
+import Modal from "../utils/modal.jsx"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import Text from "../utils/text"
-import useI18n from "i18n-on-steroids/src/use-i18n"
-import useSorting from "./use-sorting"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import Text from "../utils/text.jsx"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useSorting from "./use-sorting.js"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderSelect extends BaseComponent {
   static propTypes = propTypesExact({
@@ -38,7 +38,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderSelect extends BaseC
     const columnLabel = column && table.headerLabelForColumn(column)
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "api-maker/table/header-select"}}>
+      <View dataSet={this.rootViewDataSet ||= {component: "api-maker/table/header-select.jsx"}}>
         {this.s.modalOpen &&
           <Modal dataSet={this.modalDataSet ||= {class: "table-header-select-modal"}} onRequestClose={this.tt.onModalRequestClose} transparent>
             {this.p.preparedColumns.map(({column, tableSettingColumn}) =>

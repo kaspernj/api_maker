@@ -1,11 +1,11 @@
 import {CheckBox, Pressable, View} from "react-native"
 import React, {useMemo} from "react"
-import BaseComponent from "../base-component"
-import memo from "set-state-compare/src/memo"
+import BaseComponent from "../base-component.js"
+import memo from "set-state-compare/src/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import Text from "./text"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import Text from "./text.jsx"
 
 export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseComponent {
   static defaultProps = {
@@ -46,7 +46,7 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
 
     return (
       <View
-        dataSet={this.viewContainerDataSet ||= {component: "api-maker/utils/checkbox"}}
+        dataSet={this.viewContainerDataSet ||= {component: "api-maker/utils/checkbox.jsx"}}
         style={actualStyle}
       >
         <CheckBox dataSet={actualDataSet} onValueChange={this.tt.onValueChange} value={isChecked} />

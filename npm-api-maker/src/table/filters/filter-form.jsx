@@ -1,27 +1,27 @@
 import {useMemo, useRef} from "react"
 import {ActivityIndicator, View} from "react-native"
-import AttributeElement from "./attribute-element"
-import BaseComponent from "../../base-component"
-import Button from "../../utils/button"
-import Card from "../../utils/card"
+import AttributeElement from "./attribute-element.jsx"
+import BaseComponent from "../../base-component.js"
+import Button from "../../utils/button.jsx"
+import Card from "../../utils/card.jsx"
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
-import {Form} from "../../form"
-import Header from "../../utils/header"
-import Input from "../../inputs/input"
-import memo from "set-state-compare/src/memo"
-import Params from "../../params"
+import {Form} from "../../form.jsx"
+import Header from "../../utils/header.jsx"
+import Input from "../../inputs/input.jsx"
+import memo from "set-state-compare/src/memo.js"
+import Params from "../../params.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
-import ReflectionElement from "./reflection-element"
-import ScopeElement from "./scope-element"
-import Select from "../../inputs/select"
-import Services from "../../services"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import Text from "../../utils/text"
-import useBreakpoint from "../../use-breakpoint"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import ReflectionElement from "./reflection-element.jsx"
+import ScopeElement from "./scope-element.jsx"
+import Select from "../../inputs/select.jsx"
+import Services from "../../services.js"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import Text from "../../utils/text.jsx"
+import useBreakpoint from "../../use-breakpoint.js"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -182,7 +182,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
 
     return (
       <Card
-        testID="api-maker/table/filters/filter-form"
+        testID="api-maker/table/filters/filter-form.jsx"
         style={this.cache("cardStyle", {
           width: mdUp ? undefined : "100%",
           minWidth: 50,

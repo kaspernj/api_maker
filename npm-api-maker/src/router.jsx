@@ -1,10 +1,10 @@
-import BaseComponent from "./base-component"
+import BaseComponent from "./base-component.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React, {memo, Suspense} from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import usePath from "on-location-changed/build/use-path"
-import useRouter from "./use-router"
+import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import usePath from "on-location-changed/build/use-path.js"
+import useRouter from "./use-router.js"
 
 export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
   static propTypes = propTypesExact({

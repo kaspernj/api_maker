@@ -1,4 +1,4 @@
-import Config from "./config"
+import Config from "./config.js"
 import * as inflection from "inflection"
 
 export default class ModelName {

@@ -1,8 +1,8 @@
-import config from "./config"
+import config from "./config.js"
 import formSerialize from "form-serialize"
 import Incorporator from "incorporator"
 import qs from "qs"
-import urlEncode from "./url-encode"
+import urlEncode from "./url-encode.js"
 
 export default class Params {
   /**
