@@ -2,7 +2,9 @@
   "name": "@kaspernj/api-maker",
   "version": "1.0.2053",
   "description": "My new module",
-  "files": ["build/**"],
+  "files": [
+    "build/**"
+  ],
   "main": "build/index.js",
   "scripts": {
     "build": "rm -rf build && tsc -p tsconfig.json || true",
@@ -65,8 +67,10 @@
     "@babel/eslint-parser": "^7.16.3",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.26.3",
+    "@jest/globals": "^30.2.0",
     "babel-jest": "^30.0.0",
     "eslint": "^9.23.0",
+    "eslint-config-expo": "~9.2.0",
     "eslint-find-rules": "^5.0.0",
     "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-react": "^7.23.2",
