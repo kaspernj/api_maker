@@ -1,6 +1,6 @@
 import {Controller} from "stimulus"
-import Devise from "@kaspernj/api-maker/dist/devise"
-import Params from "@kaspernj/api-maker/dist/params"
+import Devise from "@kaspernj/api-maker/build/devise"
+import Params from "@kaspernj/api-maker/build/params"
 import {User} from "models"
 
 export default class DeviseSignInController extends Controller {

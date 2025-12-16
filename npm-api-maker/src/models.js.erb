@@ -1,7 +1,7 @@
 /* rails-erb-loader-dependencies api_maker/resources/ models/ */
 
 import {digg} from "diggerize"
-import ModelRecipesLoader from "@kaspernj/api-maker/dist/model-recipes-loader"
+import ModelRecipesLoader from "@kaspernj/api-maker/build/model-recipes-loader"
 import modelRecipes from "./model-recipes.json"
 
 const loader = new ModelRecipesLoader({recipes: modelRecipes})

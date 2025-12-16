@@ -1,5 +1,5 @@
 import {digs} from "diggerize"
-import EventModelClass from "@kaspernj/api-maker/dist/event-model-class"
+import EventModelClass from "@kaspernj/api-maker/build/event-model-class"
 import Layout from "components/layout"
 import React from "react"
 import {Task} from "models"

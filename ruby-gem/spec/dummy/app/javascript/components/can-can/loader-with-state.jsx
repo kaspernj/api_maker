@@ -2,13 +2,13 @@ import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import {Account} from "models"
 import classNames from "classnames"
-import Devise from "@kaspernj/api-maker/dist/devise"
+import Devise from "@kaspernj/api-maker/build/devise"
 import {FlashNotifications} from "flash-notifications"
 import {Pressable} from "react-native"
 import PropTypes from "prop-types"
-import Text from "@kaspernj/api-maker/dist/utils/text"
-import useCanCan from "@kaspernj/api-maker/dist/use-can-can"
-import useCurrentUser from "@kaspernj/api-maker/dist/use-current-user"
+import Text from "@kaspernj/api-maker/build/utils/text"
+import useCanCan from "@kaspernj/api-maker/build/use-can-can"
+import useCurrentUser from "@kaspernj/api-maker/build/use-current-user"
 
 export default memo(shapeComponent(class CanCanWithState extends ShapeComponent {
   static propTypes = {

@@ -1,10 +1,10 @@
 import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import {FlashNotifications} from "flash-notifications"
-import Link from "@kaspernj/api-maker/dist/link"
-import modelClassRequire from "@kaspernj/api-maker/dist/model-class-require"
+import Link from "@kaspernj/api-maker/build/link"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require"
 import Routes from "shared/routes"
-import useCurrentUser from "@kaspernj/api-maker/dist/use-current-user"
+import useCurrentUser from "@kaspernj/api-maker/build/use-current-user"
 
 const Account = modelClassRequire("Account")
 const Project = modelClassRequire("Project")

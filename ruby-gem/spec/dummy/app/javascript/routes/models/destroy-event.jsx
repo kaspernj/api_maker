@@ -1,7 +1,7 @@
 import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
 import {Task} from "models"
-import useDestroyedEvent from "@kaspernj/api-maker/dist/use-destroyed-event"
+import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
 
 const TaskRow = memo(shapeComponent(class TaskRow extends ShapeComponent {
   render() {

@@ -1,4 +1,4 @@
-import Routes from "@kaspernj/api-maker/dist/routes"
+import Routes from "@kaspernj/api-maker/build/routes"
 
 export default class Path {
   static localized(pathName, params, args = {}) {

@@ -1,6 +1,6 @@
 import BaseComponent from "../base-component"
 import classNames from "classnames"
-import {Input as ApiMakerInput} from "@kaspernj/api-maker/dist/inputs/input"
+import {Input as ApiMakerInput} from "@kaspernj/api-maker/build/inputs/input"
 import Checkbox from "./checkbox"
 import memo from "set-state-compare/src/memo"
 import PropTypes from "prop-types"

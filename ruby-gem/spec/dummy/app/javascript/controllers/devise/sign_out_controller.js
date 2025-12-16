@@ -1,5 +1,5 @@
 import { Controller } from "stimulus"
-import Devise from "@kaspernj/api-maker/dist/devise"
+import Devise from "@kaspernj/api-maker/build/devise"
 
 export default class extends Controller {
   static targets = ["link"]

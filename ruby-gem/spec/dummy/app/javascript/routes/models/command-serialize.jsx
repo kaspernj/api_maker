@@ -1,4 +1,4 @@
-import Params from "@kaspernj/api-maker/dist/params"
+import Params from "@kaspernj/api-maker/build/params"
 import React from "react"
 import {Task} from "models"
 
