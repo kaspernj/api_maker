@@ -68,7 +68,6 @@ export default class ModelsCustomValidationError extends React.PureComponent {
   onSubmit = async (e) => {
     e.preventDefault()
 
-    const {project} = digs(this.state, "project")
     const form = digg(e, "target")
     const formData = new FormData(form)
 
