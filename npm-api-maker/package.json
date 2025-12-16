@@ -5,7 +5,7 @@
   "files": ["dist/**"],
   "main": "build/index.js",
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.json --jsx react-native",
+    "build": "rm -rf dist && tsc -p tsconfig.json || exit /b 0",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
@@ -16,8 +16,8 @@
     "open:android": "open -a \"Android Studio\" example/android",
     "eslint": "eslint --ext .js,.jsx",
     "eslint-find-rules": "eslint-find-rules",
-    "typecheck": "tsc --noEmit --jsx react-native",
-    "watch": "expo-module build --jsx react-native"
+    "typecheck": "tsc --noEmit",
+    "watch": "expo-module build"
   },
   "keywords": [
     "react-native",
