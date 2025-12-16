@@ -17,7 +17,7 @@
     "eslint": "eslint --ext .js,.jsx",
     "eslint-find-rules": "eslint-find-rules",
     "typecheck": "tsc --noEmit",
-    "watch": "expo-module build"
+    "watch": "tsc -p tsconfig.json -w"
   },
   "keywords": [
     "react-native",

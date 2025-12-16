@@ -40,7 +40,7 @@ group :development, :test do
 end
 
 group :test do
-  gem "api_maker_table", path: "/home/dev/api_maker/api_maker_table_rubygem"
+  gem "api_maker_table", path: "/home/dev/Development/api_maker/api_maker_table_rubygem"
 end
 
 gemspec path: "../"

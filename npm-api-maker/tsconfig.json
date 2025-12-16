@@ -4,7 +4,8 @@
     "allowJs": true,
     "checkJs": true,
     "declaration": true,
-    "jsx": "react-native",
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
     "outDir": "build",
     "rootDir": "src",
     "declarationMap": true
