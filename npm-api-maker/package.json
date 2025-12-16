@@ -3,7 +3,7 @@
   "version": "1.0.2053",
   "description": "My new module",
   "files": ["dist/**"],
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.json || true",
     "clean": "expo-module clean",
