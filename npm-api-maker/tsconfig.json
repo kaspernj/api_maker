@@ -1,6 +1,5 @@
 {
-  "include": ["index.js", "bin/**/*", "src/**/*"],
-  "exclude": ["src/templates/**"],
+  "include": ["src/**/*"],
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
