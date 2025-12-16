@@ -1,6 +1,6 @@
 import React, {useMemo} from "react"
 import {Pressable, View} from "react-native"
-import apiMakerConfig from "@kaspernj/api-maker/build/config"
+import apiMakerConfig from "@kaspernj/api-maker/dist/config"
 import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"

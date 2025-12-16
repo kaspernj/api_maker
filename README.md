@@ -182,7 +182,7 @@ end
 Define a routes file for your project (or multiple) in `app/javascript/routes.js`:
 ```js
 import jsRoutes from "js-routes"
-import Routes from "@kaspernj/api-maker/build/routes"
+import Routes from "@kaspernj/api-maker/dist/routes"
 import routeDefinitions from "route-definitions.json"
 
 const routes = new Routes({jsRoutes, routeDefinitions})
@@ -346,7 +346,7 @@ Each attribute is defined as a method on each model. So if you have an attribute
 You can validate model types and loaded attributes like this:
 
 ```js
-import ModelPropType from "@kaspernj/api-maker/build/model-prop-type"
+import ModelPropType from "@kaspernj/api-maker/dist/model-prop-type"
 
 class MyComponent extends React.Component {
   static propTypes = {
@@ -430,7 +430,7 @@ First include this in your layout, so JS can know which user is signed in:
 
 Then you can do like this in JS:
 ```js
-import Devise from "@kaspernj/api-maker/build/devise"
+import Devise from "@kaspernj/api-maker/dist/devise"
 
 console.log(`The current user has this email: ${Devise.currentUser().email()}`)
 ```
@@ -503,9 +503,9 @@ subscription.unsubscribe()
 
 You can also use a React component if you use React and dont want to keep track of when to unsubscribe:
 ```jsx
-import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event"
-import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
-import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event"
+import useCreatedEvent from "@kaspernj/api-maker/dist/use-created-event"
+import useDestroyedEvent from "@kaspernj/api-maker/dist/use-destroyed-event"
+import useUpdatedEvent from "@kaspernj/api-maker/dist/use-updated-event"
 ```
 
 ```js
@@ -531,7 +531,7 @@ onUserUpdated = (args) => {
 You can also use this React component to show a models attribute with automatic updates:
 
 ```jsx
-import UpdatedAttribute from "@kaspernj/api-maker/build/updated-attribute"
+import UpdatedAttribute from "@kaspernj/api-maker/dist/updated-attribute"
 ```
 
 ```jsx
@@ -540,7 +540,7 @@ import UpdatedAttribute from "@kaspernj/api-maker/build/updated-attribute"
 
 You can also use the `EventConnection` React component so you don't need to keep track of your subscription and unsubscribe:
 ```jsx
-import EventConnection from "@kaspernj/api-maker/build/event-connection"
+import EventConnection from "@kaspernj/api-maker/dist/event-connection"
 ```
 
 ```jsx

@@ -1,6 +1,6 @@
 import {digg, digs} from "diggerize"
 import {Account} from "models"
-import Params from "@kaspernj/api-maker/build/params"
+import Params from "@kaspernj/api-maker/dist/params"
 import React from "react"
 
 export default class ModelsHasManyAs extends React.PureComponent {

@@ -1,5 +1,5 @@
 import Hash from "shared/hash"
-import Params from "@kaspernj/api-maker/build/params"
+import Params from "@kaspernj/api-maker/dist/params"
 import React from "react"
 import {Task} from "models"
 

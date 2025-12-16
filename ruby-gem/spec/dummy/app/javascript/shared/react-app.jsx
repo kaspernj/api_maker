@@ -1,13 +1,13 @@
-import ApiMakerConfig from "@kaspernj/api-maker/build/config"
+import ApiMakerConfig from "@kaspernj/api-maker/dist/config"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"
 import {Container as Notifications} from "flash-notifications"
 import Locales from "shared/locales"
 import React from "react"
-import Router from "@kaspernj/api-maker/build/router"
+import Router from "@kaspernj/api-maker/dist/router"
 import Routes from "shared/routes"
 import {SafeAreaProvider} from "react-native-safe-area-context"
-import {WithCurrentUser} from "@kaspernj/api-maker/build/use-current-user"
+import {WithCurrentUser} from "@kaspernj/api-maker/dist/use-current-user"
 import WithLocationPath from "on-location-changed/build/with-location-path"
 
 const NotFoundComponent = () => <div>Not found</div>

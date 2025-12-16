@@ -1,6 +1,6 @@
-import Input from "@kaspernj/api-maker/build/bootstrap/input"
+import Input from "@kaspernj/api-maker/dist/bootstrap/input"
 import Layout from "components/layout"
-import Params from "@kaspernj/api-maker/build/params"
+import Params from "@kaspernj/api-maker/dist/params"
 import React from "react"
 import {Task} from "models"
 

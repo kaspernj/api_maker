@@ -1,5 +1,5 @@
-import Devise from "@kaspernj/api-maker/build/devise"
-import Input from "@kaspernj/api-maker/build/bootstrap/input"
+import Devise from "@kaspernj/api-maker/dist/devise"
+import Input from "@kaspernj/api-maker/dist/bootstrap/input"
 import Layout from "components/layout"
 import React from "react"
 
