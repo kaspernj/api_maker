@@ -1,8 +1,14 @@
+// @ts-check
+
 import BaseError from "./base-error.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 
 class ValidationError extends BaseError {
+  /**
+   * @param {import("./validation-errors.js").ValidationErrors} validationErrors
+   * @param {object} args
+   */
   constructor(validationErrors, args) {
     const errorMessage = validationErrors.getUnhandledErrorMessage() || validationErrors.getErrorMessage()
     const forwardedArgs = {addResponseErrorsToErrorMessage: false}

@@ -1,13 +1,27 @@
+// @ts-check
+
 import {dig, digg} from "diggerize"
 import errorMessages from "./error-messages"
+
+/**
+ * @typedef {object} BaseErrorArgsType
+ * @property {boolean} [addResponseErrorsToErrorMessage]
+ * @property {object} response
+ * @property {string[]} response.validation_errors
+ * @property {import("./error-messages.js").ErrorMessagesArgsType} response.errors
+ */
 
 export default class BaseError extends Error {
   static apiMakerType = "BaseError"
 
-  constructor (message, args = {}) {
+  /**
+   * @param {string} message
+   * @param {BaseErrorArgsType} [args]
+   */
+  constructor (message, args) {
     let messageToUse = message
 
-    if ("addResponseErrorsToErrorMessage" in args && !args.addResponseErrorsToErrorMessage) {
+    if (args && "addResponseErrorsToErrorMessage" in args && !args.addResponseErrorsToErrorMessage) {
       messageToUse = message
     } else {
       if (typeof args.response == "object" && dig(args, "response", "errors")) {
@@ -26,10 +40,12 @@ export default class BaseError extends Error {
     if (Error.captureStackTrace) Error.captureStackTrace(this, BaseError)
   }
 
+  /** @returns {string[]} */
   errorMessages () {
     return errorMessages(this.args)
   }
 
+  /** @returns {string[]} */
   errorTypes () {
     if (typeof this.args.response == "object") {
       return digg(this, "args", "response", "errors").map((error) => digg(error, "type"))

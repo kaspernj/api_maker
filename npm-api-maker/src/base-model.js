@@ -17,6 +17,12 @@ import Services from "./services.js"
 import ValidationError from "./validation-error.js"
 import {ValidationErrors} from "./validation-errors.js"
 
+/**
+ * @typedef {object} ParseValidationErrorsOptions
+ * @property {object} [form]
+ * @property {boolean} [throwValidationError]
+ */
+
 function objectToUnderscore(object) {
   const newObject = {}
 
@@ -73,7 +79,13 @@ export default class BaseModel {
     return new CustomEvent("validation-errors", {detail: validationErrors})
   }
 
-  static sendValidationErrorsEvent = (validationErrors, options) => {
+  /**
+   * @param {ValidationErrors} validationErrors
+   * @param {object} [options]
+   * @param {object} [options.form]
+   * @param {boolean} [options.throwValidationError]
+   */
+  static sendValidationErrorsEvent(validationErrors, options) {
     if (options && options.form) {
       const event = BaseModel.newCustomEvent(validationErrors)
       options.form.dispatchEvent(event)
@@ -81,9 +93,10 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {BaseModel}
+   * @returns {Promise<BaseModel>}
    */
   static async find(id) {
+    /** @type {Record<string, any>} */
     const query = {}
 
     query[`${this.primaryKey()}_eq`] = id
@@ -109,7 +122,7 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {string}
+   * @returns {ModelName}
    */
   static modelName() {
     return new ModelName({modelClassData: this.modelClassData()})
@@ -241,7 +254,7 @@ export default class BaseModel {
   }
 
   /**
-   * @param {Record<string, any>}
+   * @param {Record<string, any>} newAttributes
    * @returns {void}
    */
   assignAttributes(newAttributes) {
@@ -306,7 +319,8 @@ export default class BaseModel {
    * @returns {BaseModel}
    */
   clone() {
-    const clone = new this.constructor()
+    const ModelClass = /** @type {typeof BaseModel} */ (this.constructor)
+    const clone = new ModelClass()
 
     clone.abilities = {...this.abilities}
     clone.modelData = {...this.modelData}
@@ -317,7 +331,7 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {string}
+   * @returns {number | string}
    */
   cacheKey() {
     if (this.isPersisted()) {
@@ -327,6 +341,7 @@ export default class BaseModel {
       ]
 
       if ("updated_at" in this.modelData) {
+        // @ts-expect-error
         const updatedAt = this.updatedAt()
 
         if (typeof updatedAt != "object") {
@@ -335,6 +350,7 @@ export default class BaseModel {
           throw new Error(`updatedAt didn't support getTime with class: ${updatedAt.constructor && updatedAt.constructor.name}`)
         }
 
+        // @ts-expect-error
         keyParts.push(`updatedAt-${this.updatedAt().getTime()}`)
       }
 
@@ -363,15 +379,15 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {Promise<BaseModel[]>}
+   * @returns {Collection}
    */
   static all() {
     return this.ransack()
   }
 
   /**
-   * @param {Record<string, any>} attributes
-   * @param {object} options
+   * @param {Record<string, any>} [attributes]
+   * @param {object} [options]
    * @returns {Promise<{
    *   model: BaseModel,
    *   response: object
@@ -481,14 +497,14 @@ export default class BaseModel {
 
     // Load the missing abilities if any
     if (abilitiesToLoad.length > 0) {
-      const primaryKeyName = this.constructor.primaryKey()
+      const primaryKeyName = this.modelClass().primaryKey()
       const ransackParams = {}
       ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
 
       const abilitiesParams = {}
       abilitiesParams[digg(this.modelClassData(), "name")] = abilitiesToLoad
 
-      const anotherModel = await this.constructor
+      const anotherModel = await this.modelClass()
         .ransack(ransackParams)
         .abilities(abilitiesParams)
         .first()
@@ -511,11 +527,11 @@ export default class BaseModel {
 
   handleResponseError(response) {
     BaseModel.parseValidationErrors({model: this, response})
-    throw new new CustomError("Response wasn't successful", {model: this, response})
+    throw new CustomError("Response wasn't successful", {model: this, response})
   }
 
   /**
-   * @returns {string}
+   * @returns {number | string}
    */
   identifierKey() {
     if (!this._identifierKey) this._identifierKey = this.isPersisted() ? this.primaryKey() : this.uniqueKey()
@@ -545,6 +561,12 @@ export default class BaseModel {
     return false
   }
 
+  /**
+   * @param {object} args
+   * @param {any} args.error
+   * @param {BaseModel} args.model
+   * @param {ParseValidationErrorsOptions} args.options
+   */
   static parseValidationErrors({error, model, options}) {
     if (!(error instanceof ValidationError)) return
     if (!error.args.response.validation_errors) return
@@ -563,6 +585,8 @@ export default class BaseModel {
 
   static humanAttributeName(attributeName) {
     const keyName = digg(this.modelClassData(), "i18nKey")
+
+    // @ts-expect-error
     const i18n = Config.getI18n()
 
     if (i18n) return i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`, {defaultValue: attributeName})
@@ -629,7 +653,7 @@ export default class BaseModel {
   isPersisted() { return !this.isNewRecord() }
 
   /**
-   * @param {string}
+   * @param {string} string
    * @returns {string}
    */
   static snakeCase(string) { return inflection.underscore(string) }
@@ -708,7 +732,7 @@ export default class BaseModel {
       return true
   }
 
-  modelClassData() { return this.constructor.modelClassData() }
+  modelClassData() { return this.modelClass().modelClassData() }
 
   /**
    * @returns {Promise<void>}
@@ -716,9 +740,9 @@ export default class BaseModel {
   async reload() {
     const params = this.collection && this.collection.params()
     const ransackParams = {}
-    ransackParams[`${this.constructor.primaryKey()}_eq`] = this.primaryKey()
+    ransackParams[`${this.modelClass().primaryKey()}_eq`] = this.primaryKey()
 
-    let query = this.constructor.ransack(ransackParams)
+    let query = this.modelClass().ransack(ransackParams)
 
     if (params) {
       if (params.preload) {
@@ -740,7 +764,7 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {Promise<{model: BaseModel, response: object}>}
+   * @returns {Promise<{model: BaseModel, response?: object}>}
    */
   save() {
     if (this.isNewRecord()) {
@@ -761,6 +785,14 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {Record<string, any>} [newAttributes]
+   * @param {ParseValidationErrorsOptions} [options]
+   * @returns {Promise<{
+   *   model: BaseModel,
+   *   response?: object
+   * }>}
+   */
   async update(newAttributes, options) {
     if (newAttributes) {
       this.assignAttributes(newAttributes)
@@ -894,7 +926,11 @@ export default class BaseModel {
   /**
    * @returns {typeof BaseModel}
    */
-  modelClass() { return this.constructor }
+  modelClass() {
+    const modelClass = /** @type {typeof BaseModel} */ (this.constructor)
+
+    return modelClass
+  }
 
   preloadRelationship(relationshipName, model) {
     this.relationshipsCache[BaseModel.snakeCase(relationshipName)] = model
@@ -1152,5 +1188,5 @@ export default class BaseModel {
   /**
    * @returns {number|string}
    */
-  primaryKey() { return this.readAttributeUnderscore(this.constructor.primaryKey()) }
+  primaryKey() { return this.readAttributeUnderscore(this.modelClass().primaryKey()) }
 }

@@ -60,7 +60,7 @@ export default class ApiMakerCollection {
 
   /**
    * @param {function(import("./base-model.js").default) : void} callback
-   * @returns {void}
+   * @returns {Promise<void>}
    */
   async each(callback) {
     const array = await this.toArray()
@@ -71,6 +71,7 @@ export default class ApiMakerCollection {
   }
 
   /**
+   * @param {...string} keys
    * @returns {this}
    */
   except(...keys) {
@@ -177,6 +178,17 @@ export default class ApiMakerCollection {
     }
   }
 
+  /** @returns {Array<import("./base-model.js").default>} */
+  loadedArray() {
+    const loaded = this.loaded()
+
+    if (Array.isArray(loaded)) {
+      return loaded
+    } else {
+      throw new Error("'loaded' wasn't an array")
+    }
+  }
+
   // Replaces the relationships with the given new collection.
   set(newCollection) {
     this.args.model.relationships[this.args.reflectionName] = newCollection
@@ -196,9 +208,23 @@ export default class ApiMakerCollection {
   }
 
   // Array shortcuts
-  find = (...args) => this.loaded().find(...args)
-  forEach = (...args) => this.loaded().forEach(...args)
-  map = (...args) => this.loaded().map(...args)
+  /**
+   * @param {function(import("./base-model.js").default): boolean} callback
+   * @returns {import("./base-model.js").default}
+   */
+  find(callback) { return this.loadedArray().find(callback) }
+
+  /**
+   * @param {function(import("./base-model.js").default): void} callback
+   * @returns {void}
+   */
+  forEach(callback) { return this.loadedArray().forEach(callback) }
+
+  /**
+   * @param {function(import("./base-model.js").default): void} callback
+   * @returns {any[]}
+   */
+  map(callback) { return this.loadedArray().map(callback) }
 
   /**
    * @param {string[]} preloadValue
