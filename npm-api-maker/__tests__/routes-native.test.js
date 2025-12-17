@@ -1,4 +1,4 @@
-import RoutesNative from "../build/routes-native"
+import RoutesNative from "../build/routes-native.js"
 
 const testRoutes = () => ({
   routes: [

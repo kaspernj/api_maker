@@ -1,11 +1,11 @@
 import {useCallback} from "react"
-import config from "./config"
+import config from "./config.js"
 import {Dimensions} from "react-native"
 import * as inflection from "inflection"
-import isExpo from "./is-expo"
-import useEventEmitter from "./use-event-emitter"
-import useEventListener from "./use-event-listener"
-import useShape from "set-state-compare/src/use-shape"
+import isExpo from "./is-expo.js"
+import useEventEmitter from "./use-event-emitter.js"
+import useEventListener from "./use-event-listener.js"
+import useShape from "set-state-compare/build/use-shape.js"
 
 function calculateBreakPoint(breakpoints) {
   let windowWidth

@@ -1,10 +1,10 @@
 import Attribute from "./base-model/attribute"
 import AttributeNotLoadedError from "./attribute-not-loaded-error"
 import CacheKeyGenerator from "./cache-key-generator"
-import Collection from "./collection"
-import CommandsPool from "./commands-pool"
-import Config from "./config"
-import CustomError from "./custom-error"
+import Collection from "./collection.js"
+import CommandsPool from "./commands-pool.js"
+import Config from "./config.js"
+import CustomError from "./custom-error.js"
 import {digg} from "diggerize"
 import FormDataObjectizer from "form-data-objectizer"
 import * as inflection from "inflection"
@@ -13,9 +13,25 @@ import NotLoadedError from "./not-loaded-error"
 import objectToFormData from "object-to-formdata"
 import Reflection from "./base-model/reflection"
 import Scope from "./base-model/scope"
-import Services from "./services"
-import ValidationError from "./validation-error"
-import {ValidationErrors} from "./validation-errors"
+import Services from "./services.js"
+import ValidationError from "./validation-error.js"
+import {ValidationErrors} from "./validation-errors.js"
+
+/**
+ * @typedef {object} ModelClassDataType
+ * @property {import("./base-model/attribute.js").AttributeArgType[]} attributes
+ * @property {string} collectionName
+ * @property {string} name
+ * @property {string} paramKey
+ * @property {string} primaryKey
+ * @property {object} ransackable_attributes
+ */
+
+/**
+ * @typedef {object} ParseValidationErrorsOptions
+ * @property {object} [form]
+ * @property {boolean} [throwValidationError]
+ */
 
 function objectToUnderscore(object) {
   const newObject = {}
@@ -32,11 +48,9 @@ function objectToUnderscore(object) {
 export default class BaseModel {
   static apiMakerType = "BaseModel"
 
-  /**
-   * @returns {Attribute[]}
-   */
+  /** @returns {Attribute[]} */
   static attributes() {
-    const attributes = digg(this.modelClassData(), "attributes")
+    const attributes = this.modelClassData().attributes
     const result = []
 
     for (const attributeKey in attributes) {
@@ -49,9 +63,7 @@ export default class BaseModel {
     return result
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   static hasAttribute(attributeName) {
     const attributes = digg(this.modelClassData(), "attributes")
     const lowerCaseAttributeName = inflection.underscore(attributeName)
@@ -63,17 +75,27 @@ export default class BaseModel {
 
   /**
    * @interface
-   * @returns {object}
+   * @returns {ModelClassDataType}
    */
   static modelClassData() {
     throw new Error("modelClassData should be overriden by child")
   }
 
+  /**
+   * @param {ValidationErrors} validationErrors
+   * @returns {CustomEvent}
+   */
   static newCustomEvent = (validationErrors) => {
     return new CustomEvent("validation-errors", {detail: validationErrors})
   }
 
-  static sendValidationErrorsEvent = (validationErrors, options) => {
+  /**
+   * @param {ValidationErrors} validationErrors
+   * @param {object} [options]
+   * @param {object} [options.form]
+   * @param {boolean} [options.throwValidationError]
+   */
+  static sendValidationErrorsEvent(validationErrors, options) {
     if (options && options.form) {
       const event = BaseModel.newCustomEvent(validationErrors)
       options.form.dispatchEvent(event)
@@ -81,14 +103,18 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {BaseModel}
+   * @template {typeof BaseModel} T
+   * @this {T}
+   * @param {number | string} id
+   * @returns {Promise<InstanceType<T>>}
    */
   static async find(id) {
+    /** @type {Record<string, any>} */
     const query = {}
 
     query[`${this.primaryKey()}_eq`] = id
 
-    const model = await this.ransack(query).first()
+    const model = /** @type {InstanceType<T>} */ (await this.ransack(query).first())
 
     if (model) {
       return model
@@ -97,48 +123,56 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @template {typeof BaseModel} T
+   * @this {T}
+   * @param {Record<string, any>} findOrCreateByArgs
+   * @returns {Promise<InstanceType<T>>}
+   */
   static async findOrCreateBy(findOrCreateByArgs, args = {}) {
     const result = await Services.current().sendRequest("Models::FindOrCreateBy", {
       additional_data: args.additionalData,
       find_or_create_by_args: findOrCreateByArgs,
       resource_name: digg(this.modelClassData(), "name")
     })
-    const model = digg(result, "model")
+    const model = /** @type {InstanceType<T>} */ (digg(result, "model"))
 
     return model
   }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {ModelName} */
   static modelName() {
     return new ModelName({modelClassData: this.modelClassData()})
   }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {string} */
   static primaryKey() {
     return digg(this.modelClassData(), "primaryKey")
   }
 
   /**
-   * @returns {Collection}
+   * @template {typeof BaseModel} MC
+   * @this {MC}
+   * @param {Record<string, any>} [query]
+   * @returns {import("./collection.js").default<MC>}
    */
   static ransack(query = {}) {
-    return new Collection({modelClass: this}, {ransack: query})
+    const ModelClass = /** @type {MC} */ (this)
+
+    return new Collection({modelClass: ModelClass}, {ransack: query})
   }
 
   /**
-   * @returns {Collection}
+   * @template {typeof BaseModel} MC
+   * @this {MC}
+   * @param {Record<string, any>} [select]
+   * @returns {import("./collection.js").default<MC>}
    */
   static select(select) {
     return this.ransack().select(select)
   }
 
-  /**
-   * @returns {Reflection[]}
-   */
+  /** @returns {Reflection[]} */
   static ransackableAssociations() {
     const relationships = digg(this.modelClassData(), "ransackable_associations")
     const reflections = []
@@ -150,11 +184,9 @@ export default class BaseModel {
     return reflections
   }
 
-  /**
-   * @returns {Attribute[]}
-   */
+  /** @returns {Attribute[]} */
   static ransackableAttributes() {
-    const attributes = digg(this.modelClassData(), "ransackable_attributes")
+    const attributes = this.modelClassData().ransackable_attributes
     const result = []
 
     for (const attributeData of attributes) {
@@ -164,9 +196,7 @@ export default class BaseModel {
     return result
   }
 
-  /**
-   * @returns {Scope[]}
-   */
+  /** @returns {Scope[]} */
   static ransackableScopes() {
     const ransackableScopes = digg(this.modelClassData(), "ransackable_scopes")
     const result = []
@@ -180,9 +210,7 @@ export default class BaseModel {
     return result
   }
 
-  /**
-   * @returns {Reflection[]}
-   */
+  /** @returns {Reflection[]} */
   static reflections() {
     const relationships = digg(this.modelClassData(), "relationships")
     const reflections = []
@@ -196,9 +224,7 @@ export default class BaseModel {
     return reflections
   }
 
-  /**
-   * @returns {Reflection}
-   */
+  /** @returns {Reflection} */
   static reflection(name) {
     const foundReflection = this.reflections().find((reflection) => reflection.name() == name)
 
@@ -241,7 +267,7 @@ export default class BaseModel {
   }
 
   /**
-   * @param {Record<string, any>}
+   * @param {Record<string, any>} newAttributes
    * @returns {void}
    */
   assignAttributes(newAttributes) {
@@ -272,9 +298,7 @@ export default class BaseModel {
     }
   }
 
-  /**
-   * @returns {Record<string, any>}
-   */
+  /** @returns {Record<string, any>} */
   attributes() {
     const result = {}
 
@@ -290,6 +314,7 @@ export default class BaseModel {
   }
 
   /**
+   * @param {string} givenAbilityName
    * @returns {boolean}
    */
   can(givenAbilityName) {
@@ -303,10 +328,13 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {BaseModel}
+   * @template {BaseModel} Self
+   * @this {Self}
+   * @returns {Self}
    */
   clone() {
-    const clone = new this.constructor()
+    const ModelClass = /** @type {new (...args: any[]) => Self} */ (this.constructor)
+    const clone = new ModelClass()
 
     clone.abilities = {...this.abilities}
     clone.modelData = {...this.modelData}
@@ -316,9 +344,7 @@ export default class BaseModel {
     return clone
   }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {number | string} */
   cacheKey() {
     if (this.isPersisted()) {
       const keyParts = [
@@ -327,6 +353,7 @@ export default class BaseModel {
       ]
 
       if ("updated_at" in this.modelData) {
+        // @ts-expect-error
         const updatedAt = this.updatedAt()
 
         if (typeof updatedAt != "object") {
@@ -335,6 +362,7 @@ export default class BaseModel {
           throw new Error(`updatedAt didn't support getTime with class: ${updatedAt.constructor && updatedAt.constructor.name}`)
         }
 
+        // @ts-expect-error
         keyParts.push(`updatedAt-${this.updatedAt().getTime()}`)
       }
 
@@ -344,18 +372,14 @@ export default class BaseModel {
     }
   }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {string} */
   localCacheKey() {
     const cacheKeyGenerator = new CacheKeyGenerator(this)
 
     return cacheKeyGenerator.local()
   }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {string} */
   fullCacheKey() {
     const cacheKeyGenerator = new CacheKeyGenerator(this)
 
@@ -363,15 +387,17 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {Promise<BaseModel[]>}
+   * @template {typeof BaseModel} MC
+   * @this {MC}
+   * @returns {Collection<MC>}
    */
   static all() {
     return this.ransack()
   }
 
   /**
-   * @param {Record<string, any>} attributes
-   * @param {object} options
+   * @param {Record<string, any>} [attributes]
+   * @param {object} [options]
    * @returns {Promise<{
    *   model: BaseModel,
    *   response: object
@@ -411,6 +437,10 @@ export default class BaseModel {
     return {model: this, response}
   }
 
+  /**
+   * @param {FormData | Record<string, any>} rawData
+   * @param {object} [options]
+   */
   async createRaw(rawData, options = {}) {
     const objectData = BaseModel._objectDataFromGivenRawData(rawData, options)
 
@@ -442,9 +472,7 @@ export default class BaseModel {
     return {model: this, response}
   }
 
-  /**
-   * @returns {Promise<{model: BaseModel, response: object}>}
-   */
+  /** @returns {Promise<{model: BaseModel, response: object}>} */
   async destroy() {
     const response = await CommandsPool.addCommand(
       {
@@ -481,14 +509,14 @@ export default class BaseModel {
 
     // Load the missing abilities if any
     if (abilitiesToLoad.length > 0) {
-      const primaryKeyName = this.constructor.primaryKey()
+      const primaryKeyName = this.modelClass().primaryKey()
       const ransackParams = {}
       ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
 
       const abilitiesParams = {}
       abilitiesParams[digg(this.modelClassData(), "name")] = abilitiesToLoad
 
-      const anotherModel = await this.constructor
+      const anotherModel = await this.modelClass()
         .ransack(ransackParams)
         .abilities(abilitiesParams)
         .first()
@@ -508,14 +536,15 @@ export default class BaseModel {
    * @returns {Record<string, any>}
    */
   getAttributes() { return Object.assign(this.modelData, this.changes) }
-
+asd
   handleResponseError(response) {
+    // @ts-expect-error
     BaseModel.parseValidationErrors({model: this, response})
-    throw new new CustomError("Response wasn't successful", {model: this, response})
+    throw new CustomError("Response wasn't successful", {model: this, response})
   }
 
   /**
-   * @returns {string}
+   * @returns {number | string}
    */
   identifierKey() {
     if (!this._identifierKey) this._identifierKey = this.isPersisted() ? this.primaryKey() : this.uniqueKey()
@@ -545,6 +574,12 @@ export default class BaseModel {
     return false
   }
 
+  /**
+   * @param {object} args
+   * @param {any} args.error
+   * @param {BaseModel} [args.model]
+   * @param {ParseValidationErrorsOptions} args.options
+   */
   static parseValidationErrors({error, model, options}) {
     if (!(error instanceof ValidationError)) return
     if (!error.args.response.validation_errors) return
@@ -563,6 +598,8 @@ export default class BaseModel {
 
   static humanAttributeName(attributeName) {
     const keyName = digg(this.modelClassData(), "i18nKey")
+
+    // @ts-expect-error
     const i18n = Config.getI18n()
 
     if (i18n) return i18n.t(`activerecord.attributes.${keyName}.${BaseModel.snakeCase(attributeName)}`, {defaultValue: attributeName})
@@ -571,7 +608,7 @@ export default class BaseModel {
   }
 
   /**
-   * @param {string}
+   * @param {string} attributeName
    * @returns {boolean}
    */
   isAttributeChanged(attributeName) {
@@ -629,7 +666,7 @@ export default class BaseModel {
   isPersisted() { return !this.isNewRecord() }
 
   /**
-   * @param {string}
+   * @param {string} string
    * @returns {string}
    */
   static snakeCase(string) { return inflection.underscore(string) }
@@ -708,7 +745,8 @@ export default class BaseModel {
       return true
   }
 
-  modelClassData() { return this.constructor.modelClassData() }
+  /** @returns {ModelClassDataType} */
+  modelClassData() { return this.modelClass().modelClassData() }
 
   /**
    * @returns {Promise<void>}
@@ -716,9 +754,9 @@ export default class BaseModel {
   async reload() {
     const params = this.collection && this.collection.params()
     const ransackParams = {}
-    ransackParams[`${this.constructor.primaryKey()}_eq`] = this.primaryKey()
+    ransackParams[`${this.modelClass().primaryKey()}_eq`] = this.primaryKey()
 
-    let query = this.constructor.ransack(ransackParams)
+    let query = this.modelClass().ransack(ransackParams)
 
     if (params) {
       if (params.preload) {
@@ -740,7 +778,7 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {Promise<{model: BaseModel, response: object}>}
+   * @returns {Promise<{model: BaseModel, response?: object}>}
    */
   save() {
     if (this.isNewRecord()) {
@@ -761,6 +799,14 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {Record<string, any>} [newAttributes]
+   * @param {ParseValidationErrorsOptions} [options]
+   * @returns {Promise<{
+   *   model: BaseModel,
+   *   response?: object
+   * }>}
+   */
   async update(newAttributes, options) {
     if (newAttributes) {
       this.assignAttributes(newAttributes)
@@ -823,6 +869,11 @@ export default class BaseModel {
     this.setNewModelData(newModel)
   }
 
+  /**
+   * @param {FormData | Record<string, any>} rawData
+   * @param {object} options
+   * @returns {Record<string, any>}
+   */
   static _objectDataFromGivenRawData(rawData, options) {
     if (rawData instanceof FormData || rawData.nodeName == "FORM") {
       const formData = FormDataObjectizer.formDataFromObject(rawData, options)
@@ -892,9 +943,13 @@ export default class BaseModel {
   }
 
   /**
-   * @returns {typeof BaseModel}
+   * @template {BaseModel} Self
+   * @this {Self}
+   * @returns {typeof BaseModel & (new (...args: any[]) => Self)}
    */
-  modelClass() { return this.constructor }
+  modelClass() {
+    return /** @type {any} */ (this.constructor)
+  }
 
   preloadRelationship(relationshipName, model) {
     this.relationshipsCache[BaseModel.snakeCase(relationshipName)] = model
@@ -1045,6 +1100,12 @@ export default class BaseModel {
     throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
   }
 
+  /**
+   * @template {typeof import("./base-model.js").default} AssocMC
+   * @param {import("./collection.js").CollectionArgsType<AssocMC>} args
+   * @param {import("./collection.js").QueryArgsType} queryArgs
+   * @returns {Promise<Array<InstanceType<AssocMC>>>}
+   */
   async _loadHasManyReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationships) {
       return this.relationships[args.reflectionName]
@@ -1060,6 +1121,12 @@ export default class BaseModel {
     return models
   }
 
+  /**
+   * @template {typeof import("./base-model.js").default} AssocMC
+   * @param {import("./collection.js").CollectionArgsType<AssocMC>} args
+   * @param {import("./collection.js").QueryArgsType} queryArgs
+   * @returns {Promise<InstanceType<AssocMC>>}
+   */
   async _loadHasOneReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationships) {
       return this.relationships[args.reflectionName]
@@ -1152,5 +1219,5 @@ export default class BaseModel {
   /**
    * @returns {number|string}
    */
-  primaryKey() { return this.readAttributeUnderscore(this.constructor.primaryKey()) }
+  primaryKey() { return this.readAttributeUnderscore(this.modelClass().primaryKey()) }
 }

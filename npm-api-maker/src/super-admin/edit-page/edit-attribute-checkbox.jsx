@@ -1,11 +1,11 @@
 import React, {useMemo} from "react"
 import {StyleSheet, View} from "react-native"
 import Checkbox from "../../utils/checkbox"
-import BaseComponent from "../../base-component"
-import memo from "set-state-compare/src/memo"
+import BaseComponent from "../../base-component.js"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../../form"
 
 const styles = StyleSheet.create({

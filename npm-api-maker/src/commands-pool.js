@@ -1,16 +1,29 @@
-import Api from "./api"
-import CommandSubmitData from "./command-submit-data"
-import CustomError from "./custom-error"
-import DestroyError from "./destroy-error"
-import Deserializer from "./deserializer"
+// @ts-check
+
+import Api from "./api.js"
+import CommandSubmitData from "./command-submit-data.js"
+import CustomError from "./custom-error.js"
+import DestroyError from "./destroy-error.js"
+import Deserializer from "./deserializer.js"
 import {dig, digg} from "diggerize"
-import events from "./events"
+import events from "./events.js"
 import FormDataObjectizer from "form-data-objectizer"
-import RunLast from "./run-last"
-import Serializer from "./serializer"
-import SessionStatusUpdater from "./session-status-updater"
-import ValidationError from "./validation-error"
-import {ValidationErrors} from "./validation-errors"
+import RunLast from "./run-last.js"
+import Serializer from "./serializer.js"
+import SessionStatusUpdater from "./session-status-updater.js"
+import ValidationError from "./validation-error.js"
+import {ValidationErrors} from "./validation-errors.js"
+
+/**
+ * @typedef {object} CommandDataType
+ * @property {Function} resolve
+ * @property {Function} reject
+ * @property {string} stack
+ */
+
+/**
+ * @typedef {{[key: string]: {[key: string]: {[key: string]: {[key: number]: {args: object, primary_key: number | string, id: number}}}}}} PoolDataType
+ */
 
 const shared = {}
 
@@ -47,9 +60,16 @@ export default class ApiMakerCommandsPool {
 
   constructor() {
     this.flushCount = 0
+
+    /** @type {Record<number, CommandDataType>} */
     this.pool = {}
+
+    /** @type {PoolDataType} */
     this.poolData = {}
+
     this.currentId = 1
+
+    /** @type {Record<string, any>} */
     this.globalRequestData = {}
   }
 
@@ -90,10 +110,17 @@ export default class ApiMakerCommandsPool {
     })
   }
 
+  /** @returns {number} */
   commandsCount() {
-    return Object.keys(this.pool)
+    return Object.keys(this.pool).length
   }
 
+  /**
+   * @param {object} args
+   * @param {string} args.url
+   * @param {CommandSubmitData} args.commandSubmitData
+   * @returns {Promise<Record<string, any>>}
+   */
   async sendRequest({commandSubmitData, url}) {
     let response
 
@@ -172,6 +199,14 @@ export default class ApiMakerCommandsPool {
     }
   }
 
+  /**
+   * @param {CommandDataType} commandData
+   * @param {object} commandResponseData
+   * @param {string} commandResponseData.error_type
+   * @param {string[]} commandResponseData.errors
+   * @param {string[]} commandResponseData.validation_errors
+   * @returns {void}
+   */
   handleFailedResponse(commandData, commandResponseData) {
     let error
 

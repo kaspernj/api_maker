@@ -1,5 +1,5 @@
 import React from "react"
-import {Task} from "models"
+import {Task} from "models.js"
 
 export default class ModelsLoadHasOneThrough extends React.PureComponent {
   state = {}

@@ -1,7 +1,7 @@
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import modelClassRequire from "./model-class-require"
-import ModelsResponseReader from "./models-response-reader"
+import modelClassRequire from "./model-class-require.js"
+import ModelsResponseReader from "./models-response-reader.js"
 import Money from "js-money"
 
 export default class ApiMakerDeserializer {

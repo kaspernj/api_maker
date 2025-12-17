@@ -1,13 +1,21 @@
 import objectToFormData from "object-to-formdata"
 
 export default class ApiMakerCommandSubmitData {
+  /**
+   * @param {object} data
+   * @param {Record<string, any>} [data.global]
+   * @param {import("./commands-pool.js").PoolDataType} data.pool
+   */
   constructor (data) {
     this.data = data
     this.filesCount = 0
     this.jsonData = this.traverseObject(this.data, "json")
   }
 
+  /** @returns {number} */
   getFilesCount = () => this.filesCount
+
+  /** @returns {Record<string, object>} */
   getJsonData = () => this.jsonData
 
   getRawData () {
@@ -28,7 +36,12 @@ export default class ApiMakerCommandSubmitData {
     return formData
   }
 
-  convertDynamic (value, type) {
+  /**
+   * @param {any} value
+   * @param {string} type
+   * @returns
+   */
+  convertDynamic(value, type) {
     if (Array.isArray(value)) {
       return this.traverseArray(value, type)
     } else if (typeof value == "object" && value !== null && value.constructor.name == "Object") {
@@ -38,7 +51,12 @@ export default class ApiMakerCommandSubmitData {
     }
   }
 
-  shouldSkip (object, type) {
+  /**
+   * @param {any} object
+   * @param {string} type
+   * @returns {boolean}
+   */
+  shouldSkip(object, type) {
     if (type == "json" && object instanceof File) {
       this.filesCount += 1
       return true
@@ -51,7 +69,11 @@ export default class ApiMakerCommandSubmitData {
     return false
   }
 
-  isObject (value) {
+  /**
+   * @param {any} value
+   * @returns {boolean}
+   */
+  isObject(value) {
     if (typeof value == "object" && value !== null && value.constructor.name == "Object") {
       return true
     }
@@ -59,7 +81,12 @@ export default class ApiMakerCommandSubmitData {
     return false
   }
 
-  traverseArray (array, type) {
+  /**
+   * @param {Array<any>} array
+   * @param {string} type
+   * @returns {Array<any>}
+   */
+  traverseArray(array, type) {
     const newArray = []
 
     for (const value of array) {
@@ -79,7 +106,12 @@ export default class ApiMakerCommandSubmitData {
     return newArray
   }
 
-  traverseObject (object, type) {
+  /**
+   * @param {Record<any, any>} object
+   * @param {string} type
+   * @returns {Record<any, any>}
+   */
+  traverseObject(object, type) {
     const newObject = {}
 
     for (const key in object) {

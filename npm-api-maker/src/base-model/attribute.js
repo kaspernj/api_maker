@@ -1,9 +1,19 @@
-import Column from "./column"
-import {digg} from "diggerize"
+// @ts-check
+
+import Column from "./column.js"
+
+/**
+ * @typedef AttributeArgType
+ * @property {string} column
+ * @property {string} name
+ * @property {boolean} selected_by_default
+ * @property {boolean} translated
+ * @property {string} type
+ */
 
 export default class ApiMakerBaseModelAttribute {
   /**
-   * @param {object>} attributeData
+   * @param {AttributeArgType} attributeData
    */
   constructor(attributeData) {
     this.attributeData = attributeData
@@ -14,7 +24,7 @@ export default class ApiMakerBaseModelAttribute {
    */
   getColumn() {
     if (!this.column) {
-      const columnData = digg(this, "attributeData", "column")
+      const columnData = this.attributeData.column
 
       if (columnData) {
         this.column = new Column(columnData)
@@ -27,13 +37,13 @@ export default class ApiMakerBaseModelAttribute {
   /**
    * @returns {boolean}
    */
-  isColumn() { return Boolean(digg(this, "attributeData", "column")) }
+  isColumn() { return Boolean(this.attributeData.column) }
 
   /**
    * @returns {boolean}
    */
   isSelectedByDefault() {
-    const isSelectedByDefault = digg(this, "attributeData", "selected_by_default")
+    const isSelectedByDefault = this.attributeData.selected_by_default
 
     if (isSelectedByDefault || isSelectedByDefault === null) return true
 
@@ -43,10 +53,10 @@ export default class ApiMakerBaseModelAttribute {
   /**
    * @returns {boolean}
    */
-  isTranslated() { return digg(this, "attributeData", "translated") }
+  isTranslated() { return this.attributeData.translated }
 
   /**
    * @returns {string}
    */
-  name() { return digg(this, "attributeData", "name")}
+  name() { return this.attributeData.name }
 }

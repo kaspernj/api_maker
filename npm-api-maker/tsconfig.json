@@ -1,0 +1,15 @@
+{
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "outDir": "build",
+    "rootDir": "src",
+    "declarationMap": true,
+    "sourceMap": true,
+    "sourceRoot": "/src"
+  }
+}

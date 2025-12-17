@@ -1,6 +1,6 @@
 import {Controller} from "stimulus"
-import {Project} from "models"
-import Params from "@kaspernj/api-maker/build/params"
+import {Project} from "models.js"
+import Params from "@kaspernj/api-maker/build/params.js"
 
 export default class ModelsCreateController extends Controller {
   connect() {

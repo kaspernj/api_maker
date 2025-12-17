@@ -1,15 +1,15 @@
-import BaseComponent from "../base-component"
-import instanceOfClassName from "../instance-of-class-name"
+import BaseComponent from "../base-component.js"
+import instanceOfClassName from "../instance-of-class-name.js"
 import Link from "../link"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import qs from "qs"
 import React, {useMemo} from "react"
 import Text from "../utils/text"
-import Result from "../result"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import urlEncode from "../url-encode"
+import Result from "../result.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import urlEncode from "../url-encode.js"
 
 export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseComponent {
   static propTypes = propTypesExact({

@@ -1,5 +1,5 @@
 import {camelize} from "inflection"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 /**
  * @returns {object}

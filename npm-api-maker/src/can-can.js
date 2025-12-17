@@ -2,7 +2,7 @@ import {digg} from "diggerize"
 import EventEmitter from "events"
 import * as inflection from "inflection"
 import {ReadersWriterLock} from "epic-locks"
-import Services from "./services"
+import Services from "./services.js"
 
 const shared = {}
 

@@ -1,6 +1,6 @@
-import CanCan from "../build/can-can"
+import CanCan from "../build/can-can.js"
 import {jest} from "@jest/globals"
-import Services from "../build/services"
+import Services from "../build/services.js"
 
 jest.mock("../build/services.js")
 

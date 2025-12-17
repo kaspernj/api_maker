@@ -1,7 +1,7 @@
 import {dig, digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import qs from "qs"
-import urlEncode from "./url-encode"
+import urlEncode from "./url-encode.js"
 
 export default class ApiMakerRoutesNative {
   constructor ({getLocale}) {

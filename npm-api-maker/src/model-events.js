@@ -1,4 +1,4 @@
-import CableConnectionPool from "./cable-connection-pool"
+import CableConnectionPool from "./cable-connection-pool.js"
 import {digg} from "diggerize"
 
 export default class ModelEvents {

@@ -1,7 +1,8 @@
 import {digg} from "diggerize"
-import memo from "set-state-compare/src/memo"
+import * as inflection from "inflection"
+import memo from "set-state-compare/build/memo.js"
 import React from "react"
-import useCollection from "./use-collection"
+import useCollection from "./use-collection.js"
 
 export default (WrappedComponent, withCollectionArgs) => memo(() => {
   const useCollectionResult = useCollection(withCollectionArgs)

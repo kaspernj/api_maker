@@ -1,17 +1,17 @@
-import BaseComponent from "../base-component"
+import BaseComponent from "../base-component.js"
 import * as inflection from "inflection"
 import Icon from "../utils/icon"
 import PropTypes from "prop-types"
 import qs from "qs"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import Text from "../utils/text"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import urlEncode from "../url-encode"
-import useSorting from "../table/use-sorting"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import urlEncode from "../url-encode.js"
+import useSorting from "../table/use-sorting.js"
 
 import Link from "../link"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseComponent {
   static propTypes = {

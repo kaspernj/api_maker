@@ -1,7 +1,7 @@
 import {digs} from "diggerize"
 import inputWrapper from "../inputs/input-wrapper"
 import {Select} from "../inputs/select"
-import InvalidFeedback from "./invalid-feedback"
+import InvalidFeedback from "./invalid-feedback.js"
 import PropTypes from "prop-types"
 import React from "react"
 

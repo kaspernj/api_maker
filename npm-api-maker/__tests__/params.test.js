@@ -1,4 +1,4 @@
-import Params from "../build/params"
+import Params from "../build/params.js"
 
 describe("Params", () => {
   describe("change", () => {

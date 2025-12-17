@@ -1,10 +1,10 @@
-import config from "./config"
-import CustomError from "./custom-error"
+import config from "./config.js"
+import CustomError from "./custom-error.js"
 import FormDataObjectizer from "form-data-objectizer"
-import Logger from "./logger"
+import Logger from "./logger.js"
 import qs from "qs"
-import SessionStatusUpdater from "./session-status-updater"
-import urlEncode from "./url-encode"
+import SessionStatusUpdater from "./session-status-updater.js"
+import urlEncode from "./url-encode.js"
 
 const logger = new Logger({name: "ApiMaker / Api"})
 

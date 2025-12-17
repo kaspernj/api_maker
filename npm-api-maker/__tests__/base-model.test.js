@@ -1,8 +1,8 @@
-import BaseModel from "../build/base-model"
+import BaseModel from "../build/base-model.js"
 import CustomError from "../build/custom-error"
 import {jest} from "@jest/globals"
 import {JSDOM} from "jsdom"
-import ValidationError from "../build/validation-error"
+import ValidationError from "../build/validation-error.js"
 import User from "./support/user"
 
 jest.mock("@rails/actioncable", () => ({

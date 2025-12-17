@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useMemo} from "react"
 import {incorporate} from "incorporator"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 
 const DefaultStyleContext = createContext({
   Text: []

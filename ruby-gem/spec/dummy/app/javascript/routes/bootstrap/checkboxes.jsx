@@ -1,7 +1,7 @@
-import {Account, Task} from "models"
+import {Account, Task} from "models.js"
 import Checkboxes from "@kaspernj/api-maker/build/bootstrap/checkboxes"
 import Layout from "components/layout"
-import Params from "@kaspernj/api-maker/build/params"
+import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
 
 export default class BootstrapCheckboxes extends React.PureComponent {

@@ -1,7 +1,7 @@
-import config from "./config"
-import Devise from "./devise"
+import config from "./config.js"
+import Devise from "./devise.js"
 import * as inflection from "inflection"
-import Logger from "./logger"
+import Logger from "./logger.js"
 import wakeEvent from "wake-event"
 
 const logger = new Logger({name: "ApiMaker / SessionStatusUpdater"})

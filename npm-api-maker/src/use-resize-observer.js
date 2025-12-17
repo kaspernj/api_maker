@@ -1,5 +1,5 @@
 import {useCallback, useLayoutEffect, useMemo} from "react"
-import useShape from "set-state-compare/src/use-shape"
+import useShape from "set-state-compare/build/use-shape.js"
 
 /**
  * @param {object} element

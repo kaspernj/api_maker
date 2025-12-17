@@ -1,4 +1,4 @@
-import CableConnectionPool from "../buikd/cable-connection-pool"
+import CableConnectionPool from "../buikd/cable-connection-pool.js"
 import CableSubscriptionPool from "../build/cable-subscription-pool"
 import {digg} from "diggerize"
 import {jest} from "@jest/globals"

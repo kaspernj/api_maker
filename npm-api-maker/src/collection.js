@@ -1,16 +1,56 @@
 import cloneDeep from "clone-deep"
-import CommandsPool from "./commands-pool"
+import CommandsPool from "./commands-pool.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import {incorporate} from "incorporator"
-import modelClassRequire from "./model-class-require"
-import Result from "./result"
+import modelClassRequire from "./model-class-require.js"
+import Result from "./result.js"
 import uniqunize from "uniqunize"
 
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ * @typedef {InstanceType<MC>} ModelOf
+ */
+
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ * @typedef {object} CollectionArgsType
+ * @property {ModelOf<MC>} [model]
+ * @property {MC} modelClass
+ * @property {string} [reflectionName]
+ */
+
+/**
+ * @typedef {object} QueryArgsType
+ * @property {Record<string, string[]>} [abilities]
+ * @property {string} [accessibleBy]
+ * @property {number} [count]
+ * @property {string} [distinct]
+ * @property {string[]} [groupBy]
+ * @property {number} [limit]
+ * @property {number} [page]
+ * @property {Record<string, any>} [params]
+ * @property {number} [per]
+ * @property {string[]} [preload]
+ * @property {Record<string, any>} [ransack]
+ * @property {Record<string, any>} [search]
+ * @property {Record<string, string[]>} [select]
+ * @property {Record<string, string[]>} [selectColumns]
+ */
+
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ */
 export default class ApiMakerCollection {
   static apiMakerType = "Collection"
 
+  /**
+   * @param {CollectionArgsType<MC>} args
+   * @param {QueryArgsType} queryArgs
+   */
   constructor(args, queryArgs = {}) {
+    if (!args.modelClass) throw new Error(`No modelClass given in ${Object.keys(args).join(", ")}`)
+
     this.queryArgs = queryArgs
     this.args = args
   }
@@ -60,7 +100,7 @@ export default class ApiMakerCollection {
 
   /**
    * @param {function(import("./base-model.js").default) : void} callback
-   * @returns {void}
+   * @returns {Promise<void>}
    */
   async each(callback) {
     const array = await this.toArray()
@@ -71,6 +111,7 @@ export default class ApiMakerCollection {
   }
 
   /**
+   * @param {...string} keys
    * @returns {this}
    */
   except(...keys) {
@@ -86,7 +127,7 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {Promise<import("./base-model.js").default>}
+   * @returns {Promise<ModelOf<MC>>}
    */
   async first() {
     const models = await this.toArray()
@@ -143,7 +184,7 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {Array<import("./base-model.js").default}
+   * @returns {Array<ModelOf<MC>>}
    */
   preloaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
@@ -154,7 +195,7 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {import("./base-model.js").default | Array<import("./base-model.js").default>}
+   * @returns {ModelOf<MC> | Array<ModelOf<MC>>}
    */
   loaded() {
     const {model, reflectionName} = this.args
@@ -177,6 +218,17 @@ export default class ApiMakerCollection {
     }
   }
 
+  /** @returns {Array<ModelOf<MC>>} */
+  loadedArray() {
+    const loaded = this.loaded()
+
+    if (Array.isArray(loaded)) {
+      return loaded
+    } else {
+      throw new Error("'loaded' wasn't an array")
+    }
+  }
+
   // Replaces the relationships with the given new collection.
   set(newCollection) {
     this.args.model.relationships[this.args.reflectionName] = newCollection
@@ -196,9 +248,23 @@ export default class ApiMakerCollection {
   }
 
   // Array shortcuts
-  find = (...args) => this.loaded().find(...args)
-  forEach = (...args) => this.loaded().forEach(...args)
-  map = (...args) => this.loaded().map(...args)
+  /**
+   * @param {function(import("./base-model.js").default): boolean} callback
+   * @returns {import("./base-model.js").default}
+   */
+  find(callback) { return this.loadedArray().find(callback) }
+
+  /**
+   * @param {function(import("./base-model.js").default): void} callback
+   * @returns {void}
+   */
+  forEach(callback) { return this.loadedArray().forEach(callback) }
+
+  /**
+   * @param {function(import("./base-model.js").default): void} callback
+   * @returns {any[]}
+   */
+  map(callback) { return this.loadedArray().map(callback) }
 
   /**
    * @param {string[]} preloadValue
@@ -383,7 +449,7 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {Promise<import("./base-model.js").default}
+   * @returns {Promise<Array<ModelOf<MC>>>}
    */
   async toArray() {
     const response = await this._response()
@@ -395,12 +461,14 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {typeof import("./base-model.js").default}
+   * @returns {MC}
    */
   modelClass() {
-    const modelName = digg(this.args.modelClass.modelClassData(), "name")
+    if (!this.args.modelClass) {
+      throw new Error("No model class given in args")
+    }
 
-    return modelClassRequire(modelName)
+    return this.args.modelClass
   }
 
   /**
@@ -426,6 +494,10 @@ export default class ApiMakerCollection {
   }
 
   _response() {
+    if (!this.args) throw new Error("No args?")
+    if (!this.args.modelClass) throw new Error("No modelClass in args")
+    if (!this.args.modelClass.modelClassData) throw new Error(`No modelClassData on modelClass ${this.args.modelClass?.name} (${typeof this.args.modelClass})`)
+
     const modelClassData = this.args.modelClass.modelClassData()
 
     return CommandsPool.addCommand(

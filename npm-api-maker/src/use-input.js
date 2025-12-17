@@ -1,10 +1,10 @@
 import {dig, digg} from "diggerize"
 import {useCallback, useEffect, useMemo, useRef} from "react"
-import idForComponent from "./inputs/id-for-component"
-import nameForComponent from "./inputs/name-for-component"
+import idForComponent from "./inputs/id-for-component.js"
+import nameForComponent from "./inputs/name-for-component.js"
 import strftime from "strftime"
-import useShape from "set-state-compare/src/use-shape"
-import useValidationErrors from "./use-validation-errors"
+import useShape from "set-state-compare/build/use-shape.js"
+import useValidationErrors from "./use-validation-errors.js"
 
 /**
  * @param {object} args

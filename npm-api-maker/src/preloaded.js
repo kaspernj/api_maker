@@ -1,5 +1,5 @@
 import * as inflection from "inflection"
-import modelClassRequire from "./model-class-require"
+import modelClassRequire from "./model-class-require.js"
 
 export default class ApiMakerPreloaded {
   constructor (response) {
