@@ -1,4 +1,4 @@
-import memo from "set-state-compare/src/memo.js"
+import memo from ""set-state-compare/build/memo.js"
 import React from "react"
 import useModel from "./use-model.js"
 

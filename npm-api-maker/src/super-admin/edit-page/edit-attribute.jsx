@@ -5,12 +5,12 @@ import EditAttributeContent from "./edit-attribute-content"
 import EditAttributeInput from "./edit-attribute-input"
 import * as inflection from "inflection"
 import Locales from "shared/locales"
-import memo from "set-state-compare/src/memo.js"
+import memo from ""set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import {View} from "react-native"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from ""set-state-compare/build/shape-component.js"
 
 export default memo(shapeComponent(class EditAttribute extends BaseComponent {
   static propTypes = propTypesExact({

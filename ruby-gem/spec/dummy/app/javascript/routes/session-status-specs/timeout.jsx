@@ -1,5 +1,5 @@
 import React, {memo} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent, ShapeComponent} from ""set-state-compare/build/shape-component.js"
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import Layout from "components/layout"
 import useEventEmitter from "@kaspernj/api-maker/build/use-event-emitter.js"

@@ -1,5 +1,5 @@
 import React, {memo} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent, ShapeComponent} from ""set-state-compare/build/shape-component.js"
 import {Account} from "models.js"
 import classNames from "classnames"
 import Devise from "@kaspernj/api-maker/build/devise.js"

@@ -1,4 +1,4 @@
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent, ShapeComponent} from ""set-state-compare/build/shape-component.js"
 import {memo, useMemo} from "react"
 import React from "react"
 import {Task} from "models.js"

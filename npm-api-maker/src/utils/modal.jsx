@@ -3,8 +3,8 @@ import React, {useMemo} from "react"
 import BaseComponent from "../base-component.js"
 import Card from "./card"
 import Icon from "../utils/icon"
-import memo from "set-state-compare/src/memo.js"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import memo from ""set-state-compare/build/memo.js"
+import {shapeComponent} from ""set-state-compare/build/shape-component.js"
 import useBreakpoint from "../use-breakpoint.js"
 
 export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComponent {

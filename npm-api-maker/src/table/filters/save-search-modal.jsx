@@ -7,8 +7,8 @@ import {Form} from "../../form"
 import Input from "../../bootstrap/input"
 import modelClassRequire from "../../model-class-require.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
-import memo from "set-state-compare/src/memo.js"
+import {shapeComponent} from ""set-state-compare/build/shape-component.js"
+import memo from ""set-state-compare/build/memo.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const TableSearch = modelClassRequire("TableSearch")

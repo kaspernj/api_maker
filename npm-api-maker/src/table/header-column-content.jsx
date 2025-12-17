@@ -1,11 +1,11 @@
 import BaseComponent from "../base-component.js"
 import {digs} from "diggerize"
-import memo from "set-state-compare/src/memo.js"
+import memo from ""set-state-compare/build/memo.js"
 import {View} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from ""set-state-compare/build/shape-component.js"
 import SortLink from "../bootstrap/sort-link"
 import Text from "../utils/text"
 

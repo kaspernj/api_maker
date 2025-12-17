@@ -1,9 +1,9 @@
 import BaseComponent from "../base-component.js"
-import memo from "set-state-compare/src/memo.js"
+import memo from ""set-state-compare/build/memo.js"
 import ModelClassTable from "./model-class-table"
 import PropTypes from "prop-types"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from ""set-state-compare/build/shape-component.js"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminIndexPage extends BaseComponent {

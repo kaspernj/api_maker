@@ -1,9 +1,9 @@
 import BaseComponent from "../base-component.js"
 import React, {createContext} from "react"
-import memo from "set-state-compare/src/memo.js"
+import memo from ""set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from ""set-state-compare/build/shape-component.js"
 
 const CurrentSwitchContext = createContext([])
 

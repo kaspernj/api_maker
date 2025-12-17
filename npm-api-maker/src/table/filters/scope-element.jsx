@@ -1,9 +1,9 @@
 import BaseComponent from "../../base-component.js"
 import PropTypes from "prop-types"
-import memo from "set-state-compare/src/memo.js"
+import memo from ""set-state-compare/build/memo.js"
 import {Pressable} from "react-native"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent} from ""set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 
 export default memo(shapeComponent(class ScopeElement extends BaseComponent {

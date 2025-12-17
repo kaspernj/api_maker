@@ -2,7 +2,7 @@ import {digs} from "diggerize"
 import Form from "components/tasks/form"
 import Layout from "components/layout"
 import React from "react"
-import Shape from "set-state-compare/src/shape"
+import Shape from ""set-state-compare/build/shape"
 import {Task} from "models.js"
 
 export default class RoutesTasksEdit extends React.PureComponent {

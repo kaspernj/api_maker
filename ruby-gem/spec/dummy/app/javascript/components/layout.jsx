@@ -1,5 +1,5 @@
 import React, {memo} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent, ShapeComponent} from ""set-state-compare/build/shape-component.js"
 import {FlashNotifications} from "flash-notifications"
 import Link from "@kaspernj/api-maker/build/link"
 import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"

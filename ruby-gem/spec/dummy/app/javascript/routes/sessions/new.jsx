@@ -1,5 +1,5 @@
 import React, {memo, useRef} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component.js"
+import {shapeComponent, ShapeComponent} from ""set-state-compare/build/shape-component.js"
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import {FlashNotifications} from "flash-notifications"
