@@ -1,5 +1,5 @@
 import React, {memo} from "react"
-import {shapeComponent, ShapeComponent} from ""set-state-compare/build/shape-component.js"
+import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import Layout from "components/layout"
 import {Task} from "models.js"
 import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event.js"

@@ -5,7 +5,7 @@ import * as inflection from "inflection"
 import isExpo from "./is-expo.js"
 import useEventEmitter from "./use-event-emitter.js"
 import useEventListener from "./use-event-listener.js"
-import useShape from ""set-state-compare/build/use-shape.js"
+import useShape from "set-state-compare/build/use-shape.js"
 
 function calculateBreakPoint(breakpoints) {
   let windowWidth

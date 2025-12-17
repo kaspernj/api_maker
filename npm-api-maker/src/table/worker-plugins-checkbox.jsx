@@ -2,11 +2,11 @@ import React, {useMemo} from "react"
 import BaseComponent from "../base-component.js"
 import classNames from "classnames"
 import {digg} from "diggerize"
-import memo from ""set-state-compare/build/memo.js"
+import memo from "set-state-compare/build/memo.js"
 import modelClassRequire from "../model-class-require.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {shapeComponent} from ""set-state-compare/build/shape-component.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useModelEvent from "../use-model-event.js"
 
 const Workplace = modelClassRequire("Workplace")

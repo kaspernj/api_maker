@@ -1,9 +1,9 @@
 import React, {useMemo} from "react"
 import classNames from "classnames"
-import memo from ""set-state-compare/build/memo.js"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent, ShapeComponent} from ""set-state-compare/build/shape-component.js"
+import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "./text"
 import {View} from "react-native"
 

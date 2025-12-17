@@ -4,7 +4,7 @@ import * as inflection from "inflection"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {useCallback, useMemo} from "react"
-import useShape from ""set-state-compare/build/use-shape.js"
+import useShape from "set-state-compare/build/use-shape.js"
 
 const useRouterPropTypes = propTypesExact({
   locales: PropTypes.array.isRequired,

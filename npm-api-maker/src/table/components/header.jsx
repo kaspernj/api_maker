@@ -1,8 +1,8 @@
 import BaseComponent from "../../base-component.js"
 import classNames from "classnames"
-import memo from ""set-state-compare/build/memo.js"
+import memo from "set-state-compare/build/memo.js"
 import React from "react"
-import {shapeComponent} from ""set-state-compare/build/shape-component.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Animated} from "react-native"
 
 export default memo(shapeComponent(class SharedTableHeader extends BaseComponent {

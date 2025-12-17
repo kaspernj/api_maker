@@ -1,10 +1,10 @@
 import BaseComponent from "../base-component.js"
 import {digg} from "diggerize"
 import Link from "../link"
-import memo from ""set-state-compare/build/memo.js"
+import memo from "set-state-compare/build/memo.js"
 import Params from "../params.js"
 import React from "react"
-import {shapeComponent} from ""set-state-compare/build/shape-component.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
 import {useMemo} from "react"
 

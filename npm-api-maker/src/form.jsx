@@ -1,10 +1,10 @@
 import React, {createContext, useContext, useEffect, useMemo} from "react"
 import BaseComponent from "./base-component.js"
 import FormDataObjectizer from "form-data-objectizer"
-import memo from ""set-state-compare/build/memo.js"
+import memo from "set-state-compare/build/memo.js"
 import {Platform} from "react-native"
 import PropTypes from "prop-types"
-import {shapeComponent} from ""set-state-compare/build/shape-component.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 
 const FormContext = createContext(null)
 const useForm = () => useContext(FormContext)
