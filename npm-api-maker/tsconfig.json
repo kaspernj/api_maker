@@ -8,6 +8,8 @@
     "jsx": "react-jsx",
     "outDir": "build",
     "rootDir": "src",
-    "declarationMap": true
+    "declarationMap": true,
+    "sourceMap": true,
+    "sourceRoot": "/src"
   }
 }

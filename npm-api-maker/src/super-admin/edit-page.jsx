@@ -6,6 +6,7 @@ import EditAttribute from "./edit-page/edit-attribute"
 import {FlashNotifications} from "flash-notifications"
 import {Form} from "../form"
 import * as inflection from "inflection"
+// @ts-expect-error
 import Locales from "shared/locales"
 import memo from "set-state-compare/src/memo.js"
 import Params from "../params.js"
