@@ -6,13 +6,15 @@ import errorMessages from "./error-messages"
 /**
  * @typedef {object} BaseErrorArgsType
  * @property {boolean} [addResponseErrorsToErrorMessage]
+ * @property {import("./base-model.js").default} [model]
  * @property {object} response
- * @property {string[]} response.validation_errors
- * @property {import("./error-messages.js").ErrorMessagesArgsType} response.errors
+ * @property {string[]} [response.validation_errors]
+ * @property {import("./error-messages.js").ErrorMessagesArgsType} [response.errors]
  */
 
 export default class BaseError extends Error {
   static apiMakerType = "BaseError"
+  apiMakerType = "BaseError"
 
   /**
    * @param {string} message

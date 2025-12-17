@@ -8,19 +8,19 @@ import useShape from "set-state-compare/src/use-shape.js"
 /**
  * @param {function} modelClass
  * @param {function} onCreated
- * @param {object} args
- * @param {boolean} args.active
- * @param {number} args.debounce
- * @param {function} args.onConnected
+ * @param {object} [args]
+ * @param {boolean} [args.active]
+ * @param {number} [args.debounce]
+ * @param {function} [args.onConnected]
  * @returns {void}
  */
-const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {}) => {
+const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {active: true, debounce: 0, onConnected: undefined}) => {
   const {active = true, debounce} = args
   const s = useShape({active, debounce, modelClass, onCreated})
 
   const eventDebounce = useCallback(() => {
     if (!s.meta.debounceInstance) {
-      if (typeof this.props.debounce == "number") {
+      if (typeof s.props.debounce == "number") {
         s.meta.debounceInstance = debounceFunction(s.p.onCreated, s.p.debounce)
       } else {
         s.meta.debounceInstance = debounceFunction(s.p.onCreated)

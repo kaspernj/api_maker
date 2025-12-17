@@ -77,7 +77,7 @@ export default class ModelsCustomValidationError extends React.PureComponent {
     } catch(error) {
       FlashNotifications.errorResponse(error)
 
-      if (error instanceof ValidationError) {
+      if (error.apiMakerType == "ValidationError") {
         this.setState({
           errorForProjectName: error.hasValidationErrorForAttribute("name")
         })

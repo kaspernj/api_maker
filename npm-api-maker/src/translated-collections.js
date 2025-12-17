@@ -1,5 +1,7 @@
 import {digg} from "diggerize"
 import I18nOnSteroids from "i18n-on-steroids"
+
+// @ts-expect-error
 import translatedCollectionsData from "translated-collections-data.json"
 
 export default class ApiMakerTranslatedCollections {

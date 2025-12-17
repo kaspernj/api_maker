@@ -7,10 +7,50 @@ import modelClassRequire from "./model-class-require.js"
 import Result from "./result.js"
 import uniqunize from "uniqunize"
 
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ * @typedef {InstanceType<MC>} ModelOf
+ */
+
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ * @typedef {object} CollectionArgsType
+ * @property {ModelOf<MC>} [model]
+ * @property {MC} modelClass
+ * @property {string} [reflectionName]
+ */
+
+/**
+ * @typedef {object} QueryArgsType
+ * @property {Record<string, string[]>} [abilities]
+ * @property {string} [accessibleBy]
+ * @property {number} [count]
+ * @property {string} [distinct]
+ * @property {string[]} [groupBy]
+ * @property {number} [limit]
+ * @property {number} [page]
+ * @property {Record<string, any>} [params]
+ * @property {number} [per]
+ * @property {string[]} [preload]
+ * @property {Record<string, any>} [ransack]
+ * @property {Record<string, any>} [search]
+ * @property {Record<string, string[]>} [select]
+ * @property {Record<string, string[]>} [selectColumns]
+ */
+
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ */
 export default class ApiMakerCollection {
   static apiMakerType = "Collection"
 
+  /**
+   * @param {CollectionArgsType<MC>} args
+   * @param {QueryArgsType} queryArgs
+   */
   constructor(args, queryArgs = {}) {
+    if (!args.modelClass) throw new Error(`No modelClass given in ${Object.keys(args).join(", ")}`)
+
     this.queryArgs = queryArgs
     this.args = args
   }
@@ -87,7 +127,7 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {Promise<import("./base-model.js").default>}
+   * @returns {Promise<ModelOf<MC>>}
    */
   async first() {
     const models = await this.toArray()
@@ -144,7 +184,7 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {Array<import("./base-model.js").default}
+   * @returns {Array<ModelOf<MC>>}
    */
   preloaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
@@ -155,7 +195,7 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {import("./base-model.js").default | Array<import("./base-model.js").default>}
+   * @returns {ModelOf<MC> | Array<ModelOf<MC>>}
    */
   loaded() {
     const {model, reflectionName} = this.args
@@ -178,7 +218,7 @@ export default class ApiMakerCollection {
     }
   }
 
-  /** @returns {Array<import("./base-model.js").default>} */
+  /** @returns {Array<ModelOf<MC>>} */
   loadedArray() {
     const loaded = this.loaded()
 
@@ -409,7 +449,7 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {Promise<import("./base-model.js").default}
+   * @returns {Promise<Array<ModelOf<MC>>>}
    */
   async toArray() {
     const response = await this._response()
@@ -421,12 +461,14 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @returns {typeof import("./base-model.js").default}
+   * @returns {MC}
    */
   modelClass() {
-    const modelName = digg(this.args.modelClass.modelClassData(), "name")
+    if (!this.args.modelClass) {
+      throw new Error("No model class given in args")
+    }
 
-    return modelClassRequire(modelName)
+    return this.args.modelClass
   }
 
   /**
@@ -452,6 +494,10 @@ export default class ApiMakerCollection {
   }
 
   _response() {
+    if (!this.args) throw new Error("No args?")
+    if (!this.args.modelClass) throw new Error("No modelClass in args")
+    if (!this.args.modelClass.modelClassData) throw new Error(`No modelClassData on modelClass ${this.args.modelClass?.name} (${typeof this.args.modelClass})`)
+
     const modelClassData = this.args.modelClass.modelClassData()
 
     return CommandsPool.addCommand(

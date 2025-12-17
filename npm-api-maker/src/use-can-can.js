@@ -45,6 +45,7 @@ export default function useCanCan(abilitiesCallback, dependencies) {
   }, [])
 
   if (!dependencies) {
+    // @ts-expect-error
     dependencies = [currentUser?.id()]
   }
 
