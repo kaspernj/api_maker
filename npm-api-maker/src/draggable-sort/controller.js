@@ -1,5 +1,5 @@
 import {digg} from "diggerize"
-import EventEmitter from "events"
+import {EventEmitter} from "eventemitter3"
 
 export default class DraggableSortController {
   constructor({data, events, keyExtractor}) {

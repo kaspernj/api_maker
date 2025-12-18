@@ -1,6 +1,6 @@
 import {useContext} from "react"
 import Devise from "./devise.js"
-import EventEmitter from "events"
+import {EventEmitter} from "eventemitter3"
 import Logger from "./logger.js"
 
 const events = new EventEmitter()

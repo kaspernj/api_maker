@@ -1,4 +1,4 @@
-import EventEmitter from "events"
+import {EventEmitter} from "eventemitter3"
 import * as inflection from "inflection"
 
 const accessors = {
@@ -32,7 +32,6 @@ class ApiMakerConfig {
     this.global = globalThis.apiMakerConfigGlobal
 
     this.events = new EventEmitter()
-    this.events.setMaxListeners(Infinity)
   }
 
   getEvents = () => this.events

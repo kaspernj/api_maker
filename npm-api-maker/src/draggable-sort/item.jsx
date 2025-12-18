@@ -1,7 +1,7 @@
 import React, {useMemo} from "react"
 import {Animated, Easing, PanResponder} from "react-native"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import EventEmitter from "events"
+import {EventEmitter} from "eventemitter3"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"

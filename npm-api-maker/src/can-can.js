@@ -1,5 +1,5 @@
 import {digg} from "diggerize"
-import EventEmitter from "events"
+import {EventEmitter} from "eventemitter3"
 import * as inflection from "inflection"
 import {ReadersWriterLock} from "epic-locks"
 import Services from "./services.js"
