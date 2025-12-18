@@ -5,6 +5,7 @@
   "files": [
     "build/**"
   ],
+  "types": "build/index.d.ts",
   "main": "build/index.js",
   "scripts": {
     "build": "rm -rf build && tsc -p tsconfig.json || true",
