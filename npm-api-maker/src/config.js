@@ -32,7 +32,6 @@ class ApiMakerConfig {
     this.global = globalThis.apiMakerConfigGlobal
 
     this.events = new EventEmitter()
-    this.events.setMaxListeners(Infinity)
   }
 
   getEvents = () => this.events
