@@ -5,11 +5,12 @@
     "checkJs": true,
     "declaration": true,
     "esModuleInterop": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "jsx": "react-jsx",
     "outDir": "build",
     "rootDir": "src",
     "declarationMap": true,
-    "sourceMap": true,
     "sourceRoot": "/src",
     "target": "ES2024"
   }

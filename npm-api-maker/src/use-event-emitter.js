@@ -7,7 +7,7 @@ import {useEffect, useLayoutEffect, useMemo} from "react"
  * @param {function} onCalled
  * @return {void}
  */
-const ApiMakerUseEventEmitter = (events, event, onCalled) => {
+export default function ApiMakerUseEventEmitter(events, event, onCalled) {
   const {isServer} = useEnvSense()
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect
 
@@ -27,5 +27,3 @@ const ApiMakerUseEventEmitter = (events, event, onCalled) => {
     }
   }, [events, event, onCalled])
 }
-
-export default ApiMakerUseEventEmitter
