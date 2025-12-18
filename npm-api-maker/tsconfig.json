@@ -8,6 +8,8 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "jsx": "react-jsx",
+    "moduleResolution": "nodenext",
+    "module": "nodenext",
     "outDir": "build",
     "rootDir": "src",
     "declarationMap": true,

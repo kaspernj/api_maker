@@ -44,6 +44,7 @@
     "diggerize": ">= 1.0.5",
     "env-sense": "^1.0.1",
     "epic-locks": ">= 1.0.2",
+    "eventemitter3": "^5.0.1",
     "file-saver": "^2.0.5",
     "form-data-objectizer": ">= 1.0.0",
     "form-serialize": ">= 0.7.2",
