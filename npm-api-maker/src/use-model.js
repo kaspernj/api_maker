@@ -6,15 +6,19 @@ import useQueryParams from "on-location-changed/build/use-query-params.js"
 import useShape from "set-state-compare/build/use-shape.js"
 
 /**
+ * @typedef {object} useModelArgs
+ * @property {(arg: object) => function} [callback]
+ * @property {(arg: object) => object} [args]
+ * @property {() => number|string} [loadByQueryParam]
+ * @property {any[]} [cacheArgs]
+ * @property {{params: object}} [match]
+ * @property {(ctx: { model: import("./base-model.js").default }) => void} [onDestroyed]
+ * @property {import("./collection.js").default} [query]
+ */
+
+/**
  * @param {function|object} modelClassArg
- * @param {object} argsArg
- * @param {(arg: object) => function} argsArg.callback
- * @param {(arg: object) => object} argsArg.args
- * @param {() => number|string} argsArg.loadByQueryParam
- * @param {any[]} argsArg.cacheArgs
- * @param {{params: object}} argsArg.match
- * @param {(ctx: { model: import("./base-model.js").default }) => void} argsArg.onDestroyed
- * @param {import("./collection.js").default} argsArg.query
+ * @param {object | function({modelClass: typeof import("./base-model.js").default}): useModelArgs} [argsArg]
  */
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
