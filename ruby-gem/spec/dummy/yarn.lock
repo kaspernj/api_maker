@@ -2289,10 +2289,10 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-"diggerize@>= 1.0.5", diggerize@^1.0.3, diggerize@^1.0.5, diggerize@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.9.tgz#40c8dbdf7e30cd8c3362ead8c3a57c6764814d25"
-  integrity sha512-DY1H4k78K51p8Yxmm2GgKbiDdfW/fWnJY3tpBEkgPCKdirZ9YH6QwQbisgMOSsEI73QTa00ryX2pe/uRznJkXw==
+"diggerize@>= 1.0.5", diggerize@^1.0.10, diggerize@^1.0.3, diggerize@^1.0.5, diggerize@^1.0.9:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/diggerize/-/diggerize-1.0.10.tgz#00a09f7ded60d4baeaecc4eec2abfe1c2891514a"
+  integrity sha512-Q3HUtotftOZxFSir9Ll3PztAlFNfsXt+PsJOXOlpLExXQG7eIIMVKr8/RnOZDsoYCHC+mhXROh7M/N0gOELBYQ==
 
 dns-packet@^5.2.2:
   version "5.4.0"
