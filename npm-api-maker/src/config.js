@@ -30,11 +30,16 @@ class ApiMakerConfig {
     if (!globalThis.apiMakerConfigGlobal) globalThis.apiMakerConfigGlobal = {}
 
     this.global = globalThis.apiMakerConfigGlobal
-
     this.events = new EventEmitter()
   }
 
-  getEvents = () => this.events
+  getEvents() { return this.events }
+
+  /** @returns {import("history").BrowserHistory} */
+  getHistory() { throw new Error("'getHistory' not implemented") }
+
+  /** @returns {string} */
+  getHost() { throw new Error("'getHost' not implemented") }
 }
 
 for (const accessorName in accessors) {

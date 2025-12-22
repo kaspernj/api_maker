@@ -24,6 +24,7 @@ export default class ApiMakerDevise {
     events.emit("onDeviseSignOut", {args})
   }
 
+  /** @returns {ApiMakerDevise} */
   static current() {
     if (!shared.currentApiMakerDevise) {
       shared.currentApiMakerDevise = new ApiMakerDevise()
