@@ -4,9 +4,7 @@
  */
 
 export default class ApiMakerBaseModelColumn {
-  /**
-   * @param {ColumnArgType} columnData
-   */
+  /** @param {ColumnArgType} columnData */
   constructor(columnData) {
     if (!columnData) {
       throw new Error("No column data was given")

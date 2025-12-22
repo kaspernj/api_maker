@@ -5,7 +5,7 @@ import ModelsResponseReader from "./models-response-reader.js"
 import Money from "js-money"
 
 export default class ApiMakerDeserializer {
-  static parse (object) {
+  static parse(object) {
     if (Array.isArray(object)) {
       return object.map((value) => ApiMakerDeserializer.parse(value))
     } else if (object && typeof object == "object") {

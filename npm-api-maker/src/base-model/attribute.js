@@ -12,9 +12,7 @@ import Column from "./column.js"
  */
 
 export default class ApiMakerBaseModelAttribute {
-  /**
-   * @param {AttributeArgType} attributeData
-   */
+  /** @param {AttributeArgType} attributeData */
   constructor(attributeData) {
     this.attributeData = attributeData
   }
@@ -34,14 +32,10 @@ export default class ApiMakerBaseModelAttribute {
     return this.column
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isColumn() { return Boolean(this.attributeData.column) }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isSelectedByDefault() {
     const isSelectedByDefault = this.attributeData.selected_by_default
 
@@ -50,13 +44,9 @@ export default class ApiMakerBaseModelAttribute {
     return false
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isTranslated() { return this.attributeData.translated }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {string} */
   name() { return this.attributeData.name }
 }

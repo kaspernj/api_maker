@@ -3,29 +3,29 @@ import * as inflection from "inflection"
 import modelClassRequire from "../model-class-require.js"
 
 export default class ApiMakerBaseModelReflection {
+  /**
+   * @param {object} reflectionData
+   * @param {string} reflectionData.foreignKey
+   * @param {string} reflectionData.marco
+   * @param {string} reflectionData.resource_name
+   * @param {string} reflectionData.name
+   * @param {string} reflectionData.through
+   */
   constructor(reflectionData) {
     this.reflectionData = reflectionData
   }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {string} */
   foreignKey() { return digg(this, "reflectionData", "foreignKey") }
 
   macro() { return digg(this, "reflectionData", "macro") }
 
-  /**
-   * @returns {typeof import("../base-model.js").default}
-   */
+  /** @returns {typeof import("../base-model.js").default} */
   modelClass() { return modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "resource_name")))) }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {string} */
   name() { return inflection.camelize(digg(this, "reflectionData", "name"), true) }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {string} */
   through() { return digg(this, "reflectionData", "through") }
 }
