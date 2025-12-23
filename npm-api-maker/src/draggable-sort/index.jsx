@@ -16,6 +16,9 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
   panResponder
 
   static defaultProps = {
+    cacheKeyExtractor: null,
+    data: [],
+    dataSet: undefined,
     horizontal: false
   }
 
