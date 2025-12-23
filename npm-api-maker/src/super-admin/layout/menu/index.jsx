@@ -10,13 +10,17 @@ import MenuItem from "./menu-item"
 import Params from "../../../params.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import React from "react"
+import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../../utils/text"
 import useBreakpoint from "../../../use-breakpoint.js"
 import useCurrentUser from "../../../use-current-user.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import {WithDefaultStyle} from "../../../utils/default-style"
+
+// Hook for consistent menu logo link styling (replaces SCSS)
+export const useMenuLogoLinkStyle = () =>
+  useMemo(() => ({color: "#dededf", textDecorationLine: "none"}), [])
 
 const styles = StyleSheet.create({
   root: {
@@ -72,6 +76,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
 
   render() {
     const {currentUser, lgUp, mdDown, mdUp, t} = this.tt
+    const menuLogoLinkStyle = useMenuLogoLinkStyle()
     const {active, noAccess, triggered} = this.props
 
     const style = [styles.root.base]
@@ -98,11 +103,14 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
           >
             <Link dataSet={this.cache("menuLogoLinkDataSet", {class: "menu-logo-link"})} to={Params.withParams({})}>
               <Text
-                style={this.cache("menuLogoLinkTextStyle", {
-                  fontSize: 42,
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap"
-                })}
+                style={[
+                  menuLogoLinkStyle,
+                  this.cache("menuLogoLinkTextStyle", {
+                    fontSize: 42,
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  })
+                ]}
               >
                 Admin
               </Text>

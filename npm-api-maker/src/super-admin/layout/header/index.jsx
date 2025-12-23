@@ -1,5 +1,4 @@
-// import "../../../../src/super-admin/layout/header/style"
-import React, {useRef} from "react"
+import React, {useCallback, useRef} from "react"
 import BaseComponent from "../../../base-component.js"
 import Icon from "../../../utils/icon"
 import memo from "set-state-compare/build/memo.js"
@@ -10,6 +9,37 @@ import Text from "../../../utils/text"
 import {Pressable, View} from "react-native"
 import useBreakpoint from "../../../use-breakpoint.js"
 import useEventListener from "../../../use-event-listener.js"
+
+// Hook for consistent action button styling across breakpoints
+export const useHeaderActionButtonStyle = () => {
+  const {mdUp} = useBreakpoint()
+
+  return useCallback(({stackedIndex = 0} = {}) => {
+    const base = mdUp
+      ? {
+          alignSelf: "flex-start",
+          paddingVertical: 7,
+          paddingHorizontal: 10,
+          borderWidth: 1,
+          borderColor: "#cbd5e1",
+          marginRight: 4,
+          marginBottom: 4,
+          borderRadius: 5,
+          fontSize: 13
+        }
+      : {
+          alignSelf: "stretch",
+          padding: 11
+        }
+
+    if (!mdUp && stackedIndex > 0) {
+      base.borderTopWidth = 1
+      base.borderTopColor = "#c9c9c9"
+    }
+
+    return base
+  }, [mdUp])
+}
 
 export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -46,7 +76,11 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
     }
 
     const headerActionsContainerStyle = {}
-    const headerActionsStyle = {}
+    const headerActionsStyle = {
+      flexDirection: mdUp ? "row" : "column",
+      alignItems: mdUp ? "flex-start" : "stretch",
+      gap: mdUp ? 8 : 0
+    }
 
     if (breakpoint == "xs" || breakpoint == "sm") {
       headerStyle.position = "absolute"
@@ -63,7 +97,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
         alignItems: "center",
         justifyContent: "center",
 
-        background: "rgba(#000, .8)"
+        backgroundColor: "rgba(0, 0, 0, 0.8)"
       })
 
       if (!this.s.headerActionsActive) {
@@ -99,12 +133,12 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
         {actions &&
           <View dataSet={{active: this.s.headerActionsActive, class: "header-actions-container"}} style={headerActionsContainerStyle}>
             <View
-              dataSet={this.cache("headerActionsViewDataSet", {class: "header-actions"})}
-              ref={this.tt.headerActionsRef}
-              style={headerActionsStyle}
-            >
-              {actions}
-            </View>
+            dataSet={this.cache("headerActionsViewDataSet", {class: "header-actions"})}
+            ref={this.tt.headerActionsRef}
+            style={headerActionsStyle}
+          >
+            {actions}
+          </View>
           </View>
         }
         {!mdUp &&
