@@ -1,9 +1,10 @@
 export default class ApiMakerResult {
-  /**
-   * @param {object} data
-   * @param {import("./collection.js").default} data.collection
-   * @param {object} data.response
-   */
+ /**
+  * @param {object} data
+  * @param {import("./collection.js").default} data.collection
+  * @param {object} data.response
+   * @param {Array<import("./base-model.js").default>} [data.models]
+  */
   constructor (data) {
     this.data = data
   }

@@ -183,7 +183,7 @@ export default class ApiMakerCableSubscriptionPool {
     subscription.events.addListener("unsubscribed", () => {
       logger.debug("Call onUnsubscribe on self")
 
-      this.onUnsubscribe(subscription)
+      this.onUnsubscribe()
     })
   }
 }

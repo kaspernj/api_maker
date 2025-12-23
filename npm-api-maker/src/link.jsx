@@ -48,7 +48,7 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
     }
   }
 
-  onPress = () => {
+  onPress = (e, ...restArgs) => {
     const {onClick, onPress} = this.props
 
     if (onClick) {

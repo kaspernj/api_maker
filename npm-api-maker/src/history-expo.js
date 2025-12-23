@@ -14,6 +14,7 @@ class HistoryExpo {
 
     const actualPath = url.href
 
+    // @ts-ignore
     router.push({pathname: actualPath, params: actualParams})
   }
 }

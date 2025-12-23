@@ -33,6 +33,7 @@ import uniqunize from "uniqunize"
  * @property {string[]} [preload]
  * @property {Record<string, any>} [ransack]
  * @property {Record<string, any>} [search]
+ * @property {string} [searchKey]
  * @property {Record<string, string[]>} [select]
  * @property {Record<string, string[]>} [selectColumns]
  */

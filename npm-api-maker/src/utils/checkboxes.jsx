@@ -78,8 +78,8 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckboxes extends ShapeCo
     })
 
     useMemo(() => {
-      if (this.form && inputProps.name) {
-        this.form.setValue(inputProps.name, this.s.checkedOptions)
+      if (this.tt.form && inputProps.name) {
+        this.tt.form.setValue(inputProps.name, this.s.checkedOptions)
       }
     }, [])
   }

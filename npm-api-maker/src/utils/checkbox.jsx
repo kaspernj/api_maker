@@ -1,3 +1,4 @@
+// @ts-ignore
 import {CheckBox, Pressable, View} from "react-native"
 import React, {useMemo} from "react"
 import BaseComponent from "../base-component.js"

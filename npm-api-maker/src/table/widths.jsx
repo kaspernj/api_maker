@@ -56,10 +56,10 @@ export default class TableWidths {
         column.animatedWidth = new Animated.Value(newWidth)
         column.width = newWidth
 
-        updateData << {
+        updateData.push({
           id: tableSettingColumn.id(),
           width: newWidth
-        }
+        })
       }
     }
 

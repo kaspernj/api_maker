@@ -12,12 +12,14 @@ export default class ApiMakerDeserializer {
       if (object.api_maker_type == "date") {
         const date = new Date(digg(object, "value"))
 
+        // @ts-ignore
         date.apiMakerType = "date"
 
         return date
       } else if (object.api_maker_type == "time") {
         const date = new Date(digg(object, "value"))
 
+        // @ts-ignore
         date.apiMakerType = "time"
 
         return date

@@ -21,7 +21,7 @@ export default memo(shapeComponent(class SuperAdminShowReflectionActions extends
     const {modelClass, reflectionName} = this.p
 
     this.reflection = useMemo(() => modelClass.reflections().find((reflection) => reflection.name() == reflectionName), [modelClass, reflectionName])
-    this.canCan = useCanCan(() => [[this.reflection.modelClass(), ["new"]]])
+    this.canCan = useCanCan(() => [[this.reflection.modelClass(), ["new"]]], [modelClass, reflectionName])
   }
 
   render() {

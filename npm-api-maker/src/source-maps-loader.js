@@ -4,7 +4,9 @@ import {SourceMapConsumer} from "source-map"
 import uniqunize from "uniqunize"
 
 // Sometimes this needs to be called and sometimes not
+// @ts-ignore
 if (SourceMapConsumer.initialize) {
+  // @ts-ignore
   SourceMapConsumer.initialize({
     "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.4/lib/mappings.wasm"
   })

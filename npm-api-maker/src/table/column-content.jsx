@@ -6,7 +6,7 @@ import React from "react"
 import Text from "../utils/text"
 
 export default class ApiMakerTableColumnContent {
-  constructor({column, l, mode = "react-native", model, t, table}) {
+  constructor({column, l, mode = "react-native", model, t = undefined, table}) {
     this.column = column
     this.l = l
     this.mode = mode
@@ -106,6 +106,9 @@ export default class ApiMakerTableColumnContent {
     return <Text>{contentText}</Text>
   }
 
+  /**
+   * @param {{apiMakerType?: any, value: any}} args
+   */
   presentDateTime = ({apiMakerType, value}) => {
     if (!apiMakerType || apiMakerType == "time") {
       const dateTimeFormatName = this.table.props.defaultDateTimeFormatName || "time.formats.default"

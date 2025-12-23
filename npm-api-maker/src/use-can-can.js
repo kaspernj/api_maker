@@ -6,7 +6,7 @@ import useShape from "set-state-compare/build/use-shape.js"
 
 /**
  * @param {function() : Array} abilitiesCallback
- * @param {Array} dependencies
+ * @param {Array} [dependencies]
  * @returns {CanCan}
  */
 export default function useCanCan(abilitiesCallback, dependencies) {

@@ -44,8 +44,8 @@ export default class ApiMakerRoutesNative {
           localizedRoutes[locale] = localizedPathParts
         }
 
-        this[pathMethodName] = (...args) => this.translateRoute({args, localizedRoutes})
-        this[urlMethodName] = (...args) => this.translateRoute({args, localizedRoutes, url: true})
+        this[pathMethodName] = (...args) => this.translateRoute(/** @type {any} */ ({args, localizedRoutes}))
+        this[urlMethodName] = (...args) => this.translateRoute(/** @type {any} */ ({args, localizedRoutes, url: true}))
       } else {
         let variableCount = 0
 
@@ -59,8 +59,8 @@ export default class ApiMakerRoutesNative {
           }
         })
 
-        this[pathMethodName] = (...args) => this.translateRoute({args, pathParts})
-        this[urlMethodName] = (...args) => this.translateRoute({args, pathParts, url: true})
+        this[pathMethodName] = (...args) => this.translateRoute(/** @type {any} */ ({args, pathParts}))
+        this[urlMethodName] = (...args) => this.translateRoute(/** @type {any} */ ({args, pathParts, url: true}))
       }
     }
   }

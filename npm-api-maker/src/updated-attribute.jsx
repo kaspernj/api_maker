@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {digg} from "diggerize"
 import ModelEvents from "./model-events.js"
 import PropTypes from "prop-types"

@@ -79,7 +79,7 @@ export default class MoneyFormatter {
       integerSeparator: I18nOnSteroids.getCurrent().t("number.currency.format.delimiter")
     }
 
-    return formatNumber(formatOptions)(amount)
+    return formatNumber(formatOptions)(Number(amount))
   }
 
   decimalDigits () {

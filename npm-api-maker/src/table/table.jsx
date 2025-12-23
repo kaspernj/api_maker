@@ -95,6 +95,8 @@ const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extend
 }))
 
 export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
+  t = (...args) => this.tt.t?.(...args)
+
   static defaultProps = {
     card: true,
     currentUser: null,
@@ -234,23 +236,23 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       select = selectCalculator({table: this})
     }
 
-    this.collection = useCollection({
-      abilities: this.abilitiesToLoad(),
+    this.collection = /** @type {any} */ (useCollection({
+      abilities: /** @type {Record<string, string[]>} */ (this.abilitiesToLoad()),
       defaultParams: this.props.defaultParams,
       collection: this.props.collection,
       groupBy: this.props.groupBy,
-      ifCondition: collectionReady,
+      ifCondition: () => collectionReady,
       modelClass: this.props.modelClass,
       onModelsLoaded: this.props.onModelsLoaded,
       noRecordsAvailableContent: this.props.noRecordsAvailableContent,
       noRecordsFoundContent: this.props.noRecordsFoundContent,
       pagination: true,
-      preloads: this.state.preload,
+      preloads: this.s.preload,
       queryMethod: this.props.queryMethod,
       queryName,
       select,
       selectColumns: this.props.selectColumns
-    })
+    }))
     this.queryWithoutPagination = useMemo(
       () => this.collection?.query?.clone()?.except("page"),
       [this.collection.query]
@@ -267,7 +269,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   async loadCurrentWorkplace() {
     const Workplace = modelClassRequire("Workplace")
-    const result = await Workplace.current()
+    const WorkplaceModel = /** @type {any} */ (Workplace)
+    const result = await WorkplaceModel.current()
     const currentWorkplace = digg(result, "current", 0)
 
     this.setState({currentWorkplace})
@@ -312,7 +315,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     })
   }
 
-  updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.state.tableSetting.fullCacheKey()})
+  updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.s.tableSetting.fullCacheKey()})
 
   columnsAsArray = () => {
     if (typeof this.props.columns == "function") {
@@ -613,7 +616,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   onFilterClicked = (e) => {
     e.preventDefault()
-    this.setState({showFilters: !this.state.showFilters})
+    this.setState({showFilters: !this.s.showFilters})
   }
 
   onPerPageChanged = (e) => {
@@ -714,6 +717,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return actualStyle
   }
 
+  /**
+   * @param {{even?: boolean}} [args]
+   */
   styleForRow = ({even} = {}) => {
     const actualStyle = {
       flex: 1,

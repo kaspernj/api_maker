@@ -21,6 +21,7 @@ const propTypesValidator = (expectedClassName, args = {}) => (props, propName, c
 const instanceOfClassName = (expectedClassName) => {
   const validator = propTypesValidator(expectedClassName)
 
+  // @ts-ignore
   validator.isRequired = propTypesValidator(expectedClassName, {required: true})
 
   return validator

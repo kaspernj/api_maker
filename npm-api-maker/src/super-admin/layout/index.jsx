@@ -16,7 +16,7 @@ import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const NoAccess = React.lazy(() => import("./no-access"))
 
-const styles = StyleSheet.create({
+const styles = /** @type {any} */ (StyleSheet.create({
   appLayoutContentContainer: {
     base: {
       minHeight: "100vh",
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     color: "#000"
   }
-})
+}))
 
 export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseComponent {
   static propTypes = PropTypesExact({

@@ -178,7 +178,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     const actualComponentPath = this.props.componentPath || this.tt.componentPathParts.join("/")
     let Component
 
-    this.log(() => ["loadComponent", {componentPath: this.props.componentPath, componentPathParts: this.componentPathParts, actualComponentPath}])
+    this.log(() => ["loadComponent", {componentPath: this.props.componentPath, componentPathParts: this.tt.componentPathParts, actualComponentPath}])
 
     try {
       const componentImport = await this.tt.requireComponent({routeDefinition: {component: actualComponentPath}})

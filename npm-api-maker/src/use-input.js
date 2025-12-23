@@ -9,13 +9,14 @@ import useValidationErrors from "./use-validation-errors.js"
 /**
  * @param {object} args
  * @param {object} args.props
- * @param {object} args.props.inputRef
- * @param {string} args.props.type
- * @param {object} args.props.inputProps
- * @param {string} args.props.inputProps.name
- * @param {object} args.props.inputProps.wrapperOpts
- * @param {object} args.wrapperOptions
- * @param {string} args.wrapperOptions.type
+ * @param {object} [args.props.inputRef]
+ * @param {string} [args.props.type]
+ * @param {object} [args.props.wrapperOpts]
+ * @param {object} [args.props.inputProps]
+ * @param {string} [args.props.inputProps.name]
+ * @param {object} [args.props.inputProps.wrapperOpts]
+ * @param {object} [args.wrapperOptions]
+ * @param {string} [args.wrapperOptions.type]
  * @returns {{inputProps: object, wrapperOpts: object, restProps: object}}
  */
 const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {

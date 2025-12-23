@@ -26,7 +26,7 @@ export default class ModelName {
 
     if (args?.count > 1) defaultModelName = inflection.pluralize(defaultModelName)
 
-    return Config.getI18n().t(key, {defaultValue: defaultModelName})
+    return /** @type {any} */ (Config).getI18n().t(key, {defaultValue: defaultModelName})
   }
 
   paramKey = () => this.data.modelClassData.paramKey

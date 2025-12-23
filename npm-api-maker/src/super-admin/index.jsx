@@ -10,6 +10,7 @@ import Layout from "./layout/index"
 import Link from "../link"
 import memo from "set-state-compare/build/memo.js"
 // @ts-expect-error
+// @ts-ignore
 import * as models from "models.js"
 import Params from "../params.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"

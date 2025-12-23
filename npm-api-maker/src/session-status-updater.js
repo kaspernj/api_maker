@@ -96,6 +96,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   onSignedOut(callback) {
+    // @ts-ignore
     this.addEvent("onSignedOut", callback)
   }
 

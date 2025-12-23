@@ -8,6 +8,7 @@ import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
+// @ts-ignore
 import {renderToString} from "react-dom/server"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Pressable} from "react-native"

@@ -9,7 +9,14 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "../use-event-emitter.js"
 
+const AnimatedView = /** @type {any} */ (Animated.View)
+
 export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
+  /** @type {Controller|undefined} */
+  controller
+  /** @type {any} */
+  panResponder
+
   static defaultProps = {
     horizontal: false
   }
@@ -30,12 +37,13 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
 
   setup() {
     const {data, keyExtractor} = this.p
-    const {events} = this.props
+    const {events} = this.p
 
     this.controller ||= new Controller({data, events, keyExtractor})
     this.panResponder ||= PanResponder.create({
       onStartShouldSetPanResponder: (e) => {
-        const initialDragPosition = {x: e.nativeEvent.locationX, y: e.nativeEvent.locationY}
+        const eventAny = /** @type {any} */ (e)
+        const initialDragPosition = {x: eventAny.nativeEvent.locationX, y: eventAny.nativeEvent.locationY}
 
         this.controller.setInitialDragPosition(initialDragPosition)
 
@@ -43,10 +51,10 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
           return true
         }
       },
-      onPanResponderMove: (e, gestate) => {
+      onPanResponderMove: (_e, gestate) => {
         this.tt.controller.onMove({gestate})
       },
-      onPanResponderRelease: (e, gestate) => {
+      onPanResponderRelease: () => {
         if (this.controller.draggedItem) {
           this.tt.controller.onDragEnd()
         }
@@ -59,7 +67,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
 
   render() {
     const {data, horizontal, keyExtractor, renderItem} = this.p
-    const {cacheKeyExtractor, dataSet} = this.props
+    const {cacheKeyExtractor, dataSet} = this.p
     const actualDataSet = useMemo(
       () => Object.assign(
         {component: "draggable-sort"},
@@ -69,7 +77,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
     )
 
     return (
-      <Animated.View
+      <AnimatedView
         dataSet={actualDataSet}
         style={this.cache("rootViewStyle", {flexDirection: horizontal ? "row" : "column"}, [horizontal])}
         {...this.tt.panResponder.panHandlers}

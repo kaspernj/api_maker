@@ -16,7 +16,7 @@ function calculateQParams(defaultParams, queryParams, searchKey) {
 
 /**
  * @param {object} args
- * @param {object} args.defaultParams
+ * @param {object} [args.defaultParams]
  * @param {import("../collection.js").default} args.query
  * @returns {{
  *   qParams: object

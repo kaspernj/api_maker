@@ -14,7 +14,7 @@ class HistoryReactNative {
       url.set("query", qs.stringify(actualParams))
     }
 
-    const {linkTo} = Config.getLinkTo()
+    const {linkTo} = /** @type {any} */ (Config).getLinkTo()
 
     linkTo(url.href)
   }

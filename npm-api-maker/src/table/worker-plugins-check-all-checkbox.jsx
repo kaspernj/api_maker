@@ -49,7 +49,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckAllCheck
     const previousParams = prevProps.query.params()
     const currentParams = this.props.query.params()
 
-    if (simpleObjectDifferent(previousParams, currentParams)) {
+    if (simpleObjectDifferent(previousParams, currentParams, true)) {
       this.updateAllChecked()
     }
   }
@@ -68,7 +68,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckAllCheck
 
   render() {
     const {className, style} = this.props
-    const {checked, indeterminate} = this.state
+    const {checked, indeterminate} = this.s
 
     return (
       <Checkbox

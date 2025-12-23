@@ -7,7 +7,18 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "../use-event-emitter.js"
 
+const AnimatedView = /** @type {any} */ (Animated.View)
+
 export default memo(shapeComponent(class DraggableSortItem extends ShapeComponent {
+  /** @type {EventEmitter|undefined} */
+  events
+  /** @type {Animated.ValueXY|undefined} */
+  position
+  /** @type {any} */
+  panResponder
+  /** @type {any} */
+  baseXAtStartedDragging
+
   static propTypes = propTypesExact({
     cacheKey: PropTypes.string,
     controller: PropTypes.object.isRequired,
@@ -28,7 +39,7 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     this.events ||= new EventEmitter()
     this.position ||= new Animated.ValueXY()
     this.panResponder ||= PanResponder.create({
-      onStartShouldSetPanResponder: (e, ) => {
+      onStartShouldSetPanResponder: () => {
         this.setState({dragging: true})
         this.p.controller.onDragStart({item: this.p.item, itemIndex: this.p.itemIndex})
 
@@ -64,9 +75,9 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     )
 
     return (
-      <Animated.View dataSet={this.cache("draggableSortItemDataSet", {component: "draggable-sort/item"})} onLayout={this.tt.onLayout} style={style}>
+      <AnimatedView dataSet={this.cache("draggableSortItemDataSet", {component: "draggable-sort/item"})} onLayout={this.tt.onLayout} style={style}>
         {renderItem({isActive: active, item, touchProps: this.tt.panResponder.panHandlers})}
-      </Animated.View>
+      </AnimatedView>
     )
   }
 

@@ -27,7 +27,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal ext
 
     return (
       <Modal onRequestClose={onRequestClose} {...restProps}>
-        <Form onSubmit={this.tt.onSaveSearchSubmit} setForm={this.setStates.form}>
+        <Form onSubmit={this.tt.onSaveSearchSubmit} setForm={/** @type {any} */ (this.setStates).form}>
           <Input
             defaultValue={search.name()}
             id="table_search_name"

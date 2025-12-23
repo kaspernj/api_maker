@@ -10,13 +10,14 @@ import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 export default memo(shapeComponent(class ComponentsAdminLayoutNoAccess extends BaseComponent {
   render() {
     const currentUser = useCurrentUser()
+    const currentUserAny = /** @type {any} */ (currentUser)
     const {t} = useI18n({namespace: "js.api_maker.super_admin.layout.no_access"})
 
     return (
       <View
         dataSet={{
           component: "super-admin--layout--no-access",
-          userRoles: currentUser?.userRoles()?.loaded()?.map((userRole) => userRole.role()?.identifier()).join(", ")
+          userRoles: currentUserAny?.userRoles()?.loaded()?.map((userRole) => userRole.role()?.identifier()).join(", ")
         }}
       >
         <Text>{t(".you_dont_have_no_access_to_this_page", {defaultValue: "You don't have access to this page."})}</Text>

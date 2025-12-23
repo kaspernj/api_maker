@@ -1,5 +1,6 @@
 import {digg} from "diggerize"
 import * as inflection from "inflection"
+/* global I18n */
 
 export default class ApiMakerRoutes {
   constructor ({jsRoutes, locale, routeDefinitions}) {

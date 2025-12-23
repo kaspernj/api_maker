@@ -165,7 +165,7 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
     if (!inputElement) return
 
     let whole = MoneyFormatter.stringToFloat(this.wholeRef.current.value)
-    let cents = parseInt(whole * 100, 10)
+    let cents = parseInt(String(whole * 100), 10)
     let oldCents = parseInt(inputElement.value, 10)
 
     if (typeof cents == "number") {

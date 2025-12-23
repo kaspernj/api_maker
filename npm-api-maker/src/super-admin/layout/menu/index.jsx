@@ -22,7 +22,7 @@ import {WithDefaultStyle} from "../../../utils/default-style"
 export const useMenuLogoLinkStyle = () =>
   useMemo(() => ({color: "#dededf", textDecorationLine: "none"}), [])
 
-const styles = StyleSheet.create({
+const styles = /** @type {any} */ (StyleSheet.create({
   root: {
     base: {
       position: "fixed",
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     maxWidth: 140
   }
-})
+}))
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -173,7 +173,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
 
     try {
       await Devise.signOut()
-      FlashNotifications.success(this.t(".you_have_been_signed_out", {defaultValue: "You have been signed out"}))
+      FlashNotifications.success(this.tt.t(".you_have_been_signed_out", {defaultValue: "You have been signed out"}))
     } catch (error) {
       FlashNotifications.errorResponse(error)
     }

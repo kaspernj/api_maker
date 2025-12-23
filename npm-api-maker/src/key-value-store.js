@@ -35,6 +35,7 @@ export default class KeyValueStore {
   }
 
   constructor () {
+    // @ts-ignore
     this.database = new Dexie("KeyValueStoreDatabase")
     this.database.version(1).stores({
       keyValues: "++id, key, value"

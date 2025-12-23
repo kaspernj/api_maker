@@ -10,6 +10,7 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useModelEvent from "../use-model-event.js"
 
 const Workplace = modelClassRequire("Workplace")
+const WorkplaceModel = /** @type {any} */ (Workplace)
 
 export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -34,7 +35,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
 
   async loadCurrentLink() {
     const {model} = this.props
-    const response = await Workplace.linkFor({model_class: model.modelClassData().name, model_id: model.id()})
+    const response = await WorkplaceModel.linkFor({model_class: model.modelClassData().name, model_id: model.id()})
     const link = digg(response, "link")
 
     this.setState({
@@ -45,7 +46,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
 
   render() {
     const {className, model, style} = this.props
-    const {checked, linkLoaded} = this.state
+    const {checked, linkLoaded} = this.s
 
     if (!linkLoaded) {
       return null
@@ -71,14 +72,14 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
     const checked = e.target.checked
 
     if (checked) {
-      Workplace.createLink({model_class: model.modelClassData().name, model_id: model.id()})
+      WorkplaceModel.createLink({model_class: model.modelClassData().name, model_id: model.id()})
     } else {
       const modelClassName = model.modelClassData().name
       const params = {models: {}}
 
       params.models[modelClassName] = [model.id()]
 
-      Workplace.destroyLinks(params)
+      WorkplaceModel.destroyLinks(params)
     }
   }
 

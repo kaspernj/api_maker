@@ -4,12 +4,12 @@ import ModelEvents from "./model-events.js"
 import useShape from "set-state-compare/build/use-shape.js"
 
 /**
- * @param {import("./base-model.js").default} model
+ * @param {(import("./base-model.js").default & {id(): any})|undefined} model
  * @param {function} onUpdated
- * @param {object} props
- * @param {boolean} props.active
- * @param {number} props.debounce
- * @param {function} props.onConnected
+ * @param {object} [props]
+ * @param {boolean} [props.active]
+ * @param {number} [props.debounce]
+ * @param {function} [props.onConnected]
  * @return {void}
  */
 const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {

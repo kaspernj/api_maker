@@ -195,7 +195,7 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   }
 
   inputName () {
-    if (this.state.blankInputName) return ""
+    if (this.s.blankInputName) return ""
 
     return this.props.inputProps.name
   }

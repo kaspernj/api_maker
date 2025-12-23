@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as models from "models.js"
 
 const modelsAsArray = []

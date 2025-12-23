@@ -153,7 +153,7 @@ export default class ApiMakerModelRecipesModelLoader {
           relationshipName,
           resourceName
         })
-        this.defineHasManyLoadMethod({foreignKey, loadMethodName, ModelClass, modelClassData, modelRecipesLoader, relationshipName, resourceName})
+        this.defineHasManyLoadMethod({foreignKey, loadMethodName, ModelClass, modelClassData, modelRecipesLoader, optionsThrough, relationshipName, resourceName})
       } else if (type == "has_one") {
         this.defineHasOneGetMethd({ModelClass, modelMethodName, relationshipName})
         this.defineHasOneLoadMethod({

@@ -6,6 +6,9 @@ import propTypesExact from "prop-types-exact"
 import {useCallback, useMemo} from "react"
 import useShape from "set-state-compare/build/use-shape.js"
 
+/** @type {import("./config.js").default & {getRouteDefinitions(): {routes: Array<{name: string, path: string}>}, getRoutes(): Record<string, Function>}} */
+const typedConfig = /** @type {any} */ (config)
+
 const useRouterPropTypes = propTypesExact({
   locales: PropTypes.array.isRequired,
   path: PropTypes.string,
@@ -38,8 +41,8 @@ const useRouter = (props) => {
     return path
   }, [])
 
-  const getRouteDefinitions = useCallback(() => s.p.routeDefinitions || config.getRouteDefinitions(), [])
-  const getRoutes = useCallback(() => s.p.routes || config.getRoutes(), [])
+  const getRouteDefinitions = useCallback(() => s.p.routeDefinitions || typedConfig.getRouteDefinitions(), [])
+  const getRoutes = useCallback(() => s.p.routes || typedConfig.getRoutes(), [])
 
   const parseRouteDefinitions = useCallback(() => {
     const routeDefinitions = getRouteDefinitions()
@@ -55,7 +58,7 @@ const useRouter = (props) => {
         params.push({locale})
 
         if (!(routePathName in routes))
-          throw new Error(`${routePathName} not found in routes: ${Object.keys(routes, ", ")}`)
+          throw new Error(`${routePathName} not found in routes: ${Object.keys(routes).join(", ")}`)
 
         const routePath = routes[routePathName](...params).replace(/[/]+$/, "")
         const groups = []

@@ -304,7 +304,7 @@ const useCollection = (props, cacheKeys = []) => {
     }
   }, [modelIdsCacheString])
 
-  const result = Object.assign({}, s.state)
+  const result = /** @type {any} */ (Object.assign({}, s.state))
   const modelVariableName = inflection.pluralize(inflection.camelize(modelClass.modelClassData().name, true))
 
   result.modelIdsCacheString = modelIdsCacheString
