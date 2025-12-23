@@ -83,8 +83,8 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
   labelClassName () {
     const classNames = ["form-group-label"]
 
-    if (this.p.labelClassName)
-      classNames.push(this.p.labelClassName)
+    if (this.props.labelClassName)
+      classNames.push(this.props.labelClassName)
 
     return classNames.join(" ")
   }
@@ -92,8 +92,8 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
   selectClassName () {
     const classNames = ["form-control"]
 
-    if (this.p.className) classNames.push(this.p.className)
-    if (this.p.wrapperOpts.errors.length > 0) classNames.push("is-invalid")
+    if (this.props.className) classNames.push(this.props.className)
+    if (this.props.wrapperOpts.errors.length > 0) classNames.push("is-invalid")
 
     return classNames.join(" ")
   }
@@ -101,7 +101,7 @@ class ApiMakerBootstrapSelect extends React.PureComponent {
   wrapperClassName () {
     const classNames = ["form-group", "component-bootstrap-select"]
 
-    if (this.p.wrapperClassName) classNames.push(this.p.wrapperClassName)
+    if (this.props.wrapperClassName) classNames.push(this.props.wrapperClassName)
 
     return classNames.join(" ")
   }
