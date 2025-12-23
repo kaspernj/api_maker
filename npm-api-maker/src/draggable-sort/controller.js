@@ -3,8 +3,10 @@ import {EventEmitter} from "eventemitter3"
 
 export default class DraggableSortController {
   constructor({data, events, keyExtractor}) {
-    this.data = data
-    this.currentOrder = [...data]
+    const safeData = data || []
+
+    this.data = safeData
+    this.currentOrder = [...safeData]
     this.events = events || new EventEmitter()
     this.keyExtractor = keyExtractor
 
@@ -17,10 +19,10 @@ export default class DraggableSortController {
 
     this.itemData = {}
 
-    for (const itemIndex in data) {
+    for (const itemIndex in safeData) {
       this.itemData[itemIndex] = {
         index: itemIndex,
-        item: data[itemIndex],
+        item: safeData[itemIndex],
         position: itemIndex
       }
     }
