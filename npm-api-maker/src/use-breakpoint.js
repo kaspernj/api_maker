@@ -7,9 +7,6 @@ import useEventEmitter from "./use-event-emitter.js"
 import useEventListener from "./use-event-listener.js"
 import useShape from "set-state-compare/build/use-shape.js"
 
-/** @type {import("./config.js").default & {getBreakpoints(): Array<[string, number]>}} */
-const typedConfig = /** @type {any} */ (config)
-
 function calculateBreakPoint(breakpoints) {
   let windowWidth
 
@@ -50,7 +47,7 @@ const sizeTypes = ["down", "up"]
 const useBreakpoint = (args = {}) => {
   const s = useShape(args)
 
-  s.meta.breakpoints ||= typedConfig.getBreakpoints()
+  s.meta.breakpoints ||= config.getBreakpoints()
 
   const checkAndUpdateBreakpoint = useCallback(() => {
     const breakpoint = calculateBreakPoint(s.m.breakpoints)
@@ -91,7 +88,7 @@ const useBreakpoint = (args = {}) => {
     return style
   }, [])
 
-  useEventEmitter(typedConfig.getEvents(), "onBreakpointsChange", onBreakpointsChange)
+  useEventEmitter(config.getEvents(), "onBreakpointsChange", onBreakpointsChange)
   useEventListener(Dimensions, "change", onDimensionsChange)
 
   return {

@@ -3,11 +3,8 @@ import Config from "./config.js"
 import {createConsumer} from "@rails/actioncable"
 
 export default () => {
-  /** @type {any} */
-  const typedConfig = Config
-
   if (!globalThis.apiMakerChannelsConsumer) {
-    globalThis.apiMakerChannelsConsumer = createConsumer(typedConfig.getCableUrl())
+    globalThis.apiMakerChannelsConsumer = createConsumer(Config.getCableUrl())
   }
 
   return globalThis.apiMakerChannelsConsumer

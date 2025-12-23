@@ -6,9 +6,6 @@ import propTypesExact from "prop-types-exact"
 import {useCallback, useMemo} from "react"
 import useShape from "set-state-compare/build/use-shape.js"
 
-/** @type {import("./config.js").default & {getRouteDefinitions(): {routes: Array<{name: string, path: string}>}, getRoutes(): Record<string, Function>}} */
-const typedConfig = /** @type {any} */ (config)
-
 const useRouterPropTypes = propTypesExact({
   locales: PropTypes.array.isRequired,
   path: PropTypes.string,
@@ -16,10 +13,19 @@ const useRouterPropTypes = propTypesExact({
   routes: PropTypes.object.isRequired
 })
 
+/**
+ * @param {{locales: string[], path?: string, routeDefinitions?: {routes: Array<{name: string, path: string}>}, routes?: Record<string, Function>}} props
+ * @returns {{match: {matchingRoute?: {params: Record<string, string>, parsedRouteDefinition: any}, params: Record<string, string>}}}
+ */
 const useRouter = (props) => {
   PropTypes.checkPropTypes(useRouterPropTypes, props, "prop", "useRouter")
 
   const s = useShape(props)
+  const locales = s.p.locales
+
+  if (!Array.isArray(locales)) {
+    throw new Error("useRouter expected 'locales' to be an array")
+  }
 
   const findRouteParams = useCallback((routeDefinition) => {
     const result = []
@@ -41,17 +47,30 @@ const useRouter = (props) => {
     return path
   }, [])
 
-  const getRouteDefinitions = useCallback(() => s.p.routeDefinitions || typedConfig.getRouteDefinitions(), [])
-  const getRoutes = useCallback(() => s.p.routes || typedConfig.getRoutes(), [])
+  const getRouteDefinitions = useCallback(() => s.p.routeDefinitions || config.getRouteDefinitions(), [])
+  const getRoutes = useCallback(() => s.p.routes || config.getRoutes(), [])
 
   const parseRouteDefinitions = useCallback(() => {
-    const routeDefinitions = getRouteDefinitions() || {routes: []}
-    const routes = getRoutes() || {}
+    const routeDefinitions = getRouteDefinitions()
+    const routes = getRoutes()
+
+    if (!Array.isArray(routeDefinitions.routes)) {
+      throw new Error("useRouter expected 'routeDefinitions.routes' to be an array")
+    }
+
+    if (!routes || typeof routes != "object") {
+      throw new Error("useRouter expected 'routes' to be an object with route helpers")
+    }
+
     const regex = /:([A-z\d_]+)/
     const parsedRouteDefinitions = []
 
     for (const locale of s.p.locales) {
-      for (const routeDefinition of routeDefinitions.routes || []) {
+      for (const routeDefinition of routeDefinitions.routes) {
+        if (!routeDefinition?.name || !routeDefinition?.path) {
+          throw new Error("useRouter expected each routeDefinition to have 'name' and 'path'")
+        }
+
         const routePathName = `${inflection.camelize(routeDefinition.name, true)}Path`
         const params = findRouteParams(routeDefinition)
 

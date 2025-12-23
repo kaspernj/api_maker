@@ -4,9 +4,6 @@ import * as inflection from "inflection"
 import useBreakpoint from "./use-breakpoint.js"
 import {useMemo} from "react"
 
-/** @type {import("./config.js").default & {getBreakpoints(): Array<[string, number]>}} */
-const typedConfig = /** @type {any} */ (config)
-
 function handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse, arg) {
   if (!(arg in styles)) {
     throw new Error(`No such styling '${arg}' in given styles: ${Object.keys(styles).join(", ")}`)
@@ -38,7 +35,7 @@ export default function useStyles(styles, args, dependencies = []) {
 
   const listOfStyles = useMemo(() => {
     const listOfStyles = []
-    const breakpointsReverse = [...typedConfig.getBreakpoints()].reverse()
+    const breakpointsReverse = [...config.getBreakpoints()].reverse()
 
     if (!Array.isArray(args)) {
       args = [args]
