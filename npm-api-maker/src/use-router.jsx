@@ -45,13 +45,13 @@ const useRouter = (props) => {
   const getRoutes = useCallback(() => s.p.routes || typedConfig.getRoutes(), [])
 
   const parseRouteDefinitions = useCallback(() => {
-    const routeDefinitions = getRouteDefinitions()
-    const routes = getRoutes()
+    const routeDefinitions = getRouteDefinitions() || {routes: []}
+    const routes = getRoutes() || {}
     const regex = /:([A-z\d_]+)/
     const parsedRouteDefinitions = []
 
     for (const locale of s.p.locales) {
-      for (const routeDefinition of routeDefinitions.routes) {
+      for (const routeDefinition of routeDefinitions.routes || []) {
         const routePathName = `${inflection.camelize(routeDefinition.name, true)}Path`
         const params = findRouteParams(routeDefinition)
 
