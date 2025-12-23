@@ -103,7 +103,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
 
   render() {
     const {canCan, configReader, modelClass, modelId, modelName, queryParams} = this.tt
-    const {model} = this.s
+    const {model} = this.state
     const modelConfigActions = configReader?.modelConfig?.actions
     let pageToShow
 

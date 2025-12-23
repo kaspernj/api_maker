@@ -12,8 +12,6 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useBreakpoint from "../use-breakpoint.js"
 import Widths from "./widths.js"
 
-const AnimatedView = /** @type {any} */ (Animated.View)
-
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
     active: PropTypes.bool.isRequired,
@@ -106,7 +104,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         }
         <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
         {mdUp &&
-          <AnimatedView
+          <Animated.View
             style={this.cache("resizeColumnViewStyle", {
               position: "absolute",
               top: 0,

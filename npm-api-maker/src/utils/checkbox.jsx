@@ -35,13 +35,13 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
     if ("checked" in this.props) {
       return this.p.checked
     } else {
-      return this.s.checked
+      return this.state.checked
     }
   }
 
   render() {
     const {isChecked} = this.tt
-    const {dataSet, label, style} = this.p
+    const {dataSet, label, style} = this.props
     const actualStyle = useMemo(() => Object.assign({flexDirection: "row", alignItems: "center"}, style), [style])
     const actualDataSet = useMemo(() => Object.assign({checked: isChecked}, dataSet), [dataSet, isChecked])
 

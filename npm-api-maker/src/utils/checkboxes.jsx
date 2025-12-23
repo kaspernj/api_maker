@@ -79,7 +79,7 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckboxes extends ShapeCo
 
     useMemo(() => {
       if (this.tt.form && inputProps.name) {
-        this.tt.form.setValue(inputProps.name, this.s.checkedOptions)
+        this.tt.form.setValue(inputProps.name, this.state.checkedOptions)
       }
     }, [])
   }
@@ -129,7 +129,7 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckboxes extends ShapeCo
     }
   }
 
-  isChecked = (option) => this.s.checkedOptions.includes(option[1])
+  isChecked = (option) => this.state.checkedOptions.includes(option[1])
 
   onOptionChecked = ({checked, option}) => {
     const {inputProps, form} = this.tt
@@ -137,11 +137,11 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckboxes extends ShapeCo
     let newOptions
 
     if (checked) {
-      newOptions = this.s.checkedOptions.concat([option[1]])
+      newOptions = this.state.checkedOptions.concat([option[1]])
 
       this.setState({checkedOptions: newOptions})
     } else {
-      newOptions = this.s.checkedOptions.filter((value) => value != option[1])
+      newOptions = this.state.checkedOptions.filter((value) => value != option[1])
 
       this.setState({checkedOptions: newOptions})
     }

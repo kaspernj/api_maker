@@ -1,9 +1,9 @@
-// @ts-nocheck
 import ModelEvents from "./model-events.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 
+/** @extends React.PureComponent<{modelClass: any, event: string, onCall: Function}> */
 export default class ApiMakerEventModelClass extends React.PureComponent {
   static propTypes = propTypesExact({
     event: PropTypes.string.isRequired,

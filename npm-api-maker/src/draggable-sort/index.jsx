@@ -9,8 +9,6 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "../use-event-emitter.js"
 
-const AnimatedView = /** @type {any} */ (Animated.View)
-
 export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
   /** @type {Controller|undefined} */
   controller
@@ -77,7 +75,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
     )
 
     return (
-      <AnimatedView
+      <Animated.View
         dataSet={actualDataSet}
         style={this.cache("rootViewStyle", {flexDirection: horizontal ? "row" : "column"}, [horizontal])}
         {...this.tt.panResponder.panHandlers}

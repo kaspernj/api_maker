@@ -109,14 +109,14 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
 
     return (
       <View
-        dataSet={{component: "super-admin--layout", class: className, menuTriggered: this.s.menuTriggered}}
+        dataSet={{component: "super-admin--layout", class: className, menuTriggered: this.state.menuTriggered}}
         style={styles.rootView}
         {...restProps}>
         <Menu
           active={active}
           noAccess={noAccess}
           onRequestMenuClose={this.tt.onRequestMenuClose}
-          triggered={this.s.menuTriggered}
+          triggered={this.state.menuTriggered}
         />
         <Header actions={actions} onTriggerMenu={this.tt.onTriggerMenu} title={headerTitle} />
         <View dataSet={{class: "app-layout-content-container"}} style={appLayoutContentContainerStyles}>
@@ -149,6 +149,6 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
   onRequestMenuClose = () => this.setState({menuTriggered: false})
   onTriggerMenu = (e) => {
     e.preventDefault()
-    this.setState({menuTriggered: !this.s.menuTriggered})
+    this.setState({menuTriggered: !this.state.menuTriggered})
   }
 }))

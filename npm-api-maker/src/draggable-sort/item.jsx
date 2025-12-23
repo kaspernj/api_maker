@@ -7,8 +7,6 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "../use-event-emitter.js"
 
-const AnimatedView = /** @type {any} */ (Animated.View)
-
 export default memo(shapeComponent(class DraggableSortItem extends ShapeComponent {
   /** @type {EventEmitter|undefined} */
   events
@@ -75,9 +73,9 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     )
 
     return (
-      <AnimatedView dataSet={this.cache("draggableSortItemDataSet", {component: "draggable-sort/item"})} onLayout={this.tt.onLayout} style={style}>
+      <Animated.View dataSet={this.cache("draggableSortItemDataSet", {component: "draggable-sort/item"})} onLayout={this.tt.onLayout} style={style}>
         {renderItem({isActive: active, item, touchProps: this.tt.panResponder.panHandlers})}
-      </AnimatedView>
+      </Animated.View>
     )
   }
 

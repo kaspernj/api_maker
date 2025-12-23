@@ -1,10 +1,12 @@
-// @ts-nocheck
 import {digg} from "diggerize"
 import ModelEvents from "./model-events.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 
+/**
+ * @extends React.PureComponent<{attribute?: string, model: any, onValue?: Function}, {model: any, value?: any}>
+ */
 export default class ApiMakerUpdatedAttribute extends React.PureComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,

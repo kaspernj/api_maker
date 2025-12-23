@@ -4,8 +4,6 @@ import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Animated} from "react-native"
 
-const AnimatedView = /** @type {any} */ (Animated.View)
-
 export default memo(shapeComponent(class SharedTableColumn extends BaseComponent {
   render() {
     const {dataSet, ...restProps} = this.props
@@ -14,6 +12,8 @@ export default memo(shapeComponent(class SharedTableColumn extends BaseComponent
       dataSet
     )
 
-    return <AnimatedView dataSet={actualDataSet} {...restProps} />
+    return (
+      <Animated.View dataSet={actualDataSet} {...restProps} />
+    )
   }
 }))
