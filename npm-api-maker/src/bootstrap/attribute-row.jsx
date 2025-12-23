@@ -60,10 +60,10 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
         style={actualStyle}
         {...restProps}
       >
-        <Text dataSet={this.labelTextDataSet ||= {class: "attribute-row-label"}} style={this.labelTextStyle ||= {fontWeight: "bold"}}>
+        <Text dataSet={this.cache("labelTextDataSet", {class: "attribute-row-label"})} style={this.cache("labelTextStyle", {fontWeight: "bold"})}>
           {this.label()}
         </Text>
-        <View dataSet={this.valueViewDataSet ||= {class: "attribute-row-value"}} style={this.valueViewStyle ||= {marginTop: 3}}>
+        <View dataSet={this.cache("valueViewDataSet", {class: "attribute-row-value"})} style={this.cache("valueViewStyle", {marginTop: 3})}>
           {this.value()}
         </View>
       </View>

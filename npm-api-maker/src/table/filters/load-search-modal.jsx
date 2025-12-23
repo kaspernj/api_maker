@@ -18,22 +18,22 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
     return (
       <View
         dataSet={this.cache("rootViewStyle", {class: "search-row", searchId: search.id()}, [search.id()])}
-        style={this.rootViewStyle ||= {flexDirection: "row", width: "100%"}}
+        style={this.cache("rootViewStyleStyle", {flexDirection: "row", width: "100%"})}
       >
         <Pressable
-          dataSet={this.loadSearchLinkPressableDataSet ||= {class: "load-search-link"}}
+          dataSet={this.cache("loadSearchLinkPressableDataSet", {class: "load-search-link"})}
           onPress={this.tt.onSearchClicked}
-          style={this.loadSearchLinkPressableStyle ||= {justifyContent: "center"}}
+          style={this.cache("loadSearchLinkPressableStyle", {justifyContent: "center"})}
         >
           <Text>
             {search.name()}
           </Text>
         </Pressable>
-        <View style={this.actionsViewStyle ||= {flexDirection: "row", marginLeft: "auto"}}>
+        <View style={this.cache("actionsViewStyle", {flexDirection: "row", marginLeft: "auto"})}>
           <Pressable
-            dataSet={this.editSearchButtonDataSet ||= {class: "edit-search-button"}}
+            dataSet={this.cache("editSearchButtonDataSet", {class: "edit-search-button"})}
             onPress={this.tt.onEditPressed}
-            style={this.editSearchButtonStyle ||= {
+            style={this.cache("editSearchButtonStyle", {
               alignItems: "center",
               justifyContent: "center",
               width: 25,
@@ -42,16 +42,16 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
               border: "1px solid #007bff",
               borderRadius: 5,
               color: "#007bff"
-            }}
+            })}
           >
             <Text>
               &#x270E;
             </Text>
           </Pressable>
           <Pressable
-            dataSet={this.deleteSearchButtonDataSet ||= {class: "delete-search-button"}}
+            dataSet={this.cache("deleteSearchButtonDataSet", {class: "delete-search-button"})}
             onPress={this.tt.onDeletePressed}
-            style={this.deleteSearchButtonStyle ||= {
+            style={this.cache("deleteSearchButtonStyle", {
               alignItems: "center",
               justifyContent: "center",
               marginLeft: 5,
@@ -61,7 +61,7 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
               border: "1px solid #dc3545",
               borderRadius: 5,
               color: "#dc3545"
-            }}
+            })}
           >
             <Text>
               &#x2715;

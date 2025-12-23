@@ -62,31 +62,31 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
         style={styleForRow({even})}
       >
         {workplace &&
-          <Column dataSet={this.columnDataSet ||= {class: "workplace-column"}} style={styleForColumn({even, style: {width: 41}})}>
+          <Column dataSet={this.cache("columnDataSet", {class: "workplace-column"})} style={styleForColumn({even, style: {width: 41}})}>
             <WorkerPluginsCheckbox
               currentWorkplace={currentWorkplace}
               model={model}
-              style={this.workerPluginsCheckboxStyle ||= {marginHorizontal: "auto"}}
+              style={this.cache("workerPluginsCheckboxStyle", {marginHorizontal: "auto"})}
             />
           </Column>
         }
         {columns && this.columnsContentFromColumns(model, even)}
-        <Column dataSet={this.actionsColumnDataSet ||= {class: "actions-column"}} style={styleForColumn({even, style: {}, type: "actions"})}>
+        <Column dataSet={this.cache("actionsColumnDataSet", {class: "actions-column"})} style={styleForColumn({even, style: {}, type: "actions"})}>
           {actionsContent && actionsContent(this.tt.modelCallbackArgs)}
           {viewPath &&
-            <Link dataSet={this.viewButtonDataSet ||= {class: "view-button"}} style={this.searchLinkStyle ||= {marginLeft: 2, marginRight: 2}} to={viewPath}>
+            <Link dataSet={this.cache("viewButtonDataSet", {class: "view-button"})} style={this.cache("searchLinkStyle", {marginLeft: 2, marginRight: 2})} to={viewPath}>
               <Icon name="search" size={18} />
             </Link>
           }
           {editPath &&
-            <Link dataSet={this.editButtonDataSet ||= {class: "edit-button"}} style={this.editButtonStyle ||= {marginLeft: 2, marginRight: 2}} to={editPath}>
+            <Link dataSet={this.cache("editButtonDataSet", {class: "edit-button"})} style={this.cache("editButtonStyle", {marginLeft: 2, marginRight: 2})} to={editPath}>
               <Icon name="pencil" size={20} />
             </Link>
           }
           {destroyEnabled && model.can("destroy") &&
             <Pressable
-              dataSet={this.destroyButtonDataSet ||= {class: "destroy-button"}}
-              style={this.destroyButtonStyle ||= {marginLeft: 2, marginRight: 2}}
+              dataSet={this.cache("destroyButtonDataSet", {class: "destroy-button"})}
+              style={this.cache("destroyButtonStyle", {marginLeft: 2, marginRight: 2})}
               onPress={this.tt.onDestroyClicked}
             >
               <Icon name="remove" size={22} />

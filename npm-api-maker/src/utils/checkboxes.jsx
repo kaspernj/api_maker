@@ -89,8 +89,8 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckboxes extends ShapeCo
     const {errors} = digs(wrapperOpts, "errors")
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "api-maker/utils/checkboxes"}}>
-        <Text style={this.textStyle ||= {fontWeight: "bold"}}>
+      <View dataSet={this.cache("rootViewDataSet", {component: "api-maker/utils/checkboxes"})}>
+        <Text style={this.cache("textStyle", {fontWeight: "bold"})}>
           {this.tt.wrapperOpts.label}
         </Text>
         {this.props.options.map((option) =>

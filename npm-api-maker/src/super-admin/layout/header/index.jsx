@@ -90,16 +90,16 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
     }
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "super-admin--layout--header"}} style={headerStyle}>
-        <View dataSet={this.headerTitleViewDataSet ||= {class: "header-title-container"}}>
-          <Text style={this.headerTitleTextStyle ||= {color: "#282a33", fontSize: 22}}>
+      <View dataSet={this.cache("rootViewDataSet", {component: "super-admin--layout--header"})} style={headerStyle}>
+        <View dataSet={this.cache("headerTitleViewDataSet", {class: "header-title-container"})}>
+          <Text style={this.cache("headerTitleTextStyle", {color: "#282a33", fontSize: 22})}>
             {title}
           </Text>
         </View>
         {actions &&
           <View dataSet={{active: this.s.headerActionsActive, class: "header-actions-container"}} style={headerActionsContainerStyle}>
             <View
-              dataSet={this.headerActionsViewDataSet ||= {class: "header-actions"}}
+              dataSet={this.cache("headerActionsViewDataSet", {class: "header-actions"})}
               ref={this.tt.headerActionsRef}
               style={headerActionsStyle}
             >
@@ -109,22 +109,22 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
         }
         {!mdUp &&
           <View
-            dataSet={this.burgerMenuContainerDataSet ||= {class: "burger-menu-container"}}
-            style={this.burgerMenuContainerStyle ||= {
+            dataSet={this.cache("burgerMenuContainerDataSet", {class: "burger-menu-container"})}
+            style={this.cache("burgerMenuContainerStyle", {
               flexDirection: "row",
               marginLeft: "auto"
-            }}
+            })}
           >
             {actions &&
               <Pressable
-                dataSet={this.actionsLinkDataSet ||= {class: "actions-link"}}
+                dataSet={this.cache("actionsLinkDataSet", {class: "actions-link"})}
                 onPress={this.tt.onGearsClicked}
-                style={this.actionsLinkStyle ||= {marginRight: 8, fontSize: 22}}
+                style={this.cache("actionsLinkStyle", {marginRight: 8, fontSize: 22})}
               >
                 <Icon name="gear" size={20} />
               </Pressable>
             }
-            <Pressable dataSet={this.burgerMenuLinkDataSet ||= {class: "burger-menu-link"}} onPress={onTriggerMenu}>
+            <Pressable dataSet={this.cache("burgerMenuLinkDataSet", {class: "burger-menu-link"})} onPress={onTriggerMenu}>
               <Icon name="bars" size={20} />
             </Pressable>
           </View>

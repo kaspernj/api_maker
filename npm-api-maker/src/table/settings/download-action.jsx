@@ -22,12 +22,12 @@ export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction ext
   render() {
     return (
       <Pressable
-        dataSet={this.pressableDataSet ||= {component: "api-maker/table/settings/download-action"}}
+        dataSet={this.cache("pressableDataSet", {component: "api-maker/table/settings/download-action"})}
         onPress={this.tt.onDownloadPress}
-        style={this.pressableStyle ||= {flexDirection: "row", alignItems: "center"}}
+        style={this.cache("pressableStyle", {flexDirection: "row", alignItems: "center"})}
       >
         <Icon name="download" size={20} />
-        <Text style={this.textStyle ||= {marginLeft: 5}}>
+        <Text style={this.cache("textStyle", {marginLeft: 5})}>
           Download
         </Text>
       </Pressable>

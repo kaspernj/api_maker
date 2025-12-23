@@ -44,7 +44,7 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
             return (
               <>
                 {availableLocales.map((locale) =>
-                  <View key={locale} style={this.localeViewStyle ||= {marginBottom: 12}}>
+                  <View key={locale} style={this.cache("localeViewStyle", {marginBottom: 12})}>
                     <EditAttributeInput
                       attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
                       id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}_${locale}`}

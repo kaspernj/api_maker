@@ -34,25 +34,25 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
     const {preparedColumns} = table.s
 
     return (
-      <Modal onBackdropPress={this.p.onRequestClose} onRequestClose={this.p.onRequestClose} style={this.rootModalStyle ||= {backgroundColor: "#000"}} transparent>
+      <Modal onBackdropPress={this.p.onRequestClose} onRequestClose={this.p.onRequestClose} style={this.cache("rootModalStyle", {backgroundColor: "#000"})} transparent>
         <View
-          dataSet={this.rootViewDataSet ||= {class: "api-maker--table--settings"}}
-          style={this.rootViewStyle ||= {
+          dataSet={this.cache("rootViewDataSet", {class: "api-maker--table--settings"})}
+          style={this.cache("rootViewStyle", {
             width: "100%",
             maxWidth: 800,
             padding: 20,
             backgroundColor: "#fff",
             border: "1px solid black"
-          }}
+          })}
         >
-          <View style={this.settingsHeaderViewStyle ||= {marginBottom: 5}}>
-            <Text style={this.settingsHeaderTextSTyle ||= {fontSize: 16, fontWeight: "bold"}}>
+          <View style={this.cache("settingsHeaderViewStyle", {marginBottom: 5})}>
+            <Text style={this.cache("settingsHeaderTextSTyle", {fontSize: 16, fontWeight: "bold"})}>
               {t(".settings", {defaultValue: "Settings"})}
             </Text>
           </View>
           <DownloadAction l={l} table={table} />
-          <View style={this.columnsHeaderViewStyle ||= {marginBottom: 5}}>
-            <Text style={this.columnsHeaderTextStyle ||= {fontSize: 16, fontWeight: "bold"}}>
+          <View style={this.cache("columnsHeaderViewStyle", {marginBottom: 5})}>
+            <Text style={this.cache("columnsHeaderTextStyle", {fontSize: 16, fontWeight: "bold"})}>
               {t(".columns", {defaultValue: "Columns"})}
             </Text>
           </View>

@@ -100,12 +100,12 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         {...restColumnProps}
       >
         {mdUp &&
-          <Icon name="bars" style={this.barsIconStyle ||= {marginRight: 3, fontSize: 12}} {...touchProps} />
+          <Icon name="bars" style={this.cache("barsIconStyle", {marginRight: 3, fontSize: 12})} {...touchProps} />
         }
         <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
         {mdUp &&
           <Animated.View
-            style={this.resizeColumnViewStyle ||= {
+            style={this.cache("resizeColumnViewStyle", {
               position: "absolute",
               top: 0,
               right: 0,
@@ -113,7 +113,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               height: "100%",
               cursor: "col-resize",
               zIndex: 9999
-            }}
+            })}
             {...this.tt.resizePanResponder.panHandlers}
           />
         }

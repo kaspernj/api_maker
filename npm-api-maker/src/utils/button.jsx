@@ -94,7 +94,7 @@ export default memo(shapeComponent(class ApiMakerUtilsButton extends ShapeCompon
         {...restPressableProps}
       >
         {icon &&
-          <View style={this.iconViewStyle ||= {marginRight: 4}}>
+          <View style={this.cache("iconViewStyle", {marginRight: 4})}>
             <Icon name={icon} />
           </View>
         }

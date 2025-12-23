@@ -85,24 +85,24 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
     }
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "super-admin--layout--menu", triggered}} style={style}>
-        <WithDefaultStyle style={this.withDefaultStyleStyle ||= {Text: {color: "#fff"}}}>
+      <View dataSet={this.cache("rootViewDataSet", {component: "super-admin--layout--menu", triggered}, [triggered])} style={style}>
+        <WithDefaultStyle style={this.cache("withDefaultStyleStyle", {Text: {color: "#fff"}})}>
           <View
-            dataSet={this.menuLogoViewDataSet ||= {class: "menu-logo"}}
-            style={this.menuLogoViewStyle ||= {
+            dataSet={this.cache("menuLogoViewDataSet", {class: "menu-logo"})}
+            style={this.cache("menuLogoViewStyle", {
               overflow: "hidden",
               marginTop: 25,
               marginRight: "auto",
               marginLeft: "auto"
-            }}
+            })}
           >
-            <Link dataSet={this.menuLogoLinkDataSet ||= {class: "menu-logo-link"}} to={Params.withParams({})}>
+            <Link dataSet={this.cache("menuLogoLinkDataSet", {class: "menu-logo-link"})} to={Params.withParams({})}>
               <Text
-                style={this.menuLogoLinkTextStyle ||= {
+                style={this.cache("menuLogoLinkTextStyle", {
                   fontSize: 42,
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap"
-                }}
+                })}
               >
                 Admin
               </Text>
