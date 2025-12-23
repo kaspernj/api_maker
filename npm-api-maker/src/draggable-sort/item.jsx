@@ -64,7 +64,7 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     )
 
     return (
-      <Animated.View dataSet={this.draggableSortItemDataSet ||= {component: "draggable-sort/item"}} onLayout={this.tt.onLayout} style={style}>
+      <Animated.View dataSet={this.cache("draggableSortItemDataSet", {component: "draggable-sort/item"})} onLayout={this.tt.onLayout} style={style}>
         {renderItem({isActive: active, item, touchProps: this.tt.panResponder.panHandlers})}
       </Animated.View>
     )

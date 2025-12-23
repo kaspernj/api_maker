@@ -71,7 +71,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
     return (
       <Animated.View
         dataSet={actualDataSet}
-        style={this.rootViewStyle ||= {flexDirection: horizontal ? "row" : "column"}}
+        style={this.cache("rootViewStyle", {flexDirection: horizontal ? "row" : "column"}, [horizontal])}
         {...this.tt.panResponder.panHandlers}
       >
         {data.map((item, itemIndex) =>

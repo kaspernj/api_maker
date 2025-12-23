@@ -35,7 +35,7 @@ export default memo(shapeComponent(class ColumnRow extends BaseComponent {
     }
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "api-maker--table--settings--column-row"}} style={this.rootViewStyle ||= {justifyContent: "center"}}>
+      <View dataSet={this.cache("rootViewDataSet", {component: "api-maker--table--settings--column-row"})} style={this.cache("rootViewStyle", {justifyContent: "center"})}>
         <label style={{whiteSpace: "nowrap"}}>
           <input
             className="api-maker--table--setings--column-checkbox"

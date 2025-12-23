@@ -268,18 +268,18 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
               icon="remove"
               label={t(".cancel", {defaultValue: "Cancel"})}
               onPress={this.p.onRequestClose}
-              pressableProps={this.cancelButtonPressableProps ||= {
+              pressableProps={this.cache("cancelButtonPressableProps", {
                 marginRight: 5
-              }}
+              })}
             />
             <Button
               disabled={!submitEnabled}
               icon="check"
               label={t(".apply", {defaultValue: "Apply"})}
-              pressableProps={this.appleButtonPressableProps ||= {
+              pressableProps={this.cache("appleButtonPressableProps", {
                 style: {marginLeft: 5},
                 testID: "apply-filter-button"
-              }}
+              })}
               submit
             />
           </View>

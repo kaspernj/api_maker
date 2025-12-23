@@ -60,8 +60,8 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
 
     return (
       <View
-        dataSet={this.rootViewDataSet ||= {component: "api-maker/super-admin/edit-page/edit-attribute-input"}}
-        style={this.rootViewStyle ||= {flexDirection: "row", alignItems: "center"}}
+        dataSet={this.cache("rootViewDataSet", {component: "api-maker/super-admin/edit-page/edit-attribute-input"})}
+        style={this.cache("rootViewStyle", {flexDirection: "row", alignItems: "center"})}
       >
         <Checkbox
           checked={checked}

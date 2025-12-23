@@ -38,19 +38,19 @@ export default memo(shapeComponent(class ApiMakerTableHeaderSelect extends BaseC
     const columnLabel = column && table.headerLabelForColumn(column)
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "api-maker/table/header-select"}}>
+      <View dataSet={this.cache("rootViewDataSet", {component: "api-maker/table/header-select"})}>
         {this.s.modalOpen &&
-          <Modal dataSet={this.modalDataSet ||= {class: "table-header-select-modal"}} onRequestClose={this.tt.onModalRequestClose} transparent>
+          <Modal dataSet={this.cache("modalDataSet", {class: "table-header-select-modal"})} onRequestClose={this.tt.onModalRequestClose} transparent>
             {this.p.preparedColumns.map(({column, tableSettingColumn}) =>
               <View
                 key={tableSettingColumn.identifier()}
-                style={this.headerColumnContentViewStyle ||= {marginVertical: 5}}
+                style={this.cache("headerColumnContentViewStyle", {marginVertical: 5})}
               >
                 <HeaderColumnContent
                   column={column}
                   table={table}
                   tableSettingColumn={tableSettingColumn}
-                  sortLinkProps={this.sortLinkProps ||= {usePressable: true}}
+                  sortLinkProps={this.cache("sortLinkProps", {usePressable: true})}
                 />
               </View>
             )}

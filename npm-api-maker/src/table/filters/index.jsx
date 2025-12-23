@@ -42,7 +42,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
     const currentFilters = this.currentFilters()
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {class: "api-maker--table--filters"}} style={this.rootViewStyle ||= {alignItems: "flex-start"}}>
+      <View dataSet={this.cache("rootViewDataSet", {class: "api-maker--table--filters"})} style={this.cache("rootViewStyle", {alignItems: "flex-start"})}>
         {filter &&
           <FilterForm
             filter={filter}
@@ -79,7 +79,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
             {...filterData}
           />
         )}
-        <View dataSet={this.filterActionsDataSet ||= {class: "filter-actions"}} style={this.filterActionsStyle ||= {flexDirection: "row", marginTop: 10}}>
+        <View dataSet={this.cache("filterActionsDataSet", {class: "filter-actions"})} style={this.cache("filterActionsStyle", {flexDirection: "row", marginTop: 10})}>
           <button className="add-new-filter-button" onClick={this.tt.onAddFilterClicked}>
             {this.t(".add_new_filter", {defaultValue: "Add new filter"})}
           </button>

@@ -53,7 +53,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               name
             }, [attributeName, id, name])}
             onChangeText={this.tt.onChangeText}
-            style={this.textInputStyle ||= {
+            style={this.cache("textInputStyle", {
               paddingTop: 9,
               paddingRight: 13,
               paddingBottom: 9,
@@ -61,7 +61,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               borderRadius: 5,
               backgroundColor: "#fff",
               border: "1px solid #cecece"
-            }}
+            })}
             value={value}
           />
         </View>

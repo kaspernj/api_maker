@@ -83,7 +83,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
           {extraContent && extraContent(modelArgs)}
           <Pressable
             onPress={this.tt.onSubmit}
-            style={this.pressableStyle ||= {
+            style={this.cache("pressableStyle", {
               paddingTop: 18,
               paddingRight: 24,
               paddingBottom: 18,
@@ -91,10 +91,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
               borderRadius: 10,
               backgroundColor: "#4c93ff",
               marginTop: 10
-            }}
+            })}
             testID="submit-button"
           >
-            <Text style={this.buttonTextStyle ||= {color: "#fff"}}>
+            <Text style={this.cache("buttonTextStyle", {color: "#fff"})}>
               Submit
             </Text>
           </Pressable>
