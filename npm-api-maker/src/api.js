@@ -1,4 +1,5 @@
 // @ts-check
+/* eslint-disable sort-imports */
 
 import config from "./config.js"
 import CustomError from "./custom-error.js"
@@ -17,33 +18,34 @@ const logger = new Logger({name: "ApiMaker / Api"})
  * Provides helper verbs, CSRF token handling and consistent error formatting.
  */
 export default class Api {
+  // eslint-disable-next-line lines-around-comment
   /**
    * @param {string} path
    * @param {Record<string, any>|null} [pathParams]
    * @returns {Promise<any>}
    */
-  static get = async (path, pathParams = null) =>  await Api.requestLocal({path, pathParams, method: "GET"})
+  static get = (path, pathParams = null) => Api.requestLocal({path, pathParams, method: "GET"})
 
   /**
    * @param {string} path
    * @param {Record<string, any>|null} [pathParams]
    * @returns {Promise<any>}
    */
-  static delete = async (path, pathParams = null) => await Api.requestLocal({path, pathParams, method: "DELETE"})
+  static delete = (path, pathParams = null) => Api.requestLocal({path, pathParams, method: "DELETE"})
 
   /**
    * @param {string} path
    * @param {Record<string, any>} [data]
    * @returns {Promise<any>}
    */
-  static patch = async (path, data = {}) => await Api.requestLocal({path, data, method: "PATCH"})
+  static patch = (path, data = {}) => Api.requestLocal({path, data, method: "PATCH"})
 
   /**
    * @param {string} path
    * @param {Record<string, any>} [data]
    * @returns {Promise<any>}
    */
-  static post = async (path, data = {}) => await Api.requestLocal({path, data, method: "POST"})
+  static post = (path, data = {}) => Api.requestLocal({path, data, method: "POST"})
 
   /**
    * Performs a network request against the configured host.
@@ -129,8 +131,10 @@ export default class Api {
    * @returns {Promise<any>}
    */
   static async requestLocal(args) {
-    if (!args.headers) {
-      args.headers = {}
+    let headers = {}
+
+    if (args.headers) {
+      headers = {...args.headers}
     }
 
     const token = await this._token()
@@ -138,11 +142,11 @@ export default class Api {
     logger.debug(() => `Got token: ${token}`)
 
     if (token) {
-      args.headers["X-CSRF-Token"] = token
+      headers["X-CSRF-Token"] = token
     }
 
     if (args.data) {
-      args.headers["Content-Type"] = "application/json"
+      headers["Content-Type"] = "application/json"
       // @ts-ignore Allow string body despite data being typed as record
       args.data = JSON.stringify(args.data)
     }
@@ -151,7 +155,7 @@ export default class Api {
       args.data = args.rawData
     }
 
-    return await this.request(args)
+    return this.request({...args, headers})
   }
 
   /**
@@ -160,13 +164,13 @@ export default class Api {
    * @returns {Promise<any>}
    */
   static async put(path, data = {}) {
-    return await this.requestLocal({path, data, method: "PUT"})
+    return this.requestLocal({path, data, method: "PUT"})
   }
 
   /**
    * @returns {Promise<string>}
    */
-  static _token = async () => await SessionStatusUpdater.current().getCsrfToken()
+  static _token = async() => SessionStatusUpdater.current().getCsrfToken()
 
   /**
    * Parses the response body according to the response content-type.

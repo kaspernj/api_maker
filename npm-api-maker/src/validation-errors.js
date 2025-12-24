@@ -1,10 +1,11 @@
 // @ts-check
 
-import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
+import {digg, digs} from "diggerize"
 import modelClassRequire from "./model-class-require.js"
 
 class ValidationError {
+  // eslint-disable-next-line lines-around-comment
   /**
    * @param {object} args
    * @param {string} args.attribute_name
@@ -108,7 +109,7 @@ class ValidationErrors {
 
   getValidationErrors = () => this.validationErrors
 
-  getValidationErrorsForInput ({attribute, inputName, onMatchValidationError}) {
+  getValidationErrorsForInput({attribute, inputName, onMatchValidationError}) {
     const validationErrors = this.validationErrors.filter((validationError) => {
       if (onMatchValidationError) {
         return onMatchValidationError(validationError)
@@ -122,7 +123,7 @@ class ValidationErrors {
     return validationErrors
   }
 
-  getUnhandledErrorMessage () {
+  getUnhandledErrorMessage() {
     const unhandledValidationErrors = this.validationErrors.filter((validationError) => !validationError.getHandled())
 
     if (unhandledValidationErrors.length > 0) {
