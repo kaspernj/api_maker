@@ -10,8 +10,8 @@ const useResizeObserver = (element, callback) => {
   const s = useShape({callback})
   const onResize = useCallback((...args) => {
     s.p.callback(...args)
-  }, [])
-  const observer = useMemo(() => new ResizeObserver(onResize), [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const observer = useMemo(() => new ResizeObserver(onResize), []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
     if (element) {
@@ -23,7 +23,7 @@ const useResizeObserver = (element, callback) => {
         observer.disconnect()
       }
     }
-  }, [element])
+  }, [element]) // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 export default useResizeObserver

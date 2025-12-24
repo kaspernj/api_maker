@@ -12,6 +12,7 @@ const useValidationErrors = (callback) => {
 
   s.useStates({validationErrors: []})
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onValidationErrors = useCallback((validationErrors) => {
     const matchedValidationErrors = []
 
