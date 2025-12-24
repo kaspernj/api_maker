@@ -7,8 +7,6 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "lib": ["dom", "ES2020"],
-    "moduleResolution": "nodenext",
-    "module": "nodenext",
     "outDir": "build",
     "rootDir": "src",
     "sourceRoot": "/src",
