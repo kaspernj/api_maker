@@ -4,7 +4,6 @@
     "checkJs": true,
     "declaration": true,
     "declarationMap": true,
-    "jsx": "react-jsx",
     "lib": ["dom", "ES2020"],
     "outDir": "build",
     "target": "ES2020",
