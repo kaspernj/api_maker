@@ -1,27 +1,27 @@
 export default class Task {
-  static modelClassData () {
+  static modelClassData() {
     return {
       attributes: [],
       name: "Task"
     }
   }
 
-  static modelName () {
+  static modelName() {
     return "Task"
   }
 
-  constructor ({a, b, isNewRecord = false, r} = {}) {
+  constructor({a, b, isNewRecord = false, r} = {}) {
     this.abilities = b
     this._isNewRecord = isNewRecord
     this.modelData = a
     this.relationshipsCache = r
   }
 
-  isNewRecord () {
+  isNewRecord() {
     return this._isNewRecord
   }
 
-  isPersisted () {
+  isPersisted() {
     return !this._isNewRecord
   }
 }

@@ -238,7 +238,7 @@ module.exports = defineConfig([
       "react/jsx-pascal-case": "error",
       "react/jsx-props-no-multi-spaces": "error",
       "react/jsx-props-no-spreading": "off",
-      "react/jsx-sort-default-props": "error",
+      "react/sort-default-props": "error",
       "react/jsx-sort-props": ["error", {ignoreCase: true}],
       "react/jsx-tag-spacing": "error",
       "react/jsx-wrap-multilines": "error",
