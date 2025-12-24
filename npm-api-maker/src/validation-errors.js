@@ -4,8 +4,8 @@ import * as inflection from "inflection"
 import {digg, digs} from "diggerize"
 import modelClassRequire from "./model-class-require.js"
 
-class ValidationError {
-  // eslint-disable-next-line lines-around-comment
+class ValidationError { // eslint-disable-line padded-blocks
+
   /**
    * @param {object} args
    * @param {string} args.attribute_name

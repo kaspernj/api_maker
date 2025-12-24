@@ -1,12 +1,11 @@
 // @ts-check
-/* eslint-disable sort-imports */
 
 import config from "./config.js"
-import CustomError from "./custom-error.js"
+import CustomError from "./custom-error.js" // eslint-disable-line sort-imports
 import FormDataObjectizer from "form-data-objectizer"
 import Logger from "./logger.js"
 import qs from "qs"
-import SessionStatusUpdater from "./session-status-updater.js"
+import SessionStatusUpdater from "./session-status-updater.js" // eslint-disable-line sort-imports
 import urlEncode from "./url-encode.js"
 
 const logger = new Logger({name: "ApiMaker / Api"})
@@ -17,8 +16,8 @@ const logger = new Logger({name: "ApiMaker / Api"})
  * Thin XMLHttpRequest wrapper used across the client to talk to the API.
  * Provides helper verbs, CSRF token handling and consistent error formatting.
  */
-export default class Api {
-  // eslint-disable-next-line lines-around-comment
+export default class Api { // eslint-disable-line padded-blocks
+
   /**
    * @param {string} path
    * @param {Record<string, any>|null} [pathParams]
