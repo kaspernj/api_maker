@@ -1,11 +1,11 @@
-import React, {useCallback, useMemo} from "react"
+import React, {useCallback, useMemo} from "react" // eslint-disable-line sort-imports
 import Devise from "./devise.js"
-import {digg} from "diggerize"
-import {events} from "./use-current-user.js"
-import * as inflection from "inflection"
+import {digg} from "diggerize" // eslint-disable-line sort-imports
+import {events} from "./use-current-user.js" // eslint-disable-line sort-imports
+import * as inflection from "inflection" // eslint-disable-line sort-imports
 import Logger from "./logger.js"
 import Services from "./services.js"
-import useEventEmitter from "./use-event-emitter.js"
+import useEventEmitter from "./use-event-emitter.js" // eslint-disable-line sort-imports
 import useShape from "set-state-compare/build/use-shape.js"
 
 const logger = new Logger({name: "ApiMaker / UseCurrentUserContext"})
@@ -18,7 +18,7 @@ logger.setDebug(false)
  * @param {string} [props.scope]
  * @returns {import("react").ReactNode}
  */
-const UseCurrentUserContext = (props) => {
+const UseCurrentUserContext = (props) => { // eslint-disable-line react/function-component-definition, jest/require-hook
   const {children, scope = "user", ...restProps} = props
 
   if (Object.keys(restProps).length > 0) {
@@ -33,7 +33,7 @@ const UseCurrentUserContext = (props) => {
   s.meta.scope = scope
   s.meta.scopeName = scopeName
 
-  const loadCurrentUserFromRequest = useCallback(async () => {
+  const loadCurrentUserFromRequest = useCallback(async () => { // eslint-disable-line react-hooks/exhaustive-deps
     const {scope} = s.m
     const getArgsMethodName = `get${inflection.camelize(scope)}Args`
     const args = Devise[getArgsMethodName]()
@@ -55,7 +55,7 @@ const UseCurrentUserContext = (props) => {
     events.emit("currentUserLoaded", {current})
   }, [])
 
-  const defaultCurrentUser = useCallback(() => {
+  const defaultCurrentUser = useCallback(() => { // eslint-disable-line react-hooks/exhaustive-deps
     const {scope, scopeName} = s.m
     let current
 
@@ -83,7 +83,7 @@ const UseCurrentUserContext = (props) => {
     })
   })
 
-  const updateCurrentUser = useCallback(() => {
+  const updateCurrentUser = useCallback(() => { // eslint-disable-line react-hooks/exhaustive-deps
     s.set({
       result: {
         loaded: true,
@@ -92,18 +92,18 @@ const UseCurrentUserContext = (props) => {
     })
   }, [])
 
-  useMemo(() => {
+  useMemo(() => { // eslint-disable-line react-hooks/exhaustive-deps
     if (!Devise.current().hasGlobalCurrentScope(s.m.scope) && !Devise.current().hasCurrentScope(s.m.scope)) {
       logger.debug(() => `Devise hasn't got current scope ${s.m.scope} so loading from request`)
       loadCurrentUserFromRequest()
     }
   }, [])
 
-  const onDeviseSignIn = useCallback(() => {
+  const onDeviseSignIn = useCallback(() => { // eslint-disable-line react-hooks/exhaustive-deps
     updateCurrentUser()
   }, [])
 
-  const onDeviseSignOut = useCallback(() => {
+  const onDeviseSignOut = useCallback(() => { // eslint-disable-line react-hooks/exhaustive-deps
     updateCurrentUser()
   }, [])
 
