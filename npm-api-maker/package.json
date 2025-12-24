@@ -1,7 +1,7 @@
 {
   "name": "@kaspernj/api-maker",
   "type": "module",
-  "version": "1.0.2061",
+  "version": "1.0.2062",
   "description": "My new module",
   "files": [
     "build/**"
