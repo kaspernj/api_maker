@@ -1,3 +1,5 @@
+// @ts-check
+
 import config from "./config.js"
 import CustomError from "./custom-error.js"
 import FormDataObjectizer from "form-data-objectizer"
