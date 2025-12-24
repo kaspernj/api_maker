@@ -1,19 +1,16 @@
 {
-  "include": ["src/**/*"],
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
     "declaration": true,
-    "esModuleInterop": true,
-    "inlineSourceMap": true,
-    "inlineSources": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "nodenext",
-    "module": "nodenext",
-    "outDir": "build",
-    "rootDir": "src",
     "declarationMap": true,
-    "sourceRoot": "/src",
-    "target": "ES2024"
-  }
+    "jsx": "react-jsx",
+    "lib": ["dom", "ES2020"],
+    "outDir": "build",
+    "target": "ES2020",
+    "moduleResolution": "nodenext",
+    "module": "nodenext"
+  },
+  "include": ["src/**/*"]
 }
+
