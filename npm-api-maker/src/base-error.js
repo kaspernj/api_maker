@@ -20,13 +20,13 @@ export default class BaseError extends Error {
    * @param {string} message
    * @param {BaseErrorArgsType} [args]
    */
-  constructor (message, args) {
+  constructor(message, args) {
     let messageToUse = message
 
     if (args && "addResponseErrorsToErrorMessage" in args && !args.addResponseErrorsToErrorMessage) {
       messageToUse = message
     } else {
-      if (typeof args.response == "object" && dig(args, "response", "errors")) {
+      if (typeof args.response == "object" && dig(args, "response", "errors")) { // eslint-disable-line no-lonely-if
         if (message) {
           messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
         } else {
@@ -43,12 +43,12 @@ export default class BaseError extends Error {
   }
 
   /** @returns {string[]} */
-  errorMessages () {
+  errorMessages() {
     return errorMessages(this.args)
   }
 
   /** @returns {string[]} */
-  errorTypes () {
+  errorTypes() {
     if (typeof this.args.response == "object") {
       return digg(this, "args", "response", "errors").map((error) => digg(error, "type"))
     }
