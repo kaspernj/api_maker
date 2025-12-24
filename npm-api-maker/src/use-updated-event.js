@@ -19,10 +19,8 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
     throw new Error(`Unknown props given to useUpdatedEvent: ${Object.keys(restProps).join(", ")}`)
   }
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const s = useShape({active, debounce, model, onUpdated})
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const debounceCallback = useMemo(() => {
     if (typeof debounce == "number") {
       return debounceFunction(s.p.onUpdated, debounce)

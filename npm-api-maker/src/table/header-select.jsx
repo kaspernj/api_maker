@@ -1,5 +1,5 @@
 import {Pressable, View} from "react-native"
-import BaseComponent from "../base-component.js"
+import BaseComponent from "../base-component"
 import Collection from "../collection.js"
 import HeaderColumnContent from "./header-column-content"
 import memo from "set-state-compare/build/memo.js"

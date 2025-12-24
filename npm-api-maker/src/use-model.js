@@ -108,7 +108,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
       // Not active - don't do anything
     } else if (s.props.newIfNoId && !s.m.modelId) {
       return await loadNewModel()
-    } else if (!s.props.optional || s.m.modelId | s.m.args.query) {
+    } else if (!s.props.optional || s.m.modelId || s.m.args.query) {
       return await loadExistingModel()
     }
   }, [])

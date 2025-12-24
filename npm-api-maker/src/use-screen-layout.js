@@ -1,4 +1,6 @@
 import {Platform, useWindowDimensions} from "react-native"
+import {useCallback, useMemo, useState} from "react"
+import useEventListener from "./use-event-listener"
 
 const getWindowLayout = (width) => {
   if (width <= 575) {
