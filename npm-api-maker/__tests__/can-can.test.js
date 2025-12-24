@@ -8,9 +8,9 @@ describe("CanCan", () => {
   const canCan = CanCan.current()
 
   describe("resetAbilities", () => {
-    test("that reset abilities and load abilities not have concurrency issues", async () => {
+    test("that reset abilities and load abilities not have concurrency issues", async() => {
       const mockedCurrent = jest.fn().mockReturnValue({
-        sendRequest: async () => ({abilities: ["loaded"]})
+        sendRequest: async() => ({abilities: ["loaded"]})
       })
       Services.current = mockedCurrent
 
@@ -22,7 +22,7 @@ describe("CanCan", () => {
       expect(canCan.abilities).toEqual([])
     })
 
-    it("dispatches an event", async () => {
+    it("dispatches an event", async() => {
       const eventListener = jest.fn()
       canCan.events.addListener("onResetAbilities", eventListener)
 

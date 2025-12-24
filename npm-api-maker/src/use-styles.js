@@ -4,7 +4,7 @@ import * as inflection from "inflection"
 import useBreakpoint from "./use-breakpoint.js"
 import {useMemo} from "react"
 
-function handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse, arg) {
+function handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse, arg) { // eslint-disable-line func-style, max-params
   if (!(arg in styles)) {
     throw new Error(`No such styling '${arg}' in given styles: ${Object.keys(styles).join(", ")}`)
   }
@@ -33,12 +33,13 @@ export default function useStyles(styles, args, dependencies = []) {
   const breakpointName = digg(breakpoint, "name")
   const actualDependencies = [...dependencies, breakpointName]
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const listOfStyles = useMemo(() => {
     const listOfStyles = []
     const breakpointsReverse = [...config.getBreakpoints()].reverse()
 
     if (!Array.isArray(args)) {
-      args = [args]
+      args = [args] // eslint-disable-line no-param-reassign
     }
 
     for (const arg of args) {
@@ -58,7 +59,7 @@ export default function useStyles(styles, args, dependencies = []) {
     }
 
     return listOfStyles
-  }, actualDependencies)
+  }, actualDependencies) // eslint-disable-line react-hooks/exhaustive-deps
 
   return listOfStyles
 }

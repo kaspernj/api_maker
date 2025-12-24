@@ -27,10 +27,11 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
     } else {
       return debounceFunction(s.p.onUpdated)
     }
-  }, [debounce])
+  }, [debounce]) // eslint-disable-line react-hooks/exhaustive-deps
 
   s.updateMeta({debounceCallback})
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const onUpdatedCallback = useCallback((...args) => {
     if (!s.p.active) {
       return
@@ -41,8 +42,9 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
     } else {
       s.p.onUpdated(...args)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useLayoutEffect(() => {
     let connectUpdated, onConnectedListener
 
@@ -63,7 +65,7 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
         connectUpdated.unsubscribe()
       }
     }
-  }, [model?.id()])
+  }, [model?.id()]) // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 export default apiMakerUseUpdatedEvent
