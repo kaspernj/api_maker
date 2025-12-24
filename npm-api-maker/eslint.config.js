@@ -1,9 +1,9 @@
-const {defineConfig} = require("eslint/config")
-const expoConfig = require("eslint-config-expo/flat")
-const globals = require("globals")
-const jest = require("eslint-plugin-jest")
+import {defineConfig} from "eslint/config"
+import expoConfig from "eslint-config-expo/flat.js"
+import globals from "globals"
+import jest from "eslint-plugin-jest"
 
-module.exports = defineConfig([
+export default defineConfig([
   expoConfig,
   jest.configs["flat/recommended"],
   {
