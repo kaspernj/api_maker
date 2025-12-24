@@ -4,11 +4,16 @@
     "checkJs": true,
     "declaration": true,
     "declarationMap": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "lib": ["dom", "ES2020"],
-    "outDir": "build",
-    "target": "ES2020",
     "moduleResolution": "nodenext",
-    "module": "nodenext"
+    "module": "nodenext",
+    "outDir": "build",
+    "rootDir": "src",
+    "sourceRoot": "/src",
+    "target": "ES2024",
+    "types": ["node"]
   },
   "include": ["src/**/*"]
 }

@@ -1,5 +1,6 @@
 {
   "name": "@kaspernj/api-maker",
+  "type": "module",
   "version": "1.0.2060",
   "description": "My new module",
   "files": [
@@ -72,6 +73,7 @@
     "@jest/globals": "^30.2.0",
     "babel-jest": "^30.0.0",
     "eslint": "^9.23.0",
+    "@types/react": "^18.3.12",
     "eslint-config-expo": "~9.2.0",
     "eslint-find-rules": "^5.0.0",
     "eslint-plugin-jest": "^29.0.1",
