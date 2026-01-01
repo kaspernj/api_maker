@@ -1,7 +1,8 @@
-import {digg} from "diggerize"
-import {EventEmitter} from "eventemitter3"
+/* eslint-disable sort-imports */
 import * as inflection from "inflection"
+import {EventEmitter} from "eventemitter3"
 import {ReadersWriterLock} from "epic-locks"
+import {digg} from "diggerize"
 import Services from "./services.js"
 
 const shared = {}
@@ -10,6 +11,7 @@ export default class ApiMakerCanCan {
   abilities = []
   abilitiesToLoad = []
   abilitiesToLoadData = []
+  abilitiesGeneration = 0
   events = new EventEmitter()
   lock = new ReadersWriterLock()
 
@@ -97,20 +99,22 @@ export default class ApiMakerCanCan {
 
   loadAbility (ability, subject) {
     return new Promise((resolve) => {
-      ability = inflection.underscore(ability)
+      const normalizedAbility = inflection.underscore(ability)
 
-      if (this.isAbilityLoaded(ability, subject)) {
+      if (this.isAbilityLoaded(normalizedAbility, subject)) {
         resolve()
         return
       }
 
-      const foundAbility = this.abilitiesToLoad.find((abilityToLoad) => digg(abilityToLoad, "ability") == ability && digg(abilityToLoad, "subject") == subject)
+      const foundAbility = this.abilitiesToLoad.find((abilityToLoad) => digg(abilityToLoad, "ability") == normalizedAbility &&
+        digg(abilityToLoad, "subject") == subject
+      )
 
       if (foundAbility) {
         foundAbility.callbacks.push(resolve)
       } else {
-        this.abilitiesToLoad.push({ability, callbacks: [resolve], subject})
-        this.abilitiesToLoadData.push({ability, subject})
+        this.abilitiesToLoad.push({ability: normalizedAbility, callbacks: [resolve], subject})
+        this.abilitiesToLoadData.push({ability: normalizedAbility, subject})
 
         this.queueAbilitiesRequest()
       }
@@ -128,11 +132,13 @@ export default class ApiMakerCanCan {
   async resetAbilities () {
     await this.lock.write(() => {
       this.abilities = []
+      this.abilitiesGeneration += 1
     })
     this.events.emit("onResetAbilities")
   }
 
   sendAbilitiesRequest = async () => {
+    const generation = this.abilitiesGeneration
     const abilitiesToLoad = this.abilitiesToLoad
     const abilitiesToLoadData = this.abilitiesToLoadData
 
@@ -144,6 +150,16 @@ export default class ApiMakerCanCan {
       request: abilitiesToLoadData
     })
     const abilities = digg(result, "abilities")
+
+    if (generation !== this.abilitiesGeneration) {
+      for (const abilityData of abilitiesToLoad) {
+        for (const callback of abilityData.callbacks) {
+          callback()
+        }
+      }
+
+      return
+    }
 
     // Set the loaded abilities
     this.abilities = this.abilities.concat(abilities)
