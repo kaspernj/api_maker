@@ -23,7 +23,7 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
     return (
       <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>
         {!currentUser &&
-          <Pressable onPress={this.tt.onSignInAsAdminPress}>
+          <Pressable data-testid="sign-in-as-admin" onPress={this.tt.onSignInAsAdminPress}>
             <Text>Sign in as admin</Text>
           </Pressable>
         }

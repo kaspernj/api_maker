@@ -26,7 +26,7 @@ describe "can can - loader" do
     visit can_can_loader_path
 
     wait_for_selector ".components-can-can-loader-with-state #{cannot_access_admin_selector}"
-    click_on "Sign in as admin"
+    wait_for_and_find("[data-testid='sign-in-as-admin']").click
 
     wait_for_selector ".components-can-can-loader-with-state #{can_access_admin_selector}"
     wait_for_no_selector ".components-can-can-loader-with-state #{cannot_access_admin_selector}"
