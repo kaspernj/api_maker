@@ -8,7 +8,7 @@ import Params from "../params.js"
 import PropTypes from "prop-types"
 import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import Table from "../table/table"
+import Table from "../table/table.js"
 import useCurrentUser from "../use-current-user.js"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminModelClassTable extends BaseComponent {

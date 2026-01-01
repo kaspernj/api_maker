@@ -1,7 +1,7 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import React, {useMemo} from "react"
 import {digs} from "diggerize"
-import {useForm} from "../form"
+import {useForm} from "../form.js"
 import * as inflection from "inflection"
 import InvalidFeedback from "./invalid-feedback.js"
 import memo from "set-state-compare/build/memo.js"

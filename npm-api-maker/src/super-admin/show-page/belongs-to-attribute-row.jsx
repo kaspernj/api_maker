@@ -1,12 +1,12 @@
-import AttributeRow from "../../bootstrap/attribute-row"
+import AttributeRow from "../../bootstrap/attribute-row.js"
 import BaseComponent from "../../base-component.js"
 import * as inflection from "inflection"
-import Link from "../../link"
+import Link from "../../link.js"
 import memo from "set-state-compare/build/memo.js"
 import Params from "../../params.js"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import Text from "../../utils/text"
+import Text from "../../utils/text.js"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowPageBelongsToAttributeRow extends BaseComponent {
   render() {

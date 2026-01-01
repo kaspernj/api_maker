@@ -6,8 +6,8 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import SortLink from "../bootstrap/sort-link"
-import Text from "../utils/text"
+import SortLink from "../bootstrap/sort-link.js"
+import Text from "../utils/text.js"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({

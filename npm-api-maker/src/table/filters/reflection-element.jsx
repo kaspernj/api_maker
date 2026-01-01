@@ -5,7 +5,7 @@ import memo from "set-state-compare/build/memo.js"
 import {Pressable} from "react-native"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import Text from "../../utils/text"
+import Text from "../../utils/text.js"
 
 export default memo(shapeComponent(class ReflectionElement extends BaseComponent {
   static propTypes = PropTypesExact({

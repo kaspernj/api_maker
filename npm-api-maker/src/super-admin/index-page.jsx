@@ -1,6 +1,6 @@
 import BaseComponent from "../base-component.js"
 import memo from "set-state-compare/build/memo.js"
-import ModelClassTable from "./model-class-table"
+import ModelClassTable from "./model-class-table.js"
 import PropTypes from "prop-types"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"

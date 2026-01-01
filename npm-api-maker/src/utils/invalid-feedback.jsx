@@ -3,7 +3,7 @@ import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import Text from "./text"
+import Text from "./text.js"
 
 export default memo(shapeComponent(class ApiMakerUtilsInvalidFeedback extends ShapeComponent {
   static propTypes = propTypesExact({
