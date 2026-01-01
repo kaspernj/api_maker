@@ -1,5 +1,6 @@
+import {useCallback, useEffect} from "react"
 import CanCan from "./can-can.js"
-import {useCallback, useMemo} from "react"
+import Devise from "./devise.js"
 import useCurrentUser from "./use-current-user.js"
 import useEventEmitter from "./use-event-emitter.js"
 import useShape from "set-state-compare/build/use-shape.js"
@@ -44,15 +45,14 @@ export default function useCanCan(abilitiesCallback, dependencies) {
     }
   }, [])
 
-  if (!dependencies) {
-    // @ts-expect-error
-    dependencies = [currentUser?.id()]
-  }
+  const dependencyList = dependencies ?? [currentUser?.id()] // @ts-expect-error
 
-  useMemo(() => {
+  useEffect(() => {
     loadAbilitiesOnNew()
-  }, dependencies)
+  }, dependencyList)
 
+  useEventEmitter(Devise.events(), "onDeviseSignIn", loadAbilitiesOnNew)
+  useEventEmitter(Devise.events(), "onDeviseSignOut", loadAbilitiesOnNew)
   useEventEmitter(CanCan.current().events, "onResetAbilities", onResetAbilities)
 
   return s.s.canCan
