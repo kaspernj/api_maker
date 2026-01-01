@@ -7,7 +7,7 @@ import {FlashNotifications} from "flash-notifications"
 import {Form} from "../form.js"
 import * as inflection from "inflection"
 // @ts-expect-error
-import Locales from "shared/locales"
+import Locales from "shared/locales.js"
 import memo from "set-state-compare/build/memo.js"
 import Params from "../params.js"
 import PropTypes from "prop-types"
