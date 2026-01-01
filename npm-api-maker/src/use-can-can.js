@@ -1,4 +1,4 @@
-import {useCallback, useEffect} from "react"
+import {useCallback, useMemo} from "react"
 import CanCan from "./can-can.js"
 import Devise from "./devise.js"
 import useCurrentUser from "./use-current-user.js"
@@ -47,7 +47,7 @@ export default function useCanCan(abilitiesCallback, dependencies) {
 
   const dependencyList = dependencies ?? [currentUser?.id()] // @ts-expect-error
 
-  useEffect(() => {
+  useMemo(() => {
     loadAbilitiesOnNew()
   }, dependencyList)
 
