@@ -1,4 +1,4 @@
-require "rspec"
+require "rails_helper"
 
 describe "api_maker_table helpers" do
   class FakeWorkplace
