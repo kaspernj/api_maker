@@ -1,8 +1,0 @@
-export default useResizeObserver;
-/**
- * @param {object} element
- * @param {function} callback
- * @return {void}
- */
-declare function useResizeObserver(element: object, callback: Function): void;
-//# sourceMappingURL=use-resize-observer.d.ts.map
