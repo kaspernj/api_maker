@@ -4,6 +4,8 @@ artifact_dirs:
 before_script:
   - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
 
+  - cd api_maker_table_rubygem && bundle install --jobs 4 --without production staging
+
   - cd npm-api-maker && npm install
   - cd npm-api-maker && yarn link
   - cd npm-api-maker && npm run build
@@ -83,3 +85,9 @@ builds:
     name: Expo Doctor
     script:
       - cd npm-api-maker && npx expo-doctor
+  build_13:
+    name: ApiMakerTable RSpec
+    environment:
+      RUBY_VERSION: 3.3.5
+    script:
+      - cd api_maker_table_rubygem && bundle exec rspec spec/api_helpers/api_maker_table_helpers_spec.rb
