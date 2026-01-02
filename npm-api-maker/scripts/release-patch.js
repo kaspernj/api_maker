@@ -51,8 +51,20 @@ class ReleasePatch {
     }
   }
 
+  ensureNpmLogin() {
+    try {
+      const whoami = this.runQuiet("npm whoami", {cwd: this.packageDir})
+      if (whoami) return
+    } catch (error) {
+      // Fall through to login.
+    }
+
+    this.run("npm login", {cwd: this.packageDir})
+  }
+
   execute() {
     this.requireCleanGit()
+    this.ensureNpmLogin()
 
     this.run("npm version patch --no-git-tag-version", {cwd: this.packageDir})
     this.run("npm run build", {cwd: this.packageDir})
