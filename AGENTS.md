@@ -7,3 +7,6 @@ Notes:
 - When using `gh pr create/edit`, pass multi-line bodies with real newlines (not literal `\n`) so GitHub renders them correctly.
 - Avoid unrelated changes (for example, adding placeholder modules in specs) unless they are necessary for the requested change.
 - Before committing, review the current diff and propose commit message(s) grouped by logical change sets.
+- Prefer `describe` over `RSpec.describe` in specs.
+- Do not add `# frozen_string_literal: true` to files.
+- Prefer multiple small, individually working commits when possible.
