@@ -1,70 +1,77 @@
 require "rails_helper"
 
 describe "api_maker_table helpers" do
-  class FakeWorkplace
-    attr_reader :name
+  let(:fake_workplace_class) do
+    Class.new do
+      attr_reader :name
 
-    def initialize(name)
-      @name = name
+      def initialize(name)
+        @name = name
+      end
     end
   end
 
-  class FakeUser
-    attr_reader :id
-    attr_accessor :current_workplace
+  let(:fake_user_class) do
+    workplace_class = fake_workplace_class
 
-    def initialize(id: 1, current_workplace: nil, lock_results: [false])
-      @id = id
-      @current_workplace = current_workplace
-      @created = false
-      @lock_results = lock_results
-      @lock_calls = 0
-    end
+    Class.new do
+      attr_reader :id
+      attr_accessor :current_workplace
 
-    def with_advisory_lock(_key)
-      result = @lock_results[@lock_calls]
-      @lock_calls += 1
-      result = @lock_results.last if result.nil?
-      return false unless result
+      define_method(:initialize) do |id: 1, current_workplace: nil, lock_results: [false]|
+        @id = id
+        @current_workplace = current_workplace
+        @created = false
+        @lock_results = lock_results
+        @lock_calls = 0
+        @workplace_class = workplace_class
+      end
 
-      yield
-    end
+      def with_advisory_lock(_key)
+        result = @lock_results[@lock_calls]
+        @lock_calls += 1
+        result = @lock_results.last if result.nil?
+        return false unless result
 
-    def reload
-      self
-    end
+        yield
+      end
 
-    def create_current_workplace!(name:, user:)
-      @created = true
-      self.current_workplace = FakeWorkplace.new(name)
-      self.current_workplace
-    end
+      def reload
+        self
+      end
 
-    def save!
-      true
-    end
+      def create_current_workplace!(name:, **_kwargs)
+        @created = true
+        self.current_workplace = @workplace_class.new(name)
+        current_workplace
+      end
 
-    def created?
-      @created
+      def save!
+        true
+      end
+
+      def created?
+        @created
+      end
     end
   end
 
-  class HelperHost
-    include ApiHelpers::ApiMakerTableHelpers
+  let(:helper_host_class) do
+    Class.new do
+      include ApiHelpers::ApiMakerTableHelpers
 
-    def initialize(user)
-      @current_user = user
-    end
+      attr_reader :current_user
 
-    def current_user
-      @current_user
+      def initialize(user)
+        @current_user = user
+      end
     end
   end
 
   describe "#current_workplace" do
     it "returns nil when the lock is never acquired" do
-      user = FakeUser.new(current_workplace: nil, lock_results: [false, false, false])
-      helper = HelperHost.new(user)
+      user = fake_user_class.new(current_workplace: nil, lock_results: [false, false, false])
+      helper = helper_host_class.new(user)
 
       workplace = helper.current_workplace
 
@@ -73,9 +80,9 @@ describe "api_maker_table helpers" do
     end
 
     it "returns existing when the lock is not acquired" do
-      existing = FakeWorkplace.new("Existing workplace")
-      user = FakeUser.new(current_workplace: existing, lock_results: [false])
-      helper = HelperHost.new(user)
+      existing = fake_workplace_class.new("Existing workplace")
+      user = fake_user_class.new(current_workplace: existing, lock_results: [false])
+      helper = helper_host_class.new(user)
 
       workplace = helper.current_workplace
 
@@ -85,12 +92,12 @@ describe "api_maker_table helpers" do
     end
 
     it "creates after retry when the lock is acquired" do
-      user = FakeUser.new(current_workplace: nil, lock_results: [false, true])
-      helper = HelperHost.new(user)
+      user = fake_user_class.new(current_workplace: nil, lock_results: [false, true])
+      helper = helper_host_class.new(user)
 
       workplace = helper.current_workplace
 
-      expect(workplace).to be_a(FakeWorkplace)
+      expect(workplace).to be_a(fake_workplace_class)
       expect(workplace.name).to eq("Current workplace")
       expect(user).to be_created
     end

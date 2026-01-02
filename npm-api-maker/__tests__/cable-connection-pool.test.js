@@ -1,4 +1,4 @@
-import CableConnectionPool from "../buikd/cable-connection-pool.js"
+import CableConnectionPool from "../build/cable-connection-pool.js"
 import CableSubscriptionPool from "../build/cable-subscription-pool"
 import {digg} from "diggerize"
 import {jest} from "@jest/globals"
@@ -12,16 +12,16 @@ describe("CableConnectionPool", () => {
     it("creates a new create event and connects", () => {
       const cableConnectionPool = new CableConnectionPool()
 
-      cableConnectionPool.scheduleConnectUpcoming = function() {
-        const subscriptionData = this.upcomingSubscriptionData
-        const subscriptions = this.upcomingSubscriptions
+      cableConnectionPool.scheduleConnectUpcomingRunLast.queue = () => {
+        const subscriptionData = cableConnectionPool.upcomingSubscriptionData
+        const subscriptions = cableConnectionPool.upcomingSubscriptions
 
-        this.upcomingSubscriptionData = {}
-        this.upcomingSubscriptions = {}
+        cableConnectionPool.upcomingSubscriptionData = {}
+        cableConnectionPool.upcomingSubscriptions = {}
 
         const cableSubscriptionPool = {subscriptionData, subscriptions}
 
-        this.cableSubscriptionPools.push(cableSubscriptionPool)
+        cableConnectionPool.cableSubscriptionPools.push(cableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = []
       cableConnectionPool.connectCreated("Contact", () => console.log("Callback"))
@@ -48,16 +48,16 @@ describe("CableConnectionPool", () => {
         }
       }
 
-      cableConnectionPool.scheduleConnectUpcoming = function() {
-        const subscriptionData = this.upcomingSubscriptionData
-        const subscriptions = this.upcomingSubscriptions
+      cableConnectionPool.scheduleConnectUpcomingRunLast.queue = () => {
+        const subscriptionData = cableConnectionPool.upcomingSubscriptionData
+        const subscriptions = cableConnectionPool.upcomingSubscriptions
 
-        this.upcomingSubscriptionData = {}
-        this.upcomingSubscriptions = {}
+        cableConnectionPool.upcomingSubscriptionData = {}
+        cableConnectionPool.upcomingSubscriptions = {}
 
         const cableSubscriptionPool = {subscriptionData, subscriptions}
 
-        this.cableSubscriptionPools.push(cableSubscriptionPool)
+        cableConnectionPool.cableSubscriptionPools.push(cableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectDestroyed("Contact", "modelId", () => { })
@@ -123,7 +123,7 @@ describe("CableConnectionPool", () => {
         this.cableSubscriptionPools.push(cableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
-      cableConnectionPool.scheduleConnectUpcoming = () => cableConnectionPool.connectUpcoming()
+      cableConnectionPool.scheduleConnectUpcomingRunLast.queue = () => cableConnectionPool.connectUpcoming()
       cableConnectionPool.connectDestroyed("Contact", "modelId", () => { })
 
       const subscriptions = digg(cableSubscriptionPool, "subscriptions", "Contact", "destroys", "modelId")
@@ -146,16 +146,16 @@ describe("CableConnectionPool", () => {
         }
       }
 
-      cableConnectionPool.scheduleConnectUpcoming = function() {
-        const subscriptionData = this.upcomingSubscriptionData
-        const subscriptions = this.upcomingSubscriptions
+      cableConnectionPool.scheduleConnectUpcomingRunLast.queue = () => {
+        const subscriptionData = cableConnectionPool.upcomingSubscriptionData
+        const subscriptions = cableConnectionPool.upcomingSubscriptions
 
-        this.upcomingSubscriptionData = {}
-        this.upcomingSubscriptions = {}
+        cableConnectionPool.upcomingSubscriptionData = {}
+        cableConnectionPool.upcomingSubscriptions = {}
 
         const cableSubscriptionPool = {subscriptionData, subscriptions}
 
-        this.cableSubscriptionPools.push(cableSubscriptionPool)
+        cableConnectionPool.cableSubscriptionPools.push(cableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectUpdate("Contact", "modelId", () => console.log("Update callback"))

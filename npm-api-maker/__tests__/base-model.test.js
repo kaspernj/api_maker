@@ -1,5 +1,4 @@
 import BaseModel from "../build/base-model.js"
-import CustomError from "../build/custom-error"
 import {jest} from "@jest/globals"
 import {JSDOM} from "jsdom"
 import ValidationError from "../build/validation-error.js"
@@ -42,15 +41,30 @@ describe("BaseModel", () => {
   })
 
   describe("parseValidationErrors", () => {
-    const error = new CustomError("Some validation error", {
+    const error = new ValidationError({
+      getUnhandledErrorMessage: () => "Some validation error",
+      getErrorMessage: () => "Some validation error"
+    }, {
       response: {
-        validation_errors: []
+        validation_errors: [{
+          attribute_name: "name",
+          attribute_type: "string",
+          error_messages: ["can't be blank"],
+          error_types: ["blank"],
+          input_name: "user[name]",
+          model_name: "user"
+        }]
       }
     })
     const form = document.createElement("form")
     const model = new BaseModel()
     const dispatchEventSpy = jest.spyOn(form, "dispatchEvent").mockImplementation(() => "asd")
     const newCustomEventSpy = jest.spyOn(BaseModel, "newCustomEvent").mockImplementation(() => "asd")
+
+    beforeEach(() => {
+      dispatchEventSpy.mockClear()
+      newCustomEventSpy.mockClear()
+    })
 
     it("throws the validation errors if no options are given", () => {
       expect(() => BaseModel.parseValidationErrors({error, model})).toThrow(ValidationError)
@@ -64,8 +78,8 @@ describe("BaseModel", () => {
 
     it("doesnt throw validation errors if disabled", () => {
       BaseModel.parseValidationErrors({error, model, options: {throwValidationError: false}})
-      expect(dispatchEventSpy).toHaveBeenCalled()
-      expect(newCustomEventSpy).toHaveBeenCalled()
+      expect(dispatchEventSpy).not.toHaveBeenCalled()
+      expect(newCustomEventSpy).not.toHaveBeenCalled()
     })
   })
 })

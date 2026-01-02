@@ -1,9 +1,15 @@
 import Collection from "../build/collection.js"
 
+class FakeModel {
+  static modelClassData() {
+    return {name: "User"}
+  }
+}
+
 describe("Collection", () => {
   describe("count", () => {
     it("is able to clone the collection and merge count into it without manipulating the original given query", () => {
-      let collection = new Collection({}, {})
+      let collection = new Collection({modelClass: FakeModel}, {})
 
       collection.ransack({name_cont: "Kasper"})
 
@@ -19,7 +25,7 @@ describe("Collection", () => {
       // This can happen if someone does something like this and users_q isn't set:
       // query.ransack(params.users_q)
 
-      let collection = new Collection({}, {ransack: {id_eq: 5}})
+      let collection = new Collection({modelClass: FakeModel}, {ransack: {id_eq: 5}})
 
       collection.ransack(undefined)
 
@@ -27,7 +33,7 @@ describe("Collection", () => {
     })
 
     it("handles sorts of different types", () => {
-      let collection = new Collection({}, {})
+      let collection = new Collection({modelClass: FakeModel}, {})
 
       collection = collection.ransack({s: "created_at"})
       expect(collection.queryArgs.ransack.s).toEqual("created_at")
@@ -39,7 +45,7 @@ describe("Collection", () => {
 
   describe("selectColumns", () => {
     it("adds selected columns to the query", () => {
-      let collection = new Collection({}, {})
+      let collection = new Collection({modelClass: FakeModel}, {})
 
       collection = collection.selectColumns({User: ["id"]})
       expect(collection.queryArgs.selectColumns).toEqual({user: ["id"]})
