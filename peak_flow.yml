@@ -78,7 +78,7 @@ builds:
   build_11:
     name: ESLint find rules
     script:
-      - cd npm-api-maker && npm run eslint-find-rules -u .eslintrc.js
+      - cd npm-api-maker && npm run lint:eslint-find-rules -u .eslintrc.js
   build_12:
     name: Expo Doctor
     script:
