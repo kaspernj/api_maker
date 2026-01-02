@@ -22,13 +22,13 @@ builds:
       RUBY_VERSION: 3.3.5
     name: RSpec Rails 6 Ruby 3.3.5
     script:
-      - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services
+      - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services spec/api_helpers
   build_2:
     environment:
       RUBY_VERSION: 3.3.5
     name: RSpec Rails 7 Ruby 3.3.5
     script:
-      - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services
+      - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services spec/api_helpers
   build_3:
     environment:
       RUBY_VERSION: 3.3.5
