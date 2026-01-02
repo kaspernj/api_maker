@@ -30,6 +30,12 @@ module ApiHelpers::ApiMakerTableHelpers
 
       unless workplace
         current_user.reload
+
+        unless current_user.current_workplace
+          current_user.create_current_workplace!(name: "Current workplace", user: current_user)
+          current_user.save!
+        end
+
         workplace = current_user.current_workplace
       end
 
