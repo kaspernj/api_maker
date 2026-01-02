@@ -5,3 +5,5 @@ Notes:
 - Do not edit `build/` outputs manually; regenerate with the appropriate build command instead.
 - Only run builds when releasing a new package; development runs against source files.
 - When using `gh pr create/edit`, pass multi-line bodies with real newlines (not literal `\n`) so GitHub renders them correctly.
+- Avoid unrelated changes (for example, adding placeholder modules in specs) unless they are necessary for the requested change.
+- Before committing, review the current diff and propose commit message(s) grouped by logical change sets.
