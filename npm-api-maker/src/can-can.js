@@ -12,6 +12,7 @@ export default class ApiMakerCanCan {
   abilitiesToLoad = []
   abilitiesToLoadData = []
   abilitiesGeneration = 0
+  loadingCount = 0
   events = new EventEmitter()
   lock = new ReadersWriterLock()
 
@@ -26,6 +27,8 @@ export default class ApiMakerCanCan {
     const foundAbility = this.findAbility(abilityToUse, subject)
 
     if (foundAbility === undefined) {
+      if (this.isReloading()) return false
+
       let subjectLabel = subject
 
       // Translate resource-models into class name strings
@@ -76,25 +79,33 @@ export default class ApiMakerCanCan {
     return false
   }
 
+  isReloading () {
+    return this.loadingCount > 0
+  }
+
   async loadAbilities (abilities) {
-    await this.lock.read(async () => {
-      const promises = []
+    try {
+      await this.lock.read(async () => {
+        const promises = []
 
-      for (const abilityData of abilities) {
-        const subject = abilityData[0]
+        for (const abilityData of abilities) {
+          const subject = abilityData[0]
 
-        if (!subject) throw new Error(`Invalid subject given in abilities: ${subject} - ${JSON.stringify(abilities)}`)
-        if (!Array.isArray(abilityData[1])) throw new Error(`Expected an array of abilities but got: ${typeof abilityData[1]}: ${abilityData[1]}`)
+          if (!subject) throw new Error(`Invalid subject given in abilities: ${subject} - ${JSON.stringify(abilities)}`)
+          if (!Array.isArray(abilityData[1])) throw new Error(`Expected an array of abilities but got: ${typeof abilityData[1]}: ${abilityData[1]}`)
 
-        for (const ability of abilityData[1]) {
-          const promise = this.loadAbility(ability, subject)
+          for (const ability of abilityData[1]) {
+            const promise = this.loadAbility(ability, subject)
 
-          promises.push(promise)
+            promises.push(promise)
+          }
         }
-      }
 
-      await Promise.all(promises)
-    })
+        await Promise.all(promises)
+      })
+    } finally {
+      if (this.loadingCount > 0) this.loadingCount -= 1
+    }
   }
 
   loadAbility (ability, subject) {
@@ -133,6 +144,7 @@ export default class ApiMakerCanCan {
     await this.lock.write(() => {
       this.abilities = []
       this.abilitiesGeneration += 1
+      this.loadingCount += 1
     })
     this.events.emit("onResetAbilities")
   }
