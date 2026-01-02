@@ -1,0 +1,19 @@
+import { EventEmitter } from "eventemitter3";
+import Logger from "./logger.js";
+const logger = new Logger({ name: "ApiMaker / CableSubscription" });
+export default class ApiMakerCableSubscription {
+    constructor() {
+        this.events = new EventEmitter();
+        this.subscribed = true;
+    }
+    unsubscribe() {
+        if (!this.subscribed) {
+            logger.debug("Unsubscribed already called");
+            return;
+        }
+        logger.debug("Unsubscribe called for subscription");
+        this.subscribed = false;
+        this.events.emit("unsubscribed");
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2FibGUtc3Vic2NyaXB0aW9uLmpzIiwic291cmNlUm9vdCI6Ii9zcmMvIiwic291cmNlcyI6WyJjYWJsZS1zdWJzY3JpcHRpb24uanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFDLFlBQVksRUFBQyxNQUFNLGVBQWUsQ0FBQTtBQUMxQyxPQUFPLE1BQU0sTUFBTSxhQUFhLENBQUE7QUFFaEMsTUFBTSxNQUFNLEdBQUcsSUFBSSxNQUFNLENBQUMsRUFBQyxJQUFJLEVBQUUsOEJBQThCLEVBQUMsQ0FBQyxDQUFBO0FBRWpFLE1BQU0sQ0FBQyxPQUFPLE9BQU8seUJBQXlCO0lBQzVDO1FBQ0UsSUFBSSxDQUFDLE1BQU0sR0FBRyxJQUFJLFlBQVksRUFBRSxDQUFBO1FBQ2hDLElBQUksQ0FBQyxVQUFVLEdBQUcsSUFBSSxDQUFBO0lBQ3hCLENBQUM7SUFFRCxXQUFXO1FBQ1QsSUFBSSxDQUFDLElBQUksQ0FBQyxVQUFVLEVBQUUsQ0FBQztZQUNyQixNQUFNLENBQUMsS0FBSyxDQUFDLDZCQUE2QixDQUFDLENBQUE7WUFDM0MsT0FBTTtRQUNSLENBQUM7UUFFRCxNQUFNLENBQUMsS0FBSyxDQUFDLHFDQUFxQyxDQUFDLENBQUE7UUFFbkQsSUFBSSxDQUFDLFVBQVUsR0FBRyxLQUFLLENBQUE7UUFDdkIsSUFBSSxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsY0FBYyxDQUFDLENBQUE7SUFDbEMsQ0FBQztDQUNGIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHtFdmVudEVtaXR0ZXJ9IGZyb20gXCJldmVudGVtaXR0ZXIzXCJcbmltcG9ydCBMb2dnZXIgZnJvbSBcIi4vbG9nZ2VyLmpzXCJcblxuY29uc3QgbG9nZ2VyID0gbmV3IExvZ2dlcih7bmFtZTogXCJBcGlNYWtlciAvIENhYmxlU3Vic2NyaXB0aW9uXCJ9KVxuXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBBcGlNYWtlckNhYmxlU3Vic2NyaXB0aW9uIHtcbiAgY29uc3RydWN0b3IgKCkge1xuICAgIHRoaXMuZXZlbnRzID0gbmV3IEV2ZW50RW1pdHRlcigpXG4gICAgdGhpcy5zdWJzY3JpYmVkID0gdHJ1ZVxuICB9XG5cbiAgdW5zdWJzY3JpYmUgKCkge1xuICAgIGlmICghdGhpcy5zdWJzY3JpYmVkKSB7XG4gICAgICBsb2dnZXIuZGVidWcoXCJVbnN1YnNjcmliZWQgYWxyZWFkeSBjYWxsZWRcIilcbiAgICAgIHJldHVyblxuICAgIH1cblxuICAgIGxvZ2dlci5kZWJ1ZyhcIlVuc3Vic2NyaWJlIGNhbGxlZCBmb3Igc3Vic2NyaXB0aW9uXCIpXG5cbiAgICB0aGlzLnN1YnNjcmliZWQgPSBmYWxzZVxuICAgIHRoaXMuZXZlbnRzLmVtaXQoXCJ1bnN1YnNjcmliZWRcIilcbiAgfVxufVxuIl19
