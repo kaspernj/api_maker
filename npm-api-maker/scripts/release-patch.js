@@ -33,21 +33,15 @@ class ReleasePatch {
   }
 
   stageReleaseFiles() {
-    const standardCandidates = [
+    const candidates = [
       "npm-api-maker/package.json",
       "npm-api-maker/package-lock.json",
       "npm-api-maker/yarn.lock"
     ]
-    const forceCandidates = ["npm-api-maker/build"]
 
-    const existingStandard = standardCandidates.filter((item) => fs.existsSync(path.join(this.repoRoot, item)))
-    if (existingStandard.length > 0) {
-      this.run(`git add ${existingStandard.join(" ")}`, {cwd: this.repoRoot})
-    }
-
-    const existingForce = forceCandidates.filter((item) => fs.existsSync(path.join(this.repoRoot, item)))
-    if (existingForce.length > 0) {
-      this.run(`git add -f ${existingForce.join(" ")}`, {cwd: this.repoRoot})
+    const existing = candidates.filter((item) => fs.existsSync(path.join(this.repoRoot, item)))
+    if (existing.length > 0) {
+      this.run(`git add ${existing.join(" ")}`, {cwd: this.repoRoot})
     }
   }
 
