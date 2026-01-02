@@ -1,3 +1,0 @@
-const stub = "Hello World";
-export { stub };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiL3NyYy8iLCJzb3VyY2VzIjpbImluZGV4LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sSUFBSSxHQUFHLGFBQWEsQ0FBQTtBQUUxQixPQUFPLEVBQUMsSUFBSSxFQUFDLENBQUEiLCJzb3VyY2VzQ29udGVudCI6WyJjb25zdCBzdHViID0gXCJIZWxsbyBXb3JsZFwiXG5cbmV4cG9ydCB7c3R1Yn1cbiJdfQ==
