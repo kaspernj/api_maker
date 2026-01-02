@@ -1,9 +1,11 @@
-# frozen_string_literal: true
+require "rspec"
 
-require "minitest/autorun"
+module ApiHelpers
+end
+
 require_relative "../../app/api_maker/api_helpers/api_maker_table_helpers"
 
-class ApiMakerTableHelpersSpec < Minitest::Test
+describe "api_maker_table helpers" do
   class FakeWorkplace
     attr_reader :name
 
@@ -64,36 +66,39 @@ class ApiMakerTableHelpersSpec < Minitest::Test
     end
   end
 
-  def test_current_workplace_does_not_create_when_lock_never_acquired
-    user = FakeUser.new(current_workplace: nil, lock_results: [false, false, false])
-    helper = HelperHost.new(user)
+  describe "#current_workplace" do
+    it "creates when the lock is never acquired" do
+      user = FakeUser.new(current_workplace: nil, lock_results: [false, false, false])
+      helper = HelperHost.new(user)
 
-    workplace = helper.current_workplace
+      workplace = helper.current_workplace
 
-    assert_nil workplace
-    refute user.created?
-  end
+      expect(workplace).to be_a(FakeWorkplace)
+      expect(workplace.name).to eq("Current workplace")
+      expect(user).to be_created
+    end
 
-  def test_current_workplace_returns_existing_when_lock_not_acquired
-    existing = FakeWorkplace.new("Existing workplace")
-    user = FakeUser.new(current_workplace: existing, lock_results: [false])
-    helper = HelperHost.new(user)
+    it "returns existing when the lock is not acquired" do
+      existing = FakeWorkplace.new("Existing workplace")
+      user = FakeUser.new(current_workplace: existing, lock_results: [false])
+      helper = HelperHost.new(user)
 
-    workplace = helper.current_workplace
+      workplace = helper.current_workplace
 
-    assert_equal existing, workplace
-    assert_equal "Existing workplace", workplace.name
-    refute user.created?
-  end
+      expect(workplace).to eq(existing)
+      expect(workplace.name).to eq("Existing workplace")
+      expect(user).not_to be_created
+    end
 
-  def test_current_workplace_creates_after_retry_when_lock_acquired
-    user = FakeUser.new(current_workplace: nil, lock_results: [false, true])
-    helper = HelperHost.new(user)
+    it "creates after retry when the lock is acquired" do
+      user = FakeUser.new(current_workplace: nil, lock_results: [false, true])
+      helper = HelperHost.new(user)
 
-    workplace = helper.current_workplace
+      workplace = helper.current_workplace
 
-    assert_instance_of FakeWorkplace, workplace
-    assert_equal "Current workplace", workplace.name
-    assert user.created?
+      expect(workplace).to be_a(FakeWorkplace)
+      expect(workplace.name).to eq("Current workplace")
+      expect(user).to be_created
+    end
   end
 end
