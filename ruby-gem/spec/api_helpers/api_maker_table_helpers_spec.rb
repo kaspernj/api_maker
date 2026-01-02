@@ -9,9 +9,9 @@ describe "api_maker_table helpers" do
       Struct.new(:id, :current_workplace, :lock_results, :lock_calls, :created, keyword_init: true) do
         def initialize(id: 1, current_workplace: nil, lock_results: [false])
           super(
-            id: id,
-            current_workplace: current_workplace,
-            lock_results: lock_results,
+            id:,
+            current_workplace:,
+            lock_results:,
             lock_calls: 0,
             created: false
           )
