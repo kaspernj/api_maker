@@ -20,6 +20,7 @@
     "lint:eslint": "eslint --ext .js,.jsx",
     "lint:eslint-find-rules": "eslint-find-rules",
     "release:patch": "node scripts/release-patch.js",
+    "release:patch-master": "node scripts/release-patch-master.js",
     "typecheck": "tsc --noEmit",
     "watch": "tsc -w"
   },
