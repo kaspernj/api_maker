@@ -1,5 +1,5 @@
 import React from "react"
-import useRouter from "./use-router.js"
+import useRouter from "./use-router"
 
 const withRouter = (WrapperComponent) => {
   function WithRouter(props) { // eslint-disable-line func-style

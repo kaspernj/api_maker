@@ -71,9 +71,9 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.26.3",
     "@jest/globals": "~29.7.0",
+    "@types/react": "~19.0.10",
     "babel-jest": "~29.7.0",
     "eslint": "^9.23.0",
-    "@types/react": "~19.0.10",
     "eslint-config-expo": "~9.2.0",
     "eslint-find-rules": "^5.0.0",
     "eslint-plugin-jest": "^29.0.1",
@@ -83,7 +83,8 @@
     "jest": "~29.7.0",
     "react": "19.0.0",
     "react-native": "0.79.6",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "velocious": "^1.0.173"
   },
   "peerDependencies": {
     "expo": "*",

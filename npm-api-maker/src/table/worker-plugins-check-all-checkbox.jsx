@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef} from "react"
-import BaseComponent from "../base-component.js"
+import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Collection from "../collection.js"
 import memo from "set-state-compare/build/memo.js"

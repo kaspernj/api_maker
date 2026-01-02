@@ -1,11 +1,11 @@
-import BaseComponent from "../../../base-component.js"
+import BaseComponent from "../../../base-component"
 import classNames from "classnames"
-import Link from "../../../link.js"
+import Link from "../../../link"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import Text from "../../../utils/text.js"
+import Text from "../../../utils/text"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
   static propTypes = {

@@ -9,6 +9,12 @@ const options = {
   devtool: "source-map",
   module: {
     rules: [
+      {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false
+        }
+      },
       babel,
       erb,
       {

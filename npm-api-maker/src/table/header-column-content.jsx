@@ -1,4 +1,4 @@
-import BaseComponent from "../base-component.js"
+import BaseComponent from "../base-component"
 import {digs} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
 import {View} from "react-native"
@@ -6,8 +6,8 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import SortLink from "../bootstrap/sort-link.js"
-import Text from "../utils/text.js"
+import SortLink from "../bootstrap/sort-link"
+import Text from "../utils/text"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({

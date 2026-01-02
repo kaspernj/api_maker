@@ -1,20 +1,20 @@
 import React, {useMemo} from "react"
 import {StyleSheet, View} from "react-native"
-import BaseComponent from "../../base-component.js"
+import BaseComponent from "../../base-component"
 import CommandsPool from "../../commands-pool.js"
-import config from "super-admin/config.js"
-import Header from "./header/index.js"
+import config from "super-admin/config"
+import Header from "./header/index"
 import memo from "set-state-compare/build/memo.js"
-import Menu from "./menu/index.js"
+import Menu from "./menu/index"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import Text from "../../utils/text.js"
+import Text from "../../utils/text"
 import useBreakpoint from "../../use-breakpoint.js"
 import useCurrentUser from "../../use-current-user.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
-const NoAccess = React.lazy(() => import("./no-access.js"))
+const NoAccess = React.lazy(() => import("./no-access"))
 
 const styles = StyleSheet.create({
   appLayoutContentContainer: {

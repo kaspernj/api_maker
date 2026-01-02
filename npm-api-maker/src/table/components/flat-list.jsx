@@ -1,4 +1,4 @@
-import BaseComponent from "../../base-component.js"
+import BaseComponent from "../../base-component"
 import {FlatList} from "react-native"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"

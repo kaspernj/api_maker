@@ -1,9 +1,9 @@
-import BaseComponent from "../../base-component.js"
+import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useForm} from "../../form.js"
+import {useForm} from "../../form"
 import {useMemo} from "react"
 
 export default memo(shapeComponent(class EditAttributeContent extends BaseComponent {
