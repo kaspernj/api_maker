@@ -1,9 +1,9 @@
-import BaseComponent from "../../base-component.js"
-import ColumnContent from "../column-content.js"
+import BaseComponent from "../../base-component"
+import ColumnContent from "../column-content"
 import columnIdentifier from "../column-identifier.js"
 import columnVisible from "../column-visible.js"
 import {saveAs} from "file-saver"
-import Icon from "../../utils/icon.js"
+import Icon from "../../utils/icon"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -11,7 +11,7 @@ import React from "react"
 import {renderToString} from "react-dom/server"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Pressable} from "react-native"
-import Text from "../../utils/text.js"
+import Text from "../../utils/text"
 
 export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction extends BaseComponent {
   static propTypes = propTypesExact({

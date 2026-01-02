@@ -3,7 +3,7 @@ import * as inflection from "inflection"
 import modelCallbackArgs from "./model-callback-args.js"
 import MoneyFormatter from "../money-formatter.js"
 import React from "react"
-import Text from "../utils/text.js"
+import Text from "../utils/text"
 
 export default class ApiMakerTableColumnContent {
   constructor({column, l, mode = "react-native", model, t, table}) {

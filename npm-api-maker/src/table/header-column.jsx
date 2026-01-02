@@ -1,16 +1,16 @@
 import React, {useMemo} from "react"
-import BaseComponent from "../base-component.js"
+import BaseComponent from "../base-component"
 import classNames from "classnames"
-import Header from "./components/header.js"
-import HeaderColumnContent from "./header-column-content.js"
-import Icon from "../utils/icon.js"
+import Header from "./components/header"
+import HeaderColumnContent from "./header-column-content"
+import Icon from "../utils/icon"
 import memo from "set-state-compare/build/memo.js"
 import {Animated, PanResponder} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useBreakpoint from "../use-breakpoint.js"
-import Widths from "./widths.js"
+import Widths from "./widths"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({

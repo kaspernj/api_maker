@@ -1,5 +1,5 @@
 import {Platform, Pressable} from "react-native"
-import BaseComponent from "./base-component.js"
+import BaseComponent from "./base-component"
 import dataSetToAttributes from "./data-set-to-attributes.js"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"

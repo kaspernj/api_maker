@@ -1,4 +1,4 @@
-import BaseComponent from "../../base-component.js"
+import BaseComponent from "../../base-component"
 import {digg} from "diggerize"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
@@ -6,7 +6,7 @@ import memo from "set-state-compare/build/memo.js"
 import {Pressable} from "react-native"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import Text from "../../utils/text.js"
+import Text from "../../utils/text"
 
 export default memo(shapeComponent(class AttributeElement extends BaseComponent {
   static propTypes = PropTypesExact({

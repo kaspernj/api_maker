@@ -1,11 +1,11 @@
 import {CheckBox, Pressable, View} from "react-native"
 import React, {useMemo} from "react"
-import BaseComponent from "../base-component.js"
+import BaseComponent from "../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import Text from "./text.js"
+import Text from "./text"
 
 export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseComponent {
   static defaultProps = {

@@ -1,5 +1,5 @@
 import React, {useMemo} from "react"
-import BaseComponent from "../base-component.js"
+import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"

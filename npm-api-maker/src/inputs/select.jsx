@@ -1,10 +1,10 @@
-import BaseComponent from "../base-component.js"
-import inputWrapper from "./input-wrapper.js"
+import BaseComponent from "../base-component"
+import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useForm} from "../form.js"
+import {useForm} from "../form"
 
 const ApiMakerInputsSelect = memo(shapeComponent(class ApiMakerInputsSelect extends BaseComponent {
   static propTypes = {

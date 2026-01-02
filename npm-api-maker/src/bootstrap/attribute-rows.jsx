@@ -1,5 +1,5 @@
-import AttributeRow from "./attribute-row.js"
-import BaseComponent from "../base-component.js"
+import AttributeRow from "./attribute-row"
+import BaseComponent from "../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"

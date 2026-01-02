@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useMemo} from "react"
-import BaseComponent from "./base-component.js"
+import BaseComponent from "./base-component"
 import FormDataObjectizer from "form-data-objectizer"
 import memo from "set-state-compare/build/memo.js"
 import {Platform} from "react-native"

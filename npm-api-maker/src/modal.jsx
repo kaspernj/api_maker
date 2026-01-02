@@ -1,4 +1,4 @@
-import BaseComponent from "./base-component.js"
+import BaseComponent from "./base-component"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"

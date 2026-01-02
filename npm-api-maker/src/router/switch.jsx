@@ -1,4 +1,4 @@
-import BaseComponent from "../base-component.js"
+import BaseComponent from "../base-component"
 import React, {createContext} from "react"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"

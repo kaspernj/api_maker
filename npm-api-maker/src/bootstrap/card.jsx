@@ -1,4 +1,4 @@
-import BaseComponent from "../base-component.js"
+import BaseComponent from "../base-component"
 import classNames from "classnames"
 import {digg, digs} from "diggerize"
 import memo from "set-state-compare/build/memo.js"

@@ -1,14 +1,14 @@
 import React, {useMemo} from "react"
 import {Pressable, View} from "react-native"
 import apiMakerConfig from "@kaspernj/api-maker/build/config.js"
-import BaseComponent from "../../base-component.js"
+import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Params from "../../params.js"
 import {TableSearch} from "models.js"
-import Text from "../../utils/text.js"
+import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
