@@ -1,5 +1,5 @@
 import {digg} from "diggerize"
-import Inflection from "inflection"
+import * as inflection from "inflection"
 
 export default class ApiMakerModelPropType {
   static ofModel (modelClass) {
@@ -52,7 +52,7 @@ export default class ApiMakerModelPropType {
 
     if (this._withLoadedAbilities) {
       for (const abilityName of this._withLoadedAbilities) {
-        const underscoreAbilityName = Inflection.underscore(abilityName)
+        const underscoreAbilityName = inflection.underscore(abilityName)
 
         if (!(underscoreAbilityName in model.abilities))
           return new Error(`The ability ${abilityName} was required to be loaded in ${propName} of the ${model.constructor.name} type but it wasn't`)
@@ -62,7 +62,7 @@ export default class ApiMakerModelPropType {
     if (this._withLoadedAssociations) {
       for (const associationName in this._withLoadedAssociations) {
         const associationModelPropType = digg(this._withLoadedAssociations, associationName)
-        const underscoreAssociationName = Inflection.underscore(associationName)
+        const underscoreAssociationName = inflection.underscore(associationName)
 
         if (!(underscoreAssociationName in model.relationshipsCache))
           return new Error(`The association ${associationName} was required to be loaded in ${propName} of the ${model.constructor.name} type but it wasn't`)
@@ -92,7 +92,7 @@ export default class ApiMakerModelPropType {
 
     if (this._withLoadedAttributes && model.isPersisted()) {
       for (const attributeName of this._withLoadedAttributes) {
-        const underscoreAttributeName = Inflection.underscore(attributeName)
+        const underscoreAttributeName = inflection.underscore(attributeName)
 
         if (!(underscoreAttributeName in model.modelData)) {
           return new Error(`The attribute ${attributeName} was required to be loaded in ${propName} of the ${model.constructor.name} type but it wasn't`)

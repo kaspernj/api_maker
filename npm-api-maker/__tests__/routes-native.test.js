@@ -12,8 +12,8 @@ const testRoutes = () => ({
     {"name": "drinks", "path": "/drinks", "component": "drinks/index"}
   ]
 })
-const testTranslations = () => ({
-  locales: {
+const testTranslations = () => {
+  const locales = {
     da: {
       routes: {
         drink: "drink",
@@ -27,7 +27,16 @@ const testTranslations = () => ({
       }
     }
   }
-})
+
+  return {
+    locales,
+    t: (key, _unused, {default: defaultValue, locale}) => {
+      const path = key.split(".").slice(1)
+      const routeKey = path[path.length - 1]
+      return locales?.[locale]?.routes?.[routeKey] || defaultValue
+    }
+  }
+}
 
 const routesNative = ({args, currentLocale}) => {
   const test = new RoutesNative({
@@ -66,14 +75,14 @@ describe("RoutesNative", () => {
     const test = routesNative({args: {localized: true}, currentLocale: "en"})
     const daRoute = test.editDrinkPath(5, {drink: {name: "Pina Colada"}, locale: "da"})
 
-    expect(daRoute).toEqual("/da/drinks/5/rediger?drink%5Bname%5D=Pina%20Colada")
+    expect(daRoute).toEqual("/da/drinks/5/rediger?drink[name]=Pina+Colada")
   })
 
   it("translates a route without localization", () => {
     const test = routesNative({currentLocale: "en"})
     const daRoute = test.editDrinkPath(5, {drink: {name: "Pina Colada"}})
 
-    expect(daRoute).toEqual("/drinks/5/edit?drink%5Bname%5D=Pina%20Colada")
+    expect(daRoute).toEqual("/drinks/5/edit?drink[name]=Pina+Colada")
   })
 
   it("generates urls", () => {
@@ -85,20 +94,20 @@ describe("RoutesNative", () => {
     const test = routesNative({args: {localized: true}, currentLocale: "en"})
     const daRoute = test.editDrinkUrl(5, {drink: {name: "Pina Colada"}, locale: "da"})
 
-    expect(daRoute).toEqual("http://localhost/da/drinks/5/rediger?drink%5Bname%5D=Pina%20Colada")
+    expect(daRoute).toEqual("http://localhost/da/drinks/5/rediger?drink[name]=Pina+Colada")
   })
 
   it("generates urls with custom options", () => {
     const test = routesNative({args: {localized: true}, currentLocale: "en"})
     const daRoute = test.editDrinkUrl(5, {drink: {name: "Pina Colada"}, locale: "da", host: "google.com", port: 123, protocol: "https"})
 
-    expect(daRoute).toEqual("https://google.com:123/da/drinks/5/rediger?drink%5Bname%5D=Pina%20Colada")
+    expect(daRoute).toEqual("https://google.com:123/da/drinks/5/rediger?drink[name]=Pina+Colada")
   })
 
   it("generates urls without locales", () => {
     const test = routesNative({currentLocale: "en"})
     const daRoute = test.editDrinkUrl(5, {drink: {name: "Pina Colada"}, locale: "da", host: "google.com", port: 123, protocol: "https"})
 
-    expect(daRoute).toEqual("https://google.com:123/drinks/5/edit?drink%5Bname%5D=Pina%20Colada")
+    expect(daRoute).toEqual("https://google.com:123/drinks/5/edit?drink[name]=Pina+Colada")
   })
 })
