@@ -1,64 +1,58 @@
 require "rails_helper"
 
 describe "api_maker_table helpers" do
-  class FakeWorkplace
-    attr_reader :name
+  before do
+    stub_const("FakeWorkplace", Struct.new(:name))
 
-    def initialize(name)
-      @name = name
-    end
-  end
+    stub_const(
+      "FakeUser",
+      Struct.new(:id, :current_workplace, :lock_results, :lock_calls, :created, keyword_init: true) do
+        def initialize(id: 1, current_workplace: nil, lock_results: [false])
+          super(
+            id: id,
+            current_workplace: current_workplace,
+            lock_results: lock_results,
+            lock_calls: 0,
+            created: false
+          )
+        end
 
-  class FakeUser
-    attr_reader :id
-    attr_accessor :current_workplace
+        def with_advisory_lock(_key)
+          result = lock_results[lock_calls]
+          self.lock_calls = lock_calls + 1
+          result = lock_results.last if result.nil?
+          return false unless result
 
-    def initialize(id: 1, current_workplace: nil, lock_results: [false])
-      @id = id
-      @current_workplace = current_workplace
-      @created = false
-      @lock_results = lock_results
-      @lock_calls = 0
-    end
+          yield
+        end
 
-    def with_advisory_lock(_key)
-      result = @lock_results[@lock_calls]
-      @lock_calls += 1
-      result = @lock_results.last if result.nil?
-      return false unless result
+        def reload
+          self
+        end
 
-      yield
-    end
+        def create_current_workplace!(name:, user:)
+          _user = user
+          self.created = true
+          self.current_workplace = FakeWorkplace.new(name)
+          current_workplace
+        end
 
-    def reload
-      self
-    end
+        def save!
+          true
+        end
 
-    def create_current_workplace!(name:, user:)
-      @created = true
-      self.current_workplace = FakeWorkplace.new(name)
-      self.current_workplace
-    end
+        def created?
+          created
+        end
+      end
+    )
 
-    def save!
-      true
-    end
-
-    def created?
-      @created
-    end
-  end
-
-  class HelperHost
-    include ApiHelpers::ApiMakerTableHelpers
-
-    def initialize(user)
-      @current_user = user
-    end
-
-    def current_user
-      @current_user
-    end
+    stub_const(
+      "HelperHost",
+      Struct.new(:current_user) do
+        include ApiHelpers::ApiMakerTableHelpers
+      end
+    )
   end
 
   describe "#current_workplace" do
