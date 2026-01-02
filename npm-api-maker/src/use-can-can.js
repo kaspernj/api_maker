@@ -29,14 +29,14 @@ export default function useCanCan(abilitiesCallback, dependencies) {
   }, [])
 
   const onResetAbilities = useCallback(() => {
-    s.set({canCan: null}, {silent: true})
+    s.set({canCan: null})
     loadAbilities()
   }, [])
 
   const loadAbilitiesOnNew = useCallback(async () => {
     const canCan = s.s.canCan
 
-    s.set({canCan: null}, {silent: true})
+    s.set({canCan: null})
 
     if (canCan) {
       await canCan?.resetAbilities()
