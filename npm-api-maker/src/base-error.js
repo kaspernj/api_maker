@@ -1,7 +1,7 @@
 // @ts-check
 
 import {dig, digg} from "diggerize"
-import errorMessages from "./error-messages"
+import errorMessages from "./error-messages.js"
 
 /**
  * @typedef {object} BaseErrorArgsType

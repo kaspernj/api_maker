@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe "can can - loader" do
   let(:user) { create :user }
+  let(:admin_user) { create :user, :admin, email: "admin@example.com", password: "password", password_confirmation: "password" }
 
   let(:can_access_admin_selector) { ".can-access-admin" }
   let(:cannot_access_admin_selector) { ".cannot-access-admin" }
@@ -18,6 +19,17 @@ describe "can can - loader" do
 
     wait_for_selector ".components-can-can-loader-with-state #{cannot_access_admin_selector}"
     wait_for_no_selector ".components-can-can-loader-with-state #{can_access_admin_selector}"
+  end
+
+  it "reloads abilities after signing in" do
+    admin_user
+    visit can_can_loader_path
+
+    wait_for_selector ".components-can-can-loader-with-state #{cannot_access_admin_selector}"
+    wait_for_and_find("[data-testid='sign-in-as-admin']").click
+
+    wait_for_selector ".components-can-can-loader-with-state #{can_access_admin_selector}"
+    wait_for_no_selector ".components-can-can-loader-with-state #{cannot_access_admin_selector}"
   end
 
   it "calls the abilities callbacks in the correct order" do

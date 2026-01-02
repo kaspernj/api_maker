@@ -1,7 +1,7 @@
 import BaseComponent from "../base-component.js"
 import classNames from "classnames"
 import {Input as ApiMakerInput} from "@kaspernj/api-maker/build/inputs/input"
-import Checkbox from "./checkbox"
+import Checkbox from "./checkbox.js"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import React from "react"

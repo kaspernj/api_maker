@@ -1,4 +1,4 @@
-import getChannelsConsumer from "./channels-consumer"
+import getChannelsConsumer from "./channels-consumer.js"
 import CommandsPool from "./commands-pool.js"
 import Deserializer from "./deserializer.js"
 import {digg} from "diggerize"

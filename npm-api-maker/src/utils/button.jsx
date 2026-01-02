@@ -1,12 +1,12 @@
 import {Pressable, View} from "react-native"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import Icon from "./icon"
+import Icon from "./icon.js"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import Text from "./text"
-import {useForm} from "../form"
+import Text from "./text.js"
+import {useForm} from "../form.js"
 
 export default memo(shapeComponent(class ApiMakerUtilsButton extends ShapeComponent {
   static defaultProps = {

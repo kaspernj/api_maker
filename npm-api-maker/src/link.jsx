@@ -5,7 +5,7 @@ import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useApiMaker} from "@kaspernj/api-maker/build/with-api-maker"
+import {useApiMaker} from "@kaspernj/api-maker/build/with-api-maker.js"
 
 export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   static propTypes = {

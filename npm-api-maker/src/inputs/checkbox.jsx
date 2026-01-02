@@ -6,7 +6,7 @@ import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useInput from "../use-input.js"
-import {useForm} from "../form"
+import {useForm} from "../form.js"
 import useUpdatedEvent from "../use-updated-event.js"
 
 export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComponent {

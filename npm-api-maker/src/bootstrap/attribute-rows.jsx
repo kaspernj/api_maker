@@ -1,4 +1,4 @@
-import AttributeRow from "./attribute-row"
+import AttributeRow from "./attribute-row.js"
 import BaseComponent from "../base-component.js"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
