@@ -10,6 +10,7 @@ api_maker_table_rubygem/spec/dummy/storage/
 api_maker_table_rubygem/spec/dummy/tmp/
 
 npm-api-maker/node_modules
+npm-api-maker/build
 
 ruby-gem/.bundle/
 ruby-gem/.env.test.local
