@@ -22,7 +22,13 @@ const useCurrentUser = (props = {}) => {
   }
 
   const scopeInstance = Devise.getScope(scope)
+  if (!scopeInstance || !scopeInstance.getContext) {
+    throw new Error(`useCurrentUser: Devise scope "${scope}" is not available. Did you initialize the Devise scope provider?`)
+  }
   const currentUserContext = useContext(scopeInstance.getContext())
+  if (!currentUserContext) {
+    throw new Error(`useCurrentUser: no context for Devise scope "${scope}". Ensure the provider is mounted before calling useCurrentUser.`)
+  }
 
   if (withData) {
     return currentUserContext
