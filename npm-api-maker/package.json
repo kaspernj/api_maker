@@ -19,6 +19,7 @@
     "open:android": "open -a \"Android Studio\" example/android",
     "lint:eslint": "eslint --ext .js,.jsx",
     "lint:eslint-find-rules": "eslint-find-rules",
+    "release:patch": "node scripts/release-patch.js",
     "typecheck": "tsc --noEmit",
     "watch": "tsc -w"
   },
