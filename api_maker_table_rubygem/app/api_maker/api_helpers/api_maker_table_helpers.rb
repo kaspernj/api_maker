@@ -9,7 +9,7 @@ module ApiHelpers::ApiMakerTableHelpers
       while workplace.nil? && attempts < max_attempts
         attempts += 1
 
-        current_user.with_advisory_lock(lock_key) do
+        current_user.with_advisory_lock!(lock_key, timeout_seconds: 10) do
           current_user.reload
 
           unless current_user.current_workplace
