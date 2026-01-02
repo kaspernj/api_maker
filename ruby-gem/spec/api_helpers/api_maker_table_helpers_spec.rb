@@ -40,7 +40,7 @@ describe "api_maker_table helpers" do
         self
       end
 
-      def create_current_workplace!(name:, _user:)
+      def create_current_workplace!(name:, _user: nil)
         @created = true
         self.current_workplace = @workplace_class.new(name)
         current_workplace
