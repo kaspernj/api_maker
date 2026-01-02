@@ -1,10 +1,5 @@
 require "rspec"
 
-module ApiHelpers
-end
-
-require_relative "../../app/api_maker/api_helpers/api_maker_table_helpers"
-
 describe "api_maker_table helpers" do
   class FakeWorkplace
     attr_reader :name
@@ -67,15 +62,14 @@ describe "api_maker_table helpers" do
   end
 
   describe "#current_workplace" do
-    it "creates when the lock is never acquired" do
+    it "returns nil when the lock is never acquired" do
       user = FakeUser.new(current_workplace: nil, lock_results: [false, false, false])
       helper = HelperHost.new(user)
 
       workplace = helper.current_workplace
 
-      expect(workplace).to be_a(FakeWorkplace)
-      expect(workplace.name).to eq("Current workplace")
-      expect(user).to be_created
+      expect(workplace).to be_nil
+      expect(user).not_to be_created
     end
 
     it "returns existing when the lock is not acquired" do
