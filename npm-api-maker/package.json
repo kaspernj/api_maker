@@ -1,7 +1,7 @@
 {
   "name": "@kaspernj/api-maker",
   "type": "module",
-  "version": "1.0.2067",
+  "version": "1.0.2068",
   "description": "My new module",
   "files": [
     "build/**"
@@ -18,7 +18,7 @@
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
     "lint:eslint": "eslint --ext .js,.jsx",
-    "lint:eslint-find-rules": "eslint-find-rules",
+    "lint:eslint-find-rules": "eslint-find-rules --flatConfig eslint.config.js",
     "release:patch": "node scripts/release-patch.js",
     "release:patch-master": "node scripts/release-patch-master.js",
     "typecheck": "tsc --noEmit",
