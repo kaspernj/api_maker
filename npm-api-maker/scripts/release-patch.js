@@ -1,6 +1,10 @@
-const fs = require("fs")
-const path = require("path")
-const {execSync} = require("child_process")
+import fs from "node:fs"
+import path from "node:path"
+import {execSync} from "node:child_process"
+import {fileURLToPath} from "node:url"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const repoRoot = path.resolve(__dirname, "..", "..")
 const packageDir = path.resolve(__dirname, "..")
