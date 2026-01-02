@@ -1,13 +1,13 @@
 import React, {useMemo} from "react"
 import {Animated, PanResponder} from "react-native"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import Controller from "./controller"
+import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
+import Controller from "./controller.js"
 import DraggableSortItem from "./item"
-import EventEmitter from "events"
-import memo from "set-state-compare/src/memo"
+import {EventEmitter} from "eventemitter3"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import useEventEmitter from "../use-event-emitter"
+import useEventEmitter from "../use-event-emitter.js"
 
 export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
   static defaultProps = {
@@ -71,7 +71,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
     return (
       <Animated.View
         dataSet={actualDataSet}
-        style={this.rootViewStyle ||= {flexDirection: horizontal ? "row" : "column"}}
+        style={this.cache("rootViewStyle", {flexDirection: horizontal ? "row" : "column"}, [horizontal])}
         {...this.tt.panResponder.panHandlers}
       >
         {data.map((item, itemIndex) =>

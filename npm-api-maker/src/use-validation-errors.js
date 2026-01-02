@@ -1,13 +1,18 @@
-import events from "./events"
+import events from "./events.js"
 import {useCallback} from "react"
-import useEventEmitter from "./use-event-emitter"
-import useShape from "set-state-compare/src/use-shape"
+import useEventEmitter from "./use-event-emitter.js"
+import useShape from "set-state-compare/build/use-shape.js"
 
+/**
+ * @param {function} callback
+ * @returns {object}
+ */
 const useValidationErrors = (callback) => {
   const s = useShape({callback})
 
   s.useStates({validationErrors: []})
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onValidationErrors = useCallback((validationErrors) => {
     const matchedValidationErrors = []
 

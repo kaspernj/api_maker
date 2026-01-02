@@ -1,22 +1,28 @@
 {
   "name": "@kaspernj/api-maker",
-  "version": "1.0.2053",
+  "type": "module",
+  "version": "1.0.2067",
   "description": "My new module",
+  "files": [
+    "build/**"
+  ],
+  "types": "build/index.d.ts",
   "main": "build/index.js",
   "scripts": {
-    "build": "babel src --out-dir build --extensions \".js,.jsx\" --source-maps inline",
-    "build-expo": "expo-module build",
+    "build": "rm -rf build && tsc || true",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
     "prepare": "npm run clean && npm run build",
-    "prepublishOnly": "expo-module prepublishOnly",
-    "expo-module": "expo-module",
+    "prepublishOnly": "expo-module prepublishOnly && npm run build",
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
-    "eslint": "eslint --ext .js,.jsx",
-    "eslint-find-rules": "eslint-find-rules",
-    "watch": "babel src --out-dir build --extensions \".js,.jsx\" --source-maps inline --watch"
+    "lint:eslint": "eslint --ext .js,.jsx",
+    "lint:eslint-find-rules": "eslint-find-rules",
+    "release:patch": "node scripts/release-patch.js",
+    "release:patch-master": "node scripts/release-patch-master.js",
+    "typecheck": "tsc --noEmit",
+    "watch": "tsc -w"
   },
   "keywords": [
     "react-native",
@@ -38,8 +44,9 @@
     "clone-deep": ">= 4.0.1",
     "debounce": ">= 2.0.0",
     "diggerize": ">= 1.0.5",
-    "env-sense": "^1.0.1",
+    "env-sense": ">= 1.0.2",
     "epic-locks": ">= 1.0.2",
+    "eventemitter3": "^5.0.1",
     "file-saver": "^2.0.5",
     "form-data-objectizer": ">= 1.0.0",
     "form-serialize": ">= 0.7.2",
@@ -52,7 +59,7 @@
     "on-location-changed": ">= 1.0.18",
     "qs": ">= 6.9.3",
     "replaceall": ">= 0.1.6",
-    "set-state-compare": ">= 1.0.55",
+    "set-state-compare": ">= 1.0.65",
     "spark-md5": "^3.0.2",
     "stacktrace-parser": "^0.1.10",
     "strftime": ">= 0.10.0",
@@ -64,22 +71,44 @@
     "@babel/eslint-parser": "^7.16.3",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.26.3",
-    "babel-jest": "^30.0.0",
+    "@jest/globals": "~29.7.0",
+    "@types/react": "~19.0.10",
+    "babel-jest": "~29.7.0",
     "eslint": "^9.23.0",
+    "eslint-config-expo": "~9.2.0",
     "eslint-find-rules": "^5.0.0",
     "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-react": "^7.23.2",
-    "expo": "~53.0.9",
+    "expo": "~53.0.25",
     "expo-module-scripts": "^4.0.2",
-    "jest": "^30.0.0"
+    "jest": "~29.7.0",
+    "react": "19.0.0",
+    "react-native": "0.79.6",
+    "typescript": "~5.8.3",
+    "velocious": "^1.0.173"
   },
   "peerDependencies": {
     "expo": "*",
-    "flash-notifications": "*",
+    "flash-notifications": ">= 0.0.32",
+    "history": "^5.3.0",
     "i18n-on-steroids": "*",
-    "react": "*",
+    "react": ">=18.3.0",
     "react-native": "*",
     "react-native-vector-icons": "*"
+  },
+  "resolutions": {
+    "@expo/config-plugins": "~10.1.1",
+    "@expo/metro-config": "~0.20.18",
+    "metro": "^0.82.0",
+    "metro-config": "^0.82.0",
+    "metro-resolver": "^0.82.0"
+  },
+  "overrides": {
+    "@expo/config-plugins": "~10.1.1",
+    "@expo/metro-config": "~0.20.18",
+    "metro": "^0.82.0",
+    "metro-config": "^0.82.0",
+    "metro-resolver": "^0.82.0"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

@@ -7,8 +7,8 @@ import InvalidFeedback from "../bootstrap/invalid-feedback"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import memo from "set-state-compare/build/memo.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 
 const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckboxes extends BaseComponent {
   static propTypes = propTypesExact({

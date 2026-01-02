@@ -5,14 +5,14 @@ import FilterForm from "./filter-form"
 import {FlashNotifications} from "flash-notifications"
 import LoadSearchModal from "./load-search-modal"
 import SaveSearchModal from "./save-search-modal"
-import Params from "../../params"
+import Params from "../../params.js"
 import PropTypes from "prop-types"
-import {TableSearch} from "models"
-import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {TableSearch} from "models.js"
+import memo from "set-state-compare/build/memo.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import React from "react"
-import useI18n from "i18n-on-steroids/src/use-i18n"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerTableFilters extends BaseComponent {
@@ -42,7 +42,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
     const currentFilters = this.currentFilters()
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {class: "api-maker--table--filters"}} style={this.rootViewStyle ||= {alignItems: "flex-start"}}>
+      <View dataSet={this.cache("rootViewDataSet", {class: "api-maker--table--filters"})} style={this.cache("rootViewStyle", {alignItems: "flex-start"})}>
         {filter &&
           <FilterForm
             filter={filter}
@@ -79,7 +79,7 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
             {...filterData}
           />
         )}
-        <View dataSet={this.filterActionsDataSet ||= {class: "filter-actions"}} style={this.filterActionsStyle ||= {flexDirection: "row", marginTop: 10}}>
+        <View dataSet={this.cache("filterActionsDataSet", {class: "filter-actions"})} style={this.cache("filterActionsStyle", {flexDirection: "row", marginTop: 10})}>
           <button className="add-new-filter-button" onClick={this.tt.onAddFilterClicked}>
             {this.t(".add_new_filter", {defaultValue: "Add new filter"})}
           </button>

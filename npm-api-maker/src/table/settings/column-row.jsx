@@ -1,10 +1,10 @@
 import React, {useEffect, useRef} from "react"
 import BaseComponent from "../../base-component"
-import columnIdentifier from "../column-identifier"
-import memo from "set-state-compare/src/memo"
+import columnIdentifier from "../column-identifier.js"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {View} from "react-native"
 
@@ -35,7 +35,7 @@ export default memo(shapeComponent(class ColumnRow extends BaseComponent {
     }
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "api-maker--table--settings--column-row"}} style={this.rootViewStyle ||= {justifyContent: "center"}}>
+      <View dataSet={this.cache("rootViewDataSet", {component: "api-maker--table--settings--column-row"})} style={this.cache("rootViewStyle", {justifyContent: "center"})}>
         <label style={{whiteSpace: "nowrap"}}>
           <input
             className="api-maker--table--setings--column-checkbox"

@@ -1,15 +1,15 @@
 import BaseComponent from "../../base-component"
 import ColumnContent from "../column-content"
-import columnIdentifier from "../column-identifier"
-import columnVisible from "../column-visible"
+import columnIdentifier from "../column-identifier.js"
+import columnVisible from "../column-visible.js"
 import {saveAs} from "file-saver"
 import Icon from "../../utils/icon"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import {renderToString} from "react-dom/server"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Pressable} from "react-native"
 import Text from "../../utils/text"
 
@@ -22,12 +22,12 @@ export default memo(shapeComponent(class ApiMakerTableSettingsDownloadAction ext
   render() {
     return (
       <Pressable
-        dataSet={this.pressableDataSet ||= {component: "api-maker/table/settings/download-action"}}
+        dataSet={this.cache("pressableDataSet", {component: "api-maker/table/settings/download-action"})}
         onPress={this.tt.onDownloadPress}
-        style={this.pressableStyle ||= {flexDirection: "row", alignItems: "center"}}
+        style={this.cache("pressableStyle", {flexDirection: "row", alignItems: "center"})}
       >
         <Icon name="download" size={20} />
-        <Text style={this.textStyle ||= {marginLeft: 5}}>
+        <Text style={this.cache("textStyle", {marginLeft: 5})}>
           Download
         </Text>
       </Pressable>

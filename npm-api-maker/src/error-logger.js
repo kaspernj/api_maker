@@ -1,5 +1,5 @@
 import {digg} from "diggerize"
-import SourceMapsLoader from "./source-maps-loader"
+import SourceMapsLoader from "./source-maps-loader.js"
 
 export default class ErrorLogger {
   constructor () {

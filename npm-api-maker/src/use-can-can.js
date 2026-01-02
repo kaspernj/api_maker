@@ -1,10 +1,16 @@
-import CanCan from "./can-can"
 import {useCallback, useMemo} from "react"
-import useCurrentUser from "./use-current-user"
-import useEventEmitter from "./use-event-emitter"
-import useShape from "set-state-compare/src/use-shape"
+import CanCan from "./can-can.js"
+import Devise from "./devise.js"
+import useCurrentUser from "./use-current-user.js"
+import useEventEmitter from "./use-event-emitter.js"
+import useShape from "set-state-compare/build/use-shape.js"
 
-const useCanCan = (abilitiesCallback, dependencies) => {
+/**
+ * @param {function() : Array} abilitiesCallback
+ * @param {Array} dependencies
+ * @returns {CanCan}
+ */
+export default function useCanCan(abilitiesCallback, dependencies) {
   const currentUser = useCurrentUser()
   const s = useShape({abilitiesCallback})
 
@@ -23,14 +29,14 @@ const useCanCan = (abilitiesCallback, dependencies) => {
   }, [])
 
   const onResetAbilities = useCallback(() => {
-    s.set({canCan: null}, {silent: true})
+    s.set({canCan: null})
     loadAbilities()
   }, [])
 
   const loadAbilitiesOnNew = useCallback(async () => {
     const canCan = s.s.canCan
 
-    s.set({canCan: null}, {silent: true})
+    s.set({canCan: null})
 
     if (canCan) {
       await canCan?.resetAbilities()
@@ -39,17 +45,15 @@ const useCanCan = (abilitiesCallback, dependencies) => {
     }
   }, [])
 
-  if (!dependencies) {
-    dependencies = [currentUser?.id()]
-  }
+  const dependencyList = dependencies ?? [currentUser?.id()] // @ts-expect-error
 
   useMemo(() => {
     loadAbilitiesOnNew()
-  }, dependencies)
+  }, dependencyList)
 
+  useEventEmitter(Devise.events(), "onDeviseSignIn", loadAbilitiesOnNew)
+  useEventEmitter(Devise.events(), "onDeviseSignOut", loadAbilitiesOnNew)
   useEventEmitter(CanCan.current().events, "onResetAbilities", onResetAbilities)
 
   return s.s.canCan
 }
-
-export default useCanCan

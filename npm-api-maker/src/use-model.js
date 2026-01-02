@@ -1,10 +1,25 @@
 import {useCallback, useLayoutEffect, useMemo} from "react"
-import Devise from "./devise"
+import Devise from "./devise.js"
 import * as inflection from "inflection"
-import ModelEvents from "./model-events"
-import useQueryParams from "on-location-changed/build/use-query-params"
-import useShape from "set-state-compare/src/use-shape"
+import ModelEvents from "./model-events.js"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
+import useShape from "set-state-compare/build/use-shape.js"
 
+/**
+ * @typedef {object} useModelArgs
+ * @property {(arg: object) => function} [callback]
+ * @property {(arg: object) => object} [args]
+ * @property {() => number|string} [loadByQueryParam]
+ * @property {any[]} [cacheArgs]
+ * @property {{params: object}} [match]
+ * @property {(ctx: { model: import("./base-model.js").default }) => void} [onDestroyed]
+ * @property {import("./collection.js").default} [query]
+ */
+
+/**
+ * @param {function|object} modelClassArg
+ * @param {object | function({modelClass: typeof import("./base-model.js").default}): useModelArgs} [argsArg]
+ */
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
   let args, modelClass
@@ -93,7 +108,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
       // Not active - don't do anything
     } else if (s.props.newIfNoId && !s.m.modelId) {
       return await loadNewModel()
-    } else if (!s.props.optional || s.m.modelId | s.m.args.query) {
+    } else if (!s.props.optional || s.m.modelId || s.m.args.query) {
       return await loadExistingModel()
     }
   }, [])

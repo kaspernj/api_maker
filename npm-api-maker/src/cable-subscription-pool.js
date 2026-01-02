@@ -1,9 +1,9 @@
-import getChannelsConsumer from "./channels-consumer"
-import CommandsPool from "./commands-pool"
-import Deserializer from "./deserializer"
+import getChannelsConsumer from "./channels-consumer.js"
+import CommandsPool from "./commands-pool.js"
+import Deserializer from "./deserializer.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import Logger from "./logger"
+import Logger from "./logger.js"
 
 const logger = new Logger({name: "ApiMaker / CableSubscriptionPool"})
 

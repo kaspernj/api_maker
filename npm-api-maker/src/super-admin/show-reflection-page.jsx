@@ -2,13 +2,13 @@ import BaseComponent from "../base-component"
 import {digg} from "diggerize"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import ModelClassTable from "./model-class-table"
 import React, {useMemo} from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import ShowNav from "./show-nav"
-import useModel from "../use-model"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import useModel from "../use-model.js"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionPage extends BaseComponent {
@@ -30,10 +30,8 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionPage ex
 
     if (model) collection = model[reflection.name()]()
 
-    const dataSet = useMemo(() => ({component: "super-admin--show-page"}), [])
-
     return (
-      <View dataSet={dataSet}>
+      <View testID="super-admin/show-reflection-page">
         {model &&
           <ShowNav model={model} modelClass={modelClass} />
         }

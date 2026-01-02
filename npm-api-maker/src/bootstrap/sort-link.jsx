@@ -3,15 +3,15 @@ import * as inflection from "inflection"
 import Icon from "../utils/icon"
 import PropTypes from "prop-types"
 import qs from "qs"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import Text from "../utils/text"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import urlEncode from "../url-encode"
-import useSorting from "../table/use-sorting"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import urlEncode from "../url-encode.js"
+import useSorting from "../table/use-sorting.js"
 
 import Link from "../link"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseComponent {
   static propTypes = {
@@ -84,10 +84,10 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
           {this.title()}
         </Text>
         {isSortedByAttribute && sortMode == "asc" &&
-          <Icon name="chevron-down" size={14} style={this.downIconStyle ||= {marginLeft: 3}} />
+          <Icon name="chevron-down" size={14} style={this.cache("downIconStyle", {marginLeft: 3})} />
         }
         {isSortedByAttribute && sortMode == "desc" &&
-          <Icon name="chevron-up" size={14} style={this.upIconStyle ||= {marginLeft: 3}} />
+          <Icon name="chevron-up" size={14} style={this.cache("upIconStyle", {marginLeft: 3})} />
         }
       </LinkComponent>
     )

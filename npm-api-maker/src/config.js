@@ -1,4 +1,4 @@
-import EventEmitter from "events"
+import {EventEmitter} from "eventemitter3"
 import * as inflection from "inflection"
 
 const accessors = {
@@ -30,12 +30,16 @@ class ApiMakerConfig {
     if (!globalThis.apiMakerConfigGlobal) globalThis.apiMakerConfigGlobal = {}
 
     this.global = globalThis.apiMakerConfigGlobal
-
     this.events = new EventEmitter()
-    this.events.setMaxListeners(Infinity)
   }
 
-  getEvents = () => this.events
+  getEvents() { return this.events }
+
+  /** @returns {import("history").BrowserHistory} */
+  getHistory() { throw new Error("'getHistory' not implemented") }
+
+  /** @returns {string} */
+  getHost() { throw new Error("'getHost' not implemented") }
 }
 
 for (const accessorName in accessors) {

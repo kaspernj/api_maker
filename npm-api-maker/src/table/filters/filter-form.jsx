@@ -1,4 +1,4 @@
-import {useMemo, useRef} from "react"
+import React, {useMemo, useRef} from "react"
 import {ActivityIndicator, View} from "react-native"
 import AttributeElement from "./attribute-element"
 import BaseComponent from "../../base-component"
@@ -9,19 +9,18 @@ import * as inflection from "inflection"
 import {Form} from "../../form"
 import Header from "../../utils/header"
 import Input from "../../inputs/input"
-import memo from "set-state-compare/src/memo"
-import Params from "../../params"
+import memo from "set-state-compare/build/memo.js"
+import Params from "../../params.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import React from "react"
 import ReflectionElement from "./reflection-element"
 import ScopeElement from "./scope-element"
 import Select from "../../inputs/select"
-import Services from "../../services"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import Services from "../../services.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
-import useBreakpoint from "../../use-breakpoint"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import useBreakpoint from "../../use-breakpoint.js"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -268,18 +267,18 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
               icon="remove"
               label={t(".cancel", {defaultValue: "Cancel"})}
               onPress={this.p.onRequestClose}
-              pressableProps={this.cancelButtonPressableProps ||= {
+              pressableProps={this.cache("cancelButtonPressableProps", {
                 marginRight: 5
-              }}
+              })}
             />
             <Button
               disabled={!submitEnabled}
               icon="check"
               label={t(".apply", {defaultValue: "Apply"})}
-              pressableProps={this.appleButtonPressableProps ||= {
+              pressableProps={this.cache("appleButtonPressableProps", {
                 style: {marginLeft: 5},
                 testID: "apply-filter-button"
-              }}
+              })}
               submit
             />
           </View>

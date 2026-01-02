@@ -1,7 +1,7 @@
 import {Pressable, View} from "react-native"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import Icon from "./icon"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
@@ -94,7 +94,7 @@ export default memo(shapeComponent(class ApiMakerUtilsButton extends ShapeCompon
         {...restPressableProps}
       >
         {icon &&
-          <View style={this.iconViewStyle ||= {marginRight: 4}}>
+          <View style={this.cache("iconViewStyle", {marginRight: 4})}>
             <Icon name={icon} />
           </View>
         }

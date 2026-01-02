@@ -1,23 +1,22 @@
 import {Pressable} from "react-native"
 import BaseComponent from "../base-component"
 import Column from "./components/column"
-import columnIdentifier from "./column-identifier"
-import EventEmitter from "events"
+import columnIdentifier from "./column-identifier.js"
+import {EventEmitter} from "eventemitter3"
 import {FlashNotifications} from "flash-notifications"
 import Icon from "../utils/icon"
 import * as inflection from "inflection"
-import modelCallbackArgs from "./model-callback-args"
+import modelCallbackArgs from "./model-callback-args.js"
 import Link from "../link"
 import ModelColumn from "./model-column"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import Row from "./components/row"
-import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import useI18n from "i18n-on-steroids/src/use-i18n"
-
-const WorkerPluginsCheckbox = React.lazy(() => import("./worker-plugins-checkbox"))
+import memo from "set-state-compare/build/memo.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import WorkerPluginsCheckbox from "./worker-plugins-checkbox"
 
 export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
   static propTypes = propTypesExact({
@@ -63,31 +62,31 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
         style={styleForRow({even})}
       >
         {workplace &&
-          <Column dataSet={this.columnDataSet ||= {class: "workplace-column"}} style={styleForColumn({even, style: {width: 41}})}>
+          <Column dataSet={this.cache("columnDataSet", {class: "workplace-column"})} style={styleForColumn({even, style: {width: 41}})}>
             <WorkerPluginsCheckbox
               currentWorkplace={currentWorkplace}
               model={model}
-              style={this.workerPluginsCheckboxStyle ||= {marginHorizontal: "auto"}}
+              style={this.cache("workerPluginsCheckboxStyle", {marginHorizontal: "auto"})}
             />
           </Column>
         }
         {columns && this.columnsContentFromColumns(model, even)}
-        <Column dataSet={this.actionsColumnDataSet ||= {class: "actions-column"}} style={styleForColumn({even, style: {}, type: "actions"})}>
+        <Column dataSet={this.cache("actionsColumnDataSet", {class: "actions-column"})} style={styleForColumn({even, style: {}, type: "actions"})}>
           {actionsContent && actionsContent(this.tt.modelCallbackArgs)}
           {viewPath &&
-            <Link dataSet={this.viewButtonDataSet ||= {class: "view-button"}} style={this.searchLinkStyle ||= {marginLeft: 2, marginRight: 2}} to={viewPath}>
+            <Link dataSet={this.cache("viewButtonDataSet", {class: "view-button"})} style={this.cache("searchLinkStyle", {marginLeft: 2, marginRight: 2})} to={viewPath}>
               <Icon name="search" size={18} />
             </Link>
           }
           {editPath &&
-            <Link dataSet={this.editButtonDataSet ||= {class: "edit-button"}} style={this.editButtonStyle ||= {marginLeft: 2, marginRight: 2}} to={editPath}>
+            <Link dataSet={this.cache("editButtonDataSet", {class: "edit-button"})} style={this.cache("editButtonStyle", {marginLeft: 2, marginRight: 2})} to={editPath}>
               <Icon name="pencil" size={20} />
             </Link>
           }
           {destroyEnabled && model.can("destroy") &&
             <Pressable
-              dataSet={this.destroyButtonDataSet ||= {class: "destroy-button"}}
-              style={this.destroyButtonStyle ||= {marginLeft: 2, marginRight: 2}}
+              dataSet={this.cache("destroyButtonDataSet", {class: "destroy-button"})}
+              style={this.cache("destroyButtonStyle", {marginLeft: 2, marginRight: 2})}
               onPress={this.tt.onDestroyClicked}
             >
               <Icon name="remove" size={22} />

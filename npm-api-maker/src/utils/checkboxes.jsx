@@ -1,15 +1,15 @@
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import React, {useMemo} from "react"
 import Checkbox from "./checkbox"
 import {digs} from "diggerize"
 import {useForm} from "../form"
 import * as inflection from "inflection"
 import InvalidFeedback from "./invalid-feedback"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import Text from "./text"
-import useInput from "../use-input"
+import useInput from "../use-input.js"
 import {View} from "react-native"
 
 const OptionElement = memo(shapeComponent(class OptionElement extends ShapeComponent {
@@ -89,8 +89,8 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckboxes extends ShapeCo
     const {errors} = digs(wrapperOpts, "errors")
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "api-maker/utils/checkboxes"}}>
-        <Text style={this.textStyle ||= {fontWeight: "bold"}}>
+      <View dataSet={this.cache("rootViewDataSet", {component: "api-maker/utils/checkboxes"})}>
+        <Text style={this.cache("textStyle", {fontWeight: "bold"})}>
           {this.tt.wrapperOpts.label}
         </Text>
         {this.props.options.map((option) =>

@@ -6,17 +6,18 @@ import EditAttribute from "./edit-page/edit-attribute"
 import {FlashNotifications} from "flash-notifications"
 import {Form} from "../form"
 import * as inflection from "inflection"
-import Locales from "shared/locales"
-import memo from "set-state-compare/src/memo"
-import Params from "../params"
+// @ts-expect-error
+import Locales from "shared/locales.js"
+import memo from "set-state-compare/build/memo.js"
+import Params from "../params.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
-import useCurrentUser from "../use-current-user"
-import useModel from "../use-model"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import useCurrentUser from "../use-current-user.js"
+import useModel from "../use-model.js"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends BaseComponent {
   static propTypes = propTypesExact({
@@ -82,7 +83,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
           {extraContent && extraContent(modelArgs)}
           <Pressable
             onPress={this.tt.onSubmit}
-            style={this.pressableStyle ||= {
+            style={this.cache("pressableStyle", {
               paddingTop: 18,
               paddingRight: 24,
               paddingBottom: 18,
@@ -90,10 +91,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
               borderRadius: 10,
               backgroundColor: "#4c93ff",
               marginTop: 10
-            }}
+            })}
             testID="submit-button"
           >
-            <Text style={this.buttonTextStyle ||= {color: "#fff"}}>
+            <Text style={this.cache("buttonTextStyle", {color: "#fff"})}>
               Submit
             </Text>
           </Pressable>

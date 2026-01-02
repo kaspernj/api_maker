@@ -3,9 +3,9 @@ import BaseComponent from "../../base-component"
 import Icon from "../../utils/icon"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 
 export default memo(shapeComponent(class ApiMakerTableFilter extends BaseComponent {
@@ -30,7 +30,7 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
     const {a, pre, sc} = this.props
 
     return (
-      <View style={this.rootViewStyle ||= {alignItems: "center", flexDirection: "row", backgroundColor: "grey", paddingVertical: 10, paddingHorizontal: 6}}>
+      <View style={this.cache("rootViewStyle", {alignItems: "center", flexDirection: "row", backgroundColor: "grey", paddingVertical: 10, paddingHorizontal: 6})}>
         <Pressable
           dataSet={{
             attribute: a,
@@ -47,9 +47,9 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
           </Text>
         </Pressable>
         <Pressable
-          dataSet={this.removeFilterButtonDataSet ||= {class: "remove-filter-button"}}
+          dataSet={this.cache("removeFilterButtonDataSet", {class: "remove-filter-button"})}
           onPress={this.tt.onRemoveFilterPressed}
-          style={this.removeFilterButtonStyle ||= {marginLeft: 6}}
+          style={this.cache("removeFilterButtonStyle", {marginLeft: 6})}
         >
           <Icon name="remove" />
         </Pressable>

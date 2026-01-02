@@ -4,15 +4,15 @@ import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Column from "./components/column"
 import ColumnContent from "./column-content"
-import columnIdentifier from "./column-identifier"
-import EventEmitter from "events"
+import columnIdentifier from "./column-identifier.js"
+import {EventEmitter} from "eventemitter3"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import memo from "set-state-compare/build/memo.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
-import useBreakpoint from "../use-breakpoint"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import useBreakpoint from "../use-breakpoint.js"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseComponent {
   static propTypes = propTypesExact({
@@ -62,13 +62,13 @@ export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseCo
         {...restColumnProps}
       >
         {!mdUp &&
-          <View dataSet={this.columnLabelDataSet ||= {class: "table--column-label"}}>
-            <Text style={this.columnLabelTextStyle ||= {fontWeight: "bold"}}>
+          <View dataSet={this.cache("columnLabelDataSet", {class: "table--column-label"})}>
+            <Text style={this.cache("columnLabelTextStyle", {fontWeight: "bold"})}>
               {table.headerLabelForColumn(column)}
             </Text>
           </View>
         }
-        <View dataSet={this.columnValueDataSet ||= {class: "table--column-value"}}>
+        <View dataSet={this.cache("columnValueDataSet", {class: "table--column-value"})}>
           {new ColumnContent({column, l, model, t, table}).content()}
         </View>
       </Column>

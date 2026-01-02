@@ -1,14 +1,19 @@
-import config from "./config"
+import config from "./config.js"
 import formSerialize from "form-serialize"
 import Incorporator from "incorporator"
 import qs from "qs"
-import urlEncode from "./url-encode"
+import urlEncode from "./url-encode.js"
 
 export default class Params {
+  /** @returns {Record<string, any>} */
   static parse() {
     return qs.parse(globalThis.location.search.substr(1))
   }
 
+  /**
+   * @param {object} given
+   * @returns {object}
+   */
   static change(given) {
     const incorporator = new Incorporator({objects: [Params.parse(), given]})
 
@@ -17,6 +22,10 @@ export default class Params {
     return incorporator.merge()
   }
 
+  /**
+   * @param {Record<string, any>} params
+   * @returns {string}
+   */
   static withParams(params) {
     const newParams = qs.stringify(params, {encoder: urlEncode})
     const newPath = `${location.pathname}?${newParams}`
@@ -24,6 +33,10 @@ export default class Params {
     return newPath
   }
 
+  /**
+   * @param {Record<string, any>} given
+   * @param {{appHistory?: any}} opts
+   */
   static changeParams(given, opts = {}) {
     const params = Params.change(given)
     const newParams = qs.stringify(params, {encoder: urlEncode})
@@ -35,12 +48,20 @@ export default class Params {
     appHistory.push(newPath)
   }
 
+  /**
+   * @param {HTMLFormElement} form
+   * @returns {Record<string, any>}
+   */
   static serializeForm(form) {
     const hash = formSerialize(form, {empty: true, hash: true})
     return Params.setUndefined(hash)
   }
 
-  // This is used to set all empty values to 'undefined' which makes qs removed those elements from the query string
+  /**
+   * This is used to set all empty values to 'undefined' which makes qs removed those elements from the query string
+   * @param {Record<string, any>} given
+   * @returns {Record<string, any>}
+   */
   static setUndefined(given) {
     if (Array.isArray(given)) {
       if (given.length == 0)

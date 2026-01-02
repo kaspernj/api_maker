@@ -1,7 +1,13 @@
 import * as inflection from "inflection"
-import * as models from "models"
 
-const modelClassRequire = (modelName) => {
+// @ts-expect-error
+import * as models from "models.js"
+
+/**
+ * @param {string} modelName
+ * @returns {typeof import("./base-model.js").default}
+ */
+export default function modelClassRequire(modelName) {
   const requireName = inflection.camelize(modelName)
   const ModelClass = models[requireName]
 
@@ -13,5 +19,3 @@ const modelClassRequire = (modelName) => {
 
   return ModelClass
 }
-
-export default modelClassRequire

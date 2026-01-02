@@ -1,4 +1,4 @@
-import Config from "./config"
+import Config from "./config.js"
 import parse from "url-parse"
 import qs from "qs"
 

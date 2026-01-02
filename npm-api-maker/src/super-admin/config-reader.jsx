@@ -1,21 +1,29 @@
-import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
+import {digg, digs} from "diggerize"
 
-const modelConfigRequireContext = require.context("super-admin/model-configs", true, /.jsx$/)
+const modelConfigRequireContext = import.meta.webpackContext("super-admin/model-configs", {
+  recursive: true,
+  regExp: /\.(jsx|js)$/
+})
 
 export default class ApiMakerSuperAdminConfigReader {
   static forModel(modelClass) {
     const modelNameCamelized = digg(modelClass.modelClassData(), "nameDasherized")
     let modelConfig
 
-    try {
-      modelConfig = modelConfigRequireContext(`./${modelNameCamelized}.jsx`).default
-    } catch (error) {
-      if (error.message.includes("Cannot find module")) {
-        console.debug(`No model-config for ${modelClass.modelClassData().name}`)
-      } else {
-        throw error
+    for (const configPath of [`./${modelNameCamelized}.jsx`, `./${modelNameCamelized}.js`]) {
+      try {
+        modelConfig = modelConfigRequireContext(configPath).default
+        break
+      } catch (error) {
+        if (!error.message.includes("Cannot find module")) {
+          throw error
+        }
       }
+    }
+
+    if (!modelConfig) {
+      console.debug(`No model-config for ${modelClass.modelClassData().name}`)
     }
 
     return new ApiMakerSuperAdminConfigReader(modelClass, modelConfig)
@@ -69,23 +77,21 @@ export default class ApiMakerSuperAdminConfigReader {
     select[modelClass.modelClassData().name] = modelClassSelect
 
     for (const attribute of attributes) {
-      if (!attribute.isSelectedByDefault() && attribute.name() != "name") {
-        continue
-      }
+      if (attribute.isSelectedByDefault() || attribute.name() == "name") {
+        const camelizedName = inflection.camelize(attribute.name(), true)
+        const column = {
+          attribute: camelizedName
+        }
 
-      const camelizedName = inflection.camelize(attribute.name(), true)
-      const column = {
-        attribute: camelizedName
-      }
+        if (attribute.isColumn()) {
+          column.sortKey = camelizedName
+        } else if (attribute.isTranslated()) {
+          column.sortKey = `currentTranslation${camelizedName}`
+        }
 
-      if (attribute.isColumn()) {
-        column.sortKey = camelizedName
-      } else if (attribute.isTranslated()) {
-        column.sortKey = `currentTranslation${camelizedName}`
+        modelClassSelect.push(camelizedName)
+        columns.push(column)
       }
-
-      modelClassSelect.push(camelizedName)
-      columns.push(column)
     }
 
     return {columns, select}

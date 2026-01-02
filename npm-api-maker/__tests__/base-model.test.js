@@ -1,8 +1,8 @@
-import BaseModel from "../build/base-model"
+import BaseModel from "../build/base-model.js"
 import CustomError from "../build/custom-error"
 import {jest} from "@jest/globals"
 import {JSDOM} from "jsdom"
-import ValidationError from "../build/validation-error"
+import ValidationError from "../build/validation-error.js"
 import User from "./support/user"
 
 jest.mock("@rails/actioncable", () => ({
@@ -30,7 +30,7 @@ describe("BaseModel", () => {
   })
 
   describe("update", () => {
-    it("aborts if no changes", async () => {
+    it("aborts if no changes", async() => {
       const model = new BaseModel()
 
       // This will fail because of missing setup if it doesn't abort.

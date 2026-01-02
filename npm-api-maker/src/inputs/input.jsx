@@ -1,17 +1,17 @@
-import AutoSubmit from "./auto-submit"
+import AutoSubmit from "./auto-submit.js"
 import BaseComponent from "../base-component"
 import {dig, digg, digs} from "diggerize"
 import inputWrapper from "./input-wrapper"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import Money from "./money"
 import PropTypes from "prop-types"
 import React, {useMemo, useRef} from "react"
 import replaceall from "replaceall"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import strftime from "strftime"
 import {useForm} from "../form"
-import useI18n from "i18n-on-steroids/src/use-i18n"
-import useUpdatedEvent from "../use-updated-event"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useUpdatedEvent from "../use-updated-event.js"
 
 const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extends BaseComponent {
   static defaultProps = {

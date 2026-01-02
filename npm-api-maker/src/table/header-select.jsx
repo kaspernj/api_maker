@@ -1,16 +1,16 @@
 import {Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
-import Collection from "../collection"
+import Collection from "../collection.js"
 import HeaderColumnContent from "./header-column-content"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import Modal from "../utils/modal"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
-import useI18n from "i18n-on-steroids/src/use-i18n"
-import useSorting from "./use-sorting"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useSorting from "./use-sorting.js"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderSelect extends BaseComponent {
   static propTypes = propTypesExact({
@@ -38,19 +38,19 @@ export default memo(shapeComponent(class ApiMakerTableHeaderSelect extends BaseC
     const columnLabel = column && table.headerLabelForColumn(column)
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "api-maker/table/header-select"}}>
+      <View dataSet={this.cache("rootViewDataSet", {component: "api-maker/table/header-select"})}>
         {this.s.modalOpen &&
-          <Modal dataSet={this.modalDataSet ||= {class: "table-header-select-modal"}} onRequestClose={this.tt.onModalRequestClose} transparent>
+          <Modal dataSet={this.cache("modalDataSet", {class: "table-header-select-modal"})} onRequestClose={this.tt.onModalRequestClose} transparent>
             {this.p.preparedColumns.map(({column, tableSettingColumn}) =>
               <View
                 key={tableSettingColumn.identifier()}
-                style={this.headerColumnContentViewStyle ||= {marginVertical: 5}}
+                style={this.cache("headerColumnContentViewStyle", {marginVertical: 5})}
               >
                 <HeaderColumnContent
                   column={column}
                   table={table}
                   tableSettingColumn={tableSettingColumn}
-                  sortLinkProps={this.sortLinkProps ||= {usePressable: true}}
+                  sortLinkProps={this.cache("sortLinkProps", {usePressable: true})}
                 />
               </View>
             )}

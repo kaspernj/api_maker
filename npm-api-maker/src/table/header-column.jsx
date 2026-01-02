@@ -4,12 +4,12 @@ import classNames from "classnames"
 import Header from "./components/header"
 import HeaderColumnContent from "./header-column-content"
 import Icon from "../utils/icon"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import {Animated, PanResponder} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import useBreakpoint from "../use-breakpoint"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import useBreakpoint from "../use-breakpoint.js"
 import Widths from "./widths"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
@@ -100,12 +100,12 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         {...restColumnProps}
       >
         {mdUp &&
-          <Icon name="bars" style={this.barsIconStyle ||= {marginRight: 3, fontSize: 12}} {...touchProps} />
+          <Icon name="bars" style={this.cache("barsIconStyle", {marginRight: 3, fontSize: 12})} {...touchProps} />
         }
         <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
         {mdUp &&
           <Animated.View
-            style={this.resizeColumnViewStyle ||= {
+            style={this.cache("resizeColumnViewStyle", {
               position: "absolute",
               top: 0,
               right: 0,
@@ -113,7 +113,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               height: "100%",
               cursor: "col-resize",
               zIndex: 9999
-            }}
+            })}
             {...this.tt.resizePanResponder.panHandlers}
           />
         }

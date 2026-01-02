@@ -1,16 +1,55 @@
 import cloneDeep from "clone-deep"
-import CommandsPool from "./commands-pool"
+import CommandsPool from "./commands-pool.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import {incorporate} from "incorporator"
-import modelClassRequire from "./model-class-require"
-import Result from "./result"
+import Result from "./result.js"
 import uniqunize from "uniqunize"
 
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ * @typedef {InstanceType<MC>} ModelOf
+ */
+
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ * @typedef {object} CollectionArgsType
+ * @property {ModelOf<MC>} [model]
+ * @property {MC} modelClass
+ * @property {string} [reflectionName]
+ */
+
+/**
+ * @typedef {object} QueryArgsType
+ * @property {Record<string, string[]>} [abilities]
+ * @property {string} [accessibleBy]
+ * @property {number} [count]
+ * @property {string} [distinct]
+ * @property {string[]} [groupBy]
+ * @property {number} [limit]
+ * @property {number} [page]
+ * @property {Record<string, any>} [params]
+ * @property {number} [per]
+ * @property {string[]} [preload]
+ * @property {Record<string, any>} [ransack]
+ * @property {Record<string, any>} [search]
+ * @property {Record<string, string[]>} [select]
+ * @property {Record<string, string[]>} [selectColumns]
+ */
+
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ */
 export default class ApiMakerCollection {
   static apiMakerType = "Collection"
 
+  /**
+   * @param {CollectionArgsType<MC>} args
+   * @param {QueryArgsType} queryArgs
+   */
   constructor(args, queryArgs = {}) {
+    if (!args.modelClass) throw new Error(`No modelClass given in ${Object.keys(args).join(", ")}`)
+
     this.queryArgs = queryArgs
     this.args = args
   }
@@ -34,20 +73,34 @@ export default class ApiMakerCollection {
     return this._merge({abilities: newAbilities})
   }
 
+  /**
+   * @param {string} abilityName
+   * @returns {this}
+   */
   accessibleBy(abilityName) {
     return this._merge({accessibleBy: inflection.underscore(abilityName)})
   }
 
+  /**
+   * @returns {Promise<number>}
+   */
   async count() {
     const response = await this.clone()._merge({count: true})._response()
 
     return digg(response, "count")
   }
 
+  /**
+   * @returns {this}
+   */
   distinct() {
     return this._merge({distinct: true})
   }
 
+  /**
+   * @param {function(import("./base-model.js").default) : void} callback
+   * @returns {Promise<void>}
+   */
   async each(callback) {
     const array = await this.toArray()
 
@@ -56,6 +109,10 @@ export default class ApiMakerCollection {
     }
   }
 
+  /**
+   * @param {...string} keys
+   * @returns {this}
+   */
   except(...keys) {
     for (const key of keys) {
       if (key == "page") {
@@ -68,6 +125,9 @@ export default class ApiMakerCollection {
     return this
   }
 
+  /**
+   * @returns {Promise<ModelOf<MC>>}
+   */
   async first() {
     const models = await this.toArray()
     return models[0]
@@ -99,6 +159,9 @@ export default class ApiMakerCollection {
     return this.loaded()
   }
 
+  /**
+   * @returns {boolean}
+   */
   isLoaded() {
     const {model, reflectionName} = this.args
 
@@ -111,10 +174,17 @@ export default class ApiMakerCollection {
     return false
   }
 
+  /**
+   * @param {number} amount
+   * @returns {this}
+   */
   limit(amount) {
     return this._merge({limit: amount})
   }
 
+  /**
+   * @returns {Array<ModelOf<MC>>}
+   */
   preloaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
       throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
@@ -123,6 +193,9 @@ export default class ApiMakerCollection {
     return this.args.model.relationshipsCache[this.args.reflectionName]
   }
 
+  /**
+   * @returns {ModelOf<MC> | Array<ModelOf<MC>>}
+   */
   loaded() {
     const {model, reflectionName} = this.args
 
@@ -141,6 +214,17 @@ export default class ApiMakerCollection {
       const relationshipsLoaded = uniqunize(Object.keys(model.relationships).concat(Object.keys(model.relationshipsCache)))
 
       throw new Error(`${reflectionName} hasnt been loaded yet on ${model.modelClassData().name}. Loaded was: ${relationshipsLoaded.join(", ")}`)
+    }
+  }
+
+  /** @returns {Array<ModelOf<MC>>} */
+  loadedArray() {
+    const loaded = this.loaded()
+
+    if (Array.isArray(loaded)) {
+      return loaded
+    } else {
+      throw new Error("'loaded' wasn't an array")
     }
   }
 
@@ -163,24 +247,53 @@ export default class ApiMakerCollection {
   }
 
   // Array shortcuts
-  find = (...args) => this.loaded().find(...args)
-  forEach = (...args) => this.loaded().forEach(...args)
-  map = (...args) => this.loaded().map(...args)
+  /**
+   * @param {function(import("./base-model.js").default): boolean} callback
+   * @returns {import("./base-model.js").default}
+   */
+  find(callback) { return this.loadedArray().find(callback) }
 
+  /**
+   * @param {function(import("./base-model.js").default): void} callback
+   * @returns {void}
+   */
+  forEach(callback) { return this.loadedArray().forEach(callback) }
+
+  /**
+   * @param {function(import("./base-model.js").default): void} callback
+   * @returns {any[]}
+   */
+  map(callback) { return this.loadedArray().map(callback) }
+
+  /**
+   * @param {string[]} preloadValue
+   * @returns {this}
+   */
   preload(preloadValue) {
     return this._merge({preload: preloadValue})
   }
 
+  /**
+   * @param {number} page
+   * @returns {this}
+   */
   page(page) {
     if (!page) page = 1
 
     return this._merge({page})
   }
 
+  /**
+   * @param {string} pageKey
+   * @returns {this}
+   */
   pageKey(pageKey) {
     return this._merge({pageKey})
   }
 
+  /**
+   * @returns {boolean}
+   */
   isFiltered() {
     const {queryArgs} = this
 
@@ -200,6 +313,9 @@ export default class ApiMakerCollection {
     return false
   }
 
+  /**
+   * @returns {Record<string, any>}
+   */
   params() {
     let params = {}
 
@@ -221,19 +337,34 @@ export default class ApiMakerCollection {
     return params
   }
 
+  /**
+   * @param {number} per
+   * @returns {this}
+   */
   per(per) {
     return this._merge({per})
   }
 
+  /**
+   * @param {string} perKey
+   * @returns {this}
+   */
   perKey(perKey) {
     return this._merge({perKey})
   }
 
+  /**
+   * @param {Record<string, any>} params
+   * @returns {this}
+   */
   ransack(params) {
     if (params) this._merge({ransack: params})
     return this
   }
 
+  /**
+   * @returns {Promise<Result>}
+   */
   async result() {
     const response = await this._response()
     const models = digg(response, "collection")
@@ -245,15 +376,27 @@ export default class ApiMakerCollection {
     return result
   }
 
+  /**
+   * @param {Record<string, any>} params
+   * @returns {this}
+   */
   search(params) {
     if (params) this._merge({search: params})
     return this
   }
 
+  /**
+   * @param {string} searchKey
+   * @returns {this}
+   */
   searchKey(searchKey) {
     return this._merge({searchKey})
   }
 
+  /**
+   * @param {Record<string, string[]>} originalSelect
+   * @returns {this}
+   */
   select(originalSelect) {
     const newSelect = {}
 
@@ -273,6 +416,10 @@ export default class ApiMakerCollection {
     return this._merge({select: newSelect})
   }
 
+  /**
+   * @param {Record<string, string[]>} originalSelect
+   * @returns {this}
+   */
   selectColumns(originalSelect) {
     const newSelect = {}
 
@@ -292,10 +439,17 @@ export default class ApiMakerCollection {
     return this._merge({selectColumns: newSelect})
   }
 
+  /**
+   * @param {string} sortBy
+   * @returns {this}
+   */
   sort(sortBy) {
     return this._merge({ransack: {s: sortBy}})
   }
 
+  /**
+   * @returns {Promise<Array<ModelOf<MC>>>}
+   */
   async toArray() {
     const response = await this._response()
     const models = digg(response, "collection")
@@ -305,12 +459,20 @@ export default class ApiMakerCollection {
     return models
   }
 
+  /**
+   * @returns {MC}
+   */
   modelClass() {
-    const modelName = digg(this.args.modelClass.modelClassData(), "name")
+    if (!this.args.modelClass) {
+      throw new Error("No model class given in args")
+    }
 
-    return modelClassRequire(modelName)
+    return this.args.modelClass
   }
 
+  /**
+   * @returns {ApiMakerCollection}
+   */
   clone() {
     const clonedQueryArgs = cloneDeep(this.queryArgs)
 
@@ -331,6 +493,10 @@ export default class ApiMakerCollection {
   }
 
   _response() {
+    if (!this.args) throw new Error("No args?")
+    if (!this.args.modelClass) throw new Error("No modelClass in args")
+    if (!this.args.modelClass.modelClassData) throw new Error(`No modelClassData on modelClass ${this.args.modelClass?.name} (${typeof this.args.modelClass})`)
+
     const modelClassData = this.args.modelClass.modelClassData()
 
     return CommandsPool.addCommand(

@@ -1,4 +1,4 @@
-import ModelEvents from "./model-events"
+import ModelEvents from "./model-events.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"

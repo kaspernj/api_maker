@@ -1,15 +1,15 @@
 import React, {useMemo} from "react"
 import {Pressable, View} from "react-native"
-import apiMakerConfig from "@kaspernj/api-maker/build/config"
+import apiMakerConfig from "@kaspernj/api-maker/build/config.js"
 import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
-import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import Params from "../../params"
-import {TableSearch} from "models"
+import memo from "set-state-compare/build/memo.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import Params from "../../params.js"
+import {TableSearch} from "models.js"
 import Text from "../../utils/text"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
   render() {
@@ -18,22 +18,22 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
     return (
       <View
         dataSet={this.cache("rootViewStyle", {class: "search-row", searchId: search.id()}, [search.id()])}
-        style={this.rootViewStyle ||= {flexDirection: "row", width: "100%"}}
+        style={this.cache("rootViewStyleStyle", {flexDirection: "row", width: "100%"})}
       >
         <Pressable
-          dataSet={this.loadSearchLinkPressableDataSet ||= {class: "load-search-link"}}
+          dataSet={this.cache("loadSearchLinkPressableDataSet", {class: "load-search-link"})}
           onPress={this.tt.onSearchClicked}
-          style={this.loadSearchLinkPressableStyle ||= {justifyContent: "center"}}
+          style={this.cache("loadSearchLinkPressableStyle", {justifyContent: "center"})}
         >
           <Text>
             {search.name()}
           </Text>
         </Pressable>
-        <View style={this.actionsViewStyle ||= {flexDirection: "row", marginLeft: "auto"}}>
+        <View style={this.cache("actionsViewStyle", {flexDirection: "row", marginLeft: "auto"})}>
           <Pressable
-            dataSet={this.editSearchButtonDataSet ||= {class: "edit-search-button"}}
+            dataSet={this.cache("editSearchButtonDataSet", {class: "edit-search-button"})}
             onPress={this.tt.onEditPressed}
-            style={this.editSearchButtonStyle ||= {
+            style={this.cache("editSearchButtonStyle", {
               alignItems: "center",
               justifyContent: "center",
               width: 25,
@@ -42,16 +42,16 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
               border: "1px solid #007bff",
               borderRadius: 5,
               color: "#007bff"
-            }}
+            })}
           >
             <Text>
               &#x270E;
             </Text>
           </Pressable>
           <Pressable
-            dataSet={this.deleteSearchButtonDataSet ||= {class: "delete-search-button"}}
+            dataSet={this.cache("deleteSearchButtonDataSet", {class: "delete-search-button"})}
             onPress={this.tt.onDeletePressed}
-            style={this.deleteSearchButtonStyle ||= {
+            style={this.cache("deleteSearchButtonStyle", {
               alignItems: "center",
               justifyContent: "center",
               marginLeft: 5,
@@ -61,7 +61,7 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
               border: "1px solid #dc3545",
               borderRadius: 5,
               color: "#dc3545"
-            }}
+            })}
           >
             <Text>
               &#x2715;

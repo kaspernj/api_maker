@@ -1,11 +1,23 @@
 import {dig, digg} from "diggerize"
 import {useCallback, useEffect, useMemo, useRef} from "react"
-import idForComponent from "./inputs/id-for-component"
-import nameForComponent from "./inputs/name-for-component"
+import idForComponent from "./inputs/id-for-component.js"
+import nameForComponent from "./inputs/name-for-component.js"
 import strftime from "strftime"
-import useShape from "set-state-compare/src/use-shape"
-import useValidationErrors from "./use-validation-errors"
+import useShape from "set-state-compare/build/use-shape.js"
+import useValidationErrors from "./use-validation-errors.js"
 
+/**
+ * @param {object} args
+ * @param {object} args.props
+ * @param {object} args.props.inputRef
+ * @param {string} args.props.type
+ * @param {object} args.props.inputProps
+ * @param {string} args.props.inputProps.name
+ * @param {object} args.props.inputProps.wrapperOpts
+ * @param {object} args.wrapperOptions
+ * @param {string} args.wrapperOptions.type
+ * @returns {{inputProps: object, wrapperOpts: object, restProps: object}}
+ */
 const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   const useInputRestPropsKeys = Object.keys(useInputRestProps)
 

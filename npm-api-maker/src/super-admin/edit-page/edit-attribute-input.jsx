@@ -1,10 +1,10 @@
 import React, {useMemo} from "react"
 import {TextInput, View} from "react-native"
 import BaseComponent from "../../base-component"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {useForm} from "../../form"
 
@@ -53,7 +53,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               name
             }, [attributeName, id, name])}
             onChangeText={this.tt.onChangeText}
-            style={this.textInputStyle ||= {
+            style={this.cache("textInputStyle", {
               paddingTop: 9,
               paddingRight: 13,
               paddingBottom: 9,
@@ -61,7 +61,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               borderRadius: 5,
               backgroundColor: "#fff",
               border: "1px solid #cecece"
-            }}
+            })}
             value={value}
           />
         </View>

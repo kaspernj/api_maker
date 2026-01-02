@@ -1,9 +1,9 @@
 import {createContext} from "react"
-import Deserializer from "./deserializer"
-import events from "./events"
+import Deserializer from "./deserializer.js"
+import events from "./events.js"
 import * as inflection from "inflection"
-import modelClassRequire from "./model-class-require"
-import Services from "./services"
+import modelClassRequire from "./model-class-require.js"
+import Services from "./services.js"
 
 if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
 
@@ -24,6 +24,7 @@ export default class ApiMakerDevise {
     events.emit("onDeviseSignOut", {args})
   }
 
+  /** @returns {ApiMakerDevise} */
   static current() {
     if (!shared.currentApiMakerDevise) {
       shared.currentApiMakerDevise = new ApiMakerDevise()

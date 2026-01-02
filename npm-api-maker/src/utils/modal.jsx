@@ -3,9 +3,9 @@ import React, {useMemo} from "react"
 import BaseComponent from "../base-component"
 import Card from "./card"
 import Icon from "../utils/icon"
-import memo from "set-state-compare/src/memo"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import useBreakpoint from "../use-breakpoint"
+import memo from "set-state-compare/build/memo.js"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import useBreakpoint from "../use-breakpoint.js"
 
 export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComponent {
   render() {
@@ -33,13 +33,13 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
     return (
       <Modal dataSet={actualDataSet} {...restProps}>
         <View
-          style={this.rootViewStyle ||= {
+          style={this.cache("rootViewStyle", {
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
             height: "100%",
             backgroundColor: "rgba(0, 0, 0, 0.8)"
-          }}
+          })}
         >
           <Card
             controls={this.cardHeaderControls()}
@@ -54,7 +54,7 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
 
   cardHeaderControls() {
     return (
-      <Pressable onPress={this.tt.onModalClosePress} style={this.pressableStyle ||= {marginLeft: "auto", padding: 5}}>
+      <Pressable onPress={this.tt.onModalClosePress} style={this.cache("pressableStyle", {marginLeft: "auto", padding: 5})}>
         <Icon name="remove" />
       </Pressable>
     )

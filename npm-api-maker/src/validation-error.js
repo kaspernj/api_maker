@@ -1,7 +1,17 @@
-import BaseError from "./base-error"
+// @ts-check
+
+import BaseError from "./base-error.js"
+import {digg} from "diggerize"
 import * as inflection from "inflection"
 
-class ValidationError extends BaseError {
+export default class ValidationError extends BaseError {
+  static apiMakerType = "ValidationError"
+  apiMakerType = "ValidationError"
+
+  /**
+   * @param {import("./validation-errors.js").ValidationErrors} validationErrors
+   * @param {object} args
+   */
   constructor(validationErrors, args) {
     const errorMessage = validationErrors.getUnhandledErrorMessage() || validationErrors.getErrorMessage()
     const forwardedArgs = {addResponseErrorsToErrorMessage: false}
@@ -11,16 +21,21 @@ class ValidationError extends BaseError {
     this.validationErrors = validationErrors
   }
 
+  /** @returns {import("./validation-errors.js").ValidationError[]} */
   getUnhandledErrors = () => this.validationErrors.getValidationErrors().filter((validationError) => !validationError.getHandled())
+
+  /** @returns {import("./validation-errors.js").ValidationErrors} */
   getValidationErrors = () => digg(this, "validationErrors")
 
-  hasUnhandledErrors() {
+  /** @returns {boolean} */
+  hasUnhandledErrors = () => {
     const unhandledError = this.validationErrors.getValidationErrors().find((validationError) => !validationError.getHandled())
 
     return Boolean(unhandledError)
   }
 
-  hasValidationErrorForAttribute(attributeName) {
+  /** @returns {boolean} */
+  hasValidationErrorForAttribute = (attributeName) => {
     const underscoredAttributeName = inflection.underscore(attributeName)
     const foundAttribute = this.validationErrors.getValidationErrors().find((validationError) => validationError.getAttributeName() == underscoredAttributeName)
 
@@ -29,7 +44,3 @@ class ValidationError extends BaseError {
     return false
   }
 }
-
-ValidationError.apiMakerType = "ValidationError"
-
-export default ValidationError

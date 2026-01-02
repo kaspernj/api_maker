@@ -1,13 +1,13 @@
 import React, {useMemo} from "react"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import memo from "set-state-compare/src/memo"
-import MoneyFormatter from "../money-formatter"
+import memo from "set-state-compare/build/memo.js"
+import MoneyFormatter from "../money-formatter.js"
 import PropTypes from "prop-types"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import strftime from "strftime"
 import Text from "../utils/text"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends ShapeComponent {
@@ -60,10 +60,10 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
         style={actualStyle}
         {...restProps}
       >
-        <Text dataSet={this.labelTextDataSet ||= {class: "attribute-row-label"}} style={this.labelTextStyle ||= {fontWeight: "bold"}}>
+        <Text dataSet={this.cache("labelTextDataSet", {class: "attribute-row-label"})} style={this.cache("labelTextStyle", {fontWeight: "bold"})}>
           {this.label()}
         </Text>
-        <View dataSet={this.valueViewDataSet ||= {class: "attribute-row-value"}} style={this.valueViewStyle ||= {marginTop: 3}}>
+        <View dataSet={this.cache("valueViewDataSet", {class: "attribute-row-value"})} style={this.cache("valueViewStyle", {marginTop: 3})}>
           {this.value()}
         </View>
       </View>

@@ -1,8 +1,8 @@
 import BaseComponent from "../../base-component"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../../form"
 import {useMemo} from "react"
 

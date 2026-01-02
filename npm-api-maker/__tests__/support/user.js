@@ -1,7 +1,7 @@
-import BaseModel from "../../build/base-model"
+import BaseModel from "../../build/base-model.js"
 
 export default class User extends BaseModel {
-  static modelClassData () {
+  static modelClassData() {
     return {
       attributes: [],
       name: "User",
@@ -9,11 +9,11 @@ export default class User extends BaseModel {
     }
   }
 
-  static modelName () {
+  static modelName() {
     return "User"
   }
 
-  constructor ({a, b, isNewRecord = false, r}) {
+  constructor({a, b, isNewRecord = false, r}) {
     super({a})
 
     this.abilities = b
@@ -22,11 +22,11 @@ export default class User extends BaseModel {
     this.relationshipsCache = r
   }
 
-  isNewRecord () {
+  isNewRecord() {
     return this._isNewRecord
   }
 
-  isPersisted () {
+  isPersisted() {
     return !this._isNewRecord
   }
 }

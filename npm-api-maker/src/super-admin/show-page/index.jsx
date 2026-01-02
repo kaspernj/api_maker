@@ -4,12 +4,12 @@ import BaseComponent from "../../base-component"
 import BelongsToAttributeRow from "./belongs-to-attribute-row"
 import ConfigReader from "../config-reader"
 import {digg} from "diggerize"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import ShowNav from "../show-nav"
-import useModel from "../../use-model"
+import useModel from "../../use-model.js"
 import {View} from "react-native"
 
 const AttributePresenter = memo(({attribute, model, modelArgs}) => {
@@ -124,7 +124,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPage extends Base
     modelArgs[inflection.camelize(modelClass.modelClassData().name, true)] = model
 
     return (
-      <View dataSet={{component: "super-admin--show-page"}}>
+      <View testID="super-admin/show-page">
         {model &&
           <ShowNav model={model} modelClass={modelClass} />
         }

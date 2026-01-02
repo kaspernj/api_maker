@@ -1,4 +1,4 @@
-import ApiMakerConfig from "@kaspernj/api-maker/build/config"
+import ApiMakerConfig from "@kaspernj/api-maker/build/config.js"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"
 import {Container as Notifications} from "flash-notifications"
@@ -7,7 +7,7 @@ import React from "react"
 import Router from "@kaspernj/api-maker/build/router"
 import Routes from "shared/routes"
 import {SafeAreaProvider} from "react-native-safe-area-context"
-import {WithCurrentUser} from "@kaspernj/api-maker/build/use-current-user"
+import UseCurrentUserContext from "@kaspernj/api-maker/build/use-current-user-context"
 import WithLocationPath from "on-location-changed/build/with-location-path"
 
 const NotFoundComponent = () => <div>Not found</div>
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   root.render(
     <SafeAreaProvider>
-      <WithCurrentUser>
+      <UseCurrentUserContext>
         <WithLocationPath>
           <Notifications />
           <Router
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
             routeDefinitions={routeDefinitions}
           />
         </WithLocationPath>
-      </WithCurrentUser>
+      </UseCurrentUserContext>
     </SafeAreaProvider>
   )
 })

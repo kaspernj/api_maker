@@ -1,5 +1,5 @@
-import EventEmitter from "events"
-import Logger from "./logger"
+import {EventEmitter} from "eventemitter3"
+import Logger from "./logger.js"
 
 const logger = new Logger({name: "ApiMaker / CableSubscription"})
 

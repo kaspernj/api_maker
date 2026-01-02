@@ -15,7 +15,7 @@ describe("Serializer", () => {
     // Mock time zone offset
     var getTimezoneOffset = Date.prototype.getTimezoneOffset
 
-    Date.prototype.getTimezoneOffset = function () {
+    Date.prototype.getTimezoneOffset = function() {
       return -120
     }
 

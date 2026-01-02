@@ -1,15 +1,15 @@
-import apiMakerConfig from "@kaspernj/api-maker/build/config"
+import apiMakerConfig from "@kaspernj/api-maker/build/config.js"
 import BaseComponent from "../../base-component"
 import Checkbox from "../../bootstrap/checkbox"
 import {digg} from "diggerize"
 import {FlashNotifications} from "flash-notifications"
 import {Form} from "../../form"
 import Input from "../../bootstrap/input"
-import modelClassRequire from "../../model-class-require"
+import modelClassRequire from "../../model-class-require.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import memo from "set-state-compare/src/memo"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import memo from "set-state-compare/build/memo.js"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const TableSearch = modelClassRequire("TableSearch")
 

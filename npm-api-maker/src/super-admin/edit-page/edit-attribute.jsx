@@ -4,13 +4,13 @@ import EditAttributeCheckbox from "./edit-attribute-checkbox"
 import EditAttributeContent from "./edit-attribute-content"
 import EditAttributeInput from "./edit-attribute-input"
 import * as inflection from "inflection"
-import Locales from "shared/locales"
-import memo from "set-state-compare/src/memo"
+import Locales from "shared/locales.js"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import {View} from "react-native"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 
 export default memo(shapeComponent(class EditAttribute extends BaseComponent {
   static propTypes = propTypesExact({
@@ -44,7 +44,7 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
             return (
               <>
                 {availableLocales.map((locale) =>
-                  <View key={locale} style={this.localeViewStyle ||= {marginBottom: 12}}>
+                  <View key={locale} style={this.cache("localeViewStyle", {marginBottom: 12})}>
                     <EditAttributeInput
                       attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
                       id={`${inflection.underscore(camelizedLower)}_${inflection.underscore(attribute.attribute)}_${locale}`}

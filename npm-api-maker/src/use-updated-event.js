@@ -1,8 +1,17 @@
 import {useCallback, useLayoutEffect, useMemo} from "react"
 import debounceFunction from "debounce"
-import ModelEvents from "./model-events"
-import useShape from "set-state-compare/src/use-shape"
+import ModelEvents from "./model-events.js"
+import useShape from "set-state-compare/build/use-shape.js"
 
+/**
+ * @param {import("./base-model.js").default} model
+ * @param {function} onUpdated
+ * @param {object} props
+ * @param {boolean} props.active
+ * @param {number} props.debounce
+ * @param {function} props.onConnected
+ * @return {void}
+ */
 const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
   const {active = true, debounce, onConnected, ...restProps} = props
 
@@ -18,10 +27,11 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
     } else {
       return debounceFunction(s.p.onUpdated)
     }
-  }, [debounce])
+  }, [debounce]) // eslint-disable-line react-hooks/exhaustive-deps
 
   s.updateMeta({debounceCallback})
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const onUpdatedCallback = useCallback((...args) => {
     if (!s.p.active) {
       return
@@ -32,8 +42,9 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
     } else {
       s.p.onUpdated(...args)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useLayoutEffect(() => {
     let connectUpdated, onConnectedListener
 
@@ -54,7 +65,7 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
         connectUpdated.unsubscribe()
       }
     }
-  }, [model?.id()])
+  }, [model?.id()]) // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 export default apiMakerUseUpdatedEvent

@@ -1,16 +1,16 @@
 import React, {useRef} from "react"
 import BaseComponent from "../../base-component"
-import columnIdentifier from "../column-identifier"
+import columnIdentifier from "../column-identifier.js"
 import ColumnRow from "./column-row"
 import DownloadAction from "./download-action"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import Modal from "../../modal"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {View} from "react-native"
 import Text from "../../utils/text"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 export default memo(shapeComponent(class ApiMakerTableSettings extends BaseComponent {
   static propTypes = propTypesExact({
@@ -34,25 +34,25 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
     const {preparedColumns} = table.s
 
     return (
-      <Modal onBackdropPress={this.p.onRequestClose} onRequestClose={this.p.onRequestClose} style={this.rootModalStyle ||= {backgroundColor: "#000"}} transparent>
+      <Modal onBackdropPress={this.p.onRequestClose} onRequestClose={this.p.onRequestClose} style={this.cache("rootModalStyle", {backgroundColor: "#000"})} transparent>
         <View
-          dataSet={this.rootViewDataSet ||= {class: "api-maker--table--settings"}}
-          style={this.rootViewStyle ||= {
+          dataSet={this.cache("rootViewDataSet", {class: "api-maker--table--settings"})}
+          style={this.cache("rootViewStyle", {
             width: "100%",
             maxWidth: 800,
             padding: 20,
             backgroundColor: "#fff",
             border: "1px solid black"
-          }}
+          })}
         >
-          <View style={this.settingsHeaderViewStyle ||= {marginBottom: 5}}>
-            <Text style={this.settingsHeaderTextSTyle ||= {fontSize: 16, fontWeight: "bold"}}>
+          <View style={this.cache("settingsHeaderViewStyle", {marginBottom: 5})}>
+            <Text style={this.cache("settingsHeaderTextSTyle", {fontSize: 16, fontWeight: "bold"})}>
               {t(".settings", {defaultValue: "Settings"})}
             </Text>
           </View>
           <DownloadAction l={l} table={table} />
-          <View style={this.columnsHeaderViewStyle ||= {marginBottom: 5}}>
-            <Text style={this.columnsHeaderTextStyle ||= {fontSize: 16, fontWeight: "bold"}}>
+          <View style={this.cache("columnsHeaderViewStyle", {marginBottom: 5})}>
+            <Text style={this.cache("columnsHeaderTextStyle", {fontSize: 16, fontWeight: "bold"})}>
               {t(".columns", {defaultValue: "Columns"})}
             </Text>
           </View>

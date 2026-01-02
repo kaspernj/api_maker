@@ -1,12 +1,17 @@
 import {useCallback, useLayoutEffect, useMemo} from "react"
-import useShape from "set-state-compare/src/use-shape"
+import useShape from "set-state-compare/build/use-shape.js"
 
+/**
+ * @param {object} element
+ * @param {function} callback
+ * @return {void}
+ */
 const useResizeObserver = (element, callback) => {
   const s = useShape({callback})
   const onResize = useCallback((...args) => {
     s.p.callback(...args)
-  }, [])
-  const observer = useMemo(() => new ResizeObserver(onResize), [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const observer = useMemo(() => new ResizeObserver(onResize), []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
     if (element) {
@@ -18,7 +23,7 @@ const useResizeObserver = (element, callback) => {
         observer.disconnect()
       }
     }
-  }, [element])
+  }, [element]) // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 export default useResizeObserver

@@ -1,4 +1,4 @@
-import CommandsPool from "./commands-pool"
+import CommandsPool from "./commands-pool.js"
 
 const shared = {}
 

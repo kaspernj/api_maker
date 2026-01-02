@@ -1,22 +1,26 @@
 import {StyleSheet, View} from "react-native"
 import BaseComponent from "../../../base-component"
-import Devise from "../../../devise"
+import Devise from "../../../devise.js"
 import {FlashNotifications} from "flash-notifications"
 import Icon from "../../../utils/icon"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import Link from "../../../link"
 import MenuContent from "./menu-content"
 import MenuItem from "./menu-item"
-import Params from "../../../params"
+import Params from "../../../params.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import React from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import React, {useMemo} from "react"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../../utils/text"
-import useBreakpoint from "../../../use-breakpoint"
-import useCurrentUser from "../../../use-current-user"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import useBreakpoint from "../../../use-breakpoint.js"
+import useCurrentUser from "../../../use-current-user.js"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import {WithDefaultStyle} from "../../../utils/default-style"
+
+// Hook for consistent menu logo link styling (replaces SCSS)
+export const useMenuLogoLinkStyle = () =>
+  useMemo(() => ({color: "#dededf", textDecorationLine: "none"}), [])
 
 const styles = StyleSheet.create({
   root: {
@@ -72,6 +76,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
 
   render() {
     const {currentUser, lgUp, mdDown, mdUp, t} = this.tt
+    const menuLogoLinkStyle = useMenuLogoLinkStyle()
     const {active, noAccess, triggered} = this.props
 
     const style = [styles.root.base]
@@ -85,24 +90,27 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
     }
 
     return (
-      <View dataSet={this.rootViewDataSet ||= {component: "super-admin--layout--menu", triggered}} style={style}>
-        <WithDefaultStyle style={this.withDefaultStyleStyle ||= {Text: {color: "#fff"}}}>
+      <View dataSet={this.cache("rootViewDataSet", {component: "super-admin--layout--menu", triggered}, [triggered])} style={style}>
+        <WithDefaultStyle style={this.cache("withDefaultStyleStyle", {Text: {color: "#fff"}})}>
           <View
-            dataSet={this.menuLogoViewDataSet ||= {class: "menu-logo"}}
-            style={this.menuLogoViewStyle ||= {
+            dataSet={this.cache("menuLogoViewDataSet", {class: "menu-logo"})}
+            style={this.cache("menuLogoViewStyle", {
               overflow: "hidden",
               marginTop: 25,
               marginRight: "auto",
               marginLeft: "auto"
-            }}
+            })}
           >
-            <Link dataSet={this.menuLogoLinkDataSet ||= {class: "menu-logo-link"}} to={Params.withParams({})}>
+            <Link dataSet={this.cache("menuLogoLinkDataSet", {class: "menu-logo-link"})} to={Params.withParams({})}>
               <Text
-                style={this.menuLogoLinkTextStyle ||= {
-                  fontSize: 42,
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap"
-                }}
+                style={[
+                  menuLogoLinkStyle,
+                  this.cache("menuLogoLinkTextStyle", {
+                    fontSize: 42,
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  })
+                ]}
               >
                 Admin
               </Text>

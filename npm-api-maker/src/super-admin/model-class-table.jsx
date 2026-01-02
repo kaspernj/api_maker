@@ -1,15 +1,15 @@
 import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader"
 import {digg} from "diggerize"
-import hasEditConfig from "./has-edit-config"
+import hasEditConfig from "./has-edit-config.js"
 import * as inflection from "inflection"
-import memo from "set-state-compare/src/memo"
-import Params from "../params"
+import memo from "set-state-compare/build/memo.js"
+import Params from "../params.js"
 import PropTypes from "prop-types"
 import React, {useMemo} from "react"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Table from "../table/table"
-import useCurrentUser from "../use-current-user"
+import useCurrentUser from "../use-current-user.js"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminModelClassTable extends BaseComponent {
   static propTypes = {

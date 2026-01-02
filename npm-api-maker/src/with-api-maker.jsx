@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useMemo} from "react"
-import ApiMakerConfig from "./config"
-import memo from "set-state-compare/src/memo"
+import ApiMakerConfig from "./config.js"
+import memo from "set-state-compare/build/memo.js"
 
 const ApiMakerContext = createContext()
 const useApiMaker = () => {

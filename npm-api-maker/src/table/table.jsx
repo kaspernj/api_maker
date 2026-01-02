@@ -4,12 +4,12 @@ import {Animated, Platform, Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
-import Collection from "../collection"
-import columnVisible from "./column-visible"
+import Collection from "../collection.js"
+import columnVisible from "./column-visible.js"
 import debounce from "debounce"
 import DraggableSort from "../draggable-sort/index"
-import EventEmitter from "events"
-import Filters from "./filters"
+import {EventEmitter} from "eventemitter3"
+import Filters from "./filters/index"
 import FlatList from "./components/flat-list"
 import {Form} from "../form"
 import Header from "./components/header"
@@ -18,30 +18,30 @@ import HeaderSelect from "./header-select"
 import Icon from "../utils/icon"
 import {incorporate} from "incorporator"
 import * as inflection from "inflection"
-import memo from "set-state-compare/src/memo"
-import modelClassRequire from "../model-class-require"
+import memo from "set-state-compare/build/memo.js"
+import modelClassRequire from "../model-class-require.js"
 import ModelRow from "./model-row"
 import Paginate from "../bootstrap/paginate"
-import Params from "../params"
+import Params from "../params.js"
 import PropTypes from "prop-types"
 import Row from "./components/row"
-import selectCalculator from "./select-calculator"
+import selectCalculator from "./select-calculator.js"
 import Select from "../inputs/select"
 import Settings from "./settings/index"
-import {shapeComponent} from "set-state-compare/src/shape-component"
-import TableSettings from "./table-settings"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import TableSettings from "./table-settings.js"
 import Text from "../utils/text"
 import uniqunize from "uniqunize"
-import useBreakpoint from "../use-breakpoint"
-import useCollection from "../use-collection"
-import useI18n from "i18n-on-steroids/src/use-i18n"
-import useEventEmitter from "../use-event-emitter"
-import useModelEvent from "../use-model-event"
-import useQueryParams from "on-location-changed/build/use-query-params"
+import useBreakpoint from "../use-breakpoint.js"
+import useCollection from "../use-collection.js"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useEventEmitter from "../use-event-emitter.js"
+import useModelEvent from "../use-model-event.js"
+import useQueryParams from "on-location-changed/build/use-query-params.js"
 import Widths from "./widths"
+import WorkerPluginsCheckAllCheckbox from "./worker-plugins-check-all-checkbox"
 
 const paginationOptions = [30, 60, 90, ["All", "all"]]
-const WorkerPluginsCheckAllCheckbox = React.lazy(() => import("./worker-plugins-check-all-checkbox"))
 const TableContext = createContext()
 
 const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {
@@ -61,16 +61,16 @@ const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extend
     useEventEmitter(events, "columnVisibilityUpdated", this.tt.onColumnVisibilityUpdated)
 
     return (
-      <Row dataSet={{class: "api-maker/table/header-row"}} style={table.styleForRowHeader()}>
+      <Row style={table.styleForRowHeader()} testID="api-maker/table/header-row">
         {table.p.workplace && table.s.currentWorkplace &&
           <Header style={table.styleForHeader({style: {width: mdUp ? 41 : undefined}})}>
             <WorkerPluginsCheckAllCheckbox
               currentWorkplace={table.s.currentWorkplace}
               query={queryWithoutPagination}
-              style={this.workerPlguinsCheckAllCheckboxStyle ||= {marginHorizontal: "auto"}}
+              style={this.cache("workerPlguinsCheckAllCheckboxStyle", {marginHorizontal: "auto"})}
             />
             {!mdUp &&
-              <Text style={this.selectAllFoundTextStyle ||= {marginLeft: 3}}>
+              <Text style={this.cache("selectAllFoundTextStyle", {marginLeft: 3})}>
                 {t(".select_all_found", {defaultValue: "Select all found"})}
               </Text>
             }
@@ -363,7 +363,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
 
     return (
-      <View dataSet={{class: this.className()}} onLayout={this.tt.onContainerLayout} style={this.props.styles?.container}>
+      <View
+        dataSet={this.cache("rootViewDataSet", {class: this.className()}, [this.className()])}
+        onLayout={this.tt.onContainerLayout}
+        style={this.props.styles?.container}
+      >
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
             {noRecordsAvailableContent({models, qParams, overallCount})}
@@ -377,9 +381,17 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         {showFilters &&
           <Filters currentUser={currentUser} modelClass={modelClass} queryName={queryName} querySName={querySName} />
         }
-        {qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
-          this.cardOrTable()
-        }
+        {(() => {
+          if (qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent) {
+            return this.cardOrTable()
+          } else {
+            return (
+              <View>
+                <Text>{this.t(".loading_dot_dot_dit", {defaultValue: "Loading..."})}</Text>
+              </View>
+            )
+          }
+        })()}
       </View>
     )
   }
@@ -730,7 +742,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
 
     return (
-      <View style={this.rootViewStyle ||= {flexDirection: "row"}}>
+      <View style={this.cache("tableControlsRootViewStyle", {flexDirection: "row"})}>
         {controls && controls({models, qParams, query, result})}
         <Pressable dataSet={{class: "filter-button"}} onPress={this.tt.onFilterClicked}>
           <Icon name="search" size={20} />
@@ -739,7 +751,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           {showSettings &&
             <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
-          <Pressable dataSet={this.settingsButtonDataSet ||= {class: "settings-button"}} onPress={this.tt.onSettingsClicked}>
+          <Pressable dataSet={this.cache("settingsButtonDataSet", {class: "settings-button"})} onPress={this.tt.onSettingsClicked}>
             <Icon name="gear" size={20} />
           </Pressable>
         </View>
@@ -759,13 +771,13 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     if (to === 0) from = 0
 
     return (
-      <View style={this.rootViewStyle ||= {flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
-        <View dataSet={this.showingCountsDataSet ||= {class: "showing-counts"}} style={this.showingCountsStyle ||= {flexDirection: "row"}}>
+      <View style={this.cache("tableFooterRootViewStyle", {flexDirection: "row", justifyContent: "space-between", marginTop: 10})}>
+        <View dataSet={this.cache("showingCountsDataSet", {class: "showing-counts"})} style={this.cache("showingCountsStyle", {flexDirection: "row"})}>
           <Text>
             {this.t(".showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
           </Text>
           {this.p.workplace && this.s.currentWorkplaceCount !== null &&
-            <Text style={this.xSelectedTextStyle ||= {marginLeft: 3}}>
+            <Text style={this.cache("xSelectedTextStyle", {marginLeft: 3})}>
               {this.t(".x_selected", {defaultValue: "%{selected} selected.", selected: this.s.currentWorkplaceCount})}
             </Text>
           }

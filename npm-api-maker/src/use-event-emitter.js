@@ -1,7 +1,13 @@
-import useEnvSense from "env-sense/src/use-env-sense"
+import useEnvSense from "env-sense/build/use-env-sense.js"
 import {useEffect, useLayoutEffect, useMemo} from "react"
 
-const ApiMakerUseEventEmitter = (events, event, onCalled) => {
+/**
+ * @param {object} events
+ * @param {string} event
+ * @param {function} onCalled
+ * @return {void}
+ */
+export default function ApiMakerUseEventEmitter(events, event, onCalled) {
   const {isServer} = useEnvSense()
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect
 
@@ -21,5 +27,3 @@ const ApiMakerUseEventEmitter = (events, event, onCalled) => {
     }
   }, [events, event, onCalled])
 }
-
-export default ApiMakerUseEventEmitter

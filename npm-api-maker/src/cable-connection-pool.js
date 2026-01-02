@@ -1,7 +1,7 @@
-import CableSubscriptionPool from "./cable-subscription-pool"
-import CableSubscription from "./cable-subscription"
+import CableSubscriptionPool from "./cable-subscription-pool.js"
+import CableSubscription from "./cable-subscription.js"
 import {dig} from "diggerize"
-import RunLast from "./run-last"
+import RunLast from "./run-last.js"
 
 const shared = {}
 

@@ -2,7 +2,7 @@ import {digg} from "diggerize"
 import Hash from "shared/hash"
 import Layout from "components/layout"
 import React from "react"
-import {Project} from "models"
+import {Project} from "models.js"
 
 export default class ModelsUpdate extends React.PureComponent {
   state = {

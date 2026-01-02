@@ -1,5 +1,5 @@
 import {digg, digs} from "diggerize"
-import ModelRecipesModelLoader from "./model-recipes-model-loader"
+import ModelRecipesModelLoader from "./model-recipes-model-loader.js"
 
 export default class ModelRecipesLoader {
   constructor ({recipes}) {

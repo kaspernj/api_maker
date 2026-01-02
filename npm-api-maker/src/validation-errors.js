@@ -1,8 +1,19 @@
-import {digg, digs} from "diggerize"
-import * as inflection from "inflection"
-import modelClassRequire from "./model-class-require"
+// @ts-check
 
-class ValidationError {
+import * as inflection from "inflection"
+import {digg, digs} from "diggerize"
+import modelClassRequire from "./model-class-require.js"
+
+class ValidationError { // eslint-disable-line padded-blocks
+
+  /**
+   * @param {object} args
+   * @param {string} args.attribute_name
+   * @param {string} args.attribute_type
+   * @param {string[]} args.error_messages
+   * @param {string} args.input_name
+   * @param {string} args.model_name
+   */
   constructor(args) {
     this.attributeName = digg(args, "attribute_name")
     this.attributeType = digg(args, "attribute_type")
@@ -13,6 +24,11 @@ class ValidationError {
     this.modelName = digg(args, "model_name")
   }
 
+  /**
+   * @param {string} attributeName
+   * @param {string} inputName
+   * @returns {boolean}
+   */
   matchesAttributeAndInputName(attributeName, inputName) {
     if (this.getInputName() == inputName) return true
     if (!attributeName) return false
@@ -30,9 +46,13 @@ class ValidationError {
     return false
   }
 
+  /** @returns {string} */
   getAttributeName = () => digg(this, "attributeName")
+
+  /** @returns {string[]} */
   getErrorMessages = () => digg(this, "errorMessages")
 
+  /** @returns {string[]} */
   getFullErrorMessages() {
     const {attributeType} = digs(this, "attributeType")
 
@@ -50,15 +70,20 @@ class ValidationError {
     }
   }
 
+  /** @returns {string} */
   getHandled = () => digg(this, "handled")
+
+  /** @returns {string} */
   getInputName = () => digg(this, "inputName")
 
+  /** @returns {typeof import("./base-model.js").default} */
   getModelClass() {
     const modelName = inflection.classify(digg(this, "modelName"))
 
     return modelClassRequire(modelName)
   }
 
+  /** @returns {void} */
   setHandled() {
     this.handled = true
   }
@@ -84,7 +109,7 @@ class ValidationErrors {
 
   getValidationErrors = () => this.validationErrors
 
-  getValidationErrorsForInput ({attribute, inputName, onMatchValidationError}) {
+  getValidationErrorsForInput({attribute, inputName, onMatchValidationError}) {
     const validationErrors = this.validationErrors.filter((validationError) => {
       if (onMatchValidationError) {
         return onMatchValidationError(validationError)
@@ -98,7 +123,7 @@ class ValidationErrors {
     return validationErrors
   }
 
-  getUnhandledErrorMessage () {
+  getUnhandledErrorMessage() {
     const unhandledValidationErrors = this.validationErrors.filter((validationError) => !validationError.getHandled())
 
     if (unhandledValidationErrors.length > 0) {

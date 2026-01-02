@@ -1,15 +1,31 @@
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import modelClassRequire from "../model-class-require"
+import modelClassRequire from "../model-class-require.js"
 
 export default class ApiMakerBaseModelReflection {
+  /**
+   * @param {object} reflectionData
+   * @param {string} reflectionData.foreignKey
+   * @param {string} reflectionData.marco
+   * @param {string} reflectionData.resource_name
+   * @param {string} reflectionData.name
+   * @param {string} reflectionData.through
+   */
   constructor(reflectionData) {
     this.reflectionData = reflectionData
   }
 
-  foreignKey = () => digg(this, "reflectionData", "foreignKey")
-  macro = () => digg(this, "reflectionData", "macro")
-  modelClass = () => modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "resource_name"))))
-  name = () => inflection.camelize(digg(this, "reflectionData", "name"), true)
-  through = () => digg(this, "reflectionData", "through")
+  /** @returns {string} */
+  foreignKey() { return digg(this, "reflectionData", "foreignKey") }
+
+  macro() { return digg(this, "reflectionData", "macro") }
+
+  /** @returns {typeof import("../base-model.js").default} */
+  modelClass() { return modelClassRequire(inflection.singularize(inflection.camelize(digg(this, "reflectionData", "resource_name")))) }
+
+  /** @returns {string} */
+  name() { return inflection.camelize(digg(this, "reflectionData", "name"), true) }
+
+  /** @returns {string} */
+  through() { return digg(this, "reflectionData", "through") }
 }

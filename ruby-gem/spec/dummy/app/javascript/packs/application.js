@@ -1,5 +1,5 @@
 import { Application } from "stimulus"
-import Devise from "@kaspernj/api-maker/build/devise"
+import Devise from "@kaspernj/api-maker/build/devise.js"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 
 Devise.addUserScope("user")

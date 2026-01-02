@@ -242,7 +242,7 @@ end
 ### Creating a new model from JavaScript
 
 ```js
-import {Task} from "models"
+import {Task} from "models.js"
 
 const task = new Task()
 task.assignAttributes({name: "New task"})
@@ -430,7 +430,7 @@ First include this in your layout, so JS can know which user is signed in:
 
 Then you can do like this in JS:
 ```js
-import Devise from "@kaspernj/api-maker/build/devise"
+import Devise from "@kaspernj/api-maker/build/devise.js"
 
 console.log(`The current user has this email: ${Devise.currentUser().email()}`)
 ```
@@ -503,9 +503,9 @@ subscription.unsubscribe()
 
 You can also use a React component if you use React and dont want to keep track of when to unsubscribe:
 ```jsx
-import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event"
+import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event.js"
 import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
-import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event"
+import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
 ```
 
 ```js

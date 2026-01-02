@@ -1,11 +1,11 @@
 import BaseComponent from "../base-component"
 import React, {createContext, useContext, useMemo} from "react"
-import memo from "set-state-compare/src/memo"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/src/shape-component"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Switch, {CurrentSwitchContext} from "./switch"
-import useI18n from "i18n-on-steroids/src/use-i18n"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const CurrentPathContext = createContext([])
 const ParamsContext = createContext({})

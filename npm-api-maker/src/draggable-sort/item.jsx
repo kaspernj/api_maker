@@ -1,11 +1,11 @@
 import React, {useMemo} from "react"
 import {Animated, Easing, PanResponder} from "react-native"
-import {shapeComponent, ShapeComponent} from "set-state-compare/src/shape-component"
-import EventEmitter from "events"
-import memo from "set-state-compare/src/memo"
+import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
+import {EventEmitter} from "eventemitter3"
+import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import useEventEmitter from "../use-event-emitter"
+import useEventEmitter from "../use-event-emitter.js"
 
 export default memo(shapeComponent(class DraggableSortItem extends ShapeComponent {
   static propTypes = propTypesExact({
@@ -64,7 +64,7 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     )
 
     return (
-      <Animated.View dataSet={this.draggableSortItemDataSet ||= {component: "draggable-sort/item"}} onLayout={this.tt.onLayout} style={style}>
+      <Animated.View dataSet={this.cache("draggableSortItemDataSet", {component: "draggable-sort/item"})} onLayout={this.tt.onLayout} style={style}>
         {renderItem({isActive: active, item, touchProps: this.tt.panResponder.panHandlers})}
       </Animated.View>
     )
