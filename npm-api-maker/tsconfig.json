@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "checkJs": true,
     "declaration": true,
     "declarationMap": true,
     "inlineSourceMap": true,
     "inlineSources": true,
+    "jsx": "react-jsx",
     "lib": ["dom", "ES2020"],
+    "module": "ESNext",
+    "moduleResolution": "node",
     "outDir": "build",
     "rootDir": "src",
     "sourceRoot": "/src",
@@ -15,4 +19,3 @@
   },
   "include": ["src/**/*"]
 }
-
