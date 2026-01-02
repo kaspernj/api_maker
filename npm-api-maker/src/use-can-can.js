@@ -34,15 +34,10 @@ export default function useCanCan(abilitiesCallback, dependencies) {
   }, [])
 
   const loadAbilitiesOnNew = useCallback(async () => {
-    const canCan = s.s.canCan
-
     s.set({canCan: null})
 
-    if (canCan) {
-      await canCan?.resetAbilities()
-    } else {
-      await loadAbilities()
-    }
+    await CanCan.current().resetAbilities()
+    await loadAbilities()
   }, [])
 
   const dependencyList = dependencies ?? [currentUser?.id()] // @ts-expect-error
