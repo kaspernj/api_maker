@@ -36,6 +36,10 @@ describe "api_maker_table helpers" do
         yield
       end
 
+      def with_advisory_lock!(key, **_options, &block)
+        with_advisory_lock(key, &block)
+      end
+
       def reload
         self
       end
