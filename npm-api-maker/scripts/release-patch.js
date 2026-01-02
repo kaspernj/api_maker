@@ -6,53 +6,64 @@ import {fileURLToPath} from "node:url"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const repoRoot = path.resolve(__dirname, "..", "..")
-const packageDir = path.resolve(__dirname, "..")
-const packageJsonPath = path.join(packageDir, "package.json")
+class ReleasePatch {
+  repoRoot = path.resolve(__dirname, "..", "..")
+  packageDir = path.resolve(__dirname, "..")
+  packageJsonPath = path.join(this.packageDir, "package.json")
 
-function run(command, options = {}) {
-  execSync(command, {stdio: "inherit", ...options})
-}
+  run(command, options = {}) {
+    execSync(command, {stdio: "inherit", ...options})
+  }
 
-function runQuiet(command, options = {}) {
-  return execSync(command, {encoding: "utf8", ...options}).trim()
-}
+  runQuiet(command, options = {}) {
+    return execSync(command, {encoding: "utf8", ...options}).trim()
+  }
 
-function requireCleanGit() {
-  const status = runQuiet("git status --porcelain", {cwd: repoRoot})
-  if (status) {
-    console.error("Working tree is not clean. Commit or stash changes first.")
-    process.exit(1)
+  requireCleanGit() {
+    const status = this.runQuiet("git status --porcelain", {cwd: this.repoRoot})
+    if (status) {
+      console.error("Working tree is not clean. Commit or stash changes first.")
+      process.exit(1)
+    }
+  }
+
+  readVersion() {
+    const raw = fs.readFileSync(this.packageJsonPath, "utf8")
+    return JSON.parse(raw).version
+  }
+
+  stageReleaseFiles() {
+    const standardCandidates = [
+      "npm-api-maker/package.json",
+      "npm-api-maker/package-lock.json",
+      "npm-api-maker/yarn.lock"
+    ]
+    const forceCandidates = ["npm-api-maker/build"]
+
+    const existingStandard = standardCandidates.filter((item) => fs.existsSync(path.join(this.repoRoot, item)))
+    if (existingStandard.length > 0) {
+      this.run(`git add ${existingStandard.join(" ")}`, {cwd: this.repoRoot})
+    }
+
+    const existingForce = forceCandidates.filter((item) => fs.existsSync(path.join(this.repoRoot, item)))
+    if (existingForce.length > 0) {
+      this.run(`git add -f ${existingForce.join(" ")}`, {cwd: this.repoRoot})
+    }
+  }
+
+  execute() {
+    this.requireCleanGit()
+
+    this.run("npm version patch --no-git-tag-version", {cwd: this.packageDir})
+    this.run("npm run build", {cwd: this.packageDir})
+
+    this.stageReleaseFiles()
+
+    const version = this.readVersion()
+    this.run(`git commit -m "Release npm-api-maker v${version}"`, {cwd: this.repoRoot})
+    this.run("git push", {cwd: this.repoRoot})
+    this.run("npm publish", {cwd: this.packageDir})
   }
 }
 
-function readVersion() {
-  const raw = fs.readFileSync(packageJsonPath, "utf8")
-  return JSON.parse(raw).version
-}
-
-function stageReleaseFiles() {
-  const candidates = [
-    "npm-api-maker/package.json",
-    "npm-api-maker/package-lock.json",
-    "npm-api-maker/yarn.lock",
-    "npm-api-maker/build"
-  ]
-
-  const existing = candidates.filter((item) => fs.existsSync(path.join(repoRoot, item)))
-  if (existing.length > 0) {
-    run(`git add ${existing.join(" ")}`, {cwd: repoRoot})
-  }
-}
-
-requireCleanGit()
-
-run("npm version patch --no-git-tag-version", {cwd: packageDir})
-run("npm run build", {cwd: packageDir})
-
-stageReleaseFiles()
-
-const version = readVersion()
-run(`git commit -m "Release npm-api-maker v${version}"`, {cwd: repoRoot})
-run("git push", {cwd: repoRoot})
-run("npm publish", {cwd: packageDir})
+new ReleasePatch().execute()
