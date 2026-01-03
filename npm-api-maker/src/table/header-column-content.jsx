@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import BaseComponent from "../base-component"
 import {digs} from "diggerize"
 import memo from "set-state-compare/build/memo.js"

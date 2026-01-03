@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import {Animated} from "react-native"

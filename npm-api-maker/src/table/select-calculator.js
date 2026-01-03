@@ -1,3 +1,4 @@
+/* eslint-disable no-continue, sort-imports */
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import modelClassRequire from "../model-class-require.js"

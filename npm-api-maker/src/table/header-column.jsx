@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved, sort-imports */
 import React, {useMemo} from "react"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
@@ -75,6 +76,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     const {style, ...restColumnProps} = headerProps
     const actualStyle = useMemo(
       () => {
+        // eslint-disable-next-line prefer-object-spread
         const actualStyle = Object.assign(
           {
             cursor: resizing ? "col-resize" : undefined,

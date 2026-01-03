@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-closing-bracket-location, react/jsx-no-comment-textnodes, react/jsx-no-literals, react/jsx-one-expression-per-line, sort-imports */
+/* eslint-disable react/jsx-closing-bracket-location, sort-imports */
 import React, {useMemo} from "react"
 import {StyleSheet, View} from "react-native"
 import BaseComponent from "../../base-component"

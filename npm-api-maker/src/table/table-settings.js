@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style, import/no-unresolved, newline-per-chained-call, sort-imports */
 import columnIdentifier from "./column-identifier.js"
 import columnVisible from "./column-visible.js"
 import {digg} from "diggerize"

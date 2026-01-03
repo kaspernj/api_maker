@@ -1,4 +1,5 @@
-import {useCallback, useLayoutEffect, useMemo} from "react" // eslint-disable-line sort-imports
+/* eslint-disable sort-imports */
+import {useCallback, useLayoutEffect, useMemo} from "react"
 import debounceFunction from "debounce"
 import ModelEvents from "./model-events.js"
 import useShape from "set-state-compare/build/use-shape.js"
@@ -12,26 +13,26 @@ import useShape from "set-state-compare/build/use-shape.js"
  * @param {function} props.onConnected
  * @returns {void}
  */
-const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => { // eslint-disable-line react-hooks/rules-of-hooks
+const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => {
   const {active = true, debounce, onConnected, ...restProps} = props || {}
 
   if (Object.keys(restProps).length > 0) {
     throw new Error(`Unknown props given to useDestroyedEvent: ${Object.keys(restProps).join(", ")}`)
   }
 
-  const s = useShape({active, debounce, model, onDestroyed}) // eslint-disable-line react-hooks/rules-of-hooks
+  const s = useShape({active, debounce, model, onDestroyed})
 
-  const debounceCallback = useMemo(() => { // eslint-disable-line react-hooks/rules-of-hooks
+  const debounceCallback = useMemo(() => {
     if (typeof debounce == "number") {
       return debounceFunction(s.p.onDestroyed, debounce)
     } else {
       return debounceFunction(s.p.onDestroyed)
     }
-  }, [debounce]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [debounce])
 
   s.updateMeta({debounceCallback})
 
-  const onDestroyedCallback = useCallback((...args) => { // eslint-disable-line react-hooks/rules-of-hooks
+  const onDestroyedCallback = useCallback((...args) => {
     if (!s.p.active) {
       return
     }
@@ -41,9 +42,9 @@ const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => { // eslint-dis
     } else {
       s.p.onDestroyed(...args)
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
-  useLayoutEffect(() => { // eslint-disable-line react-hooks/rules-of-hooks
+  useLayoutEffect(() => {
     let connectDestroyed, onConnectedListener
 
     if (model) {

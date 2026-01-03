@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-curly-brace-presence, react/jsx-no-comment-textnodes, react/jsx-no-literals, react/jsx-no-useless-fragment, react/jsx-one-expression-per-line, sort-imports */
+/* eslint-disable react/jsx-no-literals, react/jsx-no-useless-fragment, react/jsx-one-expression-per-line, sort-imports */
 import React, {useMemo} from "react"
 import {Pressable, StyleSheet, View} from "react-native"
 import BaseComponent from "../base-component"

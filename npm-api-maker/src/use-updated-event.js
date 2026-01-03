@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import {useCallback, useLayoutEffect, useMemo} from "react"
 import debounceFunction from "debounce"
 import ModelEvents from "./model-events.js"
@@ -27,11 +28,10 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
     } else {
       return debounceFunction(s.p.onUpdated)
     }
-  }, [debounce]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [debounce])
 
   s.updateMeta({debounceCallback})
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const onUpdatedCallback = useCallback((...args) => {
     if (!s.p.active) {
       return
@@ -42,9 +42,8 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
     } else {
       s.p.onUpdated(...args)
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useLayoutEffect(() => {
     let connectUpdated, onConnectedListener
 
@@ -65,7 +64,7 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
         connectUpdated.unsubscribe()
       }
     }
-  }, [model?.id()]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [model?.id()])
 }
 
 export default apiMakerUseUpdatedEvent

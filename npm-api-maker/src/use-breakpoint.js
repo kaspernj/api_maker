@@ -1,3 +1,4 @@
+/* eslint-disable func-style, sort-imports */
 import {useCallback} from "react"
 import config from "./config.js"
 import {Dimensions} from "react-native"
@@ -71,6 +72,7 @@ const useBreakpoint = (args = {}) => {
   })
 
   const styling = useCallback((args) => {
+    // eslint-disable-next-line prefer-object-spread
     const style = Object.assign({}, args.base)
 
     for (const breakpointData of s.m.breakpoints) {

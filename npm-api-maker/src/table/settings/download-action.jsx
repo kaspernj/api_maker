@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak, no-extra-parens, react/jsx-no-literals, sort-imports */
 import BaseComponent from "../../base-component"
 import ColumnContent from "../column-content"
 import columnIdentifier from "../column-identifier.js"
@@ -8,7 +9,7 @@ import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import {renderToString} from "react-dom/server"
+import {renderToString} from "react-dom/server" // eslint-disable-line import/no-unresolved
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Pressable} from "react-native"
 import Text from "../../utils/text"

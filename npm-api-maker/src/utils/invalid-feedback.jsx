@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"

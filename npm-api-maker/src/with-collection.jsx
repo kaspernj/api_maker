@@ -1,3 +1,4 @@
+/* eslint-disable no-invalid-this, sort-imports */
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import memo from "set-state-compare/build/memo.js"

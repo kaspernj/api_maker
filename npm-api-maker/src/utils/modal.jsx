@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak, prefer-object-spread, sort-vars */
 import {Modal, Pressable, View} from "react-native"
 import React, {useMemo} from "react"
 import BaseComponent from "../base-component"

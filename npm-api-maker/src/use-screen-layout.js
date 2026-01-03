@@ -21,32 +21,27 @@ const getWindowLayout = (width) => {
 }
 
 const useScreenLayout = () => {
-  if (Platform.OS == "web") { // eslint-disable-line eqeqeq
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+  if (Platform.OS == "web") {
     const shared = useMemo(() => ({}))
 
     shared.width = window.innerWidth
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [screenLayout, setScreenLayout] = useState(() => getWindowLayout(shared.width))
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const onResize = useCallback(() => {
       const newWindowLayout = getWindowLayout(window.innerWidth)
 
       if (shared.screenlayout != newWindowLayout) {
         setScreenLayout(newWindowLayout)
       }
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [])
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEventListener(window, "resize", onResize)
 
     shared.screenLayout = screenLayout
 
     return shared.screenLayout
   } else {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const windowDimensions = useWindowDimensions()
 
     return getWindowLayout(windowDimensions.width)

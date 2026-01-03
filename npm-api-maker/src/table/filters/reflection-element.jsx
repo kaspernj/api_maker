@@ -1,3 +1,4 @@
+/* eslint-disable new-cap, sort-imports */
 import BaseComponent from "../../base-component"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"

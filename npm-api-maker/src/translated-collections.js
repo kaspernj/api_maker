@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved, sort-imports */
 import {digg} from "diggerize"
 import I18nOnSteroids from "i18n-on-steroids"
 

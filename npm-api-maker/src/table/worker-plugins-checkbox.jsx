@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved, new-cap, sort-imports */
 import React, {useMemo} from "react"
 import BaseComponent from "../base-component"
 import classNames from "classnames"

@@ -1,3 +1,4 @@
+/* eslint-disable max-len, sort-imports */
 import React, {useEffect, useRef} from "react"
 import BaseComponent from "../../base-component"
 import columnIdentifier from "../column-identifier.js"

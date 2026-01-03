@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak, import/no-unresolved, indent, sort-imports */
 import {Animated, View} from "react-native"
 import React, {useMemo} from "react"
 import BaseComponent from "../base-component"

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, no-use-before-define, prefer-object-spread, sort-imports */
 import debounce from "debounce"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
