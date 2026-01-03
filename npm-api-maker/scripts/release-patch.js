@@ -10,6 +10,7 @@ class ReleasePatch {
   repoRoot = path.resolve(__dirname, "..", "..")
   packageDir = path.resolve(__dirname, "..")
   packageJsonPath = path.join(this.packageDir, "package.json")
+  requireMaster = process.argv.includes("--require-master")
 
   run(command, options = {}) {
     execSync(command, {stdio: "inherit", ...options})
@@ -27,12 +28,28 @@ class ReleasePatch {
     }
   }
 
+  requireMasterBranch() {
+    const branch = this.runQuiet("git rev-parse --abbrev-ref HEAD", {cwd: this.repoRoot})
+    if (branch !== "master") {
+      console.error(`Release must run on master (current: ${branch}).`)
+      process.exit(1)
+    }
+  }
+
+  bumpPatch() {
+    this.run("npm version patch --no-git-tag-version", {cwd: this.packageDir})
+  }
+
+  build() {
+    this.run("npm run build", {cwd: this.packageDir})
+  }
+
   readVersion() {
     const raw = fs.readFileSync(this.packageJsonPath, "utf8")
     return JSON.parse(raw).version
   }
 
-  stageReleaseFiles() {
+  stageVersionFiles() {
     const candidates = [
       "npm-api-maker/package.json",
       "npm-api-maker/package-lock.json",
@@ -56,19 +73,39 @@ class ReleasePatch {
     this.run("npm login", {cwd: this.packageDir})
   }
 
+  commit(version) {
+    this.run(`git commit -m "Release npm-api-maker v${version}"`, {cwd: this.repoRoot})
+  }
+
+  push() {
+    if (this.requireMaster) {
+      this.run("git push origin master", {cwd: this.repoRoot})
+      return
+    }
+
+    this.run("git push", {cwd: this.repoRoot})
+  }
+
+  publish() {
+    this.run("npm publish", {cwd: this.packageDir})
+  }
+
   execute() {
     this.requireCleanGit()
-    this.ensureNpmLogin()
+    if (this.requireMaster) {
+      this.requireMasterBranch()
+    }
 
-    this.run("npm version patch --no-git-tag-version", {cwd: this.packageDir})
-    this.run("npm run build", {cwd: this.packageDir})
-
-    this.stageReleaseFiles()
+    this.bumpPatch()
+    this.build()
+    this.stageVersionFiles()
 
     const version = this.readVersion()
-    this.run(`git commit -m "Release npm-api-maker v${version}"`, {cwd: this.repoRoot})
-    this.run("git push", {cwd: this.repoRoot})
-    this.run("npm publish", {cwd: this.packageDir})
+    this.commit(version)
+    this.push()
+
+    this.ensureNpmLogin()
+    this.publish()
   }
 }
 
