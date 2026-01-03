@@ -1,3 +1,4 @@
+/* eslint-disable new-cap, newline-per-chained-call, react/jsx-sort-props, sort-imports */
 import React, {useMemo} from "react"
 import BaseComponent from "../../../base-component"
 import {digg} from "diggerize"

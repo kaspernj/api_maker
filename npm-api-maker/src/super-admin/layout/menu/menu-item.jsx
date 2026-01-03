@@ -1,5 +1,6 @@
+/* eslint-disable react/jsx-one-expression-per-line, sort-imports */
 import BaseComponent from "../../../base-component"
-import classNames from "classnames"
+import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import Link from "../../../link"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"

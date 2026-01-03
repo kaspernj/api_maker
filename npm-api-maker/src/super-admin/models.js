@@ -1,4 +1,4 @@
-import * as models from "models.js"
+import * as models from "models.js" // eslint-disable-line import/no-unresolved
 
 const modelsAsArray = []
 

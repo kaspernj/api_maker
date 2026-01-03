@@ -1,3 +1,4 @@
+/* eslint-disable indent, react/jsx-closing-bracket-location, react/jsx-closing-tag-location, react/jsx-indent, react/jsx-indent-props , sort-imports */
 import React, {useCallback, useRef} from "react"
 import BaseComponent from "../../../base-component"
 import Icon from "../../../utils/icon"
@@ -42,7 +43,7 @@ export const useHeaderActionButtonStyle = () => {
 }
 
 export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
-  static propTypes = PropTypesExact({
+  static propTypes = PropTypesExact({ // eslint-disable-line new-cap
     actions: PropTypes.any,
     onTriggerMenu: PropTypes.func.isRequired,
     title: PropTypes.string

@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import React, {useMemo} from "react"
 import {StyleSheet, View} from "react-native"
 import Checkbox from "../../utils/checkbox"

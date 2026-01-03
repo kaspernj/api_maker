@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import React, {useMemo} from "react"
 import {TextInput, View} from "react-native"
 import BaseComponent from "../../base-component"
@@ -44,7 +45,9 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
 
     return (
       <View testID="api-maker/super-admin/edit-page/edit-attribute-input">
-        <Text>{label}</Text>
+        <Text>
+          {label}
+        </Text>
         <View>
           <TextInput
             dataSet={this.cache("textInputDataSet", {

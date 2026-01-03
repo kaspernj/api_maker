@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import AttributeRow from "../../bootstrap/attribute-row"
 import BaseComponent from "../../base-component"
 import * as inflection from "inflection"

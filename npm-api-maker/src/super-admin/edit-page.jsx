@@ -1,20 +1,21 @@
-import {Pressable, View} from "react-native"
-import BaseComponent from "../base-component"
-import ConfigReader from "./config-reader"
-import {digg} from "diggerize"
-import EditAttribute from "./edit-page/edit-attribute"
+/* eslint-disable react/jsx-max-depth, react/jsx-no-literals, react/jsx-one-expression-per-line, sort-imports */
+import * as inflection from "inflection"
 import {FlashNotifications} from "flash-notifications"
 import {Form} from "../form"
-import * as inflection from "inflection"
+import {Pressable, View} from "react-native"
+import {digg} from "diggerize"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import BaseComponent from "../base-component"
+import ConfigReader from "./config-reader"
+import EditAttribute from "./edit-page/edit-attribute"
 // @ts-expect-error
-import Locales from "shared/locales.js"
-import memo from "set-state-compare/build/memo.js"
+import Locales from "shared/locales.js" // eslint-disable-line import/no-unresolved
 import Params from "../params.js"
 import PropTypes from "prop-types"
-import propTypesExact from "prop-types-exact"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
+import memo from "set-state-compare/build/memo.js"
+import propTypesExact from "prop-types-exact"
 import useCurrentUser from "../use-current-user.js"
 import useModel from "../use-model.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
@@ -77,10 +78,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     return (
       <View testID="super-admin--edit-page">
         <Form setForm={this.setStates.form}>
-          {model && attributes?.map((attribute) =>
+          {model && attributes?.map((attribute) => ( // eslint-disable-line no-extra-parens
             <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelClass={modelClass} />
-          )}
-          {extraContent && extraContent(modelArgs)}
+          ))}
+          {extraContent && extraContent(this.modelArgs)}
           <Pressable
             onPress={this.tt.onSubmit}
             style={this.cache("pressableStyle", {
@@ -94,9 +95,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
             })}
             testID="submit-button"
           >
-            <Text style={this.cache("buttonTextStyle", {color: "#fff"})}>
-              Submit
-            </Text>
+            <Text style={this.cache("buttonTextStyle", {color: "#fff"})}>Submit</Text>
           </Pressable>
         </Form>
       </View>

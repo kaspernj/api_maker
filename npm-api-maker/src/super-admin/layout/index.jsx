@@ -1,8 +1,9 @@
+/* eslint-disable react/jsx-closing-bracket-location, react/jsx-no-comment-textnodes, react/jsx-no-literals, react/jsx-one-expression-per-line, sort-imports */
 import React, {useMemo} from "react"
 import {StyleSheet, View} from "react-native"
 import BaseComponent from "../../base-component"
 import CommandsPool from "../../commands-pool.js"
-import config from "super-admin/config"
+import config from "super-admin/config" // eslint-disable-line import/no-unresolved
 import Header from "./header/index"
 import memo from "set-state-compare/build/memo.js"
 import Menu from "./menu/index"
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
 })
 
 export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseComponent {
-  static propTypes = PropTypesExact({
+  static propTypes = PropTypesExact({ // eslint-disable-line new-cap
     actions: PropTypes.any,
     active: PropTypes.string,
     children: PropTypes.any,
@@ -124,11 +125,9 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
             <>
               <NoAccess />
               {currentUser &&
-                <>
-                  <Text style={styles.mb15}>
-                    {t(".try_signing_out_and_in_with_a_different_user", {defaultValue: "Try signing in with a different user."})}
-                  </Text>
-                </>
+                <Text style={styles.mb15}>
+                  {t(".try_signing_out_and_in_with_a_different_user", {defaultValue: "Try signing in with a different user."})}
+                </Text>
               }
               {!currentUser &&
                 <>
