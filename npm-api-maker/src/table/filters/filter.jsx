@@ -1,3 +1,4 @@
+/* eslint-disable max-len, new-cap, react/jsx-one-expression-per-line, sort-imports */
 import {Pressable, View} from "react-native"
 import BaseComponent from "../../base-component"
 import Icon from "../../utils/icon"

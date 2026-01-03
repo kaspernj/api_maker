@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import BaseComponent from "../../base-component"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"

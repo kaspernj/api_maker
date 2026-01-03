@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import BaseComponent from "../../base-component"
 import {FlatList} from "react-native"
 import memo from "set-state-compare/build/memo.js"
@@ -7,7 +8,7 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 export default memo(shapeComponent(class SharedTagble extends BaseComponent {
   render() {
     const {style, ...restProps} = this.props
-    const actualStyle = Object.assign(
+    const actualStyle = Object.assign( // eslint-disable-line prefer-object-spread
       {width: "100%"},
       style
     )

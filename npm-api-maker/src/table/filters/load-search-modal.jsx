@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved, implicit-arrow-linebreak, no-alert */
+/* eslint-disable react/jsx-max-depth, react/jsx-no-literals, sort-imports */
 import React, {useMemo} from "react"
 import {Pressable, View} from "react-native"
 import apiMakerConfig from "@kaspernj/api-maker/build/config.js"

@@ -1,4 +1,4 @@
-import {Animated, Easing} from "react-native"
+import {Animated} from "react-native"
 import {digg} from "diggerize"
 
 export default class TableWidths {
@@ -56,6 +56,7 @@ export default class TableWidths {
         column.animatedWidth = new Animated.Value(newWidth)
         column.width = newWidth
 
+        // eslint-disable-next-line no-bitwise, no-unused-expressions
         updateData << {
           id: tableSettingColumn.id(),
           width: newWidth

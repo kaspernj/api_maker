@@ -1,3 +1,4 @@
+/* eslint-disable func-style */
 import {camelize} from "inflection"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 

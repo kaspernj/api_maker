@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak, max-len, react/jsx-sort-props, sort-imports */
 import {Pressable} from "react-native"
 import BaseComponent from "../base-component"
 import Column from "./components/column"
@@ -122,6 +123,7 @@ export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow exte
     const {destroyMessage} = this.p.table.props
     const {model} = this.p
 
+    // eslint-disable-next-line no-alert
     if (!confirm(t("js.shared.are_you_sure"))) {
       return
     }

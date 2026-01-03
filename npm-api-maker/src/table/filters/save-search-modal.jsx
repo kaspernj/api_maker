@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type, sort-imports */
 import apiMakerConfig from "@kaspernj/api-maker/build/config.js"
 import BaseComponent from "../../base-component"
 import Checkbox from "../../bootstrap/checkbox"

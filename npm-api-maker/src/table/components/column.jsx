@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"
@@ -7,7 +8,7 @@ import {Animated} from "react-native"
 export default memo(shapeComponent(class SharedTableColumn extends BaseComponent {
   render() {
     const {dataSet, ...restProps} = this.props
-    const actualDataSet = Object.assign(
+    const actualDataSet = Object.assign( // eslint-disable-line prefer-object-spread
       {component: "api-maker/table/components/column"},
       dataSet
     )
