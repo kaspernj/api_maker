@@ -1,4 +1,4 @@
-import {digg, digs} from "diggerize"
+import {dig, digg, digs} from "diggerize"
 import React, {createContext, useContext, useMemo, useRef} from "react"
 import {Animated, Platform, Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
@@ -268,12 +268,17 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   async loadCurrentWorkplace() {
     const Workplace = modelClassRequire("Workplace")
     const result = await Workplace.current()
-    const currentWorkplace = digg(result, "current", 0)
+    const currentWorkplace = dig(result, "current", 0)
 
     this.setState({currentWorkplace})
   }
 
   async loadCurrentWorkplaceCount() {
+    if (!this.s.currentWorkplace) {
+      this.setState({currentWorkplaceCount: 0})
+      return
+    }
+
     const WorkplaceLink = modelClassRequire("WorkplaceLink")
     const currentWorkplaceCount = await WorkplaceLink
       .ransack({

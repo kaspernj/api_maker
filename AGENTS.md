@@ -10,3 +10,4 @@ Notes:
 - Prefer `describe` over `RSpec.describe` in specs.
 - Do not add `# frozen_string_literal: true` to files.
 - Prefer multiple small, individually working commits when possible.
+- Always run Rubocop on changed Ruby files.

@@ -7,7 +7,7 @@ describe("CustomError", () => {
     const customError = new CustomError(`Request failed with code: ${xhr.status}`, {response, xhr})
 
     expect(customError.message).toEqual("Request failed with code: 401")
-    expect(customError.errorMessages()).toEqual(undefined)
+    expect(customError.errorMessages()).toEqual(["No error messages found"])
     expect(customError.errorTypes()).toEqual(undefined)
   })
 })
