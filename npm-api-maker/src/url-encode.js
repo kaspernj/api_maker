@@ -9,6 +9,7 @@ const replaces = {
   "?": "%3F"
 }
 
+// eslint-disable-next-line newline-per-chained-call
 const regexp = new RegExp(`(${Object.keys(replaces).map(escapeStringRegexp).join("|")})`, "g")
 
 /**

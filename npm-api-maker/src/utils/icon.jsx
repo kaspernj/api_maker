@@ -1,3 +1,4 @@
+/* eslint-disable no-multi-spaces, prefer-object-spread, sort-imports */
 import BaseComponent from "../base-component"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome.js"
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5.js"

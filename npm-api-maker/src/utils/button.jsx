@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style, prefer-object-spread, sort-imports */
 import {Pressable, View} from "react-native"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import Icon from "./icon"

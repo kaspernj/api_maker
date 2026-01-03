@@ -1,13 +1,12 @@
-/* eslint-disable sort-imports */
+/* eslint-disable react/jsx-curly-brace-presence, sort-imports */
 import BaseComponent from "../base-component"
 import {digg} from "diggerize"
 import Link from "../link"
 import memo from "set-state-compare/build/memo.js"
 import Params from "../params.js"
-import React from "react"
+import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
-import {useMemo} from "react"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionLink extends BaseComponent {
   setup() {
@@ -33,7 +32,10 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionLink ex
     return (
       <Link to={Params.withParams({model: digg(modelClass.modelClassData(), "name"), model_id: model.primaryKey(), model_reflection: reflection.name()})}>
         <Text>
-          {modelClass.humanAttributeName(reflection.name())} ({count})
+          {modelClass.humanAttributeName(reflection.name())}
+          {" ("}
+          {count}
+          {")"}
         </Text>
       </Link>
     )

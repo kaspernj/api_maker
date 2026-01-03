@@ -1,10 +1,11 @@
+/* eslint-disable sort-imports */
 import BaseComponent from "../base-component"
 import {digg} from "diggerize"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import memo from "set-state-compare/build/memo.js"
 import ModelClassTable from "./model-class-table"
-import React, {useMemo} from "react"
+import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import ShowNav from "./show-nav"
 import useModel from "../use-model.js"

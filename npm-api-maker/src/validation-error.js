@@ -1,5 +1,6 @@
 // @ts-check
 
+/* eslint-disable prefer-object-spread, sort-imports */
 import BaseError from "./base-error.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"

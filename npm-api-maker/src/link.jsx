@@ -22,7 +22,12 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
 
     if (Platform.OS == "web" && !usePressable) {
       return (
-        <a {...dataSetToAttributes(Object.assign({testid: testID}, dataSet))} href={to || "#"} {...restProps} onClick={this.tt.onLinkClicked} /> // eslint-disable-line prefer-object-spread
+        <a
+          {...dataSetToAttributes(Object.assign({testid: testID}, dataSet))} // eslint-disable-line prefer-object-spread
+          href={to || "#"}
+          onClick={this.tt.onLinkClicked}
+          {...restProps}
+        />
       )
     }
 
