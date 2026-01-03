@@ -1,12 +1,12 @@
-import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import React, {useMemo} from "react"
-import {digs} from "diggerize"
-import {useForm} from "../form"
 import * as inflection from "inflection"
-import InvalidFeedback from "./invalid-feedback"
-import memo from "set-state-compare/build/memo.js"
+import React, {useMemo} from "react"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
+import {digs} from "diggerize"
+import InvalidFeedback from "./invalid-feedback" // eslint-disable-line sort-imports
 import PropTypes from "prop-types"
+import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
+import {useForm} from "../form"
 import useInput from "../use-input.js"
 
 const OptionElement = memo(shapeComponent(class OptionElement extends ShapeComponent {
@@ -32,7 +32,7 @@ const OptionElement = memo(shapeComponent(class OptionElement extends ShapeCompo
           {option[0]}
         </label>
 
-        {(optionIndex + 1) == options.length && errors.length > 0 &&
+        {optionIndex + 1 == options.length && errors.length > 0 &&
           <InvalidFeedback errors={errors} />
         }
       </div>
@@ -62,7 +62,11 @@ export default memo(shapeComponent(class ApiMakerBootstrapCheckboxes extends Sha
     const {inputProps, wrapperOpts} = useInput({props: this.props})
 
     this.generatedId = useMemo(
-      () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+      () => Math.random()
+        .toString(36)
+        .substring(2, 15) + Math.random()
+        .toString(36)
+        .substring(2, 15),
       []
     )
 
@@ -95,21 +99,23 @@ export default memo(shapeComponent(class ApiMakerBootstrapCheckboxes extends Sha
         </label>
 
         <input name={this.inputName()} ref={this.tt.inputProps.ref} type="hidden" value="" />
-        {this.props.options.map((option, index) =>
-          <OptionElement
-            inputCheckboxClassName={this.tt.inputCheckboxClassName()}
-            inputName={this.inputName()}
-            isDefaultSelected={this.isDefaultSelected(option[1])}
-            generatedId={this.tt.generatedId}
-            key={option[1]}
-            onChange={this.props.onChange}
-            onOptionChecked={this.tt.onOptionChecked}
-            option={option}
-            optionIndex={index}
-            options={this.props.options}
-            wrapperOpts={this.tt.wrapperOpts}
-          />
-        )}
+        {this.props.options.map((option, index) => { // eslint-disable-line arrow-body-style
+          return (
+            <OptionElement
+              generatedId={this.tt.generatedId}
+              inputCheckboxClassName={this.tt.inputCheckboxClassName()}
+              inputName={this.inputName()}
+              isDefaultSelected={this.isDefaultSelected(option[1])}
+              key={option[1]}
+              onChange={this.props.onChange}
+              onOptionChecked={this.tt.onOptionChecked}
+              option={option}
+              optionIndex={index}
+              options={this.props.options}
+              wrapperOpts={this.tt.wrapperOpts}
+            />
+          )
+        })}
       </div>
     )
   }
@@ -120,7 +126,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapCheckboxes extends Sha
     if (defaultValue) {
       return defaultValue
     } else if (attribute && model) {
-      if (!model[attribute]) throw `No such attribute: ${attribute}`
+      if (!model[attribute]) throw new Error(`No such attribute: ${attribute}`)
 
       return this.props.model[attribute]()
     }

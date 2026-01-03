@@ -4,10 +4,10 @@ import Api from "./api.js"
 import CommandSubmitData from "./command-submit-data.js"
 import CustomError from "./custom-error.js"
 import DestroyError from "./destroy-error.js"
-import Deserializer from "./deserializer.js"
-import {dig, digg} from "diggerize"
+import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
+import {dig, digg} from "diggerize" // eslint-disable-line sort-imports
 import events from "./events.js"
-import FormDataObjectizer from "form-data-objectizer"
+import FormDataObjectizer from "form-data-objectizer" // eslint-disable-line sort-imports
 import RunLast from "./run-last.js"
 import Serializer from "./serializer.js"
 import SessionStatusUpdater from "./session-status-updater.js"
@@ -126,15 +126,15 @@ export default class ApiMakerCommandsPool {
 
     for (let i = 0; i < 3; i++) {
       if (commandSubmitData.getFilesCount() > 0) {
-        response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()})
+        response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()}) // eslint-disable-line no-await-in-loop
       } else {
-        response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()})
+        response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()}) // eslint-disable-line no-await-in-loop
       }
 
       if (response.success === false && response.type == "invalid_authenticity_token") {
         console.log("Invalid authenticity token - try again")
-        await SessionStatusUpdater.current().updateSessionStatus()
-        continue
+        await SessionStatusUpdater.current().updateSessionStatus() // eslint-disable-line no-await-in-loop
+        continue // eslint-disable-line no-continue
       }
 
       return response
@@ -185,7 +185,9 @@ export default class ApiMakerCommandsPool {
           const error = new CustomError("Command error", {response: commandResponseData})
 
           error.stack += "\n"
-          error.stack += commandData.stack.split("\n").slice(1).join("\n")
+          error.stack += commandData.stack.split("\n")
+            .slice(1)
+            .join("\n")
 
           commandData.reject(error)
         } else if (responseType == "failed") {
@@ -211,7 +213,7 @@ export default class ApiMakerCommandsPool {
     let error
 
     if (commandResponseData.error_type == "destroy_error") {
-      error = new DestroyError(`Destroy failed`, {response: commandResponseData})
+      error = new DestroyError("Destroy failed", {response: commandResponseData})
     } else if (commandResponseData.error_type == "validation_error") {
       const validationErrors = new ValidationErrors({
         model: digg(commandResponseData, "model"),
@@ -223,7 +225,9 @@ export default class ApiMakerCommandsPool {
     } else {
       let errorMessage
 
-      if (!commandResponseData.errors) { errorMessage = "Command failed" }
+      if (!commandResponseData.errors) {
+        errorMessage = "Command failed"
+      }
 
       error = new CustomError(errorMessage, {response: commandResponseData})
     }

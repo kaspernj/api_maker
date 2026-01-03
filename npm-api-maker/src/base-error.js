@@ -26,7 +26,7 @@ export default class BaseError extends Error {
     if (args && "addResponseErrorsToErrorMessage" in args && !args.addResponseErrorsToErrorMessage) {
       messageToUse = message
     } else {
-      if (typeof args.response == "object" && dig(args, "response", "errors")) { // eslint-disable-line no-lonely-if
+      if (typeof args.response == "object" && dig(args, "response", "errors")) {
         if (message) {
           messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
         } else {

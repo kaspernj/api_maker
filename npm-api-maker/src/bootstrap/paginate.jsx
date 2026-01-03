@@ -1,15 +1,21 @@
-import BaseComponent from "../base-component"
-import instanceOfClassName from "../instance-of-class-name.js"
+import React, {useMemo} from "react"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import BaseComponent from "../base-component" // eslint-disable-line sort-imports
 import Link from "../link"
 import PropTypes from "prop-types"
-import propTypesExact from "prop-types-exact"
-import memo from "set-state-compare/build/memo.js"
-import qs from "qs"
-import React, {useMemo} from "react"
-import Text from "../utils/text"
 import Result from "../result.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import Text from "../utils/text"
+import instanceOfClassName from "../instance-of-class-name.js"
+import memo from "set-state-compare/build/memo.js"
+import propTypesExact from "prop-types-exact"
+import qs from "qs"
 import urlEncode from "../url-encode.js"
+
+const FIRST_PAGE_LABEL = "⇤"
+const PREVIOUS_PAGE_LABEL = "←"
+const NEXT_PAGE_LABEL = "→"
+const LAST_PAGE_LABEL = "⇥"
+const ELLIPSIS_LABEL = "…"
 
 export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseComponent {
   static propTypes = propTypesExact({
@@ -56,7 +62,9 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
     return pages
   }
 
-  isPageActiveClass = (pageNumber) => this.p.result.currentPage() == pageNumber ? "active" : "not-active"
+  isPageActiveClass = (pageNumber) => {
+    return this.p.result.currentPage() == pageNumber ? "active" : "not-active"
+  }
 
   pagePath (pageNumber) {
     let pageKey = this.p.result.data.collection.queryArgs.pageKey
@@ -99,8 +107,8 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
     return this.pagePath(nextPage)
   }
 
-  showBackwardsDots = () => (this.p.result.currentPage() - 5 > 1)
-  showForwardsDots = () => (this.p.result.currentPage() + 5 < this.tt.totalPages)
+  showBackwardsDots = () => this.p.result.currentPage() - 5 > 1
+  showForwardsDots = () => this.p.result.currentPage() + 5 < this.tt.totalPages
 
   render () {
     const {result} = this.p
@@ -110,78 +118,105 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
     const showPreviousPage = result.currentPage() > 1
     const showFirstPage = result.currentPage() > 1
 
+    const previousPageDisabled = !showPreviousPage
+    const firstPageDisabled = !showFirstPage
+    const nextPageDisabled = !showNextPage
+    const lastPageDisabled = !showLastPage
+
     return (
-      <>
-        <ul className="pagination" data-pages-length={pages.length}>
-          <li className={`page-item ${!showPreviousPage ? "disabled" : ""}`} key="page-first">
-            {!showPreviousPage &&
-              <Text>⇤</Text>
-            }
-            {showPreviousPage &&
-              <Link dataSet={{class: "page-link"}} to={this.pagePath(1)}>
-                <Text>⇤</Text>
-              </Link>
-            }
-          </li>
-          <li className={`page-item ${!showFirstPage ? "disabled" : ""}`} key="page-previous">
-            {!showFirstPage &&
-              <Text>←</Text>
-            }
-            {showFirstPage &&
-              <Link dataSet={{class: "page-link"}} to={this.previousPagePath()}>
-                <Text>←</Text>
-              </Link>
-            }
-          </li>
-          {this.showBackwardsDots() &&
-            <li className="page-item disabled">
-              &hellip;
-            </li>
+      <ul className="pagination" data-pages-length={pages.length}>
+        <li className={`page-item ${previousPageDisabled ? "disabled" : ""}`} key="page-first">
+          {previousPageDisabled &&
+            <Text>
+              {FIRST_PAGE_LABEL}
+            </Text>
           }
-          {pages.map((page) =>
-            <li
-              className={`page-item ${this.isPageActiveClass(page)}`}
-              data-active={this.isPageActiveClass(page) == "active"}
-              data-page={page}
-              key={`page-${page}`}
-            >
-              {this.isPageActiveClass(page) == "active" &&
-                page
-              }
-              {this.isPageActiveClass(page) == "not-active" &&
-                <Link dataSet={{class: "page-link"}} to={this.pagePath(page)}>
-                  <Text>{page}</Text>
-                </Link>
-              }
-            </li>
-          )}
-          {this.showForwardsDots() &&
-            <li className="page-item disabled">
-              &hellip;
-            </li>
+          {showPreviousPage &&
+            <Link dataSet={{class: "page-link"}} to={this.pagePath(1)}>
+              <Text>
+                {FIRST_PAGE_LABEL}
+              </Text>
+            </Link>
           }
-          <li className={`page-item ${!showNextPage ? "disabled" : ""}`} key="page-next">
-            {!showNextPage &&
-              <Text>→</Text>
+        </li>
+        <li className={`page-item ${firstPageDisabled ? "disabled" : ""}`} key="page-previous">
+          {firstPageDisabled &&
+            <Text>
+              {PREVIOUS_PAGE_LABEL}
+            </Text>
+          }
+          {showFirstPage &&
+            <Link dataSet={{class: "page-link"}} to={this.previousPagePath()}>
+              <Text>
+                {PREVIOUS_PAGE_LABEL}
+              </Text>
+            </Link>
+          }
+        </li>
+        {this.showBackwardsDots() &&
+          <li className="page-item disabled">
+            <Text>
+              {ELLIPSIS_LABEL}
+            </Text>
+          </li>
+        }
+        {pages.map((page) => (
+          <li
+            className={`page-item ${this.isPageActiveClass(page)}`}
+            data-active={this.isPageActiveClass(page) == "active"}
+            data-page={page}
+            key={`page-${page}`}
+          >
+            {this.isPageActiveClass(page) == "active" &&
+              <Text>
+                {page}
+              </Text>
             }
-            {showNextPage &&
-              <Link dataSet={{class: "page-link"}} to={this.nextPagePath()}>
-                <Text>→</Text>
+            {this.isPageActiveClass(page) == "not-active" &&
+              <Link dataSet={{class: "page-link"}} to={this.pagePath(page)}>
+                <Text>
+                  {page}
+                </Text>
               </Link>
             }
           </li>
-          <li className={`page-item ${!showLastPage ? "disabled" : ""}`} key="page-last">
-            {!showLastPage &&
-              <Text>⇥</Text>
-            }
-            {showLastPage &&
-              <Link dataSet={{class: "page-link"}} to={this.pagePath(totalPages)}>
-                <Text>⇥</Text>
-              </Link>
-            }
+        ))}
+        {this.showForwardsDots() &&
+          <li className="page-item disabled">
+            <Text>
+              {ELLIPSIS_LABEL}
+            </Text>
           </li>
-        </ul>
-      </>
+        }
+        <li className={`page-item ${nextPageDisabled ? "disabled" : ""}`} key="page-next">
+          {nextPageDisabled &&
+            <Text>
+              {NEXT_PAGE_LABEL}
+            </Text>
+          }
+          {showNextPage &&
+            <Link dataSet={{class: "page-link"}} to={this.nextPagePath()}>
+              <Text>
+                {NEXT_PAGE_LABEL}
+              </Text>
+            </Link>
+          }
+        </li>
+        <li className={`page-item ${lastPageDisabled ? "disabled" : ""}`} key="page-last">
+          {lastPageDisabled &&
+            <Text>
+              {LAST_PAGE_LABEL}
+            </Text>
+          }
+          {showLastPage &&
+            <Link dataSet={{class: "page-link"}} to={this.pagePath(totalPages)}>
+              <Text>
+                {LAST_PAGE_LABEL}
+              </Text>
+            </Link>
+          }
+        </li>
+      </ul>
     )
   }
 }))

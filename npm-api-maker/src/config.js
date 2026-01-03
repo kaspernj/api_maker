@@ -1,5 +1,5 @@
 import {EventEmitter} from "eventemitter3"
-import * as inflection from "inflection"
+import * as inflection from "inflection" // eslint-disable-line sort-imports
 
 const accessors = {
   breakpoints: {

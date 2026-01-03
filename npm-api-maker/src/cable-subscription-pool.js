@@ -1,9 +1,9 @@
-import getChannelsConsumer from "./channels-consumer.js"
-import CommandsPool from "./commands-pool.js"
-import Deserializer from "./deserializer.js"
-import {digg} from "diggerize"
 import * as inflection from "inflection"
-import Logger from "./logger.js"
+import {digg} from "diggerize"
+import CommandsPool from "./commands-pool.js" // eslint-disable-line sort-imports
+import Deserializer from "./deserializer.js"
+import getChannelsConsumer from "./channels-consumer.js"
+import Logger from "./logger.js" // eslint-disable-line sort-imports
 
 const logger = new Logger({name: "ApiMaker / CableSubscriptionPool"})
 
@@ -41,6 +41,7 @@ export default class ApiMakerCableSubscriptionPool {
       for (const modelIdMode of modelIdModes) {
         if (subscriptions[modelName][modelIdMode]) {
           for (const modelId in subscriptions[modelName][modelIdMode]) {
+            // eslint-disable-next-line max-depth
             for (const subscription of subscriptions[modelName][modelIdMode][modelId]) {
               callback({mode: modelIdMode, modelId, modelName, subscription})
             }
@@ -65,6 +66,7 @@ export default class ApiMakerCableSubscriptionPool {
       if (subscriptions[modelName].events) {
         for (const modelId in subscriptions[modelName].events) {
           for (const eventName in subscriptions[modelName].events[modelId]) {
+            // eslint-disable-next-line max-depth
             for (const subscription of subscriptions[modelName].events[modelId][eventName]) {
               callback({eventName, mode: "updates", modelId, modelName, subscription})
             }
@@ -158,6 +160,7 @@ export default class ApiMakerCableSubscriptionPool {
       if (subscriptions[modelName].events) {
         for (const eventName in subscriptions[modelName].events) {
           for (const modelId in subscriptions[modelName].events[eventName]) {
+            // eslint-disable-next-line max-depth
             for (const subscription of subscriptions[modelName].events[eventName][modelId]) {
               this.connectUnsubscriptionForSubscription(subscription)
             }

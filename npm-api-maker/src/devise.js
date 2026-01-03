@@ -1,9 +1,9 @@
 import {createContext} from "react"
-import Deserializer from "./deserializer.js"
+import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
 import events from "./events.js"
-import * as inflection from "inflection"
+import * as inflection from "inflection" // eslint-disable-line sort-imports
 import modelClassRequire from "./model-class-require.js"
-import Services from "./services.js"
+import Services from "./services.js" // eslint-disable-line sort-imports
 
 if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
 
@@ -69,7 +69,7 @@ export default class ApiMakerDevise {
     if (Array.isArray(model)) model = model[0]
 
     ApiMakerDevise.updateSession(model)
-    events.emit("onDeviseSignIn", Object.assign({username}, args))
+    events.emit("onDeviseSignIn", {username, ...args})
 
     return {model, response}
   }

@@ -13,6 +13,7 @@ export default class ApiMakerBaseModelColumn {
     this.columnData = columnData
   }
 
+
   /** @returns {string} */
   getType() { return this.columnData.type }
 }

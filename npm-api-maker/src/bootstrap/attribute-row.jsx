@@ -1,14 +1,14 @@
-import React, {useMemo} from "react"
-import {digg} from "diggerize"
 import * as inflection from "inflection"
-import memo from "set-state-compare/build/memo.js"
-import MoneyFormatter from "../money-formatter.js"
-import PropTypes from "prop-types"
-import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import strftime from "strftime"
-import Text from "../utils/text"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import React, {useMemo} from "react"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {View} from "react-native"
+import {digg} from "diggerize"
+import MoneyFormatter from "../money-formatter.js" // eslint-disable-line sort-imports
+import PropTypes from "prop-types"
+import Text from "../utils/text"
+import memo from "set-state-compare/build/memo.js"
+import strftime from "strftime"
+import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends ShapeComponent {
   static defaultProps = {
@@ -42,12 +42,10 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
 
   render () {
     const {attribute, checkIfAttributeLoaded, children, className, identifier, label, model, style, value, ...restProps} = this.props
-    const actualStyle = Object.assign(
-      {
-        paddingVertical: 8
-      },
-      style
-    )
+    const actualStyle = {
+      paddingVertical: 8,
+      ...style
+    }
 
     return (
       <View
@@ -103,29 +101,41 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
 
     if (columnType == "date") {
       return (
-        <Text>{l("date.formats.default", value)}</Text>
+        <Text>
+          {l("date.formats.default", value)}
+        </Text>
       )
     } else if (value instanceof Date) {
       return (
-        <Text>{strftime("%Y-%m-%d %H:%M", value)}</Text>
+        <Text>
+          {strftime("%Y-%m-%d %H:%M", value)}
+        </Text>
       )
     } else if (typeof value === "boolean") {
       if (value) {
         return (
-          <Text>{t("js.shared.yes", {defaultValue: "Yes"})}</Text>
+          <Text>
+            {t("js.shared.yes", {defaultValue: "Yes"})}
+          </Text>
         )
       }
 
       return (
-        <Text>{t("js.shared.no", {defaultValue: "No"})}</Text>
+        <Text>
+          {t("js.shared.no", {defaultValue: "No"})}
+        </Text>
       )
     } else if (MoneyFormatter.isMoney(value)) {
       return (
-        <Text>{MoneyFormatter.format(value)}</Text>
+        <Text>
+          {MoneyFormatter.format(value)}
+        </Text>
       )
     } else if (typeof value == "string") {
       return (
-        <Text>{value}</Text>
+        <Text>
+          {value}
+        </Text>
       )
     } else {
       return value

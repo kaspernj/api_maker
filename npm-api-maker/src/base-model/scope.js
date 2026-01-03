@@ -1,5 +1,5 @@
-import {digg} from "diggerize"
 import * as inflection from "inflection"
+import {digg} from "diggerize"
 
 export default class ApiMakerBaseModelScope {
   /**

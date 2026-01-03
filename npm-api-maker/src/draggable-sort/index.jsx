@@ -1,9 +1,9 @@
 import React, {useMemo} from "react"
 import {Animated, PanResponder} from "react-native"
-import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import Controller from "./controller.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
+import Controller from "./controller.js" // eslint-disable-line sort-imports
 import DraggableSortItem from "./item"
-import {EventEmitter} from "eventemitter3"
+import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -43,10 +43,10 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
           return true
         }
       },
-      onPanResponderMove: (e, gestate) => {
+      onPanResponderMove: (_e, gestate) => {
         this.tt.controller.onMove({gestate})
       },
-      onPanResponderRelease: (e, gestate) => {
+      onPanResponderRelease: (_e, _gestate) => {
         if (this.controller.draggedItem) {
           this.tt.controller.onDragEnd()
         }
@@ -60,13 +60,10 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
   render() {
     const {data, horizontal, keyExtractor, renderItem} = this.p
     const {cacheKeyExtractor, dataSet} = this.props
-    const actualDataSet = useMemo(
-      () => Object.assign(
-        {component: "draggable-sort"},
-        dataSet
-      ),
-      [dataSet]
-    )
+    const actualDataSet = useMemo(() => ({
+      component: "draggable-sort",
+      ...dataSet
+    }), [dataSet])
 
     return (
       <Animated.View
@@ -74,7 +71,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
         style={this.cache("rootViewStyle", {flexDirection: horizontal ? "row" : "column"}, [horizontal])}
         {...this.tt.panResponder.panHandlers}
       >
-        {data.map((item, itemIndex) =>
+        {data.map((item, itemIndex) => (
           <DraggableSortItem
             cacheKey={cacheKeyExtractor ? cacheKeyExtractor(item) : undefined}
             controller={this.tt.controller}
@@ -84,7 +81,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
             onItemMoved={this.props.onItemMoved}
             renderItem={renderItem}
           />
-        )}
+        ))}
       </Animated.View>
     )
   }

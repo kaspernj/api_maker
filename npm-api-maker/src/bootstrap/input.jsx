@@ -1,12 +1,12 @@
-import {digs} from "diggerize"
-import inputWrapper from "../inputs/input-wrapper"
 import {Input} from "../inputs/input"
-import InvalidFeedback from "./invalid-feedback"
-import memo from "set-state-compare/build/memo.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js" // eslint-disable-line sort-imports
+import {digs} from "diggerize"
+import InvalidFeedback from "./invalid-feedback" // eslint-disable-line sort-imports
 import Money from "../inputs/money"
 import PropTypes from "prop-types"
 import React from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
+import inputWrapper from "../inputs/input-wrapper"
+import memo from "set-state-compare/build/memo.js"
 
 const ApiMakerBootstrapInput = memo(shapeComponent(class ApiMakerBootstrapInput extends ShapeComponent {
   static propTypes = {
@@ -73,8 +73,8 @@ const ApiMakerBootstrapInput = memo(shapeComponent(class ApiMakerBootstrapInput 
         }
         {type == "money" &&
           <Money
-            name={inputProps.name}
             className={this.inputClassName()}
+            name={inputProps.name}
             ref={this.props.moneyRef}
             {...this.moneyProps()}
           />

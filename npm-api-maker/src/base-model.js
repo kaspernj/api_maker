@@ -1,21 +1,21 @@
-import Attribute from "./base-model/attribute.js"
+import * as inflection from "inflection"
+import {ValidationErrors} from "./validation-errors.js"
+import {digg} from "diggerize"
+import Attribute from "./base-model/attribute.js" // eslint-disable-line sort-imports
 import AttributeNotLoadedError from "./attribute-not-loaded-error.js"
 import CacheKeyGenerator from "./cache-key-generator.js"
 import Collection from "./collection.js"
 import CommandsPool from "./commands-pool.js"
 import Config from "./config.js"
 import CustomError from "./custom-error.js"
-import {digg} from "diggerize"
 import FormDataObjectizer from "form-data-objectizer"
-import * as inflection from "inflection"
 import ModelName from "./model-name.js"
 import NotLoadedError from "./not-loaded-error.js"
-import objectToFormData from "object-to-formdata"
 import Reflection from "./base-model/reflection.js"
 import Scope from "./base-model/scope.js"
 import Services from "./services.js"
 import ValidationError from "./validation-error.js"
-import {ValidationErrors} from "./validation-errors.js"
+import objectToFormData from "object-to-formdata"
 
 /**
  * @typedef {object} ModelClassDataType
@@ -33,7 +33,7 @@ import {ValidationErrors} from "./validation-errors.js"
  * @property {boolean} [throwValidationError]
  */
 
-function objectToUnderscore(object) {
+const objectToUnderscore = (object) => {
   const newObject = {}
 
   for (const key in object) {
@@ -85,9 +85,7 @@ export default class BaseModel {
    * @param {ValidationErrors} validationErrors
    * @returns {CustomEvent}
    */
-  static newCustomEvent = (validationErrors) => {
-    return new CustomEvent("validation-errors", {detail: validationErrors})
-  }
+  static newCustomEvent = (validationErrors) => new CustomEvent("validation-errors", {detail: validationErrors})
 
   /**
    * @param {ValidationErrors} validationErrors
@@ -109,12 +107,11 @@ export default class BaseModel {
    * @returns {Promise<InstanceType<T>>}
    */
   static async find(id) {
-    /** @type {Record<string, any>} */
-    const query = {}
+    const query = /** @type {Record<string, any>} */ ({}) // eslint-disable-line no-extra-parens
 
     query[`${this.primaryKey()}_eq`] = id
 
-    const model = /** @type {InstanceType<T>} */ (await this.ransack(query).first())
+    const model = /** @type {InstanceType<T>} */ (await this.ransack(query).first()) // eslint-disable-line no-extra-parens
 
     if (model) {
       return model
@@ -135,7 +132,7 @@ export default class BaseModel {
       find_or_create_by_args: findOrCreateByArgs,
       resource_name: digg(this.modelClassData(), "name")
     })
-    const model = /** @type {InstanceType<T>} */ (digg(result, "model"))
+    const model = /** @type {InstanceType<T>} */ (digg(result, "model")) // eslint-disable-line no-extra-parens
 
     return model
   }
@@ -157,9 +154,7 @@ export default class BaseModel {
    * @returns {import("./collection.js").default<MC>}
    */
   static ransack(query = {}) {
-    const ModelClass = /** @type {MC} */ (this)
-
-    return new Collection({modelClass: ModelClass}, {ransack: query})
+    return new Collection({modelClass: this}, {ransack: query})
   }
 
   /**
@@ -229,7 +224,11 @@ export default class BaseModel {
     const foundReflection = this.reflections().find((reflection) => reflection.name() == name)
 
     if (!foundReflection) {
-      throw new Error(`No such reflection: ${name} in ${this.reflections().map((reflection) => reflection.name()).join(", ")}`)
+      const reflectionNames = this.reflections()
+        .map((reflection) => reflection.name())
+        .join(", ")
+
+      throw new Error(`No such reflection: ${name} in ${reflectionNames}`)
     }
 
     return foundReflection
@@ -333,7 +332,7 @@ export default class BaseModel {
    * @returns {Self}
    */
   clone() {
-    const ModelClass = /** @type {new (...args: any[]) => Self} */ (this.constructor)
+    const ModelClass = /** @type {new (...args: any[]) => Self} */ this.constructor
     const clone = new ModelClass()
 
     clone.abilities = {...this.abilities}
@@ -535,8 +534,9 @@ export default class BaseModel {
   /**
    * @returns {Record<string, any>}
    */
-  getAttributes() { return Object.assign(this.modelData, this.changes) }
-asd
+  getAttributes() {
+    return Object.assign(this.modelData, this.changes)
+  }
   handleResponseError(response) {
     // @ts-expect-error
     BaseModel.parseValidationErrors({model: this, response})
@@ -720,7 +720,7 @@ asd
   setNewModelData(model) {
     if (!("modelData" in model)) throw new Error(`No modelData in model: ${JSON.stringify(model)}`)
 
-    this.previousModelData = Object.assign({}, digg(this, "modelData"))
+    this.previousModelData = {...digg(this, "modelData")}
 
     for(const attributeName in model.modelData) {
       this.modelData[attributeName] = model.modelData[attributeName]
@@ -948,7 +948,7 @@ asd
    * @returns {typeof BaseModel & (new (...args: any[]) => Self)}
    */
   modelClass() {
-    return /** @type {any} */ (this.constructor)
+    return /** @type {any} */ this.constructor
   }
 
   preloadRelationship(relationshipName, model) {
@@ -975,8 +975,8 @@ asd
     if (!this.uniqueKeyValue) {
       const min = 5000000000000000
       const max = 9007199254740991
-      const randomBetween = Math.floor(Math.random() * (max - min + 1) + min)
-      this.uniqueKeyValue = randomBetween
+      const range = max - min + 1
+      this.uniqueKeyValue = Math.floor(Math.random() * range) + min
     }
 
     return this.uniqueKeyValue
