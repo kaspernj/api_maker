@@ -1,4 +1,5 @@
 import {defineConfig} from "eslint/config"
+import js from "@eslint/js"
 import expoConfig from "eslint-config-expo/flat.js"
 import globals from "globals"
 import jest from "eslint-plugin-jest"
@@ -7,6 +8,8 @@ export default defineConfig([
   expoConfig,
   jest.configs["flat/recommended"],
   {
+    plugins: {js},
+    extends: ["js/recommended"],
     ignores: ["dist/*"],
     languageOptions: {
       globals: {
@@ -84,7 +87,7 @@ export default defineConfig([
       "keyword-spacing": "off",
       "linebreak-style": ["error", "unix"],
       "line-comment-position": "off",
-      "lines-around-comment": "error",
+      "lines-around-comment": ["error", {allowClassStart: true}],
       "lines-between-class-members": "off",
       "logical-assignment-operators": "error",
       "max-classes-per-file": "off",
