@@ -1,7 +1,7 @@
 import ModelEvents from "./model-events.js"
 import PropTypes from "prop-types"
-import propTypesExact from "prop-types-exact"
 import React from "react"
+import propTypesExact from "prop-types-exact"
 
 export default class ApiMakerEventConnection extends React.PureComponent {
   static defaultProps = {

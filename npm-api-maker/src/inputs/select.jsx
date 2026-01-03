@@ -1,10 +1,11 @@
-import BaseComponent from "../base-component"
-import inputWrapper from "./input-wrapper"
-import memo from "set-state-compare/build/memo.js"
-import PropTypes from "prop-types"
-import React from "react"
+/* eslint-disable sort-imports */
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../form"
+import BaseComponent from "../base-component"
+import PropTypes from "prop-types"
+import React from "react"
+import inputWrapper from "./input-wrapper"
+import memo from "set-state-compare/build/memo.js"
 
 const ApiMakerInputsSelect = memo(shapeComponent(class ApiMakerInputsSelect extends BaseComponent {
   static propTypes = {
@@ -46,14 +47,14 @@ const ApiMakerInputsSelect = memo(shapeComponent(class ApiMakerInputsSelect exte
       <select onChange={this.tt.onChange} {...inputProps} {...restProps}>
         {this.includeBlank() &&
           <option data-include-blank="true">
-            {typeof includeBlank != "boolean" ? includeBlank : null}
+            {typeof includeBlank == "boolean" ? null : includeBlank}
           </option>
         }
-        {options && options.map((option) =>
+        {options && options.map((option) => ( // eslint-disable-line no-extra-parens
           <option key={this.optionKey(option)} value={this.optionValue(option)}>
             {this.optionLabel(option)}
           </option>
-        )}
+        ))}
         {children}
       </select>
     )
@@ -92,11 +93,7 @@ const ApiMakerInputsSelect = memo(shapeComponent(class ApiMakerInputsSelect exte
   }
 
   includeBlank () {
-    if (this.props.includeBlank && !this.props.multiple) {
-      return true
-    } else {
-      return false
-    }
+    return Boolean(this.props.includeBlank && this.props.multiple === false)
   }
 }))
 

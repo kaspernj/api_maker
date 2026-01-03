@@ -1,5 +1,5 @@
-import {digg} from "diggerize"
 import * as inflection from "inflection"
+import {digg} from "diggerize"
 
 export default class ApiMakerInputsAutoSubmit {
   constructor ({component}) {
@@ -22,11 +22,11 @@ export default class ApiMakerInputsAutoSubmit {
 
     if (input.type == "checkbox") {
       if (input.checked) {
-        if (input.value !== undefined) {
-          return input.value
-        } else {
+        if (input.value === undefined) {
           return 1
         }
+
+        return input.value
       } else {
         return 0
       }

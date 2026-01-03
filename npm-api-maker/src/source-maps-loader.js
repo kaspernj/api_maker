@@ -120,7 +120,7 @@ export default class SourceMapsLoader {
 
     try {
       await this.loadXhr(xhr, sourceMapUrl)
-    } catch (error) {
+    } catch {
       console.log(`Couldn't load source map from: ${sourceMapUrl}: ${xhr.responseText}`)
 
       return

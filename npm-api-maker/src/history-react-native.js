@@ -7,7 +7,7 @@ class HistoryReactNative {
     const url = parse(path, {})
 
     if (url.query) {
-      const actualParams = Object.assign({}, params)
+      const actualParams = {...params}
 
       Object.assign(actualParams, qs.parse(url.query.slice(1, url.query.length)))
 

@@ -1,6 +1,6 @@
+import Incorporator from "incorporator"
 import config from "./config.js"
 import formSerialize from "form-serialize"
-import Incorporator from "incorporator"
 import qs from "qs"
 import urlEncode from "./url-encode.js"
 

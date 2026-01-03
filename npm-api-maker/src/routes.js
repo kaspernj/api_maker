@@ -1,5 +1,5 @@
-import {digg} from "diggerize"
 import * as inflection from "inflection"
+import {digg} from "diggerize"
 
 export default class ApiMakerRoutes {
   constructor ({jsRoutes, locale, routeDefinitions}) {
@@ -30,7 +30,7 @@ export default class ApiMakerRoutes {
         let routeNamePathToUse
 
         if (locale) {
-          routeNamePathToUse = inflection.camelize(`${digg(routeDefinition, "name")}_${I18n.locale}_path`, true)
+          routeNamePathToUse = inflection.camelize(`${digg(routeDefinition, "name")}_${I18n.locale}_path`, true) // eslint-disable-line no-undef
         } else {
           routeNamePathToUse = routeNamePath
         }
@@ -46,7 +46,7 @@ export default class ApiMakerRoutes {
         let routeNameUrlToUse
 
         if (locale) {
-          routeNameUrlToUse = inflection.camelize(`${digg(routeDefinition, "name")}_${I18n.locale}_url`, true)
+          routeNameUrlToUse = inflection.camelize(`${digg(routeDefinition, "name")}_${I18n.locale}_url`, true) // eslint-disable-line no-undef
         } else {
           routeNameUrlToUse = routeNameUrl
         }

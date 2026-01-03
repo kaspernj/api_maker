@@ -1,8 +1,9 @@
-import BaseComponent from "./base-component"
-import memo from "set-state-compare/build/memo.js"
-import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+/* eslint-disable sort-imports */
 import {Modal, Pressable, View} from "react-native"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import BaseComponent from "./base-component"
+import React from "react"
+import memo from "set-state-compare/build/memo.js"
 
 export default memo(shapeComponent(class ApiMakerModal extends BaseComponent {
   render() {
@@ -16,7 +17,7 @@ export default memo(shapeComponent(class ApiMakerModal extends BaseComponent {
             justifyContent: "center",
             minWidth: "100%",
             minHeight: "100%",
-            padding: 20,
+            padding: 20
           })}
         >
           <Pressable

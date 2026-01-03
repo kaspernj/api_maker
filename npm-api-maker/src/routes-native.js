@@ -1,5 +1,5 @@
-import {dig, digg, digs} from "diggerize"
 import * as inflection from "inflection"
+import {dig, digg, digs} from "diggerize"
 import qs from "qs"
 import urlEncode from "./url-encode.js"
 
@@ -32,6 +32,7 @@ export default class ApiMakerRoutesNative {
             const pathPart = rawPathParts[i]
             const variableMatch = pathPart.match(/^:([A-z_]+)$/)
 
+            // eslint-disable-next-line max-depth
             if (variableMatch) {
               localizedPathParts.push({type: "variable", count: variableCount++})
             } else if (pathPart) {
@@ -72,11 +73,12 @@ export default class ApiMakerRoutesNative {
     for (const locale in locales) {
       const routeTranslations = dig(locales, locale, "routes")
 
-      if (!routeTranslations) continue
-      if (!(locale in this.routeTranslationParts)) this.routeTranslationParts[locale] = {}
+      if (routeTranslations) {
+        if (!(locale in this.routeTranslationParts)) this.routeTranslationParts[locale] = {}
 
-      for (const key in routeTranslations) {
-        this.routeTranslationParts[locale][key] = routeTranslations[key]
+        for (const key in routeTranslations) {
+          this.routeTranslationParts[locale][key] = routeTranslations[key]
+        }
       }
     }
   }
@@ -147,8 +149,8 @@ export default class ApiMakerRoutesNative {
   addHostToRoute ({host, port, protocol, translatedRoute}) {
     let fullUrl = ""
 
-    const hostToUse = host || globalThis.location && globalThis.location.host
-    const portToUse = port || globalThis.location && globalThis.location.port
+    const hostToUse = host || (globalThis.location ? globalThis.location.host : undefined)
+    const portToUse = port || (globalThis.location ? globalThis.location.port : undefined)
 
     if (!hostToUse) throw new Error("Unable to detect host")
 
@@ -162,7 +164,10 @@ export default class ApiMakerRoutesNative {
 
     fullUrl += hostToUse
 
-    if (portToUse && ((protocol == "http" && portToUse != 80) || (protocol == "https" && port != 443))) {
+    const isHttpNonDefaultPort = protocol == "http" && portToUse != 80
+    const isHttpsNonDefaultPort = protocol == "https" && port != 443
+
+    if (portToUse && (isHttpNonDefaultPort || isHttpsNonDefaultPort)) {
       fullUrl += `:${portToUse}`
     }
 

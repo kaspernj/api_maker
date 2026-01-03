@@ -1,15 +1,16 @@
+/* eslint-disable sort-imports */
+import React, {useMemo, useRef} from "react"
+import {dig, digg, digs} from "diggerize"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {useForm} from "../form"
 import AutoSubmit from "./auto-submit.js"
 import BaseComponent from "../base-component"
-import {dig, digg, digs} from "diggerize"
-import inputWrapper from "./input-wrapper"
-import memo from "set-state-compare/build/memo.js"
 import Money from "./money"
 import PropTypes from "prop-types"
-import React, {useMemo, useRef} from "react"
+import inputWrapper from "./input-wrapper"
+import memo from "set-state-compare/build/memo.js"
 import replaceall from "replaceall"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import strftime from "strftime"
-import {useForm} from "../form"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import useUpdatedEvent from "../use-updated-event.js"
 
@@ -17,8 +18,8 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
-    model: null,
-    localizedNumber: false
+    localizedNumber: false,
+    model: null
   }
 
   static propTypes = {
@@ -81,7 +82,7 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
 
     const sharedProps = {
       id: localizedNumber ? null : inputProps.id,
-      name: localizedNumber ? null : inputProps.name,
+      name: localizedNumber ? null : inputProps.name
     }
     const ref = localizedNumber ? this.visibleInputRef : this.inputReference()
     const {ref: inputPropsRef, ...inputPropsWithoutRef} = inputProps

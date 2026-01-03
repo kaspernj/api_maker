@@ -1,14 +1,15 @@
-import React, {useRef} from "react"
-import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import classNames from "classnames"
-import Config from "../config.js"
-import {digg} from "diggerize"
-import idForComponent from "./id-for-component.js"
+/* eslint-disable sort-imports */
 import * as inflection from "inflection"
-import memo from "set-state-compare/build/memo.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
+import {digg} from "diggerize"
+import Config from "../config.js"
 import MoneyFormatter from "../money-formatter.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
+import React, {useRef} from "react"
+import classNames from "classnames" // eslint-disable-line import/no-unresolved
+import idForComponent from "./id-for-component.js"
+import memo from "set-state-compare/build/memo.js"
 
 export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeComponent {
   static defaultProps = {
@@ -16,7 +17,7 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
     showCurrencyOptions: true
   }
 
-  static propTypes = PropTypesExact({
+  static propTypes = PropTypesExact({ // eslint-disable-line new-cap
     attribute: PropTypes.string,
     centsInputName: PropTypes.string,
     className: PropTypes.string,
@@ -79,8 +80,8 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
             onChange={this.tt.onCurrencyChanged}
             ref={this.tt.currencyRef}
           >
-            <option></option>
-            {currenciesCollection.map((option) => (
+            <option />
+            {currenciesCollection.map((option) => ( // eslint-disable-line no-extra-parens
               <option key={`select-option-${option[1]}`} value={option[1]}>
                 {this.props.small && option[1]}
                 {!this.props.small && option[0]}
@@ -171,7 +172,7 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
     if (typeof cents == "number") {
       inputElement.value = cents
     } else {
-      inputElement.value = ''
+      inputElement.value = ""
     }
 
     if (this.props.onChange && oldCents != cents) this.props.onChange()

@@ -20,15 +20,13 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRows extends 
   render () {
     const {attributes, checkIfAttributeLoaded, model} = this.p
 
-    return attributes.map((attribute) => {
-      return (
-        <AttributeRow
-          attribute={attribute}
-          checkIfAttributeLoaded={checkIfAttributeLoaded}
-          key={`attribute-${attribute}`}
-          model={model}
-        />
-      )
-    })
+    return attributes.map((attribute) => ( // eslint-disable-line no-extra-parens
+      <AttributeRow
+        attribute={attribute}
+        checkIfAttributeLoaded={checkIfAttributeLoaded}
+        key={`attribute-${attribute}`}
+        model={model}
+      />
+    ))
   }
 }))

@@ -8,7 +8,11 @@ export default function apiMakerIdForComponent(component) {
   } else if (component.generatedInputId) {
     return component.generatedInputId
   } else {
-    const generatedInputId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    const generatedInputId = Math.random()
+      .toString(36)
+      .substring(2, 15) + Math.random()
+      .toString(36)
+      .substring(2, 15)
     component.generatedInputId = generatedInputId
     return generatedInputId
   }

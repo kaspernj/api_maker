@@ -1,11 +1,12 @@
-import React, {useMemo} from "react"
+/* eslint-disable sort-imports */
 import {Animated, PanResponder} from "react-native"
+import {EventEmitter} from "eventemitter3"
+import React, {useMemo} from "react"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
-import Controller from "./controller.js" // eslint-disable-line sort-imports
+import Controller from "./controller.js"
 import DraggableSortItem from "./item"
-import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
-import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
+import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "../use-event-emitter.js"
 
@@ -71,7 +72,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
         style={this.cache("rootViewStyle", {flexDirection: horizontal ? "row" : "column"}, [horizontal])}
         {...this.tt.panResponder.panHandlers}
       >
-        {data.map((item, itemIndex) => (
+        {data.map((item, itemIndex) => ( // eslint-disable-line no-extra-parens
           <DraggableSortItem
             cacheKey={cacheKeyExtractor ? cacheKeyExtractor(item) : undefined}
             controller={this.tt.controller}

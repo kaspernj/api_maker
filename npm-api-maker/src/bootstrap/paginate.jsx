@@ -63,7 +63,11 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
   }
 
   isPageActiveClass = (pageNumber) => {
-    return this.p.result.currentPage() == pageNumber ? "active" : "not-active"
+    if (this.p.result.currentPage() == pageNumber) {
+      return "active"
+    }
+
+    return "not-active"
   }
 
   pagePath (pageNumber) {
@@ -160,7 +164,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
             </Text>
           </li>
         }
-        {pages.map((page) => (
+        {pages.map((page) => ( // eslint-disable-line no-extra-parens
           <li
             className={`page-item ${this.isPageActiveClass(page)}`}
             data-active={this.isPageActiveClass(page) == "active"}

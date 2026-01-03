@@ -1,9 +1,10 @@
-import BaseComponent from "../base-component"
+/* eslint-disable sort-imports */
 import React, {createContext} from "react"
-import memo from "set-state-compare/build/memo.js"
-import PropTypes from "prop-types"
-import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import BaseComponent from "../base-component"
+import PropTypes from "prop-types"
+import memo from "set-state-compare/build/memo.js"
+import propTypesExact from "prop-types-exact"
 
 const CurrentSwitchContext = createContext([])
 

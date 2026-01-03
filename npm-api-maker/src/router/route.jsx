@@ -1,10 +1,11 @@
-import BaseComponent from "../base-component"
+/* eslint-disable react/jsx-max-depth, sort-imports */
 import React, {createContext, useContext, useMemo} from "react"
-import memo from "set-state-compare/build/memo.js"
-import PropTypes from "prop-types"
-import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Switch, {CurrentSwitchContext} from "./switch"
+import BaseComponent from "../base-component"
+import PropTypes from "prop-types"
+import memo from "set-state-compare/build/memo.js"
+import propTypesExact from "prop-types-exact"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const CurrentPathContext = createContext([])
@@ -96,10 +97,10 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
 
     if (fallback) {
       pathId = "[FALLBACK]"
-    } else if (!path) {
-      pathId = "[PATH-EMPTY]"
-    } else {
+    } else if (path) {
       pathId = path
+    } else {
+      pathId = "[PATH-EMPTY]"
     }
 
     return pathId
@@ -162,7 +163,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
         componentPathParts.push(component)
       }
 
-      const newParams = Object.assign({}, this.currentParams, params)
+      const newParams = {...this.currentParams, ...params}
 
       this.setInstance({componentPathParts, match: {params}, newParams})
       this.setState({matches})
@@ -217,7 +218,8 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
       // Route is matching but hasn't been loaded yet.
       return (
         <div>
-          Loading {component || this.props.componentPath || componentPathParts.join("/")}
+          {"Loading "}
+          {component || this.props.componentPath || componentPathParts.join("/")}
         </div>
       )
     }

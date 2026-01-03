@@ -1,10 +1,11 @@
+/* eslint-disable sort-imports */
 import React, {createContext, useContext, useEffect, useMemo} from "react"
+import {Platform} from "react-native"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import BaseComponent from "./base-component"
 import FormDataObjectizer from "form-data-objectizer"
-import memo from "set-state-compare/build/memo.js"
-import {Platform} from "react-native"
 import PropTypes from "prop-types"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import memo from "set-state-compare/build/memo.js"
 
 const FormContext = createContext(null)
 const useForm = () => useContext(FormContext)
@@ -72,11 +73,9 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
       }
     }, [form, formObjectRef])
 
-    useEffect(() => {
-      return () => {
-        if (formObjectRef) {
-          formObjectRef.current = null
-        }
+    useEffect(() => () => {
+      if (formObjectRef) {
+        formObjectRef.current = null
       }
     }, [form, formObjectRef])
 
@@ -89,7 +88,7 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
     return (
       <FormContext.Provider value={form}>
         {Platform.OS == "web" &&
-          <form ref={formRef} onSubmit={this.tt.onFormSubmit} {...restProps}>
+          <form onSubmit={this.tt.onFormSubmit} ref={formRef} {...restProps}>
             {children}
           </form>
         }

@@ -1,8 +1,9 @@
+/* eslint-disable sort-imports */
+import React, {Suspense, memo} from "react"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import BaseComponent from "./base-component"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import React, {memo, Suspense} from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import usePath from "on-location-changed/build/use-path.js"
 import useRouter from "./use-router"
 
