@@ -62,7 +62,7 @@ builds:
   build_7:
     name: Jest
     script:
-      - cd npm-api-maker && npm run test
+      - cd npm-api-maker && npm install && npm run test
   build_8:
     name: Rubocop
     script:
