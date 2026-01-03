@@ -2531,10 +2531,10 @@ fbjs@^3.0.4:
     setimmediate "^1.0.5"
     ua-parser-js "^1.0.35"
 
-"fetching-object@>= 1.0.2", fetching-object@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/fetching-object/-/fetching-object-1.0.3.tgz#a310c3d96a20a0eedc6134e6eb532193ec100436"
-  integrity sha512-4keug2WljzrnY7lZ8iIGfCqpifv0MrdKXga9c9vQysCLVidwMk9zz3fLJFqj8O/CGjCLviejlei2Ipcw/rdbWw==
+"fetching-object@>= 1.0.5", fetching-object@^1.0.3:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/fetching-object/-/fetching-object-1.0.5.tgz#ca6fe81927c130a75945afca148bee4e1e1d24a2"
+  integrity sha512-hXflbW3DknOZJdqduLZn/hiMWDO9/eEv2BMvc8F8BO/3Fbh0B7hMrcaKdlQolJw3To3SJD1l9yzsCmWtzsmlpw==
 
 file-loader@^6.2.0:
   version "6.2.0"
@@ -4120,29 +4120,13 @@ set-function-length@^1.2.1, set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-"set-state-compare@>= 1.0.55":
-  version "1.0.60"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.60.tgz#455b859780f3c76b69169b6058788a7c69c933db"
-  integrity sha512-p9M+bd9GNH9AShvq/xmZwYZUQPbFuI+fE07fuMmVKINsKdbaespdAas8DncCtPjPowN2mLIiX9jY3wUOoddcuQ==
+"set-state-compare@>= 1.0.55", set-state-compare@^1.0.57, set-state-compare@^1.0.67:
+  version "1.0.67"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.67.tgz#c722564f00ea0102f4a4fc8e1f274ee84af99a01"
+  integrity sha512-FANlTHSEwipmWEYW73//89aaEsRHIaNV1iLUMyE8tfeLwhLSaPvFmdcXw5CYcOLUcT4mA/9puYywEFN/YZ39Vg==
   dependencies:
     diggerize "^1.0.5"
-    fetching-object ">= 1.0.2"
-
-set-state-compare@^1.0.57:
-  version "1.0.59"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.59.tgz#564d9817e0208dcf05b14c13af4b5b3b2389a5d2"
-  integrity sha512-jF73uSqAhBR0TRMUMQVRL4cLeteXFrVyu/2KIKzNXuYBkuezHnpAgJcdHDxGZtEEgbCjogqaXEp06nkc0Cp59w==
-  dependencies:
-    diggerize "^1.0.5"
-    fetching-object ">= 1.0.2"
-
-set-state-compare@^1.0.61:
-  version "1.0.61"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.61.tgz#2dede2eec4a61d3685e572769b3dbe32e4f41920"
-  integrity sha512-HvGkYPjpbvcnI07bMc/XTn8w/+Nm8Z/6SpUnvCq6nUGiQK0P/TbAs9tYkbfhaGILJPVunOb7HNxIQjnJm6dbmQ==
-  dependencies:
-    diggerize "^1.0.5"
-    fetching-object ">= 1.0.2"
+    fetching-object ">= 1.0.5"
 
 setimmediate@^1.0.5:
   version "1.0.5"
