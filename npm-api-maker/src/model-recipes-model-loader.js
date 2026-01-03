@@ -1,7 +1,7 @@
+import * as inflection from "inflection"
+import {digg, digs} from "diggerize"
 import BaseModel from "./base-model.js"
 import Collection from "./collection.js"
-import {digg, digs} from "diggerize"
-import * as inflection from "inflection"
 
 export default class ApiMakerModelRecipesModelLoader {
   constructor ({modelRecipe, modelRecipesLoader}) {

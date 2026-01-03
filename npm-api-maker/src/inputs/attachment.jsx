@@ -1,11 +1,13 @@
-import BaseComponent from "../base-component"
-import classNames from "classnames"
+/* eslint-disable sort-imports */
 import {Input as ApiMakerInput} from "@kaspernj/api-maker/build/inputs/input"
+import {digg} from "diggerize"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import BaseComponent from "../base-component"
 import Checkbox from "./checkbox"
-import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import classNames from "classnames" // eslint-disable-line import/no-unresolved
+import memo from "set-state-compare/build/memo.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import useInput from "../use-input.js"
 
@@ -31,7 +33,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
     const {inputProps, t} = this.tt
     const {attribute, checkboxComponent, className, label, model, name, onPurgeChanged, purgeName, wrapperOpts, ...restProps} = this.props
     const CheckboxComponent = checkboxComponent || Checkbox
-    const newInputProps = Object.assign({}, inputProps, {type: "file"})
+    const newInputProps = Object.assign({}, inputProps, {type: "file"}) // eslint-disable-line prefer-object-spread
 
     return (
       <div className={classNames("api-maker--inputs--attachment", "components--inputs--input", className)} {...restProps}>

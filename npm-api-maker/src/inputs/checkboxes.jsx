@@ -1,14 +1,15 @@
-import BaseComponent from "../base-component"
-import classNames from "classnames"
-import {digs} from "diggerize"
-import inputWrapper from "./input-wrapper"
+/* eslint-disable sort-imports */
 import * as inflection from "inflection"
+import {digs} from "diggerize"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import BaseComponent from "../base-component"
 import InvalidFeedback from "../bootstrap/invalid-feedback"
 import PropTypes from "prop-types"
-import propTypesExact from "prop-types-exact"
 import React from "react"
+import classNames from "classnames" // eslint-disable-line import/no-unresolved
+import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import propTypesExact from "prop-types-exact"
 
 const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckboxes extends BaseComponent {
   static propTypes = propTypesExact({
@@ -41,8 +42,9 @@ const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckbo
     if (defaultValue) {
       return defaultValue
     } else if (attribute && model) {
-      if (!model[attribute])
-        throw `No such attribute: ${attribute}`
+      if (!model[attribute]) {
+        throw `No such attribute: ${attribute}` // eslint-disable-line no-throw-literal
+      }
 
       return this.props.model[attribute]()
     }
@@ -77,8 +79,13 @@ const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckbo
   }
 
   generatedId () {
-    if (!this.generatedIdValue)
-      this.generatedIdValue = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    if (!this.generatedIdValue) {
+      this.generatedIdValue = Math.random()
+        .toString(36)
+        .substring(2, 15) + Math.random()
+        .toString(36)
+        .substring(2, 15)
+    }
 
     return this.generatedIdValue
   }
@@ -105,7 +112,7 @@ const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckbo
           {option[0]}
         </label>
 
-        {(index + 1) == options.length && errors.length > 0 &&
+        {index + 1 == options.length && errors.length > 0 &&
           <InvalidFeedback errors={errors} />
         }
       </div>

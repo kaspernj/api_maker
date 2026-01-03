@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-curly-brace-presence, react/jsx-no-comment-textnodes, react/jsx-no-literals, react/jsx-no-useless-fragment, react/jsx-one-expression-per-line, sort-imports */
 import React, {useMemo} from "react"
 import {Pressable, StyleSheet, View} from "react-native"
 import BaseComponent from "../base-component"
@@ -10,7 +11,7 @@ import Layout from "./layout/index"
 import Link from "../link"
 import memo from "set-state-compare/build/memo.js"
 // @ts-expect-error
-import * as models from "models.js"
+import * as models from "models.js" // eslint-disable-line import/no-unresolved
 import Params from "../params.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import ShowPage from "./show-page/index"
@@ -100,7 +101,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     }
   }
 
-  render() {
+  render() { // eslint-disable-line complexity
     const {canCan, configReader, modelClass, modelId, modelName, queryParams} = this.tt
     const {model} = this.s
     const modelConfigActions = configReader?.modelConfig?.actions
@@ -133,9 +134,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
                 style={styles.createNewModelLink}
                 to={Params.withParams({model: modelName, mode: "new"})}
               >
-                <Text>
-                  Create new
-                </Text>
+                <Text>Create new</Text>
               </Link>
             }
           </>
@@ -148,9 +147,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
                 style={styles.editModelLink}
                 to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}
               >
-                <Text>
-                  Edit
-                </Text>
+                <Text>Edit</Text>
               </Link>
             }
             {model.can("destroy") &&
@@ -159,9 +156,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
                 onPress={this.tt.onDestroyClicked}
                 style={styles.destroyModelLink}
               >
-                <Text>
-                  Delete
-                </Text>
+                <Text>Delete</Text>
               </Pressable>
             }
           </>
@@ -169,7 +164,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
         {pageToShow == "show_reflection" &&
           <ShowReflectionActions model={model} modelClass={modelClass} reflectionName={queryParams.model_reflection} />
         }
-      </View>,
+      </View>, // eslint-disable-line react/jsx-closing-tag-location
       [canCan, configReader?.actions, model, modelClass, pageToShow]
     )
 
@@ -206,6 +201,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
   }
 
   onDestroyClicked = async () => {
+    // eslint-disable-next-line no-alert
     if (!confirm("Are you sure?")) {
       return
     }

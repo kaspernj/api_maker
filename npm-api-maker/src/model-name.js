@@ -1,5 +1,5 @@
-import Config from "./config.js"
 import * as inflection from "inflection"
+import Config from "./config.js"
 
 export default class ModelName {
   constructor(data) {
@@ -11,7 +11,7 @@ export default class ModelName {
   human(args) {
     let argsToUse = args
 
-    if (!argsToUse) argsToUse = { count: 1 }
+    if (!argsToUse) argsToUse = {count: 1}
 
     let countKey
 

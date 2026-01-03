@@ -101,9 +101,11 @@ export default class ApiMakerCableConnectionPool {
   }
 
   connectCreated = (modelName, callback) => this.connectModelEvent({callback, value: true, path: [modelName, "creates"]})
-  connectEvent = (modelName, modelId, eventName, callback) => { // eslint-disable-line max-params
-    return this.connectModelEvent({callback, value: modelId, path: [modelName, "events", eventName]})
-  }
+  connectEvent = (modelName, modelId, eventName, callback) => this.connectModelEvent({ // eslint-disable-line max-params
+    callback,
+    value: modelId,
+    path: [modelName, "events", eventName]
+  })
   connectDestroyed = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "destroys"]})
   connectModelClassEvent = (modelName, eventName, callback) => this.connectModelEvent({callback, value: eventName, path: [modelName, "model_class_events"]})
   connectUpdate = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})

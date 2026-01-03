@@ -12,3 +12,4 @@ Notes:
 - Prefer multiple small, individually working commits when possible.
 - Always run Rubocop on changed Ruby files.
 - When creating PRs, choose a sensible branch name and commit messages without prompting.
+- For system specs, use `scripts/run-system-spec.sh [spec/path.rb:line]` (wraps the README system spec command).

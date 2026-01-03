@@ -1,3 +1,4 @@
+/* eslint-disable complexity, implicit-arrow-linebreak, max-len, newline-per-chained-call, react/jsx-sort-props, sort-imports */
 import React, {useMemo} from "react"
 import AttributeRow from "../../bootstrap/attribute-row"
 import BaseComponent from "../../base-component"

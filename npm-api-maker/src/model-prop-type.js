@@ -1,5 +1,6 @@
-import {digg} from "diggerize"
+/* eslint-disable max-depth */
 import * as inflection from "inflection"
+import {digg} from "diggerize"
 
 export default class ApiMakerModelPropType {
   static ofModel (modelClass) {

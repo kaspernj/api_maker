@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader"
 import {digg} from "diggerize"

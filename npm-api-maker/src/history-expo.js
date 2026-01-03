@@ -4,7 +4,7 @@ import qs from "qs"
 class HistoryExpo {
   push(path, ...params) {
     const url = parse(path, {})
-    const actualParams = Object.assign({}, params)
+    const actualParams = Object.assign({}, params) // eslint-disable-line prefer-object-spread
 
     if (url.query) {
       Object.assign(actualParams, qs.parse(url.query.slice(1, url.query.length)))
@@ -14,7 +14,7 @@ class HistoryExpo {
 
     const actualPath = url.href
 
-    router.push({pathname: actualPath, params: actualParams})
+    router.push({pathname: actualPath, params: actualParams}) // eslint-disable-line no-undef
   }
 }
 

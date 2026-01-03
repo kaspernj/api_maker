@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import BaseComponent from "../base-component"
 import {digg} from "diggerize"
 import Link from "../link"

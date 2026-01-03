@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak, new-cap, react/jsx-max-depth, react/jsx-no-literals, sort-imports */
 import {StyleSheet, View} from "react-native"
 import BaseComponent from "../../../base-component"
 import Devise from "../../../devise.js"

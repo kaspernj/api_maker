@@ -1,3 +1,4 @@
+/* eslint-disable jest/require-hook */
 import {digg, digs} from "diggerize"
 
 let isExpo = false
@@ -11,7 +12,7 @@ try {
 
   // True if the app is running in an `expo build` app or if it's running in Expo Go.
   isExpo = executionEnvironment === Bare || executionEnvironment === Standalone || executionEnvironment === StoreClient
-} catch (error) {
+} catch {
   // Do nothing - failed to require expo-constants
 }
 

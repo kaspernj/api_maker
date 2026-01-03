@@ -1,5 +1,5 @@
-import {digg} from "diggerize"
 import SourceMapsLoader from "./source-maps-loader.js"
+import {digg} from "diggerize"
 
 export default class ErrorLogger {
   constructor () {
@@ -19,7 +19,7 @@ export default class ErrorLogger {
   }
 
   debug(...output) {
-    if (this.debugging) console.error(`ApiMaker ErrorLogger:`, ...output)
+    if (this.debugging) console.error("ApiMaker ErrorLogger:", ...output)
   }
 
   enable () {
@@ -29,13 +29,13 @@ export default class ErrorLogger {
   }
 
   getErrors = () => this.errors
-  hasErrorOccurred = () =>digg(this, "errorOccurred")
+  hasErrorOccurred = () => digg(this, "errorOccurred")
   isLoadingSourceMaps = () => digg(this, "sourceMapsLoader", "isLoadingSourceMaps")
   isWorkingOnError = () => digg(this, "isHandlingError") || this.isLoadingSourceMaps()
 
   connectOnError() {
     window.addEventListener("error", (event) => {
-      if (this.debugging) this.debug(`Error:`, event.message)
+      if (this.debugging) this.debug("Error:", event.message)
       this.errorOccurred = true
 
       if (!this.isHandlingError) {
@@ -49,7 +49,7 @@ export default class ErrorLogger {
 
   connectUnhandledRejection() {
     window.addEventListener("unhandledrejection", (event) => {
-      if (this.debugging) this.debug(`Unhandled rejection:`, event.reason.message)
+      if (this.debugging) this.debug("Unhandled rejection:", event.reason.message)
       this.errorOccurred = true
 
       if (!this.isHandlingError) {

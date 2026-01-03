@@ -1,3 +1,4 @@
+/* eslint-disable newline-per-chained-call, react/jsx-one-expression-per-line, sort-imports */
 import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"

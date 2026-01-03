@@ -1,7 +1,7 @@
-import config from "./config.js"
-import Devise from "./devise.js"
 import * as inflection from "inflection"
+import Devise from "./devise.js"
 import Logger from "./logger.js"
+import config from "./config.js"
 import wakeEvent from "wake-event"
 
 const logger = new Logger({name: "ApiMaker / SessionStatusUpdater"})
@@ -24,10 +24,10 @@ export default class ApiMakerSessionStatusUpdater {
 
     if ("useMetaElement" in args) {
       this.useMetaElement = args.useMetaElement
-    } else if (typeof document != "undefined") {
-      this.useMetaElement = true
-    } else {
+    } else if (typeof document === "undefined") {
       this.useMetaElement = false
+    } else {
+      this.useMetaElement = true
     }
 
     if (typeof window != "undefined") {

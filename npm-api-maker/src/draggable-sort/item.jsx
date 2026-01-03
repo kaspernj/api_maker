@@ -1,9 +1,10 @@
-import React, {useMemo} from "react"
+/* eslint-disable sort-imports */
 import {Animated, Easing, PanResponder} from "react-native"
+import {EventEmitter} from "eventemitter3"
+import React, {useMemo} from "react"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
-import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
-import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
+import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "../use-event-emitter.js"
 
@@ -146,7 +147,7 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
         x: baseX,
         y: 0
       },
-      useNativeDriver: true,
+      useNativeDriver: true
     }
     const animationEventArgs = {animationArgs, animationType: "resetPosition", item: this.p.item}
 

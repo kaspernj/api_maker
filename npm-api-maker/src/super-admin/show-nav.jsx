@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak, new-cap, react/jsx-max-depth, sort-imports */
 import BaseComponent from "../base-component"
 import Link from "../link"
 import PropTypes from "prop-types"

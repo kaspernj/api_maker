@@ -1,7 +1,7 @@
 import * as inflection from "inflection"
 
 // @ts-expect-error
-import * as models from "models.js"
+import * as models from "models.js" // eslint-disable-line import/no-unresolved
 
 /**
  * @param {string} modelName

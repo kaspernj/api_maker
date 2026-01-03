@@ -1,10 +1,11 @@
+/* eslint-disable no-extra-parens, sort-imports */
 import BaseComponent from "../../base-component"
 import {digg} from "diggerize"
 import EditAttributeCheckbox from "./edit-attribute-checkbox"
 import EditAttributeContent from "./edit-attribute-content"
 import EditAttributeInput from "./edit-attribute-input"
 import * as inflection from "inflection"
-import Locales from "shared/locales.js"
+import Locales from "shared/locales.js" // eslint-disable-line import/no-unresolved
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -43,7 +44,7 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
           } else if (attribute.translated) {
             return (
               <>
-                {availableLocales.map((locale) =>
+                {availableLocales.map((locale) => (
                   <View key={locale} style={this.cache("localeViewStyle", {marginBottom: 12})}>
                     <EditAttributeInput
                       attributeName={`${attribute.attribute}${inflection.camelize(locale)}`}
@@ -53,7 +54,7 @@ export default memo(shapeComponent(class EditAttribute extends BaseComponent {
                       name={`${inflection.underscore(attribute.attribute)}_${locale}`}
                     />
                   </View>
-                )}
+                ))}
               </>
             )
           } else if (modelAttribute?.getColumn()?.getType() == "boolean") {

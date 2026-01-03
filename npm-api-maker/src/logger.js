@@ -23,11 +23,13 @@ export default class ApiMakerLogger {
 
   log(message) {
     if (!this.debug && !ApiMakerLogger.getGlobalDebug()) return
-    if (typeof message == "function") message = message()
-    if (!Array.isArray(message)) message = [message]
-    if (this.name) message.unshift(`${this.name}:`)
+    let logMessage = message
 
-    console.log(...message)
+    if (typeof logMessage == "function") logMessage = logMessage()
+    if (!Array.isArray(logMessage)) logMessage = [logMessage]
+    if (this.name) logMessage = [`${this.name}:`, ...logMessage]
+
+    console.log(...logMessage)
   }
 
   getDebug = () => this.isDebugging

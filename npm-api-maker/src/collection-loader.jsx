@@ -7,7 +7,7 @@ import propTypesExact from "prop-types-exact"
 import useCollection from "./use-collection.js"
 import useShape from "set-state-compare/build/use-shape.js"
 
-function CollectionLoader({component, ...restProps}) {
+function CollectionLoader({component, ...restProps}) { // eslint-disable-line func-style
   const s = useShape(restProps)
   const useCollectionResult = useCollection(restProps)
   const cachePartsKeys = [

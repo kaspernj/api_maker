@@ -1,7 +1,7 @@
 import ModelEvents from "./model-events.js"
 import PropTypes from "prop-types"
-import propTypesExact from "prop-types-exact"
 import React from "react"
+import propTypesExact from "prop-types-exact"
 
 export default class ApiMakerEventModelClass extends React.PureComponent {
   static propTypes = propTypesExact({
@@ -24,5 +24,7 @@ export default class ApiMakerEventModelClass extends React.PureComponent {
     this.connection = ModelEvents.connectModelClass(this.props.modelClass, this.props.event, this.props.onCall)
   }
 
-  render = () => null
+  render () {
+    return null
+  }
 }

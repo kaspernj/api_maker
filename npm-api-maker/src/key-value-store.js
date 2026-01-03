@@ -35,7 +35,7 @@ export default class KeyValueStore {
   }
 
   constructor () {
-    this.database = new Dexie("KeyValueStoreDatabase")
+    this.database = new Dexie("KeyValueStoreDatabase") // eslint-disable-line no-undef
     this.database.version(1).stores({
       keyValues: "++id, key, value"
     })
