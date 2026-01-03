@@ -1,5 +1,5 @@
-import {defineConfig} from "eslint/config"
 import js from "@eslint/js"
+import {defineConfig} from "eslint/config"
 import expoConfig from "eslint-config-expo/flat.js"
 import globals from "globals"
 import jest from "eslint-plugin-jest"
@@ -7,9 +7,8 @@ import jest from "eslint-plugin-jest"
 export default defineConfig([
   expoConfig,
   jest.configs["flat/recommended"],
+  js.configs.recommended,
   {
-    plugins: {js},
-    extends: ["js/recommended"],
     ignores: ["dist/*"],
     languageOptions: {
       globals: {
