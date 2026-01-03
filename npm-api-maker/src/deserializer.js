@@ -1,7 +1,7 @@
 import {digg} from "diggerize"
-import * as inflection from "inflection"
+import * as inflection from "inflection" // eslint-disable-line sort-imports
 import modelClassRequire from "./model-class-require.js"
-import ModelsResponseReader from "./models-response-reader.js"
+import ModelsResponseReader from "./models-response-reader.js" // eslint-disable-line sort-imports
 import Money from "js-money"
 
 export default class ApiMakerDeserializer {

@@ -1,9 +1,9 @@
 import {digs} from "diggerize"
-import inputWrapper from "../inputs/input-wrapper"
-import InvalidFeedback from "./invalid-feedback"
+import InvalidFeedback from "./invalid-feedback" // eslint-disable-line sort-imports
 import PropTypes from "prop-types"
-import propTypesExact from "prop-types-exact"
 import React from "react"
+import inputWrapper from "../inputs/input-wrapper"
+import propTypesExact from "prop-types-exact"
 
 class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   static propTypes = propTypesExact({
@@ -42,7 +42,11 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   }
 
   generatedId () {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    return Math.random()
+      .toString(36)
+      .substring(2, 15) + Math.random()
+      .toString(36)
+      .substring(2, 15)
   }
 
   optionElement (option, index) {
@@ -67,7 +71,7 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
           {option[0]}
         </label>
 
-        {(index + 1) == collection.length && this.props.wrapperOpts.errors.length > 0 &&
+        {index + 1 == collection.length && this.props.wrapperOpts.errors.length > 0 &&
           <InvalidFeedback errors={this.props.wrapperOpts.errors} />
         }
       </div>

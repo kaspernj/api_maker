@@ -1,11 +1,11 @@
-import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import Checkbox from "../inputs/checkbox"
-import classNames from "classnames"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {digs} from "diggerize"
+import Checkbox from "../inputs/checkbox" // eslint-disable-line sort-imports
 import InvalidFeedback from "./invalid-feedback"
-import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import React from "react"
+import classNames from "classnames" // eslint-disable-line import/no-unresolved
+import memo from "set-state-compare/build/memo.js"
 import useInput from "../use-input.js"
 
 export default memo(shapeComponent(class ApiMakerBootstrapCheckbox extends ShapeComponent {

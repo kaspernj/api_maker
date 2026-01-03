@@ -17,6 +17,7 @@ export default class ApiMakerBaseModelAttribute {
     this.attributeData = attributeData
   }
 
+
   /**
    * @returns {Column}
    */

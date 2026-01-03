@@ -1,6 +1,6 @@
-import CableSubscriptionPool from "./cable-subscription-pool.js"
-import CableSubscription from "./cable-subscription.js"
 import {dig} from "diggerize"
+import CableSubscription from "./cable-subscription.js" // eslint-disable-line sort-imports
+import CableSubscriptionPool from "./cable-subscription-pool.js"
 import RunLast from "./run-last.js"
 
 const shared = {}
@@ -19,27 +19,25 @@ export default class ApiMakerCableConnectionPool {
 
   connectEventToExistingSubscription ({path, subscription, value}) {
     for (const cableSubscriptionPool of this.cableSubscriptionPools) {
-      if (!cableSubscriptionPool.isConnected()) {
-        continue
-      }
+      if (cableSubscriptionPool.isConnected()) {
+        let existingSubscriptions
 
-      let existingSubscriptions
-
-      if (value === true) {
-        existingSubscriptions = dig(cableSubscriptionPool.subscriptions, ...path)
-      } else {
-        existingSubscriptions = dig(cableSubscriptionPool.subscriptions, ...path, value)
-      }
-
-      if (existingSubscriptions !== undefined) {
-        if (!Array.isArray(existingSubscriptions)) {
-          throw new Error(`existingSubscriptions wasn't an array: ${typeof existingSubscriptions} (${dig(existingSubscriptions, "constructor", "name")})`)
+        if (value === true) {
+          existingSubscriptions = dig(cableSubscriptionPool.subscriptions, ...path)
+        } else {
+          existingSubscriptions = dig(cableSubscriptionPool.subscriptions, ...path, value)
         }
 
-        existingSubscriptions.push(subscription)
-        cableSubscriptionPool.connectUnsubscriptionForSubscription(subscription)
+        if (existingSubscriptions !== undefined) {
+          if (!Array.isArray(existingSubscriptions)) {
+            throw new Error(`existingSubscriptions wasn't an array: ${typeof existingSubscriptions} (${dig(existingSubscriptions, "constructor", "name")})`)
+          }
 
-        return true
+          existingSubscriptions.push(subscription)
+          cableSubscriptionPool.connectUnsubscriptionForSubscription(subscription)
+
+          return true
+        }
       }
     }
 
@@ -103,7 +101,9 @@ export default class ApiMakerCableConnectionPool {
   }
 
   connectCreated = (modelName, callback) => this.connectModelEvent({callback, value: true, path: [modelName, "creates"]})
-  connectEvent = (modelName, modelId, eventName, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "events", eventName]})
+  connectEvent = (modelName, modelId, eventName, callback) => { // eslint-disable-line max-params
+    return this.connectModelEvent({callback, value: modelId, path: [modelName, "events", eventName]})
+  }
   connectDestroyed = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "destroys"]})
   connectModelClassEvent = (modelName, eventName, callback) => this.connectModelEvent({callback, value: eventName, path: [modelName, "model_class_events"]})
   connectUpdate = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})

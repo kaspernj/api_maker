@@ -1,10 +1,10 @@
-import BaseComponent from "../base-component"
-import classNames from "classnames"
-import {digg, digs} from "diggerize"
-import memo from "set-state-compare/build/memo.js"
-import PropTypes from "prop-types"
 import React, {useRef} from "react"
+import {digg, digs} from "diggerize"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import BaseComponent from "../base-component" // eslint-disable-line sort-imports
+import PropTypes from "prop-types"
+import classNames from "classnames" // eslint-disable-line import/no-unresolved
+import memo from "set-state-compare/build/memo.js"
 
 export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseComponent {
   static defaultProps = {
@@ -17,16 +17,16 @@ export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseCompo
 
   static propTypes = {
     cardRef: PropTypes.object,
-    className: PropTypes.string,
     children: PropTypes.any,
+    className: PropTypes.string,
     controls: PropTypes.any,
     defaultExpanded: PropTypes.bool.isRequired,
     expandable: PropTypes.bool.isRequired,
     expandableHide: PropTypes.bool.isRequired,
     footer: PropTypes.any,
     header: PropTypes.any,
-    striped: PropTypes.bool,
     responsiveTable: PropTypes.bool.isRequired,
+    striped: PropTypes.bool,
     table: PropTypes.bool.isRequired
   }
 
@@ -58,7 +58,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseCompo
     const cardHeaderStyle = {display: "flex"}
     const cardRefToUse = cardRef || this.cardRef
 
-    if (!expanded) cardHeaderStyle["borderBottom"] = "0"
+    if (!expanded) cardHeaderStyle.borderBottom = "0"
 
     return (
       <div
@@ -118,7 +118,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseCompo
     }
 
     if (table) {
-      if (responsiveTable){
+      if (responsiveTable) {
         classNames.push("table-responsive")
       }
 

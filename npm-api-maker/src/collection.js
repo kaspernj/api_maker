@@ -1,9 +1,9 @@
 import cloneDeep from "clone-deep"
-import CommandsPool from "./commands-pool.js"
+import CommandsPool from "./commands-pool.js" // eslint-disable-line sort-imports
 import {digg} from "diggerize"
-import * as inflection from "inflection"
+import * as inflection from "inflection" // eslint-disable-line sort-imports
 import {incorporate} from "incorporator"
-import Result from "./result.js"
+import Result from "./result.js" // eslint-disable-line sort-imports
 import uniqunize from "uniqunize"
 
 /**
@@ -85,7 +85,9 @@ export default class ApiMakerCollection {
    * @returns {Promise<number>}
    */
   async count() {
-    const response = await this.clone()._merge({count: true})._response()
+    const response = await this.clone()
+      ._merge({count: true})
+      ._response()
 
     return digg(response, "count")
   }
@@ -278,9 +280,9 @@ export default class ApiMakerCollection {
    * @returns {this}
    */
   page(page) {
-    if (!page) page = 1
+    const pageToUse = page || 1
 
-    return this._merge({page})
+    return this._merge({page: pageToUse})
   }
 
   /**

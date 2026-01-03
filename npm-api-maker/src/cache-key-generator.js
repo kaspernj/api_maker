@@ -43,20 +43,16 @@ export default class CacheKeyGenerator {
 
       if (Array.isArray(loadedRelationship)) { // has_many
         for (const anotherModel of loadedRelationship) {
-          if (this.isModelRecorded(relationshipType, anotherModel)) {
-            continue
+          if (!this.isModelRecorded(relationshipType, anotherModel)) {
+            this.recordModel(relationshipType, anotherModel)
+            this.fillModels(anotherModel)
           }
-
-          this.recordModel(relationshipType, anotherModel)
-          this.fillModels(anotherModel)
         }
       } else if (loadedRelationship) { // belongs_to, has_one
-        if (this.isModelRecorded(relationshipType, loadedRelationship)) {
-          continue
+        if (!this.isModelRecorded(relationshipType, loadedRelationship)) {
+          this.recordModel(relationshipType, loadedRelationship)
+          this.fillModels(loadedRelationship)
         }
-
-        this.recordModel(relationshipType, loadedRelationship)
-        this.fillModels(loadedRelationship)
       }
     }
 

@@ -1,7 +1,7 @@
 import React, {useMemo} from "react"
 import {Animated, Easing, PanResponder} from "react-native"
-import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import {EventEmitter} from "eventemitter3"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
+import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -28,7 +28,7 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     this.events ||= new EventEmitter()
     this.position ||= new Animated.ValueXY()
     this.panResponder ||= PanResponder.create({
-      onStartShouldSetPanResponder: (e, ) => {
+      onStartShouldSetPanResponder: (_event) => {
         this.setState({dragging: true})
         this.p.controller.onDragStart({item: this.p.item, itemIndex: this.p.itemIndex})
 
@@ -113,7 +113,7 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
         x: calculatedXFromStartingPosition,
         y
       },
-      useNativeDriver: true,
+      useNativeDriver: true
     }
     const animationEventArgs = {animationArgs, animationType: "moveToPosition", item: this.p.item}
 

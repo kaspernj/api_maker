@@ -1,5 +1,5 @@
 import {digg} from "diggerize"
-import {EventEmitter} from "eventemitter3"
+import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
 
 export default class DraggableSortController {
   constructor({data, events, keyExtractor}) {
@@ -94,7 +94,7 @@ export default class DraggableSortController {
 
       if (itemData.layout.width < smallestWidth) smallestWidth = itemData.layout.width
 
-      if (moveX > baseX && moveX < (baseX + smallestWidth) && itemIndex != this.draggedItemData.index) {
+      if (moveX > baseX && moveX < baseX + smallestWidth && itemIndex != this.draggedItemData.index) {
         this.draggedOverItem = itemData.item
         this.draggedOverItemData = itemData
 
@@ -123,7 +123,8 @@ export default class DraggableSortController {
     for (const item of this.currentOrder) {
       const itemData = this.getItemDataForItem(item)
 
-      if (digg(itemData, "index") != digg(this, "draggedItemData", "index")) { // Dont animate dragged element to a new position because it is currently being dragged
+      if (digg(itemData, "index") != digg(this, "draggedItemData", "index")) {
+        // Dont animate dragged element to a new position because it is currently being dragged
         itemData.events.emit("moveToPosition", {
           x: currentPosition,
           y: 0

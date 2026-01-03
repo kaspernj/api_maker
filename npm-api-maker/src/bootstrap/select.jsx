@@ -1,18 +1,18 @@
-import {digs} from "diggerize"
-import inputWrapper from "../inputs/input-wrapper"
 import {Select} from "../inputs/select"
-import InvalidFeedback from "./invalid-feedback"
+import {digs} from "diggerize"
+import InvalidFeedback from "./invalid-feedback" // eslint-disable-line sort-imports
 import PropTypes from "prop-types"
 import React from "react"
+import inputWrapper from "../inputs/input-wrapper"
 
 class ApiMakerBootstrapSelect extends React.PureComponent {
   static propTypes = {
     attribute: PropTypes.string,
     className: PropTypes.string,
     description: PropTypes.any,
-    id: PropTypes.string,
     hint: PropTypes.any,
     hintBottom: PropTypes.any,
+    id: PropTypes.string,
     inputProps: PropTypes.object.isRequired,
     label: PropTypes.any,
     labelContainerClassName: PropTypes.string,

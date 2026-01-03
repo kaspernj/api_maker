@@ -90,16 +90,14 @@ export default class ApiMakerCommandSubmitData {
     const newArray = []
 
     for (const value of array) {
-      if (this.shouldSkip(value, type)) {
-        continue
-      }
-
-      if (Array.isArray(value)) {
-        newArray.push(this.convertDynamic(value, type))
-      } else if (this.isObject(value)) {
-        newArray.push(this.convertDynamic(value, type))
-      } else {
-        newArray.push(value)
+      if (!this.shouldSkip(value, type)) {
+        if (Array.isArray(value)) {
+          newArray.push(this.convertDynamic(value, type))
+        } else if (this.isObject(value)) {
+          newArray.push(this.convertDynamic(value, type))
+        } else {
+          newArray.push(value)
+        }
       }
     }
 
@@ -117,16 +115,14 @@ export default class ApiMakerCommandSubmitData {
     for (const key in object) {
       const value = object[key]
 
-      if (this.shouldSkip(value, type)) {
-        continue
-      }
-
-      if (Array.isArray(value)) {
-        newObject[key] = this.convertDynamic(value, type)
-      } else if (this.isObject(value)) {
-        newObject[key] = this.convertDynamic(value, type)
-      } else {
-        newObject[key] = value
+      if (!this.shouldSkip(value, type)) {
+        if (Array.isArray(value)) {
+          newObject[key] = this.convertDynamic(value, type)
+        } else if (this.isObject(value)) {
+          newObject[key] = this.convertDynamic(value, type)
+        } else {
+          newObject[key] = value
+        }
       }
     }
 

@@ -1,10 +1,10 @@
-import AttributeRow from "./attribute-row"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import PropTypes from "prop-types" // eslint-disable-line sort-imports
+import React from "react"
+import AttributeRow from "./attribute-row" // eslint-disable-line sort-imports
 import BaseComponent from "../base-component"
 import memo from "set-state-compare/build/memo.js"
-import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
 
 export default memo(shapeComponent(class ApiMakerBootstrapAttributeRows extends BaseComponent {
   static defaultProps = {
@@ -20,8 +20,15 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRows extends 
   render () {
     const {attributes, checkIfAttributeLoaded, model} = this.p
 
-    return attributes.map((attribute) =>
-      <AttributeRow attribute={attribute} checkIfAttributeLoaded={checkIfAttributeLoaded} key={`attribute-${attribute}`} model={model} />
-    )
+    return attributes.map((attribute) => {
+      return (
+        <AttributeRow
+          attribute={attribute}
+          checkIfAttributeLoaded={checkIfAttributeLoaded}
+          key={`attribute-${attribute}`}
+          model={model}
+        />
+      )
+    })
   }
 }))

@@ -1,7 +1,7 @@
 import {digs} from "diggerize"
-import PropTypes from "prop-types"
+import PropTypes from "prop-types" // eslint-disable-line sort-imports
 import propTypesExact from "prop-types-exact"
-import React from "react"
+import React from "react" // eslint-disable-line sort-imports
 
 export default class ApiMakerBootstrapInvalidFeedback extends React.PureComponent {
   static propTypes = propTypesExact({

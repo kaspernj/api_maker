@@ -1,17 +1,16 @@
-import BaseComponent from "../base-component"
 import * as inflection from "inflection"
+import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import BaseComponent from "../base-component" // eslint-disable-line sort-imports
 import Icon from "../utils/icon"
+import Link from "../link"
 import PropTypes from "prop-types"
-import qs from "qs"
-import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import Text from "../utils/text"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import memo from "set-state-compare/build/memo.js"
+import qs from "qs"
 import urlEncode from "../url-encode.js"
-import useSorting from "../table/use-sorting.js"
-
-import Link from "../link"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
+import useSorting from "../table/use-sorting.js"
 
 export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseComponent {
   static propTypes = {
@@ -41,11 +40,11 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
   }
 
   href () {
-    const qParams = Object.assign({}, this.tt.qParams)
+    const qParams = {...this.tt.qParams}
     const {attribute, queryParams, searchKey, sortMode} = this.tt
     const newQueryParams = {...queryParams}
 
-    qParams.s = `${attribute} ${sortMode == "asc" ? "desc" : "asc"}` // eslint-disable-line id-length
+    qParams.s = `${attribute} ${sortMode == "asc" ? "desc" : "asc"}`
 
     newQueryParams[searchKey] = JSON.stringify(qParams)
 
@@ -59,19 +58,19 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
     const {isSortedByAttribute, sortMode} = this.tt
     const LinkComponent = this.linkComponent()
     const {attribute, className, dataSet, defaultParams, linkComponent, onChanged, query, style, textProps, title, ...restProps} = this.props
-    const actualDataSet = Object.assign(
-      {
-        attribute,
-        class: className,
-        component: "api-maker/bootstrap/sort-link",
-        sortMode: this.tt.sortMode
-      },
-      dataSet
-    )
-    const actualStyle = Object.assign(
-      {display: "flex", flexDirection: "row", alignItems: "center"},
-      style
-    )
+    const actualDataSet = {
+      attribute,
+      class: className,
+      component: "api-maker/bootstrap/sort-link",
+      sortMode: this.tt.sortMode,
+      ...dataSet
+    }
+    const actualStyle = {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      ...style
+    }
 
     return (
       <LinkComponent
