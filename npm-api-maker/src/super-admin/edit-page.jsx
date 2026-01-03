@@ -81,7 +81,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
           {model && attributes?.map((attribute) => ( // eslint-disable-line no-extra-parens
             <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelClass={modelClass} />
           ))}
-          {extraContent && extraContent(this.modelArgs)}
+          {extraContent && extraContent(modelArgs)} // eslint-disable-line no-undef
           <Pressable
             onPress={this.tt.onSubmit}
             style={this.cache("pressableStyle", {

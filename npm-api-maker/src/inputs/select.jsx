@@ -93,7 +93,7 @@ const ApiMakerInputsSelect = memo(shapeComponent(class ApiMakerInputsSelect exte
   }
 
   includeBlank () {
-    return Boolean(this.props.includeBlank && this.props.multiple === false)
+    return Boolean(this.props.includeBlank && !this.props.multiple)
   }
 }))
 

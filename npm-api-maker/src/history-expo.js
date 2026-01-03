@@ -4,7 +4,7 @@ import qs from "qs"
 class HistoryExpo {
   push(path, ...params) {
     const url = parse(path, {})
-    const actualParams = {...params}
+    const actualParams = Object.assign({}, params) // eslint-disable-line prefer-object-spread
 
     if (url.query) {
       Object.assign(actualParams, qs.parse(url.query.slice(1, url.query.length)))

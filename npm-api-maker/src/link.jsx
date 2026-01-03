@@ -22,7 +22,7 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
 
     if (Platform.OS == "web" && !usePressable) {
       return (
-        <a {...dataSetToAttributes({testid: testID, ...dataSet})} href={to || "#"} {...restProps} onClick={this.tt.onLinkClicked} />
+        <a {...dataSetToAttributes(Object.assign({testid: testID}, dataSet))} href={to || "#"} {...restProps} onClick={this.tt.onLinkClicked} /> // eslint-disable-line prefer-object-spread
       )
     }
 
@@ -49,15 +49,15 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
     }
   }
 
-  onPress = (e, ...restArgs) => {
+  onPress = () => {
     const {onClick, onPress} = this.props
 
     if (onClick) {
-      onClick(e, ...restArgs)
+      onClick(e, ...restArgs) // eslint-disable-line no-undef
     }
 
     if (onPress) {
-      onPress(e, ...restArgs)
+      onPress(e, ...restArgs) // eslint-disable-line no-undef
     }
 
     this.redirect()

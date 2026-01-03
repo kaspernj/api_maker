@@ -43,7 +43,7 @@ const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckbo
       return defaultValue
     } else if (attribute && model) {
       if (!model[attribute]) {
-        throw new Error(`No such attribute: ${attribute}`)
+        throw `No such attribute: ${attribute}` // eslint-disable-line no-throw-literal
       }
 
       return this.props.model[attribute]()

@@ -33,7 +33,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
     const {inputProps, t} = this.tt
     const {attribute, checkboxComponent, className, label, model, name, onPurgeChanged, purgeName, wrapperOpts, ...restProps} = this.props
     const CheckboxComponent = checkboxComponent || Checkbox
-    const newInputProps = {...inputProps, type: "file"}
+    const newInputProps = Object.assign({}, inputProps, {type: "file"}) // eslint-disable-line prefer-object-spread
 
     return (
       <div className={classNames("api-maker--inputs--attachment", "components--inputs--input", className)} {...restProps}>

@@ -7,7 +7,7 @@ class HistoryReactNative {
     const url = parse(path, {})
 
     if (url.query) {
-      const actualParams = {...params}
+      const actualParams = Object.assign({}, params) // eslint-disable-line prefer-object-spread
 
       Object.assign(actualParams, qs.parse(url.query.slice(1, url.query.length)))
 
