@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import {useCallback, useLayoutEffect, useMemo} from "react"
 import debounceFunction from "debounce"
 import ModelEvents from "./model-events.js"
@@ -13,6 +14,7 @@ import useShape from "set-state-compare/build/use-shape.js"
  * @param {function} props.onConnected
  * @return {void}
  */
+// eslint-disable-next-line max-params
 const apiMakerUseModelEvent = (model, event, onCallback, props) => {
   const {active = true, debounce, onConnected, ...restProps} = props || {}
 

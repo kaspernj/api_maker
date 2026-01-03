@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import useEnvSense from "env-sense/build/use-env-sense.js"
 import {useCallback, useEffect, useLayoutEffect} from "react"
 
@@ -11,6 +12,7 @@ const ApiMakerUseEventListener = (target, event, onCalled) => {
   const {isServer} = useEnvSense()
   const useWorkingEffect = isServer ? useEffect : useLayoutEffect
   const onCalledCallback = useCallback((...args) => {
+    // eslint-disable-next-line prefer-spread
     onCalled.apply(null, args)
   }, [target, event, onCalled])
 

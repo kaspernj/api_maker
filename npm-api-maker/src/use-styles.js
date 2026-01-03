@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import config from "./config.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
@@ -33,7 +34,6 @@ export default function useStyles(styles, args, dependencies = []) {
   const breakpointName = digg(breakpoint, "name")
   const actualDependencies = [...dependencies, breakpointName]
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const listOfStyles = useMemo(() => {
     const listOfStyles = []
     const breakpointsReverse = [...config.getBreakpoints()].reverse()
@@ -59,7 +59,7 @@ export default function useStyles(styles, args, dependencies = []) {
     }
 
     return listOfStyles
-  }, actualDependencies) // eslint-disable-line react-hooks/exhaustive-deps
+  }, actualDependencies)
 
   return listOfStyles
 }

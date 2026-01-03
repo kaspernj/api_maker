@@ -1,8 +1,9 @@
-import debounceFunction from "debounce" // eslint-disable-line sort-imports
+/* eslint-disable sort-imports */
+import debounceFunction from "debounce"
 import ModelEvents from "./model-events.js"
-import PropTypes from "prop-types" // eslint-disable-line sort-imports
+import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {useCallback, useLayoutEffect} from "react" // eslint-disable-line sort-imports
+import {useCallback, useLayoutEffect} from "react"
 import useShape from "set-state-compare/build/use-shape.js"
 
 /**
@@ -14,11 +15,12 @@ import useShape from "set-state-compare/build/use-shape.js"
  * @param {function} [args.onConnected]
  * @returns {void}
  */
+// eslint-disable-next-line max-len
 const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {active: true, debounce: 0, onConnected: undefined}) => { // eslint-disable-line react/function-component-definition
   const {active = true, debounce} = args
   const s = useShape({active, debounce, modelClass, onCreated})
 
-  const eventDebounce = useCallback(() => { // eslint-disable-line react-hooks/exhaustive-deps
+  const eventDebounce = useCallback(() => {
     if (!s.meta.debounceInstance) {
       if (typeof s.props.debounce == "number") {
         s.meta.debounceInstance = debounceFunction(s.p.onCreated, s.p.debounce)
@@ -30,7 +32,7 @@ const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {active: true, de
     return s.meta.debounceInstance
   }, [])
 
-  const onCreatedCallback = useCallback((...args) => { // eslint-disable-line react-hooks/exhaustive-deps
+  const onCreatedCallback = useCallback((...args) => {
     if (!s.p.active) {
       return
     }
@@ -42,7 +44,7 @@ const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {active: true, de
     }
   }, [])
 
-  useLayoutEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
     const connectCreated = ModelEvents.connectCreated(s.p.modelClass, (...args) => onCreatedCallback(...args))
 
     return () => {

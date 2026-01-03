@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 import config from "./config.js"
 import escapeStringRegexp from "escape-string-regexp"
 import * as inflection from "inflection"
@@ -18,7 +19,6 @@ const useRouter = (props) => {
 
   const s = useShape(props)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const findRouteParams = useCallback((routeDefinition) => {
     const result = []
     const parts = routeDefinition.path.split("/")
@@ -29,23 +29,19 @@ const useRouter = (props) => {
     }
 
     return result
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getPath = useCallback(() => {
     let path = s.p.path || window.location.pathname
 
     path = path.replace(/[/]+$/, "")
 
     return path
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getRouteDefinitions = useCallback(() => s.p.routeDefinitions || config.getRouteDefinitions(), [])
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getRoutes = useCallback(() => s.p.routes || config.getRoutes(), [])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const parseRouteDefinitions = useCallback(() => {
     const routeDefinitions = getRouteDefinitions()
     const routes = getRoutes()
@@ -89,14 +85,12 @@ const useRouter = (props) => {
     }
 
     return parsedRouteDefinitions
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const parsedRouteDefinitions = useMemo(() => parseRouteDefinitions(), [])
 
   s.updateMeta({parsedRouteDefinitions})
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const findMatchingRoute = useCallback(() => {
     const path = getPath()
 
@@ -115,7 +109,7 @@ const useRouter = (props) => {
         }
       }
 
-      if (path == "" && parsedRouteDefinition.routeDefinition.path == "/") matched = true // eslint-disable-line eqeqeq
+      if (path == "" && parsedRouteDefinition.routeDefinition.path == "/") matched = true
       if (matched) {
         return {params, parsedRouteDefinition}
       }

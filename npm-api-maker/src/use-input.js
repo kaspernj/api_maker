@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak, no-extra-parens, no-use-before-define, prefer-object-spread */
 import {dig, digg} from "diggerize"
 import {useCallback, useEffect, useMemo, useRef} from "react"
 import idForComponent from "./inputs/id-for-component.js"
