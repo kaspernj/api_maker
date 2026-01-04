@@ -1,7 +1,7 @@
 /* eslint-disable arrow-body-style, import/no-named-as-default, import/no-unresolved */
 /* eslint-disable no-extra-parens, no-unused-vars, react/jsx-max-depth */
 /* eslint-disable react/jsx-one-expression-per-line, react/jsx-sort-props */
-/* eslint-disable react/sort-prop-types, sort-imports, sort-vars */
+/* eslint-disable react/sort-prop-types, sort-imports */
 import {dig, digg, digs} from "diggerize"
 import React, {createContext, useContext, useMemo, useRef} from "react"
 import {Animated, Platform, Pressable, View} from "react-native"

@@ -44,7 +44,7 @@
     "debounce": ">= 2.0.0",
     "diggerize": ">= 1.0.10",
     "env-sense": ">= 1.0.2",
-    "epic-locks": ">= 1.0.5",
+    "epic-locks": ">= 1.0.6",
     "eventemitter3": "^5.0.1",
     "file-saver": "^2.0.5",
     "form-data-objectizer": ">= 1.0.0",
