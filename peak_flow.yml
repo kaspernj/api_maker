@@ -68,6 +68,8 @@ builds:
       build_11:
         name: ESLint
         script:
+          - cd npm-api-maker && node -e "console.log('set-state-compare', require('./node_modules/set-state-compare/package.json').version)"
+          - cd npm-api-maker && ls -la node_modules/set-state-compare && ls -la node_modules/set-state-compare/build
           - cd npm-api-maker && npm run lint
       build_12:
         name: Expo Doctor
