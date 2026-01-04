@@ -44,7 +44,7 @@ development:
 
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
-    host: localhost
+    host: 0.0.0.0
     port: 5002
     # Hot Module Replacement updates modules while the application is running without a full reload
     hmr: false
