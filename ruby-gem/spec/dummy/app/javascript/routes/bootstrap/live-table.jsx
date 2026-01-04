@@ -7,6 +7,7 @@ import Layout from "components/layout"
 import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
 import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
+import {Pressable, Text} from "react-native"
 
 const Task = modelClassRequire("Task")
 
@@ -36,6 +37,25 @@ export default class BootstrapLiveTable extends React.PureComponent {
         </div>
     }
 
+    if (params.delay_query_ms) {
+      const delayMs = Number(params.delay_query_ms)
+
+      if (!Number.isNaN(delayMs)) {
+        liveTableProps.queryMethod = async ({query}) => {
+          await new Promise((resolve) => setTimeout(resolve, delayMs))
+
+          return query.result()
+        }
+      }
+    }
+
+    if (params.show_controls) {
+      liveTableProps.controls = () =>
+        <Pressable dataSet={{class: "table-controls-test-button"}} onPress={this.onTestControlsPressed}>
+          <Text>Test control</Text>
+        </Pressable>
+    }
+
     return (
       <Layout>
         <ApiMakerTable
@@ -52,6 +72,8 @@ export default class BootstrapLiveTable extends React.PureComponent {
       </Layout>
     )
   }
+
+  onTestControlsPressed = () => {}
 
   filterContent = (args) => {
     const {onFilterChangedWithDelay, qParams} = digs(args, "onFilterChangedWithDelay", "qParams")
