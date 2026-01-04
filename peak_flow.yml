@@ -1,81 +1,85 @@
 artifact_dirs:
   - ruby-gem/spec/dummy/tmp/capybara
   - ruby-gem/spec/dummy/tmp/screenshots
-before_script:
-  - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
-
-  - cd npm-api-maker && npm install
-  - cd npm-api-maker && yarn link
-  - cd npm-api-maker && npm run build
-
-  - cd ruby-gem/spec/dummy && yarn install --network-timeout 120000
-  - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker
-  - cd ruby-gem/spec/dummy && yarn
-  - cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
-  - cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
-  - cd ruby-gem/spec/dummy && bundle exec rails runner "ApiMaker::GenerateModelRecipes.execute!"
-
 rvm: true
 builds:
   build_1:
     environment:
       RUBY_VERSION: 3.3.5
-    name: RSpec Rails 6 Ruby 3.3.5
+    name: Setup build container
     script:
-      - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services spec/api_helpers
-  build_2:
-    environment:
-      RUBY_VERSION: 3.3.5
-    name: RSpec Rails 7 Ruby 3.3.5
-    script:
-      - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services spec/api_helpers
-  build_3:
-    environment:
-      RUBY_VERSION: 3.3.5
-    name: Chrome Rails 6 Ruby 3.3.5
-    script:
-      - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
-  build_4:
-    environment:
-      RUBY_VERSION: 3.3.5
-    name: Chrome Rails 7 Ruby 3.3.5
-    script:
-      - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
-  build_5:
-    name: Firefox Rails 6 Ruby 3.3.5
-    environment:
-      RUBY_VERSION: 3.3.5
-      SELENIUM_DRIVER: firefox
-    script:
-      - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
-  build_6:
-    name: Firefox Rails 7 Ruby 3.3.5
-    environment:
-      RUBY_VERSION: 3.3.5
-      SELENIUM_DRIVER: firefox
-    script:
-      - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
-      - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
-  build_7:
-    name: Jest
-    script:
-      - cd npm-api-maker && npm install && npm run test
-  build_8:
-    name: Rubocop
-    script:
-      - cd ruby-gem && bundle exec rubocop
-  build_9:
-    name: Rails Best Practices
-    script:
-      - cd ruby-gem && bundle exec rails_best_practices
-  build_10:
-    name: ESLint
-    script:
-      - cd npm-api-maker && npm run lint
-  build_12:
-    name: Expo Doctor
-    script:
-      - cd npm-api-maker && npx expo-doctor
+      - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
+
+      - cd npm-api-maker && npm install
+      - cd npm-api-maker && yarn link
+      - cd npm-api-maker && npm run build
+
+      - cd ruby-gem/spec/dummy && yarn install --network-timeout 120000
+      - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker
+      - cd ruby-gem/spec/dummy && yarn
+      - cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
+      - cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
+      - cd ruby-gem/spec/dummy && bundle exec rails runner "ApiMaker::GenerateModelRecipes.execute!"
+    builds:
+      build_2:
+        environment:
+          RUBY_VERSION: 3.3.5
+        name: RSpec Rails 6 Ruby 3.3.5
+        script:
+          - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services spec/api_helpers
+      build_3:
+        environment:
+          RUBY_VERSION: 3.3.5
+        name: RSpec Rails 7 Ruby 3.3.5
+        script:
+          - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services spec/api_helpers
+      build_4:
+        environment:
+          RUBY_VERSION: 3.3.5
+        name: Chrome Rails 6 Ruby 3.3.5
+        script:
+          - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
+          - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
+      build_5:
+        environment:
+          RUBY_VERSION: 3.3.5
+        name: Chrome Rails 7 Ruby 3.3.5
+        script:
+          - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
+          - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
+      build_6:
+        name: Firefox Rails 6 Ruby 3.3.5
+        environment:
+          RUBY_VERSION: 3.3.5
+          SELENIUM_DRIVER: firefox
+        script:
+          - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
+          - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
+      build_7:
+        name: Firefox Rails 7 Ruby 3.3.5
+        environment:
+          RUBY_VERSION: 3.3.5
+          SELENIUM_DRIVER: firefox
+        script:
+          - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
+          - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
+      build_8:
+        name: Jest
+        script:
+          - cd npm-api-maker && npm run test
+      build_9:
+        name: Rubocop
+        script:
+          - cd ruby-gem && bundle exec rubocop
+      build_10:
+        name: Rails Best Practices
+        script:
+          - cd ruby-gem && bundle exec rails_best_practices
+      build_11:
+        name: ESLint
+        script:
+          - cd npm-api-maker && npm run lint
+      build_12:
+        name: Expo Doctor
+        script:
+          - cd npm-api-maker && npx expo-doctor
