@@ -462,11 +462,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     if (!card) return loadingContent
 
+    const safeModels = models || []
+    const safeArgs = {models: safeModels, qParams, query, result}
+
     return (
       <Card
         className={classNames("live-table--table-card", "mb-4", className)}
-        controls={this.tableControls()}
-        header={this.tableHeaderContent({models, qParams, query, result})}
+        controls={this.tableControls(safeArgs)}
+        header={this.tableHeaderContent(safeArgs)}
         {...restProps}
       >
         {loadingContent}
@@ -807,14 +810,18 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return actualStyle
   }
 
-  tableControls() {
+  tableControls({models, qParams, query, result} = {}) {
     const {controls} = this.props
     const {showSettings} = this.s
-    const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
+    const collectionArgs = digs(this.collection, "models", "qParams", "query", "result")
+    const actualModels = models ?? collectionArgs.models ?? []
+    const actualQParams = qParams ?? collectionArgs.qParams
+    const actualQuery = query ?? collectionArgs.query
+    const actualResult = result ?? collectionArgs.result
 
     return (
       <View style={this.cache("tableControlsRootViewStyle", {flexDirection: "row"})}>
-        {controls && controls({models, qParams, query, result})}
+        {controls && controls({models: actualModels, qParams: actualQParams, query: actualQuery, result: actualResult})}
         <Pressable dataSet={{class: "filter-button"}} onPress={this.tt.onFilterClicked}>
           <Icon name="search" size={20} />
         </Pressable>
