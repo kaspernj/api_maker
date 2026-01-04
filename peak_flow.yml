@@ -2,10 +2,10 @@ artifact_dirs:
   - ruby-gem/spec/dummy/tmp/capybara
   - ruby-gem/spec/dummy/tmp/screenshots
 rvm: true
+environment:
+  RUBY_VERSION: 3.3.5
 builds:
   build_1:
-    environment:
-      RUBY_VERSION: 3.3.5
     name: Setup build container
     script:
       - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
@@ -22,27 +22,19 @@ builds:
       - cd ruby-gem/spec/dummy && bundle exec rails runner "ApiMaker::GenerateModelRecipes.execute!"
     builds:
       build_2:
-        environment:
-          RUBY_VERSION: 3.3.5
         name: RSpec Rails 6 Ruby 3.3.5
         script:
           - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services spec/api_helpers
       build_3:
-        environment:
-          RUBY_VERSION: 3.3.5
         name: RSpec Rails 7 Ruby 3.3.5
         script:
           - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services spec/api_helpers
       build_4:
-        environment:
-          RUBY_VERSION: 3.3.5
         name: Chrome Rails 6 Ruby 3.3.5
         script:
           - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
           - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
       build_5:
-        environment:
-          RUBY_VERSION: 3.3.5
         name: Chrome Rails 7 Ruby 3.3.5
         script:
           - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
@@ -50,7 +42,6 @@ builds:
       build_6:
         name: Firefox Rails 6 Ruby 3.3.5
         environment:
-          RUBY_VERSION: 3.3.5
           SELENIUM_DRIVER: firefox
         script:
           - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
@@ -58,7 +49,6 @@ builds:
       build_7:
         name: Firefox Rails 7 Ruby 3.3.5
         environment:
-          RUBY_VERSION: 3.3.5
           SELENIUM_DRIVER: firefox
         script:
           - cd ruby-gem/spec/dummy && RAILS_ENV=development bundle exec rails db:schema:load && RAILS_ENV=development bin/shakapacker
