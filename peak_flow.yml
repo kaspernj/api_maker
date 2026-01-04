@@ -5,12 +5,14 @@ rvm: true
 environment:
   RUBY_VERSION: 3.3.5
 builds:
-  build_1:
+  setup:
     name: Setup build container
     script:
       - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
 
       - cd npm-api-maker && npm install
+      - cd npm-api-maker && node -e "console.log('set-state-compare', require('./node_modules/set-state-compare/package.json').version)"
+      - cd npm-api-maker && ls -la node_modules/set-state-compare && ls -la node_modules/set-state-compare/build
       - cd npm-api-maker && yarn link
       - cd npm-api-maker && npm run build
 
