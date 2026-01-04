@@ -2348,6 +2348,11 @@ env-sense@^1.0.1:
   resolved "https://registry.yarnpkg.com/env-sense/-/env-sense-1.0.1.tgz#375a7b5b7e0118cd00fdeb80fc004653a931629c"
   integrity sha512-6otgggbxvN6hnAR8/9GoWQJbNfOiwXZJc66deDoECD53FXjPQx6gibScs0CbA+Us+vRBAXH8y8ktQ1G9hN5Ydg==
 
+env-sense@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/env-sense/-/env-sense-1.0.2.tgz#68aeec79334bfb410971475712e65dfc9c84a347"
+  integrity sha512-HQh53034ukawbyWDZPsBVBTs8qEFRHthvgpQauisoVLOuWUaS7rAnOv8iqGYgH2ao6coLN5nwKaUJekeHROE9w==
+
 envinfo@^7.14.0:
   version "7.14.0"
   resolved "https://registry.yarnpkg.com/envinfo/-/envinfo-7.14.0.tgz#26dac5db54418f2a4c1159153a0b2ae980838aae"
@@ -2448,6 +2453,11 @@ eventemitter3@^4.0.0:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
+
+eventemitter3@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-5.0.1.tgz#53f5ffd0a492ac800721bb42c66b841de96423c4"
+  integrity sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==
 
 events@^3.2.0:
   version "3.3.0"
@@ -2585,17 +2595,16 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-flash-notifications@^0.0.27:
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.27.tgz#42c44b92c0806db508c2b94e18ef2b09bc8da673"
-  integrity sha512-DIz7ArwN+4pYMlTG+nsphB8/JGO0Xx52uZKPh6QEQ7JOZsa6rYipEdAr3zk8YPrIBg7MPi4nUM3vu/7x2CV5og==
+flash-notifications@^0.0.33:
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.33.tgz#f1aa46fef2c3927ce196158f375d1fb2965a940a"
+  integrity sha512-u4GX5pDk0CJQZlYvrtOwJRDJULWkilMnBVCS8OxCVoo8b9tkxrcz8EaHkqu2je0joQYv1VJgzKfE3/UeMxZpeA==
   dependencies:
-    classnames "^2.5.1"
     diggerize "^1.0.9"
-    env-sense "^1.0.1"
+    env-sense "^1.0.2"
+    eventemitter3 "^5.0.1"
     fetching-object "^1.0.3"
     prop-types-exact "*"
-    set-state-compare "^1.0.57"
 
 flat@^5.0.2:
   version "5.0.2"
@@ -4120,7 +4129,7 @@ set-function-length@^1.2.1, set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-"set-state-compare@>= 1.0.55", set-state-compare@^1.0.57, set-state-compare@^1.0.67:
+"set-state-compare@>= 1.0.55", set-state-compare@^1.0.67:
   version "1.0.67"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.67.tgz#c722564f00ea0102f4a4fc8e1f274ee84af99a01"
   integrity sha512-FANlTHSEwipmWEYW73//89aaEsRHIaNV1iLUMyE8tfeLwhLSaPvFmdcXw5CYcOLUcT4mA/9puYywEFN/YZ39Vg==
