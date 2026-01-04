@@ -19,8 +19,8 @@ builds:
       - cd ruby-gem/spec/dummy && yarn
       - cd ruby-gem/spec/dummy && bundle exec rails db:environment:set RAILS_ENV=test
       - cd ruby-gem/spec/dummy && bundle exec rails db:schema:load
-      - cd ruby-gem/spec/dummy && RAILS_ENV=development bin/shakapacker
       - cd ruby-gem/spec/dummy && bundle exec rails runner "ApiMaker::GenerateModelRecipes.execute!"
+      - cd ruby-gem/spec/dummy && RAILS_ENV=development bin/shakapacker
     builds:
       build_2:
         name: RSpec Rails 6 Ruby 3.3.5
