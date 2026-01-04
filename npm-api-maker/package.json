@@ -42,15 +42,15 @@
   "dependencies": {
     "clone-deep": ">= 4.0.1",
     "debounce": ">= 2.0.0",
-    "diggerize": ">= 1.0.5",
+    "diggerize": ">= 1.0.10",
     "env-sense": ">= 1.0.2",
-    "epic-locks": ">= 1.0.2",
+    "epic-locks": ">= 1.0.4",
     "eventemitter3": "^5.0.1",
     "file-saver": "^2.0.5",
     "form-data-objectizer": ">= 1.0.0",
     "form-serialize": ">= 0.7.2",
     "format-number": ">= 3.0.0",
-    "incorporator": ">= 1.0.3",
+    "incorporator": ">= 1.0.5",
     "inflection": ">= 1.12.0",
     "js-money": ">= 0.6.3",
     "numberable": ">= 1.0.0",
@@ -83,13 +83,13 @@
     "react": "19.0.0",
     "react-native": "0.79.6",
     "typescript": "~5.8.3",
-    "velocious": "^1.0.173"
+    "velocious": "^1.0.175"
   },
   "peerDependencies": {
     "expo": "*",
-    "flash-notifications": ">= 0.0.32",
+    "flash-notifications": ">= 0.0.33",
     "history": "^5.3.0",
-    "i18n-on-steroids": "*",
+    "i18n-on-steroids": ">= 1.0.21",
     "react": ">=18.3.0",
     "react-native": "*",
     "react-native-vector-icons": "*"

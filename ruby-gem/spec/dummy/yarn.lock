@@ -1239,16 +1239,17 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@>= 1.0.2053":
-  version "1.0.2053"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2053.tgz#f791494175a42945d5fd8e677ef52a0190ff882f"
-  integrity sha512-S0MhYsLtyRy3LTNZT0qMqcrwtQs+AoPU/Xzh2skmeW7sOXwjiIwQeA+yHoGno3bRUBwKLz3oF8aVWgHTUFkoqA==
+"@kaspernj/api-maker@>= 1.0.2073":
+  version "1.0.2073"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2073.tgz#4978919ba6e7867f7f1df0bf7800525ba901b416"
+  integrity sha512-0uX4ccr5ckTrW359r5bmPvA9NVZYXRBR5Y0oPEMrMM85HWmu5xX5qr0xwvK8M60lgd1Qn6HFZOmLDpFW+72+0w==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
     diggerize ">= 1.0.5"
-    env-sense "^1.0.1"
+    env-sense ">= 1.0.2"
     epic-locks ">= 1.0.2"
+    eventemitter3 "^5.0.1"
     file-saver "^2.0.5"
     form-data-objectizer ">= 1.0.0"
     form-serialize ">= 0.7.2"
@@ -1261,7 +1262,7 @@
     on-location-changed ">= 1.0.18"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
-    set-state-compare ">= 1.0.55"
+    set-state-compare ">= 1.0.65"
     spark-md5 "^3.0.2"
     stacktrace-parser "^0.1.10"
     strftime ">= 0.10.0"
@@ -2343,12 +2344,7 @@ enhanced-resolve@^5.17.4:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
 
-env-sense@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/env-sense/-/env-sense-1.0.1.tgz#375a7b5b7e0118cd00fdeb80fc004653a931629c"
-  integrity sha512-6otgggbxvN6hnAR8/9GoWQJbNfOiwXZJc66deDoECD53FXjPQx6gibScs0CbA+Us+vRBAXH8y8ktQ1G9hN5Ydg==
-
-env-sense@^1.0.2:
+"env-sense@>= 1.0.2", env-sense@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/env-sense/-/env-sense-1.0.2.tgz#68aeec79334bfb410971475712e65dfc9c84a347"
   integrity sha512-HQh53034ukawbyWDZPsBVBTs8qEFRHthvgpQauisoVLOuWUaS7rAnOv8iqGYgH2ao6coLN5nwKaUJekeHROE9w==
@@ -4129,7 +4125,7 @@ set-function-length@^1.2.1, set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-"set-state-compare@>= 1.0.55", set-state-compare@^1.0.67:
+"set-state-compare@>= 1.0.65", set-state-compare@^1.0.67:
   version "1.0.67"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.67.tgz#c722564f00ea0102f4a4fc8e1f274ee84af99a01"
   integrity sha512-FANlTHSEwipmWEYW73//89aaEsRHIaNV1iLUMyE8tfeLwhLSaPvFmdcXw5CYcOLUcT4mA/9puYywEFN/YZ39Vg==
