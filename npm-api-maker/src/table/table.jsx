@@ -394,14 +394,86 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           if (qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent) {
             return this.cardOrTable()
           } else {
-            return (
-              <View>
-                <Text>{this.t(".loading_dot_dot_dit", {defaultValue: "Loading..."})}</Text>
-              </View>
-            )
+            return this.loadingContent({models, qParams, query, result})
           }
         })()}
       </View>
+    )
+  }
+
+  tableHeaderContent ({models, qParams, query, result} = {}) {
+    const {header, modelClass} = this.props
+
+    if (typeof header == "function") {
+      return header({models, qParams, query, result})
+    } else if (header) {
+      return header
+    }
+
+    return modelClass.modelName().human({count: 2})
+  }
+
+  loadingContent ({models, qParams, query, result}) {
+    const {
+      abilities,
+      actionsContent,
+      appHistory,
+      card,
+      className,
+      collection,
+      columns,
+      controls,
+      currentUser,
+      defaultDateFormatName,
+      defaultDateTimeFormatName,
+      defaultParams,
+      destroyEnabled,
+      destroyMessage,
+      editModelPath,
+      filterCard,
+      filterContent,
+      filterSubmitButton,
+      filterSubmitLabel,
+      groupBy,
+      header,
+      identifier,
+      modelClass,
+      noRecordsAvailableContent,
+      noRecordsFoundContent,
+      onModelsLoaded,
+      paginateContent,
+      paginationComponent,
+      preloads,
+      queryMethod,
+      queryName,
+      select,
+      selectColumns,
+      styleUI,
+      viewModelPath,
+      workplace,
+      ...restProps
+    } = this.props
+
+    const loadingContent = (
+      <View dataSet={this.cache("loadingDataSet", {class: "api-maker--table--loading"})}>
+        <Text>{this.t(".loading_dot_dot_dit", {defaultValue: "Loading..."})}</Text>
+      </View>
+    )
+
+    if (!card) return loadingContent
+
+    const safeModels = models || []
+    const safeArgs = {models: safeModels, qParams, query, result}
+
+    return (
+      <Card
+        className={classNames("live-table--table-card", "mb-4", className)}
+        controls={this.tableControls(safeArgs)}
+        header={this.tableHeaderContent(safeArgs)}
+        {...restProps}
+      >
+        {loadingContent}
+      </Card>
     )
   }
 
@@ -477,15 +549,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     } = this.props
     const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
 
-    let headerContent, PaginationComponent
-
-    if (typeof header == "function") {
-      headerContent = header({models, qParams, query, result})
-    } else if (header) {
-      headerContent = header
-    } else {
-      headerContent = modelClass.modelName().human({count: 2})
-    }
+    const headerContent = this.tableHeaderContent({models, qParams, query, result})
+    let PaginationComponent
 
     if (!paginateContent) {
       if (paginationComponent) {
@@ -745,14 +810,18 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return actualStyle
   }
 
-  tableControls() {
+  tableControls({models, qParams, query, result} = {}) {
     const {controls} = this.props
     const {showSettings} = this.s
-    const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
+    const collectionArgs = digs(this.collection, "models", "qParams", "query", "result")
+    const actualModels = models ?? collectionArgs.models ?? []
+    const actualQParams = qParams ?? collectionArgs.qParams
+    const actualQuery = query ?? collectionArgs.query
+    const actualResult = result ?? collectionArgs.result
 
     return (
       <View style={this.cache("tableControlsRootViewStyle", {flexDirection: "row"})}>
-        {controls && controls({models, qParams, query, result})}
+        {controls && controls({models: actualModels, qParams: actualQParams, query: actualQuery, result: actualResult})}
         <Pressable dataSet={{class: "filter-button"}} onPress={this.tt.onFilterClicked}>
           <Icon name="search" size={20} />
         </Pressable>
