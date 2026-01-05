@@ -782,10 +782,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return actualStyle
   }
 
-  styleForHeaderText() {
-    const actualStyle = {fontWeight: "bold"}
-
-    return actualStyle
+  styleForHeaderText = () => {
+    return this.cache("headerTextStyle", {fontWeight: "bold"})
   }
 
   styleForRow = ({even} = {}) => {
