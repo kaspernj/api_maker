@@ -47,15 +47,16 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
             defaultParams={defaultParams}
             query={query}
             style={this.cache("sortLinkStyle", {whiteSpace: "nowrap", overflow: "hidden"})}
-            textProps={{
+            textProps={this.cache("sortLinkTextProps", {
               ellipsizeMode: "clip",
               numberOfLines: 1,
               style: this.cache(
                 "sortLinkTextStyle",
                 // Ensure text can shrink inside constrained column widths.
-                Object.assign({flexShrink: 1}, styleForHeaderText())
+                Object.assign({flexShrink: 1}, styleForHeaderText()),
+                [styleForHeaderText()]
               )
-            }}
+            }, [styleForHeaderText()])}
             title={table.headerLabelForColumn(column)}
             {...this.props.sortLinkProps}
           />
