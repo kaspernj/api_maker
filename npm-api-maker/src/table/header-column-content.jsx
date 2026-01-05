@@ -53,7 +53,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               style: this.cache(
                 "sortLinkTextStyle",
                 // Ensure text can shrink inside constrained column widths.
-                Object.assign({flexShrink: 1}, styleForHeaderText()),
+                {...{flexShrink: 1}, ...styleForHeaderText()},
                 [styleForHeaderText()]
               )
             }, [styleForHeaderText()])}
