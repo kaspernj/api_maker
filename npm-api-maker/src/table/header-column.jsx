@@ -81,7 +81,8 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
           {
             cursor: resizing ? "col-resize" : undefined,
             width: mdUp ? animatedWidth : "100%",
-            height: mdUp ? "100%" : undefined
+            height: mdUp ? "100%" : undefined,
+            overflow: "hidden"
           },
           style
         )

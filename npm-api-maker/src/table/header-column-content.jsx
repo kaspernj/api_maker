@@ -31,7 +31,14 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
           component: "api-maker/table/header-column-content",
           identifier: tableSettingColumn.identifier()
         }, [tableSettingColumn.identifier()])}
-        style={this.cache("rootViewStyle", {display: "flex", flexDirection: "row", alignItems: "center"})}
+        style={this.cache("rootViewStyle", {
+          alignItems: "center",
+          display: "flex",
+          flex: 1,
+          flexDirection: "row",
+          minWidth: 0,
+          overflow: "hidden"
+        })}
         {...columnProps}
       >
         {tableSettingColumn.hasSortKey() && query &&
@@ -40,13 +47,25 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
             defaultParams={defaultParams}
             query={query}
             style={this.cache("sortLinkStyle", {whiteSpace: "nowrap", overflow: "hidden"})}
-            textProps={{ellipsizeMode: "clip", numberOfLines: 1, style: styleForHeaderText()}}
+            textProps={{
+              ellipsizeMode: "clip",
+              numberOfLines: 1,
+              style: this.cache(
+                "sortLinkTextStyle",
+                // Ensure text can shrink inside constrained column widths.
+                Object.assign({flexShrink: 1}, styleForHeaderText())
+              )
+            }}
             title={table.headerLabelForColumn(column)}
             {...this.props.sortLinkProps}
           />
         }
         {(!tableSettingColumn.hasSortKey() || !query) &&
-          <Text ellipsizeMode="clip" numberOfLines={1} style={this.cache("headerLabelStyle", {fontWeight: "bold"})}>
+          <Text
+            ellipsizeMode="clip"
+            numberOfLines={1}
+            style={this.cache("headerLabelStyle", {flexShrink: 1, fontWeight: "bold"})}
+          >
             {table.headerLabelForColumn(column)}
           </Text>
         }
