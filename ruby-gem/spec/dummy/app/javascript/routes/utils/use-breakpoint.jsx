@@ -5,7 +5,7 @@ import useBreakpoint from "@kaspernj/api-maker/build/use-breakpoint"
 
 export default function RoutesUtilsUseBreakpoint() {
   const {styling} = useBreakpoint()
-  const style = styling({
+  const upStyle = styling({
     base: {padding: 4},
     lgUp: {backgroundColor: "yellow"},
     mdUp: {backgroundColor: "green"},
@@ -14,12 +14,32 @@ export default function RoutesUtilsUseBreakpoint() {
     xsUp: {backgroundColor: "purple"},
     xxlUp: {backgroundColor: "red"}
   })
+  const downStyle = styling({
+    base: {padding: 4},
+    lgDown: {backgroundColor: "yellow"},
+    mdDown: {backgroundColor: "green"},
+    smDown: {backgroundColor: "blue"},
+    xlDown: {backgroundColor: "orange"},
+    xsDown: {backgroundColor: "purple"},
+    xxlDown: {backgroundColor: "red"}
+  })
 
   return (
     <Layout>
-      <View dataSet={{appliedBackground: style.backgroundColor, testid: "utils-use-breakpoint"}} style={style}>
+      <View
+        dataSet={{appliedBackground: upStyle.backgroundColor, testid: "utils-use-breakpoint-up"}}
+        style={upStyle}
+      >
         <Text>
-          Utils useBreakpoint styling test
+          {"Utils useBreakpoint up styling test"}
+        </Text>
+      </View>
+      <View
+        dataSet={{appliedBackgroundDown: downStyle.backgroundColor, testid: "utils-use-breakpoint-down"}}
+        style={downStyle}
+      >
+        <Text>
+          {"Utils useBreakpoint down styling test"}
         </Text>
       </View>
     </Layout>

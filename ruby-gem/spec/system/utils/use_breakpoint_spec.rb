@@ -7,6 +7,13 @@ describe "utils - use breakpoint" do
     login_as user
     visit utils_use_breakpoint_path
 
-    wait_for_selector "[data-testid='utils-use-breakpoint'][data-applied-background='red']"
+    wait_for_selector "[data-testid='utils-use-breakpoint-up'][data-applied-background='red']"
+  end
+
+  it "applies down styles from smallest to largest", :mobile do
+    login_as user
+    visit utils_use_breakpoint_path
+
+    wait_for_selector "[data-testid='utils-use-breakpoint-down'][data-applied-background-down='purple']"
   end
 end
