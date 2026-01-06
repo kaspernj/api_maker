@@ -13,5 +13,5 @@ Notes:
 - Always run Rubocop on changed Ruby files.
 - Always run ESLint on changed or new JavaScript files.
 - When creating PRs, choose a sensible branch name and commit messages without prompting.
-- For system specs, use `scripts/run-system-spec.sh [spec/path.rb:line]` (wraps the README system spec command).
+- For system specs, use `ruby-gem/scripts/run-system-spec.sh [spec/path.rb:line]` (wraps the README system spec command).
 - Keep component props ordered alphabetically.
