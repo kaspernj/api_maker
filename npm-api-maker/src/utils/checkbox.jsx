@@ -28,7 +28,6 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
     this.useStates({
       checked: this.props.defaultChecked
     })
-    this.isChecked = this.calculateChecked()
   }
 
   calculateChecked() {
@@ -40,8 +39,8 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
   }
 
   render() {
-    const {isChecked} = this.tt
     const {dataSet, label, style} = this.p
+    const isChecked = this.calculateChecked()
     const actualStyle = useMemo(() => Object.assign({flexDirection: "row", alignItems: "center"}, style), [style])
     const actualDataSet = useMemo(() => Object.assign({checked: isChecked}, dataSet), [dataSet, isChecked])
 
@@ -62,13 +61,25 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
     )
   }
 
-  onLabelPressed = () => this.p.onCheckedChange(!this.tt.isChecked)
+  onLabelPressed = () => {
+    const newChecked = !this.calculateChecked()
 
-  onValueChange = (e) => {
     if (this.props.onCheckedChange) {
-      this.p.onCheckedChange(e)
+      this.p.onCheckedChange(newChecked)
     }
 
-    this.setState({checked: !this.tt.isChecked})
+    if (!("checked" in this.props)) {
+      this.setState({checked: newChecked})
+    }
+  }
+
+  onValueChange = (newChecked) => {
+    if (this.props.onCheckedChange) {
+      this.p.onCheckedChange(newChecked)
+    }
+
+    if (!("checked" in this.props)) {
+      this.setState({checked: newChecked})
+    }
   }
 }))
