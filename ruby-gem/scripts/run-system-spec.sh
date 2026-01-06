@@ -3,7 +3,7 @@ set -euo pipefail
 
 spec_path="${1:-spec/system/api_maker_table/api_maker_table_spec.rb}"
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${repo_root}/ruby-gem"
 
 rm -rf spec/dummy/public/packs/
