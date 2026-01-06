@@ -43,8 +43,6 @@ function calculateBreakPoint(breakpoints) {
   throw new Error(`Couldn't not find breakpoint from window width: ${windowWidth}`)
 }
 
-const sizeTypes = ["down", "up"]
-
 const useBreakpoint = (args = {}) => {
   const s = useShape(args)
 
@@ -77,13 +75,19 @@ const useBreakpoint = (args = {}) => {
 
     for (const breakpointData of s.m.breakpoints) {
       const breakpoint = breakpointData[0]
+      const breakpointWithSizeType = `${breakpoint}${inflection.camelize("down")}`
 
-      for (const sizeType of sizeTypes) {
-        const breakpointWithSizeType = `${breakpoint}${inflection.camelize(sizeType)}`
+      if (args[breakpointWithSizeType] && s.s.breakpoint[breakpointWithSizeType]) {
+        Object.assign(style, args[breakpointWithSizeType])
+      }
+    }
 
-        if (args[breakpointWithSizeType] && s.s.breakpoint[breakpointWithSizeType]) {
-          Object.assign(style, args[breakpointWithSizeType])
-        }
+    for (const breakpointData of [...s.m.breakpoints].reverse()) {
+      const breakpoint = breakpointData[0]
+      const breakpointWithSizeType = `${breakpoint}${inflection.camelize("up")}`
+
+      if (args[breakpointWithSizeType] && s.s.breakpoint[breakpointWithSizeType]) {
+        Object.assign(style, args[breakpointWithSizeType])
       }
     }
 
