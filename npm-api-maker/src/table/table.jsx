@@ -304,6 +304,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     this.tableSettings = new TableSettings({table: this})
 
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
+
+    if (!tableSetting) throw new Error("No tableSetting returned by tableSettings.loadExistingOrCreateTableSettings()")
+
     const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
     const {width} = this.s
     const widths = new Widths({columns, table: this, width})

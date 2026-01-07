@@ -77,6 +77,8 @@ export default class ApiMakerTableSettings {
         tableSetting = await this.updateTableSetting(tableSetting)
       } else {
         tableSetting = await this.createInitialTableSetting()
+
+        if (!tableSetting) throw new Error("No tableSetting returned by createInitialTableSetting")
       }
 
       return tableSetting
@@ -94,6 +96,8 @@ export default class ApiMakerTableSettings {
       })
       .preload("columns")
       .first()
+
+    if (!tableSetting) throw new Error("Couldn't find a tableSetting")
 
     return tableSetting
   }
@@ -150,6 +154,8 @@ export default class ApiMakerTableSettings {
     await tableSetting.saveRaw(tableSettingFormData)
 
     const reloadedTableSetting = await this.loadTableSetting()
+
+    if (!reloadedTableSetting) throw new Error("No reloadedTableSetting returned by loadTableSetting")
 
     return reloadedTableSetting
   }
