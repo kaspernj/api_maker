@@ -97,8 +97,6 @@ export default class ApiMakerTableSettings {
       .preload("columns")
       .first()
 
-    if (!tableSetting) throw new Error("Couldn't find a tableSetting")
-
     return tableSetting
   }
 
