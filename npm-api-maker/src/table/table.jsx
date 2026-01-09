@@ -569,7 +569,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       <TableContext.Provider value={this.tt.tableContextValue}>
         <FlatList
           data={models}
-          dataSet={dataSets[`flatList-${className}-${this.s.tableSettingFullCacheKey}-${this.s.lastUpdate}`] ||= {
+          dataSet={dataSets[`flatList-${className}-${this.s.tableSettingFullCacheKey}`] ||= {
             class: classNames("api-maker--table", className),
             cacheKey: this.s.tableSettingFullCacheKey,
             lastUpdate: this.s.lastUpdate
@@ -820,7 +820,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return (
       <View style={styles.tableControlsRootView ||= {flexDirection: "row"}}>
         {controls && controls({models: actualModels, qParams: actualQParams, query: actualQuery, result: actualResult})}
-        <Pressable onPress={this.tt.onFilterClicked} testID="filterButton">
+        <Pressable
+          dataSet={dataSets.filterButton ||= {class: "filter-button"}}
+          onPress={this.tt.onFilterClicked}
+          testID="filterButton"
+        >
           <Icon name="search" size={20} />
         </Pressable>
         <View>

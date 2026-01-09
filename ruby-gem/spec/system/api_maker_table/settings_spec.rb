@@ -25,7 +25,7 @@ describe "table - settings" do
     wait_for_selector "[data-class='table--column'][data-identifier='attribute-id--sort-key-id']"
 
     # It triggers the settings modal
-    wait_for_and_find("[data-class='settings-button']").click
+    wait_for_and_find("[data-testid='settings-button']").click
     wait_for_selector "[data-class='api-maker--table--settings']"
 
     # It removes the ID column
@@ -43,7 +43,7 @@ describe "table - settings" do
     visit bootstrap_live_table_path
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
-    wait_for_and_find("[data-class='settings-button']").click
+    wait_for_and_find("[data-testid='settings-button']").click
     wait_for_and_find("[data-component='api-maker/table/settings/download-action']").click
 
     sleep 1

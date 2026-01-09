@@ -7,3 +7,5 @@
 - Cache filter form style props inline to avoid recreating objects each render.
 - Cache static dataSet props across super admin, bootstrap, and table filter components.
 - Allow inline cached style props in table without eslint `no-return-assign` errors.
+- Remove `lastUpdate` from table dataSet cache keys to avoid unbounded growth.
+- Restore filter button `data-class` for system spec selectors.

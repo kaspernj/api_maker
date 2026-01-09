@@ -14,4 +14,5 @@ Notes:
 - Always run ESLint on changed or new JavaScript files.
 - When creating PRs, choose a sensible branch name and commit messages without prompting.
 - For system specs, use `ruby-gem/scripts/run-system-spec.sh [spec/path.rb:line]` (wraps the README system spec command).
+- When installing gems, run `bundle install` in both `ruby-gem/` and `ruby-gem/spec/dummy/`.
 - Keep component props ordered alphabetically.
