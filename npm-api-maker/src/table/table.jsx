@@ -1,5 +1,5 @@
 /* eslint-disable arrow-body-style, import/no-named-as-default, import/no-unresolved */
-/* eslint-disable no-extra-parens, no-unused-vars, react/jsx-max-depth */
+/* eslint-disable no-extra-parens, no-return-assign, no-unused-vars, react/jsx-max-depth */
 /* eslint-disable react/jsx-one-expression-per-line, react/jsx-sort-props */
 /* eslint-disable react/sort-prop-types, sort-imports */
 import {dig, digg, digs} from "diggerize"
@@ -45,7 +45,9 @@ import useQueryParams from "on-location-changed/build/use-query-params.js"
 import Widths from "./widths"
 import WorkerPluginsCheckAllCheckbox from "./worker-plugins-check-all-checkbox"
 
+const dataSets = {}
 const paginationOptions = [30, 60, 90, ["All", "all"]]
+const styles = {}
 const TableContext = createContext()
 
 const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {
@@ -140,7 +142,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     noRecordsFoundContent: PropTypes.func,
     onModelsLoaded: PropTypes.func,
     paginateContent: PropTypes.func,
-    paginationComponent: PropTypes.func,
+    paginationComponent: PropTypes.elementType,
     preloads: PropTypes.array.isRequired,
     queryMethod: PropTypes.func,
     queryName: PropTypes.string,
@@ -344,7 +346,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return uniqunize(mergedPreloads)
   }
 
-  render () {
+  render() {
     const {modelClass, noRecordsAvailableContent, noRecordsFoundContent} = this.p
     const {collection, currentUser} = this.props
     const {queryName, querySName, showFilters} = this.s
@@ -563,20 +565,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       }
     }
 
-    const flatListStyle = {
-      overflowX: "auto"
-    }
-
-    if (styleUI) {
-      flatListStyle.border = "1px solid #dbdbdb"
-      flatListStyle.borderRadius = 5
-    }
-
     const flatList = (
       <TableContext.Provider value={this.tt.tableContextValue}>
         <FlatList
           data={models}
-          dataSet={{
+          dataSet={dataSets[`flatList-${className}-${this.s.tableSettingFullCacheKey}`] ||= {
             class: classNames("api-maker--table", className),
             cacheKey: this.s.tableSettingFullCacheKey,
             lastUpdate: this.s.lastUpdate
@@ -586,7 +579,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           ListHeaderComponent={ListHeaderComponent}
           renderItem={this.tt.renderItem}
           showsHorizontalScrollIndicator
-          style={flatListStyle}
+          style={styles[`flatList-${styleUI}`] ||= {
+            overflowX: "auto",
+            border: styleUI ? "1px solid #dbdbdb" : undefined,
+            borderRadius: styleUI ? 5 : undefined
+          }}
           {...restProps}
         />
       </TableContext.Provider>
@@ -680,7 +677,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
           <input
             className="btn btn-primary live-table--submit-filter-button"
             type="submit"
-            style={{marginTop: "8px"}}
+            style={styles.filterSubmitButton ||= {marginTop: "8px"}}
             value={filterSubmitLabel || this.t(".filter", {defaultValue: "Filter"})}
           />
         }
@@ -821,16 +818,20 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const actualResult = result ?? collectionArgs.result
 
     return (
-      <View style={this.cache("tableControlsRootViewStyle", {flexDirection: "row"})}>
+      <View style={styles.tableControlsRootView ||= {flexDirection: "row"}}>
         {controls && controls({models: actualModels, qParams: actualQParams, query: actualQuery, result: actualResult})}
-        <Pressable dataSet={{class: "filter-button"}} onPress={this.tt.onFilterClicked}>
+        <Pressable
+          dataSet={dataSets.filterButton ||= {class: "filter-button"}}
+          onPress={this.tt.onFilterClicked}
+          testID="filterButton"
+        >
           <Icon name="search" size={20} />
         </Pressable>
         <View>
           {showSettings &&
             <Settings onRequestClose={this.tt.onRequestCloseSettings} table={this} />
           }
-          <Pressable dataSet={this.cache("settingsButtonDataSet", {class: "settings-button"})} onPress={this.tt.onSettingsClicked}>
+          <Pressable onPress={this.tt.onSettingsClicked} testID="settings-button">
             <Icon name="gear" size={20} />
           </Pressable>
         </View>
@@ -851,7 +852,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     return (
       <View style={this.cache("tableFooterRootViewStyle", {flexDirection: "row", justifyContent: "space-between", marginTop: 10})}>
-        <View dataSet={this.cache("showingCountsDataSet", {class: "showing-counts"})} style={this.cache("showingCountsStyle", {flexDirection: "row"})}>
+        <View dataSet={dataSets.showingCounts ||= {class: "showing-counts"}} style={styles.showingCounts ||= {flexDirection: "row"}}>
           <Text>
             {this.t(".showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
           </Text>

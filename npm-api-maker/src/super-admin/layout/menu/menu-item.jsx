@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-one-expression-per-line, sort-imports */
+/* eslint-disable no-return-assign, react/jsx-one-expression-per-line, sort-imports */
 import BaseComponent from "../../../base-component"
 import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import Link from "../../../link"
@@ -7,6 +7,8 @@ import PropTypes from "prop-types"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../../utils/text"
+
+const dataSets = {}
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
   static propTypes = {
@@ -49,7 +51,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem exten
 
     return (
       <Link
-        dataSet={{
+        dataSet={dataSets[`menuItem-${isActive}-${className}-${identifier}`] ||= {
           active: isActive,
           class: classNames("components--admin--layout--menu--menu-item", className),
           identifier

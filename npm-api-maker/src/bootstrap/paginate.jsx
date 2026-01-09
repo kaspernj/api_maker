@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import BaseComponent from "../base-component" // eslint-disable-line sort-imports
@@ -10,6 +11,8 @@ import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import qs from "qs"
 import urlEncode from "../url-encode.js"
+
+const dataSets = {}
 
 const FIRST_PAGE_LABEL = "⇤"
 const PREVIOUS_PAGE_LABEL = "←"
@@ -136,7 +139,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
             </Text>
           }
           {showPreviousPage &&
-            <Link dataSet={{class: "page-link"}} to={this.pagePath(1)}>
+            <Link dataSet={dataSets.pageLink ||= {class: "page-link"}} to={this.pagePath(1)}>
               <Text>
                 {FIRST_PAGE_LABEL}
               </Text>
@@ -150,7 +153,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
             </Text>
           }
           {showFirstPage &&
-            <Link dataSet={{class: "page-link"}} to={this.previousPagePath()}>
+            <Link dataSet={dataSets.pageLink ||= {class: "page-link"}} to={this.previousPagePath()}>
               <Text>
                 {PREVIOUS_PAGE_LABEL}
               </Text>
@@ -177,7 +180,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
               </Text>
             }
             {this.isPageActiveClass(page) == "not-active" &&
-              <Link dataSet={{class: "page-link"}} to={this.pagePath(page)}>
+              <Link dataSet={dataSets.pageLink ||= {class: "page-link"}} to={this.pagePath(page)}>
                 <Text>
                   {page}
                 </Text>
@@ -199,7 +202,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
             </Text>
           }
           {showNextPage &&
-            <Link dataSet={{class: "page-link"}} to={this.nextPagePath()}>
+            <Link dataSet={dataSets.pageLink ||= {class: "page-link"}} to={this.nextPagePath()}>
               <Text>
                 {NEXT_PAGE_LABEL}
               </Text>
@@ -213,7 +216,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
             </Text>
           }
           {showLastPage &&
-            <Link dataSet={{class: "page-link"}} to={this.pagePath(totalPages)}>
+            <Link dataSet={dataSets.pageLink ||= {class: "page-link"}} to={this.pagePath(totalPages)}>
               <Text>
                 {LAST_PAGE_LABEL}
               </Text>

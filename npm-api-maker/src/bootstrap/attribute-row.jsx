@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import * as inflection from "inflection"
 import React, {useMemo} from "react"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
@@ -9,6 +10,8 @@ import Text from "../utils/text"
 import memo from "set-state-compare/build/memo.js"
 import strftime from "strftime"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+
+const dataSets = {}
 
 export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends ShapeComponent {
   static defaultProps = {
@@ -49,7 +52,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
 
     return (
       <View
-        dataSet={{
+        dataSet={dataSets[`attributeRow-${attribute}-${className}-${identifier}`] ||= {
           attribute,
           class: className,
           component: "api-maker/attribute-row",

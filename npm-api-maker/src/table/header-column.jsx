@@ -1,4 +1,4 @@
-/* eslint-disable import/no-unresolved, sort-imports */
+/* eslint-disable import/no-unresolved, no-return-assign, sort-imports */
 import React, {useMemo} from "react"
 import BaseComponent from "../base-component"
 import classNames from "classnames"
@@ -12,6 +12,8 @@ import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useBreakpoint from "../use-breakpoint.js"
 import Widths from "./widths"
+
+const dataSets = {}
 
 export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
@@ -74,6 +76,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     const {styleForHeader} = table.tt
     const headerProps = table.headerProps(column)
     const {style, ...restColumnProps} = headerProps
+    const headerIdentifier = tableSettingColumn.identifier()
     const actualStyle = useMemo(
       () => {
         // eslint-disable-next-line prefer-object-spread
@@ -93,9 +96,9 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
 
     return (
       <Header
-        dataSet={{
+        dataSet={dataSets[`header-${headerIdentifier}`] ||= {
           className: classNames(...table.headerClassNameForColumn(column)),
-          identifier: tableSettingColumn.identifier()
+          identifier: headerIdentifier
         }}
         onLayout={this.tt.onLayout}
         style={styleForHeader({style: actualStyle})}

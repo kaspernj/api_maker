@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-closing-bracket-location, sort-imports */
+/* eslint-disable no-return-assign, react/jsx-closing-bracket-location, sort-imports */
 import React, {useMemo} from "react"
 import {StyleSheet, View} from "react-native"
 import BaseComponent from "../../base-component"
@@ -51,6 +51,8 @@ const styles = StyleSheet.create({
     color: "#000"
   }
 })
+
+const dataSets = {}
 
 export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseComponent {
   static propTypes = PropTypesExact({ // eslint-disable-line new-cap
@@ -110,7 +112,11 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
 
     return (
       <View
-        dataSet={{component: "super-admin--layout", class: className, menuTriggered: this.s.menuTriggered}}
+        dataSet={dataSets[`root-${className}-${this.s.menuTriggered}`] ||= {
+          component: "super-admin--layout",
+          class: className,
+          menuTriggered: this.s.menuTriggered
+        }}
         style={styles.rootView}
         {...restProps}>
         <Menu
@@ -120,7 +126,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
           triggered={this.s.menuTriggered}
         />
         <Header actions={actions} onTriggerMenu={this.tt.onTriggerMenu} title={headerTitle} />
-        <View dataSet={{class: "app-layout-content-container"}} style={appLayoutContentContainerStyles}>
+        <View dataSet={dataSets.appLayoutContentContainer ||= {class: "app-layout-content-container"}} style={appLayoutContentContainerStyles}>
           {noAccess &&
             <>
               <NoAccess />

@@ -1,5 +1,5 @@
 /* eslint-disable comma-dangle, implicit-arrow-linebreak, import/no-named-as-default */
-/* eslint-disable new-cap, newline-per-chained-call, no-await-in-loop, no-extra-parens */
+/* eslint-disable complexity, new-cap, newline-per-chained-call, no-await-in-loop, no-extra-parens, no-return-assign */
 /* eslint-disable no-unused-vars, react/jsx-max-depth, react/jsx-no-literals */
 /* eslint-disable react/jsx-sort-props, react/no-array-index-key, sort-imports */
 import React, {useMemo, useRef} from "react"
@@ -25,6 +25,8 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import useBreakpoint from "../../use-breakpoint.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+
+const styles = {}
 
 export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -186,18 +188,18 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     return (
       <Card
         testID="api-maker/table/filters/filter-form"
-        style={this.cache("cardStyle", {
+        style={styles[`card-${mdUp}`] ||= {
           width: mdUp ? undefined : "100%",
           minWidth: 50,
           minHeight: 50
-        }, [mdUp])}
+        }}
       >
         <Form onSubmit={this.tt.onSubmit}>
-          <View style={{flexDirection: "row"}}>
+          <View style={styles.pathRow ||= {flexDirection: "row"}}>
             {path.map(({humanName, reflectionName}, pathPartIndex) =>
-              <View key={`${pathPartIndex}-${reflectionName}`} style={{flexDirection: "row"}}>
+              <View key={`${pathPartIndex}-${reflectionName}`} style={styles.pathItemRow ||= {flexDirection: "row"}}>
                 {pathPartIndex > 0 &&
-                  <Text style={{marginRight: 5, marginLeft: 5}}>
+                  <Text style={styles.pathSeparator ||= {marginRight: 5, marginLeft: 5}}>
                     -
                   </Text>
                 }
@@ -207,8 +209,8 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
               </View>
             )}
           </View>
-          <View style={{flexDirection: mdUp ? "row" : "column"}}>
-            <View style={{marginTop: mdUp ? undefined : 25}}>
+          <View style={styles[`filtersRow-${mdUp}`] ||= {flexDirection: mdUp ? "row" : "column"}}>
+            <View style={styles[`relationshipsColumn-${mdUp}`] ||= {marginTop: mdUp ? undefined : 25}}>
               <Header>
                 {t(".relationships", {defaultValue: "Relationships"})}
               </Header>
@@ -221,7 +223,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                 />
               )}
             </View>
-            <View style={{marginTop: mdUp ? undefined : 25}}>
+            <View style={styles[`attributesColumn-${mdUp}`] ||= {marginTop: mdUp ? undefined : 25}}>
               <Header>
                 {t(".attributes", {defaultValue: "Attributes"})}
               </Header>
@@ -243,7 +245,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                 />
               )}
             </View>
-            <View style={{marginTop: mdUp ? undefined : 25}}>
+            <View style={styles[`searchColumn-${mdUp}`] ||= {marginTop: mdUp ? undefined : 25}}>
               <Header>
                 {t(".search", {defaultValue: "Search"})}
               </Header>
@@ -258,14 +260,14 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
                   />
                 }
               </View>
-              <View style={{marginTop: 10}}>
+              <View style={styles.searchInputContainer ||= {marginTop: 10}}>
                 {((attribute && predicate) || scope) &&
                   <Input className="value-input" defaultValue={value} inputRef={valueInputRef} />
                 }
               </View>
             </View>
           </View>
-          <View style={{flexDirection: "row", justifyContent: "end", marginTop: 10}}>
+          <View style={styles.actionsRow ||= {flexDirection: "row", justifyContent: "end", marginTop: 10}}>
             <Button
               danger
               icon="remove"
@@ -289,7 +291,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
         </Form>
         {this.s.loading > 0 &&
           <View
-            style={{
+            style={styles.loadingOverlay ||= {
               alignItems: "center",
               justifyContent: "center",
               position: "absolute",
