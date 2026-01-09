@@ -1,4 +1,5 @@
-/* eslint-disable indent, react/jsx-closing-bracket-location, react/jsx-closing-tag-location, react/jsx-indent, react/jsx-indent-props , sort-imports */
+/* eslint-disable indent, no-return-assign, react/jsx-closing-bracket-location, react/jsx-closing-tag-location */
+/* eslint-disable react/jsx-indent, react/jsx-indent-props, sort-imports */
 import React, {useCallback, useRef} from "react"
 import BaseComponent from "../../../base-component"
 import Icon from "../../../utils/icon"
@@ -10,6 +11,8 @@ import Text from "../../../utils/text"
 import {Pressable, View} from "react-native"
 import useBreakpoint from "../../../use-breakpoint.js"
 import useEventListener from "../../../use-event-listener.js"
+
+const dataSets = {}
 
 // Hook for consistent action button styling across breakpoints
 export const useHeaderActionButtonStyle = () => {
@@ -132,7 +135,13 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
           </Text>
         </View>
         {actions &&
-          <View dataSet={{active: this.s.headerActionsActive, class: "header-actions-container"}} style={headerActionsContainerStyle}>
+          <View
+            dataSet={dataSets[`headerActionsContainer-${this.s.headerActionsActive}`] ||= {
+              active: this.s.headerActionsActive,
+              class: "header-actions-container"
+            }}
+            style={headerActionsContainerStyle}
+          >
             <View
             dataSet={this.cache("headerActionsViewDataSet", {class: "header-actions"})}
             ref={this.tt.headerActionsRef}

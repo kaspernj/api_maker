@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-no-literals, react/jsx-no-useless-fragment, react/jsx-one-expression-per-line, sort-imports */
+/* eslint-disable no-return-assign, react/jsx-no-literals, react/jsx-no-useless-fragment, react/jsx-one-expression-per-line, sort-imports */
 import React, {useMemo} from "react"
 import {Pressable, StyleSheet, View} from "react-native"
 import BaseComponent from "../base-component"
@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
     marginRight: 10
   }
 })
+
+const dataSets = {}
 
 export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponent {
   setup() {
@@ -130,7 +132,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
           <>
             {canCan?.can("new", modelClass) && hasEditConfig(modelClass) &&
               <Link
-                dataSet={{class: "create-new-model-link"}}
+                dataSet={dataSets.createNewModelLink ||= {class: "create-new-model-link"}}
                 style={styles.createNewModelLink}
                 to={Params.withParams({model: modelName, mode: "new"})}
               >
@@ -143,7 +145,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
           <>
             {model.can("edit") && hasEditConfig(modelClass) &&
               <Link
-                dataSet={{class: "edit-model-link"}}
+                dataSet={dataSets.editModelLink ||= {class: "edit-model-link"}}
                 style={styles.editModelLink}
                 to={Params.withParams({model: modelName, model_id: modelId, mode: "edit"})}
               >
@@ -152,7 +154,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
             }
             {model.can("destroy") &&
               <Pressable
-                dataSet={{class: "destroy-model-link"}}
+                dataSet={dataSets.destroyModelLink ||= {class: "destroy-model-link"}}
                 onPress={this.tt.onDestroyClicked}
                 style={styles.destroyModelLink}
               >

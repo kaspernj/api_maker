@@ -1,4 +1,4 @@
-/* eslint-disable new-cap, sort-imports */
+/* eslint-disable new-cap, no-return-assign, sort-imports */
 import BaseComponent from "../../base-component"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
@@ -7,6 +7,8 @@ import {Pressable} from "react-native"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
+
+const dataSets = {}
 
 export default memo(shapeComponent(class ReflectionElement extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -21,7 +23,7 @@ export default memo(shapeComponent(class ReflectionElement extends BaseComponent
 
     return (
       <Pressable
-        dataSet={{
+        dataSet={dataSets[`reflection-${modelClassName}-${reflectionName}`] ||= {
           class: "reflection-element",
           modelClass: modelClassName,
           reflectionName

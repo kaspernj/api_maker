@@ -1,4 +1,4 @@
-/* eslint-disable newline-per-chained-call, react/jsx-one-expression-per-line, sort-imports */
+/* eslint-disable newline-per-chained-call, no-return-assign, react/jsx-one-expression-per-line, sort-imports */
 import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"
@@ -8,16 +8,19 @@ import Text from "../../utils/text"
 import useCurrentUser from "../../use-current-user.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
+const dataSets = {}
+
 export default memo(shapeComponent(class ComponentsAdminLayoutNoAccess extends BaseComponent {
   render() {
     const currentUser = useCurrentUser()
     const {t} = useI18n({namespace: "js.api_maker.super_admin.layout.no_access"})
+    const userRoles = currentUser?.userRoles()?.loaded()?.map((userRole) => userRole.role()?.identifier()).join(", ")
 
     return (
       <View
-        dataSet={{
+        dataSet={dataSets[`noAccess-${userRoles}`] ||= {
           component: "super-admin--layout--no-access",
-          userRoles: currentUser?.userRoles()?.loaded()?.map((userRole) => userRole.role()?.identifier()).join(", ")
+          userRoles
         }}
       >
         <Text>{t(".you_dont_have_no_access_to_this_page", {defaultValue: "You don't have access to this page."})}</Text>

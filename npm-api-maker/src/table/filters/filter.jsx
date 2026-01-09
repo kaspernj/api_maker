@@ -1,4 +1,4 @@
-/* eslint-disable max-len, new-cap, react/jsx-one-expression-per-line, sort-imports */
+/* eslint-disable max-len, new-cap, no-return-assign, react/jsx-one-expression-per-line, sort-imports */
 import {Pressable, View} from "react-native"
 import BaseComponent from "../../base-component"
 import Icon from "../../utils/icon"
@@ -8,6 +8,8 @@ import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
+
+const dataSets = {}
 
 export default memo(shapeComponent(class ApiMakerTableFilter extends BaseComponent {
   static defaultProps = {
@@ -33,7 +35,7 @@ export default memo(shapeComponent(class ApiMakerTableFilter extends BaseCompone
     return (
       <View style={this.cache("rootViewStyle", {alignItems: "center", flexDirection: "row", backgroundColor: "grey", paddingVertical: 10, paddingHorizontal: 6})}>
         <Pressable
-          dataSet={{
+          dataSet={dataSets[`filterLabel-${a}-${sc}`] ||= {
             attribute: a,
             class: "filter-label",
             scope: sc

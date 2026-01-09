@@ -1,5 +1,5 @@
-/* eslint-disable implicit-arrow-linebreak, new-cap, react/jsx-max-depth, react/jsx-no-literals, sort-imports */
-import {StyleSheet, View} from "react-native"
+/* eslint-disable new-cap, no-extra-parens, no-return-assign, react/jsx-max-depth, react/jsx-no-literals, sort-imports */
+import {View} from "react-native"
 import BaseComponent from "../../../base-component"
 import Devise from "../../../devise.js"
 import {FlashNotifications} from "flash-notifications"
@@ -11,7 +11,7 @@ import MenuItem from "./menu-item"
 import Params from "../../../params.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import React, {useMemo} from "react"
+import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../../utils/text"
 import useBreakpoint from "../../../use-breakpoint.js"
@@ -19,45 +19,8 @@ import useCurrentUser from "../../../use-current-user.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 import {WithDefaultStyle} from "../../../utils/default-style"
 
-// Hook for consistent menu logo link styling (replaces SCSS)
-export const useMenuLogoLinkStyle = () =>
-  useMemo(() => ({color: "#dededf", textDecorationLine: "none"}), [])
-
-const styles = StyleSheet.create({
-  root: {
-    base: {
-      position: "fixed",
-      zIndex: 9,
-      overflowY: "auto",
-      overflowX: "hidden",
-      top: 0,
-      left: 0,
-      height: "100%",
-      flexDirection: "column",
-      backgroundColor: "#1b1c1e"
-    },
-    mdDown: {
-      width: "100%",
-      maxWidth: 250,
-      maxHeight: "100vh",
-      overflowY: "auto"
-    },
-    mdUp: {
-      width: 250
-    },
-    lgUp: {
-      width: 290
-    }
-  },
-  userName: {
-    flexShrink: 1,
-    marginLeft: 8
-  },
-  userNameContainer: {
-    overflow: "hidden",
-    maxWidth: 140
-  }
-})
+const dataSets = {}
+const styles = {}
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -75,58 +38,72 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
     this.setInstance({currentUser, lgUp, mdDown, mdUp, t})
   }
 
-  render() {
+  render() { // eslint-disable-line complexity
     const {currentUser, lgUp, mdDown, mdUp, t} = this.tt
-    const menuLogoLinkStyle = useMenuLogoLinkStyle()
     const {active, noAccess, triggered} = this.props
-
-    const style = [styles.root.base]
-
-    if (mdDown) style.push(styles.root.mdDown)
-    if (mdUp) style.push(styles.root.mdUp)
-    if (lgUp) style.push(styles.root.lgUp)
 
     if (mdDown && !triggered) {
       return null
     }
 
     return (
-      <View dataSet={this.cache("rootViewDataSet", {component: "super-admin--layout--menu", triggered}, [triggered])} style={style}>
-        <WithDefaultStyle style={this.cache("withDefaultStyleStyle", {Text: {color: "#fff"}})}>
+      <View
+        dataSet={dataSets[`rootView-${triggered}`] ||= {component: "super-admin--layout--menu", triggered}}
+        style={styles[`root-${mdDown}-${mdUp}-${lgUp}`] ||= {
+          position: "fixed",
+          zIndex: 9,
+          overflowY: "auto",
+          overflowX: "hidden",
+          top: 0,
+          left: 0,
+          height: "100%",
+          flexDirection: "column",
+          backgroundColor: "#1b1c1e",
+          width: (lgUp && 290) || (mdUp && 250) || (mdDown && "100%") || undefined,
+          maxWidth: mdDown ? 250 : undefined,
+          maxHeight: mdDown ? "100vh" : undefined
+        }}
+      >
+        <WithDefaultStyle style={styles.withDefaultStyle ||= {Text: {color: "#fff"}}}>
           <View
-            dataSet={this.cache("menuLogoViewDataSet", {class: "menu-logo"})}
-            style={this.cache("menuLogoViewStyle", {
+            dataSet={dataSets.menuLogoView ||= {class: "menu-logo"}}
+            style={styles.menuLogoView ||= {
               overflow: "hidden",
               marginTop: 25,
               marginRight: "auto",
               marginLeft: "auto"
-            })}
+            }}
           >
-            <Link dataSet={this.cache("menuLogoLinkDataSet", {class: "menu-logo-link"})} to={Params.withParams({})}>
+            <Link dataSet={dataSets.menuLogoLink ||= {class: "menu-logo-link"}} to={Params.withParams({})}>
               <Text
-                style={[
-                  menuLogoLinkStyle,
-                  this.cache("menuLogoLinkTextStyle", {
-                    fontSize: 42,
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap"
-                  })
-                ]}
+                style={styles.menuLogoLinkText ||= {
+                  color: "#dededf",
+                  textDecorationLine: "none",
+                  fontSize: 42,
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
+                }}
               >
                 Admin
               </Text>
             </Link>
           </View>
-          <View dataSet={{class: "menu-items-center"}} style={{marginTop: 25}}>
+          <View
+            dataSet={dataSets.menuItemsCenter ||= {class: "menu-items-center"}}
+            style={styles.menuItemsCenter ||= {marginTop: 25}}
+          >
             {!noAccess &&
               <MenuContent active={active} />
             }
           </View>
-          <View dataSet={{class: "menu-items-bottom"}} style={{marginTop: "auto", marginBottom: 25}}>
+          <View
+            dataSet={dataSets.menuItemsBottom ||= {class: "menu-items-bottom"}}
+            style={styles.menuItemsBottom ||= {marginTop: "auto", marginBottom: 25}}
+          >
             {currentUser &&
               <View
-                dataSet={{class: "menu-user-section"}}
-                style={{
+                dataSet={dataSets.menuUserSection ||= {class: "menu-user-section"}}
+                style={styles.menuUserSection ||= {
                   flexDirection: "row",
                   alignItems: "center",
                   marginRight: 25,
@@ -135,8 +112,8 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
                 }}
               >
                 <View
-                  dataSet={{class: "menu-user-icon"}}
-                  style={{
+                  dataSet={dataSets.menuUserIcon ||= {class: "menu-user-icon"}}
+                  style={styles.menuUserIcon ||= {
                     width: 44,
                     height: 44,
                     alignItems: "center",
@@ -147,8 +124,11 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
                 >
                   <Icon name="user" size={12} />
                 </View>
-                <View className="menu-user-name" style={styles.userName}>
-                  <Text dataSet={{class: "menu-user-name-container"}} style={styles.userNameContainer}>
+                <View className="menu-user-name" style={styles.userName ||= {flexShrink: 1, marginLeft: 8}}>
+                  <Text
+                    dataSet={dataSets.menuUserNameContainer ||= {class: "menu-user-name-container"}}
+                    style={styles.userNameContainer ||= {overflow: "hidden", maxWidth: 140}}
+                  >
                     {currentUser.name()}
                   </Text>
                 </View>

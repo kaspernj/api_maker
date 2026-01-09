@@ -1,4 +1,4 @@
-/* eslint-disable new-cap, sort-imports */
+/* eslint-disable new-cap, no-return-assign, sort-imports */
 import BaseComponent from "../../base-component"
 import {digg} from "diggerize"
 import PropTypes from "prop-types"
@@ -8,6 +8,8 @@ import {Pressable} from "react-native"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
+
+const dataSets = {}
 
 export default memo(shapeComponent(class AttributeElement extends BaseComponent {
   static propTypes = PropTypesExact({
@@ -26,7 +28,7 @@ export default memo(shapeComponent(class AttributeElement extends BaseComponent 
 
     return (
       <Pressable
-        dataSet={{
+        dataSet={dataSets[`attribute-${digg(attribute, "attributeName")}-${modelClassName}`] ||= {
           class: "attribute-element",
           attributeName: digg(attribute, "attributeName"),
           modelClass: modelClassName

@@ -1,4 +1,4 @@
-/* eslint-disable sort-imports */
+/* eslint-disable no-return-assign, sort-imports */
 import BaseComponent from "../../base-component"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
@@ -6,6 +6,8 @@ import {Pressable} from "react-native"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
+
+const dataSets = {}
 
 export default memo(shapeComponent(class ScopeElement extends BaseComponent {
   static defaultProps = {
@@ -26,7 +28,7 @@ export default memo(shapeComponent(class ScopeElement extends BaseComponent {
 
     return (
       <Pressable
-        dataSet={{class: "scope-element", scopeName: scope}}
+        dataSet={dataSets[`scope-${scope}`] ||= {class: "scope-element", scopeName: scope}}
         key={scope}
         onPress={this.tt.onScopeClicked}
       >
