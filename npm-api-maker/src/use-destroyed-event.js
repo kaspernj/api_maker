@@ -6,11 +6,11 @@ import useShape from "set-state-compare/build/use-shape.js"
 
 /**
  * @param {object} model
- * @param {function} onDestroyed
+ * @param {Function} onDestroyed
  * @param {object} props
  * @param {boolean} props.active
  * @param {number} props.debounce
- * @param {function} props.onConnected
+ * @param {Function} props.onConnected
  * @returns {void}
  */
 const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => {

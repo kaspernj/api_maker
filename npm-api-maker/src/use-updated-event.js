@@ -6,12 +6,12 @@ import useShape from "set-state-compare/build/use-shape.js"
 
 /**
  * @param {import("./base-model.js").default} model
- * @param {function} onUpdated
+ * @param {Function} onUpdated
  * @param {object} props
  * @param {boolean} props.active
  * @param {number} props.debounce
- * @param {function} props.onConnected
- * @return {void}
+ * @param {Function} props.onConnected
+ * @returns {void}
  */
 const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
   const {active = true, debounce, onConnected, ...restProps} = props

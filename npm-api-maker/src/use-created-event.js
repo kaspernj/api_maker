@@ -7,12 +7,12 @@ import {useCallback, useLayoutEffect} from "react"
 import useShape from "set-state-compare/build/use-shape.js"
 
 /**
- * @param {function} modelClass
- * @param {function} onCreated
+ * @param {Function} modelClass
+ * @param {Function} onCreated
  * @param {object} [args]
  * @param {boolean} [args.active]
  * @param {number} [args.debounce]
- * @param {function} [args.onConnected]
+ * @param {Function} [args.onConnected]
  * @returns {void}
  */
 // eslint-disable-next-line max-len

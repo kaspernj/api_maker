@@ -15,7 +15,7 @@ logger.setDebug(false)
 
 /**
  * @param {object} props
- * @param {function} props.children
+ * @param {Function} props.children
  * @param {string} [props.scope]
  * @returns {import("react").ReactNode}
  */

@@ -4,7 +4,7 @@ import useEventEmitter from "./use-event-emitter.js"
 import useShape from "set-state-compare/build/use-shape.js"
 
 /**
- * @param {function} callback
+ * @param {Function} callback
  * @returns {object}
  */
 const useValidationErrors = (callback) => {

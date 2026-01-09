@@ -3,8 +3,8 @@ import useShape from "set-state-compare/build/use-shape.js"
 
 /**
  * @param {object} element
- * @param {function} callback
- * @return {void}
+ * @param {Function} callback
+ * @returns {void}
  */
 const useResizeObserver = (element, callback) => {
   const s = useShape({callback})

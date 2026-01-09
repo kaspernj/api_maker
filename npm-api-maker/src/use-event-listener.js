@@ -5,7 +5,7 @@ import {useCallback, useEffect, useLayoutEffect} from "react"
 /**
  * @param {object} target
  * @param {string} event
- * @param {function} onCalled
+ * @param {Function} onCalled
  * @returns {void}
  */
 const ApiMakerUseEventListener = (target, event, onCalled) => {

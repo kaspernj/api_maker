@@ -22,9 +22,9 @@ const iconMap = {
 }
 
 /**
- * @typedef {Object} ApiMakerUtilsIconProps
+ * @typedef {object} ApiMakerUtilsIconProps
  * @property {string|number=} color
- * @property {Object=} dataSet
+ * @property {object=} dataSet
  * @property {string} name
  * @property {number=} size
  * @property {import("react-native").TextStyle|Array<import("react-native").TextStyle>=} style Only `color` is forwarded.
