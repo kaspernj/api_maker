@@ -8,7 +8,7 @@ import useShape from "set-state-compare/build/use-shape.js"
 
 /**
  * @typedef {object} useModelArgs
- * @property {(arg: object) => function} [callback]
+ * @property {(arg: object) => Function} [callback]
  * @property {(arg: object) => object} [args]
  * @property {() => number|string} [loadByQueryParam]
  * @property {any[]} [cacheArgs]
@@ -18,8 +18,8 @@ import useShape from "set-state-compare/build/use-shape.js"
  */
 
 /**
- * @param {function|object} modelClassArg
- * @param {object | function({modelClass: typeof import("./base-model.js").default}): useModelArgs} [argsArg]
+ * @param {Function|object} modelClassArg
+ * @param {object | ((args: {modelClass: typeof import("./base-model.js").default}) => useModelArgs)} [argsArg]
  */
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()

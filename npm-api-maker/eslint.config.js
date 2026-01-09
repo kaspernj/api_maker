@@ -1,8 +1,9 @@
-import js from "@eslint/js"
 import {defineConfig} from "eslint/config"
 import expoConfig from "eslint-config-expo/flat.js"
 import globals from "globals"
 import jest from "eslint-plugin-jest"
+import js from "@eslint/js"
+import jsdoc from "eslint-plugin-jsdoc"
 
 export default defineConfig([
   expoConfig,
@@ -14,6 +15,9 @@ export default defineConfig([
       globals: {
         ...globals.jest
       }
+    },
+    plugins: {
+      jsdoc
     },
     rules: {
       "accessor-pairs": "error",
@@ -81,6 +85,9 @@ export default defineConfig([
       "jest/require-hook": "error",
       "jest/require-to-throw-message": "error",
       "jest/require-top-level-describe": "error",
+      "jsdoc/check-tag-names": "error",
+      "jsdoc/check-types": "error",
+      "jsdoc/no-undefined-types": "error",
       "jsx-quotes": "error",
       "key-spacing": "error",
       "keyword-spacing": "off",
@@ -230,7 +237,6 @@ export default defineConfig([
       "react/jsx-indent": ["error", 2],
       "react/jsx-indent-props": ["error", 2],
       "react/jsx-max-depth": "error",
-      "react/jsx-max-props-per-line": "error",
       "react/jsx-newline": "off",
       "react/jsx-no-bind": "error",
       "react/jsx-no-constructed-context-values": "error",

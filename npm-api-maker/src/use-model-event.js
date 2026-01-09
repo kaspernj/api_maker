@@ -7,12 +7,12 @@ import useShape from "set-state-compare/build/use-shape.js"
 /**
  * @param {import("./base-model.js").default} model
  * @param {string} event
- * @param {function} onCallback
+ * @param {Function} onCallback
  * @param {object} props
  * @param {object} props.active
  * @param {number} props.debounce
- * @param {function} props.onConnected
- * @return {void}
+ * @param {Function} props.onConnected
+ * @returns {void}
  */
 // eslint-disable-next-line max-params
 const apiMakerUseModelEvent = (model, event, onCallback, props) => {

@@ -5,6 +5,7 @@ import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5.js"
 import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6.js"
 import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons.js"
 import memo from "set-state-compare/build/memo.js"
+import PropTypes from "prop-types"
 import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useMergedStyle} from "./default-style"
@@ -20,7 +21,31 @@ const iconMap = {
   search: "FontAwesome"
 }
 
+/**
+ * @typedef {object} ApiMakerUtilsIconProps
+ * @property {string|number=} color
+ * @property {object=} dataSet
+ * @property {string} name
+ * @property {number=} size
+ * @property {import("react-native").TextStyle|Array<import("react-native").TextStyle>=} style Only `color` is forwarded.
+ * @property {("FontAwesome"|"FontAwesome5"|"FontAwesome6"|"MaterialIcons")=} version
+ */
 export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent {
+  /** @type {ApiMakerUtilsIconProps} */
+  static propTypes = {
+    color: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    dataSet: PropTypes.object,
+    name: PropTypes.string.isRequired,
+    size: PropTypes.number,
+    style: PropTypes.oneOfType([
+      PropTypes.exact({color: PropTypes.oneOfType([PropTypes.number, PropTypes.string])}),
+      PropTypes.arrayOf(
+        PropTypes.exact({color: PropTypes.oneOfType([PropTypes.number, PropTypes.string])})
+      )
+    ]),
+    version: PropTypes.oneOf(["FontAwesome", "FontAwesome5", "FontAwesome6", "MaterialIcons"])
+  }
+
   render() {
     const {dataSet, name, style, version, ...restProps} = this.props
     const {stylesList} = useMergedStyle(style, "Text")

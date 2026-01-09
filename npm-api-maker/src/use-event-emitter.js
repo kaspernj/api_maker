@@ -5,8 +5,8 @@ import {useEffect, useLayoutEffect, useMemo} from "react"
 /**
  * @param {object} events
  * @param {string} event
- * @param {function} onCalled
- * @return {void}
+ * @param {Function} onCalled
+ * @returns {void}
  */
 export default function ApiMakerUseEventEmitter(events, event, onCalled) {
   const {isServer} = useEnvSense()
