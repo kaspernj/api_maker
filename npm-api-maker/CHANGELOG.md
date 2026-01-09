@@ -10,3 +10,4 @@
 - Remove `lastUpdate` from table dataSet cache keys to avoid unbounded growth.
 - Restore filter button `data-class` for system spec selectors.
 - Add Icon prop types and JSDoc for supported style usage.
+- Add ESLint JSDoc checks to the lint configuration.
