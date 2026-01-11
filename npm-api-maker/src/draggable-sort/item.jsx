@@ -50,12 +50,21 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     const {active} = this.s
     const style = useMemo(
       () => {
-        const style = {
-          transform: this.tt.position.getTranslateTransform()
-        }
+        const baseTransform = this.tt.position.getTranslateTransform()
+        const style = {transform: baseTransform}
 
         if (active) {
-          if (activeItemStyle) Object.assign(style, activeItemStyle)
+          if (activeItemStyle) {
+            const {transform: activeTransform, ...restActiveStyle} = activeItemStyle
+
+            if (activeTransform) {
+              const normalizedActiveTransform = Array.isArray(activeTransform) ? activeTransform : [activeTransform]
+
+              style.transform = baseTransform.concat(normalizedActiveTransform)
+            }
+
+            Object.assign(style, restActiveStyle)
+          }
           style.elevation = 2
           style.zIndex = 99999
         }
