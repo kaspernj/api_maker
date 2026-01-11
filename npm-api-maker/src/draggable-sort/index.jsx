@@ -12,10 +12,12 @@ import useEventEmitter from "../use-event-emitter.js"
 
 export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
   static defaultProps = {
+    activeItemStyle: {backgroundColor: "#fff"},
     horizontal: false
   }
 
   static propTypes = propTypesExact({
+    activeItemStyle: PropTypes.object,
     cacheKeyExtractor: PropTypes.func,
     data: PropTypes.array.isRequired,
     dataSet: PropTypes.object,
@@ -74,6 +76,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
       >
         {data.map((item, itemIndex) => ( // eslint-disable-line no-extra-parens
           <DraggableSortItem
+            activeItemStyle={this.p.activeItemStyle}
             cacheKey={cacheKeyExtractor ? cacheKeyExtractor(item) : undefined}
             controller={this.tt.controller}
             item={item}
