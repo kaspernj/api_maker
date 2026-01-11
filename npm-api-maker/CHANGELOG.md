@@ -19,3 +19,4 @@
 - Lazily compute cached header styles to avoid rebuilding defaults.
 - Cache row and column style props with `this.cache` to reduce re-renders.
 - Preserve drag translation when activeItemStyle includes transforms.
+- Default `draggedHeaderStyle` to avoid missing-prop errors.

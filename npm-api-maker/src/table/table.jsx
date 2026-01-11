@@ -111,6 +111,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     card: true,
     currentUser: null,
     destroyEnabled: true,
+    draggedHeaderStyle: undefined,
     filterCard: true,
     filterSubmitButton: true,
     noRecordsAvailableContent: undefined,
