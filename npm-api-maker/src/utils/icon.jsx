@@ -7,6 +7,7 @@ import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons.js"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import React, {useMemo} from "react"
+import {StyleSheet} from "react-native"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useMergedStyle} from "./default-style"
 
@@ -70,10 +71,11 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
       for (const style of stylesList) {
         const newStyle = {}
         let count = 0
+        const flattenedStyle = StyleSheet.flatten(style) || {}
 
-        for (const key in style) {
+        for (const key in flattenedStyle) {
           if (key == "color") {
-            newStyle[key] = style[key]
+            newStyle[key] = flattenedStyle[key]
             count++
           } else {
             unsupportedStyleKeys.add(key)

@@ -22,3 +22,4 @@
 - Default `draggedHeaderStyle` to avoid missing-prop errors.
 - Loosen Icon style prop-types to accept React Native style props without warnings.
 - Warn when Icon receives unsupported style keys.
+- Flatten Icon styles before extracting supported keys so StyleSheet IDs apply.
