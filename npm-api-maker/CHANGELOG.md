@@ -20,3 +20,6 @@
 - Cache row and column style props with `this.cache` to reduce re-renders.
 - Preserve drag translation when activeItemStyle includes transforms.
 - Default `draggedHeaderStyle` to avoid missing-prop errors.
+- Loosen Icon style prop-types to accept React Native style props without warnings.
+- Warn when Icon receives unsupported style keys.
+- Flatten Icon styles before extracting supported keys so StyleSheet IDs apply.
