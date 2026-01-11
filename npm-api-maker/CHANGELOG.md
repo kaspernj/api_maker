@@ -12,3 +12,9 @@
 - Add Icon prop types and JSDoc for supported style usage.
 - Add ESLint JSDoc checks to the lint configuration.
 - Fix JSDoc types to satisfy eslint-plugin-jsdoc.
+- Allow dragged table header backgrounds to be customized for dark UI themes.
+- Cache table styles and dataSet props without `this.cache` in the table header/footer.
+- Document table component helpers with JSDoc annotations.
+- Cache header styles with `this.cache` to keep header renders stable.
+- Lazily compute cached header styles to avoid rebuilding defaults.
+- Cache row and column style props with `this.cache` to reduce re-renders.

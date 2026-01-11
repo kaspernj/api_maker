@@ -45,6 +45,9 @@ import useQueryParams from "on-location-changed/build/use-query-params.js"
 import Widths from "./widths"
 import WorkerPluginsCheckAllCheckbox from "./worker-plugins-check-all-checkbox"
 
+/**
+ * Table component with sortable, resizable columns and optional filters.
+ */
 const dataSets = {}
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const styles = {}
@@ -73,10 +76,10 @@ const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extend
             <WorkerPluginsCheckAllCheckbox
               currentWorkplace={table.s.currentWorkplace}
               query={queryWithoutPagination}
-              style={this.cache("workerPlguinsCheckAllCheckboxStyle", {marginHorizontal: "auto"})}
+              style={styles.workerPlguinsCheckAllCheckboxStyle ||= {marginHorizontal: "auto"}}
             />
             {!mdUp &&
-              <Text style={this.cache("selectAllFoundTextStyle", {marginLeft: 3})}>
+              <Text style={styles.selectAllFoundTextStyle ||= {marginLeft: 3}}>
                 {t(".select_all_found", {defaultValue: "Select all found"})}
               </Text>
             }
@@ -101,6 +104,9 @@ const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extend
 }))
 
 export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
+  /**
+   * @param {object} props
+   */
   static defaultProps = {
     card: true,
     currentUser: null,
@@ -130,6 +136,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     defaultParams: PropTypes.object,
     destroyEnabled: PropTypes.bool.isRequired,
     destroyMessage: PropTypes.string,
+    draggedHeaderStyle: PropTypes.object,
     editModelPath: PropTypes.func,
     filterCard: PropTypes.bool.isRequired,
     filterContent: PropTypes.func,
@@ -378,7 +385,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     return (
       <View
-        dataSet={this.cache("rootViewDataSet", {class: this.className()}, [this.className()])}
+        dataSet={dataSets[`rootView-${this.className()}`] ||= {class: this.className()}}
         onLayout={this.tt.onContainerLayout}
         style={this.props.styles?.container}
       >
@@ -406,6 +413,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     )
   }
 
+  /**
+   * Resolve the header title or custom header content.
+   * @param {object} [args]
+   * @param {Array<object>} [args.models]
+   * @param {object} [args.qParams]
+   * @param {object} [args.query]
+   * @param {object} [args.result]
+   * @returns {string|React.ReactNode}
+   */
   tableHeaderContent ({models, qParams, query, result} = {}) {
     const {header, modelClass} = this.props
 
@@ -460,7 +476,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     } = this.props
 
     const loadingContent = (
-      <View dataSet={this.cache("loadingDataSet", {class: "api-maker--table--loading"})}>
+      <View dataSet={dataSets.loading ||= {class: "api-maker--table--loading"}}>
         <Text>{this.t(".loading_dot_dot_dit", {defaultValue: "Loading..."})}</Text>
       </View>
     )
@@ -512,6 +528,10 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return abilitiesToLoad
   }
 
+  /**
+   * Decide between card/table rendering once data is ready.
+   * @returns {React.ReactNode}
+   */
   cardOrTable () {
     const {
       abilities,
@@ -727,6 +747,16 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     )
   }
 
+  /**
+   * Build the base style for a data column.
+   * @param {object} args
+   * @param {object} args.column
+   * @param {number} args.columnIndex
+   * @param {boolean} args.even
+   * @param {object} args.style
+   * @param {string} args.type
+   * @returns {object}
+   */
   styleForColumn = ({column, columnIndex, even, style, type}) => {
     const {styleUI} = this.p
     const defaultStyle = {
@@ -762,50 +792,81 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return actualStyle
   }
 
+  /**
+   * Build the base style for a header column.
+   * @param {object} args
+   * @param {object} args.column
+   * @param {number} args.columnIndex
+   * @param {object} args.style
+   * @param {string} args.type
+   * @returns {object}
+   */
   styleForHeader = ({column, columnIndex, style, type}) => {
     const {mdUp} = this.tt
-    const defaultStyle = {
-      flexDirection: "row",
-      alignItems: "center",
-      padding: 8
-    }
+    return this.cache(
+      `headerStyle-${type || "default"}`,
+      () => {
+        const defaultStyle = {
+          flexDirection: "row",
+          alignItems: "center",
+          padding: 8
+        }
 
-    if (type != "actions" && mdUp && this.p.styleUI) {
-      defaultStyle.borderRight = "1px solid #dbdbdb"
-    }
+        if (type != "actions" && mdUp && this.p.styleUI) {
+          defaultStyle.borderRight = "1px solid #dbdbdb"
+        }
 
-    const actualStyle = Object.assign(
-      defaultStyle,
-      style
+        return Object.assign(defaultStyle, style)
+      },
+      [mdUp, this.p.styleUI, type, style]
     )
-
-    return actualStyle
   }
 
+  /**
+   * Provide a bold header text style.
+   * @returns {object}
+   */
   styleForHeaderText = () => {
-    return this.cache("headerTextStyle", {fontWeight: "bold"})
+    return styles.headerTextStyle ||= {fontWeight: "bold"}
   }
 
+  /**
+   * Style for a table row wrapper.
+   * @param {object} [args]
+   * @param {boolean} [args.even]
+   * @returns {object}
+   */
   styleForRow = ({even} = {}) => {
-    const actualStyle = {
-      flex: 1,
-      alignItems: "stretch"
-    }
+    return this.cache(
+      `rowStyle-${even ? "even" : "odd"}`,
+      () => {
+        const actualStyle = {
+          flex: 1,
+          alignItems: "stretch"
+        }
 
-    if (even && this.p.styleUI) {
-      actualStyle.backgroundColor = "#f5f5f5"
-    }
+        if (even && this.p.styleUI) {
+          actualStyle.backgroundColor = "#f5f5f5"
+        }
 
-    return actualStyle
+        return actualStyle
+      },
+      [even, this.p.styleUI]
+    )
   }
 
+  /**
+   * Style for the header row wrapper.
+   * @returns {object}
+   */
   styleForRowHeader = () => {
-    const actualStyle = {
-      flex: 1,
-      alignItems: "stretch"
-    }
-
-    return actualStyle
+    return this.cache(
+      "rowHeaderStyle",
+      () => ({
+        flex: 1,
+        alignItems: "stretch"
+      })
+    )
   }
 
   tableControls({models, qParams, query, result} = {}) {
@@ -851,13 +912,13 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     if (to === 0) from = 0
 
     return (
-      <View style={this.cache("tableFooterRootViewStyle", {flexDirection: "row", justifyContent: "space-between", marginTop: 10})}>
+      <View style={styles.tableFooterRootViewStyle ||= {flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
         <View dataSet={dataSets.showingCounts ||= {class: "showing-counts"}} style={styles.showingCounts ||= {flexDirection: "row"}}>
           <Text>
             {this.t(".showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
           </Text>
           {this.p.workplace && this.s.currentWorkplaceCount !== null &&
-            <Text style={this.cache("xSelectedTextStyle", {marginLeft: 3})}>
+            <Text style={styles.xSelectedTextStyle ||= {marginLeft: 3}}>
               {this.t(".x_selected", {defaultValue: "%{selected} selected.", selected: this.s.currentWorkplaceCount})}
             </Text>
           }
@@ -884,38 +945,80 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     return classNames.join(" ")
   }
 
+  /**
+   * Build per-column props for table cells.
+   * @param {object} column
+   * @returns {object}
+   */
   columnProps(column) {
-    const props = {}
+    let cacheKey = "default"
 
     if (column.textCenter) {
-      props.style ||= {}
-      props.style.textAlign = "center"
+      cacheKey = "center"
+    } else if (column.textRight) {
+      cacheKey = "right"
     }
 
-    if (column.textRight) {
-      props.style ||= {}
-      props.style.textAlign = "right"
-    }
+    return this.cache(
+      `columnProps-${cacheKey}`,
+      () => {
+        const props = {}
 
-    return props
+        if (column.textCenter) {
+          props.style ||= {}
+          props.style.textAlign = "center"
+        }
+
+        if (column.textRight) {
+          props.style ||= {}
+          props.style.textAlign = "right"
+        }
+
+        return props
+      },
+      [column.textCenter, column.textRight]
+    )
   }
 
+  /**
+   * Build per-column props for header cells.
+   * @param {object} column
+   * @returns {object}
+   */
   headerProps(column) {
-    const props = {}
+    let cacheKey = "default"
 
     if (column.textCenter) {
-      props.style ||= {}
-      props.style.justifyContent = "center"
+      cacheKey = "center"
+    } else if (column.textRight) {
+      cacheKey = "right"
     }
 
-    if (column.textRight) {
-      props.style ||= {}
-      props.style.justifyContent = "end"
-    }
+    return this.cache(
+      `headerProps-${cacheKey}`,
+      () => {
+        const props = {}
 
-    return props
+        if (column.textCenter) {
+          props.style ||= {}
+          props.style.justifyContent = "center"
+        }
+
+        if (column.textRight) {
+          props.style ||= {}
+          props.style.justifyContent = "end"
+        }
+
+        return props
+      },
+      [column.textCenter, column.textRight]
+    )
   }
 
+  /**
+   * Column widths keyed by identifier for table rows.
+   * @returns {object}
+   */
   columnWidths() {
     const columnWidths = {}
 
@@ -929,6 +1032,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   headersContentFromColumns = () => {
     return (
       <DraggableSort
+        activeItemStyle={this.tt.draggedHeaderStyle()}
         data={this.s.columnsToShow}
         events={this.tt.draggableSortEvents}
         horizontal
@@ -953,6 +1057,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }
   }
 
+  /**
+   * Persist the new column ordering.
+   * @param {object} args
+   * @param {object} args.fromItem
+   * @param {object} args.toItem
+   * @param {number} args.fromPosition
+   * @param {number} args.toPosition
+   * @returns {Promise<void>}
+   */
   onReordered = async ({fromItem, fromPosition, toItem, toPosition}) => {
     if (fromPosition == toPosition) return // Only do requests and queries if changed
 
@@ -1016,6 +1129,17 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     if (column.attribute) return currentModelClass.humanAttributeName(column.attribute)
 
     throw new Error("No 'label' or 'attribute' was given")
+  }
+
+  /**
+   * Provide styling for a dragged header item.
+   * @returns {object|undefined}
+   */
+  draggedHeaderStyle = () => {
+    if (this.p.draggedHeaderStyle !== undefined) return this.p.draggedHeaderStyle
+    if (this.p.styleUI) return undefined
+
+    return styles.draggedHeaderStyleTransparent ||= {backgroundColor: "transparent"}
   }
 
   onFilterFormSubmit = () => this.submitFilter()
