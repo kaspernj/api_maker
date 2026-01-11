@@ -27,7 +27,7 @@ const iconMap = {
  * @property {object=} dataSet
  * @property {string} name
  * @property {number=} size
- * @property {import("react-native").TextStyle|Array<import("react-native").TextStyle>=} style Only `color` is forwarded.
+ * @property {import("react-native").StyleProp<import("react-native").TextStyle>=} style Only `color` is forwarded.
  * @property {("FontAwesome"|"FontAwesome5"|"FontAwesome6"|"MaterialIcons")=} version
  */
 export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent {
@@ -37,12 +37,7 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
     dataSet: PropTypes.object,
     name: PropTypes.string.isRequired,
     size: PropTypes.number,
-    style: PropTypes.oneOfType([
-      PropTypes.exact({color: PropTypes.oneOfType([PropTypes.number, PropTypes.string])}),
-      PropTypes.arrayOf(
-        PropTypes.exact({color: PropTypes.oneOfType([PropTypes.number, PropTypes.string])})
-      )
-    ]),
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number]),
     version: PropTypes.oneOf(["FontAwesome", "FontAwesome5", "FontAwesome6", "MaterialIcons"])
   }
 
@@ -70,6 +65,7 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
     // Only forward some styles like color
     const actualStylesList = useMemo(() => {
       const actualStylesList = []
+      const unsupportedStyleKeys = new Set()
 
       for (const style of stylesList) {
         const newStyle = {}
@@ -79,12 +75,21 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
           if (key == "color") {
             newStyle[key] = style[key]
             count++
+          } else {
+            unsupportedStyleKeys.add(key)
           }
         }
 
         if (count > 0) {
           actualStylesList.push(newStyle)
         }
+      }
+
+      if (unsupportedStyleKeys.size > 0) {
+        console.warn(
+          "ApiMakerUtilsIcon received unsupported style keys:",
+          Array.from(unsupportedStyleKeys).sort()
+        )
       }
 
       return actualStylesList
