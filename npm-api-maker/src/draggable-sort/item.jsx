@@ -10,6 +10,7 @@ import useEventEmitter from "../use-event-emitter.js"
 
 export default memo(shapeComponent(class DraggableSortItem extends ShapeComponent {
   static propTypes = propTypesExact({
+    activeItemStyle: PropTypes.object,
     cacheKey: PropTypes.string,
     controller: PropTypes.object.isRequired,
     item: PropTypes.any.isRequired,
@@ -45,23 +46,32 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
   }
 
   render() {
-    const {item, renderItem} = this.p
+    const {activeItemStyle, item, renderItem} = this.p
     const {active} = this.s
     const style = useMemo(
       () => {
-        const style = {
-          transform: this.tt.position.getTranslateTransform()
-        }
+        const baseTransform = this.tt.position.getTranslateTransform()
+        const style = {transform: baseTransform}
 
         if (active) {
-          style.backgroundColor = "#fff"
+          if (activeItemStyle) {
+            const {transform: activeTransform, ...restActiveStyle} = activeItemStyle
+
+            if (activeTransform) {
+              const normalizedActiveTransform = Array.isArray(activeTransform) ? activeTransform : [activeTransform]
+
+              style.transform = baseTransform.concat(normalizedActiveTransform)
+            }
+
+            Object.assign(style, restActiveStyle)
+          }
           style.elevation = 2
           style.zIndex = 99999
         }
 
         return style
       },
-      [active]
+      [active, activeItemStyle]
     )
 
     return (
