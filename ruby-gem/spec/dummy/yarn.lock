@@ -1786,6 +1786,11 @@ asap@~2.0.3:
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
   integrity sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==
 
+awaitery@^1.0.10:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/awaitery/-/awaitery-1.0.12.tgz#4792601f0a7980e1ab41acf9d2f35f5ac8719f21"
+  integrity sha512-WjsmQVbSyiutNLfmbSPBaFMY+qHAMTFNdP3e1ypy+Vpe0AaaWYmq7pQnJ7wGf54Qvc3uzDmlkkFAE3t4IoG6ow==
+
 babel-loader@10:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-10.0.0.tgz#b9743714c0e1e084b3e4adef3cd5faee33089977"
@@ -2591,11 +2596,12 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-flash-notifications@^0.0.33:
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.33.tgz#f1aa46fef2c3927ce196158f375d1fb2965a940a"
-  integrity sha512-u4GX5pDk0CJQZlYvrtOwJRDJULWkilMnBVCS8OxCVoo8b9tkxrcz8EaHkqu2je0joQYv1VJgzKfE3/UeMxZpeA==
+flash-notifications@^0.0.36:
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/flash-notifications/-/flash-notifications-0.0.36.tgz#8755dece50f5f0134a92712158d03965daf34632"
+  integrity sha512-5lmSqVEY9y2Lejn8rPInfL1pn689p/JKvhOgWIUmF/p3d8nkt/GA8313I8NiN3HIzFFLJYZ2fcFKWPdHNS5HWA==
   dependencies:
+    awaitery "^1.0.10"
     diggerize "^1.0.9"
     env-sense "^1.0.2"
     eventemitter3 "^5.0.1"
