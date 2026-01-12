@@ -12,7 +12,7 @@
     "build": "rm -rf build && tsc || true",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
-    "test": "expo-module test",
+    "test": "NODE_OPTIONS=--experimental-vm-modules expo-module test",
     "prepare": "npm run clean && npm run build",
     "prepublishOnly": "expo-module prepublishOnly && npm run build",
     "open:ios": "xed example/ios",
@@ -62,7 +62,7 @@
     "spark-md5": "^3.0.2",
     "stacktrace-parser": "^0.1.10",
     "strftime": ">= 0.10.0",
-    "uniqunize": "^1.0.1",
+    "uniqunize": "^1.0.3",
     "url-parse": "^1.5.10",
     "wake-event": ">= 0.0.1"
   },

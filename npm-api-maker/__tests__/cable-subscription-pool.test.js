@@ -1,9 +1,5 @@
 import CableSubscriptionPool from "../build/cable-subscription-pool"
 
-jest.mock("@rails/actioncable", () => ({
-  createConsumer: () => ({})
-}))
-
 describe("CableSubscriptionPool", () => {
   describe("onUnsubscribe", () => {
     it("unsubscribes from ActionCable", () => {
