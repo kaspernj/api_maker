@@ -44,7 +44,7 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
 
   render() {
     const {dataSet, name, style, version, ...restProps} = this.props
-    const {stylesList} = useMergedStyle(style, "Text")
+    const {stylesList: inheritedStylesList} = useMergedStyle(null, "Text")
     let actualVersion = version
 
     if (!actualVersion) {
@@ -63,39 +63,30 @@ export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent
       }
     }
 
-    // Only forward some styles like color
+    // Only forward some styles like color from inherited Text styles.
     const actualStylesList = useMemo(() => {
       const actualStylesList = []
-      const unsupportedStyleKeys = new Set()
 
-      for (const style of stylesList) {
-        const newStyle = {}
-        let count = 0
-        const flattenedStyle = StyleSheet.flatten(style) || {}
+      for (const inheritedStyle of inheritedStylesList) {
+        const flattenedStyle = StyleSheet.flatten(inheritedStyle) || {}
 
-        for (const key in flattenedStyle) {
-          if (key == "color") {
-            newStyle[key] = flattenedStyle[key]
-            count++
-          } else {
-            unsupportedStyleKeys.add(key)
-          }
-        }
-
-        if (count > 0) {
-          actualStylesList.push(newStyle)
+        if ("color" in flattenedStyle) {
+          actualStylesList.push({color: flattenedStyle.color})
         }
       }
 
-      if (unsupportedStyleKeys.size > 0) {
-        console.warn(
-          "ApiMakerUtilsIcon received unsupported style keys:",
-          Array.from(unsupportedStyleKeys).sort()
-        )
+      if (Array.isArray(style)) {
+        for (const propStyle of style) {
+          if (propStyle) {
+            actualStylesList.push(propStyle)
+          }
+        }
+      } else if (style) {
+        actualStylesList.push(style)
       }
 
       return actualStylesList
-    }, [stylesList, style])
+    }, [inheritedStylesList, style])
 
     const actualDataSet = useMemo(() => Object.assign({name, version: actualVersion}, dataSet), [actualVersion, dataSet, name])
 
