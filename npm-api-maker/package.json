@@ -62,7 +62,7 @@
     "spark-md5": "^3.0.2",
     "stacktrace-parser": "^0.1.10",
     "strftime": ">= 0.10.0",
-    "uniqunize": "^1.0.2",
+    "uniqunize": "^1.0.3",
     "url-parse": "^1.5.10",
     "wake-event": ">= 0.0.1"
   },
