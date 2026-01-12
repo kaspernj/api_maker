@@ -12,7 +12,7 @@
     "build": "rm -rf build && tsc || true",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
-    "test": "expo-module test",
+    "test": "NODE_OPTIONS=--experimental-vm-modules expo-module test",
     "prepare": "npm run clean && npm run build",
     "prepublishOnly": "expo-module prepublishOnly && npm run build",
     "open:ios": "xed example/ios",

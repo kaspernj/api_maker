@@ -1,12 +1,8 @@
 import BaseModel from "../build/base-model.js"
-import {jest} from "@jest/globals"
 import {JSDOM} from "jsdom"
-import ValidationError from "../build/validation-error.js"
 import User from "./support/user"
-
-jest.mock("@rails/actioncable", () => ({
-  createConsumer: () => ({})
-}))
+import ValidationError from "../build/validation-error.js"
+import {jest} from "@jest/globals"
 
 const {window} = new JSDOM()
 const document = window.document
@@ -46,14 +42,16 @@ describe("BaseModel", () => {
       getErrorMessage: () => "Some validation error"
     }, {
       response: {
-        validation_errors: [{
-          attribute_name: "name",
-          attribute_type: "string",
-          error_messages: ["can't be blank"],
-          error_types: ["blank"],
-          input_name: "user[name]",
-          model_name: "user"
-        }]
+        validation_errors: [
+          {
+            attribute_name: "name",
+            attribute_type: "string",
+            error_messages: ["can't be blank"],
+            error_types: ["blank"],
+            input_name: "user[name]",
+            model_name: "user"
+          }
+        ]
       }
     })
     const form = document.createElement("form")

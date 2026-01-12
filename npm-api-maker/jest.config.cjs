@@ -2,6 +2,7 @@ module.exports = {
   testEnvironment: "jsdom",
   testMatch: ["<rootDir>/__tests__/**/*.test.js"],
   setupFilesAfterEnv: ["<rootDir>/__tests__/setup.js"],
+  extensionsToTreatAsEsm: [".jsx"],
   transform: {
     "^.+\\.(cjs|mjs|[jt]sx?)$": ["babel-jest", {configFile: "./babel.config.cjs"}]
   },
