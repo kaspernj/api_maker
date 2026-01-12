@@ -1239,10 +1239,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@>= 1.0.2076":
-  version "1.0.2076"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2076.tgz#d8bdf4169dbfa2f50c8aa0f17a3d4fa365061ff1"
-  integrity sha512-o84Q8uX3QD7SOrKuxJl7v0ol29mtvwtDFLrQsAFgyvT+J2x58P3llk1/IwBD9FUixNy29w77sXl0eg/5Yn6QWw==
+"@kaspernj/api-maker@>= 1.0.2085":
+  version "1.0.2085"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2085.tgz#679eeacf25dbfb2d84754f4c5716ab07311c21cd"
+  integrity sha512-YcMwrxr3upiNO2kpdaewbsNy1ZzzWzw7I9YAvcV9L/uEHBflsJlX4ogSE6zy6NDNtDV6Bf8bzsv86j/5WcnkMg==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -1262,7 +1262,7 @@
     on-location-changed ">= 1.0.18"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
-    set-state-compare ">= 1.0.67"
+    set-state-compare ">= 1.0.69"
     spark-md5 "^3.0.2"
     stacktrace-parser "^0.1.10"
     strftime ">= 0.10.0"
@@ -4125,15 +4125,7 @@ set-function-length@^1.2.1, set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-"set-state-compare@>= 1.0.67":
-  version "1.0.67"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.67.tgz#c722564f00ea0102f4a4fc8e1f274ee84af99a01"
-  integrity sha512-FANlTHSEwipmWEYW73//89aaEsRHIaNV1iLUMyE8tfeLwhLSaPvFmdcXw5CYcOLUcT4mA/9puYywEFN/YZ39Vg==
-  dependencies:
-    diggerize "^1.0.5"
-    fetching-object ">= 1.0.5"
-
-set-state-compare@^1.0.69:
+"set-state-compare@>= 1.0.69", set-state-compare@^1.0.69:
   version "1.0.69"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.69.tgz#5fa7054bb2d639d1959d68269a896f2604d25ec9"
   integrity sha512-x1rtEd2j2HKvqIH0J8pk+9L7oaVZI5wD2LTSncdO76AoIfNOJn+FZVKM/LW6e86iFucTe+aOomoGNXvYbNN5tw==
