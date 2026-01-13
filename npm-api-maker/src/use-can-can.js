@@ -2,7 +2,7 @@ import {useCallback, useMemo} from "react"
 import CanCan from "./can-can.js"
 import Devise from "./devise.js"
 import useCurrentUser from "./use-current-user.js"
-import useEventEmitter from "./use-event-emitter.js"
+import useEventEmitter from "ya-use-event-emitter"
 import useShape from "set-state-compare/build/use-shape.js"
 
 /**

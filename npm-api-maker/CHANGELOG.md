@@ -27,3 +27,4 @@
 - Extract `useBreakpoint` into the new `responsive-breakpoints` package.
 - Use `ya-use-event-listener` for the shared event listener hook.
 - Switch the dummy `use-breakpoint` route to the `responsive-breakpoints` package.
+- Extract `useEventEmitter` into the new `ya-use-event-emitter` package.

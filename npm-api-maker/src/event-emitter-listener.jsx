@@ -1,4 +1,4 @@
-import useEventEmitter from "./use-event-emitter.js"
+import useEventEmitter from "ya-use-event-emitter"
 
 const EventEmitterListener = ({event, events, onCalled, ...restProps}) => {
   const restPropsKeys = Object.keys(restProps)

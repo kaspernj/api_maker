@@ -6,7 +6,7 @@ import {events} from "./use-current-user.js"
 import * as inflection from "inflection"
 import Logger from "./logger.js"
 import Services from "./services.js"
-import useEventEmitter from "./use-event-emitter.js"
+import useEventEmitter from "ya-use-event-emitter"
 import useShape from "set-state-compare/build/use-shape.js"
 
 const logger = new Logger({name: "ApiMaker / UseCurrentUserContext"})

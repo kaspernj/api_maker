@@ -4721,6 +4721,13 @@ ws@^8.18.0:
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.18.0.tgz#0d7505a6eafe2b0e712d232b42279f53bc289bbc"
   integrity sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==
 
+ya-use-event-listener@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/ya-use-event-listener/-/ya-use-event-listener-0.1.1.tgz#33115542421731d495d590d9ac0df7cf94cf5f3d"
+  integrity sha512-zLuYK3XsYFGBME4OkffOO/bmX7/eTl+01OEA6RLzidfxWeuJtEagXHdDYhMu2EcZyhbc2Dq5LUB8jgKKfZ4suA==
+  dependencies:
+    env-sense ">= 1.0.2"
+
 yallist@^3.0.2:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
