@@ -9,8 +9,8 @@ import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../../utils/text"
 import {Pressable, View} from "react-native"
-import useBreakpoint from "../../../use-breakpoint.js"
-import useEventListener from "../../../use-event-listener.js"
+import {useBreakpoint} from "responsive-breakpoints"
+import useEventListener from "ya-use-event-listener"
 
 const dataSets = {}
 

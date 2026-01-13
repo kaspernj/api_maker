@@ -3,7 +3,7 @@ import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import useBreakpoint from "../../use-breakpoint.js"
+import {useBreakpoint} from "responsive-breakpoints"
 import {View} from "react-native"
 
 export default memo(shapeComponent(class SharedTableRow extends BaseComponent {

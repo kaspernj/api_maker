@@ -2,7 +2,7 @@
 import config from "./config.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
-import useBreakpoint from "./use-breakpoint.js"
+import {useBreakpoint} from "responsive-breakpoints"
 import {useMemo} from "react"
 
 function handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse, arg) { // eslint-disable-line func-style, max-params

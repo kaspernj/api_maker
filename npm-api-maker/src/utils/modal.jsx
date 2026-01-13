@@ -6,7 +6,7 @@ import Card from "./card"
 import Icon from "../utils/icon"
 import memo from "set-state-compare/build/memo.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import useBreakpoint from "../use-breakpoint.js"
+import {useBreakpoint} from "responsive-breakpoints"
 
 export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComponent {
   render() {

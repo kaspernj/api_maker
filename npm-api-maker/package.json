@@ -58,13 +58,15 @@
     "on-location-changed": ">= 1.0.18",
     "qs": ">= 6.9.3",
     "replaceall": ">= 0.1.6",
+    "responsive-breakpoints": ">= 0.1.0",
     "set-state-compare": ">= 1.0.69",
     "spark-md5": "^3.0.2",
     "stacktrace-parser": "^0.1.10",
     "strftime": ">= 0.10.0",
     "uniqunize": "^1.0.3",
     "url-parse": "^1.5.10",
-    "wake-event": ">= 0.0.1"
+    "wake-event": ">= 0.0.1",
+    "ya-use-event-listener": ">= 0.1.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
