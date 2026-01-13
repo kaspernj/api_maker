@@ -40,7 +40,6 @@ export default class ApiMakerRoutesNative {
       const urlMethodName = `${inflection.camelize(name, true)}Url`
 
       if (routeDefinitionArgs && routeDefinitionArgs.localized) {
-
         /** @type {Record<string, PathPart[]>} */
         const localizedRoutes = {}
 
@@ -118,7 +117,6 @@ export default class ApiMakerRoutesNative {
    * @returns {string}
    */
   translateRoute ({args, localizedRoutes, pathParts, url}) {
-
     /** @type {RouteOptions} */
     let options
 
