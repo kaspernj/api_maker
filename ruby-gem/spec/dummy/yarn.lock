@@ -3970,6 +3970,16 @@ resolve@^1.22.10:
     path-parse "^1.0.7"
     supports-preserve-symlinks-flag "^1.0.0"
 
+responsive-breakpoints@0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/responsive-breakpoints/-/responsive-breakpoints-0.1.3.tgz#b2b1489dedc6129ed34011ed32775965cb575e61"
+  integrity sha512-VQizNAHj+LKhDGsN3u3ydjxOxmpziFTeynRRhtmIaxbNgKP7ufWY+u3B20opN+MQgu8OHBoWJzq5CKSKvTmzKA==
+  dependencies:
+    diggerize ">= 1.0.10"
+    env-sense ">= 1.0.2"
+    inflection ">= 1.12.0"
+    set-state-compare ">= 1.0.69"
+
 retry@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/retry/-/retry-0.13.1.tgz#185b1587acf67919d63b357349e03537b2484658"

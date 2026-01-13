@@ -26,3 +26,4 @@
 - Fix non-localized routes to map each path variable to the correct argument index.
 - Extract `useBreakpoint` into the new `responsive-breakpoints` package.
 - Use `ya-use-event-listener` for the shared event listener hook.
+- Switch the dummy `use-breakpoint` route to the `responsive-breakpoints` package.
