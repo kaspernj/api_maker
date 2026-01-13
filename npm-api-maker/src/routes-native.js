@@ -54,7 +54,7 @@ export default class ApiMakerRoutesNative {
           const variableMatch = pathPart.match(/^:([A-z_]+)$/)
 
           if (variableMatch) {
-            return {type: "variable", count: variableCount}
+            return {type: "variable", count: variableCount++}
           } else {
             return {type: "pathPart", name: pathPart}
           }

@@ -1,4 +1,4 @@
-import RoutesNative from "../build/routes-native.js"
+import RoutesNative from "../src/routes-native.js"
 
 const testRoutes = () => ({
   routes: [
@@ -9,7 +9,8 @@ const testRoutes = () => ({
     {"name": "new_drink", "path": "/drinks/new", "component": "drinks/edit"},
     {"name": "edit_drink", "path": "/drinks/:id/edit", "component": "drinks/edit"},
     {"name": "drink", "path": "/drinks/:id", "component": "drinks/show"},
-    {"name": "drinks", "path": "/drinks", "component": "drinks/index"}
+    {"name": "drinks", "path": "/drinks", "component": "drinks/index"},
+    {"name": "project_board", "path": "/projects/:projectId/boards/:boardId", "component": "boards/show"}
   ]
 })
 const testTranslations = () => {
@@ -85,8 +86,15 @@ describe("RoutesNative", () => {
     expect(daRoute).toEqual("/drinks/5/edit?drink[name]=Pina+Colada")
   })
 
+  it("handles multiple params without localization", () => {
+    const test = routesNative({currentLocale: "en"})
+    const boardRoute = test.projectBoardPath(5, 1)
+
+    expect(boardRoute).toEqual("/projects/5/boards/1")
+  })
+
   it("generates urls", () => {
-    if (!globalThis.location) globalThis.location = {} // eslint-disable-line jest/no-if
+    globalThis.location = {}
 
     globalThis.location.host = "localhost"
     globalThis.location.protocol = "http:"

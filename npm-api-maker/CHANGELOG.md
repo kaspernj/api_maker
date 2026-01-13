@@ -23,3 +23,4 @@
 - Loosen Icon style prop-types to accept React Native style props.
 - Forward inherited Text color while passing through all Icon style props.
 - Run Jest in ESM mode for Expo tests and rely on module mapping for ActionCable stubs.
+- Fix non-localized routes to map each path variable to the correct argument index.
