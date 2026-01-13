@@ -40,14 +40,12 @@ export default class ApiMakerRoutesNative {
       const urlMethodName = `${inflection.camelize(name, true)}Url`
 
       if (routeDefinitionArgs && routeDefinitionArgs.localized) {
-        /** @type {Record<string, PathPart[]>} */
-        const localizedRoutes = {}
+        const localizedRoutes = /** @type {Record<string, PathPart[]>} */ {}
 
         for (const locale in this.routeTranslationParts) {
           let variableCount = 0
 
-          /** @type {PathPart[]} */
-          const localizedPathParts = [
+          const localizedPathParts = /** @type {PathPart[]} */ [
             {type: "pathPart", name: ""},
             {type: "pathPart", name: locale}
           ]
@@ -74,8 +72,7 @@ export default class ApiMakerRoutesNative {
       } else {
         let variableCount = 0
 
-        /** @type {PathPart[]} */
-        const pathParts = rawPathParts.map((pathPart) => {
+        const pathParts = /** @type {PathPart[]} */ rawPathParts.map((pathPart) => {
           const variableMatch = pathPart.match(/^:([A-z_]+)$/)
 
           if (variableMatch) {
@@ -117,8 +114,7 @@ export default class ApiMakerRoutesNative {
    * @returns {string}
    */
   translateRoute ({args, localizedRoutes, pathParts, url}) {
-    /** @type {RouteOptions} */
-    let options
+    let options = /** @type {RouteOptions} */ {}
 
     // Extract options from args if any
     const lastArg = args[args.length - 1]
@@ -134,8 +130,7 @@ export default class ApiMakerRoutesNative {
 
     if (localizedRoutes) {
       // Put together route with variables and static translated parts (which were translated and cached previously)
-      /** @type {PathPart[]} */
-      const translatedPathParts = digg(localizedRoutes, locale || this.getLocale())
+      const translatedPathParts = /** @type {PathPart[]} */ digg(localizedRoutes, locale || this.getLocale())
       let translatedRoute = translatedPathParts
         .map((pathPart) => {
           if (pathPart.type == "pathPart") {
