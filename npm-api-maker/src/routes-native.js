@@ -3,13 +3,35 @@ import {dig, digg, digs} from "diggerize"
 import qs from "qs"
 import urlEncode from "./url-encode.js"
 
+/**
+ * @typedef {{type: "pathPart", name: string} | {type: "variable", count: number}} PathPart
+ */
+/**
+ * @typedef {{args: Array<unknown>, localizedRoutes?: Record<string, PathPart[]>, pathParts?: PathPart[], url?: boolean}} TranslateRouteArgs
+ */
+/**
+ * @typedef {{host?: string, port?: number|string, protocol?: string, translatedRoute: string}} HostRouteArgs
+ */
+/**
+ * @typedef {{locale?: string, host?: string, port?: number|string, protocol?: string} & Record<string, unknown>} RouteOptions
+ */
+
+/**
+ * Builds paths and URLs from route definitions for native usage.
+ */
 export default class ApiMakerRoutesNative {
+  /** @param {{getLocale: () => string}} options */
   constructor ({getLocale}) {
     this.getLocale = getLocale
     this.routeDefinitions = []
     this.routeTranslationParts = {}
   }
 
+  /**
+   * @param {object} routeDefinitions
+   * @param {{localized?: boolean}=} routeDefinitionArgs
+   * @returns {void}
+   */
   loadRouteDefinitions (routeDefinitions, routeDefinitionArgs) {
     for (const routeDefinition of digg(routeDefinitions, "routes")) {
       const {name, path} = digs(routeDefinition, "name", "path")
@@ -18,11 +40,13 @@ export default class ApiMakerRoutesNative {
       const urlMethodName = `${inflection.camelize(name, true)}Url`
 
       if (routeDefinitionArgs && routeDefinitionArgs.localized) {
+        /** @type {Record<string, PathPart[]>} */
         const localizedRoutes = {}
 
         for (const locale in this.routeTranslationParts) {
           let variableCount = 0
 
+          /** @type {PathPart[]} */
           const localizedPathParts = [
             {type: "pathPart", name: ""},
             {type: "pathPart", name: locale}
@@ -50,6 +74,7 @@ export default class ApiMakerRoutesNative {
       } else {
         let variableCount = 0
 
+        /** @type {PathPart[]} */
         const pathParts = rawPathParts.map((pathPart) => {
           const variableMatch = pathPart.match(/^:([A-z_]+)$/)
 
@@ -66,6 +91,10 @@ export default class ApiMakerRoutesNative {
     }
   }
 
+  /**
+   * @param {object} i18n
+   * @returns {void}
+   */
   loadRouteTranslations (i18n) {
     this.i18n = i18n
     const locales = digg(i18n, "locales")
@@ -83,14 +112,19 @@ export default class ApiMakerRoutesNative {
     }
   }
 
+  /**
+   * @param {TranslateRouteArgs} options
+   * @returns {string}
+   */
   translateRoute ({args, localizedRoutes, pathParts, url}) {
+    /** @type {RouteOptions} */
     let options
 
     // Extract options from args if any
     const lastArg = args[args.length - 1]
 
     if (lastArg && typeof lastArg == "object") {
-      options = args.pop()
+      options = /** @type {RouteOptions} */ (args.pop())
     } else {
       options = {}
     }
@@ -100,7 +134,9 @@ export default class ApiMakerRoutesNative {
 
     if (localizedRoutes) {
       // Put together route with variables and static translated parts (which were translated and cached previously)
-      let translatedRoute = digg(localizedRoutes, locale || this.getLocale())
+      /** @type {PathPart[]} */
+      const translatedPathParts = digg(localizedRoutes, locale || this.getLocale())
+      let translatedRoute = translatedPathParts
         .map((pathPart) => {
           if (pathPart.type == "pathPart") {
             return pathPart.name
@@ -108,7 +144,7 @@ export default class ApiMakerRoutesNative {
             // Args might not contain the right amount of variables, so dont change this to 'digg'
             return dig(args, digg(pathPart, "count"))
           } else {
-            throw new Error(`Unhandled path part type: ${pathPart.type}`)
+            throw new Error("Unhandled path part type")
           }
         })
         .join("/")
@@ -129,7 +165,7 @@ export default class ApiMakerRoutesNative {
           } else if (pathPart.type == "variable") {
             return digg(args, digg(pathPart, "count"))
           } else {
-            throw new Error(`Unhandled path part type: ${pathPart.type}`)
+            throw new Error("Unhandled path part type")
           }
         })
         .join("/")
@@ -146,6 +182,10 @@ export default class ApiMakerRoutesNative {
     throw new Error("Unhandled state")
   }
 
+  /**
+   * @param {HostRouteArgs} options
+   * @returns {string}
+   */
   addHostToRoute ({host, port, protocol, translatedRoute}) {
     let fullUrl = ""
 
