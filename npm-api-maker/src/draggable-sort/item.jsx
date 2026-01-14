@@ -6,7 +6,7 @@ import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-comp
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
-import useEventEmitter from "../use-event-emitter.js"
+import useEventEmitter from "ya-use-event-emitter"
 
 export default memo(shapeComponent(class DraggableSortItem extends ShapeComponent {
   static propTypes = propTypesExact({

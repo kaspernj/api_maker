@@ -1,7 +1,7 @@
 import Layout from "components/layout"
 import React from "react"
 import {Text, View} from "react-native"
-import useBreakpoint from "@kaspernj/api-maker/build/use-breakpoint"
+import {useBreakpoint} from "responsive-breakpoints"
 
 export default function RoutesUtilsUseBreakpoint() {
   const {styling} = useBreakpoint()

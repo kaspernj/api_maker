@@ -24,3 +24,9 @@
 - Forward inherited Text color while passing through all Icon style props.
 - Run Jest in ESM mode for Expo tests and rely on module mapping for ActionCable stubs.
 - Fix non-localized routes to map each path variable to the correct argument index.
+- Extract `useBreakpoint` into the new `responsive-breakpoints` package.
+- Use `ya-use-event-listener` for the shared event listener hook.
+- Switch the dummy `use-breakpoint` route to the `responsive-breakpoints` package.
+- Extract `useEventEmitter` into the new `ya-use-event-emitter` package.
+- Bump `flash-notifications` in the dummy app.
+- Update dummy routes to use `ya-use-event-emitter` directly.

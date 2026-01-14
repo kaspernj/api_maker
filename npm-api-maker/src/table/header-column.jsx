@@ -10,7 +10,7 @@ import {Animated, PanResponder} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import useBreakpoint from "../use-breakpoint.js"
+import {useBreakpoint} from "responsive-breakpoints"
 import Widths from "./widths"
 
 const dataSets = {}
