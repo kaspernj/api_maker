@@ -66,7 +66,7 @@
     "uniqunize": "^1.0.3",
     "url-parse": "^1.5.10",
     "wake-event": ">= 0.0.1",
-    "ya-use-event-emitter": "^0.1.1",
+    "ya-use-event-emitter": "^0.1.2",
     "ya-use-event-listener": ">= 0.1.1"
   },
   "devDependencies": {
