@@ -29,3 +29,4 @@
 - Switch the dummy `use-breakpoint` route to the `responsive-breakpoints` package.
 - Extract `useEventEmitter` into the new `ya-use-event-emitter` package.
 - Bump `flash-notifications` in the dummy app.
+- Update dummy routes to use `ya-use-event-emitter` directly.

@@ -63,6 +63,7 @@
     "webpack-cli": "6",
     "webpack-dev-server": "5",
     "webpack-merge": "6",
+    "ya-use-event-emitter": "0.1.1",
     "ya-use-event-listener": ">= 0.1.1"
   }
 }
