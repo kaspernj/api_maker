@@ -215,7 +215,7 @@ export default class ApiMakerCollection {
     } else {
       const relationshipsLoaded = uniqunize(Object.keys(model.relationships).concat(Object.keys(model.relationshipsCache)))
 
-      throw new Error(`${reflectionName} hasnt been loaded yet on ${model.modelClassData().name}. Loaded was: ${relationshipsLoaded.join(", ")}`)
+      throw new Error(`${reflectionName} hasn't been loaded yet on ${model.modelClassData().name}. Loaded was: ${relationshipsLoaded.join(", ")}`)
     }
   }
 
