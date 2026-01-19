@@ -4723,10 +4723,10 @@ ws@^8.18.0:
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.18.0.tgz#0d7505a6eafe2b0e712d232b42279f53bc289bbc"
   integrity sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==
 
-ya-use-event-emitter@0.1.1, ya-use-event-emitter@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/ya-use-event-emitter/-/ya-use-event-emitter-0.1.1.tgz#f2a0b023bfda0082f2c5f277b0965096ddc07276"
-  integrity sha512-hUL4yhZ37xfVayF+SeyAr3y4xYE2PKMaKxslSwCRY+BTSn+LGTf1X3kEFsHXO85AKYl8YfNgq9ZEQJWzj7TzIA==
+ya-use-event-emitter@0.1.2, ya-use-event-emitter@^0.1.1:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/ya-use-event-emitter/-/ya-use-event-emitter-0.1.2.tgz#e29c91302ab799b62513166ec5dcfe7283135aad"
+  integrity sha512-/VKnNnd4Oj57cdrNeuV/cfCOQfBFoQh2OoQYxHCVvP3Lb8v72+XVejSOyZ8XmHhJhH32WzPWaIW57cRxJoUCwg==
   dependencies:
     env-sense ">= 1.0.2"
 
