@@ -197,6 +197,37 @@ import Routes from "routes"
 Routes.userPath(user.id()) //=> /users/4
 ```
 
+### Super Admin
+
+The Super Admin edit page supports both controlled and uncontrolled custom inputs via the `edit.attributes[].content` callback. When using uncontrolled inputs, rely on `defaultValue` and call `onChangeValue` so the `<Form>` can capture changes.
+
+```jsx
+import React from "react"
+import {Text, TextInput, View} from "react-native"
+
+export default {
+  edit: {
+    attributes: [
+      {
+        attribute: "liquidRule",
+        content: ({defaultValue, inputProps, onChangeValue}) => (
+          <View>
+            <Text>Liquid rule</Text>
+            <TextInput
+              dataSet={{id: inputProps.id}}
+              defaultValue={defaultValue}
+              onChangeText={onChangeValue}
+            />
+          </View>
+        )
+      }
+    ]
+  }
+}
+```
+
+If you prefer controlled inputs, use the `value` argument instead of `defaultValue`.
+
 ### ActionCable
 
 Your `connection.rb` should look something like this:
