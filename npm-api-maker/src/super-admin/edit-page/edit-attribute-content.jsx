@@ -17,13 +17,15 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
 
   setup() {
     this.form = useForm()
-    this.initialValue = this.defaultValue()
+    const rawValue = this.rawValue()
+    this.initialValue = rawValue === null || rawValue === undefined ? "" : rawValue
+    this.hasInitialValue = rawValue !== null && rawValue !== undefined
     this.useStates({
       value: this.initialValue
     })
 
     useMemo(() => {
-      if (this.form) {
+      if (this.form && this.hasInitialValue) {
         this.form.setValue(this.p.name, this.initialValue)
       }
     }, [])
@@ -51,12 +53,14 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
     return attribute.content(contentArgs)
   }
 
-  defaultValue = () => {
+  defaultValue = () => this.initialValue
+
+  rawValue = () => {
     if (!(this.p.attribute.attribute in this.p.model)) {
       throw new Error(`No attribute called ${this.p.attribute.attribute} in model ${this.p.model.modelClassData().name}`)
     }
 
-    return this.p.model[this.p.attribute.attribute]() || ""
+    return this.p.model[this.p.attribute.attribute]()
   }
 
   onChangeValue = (newValue) => {
