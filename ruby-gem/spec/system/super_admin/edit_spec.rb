@@ -19,4 +19,18 @@ describe "super admin - edit" do
       }
     )
   end
+
+  it "renders default values for custom edit content inputs" do
+    task = create :task, state: "closed"
+
+    login_as user_admin
+
+    resource = ApiMaker::MemoryStorage.current.resource_for_model(task.class)
+    visit super_admin_path(model: resource.short_name)
+    wait_for_and_find(model_row_edit_button_selector(task)).click
+    wait_for_selector "[data-testid='super-admin--edit-page']"
+
+    state_input = wait_for_and_find("input[data-id='task_state'], textarea[data-id='task_state']")
+    expect(state_input.value).to eq "closed"
+  end
 end
