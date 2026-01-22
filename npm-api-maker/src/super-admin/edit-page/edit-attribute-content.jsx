@@ -17,9 +17,16 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
 
   setup() {
     this.form = useForm()
+    this.initialValue = this.defaultValue()
     this.useStates({
-      value: () => this.defaultValue()
+      value: this.initialValue
     })
+
+    useMemo(() => {
+      if (this.form) {
+        this.form.setValue(this.p.name, this.initialValue)
+      }
+    }, [])
   }
 
   render() {
@@ -30,9 +37,10 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
     }
 
     const contentArgs = useMemo(() => ({
+      defaultValue: this.initialValue,
       inputProps: {
         attribute: attribute.attribute,
-        defaultValue: this.defaultValue(),
+        defaultValue: this.initialValue,
         id,
         model
       },
