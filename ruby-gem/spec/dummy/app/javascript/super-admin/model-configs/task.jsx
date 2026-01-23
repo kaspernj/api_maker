@@ -3,6 +3,22 @@
 import {Text, TextInput, View} from "react-native"
 import React from "react"
 
+const ProjectInput = ({defaultValue, inputProps, onChangeValue}) => (
+  <View>
+    <Text>
+      Project
+    </Text>
+    <Text testID="super-admin-task-project-input-name">
+      {inputProps.name}
+    </Text>
+    <TextInput
+      dataSet={{id: inputProps.id, name: inputProps.name}}
+      defaultValue={defaultValue}
+      onChangeText={onChangeValue}
+    />
+  </View>
+)
+
 export default {
   edit: {
     attributes: [
@@ -23,7 +39,12 @@ export default {
           </View>
         )
       },
-      {attribute: "projectId"},
+      {
+        attribute: "projectId",
+        content: ({defaultValue, inputProps, onChangeValue}) => (
+          <ProjectInput defaultValue={defaultValue} inputProps={inputProps} onChangeValue={onChangeValue} />
+        )
+      },
       {attribute: "userId"}
     ]
   }

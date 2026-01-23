@@ -44,11 +44,12 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
         attribute: attribute.attribute,
         defaultValue: this.initialValue,
         id,
-        model
+        model,
+        name: this.p.name
       },
       onChangeValue: this.tt.onChangeValue,
       value: this.s.value
-    }), [attribute.attribute, id, model, this.s.value])
+    }), [attribute.attribute, id, model, this.p.name, this.s.value])
 
     return attribute.content(contentArgs)
   }
