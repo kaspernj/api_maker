@@ -13,7 +13,7 @@ describe "super admin - content input names" do
     wait_for_selector "[data-testid='super-admin--edit-page']"
 
     wait_for_expect do
-      expect(page).to have_css("[data-testid='super-admin-task-project-input-name']", text: "task[project_id]")
+      expect(page).to have_css("[data-testid='super-admin-task-project-input-name']", text: "project_id")
     end
   end
 end
