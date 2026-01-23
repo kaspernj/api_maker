@@ -33,3 +33,4 @@
 - Bump `flash-notifications` in the dummy app.
 - Update dummy routes to use `ya-use-event-emitter` directly.
 - Support `paddingHorizontal` and `paddingVertical` on web `<Link>` anchors.
+- Add system coverage for Link padding props.
