@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import {Platform, Pressable} from "react-native"
+import {Platform, Pressable, StyleSheet} from "react-native"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useApiMaker} from "@kaspernj/api-maker/build/with-api-maker.js"
 import BaseComponent from "./base-component"
@@ -10,6 +10,8 @@ import memo from "set-state-compare/build/memo.js"
 
 export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   static propTypes = {
+    paddingHorizontal: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    paddingVertical: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     usePressable: PropTypes.bool
   }
 
@@ -18,7 +20,8 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   }
 
   render() {
-    const {dataSet, to, onClick, onPress, testID, usePressable, ...restProps} = this.props
+    const {dataSet, to, onClick, onPress, paddingHorizontal, paddingVertical, style, testID, usePressable, ...restProps} = this.props
+    const linkStyle = this.linkStyle({paddingHorizontal, paddingVertical, style, usePressable})
 
     if (Platform.OS == "web" && !usePressable) {
       return (
@@ -26,14 +29,134 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
           {...dataSetToAttributes(Object.assign({testid: testID}, dataSet))} // eslint-disable-line prefer-object-spread
           href={to || "#"}
           onClick={this.tt.onLinkClicked}
+          style={linkStyle}
           {...restProps}
         />
       )
     }
 
     return (
-      <Pressable dataSet={dataSet} onPress={this.tt.onPress} testID={testID} {...restProps} />
+      <Pressable dataSet={dataSet} onPress={this.tt.onPress} style={linkStyle} testID={testID} {...restProps} />
     )
+  }
+
+  /** Returns a cached style with padding props applied. */
+  linkStyle({paddingHorizontal, paddingVertical, style, usePressable}) {
+    if (Platform.OS == "web" && !usePressable) {
+      return this.linkStyleForAnchor({paddingHorizontal, paddingVertical, style})
+    }
+
+    return this.linkStyleForPressable({paddingHorizontal, paddingVertical, style})
+  }
+
+  /** Returns the anchor style with padding props applied. */
+  linkStyleForAnchor({paddingHorizontal, paddingVertical, style}) {
+    return this.cache("linkStyleForAnchor", () => {
+      const resolvedStyle = this.resolveStyleForAnchor(style)
+      const overrides = this.paddingOverridesFromStyle({paddingHorizontal, paddingVertical, style: resolvedStyle})
+
+      if (!overrides) return resolvedStyle
+
+      const nextStyle = {...resolvedStyle}
+
+      delete nextStyle.paddingHorizontal
+      delete nextStyle.paddingVertical
+
+      return {...nextStyle, ...overrides}
+    }, [paddingHorizontal, paddingVertical, style])
+  }
+
+  /** Returns a Pressable-compatible style with padding props applied. */
+  linkStyleForPressable({paddingHorizontal, paddingVertical, style}) {
+    return this.cache("linkStyleForPressable", () => {
+      if (typeof style == "function") {
+        return (state) => {
+          const resolvedStyle = style(state)
+          const overrides = this.paddingOverridesFromStyle({paddingHorizontal, paddingVertical, style: resolvedStyle})
+
+          if (!overrides) return resolvedStyle
+
+          if (Array.isArray(resolvedStyle)) return [...resolvedStyle, overrides]
+
+          if (resolvedStyle && typeof resolvedStyle == "object") {
+            return {...this.stripPaddingShorthand(resolvedStyle), ...overrides}
+          }
+
+          return [resolvedStyle, overrides]
+        }
+      }
+
+      const overrides = this.paddingOverridesFromStyle({paddingHorizontal, paddingVertical, style})
+
+      if (!overrides) return style
+
+      if (!style) return overrides
+
+      if (Array.isArray(style)) return [...style, overrides]
+
+      if (typeof style == "object") {
+        return {...this.stripPaddingShorthand(style), ...overrides}
+      }
+
+      return [style, overrides]
+    }, [paddingHorizontal, paddingVertical, style])
+  }
+
+  /** Resolves a style object for anchor rendering. */
+  resolveStyleForAnchor(style) {
+    if (typeof style == "function") {
+      return StyleSheet.flatten(style({pressed: false, focused: false, hovered: false})) || {}
+    }
+
+    if (Array.isArray(style)) return StyleSheet.flatten(style) || {}
+
+    return style || {}
+  }
+
+  /** Returns padding overrides based on the resolved style. */
+  paddingOverridesFromStyle({paddingHorizontal, paddingVertical, style}) {
+    const styleObject = StyleSheet.flatten(style) || {}
+    const stylePaddingHorizontal = styleObject.paddingHorizontal
+    const stylePaddingVertical = styleObject.paddingVertical
+    const paddingHorizontalDefined = this.isDefined(paddingHorizontal)
+    const paddingVerticalDefined = this.isDefined(paddingVertical)
+    const stylePaddingHorizontalDefined = this.isDefined(stylePaddingHorizontal)
+    const stylePaddingVerticalDefined = this.isDefined(stylePaddingVertical)
+    const hasPaddingHorizontal = paddingHorizontalDefined || stylePaddingHorizontalDefined
+    const hasPaddingVertical = paddingVerticalDefined || stylePaddingVerticalDefined
+
+    if (!hasPaddingHorizontal && !hasPaddingVertical) return null
+
+    const resolvedPaddingHorizontal = paddingHorizontalDefined ? paddingHorizontal : stylePaddingHorizontal
+    const resolvedPaddingVertical = paddingVerticalDefined ? paddingVertical : stylePaddingVertical
+    const overrides = {}
+
+    if (this.isDefined(resolvedPaddingHorizontal)) {
+      if (!this.isDefined(styleObject.paddingLeft)) overrides.paddingLeft = resolvedPaddingHorizontal
+      if (!this.isDefined(styleObject.paddingRight)) overrides.paddingRight = resolvedPaddingHorizontal
+    }
+
+    if (this.isDefined(resolvedPaddingVertical)) {
+      if (!this.isDefined(styleObject.paddingTop)) overrides.paddingTop = resolvedPaddingVertical
+      if (!this.isDefined(styleObject.paddingBottom)) overrides.paddingBottom = resolvedPaddingVertical
+    }
+
+    return overrides
+  }
+
+  /** Removes padding shorthand values from a style object. */
+  stripPaddingShorthand(style) {
+    const nextStyle = {...style}
+
+    delete nextStyle.paddingHorizontal
+    delete nextStyle.paddingVertical
+
+    return nextStyle
+  }
+
+  /** Returns true when a value is neither null nor undefined. */
+  isDefined(value) {
+    return value !== null && value !== undefined
   }
 
   onLinkClicked = (e, ...restArgs) => {

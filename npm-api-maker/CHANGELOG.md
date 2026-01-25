@@ -32,3 +32,6 @@
 - Extract `useEventEmitter` into the new `ya-use-event-emitter` package.
 - Bump `flash-notifications` in the dummy app.
 - Update dummy routes to use `ya-use-event-emitter` directly.
+- Support `paddingHorizontal` and `paddingVertical` on web `<Link>` anchors.
+- Add system coverage for Link padding props.
+- Preserve Pressable style arrays/functions when padding props are applied on Link.
