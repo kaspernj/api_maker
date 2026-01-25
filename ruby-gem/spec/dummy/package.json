@@ -39,7 +39,7 @@
     "i18n-on-steroids": "^1.0.21",
     "inflection": "^3.0.2",
     "js-yaml-loader": "^1.2.2",
-    "mini-css-extract-plugin": "^2.9.4",
+    "mini-css-extract-plugin": "^2.10.0",
     "on-location-changed": "^1.0.18",
     "prop-types": "^15.8.1",
     "prop-types-exact": "^1.2.7",
