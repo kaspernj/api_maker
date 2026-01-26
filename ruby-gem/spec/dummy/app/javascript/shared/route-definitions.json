@@ -17,6 +17,7 @@
     {"name": "inputs_checkbox", "path": "/inputs/checkbox", "component": "inputs/checkbox"},
     {"name": "utils_checkbox", "path": "/utils/checkbox", "component": "utils/checkbox"},
     {"name": "utils_use_breakpoint", "path": "/utils/use-breakpoint", "component": "utils/use-breakpoint"},
+    {"name": "utils_use_model_new_if_no_id", "path": "/utils/use-model-new-if-no-id", "component": "utils/use-model-new-if-no-id"},
 
     {"name": "models_command_serialize", "path": "/models/command-serialize", "component": "models/command-serialize"},
     {"name": "models_created_event", "path": "/models/created-event", "component": "models/created-event"},
