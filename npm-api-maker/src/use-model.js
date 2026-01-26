@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import {useCallback, useLayoutEffect, useMemo} from "react"
+import {useCallback, useLayoutEffect} from "react"
 import Devise from "./devise.js"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.js"
@@ -21,6 +21,7 @@ import useShape from "set-state-compare/build/use-shape.js"
  * @param {Function|object} modelClassArg
  * @param {object | ((args: {modelClass: typeof import("./base-model.js").default}) => useModelArgs)} [argsArg]
  */
+// eslint-disable-next-line complexity
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
   let args, modelClass
@@ -92,7 +93,14 @@ const useModel = (modelClassArg, argsArg = {}) => {
     let defaults = {}
 
     if (s.props.newIfNoId?.defaults) {
-      defaults = await s.props.newIfNoId.defaults()
+      let defaultsResult = s.m.newIfNoIdDefaultsResult
+
+      if (defaultsResult === null) {
+        defaultsResult = s.props.newIfNoId.defaults()
+      }
+
+      s.meta.newIfNoIdDefaultsResult = null
+      defaults = await defaultsResult
     }
 
     const modelData = Object.assign(defaults, s.props.newAttributes, modelDataFromParams)
@@ -135,8 +143,38 @@ const useModel = (modelClassArg, argsArg = {}) => {
   }
 
   s.updateMeta({args, modelId, modelVariableName, queryParams})
+  if (s.meta.syncNewModel == undefined) s.meta.syncNewModel = false
+  if (s.meta.newIfNoIdDefaultsResult == undefined) s.meta.newIfNoIdDefaultsResult = null
 
-  useMemo(
+  if (s.m.active && s.props.newIfNoId && !s.m.modelId && !s.s.model && !s.m.syncNewModel) {
+    if (s.props.newIfNoId?.defaults && s.m.newIfNoIdDefaultsResult === null) {
+      const defaultsResult = s.props.newIfNoId.defaults()
+
+      if (defaultsResult && typeof defaultsResult.then == "function") {
+        s.meta.newIfNoIdDefaultsResult = defaultsResult.catch((error) => {
+          throw error
+        })
+      } else {
+        s.meta.newIfNoIdDefaultsResult = defaultsResult
+      }
+    }
+
+    if (!(s.m.newIfNoIdDefaultsResult && typeof s.m.newIfNoIdDefaultsResult.then == "function")) {
+      const ModelClass = modelClass
+      const paramKey = ModelClass.modelName().paramKey()
+      const modelDataFromParams = s.m.queryParams[paramKey] || {}
+      const modelData = Object.assign(s.m.newIfNoIdDefaultsResult || {}, s.props.newAttributes, modelDataFromParams)
+      const model = new ModelClass({
+        isNewRecord: true,
+        data: {a: modelData}
+      })
+
+      s.meta.syncNewModel = model
+      s.set({model})
+    }
+  }
+
+  useLayoutEffect(
     () => { loadModel() },
     cacheArgs
   )
