@@ -30,6 +30,11 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
         {!canCan &&
           "can can not loaded"
         }
+        {canCan &&
+          <Text dataSet={{class: "can-can-cache-key"}}>
+            {canCan.getCacheKey()}
+          </Text>
+        }
         {canCan && canCan.can("sum", Account) &&
           <div className="can-access-admin">
             can access admin

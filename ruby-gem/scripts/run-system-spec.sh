@@ -7,5 +7,5 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${repo_root}/ruby-gem"
 
 rm -rf spec/dummy/public/packs/
-(cd spec/dummy && bin/shakapacker)
-xvfb-run bundle exec appraisal "rails 7" rspec "${spec_path}"
+(cd spec/dummy && bundle _2.3.15_ exec bin/shakapacker)
+xvfb-run bundle _2.3.15_ exec appraisal "rails 7" rspec "${spec_path}"

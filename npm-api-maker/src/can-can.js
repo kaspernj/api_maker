@@ -12,6 +12,7 @@ export default class ApiMakerCanCan {
   abilitiesToLoad = []
   abilitiesToLoadData = []
   abilitiesGeneration = 0
+  cacheKey = 0
   loadingCount = 0
   events = new EventEmitter()
   lock = new ReadersWriterLock()
@@ -83,6 +84,10 @@ export default class ApiMakerCanCan {
     return this.loadingCount > 0
   }
 
+  getCacheKey () {
+    return this.cacheKey
+  }
+
   async loadAbilities (abilities) {
     try {
       await this.lock.read(async () => {
@@ -144,6 +149,7 @@ export default class ApiMakerCanCan {
     await this.lock.write(() => {
       this.abilities = []
       this.abilitiesGeneration += 1
+      this.cacheKey += 1
       this.loadingCount += 1
     })
     this.events.emit("onResetAbilities")
@@ -175,6 +181,7 @@ export default class ApiMakerCanCan {
 
     // Set the loaded abilities
     this.abilities = this.abilities.concat(abilities)
+    this.cacheKey += 1
 
     // Call the callbacks that are waiting for the ability to have been loaded
     for (const abilityData of abilitiesToLoad) {
