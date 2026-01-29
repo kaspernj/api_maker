@@ -39,4 +39,19 @@ describe "can can - loader" do
     wait_for_and_find(".show-loader-that-signs-out-on-load-button").click
     wait_for_selector cannot_access_admin_selector
   end
+
+  it "updates the cache key when abilities reset" do
+    login_as user
+    visit can_can_loader_path
+    wait_for_selector ".components-can-can-loader-with-state #{can_access_admin_selector}"
+
+    cache_key_selector = ".components-can-can-loader-with-state [data-class='can-can-cache-key']"
+    initial_cache_key = wait_for_and_find(cache_key_selector).text.to_i
+
+    wait_for_and_find(".reset-abilities-button").click
+
+    wait_for_expect do
+      expect(wait_for_and_find(cache_key_selector).text.to_i).to be > initial_cache_key
+    end
+  end
 end
