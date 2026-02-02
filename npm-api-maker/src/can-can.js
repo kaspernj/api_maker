@@ -14,6 +14,9 @@ export default class ApiMakerCanCan {
   abilitiesGeneration = 0
   cacheKey = 0
   loadingCount = 0
+  reloadPromises = new Map()
+  resetPromise = null
+  resettingGeneration = null
   events = new EventEmitter()
   lock = new ReadersWriterLock()
 
@@ -81,7 +84,7 @@ export default class ApiMakerCanCan {
   }
 
   isReloading () {
-    return this.loadingCount > 0
+    return this.loadingCount > 0 || this.resettingGeneration !== null
   }
 
   getCacheKey () {
@@ -89,6 +92,10 @@ export default class ApiMakerCanCan {
   }
 
   async loadAbilities (abilities) {
+    const generation = this.abilitiesGeneration
+
+    this.loadingCount += 1
+
     try {
       await this.lock.read(async () => {
         const promises = []
@@ -110,6 +117,7 @@ export default class ApiMakerCanCan {
       })
     } finally {
       if (this.loadingCount > 0) this.loadingCount -= 1
+      if (this.resettingGeneration === generation) this.resettingGeneration = null
     }
   }
 
@@ -146,13 +154,42 @@ export default class ApiMakerCanCan {
   }
 
   async resetAbilities () {
-    await this.lock.write(() => {
-      this.abilities = []
-      this.abilitiesGeneration += 1
-      this.cacheKey += 1
-      this.loadingCount += 1
-    })
-    this.events.emit("onResetAbilities")
+    if (this.resetPromise) return this.resetPromise
+
+    this.resetPromise = (async () => {
+      await this.lock.write(() => {
+        this.abilities = []
+        this.abilitiesGeneration += 1
+        this.resettingGeneration = this.abilitiesGeneration
+        this.cacheKey += 1
+      })
+      this.events.emit("onResetAbilities")
+    })()
+
+    try {
+      await this.resetPromise
+    } finally {
+      this.resetPromise = null
+    }
+  }
+
+  async reloadAbilities (abilities, reloadKey) {
+    if (reloadKey && this.reloadPromises.has(reloadKey)) {
+      return this.reloadPromises.get(reloadKey)
+    }
+
+    const promise = (async () => {
+      await this.resetAbilities()
+      await this.loadAbilities(abilities)
+    })()
+
+    if (reloadKey) this.reloadPromises.set(reloadKey, promise)
+
+    try {
+      await promise
+    } finally {
+      if (reloadKey) this.reloadPromises.delete(reloadKey)
+    }
   }
 
   sendAbilitiesRequest = async () => {
@@ -163,13 +200,23 @@ export default class ApiMakerCanCan {
     this.abilitiesToLoad = []
     this.abilitiesToLoadData = []
 
-    // Load abilities from backend
-    const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
-      request: abilitiesToLoadData
-    })
-    const abilities = digg(result, "abilities")
+    let abilities = []
+    let didFail = false
 
-    if (generation !== this.abilitiesGeneration) {
+    // Load abilities from backend
+    try {
+      const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
+        request: abilitiesToLoadData
+      })
+      const responseAbilities = digg(result, "abilities")
+
+      if (Array.isArray(responseAbilities)) abilities = responseAbilities
+    } catch (error) {
+      didFail = true
+      console.error("Failed to load abilities", error)
+    }
+
+    if (generation !== this.abilitiesGeneration || didFail) {
       for (const abilityData of abilitiesToLoad) {
         for (const callback of abilityData.callbacks) {
           callback()
