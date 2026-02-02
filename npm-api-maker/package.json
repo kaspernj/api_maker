@@ -85,7 +85,7 @@
     "expo-module-scripts": "^5.0.8",
     "jest": "~29.7.0",
     "react": "19.0.0",
-    "react-native": "0.79.6",
+    "react-native": "0.83.1",
     "typescript": "~5.8.3",
     "velocious": "^1.0.175"
   },
