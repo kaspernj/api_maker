@@ -5,7 +5,10 @@ import {jest} from "@jest/globals"
 describe("CanCan", () => {
   let canCan
 
-  const flushPromises = () => Promise.resolve()
+  const flushPromises = async () => {
+    await Promise.resolve()
+    await Promise.resolve()
+  }
 
   beforeEach(() => {
     canCan = new CanCan()
@@ -69,7 +72,7 @@ describe("CanCan", () => {
       const loadPromise = canCan.loadAbilities([["user", ["read"]]])
       const loadPromiseTwo = canCan.loadAbilities([["user", ["read"]]])
 
-      jest.runOnlyPendingTimers()
+      await jest.runAllTimersAsync()
 
       expect(canCan.isReloading()).toBe(true)
 
@@ -94,7 +97,7 @@ describe("CanCan", () => {
 
       const loadPromise = canCan.loadAbilities([["user", ["read"]]])
 
-      jest.runOnlyPendingTimers()
+      await jest.runAllTimersAsync()
 
       await flushPromises()
       await loadPromise
@@ -116,7 +119,7 @@ describe("CanCan", () => {
       const reloadPromise = canCan.reloadAbilities([["user", ["read"]]], "same-key")
       const reloadPromiseTwo = canCan.reloadAbilities([["user", ["read"]]], "same-key")
 
-      jest.runOnlyPendingTimers()
+      await jest.runAllTimersAsync()
 
       await Promise.all([reloadPromise, reloadPromiseTwo])
 
