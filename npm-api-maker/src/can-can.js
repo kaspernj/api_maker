@@ -14,6 +14,8 @@ export default class ApiMakerCanCan {
   abilitiesGeneration = 0
   cacheKey = 0
   loadingCount = 0
+  missingAbilities = new Map()
+  missingAbilitiesTimeout = null
   reloadPromises = new Map()
   resetPromise = null
   resettingGeneration = null
@@ -26,25 +28,63 @@ export default class ApiMakerCanCan {
     return shared.currentApiMakerCanCan
   }
 
-  can (ability, subject) {
+  can (ability, subject, options = {}) {
     let abilityToUse = inflection.underscore(ability)
     const foundAbility = this.findAbility(abilityToUse, subject)
 
     if (foundAbility === undefined) {
       if (this.isReloading()) return false
+      this.recordMissingAbility(abilityToUse, subject)
 
-      let subjectLabel = subject
+      if (options.debug) {
+        let subjectLabel = subject
 
-      // Translate resource-models into class name strings
-      if (typeof subject == "function" && subject.modelClassData) {
-        subjectLabel = digg(subject.modelClassData(), "name")
+        // Translate resource-models into class name strings
+        if (typeof subject == "function" && subject.modelClassData) {
+          subjectLabel = digg(subject.modelClassData(), "name")
+        }
+
+        console.error(`Ability not loaded ${subjectLabel}#${abilityToUse}`, {abilities: this.abilities, ability, subject})
       }
-
-      console.error(`Ability not loaded ${subjectLabel}#${abilityToUse}`, {abilities: this.abilities, ability, subject})
 
       return false
     } else {
       return digg(foundAbility, "can")
+    }
+  }
+
+  recordMissingAbility (ability, subject) {
+    let missingAbilitySet = this.missingAbilities.get(subject)
+
+    if (!missingAbilitySet) {
+      missingAbilitySet = new Set()
+      this.missingAbilities.set(subject, missingAbilitySet)
+    }
+
+    if (missingAbilitySet.has(ability)) return
+
+    missingAbilitySet.add(ability)
+    this.queueMissingAbilitiesLoad()
+  }
+
+  queueMissingAbilitiesLoad () {
+    if (this.missingAbilitiesTimeout) {
+      clearTimeout(this.missingAbilitiesTimeout)
+    }
+
+    this.missingAbilitiesTimeout = setTimeout(this.loadMissingAbilities, 0)
+  }
+
+  loadMissingAbilities = () => {
+    const missingAbilities = this.missingAbilities
+
+    this.missingAbilities = new Map()
+    this.missingAbilitiesTimeout = null
+
+    for (const [subject, abilities] of missingAbilities.entries()) {
+      for (const ability of abilities) {
+        this.loadAbility(ability, subject)
+      }
     }
   }
 
