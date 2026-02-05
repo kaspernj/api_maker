@@ -1,10 +1,10 @@
 import React, {memo, useEffect, useState} from "react"
 import {Account} from "models.js"
+import CanCan from "@kaspernj/api-maker/build/can-can.js"
 import Layout from "components/layout"
-import useCanCan from "@kaspernj/api-maker/build/use-can-can.js"
 
 export default memo(() => {
-  const canCan = useCanCan(() => [])
+  const canCan = CanCan.current()
   const [status, setStatus] = useState("loading")
 
   useEffect(() => {
@@ -13,9 +13,10 @@ export default memo(() => {
     let isActive = true
     const checkAbility = () => {
       if (!isActive) return
-      canCan.can("index", Account)
 
-      if (canCan.isAbilityLoaded?.("index", Account)) setStatus("loaded")
+      const canAccess = canCan.can("index", Account)
+
+      if (canAccess) setStatus("loaded")
     }
 
     checkAbility()

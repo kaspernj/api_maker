@@ -33,7 +33,6 @@ export default class ApiMakerCanCan {
     const foundAbility = this.findAbility(abilityToUse, subject)
 
     if (foundAbility === undefined) {
-      if (this.isReloading()) return false
       this.recordMissingAbility(abilityToUse, subject)
 
       if (options.debug) {
@@ -68,9 +67,7 @@ export default class ApiMakerCanCan {
   }
 
   queueMissingAbilitiesLoad () {
-    if (this.missingAbilitiesTimeout) {
-      clearTimeout(this.missingAbilitiesTimeout)
-    }
+    if (this.missingAbilitiesTimeout) return
 
     this.missingAbilitiesTimeout = setTimeout(this.loadMissingAbilities, 0)
   }
@@ -186,9 +183,7 @@ export default class ApiMakerCanCan {
   }
 
   queueAbilitiesRequest () {
-    if (this.queueAbilitiesRequestTimeout) {
-      clearTimeout(this.queueAbilitiesRequestTimeout)
-    }
+    if (this.queueAbilitiesRequestTimeout) return
 
     this.queueAbilitiesRequestTimeout = setTimeout(this.sendAbilitiesRequest, 0)
   }
@@ -233,6 +228,7 @@ export default class ApiMakerCanCan {
   }
 
   sendAbilitiesRequest = async () => {
+    this.queueAbilitiesRequestTimeout = null
     const generation = this.abilitiesGeneration
     const abilitiesToLoad = this.abilitiesToLoad
     const abilitiesToLoadData = this.abilitiesToLoadData
@@ -247,7 +243,7 @@ export default class ApiMakerCanCan {
     try {
       const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
         request: abilitiesToLoadData
-      })
+      }, {instant: true})
       const responseAbilities = digg(result, "abilities")
 
       if (Array.isArray(responseAbilities)) abilities = responseAbilities
