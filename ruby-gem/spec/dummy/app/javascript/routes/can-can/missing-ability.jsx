@@ -13,7 +13,7 @@ export default memo(() => {
     let isActive = true
     const checkAbility = () => {
       if (!isActive) return
-      if (canCan.can("sum", Account)) setStatus("loaded")
+      if (canCan.isAbilityLoaded?.("sum", Account)) setStatus("loaded")
     }
 
     checkAbility()
