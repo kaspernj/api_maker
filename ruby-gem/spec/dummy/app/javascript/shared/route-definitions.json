@@ -13,6 +13,7 @@
     {"name": "bootstrap_string_input_money", "path": "/bootstrap/string-input-money", "component": "bootstrap/string-input-money"},
 
     {"name": "can_can_loader", "path": "/can_can/loader", "component": "can-can/loader"},
+    {"name": "can_can_missing_ability", "path": "/can_can/missing_ability", "component": "can-can/missing-ability"},
 
     {"name": "inputs_checkbox", "path": "/inputs/checkbox", "component": "inputs/checkbox"},
     {"name": "utils_checkbox", "path": "/utils/checkbox", "component": "utils/checkbox"},
