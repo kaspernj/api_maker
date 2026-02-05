@@ -46,7 +46,7 @@ export default class ApiMakerCanCan {
         console.error(`Ability not loaded ${subjectLabel}#${abilityToUse}`, {abilities: this.abilities, ability, subject})
       }
 
-      return false
+      return null
     } else {
       return digg(foundAbility, "can")
     }
