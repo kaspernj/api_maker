@@ -78,10 +78,14 @@ export default class ApiMakerCanCan {
     this.missingAbilities = new Map()
     this.missingAbilitiesTimeout = null
 
+    const abilitiesToLoad = []
+
     for (const [subject, abilities] of missingAbilities.entries()) {
-      for (const ability of abilities) {
-        this.loadAbility(ability, subject)
-      }
+      abilitiesToLoad.push([subject, Array.from(abilities)])
+    }
+
+    if (abilitiesToLoad.length > 0) {
+      this.loadAbilities(abilitiesToLoad)
     }
   }
 
