@@ -71,7 +71,8 @@ export default function useCanCan(abilitiesCallback, dependencies) {
     loadAbilities()
   }, [loadAbilities])
 
-  const dependencyList = dependencies ?? [currentUser?.id()] // @ts-expect-error
+  const currentUserId = /** @type {any} */ (currentUser)?.id?.()
+  const dependencyList = dependencies ?? [currentUserId]
   const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
 
   useEffect(() => {
