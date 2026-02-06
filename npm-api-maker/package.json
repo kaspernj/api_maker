@@ -21,6 +21,7 @@
     "release:patch": "node scripts/release-patch.js",
     "release:patch-master": "node scripts/release-patch.js --require-master",
     "typecheck": "tsc --noEmit",
+    "typecheck:file": "sh -c 'tsc --noEmit -p tsconfig.json | rg \"$npm_config_file\"'",
     "watch": "tsc -w"
   },
   "keywords": [
