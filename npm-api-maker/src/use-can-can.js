@@ -47,24 +47,15 @@ export default function useCanCan(abilitiesCallback, dependencies) {
     lastUpdate: () => new Date()
   })
 
-  const loadAbilities = useCallback(async () => {
+  const loadAbilities = useCallback(async (reloadKey) => {
     const canCan = CanCan.current()
     const abilities = s.p.abilitiesCallback()
 
-    await canCan.loadAbilities(abilities)
-
-    s.set({lastUpdate: new Date()})
-  }, [])
-
-  const onResetAbilities = useCallback(() => {
-    loadAbilities()
-  }, [])
-
-  const loadAbilitiesOnNew = useCallback(async (reloadKey) => {
-    const canCan = CanCan.current()
-    const abilities = s.p.abilitiesCallback()
-
-    await canCan.reloadAbilities(abilities, reloadKey)
+    if (reloadKey === undefined) {
+      await canCan.loadAbilities(abilities)
+    } else {
+      await canCan.reloadAbilities(abilities, reloadKey)
+    }
 
     s.set({lastUpdate: new Date()})
   }, [])
@@ -73,12 +64,12 @@ export default function useCanCan(abilitiesCallback, dependencies) {
   const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
 
   useEffect(() => {
-    loadAbilitiesOnNew(dependencyKey)
+    loadAbilities(dependencyKey)
   }, [dependencyKey])
 
-  useEventEmitter(Devise.events(), "onDeviseSignIn", loadAbilitiesOnNew)
-  useEventEmitter(Devise.events(), "onDeviseSignOut", loadAbilitiesOnNew)
-  useEventEmitter(CanCan.current().events, "onResetAbilities", onResetAbilities)
+  useEventEmitter(Devise.events(), "onDeviseSignIn", loadAbilities)
+  useEventEmitter(Devise.events(), "onDeviseSignOut", loadAbilities)
+  useEventEmitter(CanCan.current().events, "onResetAbilities", loadAbilities)
 
   return s.s.canCan
 }
