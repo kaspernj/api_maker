@@ -1,5 +1,5 @@
 /* eslint-disable jest/require-hook */
-import {useCallback, useMemo} from "react"
+import {useCallback, useEffect, useMemo} from "react"
 import CanCan from "./can-can.js"
 import Devise from "./devise.js"
 import useCurrentUser from "./use-current-user.js"
@@ -43,7 +43,7 @@ export default function useCanCan(abilitiesCallback, dependencies) {
   const s = useShape({abilitiesCallback})
 
   s.useStates({
-    canCan: null,
+    canCan: CanCan.current(),
     lastUpdate: () => new Date()
   })
 
@@ -51,22 +51,22 @@ export default function useCanCan(abilitiesCallback, dependencies) {
     const canCan = CanCan.current()
     const abilities = s.p.abilitiesCallback()
 
+    s.set({canCan})
     await canCan.loadAbilities(abilities)
 
     s.set({canCan, lastUpdate: new Date()})
   }, [])
 
   const onResetAbilities = useCallback(() => {
-    s.set({canCan: null})
+    s.set({canCan: CanCan.current()})
     loadAbilities()
   }, [])
 
   const loadAbilitiesOnNew = useCallback(async (reloadKey) => {
-    s.set({canCan: null})
-
     const canCan = CanCan.current()
     const abilities = s.p.abilitiesCallback()
 
+    s.set({canCan})
     await canCan.reloadAbilities(abilities, reloadKey)
 
     s.set({canCan, lastUpdate: new Date()})
@@ -75,9 +75,9 @@ export default function useCanCan(abilitiesCallback, dependencies) {
   const dependencyList = dependencies ?? [currentUser?.id()] // @ts-expect-error
   const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
 
-  useMemo(() => {
+  useEffect(() => {
     loadAbilitiesOnNew(dependencyKey)
-  }, dependencyList)
+  }, [dependencyKey])
 
   useEventEmitter(Devise.events(), "onDeviseSignIn", loadAbilitiesOnNew)
   useEventEmitter(Devise.events(), "onDeviseSignOut", loadAbilitiesOnNew)
