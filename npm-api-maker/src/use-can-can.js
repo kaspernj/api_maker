@@ -71,7 +71,7 @@ export default function useCanCan(abilitiesCallback, dependencies) {
     loadAbilities()
   }, [loadAbilities])
 
-  const currentUserId = /** @type {any} */ (currentUser)?.id?.()
+  const currentUserId = currentUser?.id()
   const dependencyList = dependencies ?? [currentUserId]
   const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
 
