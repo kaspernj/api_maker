@@ -17,4 +17,4 @@ Notes:
 - For system specs, use `ruby-gem/scripts/run-system-spec.sh [spec/path.rb:line]` (wraps the README system spec command).
 - When installing gems, run `bundle install` in both `ruby-gem/` and `ruby-gem/spec/dummy/`.
 - Keep component props ordered alphabetically.
-- To typecheck a single file, run `npm run typecheck:file --file=src/path/to/file.js` from `npm-api-maker/`.
+- To typecheck a single file, run `npm run typecheck:file --file=src/path/to/file.js` from `npm-api-maker/` (you can also pass `npm-api-maker/src/...` and it will normalize).
