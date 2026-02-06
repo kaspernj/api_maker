@@ -53,7 +53,7 @@ export default function useCanCan(abilitiesCallback, dependencies) {
 
     await canCan.loadAbilities(abilities)
 
-    s.set({canCan, lastUpdate: new Date()})
+    s.set({lastUpdate: new Date()})
   }, [])
 
   const onResetAbilities = useCallback(() => {
@@ -66,7 +66,7 @@ export default function useCanCan(abilitiesCallback, dependencies) {
 
     await canCan.reloadAbilities(abilities, reloadKey)
 
-    s.set({canCan, lastUpdate: new Date()})
+    s.set({lastUpdate: new Date()})
   }, [])
 
   const dependencyList = dependencies ?? [currentUser?.id()] // @ts-expect-error
