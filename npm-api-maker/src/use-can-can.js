@@ -51,14 +51,12 @@ export default function useCanCan(abilitiesCallback, dependencies) {
     const canCan = CanCan.current()
     const abilities = s.p.abilitiesCallback()
 
-    s.set({canCan})
     await canCan.loadAbilities(abilities)
 
     s.set({canCan, lastUpdate: new Date()})
   }, [])
 
   const onResetAbilities = useCallback(() => {
-    s.set({canCan: CanCan.current()})
     loadAbilities()
   }, [])
 
@@ -66,7 +64,6 @@ export default function useCanCan(abilitiesCallback, dependencies) {
     const canCan = CanCan.current()
     const abilities = s.p.abilitiesCallback()
 
-    s.set({canCan})
     await canCan.reloadAbilities(abilities, reloadKey)
 
     s.set({canCan, lastUpdate: new Date()})
