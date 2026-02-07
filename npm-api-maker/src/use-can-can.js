@@ -1,5 +1,5 @@
 /* eslint-disable jest/require-hook */
-import {useCallback, useMemo} from "react"
+import {useCallback, useEffect, useMemo, useRef} from "react"
 import CanCan from "./can-can.js"
 import Devise from "./devise.js"
 import useCurrentUser from "./use-current-user.js"
@@ -43,44 +43,44 @@ export default function useCanCan(abilitiesCallback, dependencies) {
   const s = useShape({abilitiesCallback})
 
   s.useStates({
-    canCan: null,
+    canCan: CanCan.current(),
     lastUpdate: () => new Date()
   })
 
-  const loadAbilities = useCallback(async () => {
+  const deviseReloadKeyRef = useRef(0)
+
+  const loadAbilities = useCallback(async (reloadKey) => {
     const canCan = CanCan.current()
     const abilities = s.p.abilitiesCallback()
 
-    await canCan.loadAbilities(abilities)
+    if (reloadKey === undefined) {
+      await canCan.loadAbilities(abilities)
+    } else {
+      await canCan.reloadAbilities(abilities, reloadKey)
+    }
 
-    s.set({canCan, lastUpdate: new Date()})
+    s.set({lastUpdate: new Date()})
   }, [])
+
+  const onDeviseChange = useCallback(() => {
+    deviseReloadKeyRef.current += 1
+    loadAbilities(`devise:${deviseReloadKeyRef.current}`)
+  }, [loadAbilities])
 
   const onResetAbilities = useCallback(() => {
-    s.set({canCan: null})
     loadAbilities()
-  }, [])
+  }, [loadAbilities])
 
-  const loadAbilitiesOnNew = useCallback(async (reloadKey) => {
-    s.set({canCan: null})
-
-    const canCan = CanCan.current()
-    const abilities = s.p.abilitiesCallback()
-
-    await canCan.reloadAbilities(abilities, reloadKey)
-
-    s.set({canCan, lastUpdate: new Date()})
-  }, [])
-
-  const dependencyList = dependencies ?? [currentUser?.id()] // @ts-expect-error
+  const currentUserId = currentUser?.id()
+  const dependencyList = dependencies ?? [currentUserId]
   const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
 
-  useMemo(() => {
-    loadAbilitiesOnNew(dependencyKey)
-  }, dependencyList)
+  useEffect(() => {
+    loadAbilities(dependencyKey)
+  }, [dependencyKey])
 
-  useEventEmitter(Devise.events(), "onDeviseSignIn", loadAbilitiesOnNew)
-  useEventEmitter(Devise.events(), "onDeviseSignOut", loadAbilitiesOnNew)
+  useEventEmitter(Devise.events(), "onDeviseSignIn", onDeviseChange)
+  useEventEmitter(Devise.events(), "onDeviseSignOut", onDeviseChange)
   useEventEmitter(CanCan.current().events, "onResetAbilities", onResetAbilities)
 
   return s.s.canCan
