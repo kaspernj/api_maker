@@ -1,4 +1,5 @@
 import React, {memo} from "react"
+import {Pressable, Text, View} from "react-native"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import Services from "@kaspernj/api-maker/build/services.js"
@@ -21,17 +22,21 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
 
     return (
       <Layout className="routes-devise-events">
-        <div data-testid="devise-sign-in-count">{signInCount}</div>
-        <div data-testid="devise-sign-out-count">{signOutCount}</div>
-        <button data-testid="devise-sign-in-button" onClick={this.tt.onSignInClicked}>
-          Sign in
-        </button>
-        <button data-testid="devise-sign-out-button" onClick={this.tt.onSignOutClicked}>
-          Sign out
-        </button>
-        <button data-testid="devise-sign-out-fail-button" onClick={this.tt.onSignOutFailClicked}>
-          Sign out (fail)
-        </button>
+        <View data-testid="devise-sign-in-count">
+          <Text>{signInCount}</Text>
+        </View>
+        <View data-testid="devise-sign-out-count">
+          <Text>{signOutCount}</Text>
+        </View>
+        <Pressable data-testid="devise-sign-in-button" onPress={this.tt.onSignInClicked}>
+          <Text>Sign in</Text>
+        </Pressable>
+        <Pressable data-testid="devise-sign-out-button" onPress={this.tt.onSignOutClicked}>
+          <Text>Sign out</Text>
+        </Pressable>
+        <Pressable data-testid="devise-sign-out-fail-button" onPress={this.tt.onSignOutFailClicked}>
+          <Text>Sign out (fail)</Text>
+        </Pressable>
       </Layout>
     )
   }
@@ -39,19 +44,15 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
   onDeviseSignIn = () => this.setState({signInCount: this.state.signInCount + 1})
   onDeviseSignOut = () => this.setState({signOutCount: this.state.signOutCount + 1})
 
-  onSignInClicked = async (event) => {
-    event.preventDefault()
+  onSignInClicked = async () => {
     await Devise.signIn("admin@example.com", "password")
   }
 
-  onSignOutClicked = async (event) => {
-    event.preventDefault()
+  onSignOutClicked = async () => {
     await Devise.signOut()
   }
 
-  onSignOutFailClicked = async (event) => {
-    event.preventDefault()
-
+  onSignOutFailClicked = async () => {
     const services = Services.current()
     const originalSendRequest = services.sendRequest
 
