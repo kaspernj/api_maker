@@ -22,19 +22,19 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
 
     return (
       <Layout className="routes-devise-events">
-        <View data-testid="devise-sign-in-count">
+        <View testID="devise-sign-in-count">
           <Text>{signInCount}</Text>
         </View>
-        <View data-testid="devise-sign-out-count">
+        <View testID="devise-sign-out-count">
           <Text>{signOutCount}</Text>
         </View>
-        <Pressable data-testid="devise-sign-in-button" onPress={this.tt.onSignInClicked}>
+        <Pressable testID="devise-sign-in-button" onPress={this.tt.onSignInClicked}>
           <Text>Sign in</Text>
         </Pressable>
-        <Pressable data-testid="devise-sign-out-button" onPress={this.tt.onSignOutClicked}>
+        <Pressable testID="devise-sign-out-button" onPress={this.tt.onSignOutClicked}>
           <Text>Sign out</Text>
         </Pressable>
-        <Pressable data-testid="devise-sign-out-fail-button" onPress={this.tt.onSignOutFailClicked}>
+        <Pressable testID="devise-sign-out-fail-button" onPress={this.tt.onSignOutFailClicked}>
           <Text>Sign out (fail)</Text>
         </Pressable>
       </Layout>
