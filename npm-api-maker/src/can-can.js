@@ -242,7 +242,6 @@ export default class ApiMakerCanCan {
 
     let abilities = []
     let didFail = false
-    let loadError
 
     // Load abilities from backend
     try {
@@ -254,15 +253,10 @@ export default class ApiMakerCanCan {
       if (Array.isArray(responseAbilities)) abilities = responseAbilities
     } catch (error) {
       didFail = true
-      loadError = error
       console.error("Failed to load abilities", error)
     }
 
     if (generation !== this.abilitiesGeneration || didFail) {
-      if (didFail) {
-        this.events.emit("onLoadAbilitiesFailed", {error: loadError})
-      }
-
       for (const abilityData of abilitiesToLoad) {
         for (const callback of abilityData.callbacks) {
           callback()
