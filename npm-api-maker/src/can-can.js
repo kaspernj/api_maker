@@ -292,11 +292,13 @@ export default class ApiMakerCanCan {
 
   indexAbilitiesByName (abilities) {
     for (const abilityData of abilities) {
-      const abilityName = digg(abilityData, "ability")
-      const subjectName = this.subjectName(digg(abilityData, "subject"))
+      if (abilityData && typeof abilityData == "object") {
+        const abilityName = digg(abilityData, "ability")
+        const subjectName = this.subjectName(digg(abilityData, "subject"))
 
-      if (abilityName && subjectName) {
-        this.abilitiesByName.set(`${abilityName}:${subjectName}`, abilityData)
+        if (abilityName && subjectName) {
+          this.abilitiesByName.set(`${abilityName}:${subjectName}`, abilityData)
+        }
       }
     }
   }
