@@ -1,7 +1,6 @@
 /* eslint-disable new-cap, newline-per-chained-call, sort-imports */
-import React, {useEffect, useMemo, useRef} from "react"
+import React, {useMemo} from "react"
 import BaseComponent from "../../../base-component"
-import CanCan from "../../../can-can.js"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
 import MenuItem from "./menu-item"
@@ -28,7 +27,6 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extend
       () => models.sort((a, b) => a.modelName().human({count: 2}).toLowerCase().localeCompare(b.modelName().human({count: 2}).toLowerCase())),
       [locale]
     )
-    const didTriggerFallbackReloadRef = useRef(false)
     const abilityStates = sortedModels.map((modelClass) => {
       const modelName = digg(modelClass.modelClassData(), "name")
       const canIndex = canCan?.can("index", modelClass)
@@ -37,25 +35,13 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extend
     })
     const allowedModelsCount = abilityStates.filter((abilityState) => abilityState.canIndex === true).length
     const pendingModelsCount = abilityStates.filter((abilityState) => abilityState.canIndex === null).length
-    const allAbilitiesPending = abilityStates.length > 0 && pendingModelsCount == abilityStates.length
-
-    useEffect(() => {
-      if (!canCan) return
-      if (didTriggerFallbackReloadRef.current) return
-      if (canCan.getCacheKey() !== 0) return
-      if (!allAbilitiesPending) return
-
-      didTriggerFallbackReloadRef.current = true
-      CanCan.current().reloadAbilities(abilitiesToLoad, `super-admin-menu-fallback:${locale}`)
-    }, [abilitiesToLoad, allAbilitiesPending, canCan, locale])
 
     const debugSummary = [
       `canCan=${String(Boolean(canCan))}`,
       `cacheKey=${canCan?.getCacheKey?.() ?? "none"}`,
       `models=${abilityStates.length}`,
       `allowed=${allowedModelsCount}`,
-      `pending=${pendingModelsCount}`,
-      `fallbackReloadTriggered=${String(didTriggerFallbackReloadRef.current)}`
+      `pending=${pendingModelsCount}`
     ].join("; ")
     const debugAbilities = abilityStates.map((abilityState) => `${abilityState.modelName}:${String(abilityState.canIndex)}`).join(",")
 

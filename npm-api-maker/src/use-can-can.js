@@ -41,6 +41,7 @@ const dependencyListKey = (list) => {
 export default function useCanCan(abilitiesCallback, dependencies) {
   const currentUser = useCurrentUser()
   const s = useShape({abilitiesCallback})
+  const failedLoadRetryRef = useRef(0)
 
   s.useStates({
     canCan: CanCan.current(),
@@ -70,17 +71,30 @@ export default function useCanCan(abilitiesCallback, dependencies) {
   const onResetAbilities = useCallback(() => {
     loadAbilities()
   }, [loadAbilities])
+  const onAbilitiesLoaded = useCallback(() => {
+    failedLoadRetryRef.current = 0
+    s.set({lastUpdate: new Date()})
+  }, [])
+  const onLoadAbilitiesFailed = useCallback(() => {
+    if (failedLoadRetryRef.current >= 2) return
+
+    failedLoadRetryRef.current += 1
+    loadAbilities(`failure-retry:${failedLoadRetryRef.current}`)
+  }, [loadAbilities])
 
   const currentUserId = currentUser?.id()
   const dependencyList = dependencies ?? [currentUserId]
   const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
 
   useEffect(() => {
+    failedLoadRetryRef.current = 0
     loadAbilities(dependencyKey)
   }, [dependencyKey])
 
   useEventEmitter(Devise.events(), "onDeviseSignIn", onDeviseChange)
   useEventEmitter(Devise.events(), "onDeviseSignOut", onDeviseChange)
+  useEventEmitter(CanCan.current().events, "onAbilitiesLoaded", onAbilitiesLoaded)
+  useEventEmitter(CanCan.current().events, "onLoadAbilitiesFailed", onLoadAbilitiesFailed)
   useEventEmitter(CanCan.current().events, "onResetAbilities", onResetAbilities)
 
   return s.s.canCan
