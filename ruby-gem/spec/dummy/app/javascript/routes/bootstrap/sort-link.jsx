@@ -25,7 +25,7 @@ export default memo(shapeComponent(class BootstrapSortLink extends BaseComponent
     this.loadTasks()
   }
 
-  componentDidUpdate() {
+  syncQueryParams = () => {
     const queryParamsString = JSON.stringify(this.tt.queryParams)
 
     if (this.s.queryParamsString != queryParamsString)
@@ -45,6 +45,7 @@ export default memo(shapeComponent(class BootstrapSortLink extends BaseComponent
   }
 
   render() {
+    this.syncQueryParams()
     const {tasks} = this.s
 
     return (

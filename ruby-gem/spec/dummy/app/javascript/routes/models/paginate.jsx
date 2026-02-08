@@ -23,7 +23,7 @@ export default memo(shapeComponent(class ModelsPaginate extends BaseComponent {
     this.loadTasks()
   }
 
-  componentDidUpdate() {
+  syncQueryParams = () => {
     const queryParamsString = JSON.stringify(this.tt.queryParams)
 
     if (this.s.queryParamsString != queryParamsString) {
@@ -44,6 +44,8 @@ export default memo(shapeComponent(class ModelsPaginate extends BaseComponent {
   }
 
   render() {
+    this.syncQueryParams()
+
     return (
       <div className="component-models-paginate">
         {this.state.tasks && this.content()}
