@@ -143,4 +143,8 @@ RSpec.configure do |config|
       resize_to(1920, 1080)
     end
   end
+
+  config.after(:each, type: :system) do |example|
+    write_browser_logs_artifact(example) if example.exception
+  end
 end
