@@ -693,6 +693,13 @@ Run a spec with all configurations.
 bundle exec appraisal rspec
 ```
 
+## Test setup
+Install gems before running specs:
+```bash
+cd ruby-gem && bundle install
+cd spec/dummy && bundle install
+```
+
 Its kinda fucked up to run system specs, but this command should work from the ruby-gem directory:
 ```bash
 rm -rf spec/dummy/public/packs/ && cd spec/dummy/ && bin/shakapacker && cd ../.. && xvfb-run bundle exec appraisal "rails 7" rspec spec/system/api_maker_table/api_maker_table_spec.rb
