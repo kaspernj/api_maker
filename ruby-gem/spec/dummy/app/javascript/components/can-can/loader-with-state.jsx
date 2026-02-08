@@ -1,6 +1,7 @@
 import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import {Account} from "models.js"
+import CanCan from "@kaspernj/api-maker/build/can-can.js"
 import classNames from "classnames"
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import {FlashNotifications} from "flash-notifications"
@@ -52,6 +53,7 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
   onSignInAsAdminPress = async () => {
     try {
       await Devise.signIn("admin@example.com", "password", {rememberMe: true})
+      await CanCan.current().resetAbilities()
     } catch (error) {
       FlashNotifications.errorResponse(error)
     }
