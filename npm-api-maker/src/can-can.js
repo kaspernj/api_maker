@@ -21,6 +21,7 @@ export default class ApiMakerCanCan {
   resettingGeneration = null
   events = new EventEmitter()
   lock = new ReadersWriterLock()
+  abilitiesByName = new Map()
 
   static current () {
     if (!shared.currentApiMakerCanCan) shared.currentApiMakerCanCan = new ApiMakerCanCan()
@@ -90,6 +91,14 @@ export default class ApiMakerCanCan {
   }
 
   findAbility (ability, subject) {
+    const subjectName = this.subjectName(subject)
+
+    if (subjectName) {
+      const abilityByName = this.abilitiesByName.get(`${ability}:${subjectName}`)
+
+      if (abilityByName) return abilityByName
+    }
+
     return this.abilities.find((abilityData) => {
       const abilityDataSubject = digg(abilityData, "subject")
       const abilityDataAbility = digg(abilityData, "ability")
@@ -198,6 +207,7 @@ export default class ApiMakerCanCan {
     this.resetPromise = (async () => {
       await this.lock.write(() => {
         this.abilities = []
+        this.abilitiesByName = new Map()
         this.abilitiesGeneration += 1
         this.resettingGeneration = this.abilitiesGeneration
         this.cacheKey += 1
@@ -268,6 +278,7 @@ export default class ApiMakerCanCan {
 
     // Set the loaded abilities
     this.abilities = this.abilities.concat(abilities)
+    this.indexAbilitiesByName(abilities)
     this.cacheKey += 1
     this.events.emit("onAbilitiesLoaded", {cacheKey: this.cacheKey})
 
@@ -277,5 +288,34 @@ export default class ApiMakerCanCan {
         callback()
       }
     }
+  }
+
+  indexAbilitiesByName (abilities) {
+    for (const abilityData of abilities) {
+      const abilityName = digg(abilityData, "ability")
+      const subjectName = this.subjectName(digg(abilityData, "subject"))
+
+      if (abilityName && subjectName) {
+        this.abilitiesByName.set(`${abilityName}:${subjectName}`, abilityData)
+      }
+    }
+  }
+
+  subjectName (subject) {
+    if (!subject) return null
+
+    if (subject.modelClassData) {
+      return digg(subject.modelClassData(), "name")
+    }
+
+    if (subject.resourceData) {
+      return digg(subject.resourceData(), "name")
+    }
+
+    if (subject.name) {
+      return subject.name
+    }
+
+    return null
   }
 }
