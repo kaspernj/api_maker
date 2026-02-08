@@ -33,6 +33,7 @@ export default class ApiMakerCommandsPool {
 
     if (args.instant) {
       pool = new ApiMakerCommandsPool()
+      pool.globalRequestData = {...ApiMakerCommandsPool.current().globalRequestData}
     } else {
       pool = ApiMakerCommandsPool.current()
     }
