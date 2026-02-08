@@ -1,5 +1,5 @@
 /* eslint-disable new-cap, newline-per-chained-call, sort-imports */
-import React, {useMemo} from "react"
+import React, {useEffect, useMemo} from "react"
 import BaseComponent from "../../../base-component"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
@@ -44,6 +44,11 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extend
       `pending=${pendingModelsCount}`
     ].join("; ")
     const debugAbilities = abilityStates.map((abilityState) => `${abilityState.modelName}:${String(abilityState.canIndex)}`).join(",")
+
+    useEffect(() => {
+      console.log(`[super-admin-menu-debug] ${debugSummary}`)
+      console.log(`[super-admin-menu-debug-abilities] ${debugAbilities}`)
+    }, [debugAbilities, debugSummary])
 
     return (
       <>
