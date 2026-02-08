@@ -13,7 +13,7 @@ describe "super admin - dashboard" do
     wait_for_selector "[data-class='menu-user-name-container']", exact_text: "Admin Adminson"
 
     # It shows menu items
-    wait_for_selector "[data-class='components--admin--layout--menu--menu-item']", exact_text: "Projects", wait: 20
-    wait_for_selector "[data-class='components--admin--layout--menu--menu-item']", exact_text: "Tasks", wait: 20
+    wait_for_selector "[data-class='components--admin--layout--menu--menu-item']", exact_text: "Projects"
+    wait_for_selector "[data-class='components--admin--layout--menu--menu-item']", exact_text: "Tasks"
   end
 end
