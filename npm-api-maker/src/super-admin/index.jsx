@@ -167,7 +167,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
           <ShowReflectionActions model={model} modelClass={modelClass} reflectionName={queryParams.model_reflection} />
         }
       </View>, // eslint-disable-line react/jsx-closing-tag-location
-      [canCan, configReader?.actions, model, modelClass, pageToShow]
+      [canCan.getCacheKey(), configReader?.actions, model, modelClass, pageToShow]
     )
 
     return (
