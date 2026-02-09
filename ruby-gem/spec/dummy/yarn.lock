@@ -1246,10 +1246,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@>= 1.0.2092":
-  version "1.0.2092"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2092.tgz#99ef81cf4c35b247e5afb30ec8c034e9246ea700"
-  integrity sha512-GEaKsqtHqqS3nD/R7q3L33D0NemuT5ZPcgfjemHqfVrP+Ct2rYh1dgDjF0vT0uBK3gSzl7jU4mHY31AekrQaJA==
+"@kaspernj/api-maker@>= 1.0.2096":
+  version "1.0.2096"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2096.tgz#3316b981971651f5a665c139f8141819f76ddd32"
+  integrity sha512-T+dIgD4XXHQqUQIBohVcryI/UXE9F20LE+VbmtT2P772sk8rONo6okpvPZAV3Lvj/MqwLB5uaVXQ4Ajn2cP9BQ==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
