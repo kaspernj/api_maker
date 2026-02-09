@@ -1,4 +1,4 @@
-import React, {memo} from "react"
+import React, {memo, useEffect} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import {Account} from "models.js"
 import CanCan from "@kaspernj/api-maker/build/can-can.js"
@@ -20,6 +20,19 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
     const {className, ...restProps} = this.props
     const canCan = useCanCan(() => [[Account, ["sum"]]])
     const currentUser = useCurrentUser()
+    const cacheKey = canCan.getCacheKey()
+    const canAccessAdmin = canCan.can("sum", Account)
+    const currentUserIdentifier = currentUser?.id() || currentUser?.email() || "none"
+    const debugSummary = [
+      `canCan=${String(Boolean(canCan))}`,
+      `cacheKey=${cacheKey}`,
+      `currentUser=${currentUserIdentifier}`,
+      `canAccessAdmin=${String(canAccessAdmin)}`
+    ].join("; ")
+
+    useEffect(() => {
+      console.log(`[can-can-loader-debug] ${debugSummary}`)
+    }, [debugSummary])
 
     return (
       <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>
@@ -28,20 +41,18 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
             <Text>Sign in as admin</Text>
           </Pressable>
         }
-        {!canCan &&
-          "can can not loaded"
-        }
-        {canCan &&
-          <Text dataSet={{class: "can-can-cache-key"}}>
-            {canCan.getCacheKey()}
-          </Text>
-        }
-        {canCan && canCan.can("sum", Account) &&
+        <Text dataSet={{class: "can-can-cache-key"}}>
+          {cacheKey}
+        </Text>
+        <Text dataSet={{class: "can-can-debug-summary"}}>
+          {debugSummary}
+        </Text>
+        {canAccessAdmin === true &&
           <div className="can-access-admin">
             can access admin
           </div>
         }
-        {canCan && !canCan.can("sum", Account) &&
+        {canAccessAdmin === false &&
           <div className="cannot-access-admin">
             can not access admin
           </div>
