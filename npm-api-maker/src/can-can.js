@@ -354,7 +354,7 @@ export default class ApiMakerCanCan {
     return `${inflection.underscore(ability)}:${subjectName}`
   }
 
-  subjectName (subject) {
+  subjectName(subject) {
     if (!subject) return null
 
     if (typeof subject == "string") {
