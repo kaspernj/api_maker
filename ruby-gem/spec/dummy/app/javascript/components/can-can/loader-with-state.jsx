@@ -22,7 +22,7 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
     const currentUser = useCurrentUser()
     const cacheKey = canCan.getCacheKey()
     const canAccessAdmin = canCan.can("sum", Account)
-    const currentUserIdentifier = currentUser?.id() || currentUser?.email() || "none"
+    const currentUserIdentifier = currentUser?.email() || "none"
     const debugSummary = [
       `canCan=${String(Boolean(canCan))}`,
       `cacheKey=${cacheKey}`,

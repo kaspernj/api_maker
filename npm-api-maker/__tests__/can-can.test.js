@@ -150,6 +150,27 @@ describe("CanCan", () => {
 
       expect(canCan.can("read", AccountRefTwo)).toBe(true)
     })
+
+    it("requeues stale generation callbacks after generation mismatch", async() => {
+      const callback = jest.fn()
+      const loadAbilitySpy = jest.spyOn(canCan, "loadAbility").mockResolvedValue()
+
+      canCan.abilitiesToLoad = [{ability: "read", callbacks: [callback], subject: "user"}]
+      canCan.abilitiesToLoadData = [{ability: "read", subject: "user"}]
+
+      jest.spyOn(Services, "current").mockReturnValue({
+        sendRequest: async() => {
+          canCan.abilitiesGeneration += 1
+          return {abilities: []}
+        }
+      })
+
+      await canCan.sendAbilitiesRequest()
+      await flushPromises()
+
+      expect(loadAbilitySpy).toHaveBeenCalledWith("read", "user")
+      expect(callback).toHaveBeenCalledTimes(1)
+    })
   })
 
   describe("reloadAbilities", () => {

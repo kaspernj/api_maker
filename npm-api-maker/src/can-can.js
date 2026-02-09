@@ -236,7 +236,17 @@ export default class ApiMakerCanCan {
       console.error("Failed to load abilities", error)
     }
 
-    if (generation !== this.abilitiesGeneration || didFail) {
+    if (generation !== this.abilitiesGeneration) {
+      for (const abilityData of abilitiesToLoad) {
+        for (const callback of abilityData.callbacks) {
+          this.loadAbility(abilityData.ability, abilityData.subject).then(callback)
+        }
+      }
+
+      return
+    }
+
+    if (didFail) {
       for (const abilityData of abilitiesToLoad) {
         for (const callback of abilityData.callbacks) {
           callback()
