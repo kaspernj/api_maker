@@ -34,10 +34,10 @@ const dependencyListKey = (list) => {
 
 /**
  * @param {function() : Array} abilitiesCallback
- * @param {Array} dependencies
+ * @param {Array} [dependencies]
  * @returns {CanCan}
  */
-export default function useCanCan(abilitiesCallback, dependencies) {
+export default function useCanCan(abilitiesCallback, dependencies = undefined) {
   const s = useShape({abilitiesCallback})
 
   s.useStates({
