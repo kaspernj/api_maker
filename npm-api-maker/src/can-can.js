@@ -279,9 +279,11 @@ export default class ApiMakerCanCan {
       const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
         request: abilitiesToLoadData
       })
-      const responseAbilities = digg(result, "abilities")
+      abilities = digg(result, "abilities")
 
-      if (Array.isArray(responseAbilities)) abilities = responseAbilities
+      if (!Array.isArray(abilities)) {
+        throw new Error(`Expected CanCan::LoadAbilities response abilities to be an array, got: ${typeof abilities}`)
+      }
     } catch (error) {
       didFail = true
       requestError = error
