@@ -278,10 +278,12 @@ export default class ApiMakerCanCan {
     try {
       const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
         request: abilitiesToLoadData
-      }, {instant: true})
-      const responseAbilities = digg(result, "abilities")
+      })
+      abilities = digg(result, "abilities")
 
-      if (Array.isArray(responseAbilities)) abilities = responseAbilities
+      if (!Array.isArray(abilities)) {
+        throw new Error(`Expected CanCan::LoadAbilities response abilities to be an array, got: ${typeof abilities}`)
+      }
     } catch (error) {
       didFail = true
       requestError = error
@@ -356,7 +358,7 @@ export default class ApiMakerCanCan {
     return `${inflection.underscore(ability)}:${subjectName}`
   }
 
-  subjectName (subject) {
+  subjectName(subject) {
     if (!subject) return null
 
     if (typeof subject == "string") {

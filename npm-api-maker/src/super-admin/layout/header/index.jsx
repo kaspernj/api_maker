@@ -143,12 +143,12 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
             style={headerActionsContainerStyle}
           >
             <View
-            dataSet={this.cache("headerActionsViewDataSet", {class: "header-actions"})}
-            ref={this.tt.headerActionsRef}
-            style={headerActionsStyle}
-          >
-            {actions}
-          </View>
+              dataSet={this.cache("headerActionsViewDataSet", {class: "header-actions"})}
+              ref={this.tt.headerActionsRef}
+              style={headerActionsStyle}
+            >
+              {actions}
+            </View>
           </View>
         }
         {!mdUp &&
