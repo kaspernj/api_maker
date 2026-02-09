@@ -47,12 +47,12 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
         <Text dataSet={{class: "can-can-debug-summary"}}>
           {debugSummary}
         </Text>
-        {canAccessAdmin === true &&
+        {canAccessAdmin &&
           <div className="can-access-admin">
             can access admin
           </div>
         }
-        {canAccessAdmin === false &&
+        {!canAccessAdmin &&
           <div className="cannot-access-admin">
             can not access admin
           </div>

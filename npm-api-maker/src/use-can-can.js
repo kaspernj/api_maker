@@ -2,7 +2,6 @@
 import {useCallback, useEffect, useMemo, useRef} from "react"
 import CanCan from "./can-can.js"
 import Devise from "./devise.js"
-import useCurrentUser from "./use-current-user.js"
 import useEventEmitter from "ya-use-event-emitter"
 import useShape from "set-state-compare/build/use-shape.js"
 
@@ -39,7 +38,6 @@ const dependencyListKey = (list) => {
  * @returns {CanCan}
  */
 export default function useCanCan(abilitiesCallback, dependencies) {
-  const currentUser = useCurrentUser()
   const s = useShape({abilitiesCallback})
 
   s.useStates({
@@ -74,8 +72,7 @@ export default function useCanCan(abilitiesCallback, dependencies) {
     s.set({lastUpdate: new Date()})
   }, [])
 
-  const currentUserId = currentUser?.id()
-  const dependencyList = dependencies ?? [currentUserId]
+  const dependencyList = dependencies ?? []
   const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
 
   useEffect(() => {

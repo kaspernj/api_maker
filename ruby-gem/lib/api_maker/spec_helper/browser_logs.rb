@@ -36,6 +36,8 @@ module ApiMaker::SpecHelper::BrowserLogs
       write_browser_log_artifact_header(file:, example:, logs:)
       write_browser_log_artifact_entries(file:, logs:)
     end
+
+    artifact_path.to_s
   rescue StandardError => e
     warn("Failed to write browser log artifact: #{e.class}: #{e.message}")
   end
