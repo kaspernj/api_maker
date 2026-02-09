@@ -169,9 +169,7 @@ export default class ApiMakerCanCan {
     this.queueAbilitiesRequestTimeout = setTimeout(this.sendAbilitiesRequest, 0)
   }
 
-  async resetAbilities (options = {}) {
-    const {source = "external"} = options
-
+  async resetAbilities () {
     if (this.resetPromise) return this.resetPromise
 
     this.resetPromise = (async () => {
@@ -183,7 +181,7 @@ export default class ApiMakerCanCan {
         this.cacheKey += 1
       })
       console.log(`[can-can-debug] resetAbilities generation=${this.abilitiesGeneration}; cacheKey=${this.cacheKey}`)
-      this.events.emit("onResetAbilities", {source})
+      this.events.emit("onResetAbilities")
     })()
 
     try {
@@ -199,7 +197,7 @@ export default class ApiMakerCanCan {
     }
 
     const promise = (async () => {
-      await this.resetAbilities({source: "reload"})
+      await this.resetAbilities()
       await this.loadAbilities(abilities)
     })()
 

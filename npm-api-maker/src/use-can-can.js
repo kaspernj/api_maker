@@ -39,7 +39,6 @@ const dependencyListKey = (list) => {
  */
 export default function useCanCan(abilitiesCallback, dependencies = undefined) {
   const s = useShape({abilitiesCallback})
-  const mountedRef = useRef(false)
 
   s.useStates({
     canCan: CanCan.current(),
@@ -58,9 +57,7 @@ export default function useCanCan(abilitiesCallback, dependencies = undefined) {
       await canCan.reloadAbilities(abilities, reloadKey)
     }
 
-    if (mountedRef.current) {
-      s.set({lastUpdate: new Date()})
-    }
+    s.set({lastUpdate: new Date()})
   }, [])
 
   const onDeviseChange = useCallback(() => {
@@ -69,30 +66,18 @@ export default function useCanCan(abilitiesCallback, dependencies = undefined) {
     loadAbilities(`devise:${deviseReloadKeyRef.current}`)
   }, [loadAbilities])
 
-  const onResetAbilities = useCallback((eventData) => {
-    if (eventData?.source == "reload") return
-
+  const onResetAbilities = useCallback(() => {
     console.log("[can-can-hook-debug] onResetAbilities -> loadAbilities()")
     loadAbilities()
   }, [loadAbilities])
   const onAbilitiesLoaded = useCallback(() => {
     console.log("[can-can-hook-debug] onAbilitiesLoaded")
-    if (mountedRef.current) {
-      s.set({lastUpdate: new Date()})
-    }
+    s.set({lastUpdate: new Date()})
   }, [])
 
   const dependencyList = dependencies ?? []
   const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
   const hasCustomDependencies = dependencies !== undefined
-
-  useEffect(() => {
-    mountedRef.current = true
-
-    return () => {
-      mountedRef.current = false
-    }
-  }, [])
 
   useEffect(() => {
     // `loadAbilities` is intentionally stable; this effect is driven by dependency inputs.
