@@ -21,6 +21,8 @@ export default class ApiMakerCanCan {
   resettingGeneration = null
   events = new EventEmitter()
   lock = new ReadersWriterLock()
+  abilitiesByName = new Map()
+  debugTokens = new Set()
 
   static current () {
     if (!shared.currentApiMakerCanCan) shared.currentApiMakerCanCan = new ApiMakerCanCan()
@@ -29,11 +31,11 @@ export default class ApiMakerCanCan {
   }
 
   can (ability, subject, options = {}) {
-    let abilityToUse = inflection.underscore(ability)
-    const foundAbility = this.findAbility(abilityToUse, subject)
+    const foundAbility = this.findAbility(ability, subject)
 
     if (foundAbility === undefined) {
-      this.recordMissingAbility(abilityToUse, subject)
+      const normalizedAbility = inflection.underscore(ability)
+      this.recordMissingAbility(normalizedAbility, subject)
 
       if (options.debug) {
         let subjectLabel = subject
@@ -43,7 +45,7 @@ export default class ApiMakerCanCan {
           subjectLabel = digg(subject.modelClassData(), "name")
         }
 
-        console.error(`Ability not loaded ${subjectLabel}#${abilityToUse}`, {abilities: this.abilities, ability, subject})
+        console.error(`Ability not loaded ${subjectLabel}#${normalizedAbility}`, {abilities: this.abilities, ability, subject})
       }
 
       return null
@@ -90,38 +92,14 @@ export default class ApiMakerCanCan {
   }
 
   findAbility (ability, subject) {
-    return this.abilities.find((abilityData) => {
-      const abilityDataSubject = digg(abilityData, "subject")
-      const abilityDataAbility = digg(abilityData, "ability")
+    const abilityKey = this.abilityKey(ability, subject)
+    if (!abilityKey) return undefined
 
-      if (abilityDataAbility == ability) {
-        // If actually same class
-        if (abilityDataSubject == subject) return true
-
-        // Sometimes in dev when using linking it will actually be two different but identical resource classes
-        if (
-          typeof subject == "function" &&
-          subject.modelClassData &&
-          typeof abilityDataSubject == "function" &&
-          abilityDataSubject.modelClassData &&
-          digg(subject.modelClassData(), "name") == digg(abilityDataSubject.modelClassData(), "name")
-        ) {
-          return true
-        }
-      }
-
-      return false
-    })
+    return this.abilitiesByName.get(abilityKey)
   }
 
   isAbilityLoaded (ability, subject) {
-    const foundAbility = this.findAbility(ability, subject)
-
-    if (foundAbility !== undefined) {
-      return true
-    }
-
-    return false
+    return this.findAbility(ability, subject) !== undefined
   }
 
   isReloading () {
@@ -132,8 +110,34 @@ export default class ApiMakerCanCan {
     return this.cacheKey
   }
 
+  setDebug (token, enabled) {
+    if (!token) return
+
+    if (enabled) {
+      this.debugTokens.add(token)
+    } else {
+      this.debugTokens.delete(token)
+    }
+  }
+
+  isDebugging () {
+    return this.debugTokens.size > 0
+  }
+
+  debugLog (message) {
+    if (this.isDebugging()) {
+      console.log(message)
+    }
+  }
+
   async loadAbilities (abilities) {
     const generation = this.abilitiesGeneration
+    const loadSummary = [
+      "[can-can-debug] loadAbilities:start",
+      `generation=${generation}`,
+      `requests=${abilities.length}`
+    ].join("; ")
+    this.debugLog(loadSummary)
 
     this.loadingCount += 1
 
@@ -157,6 +161,13 @@ export default class ApiMakerCanCan {
         await Promise.all(promises)
       })
     } finally {
+      const doneSummary = [
+        "[can-can-debug] loadAbilities:done",
+        `generation=${generation}`,
+        `currentGeneration=${this.abilitiesGeneration}`,
+        `loadingCount=${this.loadingCount}`
+      ].join("; ")
+      this.debugLog(doneSummary)
       if (this.loadingCount > 0) this.loadingCount -= 1
       if (this.resettingGeneration === generation) this.resettingGeneration = null
     }
@@ -198,10 +209,18 @@ export default class ApiMakerCanCan {
     this.resetPromise = (async () => {
       await this.lock.write(() => {
         this.abilities = []
+        this.abilitiesByName = new Map()
         this.abilitiesGeneration += 1
         this.resettingGeneration = this.abilitiesGeneration
         this.cacheKey += 1
       })
+      const resetSummary = [
+        "[can-can-debug] resetAbilities",
+        `generation=${this.abilitiesGeneration}`,
+        `cacheKey=${this.cacheKey}`,
+        `queued=${this.abilitiesToLoadData.length}`
+      ].join("; ")
+      this.debugLog(resetSummary)
       this.events.emit("onResetAbilities")
     })()
 
@@ -214,8 +233,17 @@ export default class ApiMakerCanCan {
 
   async reloadAbilities (abilities, reloadKey) {
     if (reloadKey && this.reloadPromises.has(reloadKey)) {
+      this.debugLog(`[can-can-debug] reloadAbilities:dedupe reloadKey=${reloadKey}`)
       return this.reloadPromises.get(reloadKey)
     }
+
+    const reloadSummary = [
+      "[can-can-debug] reloadAbilities:start",
+      `reloadKey=${reloadKey || "none"}`,
+      `generation=${this.abilitiesGeneration}`,
+      `requests=${abilities.length}`
+    ].join("; ")
+    this.debugLog(reloadSummary)
 
     const promise = (async () => {
       await this.resetAbilities()
@@ -227,6 +255,7 @@ export default class ApiMakerCanCan {
     try {
       await promise
     } finally {
+      this.debugLog(`[can-can-debug] reloadAbilities:done reloadKey=${reloadKey || "none"}; generation=${this.abilitiesGeneration}`)
       if (reloadKey) this.reloadPromises.delete(reloadKey)
     }
   }
@@ -239,9 +268,11 @@ export default class ApiMakerCanCan {
 
     this.abilitiesToLoad = []
     this.abilitiesToLoadData = []
+    this.debugLog(`[can-can-debug] sendAbilitiesRequest:start generation=${generation}; queued=${abilitiesToLoadData.length}`)
 
     let abilities = []
     let didFail = false
+    let requestError
 
     // Load abilities from backend
     try {
@@ -253,22 +284,48 @@ export default class ApiMakerCanCan {
       if (Array.isArray(responseAbilities)) abilities = responseAbilities
     } catch (error) {
       didFail = true
+      requestError = error
       console.error("Failed to load abilities", error)
     }
 
-    if (generation !== this.abilitiesGeneration || didFail) {
+    if (generation !== this.abilitiesGeneration) {
+      const staleResponseDebug = [
+        "[can-can-debug] sendAbilitiesRequest:stale-response",
+        `requestGeneration=${generation}`,
+        `currentGeneration=${this.abilitiesGeneration}`,
+        `requeue=${abilitiesToLoad.length}`
+      ].join("; ")
+      this.debugLog(staleResponseDebug)
       for (const abilityData of abilitiesToLoad) {
         for (const callback of abilityData.callbacks) {
-          callback()
+          this.loadAbility(abilityData.ability, abilityData.subject).then(callback)
         }
       }
 
       return
     }
 
+    if (didFail) {
+      this.debugLog(`[can-can-debug] sendAbilitiesRequest:failed generation=${generation}; queued=${abilitiesToLoad.length}`)
+      for (const abilityData of abilitiesToLoad) {
+        for (const callback of abilityData.callbacks) {
+          callback()
+        }
+      }
+
+      // Resolve callbacks to avoid deadlocks for waiters even when load failed.
+      if (requestError) this.reportUnhandledAsyncError(requestError)
+      return
+    }
+
     // Set the loaded abilities
     this.abilities = this.abilities.concat(abilities)
+    this.indexAbilitiesByName(abilities)
     this.cacheKey += 1
+    this.debugLog(
+      `[can-can-debug] sendAbilitiesRequest:success generation=${generation}; loaded=${abilities.length}; cacheKey=${this.cacheKey}`
+    )
+    this.events.emit("onAbilitiesLoaded", {cacheKey: this.cacheKey})
 
     // Call the callbacks that are waiting for the ability to have been loaded
     for (const abilityData of abilitiesToLoad) {
@@ -276,5 +333,54 @@ export default class ApiMakerCanCan {
         callback()
       }
     }
+  }
+
+  indexAbilitiesByName (abilities) {
+    for (const abilityData of abilities) {
+      if (abilityData && typeof abilityData == "object") {
+        const abilityKey = this.abilityKey(digg(abilityData, "ability"), digg(abilityData, "subject"))
+
+        if (abilityKey) {
+          this.abilitiesByName.set(abilityKey, abilityData)
+        }
+      }
+    }
+  }
+
+  abilityKey (ability, subject) {
+    if (!ability) return null
+
+    const subjectName = this.subjectName(subject)
+    if (!subjectName) return null
+
+    return `${inflection.underscore(ability)}:${subjectName}`
+  }
+
+  subjectName (subject) {
+    if (!subject) return null
+
+    if (typeof subject == "string") {
+      return subject
+    }
+
+    if (subject.modelClassData) {
+      return digg(subject.modelClassData(), "name")
+    }
+
+    if (subject.resourceData) {
+      return digg(subject.resourceData(), "name")
+    }
+
+    if (subject.name) {
+      return subject.name
+    }
+
+    return null
+  }
+
+  reportUnhandledAsyncError (error) {
+    if (!error) return
+
+    Promise.reject(error)
   }
 }

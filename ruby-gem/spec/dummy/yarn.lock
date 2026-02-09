@@ -4356,10 +4356,18 @@ set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-"set-state-compare@>= 1.0.69", set-state-compare@^1.0.70:
+"set-state-compare@>= 1.0.69":
   version "1.0.70"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.70.tgz#7b2ea1b785bd46cf207627218bbbb1a2e6f79f36"
   integrity sha512-IemC7Vveo2pSiKy1KhGJJs6pT8qZIQ1wpcITT1LCbBGIwjsQ2NGAvotgHNJ7+RhEJu1auLM7uv3qaLD8/SC2lA==
+  dependencies:
+    diggerize "^1.0.5"
+    fetching-object ">= 1.0.5"
+
+set-state-compare@^1.0.72:
+  version "1.0.72"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.72.tgz#ce800c9c712d58121ab518145c85348534ea6d21"
+  integrity sha512-vMP/1NZEBPb7mFwlgiULwHegIG9hUxW3iZzY8kW4GR7zVFM1KVS/1bHA/5xW21tQBRQyJjyP6e9AfsACGwLrHQ==
   dependencies:
     diggerize "^1.0.5"
     fetching-object ">= 1.0.5"

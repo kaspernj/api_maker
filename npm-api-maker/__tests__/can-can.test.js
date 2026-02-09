@@ -88,6 +88,7 @@ describe("CanCan", () => {
       jest.useFakeTimers()
 
       const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+      const reportAsyncErrorSpy = jest.spyOn(canCan, "reportUnhandledAsyncError").mockImplementation(() => {})
 
       jest.spyOn(Services, "current").mockReturnValue({
         sendRequest: async() => {
@@ -103,6 +104,72 @@ describe("CanCan", () => {
       await loadPromise
 
       expect(consoleSpy).toHaveBeenCalled()
+      expect(reportAsyncErrorSpy).toHaveBeenCalledTimes(1)
+      expect(reportAsyncErrorSpy.mock.calls[0][0].message).toEqual("Boom")
+    })
+
+    it("loads abilities by normalized string subject names", async() => {
+      jest.useFakeTimers()
+
+      jest.spyOn(Services, "current").mockReturnValue({
+        sendRequest: async() => ({
+          abilities: [{ability: "read", can: true, subject: "Account"}]
+        })
+      })
+
+      const loadPromise = canCan.loadAbilities([["Account", ["read"]]])
+      await jest.runAllTimersAsync()
+      await loadPromise
+
+      expect(canCan.can("read", "Account")).toBe(true)
+    })
+
+    it("loads abilities across model class references with the same model name", async() => {
+      jest.useFakeTimers()
+
+      class AccountRefOne {
+        static modelClassData() {
+          return {name: "Account"}
+        }
+      }
+      class AccountRefTwo {
+        static modelClassData() {
+          return {name: "Account"}
+        }
+      }
+
+      jest.spyOn(Services, "current").mockReturnValue({
+        sendRequest: async() => ({
+          abilities: [{ability: "read", can: true, subject: AccountRefOne}]
+        })
+      })
+
+      const loadPromise = canCan.loadAbilities([[AccountRefTwo, ["read"]]])
+      await jest.runAllTimersAsync()
+      await loadPromise
+
+      expect(canCan.can("read", AccountRefTwo)).toBe(true)
+    })
+
+    it("requeues stale generation callbacks after generation mismatch", async() => {
+      const callback = jest.fn()
+      const loadAbilitySpy = jest.spyOn(canCan, "loadAbility").mockResolvedValue()
+
+      canCan.abilitiesToLoad = [{ability: "read", callbacks: [callback], subject: "user"}]
+      canCan.abilitiesToLoadData = [{ability: "read", subject: "user"}]
+
+      jest.spyOn(Services, "current").mockReturnValue({
+        sendRequest: async() => {
+          canCan.abilitiesGeneration += 1
+          return {abilities: []}
+        }
+      })
+
+      await canCan.sendAbilitiesRequest()
+      await flushPromises()
+
+      expect(loadAbilitySpy).toHaveBeenCalledWith("read", "user")
+      expect(callback).toHaveBeenCalledTimes(1)
     })
   })
 

@@ -1,6 +1,7 @@
-import React, {memo} from "react"
+import React, {memo, useEffect} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import {Account} from "models.js"
+import CanCan from "@kaspernj/api-maker/build/can-can.js"
 import classNames from "classnames"
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import {FlashNotifications} from "flash-notifications"
@@ -17,8 +18,24 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
 
   render() {
     const {className, ...restProps} = this.props
-    const canCan = useCanCan(() => [[Account, ["sum"]]])
+    const debug = true
+    const canCan = useCanCan(() => [[Account, ["sum"]]], undefined, {debug})
     const currentUser = useCurrentUser()
+    const cacheKey = canCan.getCacheKey()
+    const canAccessAdmin = canCan.can("sum", Account)
+    const currentUserIdentifier = currentUser?.email() || "none"
+    const debugSummary = [
+      `canCan=${String(Boolean(canCan))}`,
+      `cacheKey=${cacheKey}`,
+      `currentUser=${currentUserIdentifier}`,
+      `canAccessAdmin=${String(canAccessAdmin)}`
+    ].join("; ")
+
+    useEffect(() => {
+      if (debug) {
+        console.log(`[can-can-loader-debug] ${debugSummary}`)
+      }
+    }, [debug, debugSummary])
 
     return (
       <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>
@@ -27,20 +44,18 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
             <Text>Sign in as admin</Text>
           </Pressable>
         }
-        {!canCan &&
-          "can can not loaded"
-        }
-        {canCan &&
-          <Text dataSet={{class: "can-can-cache-key"}}>
-            {canCan.getCacheKey()}
-          </Text>
-        }
-        {canCan && canCan.can("sum", Account) &&
+        <Text dataSet={{class: "can-can-cache-key"}}>
+          {cacheKey}
+        </Text>
+        <Text dataSet={{class: "can-can-debug-summary"}}>
+          {debugSummary}
+        </Text>
+        {canAccessAdmin &&
           <div className="can-access-admin">
             can access admin
           </div>
         }
-        {canCan && !canCan.can("sum", Account) &&
+        {!canAccessAdmin &&
           <div className="cannot-access-admin">
             can not access admin
           </div>
@@ -51,7 +66,11 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
 
   onSignInAsAdminPress = async () => {
     try {
+      console.log("[can-can-loader-debug] sign-in-click:start")
       await Devise.signIn("admin@example.com", "password", {rememberMe: true})
+      console.log("[can-can-loader-debug] sign-in-click:after-sign-in")
+      await CanCan.current().resetAbilities()
+      console.log("[can-can-loader-debug] sign-in-click:after-reset-abilities")
     } catch (error) {
       FlashNotifications.errorResponse(error)
     }
