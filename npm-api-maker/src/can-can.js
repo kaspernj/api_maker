@@ -278,7 +278,7 @@ export default class ApiMakerCanCan {
     try {
       const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
         request: abilitiesToLoadData
-      }, {instant: true})
+      })
       const responseAbilities = digg(result, "abilities")
 
       if (Array.isArray(responseAbilities)) abilities = responseAbilities
