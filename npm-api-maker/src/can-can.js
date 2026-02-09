@@ -30,11 +30,11 @@ export default class ApiMakerCanCan {
   }
 
   can (ability, subject, options = {}) {
-    let abilityToUse = inflection.underscore(ability)
-    const foundAbility = this.findAbility(abilityToUse, subject)
+    const foundAbility = this.findAbility(ability, subject)
 
     if (foundAbility === undefined) {
-      this.recordMissingAbility(abilityToUse, subject)
+      const normalizedAbility = inflection.underscore(ability)
+      this.recordMissingAbility(normalizedAbility, subject)
 
       if (options.debug) {
         let subjectLabel = subject
@@ -44,7 +44,7 @@ export default class ApiMakerCanCan {
           subjectLabel = digg(subject.modelClassData(), "name")
         }
 
-        console.error(`Ability not loaded ${subjectLabel}#${abilityToUse}`, {abilities: this.abilities, ability, subject})
+        console.error(`Ability not loaded ${subjectLabel}#${normalizedAbility}`, {abilities: this.abilities, ability, subject})
       }
 
       return null
@@ -91,46 +91,14 @@ export default class ApiMakerCanCan {
   }
 
   findAbility (ability, subject) {
-    const subjectName = this.subjectName(subject)
+    const abilityKey = this.abilityKey(ability, subject)
+    if (!abilityKey) return undefined
 
-    if (subjectName) {
-      const abilityByName = this.abilitiesByName.get(`${ability}:${subjectName}`)
-
-      if (abilityByName) return abilityByName
-    }
-
-    return this.abilities.find((abilityData) => {
-      const abilityDataSubject = digg(abilityData, "subject")
-      const abilityDataAbility = digg(abilityData, "ability")
-
-      if (abilityDataAbility == ability) {
-        // If actually same class
-        if (abilityDataSubject == subject) return true
-
-        // Sometimes in dev when using linking it will actually be two different but identical resource classes
-        if (
-          typeof subject == "function" &&
-          subject.modelClassData &&
-          typeof abilityDataSubject == "function" &&
-          abilityDataSubject.modelClassData &&
-          digg(subject.modelClassData(), "name") == digg(abilityDataSubject.modelClassData(), "name")
-        ) {
-          return true
-        }
-      }
-
-      return false
-    })
+    return this.abilitiesByName.get(abilityKey)
   }
 
   isAbilityLoaded (ability, subject) {
-    const foundAbility = this.findAbility(ability, subject)
-
-    if (foundAbility !== undefined) {
-      return true
-    }
-
-    return false
+    return this.findAbility(ability, subject) !== undefined
   }
 
   isReloading () {
@@ -252,6 +220,7 @@ export default class ApiMakerCanCan {
 
     let abilities = []
     let didFail = false
+    let requestError
 
     // Load abilities from backend
     try {
@@ -263,6 +232,7 @@ export default class ApiMakerCanCan {
       if (Array.isArray(responseAbilities)) abilities = responseAbilities
     } catch (error) {
       didFail = true
+      requestError = error
       console.error("Failed to load abilities", error)
     }
 
@@ -273,6 +243,8 @@ export default class ApiMakerCanCan {
         }
       }
 
+      // Resolve callbacks to avoid deadlocks for waiters even when load failed.
+      if (requestError) this.reportUnhandledAsyncError(requestError)
       return
     }
 
@@ -293,18 +265,30 @@ export default class ApiMakerCanCan {
   indexAbilitiesByName (abilities) {
     for (const abilityData of abilities) {
       if (abilityData && typeof abilityData == "object") {
-        const abilityName = digg(abilityData, "ability")
-        const subjectName = this.subjectName(digg(abilityData, "subject"))
+        const abilityKey = this.abilityKey(digg(abilityData, "ability"), digg(abilityData, "subject"))
 
-        if (abilityName && subjectName) {
-          this.abilitiesByName.set(`${abilityName}:${subjectName}`, abilityData)
+        if (abilityKey) {
+          this.abilitiesByName.set(abilityKey, abilityData)
         }
       }
     }
   }
 
+  abilityKey (ability, subject) {
+    if (!ability) return null
+
+    const subjectName = this.subjectName(subject)
+    if (!subjectName) return null
+
+    return `${inflection.underscore(ability)}:${subjectName}`
+  }
+
   subjectName (subject) {
     if (!subject) return null
+
+    if (typeof subject == "string") {
+      return subject
+    }
 
     if (subject.modelClassData) {
       return digg(subject.modelClassData(), "name")
@@ -319,5 +303,11 @@ export default class ApiMakerCanCan {
     }
 
     return null
+  }
+
+  reportUnhandledAsyncError (error) {
+    if (!error) return
+
+    Promise.reject(error)
   }
 }
