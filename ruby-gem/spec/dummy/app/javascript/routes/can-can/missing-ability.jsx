@@ -3,28 +3,33 @@ import {Account} from "models.js"
 import CanCan from "@kaspernj/api-maker/build/can-can.js"
 import Layout from "components/layout"
 
-export default memo(() => {
+function CanCanMissingAbility() {
   const canCan = CanCan.current()
   const [status, setStatus] = useState("loading")
 
   useEffect(() => {
-    if (!canCan) return
-
     let isActive = true
+
     const checkAbility = () => {
       if (!isActive) return
 
       const canAccess = canCan.can("index", Account)
 
-      if (canAccess) setStatus("loaded")
+      if (canAccess === null || canAccess === undefined) {
+        setStatus("loading")
+      } else if (canAccess) {
+        setStatus("loaded")
+      } else {
+        setStatus("missing ability")
+      }
     }
 
     checkAbility()
-    const interval = setInterval(checkAbility, 10)
+    canCan.events.on("onAbilitiesLoaded", checkAbility)
 
     return () => {
       isActive = false
-      clearInterval(interval)
+      canCan.events.off("onAbilitiesLoaded", checkAbility)
     }
   }, [canCan])
 
@@ -35,4 +40,6 @@ export default memo(() => {
       </div>
     </Layout>
   )
-})
+}
+
+export default memo(CanCanMissingAbility)
