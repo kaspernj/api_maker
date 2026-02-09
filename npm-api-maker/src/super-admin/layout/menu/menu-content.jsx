@@ -1,5 +1,5 @@
 /* eslint-disable new-cap, newline-per-chained-call, sort-imports */
-import React, {useEffect, useMemo} from "react"
+import React, {useMemo} from "react"
 import BaseComponent from "../../../base-component"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
@@ -9,7 +9,6 @@ import Params from "../../../params.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import Text from "../../../utils/text"
 import useCanCan from "../../../use-can-can.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
@@ -22,7 +21,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extend
     const {locale} = useI18n({namespace: "js.api_maker.super_admin.layout.menu.menu_content"})
     const {active} = this.p
     const abilitiesToLoad = useMemo(() => models.map((modelClass) => [modelClass, ["index"]]), [])
-    const canCan = useCanCan(() => abilitiesToLoad, undefined, {debug: true})
+    const canCan = useCanCan(() => abilitiesToLoad)
     const sortedModels = useMemo(
       () => models.sort((a, b) => a.modelName().human({count: 2}).toLowerCase().localeCompare(b.modelName().human({count: 2}).toLowerCase())),
       [locale]
@@ -33,31 +32,9 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extend
 
       return {canIndex, modelClass, modelName}
     })
-    const allowedModelsCount = abilityStates.filter((abilityState) => abilityState.canIndex === true).length
-    const pendingModelsCount = abilityStates.filter((abilityState) => abilityState.canIndex === null).length
-
-    const debugSummary = [
-      `canCan=${String(Boolean(canCan))}`,
-      `cacheKey=${canCan?.getCacheKey?.() ?? "none"}`,
-      `models=${abilityStates.length}`,
-      `allowed=${allowedModelsCount}`,
-      `pending=${pendingModelsCount}`
-    ].join("; ")
-    const debugAbilities = abilityStates.map((abilityState) => `${abilityState.modelName}:${String(abilityState.canIndex)}`).join(",")
-
-    useEffect(() => {
-      console.log(`[super-admin-menu-debug] ${debugSummary}`)
-      console.log(`[super-admin-menu-debug-abilities] ${debugAbilities}`)
-    }, [debugAbilities, debugSummary])
 
     return (
       <>
-        <Text dataSet={{class: "components--admin--layout--menu--menu-content--debug-summary"}}>
-          {debugSummary}
-        </Text>
-        <Text dataSet={{class: "components--admin--layout--menu--menu-content--debug-abilities"}}>
-          {debugAbilities}
-        </Text>
         {abilityStates.map((abilityState) => abilityState.canIndex === true &&
           <MenuItem
             active={active}
