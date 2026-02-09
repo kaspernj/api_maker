@@ -18,7 +18,8 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
 
   render() {
     const {className, ...restProps} = this.props
-    const canCan = useCanCan(() => [[Account, ["sum"]]])
+    const debug = true
+    const canCan = useCanCan(() => [[Account, ["sum"]]], undefined, {debug})
     const currentUser = useCurrentUser()
     const cacheKey = canCan.getCacheKey()
     const canAccessAdmin = canCan.can("sum", Account)
@@ -31,8 +32,10 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
     ].join("; ")
 
     useEffect(() => {
-      console.log(`[can-can-loader-debug] ${debugSummary}`)
-    }, [debugSummary])
+      if (debug) {
+        console.log(`[can-can-loader-debug] ${debugSummary}`)
+      }
+    }, [debug, debugSummary])
 
     return (
       <div className={classNames("components-can-can-loader-with-state", className)} {...restProps}>

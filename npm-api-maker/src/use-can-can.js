@@ -1,5 +1,5 @@
 /* eslint-disable jest/require-hook */
-import {useCallback, useEffect, useMemo, useRef} from "react"
+import {useCallback, useEffect, useMemo} from "react"
 import CanCan from "./can-can.js"
 import Devise from "./devise.js"
 import useEventEmitter from "ya-use-event-emitter"
@@ -35,43 +35,55 @@ const dependencyListKey = (list) => {
 /**
  * @param {function() : Array} abilitiesCallback
  * @param {Array} [dependencies]
+ * @param {object} [options]
+ * @param {boolean} [options.debug]
  * @returns {CanCan}
  */
-export default function useCanCan(abilitiesCallback, dependencies = undefined) {
+export default function useCanCan(abilitiesCallback, dependencies = undefined, options = {}) {
+  const {debug = false} = options
   const s = useShape({abilitiesCallback})
 
+  s.meta.canCan ||= CanCan.current()
+  s.meta.debug = debug
+  s.meta.debugToken ||= Symbol("use-can-can-debug")
+  s.meta.deviseReloadKey ||= 0
+
   s.useStates({
-    canCan: CanCan.current(),
     lastUpdate: () => new Date()
   })
 
-  const deviseReloadKeyRef = useRef(0)
-
   const loadAbilities = useCallback(async (reloadKey) => {
-    const canCan = CanCan.current()
     const abilities = s.p.abilitiesCallback()
 
     if (reloadKey === undefined) {
-      await canCan.loadAbilities(abilities)
+      await s.m.canCan.loadAbilities(abilities)
     } else {
-      await canCan.reloadAbilities(abilities, reloadKey)
+      await s.m.canCan.reloadAbilities(abilities, reloadKey)
     }
 
     s.set({lastUpdate: new Date()})
   }, [])
 
   const onDeviseChange = useCallback(() => {
-    deviseReloadKeyRef.current += 1
-    console.log(`[can-can-hook-debug] devise-change reloadKey=devise:${deviseReloadKeyRef.current}`)
-    loadAbilities(`devise:${deviseReloadKeyRef.current}`)
-  }, [loadAbilities])
+    s.meta.deviseReloadKey += 1
+
+    if (s.m.debug) {
+      console.log(`[useCanCan] devise-change reloadKey=devise:${s.meta.deviseReloadKey}`)
+    }
+    loadAbilities(`devise:${s.meta.deviseReloadKey}`)
+  }, [])
 
   const onResetAbilities = useCallback(() => {
-    console.log("[can-can-hook-debug] onResetAbilities -> loadAbilities()")
+    if (s.m.debug) {
+      console.log("[useCanCan] onResetAbilities -> loadAbilities()")
+    }
     loadAbilities()
-  }, [loadAbilities])
+  }, [])
+
   const onAbilitiesLoaded = useCallback(() => {
-    console.log("[can-can-hook-debug] onAbilitiesLoaded")
+    if (s.m.debug) {
+      console.log("[useCanCan] onAbilitiesLoaded")
+    }
     s.set({lastUpdate: new Date()})
   }, [])
 
@@ -80,8 +92,18 @@ export default function useCanCan(abilitiesCallback, dependencies = undefined) {
   const hasCustomDependencies = dependencies !== undefined
 
   useEffect(() => {
+    s.m.canCan.setDebug(s.meta.debugToken, debug)
+
+    return () => {
+      s.m.canCan.setDebug(s.meta.debugToken, false)
+    }
+  }, [debug])
+
+  useEffect(() => {
     // `loadAbilities` is intentionally stable; this effect is driven by dependency inputs.
-    console.log(`[can-can-hook-debug] effect hasCustomDependencies=${String(hasCustomDependencies)}; dependencyKey=${dependencyKey}`)
+    if (debug) {
+      console.log(`[useCanCan] effect hasCustomDependencies=${String(hasCustomDependencies)}; dependencyKey=${dependencyKey}`)
+    }
     if (hasCustomDependencies) {
       loadAbilities(dependencyKey)
     } else {
@@ -91,8 +113,8 @@ export default function useCanCan(abilitiesCallback, dependencies = undefined) {
 
   useEventEmitter(Devise.events(), "onDeviseSignIn", onDeviseChange)
   useEventEmitter(Devise.events(), "onDeviseSignOut", onDeviseChange)
-  useEventEmitter(CanCan.current().events, "onAbilitiesLoaded", onAbilitiesLoaded)
-  useEventEmitter(CanCan.current().events, "onResetAbilities", onResetAbilities)
+  useEventEmitter(s.m.canCan.events, "onAbilitiesLoaded", onAbilitiesLoaded)
+  useEventEmitter(s.m.canCan.events, "onResetAbilities", onResetAbilities)
 
   return s.s.canCan
 }

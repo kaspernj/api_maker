@@ -22,6 +22,7 @@ export default class ApiMakerCanCan {
   events = new EventEmitter()
   lock = new ReadersWriterLock()
   abilitiesByName = new Map()
+  debugTokens = new Set()
 
   static current () {
     if (!shared.currentApiMakerCanCan) shared.currentApiMakerCanCan = new ApiMakerCanCan()
@@ -109,6 +110,26 @@ export default class ApiMakerCanCan {
     return this.cacheKey
   }
 
+  setDebug (token, enabled) {
+    if (!token) return
+
+    if (enabled) {
+      this.debugTokens.add(token)
+    } else {
+      this.debugTokens.delete(token)
+    }
+  }
+
+  isDebugging () {
+    return this.debugTokens.size > 0
+  }
+
+  debugLog (message) {
+    if (this.isDebugging()) {
+      console.log(message)
+    }
+  }
+
   async loadAbilities (abilities) {
     const generation = this.abilitiesGeneration
     const loadSummary = [
@@ -116,7 +137,7 @@ export default class ApiMakerCanCan {
       `generation=${generation}`,
       `requests=${abilities.length}`
     ].join("; ")
-    console.log(loadSummary)
+    this.debugLog(loadSummary)
 
     this.loadingCount += 1
 
@@ -146,7 +167,7 @@ export default class ApiMakerCanCan {
         `currentGeneration=${this.abilitiesGeneration}`,
         `loadingCount=${this.loadingCount}`
       ].join("; ")
-      console.log(doneSummary)
+      this.debugLog(doneSummary)
       if (this.loadingCount > 0) this.loadingCount -= 1
       if (this.resettingGeneration === generation) this.resettingGeneration = null
     }
@@ -199,7 +220,7 @@ export default class ApiMakerCanCan {
         `cacheKey=${this.cacheKey}`,
         `queued=${this.abilitiesToLoadData.length}`
       ].join("; ")
-      console.log(resetSummary)
+      this.debugLog(resetSummary)
       this.events.emit("onResetAbilities")
     })()
 
@@ -212,7 +233,7 @@ export default class ApiMakerCanCan {
 
   async reloadAbilities (abilities, reloadKey) {
     if (reloadKey && this.reloadPromises.has(reloadKey)) {
-      console.log(`[can-can-debug] reloadAbilities:dedupe reloadKey=${reloadKey}`)
+      this.debugLog(`[can-can-debug] reloadAbilities:dedupe reloadKey=${reloadKey}`)
       return this.reloadPromises.get(reloadKey)
     }
 
@@ -222,7 +243,7 @@ export default class ApiMakerCanCan {
       `generation=${this.abilitiesGeneration}`,
       `requests=${abilities.length}`
     ].join("; ")
-    console.log(reloadSummary)
+    this.debugLog(reloadSummary)
 
     const promise = (async () => {
       await this.resetAbilities()
@@ -234,7 +255,7 @@ export default class ApiMakerCanCan {
     try {
       await promise
     } finally {
-      console.log(`[can-can-debug] reloadAbilities:done reloadKey=${reloadKey || "none"}; generation=${this.abilitiesGeneration}`)
+      this.debugLog(`[can-can-debug] reloadAbilities:done reloadKey=${reloadKey || "none"}; generation=${this.abilitiesGeneration}`)
       if (reloadKey) this.reloadPromises.delete(reloadKey)
     }
   }
@@ -247,7 +268,7 @@ export default class ApiMakerCanCan {
 
     this.abilitiesToLoad = []
     this.abilitiesToLoadData = []
-    console.log(`[can-can-debug] sendAbilitiesRequest:start generation=${generation}; queued=${abilitiesToLoadData.length}`)
+    this.debugLog(`[can-can-debug] sendAbilitiesRequest:start generation=${generation}; queued=${abilitiesToLoadData.length}`)
 
     let abilities = []
     let didFail = false
@@ -274,7 +295,7 @@ export default class ApiMakerCanCan {
         `currentGeneration=${this.abilitiesGeneration}`,
         `requeue=${abilitiesToLoad.length}`
       ].join("; ")
-      console.log(staleResponseDebug)
+      this.debugLog(staleResponseDebug)
       for (const abilityData of abilitiesToLoad) {
         for (const callback of abilityData.callbacks) {
           this.loadAbility(abilityData.ability, abilityData.subject).then(callback)
@@ -285,7 +306,7 @@ export default class ApiMakerCanCan {
     }
 
     if (didFail) {
-      console.log(`[can-can-debug] sendAbilitiesRequest:failed generation=${generation}; queued=${abilitiesToLoad.length}`)
+      this.debugLog(`[can-can-debug] sendAbilitiesRequest:failed generation=${generation}; queued=${abilitiesToLoad.length}`)
       for (const abilityData of abilitiesToLoad) {
         for (const callback of abilityData.callbacks) {
           callback()
@@ -301,7 +322,7 @@ export default class ApiMakerCanCan {
     this.abilities = this.abilities.concat(abilities)
     this.indexAbilitiesByName(abilities)
     this.cacheKey += 1
-    console.log(
+    this.debugLog(
       `[can-can-debug] sendAbilitiesRequest:success generation=${generation}; loaded=${abilities.length}; cacheKey=${this.cacheKey}`
     )
     this.events.emit("onAbilitiesLoaded", {cacheKey: this.cacheKey})
