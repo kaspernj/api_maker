@@ -127,8 +127,6 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
       headerActionsContainerStyle.marginLeft = "auto"
     }
 
-    const actionsText = `actions: ${actions ? "YES" : "NO"}`
-
     return (
       <View dataSet={this.cache("rootViewDataSet", {component: "super-admin--layout--header"})} style={headerStyle}>
         <View dataSet={this.cache("headerTitleViewDataSet", {class: "header-title-container"})}>
@@ -136,9 +134,6 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
             {title}
           </Text>
         </View>
-        <Text>
-          {actionsText}
-        </Text>
         {actions &&
           <View
             dataSet={dataSets[`headerActionsContainer-${this.s.headerActionsActive}`] ||= {
