@@ -180,6 +180,7 @@ export default class ApiMakerCanCan {
         this.resettingGeneration = this.abilitiesGeneration
         this.cacheKey += 1
       })
+      console.log(`[can-can-debug] resetAbilities generation=${this.abilitiesGeneration}; cacheKey=${this.cacheKey}`)
       this.events.emit("onResetAbilities")
     })()
 
@@ -217,6 +218,7 @@ export default class ApiMakerCanCan {
 
     this.abilitiesToLoad = []
     this.abilitiesToLoadData = []
+    console.log(`[can-can-debug] sendAbilitiesRequest:start generation=${generation}; queued=${abilitiesToLoadData.length}`)
 
     let abilities = []
     let didFail = false
@@ -237,6 +239,13 @@ export default class ApiMakerCanCan {
     }
 
     if (generation !== this.abilitiesGeneration) {
+      const staleResponseDebug = [
+        "[can-can-debug] sendAbilitiesRequest:stale-response",
+        `requestGeneration=${generation}`,
+        `currentGeneration=${this.abilitiesGeneration}`,
+        `requeue=${abilitiesToLoad.length}`
+      ].join("; ")
+      console.log(staleResponseDebug)
       for (const abilityData of abilitiesToLoad) {
         for (const callback of abilityData.callbacks) {
           this.loadAbility(abilityData.ability, abilityData.subject).then(callback)
@@ -247,6 +256,7 @@ export default class ApiMakerCanCan {
     }
 
     if (didFail) {
+      console.log(`[can-can-debug] sendAbilitiesRequest:failed generation=${generation}; queued=${abilitiesToLoad.length}`)
       for (const abilityData of abilitiesToLoad) {
         for (const callback of abilityData.callbacks) {
           callback()
@@ -262,6 +272,9 @@ export default class ApiMakerCanCan {
     this.abilities = this.abilities.concat(abilities)
     this.indexAbilitiesByName(abilities)
     this.cacheKey += 1
+    console.log(
+      `[can-can-debug] sendAbilitiesRequest:success generation=${generation}; loaded=${abilities.length}; cacheKey=${this.cacheKey}`
+    )
     this.events.emit("onAbilitiesLoaded", {cacheKey: this.cacheKey})
 
     // Call the callbacks that are waiting for the ability to have been loaded

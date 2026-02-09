@@ -62,22 +62,32 @@ export default function useCanCan(abilitiesCallback, dependencies = undefined) {
 
   const onDeviseChange = useCallback(() => {
     deviseReloadKeyRef.current += 1
+    console.log(`[can-can-hook-debug] devise-change reloadKey=devise:${deviseReloadKeyRef.current}`)
     loadAbilities(`devise:${deviseReloadKeyRef.current}`)
   }, [loadAbilities])
 
   const onResetAbilities = useCallback(() => {
+    console.log("[can-can-hook-debug] onResetAbilities -> loadAbilities()")
     loadAbilities()
   }, [loadAbilities])
   const onAbilitiesLoaded = useCallback(() => {
+    console.log("[can-can-hook-debug] onAbilitiesLoaded")
     s.set({lastUpdate: new Date()})
   }, [])
 
   const dependencyList = dependencies ?? []
   const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
+  const hasCustomDependencies = dependencies !== undefined
 
   useEffect(() => {
-    loadAbilities(dependencyKey)
-  }, [dependencyKey])
+    // `loadAbilities` is intentionally stable; this effect is driven by dependency inputs.
+    console.log(`[can-can-hook-debug] effect hasCustomDependencies=${String(hasCustomDependencies)}; dependencyKey=${dependencyKey}`)
+    if (hasCustomDependencies) {
+      loadAbilities(dependencyKey)
+    } else {
+      loadAbilities()
+    }
+  }, [dependencyKey, hasCustomDependencies])
 
   useEventEmitter(Devise.events(), "onDeviseSignIn", onDeviseChange)
   useEventEmitter(Devise.events(), "onDeviseSignOut", onDeviseChange)
