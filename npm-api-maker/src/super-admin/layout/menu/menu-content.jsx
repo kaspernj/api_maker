@@ -22,7 +22,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extend
     const {locale} = useI18n({namespace: "js.api_maker.super_admin.layout.menu.menu_content"})
     const {active} = this.p
     const abilitiesToLoad = useMemo(() => models.map((modelClass) => [modelClass, ["index"]]), [])
-    const canCan = useCanCan(() => abilitiesToLoad)
+    const canCan = useCanCan(() => abilitiesToLoad, undefined, {debug: true})
     const sortedModels = useMemo(
       () => models.sort((a, b) => a.modelName().human({count: 2}).toLowerCase().localeCompare(b.modelName().human({count: 2}).toLowerCase())),
       [locale]

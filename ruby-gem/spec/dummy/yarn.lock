@@ -4364,10 +4364,10 @@ set-function-length@^1.2.2:
     diggerize "^1.0.5"
     fetching-object ">= 1.0.5"
 
-set-state-compare@^1.0.71:
-  version "1.0.71"
-  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.71.tgz#f19b6e106f239f7328eaa485c7aa523c2cadcf13"
-  integrity sha512-KGkpgWDmXADbYqTeD95hb8QZp0RJEpY4c95bfPYIsAwiw0YOFDiNzsQzNlmZEVaeHerCppAr/BQIz5Bx53yxnA==
+set-state-compare@^1.0.72:
+  version "1.0.72"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.72.tgz#ce800c9c712d58121ab518145c85348534ea6d21"
+  integrity sha512-vMP/1NZEBPb7mFwlgiULwHegIG9hUxW3iZzY8kW4GR7zVFM1KVS/1bHA/5xW21tQBRQyJjyP6e9AfsACGwLrHQ==
   dependencies:
     diggerize "^1.0.5"
     fetching-object ">= 1.0.5"

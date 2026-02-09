@@ -1,54 +1,46 @@
-/* eslint-disable jest/require-hook */
+import {ShapeHook, useShapeHook} from "set-state-compare"
 import {useEffect, useMemo} from "react"
 import CanCan from "./can-can.js"
 import Devise from "./devise.js"
 import useEventEmitter from "ya-use-event-emitter"
-import useShape from "set-state-compare/build/use-shape.js"
 
-const dependencyKeyMap = new WeakMap()
-let dependencyKeyNextId = 1
-
-const dependencyKeyFor = (value) => {
-  if (value === null) return "null"
-  if (value === undefined) return "undefined"
-
-  const valueType = typeof value
-
-  if (valueType !== "object" && valueType !== "function") {
-    return `${valueType}:${String(value)}`
-  }
-
-  if (!dependencyKeyMap.has(value)) {
-    dependencyKeyMap.set(value, dependencyKeyNextId)
-    dependencyKeyNextId += 1
-  }
-
-  return `${valueType}:ref:${dependencyKeyMap.get(value)}`
-}
-
-const dependencyListKey = (list) => {
-  if (!Array.isArray(list)) return dependencyKeyFor(list)
-
-  return list.map((value) => dependencyKeyFor(value)).join("|")
-}
-
-class UseCanCanClass {
-  constructor(shape) {
-    this.s = shape
+class UseCanCanClass extends ShapeHook {
+  constructor(props) {
+    super(props)
     this.canCan = CanCan.current()
-    this.debug = false
     this.debugToken = Symbol("use-can-can-debug")
     this.deviseReloadKey = 0
-    this.abilitiesCallback = null
+    this.loadedWithCustomDependencies = false
+    this.dependencyKeyMap = new WeakMap()
+    this.dependencyKeyNextId = 1
   }
 
-  sync({abilitiesCallback, debug}) {
-    this.abilitiesCallback = abilitiesCallback
-    this.debug = debug
+  dependencyKeyFor(value) {
+    if (value === null) return "null"
+    if (value === undefined) return "undefined"
+
+    const valueType = typeof value
+
+    if (valueType !== "object" && valueType !== "function") {
+      return `${valueType}:${String(value)}`
+    }
+
+    if (!this.dependencyKeyMap.has(value)) {
+      this.dependencyKeyMap.set(value, this.dependencyKeyNextId)
+      this.dependencyKeyNextId += 1
+    }
+
+    return `${valueType}:ref:${this.dependencyKeyMap.get(value)}`
+  }
+
+  dependencyListKey(list) {
+    if (!Array.isArray(list)) return this.dependencyKeyFor(list)
+
+    return list.map((value) => this.dependencyKeyFor(value)).join("|")
   }
 
   loadAbilities = async (reloadKey) => {
-    const abilities = this.abilitiesCallback()
+    const abilities = this.p.abilitiesCallback()
 
     if (reloadKey === undefined) {
       await this.canCan.loadAbilities(abilities)
@@ -56,13 +48,13 @@ class UseCanCanClass {
       await this.canCan.reloadAbilities(abilities, reloadKey)
     }
 
-    this.s.set({lastUpdate: new Date()})
+    this.setState({lastUpdate: new Date()})
   }
 
   onDeviseChange = () => {
     this.deviseReloadKey += 1
 
-    if (this.debug) {
+    if (this.p.debug) {
       console.log(`[useCanCan] devise-change reloadKey=devise:${this.deviseReloadKey}`)
     }
 
@@ -70,7 +62,7 @@ class UseCanCanClass {
   }
 
   onResetAbilities = () => {
-    if (this.debug) {
+    if (this.p.debug) {
       console.log("[useCanCan] onResetAbilities -> loadAbilities()")
     }
 
@@ -78,34 +70,46 @@ class UseCanCanClass {
   }
 
   onAbilitiesLoaded = () => {
-    if (this.debug) {
+    if (this.p.debug) {
       console.log("[useCanCan] onAbilitiesLoaded")
     }
 
-    this.s.set({lastUpdate: new Date()})
+    this.setState({lastUpdate: new Date()})
   }
 
-  hook({dependencies}) {
+  setup() {
+    this.useStates({
+      lastUpdate: () => new Date()
+    })
+
+    const {debug, dependencies} = this.p
     const dependencyList = dependencies ?? []
-    const dependencyKey = useMemo(() => dependencyListKey(dependencyList), dependencyList)
+    const dependencyKey = useMemo(() => this.dependencyListKey(dependencyList), dependencyList)
     const hasCustomDependencies = dependencies !== undefined
 
     useEffect(() => {
-      this.canCan.setDebug(this.debugToken, this.debug)
+      const previousDebug = this.canCan.debugTokens.has(this.debugToken)
+      this.canCan.setDebug(this.debugToken, debug)
 
       return () => {
-        this.canCan.setDebug(this.debugToken, false)
+        this.canCan.setDebug(this.debugToken, previousDebug)
       }
-    }, [this.debug])
+    }, [debug])
 
     useEffect(() => {
-      if (this.debug) {
+      if (debug) {
         console.log(`[useCanCan] effect hasCustomDependencies=${String(hasCustomDependencies)}; dependencyKey=${dependencyKey}`)
       }
 
       if (hasCustomDependencies) {
-        this.loadAbilities(dependencyKey)
+        if (this.loadedWithCustomDependencies) {
+          this.loadAbilities(dependencyKey)
+        } else {
+          this.loadedWithCustomDependencies = true
+          this.loadAbilities()
+        }
       } else {
+        this.loadedWithCustomDependencies = false
         this.loadAbilities()
       }
     }, [dependencyKey, hasCustomDependencies])
@@ -114,8 +118,6 @@ class UseCanCanClass {
     useEventEmitter(Devise.events(), "onDeviseSignOut", this.onDeviseChange)
     useEventEmitter(this.canCan.events, "onAbilitiesLoaded", this.onAbilitiesLoaded)
     useEventEmitter(this.canCan.events, "onResetAbilities", this.onResetAbilities)
-
-    return this.canCan
   }
 }
 
@@ -127,14 +129,14 @@ class UseCanCanClass {
  * @returns {CanCan}
  */
 export default function useCanCan(abilitiesCallback, dependencies = undefined, options = {}) {
-  const {debug = false} = options
-  const s = useShape({abilitiesCallback})
-  s.meta.useCanCanClass ||= new UseCanCanClass(s)
-  s.meta.useCanCanClass.sync({abilitiesCallback, debug})
+  const {debug = false, ...restArgs} = options
+  const restArgsKeys = Object.keys(restArgs)
 
-  s.useStates({
-    lastUpdate: () => new Date()
-  })
+  if (restArgsKeys.length > 0) {
+    throw new Error(`Unknown options given to useCanCan: ${restArgsKeys.join(", ")}`)
+  }
 
-  return s.meta.useCanCanClass.hook({dependencies})
+  const shapeHook = useShapeHook(UseCanCanClass, {abilitiesCallback, debug, dependencies})
+
+  return shapeHook.canCan
 }
