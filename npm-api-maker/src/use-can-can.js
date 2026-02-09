@@ -88,11 +88,10 @@ class UseCanCanClass extends ShapeHook {
     const hasCustomDependencies = dependencies !== undefined
 
     useEffect(() => {
-      const previousDebug = this.canCan.debugTokens.has(this.debugToken)
-      this.canCan.setDebug(this.debugToken, debug)
+      this.canCan.setDebug(this.debugToken, true)
 
       return () => {
-        this.canCan.setDebug(this.debugToken, previousDebug)
+        this.canCan.setDebug(this.debugToken, false)
       }
     }, [debug])
 
