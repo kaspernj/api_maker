@@ -111,6 +111,12 @@ export default class ApiMakerCanCan {
 
   async loadAbilities (abilities) {
     const generation = this.abilitiesGeneration
+    const loadSummary = [
+      "[can-can-debug] loadAbilities:start",
+      `generation=${generation}`,
+      `requests=${abilities.length}`
+    ].join("; ")
+    console.log(loadSummary)
 
     this.loadingCount += 1
 
@@ -134,6 +140,13 @@ export default class ApiMakerCanCan {
         await Promise.all(promises)
       })
     } finally {
+      const doneSummary = [
+        "[can-can-debug] loadAbilities:done",
+        `generation=${generation}`,
+        `currentGeneration=${this.abilitiesGeneration}`,
+        `loadingCount=${this.loadingCount}`
+      ].join("; ")
+      console.log(doneSummary)
       if (this.loadingCount > 0) this.loadingCount -= 1
       if (this.resettingGeneration === generation) this.resettingGeneration = null
     }
@@ -180,7 +193,13 @@ export default class ApiMakerCanCan {
         this.resettingGeneration = this.abilitiesGeneration
         this.cacheKey += 1
       })
-      console.log(`[can-can-debug] resetAbilities generation=${this.abilitiesGeneration}; cacheKey=${this.cacheKey}`)
+      const resetSummary = [
+        "[can-can-debug] resetAbilities",
+        `generation=${this.abilitiesGeneration}`,
+        `cacheKey=${this.cacheKey}`,
+        `queued=${this.abilitiesToLoadData.length}`
+      ].join("; ")
+      console.log(resetSummary)
       this.events.emit("onResetAbilities")
     })()
 
@@ -193,8 +212,17 @@ export default class ApiMakerCanCan {
 
   async reloadAbilities (abilities, reloadKey) {
     if (reloadKey && this.reloadPromises.has(reloadKey)) {
+      console.log(`[can-can-debug] reloadAbilities:dedupe reloadKey=${reloadKey}`)
       return this.reloadPromises.get(reloadKey)
     }
+
+    const reloadSummary = [
+      "[can-can-debug] reloadAbilities:start",
+      `reloadKey=${reloadKey || "none"}`,
+      `generation=${this.abilitiesGeneration}`,
+      `requests=${abilities.length}`
+    ].join("; ")
+    console.log(reloadSummary)
 
     const promise = (async () => {
       await this.resetAbilities()
@@ -206,6 +234,7 @@ export default class ApiMakerCanCan {
     try {
       await promise
     } finally {
+      console.log(`[can-can-debug] reloadAbilities:done reloadKey=${reloadKey || "none"}; generation=${this.abilitiesGeneration}`)
       if (reloadKey) this.reloadPromises.delete(reloadKey)
     }
   }

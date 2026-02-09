@@ -63,8 +63,11 @@ export default memo(shapeComponent(class CanCanWithState extends ShapeComponent 
 
   onSignInAsAdminPress = async () => {
     try {
+      console.log("[can-can-loader-debug] sign-in-click:start")
       await Devise.signIn("admin@example.com", "password", {rememberMe: true})
+      console.log("[can-can-loader-debug] sign-in-click:after-sign-in")
       await CanCan.current().resetAbilities()
+      console.log("[can-can-loader-debug] sign-in-click:after-reset-abilities")
     } catch (error) {
       FlashNotifications.errorResponse(error)
     }
