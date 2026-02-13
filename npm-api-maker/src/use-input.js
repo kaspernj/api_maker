@@ -6,7 +6,7 @@ import nameForComponent from "./inputs/name-for-component.js"
 import strftime from "strftime"
 import useShape from "set-state-compare/build/use-shape.js"
 import useValidationErrors from "./use-validation-errors.js"
-import {useForm} from "./form.jsx"
+import {useForm} from "./form.js"
 
 /**
  * @param {object} args
