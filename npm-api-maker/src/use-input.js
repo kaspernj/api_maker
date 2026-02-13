@@ -168,11 +168,13 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
     label: label()
   }
 
+  const inputName = s.m.inputProps.name
+
   useEffect(() => () => {
-    if (formFromContext && s.m.inputProps.name) {
-      formFromContext.unsetValue(s.m.inputProps.name)
+    if (formFromContext && inputName) {
+      formFromContext.unsetValue(inputName)
     }
-  }, [formFromContext, s.m.inputProps.name])
+  }, [formFromContext, inputName])
 
   return {
     inputProps: s.m.inputProps,
