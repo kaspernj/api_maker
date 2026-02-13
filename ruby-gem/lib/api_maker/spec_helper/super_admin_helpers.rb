@@ -53,7 +53,10 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     inputs.each do |input_name, value|
       if value.is_a?(Hash) && value[:haya_select]
-        haya_select("#{base_input_name}_#{input_name}").select(value.fetch(:haya_select))
+        haya_select("#{base_input_name}_#{input_name}").select(
+          value.fetch(:haya_select),
+          allow_if_selected: true
+        )
       else
         id = "#{resource.underscore_name.singularize}_#{input_name}"
         checkbox_selector = "[data-component='api-maker/utils/checkbox'] [data-id='#{id}'] input[type='checkbox']"
