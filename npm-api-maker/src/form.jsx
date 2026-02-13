@@ -39,6 +39,12 @@ class FormInputs {
     this.inputs[name] = value
   }
 
+  unsetValue(name) {
+    if (!name) throw new Error("'name' is required")
+
+    delete this.inputs[name]
+  }
+
   setValueWithHidden(name, value) {
     this.setValue(name, value)
 

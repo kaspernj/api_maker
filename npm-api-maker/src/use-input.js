@@ -166,6 +166,12 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
     label: label()
   }
 
+  useEffect(() => () => {
+    if (s.s.form && s.m.inputProps.name) {
+      s.s.form.unsetValue(s.m.inputProps.name)
+    }
+  }, [s.s.form, s.m.inputProps.name])
+
   return {
     inputProps: s.m.inputProps,
     wrapperOpts,
