@@ -14,7 +14,6 @@ import Text from "../../utils/text"
 import {useBreakpoint} from "responsive-breakpoints"
 import useCurrentUser from "../../use-current-user.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
-import usePressOutsideProps from "outside-eye/build/use-press-outside-props.js"
 
 const NoAccess = React.lazy(() => import("./no-access"))
 
@@ -111,8 +110,6 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
     if (mdUp) appLayoutContentContainerStyles.push(styles.appLayoutContentContainer.mdUp)
     if (lgUp) appLayoutContentContainerStyles.push(styles.appLayoutContentContainer.lgUp)
 
-    const pressOutsideProps = usePressOutsideProps(restProps)
-
     return (
       <View
         dataSet={dataSets[`root-${className}-${this.s.menuTriggered}`] ||= {
@@ -121,7 +118,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
           menuTriggered: this.s.menuTriggered
         }}
         style={styles.rootView}
-        {...pressOutsideProps}>
+        {...restProps}>
         <Menu
           active={active}
           noAccess={noAccess}
