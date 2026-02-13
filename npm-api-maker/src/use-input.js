@@ -124,6 +124,10 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
       givenInputProps
     )
 
+    if (!s.m.isCheckbox && "value" in s.props && "defaultValue" in s.props) {
+      throw new Error("Input cannot receive both value and defaultValue props")
+    }
+
     if (s.m.isCheckbox) {
       if ("checked" in s.props) {
         inputProps.checked = s.props.checked
