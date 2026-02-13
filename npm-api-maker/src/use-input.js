@@ -6,6 +6,7 @@ import nameForComponent from "./inputs/name-for-component.js"
 import strftime from "strftime"
 import useShape from "set-state-compare/build/use-shape.js"
 import useValidationErrors from "./use-validation-errors.js"
+import {useForm} from "./form.jsx"
 
 /**
  * @param {object} args
@@ -112,6 +113,7 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
 
   const getId = useCallback(() => idForComponent(s.m.fakeComponent), [])
   const getName = useCallback(() => nameForComponent(s.m.fakeComponent), [])
+  const formFromContext = useForm()
 
   const getInputProps = useCallback(() => {
     const givenInputProps = s.props.inputProps || {}
@@ -167,10 +169,10 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   }
 
   useEffect(() => () => {
-    if (s.s.form && s.m.inputProps.name) {
-      s.s.form.unsetValue(s.m.inputProps.name)
+    if (formFromContext && s.m.inputProps.name) {
+      formFromContext.unsetValue(s.m.inputProps.name)
     }
-  }, [s.s.form, s.m.inputProps.name])
+  }, [formFromContext, s.m.inputProps.name])
 
   return {
     inputProps: s.m.inputProps,
