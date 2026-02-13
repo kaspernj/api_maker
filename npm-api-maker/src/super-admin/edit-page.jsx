@@ -2,6 +2,8 @@
 import * as inflection from "inflection"
 import {FlashNotifications} from "flash-notifications"
 import {Form} from "../form"
+import FormDataObjectizer from "form-data-objectizer"
+import {incorporate} from "incorporator"
 import {Pressable, View} from "react-native"
 import {digg} from "diggerize"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
@@ -12,7 +14,7 @@ import EditAttribute from "./edit-page/edit-attribute"
 import Locales from "shared/locales.js" // eslint-disable-line import/no-unresolved
 import Params from "../params.js"
 import PropTypes from "prop-types"
-import React from "react"
+import React, {useRef} from "react"
 import Text from "../utils/text"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
@@ -67,6 +69,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     this.modelId = queryParams.model_id
     this.modelArgs = {}
     this.modelArgs[modelIdVarName] = this.modelId
+    this.formRef = useRef()
     this.useStates({form: null})
   }
 
@@ -77,7 +80,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
 
     return (
       <View testID="super-admin--edit-page">
-        <Form setForm={this.setStates.form}>
+        <Form formRef={this.formRef} setForm={this.setStates.form}>
           {model && attributes?.map((attribute) => ( // eslint-disable-line no-extra-parens
             <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelClass={modelClass} />
           ))}
@@ -106,7 +109,8 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
   onSubmit = async () => {
     try {
       const {model} = this.tt
-      const formObject = this.s.form.asObject()
+      const formData = new FormData(this.formRef.current)
+      const formObject = incorporate({}, this.s.form.asObject(), FormDataObjectizer.toObject(formData))
 
       model.assignAttributes(formObject)
       await model.save()
