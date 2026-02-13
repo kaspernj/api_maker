@@ -6,6 +6,7 @@ import nameForComponent from "./inputs/name-for-component.js"
 import strftime from "strftime"
 import useShape from "set-state-compare/build/use-shape.js"
 import useValidationErrors from "./use-validation-errors.js"
+import {useForm} from "./form"
 
 /**
  * @param {object} args
@@ -112,6 +113,7 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
 
   const getId = useCallback(() => idForComponent(s.m.fakeComponent), [])
   const getName = useCallback(() => nameForComponent(s.m.fakeComponent), [])
+  const formFromContext = useForm()
 
   const getInputProps = useCallback(() => {
     const givenInputProps = s.props.inputProps || {}
@@ -123,6 +125,10 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
       },
       givenInputProps
     )
+
+    if (!s.m.isCheckbox && "value" in s.props && "defaultValue" in s.props) {
+      throw new Error("Input cannot receive both value and defaultValue props")
+    }
 
     if (s.m.isCheckbox) {
       if ("checked" in s.props) {
@@ -161,6 +167,14 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
     form: s.s.form,
     label: label()
   }
+
+  const inputName = s.m.inputProps.name
+
+  useEffect(() => () => {
+    if (formFromContext && inputName) {
+      formFromContext.unsetValue(inputName)
+    }
+  }, [formFromContext, inputName])
 
   return {
     inputProps: s.m.inputProps,
