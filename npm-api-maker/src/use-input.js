@@ -1,12 +1,14 @@
 /* eslint-disable implicit-arrow-linebreak, no-extra-parens, no-use-before-define, prefer-object-spread */
-import {dig, digg} from "diggerize"
-import {useCallback, useEffect, useMemo, useRef} from "react"
 import idForComponent from "./inputs/id-for-component.js"
 import nameForComponent from "./inputs/name-for-component.js"
 import strftime from "strftime"
 import useShape from "set-state-compare/build/use-shape.js"
 import useValidationErrors from "./use-validation-errors.js"
+import {dig, digg} from "diggerize"
+import {useCallback, useEffect, useMemo, useRef} from "react"
 import {useForm} from "./form"
+
+
 
 /**
  * @param {object} args
@@ -148,6 +150,20 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   }, [])
 
   const {inputProps: oldInputProps, wrapperOpts: oldWrapperOpts, ...restProps} = props
+
+  if ("values" in restProps && typeof restProps.values == "undefined") {
+    delete restProps.values
+  }
+
+  if (
+    wrapperOptions?.type == "select" &&
+    Array.isArray(restProps.values) &&
+    restProps.values.length == 0 &&
+    "defaultValue" in restProps &&
+    typeof restProps.defaultValue != "undefined"
+  ) {
+    delete restProps.values
+  }
   const type = inputType()
 
   s.meta.inputProps = getInputProps()

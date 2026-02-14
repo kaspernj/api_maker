@@ -1,5 +1,4 @@
-/* eslint-disable indent, no-return-assign, react/jsx-closing-bracket-location, react/jsx-closing-tag-location */
-/* eslint-disable react/jsx-indent, react/jsx-indent-props, sort-imports */
+/* eslint-disable indent, no-return-assign, sort-imports */
 import React, {useCallback, useRef} from "react"
 import BaseComponent from "../../../base-component"
 import Icon from "../../../utils/icon"
