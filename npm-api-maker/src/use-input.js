@@ -148,6 +148,20 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   }, [])
 
   const {inputProps: oldInputProps, wrapperOpts: oldWrapperOpts, ...restProps} = props
+
+  if ("values" in restProps && typeof restProps.values == "undefined") {
+    delete restProps.values
+  }
+
+  if (
+    wrapperOptions?.type == "select" &&
+    Array.isArray(restProps.values) &&
+    restProps.values.length == 0 &&
+    "defaultValue" in restProps &&
+    typeof restProps.defaultValue != "undefined"
+  ) {
+    delete restProps.values
+  }
   const type = inputType()
 
   s.meta.inputProps = getInputProps()
