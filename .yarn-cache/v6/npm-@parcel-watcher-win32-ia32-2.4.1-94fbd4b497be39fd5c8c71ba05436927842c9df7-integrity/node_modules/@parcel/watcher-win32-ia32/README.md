@@ -1,1 +1,0 @@
-This is the win32-ia32 build of @parcel/watcher. See https://github.com/parcel-bundler/watcher for details.
