@@ -229,7 +229,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }, [this.p.currentUser?.id()])
 
     useMemo(() => {
-      if (!this.tt.tableSettings && this.s.width) {
+      if (!this.tt.tableSettings && this.s.width !== undefined) {
         this.loadTableSetting()
       }
     }, [this.p.currentUser?.id(), this.s.width])
