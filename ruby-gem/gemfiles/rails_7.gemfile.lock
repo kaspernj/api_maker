@@ -222,7 +222,7 @@ GEM
     nokogiri (1.16.0-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    package_json (0.1.0)
+    package_json (0.2.0)
     parallel (1.25.1)
     parser (3.3.3.0)
       ast (~> 2.4.1)
@@ -352,7 +352,7 @@ GEM
     semantic_range (3.1.0)
     service_pattern (1.0.10)
     sexp_processor (4.17.0)
-    shakapacker (8.2.0)
+    shakapacker (9.5.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -422,7 +422,7 @@ DEPENDENCIES
   rubocop-rspec_rails (>= 2.30.0)
   selenium-webdriver (>= 4.1.0)
   sexp_processor (>= 4.16.0)
-  shakapacker (= 8.2.0)
+  shakapacker (= 9.5.0)
   sqlite3 (= 1.7.3)
   tretry
   tzinfo-data
