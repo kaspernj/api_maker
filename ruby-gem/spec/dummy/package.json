@@ -65,9 +65,5 @@
     "webpack-merge": "6",
     "ya-use-event-emitter": "0.1.2",
     "ya-use-event-listener": ">= 0.1.1"
-  },
-  "devDependencies": {
-    "@swc/core": "^1.11.0",
-    "swc-loader": "^0.2.6"
   }
 }
