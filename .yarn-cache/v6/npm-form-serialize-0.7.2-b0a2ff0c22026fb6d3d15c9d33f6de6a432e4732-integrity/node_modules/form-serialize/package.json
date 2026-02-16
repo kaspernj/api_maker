@@ -1,0 +1,30 @@
+{
+  "name": "form-serialize",
+  "version": "0.7.2",
+  "description": "serialize html forms",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "domify": "~1.4.0",
+    "zuul": "~3.10.1"
+  },
+  "scripts": {
+    "test": "zuul -- test/index.js",
+    "test-local": "zuul --local -- test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shtylman/form-serialize.git"
+  },
+  "keywords": [
+    "form",
+    "serialize"
+  ],
+  "author": "Roman Shtylman <shtylman@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shtylman/form-serialize/issues"
+  }
+}

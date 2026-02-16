@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wake Event Test</title>
+        <script src="wake-event.bundle.js"></script>
+        <script>
+            wakeEvent(function () {
+                console.log('WOKE UP!');
+            });
+            // test to make sure we allow more than one
+            wakeEvent(function () {
+                console.log('WOKE UP 2nd CALLBACK!');
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

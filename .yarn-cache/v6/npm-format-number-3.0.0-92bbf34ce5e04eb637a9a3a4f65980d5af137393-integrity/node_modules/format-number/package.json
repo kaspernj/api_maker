@@ -1,0 +1,20 @@
+{
+  "name": "format-number",
+  "version": "3.0.0",
+  "description": "Formats numbers with separators every 3 digits and currency etc. Highly configurable.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/componitable/format-number.git"
+  },
+  "author": "ForbesLindesay",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "mocha": "*",
+    "expect.js": "*"
+  }
+}

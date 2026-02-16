@@ -1,0 +1,12 @@
+{
+  "name": "format-number",
+  "repo": "componitable/format-number",
+  "description": "Formats numbers with separators every 3 digits and currency etc. Highly configurable.",
+  "version": "3.0.0",
+  "keywords": [],
+  "dependencies": {},
+  "development": {},
+  "scripts": [
+    "index.js"
+  ]
+}

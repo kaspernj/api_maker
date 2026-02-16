@@ -1,0 +1,19 @@
+{
+  "name": "wake-event",
+  "version": "0.0.1",
+  "description": "Detection for computer waking up from sleep.",
+  "main": "wake-event.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HenrikJoreteg/wake-event.js"
+  },
+  "keywords": [
+    "browser",
+    "events"
+  ],
+  "author": "Henrik Joreteg <henrik@andyet.net>",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "2.x"
+  }
+}

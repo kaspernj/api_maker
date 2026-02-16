@@ -1,0 +1,26 @@
+{
+  "name": "numberable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.cjs",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaspernj/numberable.git"
+  },
+  "keywords": [
+    "format",
+    "numbers"
+  ],
+  "author": "k@spernj.org",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kaspernj/numberable/issues"
+  },
+  "homepage": "https://github.com/kaspernj/numberable#readme",
+  "devDependencies": {
+    "jasmine": "^3.6.4"
+  }
+}
