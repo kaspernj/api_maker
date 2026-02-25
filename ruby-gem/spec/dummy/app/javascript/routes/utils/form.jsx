@@ -1,4 +1,4 @@
-import {Form, FormInputs} from "@kaspernj/api-maker/src/form.jsx"
+import {Form, FormInputs} from "@kaspernj/api-maker/build/form"
 import Layout from "components/layout"
 import React, {useCallback, useRef, useState} from "react"
 import Text from "@kaspernj/api-maker/build/utils/text"
