@@ -16,6 +16,7 @@
 
     {"name": "inputs_checkbox", "path": "/inputs/checkbox", "component": "inputs/checkbox"},
     {"name": "utils_checkbox", "path": "/utils/checkbox", "component": "utils/checkbox"},
+    {"name": "utils_form", "path": "/utils/form", "component": "utils/form"},
     {"name": "utils_link_padding", "path": "/utils/link-padding", "component": "utils/link-padding"},
     {"name": "utils_use_breakpoint", "path": "/utils/use-breakpoint", "component": "utils/use-breakpoint"},
     {"name": "utils_use_model_new_if_no_id", "path": "/utils/use-model-new-if-no-id", "component": "utils/use-model-new-if-no-id"},

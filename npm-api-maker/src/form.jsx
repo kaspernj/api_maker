@@ -5,6 +5,7 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import BaseComponent from "./base-component"
 import FormDataObjectizer from "form-data-objectizer"
 import PropTypes from "prop-types"
+import propTypesExact from "prop-types-exact"
 import memo from "set-state-compare/build/memo.js"
 
 const FormContext = createContext(null)
@@ -55,17 +56,22 @@ class FormInputs {
 }
 
 const Form = memo(shapeComponent(class Form extends BaseComponent {
-  static propTypes = {
+  static propTypes = propTypesExact({
     children: PropTypes.any,
+    form: PropTypes.instanceOf(FormInputs),
     formObjectRef: PropTypes.object,
     formRef: PropTypes.object,
+    htmlFormProps: PropTypes.object,
     onSubmit: PropTypes.func,
     setForm: PropTypes.func
-  }
+  })
 
   render() {
-    const {children, formObjectRef, formRef, onSubmit, setForm, ...restProps} = this.props
-    const form = useMemo(() => new FormInputs({onSubmit}), [])
+    const {children, form: givenForm, formObjectRef, formRef, htmlFormProps, onSubmit, setForm} = this.props
+    const localForm = useMemo(() => new FormInputs({onSubmit}), [])
+    const form = givenForm || localForm
+
+    form.onSubmit = onSubmit
 
     useMemo(() => {
       if (formObjectRef) {
@@ -83,12 +89,12 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
       if (setForm) {
         setForm(form)
       }
-    }, [setForm])
+    }, [form, setForm])
 
     return (
       <FormContext.Provider value={form}>
         {Platform.OS == "web" &&
-          <form onSubmit={this.tt.onFormSubmit} ref={formRef} {...restProps}>
+          <form {...htmlFormProps} onSubmit={this.tt.onFormSubmit} ref={formRef}>
             {children}
           </form>
         }

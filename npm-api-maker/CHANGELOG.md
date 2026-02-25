@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Add `form` and `htmlFormProps` support to `Form` and enforce exact prop-types.
 - Document BaseModel and Collection APIs in the npm README.
 - Expand the npm README with usage guidance and preloadRelationship documentation.
 - Add guards when loading table settings to surface missing data early.
