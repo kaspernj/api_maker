@@ -18,6 +18,7 @@
 
     {"name": "inputs_checkbox", "path": "/inputs/checkbox", "component": "inputs/checkbox"},
     {"name": "utils_checkbox", "path": "/utils/checkbox", "component": "utils/checkbox"},
+    {"name": "utils_form", "path": "/utils/form", "component": "utils/form"},
     {"name": "utils_link_padding", "path": "/utils/link-padding", "component": "utils/link-padding"},
     {"name": "utils_global_request_data", "path": "/utils/global-request-data", "component": "utils/global-request-data"},
     {"name": "utils_global_request_data_non_instant", "path": "/utils/global-request-data-non-instant", "component": "utils/global-request-data-non-instant"},
