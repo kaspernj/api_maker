@@ -1,13 +1,12 @@
-import BaseComponent from "@kaspernj/api-maker/build/base-component.js"
 import memo from "set-state-compare/build/memo.js"
 import Paginate from "@kaspernj/api-maker/build/bootstrap/paginate"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
 import {Task} from "models.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
-export default memo(shapeComponent(class ModelsPaginate extends BaseComponent {
+export default memo(shapeComponent(class ModelsPaginate extends ShapeComponent {
   setup() {
     this.queryParams = useQueryParams()
 
@@ -23,7 +22,7 @@ export default memo(shapeComponent(class ModelsPaginate extends BaseComponent {
     this.loadTasks()
   }
 
-  componentDidUpdate() {
+  syncQueryParams = () => {
     const queryParamsString = JSON.stringify(this.tt.queryParams)
 
     if (this.s.queryParamsString != queryParamsString) {
@@ -44,6 +43,8 @@ export default memo(shapeComponent(class ModelsPaginate extends BaseComponent {
   }
 
   render() {
+    this.syncQueryParams()
+
     return (
       <div className="component-models-paginate">
         {this.state.tasks && this.content()}

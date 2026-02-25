@@ -9,7 +9,7 @@ export default class ApiMakerServices {
     return shared.currentApiMakerService
   }
 
-  sendRequest (serviceName, args) {
+  sendRequest (serviceName, args, options = {}) {
     return CommandsPool.addCommand({
       args: {
         service_args: args,
@@ -18,6 +18,6 @@ export default class ApiMakerServices {
       command: "services",
       collectionName: "calls",
       type: "service"
-    })
+    }, options)
   }
 }

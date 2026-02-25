@@ -1,6 +1,6 @@
 artifact_dirs:
-  - ruby-gem/spec/dummy/tmp/capybara
-  - ruby-gem/spec/dummy/tmp/screenshots
+  - /home/build/project/ruby-gem/spec/dummy/tmp/capybara
+  - /home/build/project/ruby-gem/spec/dummy/tmp/screenshots
 rvm: true
 environment:
   RUBY_VERSION: 3.3.5

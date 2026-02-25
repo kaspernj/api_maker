@@ -1,4 +1,4 @@
-/* eslint-disable new-cap, newline-per-chained-call, react/jsx-sort-props, sort-imports */
+/* eslint-disable new-cap, newline-per-chained-call, sort-imports */
 import React, {useMemo} from "react"
 import BaseComponent from "../../../base-component"
 import {digg} from "diggerize"
@@ -20,22 +20,29 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extend
   render() {
     const {locale} = useI18n({namespace: "js.api_maker.super_admin.layout.menu.menu_content"})
     const {active} = this.p
-    const canCan = useCanCan(() => models.map((modelClass) => [modelClass, ["index"]]))
+    const abilitiesToLoad = useMemo(() => models.map((modelClass) => [modelClass, ["index"]]), [])
+    const canCan = useCanCan(() => abilitiesToLoad)
     const sortedModels = useMemo(
       () => models.sort((a, b) => a.modelName().human({count: 2}).toLowerCase().localeCompare(b.modelName().human({count: 2}).toLowerCase())),
       [locale]
     )
+    const abilityStates = sortedModels.map((modelClass) => {
+      const modelName = digg(modelClass.modelClassData(), "name")
+      const canIndex = canCan?.can("index", modelClass)
+
+      return {canIndex, modelClass, modelName}
+    })
 
     return (
       <>
-        {sortedModels.map((model) => canCan?.can("index", model) &&
+        {abilityStates.map((abilityState) => abilityState.canIndex === true &&
           <MenuItem
             active={active}
             icon="sitemap"
-            identifier={digg(model.modelClassData(), "name")}
-            label={model.modelName().human({count: 2})}
-            key={model.modelClassData().name}
-            to={Params.withParams({model: model.modelClassData().name})}
+            identifier={abilityState.modelName}
+            key={abilityState.modelClass.modelClassData().name}
+            label={abilityState.modelClass.modelName().human({count: 2})}
+            to={Params.withParams({model: abilityState.modelClass.modelClassData().name})}
           />
         )}
       </>

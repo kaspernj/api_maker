@@ -1,20 +1,17 @@
-import BaseComponent from "@kaspernj/api-maker/build/base-component.js"
 import Card from "@kaspernj/api-maker/build/bootstrap/card"
 import Layout from "components/layout"
 import memo from "set-state-compare/build/memo.js"
-import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
 import {Task} from "models.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
-export default memo(shapeComponent(class BootstrapSortLink extends BaseComponent {
+export default memo(shapeComponent(class BootstrapSortLink extends ShapeComponent {
   setup() {
     this.queryParams = useQueryParams()
 
     this.useStates({
-      currentHref: location.href,
       query: null,
       queryParamsString: () => JSON.stringify(this.tt.queryParams),
       tasks: null
@@ -25,7 +22,7 @@ export default memo(shapeComponent(class BootstrapSortLink extends BaseComponent
     this.loadTasks()
   }
 
-  componentDidUpdate() {
+  syncQueryParams = () => {
     const queryParamsString = JSON.stringify(this.tt.queryParams)
 
     if (this.s.queryParamsString != queryParamsString)
@@ -33,8 +30,7 @@ export default memo(shapeComponent(class BootstrapSortLink extends BaseComponent
   }
 
   loadTasks = async () => {
-    const params = Params.parse()
-    const qParams = params.q ? JSON.parse(params.q) : {}
+    const qParams = this.tt.queryParams.q ? JSON.parse(this.tt.queryParams.q) : {}
     const query = Task.ransack(qParams)
     const result = await query.result()
 
@@ -45,6 +41,7 @@ export default memo(shapeComponent(class BootstrapSortLink extends BaseComponent
   }
 
   render() {
+    this.syncQueryParams()
     const {tasks} = this.s
 
     return (

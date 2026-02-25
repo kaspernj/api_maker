@@ -39,6 +39,7 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_argument("--disable-gpu")
   options.add_argument("--headless=new")
   options.add_argument("--no-sandbox")
+  options.add_option("goog:loggingPrefs", {browser: "ALL"})
 
   Capybara::Selenium::Driver.new(
     app,
@@ -141,6 +142,13 @@ RSpec.configure do |config|
       resize_to(414, 985)
     else
       resize_to(1920, 1080)
+    end
+  end
+
+  config.after(:each, type: :system) do |example|
+    if example.exception
+      browser_log_artifact = write_browser_logs_artifact(example)
+      puts "\n[Browser Logs]: #{browser_log_artifact}\n" if browser_log_artifact
     end
   end
 end

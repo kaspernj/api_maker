@@ -13,11 +13,15 @@
     {"name": "bootstrap_string_input_money", "path": "/bootstrap/string-input-money", "component": "bootstrap/string-input-money"},
 
     {"name": "can_can_loader", "path": "/can_can/loader", "component": "can-can/loader"},
+    {"name": "devise_events", "path": "/devise/events", "component": "devise/events"},
+    {"name": "can_can_missing_ability", "path": "/can_can/missing_ability", "component": "can-can/missing-ability"},
 
     {"name": "inputs_checkbox", "path": "/inputs/checkbox", "component": "inputs/checkbox"},
     {"name": "utils_checkbox", "path": "/utils/checkbox", "component": "utils/checkbox"},
     {"name": "utils_form", "path": "/utils/form", "component": "utils/form"},
     {"name": "utils_link_padding", "path": "/utils/link-padding", "component": "utils/link-padding"},
+    {"name": "utils_global_request_data", "path": "/utils/global-request-data", "component": "utils/global-request-data"},
+    {"name": "utils_global_request_data_non_instant", "path": "/utils/global-request-data-non-instant", "component": "utils/global-request-data-non-instant"},
     {"name": "utils_use_breakpoint", "path": "/utils/use-breakpoint", "component": "utils/use-breakpoint"},
     {"name": "utils_use_model_new_if_no_id", "path": "/utils/use-model-new-if-no-id", "component": "utils/use-model-new-if-no-id"},
     {"name": "utils_use_model_new_if_no_id_async", "path": "/utils/use-model-new-if-no-id-async", "component": "utils/use-model-new-if-no-id-async"},

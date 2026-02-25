@@ -23,13 +23,14 @@ default: &default
 
   # Additional paths webpack should look up modules
   # ['app/assets', 'engine/foo/app/assets']
-  additional_paths: []
+  additional_paths:
+    - ../../../npm-api-maker/node_modules/react-native-vector-icons
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false
 
-  # Select loader to use, available options are 'babel' (default), 'swc' or 'esbuild'
-  webpack_loader: 'babel'
+  # Select JavaScript transpiler to use, available options are 'swc', 'babel' or 'esbuild'
+  javascript_transpiler: 'swc'
 
   # Set to true to enable check for matching versions of shakapacker gem and NPM package - will raise an error if there is a mismatch or wildcard versioning is used
   ensure_consistent_versioning: true

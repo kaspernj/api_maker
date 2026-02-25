@@ -28,3 +28,4 @@ ruby-gem/spec/dummy/public/packs/manifest.json
 ruby-gem/spec/dummy/storage/
 ruby-gem/spec/dummy/tmp/
 ruby-gem/spec/dummy/yarn-error.log
+.yarn-cache/

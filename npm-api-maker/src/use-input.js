@@ -4,6 +4,7 @@ import {useCallback, useEffect, useMemo, useRef} from "react"
 import idForComponent from "./inputs/id-for-component.js"
 import nameForComponent from "./inputs/name-for-component.js"
 import strftime from "strftime"
+import {useForm} from "./form"
 import useShape from "set-state-compare/build/use-shape.js"
 import useValidationErrors from "./use-validation-errors.js"
 
@@ -112,6 +113,7 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
 
   const getId = useCallback(() => idForComponent(s.m.fakeComponent), [])
   const getName = useCallback(() => nameForComponent(s.m.fakeComponent), [])
+  const formFromContext = useForm()
 
   const getInputProps = useCallback(() => {
     const givenInputProps = s.props.inputProps || {}
@@ -123,6 +125,10 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
       },
       givenInputProps
     )
+
+    if (!s.m.isCheckbox && "value" in s.props && "defaultValue" in s.props) {
+      throw new Error("Input cannot receive both value and defaultValue props")
+    }
 
     if (s.m.isCheckbox) {
       if ("checked" in s.props) {
@@ -142,6 +148,20 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   }, [])
 
   const {inputProps: oldInputProps, wrapperOpts: oldWrapperOpts, ...restProps} = props
+
+  if ("values" in restProps && typeof restProps.values == "undefined") {
+    delete restProps.values
+  }
+
+  if (
+    wrapperOptions?.type == "select" &&
+    Array.isArray(restProps.values) &&
+    restProps.values.length == 0 &&
+    "defaultValue" in restProps &&
+    typeof restProps.defaultValue != "undefined"
+  ) {
+    delete restProps.values
+  }
   const type = inputType()
 
   s.meta.inputProps = getInputProps()
@@ -161,6 +181,14 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
     form: s.s.form,
     label: label()
   }
+
+  const inputName = s.m.inputProps.name
+
+  useEffect(() => () => {
+    if (formFromContext && inputName) {
+      formFromContext.unsetValue(inputName)
+    }
+  }, [formFromContext, inputName])
 
   return {
     inputProps: s.m.inputProps,

@@ -1,3 +1,5 @@
+require "fileutils"
+
 module ApiMaker::SpecHelper::BrowserLogs
   def browser_logs
     logs = if browser_firefox?
@@ -20,6 +22,59 @@ module ApiMaker::SpecHelper::BrowserLogs
       raise NoMethodError, "undefined method `logs' - try '--headless=new' instead of just '--headless'"
     else
       raise e
+    end
+  end
+
+  def write_browser_logs_artifact(example)
+    logs = uniq_logs(recorded_browser_logs + browser_logs)
+    artifact_dir = Rails.root.join("tmp/capybara/browser_logs")
+    FileUtils.mkdir_p(artifact_dir)
+    filename = browser_log_filename(example)
+    artifact_path = artifact_dir.join(filename)
+
+    File.open(artifact_path, "w") do |file|
+      write_browser_log_artifact_header(file:, example:, logs:)
+      write_browser_log_artifact_entries(file:, logs:)
+    end
+
+    artifact_path.to_s
+  rescue StandardError => e
+    warn("Failed to write browser log artifact: #{e.class}: #{e.message}")
+  end
+
+private
+
+  def uniq_logs(logs)
+    logs.uniq { |log| [log.try(:timestamp), log.try(:level), log.try(:message)] }
+  end
+
+  def browser_log_filename(example)
+    timestamp = Time.current.strftime("%Y%m%d-%H%M%S")
+    example_name = example.full_description
+      .downcase
+      .gsub(/[^a-z0-9]+/, "_")
+      .gsub(/\A_+|_+\z/, "")
+      .slice(0, 120)
+
+    "#{timestamp}_#{example_name}.log"
+  end
+
+  def write_browser_log_artifact_header(file:, example:, logs:)
+    file.puts "example: #{example.full_description}"
+    file.puts "status: failed"
+    file.puts "exception: #{example.exception.class}: #{example.exception.message}" if example.exception
+    file.puts "browser: #{browser_name}"
+    file.puts "logs_count: #{logs.length}"
+    file.puts
+  end
+
+  def write_browser_log_artifact_entries(file:, logs:)
+    logs.each_with_index do |log, index|
+      file.puts "[#{index + 1}]"
+      file.puts "timestamp: #{log.try(:timestamp)}"
+      file.puts "level: #{log.try(:level)}"
+      file.puts "message: #{log.try(:message)}"
+      file.puts
     end
   end
 end

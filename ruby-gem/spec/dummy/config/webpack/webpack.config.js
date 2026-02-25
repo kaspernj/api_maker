@@ -1,4 +1,3 @@
-const babel = require("./loaders/babel")
 const erb = require("./loaders/erb")
 const path = require("path")
 const webpack = require("webpack")
@@ -15,7 +14,6 @@ const options = {
           fullySpecified: false
         }
       },
-      babel,
       erb,
       {
         test: /\.ya?ml$/,

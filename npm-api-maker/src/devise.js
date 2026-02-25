@@ -98,14 +98,13 @@ export default class ApiMakerDevise {
     }
 
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
+    ApiMakerDevise.setSignedOut(args)
+    ApiMakerDevise.callSignOutEvent(args)
 
     // Cannot use the class because they would both import each other
     if (shared.apiMakerSessionStatusUpdater) {
       shared.apiMakerSessionStatusUpdater.updateSessionStatus()
     }
-
-    ApiMakerDevise.setSignedOut(args)
-    ApiMakerDevise.callSignOutEvent(args)
 
     return response
   }
