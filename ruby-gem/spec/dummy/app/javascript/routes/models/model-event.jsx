@@ -1,6 +1,8 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import {memo, useMemo} from "react"
 import React from "react"
+import {View} from "react-native"
+import Text from "@kaspernj/api-maker/build/utils/text"
 import {Task} from "models.js"
 import useModelEvent from "@kaspernj/api-maker/build/use-model-event.js"
 
@@ -23,13 +25,18 @@ export default memo(shapeComponent(class ModelsModelEvent extends ShapeComponent
     const {connected, eventCounts, tasks} = this.s
 
     return (
-      <div className="component-models-model-event" data-connected={connected}>
+      <View
+        dataSet={{class: "component-models-model-event", connected}}
+      >
         {tasks.map((task) =>
-          <div className="task-event-count" data-task-id={task.id()} key={task.id()}>
+          <Text
+            dataSet={{class: "task-event-count", taskId: task.id()}}
+            key={task.id()}
+          >
             {eventCounts[task.id()] || 0}
-          </div>
+          </Text>
         )}
-      </div>
+      </View>
     )
   }
 
