@@ -31,6 +31,7 @@
     {"name": "models_destroy_event", "path": "/models/destroy-event", "component": "models/destroy-event"},
     {"name": "models_index_distinct", "path": "/models/index-distinct", "component": "models/index-distinct"},
     {"name": "models_model_class_event", "path": "/models/model-class-event", "component": "models/model-class-event"},
+    {"name": "models_model_event", "path": "/models/model-event", "component": "models/model-event"},
     {"name": "models_has_many_as", "path": "/models/has_many_as", "component": "models/has-many-as"},
     {"name": "models_has_many_options_primary_key", "path": "/models/has_many_options_primary_key", "component": "models/has-many-options-primary-key"},
     {"name": "models_has_many_through", "path": "/models/has_many_through", "component": "models/has-many-through"},

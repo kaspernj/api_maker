@@ -8,26 +8,28 @@ export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponen
   setup() {
     this.useStates({
       connected: null,
-      finishedTask: undefined
+      finishedTasks: []
     })
 
     useMemo(() => {
-      this.loadFinishedTask()
+      this.loadFinishedTasks()
     }, [])
 
-    useUpdatedEvent(this.s.finishedTask, this.tt.loadFinishedTask, {onConnected: this.tt.onConnected})
+    useUpdatedEvent(this.s.finishedTasks, this.tt.loadFinishedTasks, {onConnected: this.tt.onConnected})
   }
 
   render() {
-    const {connected, finishedTask} = this.s
+    const {connected, finishedTasks} = this.s
 
     return (
       <div className="routes-models-update-event">
-        {finishedTask &&
+        {finishedTasks.length > 0 &&
           <div className="finished-task-container" data-connected={connected}>
-            <div className="finished-task-name">
-              {finishedTask.name()}
-            </div>
+            {finishedTasks.map((task) =>
+              <div className="finished-task-name" data-task-id={task.id()} key={task.id()}>
+                {task.name()}
+              </div>
+            )}
           </div>
         }
       </div>
@@ -36,9 +38,11 @@ export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponen
 
   onConnected = () => this.setState({connected: true})
 
-  loadFinishedTask = async() => {
-    const finishedTask = await Task.ransack({finished_eq: true}).first()
+  loadFinishedTasks = async() => {
+    const finishedTasks = await Task
+      .ransack({finished_eq: true, s: "id asc"})
+      .toArray()
 
-    this.setState({finishedTask})
+    this.setState({finishedTasks: finishedTasks.slice(0, 2)})
   }
 }))

@@ -5,9 +5,7 @@ import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
 
 const TaskRow = memo(shapeComponent(class TaskRow extends ShapeComponent {
   render() {
-    const {onDestroyed, task} = this.p
-
-    useDestroyedEvent(task, onDestroyed)
+    const {task} = this.p
 
     return (
       <div className="task-row" data-task-id={task.id()}>
@@ -32,10 +30,12 @@ export default memo(shapeComponent(class ModelsDestroyEvent extends ShapeCompone
   render() {
     const {tasks} = this.s
 
+    useDestroyedEvent(tasks || [], this.tt.onDestroyed)
+
     return (
       <div className="component-models-destroy-event">
         {tasks && tasks.map(task =>
-          <TaskRow key={task.cacheKey()} onDestroyed={this.tt.onDestroyed} task={task} />
+          <TaskRow key={task.cacheKey()} task={task} />
         )}
       </div>
     )
@@ -43,6 +43,6 @@ export default memo(shapeComponent(class ModelsDestroyEvent extends ShapeCompone
 
   onDestroyed = (args) =>
     this.setState({
-      tasks: this.state.tasks.filter(task => task.id() != args.model.id())
+      tasks: this.s.tasks.filter(task => task.id() != args.model.id())
     })
 }))

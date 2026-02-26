@@ -37,3 +37,6 @@
 - Support `paddingHorizontal` and `paddingVertical` on web `<Link>` anchors.
 - Add system coverage for Link padding props.
 - Preserve Pressable style arrays/functions when padding props are applied on Link.
+- Allow `useDestroyedEvent`, `useModelEvent`, and `useUpdatedEvent` to subscribe to arrays of models as well as single models.
+- Add system coverage for array-based model subscriptions in update, destroy, and custom model event hooks.
+- Optimize array model event hooks to incrementally subscribe/unsubscribe only added or removed models.

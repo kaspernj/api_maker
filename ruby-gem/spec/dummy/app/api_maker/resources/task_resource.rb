@@ -7,6 +7,7 @@ class Resources::TaskResource < Resources::ApplicationResource
 
   USER_TASK_ABILITIES = [
     :accessible_by,
+    :event_test_model_event,
     :test_collection,
     :test_member,
     :validate,
