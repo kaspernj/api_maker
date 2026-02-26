@@ -5,12 +5,34 @@ import ModelEvents from "./model-events.js"
 import useShape from "set-state-compare/build/use-shape.js"
 
 /**
- * @param {object} model
+ * @param {object|object[]|undefined|null} modelOrModels
+ * @returns {object[]}
+ */
+const modelsFromInput = (modelOrModels) => {
+  if (!modelOrModels) {
+    return []
+  } else if (Array.isArray(modelOrModels)) {
+    return modelOrModels.filter(Boolean)
+  } else {
+    return [modelOrModels]
+  }
+}
+
+/**
+ * @param {object|object[]|undefined|null} modelOrModels
+ * @returns {string}
+ */
+const modelsDependencyKey = (modelOrModels) => JSON.stringify(
+  modelsFromInput(modelOrModels).map((model) => model.id())
+)
+
+/**
+ * @param {object|object[]} model
  * @param {Function} onDestroyed
- * @param {object} props
- * @param {boolean} props.active
- * @param {number} props.debounce
- * @param {Function} props.onConnected
+ * @param {object} [props]
+ * @param {boolean} [props.active]
+ * @param {number} [props.debounce]
+ * @param {Function} [props.onConnected]
  * @returns {void}
  */
 const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => {
@@ -45,26 +67,25 @@ const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => {
   }, [])
 
   useLayoutEffect(() => {
-    let connectDestroyed, onConnectedListener
+    const destroyedConnections = []
 
-    if (model) {
-      connectDestroyed = ModelEvents.connectDestroyed(model, onDestroyedCallback)
+    modelsFromInput(model).forEach((modelInstance) => {
+      const destroyedConnection = ModelEvents.connectDestroyed(modelInstance, onDestroyedCallback)
+      destroyedConnections.push(destroyedConnection)
 
       if (onConnected) {
-        onConnectedListener = connectDestroyed.events.addListener("connected", onConnected)
+        destroyedConnection.events.addListener("connected", onConnected)
       }
-    }
+    })
 
     return () => {
-      if (onConnectedListener) {
-        connectDestroyed.events.removeListener("connected", onConnected)
+      if (onConnected) {
+        destroyedConnections.forEach((destroyedConnection) => destroyedConnection.events.removeListener("connected", onConnected))
       }
 
-      if (connectDestroyed) {
-        connectDestroyed.unsubscribe()
-      }
+      destroyedConnections.forEach((destroyedConnection) => destroyedConnection.unsubscribe())
     }
-  }, [model?.id()])
+  }, [modelsDependencyKey(model)])
 }
 
 export default apiMakerUseDestroyedEvent

@@ -5,13 +5,35 @@ import ModelEvents from "./model-events.js"
 import useShape from "set-state-compare/build/use-shape.js"
 
 /**
- * @param {import("./base-model.js").default} model
+ * @param {object|object[]|undefined|null} modelOrModels
+ * @returns {object[]}
+ */
+const modelsFromInput = (modelOrModels) => {
+  if (!modelOrModels) {
+    return []
+  } else if (Array.isArray(modelOrModels)) {
+    return modelOrModels.filter(Boolean)
+  } else {
+    return [modelOrModels]
+  }
+}
+
+/**
+ * @param {object|object[]|undefined|null} modelOrModels
+ * @returns {string}
+ */
+const modelsDependencyKey = (modelOrModels) => JSON.stringify(
+  modelsFromInput(modelOrModels).map((model) => model.id())
+)
+
+/**
+ * @param {import("./base-model.js").default|import("./base-model.js").default[]} model
  * @param {string} event
  * @param {Function} onCallback
- * @param {object} props
- * @param {object} props.active
- * @param {number} props.debounce
- * @param {Function} props.onConnected
+ * @param {object} [props]
+ * @param {boolean} [props.active]
+ * @param {number} [props.debounce]
+ * @param {Function} [props.onConnected]
  * @returns {void}
  */
 // eslint-disable-next-line max-params
@@ -47,26 +69,25 @@ const apiMakerUseModelEvent = (model, event, onCallback, props) => {
   }, [])
 
   useLayoutEffect(() => {
-    let connectEvent, onConnectedListener
+    const eventConnections = []
 
-    if (model) {
-      connectEvent = ModelEvents.connect(model, event, onCallbackCallback)
+    modelsFromInput(model).forEach((modelInstance) => {
+      const eventConnection = ModelEvents.connect(modelInstance, event, onCallbackCallback)
+      eventConnections.push(eventConnection)
 
       if (onConnected) {
-        onConnectedListener = connectEvent.events.addListener("connected", onConnected)
+        eventConnection.events.addListener("connected", onConnected)
       }
-    }
+    })
 
     return () => {
-      if (onConnectedListener) {
-        connectEvent.events.removeListener("connected", onConnected)
+      if (onConnected) {
+        eventConnections.forEach((eventConnection) => eventConnection.events.removeListener("connected", onConnected))
       }
 
-      if (connectEvent) {
-        connectEvent.unsubscribe()
-      }
+      eventConnections.forEach((eventConnection) => eventConnection.unsubscribe())
     }
-  }, [model?.id()])
+  }, [event, modelsDependencyKey(model)])
 }
 
 export default apiMakerUseModelEvent
