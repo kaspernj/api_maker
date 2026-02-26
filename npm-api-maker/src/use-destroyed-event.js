@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import {useCallback, useLayoutEffect, useMemo} from "react"
+import {useCallback, useLayoutEffect, useMemo, useRef} from "react"
 import debounceFunction from "debounce"
 import ModelEvents from "./model-events.js"
 import useShape from "set-state-compare/build/use-shape.js"
@@ -27,6 +27,20 @@ const modelsDependencyKey = (modelOrModels) => JSON.stringify(
 )
 
 /**
+ * @param {object|object[]|undefined|null} modelOrModels
+ * @returns {Record<string, object>}
+ */
+const modelsByIdFromInput = (modelOrModels) => {
+  const modelsById = {}
+
+  modelsFromInput(modelOrModels).forEach((model) => {
+    modelsById[model.id()] = model
+  })
+
+  return modelsById
+}
+
+/**
  * @param {object|object[]} model
  * @param {Function} onDestroyed
  * @param {object} [props]
@@ -37,6 +51,7 @@ const modelsDependencyKey = (modelOrModels) => JSON.stringify(
  */
 const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => {
   const {active = true, debounce, onConnected, ...restProps} = props || {}
+  const connectionsRef = useRef({})
 
   if (Object.keys(restProps).length > 0) {
     throw new Error(`Unknown props given to useDestroyedEvent: ${Object.keys(restProps).join(", ")}`)
@@ -67,25 +82,45 @@ const apiMakerUseDestroyedEvent = (model, onDestroyed, props) => {
   }, [])
 
   useLayoutEffect(() => {
-    const destroyedConnections = []
+    const currentConnections = connectionsRef.current
+    const nextModelsById = modelsByIdFromInput(model)
 
-    modelsFromInput(model).forEach((modelInstance) => {
-      const destroyedConnection = ModelEvents.connectDestroyed(modelInstance, onDestroyedCallback)
-      destroyedConnections.push(destroyedConnection)
+    Object.keys(currentConnections).forEach((modelId) => {
+      if (!(modelId in nextModelsById)) {
+        if (onConnected) {
+          currentConnections[modelId].events.removeListener("connected", onConnected)
+        }
+
+        currentConnections[modelId].unsubscribe()
+        delete currentConnections[modelId]
+      }
+    })
+
+    Object.keys(nextModelsById).forEach((modelId) => {
+      if (modelId in currentConnections) {
+        return
+      }
+
+      const destroyedConnection = ModelEvents.connectDestroyed(nextModelsById[modelId], onDestroyedCallback)
+      currentConnections[modelId] = destroyedConnection
 
       if (onConnected) {
         destroyedConnection.events.addListener("connected", onConnected)
       }
     })
+  }, [modelsDependencyKey(model)])
 
-    return () => {
+  useLayoutEffect(() => () => {
+    Object.values(connectionsRef.current).forEach((destroyedConnection) => {
       if (onConnected) {
-        destroyedConnections.forEach((destroyedConnection) => destroyedConnection.events.removeListener("connected", onConnected))
+        destroyedConnection.events.removeListener("connected", onConnected)
       }
 
-      destroyedConnections.forEach((destroyedConnection) => destroyedConnection.unsubscribe())
-    }
-  }, [modelsDependencyKey(model)])
+      destroyedConnection.unsubscribe()
+    })
+
+    connectionsRef.current = {}
+  }, [])
 }
 
 export default apiMakerUseDestroyedEvent

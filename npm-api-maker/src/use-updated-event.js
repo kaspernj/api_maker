@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import {useCallback, useLayoutEffect, useMemo} from "react"
+import {useCallback, useLayoutEffect, useMemo, useRef} from "react"
 import debounceFunction from "debounce"
 import ModelEvents from "./model-events.js"
 import useShape from "set-state-compare/build/use-shape.js"
@@ -27,6 +27,20 @@ const modelsDependencyKey = (modelOrModels) => JSON.stringify(
 )
 
 /**
+ * @param {object|object[]|undefined|null} modelOrModels
+ * @returns {Record<string, object>}
+ */
+const modelsByIdFromInput = (modelOrModels) => {
+  const modelsById = {}
+
+  modelsFromInput(modelOrModels).forEach((model) => {
+    modelsById[model.id()] = model
+  })
+
+  return modelsById
+}
+
+/**
  * @param {import("./base-model.js").default|import("./base-model.js").default[]} model
  * @param {Function} onUpdated
  * @param {object} [props]
@@ -37,6 +51,7 @@ const modelsDependencyKey = (modelOrModels) => JSON.stringify(
  */
 const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
   const {active = true, debounce, onConnected, ...restProps} = props
+  const connectionsRef = useRef({})
 
   if (Object.keys(restProps).length > 0) {
     throw new Error(`Unknown props given to useUpdatedEvent: ${Object.keys(restProps).join(", ")}`)
@@ -67,25 +82,45 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
   }, [])
 
   useLayoutEffect(() => {
-    const updatedConnections = []
+    const currentConnections = connectionsRef.current
+    const nextModelsById = modelsByIdFromInput(model)
 
-    modelsFromInput(model).forEach((modelInstance) => {
-      const updatedConnection = ModelEvents.connectUpdated(modelInstance, onUpdatedCallback)
-      updatedConnections.push(updatedConnection)
+    Object.keys(currentConnections).forEach((modelId) => {
+      if (!(modelId in nextModelsById)) {
+        if (onConnected) {
+          currentConnections[modelId].events.removeListener("connected", onConnected)
+        }
+
+        currentConnections[modelId].unsubscribe()
+        delete currentConnections[modelId]
+      }
+    })
+
+    Object.keys(nextModelsById).forEach((modelId) => {
+      if (modelId in currentConnections) {
+        return
+      }
+
+      const updatedConnection = ModelEvents.connectUpdated(nextModelsById[modelId], onUpdatedCallback)
+      currentConnections[modelId] = updatedConnection
 
       if (onConnected) {
         updatedConnection.events.addListener("connected", onConnected)
       }
     })
+  }, [modelsDependencyKey(model)])
 
-    return () => {
+  useLayoutEffect(() => () => {
+    Object.values(connectionsRef.current).forEach((updatedConnection) => {
       if (onConnected) {
-        updatedConnections.forEach((updatedConnection) => updatedConnection.events.removeListener("connected", onConnected))
+        updatedConnection.events.removeListener("connected", onConnected)
       }
 
-      updatedConnections.forEach((updatedConnection) => updatedConnection.unsubscribe())
-    }
-  }, [modelsDependencyKey(model)])
+      updatedConnection.unsubscribe()
+    })
+
+    connectionsRef.current = {}
+  }, [])
 }
 
 export default apiMakerUseUpdatedEvent
