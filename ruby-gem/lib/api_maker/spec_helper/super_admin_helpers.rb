@@ -53,9 +53,9 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     inputs.each do |input_name, value|
       if value.is_a?(Hash) && value[:haya_select]
-        haya_select("#{base_input_name}_#{input_name}").select(
-          value.fetch(:haya_select),
-          allow_if_selected: true
+        select_haya_select_option(
+          select_id: "#{base_input_name}_#{input_name}",
+          label: value.fetch(:haya_select)
         )
       else
         id = "#{resource.underscore_name.singularize}_#{input_name}"
@@ -113,5 +113,21 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
     # It redirects to the index page
     wait_for_selector "[data-testid='super-admin/index-page']"
+  end
+
+  def select_haya_select_option(select_id:, label:)
+    attempts = 0
+
+    begin
+      haya_select(select_id).select(
+        label,
+        allow_if_selected: true
+      )
+    rescue ::ApiMaker::SpecHelper::SelectorNotFoundError, WaitUtil::TimeoutError
+      attempts += 1
+      raise if attempts > 1
+
+      retry
+    end
   end
 end
