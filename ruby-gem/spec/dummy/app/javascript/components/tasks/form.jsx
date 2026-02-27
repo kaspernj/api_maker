@@ -5,7 +5,7 @@ import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import PropTypes from "prop-types"
 import React from "react"
 import Select from "@kaspernj/api-maker/build/bootstrap/select"
-import Task from "models/task.js"
+import {Task} from "models.js"
 import TranslatedCollections from "@kaspernj/api-maker/build/translated-collections"
 
 export default class ComponentsTasksForm extends React.PureComponent {

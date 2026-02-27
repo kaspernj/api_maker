@@ -1,7 +1,7 @@
 import {Text, View} from "react-native"
 import Layout from "components/layout"
 import React from "react"
-import Task from "models/task.js"
+import {Task} from "models.js"
 import useModel from "@kaspernj/api-maker/src/use-model.js"
 
 export default function RoutesUtilsUseModelNewIfNoId() {

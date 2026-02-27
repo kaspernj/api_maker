@@ -1,5 +1,5 @@
 import React from "react"
-import Task from "models/task.js"
+import {Task} from "models.js"
 
 export default class ModelsSelect extends React.PureComponent {
   state = {}

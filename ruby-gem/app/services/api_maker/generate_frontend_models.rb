@@ -14,6 +14,7 @@ class ApiMaker::GenerateFrontendModels < ApiMaker::ApplicationService # rubocop:
 
       File.write(file_path, model_file_content(model_content:, resource:))
     end
+    File.write(models_index_path, models_index_content)
 
     succeed!
   end
@@ -26,6 +27,24 @@ private
 
   def resources
     @resources ||= ApiMaker::ModelsFinderService.execute!
+  end
+
+  def models_index_path
+    @models_index_path ||= models_path.join("../models.js").cleanpath
+  end
+
+  def models_index_content
+    lines = []
+
+    resources.each do |resource|
+      file_name = resource.short_name.underscore.dasherize
+      lines << "import #{resource.short_name} from \"models/#{file_name}.js\""
+    end
+
+    lines << ""
+    lines << "export {#{resources.map(&:short_name).join(", ")}}"
+    lines << ""
+    lines.join("\n")
   end
 
   def model_file_content(model_content:, resource:) # rubocop:disable Metrics/AbcSize

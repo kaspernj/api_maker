@@ -1,5 +1,5 @@
 import {digg, digs} from "diggerize"
-import Account from "models/account.js"
+import {Account} from "models.js"
 import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
 

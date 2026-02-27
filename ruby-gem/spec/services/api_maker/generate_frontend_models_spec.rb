@@ -9,8 +9,11 @@ describe ApiMaker::GenerateFrontendModels do
 
         task_model_path = File.join(tmp_dir, "task.js")
         task_content = File.read(task_model_path)
+        models_index_path = File.join(tmp_dir, "../models.js")
+        models_index_content = File.read(models_index_path)
 
         expect(File).to exist(task_model_path)
+        expect(File).to exist(models_index_path)
         expect(task_content).to include("import BaseModel from \"../base-model.js\"")
         expect(task_content).to include("class Task extends BaseModel")
         expect(task_content).to include("static modelClassData()")
@@ -28,6 +31,8 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("loadProject()")
         expect(task_content).to include("comments()")
         expect(task_content).to include("loadComments()")
+        expect(models_index_content).to include("import Task from \"models/task.js\"")
+        expect(models_index_content).to include("export {")
       end
     end
 

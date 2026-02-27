@@ -1,7 +1,7 @@
 import Hash from "shared/hash"
 import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
-import Task from "models/task.js"
+import {Task} from "models.js"
 
 export default class ModelsDestroyEvent extends React.PureComponent {
   state = {}

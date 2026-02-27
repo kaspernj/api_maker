@@ -1,5 +1,4 @@
-import Account from "models/account.js"
-import Task from "models/task.js"
+import {Account, Task} from "models.js"
 import Checkboxes from "@kaspernj/api-maker/build/bootstrap/checkboxes"
 import Layout from "components/layout"
 import Params from "@kaspernj/api-maker/build/params.js"
