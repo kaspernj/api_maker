@@ -117,12 +117,13 @@ private
       [
         "",
         "  /**",
-        "   * @param {Record<string, any>} args",
+        "   * @template TCommandResponse",
+        "   * @param {Record<string, any> | HTMLFormElement | FormData} args",
         "   * @param {Record<string, any>} [commandArgs]",
-        "   * @returns {Promise<any>}",
+        "   * @returns {Promise<TCommandResponse>}",
         "   */",
         "  static #{method_name}(args, commandArgs = {}) {",
-        "    return this._callCollectionCommand(",
+        "    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(",
         "      {",
         "        args,",
         "        command: \"#{command_name}\",",
@@ -130,7 +131,7 @@ private
         "        type: \"collection\"",
         "      },",
         "      commandArgs",
-        "    )",
+        "    ))",
         "  }"
       ]
     end
@@ -146,12 +147,13 @@ private
       [
         "",
         "  /**",
-        "   * @param {Record<string, any>} args",
+        "   * @template TCommandResponse",
+        "   * @param {Record<string, any> | HTMLFormElement | FormData} args",
         "   * @param {Record<string, any>} [commandArgs]",
-        "   * @returns {Promise<any>}",
+        "   * @returns {Promise<TCommandResponse>}",
         "   */",
         "  #{method_name}(args, commandArgs = {}) {",
-        "    return this._callMemberCommand(",
+        "    return /** @type {Promise<TCommandResponse>} */ (this._callMemberCommand(",
         "      {",
         "        args,",
         "        command: \"#{command_name}\",",
@@ -160,7 +162,7 @@ private
         "        type: \"member\"",
         "      },",
         "      commandArgs",
-        "    )",
+        "    ))",
         "  }"
       ]
     end
