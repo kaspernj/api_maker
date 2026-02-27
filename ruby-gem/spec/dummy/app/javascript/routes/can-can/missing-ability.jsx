@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from "react"
-import {Account} from "models.js"
+import Account from "models/account.js"
 import CanCan from "@kaspernj/api-maker/build/can-can.js"
 import Layout from "components/layout"
 

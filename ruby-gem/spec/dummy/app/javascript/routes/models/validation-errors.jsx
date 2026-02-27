@@ -1,4 +1,7 @@
-import {Account, Project, Task, User} from "models.js"
+import Account from "models/account.js"
+import Project from "models/project.js"
+import Task from "models/task.js"
+import User from "models/user.js"
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import {digg} from "diggerize"
 import {FlashNotifications} from "flash-notifications"

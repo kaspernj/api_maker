@@ -1,6 +1,6 @@
 import React, {memo, useEffect} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import {Account} from "models.js"
+import Account from "models/account.js"
 import CanCan from "@kaspernj/api-maker/build/can-can.js"
 import classNames from "classnames"
 import Devise from "@kaspernj/api-maker/build/devise.js"

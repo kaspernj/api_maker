@@ -1,5 +1,5 @@
 import {Controller} from "stimulus"
-import {Project} from "models.js"
+import Project from "models/project.js"
 
 export default class extends Controller {
   connect() {

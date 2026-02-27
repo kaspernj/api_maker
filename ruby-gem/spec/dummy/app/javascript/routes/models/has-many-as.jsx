@@ -1,7 +1,7 @@
 import {digg, digs} from "diggerize"
 import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
-import {Task} from "models.js"
+import Task from "models/task.js"
 
 export default class ModelsHasManyAs extends React.PureComponent {
   params = Params.parse()

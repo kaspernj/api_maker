@@ -1,5 +1,5 @@
 import {Controller} from "stimulus"
-import {Task} from "models.js"
+import Task from "models/task.js"
 
 export default class extends Controller {
   connect() {

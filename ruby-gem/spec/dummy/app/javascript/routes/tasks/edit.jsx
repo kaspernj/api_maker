@@ -3,7 +3,7 @@ import Form from "components/tasks/form"
 import Layout from "components/layout"
 import React from "react"
 import Shape from "set-state-compare/build/shape"
-import {Task} from "models.js"
+import Task from "models/task.js"
 
 export default class RoutesTasksEdit extends React.PureComponent {
   taskId = this.props.match.params.id

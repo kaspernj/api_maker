@@ -2,7 +2,7 @@ import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import Layout from "components/layout"
 import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
-import {Task} from "models.js"
+import Task from "models/task.js"
 
 export default class BootstrapCheckboxBoolean extends React.PureComponent {
   state = {}
