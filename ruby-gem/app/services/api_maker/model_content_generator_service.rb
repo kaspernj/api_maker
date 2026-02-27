@@ -129,6 +129,10 @@ private
 
       _reflection_data(reflection, ignore_resource_not_found: true)
     end
+  rescue RuntimeError => e
+    raise e unless e.message.start_with?("Ransack needs ")
+
+    []
   end
 
   def ransackable_attributes
