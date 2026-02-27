@@ -1,6 +1,5 @@
-import BaseModel from "../base-model.js"
-import Account from "./account.js"
-import Task from "./task.js"
+import BaseModel from "@kaspernj/api-maker/build/base-model.js"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
 
 const modelClassData = {
   "attributes": {
@@ -183,42 +182,44 @@ class AccountMarkedTask extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {Account | null} */
+  /** @returns {import("./account.js").default | null} */
   account() {
     return this._readBelongsToReflection({reflectionName: "account"})
   }
 
-  /** @returns {Promise<Account | null>} */
+  /** @returns {Promise<import("./account.js").default | null>} */
   loadAccount() {
     if (!("accountId" in this)) throw new Error("Foreign key method wasn't defined: accountId")
 
     const id = this.accountId()
+    const modelClass = modelClassRequire("Account")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "account", model: this, modelClass: Account},
+      {reflectionName: "account", model: this, modelClass},
       {ransack}
     )
   }
 
-  /** @returns {Task | null} */
+  /** @returns {import("./task.js").default | null} */
   task() {
     return this._readBelongsToReflection({reflectionName: "task"})
   }
 
-  /** @returns {Promise<Task | null>} */
+  /** @returns {Promise<import("./task.js").default | null>} */
   loadTask() {
     if (!("taskId" in this)) throw new Error("Foreign key method wasn't defined: taskId")
 
     const id = this.taskId()
+    const modelClass = modelClassRequire("Task")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "task", model: this, modelClass: Task},
+      {reflectionName: "task", model: this, modelClass},
       {ransack}
     )
   }

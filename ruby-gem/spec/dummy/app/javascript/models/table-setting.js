@@ -1,6 +1,6 @@
-import BaseModel from "../base-model.js"
-import Collection from "../collection.js"
-import TableSettingColumn from "./table-setting-column.js"
+import BaseModel from "@kaspernj/api-maker/build/base-model.js"
+import Collection from "@kaspernj/api-maker/build/collection.js"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
 
 const modelClassData = {
   "attributes": {
@@ -169,9 +169,11 @@ class TableSetting extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {import("../collection.js").default<typeof TableSettingColumn>} */
+  /** @returns {import("@kaspernj/api-maker/build/collection.js").default<typeof import("./table-setting-column.js").default>} */
   columns() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("TableSettingColumn")
 
     const ransack = {}
 
@@ -182,23 +184,27 @@ class TableSetting extends BaseModel {
         reflectionName: "columns",
         model: this,
         modelName: "ApiMakerTable::TableSettingColumn",
-        modelClass: TableSettingColumn
+        modelClass
       },
       {ransack}
     )
   }
 
-  /** @returns {Promise<Array<TableSettingColumn>>} */
+  /** @returns {Promise<Array<import("./table-setting-column.js").default>>} */
   loadColumns() {
+    if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("TableSettingColumn")
+
     const ransack = {}
 
-    ransack["table_setting_id_eq"] = this.primaryKey()
+    ransack["table_setting_id_eq"] = this.id()
 
     return this._loadHasManyReflection(
       {
         reflectionName: "columns",
         model: this,
-        modelClass: TableSettingColumn
+        modelClass
       },
       {ransack}
     )

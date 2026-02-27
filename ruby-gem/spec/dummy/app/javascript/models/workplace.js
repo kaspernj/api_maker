@@ -1,6 +1,6 @@
-import BaseModel from "../base-model.js"
-import Collection from "../collection.js"
-import WorkplaceLink from "./workplace-link.js"
+import BaseModel from "@kaspernj/api-maker/build/base-model.js"
+import Collection from "@kaspernj/api-maker/build/collection.js"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
 
 const modelClassData = {
   "attributes": {
@@ -303,9 +303,11 @@ class Workplace extends BaseModel {
     ))
   }
 
-  /** @returns {import("../collection.js").default<typeof WorkplaceLink>} */
+  /** @returns {import("@kaspernj/api-maker/build/collection.js").default<typeof import("./workplace-link.js").default>} */
   workplaceLinks() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("WorkplaceLink")
 
     const ransack = {}
 
@@ -316,23 +318,27 @@ class Workplace extends BaseModel {
         reflectionName: "workplace_links",
         model: this,
         modelName: "WorkplaceLink",
-        modelClass: WorkplaceLink
+        modelClass
       },
       {ransack}
     )
   }
 
-  /** @returns {Promise<Array<WorkplaceLink>>} */
+  /** @returns {Promise<Array<import("./workplace-link.js").default>>} */
   loadWorkplaceLinks() {
+    if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("WorkplaceLink")
+
     const ransack = {}
 
-    ransack["workplace_id_eq"] = this.primaryKey()
+    ransack["workplace_id_eq"] = this.id()
 
     return this._loadHasManyReflection(
       {
         reflectionName: "workplace_links",
         model: this,
-        modelClass: WorkplaceLink
+        modelClass
       },
       {ransack}
     )

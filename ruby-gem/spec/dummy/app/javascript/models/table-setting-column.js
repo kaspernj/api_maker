@@ -1,5 +1,5 @@
-import BaseModel from "../base-model.js"
-import TableSetting from "./table-setting.js"
+import BaseModel from "@kaspernj/api-maker/build/base-model.js"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
 
 const modelClassData = {
   "attributes": {
@@ -333,22 +333,23 @@ class TableSettingColumn extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {TableSetting | null} */
+  /** @returns {import("./table-setting.js").default | null} */
   tableSetting() {
     return this._readBelongsToReflection({reflectionName: "table_setting"})
   }
 
-  /** @returns {Promise<TableSetting | null>} */
+  /** @returns {Promise<import("./table-setting.js").default | null>} */
   loadTableSetting() {
     if (!("tableSettingId" in this)) throw new Error("Foreign key method wasn't defined: tableSettingId")
 
     const id = this.tableSettingId()
+    const modelClass = modelClassRequire("TableSetting")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "table_setting", model: this, modelClass: TableSetting},
+      {reflectionName: "table_setting", model: this, modelClass},
       {ransack}
     )
   }

@@ -1,7 +1,6 @@
-import BaseModel from "../base-model.js"
-import Collection from "../collection.js"
-import Task from "./task.js"
-import UserRole from "./user-role.js"
+import BaseModel from "@kaspernj/api-maker/build/base-model.js"
+import Collection from "@kaspernj/api-maker/build/collection.js"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
 
 const modelClassData = {
   "attributes": {
@@ -483,9 +482,11 @@ class User extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {import("../collection.js").default<typeof Task>} */
+  /** @returns {import("@kaspernj/api-maker/build/collection.js").default<typeof import("./task.js").default>} */
   supportedTasks() {
     if (!("email" in this)) throw new Error("No such primary key method: email")
+
+    const modelClass = modelClassRequire("Task")
 
     const ransack = {}
 
@@ -496,31 +497,37 @@ class User extends BaseModel {
         reflectionName: "supported_tasks",
         model: this,
         modelName: "Task",
-        modelClass: Task
+        modelClass
       },
       {ransack}
     )
   }
 
-  /** @returns {Promise<Array<Task>>} */
+  /** @returns {Promise<Array<import("./task.js").default>>} */
   loadSupportedTasks() {
+    if (!("email" in this)) throw new Error("No such primary key method: email")
+
+    const modelClass = modelClassRequire("Task")
+
     const ransack = {}
 
-    ransack["support_email_eq"] = this.primaryKey()
+    ransack["support_email_eq"] = this.email()
 
     return this._loadHasManyReflection(
       {
         reflectionName: "supported_tasks",
         model: this,
-        modelClass: Task
+        modelClass
       },
       {ransack}
     )
   }
 
-  /** @returns {import("../collection.js").default<typeof Task>} */
+  /** @returns {import("@kaspernj/api-maker/build/collection.js").default<typeof import("./task.js").default>} */
   tasks() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("Task")
 
     const ransack = {}
 
@@ -531,31 +538,37 @@ class User extends BaseModel {
         reflectionName: "tasks",
         model: this,
         modelName: "Task",
-        modelClass: Task
+        modelClass
       },
       {ransack}
     )
   }
 
-  /** @returns {Promise<Array<Task>>} */
+  /** @returns {Promise<Array<import("./task.js").default>>} */
   loadTasks() {
+    if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("Task")
+
     const ransack = {}
 
-    ransack["user_id_eq"] = this.primaryKey()
+    ransack["user_id_eq"] = this.id()
 
     return this._loadHasManyReflection(
       {
         reflectionName: "tasks",
         model: this,
-        modelClass: Task
+        modelClass
       },
       {ransack}
     )
   }
 
-  /** @returns {import("../collection.js").default<typeof UserRole>} */
+  /** @returns {import("@kaspernj/api-maker/build/collection.js").default<typeof import("./user-role.js").default>} */
   userRoles() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("UserRole")
 
     const ransack = {}
 
@@ -566,23 +579,27 @@ class User extends BaseModel {
         reflectionName: "user_roles",
         model: this,
         modelName: "UserRole",
-        modelClass: UserRole
+        modelClass
       },
       {ransack}
     )
   }
 
-  /** @returns {Promise<Array<UserRole>>} */
+  /** @returns {Promise<Array<import("./user-role.js").default>>} */
   loadUserRoles() {
+    if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("UserRole")
+
     const ransack = {}
 
-    ransack["user_id_eq"] = this.primaryKey()
+    ransack["user_id_eq"] = this.id()
 
     return this._loadHasManyReflection(
       {
         reflectionName: "user_roles",
         model: this,
-        modelClass: UserRole
+        modelClass
       },
       {ransack}
     )

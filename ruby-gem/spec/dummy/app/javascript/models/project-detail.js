@@ -1,5 +1,5 @@
-import BaseModel from "../base-model.js"
-import Project from "./project.js"
+import BaseModel from "@kaspernj/api-maker/build/base-model.js"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
 
 const modelClassData = {
   "attributes": {
@@ -200,22 +200,23 @@ class ProjectDetail extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {Project | null} */
+  /** @returns {import("./project.js").default | null} */
   project() {
     return this._readBelongsToReflection({reflectionName: "project"})
   }
 
-  /** @returns {Promise<Project | null>} */
+  /** @returns {Promise<import("./project.js").default | null>} */
   loadProject() {
     if (!("projectId" in this)) throw new Error("Foreign key method wasn't defined: projectId")
 
     const id = this.projectId()
+    const modelClass = modelClassRequire("Project")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "project", model: this, modelClass: Project},
+      {reflectionName: "project", model: this, modelClass},
       {ransack}
     )
   }

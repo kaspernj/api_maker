@@ -1,10 +1,6 @@
-import BaseModel from "../base-model.js"
-import Collection from "../collection.js"
-import Account from "./account.js"
-import Comment from "./comment.js"
-import Customer from "./customer.js"
-import Project from "./project.js"
-import User from "./user.js"
+import BaseModel from "@kaspernj/api-maker/build/base-model.js"
+import Collection from "@kaspernj/api-maker/build/collection.js"
+import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
 
 const modelClassData = {
   "attributes": {
@@ -539,19 +535,20 @@ class Task extends BaseModel {
     ))
   }
 
-  /** @returns {Account | null} */
+  /** @returns {import("./account.js").default | null} */
   account() {
     return this._readHasOneReflection({reflectionName: "account"})
   }
 
-  /** @returns {Promise<Account | null>} */
+  /** @returns {Promise<import("./account.js").default | null>} */
   loadAccount() {
     if (!("id" in this)) throw new Error("Primary key method wasn't defined: id")
 
     const id = this.id()
+    const modelClass = modelClassRequire("Account")
 
     return this._loadHasOneReflection(
-      {reflectionName: "account", model: this, modelClass: Account},
+      {reflectionName: "account", model: this, modelClass},
       {
         params: {
           through: {
@@ -564,19 +561,20 @@ class Task extends BaseModel {
     )
   }
 
-  /** @returns {Customer | null} */
+  /** @returns {import("./customer.js").default | null} */
   accountCustomer() {
     return this._readHasOneReflection({reflectionName: "account_customer"})
   }
 
-  /** @returns {Promise<Customer | null>} */
+  /** @returns {Promise<import("./customer.js").default | null>} */
   loadAccountCustomer() {
     if (!("id" in this)) throw new Error("Primary key method wasn't defined: id")
 
     const id = this.id()
+    const modelClass = modelClassRequire("Customer")
 
     return this._loadHasOneReflection(
-      {reflectionName: "account_customer", model: this, modelClass: Customer},
+      {reflectionName: "account_customer", model: this, modelClass},
       {
         params: {
           through: {
@@ -589,9 +587,11 @@ class Task extends BaseModel {
     )
   }
 
-  /** @returns {import("../collection.js").default<typeof Comment>} */
+  /** @returns {import("@kaspernj/api-maker/build/collection.js").default<typeof import("./comment.js").default>} */
   comments() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("Comment")
 
     const ransack = {}
 
@@ -603,64 +603,71 @@ class Task extends BaseModel {
         reflectionName: "comments",
         model: this,
         modelName: "Comment",
-        modelClass: Comment
+        modelClass
       },
       {ransack}
     )
   }
 
-  /** @returns {Promise<Array<Comment>>} */
+  /** @returns {Promise<Array<import("./comment.js").default>>} */
   loadComments() {
+    if (!("id" in this)) throw new Error("No such primary key method: id")
+
+    const modelClass = modelClassRequire("Comment")
+
     const ransack = {}
 
-    ransack["resource_id_eq"] = this.primaryKey()
+    ransack["resource_id_eq"] = this.id()
+    ransack["resource_type_eq"] = "Task"
 
     return this._loadHasManyReflection(
       {
         reflectionName: "comments",
         model: this,
-        modelClass: Comment
+        modelClass
       },
       {ransack}
     )
   }
 
-  /** @returns {Project | null} */
+  /** @returns {import("./project.js").default | null} */
   project() {
     return this._readBelongsToReflection({reflectionName: "project"})
   }
 
-  /** @returns {Promise<Project | null>} */
+  /** @returns {Promise<import("./project.js").default | null>} */
   loadProject() {
     if (!("projectId" in this)) throw new Error("Foreign key method wasn't defined: projectId")
 
     const id = this.projectId()
+    const modelClass = modelClassRequire("Project")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "project", model: this, modelClass: Project},
+      {reflectionName: "project", model: this, modelClass},
       {ransack}
     )
   }
 
-  /** @returns {User | null} */
+  /** @returns {import("./user.js").default | null} */
   user() {
     return this._readBelongsToReflection({reflectionName: "user"})
   }
 
-  /** @returns {Promise<User | null>} */
+  /** @returns {Promise<import("./user.js").default | null>} */
   loadUser() {
     if (!("userId" in this)) throw new Error("Foreign key method wasn't defined: userId")
 
     const id = this.userId()
+    const modelClass = modelClassRequire("User")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "user", model: this, modelClass: User},
+      {reflectionName: "user", model: this, modelClass},
       {ransack}
     )
   }

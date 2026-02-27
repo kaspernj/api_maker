@@ -1,4 +1,4 @@
-import BaseModel from "../base-model.js"
+import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 
 const modelClassData = {
   "attributes": {

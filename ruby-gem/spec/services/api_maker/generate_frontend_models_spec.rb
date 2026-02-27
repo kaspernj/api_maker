@@ -14,7 +14,8 @@ describe ApiMaker::GenerateFrontendModels do
 
         expect(File).to exist(task_model_path)
         expect(File).to exist(models_index_path)
-        expect(task_content).to include("import BaseModel from \"../base-model.js\"")
+        expect(task_content).to include("import BaseModel from \"@kaspernj/api-maker/build/base-model.js\"")
+        expect(task_content).to include("import modelClassRequire from \"@kaspernj/api-maker/build/model-class-require.js\"")
         expect(task_content).to include("class Task extends BaseModel")
         expect(task_content).to include("static modelClassData()")
         expect(task_content).to include("/** @returns {number} */\n  id()")
@@ -31,6 +32,8 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("loadProject()")
         expect(task_content).to include("comments()")
         expect(task_content).to include("loadComments()")
+        expect(task_content).to include("/** @returns {Promise<import(\"./user.js\").default | null>} */")
+        expect(task_content).to include("ransack[\"resource_type_eq\"] = \"Task\"")
         expect(models_index_content).to include("import Task from \"models/task.js\"")
         expect(models_index_content).to include("export {")
       end
