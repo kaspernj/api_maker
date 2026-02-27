@@ -1,4 +1,4 @@
-module ApiMaker::SpecHelper::SuperAdminHelpers
+module ApiMaker::SpecHelper::SuperAdminHelpers # rubocop:disable Metrics/ModuleLength
   def super_admin_test_index_render(model)
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
 
@@ -27,7 +27,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     expect { model.reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  def super_admin_test_new(model_class, inputs:, expect: nil)
+  def super_admin_test_new(model_class, inputs:, expect: nil) # rubocop:disable Metrics/AbcSize
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model_class)
 
     visit super_admin_path(model: resource.short_name)
@@ -37,9 +37,19 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     expected_count = model_class.count + 1
     wait_for_and_find("[data-testid='submit-button']").click
     wait_for_expect { expect(model_class.count).to eq expected_count }
+    url_with_model_id = nil
 
-    uri = URI.parse(current_url)
-    params = CGI.parse(uri.query)
+    wait_for_expect do
+      maybe_url = current_url
+      maybe_query = URI.parse(maybe_url).query.to_s
+      maybe_model_id = CGI.parse(maybe_query)["model_id"]&.first
+
+      expect(maybe_model_id).to be_present
+      url_with_model_id = maybe_url
+    end
+
+    uri = URI.parse(url_with_model_id)
+    params = CGI.parse(uri.query.to_s)
     model_id = params.fetch("model_id").fetch(0)
     created_model = model_class.find(model_id)
 
