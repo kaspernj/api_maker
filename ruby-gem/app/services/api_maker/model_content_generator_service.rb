@@ -145,6 +145,10 @@ private
         column: column_data
       }
     end
+  rescue RuntimeError => e
+    raise e unless e.message.start_with?("Ransack needs ")
+
+    []
   rescue ActiveRecord::StatementInvalid
     # This happens if the table or column doesn't exist - like if we are running during a migration
     []
@@ -154,6 +158,10 @@ private
     model_class.ransackable_scopes.sort.map do |scope_name|
       {name: scope_name}
     end
+  rescue RuntimeError => e
+    raise e unless e.message.start_with?("Ransack needs ")
+
+    []
   end
 
   def monetized_attributes
