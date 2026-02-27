@@ -1,6 +1,6 @@
-class ApiMaker::GenerateModelRecipes < ApiMaker::ApplicationService
+class ApiMaker::GenerateModelRecipes < ApiMaker::GenerateFrontendModels
   def perform
-    ApiMaker::GenerateFrontendModels.execute!
+    super
 
     file_path = Rails.root.join("app/javascript/model-recipes.json")
     content = ApiMaker::ModelClassesJavaScriptGeneratorService.execute!
