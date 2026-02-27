@@ -35,6 +35,7 @@ private
 
   def models_index_content
     lines = []
+    model_names = resources.map(&:short_name)
 
     resources.each do |resource|
       file_name = resource.short_name.underscore.dasherize
@@ -42,7 +43,11 @@ private
     end
 
     lines << ""
-    lines << "export {#{resources.map(&:short_name).join(", ")}}"
+    lines << "export {"
+    model_names.each do |model_name|
+      lines << "  #{model_name},"
+    end
+    lines << "}"
     lines << ""
     lines.join("\n")
   end

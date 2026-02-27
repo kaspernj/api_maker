@@ -15,4 +15,21 @@ import UserRole from "models/user-role.js"
 import WorkplaceLink from "models/workplace-link.js"
 import Workplace from "models/workplace.js"
 
-export {AccountMarkedTask, Account, Activity, Comment, Customer, ProjectDetail, Project, TableSearch, TableSettingColumn, TableSetting, TaskDetail, Task, User, UserRole, WorkplaceLink, Workplace}
+export {
+  AccountMarkedTask,
+  Account,
+  Activity,
+  Comment,
+  Customer,
+  ProjectDetail,
+  Project,
+  TableSearch,
+  TableSettingColumn,
+  TableSetting,
+  TaskDetail,
+  Task,
+  User,
+  UserRole,
+  WorkplaceLink,
+  Workplace,
+}
