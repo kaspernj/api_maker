@@ -18,6 +18,7 @@ Notes:
 - For system specs, use `ruby-gem/scripts/run-system-spec.sh [spec/path.rb:line]` (wraps the README system spec command).
 - When installing gems, run `bundle install` in both `ruby-gem/` and `ruby-gem/spec/dummy/` before running specs.
 - If `ruby-gem/scripts/run-system-spec.sh` fails, run the README system spec command manually from `ruby-gem/`.
+- In `ApiMaker::ModelContentGeneratorService`, handle Ransack allowlist runtime errors (`"Ransack needs ..."`) for associations/attributes/scopes by returning `[]` so frontend model generation does not crash on third-party models.
 - Do not “fix” flaky specs by only increasing waits/timeouts. First determine whether behavior regressed (for example, element never rendered) and collect/inspect CI artifacts before adjusting timing.
 - Avoid unnecessary defensive conditions for guaranteed contracts. Prefer failing fast over silently accepting impossible states.
 - In JavaScript class method definitions, use `methodName(args)` (no space before parentheses).
