@@ -29,7 +29,6 @@ module ApiMaker::SpecHelper::SuperAdminHelpers # rubocop:disable Metrics/ModuleL
 
   def super_admin_test_new(model_class, inputs:, expect: nil)
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model_class)
-    model_ids_before_create = model_class.pluck(model_class.primary_key).map(&:to_s)
 
     submit_super_admin_new_form(
       model_class:,
@@ -37,8 +36,7 @@ module ApiMaker::SpecHelper::SuperAdminHelpers # rubocop:disable Metrics/ModuleL
       inputs:
     )
     created_model = resolve_created_super_admin_model(
-      model_class:,
-      model_ids_before_create:
+      model_class:
     )
 
     expect_attributes = expect || inputs
@@ -58,23 +56,28 @@ private
     wait_for_expect { expect(model_class.count).to eq expected_count }
   end
 
-  def resolve_created_super_admin_model(model_class:, model_ids_before_create:)
-    model_id_from_query = super_admin_model_id_from_query
-    return model_class.find(model_id_from_query) if model_id_from_query.present?
-
-    model_ids_after_create = model_class.pluck(model_class.primary_key).map(&:to_s)
-    created_model_id = (model_ids_after_create - model_ids_before_create).last
-    raise KeyError, "Could not determine created model ID from current URL query nor model ID diff. current_url=#{current_url}" if created_model_id.blank?
-
-    model_class.find(created_model_id)
-  end
-
-  def super_admin_model_id_from_query
+  def resolve_created_super_admin_model(model_class:)
     uri = URI.parse(current_url)
-    return nil if uri.query.blank?
+    if uri.query.blank?
+      message = [
+        "Expected redirect URL to include query param model_id after creating #{model_class.name},",
+        "but query was blank. current_url=#{current_url}"
+      ].join(" ")
+      raise KeyError, message
+    end
 
     params = CGI.parse(uri.query)
-    params["model_id"]&.first || params["id"]&.first || params["resource_id"]&.first
+    model_id = params["model_id"]&.first
+
+    if model_id.blank?
+      message = [
+        "Expected redirect URL to include query param model_id after creating #{model_class.name},",
+        "but got params=#{params.inspect}. current_url=#{current_url}"
+      ].join(" ")
+      raise KeyError, message
+    end
+
+    model_class.find(model_id)
   end
 
   def super_admin_test_fill_inputs(resource, inputs)
