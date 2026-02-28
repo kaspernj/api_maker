@@ -40,5 +40,5 @@
 - Allow `useDestroyedEvent`, `useModelEvent`, and `useUpdatedEvent` to subscribe to arrays of models as well as single models.
 - Add system coverage for array-based model subscriptions in update, destroy, and custom model event hooks.
 - Optimize array model event hooks to incrementally subscribe/unsubscribe only added or removed models.
-- Add `useModelClassEvent` for class-level websocket subscriptions and reuse it in `useCreatedEvent`.
+- Add `useModelClassEvent` for class-level websocket subscriptions.
 - Allow ApiMaker Table `defaultDateFormatName` and `defaultDateTimeFormatName` props to accept formatter callbacks in addition to i18n format-name strings, enabling app-specific country-aware date rendering in table cells.

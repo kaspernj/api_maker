@@ -544,7 +544,7 @@ import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
 
 ```js
 useCreatedEvent(User, this.onUserCreated)
-useModelClassEvent(User, "creates", this.onUserCreated)
+useModelClassEvent(User, "team_synced", this.onTeamSynced)
 useDestroyedEvent(user, this.onUserDestroyed)
 useUpdatedEvent(user, this.onUserUpdated)
 ```

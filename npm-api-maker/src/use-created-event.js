@@ -1,6 +1,10 @@
+/* eslint-disable sort-imports */
+import debounceFunction from "debounce"
+import ModelEvents from "./model-events.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import useModelClassEvent from "./use-model-class-event.js"
+import {useCallback, useLayoutEffect} from "react"
+import useShape from "set-state-compare/build/use-shape.js"
 
 /**
  * @param {Function} modelClass
@@ -13,7 +17,40 @@ import useModelClassEvent from "./use-model-class-event.js"
  */
 // eslint-disable-next-line max-len
 const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {active: true, debounce: 0, onConnected: undefined}) => { // eslint-disable-line react/function-component-definition
-  useModelClassEvent(modelClass, "creates", onCreated, args)
+  const {active = true, debounce} = args
+  const s = useShape({active, debounce, modelClass, onCreated})
+
+  const eventDebounce = useCallback(() => {
+    if (!s.meta.debounceInstance) {
+      if (typeof s.props.debounce == "number") {
+        s.meta.debounceInstance = debounceFunction(s.p.onCreated, s.p.debounce)
+      } else {
+        s.meta.debounceInstance = debounceFunction(s.p.onCreated)
+      }
+    }
+
+    return s.meta.debounceInstance
+  }, [])
+
+  const onCreatedCallback = useCallback((...args) => {
+    if (!s.p.active) {
+      return
+    }
+
+    if (s.p.debounce) {
+      eventDebounce()(...args)
+    } else {
+      s.p.onCreated(...args)
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, (...args) => onCreatedCallback(...args))
+
+    return () => {
+      connectCreated.unsubscribe()
+    }
+  }, [])
 }
 
 ApiMakerUseCreatedEvent.propTypes = propTypesExact({
