@@ -1,4 +1,4 @@
-module ApiMaker::SpecHelper::SuperAdminHelpers
+module ApiMaker::SpecHelper::SuperAdminHelpers # rubocop:disable Metrics/ModuleLength
   def super_admin_test_index_render(model)
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model.class)
 
@@ -29,7 +29,26 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
 
   def super_admin_test_new(model_class, inputs:, expect: nil)
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model_class)
+    model_ids_before_create = model_class.pluck(model_class.primary_key).map(&:to_s)
 
+    submit_super_admin_new_form(
+      model_class:,
+      resource:,
+      inputs:
+    )
+    created_model = resolve_created_super_admin_model(
+      model_class:,
+      model_ids_before_create:
+    )
+
+    expect_attributes = expect || inputs
+
+    expect(created_model).to have_attributes(expect_attributes)
+  end
+
+private
+
+  def submit_super_admin_new_form(model_class:, resource:, inputs:)
     visit super_admin_path(model: resource.short_name)
     wait_for_and_find("[data-class='create-new-model-link']").click
     wait_for_selector "[data-testid='super-admin--edit-page']"
@@ -37,15 +56,25 @@ module ApiMaker::SpecHelper::SuperAdminHelpers
     expected_count = model_class.count + 1
     wait_for_and_find("[data-testid='submit-button']").click
     wait_for_expect { expect(model_class.count).to eq expected_count }
+  end
 
+  def resolve_created_super_admin_model(model_class:, model_ids_before_create:)
+    model_id_from_query = super_admin_model_id_from_query
+    return model_class.find(model_id_from_query) if model_id_from_query.present?
+
+    model_ids_after_create = model_class.pluck(model_class.primary_key).map(&:to_s)
+    created_model_id = (model_ids_after_create - model_ids_before_create).last
+    raise KeyError, "Could not determine created model ID from current URL query nor model ID diff. current_url=#{current_url}" if created_model_id.blank?
+
+    model_class.find(created_model_id)
+  end
+
+  def super_admin_model_id_from_query
     uri = URI.parse(current_url)
+    return nil if uri.query.blank?
+
     params = CGI.parse(uri.query)
-    model_id = params.fetch("model_id").fetch(0)
-    created_model = model_class.find(model_id)
-
-    expect_attributes = expect || inputs
-
-    expect(created_model).to have_attributes(expect_attributes)
+    params["model_id"]&.first || params["id"]&.first || params["resource_id"]&.first
   end
 
   def super_admin_test_fill_inputs(resource, inputs)
