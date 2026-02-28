@@ -32,6 +32,8 @@ Run this command:
 rails api_maker_table:install:migrations
 ```
 
+For frontend `ApiMakerTable` date rendering, `defaultDateFormatName` and `defaultDateTimeFormatName` support both i18n format keys and custom formatter callbacks. See `npm-api-maker/README.md` for examples.
+
 Run the migrations
 ```bash
 rails db:migrate
