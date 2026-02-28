@@ -96,6 +96,42 @@ The relationship name is stored in `snake_case`, so `preloadRelationship("Accoun
 
 `config` is a shared singleton. Some helpers (forms, routing, navigation, and money inputs) require config values like `history`, `linkTo`, `navigation`, and `currenciesCollection` to be set. If a required value is missing, the getter throws an error to avoid silent failures.
 
+## ApiMakerTable date formatting
+
+`ApiMakerTable` supports date formatting in two ways:
+
+- i18n format-name strings (existing behavior)
+- formatter callbacks (custom behavior)
+
+Use `defaultDateFormatName` for date values and `defaultDateTimeFormatName` for datetime values.
+
+```jsx
+<ApiMakerTable
+  defaultDateFormatName="date.formats.default"
+  defaultDateTimeFormatName="time.formats.default"
+  modelClass={User}
+/>
+```
+
+You can also pass callbacks when you need country-aware or app-specific formatting:
+
+```jsx
+<ApiMakerTable
+  defaultDateFormatName={({value}) => formatByCountry(value, "date")}
+  defaultDateTimeFormatName={({value}) => formatByCountry(value, "date-with-time")}
+  modelClass={User}
+/>
+```
+
+Callback arguments:
+
+- `value`: the `Date` instance being rendered
+- `apiMakerType`: `"date"` or `"time"`
+- `column`: the column definition object
+- `model`: the current row model
+- `table`: the table component instance
+- `l`: ApiMaker i18n formatter helper (for fallback/interop)
+
 ## API reference
 
 ApiMaker generates model classes from your recipes. The classes inherit `BaseModel` and expose relationship helpers based on your server-side associations.
