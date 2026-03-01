@@ -538,11 +538,13 @@ You can also use a React component if you use React and dont want to keep track 
 ```jsx
 import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event.js"
 import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
+import useModelClassEvent from "@kaspernj/api-maker/build/use-model-class-event.js"
 import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
 ```
 
 ```js
 useCreatedEvent(User, this.onUserCreated)
+useModelClassEvent(User, "team_synced", this.onTeamSynced)
 useDestroyedEvent(user, this.onUserDestroyed)
 useUpdatedEvent(user, this.onUserUpdated)
 ```
