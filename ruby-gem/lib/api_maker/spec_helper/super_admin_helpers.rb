@@ -58,15 +58,7 @@ private
 
   def resolve_created_super_admin_model(model_class:)
     uri = URI.parse(current_url)
-    if uri.query.blank?
-      message = [
-        "Expected redirect URL to include query param model_id after creating #{model_class.name},",
-        "but query was blank. current_url=#{current_url}"
-      ].join(" ")
-      raise KeyError, message
-    end
-
-    params = CGI.parse(uri.query)
+    params = CGI.parse(uri.query.to_s)
     model_id = params["model_id"]&.first
 
     if model_id.blank?
