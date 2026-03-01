@@ -25,7 +25,9 @@ import {ValidationErrors} from "./validation-errors.js"
 
 const shared = {}
 
+/** ApiMakerCommandsPool. */
 export default class ApiMakerCommandsPool {
+  /** addCommand. */
   static addCommand(data, args = {}) {
     let pool
 
@@ -47,16 +49,19 @@ export default class ApiMakerCommandsPool {
     return promiseResult
   }
 
+  /** current. */
   static current() {
     if (!shared.currentApiMakerCommandsPool) shared.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
 
     return shared.currentApiMakerCommandsPool
   }
 
+  /** flush. */
   static flush() {
     ApiMakerCommandsPool.current().flush()
   }
 
+  /** Constructor. */
   constructor() {
     this.flushCount = 0
 
@@ -72,6 +77,7 @@ export default class ApiMakerCommandsPool {
     this.globalRequestData = {}
   }
 
+  /** addCommand. */
   addCommand(data) {
     const stack = Error().stack
 
@@ -142,6 +148,7 @@ export default class ApiMakerCommandsPool {
     throw new Error("Couldnt successfully execute request")
   }
 
+  /** flush. */
   flush = async () => {
     if (this.commandsCount() == 0) {
       return
@@ -234,6 +241,7 @@ export default class ApiMakerCommandsPool {
     commandData.reject(error)
   }
 
+  /** isActive. */
   isActive() {
     if (this.commandsCount() > 0) {
       return true

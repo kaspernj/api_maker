@@ -3,6 +3,7 @@ import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
 
 /** Controller for drag-sort row state and events. */
 export default class DraggableSortController {
+  /** Constructor. */
   constructor({data, events, keyExtractor}) {
     this.data = data
     this.currentOrder = [...data]
@@ -27,11 +28,19 @@ export default class DraggableSortController {
     }
   }
 
+  /** getEvents. */
   getEvents = () => this.events
+
+  /** getItemDataForItem. */
   getItemDataForItem = (item) => this.getItemDataForIndex(this.data.indexOf(item))
+
+  /** getItemDataForKey. */
   getItemDataForKey = (key) => this.itemData.find((itemDataI) => digg(itemDataI, "key") == key)
+
+  /** getItemDataForIndex. */
   getItemDataForIndex = (index) => digg(this, "itemData", index)
 
+  /** onDragStart. */
   onDragStart = ({item, itemIndex}) => {
     if (item) {
       this.draggedItem = item
@@ -42,6 +51,7 @@ export default class DraggableSortController {
     }
   }
 
+  /** onDragEnd. */
   onDragEnd = () => {
     const itemData = this.draggedItemData
     const fromIndex = itemData.index
@@ -67,6 +77,7 @@ export default class DraggableSortController {
     this.events.emit("onDragEnd", callbackArgs)
   }
 
+  /** onItemLayout. */
   onItemLayout = ({events, index, item, layout}) => {
     if (!(index in this.itemData)) throw new Error(`Item not found for index ${index}`)
 
@@ -82,6 +93,7 @@ export default class DraggableSortController {
     }
   }
 
+  /** onMove. */
   onMove = ({gestate}) => {
     // Send move-event to the item being dragged so it will actually move around
     this.draggedItemData?.events?.emit("move", {gestate})
@@ -114,10 +126,12 @@ export default class DraggableSortController {
     }
   }
 
+  /** setInitialDragPosition. */
   setInitialDragPosition = (initialDragPosition) => {
     this.initialDragPosition = initialDragPosition
   }
 
+  /** updatePositionOfItems. */
   updatePositionOfItems() {
     let currentPosition = 0
 

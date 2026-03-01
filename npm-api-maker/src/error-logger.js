@@ -3,6 +3,7 @@ import {digg} from "diggerize"
 
 /** Captures window errors with source-map support. */
 export default class ErrorLogger {
+  /** Constructor. */
   constructor () {
     this.debugging = false
     this.errorOccurred = false
@@ -19,21 +20,31 @@ export default class ErrorLogger {
     })
   }
 
+  /** debug. */
   debug(...output) {
     if (this.debugging) console.error("ApiMaker ErrorLogger:", ...output)
   }
 
+  /** enable. */
   enable () {
     this.debug("Enable called")
     this.connectOnError()
     this.connectUnhandledRejection()
   }
 
+  /** getErrors. */
   getErrors = () => this.errors
+
+  /** hasErrorOccurred. */
   hasErrorOccurred = () => digg(this, "errorOccurred")
+
+  /** isLoadingSourceMaps. */
   isLoadingSourceMaps = () => digg(this, "sourceMapsLoader", "isLoadingSourceMaps")
+
+  /** isWorkingOnError. */
   isWorkingOnError = () => digg(this, "isHandlingError") || this.isLoadingSourceMaps()
 
+  /** connectOnError. */
   connectOnError() {
     window.addEventListener("error", (event) => {
       if (this.debugging) this.debug("Error:", event.message)
@@ -48,6 +59,7 @@ export default class ErrorLogger {
     })
   }
 
+  /** connectUnhandledRejection. */
   connectUnhandledRejection() {
     window.addEventListener("unhandledrejection", (event) => {
       if (this.debugging) this.debug("Unhandled rejection:", event.reason.message)
@@ -104,6 +116,7 @@ export default class ErrorLogger {
     }
   }
 
+  /** testPromiseError. */
   testPromiseError() {
     return new Promise((_resolve) => {
       throw new Error("testPromiseError")

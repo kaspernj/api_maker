@@ -11,6 +11,7 @@ const shared = {}
 
 /** Tracks session and CSRF token freshness. */
 export default class ApiMakerSessionStatusUpdater {
+  /** current. */
   static current(args) {
     if (!shared.apiMakerSessionStatusUpdater) {
       shared.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater(args)
@@ -19,6 +20,7 @@ export default class ApiMakerSessionStatusUpdater {
     return shared.apiMakerSessionStatusUpdater
   }
 
+  /** Constructor. */
   constructor(args = {}) {
     this.events = {}
     this.timeout = args.timeout || 600000
@@ -38,10 +40,12 @@ export default class ApiMakerSessionStatusUpdater {
     this.connectWakeEvent()
   }
 
+  /** connectOnlineEvent. */
   connectOnlineEvent() {
     window.addEventListener("online", this.updateSessionStatus, false)
   }
 
+  /** connectWakeEvent. */
   connectWakeEvent() {
     wakeEvent(this.updateSessionStatus)
   }
@@ -77,6 +81,7 @@ export default class ApiMakerSessionStatusUpdater {
     throw new Error("CSRF token hasn't been set")
   }
 
+  /** sessionStatus. */
   sessionStatus() {
     return new Promise((resolve) => {
       const host = config.getHost()
@@ -96,10 +101,13 @@ export default class ApiMakerSessionStatusUpdater {
     })
   }
 
+  /** onSignedOut. */
   onSignedOut(callback) {
+    // @ts-expect-error
     this.addEvent("onSignedOut", callback)
   }
 
+  /** startTimeout. */
   startTimeout() {
     logger.debug("startTimeout")
 
@@ -115,11 +123,13 @@ export default class ApiMakerSessionStatusUpdater {
     )
   }
 
+  /** stopTimeout. */
   stopTimeout() {
     if (this.updateTimeout)
       clearTimeout(this.updateTimeout)
   }
 
+  /** updateSessionStatus. */
   updateSessionStatus = async () => {
     logger.debug("updateSessionStatus")
 
@@ -130,6 +140,7 @@ export default class ApiMakerSessionStatusUpdater {
     this.updateUserSessionsFromResult(result)
   }
 
+  /** updateMetaElementsFromResult. */
   updateMetaElementsFromResult(result) {
     logger.debug("updateMetaElementsFromResult")
 
@@ -147,12 +158,14 @@ export default class ApiMakerSessionStatusUpdater {
     }
   }
 
+  /** updateUserSessionsFromResult. */
   updateUserSessionsFromResult(result) {
     for (const scopeName in result.scopes) {
       this.updateUserSessionScopeFromResult(scopeName, result.scopes[scopeName])
     }
   }
 
+  /** updateUserSessionScopeFromResult. */
   updateUserSessionScopeFromResult(scopeName, scope) {
     const deviseIsSignedInMethodName = `is${inflection.camelize(scopeName)}SignedIn`
 

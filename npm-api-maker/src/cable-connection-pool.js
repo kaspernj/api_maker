@@ -12,12 +12,14 @@ export default class ApiMakerCableConnectionPool {
   upcomingSubscriptionData = {}
   upcomingSubscriptions = {}
 
+  /** current. */
   static current () {
     if (!shared.apiMakerCableConnectionPool) shared.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
 
     return shared.apiMakerCableConnectionPool
   }
 
+  /** connectEventToExistingSubscription. */
   connectEventToExistingSubscription ({path, subscription, value}) {
     for (const cableSubscriptionPool of this.cableSubscriptionPools) {
       if (cableSubscriptionPool.isConnected()) {
@@ -45,6 +47,7 @@ export default class ApiMakerCableConnectionPool {
     return false
   }
 
+  /** connectModelEvent. */
   connectModelEvent ({callback, path, value}) {
     const subscription = new CableSubscription()
 
@@ -101,16 +104,26 @@ export default class ApiMakerCableConnectionPool {
     return subscription
   }
 
+  /** connectCreated. */
   connectCreated = (modelName, callback) => this.connectModelEvent({callback, value: true, path: [modelName, "creates"]})
+
+  /** connectEvent. */
   connectEvent = (modelName, modelId, eventName, callback) => this.connectModelEvent({ // eslint-disable-line max-params
     callback,
     value: modelId,
     path: [modelName, "events", eventName]
   })
+
+  /** connectDestroyed. */
   connectDestroyed = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "destroys"]})
+
+  /** connectModelClassEvent. */
   connectModelClassEvent = (modelName, eventName, callback) => this.connectModelEvent({callback, value: eventName, path: [modelName, "model_class_events"]})
+
+  /** connectUpdate. */
   connectUpdate = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})
 
+  /** connectUpcoming. */
   connectUpcoming = () => {
     const subscriptionData = this.upcomingSubscriptionData
     const subscriptions = this.upcomingSubscriptions

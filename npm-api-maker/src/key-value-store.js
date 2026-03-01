@@ -55,6 +55,7 @@ export default class KeyValueStore {
     return KeyValueStore.set(paramName, qParams)
   }
 
+  /** Constructor. */
   constructor () {
     // @ts-expect-error
     this.database = new Dexie("KeyValueStoreDatabase") // eslint-disable-line no-undef

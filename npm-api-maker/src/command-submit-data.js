@@ -1,5 +1,6 @@
 import objectToFormData from "object-to-formdata"
 
+/** ApiMakerCommandSubmitData. */
 export default class ApiMakerCommandSubmitData {
   /**
    * @param {object} data
@@ -18,6 +19,7 @@ export default class ApiMakerCommandSubmitData {
   /** @returns {Record<string, object>} */
   getJsonData = () => this.jsonData
 
+  /** getRawData. */
   getRawData () {
     if (!this.rawData) {
       this.rawData = this.traverseObject(this.data, "raw")
@@ -26,6 +28,7 @@ export default class ApiMakerCommandSubmitData {
     return this.rawData
   }
 
+  /** getFormData. */
   getFormData () {
     const objectForFormData = this.getRawData() || {}
 

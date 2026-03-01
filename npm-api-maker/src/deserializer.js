@@ -6,18 +6,19 @@ import Money from "js-money"
 
 /** Deserializes API Maker encoded payloads. */
 export default class ApiMakerDeserializer {
+  /** parse. */
   static parse(object) {
     if (Array.isArray(object)) {
       return object.map((value) => ApiMakerDeserializer.parse(value))
     } else if (object && typeof object == "object") {
       if (object.api_maker_type == "date") {
-        const date = new Date(digg(object, "value"))
+        const date = /** @type {Date & {apiMakerType?: string}} */ (new Date(digg(object, "value"))) // eslint-disable-line no-extra-parens
 
         date.apiMakerType = "date"
 
         return date
       } else if (object.api_maker_type == "time") {
-        const date = new Date(digg(object, "value"))
+        const date = /** @type {Date & {apiMakerType?: string}} */ (new Date(digg(object, "value"))) // eslint-disable-line no-extra-parens
 
         date.apiMakerType = "time"
 

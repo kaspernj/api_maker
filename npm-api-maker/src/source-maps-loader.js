@@ -4,7 +4,9 @@ import {SourceMapConsumer} from "source-map"
 import uniqunize from "uniqunize"
 
 // Sometimes this needs to be called and sometimes not
+// @ts-expect-error
 if (SourceMapConsumer.initialize) {
+  // @ts-expect-error
   SourceMapConsumer.initialize({
     "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.4/lib/mappings.wasm"
   })
@@ -14,16 +16,19 @@ const logger = new Logger({name: "ApiMaker / SourceMapsLoader"})
 
 /** Loads and resolves source maps for stack traces. */
 export default class SourceMapsLoader {
+  /** Constructor. */
   constructor() {
     this.isLoadingSourceMaps = false
     this.sourceMaps = []
     this.srcLoaded = {}
   }
 
+  /** loadSourceMapsForScriptTags. */
   loadSourceMapsForScriptTags(callback) {
     this.loadSourceMapsForScriptTagsCallback = callback
   }
 
+  /** sourceMapForSource. */
   sourceMapForSource(callback) {
     this.sourceMapForSourceCallback = callback
   }
@@ -52,6 +57,7 @@ export default class SourceMapsLoader {
     }
   }
 
+  /** getSources. */
   getSources(error) {
     let sources = this.getSourcesFromScripts()
 
@@ -60,6 +66,7 @@ export default class SourceMapsLoader {
     return uniqunize(sources, (source) => source.originalUrl)
   }
 
+  /** getSourcesFromError. */
   getSourcesFromError(error) {
     const stack = stackTraceParser.parse(error.stack)
     const sources = []
@@ -83,11 +90,12 @@ export default class SourceMapsLoader {
     return sources
   }
 
+  /** getSourcesFromScripts. */
   getSourcesFromScripts() {
     const scripts = document.querySelectorAll("script")
     const sources = []
 
-    for (const script of scripts) {
+    for (const script of Array.from(scripts)) {
       const sourceMapUrl = this.getMapURL({script, src: script.src})
 
       if (sourceMapUrl) {
@@ -99,7 +107,9 @@ export default class SourceMapsLoader {
     return sources
   }
 
-  getMapURL({script, src}) {
+  /** getMapURL. */
+  getMapURL(args = {}) {
+    const {script, src} = /** @type {any} */ (args) // eslint-disable-line no-extra-parens
     const url = this.loadUrl(src)
     const originalUrl = `${url.origin}${url.pathname}`
 
@@ -112,6 +122,7 @@ export default class SourceMapsLoader {
     }
   }
 
+  /** includeMapURL. */
   includeMapURL = (src) => src.includes("/packs/")
 
   async loadSourceMapForSource({originalUrl, sourceMapUrl}) {
@@ -127,6 +138,7 @@ export default class SourceMapsLoader {
       return
     }
 
+    // @ts-expect-error
     const consumer = await new SourceMapConsumer(xhr.responseText)
 
     if (consumer) {
@@ -134,6 +146,7 @@ export default class SourceMapsLoader {
     }
   }
 
+  /** loadUrl. */
   loadUrl(url) {
     const parser = document.createElement("a")
 
@@ -142,6 +155,7 @@ export default class SourceMapsLoader {
     return parser
   }
 
+  /** loadXhr. */
   loadXhr(xhr, url) {
     return new Promise((resolve, reject) => {
       xhr.onload = () => {
@@ -155,11 +169,13 @@ export default class SourceMapsLoader {
     })
   }
 
+  /** parseStackTrace. */
   parseStackTrace(stackTrace) {
     return this.getStackTraceData(stackTrace)
       .map((traceData) => `at ${traceData.methodName} (${traceData.fileString})`)
   }
 
+  /** getStackTraceData. */
   getStackTraceData(stackTrace) {
     const stack = stackTraceParser.parse(stackTrace)
     const newSourceMap = []

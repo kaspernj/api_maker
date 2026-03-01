@@ -45,6 +45,7 @@ const objectToUnderscore = (object) => {
   return newObject
 }
 
+/** BaseModel. */
 export default class BaseModel {
   static apiMakerType = "BaseModel"
 

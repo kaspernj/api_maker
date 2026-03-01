@@ -25,12 +25,14 @@ export default class ApiMakerCanCan {
   abilitiesByName = new Map()
   debugTokens = new Set()
 
+  /** current. */
   static current () {
     if (!shared.currentApiMakerCanCan) shared.currentApiMakerCanCan = new ApiMakerCanCan()
 
     return shared.currentApiMakerCanCan
   }
 
+  /** can. */
   can (ability, subject, options = {}) {
     const foundAbility = this.findAbility(ability, subject)
 
@@ -55,6 +57,7 @@ export default class ApiMakerCanCan {
     }
   }
 
+  /** recordMissingAbility. */
   recordMissingAbility (ability, subject) {
     let missingAbilitySet = this.missingAbilities.get(subject)
 
@@ -69,12 +72,14 @@ export default class ApiMakerCanCan {
     this.queueMissingAbilitiesLoad()
   }
 
+  /** queueMissingAbilitiesLoad. */
   queueMissingAbilitiesLoad () {
     if (this.missingAbilitiesTimeout) return
 
     this.missingAbilitiesTimeout = setTimeout(this.loadMissingAbilities, 0)
   }
 
+  /** loadMissingAbilities. */
   loadMissingAbilities = () => {
     const missingAbilities = this.missingAbilities
 
@@ -92,6 +97,7 @@ export default class ApiMakerCanCan {
     }
   }
 
+  /** findAbility. */
   findAbility (ability, subject) {
     const abilityKey = this.abilityKey(ability, subject)
     if (!abilityKey) return undefined
@@ -99,18 +105,22 @@ export default class ApiMakerCanCan {
     return this.abilitiesByName.get(abilityKey)
   }
 
+  /** isAbilityLoaded. */
   isAbilityLoaded (ability, subject) {
     return this.findAbility(ability, subject) !== undefined
   }
 
+  /** isReloading. */
   isReloading () {
     return this.loadingCount > 0 || this.resettingGeneration !== null
   }
 
+  /** getCacheKey. */
   getCacheKey () {
     return this.cacheKey
   }
 
+  /** setDebug. */
   setDebug (token, enabled) {
     if (!token) return
 
@@ -121,10 +131,12 @@ export default class ApiMakerCanCan {
     }
   }
 
+  /** isDebugging. */
   isDebugging () {
     return this.debugTokens.size > 0
   }
 
+  /** debugLog. */
   debugLog (message) {
     if (this.isDebugging()) {
       console.log(message)
@@ -174,6 +186,7 @@ export default class ApiMakerCanCan {
     }
   }
 
+  /** loadAbility. */
   loadAbility (ability, subject) {
     return new Promise((resolve) => {
       const normalizedAbility = inflection.underscore(ability)
@@ -198,6 +211,7 @@ export default class ApiMakerCanCan {
     })
   }
 
+  /** queueAbilitiesRequest. */
   queueAbilitiesRequest () {
     if (this.queueAbilitiesRequestTimeout) return
 
@@ -246,6 +260,7 @@ export default class ApiMakerCanCan {
     ].join("; ")
     this.debugLog(reloadSummary)
 
+    /** promise. */
     const promise = (async () => {
       await this.resetAbilities()
       await this.loadAbilities(abilities)
@@ -261,6 +276,7 @@ export default class ApiMakerCanCan {
     }
   }
 
+  /** sendAbilitiesRequest. */
   sendAbilitiesRequest = async () => {
     this.queueAbilitiesRequestTimeout = null
     const generation = this.abilitiesGeneration
@@ -338,6 +354,7 @@ export default class ApiMakerCanCan {
     }
   }
 
+  /** indexAbilitiesByName. */
   indexAbilitiesByName (abilities) {
     for (const abilityData of abilities) {
       if (abilityData && typeof abilityData == "object") {
@@ -350,6 +367,7 @@ export default class ApiMakerCanCan {
     }
   }
 
+  /** abilityKey. */
   abilityKey (ability, subject) {
     if (!ability) return null
 
@@ -359,6 +377,7 @@ export default class ApiMakerCanCan {
     return `${inflection.underscore(ability)}:${subjectName}`
   }
 
+  /** subjectName. */
   subjectName(subject) {
     if (!subject) return null
 
@@ -381,6 +400,7 @@ export default class ApiMakerCanCan {
     return null
   }
 
+  /** reportUnhandledAsyncError. */
   reportUnhandledAsyncError (error) {
     if (!error) return
 

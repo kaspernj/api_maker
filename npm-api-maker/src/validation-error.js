@@ -5,6 +5,7 @@ import BaseError from "./base-error.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 
+/** ValidationError. */
 export default class ValidationError extends BaseError {
   static apiMakerType = "ValidationError"
   apiMakerType = "ValidationError"
