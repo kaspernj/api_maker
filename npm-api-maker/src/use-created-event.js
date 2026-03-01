@@ -1,10 +1,80 @@
-/* eslint-disable sort-imports */
-import debounceFunction from "debounce"
-import ModelEvents from "./model-events.js"
+import {ShapeHook, useShapeHook} from "set-state-compare"
+import {useEffect} from "react"
+import ModelEvents from "./model-events.js" // eslint-disable-line sort-imports
 import PropTypes from "prop-types"
+import debounceFunction from "debounce"
 import propTypesExact from "prop-types-exact"
-import {useCallback, useLayoutEffect} from "react"
-import useShape from "set-state-compare/build/use-shape.js"
+
+/** Hook state container for created-event subscriptions. */
+class UseCreatedEventShapeHook extends ShapeHook {
+  static defaultProps = {
+    active: true,
+    debounce: 0,
+    onConnected: undefined
+  }
+
+  static propTypes = propTypesExact({
+    active: PropTypes.bool.isRequired,
+    debounce: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number
+    ]),
+    modelClass: PropTypes.func.isRequired,
+    onConnected: PropTypes.func,
+    onCreated: PropTypes.func.isRequired
+  })
+
+  /** @returns {Function} */
+  debouncedOnCreated() {
+    return this.cache(
+      "debouncedOnCreated",
+      () => {
+        if (typeof this.p.debounce == "number") {
+          return debounceFunction(this.p.onCreated, this.p.debounce)
+        }
+
+        return debounceFunction(this.p.onCreated)
+      },
+      [this.p.debounce, this.p.onCreated]
+    )
+  }
+
+  /** @param {any[]} callbackArgs */
+  onCreatedCallback(...callbackArgs) {
+    if (!this.p.active) {
+      return
+    }
+
+    if (this.p.debounce) {
+      this.debouncedOnCreated()(...callbackArgs)
+    } else {
+      this.p.onCreated(...callbackArgs)
+    }
+  }
+
+  /** @returns {void} */
+  setup() {
+    useEffect(() => {
+      const modelClassConnection = ModelEvents.connectModelClass(
+        this.p.modelClass,
+        "creates",
+        (...callbackArgs) => this.onCreatedCallback(...callbackArgs)
+      )
+
+      if (this.p.onConnected) {
+        modelClassConnection.events.addListener("connected", this.p.onConnected)
+      }
+
+      return () => {
+        if (this.p.onConnected) {
+          modelClassConnection.events.removeListener("connected", this.p.onConnected)
+        }
+
+        modelClassConnection.unsubscribe()
+      }
+    }, [])
+  }
+}
 
 /**
  * @param {Function} modelClass
@@ -15,52 +85,18 @@ import useShape from "set-state-compare/build/use-shape.js"
  * @param {Function} [args.onConnected]
  * @returns {void}
  */
-// eslint-disable-next-line max-len
-const ApiMakerUseCreatedEvent = (modelClass, onCreated, args = {active: true, debounce: 0, onConnected: undefined}) => { // eslint-disable-line react/function-component-definition
-  const {active = true, debounce} = args
-  const s = useShape({active, debounce, modelClass, onCreated})
+const ApiMakerUseCreatedEvent = (
+  modelClass,
+  onCreated,
+  args = {active: true, debounce: 0, onConnected: undefined}
+) => {
+  const {active = true, debounce = 0, onConnected, ...restProps} = args
 
-  const eventDebounce = useCallback(() => {
-    if (!s.meta.debounceInstance) {
-      if (typeof s.props.debounce == "number") {
-        s.meta.debounceInstance = debounceFunction(s.p.onCreated, s.p.debounce)
-      } else {
-        s.meta.debounceInstance = debounceFunction(s.p.onCreated)
-      }
-    }
+  if (Object.keys(restProps).length > 0) {
+    throw new Error(`Unknown props given to ApiMakerUseCreatedEvent: ${Object.keys(restProps).join(", ")}`)
+  }
 
-    return s.meta.debounceInstance
-  }, [])
-
-  const onCreatedCallback = useCallback((...args) => {
-    if (!s.p.active) {
-      return
-    }
-
-    if (s.p.debounce) {
-      eventDebounce()(...args)
-    } else {
-      s.p.onCreated(...args)
-    }
-  }, [])
-
-  useLayoutEffect(() => {
-    const connectCreated = ModelEvents.connectCreated(s.p.modelClass, (...args) => onCreatedCallback(...args))
-
-    return () => {
-      connectCreated.unsubscribe()
-    }
-  }, [])
+  useShapeHook(UseCreatedEventShapeHook, {active, debounce, modelClass, onConnected, onCreated})
 }
-
-ApiMakerUseCreatedEvent.propTypes = propTypesExact({
-  active: PropTypes.bool.isRequired,
-  debounce: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.number
-  ]),
-  modelClass: PropTypes.func.isRequired,
-  onCreated: PropTypes.func.isRequired
-})
 
 export default ApiMakerUseCreatedEvent
