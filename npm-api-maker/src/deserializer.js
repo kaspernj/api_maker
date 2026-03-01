@@ -4,6 +4,7 @@ import modelClassRequire from "./model-class-require.js"
 import ModelsResponseReader from "./models-response-reader.js" // eslint-disable-line sort-imports
 import Money from "js-money"
 
+/** Deserializes API Maker encoded payloads. */
 export default class ApiMakerDeserializer {
   static parse(object) {
     if (Array.isArray(object)) {

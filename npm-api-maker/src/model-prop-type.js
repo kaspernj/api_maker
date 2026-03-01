@@ -2,6 +2,7 @@
 import * as inflection from "inflection"
 import {digg} from "diggerize"
 
+/** PropType helpers for API Maker models. */
 export default class ApiMakerModelPropType {
   static ofModel (modelClass) {
     const modelPropTypeInstance = new ApiMakerModelPropType()

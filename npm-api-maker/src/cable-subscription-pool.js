@@ -7,6 +7,7 @@ import Logger from "./logger.js" // eslint-disable-line sort-imports
 
 const logger = new Logger({name: "ApiMaker / CableSubscriptionPool"})
 
+/** Subscription pool for sharing channel subscriptions. */
 export default class ApiMakerCableSubscriptionPool {
   constructor () {
     this.activeSubscriptions = 0

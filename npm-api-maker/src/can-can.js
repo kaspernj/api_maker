@@ -7,6 +7,7 @@ import Services from "./services.js"
 
 const shared = {}
 
+/** Ability helper and query mapper. */
 export default class ApiMakerCanCan {
   abilities = []
   abilitiesToLoad = []

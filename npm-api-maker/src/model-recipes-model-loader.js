@@ -3,6 +3,7 @@ import {digg, digs} from "diggerize"
 import BaseModel from "./base-model.js"
 import Collection from "./collection.js"
 
+/** Builds runtime model classes from recipe definitions. */
 export default class ApiMakerModelRecipesModelLoader {
   constructor ({modelRecipe, modelRecipesLoader}) {
     if (!modelRecipe) throw new Error("No 'modelRecipe' was given")

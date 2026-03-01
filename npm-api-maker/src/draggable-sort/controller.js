@@ -1,6 +1,7 @@
 import {digg} from "diggerize"
 import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
 
+/** Controller for drag-sort row state and events. */
 export default class DraggableSortController {
   constructor({data, events, keyExtractor}) {
     this.data = data

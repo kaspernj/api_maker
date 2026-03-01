@@ -1,5 +1,6 @@
 import SparkMD5 from "spark-md5"
 
+/** Generates local/full cache keys for models. */
 export default class CacheKeyGenerator {
   constructor(model) {
     this.model = model

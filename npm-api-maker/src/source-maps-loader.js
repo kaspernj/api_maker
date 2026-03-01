@@ -12,6 +12,7 @@ if (SourceMapConsumer.initialize) {
 
 const logger = new Logger({name: "ApiMaker / SourceMapsLoader"})
 
+/** Loads and resolves source maps for stack traces. */
 export default class SourceMapsLoader {
   constructor() {
     this.isLoadingSourceMaps = false

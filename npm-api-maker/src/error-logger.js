@@ -1,6 +1,7 @@
 import SourceMapsLoader from "./source-maps-loader.js"
 import {digg} from "diggerize"
 
+/** Captures window errors with source-map support. */
 export default class ErrorLogger {
   constructor () {
     this.debugging = false

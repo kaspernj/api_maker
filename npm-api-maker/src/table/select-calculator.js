@@ -3,6 +3,7 @@ import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import modelClassRequire from "../model-class-require.js"
 
+/** Computes table select payloads for queries. */
 class SelectCalculator {
   constructor({table}) {
     this.table = table

@@ -5,6 +5,7 @@ import RunLast from "./run-last.js"
 
 const shared = {}
 
+/** ActionCable connection pool keyed by stream identifiers. */
 export default class ApiMakerCableConnectionPool {
   cableSubscriptionPools = []
   connections = {}

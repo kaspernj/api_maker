@@ -9,6 +9,7 @@ const shared = {}
 
 // logger.setDebug(true)
 
+/** Tracks session and CSRF token freshness. */
 export default class ApiMakerSessionStatusUpdater {
   static current(args) {
     if (!shared.apiMakerSessionStatusUpdater) {

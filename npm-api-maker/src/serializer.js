@@ -1,5 +1,6 @@
 import {digg} from "diggerize"
 
+/** Serializes API Maker payloads and model references. */
 export default class Serializer {
   static serialize (arg) {
     const serialize = new Serializer(arg)

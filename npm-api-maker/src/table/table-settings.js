@@ -14,6 +14,7 @@ const logger = new Logger({name: "ApiMaker / TableSettings"})
 // Have a lock for each unique table identifier
 const tableSettingsLocks = {}
 
+/** Persistent table settings manager. */
 export default class ApiMakerTableSettings {
   constructor({table}) {
     this.table = table

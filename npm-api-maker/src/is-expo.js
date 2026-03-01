@@ -16,4 +16,5 @@ try {
   // Do nothing - failed to require expo-constants
 }
 
+/** True when running in an Expo execution environment. */
 export default isExpo
