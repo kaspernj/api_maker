@@ -61,41 +61,6 @@ class UseDestroyedEventShapeHook extends ShapeHook {
     onDestroyed: PropTypes.func.isRequired
   })
 
-  /** @returns {Record<string, import("./cable-subscription.js").default>} */
-  currentConnections() {
-    this.currentConnectionsValue ||= {}
-
-    return this.currentConnectionsValue
-  }
-
-  /** @returns {Function} */
-  debouncedOnDestroyed() {
-    return this.cache(
-      "debouncedOnDestroyed",
-      () => {
-        if (typeof this.p.debounce == "number") {
-          return debounceFunction(this.p.onDestroyed, this.p.debounce)
-        }
-
-        return debounceFunction(this.p.onDestroyed)
-      },
-      [this.p.debounce, this.p.onDestroyed]
-    )
-  }
-
-  /** @param {any[]} callbackArgs */
-  onDestroyedCallback(...callbackArgs) {
-    if (!this.p.active) {
-      return
-    }
-
-    if (this.p.debounce) {
-      this.debouncedOnDestroyed()(...callbackArgs)
-    } else {
-      this.p.onDestroyed(...callbackArgs)
-    }
-  }
-
   /** @returns {void} */
   setup() {
     useLayoutEffect(() => {
@@ -141,6 +106,41 @@ class UseDestroyedEventShapeHook extends ShapeHook {
 
       this.currentConnectionsValue = {}
     }, [])
+  }
+
+  /** @returns {Record<string, import("./cable-subscription.js").default>} */
+  currentConnections() {
+    this.currentConnectionsValue ||= {}
+
+    return this.currentConnectionsValue
+  }
+
+  /** @returns {Function} */
+  debouncedOnDestroyed() {
+    return this.cache(
+      "debouncedOnDestroyed",
+      () => {
+        if (typeof this.p.debounce == "number") {
+          return debounceFunction(this.p.onDestroyed, this.p.debounce)
+        }
+
+        return debounceFunction(this.p.onDestroyed)
+      },
+      [this.p.debounce, this.p.onDestroyed]
+    )
+  }
+
+  /** @param {any[]} callbackArgs */
+  onDestroyedCallback(...callbackArgs) {
+    if (!this.p.active) {
+      return
+    }
+
+    if (this.p.debounce) {
+      this.debouncedOnDestroyed()(...callbackArgs)
+    } else {
+      this.p.onDestroyed(...callbackArgs)
+    }
   }
 }
 
