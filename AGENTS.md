@@ -22,6 +22,7 @@ Notes:
 - Do not “fix” flaky specs by only increasing waits/timeouts. First determine whether behavior regressed (for example, element never rendered) and collect/inspect CI artifacts before adjusting timing.
 - Avoid unnecessary defensive conditions for guaranteed contracts. Prefer failing fast over silently accepting impossible states.
 - In JavaScript class method definitions, use `methodName(args)` (no space before parentheses).
+- Keep single-tag JSDoc blocks on one line (for example `/** @returns {boolean} */`).
 - Keep component props ordered alphabetically.
 - To typecheck a single file, run `npm run typecheck:file --file=src/path/to/file.js` from `npm-api-maker/` (you can also pass `npm-api-maker/src/...` or set `FILE=src/path/to/file.js`).
 - Do not "fix" render/update bugs by replacing `useMemo()` with `useEffect()` as a blanket change; preserve hook semantics and debug the underlying state flow first.

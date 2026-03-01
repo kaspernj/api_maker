@@ -1,5 +1,10 @@
 import {digg} from "diggerize"
 
+/**
+ * @param {string} expectedClassName
+ * @param {{required?: boolean}} [args]
+ * @returns {(props: Record<string, any>, propName: string, componentName: string) => Error | undefined}
+ */
 const propTypesValidator = (expectedClassName, args = {}) => (props, propName, componentName) => {
   const prop = digg(props, propName)
 
@@ -18,8 +23,12 @@ const propTypesValidator = (expectedClassName, args = {}) => (props, propName, c
   }
 }
 
+/**
+ * @param {string} expectedClassName
+ * @returns {any}
+ */
 const instanceOfClassName = (expectedClassName) => {
-  const validator = propTypesValidator(expectedClassName)
+  const validator = /** @type {any} */ (propTypesValidator(expectedClassName)) // eslint-disable-line no-extra-parens
 
   validator.isRequired = propTypesValidator(expectedClassName, {required: true})
 

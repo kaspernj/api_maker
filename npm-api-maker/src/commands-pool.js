@@ -21,9 +21,7 @@ import {ValidationErrors} from "./validation-errors.js"
  * @property {string} stack
  */
 
-/**
- * @typedef {{[key: string]: {[key: string]: {[key: string]: {[key: number]: {args: object, primary_key: number | string, id: number}}}}}} PoolDataType
- */
+/** @typedef {{[key: string]: {[key: string]: {[key: string]: {[key: number]: {args: object, primary_key: number | string, id: number}}}}}} PoolDataType */
 
 const shared = {}
 

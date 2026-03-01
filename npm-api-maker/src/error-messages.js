@@ -2,9 +2,7 @@
 
 import {digg} from "diggerize"
 
-/**
- * @typedef {Array<string | {message: string}>} ErrorMessagesArgsType
- */
+/** @typedef {Array<string | {message: string}>} ErrorMessagesArgsType */
 
 /**
  * @param {object} args

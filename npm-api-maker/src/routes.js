@@ -1,7 +1,9 @@
 import * as inflection from "inflection"
 import {digg} from "diggerize"
 
+/** Dynamic wrapper around generated JS routes. */
 export default class ApiMakerRoutes {
+  /** @param {{jsRoutes: Record<string, (...args: any[]) => string>, locale?: string, routeDefinitions: {routes: Array<Record<string, any>>}}} args */
   constructor ({jsRoutes, locale, routeDefinitions}) {
     if (!jsRoutes) throw new Error("'jsRoutes' wasn't given")
 
@@ -30,6 +32,7 @@ export default class ApiMakerRoutes {
         let routeNamePathToUse
 
         if (locale) {
+          // @ts-expect-error
           routeNamePathToUse = inflection.camelize(`${digg(routeDefinition, "name")}_${I18n.locale}_path`, true) // eslint-disable-line no-undef
         } else {
           routeNamePathToUse = routeNamePath
@@ -46,6 +49,7 @@ export default class ApiMakerRoutes {
         let routeNameUrlToUse
 
         if (locale) {
+          // @ts-expect-error
           routeNameUrlToUse = inflection.camelize(`${digg(routeDefinition, "name")}_${I18n.locale}_url`, true) // eslint-disable-line no-undef
         } else {
           routeNameUrlToUse = routeNameUrl

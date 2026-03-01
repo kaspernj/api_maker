@@ -2,9 +2,7 @@
 import {camelize} from "inflection"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
-/**
- * @returns {object}
- */
+/** @returns {object} */
 function calculateQParams(defaultParams, queryParams, searchKey) {
   if (searchKey in queryParams) {
     return JSON.parse(queryParams[searchKey])

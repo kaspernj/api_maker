@@ -2,9 +2,7 @@ import * as inflection from "inflection"
 import modelClassRequire from "./model-class-require.js"
 
 export default class ApiMakerPreloaded {
-  /**
-   * @param {Record<string, Record<string, Record<string, Record<string, any>>>>} response
-   */
+  /** @param {Record<string, Record<string, Record<string, Record<string, any>>>>} response */
   constructor (response) {
     this.response = response
     this.loadPreloadedModels()
