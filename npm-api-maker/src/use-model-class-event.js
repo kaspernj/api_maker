@@ -56,11 +56,10 @@ class UseModelClassEventShapeHook extends ShapeHook {
   /** @returns {void} */
   setup() {
     useEffect(() => {
-      const modelClassConnection = ModelEvents.connectModelClass(
-        this.p.modelClass,
-        this.p.event,
-        (...callbackArgs) => this.onModelClassEventCallback(...callbackArgs)
-      )
+      const callback = (...callbackArgs) => this.onModelClassEventCallback(...callbackArgs)
+      const modelClassConnection = this.p.event == "creates"
+        ? ModelEvents.connectCreated(this.p.modelClass, callback)
+        : ModelEvents.connectModelClass(this.p.modelClass, this.p.event, callback)
 
       if (this.p.onConnected) {
         modelClassConnection.events.addListener("connected", this.p.onConnected)
