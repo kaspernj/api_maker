@@ -24,3 +24,4 @@ Notes:
 - In JavaScript class method definitions, use `methodName(args)` (no space before parentheses).
 - Keep component props ordered alphabetically.
 - To typecheck a single file, run `npm run typecheck:file --file=src/path/to/file.js` from `npm-api-maker/` (you can also pass `npm-api-maker/src/...` or set `FILE=src/path/to/file.js`).
+- Do not "fix" render/update bugs by replacing `useMemo()` with `useEffect()` as a blanket change; preserve hook semantics and debug the underlying state flow first.
