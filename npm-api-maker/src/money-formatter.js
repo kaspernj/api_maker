@@ -3,15 +3,30 @@ import Money from "js-money"
 import formatNumber from "format-number"
 import replaceall from "replaceall"
 
+/** Money formatter and converter utilities. */
 export default class MoneyFormatter {
+  /**
+   * @param {Money | {amount?: number | string, fractional?: number | string, currency: any}} money
+   * @param {{decimals?: number | null, excludeCurrency?: boolean}} [args]
+   * @returns {MoneyFormatter}
+   */
   static fromMoney (money, args = {}) {
     return new MoneyFormatter(money, args)
   }
 
+  /**
+   * @param {Money | {amount?: number | string, fractional?: number | string, currency: any}} money
+   * @param {{decimals?: number | null, excludeCurrency?: boolean}} [args]
+   * @returns {string}
+   */
   static format (money, args = {}) {
     return MoneyFormatter.fromMoney(money, args).toString()
   }
 
+  /**
+   * @param {string} moneyString
+   * @returns {number}
+   */
   static stringToFloat (moneyString) {
     let unformatted = replaceall(I18nOnSteroids.getCurrent().t("number.currency.format.delimiter"), "", moneyString)
 
@@ -21,6 +36,10 @@ export default class MoneyFormatter {
     return float
   }
 
+  /**
+   * @param {Money | {amount?: number | string, fractional?: number | string, currency: any}} money
+   * @returns {number}
+   */
   static amountFromMoney (money) {
     if ("amount" in money) {
       return parseFloat(money.amount)
@@ -31,6 +50,10 @@ export default class MoneyFormatter {
     throw new Error(`Couldn't figure out amount from: ${JSON.stringify(money, null, 2)}`)
   }
 
+  /**
+   * @param {Money | {currency: any}} money
+   * @returns {any}
+   */
   static currencyFromMoney (money) {
     let currencyString
 
@@ -55,6 +78,10 @@ export default class MoneyFormatter {
     return moneyCurrency
   }
 
+  /**
+   * @param {any} value
+   * @returns {boolean}
+   */
   static isMoney(value) {
     if (value instanceof Money) return true
 
@@ -64,6 +91,10 @@ export default class MoneyFormatter {
     return false
   }
 
+  /**
+   * @param {Money | {amount?: number | string, fractional?: number | string, currency: any}} money
+   * @param {{decimals?: number | null, excludeCurrency?: boolean}} [args]
+   */
   constructor (money, args = {}) {
     this.args = args
     this.money = money
@@ -71,6 +102,7 @@ export default class MoneyFormatter {
     this.currency = MoneyFormatter.currencyFromMoney(money)
   }
 
+  /** @returns {string} */
   toString () {
     const amount = (this.amount / 100).toFixed(this.decimalDigits())
     const formatOptions = {
@@ -79,9 +111,11 @@ export default class MoneyFormatter {
       integerSeparator: I18nOnSteroids.getCurrent().t("number.currency.format.delimiter")
     }
 
+    // @ts-expect-error
     return formatNumber(formatOptions)(amount)
   }
 
+  /** @returns {number} */
   decimalDigits () {
     if (this.args.decimals !== null) {
       return this.args.decimals
@@ -90,6 +124,7 @@ export default class MoneyFormatter {
     return this.currency.decimal_digits
   }
 
+  /** @returns {string} */
   prefix () {
     if (this.args.excludeCurrency) {
       return ""

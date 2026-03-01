@@ -7,12 +7,15 @@ import Logger from "./logger.js" // eslint-disable-line sort-imports
 
 const logger = new Logger({name: "ApiMaker / CableSubscriptionPool"})
 
+/** Subscription pool for sharing channel subscriptions. */
 export default class ApiMakerCableSubscriptionPool {
+  /** Constructor. */
   constructor () {
     this.activeSubscriptions = 0
     this.connected = false
   }
 
+  /** connect. */
   connect (subscriptionData) {
     const globalData = CommandsPool.current().globalRequestData
 
@@ -33,6 +36,7 @@ export default class ApiMakerCableSubscriptionPool {
     this.connected = true
   }
 
+  /** forEachSubscription. */
   forEachSubscription (callback) {
     const modelIdModes = ["destroys", "updates"]
     const subscriptions = digg(this, "subscriptions")
@@ -76,14 +80,17 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
+  /** isConnected. */
   isConnected = () => digg(this, "connected")
 
+  /** onConnected. */
   onConnected = () => {
     this.forEachSubscription(({subscription}) => {
       subscription.events.emit("connected")
     })
   }
 
+  /** onReceived. */
   onReceived = (rawData) => {
     const data = Deserializer.parse(rawData)
     const {a: args, e: eventName, m: model, mi: modelId, mt: modelType, t: type} = data
@@ -129,10 +136,12 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
+  /** onSubscribed. */
   onSubscribed = () => {
     logger.debug("onSubscribed")
   }
 
+  /** onUnsubscribe. */
   onUnsubscribe () {
     logger.debug(() => `activeSubscriptions before unsub: ${this.activeSubscriptions}`)
     this.activeSubscriptions -= 1
@@ -145,6 +154,7 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
+  /** registerSubscriptions. */
   registerSubscriptions (subscriptions) {
     this.subscriptions = subscriptions
 
@@ -178,6 +188,7 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
+  /** connectUnsubscriptionForSubscription. */
   connectUnsubscriptionForSubscription (subscription) {
     logger.debug(() => ["Connecting to unsubscribe on subscription", {subscription}])
 
@@ -186,6 +197,7 @@ export default class ApiMakerCableSubscriptionPool {
     subscription.events.addListener("unsubscribed", () => {
       logger.debug("Call onUnsubscribe on self")
 
+      // @ts-expect-error
       this.onUnsubscribe(subscription)
     })
   }

@@ -6,7 +6,9 @@ import * as inflection from "inflection"
 import Logger from "../logger.js"
 import {ReadersWriterLock} from "epic-locks"
 import {serialize as objectToFormData} from "object-to-formdata"
+// @ts-expect-error
 import {TableSetting} from "models.js"
+// @ts-expect-error
 import {v4 as uuidv4} from "uuid"
 
 const logger = new Logger({name: "ApiMaker / TableSettings"})
@@ -14,12 +16,15 @@ const logger = new Logger({name: "ApiMaker / TableSettings"})
 // Have a lock for each unique table identifier
 const tableSettingsLocks = {}
 
+/** Persistent table settings manager. */
 export default class ApiMakerTableSettings {
+  /** Constructor. */
   constructor({table}) {
     this.table = table
     this.setTableSettingsLock()
   }
 
+  /** setTableSettingsLock. */
   setTableSettingsLock() {
     const identifier = this.identifier()
 
@@ -30,10 +35,16 @@ export default class ApiMakerTableSettings {
     this.tableSettingsLock = digg(tableSettingsLocks, identifier)
   }
 
+  /** columns. */
   columns = () => digg(this, "table", "columnsAsArray")()
+
+  /** currentUser. */
   currentUser = () => digg(this, "table", "props", "currentUser")
+
+  /** identifier. */
   identifier = () => digg(this, "table", "state", "identifier")
 
+  /** preparedColumns. */
   preparedColumns = (tableSetting) => {
     const columns = this.table.columnsAsArray()
     const ordered = this.orderedTableSettingColumns(tableSetting)
@@ -62,6 +73,7 @@ export default class ApiMakerTableSettings {
     return result
   }
 
+  /** orderedTableSettingColumns. */
   orderedTableSettingColumns = (tableSetting) => {
     return tableSetting
       .columns()
@@ -69,6 +81,7 @@ export default class ApiMakerTableSettings {
       .sort((tableSettingColumn1, tableSettingColumn2) => tableSettingColumn1.position() - tableSettingColumn2.position())
   }
 
+  /** loadExistingOrCreateTableSettings. */
   loadExistingOrCreateTableSettings = async () => {
     return await this.tableSettingsLock.write(async () => {
       let tableSetting = await this.loadTableSetting()
@@ -85,6 +98,7 @@ export default class ApiMakerTableSettings {
     })
   }
 
+  /** loadTableSetting. */
   loadTableSetting = async () => {
     if (!TableSetting) throw new Error("TableSetting model isn't globally available")
 
@@ -100,6 +114,7 @@ export default class ApiMakerTableSettings {
     return tableSetting
   }
 
+  /** currentUserIdOrFallback. */
   currentUserIdOrFallback() {
     const currentUser = this.currentUser()
 
@@ -108,6 +123,7 @@ export default class ApiMakerTableSettings {
     return this.anonymouseUserId()
   }
 
+  /** currentUserTypeOrFallback. */
   currentUserTypeOrFallback() {
     const currentUser = this.currentUser()
 
@@ -116,6 +132,7 @@ export default class ApiMakerTableSettings {
     return null
   }
 
+  /** anonymouseUserId. */
   anonymouseUserId() {
     const variableName = `ApiMakerTableAnonymousUserId-${this.identifier()}`
 
@@ -128,6 +145,7 @@ export default class ApiMakerTableSettings {
     return digg(localStorage, variableName)
   }
 
+  /** createInitialTableSetting. */
   createInitialTableSetting = async () => {
     const tableSettingData = {
       identifier: this.identifier(),
@@ -158,6 +176,7 @@ export default class ApiMakerTableSettings {
     return reloadedTableSetting
   }
 
+  /** columnSaveData. */
   columnSaveData(column, {identifier, position}) {
     return {
       attribute_name: column.attribute,
@@ -169,6 +188,7 @@ export default class ApiMakerTableSettings {
     }
   }
 
+  /** updateTableSetting. */
   updateTableSetting = async (tableSetting) => {
     const changedAttributesList = ["attributeName", "sortKey"]
     const columns = this.columns()

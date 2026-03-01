@@ -4,7 +4,9 @@ import CanCan from "./can-can.js"
 import Devise from "./devise.js"
 import useEventEmitter from "ya-use-event-emitter"
 
+/** UseCanCanClass. */
 class UseCanCanClass extends ShapeHook {
+  /** Constructor. */
   constructor(props) {
     super(props)
     this.canCan = CanCan.current()
@@ -15,6 +17,7 @@ class UseCanCanClass extends ShapeHook {
     this.dependencyKeyNextId = 1
   }
 
+  /** dependencyKeyFor. */
   dependencyKeyFor(value) {
     if (value === null) return "null"
     if (value === undefined) return "undefined"
@@ -33,12 +36,14 @@ class UseCanCanClass extends ShapeHook {
     return `${valueType}:ref:${this.dependencyKeyMap.get(value)}`
   }
 
+  /** dependencyListKey. */
   dependencyListKey(list) {
     if (!Array.isArray(list)) return this.dependencyKeyFor(list)
 
     return list.map((value) => this.dependencyKeyFor(value)).join("|")
   }
 
+  /** loadAbilities. */
   loadAbilities = async (reloadKey) => {
     const abilities = this.p.abilitiesCallback()
 
@@ -51,6 +56,7 @@ class UseCanCanClass extends ShapeHook {
     this.setState({lastUpdate: new Date()})
   }
 
+  /** onDeviseChange. */
   onDeviseChange = () => {
     this.deviseReloadKey += 1
 
@@ -61,6 +67,7 @@ class UseCanCanClass extends ShapeHook {
     this.loadAbilities(`devise:${this.deviseReloadKey}`)
   }
 
+  /** onResetAbilities. */
   onResetAbilities = () => {
     if (this.p.debug) {
       console.log("[useCanCan] onResetAbilities -> loadAbilities()")
@@ -69,6 +76,7 @@ class UseCanCanClass extends ShapeHook {
     this.loadAbilities()
   }
 
+  /** onAbilitiesLoaded. */
   onAbilitiesLoaded = () => {
     if (this.p.debug) {
       console.log("[useCanCan] onAbilitiesLoaded")
@@ -77,6 +85,7 @@ class UseCanCanClass extends ShapeHook {
     this.setState({lastUpdate: new Date()})
   }
 
+  /** setup. */
   setup() {
     this.useStates({
       lastUpdate: () => new Date()

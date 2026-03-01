@@ -50,6 +50,7 @@ const modelsByIdFromInput = (modelOrModels) => {
  * @param {Function} [props.onConnected]
  * @returns {void}
  */
+/** apiMakerUseModelEvent. */
 // eslint-disable-next-line max-params
 const apiMakerUseModelEvent = (model, event, onCallback, props) => {
   const {active = true, debounce, onConnected, ...restProps} = props || {}

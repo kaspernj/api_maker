@@ -1,20 +1,25 @@
 import {digg} from "diggerize"
 
+/** Serializes API Maker payloads and model references. */
 export default class Serializer {
+  /** serialize. */
   static serialize (arg) {
     const serialize = new Serializer(arg)
 
     return serialize.serialize()
   }
 
+  /** Constructor. */
   constructor (arg) {
     this.arg = arg
   }
 
+  /** serialize. */
   serialize () {
     return this.serializeArgument(this.arg)
   }
 
+  /** serializeArgument. */
   serializeArgument (arg) {
     if (typeof arg == "object" && arg && arg.constructor.apiMakerType == "BaseModel") {
       return {
@@ -28,7 +33,7 @@ export default class Serializer {
         name: digg(arg.modelClassData(), "name")
       }
     } else if (arg instanceof Date) {
-      let offsetNumber = parseInt(arg.getTimezoneOffset() / 60 * 100, 10)
+      let offsetNumber = parseInt(`${arg.getTimezoneOffset() / 60 * 100}`, 10)
 
       offsetNumber = -offsetNumber
 
@@ -56,10 +61,12 @@ export default class Serializer {
     }
   }
 
+  /** serializeArray. */
   serializeArray (arg) {
     return arg.map((value) => this.serializeArgument(value))
   }
 
+  /** serializeObject. */
   serializeObject (arg) {
     const newObject = {}
 

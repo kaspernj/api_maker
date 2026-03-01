@@ -3,18 +3,10 @@ import {dig, digg, digs} from "diggerize"
 import qs from "qs"
 import urlEncode from "./url-encode.js"
 
-/**
- * @typedef {{type: "pathPart", name: string} | {type: "variable", count: number}} PathPart
- */
-/**
- * @typedef {{args: Array<unknown>, localizedRoutes?: Record<string, PathPart[]>, pathParts?: PathPart[], url?: boolean}} TranslateRouteArgs
- */
-/**
- * @typedef {{host?: string, port?: number|string, protocol?: string, translatedRoute: string}} HostRouteArgs
- */
-/**
- * @typedef {{locale?: string, host?: string, port?: number|string, protocol?: string} & Record<string, unknown>} RouteOptions
- */
+/** @typedef {{type: "pathPart", name: string} | {type: "variable", count: number}} PathPart */
+/** @typedef {{args: Array<unknown>, localizedRoutes?: Record<string, PathPart[]>, pathParts?: PathPart[], url?: boolean}} TranslateRouteArgs */
+/** @typedef {{host?: string, port?: number|string, protocol?: string, translatedRoute: string}} HostRouteArgs */
+/** @typedef {{locale?: string, host?: string, port?: number|string, protocol?: string} & Record<string, unknown>} RouteOptions */
 
 /**
  * Builds paths and URLs from route definitions for native usage.

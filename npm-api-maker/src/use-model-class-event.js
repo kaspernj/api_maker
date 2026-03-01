@@ -81,11 +81,12 @@ class UseModelClassEventShapeHook extends ShapeHook {
  * @param {string} event
  * @param {Function} onCallback
  * @param {object} [args]
- * @param {boolean} [args.active]
- * @param {number} [args.debounce]
- * @param {Function} [args.onConnected]
- * @returns {void}
- */
+  * @param {boolean} [args.active]
+  * @param {number} [args.debounce]
+  * @param {Function} [args.onConnected]
+  * @returns {void}
+  */
+/** apiMakerUseModelClassEvent. */
 // eslint-disable-next-line max-params
 const apiMakerUseModelClassEvent = (modelClass, event, onCallback, args = {}) => {
   const {active = true, debounce = 0, onConnected, ...restProps} = args

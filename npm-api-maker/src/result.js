@@ -1,7 +1,9 @@
+/** ApiMakerResult. */
 export default class ApiMakerResult {
   /**
    * @param {object} data
    * @param {import("./collection.js").default} data.collection
+   * @param {Array<import("./base-model.js").default>} data.models
    * @param {object} data.response
    */
   constructor (data) {
