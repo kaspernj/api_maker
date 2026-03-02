@@ -107,17 +107,47 @@ export default class ApiMakerTableColumnContent {
     return <Text>{contentText}</Text>
   }
 
-  presentDateTime = ({apiMakerType, value}) => {
+  /**
+   * Presents date and datetime values using either translation-format keys or formatter callbacks.
+   * @param {object} args
+   * @param {"date"|"time"} [args.apiMakerType]
+   * @param {Date} args.value
+   * @returns {string}
+   */
+  presentDateTime = ({apiMakerType = "time", value}) => {
     if (!apiMakerType || apiMakerType == "time") {
       const dateTimeFormatName = this.table.props.defaultDateTimeFormatName || "time.formats.default"
 
-      return this.l(dateTimeFormatName, value)
+      return this.presentDateTimeValue({apiMakerType: "time", format: dateTimeFormatName, value})
     } else if (apiMakerType == "date") {
       const dateFormatName = this.table.props.defaultDateFormatName || "date.formats.default"
 
-      return this.l(dateFormatName, value)
+      return this.presentDateTimeValue({apiMakerType: "date", format: dateFormatName, value})
     } else {
       throw new Error(`Unhandled type: ${apiMakerType}`)
     }
+  }
+
+  /**
+   * Resolves a date format key or executes a custom formatter callback.
+   * @param {object} args
+   * @param {"date"|"time"} args.apiMakerType
+   * @param {Function|string} args.format
+   * @param {Date} args.value
+   * @returns {string}
+   */
+  presentDateTimeValue({apiMakerType, format, value}) {
+    if (typeof format == "function") {
+      return format({
+        apiMakerType,
+        column: this.column,
+        l: this.l,
+        model: this.model,
+        table: this.table,
+        value
+      })
+    }
+
+    return this.l(format, value)
   }
 }

@@ -15,7 +15,7 @@ describe "super admin - index" do
     wait_for_and_find("[data-class='components--admin--layout--menu--menu-item'][data-identifier='Project']").click
     wait_for_expect { expect(current_url).to end_with "/super_admin?model=Project" }
     wait_for_selector "[data-testid='super-admin/index-page']"
-    wait_for_no_selector "[data-class='api-maker--table--loading']"
+    wait_for_no_selector model_row_selector(task)
     wait_for_selector model_row_selector(project)
   end
 

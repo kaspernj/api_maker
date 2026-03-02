@@ -1,5 +1,6 @@
 import {StyleSheet} from "react-native"
 
+/** Merge style inputs into a flat style object. */
 export default function mergeStyles(stylesList) {
   const mergedStyle = {}
 

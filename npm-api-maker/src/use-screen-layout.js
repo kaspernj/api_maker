@@ -2,6 +2,10 @@ import {Platform, useWindowDimensions} from "react-native"
 import {useCallback, useMemo, useState} from "react"
 import useEventListener from "ya-use-event-listener"
 
+/**
+ * @param {number} width
+ * @returns {"xs" | "sm" | "md" | "lg" | "xl" | "xxl" | undefined}
+ */
 const getWindowLayout = (width) => {
   if (width <= 575) {
     return "xs"
@@ -20,9 +24,10 @@ const getWindowLayout = (width) => {
   }
 }
 
+/** @returns {"xs" | "sm" | "md" | "lg" | "xl" | "xxl" | undefined} */
 const useScreenLayout = () => {
   if (Platform.OS == "web") {
-    const shared = useMemo(() => ({}))
+    const shared = useMemo(() => /** @type {any} */ ({}), [])
 
     shared.width = window.innerWidth
 

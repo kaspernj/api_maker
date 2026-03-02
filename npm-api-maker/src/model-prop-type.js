@@ -2,7 +2,9 @@
 import * as inflection from "inflection"
 import {digg} from "diggerize"
 
+/** PropType helpers for API Maker models. */
 export default class ApiMakerModelPropType {
+  /** ofModel. */
   static ofModel (modelClass) {
     const modelPropTypeInstance = new ApiMakerModelPropType()
 
@@ -11,12 +13,14 @@ export default class ApiMakerModelPropType {
     return modelPropTypeInstance
   }
 
+  /** Constructor. */
   constructor () {
     this.isNotRequired = this.isNotRequired.bind(this)
     this.isRequired = this.isRequired.bind(this)
     this._withLoadedAssociations = {}
   }
 
+  /** isNotRequired. */
   isNotRequired (props, propName, _componentName) {
     const model = props[propName]
 
@@ -25,6 +29,7 @@ export default class ApiMakerModelPropType {
     }
   }
 
+  /** isRequired. */
   isRequired (props, propName, _componentName) {
     const model = props[propName]
 
@@ -33,20 +38,24 @@ export default class ApiMakerModelPropType {
     return this.validate({model, propName})
   }
 
+  /** previous. */
   previous () {
     if (!this._previousModelPropType) throw new Error("No previous model prop type set")
 
     return this._previousModelPropType
   }
 
+  /** setPreviousModelPropType. */
   setPreviousModelPropType (previousModelPropType) {
     this._previousModelPropType = previousModelPropType
   }
 
+  /** withModelType. */
   withModelType (modelClass) {
     this._withModelType = modelClass
   }
 
+  /** validate. */
   validate ({model, propName}) {
     if (this._withModelType && this._withModelType.name != model.constructor.name)
       return new Error(`Expected ${propName} to be of type ${this._withModelType.name} but it wasn't: ${model.constructor.name}`)
@@ -102,12 +111,14 @@ export default class ApiMakerModelPropType {
     }
   }
 
+  /** withLoadedAbilities. */
   withLoadedAbilities (arrayOfAbilities) {
     this._withLoadedAbilities = arrayOfAbilities
 
     return this
   }
 
+  /** withLoadedAssociation. */
   withLoadedAssociation (associationName) {
     const associationModelPropType = new ApiMakerModelPropType()
 
@@ -117,6 +128,7 @@ export default class ApiMakerModelPropType {
     return associationModelPropType
   }
 
+  /** withLoadedAttributes. */
   withLoadedAttributes (arrayOfAttributes) {
     this._withLoadedAttributes = arrayOfAttributes
 

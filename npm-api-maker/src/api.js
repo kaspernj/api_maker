@@ -166,9 +166,7 @@ export default class Api { // eslint-disable-line padded-blocks
     return this.requestLocal({path, data, method: "PUT"})
   }
 
-  /**
-   * @returns {Promise<string>}
-   */
+  /** @returns {Promise<string>} */
   static _token = async() => SessionStatusUpdater.current().getCsrfToken()
 
   /**

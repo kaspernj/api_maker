@@ -1,3 +1,4 @@
+/** Build translated attribute names per locale. */
 export default function apiMakerTranslatedAttributes(attributeNames, availableLocales) {
   const translatedAttributes = []
 

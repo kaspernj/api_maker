@@ -32,6 +32,8 @@ Run this command:
 rails api_maker_table:install:migrations
 ```
 
+For frontend `ApiMakerTable` date rendering, `defaultDateFormatName` and `defaultDateTimeFormatName` support both i18n format keys and custom formatter callbacks. See `npm-api-maker/README.md` for examples.
+
 Run the migrations
 ```bash
 rails db:migrate
@@ -536,11 +538,13 @@ You can also use a React component if you use React and dont want to keep track 
 ```jsx
 import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event.js"
 import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
+import useModelClassEvent from "@kaspernj/api-maker/build/use-model-class-event.js"
 import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
 ```
 
 ```js
 useCreatedEvent(User, this.onUserCreated)
+useModelClassEvent(User, "team_synced", this.onTeamSynced)
 useDestroyedEvent(user, this.onUserDestroyed)
 useUpdatedEvent(user, this.onUserUpdated)
 ```

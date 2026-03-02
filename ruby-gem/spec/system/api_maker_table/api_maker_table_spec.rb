@@ -55,6 +55,16 @@ describe "bootstrap - live table" do
     )
   end
 
+  it "supports custom date formatter callbacks on table props" do
+    task1
+
+    login_as user_admin
+    visit bootstrap_live_table_path(custom_date_formatter: true)
+
+    wait_for_selector model_row_selector(task1)
+    wait_for_selector model_column_selector(task1, created_at_identifier), exact_text: "1985::06::17 10:30"
+  end
+
   it "destroys a row" do
     task1
     task2

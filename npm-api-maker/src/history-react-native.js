@@ -2,7 +2,13 @@ import Config from "./config.js"
 import parse from "url-parse"
 import qs from "qs"
 
+/** React Native history adapter. */
 class HistoryReactNative {
+  /**
+   * @param {string} path
+   * @param {...Record<string, any>} params
+   * @returns {void}
+   */
   push(path, ...params) {
     const url = parse(path, {})
 
@@ -14,6 +20,7 @@ class HistoryReactNative {
       url.set("query", qs.stringify(actualParams))
     }
 
+    // @ts-expect-error
     const {linkTo} = Config.getLinkTo()
 
     linkTo(url.href)

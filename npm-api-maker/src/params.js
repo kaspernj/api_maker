@@ -4,6 +4,7 @@ import formSerialize from "form-serialize"
 import qs from "qs"
 import urlEncode from "./url-encode.js"
 
+/** Params. */
 export default class Params {
   /** @returns {Record<string, any>} */
   static parse() {

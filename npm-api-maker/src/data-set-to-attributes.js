@@ -1,5 +1,6 @@
 import * as inflection from "inflection"
 
+/** Convert dataset attributes into normalized params. */
 export default function dataSetToAttributes(dataSet) {
   const result = {}
 

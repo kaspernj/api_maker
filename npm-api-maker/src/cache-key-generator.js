@@ -1,6 +1,8 @@
 import SparkMD5 from "spark-md5"
 
+/** Generates local/full cache keys for models. */
 export default class CacheKeyGenerator {
+  /** Constructor. */
   constructor(model) {
     this.model = model
     this.allModels = [model]
@@ -10,6 +12,7 @@ export default class CacheKeyGenerator {
     this.filledModels = false
   }
 
+  /** local. */
   local() {
     const md5 = new SparkMD5()
 
@@ -18,23 +21,27 @@ export default class CacheKeyGenerator {
     return md5.end()
   }
 
+  /** recordModelType. */
   recordModelType(relationshipType) {
     if (!(relationshipType in this.readModels)) {
       this.readModels[relationshipType] = {}
     }
   }
 
+  /** recordModel. */
   recordModel(relationshipType, model) {
     this.allModels.push(model)
     this.readModels[relationshipType][model.id() || model.uniqueKey()] = true
   }
 
+  /** isModelRecorded. */
   isModelRecorded(relationshipType, model) {
     if (model.id() in this.readModels[relationshipType]) {
       return true
     }
   }
 
+  /** fillModels. */
   fillModels(model) {
     for (const relationshipType in model.relationships) {
       this.recordModelType(relationshipType)
@@ -59,6 +66,7 @@ export default class CacheKeyGenerator {
     this.filledModels = true
   }
 
+  /** cacheKey. */
   cacheKey() {
     if (!this.filledModels) {
       this.fillModels(this.model)
@@ -73,6 +81,7 @@ export default class CacheKeyGenerator {
     return md5.end()
   }
 
+  /** feedModel. */
   feedModel(model, md5) {
     md5.append("--model--")
     md5.append(model.modelClassData().name)

@@ -9,17 +9,22 @@ if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
 
 const shared = globalThis.ApiMakerDevise
 
+/** DeviseScope. */
 class DeviseScope {
+  /** Constructor. */
   constructor(scope, args) {
     this.args = args
-    this.context = createContext()
+    this.context = createContext(undefined)
     this.scope = scope
   }
 
+  /** getContext. */
   getContext = () => this.context
 }
 
+/** ApiMakerDevise. */
 export default class ApiMakerDevise {
+  /** callSignOutEvent. */
   static callSignOutEvent(args) {
     events.emit("onDeviseSignOut", {args})
   }
@@ -33,10 +38,12 @@ export default class ApiMakerDevise {
     return shared.currentApiMakerDevise
   }
 
+  /** events. */
   static events() {
     return events
   }
 
+  /** addUserScope. */
   static addUserScope(scope, args = {}) {
     const scopeCamelized = inflection.camelize(scope)
     const currentMethodName = `current${scopeCamelized}`
@@ -51,6 +58,7 @@ export default class ApiMakerDevise {
     ApiMakerDevise[getScopeName] = () => scopeInstance
   }
 
+  /** getScope. */
   static getScope(scope) {
     const scopeCamelized = inflection.camelize(scope)
     const getScopeName = `get${scopeCamelized}Scope`
@@ -74,6 +82,7 @@ export default class ApiMakerDevise {
     return {model, response}
   }
 
+  /** updateSession. */
   static updateSession(model, args = {}) {
     if (!args.scope) args.scope = "user"
 
@@ -82,12 +91,14 @@ export default class ApiMakerDevise {
     ApiMakerDevise.current().currents[camelizedScopeName] = model
   }
 
+  /** hasCurrentScope. */
   hasCurrentScope(scope) {
     const camelizedScopeName = inflection.camelize(scope, true)
 
     return camelizedScopeName in ApiMakerDevise.current().currents
   }
 
+  /** setSignedOut. */
   static setSignedOut(args) {
     ApiMakerDevise.current().currents[inflection.camelize(args.scope, true)] = null
   }
@@ -109,10 +120,12 @@ export default class ApiMakerDevise {
     return response
   }
 
+  /** Constructor. */
   constructor() {
     this.currents = {}
   }
 
+  /** getCurrentScope. */
   getCurrentScope(scope) {
     if (!(scope in this.currents)) {
       this.currents[scope] = this.loadCurrentScope(scope)
@@ -121,6 +134,7 @@ export default class ApiMakerDevise {
     return this.currents[scope]
   }
 
+  /** hasGlobalCurrentScope. */
   hasGlobalCurrentScope(scope) {
     if (globalThis.apiMakerDeviseCurrent && scope in globalThis.apiMakerDeviseCurrent) {
       return true
@@ -129,6 +143,7 @@ export default class ApiMakerDevise {
     return false
   }
 
+  /** loadCurrentScope. */
   loadCurrentScope(scope) {
     if (!this.hasGlobalCurrentScope(scope)) {
       return null

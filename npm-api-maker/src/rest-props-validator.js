@@ -1,3 +1,7 @@
+/**
+ * @param {Record<string, any>} restProps
+ * @returns {void}
+ */
 const restPropsValidator = (restProps) => {
   const restPropsKeys = Object.keys(restProps)
 

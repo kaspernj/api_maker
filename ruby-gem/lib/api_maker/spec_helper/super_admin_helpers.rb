@@ -27,9 +27,26 @@ module ApiMaker::SpecHelper::SuperAdminHelpers # rubocop:disable Metrics/ModuleL
     expect { model.reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  def super_admin_test_new(model_class, inputs:, expect: nil) # rubocop:disable Metrics/AbcSize
+  def super_admin_test_new(model_class, inputs:, expect: nil)
     resource = ApiMaker::MemoryStorage.current.resource_for_model(model_class)
 
+    submit_super_admin_new_form(
+      model_class:,
+      resource:,
+      inputs:
+    )
+    created_model = resolve_created_super_admin_model(
+      model_class:
+    )
+
+    expect_attributes = expect || inputs
+
+    expect(created_model).to have_attributes(expect_attributes)
+  end
+
+private
+
+  def submit_super_admin_new_form(model_class:, resource:, inputs:)
     visit super_admin_path(model: resource.short_name)
     wait_for_and_find("[data-class='create-new-model-link']").click
     wait_for_selector "[data-testid='super-admin--edit-page']"
@@ -37,6 +54,9 @@ module ApiMaker::SpecHelper::SuperAdminHelpers # rubocop:disable Metrics/ModuleL
     expected_count = model_class.count + 1
     wait_for_and_find("[data-testid='submit-button']").click
     wait_for_expect { expect(model_class.count).to eq expected_count }
+  end
+
+  def resolve_created_super_admin_model(model_class:)
     url_with_model_id = nil
 
     wait_for_expect do
@@ -50,12 +70,17 @@ module ApiMaker::SpecHelper::SuperAdminHelpers # rubocop:disable Metrics/ModuleL
 
     uri = URI.parse(url_with_model_id)
     params = CGI.parse(uri.query.to_s)
-    model_id = params.fetch("model_id").fetch(0)
-    created_model = model_class.find(model_id)
+    model_id = params["model_id"]&.first
 
-    expect_attributes = expect || inputs
+    if model_id.blank?
+      message = [
+        "Expected redirect URL to include query param model_id after creating #{model_class.name},",
+        "but got params=#{params.inspect}. current_url=#{current_url}"
+      ].join(" ")
+      raise KeyError, message
+    end
 
-    expect(created_model).to have_attributes(expect_attributes)
+    model_class.find(model_id)
   end
 
   def super_admin_test_fill_inputs(resource, inputs)
