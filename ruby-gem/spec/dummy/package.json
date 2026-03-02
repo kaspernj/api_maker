@@ -24,7 +24,7 @@
     "@babel/runtime": "7",
     "@kaspernj/api-maker": ">= 1.0.2107",
     "@rails/actioncable": "^8.1.200",
-    "@swc/core": "^1.13.5",
+    "@swc/core": "^1.15.18",
     "babel-loader": "10",
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "babel-plugin-macros": "^3.1.0",
