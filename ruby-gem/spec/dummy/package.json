@@ -61,7 +61,7 @@
     "terser-webpack-plugin": "5",
     "uuid": "^13.0.0",
     "webpack": "5",
-    "webpack-assets-manifest": "5",
+    "webpack-assets-manifest": "6",
     "webpack-cli": "6",
     "webpack-dev-server": "5",
     "webpack-merge": "6",
