@@ -132,6 +132,38 @@ Callback arguments:
 - `table`: the table component instance
 - `l`: ApiMaker i18n formatter helper (for fallback/interop)
 
+## AttributeRows date formatting
+
+`AttributeRows`/`AttributeRow` support the same date-format customization pattern as `ApiMakerTable`.
+
+```jsx
+<AttributeRows
+  attributes={["createdAt"]}
+  defaultDateFormatName="date.formats.default"
+  defaultDateTimeFormatName="time.formats.default"
+  model={user}
+/>
+```
+
+You can also pass formatter callbacks:
+
+```jsx
+<AttributeRows
+  attributes={["createdAt"]}
+  defaultDateFormatName={({value}) => formatByCountry(value, "date")}
+  defaultDateTimeFormatName={({value}) => formatByCountry(value, "date-with-time")}
+  model={user}
+/>
+```
+
+Callback arguments:
+
+- `value`: the `Date` instance being rendered
+- `apiMakerType`: `"date"` or `"time"`
+- `attribute`: the attribute metadata object (when present)
+- `model`: the current model instance
+- `l`: ApiMaker i18n formatter helper (for fallback/interop)
+
 ## API reference
 
 ApiMaker generates model classes from your recipes. The classes inherit `BaseModel` and expose relationship helpers based on your server-side associations.

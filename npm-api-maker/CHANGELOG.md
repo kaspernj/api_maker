@@ -42,4 +42,5 @@
 - Optimize array model event hooks to incrementally subscribe/unsubscribe only added or removed models.
 - Add `useModelClassEvent` for class-level websocket subscriptions.
 - Allow ApiMaker Table `defaultDateFormatName` and `defaultDateTimeFormatName` props to accept formatter callbacks in addition to i18n format-name strings, enabling app-specific country-aware date rendering in table cells.
+- Allow `AttributeRows`/`AttributeRow` `defaultDateFormatName` and `defaultDateTimeFormatName` props to accept formatter callbacks for app-specific date rendering.
 - Add missing JSDoc across npm-api-maker source files, normalize single-tag blocks to single-line format, and tighten/align JSDoc typedefs used by lint/typecheck.
