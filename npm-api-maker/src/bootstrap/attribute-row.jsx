@@ -8,20 +8,23 @@ import MoneyFormatter from "../money-formatter.js" // eslint-disable-line sort-i
 import PropTypes from "prop-types"
 import Text from "../utils/text"
 import memo from "set-state-compare/build/memo.js"
-import strftime from "strftime"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const dataSets = {}
 
 export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends ShapeComponent {
   static defaultProps = {
-    checkIfAttributeLoaded: false
+    checkIfAttributeLoaded: false,
+    defaultDateFormatName: undefined,
+    defaultDateTimeFormatName: undefined
   }
 
   static propTypes = {
     attribute: PropTypes.string,
     checkIfAttributeLoaded: PropTypes.bool.isRequired,
     children: PropTypes.any,
+    defaultDateFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+    defaultDateTimeFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     identifier: PropTypes.string,
     label: PropTypes.oneOfType([PropTypes.any, PropTypes.string]),
     model: PropTypes.object,
@@ -71,6 +74,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
     )
   }
 
+  /** @returns {React.ReactNode} */
   label() {
     const {attribute, label, model} = this.props
 
@@ -80,6 +84,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
     throw new Error("Couldn't figure out label")
   }
 
+  /** @returns {React.ReactNode} */
   value() {
     const {attribute, checkIfAttributeLoaded, children, model} = this.props
 
@@ -98,20 +103,28 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
     }
   }
 
+  /**
+   * @param {any} value
+   * @returns {React.ReactNode}
+   */
   valueContent(value) {
-    const {l, t} = this.tt
+    const {t} = this.tt
     const columnType = this.attribute?.getColumn()?.getType()
 
     if (columnType == "date") {
+      const content = this.presentDateTime({apiMakerType: "date", value})
+
       return (
         <Text>
-          {l("date.formats.default", value)}
+          {content}
         </Text>
       )
     } else if (value instanceof Date) {
+      const content = this.presentDateTime({value})
+
       return (
         <Text>
-          {strftime("%Y-%m-%d %H:%M", value)}
+          {content}
         </Text>
       )
     } else if (typeof value === "boolean") {
@@ -143,5 +156,48 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRow extends S
     } else {
       return value
     }
+  }
+
+  /**
+   * @param {object} args
+   * @param {"date"|"time"} [args.apiMakerType]
+   * @param {Date} args.value
+   * @returns {string}
+   */
+  presentDateTime({apiMakerType = "time", value}) {
+    const {defaultDateFormatName, defaultDateTimeFormatName} = this.props
+
+    if (!apiMakerType || apiMakerType == "time") {
+      const format = defaultDateTimeFormatName || "time.formats.default"
+
+      return this.presentDateTimeValue({apiMakerType: "time", format, value})
+    } else if (apiMakerType == "date") {
+      const format = defaultDateFormatName || "date.formats.default"
+
+      return this.presentDateTimeValue({apiMakerType: "date", format, value})
+    }
+
+    throw new Error(`Unhandled type: ${apiMakerType}`)
+  }
+
+  /**
+   * @param {object} args
+   * @param {"date"|"time"} args.apiMakerType
+   * @param {Function|string} args.format
+   * @param {Date} args.value
+   * @returns {string}
+   */
+  presentDateTimeValue({apiMakerType, format, value}) {
+    if (typeof format == "function") {
+      return format({
+        apiMakerType,
+        attribute: this.attribute,
+        l: this.l,
+        model: this.props.model,
+        value
+      })
+    }
+
+    return this.l(format, value)
   }
 }))
