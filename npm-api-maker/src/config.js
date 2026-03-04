@@ -25,7 +25,9 @@ const accessors = {
   routeDefinitions: {required: false}
 }
 
+/** ApiMakerConfig. */
 class ApiMakerConfig {
+  /** Constructor. */
   constructor() {
     if (!globalThis.apiMakerConfigGlobal) globalThis.apiMakerConfigGlobal = {}
 
@@ -33,6 +35,7 @@ class ApiMakerConfig {
     this.events = new EventEmitter()
   }
 
+  /** getEvents. */
   getEvents() { return this.events }
 
   /** @returns {import("history").BrowserHistory} */

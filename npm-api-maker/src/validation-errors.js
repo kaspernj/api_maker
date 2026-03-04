@@ -4,6 +4,7 @@ import * as inflection from "inflection"
 import {digg, digs} from "diggerize"
 import modelClassRequire from "./model-class-require.js"
 
+/** ValidationError. */
 class ValidationError { // eslint-disable-line padded-blocks
 
   /**
@@ -89,12 +90,15 @@ class ValidationError { // eslint-disable-line padded-blocks
   }
 }
 
+/** ValidationErrors. */
 class ValidationErrors {
+  /** Constructor. */
   constructor(args) {
     this.rootModel = digg(args, "model")
     this.validationErrors = digg(args, "validationErrors").map((validationError) => new ValidationError(validationError))
   }
 
+  /** getErrorMessage. */
   getErrorMessage() {
     const fullErrorMessages = []
 
@@ -107,8 +111,10 @@ class ValidationErrors {
     return fullErrorMessages.join(". ")
   }
 
+  /** getValidationErrors. */
   getValidationErrors = () => this.validationErrors
 
+  /** getValidationErrorsForInput. */
   getValidationErrorsForInput({attribute, inputName, onMatchValidationError}) {
     const validationErrors = this.validationErrors.filter((validationError) => {
       if (onMatchValidationError) {
@@ -123,6 +129,7 @@ class ValidationErrors {
     return validationErrors
   }
 
+  /** getUnhandledErrorMessage. */
   getUnhandledErrorMessage() {
     const unhandledValidationErrors = this.validationErrors.filter((validationError) => !validationError.getHandled())
 

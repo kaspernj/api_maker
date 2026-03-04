@@ -1,6 +1,7 @@
 import * as inflection from "inflection"
 import {digg} from "diggerize"
 
+/** ApiMakerBaseModelScope. */
 export default class ApiMakerBaseModelScope {
   /**
    * @param {object} scopeData

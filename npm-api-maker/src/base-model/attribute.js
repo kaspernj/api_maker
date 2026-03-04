@@ -17,10 +17,7 @@ export default class ApiMakerBaseModelAttribute {
     this.attributeData = attributeData
   }
 
-
-  /**
-   * @returns {Column}
-   */
+  /** @returns {Column} */
   getColumn() {
     if (!this.column) {
       const columnData = this.attributeData.column

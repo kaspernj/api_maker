@@ -2,6 +2,7 @@ import * as inflection from "inflection"
 import {digg} from "diggerize"
 import modelClassRequire from "../model-class-require.js"
 
+/** ApiMakerBaseModelReflection. */
 export default class ApiMakerBaseModelReflection {
   /**
    * @param {object} reflectionData
@@ -18,6 +19,7 @@ export default class ApiMakerBaseModelReflection {
   /** @returns {string} */
   foreignKey() { return digg(this, "reflectionData", "foreignKey") }
 
+  /** macro. */
   macro() { return digg(this, "reflectionData", "macro") }
 
   /** @returns {typeof import("../base-model.js").default} */

@@ -23,23 +23,24 @@ import uniqunize from "uniqunize"
  * @typedef {object} QueryArgsType
  * @property {Record<string, string[]>} [abilities]
  * @property {string} [accessibleBy]
- * @property {number} [count]
- * @property {string} [distinct]
- * @property {string[]} [groupBy]
+ * @property {boolean} [count]
+ * @property {boolean} [distinct]
+ * @property {Array<string | [string, string]>} [groupBy]
  * @property {number} [limit]
  * @property {number} [page]
+ * @property {string} [pageKey]
  * @property {Record<string, any>} [params]
  * @property {number} [per]
+ * @property {string} [perKey]
  * @property {string[]} [preload]
  * @property {Record<string, any>} [ransack]
  * @property {Record<string, any>} [search]
+ * @property {string} [searchKey]
  * @property {Record<string, string[]>} [select]
  * @property {Record<string, string[]>} [selectColumns]
  */
 
-/**
- * @template {typeof import("./base-model.js").default} MC
- */
+/** @template {typeof import("./base-model.js").default} MC */
 export default class ApiMakerCollection {
   static apiMakerType = "Collection"
 
@@ -54,8 +55,12 @@ export default class ApiMakerCollection {
     this.args = args
   }
 
+  /**
+   * @param {Record<string, string[]>} originalAbilities
+   * @returns {this}
+   */
   abilities(originalAbilities) {
-    const newAbilities = {}
+    const newAbilities = /** @type {Record<string, string[]>} */ ({}) // eslint-disable-line no-extra-parens
 
     for (const originalAbilityName in originalAbilities) {
       const newModelName = inflection.underscore(originalAbilityName)
@@ -81,9 +86,7 @@ export default class ApiMakerCollection {
     return this._merge({accessibleBy: inflection.underscore(abilityName)})
   }
 
-  /**
-   * @returns {Promise<number>}
-   */
+  /** @returns {Promise<number>} */
   async count() {
     const response = await this.clone()
       ._merge({count: true})
@@ -92,9 +95,7 @@ export default class ApiMakerCollection {
     return digg(response, "count")
   }
 
-  /**
-   * @returns {this}
-   */
+  /** @returns {this} */
   distinct() {
     return this._merge({distinct: true})
   }
@@ -127,22 +128,27 @@ export default class ApiMakerCollection {
     return this
   }
 
-  /**
-   * @returns {Promise<ModelOf<MC>>}
-   */
+  /** @returns {Promise<ModelOf<MC>>} */
   async first() {
     const models = await this.toArray()
     return models[0]
   }
 
+  /**
+   * @param {...(string | [string, string])} arrayOfTablesAndColumns
+   * @returns {this}
+   */
   groupBy(...arrayOfTablesAndColumns) {
-    const arrayOfTablesAndColumnsWithLowercaseColumns = arrayOfTablesAndColumns.map((tableAndColumn) => {
+    const arrayOfTablesAndColumnsWithLowercaseColumns = /** @type {Array<string | [string, string]>} */ ([]) // eslint-disable-line no-extra-parens
+
+    for (const tableAndColumn of arrayOfTablesAndColumns) {
       if (Array.isArray(tableAndColumn)) {
-        return [tableAndColumn[0], tableAndColumn[1].toLowerCase()]
+        arrayOfTablesAndColumnsWithLowercaseColumns.push([tableAndColumn[0], tableAndColumn[1].toLowerCase()])
       } else {
-        return tableAndColumn.toLowerCase()
+        arrayOfTablesAndColumnsWithLowercaseColumns.push(tableAndColumn.toLowerCase())
       }
-    })
+    }
+
     const currentGroupBy = this.queryArgs.groupBy || []
     const newGroupBy = currentGroupBy.concat(arrayOfTablesAndColumnsWithLowercaseColumns)
 
@@ -151,6 +157,7 @@ export default class ApiMakerCollection {
     })
   }
 
+  /** @returns {Promise<ModelOf<MC> | Array<ModelOf<MC>> | null>} */
   async ensureLoaded() {
     if (!this.isLoaded()) {
       const models = await this.toArray()
@@ -161,9 +168,7 @@ export default class ApiMakerCollection {
     return this.loaded()
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isLoaded() {
     const {model, reflectionName} = this.args
 
@@ -184,9 +189,7 @@ export default class ApiMakerCollection {
     return this._merge({limit: amount})
   }
 
-  /**
-   * @returns {Array<ModelOf<MC>>}
-   */
+  /** @returns {Array<ModelOf<MC>>} */
   preloaded() {
     if (!(this.args.reflectionName in this.args.model.relationshipsCache)) {
       throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
@@ -195,9 +198,7 @@ export default class ApiMakerCollection {
     return this.args.model.relationshipsCache[this.args.reflectionName]
   }
 
-  /**
-   * @returns {ModelOf<MC> | Array<ModelOf<MC>>}
-   */
+  /** @returns {ModelOf<MC> | Array<ModelOf<MC>>} */
   loaded() {
     const {model, reflectionName} = this.args
 
@@ -231,11 +232,19 @@ export default class ApiMakerCollection {
   }
 
   // Replaces the relationships with the given new collection.
+  /**
+   * @param {Array<ModelOf<MC>>} newCollection
+   * @returns {void}
+   */
   set(newCollection) {
     this.args.model.relationships[this.args.reflectionName] = newCollection
   }
 
   // Pushes another model onto the given collection.
+  /**
+   * @param {ModelOf<MC>} newModel
+   * @returns {void}
+   */
   push(newModel) {
     const {model, reflectionName} = this.args
 
@@ -293,9 +302,7 @@ export default class ApiMakerCollection {
     return this._merge({pageKey})
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isFiltered() {
     const {queryArgs} = this
 
@@ -315,9 +322,7 @@ export default class ApiMakerCollection {
     return false
   }
 
-  /**
-   * @returns {Record<string, any>}
-   */
+  /** @returns {Record<string, any>} */
   params() {
     let params = {}
 
@@ -364,16 +369,14 @@ export default class ApiMakerCollection {
     return this
   }
 
-  /**
-   * @returns {Promise<Result>}
-   */
+  /** @returns {Promise<Result>} */
   async result() {
     const response = await this._response()
     const models = digg(response, "collection")
 
     this._addQueryToModels(models)
 
-    const result = new Result({collection: this, models, response})
+    const result = new Result(/** @type {any} */ ({collection: this, models, response})) // eslint-disable-line no-extra-parens
 
     return result
   }
@@ -400,7 +403,7 @@ export default class ApiMakerCollection {
    * @returns {this}
    */
   select(originalSelect) {
-    const newSelect = {}
+    const newSelect = /** @type {Record<string, string[]>} */ ({}) // eslint-disable-line no-extra-parens
 
     for (const originalModelName in originalSelect) {
       const newModelName = inflection.underscore(originalModelName)
@@ -423,7 +426,7 @@ export default class ApiMakerCollection {
    * @returns {this}
    */
   selectColumns(originalSelect) {
-    const newSelect = {}
+    const newSelect = /** @type {Record<string, string[]>} */ ({}) // eslint-disable-line no-extra-parens
 
     for (const originalModelName in originalSelect) {
       const newModelName = inflection.underscore(inflection.underscore(originalModelName))
@@ -449,9 +452,7 @@ export default class ApiMakerCollection {
     return this._merge({ransack: {s: sortBy}})
   }
 
-  /**
-   * @returns {Promise<Array<ModelOf<MC>>>}
-   */
+  /** @returns {Promise<Array<ModelOf<MC>>>} */
   async toArray() {
     const response = await this._response()
     const models = digg(response, "collection")
@@ -461,9 +462,7 @@ export default class ApiMakerCollection {
     return models
   }
 
-  /**
-   * @returns {MC}
-   */
+  /** @returns {MC} */
   modelClass() {
     if (!this.args.modelClass) {
       throw new Error("No model class given in args")
@@ -472,9 +471,7 @@ export default class ApiMakerCollection {
     return this.args.modelClass
   }
 
-  /**
-   * @returns {ApiMakerCollection}
-   */
+  /** @returns {ApiMakerCollection} */
   clone() {
     const clonedQueryArgs = cloneDeep(this.queryArgs)
 
@@ -482,18 +479,27 @@ export default class ApiMakerCollection {
   }
 
   // This is needed when reloading a version of the model with the same selected attributes and preloads
+  /**
+   * @param {Array<ModelOf<MC>>} models
+   * @returns {void}
+   */
   _addQueryToModels(models) {
     for (const model of models) {
       model.collection = this
     }
   }
 
+  /**
+   * @param {QueryArgsType} newQueryArgs
+   * @returns {this}
+   */
   _merge(newQueryArgs) {
     incorporate(this.queryArgs, newQueryArgs)
 
     return this
   }
 
+  /** @returns {Promise<{collection: Array<ModelOf<MC>>}>} */
   _response() {
     if (!this.args) throw new Error("No args?")
     if (!this.args.modelClass) throw new Error("No modelClass in args")

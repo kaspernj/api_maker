@@ -5,6 +5,14 @@ import * as inflection from "inflection"
 import {useBreakpoint} from "responsive-breakpoints"
 import {useMemo} from "react"
 
+/**
+ * @param {Record<string, any>} styles
+ * @param {Array<Record<string, any>>} listOfStyles
+ * @param {Record<string, any>} breakpoint
+ * @param {Array<[string, any]>} breakpointsReverse
+ * @param {string} arg
+ * @returns {void}
+ */
 function handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse, arg) { // eslint-disable-line func-style, max-params
   if (!(arg in styles)) {
     throw new Error(`No such styling '${arg}' in given styles: ${Object.keys(styles).join(", ")}`)
@@ -29,6 +37,12 @@ function handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse,
   }
 }
 
+/**
+ * @param {Record<string, any>} styles
+ * @param {string | Array<string | Record<string, any>> | Record<string, any>} args
+ * @param {Array<any>} [dependencies]
+ * @returns {Array<Record<string, any>>}
+ */
 export default function useStyles(styles, args, dependencies = []) {
   const breakpoint = useBreakpoint()
   const breakpointName = digg(breakpoint, "name")
@@ -36,13 +50,11 @@ export default function useStyles(styles, args, dependencies = []) {
 
   const listOfStyles = useMemo(() => {
     const listOfStyles = []
+    const argsArray = Array.isArray(args) ? args : [args]
+    // @ts-expect-error
     const breakpointsReverse = [...config.getBreakpoints()].reverse()
 
-    if (!Array.isArray(args)) {
-      args = [args] // eslint-disable-line no-param-reassign
-    }
-
-    for (const arg of args) {
+    for (const arg of argsArray) {
       if (typeof arg == "string") {
         handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse, arg)
       } else if (typeof arg == "object") {

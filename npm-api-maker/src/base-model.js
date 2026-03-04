@@ -45,6 +45,7 @@ const objectToUnderscore = (object) => {
   return newObject
 }
 
+/** BaseModel. */
 export default class BaseModel {
   static apiMakerType = "BaseModel"
 
@@ -124,6 +125,8 @@ export default class BaseModel {
    * @template {typeof BaseModel} T
    * @this {T}
    * @param {Record<string, any>} findOrCreateByArgs
+   * @param {object} [args]
+   * @param {Record<string, any>} [args.additionalData]
    * @returns {Promise<InstanceType<T>>}
    */
   static async findOrCreateBy(findOrCreateByArgs, args = {}) {
@@ -234,9 +237,7 @@ export default class BaseModel {
     return foundReflection
   }
 
-  /**
-   * @returns {string}
-   */
+  /** @returns {string} */
   static _token() {
     const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
@@ -245,6 +246,14 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {object} [args]
+   * @param {boolean} [args.isNewRecord]
+   * @param {object} [args.data]
+   * @param {Record<string, any>} [args.a]
+   * @param {Record<string, any>} [args.b]
+   * @param {Collection<typeof BaseModel>} [args.collection]
+   */
   constructor(args = {}) {
     this.changes = {}
     this.newRecord = args.isNewRecord
@@ -332,7 +341,7 @@ export default class BaseModel {
    * @returns {Self}
    */
   clone() {
-    const ModelClass = /** @type {new (...args: any[]) => Self} */ this.constructor
+    const ModelClass = /** @type {new (...args: any[]) => Self} */ (this.constructor) // eslint-disable-line no-extra-parens
     const clone = new ModelClass()
 
     clone.abilities = {...this.abilities}
@@ -496,6 +505,10 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {string[]} listOfAbilities
+   * @returns {Promise<void>}
+   */
   async ensureAbilities(listOfAbilities) {
     // Populate an array with a list of abilities currently not loaded
     const abilitiesToLoad = []
@@ -512,7 +525,7 @@ export default class BaseModel {
       const ransackParams = {}
       ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
 
-      const abilitiesParams = {}
+      const abilitiesParams = /** @type {Record<string, string[]>} */ ({}) // eslint-disable-line no-extra-parens
       abilitiesParams[digg(this.modelClassData(), "name")] = abilitiesToLoad
 
       const anotherModel = await this.modelClass()
@@ -531,21 +544,22 @@ export default class BaseModel {
     }
   }
 
-  /**
-   * @returns {Record<string, any>}
-   */
+  /** @returns {Record<string, any>} */
   getAttributes() {
     return Object.assign(this.modelData, this.changes)
   }
+
+  /**
+   * @param {object} response
+   * @returns {never}
+   */
   handleResponseError(response) {
     // @ts-expect-error
     BaseModel.parseValidationErrors({model: this, response})
     throw new CustomError("Response wasn't successful", {model: this, response})
   }
 
-  /**
-   * @returns {number | string}
-   */
+  /** @returns {number | string} */
   identifierKey() {
     if (!this._identifierKey) this._identifierKey = this.isPersisted() ? this.primaryKey() : this.uniqueKey()
 
@@ -553,11 +567,13 @@ export default class BaseModel {
   }
 
   /**
+   * @param {string} associationName
    * @returns {boolean}
    */
   isAssociationLoaded(associationName) { return this.isAssociationLoadedUnderscore(inflection.underscore(associationName)) }
 
   /**
+   * @param {string} associationNameUnderscore
    * @returns {boolean}
    */
   isAssociationLoadedUnderscore (associationNameUnderscore) {
@@ -566,6 +582,7 @@ export default class BaseModel {
   }
 
   /**
+   * @param {string} associationName
    * @returns {boolean}
    */
   isAssociationPresent(associationName) {
@@ -596,6 +613,10 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {string} attributeName
+   * @returns {string}
+   */
   static humanAttributeName(attributeName) {
     const keyName = digg(this.modelClassData(), "i18nKey")
 
@@ -634,9 +655,7 @@ export default class BaseModel {
     return changedMethod(oldValue, newValue)
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isChanged() {
     const keys = Object.keys(this.changes)
 
@@ -647,9 +666,7 @@ export default class BaseModel {
     }
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isNewRecord() {
     if (this.newRecord !== undefined) {
       return this.newRecord
@@ -660,9 +677,7 @@ export default class BaseModel {
     }
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isPersisted() { return !this.isNewRecord() }
 
   /**
@@ -717,6 +732,10 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {BaseModel} model
+   * @returns {void}
+   */
   setNewModelData(model) {
     if (!("modelData" in model)) throw new Error(`No modelData in model: ${JSON.stringify(model)}`)
 
@@ -727,16 +746,31 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {any} oldValue
+   * @param {any} newValue
+   * @returns {boolean | void}
+   */
   _isDateChanged(oldValue, newValue) {
     if (Date.parse(oldValue) != Date.parse(newValue))
       return true
   }
 
+  /**
+   * @param {any} oldValue
+   * @param {any} newValue
+   * @returns {boolean | void}
+   */
   _isIntegerChanged(oldValue, newValue) {
     if (parseInt(oldValue, 10) != parseInt(newValue, 10))
       return true
   }
 
+  /**
+   * @param {any} oldValue
+   * @param {any} newValue
+   * @returns {boolean | void}
+   */
   _isStringChanged (oldValue, newValue) {
     const oldConvertedValue = `${oldValue}`
     const newConvertedValue = `${newValue}`
@@ -748,9 +782,7 @@ export default class BaseModel {
   /** @returns {ModelClassDataType} */
   modelClassData() { return this.modelClass().modelClassData() }
 
-  /**
-   * @returns {Promise<void>}
-   */
+  /** @returns {Promise<void>} */
   async reload() {
     const params = this.collection && this.collection.params()
     const ransackParams = {}
@@ -777,9 +809,7 @@ export default class BaseModel {
     this.changes = {}
   }
 
-  /**
-   * @returns {Promise<{model: BaseModel, response?: object}>}
-   */
+  /** @returns {Promise<{model: BaseModel, response?: object}>} */
   save() {
     if (this.isNewRecord()) {
       return this.create()
@@ -788,9 +818,7 @@ export default class BaseModel {
     }
   }
 
-  /**
-   * @returns {Promise<{model: BaseModel, response: object}>}
-   */
+  /** @returns {Promise<{model: BaseModel, response: object}>} */
   saveRaw(rawData, options = {}) {
     if (this.isNewRecord()) {
       return this.createRaw(rawData, options)
@@ -853,6 +881,10 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {object} response
+   * @returns {void}
+   */
   _refreshModelFromResponse(response) {
     let newModel = digg(response, "model")
 
@@ -861,6 +893,10 @@ export default class BaseModel {
     this.setNewModel(newModel)
   }
 
+  /**
+   * @param {object} response
+   * @returns {void}
+   */
   _refreshModelDataFromResponse(response) {
     let newModel = digg(response, "model")
 
@@ -884,6 +920,11 @@ export default class BaseModel {
     return rawData
   }
 
+  /**
+   * @param {FormData | Record<string, any>} rawData
+   * @param {ParseValidationErrorsOptions & {simpleModelErrors?: boolean}} [options]
+   * @returns {Promise<{response: object, model: BaseModel}>}
+   */
   async updateRaw(rawData, options = {}) {
     const objectData = BaseModel._objectDataFromGivenRawData(rawData, options)
     let response
@@ -916,10 +957,12 @@ export default class BaseModel {
     return {response, model: this}
   }
 
+  /** @returns {never} */
   isValid() {
     throw new Error("Not implemented yet")
   }
 
+  /** @returns {Promise<{valid: boolean, errors: Record<string, any>}>} */
   async isValidOnServer() {
     const modelData = this.getAttributes()
     const paramKey = this.modelClassData().paramKey
@@ -948,29 +991,28 @@ export default class BaseModel {
    * @returns {typeof BaseModel & (new (...args: any[]) => Self)}
    */
   modelClass() {
-    return /** @type {any} */ this.constructor
+    return /** @type {typeof BaseModel & (new (...args: any[]) => Self)} */ (this.constructor) // eslint-disable-line no-extra-parens
   }
 
+  /**
+   * @param {string} relationshipName
+   * @param {BaseModel | BaseModel[] | null} model
+   * @returns {void}
+   */
   preloadRelationship(relationshipName, model) {
     this.relationshipsCache[BaseModel.snakeCase(relationshipName)] = model
     this.relationships[BaseModel.snakeCase(relationshipName)] = model
   }
 
-  /**
-   * @returns {void}
-   */
+  /** @returns {void} */
   markForDestruction() {
     this._markedForDestruction = true
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   markedForDestruction() { return this._markedForDestruction || false }
 
-  /**
-   * @returns {number}
-   */
+  /** @returns {number} */
   uniqueKey() {
     if (!this.uniqueKeyValue) {
       const min = 5000000000000000
@@ -982,6 +1024,11 @@ export default class BaseModel {
     return this.uniqueKeyValue
   }
 
+  /**
+   * @param {{args: any}} args
+   * @param {Record<string, any>} commandArgs
+   * @returns {Promise<object>}
+   */
   static async _callCollectionCommand(args, commandArgs) {
     const formOrDataObject = args.args
 
@@ -1002,8 +1049,17 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {Record<string, any>} args
+   * @param {Record<string, any>} commandArgs
+   * @returns {Promise<object>}
+   */
   _callMemberCommand = (args, commandArgs) => CommandsPool.addCommand(args, commandArgs)
 
+  /**
+   * @param {FormData | Record<string, any>} [args]
+   * @returns {FormData}
+   */
   static _postDataFromArgs(args) {
     let postData
 
@@ -1051,9 +1107,7 @@ export default class BaseModel {
     }
   }
 
-  /**
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isAttributeLoaded(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
 
@@ -1062,6 +1116,10 @@ export default class BaseModel {
     return false
   }
 
+  /**
+   * @param {any} value
+   * @returns {boolean}
+   */
   _isPresent(value) {
     if (!value) {
       return false
@@ -1072,6 +1130,12 @@ export default class BaseModel {
     return true
   }
 
+  /**
+   * @template {typeof import("./base-model.js").default} AssocMC
+   * @param {import("./collection.js").CollectionArgsType<AssocMC>} args
+   * @param {import("./collection.js").QueryArgsType} queryArgs
+   * @returns {Promise<InstanceType<AssocMC> | null>}
+   */
   async _loadBelongsToReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationships) {
       return this.relationships[args.reflectionName]
@@ -1085,6 +1149,10 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {{reflectionName: string}} args
+   * @returns {BaseModel | null}
+   */
   _readBelongsToReflection({reflectionName}) {
     if (reflectionName in this.relationships) {
       return this.relationships[reflectionName]
@@ -1142,6 +1210,10 @@ export default class BaseModel {
     }
   }
 
+  /**
+   * @param {{reflectionName: string}} args
+   * @returns {BaseModel | null}
+   */
   _readHasOneReflection({reflectionName}) {
     if (reflectionName in this.relationships) {
       return this.relationships[reflectionName]
@@ -1159,6 +1231,15 @@ export default class BaseModel {
     throw new NotLoadedError(`${modelClassName}#${reflectionName} hasn't been loaded yet. Only these were loaded: ${loadedRelationships.join(", ")}`)
   }
 
+  /**
+   * @param {object} [args]
+   * @param {object} [args.data]
+   * @param {Record<string, any>} [args.data.b]
+   * @param {Record<string, any>} [args.data.a]
+   * @param {any} [args.data.r]
+   * @param {Collection<typeof BaseModel>} [args.collection]
+   * @returns {void}
+   */
   _readModelDataFromArgs(args) {
     this.abilities = args.data.b || {}
     this.collection = args.collection
@@ -1166,6 +1247,10 @@ export default class BaseModel {
     this.preloadedRelationships = args.data.r
   }
 
+  /**
+   * @param {{getModel: (relationshipType: string, relationshipId: number | string) => BaseModel}} preloaded
+   * @returns {void}
+   */
   _readPreloadedRelationships(preloaded) {
     if (!this.preloadedRelationships) {
       return
@@ -1216,8 +1301,6 @@ export default class BaseModel {
     }
   }
 
-  /**
-   * @returns {number|string}
-   */
+  /** @returns {number|string} */
   primaryKey() { return this.readAttributeUnderscore(this.modelClass().primaryKey()) }
 }

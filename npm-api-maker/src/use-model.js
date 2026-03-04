@@ -21,6 +21,7 @@ import useShape from "set-state-compare/build/use-shape.js"
  * @param {Function|object} modelClassArg
  * @param {object | ((args: {modelClass: typeof import("./base-model.js").default}) => useModelArgs)} [argsArg]
  */
+/** useModel. */
 // eslint-disable-next-line complexity
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()

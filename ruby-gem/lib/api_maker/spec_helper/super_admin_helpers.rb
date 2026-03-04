@@ -57,7 +57,18 @@ private
   end
 
   def resolve_created_super_admin_model(model_class:)
-    uri = URI.parse(current_url)
+    url_with_model_id = nil
+
+    wait_for_expect do
+      maybe_url = current_url
+      maybe_query = URI.parse(maybe_url).query.to_s
+      maybe_model_id = CGI.parse(maybe_query)["model_id"]&.first
+
+      expect(maybe_model_id).to be_present
+      url_with_model_id = maybe_url
+    end
+
+    uri = URI.parse(url_with_model_id)
     params = CGI.parse(uri.query.to_s)
     model_id = params["model_id"]&.first
 
