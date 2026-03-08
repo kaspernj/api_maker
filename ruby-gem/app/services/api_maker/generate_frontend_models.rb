@@ -1,4 +1,6 @@
 class ApiMaker::GenerateFrontendModels < ApiMaker::ApplicationService # rubocop:disable Metrics/ClassLength
+  FRONTEND_MODELS_PATHS_ENV_KEY = "API_MAKER_FRONTEND_MODELS_PATHS".freeze
+
   attr_reader :path
 
   def initialize(path: nil)
@@ -6,31 +8,47 @@ class ApiMaker::GenerateFrontendModels < ApiMaker::ApplicationService # rubocop:
   end
 
   def perform
-    FileUtils.mkdir_p(models_path)
+    models_paths.each do |models_path|
+      FileUtils.mkdir_p(models_path)
 
-    resources.each do |resource|
-      model_content = ApiMaker::ModelContentGeneratorService.execute!(resource:)
-      file_path = models_path.join("#{model_content.dig(:model_class_data, :nameDasherized)}.js")
+      resources.each do |resource|
+        model_content = ApiMaker::ModelContentGeneratorService.execute!(resource:)
+        file_path = models_path.join("#{model_content.dig(:model_class_data, :nameDasherized)}.js")
 
-      File.write(file_path, model_file_content(model_content:, resource:))
+        File.write(file_path, model_file_content(model_content:, resource:))
+      end
+
+      File.write(models_index_path(models_path), models_index_content)
     end
-    File.write(models_index_path, models_index_content)
 
     succeed!
   end
 
 private
 
-  def models_path
-    @models_path ||= Pathname(path || Rails.root.join("app/javascript/models"))
+  def env_models_paths
+    ENV.fetch(FRONTEND_MODELS_PATHS_ENV_KEY, "")
+      .split(File::PATH_SEPARATOR)
+      .map(&:strip)
+      .compact_blank
+      .uniq
+  end
+
+  def models_paths
+    @models_paths ||= begin
+      output_paths = env_models_paths
+      output_paths = [path] if output_paths.blank? && path.present?
+      output_paths = [Rails.root.join("app/javascript/models")] if output_paths.blank?
+      output_paths.map { |output_path| Pathname(output_path) }
+    end
   end
 
   def resources
     @resources ||= ApiMaker::ModelsFinderService.execute!
   end
 
-  def models_index_path
-    @models_index_path ||= models_path.join("../models.js").cleanpath
+  def models_index_path(models_path)
+    models_path.join("../models.js").cleanpath
   end
 
   def models_index_content
