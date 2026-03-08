@@ -272,6 +272,16 @@ end
 
 ## Usage
 
+### Generating frontend models to multiple apps
+
+If multiple frontend apps should share generated models, set `API_MAKER_FRONTEND_MODELS_PATHS` to a path-separated list (using `:` on macOS/Linux):
+
+```sh
+API_MAKER_FRONTEND_MODELS_PATHS="app/javascript/models:../admin-app/app/javascript/models" bundle exec rails runner 'ApiMaker::GenerateFrontendModels.execute!'
+```
+
+If `API_MAKER_FRONTEND_MODELS_PATHS` is not set, generation keeps the previous behavior and writes to the default path (or the explicit `path:` argument when provided).
+
 ### Creating a new model from JavaScript
 
 ```js
