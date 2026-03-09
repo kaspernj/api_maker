@@ -1,7 +1,8 @@
 # Changelog
 
 ## Unreleased
-- Add an explicit `base-model.d.ts` so consumers importing `build/base-model.js` always receive static `BaseModel` typings (including `ransack`) even when JS declaration emit is partial.
+- Fix `BaseModel` declaration emission so consumers importing `build/base-model.js` receive inherited static typings (including `ransack`).
+- Disable `no-extra-parens` in `npm-api-maker` ESLint config to avoid conflicts with JSDoc cast patterns used across the package.
 - Document `useModelEvent` as the preferred UI subscription API over manual `ModelEvents.connect(...)` calls in the READMEs.
 - Bump Expo to `~53.0.27` for SDK 53 dependency compatibility.
 - Add `form` and `htmlFormProps` support to `Form` and enforce exact prop-types.
