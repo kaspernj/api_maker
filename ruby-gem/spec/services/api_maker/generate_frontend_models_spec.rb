@@ -21,7 +21,7 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("import Project from \"./project.js\"")
         expect(task_content).to include("class Task extends BaseModel")
         expect(task_content).to include("static modelClassData()")
-        expect(task_content).to include("@returns {Record<string, any>}")
+        expect(task_content).to include("@returns {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType}")
         expect(task_content).not_to include("static ransack(query = {})")
         expect(task_content).not_to include("static select(select)")
         expect(task_content).not_to include("static find(id)")

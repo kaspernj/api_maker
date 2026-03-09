@@ -96,9 +96,9 @@ private
     lines << ""
     lines << "/** Frontend model for #{model_class_name}. */"
     lines << "class #{model_class_name} extends BaseModel {"
-    lines << "  /** @returns {Record<string, any>} */"
+    lines << "  /** @returns {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */"
     lines << "  static modelClassData() {"
-    lines << "    return modelClassData"
+    lines << "    return /** @type {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */ (modelClassData)"
     lines << "  }"
     lines.concat(attribute_method_lines(attributes))
     lines.concat(collection_command_lines(collection_commands, model_content))
