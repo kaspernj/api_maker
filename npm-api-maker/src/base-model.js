@@ -46,7 +46,7 @@ const objectToUnderscore = (object) => {
 }
 
 /** BaseModel. */
-export default class BaseModel {
+const ApiMakerBaseModel = class BaseModel {
   static apiMakerType = "BaseModel"
 
   /** @returns {Attribute[]} */
@@ -1304,3 +1304,5 @@ export default class BaseModel {
   /** @returns {number|string} */
   primaryKey() { return this.readAttributeUnderscore(this.modelClass().primaryKey()) }
 }
+
+export default ApiMakerBaseModel

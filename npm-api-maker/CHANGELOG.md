@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Add an explicit `base-model.d.ts` so consumers importing `build/base-model.js` always receive static `BaseModel` typings (including `ransack`) even when JS declaration emit is partial.
 - Document `useModelEvent` as the preferred UI subscription API over manual `ModelEvents.connect(...)` calls in the READMEs.
 - Bump Expo to `~53.0.27` for SDK 53 dependency compatibility.
 - Add `form` and `htmlFormProps` support to `Form` and enforce exact prop-types.
