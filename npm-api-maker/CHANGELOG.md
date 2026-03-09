@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Type `CollectionArgsType.model` as `BaseModel` to match relationship owners and avoid generated-model `any` owner casts for reflection loading.
 - Fix `BaseModel` declaration emission so consumers importing `build/base-model.js` receive inherited static typings (including `ransack`).
 - Disable `no-extra-parens` in `npm-api-maker` ESLint config to avoid conflicts with JSDoc cast patterns used across the package.
 - Document `useModelEvent` as the preferred UI subscription API over manual `ModelEvents.connect(...)` calls in the READMEs.

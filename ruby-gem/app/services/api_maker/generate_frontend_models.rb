@@ -249,13 +249,16 @@ private
       "    if (!(\"#{foreign_key_method_name}\" in this)) throw new Error(\"Foreign key method wasn't defined: #{foreign_key_method_name}\")",
       "",
       "    const id = this.#{foreign_key_method_name}()",
-      "    const modelClass = #{related_model_class_reference}",
       "    const ransack = {}",
       "",
       "    ransack[\"#{ransack_key}\"] = id",
       "",
       "    return this._loadBelongsToReflection(",
-      "      {reflectionName: \"#{relationship_name}\", model: /** @type {any} */ (this), modelClass},",
+      "      {",
+      "        reflectionName: \"#{relationship_name}\",",
+      "        model: this,",
+      "        modelClass: #{related_model_class_reference}",
+      "      },",
       "      {ransack}",
       "    )",
       "  }"
@@ -285,13 +288,11 @@ private
     if options_through
       lines.push(
 
-        "    const modelClass = #{related_model_class_reference}",
-        "",
         "    return new Collection(",
         "      {",
         "        reflectionName: \"#{relationship_key_name}\",",
-        "        model: /** @type {any} */ (this),",
-        "        modelClass",
+        "        model: this,",
+        "        modelClass: #{related_model_class_reference}",
         "      },",
         "      {",
         "        params: {",
@@ -310,8 +311,6 @@ private
 
         "    if (!(\"#{primary_key_method_name}\" in this)) throw new Error(\"No such primary key method: #{primary_key_method_name}\")",
         "",
-        "    const modelClass = #{related_model_class_reference}",
-        "",
         "    const ransack = {}",
         "",
         "    ransack[\"#{foreign_key}_eq\"] = this.#{primary_key_method_name}()"
@@ -324,8 +323,8 @@ private
         "    return new Collection(",
         "      {",
         "        reflectionName: \"#{relationship_key_name}\",",
-        "        model: /** @type {any} */ (this),",
-        "        modelClass",
+        "        model: this,",
+        "        modelClass: #{related_model_class_reference}",
         "      },",
         "      {ransack}",
         "    )"
@@ -345,13 +344,11 @@ private
     if options_through
       lines.push(
 
-        "    const modelClass = #{related_model_class_reference}",
-        "",
         "    return this._loadHasManyReflection(",
         "      {",
         "        reflectionName: \"#{relationship_name}\",",
-        "        model: /** @type {any} */ (this),",
-        "        modelClass",
+        "        model: this,",
+        "        modelClass: #{related_model_class_reference}",
         "      },",
         "      {",
         "        params: {",
@@ -370,8 +367,6 @@ private
 
         "    if (!(\"#{primary_key_method_name}\" in this)) throw new Error(\"No such primary key method: #{primary_key_method_name}\")",
         "",
-        "    const modelClass = #{related_model_class_reference}",
-        "",
         "    const ransack = {}",
         "",
         "    ransack[\"#{foreign_key}_eq\"] = this.#{primary_key_method_name}()"
@@ -383,8 +378,8 @@ private
         "    return this._loadHasManyReflection(",
         "      {",
         "        reflectionName: \"#{relationship_name}\",",
-        "        model: /** @type {any} */ (this),",
-        "        modelClass",
+        "        model: this,",
+        "        modelClass: #{related_model_class_reference}",
         "      },",
         "      {ransack}",
         "    )"
@@ -418,8 +413,7 @@ private
       "  #{load_method_name}() {",
       "    if (!(\"#{primary_key_method_name}\" in this)) throw new Error(\"Primary key method wasn't defined: #{primary_key_method_name}\")",
       "",
-      "    const id = this.#{primary_key_method_name}()",
-      "    const modelClass = #{related_model_class_reference}"
+      "    const id = this.#{primary_key_method_name}()"
     ]
 
     if options_through
@@ -427,7 +421,11 @@ private
 
         "",
         "    return this._loadHasOneReflection(",
-        "      {reflectionName: \"#{relationship_name}\", model: /** @type {any} */ (this), modelClass},",
+        "      {",
+        "        reflectionName: \"#{relationship_name}\",",
+        "        model: this,",
+        "        modelClass: #{related_model_class_reference}",
+        "      },",
         "      {",
         "        params: {",
         "          through: {",
@@ -450,8 +448,8 @@ private
         "    return this._loadHasOneReflection(",
         "      {",
         "        reflectionName: \"#{relationship_name}\",",
-        "        model: /** @type {any} */ (this),",
-        "        modelClass",
+        "        model: this,",
+        "        modelClass: #{related_model_class_reference}",
         "      },",
         "      {ransack}",
         "    )"

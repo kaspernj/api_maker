@@ -42,7 +42,7 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("testMember(args, commandArgs = {})")
         expect(task_content).to include("project()")
         expect(task_content).to include("loadProject()")
-        expect(task_content).to include("const modelClass = Project")
+        expect(task_content).to include("modelClass: Project")
         expect(task_content).to include("comments()")
         expect(task_content).to include("loadComments()")
         expect(task_content).to include("/** @returns {Promise<import(\"./user.js\").default | null>} */")
