@@ -145,10 +145,34 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     raise ApiMaker::SpecHelper::SelectorNotFoundError, e.message
   end
 
-  def wait_for_browser(delay_sec: 0.2, message: "wait for browser", timeout_sec: 6)
+  def wait_for_browser(
+    delay_sec: 0.2,
+    heartbeat: false,
+    heartbeat_interval_sec: 5,
+    message: "wait for browser",
+    timeout_sec: 6
+  )
+    last_heartbeat_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    printed_heartbeat = false
+
     WaitUtil.wait_for_condition(message, timeout_sec:, delay_sec:) do
+      if heartbeat
+        now = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        if now - last_heartbeat_at >= heartbeat_interval_sec
+          print "."
+          $stdout.flush
+          last_heartbeat_at = now
+          printed_heartbeat = true
+        end
+      end
+
       expect_no_browser_errors
       yield
+    end
+  ensure
+    if printed_heartbeat
+      print "\n"
+      $stdout.flush
     end
   end
 

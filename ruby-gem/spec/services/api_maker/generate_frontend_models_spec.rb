@@ -46,5 +46,43 @@ describe ApiMaker::GenerateFrontendModels do
         expect(File).to exist(File.join(tmp_dir, "account-marked-task.js"))
       end
     end
+
+    it "writes model files to all configured env paths" do
+      Dir.mktmpdir do |tmp_dir_one|
+        Dir.mktmpdir do |tmp_dir_two|
+          with_env(
+            ApiMaker::GenerateFrontendModels::FRONTEND_MODELS_PATHS_ENV_KEY,
+            [tmp_dir_one, tmp_dir_two].join(File::PATH_SEPARATOR)
+          ) do
+            ApiMaker::GenerateFrontendModels.execute!
+          end
+
+          [tmp_dir_one, tmp_dir_two].each do |tmp_dir|
+            expect(File).to exist(File.join(tmp_dir, "task.js"))
+            expect(File).to exist(File.join(tmp_dir, "../models.js"))
+          end
+        end
+      end
+    end
+  end
+
+private
+
+  def with_env(key, value)
+    old_value = ENV.fetch(key, nil)
+
+    if value.nil?
+      ENV.delete(key)
+    else
+      ENV[key] = value
+    end
+
+    yield
+  ensure
+    if old_value.nil?
+      ENV.delete(key)
+    else
+      ENV[key] = old_value
+    end
   end
 end

@@ -272,6 +272,16 @@ end
 
 ## Usage
 
+### Generating frontend models to multiple apps
+
+If multiple frontend apps should share generated models, set `API_MAKER_FRONTEND_MODELS_PATHS` to a path-separated list (using `:` on macOS/Linux):
+
+```sh
+API_MAKER_FRONTEND_MODELS_PATHS="app/javascript/models:../admin-app/app/javascript/models" bundle exec rails runner 'ApiMaker::GenerateFrontendModels.execute!'
+```
+
+If `API_MAKER_FRONTEND_MODELS_PATHS` is not set, generation keeps the previous behavior and writes to the default path (or the explicit `path:` argument when provided).
+
 ### Creating a new model from JavaScript
 
 ```js
@@ -496,6 +506,16 @@ user.connect("new_message", args => {
 })
 ```
 
+For React/ShapeComponent UI code, prefer ApiMaker hooks (especially `useModelEvent`) over manual `ModelEvents.connect(...)` calls, because hooks manage subscribe/unsubscribe automatically:
+
+```js
+import useModelEvent from "@kaspernj/api-maker/build/use-model-event.js"
+
+useModelEvent(user, "new_message", ({args}) => {
+  console.log(`New message: ${args.message}`)
+})
+```
+
 Or you can receive the event in React:
 ```jsx
 <EventConnection event="new_message" model={user} onCall={args => this.onNewMessage(args)} />
@@ -538,6 +558,7 @@ You can also use a React component if you use React and dont want to keep track 
 ```jsx
 import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event.js"
 import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
+import useModelEvent from "@kaspernj/api-maker/build/use-model-event.js"
 import useModelClassEvent from "@kaspernj/api-maker/build/use-model-class-event.js"
 import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
 ```
@@ -545,6 +566,7 @@ import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
 ```js
 useCreatedEvent(User, this.onUserCreated)
 useModelClassEvent(User, "team_synced", this.onTeamSynced)
+useModelEvent(user, "team_synced", this.onTeamSynced)
 useDestroyedEvent(user, this.onUserDestroyed)
 useUpdatedEvent(user, this.onUserUpdated)
 ```
