@@ -34,6 +34,7 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("/** @returns {number} */\n  id()")
         expect(task_content).to include("/** @returns {number | null} */\n  priority()")
         expect(task_content).to include("/** @returns {string} */\n  name()")
+        expect(task_content).to include("/** @returns {Date} */\n  createdAt()")
         expect(task_content).to include("/** @returns {any} */\n  translatedState()")
         expect(task_content).to include("/** @returns {any} */\n  customId()")
         expect(task_content).to include("@template TCommandResponse")

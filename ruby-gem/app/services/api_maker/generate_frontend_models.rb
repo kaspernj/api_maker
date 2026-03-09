@@ -512,8 +512,10 @@ private
       "number"
     when "boolean"
       "boolean"
-    when "binary", "citext", "date", "datetime", "inet", "string", "text", "time", "timestamp", "uuid"
+    when "binary", "citext", "inet", "string", "text", "uuid"
       "string"
+    when "date", "datetime", "time", "timestamp"
+      "Date"
     when "json", "jsonb", "hstore"
       "Record<string, any> | Array<any>"
     else
