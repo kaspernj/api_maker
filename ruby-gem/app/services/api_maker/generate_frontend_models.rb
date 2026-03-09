@@ -100,7 +100,6 @@ private
     lines << "  static modelClassData() {"
     lines << "    return modelClassData"
     lines << "  }"
-    lines.concat(static_method_lines)
     lines.concat(attribute_method_lines(attributes))
     lines.concat(collection_command_lines(collection_commands, model_content))
     lines.concat(member_command_lines(member_commands, model_content))
@@ -139,31 +138,6 @@ private
         "  }"
       ]
     end
-  end
-
-  def static_method_lines
-    [
-      "",
-      "  /**",
-      "   * @template MC",
-      "   * @param {Record<string, any>} [query]",
-      "   * @this {MC}",
-      "   * @returns {import(\"@kaspernj/api-maker/build/collection.js\").default<MC>}",
-      "   */",
-      "  static ransack(query = {}) {",
-      "    return /** @type {import(\"@kaspernj/api-maker/build/collection.js\").default<MC>} */ (super.ransack(query))",
-      "  }",
-      "",
-      "  /**",
-      "   * @template MC",
-      "   * @param {Record<string, any>} [select]",
-      "   * @this {MC}",
-      "   * @returns {import(\"@kaspernj/api-maker/build/collection.js\").default<MC>}",
-      "   */",
-      "  static select(select) {",
-      "    return /** @type {import(\"@kaspernj/api-maker/build/collection.js\").default<MC>} */ (super.select(select))",
-      "  }"
-    ]
   end
 
   def collection_command_lines(collection_commands, model_content)
