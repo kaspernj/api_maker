@@ -9,13 +9,11 @@ describe ApiMaker::GenerateFrontendModels do
 
         task_model_path = File.join(tmp_dir, "task.js")
         task_content = File.read(task_model_path)
-        base_model_types_path = File.join(tmp_dir, "api-maker-base-model-types.d.ts")
-        base_model_types_content = File.read(base_model_types_path)
         models_index_path = File.join(tmp_dir, "../models.js")
         models_index_content = File.read(models_index_path)
 
         expect(File).to exist(task_model_path)
-        expect(File).to exist(base_model_types_path)
+        expect(File).not_to exist(File.join(tmp_dir, "api-maker-base-model-types.d.ts"))
         expect(File).to exist(models_index_path)
         expect(task_content).to start_with("// @ts-check\n")
         expect(task_content).to include("import BaseModel from \"@kaspernj/api-maker/build/base-model.js\"")
@@ -23,7 +21,9 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("import Project from \"./project.js\"")
         expect(task_content).to include("class Task extends BaseModel")
         expect(task_content).to include("static modelClassData()")
-        expect(task_content).to include("@returns {import(\"@kaspernj/api-maker/build/collection.js\").default<typeof Task>}")
+        expect(task_content).to include("@returns {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType}")
+        expect(task_content).to include("@template {typeof BaseModel} MC")
+        expect(task_content).to include("@returns {import(\"@kaspernj/api-maker/build/collection.js\").default<MC>}")
         expect(task_content).to include("static ransack(query = {})")
         expect(task_content).to include("static select(select)")
         expect(task_content).not_to include("static find(id)")
@@ -49,9 +49,6 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("loadComments()")
         expect(task_content).to include("/** @returns {Promise<import(\"./user.js\").default | null>} */")
         expect(task_content).to include("ransack[\"resource_type_eq\"] = \"Task\"")
-        expect(base_model_types_content).to include("declare module \"@kaspernj/api-maker/build/base-model.js\"")
-        expect(base_model_types_content).to include("static modelName()")
-        expect(base_model_types_content).to include("static humanAttributeName(attributeName: string)")
         expect(models_index_content).to include("import Task from \"models/task.js\"")
         expect(models_index_content).to include("export {")
       end
@@ -77,7 +74,7 @@ describe ApiMaker::GenerateFrontendModels do
 
           [tmp_dir_one, tmp_dir_two].each do |tmp_dir|
             expect(File).to exist(File.join(tmp_dir, "task.js"))
-            expect(File).to exist(File.join(tmp_dir, "api-maker-base-model-types.d.ts"))
+            expect(File).not_to exist(File.join(tmp_dir, "api-maker-base-model-types.d.ts"))
             expect(File).to exist(File.join(tmp_dir, "../models.js"))
           end
         end
