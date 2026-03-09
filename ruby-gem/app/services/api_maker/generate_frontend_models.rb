@@ -536,7 +536,7 @@ private
       relationship_resource = resource_by_short_name.fetch(resource_name)
       relationship_file_name = relationship_resource.short_name.underscore.dasherize
 
-      import_lines << "import #{resource_name}Model from \"./#{relationship_file_name}.js\""
+      import_lines << "import #{resource_name} from \"./#{relationship_file_name}.js\""
     end
 
     import_lines
@@ -554,7 +554,7 @@ private
     relationship_resource_name = relationship.fetch(:resource_name)
     return model_class_name if relationship_resource_name == model_class_name
 
-    "#{relationship_resource_name}Model"
+    relationship_resource_name
   end
 
   def attribute_jsdoc_type(attribute_data)
