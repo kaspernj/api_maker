@@ -19,6 +19,7 @@ class ApiMaker::GenerateFrontendModels < ApiMaker::ApplicationService # rubocop:
       end
 
       File.write(models_index_path(models_path), models_index_content)
+      File.write(base_model_types_path(models_path), base_model_types_content)
     end
 
     succeed!
@@ -49,6 +50,10 @@ private
 
   def models_index_path(models_path)
     models_path.join("../models.js").cleanpath
+  end
+
+  def base_model_types_path(models_path)
+    models_path.join("api-maker-base-model-types.d.ts")
   end
 
   def models_index_content
@@ -139,16 +144,6 @@ private
   def static_method_lines(model_class_name:)
     [
       "",
-      "  /** @returns {import(\"@kaspernj/api-maker/build/model-name.js\").default} */",
-      "  static modelName() {",
-      "    return super.modelName()",
-      "  }",
-      "",
-      "  /** @param {string} attributeName */",
-      "  static humanAttributeName(attributeName) {",
-      "    return super.humanAttributeName(attributeName)",
-      "  }",
-      "",
       "  /**",
       "   * @param {Record<string, any>} [query]",
       "   * @returns {import(\"@kaspernj/api-maker/build/collection.js\").default<typeof #{model_class_name}>}",
@@ -178,6 +173,39 @@ private
       "    return super.all()",
       "  }"
     ]
+  end
+
+  def base_model_types_content
+    <<~TYPES
+      declare module "@kaspernj/api-maker/build/base-model.js" {
+        export default class BaseModel {
+          [key: string]: any
+          static [key: string]: any
+
+          static modelClassData(): Record<string, any>
+          static modelName(): {human: (args?: Record<string, any>) => string}
+          static humanAttributeName(attributeName: string): string
+          static primaryKey(): string
+
+          static ransack<MC extends typeof BaseModel>(this: MC, query?: Record<string, any>): import("@kaspernj/api-maker/build/collection.js").default<MC>
+          static select<MC extends typeof BaseModel>(this: MC, select?: Record<string, any>): import("@kaspernj/api-maker/build/collection.js").default<MC>
+          static all<MC extends typeof BaseModel>(this: MC): import("@kaspernj/api-maker/build/collection.js").default<MC>
+          static find<T extends typeof BaseModel>(this: T, id: number | string): Promise<InstanceType<T>>
+          static _callCollectionCommand(args: {args: any, command: string, collectionName: string, type: "collection"}, commandArgs: Record<string, any>): Promise<object>
+
+          primaryKey(): number | string
+          readAttributeUnderscore(attributeName: string): any
+          _isPresent(value: any): boolean
+          _callMemberCommand(args: Record<string, any>, commandArgs: Record<string, any>): Promise<object>
+          _readBelongsToReflection(args: {reflectionName: string}): any
+          _loadBelongsToReflection(args: Record<string, any>, queryArgs?: Record<string, any>): Promise<any>
+          _readHasManyReflection(args: {reflectionName: string}): import("@kaspernj/api-maker/build/collection.js").default<any>
+          _loadHasManyReflection(args: Record<string, any>, queryArgs?: Record<string, any>): Promise<import("@kaspernj/api-maker/build/collection.js").default<any>>
+          _readHasOneReflection(args: {reflectionName: string}): any
+          _loadHasOneReflection(args: Record<string, any>, queryArgs?: Record<string, any>): Promise<any>
+        }
+      }
+    TYPES
   end
 
   def collection_command_lines(collection_commands, model_content)
