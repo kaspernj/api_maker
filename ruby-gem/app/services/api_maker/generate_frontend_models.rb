@@ -268,7 +268,6 @@ private
     load_method_name = js_method_name("load_#{relationship_name}")
     related_model_jsdoc_type = relationship_jsdoc_type(relationship)
     active_record_name = relationship.dig(:active_record, :name)
-    class_name = relationship.fetch(:class_name)
     foreign_key = relationship.fetch(:foreign_key)
     options_as = relationship.dig(:options, :as)
     options_primary_key = relationship.dig(:options, :primary_key)
@@ -292,7 +291,6 @@ private
         "      {",
         "        reflectionName: \"#{relationship_key_name}\",",
         "        model: /** @type {any} */ (this),",
-        "        modelName: \"#{class_name}\",",
         "        modelClass",
         "      },",
         "      {",
@@ -327,7 +325,6 @@ private
         "      {",
         "        reflectionName: \"#{relationship_key_name}\",",
         "        model: /** @type {any} */ (this),",
-        "        modelName: \"#{class_name}\",",
         "        modelClass",
         "      },",
         "      {ransack}",
