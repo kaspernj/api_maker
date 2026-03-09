@@ -19,13 +19,13 @@ import objectToFormData from "object-to-formdata"
 
 /**
  * @typedef {object} ModelClassDataType
- * @property {import("./base-model/attribute.js").AttributeArgType[]} attributes
+ * @property {Record<string, import("./base-model/attribute.js").AttributeArgType>} attributes
  * @property {string} collectionName
  * @property {string} name
  * @property {string} paramKey
  * @property {string} primaryKey
- * @property {object} ransackable_attributes
- */
+ * @property {import("./base-model/attribute.js").AttributeArgType[]} ransackable_attributes
+*/
 
 /**
  * @typedef {object} ParseValidationErrorsOptions
@@ -634,10 +634,11 @@ export default class BaseModel {
    */
   isAttributeChanged(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
-    const attributeData = this.modelClassData().attributes.find((attribute) => digg(attribute, "name") == attributeNameUnderscore)
+    const attributes = Object.values(this.modelClassData().attributes)
+    const attributeData = attributes.find((attribute) => digg(attribute, "name") == attributeNameUnderscore)
 
     if (!attributeData) {
-      const attributeNames = this.modelClassData().attributes.map((attribute) => digg(attribute, "name"))
+      const attributeNames = attributes.map((attribute) => digg(attribute, "name"))
 
       throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
     }
@@ -695,10 +696,11 @@ export default class BaseModel {
       return false
 
     const attributeNameUnderscore = inflection.underscore(attributeName)
-    const attributeData = this.modelClassData().attributes.find((attribute) => attribute.name == attributeNameUnderscore)
+    const attributes = Object.values(this.modelClassData().attributes)
+    const attributeData = attributes.find((attribute) => attribute.name == attributeNameUnderscore)
 
     if (!attributeData) {
-      const attributeNames = this.modelClassData().attributes.map((attribute) => attribute.name)
+      const attributeNames = attributes.map((attribute) => attribute.name)
       throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
     }
 

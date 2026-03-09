@@ -98,7 +98,7 @@ private
     lines << "class #{model_class_name} extends BaseModel {"
     lines << "  /** @returns {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */"
     lines << "  static modelClassData() {"
-    lines << "    return /** @type {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */ (/** @type {unknown} */ (modelClassData))"
+    lines << "    return modelClassData"
     lines << "  }"
     lines.concat(attribute_method_lines(attributes))
     lines.concat(collection_command_lines(collection_commands, model_content))
