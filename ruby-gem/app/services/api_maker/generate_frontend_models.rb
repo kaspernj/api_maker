@@ -100,12 +100,8 @@ private
     lines.concat(member_command_lines(member_commands, model_content))
     lines.concat(relationship_method_lines(relationships:, model_content:))
     lines << "}"
-    lines.concat(model_static_type_lines(model_class_name:))
     lines << ""
-    lines << "/** @type {#{model_class_name}StaticType} */"
-    lines << "const #{model_class_name}Typed = #{model_class_name}"
-    lines << ""
-    lines << "export default #{model_class_name}Typed"
+    lines << "export default #{model_class_name}"
     lines << ""
 
     lines.join("\n")
@@ -137,25 +133,6 @@ private
         "  }"
       ]
     end
-  end
-
-  def model_static_type_lines(model_class_name:)
-    [
-      "",
-      "/**",
-      " * @typedef {typeof #{model_class_name} & {",
-      " *   modelName: () => import(\"@kaspernj/api-maker/build/model-name.js\").default,",
-      " *   humanAttributeName: (attributeName: string) => string,",
-      " *   primaryKey: () => string,",
-      " *   ransack: (query?: Record<string, any>) => import(\"@kaspernj/api-maker/build/collection.js\").default<typeof #{model_class_name}>,",
-      " *   select: (select?: Record<string, any>) => import(\"@kaspernj/api-maker/build/collection.js\").default<typeof #{model_class_name}>,",
-      " *   find: (id: number | string) => Promise<#{model_class_name}>,",
-      " *   findBy: (query: Record<string, any>) => Promise<#{model_class_name} | null>,",
-      " *   findByOrFail: (query: Record<string, any>) => Promise<#{model_class_name}>,",
-      " *   findOrCreateBy: (findOrCreateByArgs: Record<string, any>, args?: {additionalData?: Record<string, any>}) => Promise<#{model_class_name}>",
-      " * }} #{model_class_name}StaticType",
-      " */"
-    ]
   end
 
   def collection_command_lines(collection_commands, model_content)
