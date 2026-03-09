@@ -41,6 +41,7 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("static testCollection(args, commandArgs = {})")
         expect(task_content).to include("testMember(args, commandArgs = {})")
         expect(task_content).to include("project()")
+        expect(task_content).to include("_readBelongsToReflection({modelClass: Project, reflectionName: \"project\"})")
         expect(task_content).to include("loadProject()")
         expect(task_content).to include("modelClass: Project")
         expect(task_content).to include("comments()")

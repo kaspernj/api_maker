@@ -1150,8 +1150,9 @@ export default class BaseModel {
   }
 
   /**
-   * @param {{reflectionName: string}} args
-   * @returns {BaseModel | null}
+   * @template {typeof import("./base-model.js").default} AssocMC
+   * @param {{modelClass: AssocMC, reflectionName: string}} args
+   * @returns {InstanceType<AssocMC> | null}
    */
   _readBelongsToReflection({reflectionName}) {
     if (reflectionName in this.relationships) {
@@ -1211,8 +1212,9 @@ export default class BaseModel {
   }
 
   /**
-   * @param {{reflectionName: string}} args
-   * @returns {BaseModel | null}
+   * @template {typeof import("./base-model.js").default} AssocMC
+   * @param {{modelClass: AssocMC, reflectionName: string}} args
+   * @returns {InstanceType<AssocMC> | null}
    */
   _readHasOneReflection({reflectionName}) {
     if (reflectionName in this.relationships) {

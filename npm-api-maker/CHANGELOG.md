@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Type `_readBelongsToReflection` and `_readHasOneReflection` with `modelClass` generics so generated relationship readers return specific associated model types instead of `BaseModel`.
 - Prefer direct `export default class ...` declarations in npm-api-maker sources instead of class expressions assigned to constants.
 - Type `CollectionArgsType.model` as `BaseModel` to match relationship owners and avoid generated-model `any` owner casts for reflection loading.
 - Fix `BaseModel` declaration emission so consumers importing `build/base-model.js` receive inherited static typings (including `ransack`).
