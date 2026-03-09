@@ -14,7 +14,7 @@ import uniqunize from "uniqunize"
 /**
  * @template {typeof import("./base-model.js").default} MC
  * @typedef {object} CollectionArgsType
- * @property {ModelOf<MC>} [model]
+ * @property {import("./base-model.js").default} [model]
  * @property {MC} modelClass
  * @property {string} [reflectionName]
  */
