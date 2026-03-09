@@ -1,4 +1,4 @@
-/* eslint-disable no-extra-parens, sort-imports */
+/* eslint-disable sort-imports */
 import BaseComponent from "../../base-component"
 import {digg} from "diggerize"
 import EditAttributeCheckbox from "./edit-attribute-checkbox"

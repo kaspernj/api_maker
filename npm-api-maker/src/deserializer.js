@@ -12,13 +12,19 @@ export default class ApiMakerDeserializer {
       return object.map((value) => ApiMakerDeserializer.parse(value))
     } else if (object && typeof object == "object") {
       if (object.api_maker_type == "date") {
-        const date = /** @type {Date & {apiMakerType?: string}} */ (new Date(digg(object, "value"))) // eslint-disable-line no-extra-parens
+        const date = /** @type {Date & {apiMakerType?: string}} */ (new Date(digg(object, "value")))
 
         date.apiMakerType = "date"
 
         return date
+      } else if (object.api_maker_type == "datetime") {
+        const date = /** @type {Date & {apiMakerType?: string}} */ (new Date(digg(object, "value")))
+
+        date.apiMakerType = "datetime"
+
+        return date
       } else if (object.api_maker_type == "time") {
-        const date = /** @type {Date & {apiMakerType?: string}} */ (new Date(digg(object, "value"))) // eslint-disable-line no-extra-parens
+        const date = /** @type {Date & {apiMakerType?: string}} */ (new Date(digg(object, "value")))
 
         date.apiMakerType = "time"
 

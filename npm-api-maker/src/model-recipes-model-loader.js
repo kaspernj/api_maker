@@ -39,7 +39,7 @@ export default class ApiMakerModelRecipesModelLoader {
       {writable: false, value: modelClassName}
     )
 
-    const modelClassConstructor = /** @type {any} */ (ModelClass.prototype.constructor) // eslint-disable-line no-extra-parens
+    const modelClassConstructor = /** @type {any} */ (ModelClass.prototype.constructor)
     modelClassConstructor.modelClassData = () => modelClassData
 
     this.addAttributeMethodsToModelClass(ModelClass, attributes)

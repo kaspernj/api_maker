@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- Align `ModelClassDataType` with generated model metadata shape (`attributes` map) and remove generator casts through `unknown` for `modelClassData()`.
+- Type `_readBelongsToReflection` and `_readHasOneReflection` with `modelClass` generics so generated relationship readers return specific associated model types instead of `BaseModel`.
 - Prefer direct `export default class ...` declarations in npm-api-maker sources instead of class expressions assigned to constants.
 - Type `CollectionArgsType.model` as `BaseModel` to match relationship owners and avoid generated-model `any` owner casts for reflection loading.
 - Fix `BaseModel` declaration emission so consumers importing `build/base-model.js` receive inherited static typings (including `ransack`).
@@ -49,3 +51,5 @@
 - Allow ApiMaker Table `defaultDateFormatName` and `defaultDateTimeFormatName` props to accept formatter callbacks in addition to i18n format-name strings, enabling app-specific country-aware date rendering in table cells.
 - Allow `AttributeRows`/`AttributeRow` `defaultDateFormatName` and `defaultDateTimeFormatName` props to accept formatter callbacks for app-specific date rendering.
 - Add missing JSDoc across npm-api-maker source files, normalize single-tag blocks to single-line format, and tighten/align JSDoc typedefs used by lint/typecheck.
+- Parse `api_maker_type: "datetime"` payloads in the JS deserializer as `Date` objects and preserve `apiMakerType`.
+- Add Jest coverage for datetime deserialization behavior.

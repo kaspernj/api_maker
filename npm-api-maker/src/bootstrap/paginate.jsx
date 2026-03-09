@@ -167,7 +167,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseC
             </Text>
           </li>
         }
-        {pages.map((page) => ( // eslint-disable-line no-extra-parens
+        {pages.map((page) => (
           <li
             className={`page-item ${this.isPageActiveClass(page)}`}
             data-active={this.isPageActiveClass(page) == "active"}

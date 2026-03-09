@@ -109,7 +109,7 @@ export default class SourceMapsLoader {
 
   /** getMapURL. */
   getMapURL(args = {}) {
-    const {script, src} = /** @type {any} */ (args) // eslint-disable-line no-extra-parens
+    const {script, src} = /** @type {any} */ (args)
     const url = this.loadUrl(src)
     const originalUrl = `${url.origin}${url.pathname}`
 

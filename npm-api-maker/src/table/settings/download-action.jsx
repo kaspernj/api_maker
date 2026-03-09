@@ -1,4 +1,4 @@
-/* eslint-disable implicit-arrow-linebreak, no-extra-parens, react/jsx-no-literals, sort-imports */
+/* eslint-disable implicit-arrow-linebreak, react/jsx-no-literals, sort-imports */
 import BaseComponent from "../../base-component"
 import ColumnContent from "../column-content"
 import columnIdentifier from "../column-identifier.js"

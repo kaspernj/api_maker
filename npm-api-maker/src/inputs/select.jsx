@@ -50,7 +50,7 @@ const ApiMakerInputsSelect = memo(shapeComponent(class ApiMakerInputsSelect exte
             {typeof includeBlank == "boolean" ? null : includeBlank}
           </option>
         }
-        {options && options.map((option) => ( // eslint-disable-line no-extra-parens
+        {options && options.map((option) => (
           <option key={this.optionKey(option)} value={this.optionValue(option)}>
             {this.optionLabel(option)}
           </option>

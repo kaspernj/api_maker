@@ -95,18 +95,16 @@ private
     lines << "const modelClassData = #{model_class_data_json}"
     lines << ""
     lines << "/** Frontend model for #{model_class_name}. */"
-    lines << "class #{model_class_name} extends BaseModel {"
-    lines << "  /** @returns {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */"
+    lines << "export default class #{model_class_name} extends BaseModel {"
+    lines << "  /** @returns {typeof modelClassData} */"
     lines << "  static modelClassData() {"
-    lines << "    return /** @type {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */ (/** @type {unknown} */ (modelClassData))"
+    lines << "    return modelClassData"
     lines << "  }"
     lines.concat(attribute_method_lines(attributes))
     lines.concat(collection_command_lines(collection_commands, model_content))
     lines.concat(member_command_lines(member_commands, model_content))
     lines.concat(relationship_method_lines(relationships:, model_content:, model_class_name:))
     lines << "}"
-    lines << ""
-    lines << "export default #{model_class_name}"
     lines << ""
 
     lines.join("\n")
@@ -241,7 +239,7 @@ private
       "",
       "  /** @returns {#{related_model_jsdoc_type} | null} */",
       "  #{method_name}() {",
-      "    return this._readBelongsToReflection({reflectionName: \"#{relationship_name}\"})",
+      "    return this._readBelongsToReflection({modelClass: #{related_model_class_reference}, reflectionName: \"#{relationship_name}\"})",
       "  }",
       "",
       "  /** @returns {Promise<#{related_model_jsdoc_type} | null>} */",
@@ -406,7 +404,7 @@ private
       "",
       "  /** @returns {#{related_model_jsdoc_type} | null} */",
       "  #{method_name}() {",
-      "    return this._readHasOneReflection({reflectionName: \"#{relationship_name}\"})",
+      "    return this._readHasOneReflection({modelClass: #{related_model_class_reference}, reflectionName: \"#{relationship_name}\"})",
       "  }",
       "",
       "  /** @returns {Promise<#{related_model_jsdoc_type} | null>} */",
@@ -514,8 +512,10 @@ private
       "number"
     when "boolean"
       "boolean"
-    when "binary", "citext", "date", "datetime", "inet", "string", "text", "time", "timestamp", "uuid"
+    when "binary", "citext", "inet", "string", "text", "uuid"
       "string"
+    when "date", "datetime", "time", "timestamp"
+      "Date"
     when "json", "jsonb", "hstore"
       "Record<string, any> | Array<any>"
     else

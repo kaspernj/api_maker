@@ -81,7 +81,7 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
             ref={this.tt.currencyRef}
           >
             <option />
-            {currenciesCollection.map((option) => ( // eslint-disable-line no-extra-parens
+            {currenciesCollection.map((option) => (
               <option key={`select-option-${option[1]}`} value={option[1]}>
                 {this.props.small && option[1]}
                 {!this.props.small && option[0]}
