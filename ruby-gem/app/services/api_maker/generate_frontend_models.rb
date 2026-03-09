@@ -95,6 +95,7 @@ private
     lines << "  static modelClassData() {"
     lines << "    return modelClassData"
     lines << "  }"
+    lines.concat(static_method_lines(model_class_name:))
     lines.concat(attribute_method_lines(attributes))
     lines.concat(collection_command_lines(collection_commands, model_content))
     lines.concat(member_command_lines(member_commands, model_content))
@@ -133,6 +134,50 @@ private
         "  }"
       ]
     end
+  end
+
+  def static_method_lines(model_class_name:)
+    [
+      "",
+      "  /** @returns {import(\"@kaspernj/api-maker/build/model-name.js\").default} */",
+      "  static modelName() {",
+      "    return super.modelName()",
+      "  }",
+      "",
+      "  /** @param {string} attributeName */",
+      "  static humanAttributeName(attributeName) {",
+      "    return super.humanAttributeName(attributeName)",
+      "  }",
+      "",
+      "  /**",
+      "   * @param {Record<string, any>} [query]",
+      "   * @returns {import(\"@kaspernj/api-maker/build/collection.js\").default<typeof #{model_class_name}>}",
+      "   */",
+      "  static ransack(query = {}) {",
+      "    return super.ransack(query)",
+      "  }",
+      "",
+      "  /**",
+      "   * @param {Record<string, any>} [select]",
+      "   * @returns {import(\"@kaspernj/api-maker/build/collection.js\").default<typeof #{model_class_name}>}",
+      "   */",
+      "  static select(select) {",
+      "    return super.select(select)",
+      "  }",
+      "",
+      "  /**",
+      "   * @param {number | string} id",
+      "   * @returns {Promise<#{model_class_name}>}",
+      "   */",
+      "  static find(id) {",
+      "    return super.find(id)",
+      "  }",
+      "",
+      "  /** @returns {import(\"@kaspernj/api-maker/build/collection.js\").default<typeof #{model_class_name}>} */",
+      "  static all() {",
+      "    return super.all()",
+      "  }"
+    ]
   end
 
   def collection_command_lines(collection_commands, model_content)
