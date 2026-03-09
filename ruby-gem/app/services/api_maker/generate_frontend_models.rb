@@ -96,7 +96,7 @@ private
     lines << ""
     lines << "/** Frontend model for #{model_class_name}. */"
     lines << "class #{model_class_name} extends BaseModel {"
-    lines << "  /** @returns {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */"
+    lines << "  /** @returns {Record<string, any>} */"
     lines << "  static modelClassData() {"
     lines << "    return modelClassData"
     lines << "  }"
@@ -145,23 +145,23 @@ private
     [
       "",
       "  /**",
-      "   * @template {typeof BaseModel} MC",
+      "   * @template MC",
       "   * @param {Record<string, any>} [query]",
       "   * @this {MC}",
       "   * @returns {import(\"@kaspernj/api-maker/build/collection.js\").default<MC>}",
       "   */",
       "  static ransack(query = {}) {",
-      "    return super.ransack(query)",
+      "    return /** @type {import(\"@kaspernj/api-maker/build/collection.js\").default<MC>} */ (super.ransack(query))",
       "  }",
       "",
       "  /**",
-      "   * @template {typeof BaseModel} MC",
+      "   * @template MC",
       "   * @param {Record<string, any>} [select]",
       "   * @this {MC}",
       "   * @returns {import(\"@kaspernj/api-maker/build/collection.js\").default<MC>}",
       "   */",
       "  static select(select) {",
-      "    return super.select(select)",
+      "    return /** @type {import(\"@kaspernj/api-maker/build/collection.js\").default<MC>} */ (super.select(select))",
       "  }"
     ]
   end
