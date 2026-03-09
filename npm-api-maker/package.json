@@ -9,7 +9,7 @@
   "types": "build/index.d.ts",
   "main": "build/index.js",
   "scripts": {
-    "build": "rm -rf build && tsc || true",
+    "build": "rm -rf build && tsc || true && mkdir -p build && cp src/base-model.d.ts build/base-model.d.ts",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "NODE_OPTIONS=--experimental-vm-modules expo-module test",
