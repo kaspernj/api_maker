@@ -20,11 +20,20 @@ import objectToFormData from "object-to-formdata"
 /**
  * @typedef {object} ModelClassDataType
  * @property {Record<string, import("./base-model/attribute.js").AttributeArgType>} attributes
+ * @property {string} camelizedLower
+ * @property {string} className
+ * @property {string} collectionKey
  * @property {string} collectionName
+ * @property {string} i18nKey
  * @property {string} name
+ * @property {string} nameDasherized
  * @property {string} paramKey
+ * @property {string} pluralName
  * @property {string} primaryKey
+ * @property {Array<Record<string, any>>} ransackable_associations
  * @property {import("./base-model/attribute.js").AttributeArgType[]} ransackable_attributes
+ * @property {Array<Record<string, any>>} ransackable_scopes
+ * @property {Array<Record<string, any>>} relationships
 */
 
 /**
@@ -102,7 +111,7 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} T
+   * @template {typeof import("./base-model.js").default} T
    * @this {T}
    * @param {number | string} id
    * @returns {Promise<InstanceType<T>>}
@@ -122,7 +131,7 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} T
+   * @template {typeof import("./base-model.js").default} T
    * @this {T}
    * @param {Record<string, any>} findOrCreateByArgs
    * @param {object} [args]
@@ -151,7 +160,7 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} MC
+   * @template {typeof import("./base-model.js").default} MC
    * @this {MC}
    * @param {Record<string, any>} [query]
    * @returns {import("./collection.js").default<MC>}
@@ -161,7 +170,7 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} MC
+   * @template {typeof import("./base-model.js").default} MC
    * @this {MC}
    * @param {Record<string, any>} [select]
    * @returns {import("./collection.js").default<MC>}
@@ -252,7 +261,7 @@ export default class BaseModel {
    * @param {object} [args.data]
    * @param {Record<string, any>} [args.a]
    * @param {Record<string, any>} [args.b]
-   * @param {Collection<typeof BaseModel>} [args.collection]
+   * @param {Collection<typeof import("./base-model.js").default>} [args.collection]
    */
   constructor(args = {}) {
     this.changes = {}
@@ -395,7 +404,7 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} MC
+   * @template {typeof import("./base-model.js").default} MC
    * @this {MC}
    * @returns {Collection<MC>}
    */
@@ -990,10 +999,10 @@ export default class BaseModel {
   /**
    * @template {BaseModel} Self
    * @this {Self}
-   * @returns {typeof BaseModel & (new (...args: any[]) => Self)}
+   * @returns {typeof import("./base-model.js").default & (new (...args: any[]) => Self)}
    */
   modelClass() {
-    return /** @type {typeof BaseModel & (new (...args: any[]) => Self)} */ (this.constructor) // eslint-disable-line no-extra-parens
+    return /** @type {typeof import("./base-model.js").default & (new (...args: any[]) => Self)} */ (this.constructor) // eslint-disable-line no-extra-parens
   }
 
   /**
@@ -1241,7 +1250,7 @@ export default class BaseModel {
    * @param {Record<string, any>} [args.data.b]
    * @param {Record<string, any>} [args.data.a]
    * @param {any} [args.data.r]
-   * @param {Collection<typeof BaseModel>} [args.collection]
+   * @param {Collection<typeof import("./base-model.js").default>} [args.collection]
    * @returns {void}
    */
   _readModelDataFromArgs(args) {

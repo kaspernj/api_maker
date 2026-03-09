@@ -95,8 +95,8 @@ private
     lines << "const modelClassData = #{model_class_data_json}"
     lines << ""
     lines << "/** Frontend model for #{model_class_name}. */"
-    lines << "class #{model_class_name} extends BaseModel {"
-    lines << "  /** @returns {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */"
+    lines << "export default class #{model_class_name} extends BaseModel {"
+    lines << "  /** @returns {typeof modelClassData} */"
     lines << "  static modelClassData() {"
     lines << "    return modelClassData"
     lines << "  }"
@@ -105,8 +105,6 @@ private
     lines.concat(member_command_lines(member_commands, model_content))
     lines.concat(relationship_method_lines(relationships:, model_content:, model_class_name:))
     lines << "}"
-    lines << ""
-    lines << "export default #{model_class_name}"
     lines << ""
 
     lines.join("\n")
