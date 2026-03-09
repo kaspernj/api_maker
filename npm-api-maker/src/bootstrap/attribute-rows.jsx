@@ -24,7 +24,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapAttributeRows extends 
   render () {
     const {attributes, checkIfAttributeLoaded, defaultDateFormatName, defaultDateTimeFormatName, model} = this.p
 
-    return attributes.map((attribute) => ( // eslint-disable-line no-extra-parens
+    return attributes.map((attribute) => (
       <AttributeRow
         attribute={attribute}
         checkIfAttributeLoaded={checkIfAttributeLoaded}

@@ -1,4 +1,4 @@
-/* eslint-disable new-cap, no-extra-parens, no-return-assign, react/jsx-max-depth, react/jsx-no-literals, sort-imports */
+/* eslint-disable new-cap, no-return-assign, react/jsx-max-depth, react/jsx-no-literals, sort-imports */
 import {View} from "react-native"
 import BaseComponent from "../../../base-component"
 import Devise from "../../../devise.js"

@@ -81,7 +81,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     return (
       <View testID="super-admin--edit-page">
         <Form formRef={this.formRef} setForm={this.setStates.form}>
-          {model && attributes?.map((attribute) => ( // eslint-disable-line no-extra-parens
+          {model && attributes?.map((attribute) => (
             <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelClass={modelClass} />
           ))}
           {/* eslint-disable-next-line no-undef */}

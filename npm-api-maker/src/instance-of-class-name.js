@@ -28,7 +28,7 @@ const propTypesValidator = (expectedClassName, args = {}) => (props, propName, c
  * @returns {any}
  */
 const instanceOfClassName = (expectedClassName) => {
-  const validator = /** @type {any} */ (propTypesValidator(expectedClassName)) // eslint-disable-line no-extra-parens
+  const validator = /** @type {any} */ (propTypesValidator(expectedClassName))
 
   validator.isRequired = propTypesValidator(expectedClassName, {required: true})
 

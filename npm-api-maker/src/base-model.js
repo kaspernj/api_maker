@@ -117,11 +117,11 @@ export default class BaseModel {
    * @returns {Promise<InstanceType<T>>}
    */
   static async find(id) {
-    const query = /** @type {Record<string, any>} */ ({}) // eslint-disable-line no-extra-parens
+    const query = /** @type {Record<string, any>} */ ({})
 
     query[`${this.primaryKey()}_eq`] = id
 
-    const model = /** @type {InstanceType<T>} */ (await this.ransack(query).first()) // eslint-disable-line no-extra-parens
+    const model = /** @type {InstanceType<T>} */ (await this.ransack(query).first())
 
     if (model) {
       return model
@@ -144,7 +144,7 @@ export default class BaseModel {
       find_or_create_by_args: findOrCreateByArgs,
       resource_name: digg(this.modelClassData(), "name")
     })
-    const model = /** @type {InstanceType<T>} */ (digg(result, "model")) // eslint-disable-line no-extra-parens
+    const model = /** @type {InstanceType<T>} */ (digg(result, "model"))
 
     return model
   }
@@ -350,7 +350,7 @@ export default class BaseModel {
    * @returns {Self}
    */
   clone() {
-    const ModelClass = /** @type {new (...args: any[]) => Self} */ (this.constructor) // eslint-disable-line no-extra-parens
+    const ModelClass = /** @type {new (...args: any[]) => Self} */ (this.constructor)
     const clone = new ModelClass()
 
     clone.abilities = {...this.abilities}
@@ -534,7 +534,7 @@ export default class BaseModel {
       const ransackParams = {}
       ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
 
-      const abilitiesParams = /** @type {Record<string, string[]>} */ ({}) // eslint-disable-line no-extra-parens
+      const abilitiesParams = /** @type {Record<string, string[]>} */ ({})
       abilitiesParams[digg(this.modelClassData(), "name")] = abilitiesToLoad
 
       const anotherModel = await this.modelClass()
@@ -1002,7 +1002,7 @@ export default class BaseModel {
    * @returns {typeof import("./base-model.js").default & (new (...args: any[]) => Self)}
    */
   modelClass() {
-    return /** @type {typeof import("./base-model.js").default & (new (...args: any[]) => Self)} */ (this.constructor) // eslint-disable-line no-extra-parens
+    return /** @type {typeof import("./base-model.js").default & (new (...args: any[]) => Self)} */ (this.constructor)
   }
 
   /**

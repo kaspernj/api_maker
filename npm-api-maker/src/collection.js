@@ -60,7 +60,7 @@ export default class ApiMakerCollection {
    * @returns {this}
    */
   abilities(originalAbilities) {
-    const newAbilities = /** @type {Record<string, string[]>} */ ({}) // eslint-disable-line no-extra-parens
+    const newAbilities = /** @type {Record<string, string[]>} */ ({})
 
     for (const originalAbilityName in originalAbilities) {
       const newModelName = inflection.underscore(originalAbilityName)
@@ -139,7 +139,7 @@ export default class ApiMakerCollection {
    * @returns {this}
    */
   groupBy(...arrayOfTablesAndColumns) {
-    const arrayOfTablesAndColumnsWithLowercaseColumns = /** @type {Array<string | [string, string]>} */ ([]) // eslint-disable-line no-extra-parens
+    const arrayOfTablesAndColumnsWithLowercaseColumns = /** @type {Array<string | [string, string]>} */ ([])
 
     for (const tableAndColumn of arrayOfTablesAndColumns) {
       if (Array.isArray(tableAndColumn)) {
@@ -376,7 +376,7 @@ export default class ApiMakerCollection {
 
     this._addQueryToModels(models)
 
-    const result = new Result(/** @type {any} */ ({collection: this, models, response})) // eslint-disable-line no-extra-parens
+    const result = new Result(/** @type {any} */ ({collection: this, models, response}))
 
     return result
   }
@@ -403,7 +403,7 @@ export default class ApiMakerCollection {
    * @returns {this}
    */
   select(originalSelect) {
-    const newSelect = /** @type {Record<string, string[]>} */ ({}) // eslint-disable-line no-extra-parens
+    const newSelect = /** @type {Record<string, string[]>} */ ({})
 
     for (const originalModelName in originalSelect) {
       const newModelName = inflection.underscore(originalModelName)
@@ -426,7 +426,7 @@ export default class ApiMakerCollection {
    * @returns {this}
    */
   selectColumns(originalSelect) {
-    const newSelect = /** @type {Record<string, string[]>} */ ({}) // eslint-disable-line no-extra-parens
+    const newSelect = /** @type {Record<string, string[]>} */ ({})
 
     for (const originalModelName in originalSelect) {
       const newModelName = inflection.underscore(inflection.underscore(originalModelName))
