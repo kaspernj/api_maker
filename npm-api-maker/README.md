@@ -39,7 +39,7 @@ const user = await User.find("a0f3842b-1e4c-4e9d-8f2d-cd021e5a9b6a")
 
 Models are generated from the server recipes and inherit `BaseModel`. Collections let you compose queries fluently and then execute them with `toArray()`.
 
-For generated model source shape, keep class declarations direct (`class Foo`) and export directly (`export default Foo`) unless a class expression is explicitly required.
+For generated model source shape, prefer `export default class Foo {}` when possible; only use class expressions when explicitly required.
 
 ```js
 const activeProjects = await Project
