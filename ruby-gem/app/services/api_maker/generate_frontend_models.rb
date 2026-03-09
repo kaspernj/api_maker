@@ -152,7 +152,7 @@ private
         "   * @returns {Promise<TCommandResponse>}",
         "   */",
         "  static #{method_name}(args, commandArgs = {}) {",
-        "    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(",
+        "    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(",
         "      {",
         "        args,",
         "        command: \"#{command_name}\",",

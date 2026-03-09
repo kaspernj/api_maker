@@ -33,6 +33,7 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("@template TCommandResponse")
         expect(task_content).to include("@returns {Promise<TCommandResponse>}")
         expect(task_content).not_to include("@returns {Promise<any>}")
+        expect(task_content).to include("BaseModel._callCollectionCommand(")
         expect(task_content).to include("static testCollection(args, commandArgs = {})")
         expect(task_content).to include("testMember(args, commandArgs = {})")
         expect(task_content).to include("project()")
