@@ -98,7 +98,7 @@ private
     lines << "class #{model_class_name} extends BaseModel {"
     lines << "  /** @returns {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */"
     lines << "  static modelClassData() {"
-    lines << "    return /** @type {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */ (modelClassData)"
+    lines << "    return /** @type {import(\"@kaspernj/api-maker/build/base-model.js\").ModelClassDataType} */ (/** @type {unknown} */ (modelClassData))"
     lines << "  }"
     lines.concat(attribute_method_lines(attributes))
     lines.concat(collection_command_lines(collection_commands, model_content))
@@ -255,7 +255,7 @@ private
       "    ransack[\"#{ransack_key}\"] = id",
       "",
       "    return this._loadBelongsToReflection(",
-      "      {reflectionName: \"#{relationship_name}\", model: this, modelClass},",
+      "      {reflectionName: \"#{relationship_name}\", model: /** @type {any} */ (this), modelClass},",
       "      {ransack}",
       "    )",
       "  }"
@@ -291,7 +291,7 @@ private
         "    return new Collection(",
         "      {",
         "        reflectionName: \"#{relationship_key_name}\",",
-        "        model: this,",
+        "        model: /** @type {any} */ (this),",
         "        modelName: \"#{class_name}\",",
         "        modelClass",
         "      },",
@@ -326,7 +326,7 @@ private
         "    return new Collection(",
         "      {",
         "        reflectionName: \"#{relationship_key_name}\",",
-        "        model: this,",
+        "        model: /** @type {any} */ (this),",
         "        modelName: \"#{class_name}\",",
         "        modelClass",
         "      },",
@@ -353,7 +353,7 @@ private
         "    return this._loadHasManyReflection(",
         "      {",
         "        reflectionName: \"#{relationship_name}\",",
-        "        model: this,",
+        "        model: /** @type {any} */ (this),",
         "        modelClass",
         "      },",
         "      {",
@@ -386,7 +386,7 @@ private
         "    return this._loadHasManyReflection(",
         "      {",
         "        reflectionName: \"#{relationship_name}\",",
-        "        model: this,",
+        "        model: /** @type {any} */ (this),",
         "        modelClass",
         "      },",
         "      {ransack}",
@@ -430,7 +430,7 @@ private
 
         "",
         "    return this._loadHasOneReflection(",
-        "      {reflectionName: \"#{relationship_name}\", model: this, modelClass},",
+        "      {reflectionName: \"#{relationship_name}\", model: /** @type {any} */ (this), modelClass},",
         "      {",
         "        params: {",
         "          through: {",
@@ -453,7 +453,7 @@ private
         "    return this._loadHasOneReflection(",
         "      {",
         "        reflectionName: \"#{relationship_name}\",",
-        "        model: this,",
+        "        model: /** @type {any} */ (this),",
         "        modelClass",
         "      },",
         "      {ransack}",
