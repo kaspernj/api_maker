@@ -3,10 +3,27 @@ import debounce from "debounce"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.js"
-import {useCallback, useLayoutEffect, useMemo} from "react"
+import {useCallback, useLayoutEffect, useMemo, useRef} from "react"
 import useCreatedEvent from "./use-created-event.js"
 import useShape from "set-state-compare/build/use-shape.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
+
+/**
+ * @typedef {object} UseCollectionResult
+ * @property {Array<import("./base-model.js").default>} models
+ * @property {Array<number | string>} modelIdsCacheString
+ * @property {number} overallCount
+ * @property {import("./collection.js").default} query
+ * @property {string} queryName
+ * @property {string} queryPerKey
+ * @property {string} queryQName
+ * @property {string} querySName
+ * @property {string} queryPageName
+ * @property {import("./result.js").default} result
+ * @property {string[]} searchParams
+ * @property {false | import("react").ReactNode} showNoRecordsAvailableContent
+ * @property {false | import("react").ReactNode} showNoRecordsFoundContent
+ */
 
 /**
  * @param {object} props
@@ -28,21 +45,7 @@ import useQueryParams from "on-location-changed/build/use-query-params.js"
  * @param {Record<string, string[]>} props.select
  * @param {Record<string, string[]>} props.selectColumns
  * @param {any[]} cacheKeys
- * @returns {{
- *   models: Array<import("./base-model.js").default>,
- *   modelIdsCacheString: Array<number|string>,
- *   overallCount: number,
- *   query: import("./collection.js").default,
- *   queryName: string,
- *   queryPerKey: string,
- *   queryQName: string,
- *   querySName: string,
- *   queryPageName: string,
- *   result: import("./result.js").default,
- *   searchParams: string[],
- *   showNoRecordsAvailableContent: false | import("react").ReactNode,
- *   showNoRecordsFoundContent: false | import("react").ReactNode
- * }}
+ * @returns {UseCollectionResult & Record<string, any>}
  */
 const useCollection = (props, cacheKeys = []) => {
   const {
@@ -72,6 +75,8 @@ const useCollection = (props, cacheKeys = []) => {
 
   const s = useShape(props)
   const queryName = initialQueryName || digg(modelClass.modelClassData(), "collectionKey")
+  const loadModelsGenerationRef = useRef(0)
+  const loadOverallCountGenerationRef = useRef(0)
 
   s.meta.queryParams = useQueryParams()
 
@@ -116,8 +121,14 @@ const useCollection = (props, cacheKeys = []) => {
   }
 
   const loadOverallCount = useCallback(async () => {
+    const loadOverallCountGeneration = loadOverallCountGenerationRef.current + 1
+
+    loadOverallCountGenerationRef.current = loadOverallCountGeneration
+
     const baseQuery = s.p.collection || s.p.modelClass.all()
     const overallCount = await baseQuery.count()
+
+    if (loadOverallCountGeneration != loadOverallCountGenerationRef.current) return
 
     s.set({
       overallCount,
@@ -145,6 +156,10 @@ const useCollection = (props, cacheKeys = []) => {
   }, [])
 
   const loadModels = useCallback(async () => {
+    const loadModelsGeneration = loadModelsGenerationRef.current + 1
+
+    loadModelsGenerationRef.current = loadModelsGeneration
+
     let query = s.props.collection?.clone() || s.p.modelClass.ransack()
 
     if (s.props.pagination) {
@@ -185,6 +200,8 @@ const useCollection = (props, cacheKeys = []) => {
     }
 
     const models = result.models()
+
+    if (loadModelsGeneration != loadModelsGenerationRef.current) return
 
     if (s.props.onModelsLoaded) {
       s.p.onModelsLoaded({
@@ -288,6 +305,11 @@ const useCollection = (props, cacheKeys = []) => {
 
   useCreatedEvent(s.p.modelClass, onCreated)
 
+  useLayoutEffect(() => () => {
+    loadModelsGenerationRef.current += 1
+    loadOverallCountGenerationRef.current += 1
+  }, [])
+
   useLayoutEffect(() => {
     const connections = []
 
@@ -305,7 +327,7 @@ const useCollection = (props, cacheKeys = []) => {
     }
   }, [modelIdsCacheString])
 
-  const result = Object.assign({}, s.state)
+  const result = /** @type {UseCollectionResult & Record<string, any>} */ (Object.assign({}, s.state))
   const modelVariableName = inflection.pluralize(inflection.camelize(modelClass.modelClassData().name, true))
 
   result.modelIdsCacheString = modelIdsCacheString

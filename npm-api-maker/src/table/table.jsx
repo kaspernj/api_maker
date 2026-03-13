@@ -229,10 +229,10 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }, [this.p.currentUser?.id()])
 
     useMemo(() => {
-      if (!this.tt.tableSettings && this.s.width !== undefined) {
+      if (!this.tt.tableSettings) {
         this.loadTableSetting()
       }
-    }, [this.p.currentUser?.id(), this.s.width])
+    }, [this.p.currentUser?.id()])
 
     useModelEvent(this.s.currentWorkplace, "workplace_links_created", this.tt.onLinksCreated)
     useModelEvent(this.s.currentWorkplace, "workplace_links_destroyed", this.tt.onLinksDestroyed)

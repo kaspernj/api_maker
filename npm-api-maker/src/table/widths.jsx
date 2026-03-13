@@ -11,9 +11,18 @@ export default class TableWidths {
 
   setWidths() {
     this.columnsWidths = {}
-
+    const columnsWithoutWidth = this.columns.filter((column) => !column.tableSettingColumn.hasWidth())
+    let amountOfColumns = columnsWithoutWidth.length
     let widthLeft = this.tableWidth
     const updateData = []
+
+    amountOfColumns++ // Actions column
+
+    if (this.table.p.workplace) amountOfColumns++
+
+    if (widthLeft === undefined) {
+      widthLeft = amountOfColumns * 200
+    }
 
     // Set widths that are defined
     for (const columnIndex in this.columns) {
@@ -35,14 +44,6 @@ export default class TableWidths {
       }
     }
 
-    // Calculate how many columns are shown
-    const columnsWithoutWidth = this.columns.filter((column) => !column.tableSettingColumn.hasWidth())
-    let amountOfColumns = columnsWithoutWidth.length
-
-    amountOfColumns++ // Actions column
-
-    if (this.table.p.workplace) amountOfColumns++
-
     // Set widths of columns without
     for (const columnIndex in this.columns) {
       const column = this.columns[columnIndex]
@@ -56,11 +57,10 @@ export default class TableWidths {
         column.animatedWidth = new Animated.Value(newWidth)
         column.width = newWidth
 
-        // eslint-disable-next-line no-bitwise, no-unused-expressions
-        updateData << {
+        updateData.push({
           id: tableSettingColumn.id(),
           width: newWidth
-        }
+        })
       }
     }
 
