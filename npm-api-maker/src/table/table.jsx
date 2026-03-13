@@ -647,6 +647,13 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {width} = e.nativeEvent.layout
     const {widths} = this.s
 
+    // If table settings loaded before RN-web produced a layout width, recompute once with the real width.
+    if (widths?.usedFallbackWidth) {
+      widths.updateTableWidth(width)
+      this.setState({lastUpdate: new Date(), width})
+      return
+    }
+
     this.setState({width})
     if (widths) widths.tableWidth = width
   }

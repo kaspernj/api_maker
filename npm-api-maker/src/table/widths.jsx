@@ -6,6 +6,7 @@ export default class TableWidths {
     this.columns = columns
     this.tableWidth = width
     this.table = table
+    this.usedFallbackWidth = width === undefined
     this.setWidths()
   }
 
@@ -30,15 +31,16 @@ export default class TableWidths {
       const column = this.columns[columnIndex]
       const tableSettingColumn = column.tableSettingColumn
 
-      if (column.animatedPosition) throw new Error("Column already had an animated position")
-
-      column.animatedPosition = new Animated.ValueXY()
-      column.animatedZIndex = new Animated.Value(0)
+      column.animatedPosition ||= new Animated.ValueXY()
+      column.animatedZIndex ||= new Animated.Value(0)
 
       if (tableSettingColumn.hasWidth()) {
-        if (column.animatedWidth) throw new Error("Column already had an animated width")
+        if (column.animatedWidth) {
+          column.animatedWidth.setValue(tableSettingColumn.width())
+        } else {
+          column.animatedWidth = new Animated.Value(tableSettingColumn.width())
+        }
 
-        column.animatedWidth = new Animated.Value(tableSettingColumn.width())
         column.width = tableSettingColumn.width()
 
         widthLeft -= tableSettingColumn.width()
@@ -55,7 +57,12 @@ export default class TableWidths {
 
         if (newWidth < 200) newWidth = 200
 
-        column.animatedWidth = new Animated.Value(newWidth)
+        if (column.animatedWidth) {
+          column.animatedWidth.setValue(newWidth)
+        } else {
+          column.animatedWidth = new Animated.Value(newWidth)
+        }
+
         column.width = newWidth
 
         updateData.push({
@@ -68,6 +75,13 @@ export default class TableWidths {
     if (updateData.length > 0) {
       // FIXME: Should update the columns on the backend if anything changed
     }
+  }
+
+  /** Apply the measured table width after an initial fallback-width bootstrap. */
+  updateTableWidth(width) {
+    this.tableWidth = width
+    this.usedFallbackWidth = false
+    this.setWidths()
   }
 
   getWidthOfColumn(identifier) {
