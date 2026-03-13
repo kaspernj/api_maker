@@ -32,7 +32,7 @@ import uniqunize from "uniqunize"
  * @property {Record<string, any>} [params]
  * @property {number} [per]
  * @property {string} [perKey]
- * @property {string[]} [preload]
+ * @property {string | string[]} [preload]
  * @property {Record<string, any>} [ransack]
  * @property {Record<string, any>} [search]
  * @property {string} [searchKey]
@@ -277,7 +277,7 @@ export default class ApiMakerCollection {
   map(callback) { return this.loadedArray().map(callback) }
 
   /**
-   * @param {string[]} preloadValue
+   * @param {string | string[]} preloadValue
    * @returns {this}
    */
   preload(preloadValue) {
