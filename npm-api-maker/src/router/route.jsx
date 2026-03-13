@@ -2,6 +2,7 @@
 import React, {createContext, useContext, useEffect, useLayoutEffect, useMemo} from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Switch, {CurrentSwitchContext} from "./switch"
+import {arrayDifferent, simpleObjectDifferent} from "set-state-compare/build/diff-utils.js"
 import BaseComponent from "../base-component"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
@@ -34,6 +35,8 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
 
   match = null
   loadComponentRequestId = 0
+  componentPathParts = []
+  lastMatchUpdate = 0
   newParams = null
   pathParts = null
 
@@ -70,7 +73,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
       [givenRoute].concat(this.pathParts)
     )
 
-    this.useStates({Component: null, componentNotFound: null, matches: false})
+    this.useStates({Component: null, componentNotFound: null, lastMatchUpdate: 0, matches: false})
 
     useLayoutEffect(() => {
       this.loadMatches()
@@ -169,14 +172,51 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
 
       const newParams = Object.assign({}, this.currentParams, params) // eslint-disable-line prefer-object-spread
 
-      this.setInstance({componentPathParts, match: {params}, newParams})
-      this.setState({matches})
+      this.updateRouteMatchState({componentPathParts, match: {params}, matches, newParams})
       this.switchGroup?.setPathMatched(matchId, true)
     } else {
-      this.setInstance({componentPathParts: null, match: null, newParams: null})
-      this.setState({matches})
+      this.updateRouteMatchState({componentPathParts: null, match: null, matches, newParams: null})
       this.switchGroup?.setPathMatched(matchId, false)
     }
+  }
+
+  updateRouteMatchState({componentPathParts, match, matches, newParams}) {
+    const routeDataChanged = this.routeDataChanged({componentPathParts, match, newParams})
+
+    this.setInstance({componentPathParts, match, newParams})
+    if (routeDataChanged || this.s.matches != matches) {
+      this.setState({
+        lastMatchUpdate: routeDataChanged ? this.lastMatchUpdate += 1 : this.s.lastMatchUpdate,
+        matches
+      })
+    }
+  }
+
+  routeDataChanged({componentPathParts, match, newParams}) {
+    const currentComponentPathParts = this.componentPathParts || null
+    const currentMatchParams = this.match?.params || null
+    const nextMatchParams = match?.params || null
+    const componentPathPartsChanged = this.nullableArrayDifferent(currentComponentPathParts, componentPathParts)
+    const matchChanged = this.nullableObjectDifferent(currentMatchParams, nextMatchParams)
+    const newParamsChanged = this.nullableObjectDifferent(this.newParams, newParams)
+
+    return componentPathPartsChanged || matchChanged || newParamsChanged
+  }
+
+  nullableArrayDifferent(value, nextValue) {
+    if (value === null || nextValue === null) {
+      return value != nextValue
+    }
+
+    return arrayDifferent(value, nextValue)
+  }
+
+  nullableObjectDifferent(value, nextValue) {
+    if (value === null || nextValue === null) {
+      return value != nextValue
+    }
+
+    return simpleObjectDifferent(value, nextValue, true)
   }
 
   async loadComponent() {
