@@ -1,5 +1,45 @@
 import {useEffect, useMemo} from "react"
 import {Shape} from "set-state-compare/build/use-shape.js"
+import shared from "set-state-compare/build/shared.js"
+
+/**
+ * Wrap queued `useShape` state setters so deferred updates schedule their own flush.
+ *
+ * The upstream `Shape` helper only replays `__setStatesLater` from React commits.
+ * When an async setter lands during another render and no later commit happens,
+ * the queued state can otherwise sit forever.
+ *
+ * @param {Shape & Record<string, any>} shape
+ * @returns {void}
+ */
+const ensureQueuedStateFlush = function(shape) {
+  shape.__wrappedUseShapeSetStates ||= {}
+
+  for (const stateName in shape.setStates) {
+    if (!shape.__wrappedUseShapeSetStates[stateName]) {
+      const originalSetState = shape.setStates[stateName]
+
+      shape.setStates[stateName] = (newValue, args) => {
+        originalSetState(newValue, args)
+
+        if (!shape.__mounted || Object.keys(shape.__setStatesLater).length === 0) return
+        if (shape.__queuedUseShapeFlushScheduled) return
+
+        shape.__queuedUseShapeFlushScheduled = true
+
+        // Flush deferred updates after paint so queued async completions do not depend on an unrelated future commit.
+        shared.scheduleAfterPaint(() => {
+          shape.__queuedUseShapeFlushScheduled = false
+
+          if (!shape.__mounted || Object.keys(shape.__setStatesLater).length === 0) return
+
+          shape.__afterRender()
+        })
+      }
+      shape.__wrappedUseShapeSetStates[stateName] = true
+    }
+  }
+}
 
 /**
  * Local `useShape` wrapper that flushes queued state writes after every commit.
@@ -39,6 +79,7 @@ export default function useShape(props, opts) {
     shape.__afterRender()
   })
 
+  ensureQueuedStateFlush(shape)
   shape.updateProps(props)
 
   return shape

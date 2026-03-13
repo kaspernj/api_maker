@@ -1,7 +1,7 @@
 import events from "./events.js"
 import {useCallback} from "react"
 import useEventEmitter from "ya-use-event-emitter"
-import useShape from "set-state-compare/build/use-shape.js"
+import useShape from "./use-shape.js"
 
 /**
  * @param {Function} callback

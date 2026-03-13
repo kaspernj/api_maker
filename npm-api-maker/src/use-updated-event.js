@@ -2,7 +2,7 @@
 import {useCallback, useLayoutEffect, useMemo, useRef} from "react"
 import debounceFunction from "debounce"
 import ModelEvents from "./model-events.js"
-import useShape from "set-state-compare/build/use-shape.js"
+import useShape from "./use-shape.js"
 
 /**
  * @param {object|object[]|undefined|null} modelOrModels

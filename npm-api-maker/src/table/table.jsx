@@ -332,7 +332,6 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     this.tableSettingLoadRequestId = requestId
     this.tableSettings = new TableSettings({table: this})
-
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
 
     if (!tableSetting) throw new Error("No tableSetting returned by tableSettings.loadExistingOrCreateTableSettings()")
