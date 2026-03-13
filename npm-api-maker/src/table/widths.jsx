@@ -21,6 +21,7 @@ export default class TableWidths {
     if (this.table.p.workplace) amountOfColumns++
 
     if (widthLeft === undefined) {
+      // Fall back to minimum per-column widths until RN-web reports the real container width.
       widthLeft = amountOfColumns * 200
     }
 

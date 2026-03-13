@@ -229,6 +229,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     }, [this.p.currentUser?.id()])
 
     useMemo(() => {
+      // Some headless RN-web runs never deliver the initial layout callback, so bootstrap table settings eagerly.
       if (!this.tt.tableSettings) {
         this.loadTableSetting()
       }

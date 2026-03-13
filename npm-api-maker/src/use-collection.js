@@ -121,6 +121,7 @@ const useCollection = (props, cacheKeys = []) => {
   }
 
   const loadOverallCount = useCallback(async () => {
+    // Ignore late overall-count responses once a newer load cycle has started or the hook unmounted.
     const loadOverallCountGeneration = loadOverallCountGenerationRef.current + 1
 
     loadOverallCountGenerationRef.current = loadOverallCountGeneration
@@ -156,6 +157,7 @@ const useCollection = (props, cacheKeys = []) => {
   }, [])
 
   const loadModels = useCallback(async () => {
+    // Only the newest collection request is allowed to update state after navigation/filter changes.
     const loadModelsGeneration = loadModelsGenerationRef.current + 1
 
     loadModelsGenerationRef.current = loadModelsGeneration
@@ -305,6 +307,7 @@ const useCollection = (props, cacheKeys = []) => {
 
   useCreatedEvent(s.p.modelClass, onCreated)
 
+  // Invalidate any in-flight async responses so unmounted hooks cannot write stale state.
   useLayoutEffect(() => () => {
     loadModelsGenerationRef.current += 1
     loadOverallCountGenerationRef.current += 1

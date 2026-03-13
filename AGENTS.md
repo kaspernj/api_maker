@@ -13,6 +13,7 @@ Notes:
 - Prefer multiple small, individually working commits when possible.
 - Always run Rubocop on changed Ruby files.
 - Always run ESLint on changed or new JavaScript files.
+- Add concise comments for non-obvious groups of code so the intent and invariants are clear without reverse-engineering the flow.
 - ESLint `sort-imports` orders import lines by member syntax group (none/all/multiple/single) and then the first local specifier name, not by module specifier; adjust import order accordingly.
 - When creating PRs, choose a sensible branch name and commit messages without prompting.
 - For system specs, use `ruby-gem/scripts/run-system-spec.sh [spec/path.rb:line]` (wraps the README system spec command).
