@@ -1234,10 +1234,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@>= 1.0.2107":
-  version "1.0.2107"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2107.tgz#e0c4de6a6428228fd7f417c0940d0d912880a926"
-  integrity sha512-nynynoeXbATircL5w4e9In9RPkmrTv29onj7U3z2df1IB7Df0bsEaL2D8nof9LpO6SzYCyv/DynEAqAZEmNeEA==
+"@kaspernj/api-maker@>= 1.0.2109":
+  version "1.0.2109"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2109.tgz#759a3e888cbe2875992e738d4fd37368c29cbad8"
+  integrity sha512-+6FWFgLxw0NWIZAzKBa8fLcaZDBINsLisZgdiSjIh5WxcuBR8LpXjitvL+B03YfXP1Jg2H76tgXWIrmDtlDW8Q==
   dependencies:
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
@@ -3177,9 +3177,9 @@ icss-utils@^5.0.0, icss-utils@^5.1.0:
   integrity sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==
 
 immutable@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-5.0.2.tgz#bb8a987349a73efbe6b3b292a9cbaf1b530d296b"
-  integrity sha512-1NU7hWZDkV7hJ4PJ9dur9gTNQ4ePNPN4k9/0YhwjzykTi/+3Q5pF93YU5QoVj8BuOnhLgaY8gs0U2pj4kSYVcw==
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-5.1.5.tgz#93ee4db5c2a9ab42a4a783069f3c5d8847d40165"
+  integrity sha512-t7xcm2siw+hlUM68I+UEOK+z84RzmN59as9DZ7P1l0994DKUWV7UXBMQZVxaoMSRQ+PBZbHCOoBt7a2wxOMt+A==
 
 import-fresh@^3.2.1:
   version "3.3.0"
@@ -4087,10 +4087,10 @@ react-is@^16.13.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-native-safe-area-context@^5.6.2:
-  version "5.6.2"
-  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-5.6.2.tgz#283e006f5b434fb247fcb4be0971ad7473d5c560"
-  integrity sha512-4XGqMNj5qjUTYywJqpdWZ9IG8jgkS3h06sfVjfw5yZQZfWnRFXczi0GnYyFyCc2EBps/qFmoCH8fez//WumdVg==
+react-native-safe-area-context@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-5.7.0.tgz#035699d5ec17fefb98cc1fa44a9ec852c7d530d0"
+  integrity sha512-/9/MtQz8ODphjsLdZ+GZAIcC/RtoqW9EeShf7Uvnfgm/pzYrJ75y3PV/J1wuAV1T5Dye5ygq4EAW20RoBq0ABQ==
 
 react-native-web@^0.21.2:
   version "0.21.2"
@@ -4460,10 +4460,18 @@ set-function-length@^1.2.2:
     gopd "^1.0.1"
     has-property-descriptors "^1.0.2"
 
-"set-state-compare@>= 1.0.69", "set-state-compare@>= 1.0.72", set-state-compare@^1.0.72:
+"set-state-compare@>= 1.0.69", "set-state-compare@>= 1.0.72":
   version "1.0.72"
   resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.72.tgz#ce800c9c712d58121ab518145c85348534ea6d21"
   integrity sha512-vMP/1NZEBPb7mFwlgiULwHegIG9hUxW3iZzY8kW4GR7zVFM1KVS/1bHA/5xW21tQBRQyJjyP6e9AfsACGwLrHQ==
+  dependencies:
+    diggerize "^1.0.5"
+    fetching-object ">= 1.0.5"
+
+set-state-compare@^1.0.73:
+  version "1.0.73"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.73.tgz#97a9b3c6b7c240cc458cad43bf5a94a5a326bfa4"
+  integrity sha512-bD+9RgjK6KieEhTl8AXXDQ5a5v/GLPe+MwJjE9AN2TZ7RYspznNSwdYvQnlfl1vJNKnYbgD6uPGh4WEeEGROXg==
   dependencies:
     diggerize "^1.0.5"
     fetching-object ">= 1.0.5"

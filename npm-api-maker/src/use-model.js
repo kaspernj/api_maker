@@ -1,10 +1,10 @@
 /* eslint-disable sort-imports */
-import {useCallback, useLayoutEffect} from "react"
+import {useCallback, useEffect, useRef} from "react"
 import Devise from "./devise.js"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
-import useShape from "set-state-compare/build/use-shape.js"
+import useShape from "./use-shape.js"
 
 /**
  * @typedef {object} useModelArgs
@@ -25,6 +25,7 @@ import useShape from "set-state-compare/build/use-shape.js"
 // eslint-disable-next-line complexity
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
+  const loadModelGenerationRef = useRef(0)
   let args, modelClass
 
   if (typeof argsArg == "function") {
@@ -66,7 +67,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
   const modelVariableName = inflection.camelize(modelClass.modelClassData().name, true)
   const cacheArgs = [modelId]
 
-  const loadExistingModel = useCallback(async () => {
+  const loadExistingModel = useCallback(async (loadModelGeneration) => {
     let query
 
     if (s.m.modelId) {
@@ -83,10 +84,12 @@ const useModel = (modelClassArg, argsArg = {}) => {
 
     const model = await query.first()
 
+    if (loadModelGeneration != loadModelGenerationRef.current) return
+
     s.set({model, notFound: !model})
   }, [])
 
-  const loadNewModel = useCallback(async () => {
+  const loadNewModel = useCallback(async (loadModelGeneration) => {
     const ModelClass = modelClass
     const paramKey = ModelClass.modelName().paramKey()
     const modelDataFromParams = s.m.queryParams[paramKey] || {}
@@ -110,16 +113,22 @@ const useModel = (modelClassArg, argsArg = {}) => {
       data: {a: modelData}
     })
 
+    if (loadModelGeneration != loadModelGenerationRef.current) return
+
     s.set({model})
   }, [])
 
   const loadModel = useCallback(async () => {
+    // Only the newest model request may update state after route or auth changes.
+    const loadModelGeneration = loadModelGenerationRef.current + 1
+
+    loadModelGenerationRef.current = loadModelGeneration
     if (!s.m.active) {
       // Not active - don't do anything
     } else if (s.props.newIfNoId && !s.m.modelId) {
-      return await loadNewModel()
+      return await loadNewModel(loadModelGeneration)
     } else if (!s.props.optional || s.m.modelId || s.m.args.query) {
-      return await loadExistingModel()
+      return await loadExistingModel(loadModelGeneration)
     }
   }, [])
 
@@ -175,12 +184,17 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }
 
-  useLayoutEffect(
+  // Start async model loading after mount so ShapeHook state updates do not race the mount lifecycle.
+  useEffect(
     () => { loadModel() },
     cacheArgs
   )
 
-  useLayoutEffect(() => {
+  useEffect(() => () => {
+    loadModelGenerationRef.current += 1
+  }, [])
+
+  useEffect(() => {
     let reloadModelCallback
 
     if (args.events) {
@@ -194,7 +208,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.events])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     let connectUpdated
 
     if (s.s.model && args.eventUpdated) {
@@ -206,7 +220,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.eventUpdated, s.s.model?.id()])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     Devise.events().addListener("onDeviseSignIn", onSignedIn)
     Devise.events().addListener("onDeviseSignOut", onSignedOut)
 
@@ -216,7 +230,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   })
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     let connectDestroyed
 
     if (s.s.model && args.onDestroyed) {

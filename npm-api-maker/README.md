@@ -39,6 +39,8 @@ const user = await User.find("a0f3842b-1e4c-4e9d-8f2d-cd021e5a9b6a")
 
 Models are generated from the server recipes and inherit `BaseModel`. Collections let you compose queries fluently and then execute them with `toArray()`.
 
+For generated model source shape, prefer `export default class Foo {}` when possible; only use class expressions when explicitly required.
+
 ```js
 const activeProjects = await Project
   .ransack({state_eq: "active"})
@@ -95,6 +97,25 @@ The relationship name is stored in `snake_case`, so `preloadRelationship("Accoun
 ## Configuration notes
 
 `config` is a shared singleton. Some helpers (forms, routing, navigation, and money inputs) require config values like `history`, `linkTo`, `navigation`, and `currenciesCollection` to be set. If a required value is missing, the getter throws an error to avoid silent failures.
+
+## Realtime model events
+
+For model-specific websocket events in React/ShapeComponent UI code, prefer `useModelEvent` over manual `ModelEvents.connect(...)` subscriptions. The hook handles subscription lifecycle automatically and avoids leaked listeners.
+
+```js
+import useModelEvent from "@kaspernj/api-maker/build/use-model-event.js"
+
+useModelEvent(projectEnvironmentInstance, "termination_job_status", ({args}) => {
+  console.log(args)
+})
+```
+
+Related hooks:
+
+- `useUpdatedEvent(model, onUpdated)`
+- `useDestroyedEvent(model, onDestroyed)`
+- `useCreatedEvent(ModelClass, onCreated)`
+- `useModelClassEvent(ModelClass, "custom_event", onEvent)`
 
 ## ApiMakerTable date formatting
 

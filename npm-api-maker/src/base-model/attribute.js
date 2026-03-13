@@ -4,11 +4,11 @@ import Column from "./column.js"
 
 /**
  * @typedef AttributeArgType
- * @property {string} column
+ * @property {import("./column.js").ColumnArgType | null} column
  * @property {string} name
- * @property {boolean} selected_by_default
- * @property {boolean} translated
- * @property {string} type
+ * @property {boolean | null} [selected_by_default]
+ * @property {boolean | null} [translated]
+ * @property {string | null} [type]
  */
 
 export default class ApiMakerBaseModelAttribute {

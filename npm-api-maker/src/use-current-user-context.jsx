@@ -1,5 +1,5 @@
 /* eslint-disable jest/require-hook, react/function-component-definition, sort-imports */
-import React, {useCallback, useMemo} from "react"
+import React, {useCallback, useEffect, useRef} from "react"
 import Devise from "./devise.js"
 import {digg} from "diggerize"
 import {events} from "./use-current-user.js"
@@ -7,7 +7,7 @@ import * as inflection from "inflection"
 import Logger from "./logger.js"
 import Services from "./services.js"
 import useEventEmitter from "ya-use-event-emitter"
-import useShape from "set-state-compare/build/use-shape.js"
+import useShape from "./use-shape.js"
 
 const logger = new Logger({name: "ApiMaker / UseCurrentUserContext"})
 
@@ -30,11 +30,16 @@ const UseCurrentUserContext = (props) => {
   const scopeName = `current${inflection.camelize(scope)}`
   const scopeInstance = Devise.getScope(scope)
   const ScopeContext = scopeInstance.getContext()
+  const loadCurrentUserRequestIdRef = useRef(0)
 
   s.meta.scope = scope
   s.meta.scopeName = scopeName
 
   const loadCurrentUserFromRequest = useCallback(async () => {
+    // Ignore late current-user responses from discarded mounts so the live provider controls the session state.
+    const requestId = loadCurrentUserRequestIdRef.current + 1
+
+    loadCurrentUserRequestIdRef.current = requestId
     const {scope} = s.m
     const getArgsMethodName = `get${inflection.camelize(scope)}Args`
     const args = Devise[getArgsMethodName]()
@@ -43,6 +48,8 @@ const UseCurrentUserContext = (props) => {
 
     const result = await Services.current().sendRequest("Devise::Current", {query: args.query, scope})
     const current = digg(result, "current")[0]
+
+    if (requestId != loadCurrentUserRequestIdRef.current) return
 
     if (current) Devise.updateSession(current)
 
@@ -93,10 +100,13 @@ const UseCurrentUserContext = (props) => {
     })
   }, [])
 
-  useMemo(() => {
+  useEffect(() => {
     if (!Devise.current().hasGlobalCurrentScope(s.m.scope) && !Devise.current().hasCurrentScope(s.m.scope)) {
       logger.debug(() => `Devise hasn't got current scope ${s.m.scope} so loading from request`)
       loadCurrentUserFromRequest()
+    }
+    return () => {
+      loadCurrentUserRequestIdRef.current += 1
     }
   }, [])
 

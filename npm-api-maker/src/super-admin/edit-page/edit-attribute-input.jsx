@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import React, {useMemo} from "react"
+import React, {useEffect} from "react"
 import {TextInput, View} from "react-native"
 import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
@@ -24,7 +24,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     this.form = useForm()
     this.initialValue = this.defaultValue()
 
-    useMemo(() => {
+    useEffect(() => {
       if (this.form) {
         this.form.setValue(name, this.initialValue)
       }

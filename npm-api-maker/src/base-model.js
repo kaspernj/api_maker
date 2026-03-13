@@ -19,13 +19,22 @@ import objectToFormData from "object-to-formdata"
 
 /**
  * @typedef {object} ModelClassDataType
- * @property {import("./base-model/attribute.js").AttributeArgType[]} attributes
+ * @property {Record<string, import("./base-model/attribute.js").AttributeArgType>} attributes
+ * @property {string} camelizedLower
+ * @property {string} className
+ * @property {string} collectionKey
  * @property {string} collectionName
+ * @property {string} i18nKey
  * @property {string} name
+ * @property {string} nameDasherized
  * @property {string} paramKey
+ * @property {string} pluralName
  * @property {string} primaryKey
- * @property {object} ransackable_attributes
- */
+ * @property {Array<Record<string, any>>} ransackable_associations
+ * @property {import("./base-model/attribute.js").AttributeArgType[]} ransackable_attributes
+ * @property {Array<Record<string, any>>} ransackable_scopes
+ * @property {Array<Record<string, any>>} relationships
+*/
 
 /**
  * @typedef {object} ParseValidationErrorsOptions
@@ -102,17 +111,17 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} T
+   * @template {typeof import("./base-model.js").default} T
    * @this {T}
    * @param {number | string} id
    * @returns {Promise<InstanceType<T>>}
    */
   static async find(id) {
-    const query = /** @type {Record<string, any>} */ ({}) // eslint-disable-line no-extra-parens
+    const query = /** @type {Record<string, any>} */ ({})
 
     query[`${this.primaryKey()}_eq`] = id
 
-    const model = /** @type {InstanceType<T>} */ (await this.ransack(query).first()) // eslint-disable-line no-extra-parens
+    const model = /** @type {InstanceType<T>} */ (await this.ransack(query).first())
 
     if (model) {
       return model
@@ -122,7 +131,7 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} T
+   * @template {typeof import("./base-model.js").default} T
    * @this {T}
    * @param {Record<string, any>} findOrCreateByArgs
    * @param {object} [args]
@@ -135,7 +144,7 @@ export default class BaseModel {
       find_or_create_by_args: findOrCreateByArgs,
       resource_name: digg(this.modelClassData(), "name")
     })
-    const model = /** @type {InstanceType<T>} */ (digg(result, "model")) // eslint-disable-line no-extra-parens
+    const model = /** @type {InstanceType<T>} */ (digg(result, "model"))
 
     return model
   }
@@ -151,7 +160,7 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} MC
+   * @template {typeof import("./base-model.js").default} MC
    * @this {MC}
    * @param {Record<string, any>} [query]
    * @returns {import("./collection.js").default<MC>}
@@ -161,7 +170,7 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} MC
+   * @template {typeof import("./base-model.js").default} MC
    * @this {MC}
    * @param {Record<string, any>} [select]
    * @returns {import("./collection.js").default<MC>}
@@ -252,7 +261,7 @@ export default class BaseModel {
    * @param {object} [args.data]
    * @param {Record<string, any>} [args.a]
    * @param {Record<string, any>} [args.b]
-   * @param {Collection<typeof BaseModel>} [args.collection]
+   * @param {Collection<typeof import("./base-model.js").default>} [args.collection]
    */
   constructor(args = {}) {
     this.changes = {}
@@ -341,7 +350,7 @@ export default class BaseModel {
    * @returns {Self}
    */
   clone() {
-    const ModelClass = /** @type {new (...args: any[]) => Self} */ (this.constructor) // eslint-disable-line no-extra-parens
+    const ModelClass = /** @type {new (...args: any[]) => Self} */ (this.constructor)
     const clone = new ModelClass()
 
     clone.abilities = {...this.abilities}
@@ -395,7 +404,7 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof BaseModel} MC
+   * @template {typeof import("./base-model.js").default} MC
    * @this {MC}
    * @returns {Collection<MC>}
    */
@@ -525,7 +534,7 @@ export default class BaseModel {
       const ransackParams = {}
       ransackParams[`${primaryKeyName}_eq`] = this.primaryKey()
 
-      const abilitiesParams = /** @type {Record<string, string[]>} */ ({}) // eslint-disable-line no-extra-parens
+      const abilitiesParams = /** @type {Record<string, string[]>} */ ({})
       abilitiesParams[digg(this.modelClassData(), "name")] = abilitiesToLoad
 
       const anotherModel = await this.modelClass()
@@ -634,10 +643,11 @@ export default class BaseModel {
    */
   isAttributeChanged(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
-    const attributeData = this.modelClassData().attributes.find((attribute) => digg(attribute, "name") == attributeNameUnderscore)
+    const attributes = Object.values(this.modelClassData().attributes)
+    const attributeData = attributes.find((attribute) => digg(attribute, "name") == attributeNameUnderscore)
 
     if (!attributeData) {
-      const attributeNames = this.modelClassData().attributes.map((attribute) => digg(attribute, "name"))
+      const attributeNames = attributes.map((attribute) => digg(attribute, "name"))
 
       throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
     }
@@ -695,10 +705,11 @@ export default class BaseModel {
       return false
 
     const attributeNameUnderscore = inflection.underscore(attributeName)
-    const attributeData = this.modelClassData().attributes.find((attribute) => attribute.name == attributeNameUnderscore)
+    const attributes = Object.values(this.modelClassData().attributes)
+    const attributeData = attributes.find((attribute) => attribute.name == attributeNameUnderscore)
 
     if (!attributeData) {
-      const attributeNames = this.modelClassData().attributes.map((attribute) => attribute.name)
+      const attributeNames = attributes.map((attribute) => attribute.name)
       throw new Error(`Couldn't find an attribute by that name: "${attributeName}" in: ${attributeNames.join(", ")}`)
     }
 
@@ -988,10 +999,10 @@ export default class BaseModel {
   /**
    * @template {BaseModel} Self
    * @this {Self}
-   * @returns {typeof BaseModel & (new (...args: any[]) => Self)}
+   * @returns {typeof import("./base-model.js").default & (new (...args: any[]) => Self)}
    */
   modelClass() {
-    return /** @type {typeof BaseModel & (new (...args: any[]) => Self)} */ (this.constructor) // eslint-disable-line no-extra-parens
+    return /** @type {typeof import("./base-model.js").default & (new (...args: any[]) => Self)} */ (this.constructor)
   }
 
   /**
@@ -1150,8 +1161,9 @@ export default class BaseModel {
   }
 
   /**
-   * @param {{reflectionName: string}} args
-   * @returns {BaseModel | null}
+   * @template {typeof import("./base-model.js").default} AssocMC
+   * @param {{modelClass: AssocMC, reflectionName: string}} args
+   * @returns {InstanceType<AssocMC> | null}
    */
   _readBelongsToReflection({reflectionName}) {
     if (reflectionName in this.relationships) {
@@ -1211,8 +1223,9 @@ export default class BaseModel {
   }
 
   /**
-   * @param {{reflectionName: string}} args
-   * @returns {BaseModel | null}
+   * @template {typeof import("./base-model.js").default} AssocMC
+   * @param {{modelClass: AssocMC, reflectionName: string}} args
+   * @returns {InstanceType<AssocMC> | null}
    */
   _readHasOneReflection({reflectionName}) {
     if (reflectionName in this.relationships) {
@@ -1237,7 +1250,7 @@ export default class BaseModel {
    * @param {Record<string, any>} [args.data.b]
    * @param {Record<string, any>} [args.data.a]
    * @param {any} [args.data.r]
-   * @param {Collection<typeof BaseModel>} [args.collection]
+   * @param {Collection<typeof import("./base-model.js").default>} [args.collection]
    * @returns {void}
    */
   _readModelDataFromArgs(args) {

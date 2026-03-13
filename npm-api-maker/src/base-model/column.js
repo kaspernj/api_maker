@@ -1,6 +1,9 @@
 /**
  * @typedef {object} ColumnArgType
- * @property {string} type
+ * @property {any} [default]
+ * @property {string} [name]
+ * @property {boolean} [null]
+ * @property {string | null} type
  */
 
 export default class ApiMakerBaseModelColumn {

@@ -6,42 +6,46 @@ export default class TableWidths {
     this.columns = columns
     this.tableWidth = width
     this.table = table
+    this.usedFallbackWidth = width === undefined
     this.setWidths()
   }
 
   setWidths() {
     this.columnsWidths = {}
-
+    const columnsWithoutWidth = this.columns.filter((column) => !column.tableSettingColumn.hasWidth())
+    let amountOfColumns = columnsWithoutWidth.length
     let widthLeft = this.tableWidth
     const updateData = []
+
+    amountOfColumns++ // Actions column
+
+    if (this.table.p.workplace) amountOfColumns++
+
+    if (widthLeft === undefined) {
+      // Fall back to minimum per-column widths until RN-web reports the real container width.
+      widthLeft = amountOfColumns * 200
+    }
 
     // Set widths that are defined
     for (const columnIndex in this.columns) {
       const column = this.columns[columnIndex]
       const tableSettingColumn = column.tableSettingColumn
 
-      if (column.animatedPosition) throw new Error("Column already had an animated position")
-
-      column.animatedPosition = new Animated.ValueXY()
-      column.animatedZIndex = new Animated.Value(0)
+      column.animatedPosition ||= new Animated.ValueXY()
+      column.animatedZIndex ||= new Animated.Value(0)
 
       if (tableSettingColumn.hasWidth()) {
-        if (column.animatedWidth) throw new Error("Column already had an animated width")
+        if (column.animatedWidth) {
+          column.animatedWidth.setValue(tableSettingColumn.width())
+        } else {
+          column.animatedWidth = new Animated.Value(tableSettingColumn.width())
+        }
 
-        column.animatedWidth = new Animated.Value(tableSettingColumn.width())
         column.width = tableSettingColumn.width()
 
         widthLeft -= tableSettingColumn.width()
       }
     }
-
-    // Calculate how many columns are shown
-    const columnsWithoutWidth = this.columns.filter((column) => !column.tableSettingColumn.hasWidth())
-    let amountOfColumns = columnsWithoutWidth.length
-
-    amountOfColumns++ // Actions column
-
-    if (this.table.p.workplace) amountOfColumns++
 
     // Set widths of columns without
     for (const columnIndex in this.columns) {
@@ -53,20 +57,31 @@ export default class TableWidths {
 
         if (newWidth < 200) newWidth = 200
 
-        column.animatedWidth = new Animated.Value(newWidth)
+        if (column.animatedWidth) {
+          column.animatedWidth.setValue(newWidth)
+        } else {
+          column.animatedWidth = new Animated.Value(newWidth)
+        }
+
         column.width = newWidth
 
-        // eslint-disable-next-line no-bitwise, no-unused-expressions
-        updateData << {
+        updateData.push({
           id: tableSettingColumn.id(),
           width: newWidth
-        }
+        })
       }
     }
 
     if (updateData.length > 0) {
       // FIXME: Should update the columns on the backend if anything changed
     }
+  }
+
+  /** Apply the measured table width after an initial fallback-width bootstrap. */
+  updateTableWidth(width) {
+    this.tableWidth = width
+    this.usedFallbackWidth = false
+    this.setWidths()
   }
 
   getWidthOfColumn(identifier) {

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-max-depth, sort-imports */
-import React, {createContext, useContext, useMemo} from "react"
+import React, {createContext, useContext, useEffect, useLayoutEffect, useMemo} from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Switch, {CurrentSwitchContext} from "./switch"
 import BaseComponent from "../base-component"
@@ -33,6 +33,7 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
   })
 
   match = null
+  loadComponentRequestId = 0
   newParams = null
   pathParts = null
 
@@ -71,11 +72,11 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
 
     this.useStates({Component: null, componentNotFound: null, matches: false})
 
-    useMemo(() => {
+    useLayoutEffect(() => {
       this.loadMatches()
     }, [givenRoute, path, pathsMatched])
 
-    useMemo(() => {
+    useEffect(() => {
       if (this.hasSwitchMatch() && !this.s.Component && this.s.matches) {
         if (this.props.onMatch) {
           this.props.onMatch()
@@ -84,6 +85,9 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
         if (!this.props.children && (this.props.path || this.props.component || this.props.componentPath)) {
           this.loadComponent()
         }
+      }
+      return () => {
+        this.loadComponentRequestId += 1
       }
     }, [path, pathShown, this.s.matches])
   }
@@ -176,6 +180,10 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
   }
 
   async loadComponent() {
+    // Ignore late async route-component loads after a route switch or discarded mount.
+    const requestId = this.loadComponentRequestId + 1
+
+    this.loadComponentRequestId = requestId
     const actualComponentPath = this.props.componentPath || this.tt.componentPathParts.join("/")
     let Component
 
@@ -190,6 +198,8 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
 
       throw error
     }
+
+    if (requestId != this.loadComponentRequestId) return
 
     this.setState({Component, componentNotFound: !Component})
   }

@@ -9,9 +9,11 @@ class UseCanCanClass extends ShapeHook {
   /** Constructor. */
   constructor(props) {
     super(props)
+    this.abilitiesRequestId = 0
     this.canCan = CanCan.current()
     this.debugToken = Symbol("use-can-can-debug")
     this.deviseReloadKey = 0
+    this.isHookMounted = false
     this.loadedWithCustomDependencies = false
     this.dependencyKeyMap = new WeakMap()
     this.dependencyKeyNextId = 1
@@ -45,6 +47,10 @@ class UseCanCanClass extends ShapeHook {
 
   /** loadAbilities. */
   loadAbilities = async (reloadKey) => {
+    // Drop late ability reload completions after dependency changes or unmounts.
+    const requestId = this.abilitiesRequestId + 1
+
+    this.abilitiesRequestId = requestId
     const abilities = this.p.abilitiesCallback()
 
     if (reloadKey === undefined) {
@@ -52,6 +58,8 @@ class UseCanCanClass extends ShapeHook {
     } else {
       await this.canCan.reloadAbilities(abilities, reloadKey)
     }
+
+    if (!this.isHookMounted || requestId != this.abilitiesRequestId) return
 
     this.setState({lastUpdate: new Date()})
   }
@@ -82,6 +90,8 @@ class UseCanCanClass extends ShapeHook {
       console.log("[useCanCan] onAbilitiesLoaded")
     }
 
+    if (!this.isHookMounted) return
+
     this.setState({lastUpdate: new Date()})
   }
 
@@ -95,6 +105,15 @@ class UseCanCanClass extends ShapeHook {
     const dependencyList = dependencies ?? []
     const dependencyKey = useMemo(() => this.dependencyListKey(dependencyList), dependencyList)
     const hasCustomDependencies = dependencies !== undefined
+
+    useEffect(() => {
+      this.isHookMounted = true
+
+      return () => {
+        this.isHookMounted = false
+        this.abilitiesRequestId += 1
+      }
+    }, [])
 
     useEffect(() => {
       this.canCan.setDebug(this.debugToken, debug)

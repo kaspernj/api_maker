@@ -74,7 +74,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
         style={this.cache("rootViewStyle", {flexDirection: horizontal ? "row" : "column"}, [horizontal])}
         {...this.tt.panResponder.panHandlers}
       >
-        {data.map((item, itemIndex) => ( // eslint-disable-line no-extra-parens
+        {data.map((item, itemIndex) => (
           <DraggableSortItem
             activeItemStyle={this.p.activeItemStyle}
             cacheKey={cacheKeyExtractor ? cacheKeyExtractor(item) : undefined}

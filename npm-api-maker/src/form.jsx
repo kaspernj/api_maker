@@ -79,7 +79,8 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
 
     form.onSubmit = onSubmit
 
-    useMemo(() => {
+    // Keep form refs/state updates in effects so consumers do not trigger parent updates during render.
+    useEffect(() => {
       if (formObjectRef) {
         formObjectRef.current = form
       }
@@ -91,7 +92,8 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
       }
     }, [form, formObjectRef])
 
-    useMemo(() => {
+    // Propagate the stable form instance after commit so ShapeComponent parents stay on the mounted path.
+    useEffect(() => {
       if (setForm) {
         setForm(form)
       }
