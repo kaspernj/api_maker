@@ -11,6 +11,10 @@ import uniqunize from "uniqunize"
  * @typedef {InstanceType<MC>} ModelOf
  */
 
+/** @typedef {Record<string, any>} PreloadMap */
+
+/** @typedef {string | Array<string | PreloadMap> | PreloadMap} PreloadValue */
+
 /**
  * @template {typeof import("./base-model.js").default} MC
  * @typedef {object} CollectionArgsType
@@ -32,7 +36,7 @@ import uniqunize from "uniqunize"
  * @property {Record<string, any>} [params]
  * @property {number} [per]
  * @property {string} [perKey]
- * @property {string[]} [preload]
+ * @property {PreloadValue} [preload]
  * @property {Record<string, any>} [ransack]
  * @property {Record<string, any>} [search]
  * @property {string} [searchKey]
@@ -277,7 +281,7 @@ export default class ApiMakerCollection {
   map(callback) { return this.loadedArray().map(callback) }
 
   /**
-   * @param {string[]} preloadValue
+   * @param {PreloadValue} preloadValue
    * @returns {this}
    */
   preload(preloadValue) {
