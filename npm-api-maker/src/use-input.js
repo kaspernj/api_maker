@@ -5,7 +5,7 @@ import idForComponent from "./inputs/id-for-component.js"
 import nameForComponent from "./inputs/name-for-component.js"
 import strftime from "strftime"
 import {useForm} from "./form"
-import useShape from "set-state-compare/build/use-shape.js"
+import useShape from "./use-shape.js"
 import useValidationErrors from "./use-validation-errors.js"
 
 /**

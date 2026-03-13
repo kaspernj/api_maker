@@ -1,15 +1,15 @@
 import Collection from "./collection.js"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
-import {useMemo} from "react"
+import {useEffect} from "react"
 import PropTypes from "prop-types" // eslint-disable-line sort-imports
 import propTypesExact from "prop-types-exact"
 import useCollection from "./use-collection.js"
-import useShape from "set-state-compare/build/use-shape.js"
+import useShape from "./use-shape.js"
 
 function CollectionLoader({component, ...restProps}) { // eslint-disable-line func-style
   const s = useShape(restProps)
-  const useCollectionResult = useCollection(restProps)
+  const useCollectionResult = useCollection(/** @type {Parameters<typeof useCollection>[0]} */ (restProps))
   const cachePartsKeys = [
     "modelIdsCacheString",
     "overallCount",
@@ -31,7 +31,8 @@ function CollectionLoader({component, ...restProps}) { // eslint-disable-line fu
 
   s.updateMeta({component, useCollectionResult})
 
-  useMemo(() => {
+  useEffect(() => {
+    // Mirror collection results into the host component after commit so async loads never update an unmounted render path.
     s.m.component.setState(s.m.useCollectionResult)
   }, cacheParts)
 

@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import React, {useMemo} from "react"
+import React, {useEffect, useMemo} from "react"
 import {StyleSheet, View} from "react-native"
 import Checkbox from "../../utils/checkbox"
 import BaseComponent from "../../base-component"
@@ -41,7 +41,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
       [attributeName, id, name]
     )
 
-    useMemo(() => {
+    useEffect(() => {
       if (this.form) {
         this.form.setValue(name, this.s.checked)
       }

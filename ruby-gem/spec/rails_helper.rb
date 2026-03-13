@@ -129,6 +129,7 @@ RSpec.configure do |config|
 
   config.before do
     Capybara.reset_sessions!
+    reset_window_size_cache
     Warden.test_reset!
   end
 

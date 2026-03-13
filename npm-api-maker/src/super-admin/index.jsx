@@ -1,5 +1,5 @@
 /* eslint-disable no-return-assign, react/jsx-no-literals, react/jsx-no-useless-fragment, react/jsx-one-expression-per-line, sort-imports */
-import React, {useMemo} from "react"
+import React, {useEffect, useMemo} from "react"
 import {Pressable, StyleSheet, View} from "react-native"
 import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader"
@@ -45,6 +45,8 @@ const styles = StyleSheet.create({
 const dataSets = {}
 
 export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponent {
+  loadModelRequestId = 0
+
   setup() {
     this.queryParams = useQueryParams()
 
@@ -57,6 +59,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     this.configReader = useMemo(() => this.modelClass && ConfigReader.forModel(this.modelClass), [this.modelClass])
     this.modelId = this.queryParams.model_id
     this.modelName = this.modelClass?.modelClassData()?.name
+    this.pageToShow = this.currentPageToShow()
     this.currentUser = useCurrentUser()
 
     this.canCan = useCanCan(
@@ -73,13 +76,24 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     this.useStates({
       model: undefined
     })
-    useMemo(
-      () => { this.loadModel() },
-      [this.modelId]
-    )
+    useEffect(() => {
+      if (this.tt.pageNeedsLoadedModel()) {
+        this.loadModel()
+      } else {
+        this.setState({model: undefined})
+      }
+
+      return () => {
+        this.loadModelRequestId += 1
+      }
+    }, [this.modelClass, this.modelId, this.pageToShow])
   }
 
   loadModel = async () => {
+    // Show/edit pages should only accept the newest model load after route changes.
+    const requestId = this.loadModelRequestId + 1
+
+    this.loadModelRequestId = requestId
     const {configReader, modelClass, modelId, modelName} = this.tt
 
     if (modelId && modelClass) {
@@ -97,31 +111,20 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
 
       const model = await query.first()
 
+      if (requestId != this.loadModelRequestId) return
+
       this.setState({model})
     } else {
+      if (requestId != this.loadModelRequestId) return
+
       this.setState({model: undefined})
     }
   }
 
-  render() { // eslint-disable-line complexity
-    const {canCan, configReader, modelClass, modelId, modelName, queryParams} = this.tt
+  render() {
+    const {canCan, configReader, modelClass, modelId, modelName, pageToShow, queryParams} = this.tt
     const {model} = this.s
     const modelConfigActions = configReader?.modelConfig?.actions
-    let pageToShow
-
-    if (queryParams.model && queryParams.model_id && queryParams.model_reflection) {
-      pageToShow = "show_reflection"
-    } else if (queryParams.model && queryParams.model_id && queryParams.mode == "edit") {
-      pageToShow = "edit"
-    } else if (queryParams.model && queryParams.model_id) {
-      pageToShow = "show"
-    } else if (queryParams.model && queryParams.mode == "new") {
-      pageToShow = "edit"
-    } else if (queryParams.model) {
-      pageToShow = "index"
-    } else {
-      pageToShow = "welcome"
-    }
 
     const actionsViewStyle = useStyles(styles, "actionsView")
 
@@ -196,6 +199,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
           <EditPage
             key={`edit-page-${modelName}-${modelId}`}
             modelClass={modelClass}
+            modelId={modelId}
           />
         }
       </Layout>
@@ -215,5 +219,29 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
     } catch (error) {
       FlashNotifications.errorResponse(error)
     }
+  }
+
+  currentPageToShow = () => {
+    const {queryParams} = this.tt
+
+    if (queryParams.model && queryParams.model_id && queryParams.model_reflection) {
+      return "show_reflection"
+    } else if (queryParams.model && queryParams.model_id && queryParams.mode == "edit") {
+      return "edit"
+    } else if (queryParams.model && queryParams.model_id) {
+      return "show"
+    } else if (queryParams.model && queryParams.mode == "new") {
+      return "edit"
+    } else if (queryParams.model) {
+      return "index"
+    }
+
+    return "welcome"
+  }
+
+  pageNeedsLoadedModel = () => {
+    const {pageToShow} = this.tt
+
+    return pageToShow == "show" || pageToShow == "show_reflection"
   }
 }))

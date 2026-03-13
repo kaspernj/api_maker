@@ -280,6 +280,14 @@ export default class ApiMakerTableSettings {
       const tableSettingFormData = objectToFormData({table_setting: tableSettingData})
 
       await tableSetting.saveRaw(tableSettingFormData)
+
+      // Re-read the table setting after structural updates so prepared columns use the
+      // persisted column list rather than the stale pre-save association cache.
+      const reloadedTableSetting = await this.loadTableSetting()
+
+      if (!reloadedTableSetting) throw new Error("No reloadedTableSetting returned by loadTableSetting")
+
+      return reloadedTableSetting
     }
 
     return tableSetting

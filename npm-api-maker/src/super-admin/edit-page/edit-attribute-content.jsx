@@ -5,7 +5,7 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../../form"
-import {useMemo} from "react"
+import {useEffect, useMemo} from "react"
 
 export default memo(shapeComponent(class EditAttributeContent extends BaseComponent {
   static propTypes = propTypesExact({
@@ -24,7 +24,7 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
       value: this.initialValue
     })
 
-    useMemo(() => {
+    useEffect(() => {
       if (this.form && this.hasInitialValue) {
         this.form.setValue(this.p.name, this.initialValue)
       }
