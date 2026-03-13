@@ -20,20 +20,19 @@ import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import useCurrentUser from "../use-current-user.js"
 import useModel from "../use-model.js"
-import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends BaseComponent {
   static propTypes = propTypesExact({
-    modelClass: PropTypes.func.isRequired
+    modelClass: PropTypes.func.isRequired,
+    modelId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   })
 
   setup() {
-    const {modelClass} = this.p
+    const {modelClass, modelId} = this.p
     const modelClassName = modelClass.modelClassData().name
     const availableLocales = Locales.availableLocales()
     this.configReader = ConfigReader.forModel(modelClass)
     const currentUser = useCurrentUser()
-    const queryParams = useQueryParams()
     const selectedModelAttributes = ["id"]
     const selectedAttributes = {}
     this.attributes = this.configReader.modelConfig?.edit?.attributes
@@ -55,9 +54,9 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     selectedAttributes[modelClassName] = selectedModelAttributes
 
     const useModelResult = useModel(modelClass, {
-      cacheArgs: [currentUser?.id()],
-      loadByQueryParam: (props) => props.queryParams.model_id,
-      newIfNoId: this.configReader.modelConfig?.edit?.newIfNoId || true,
+      cacheArgs: [currentUser?.primaryKey(), modelId],
+      loadByQueryParam: () => modelId,
+      newIfNoId: this.configReader.modelConfig?.edit?.newIfNoId ?? true,
       preload: this.configReader.modelConfig?.edit?.preload,
       select: selectedAttributes
     })
@@ -66,26 +65,25 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     const modelVarName = inflection.camelize(modelClass.modelClassData().name, true)
 
     this.model = digg(useModelResult, modelVarName)
-    this.modelId = queryParams.model_id
+    this.modelId = modelId
     this.modelArgs = {}
     this.modelArgs[modelIdVarName] = this.modelId
-    this.formRef = useRef()
-    this.useStates({form: null})
+    this.formRef = useRef(null)
+    this.formObjectRef = useRef(null)
   }
 
   render() {
     const {attributes, model} = this.tt
     const {modelClass} = this.p
-    const extraContent = this.configReader.modelConfig?.edit?.extraContentconst
+    const extraContent = this.configReader.modelConfig?.edit?.extraContent
 
     return (
       <View testID="super-admin--edit-page">
-        <Form formRef={this.formRef} setForm={this.setStates.form}>
+        <Form formObjectRef={this.formObjectRef} formRef={this.formRef}>
           {model && attributes?.map((attribute) => (
             <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelClass={modelClass} />
           ))}
-          {/* eslint-disable-next-line no-undef */}
-          {extraContent && extraContent(modelArgs)}
+          {extraContent && extraContent(this.modelArgs)}
           <Pressable
             onPress={this.tt.onSubmit}
             style={this.cache("pressableStyle", {
@@ -110,7 +108,8 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
     try {
       const {model} = this.tt
       const formData = new FormData(this.formRef.current)
-      const formObject = incorporate({}, this.s.form.asObject(), FormDataObjectizer.toObject(formData))
+      // Read the uncontrolled form object directly from the stable ref so submit does not depend on a mount-time state sync.
+      const formObject = incorporate({}, this.formObjectRef.current?.asObject() || {}, FormDataObjectizer.toObject(formData))
 
       model.assignAttributes(formObject)
       await model.save()

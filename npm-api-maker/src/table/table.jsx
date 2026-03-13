@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-one-expression-per-line, react/jsx-sort-props */
 /* eslint-disable react/sort-prop-types, sort-imports */
 import {dig, digg, digs} from "diggerize"
-import React, {createContext, useContext, useMemo, useRef} from "react"
+import React, {createContext, useContext, useEffect, useMemo, useRef} from "react"
 import {Animated, Platform, Pressable, View} from "react-native"
 import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
@@ -164,6 +164,8 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   draggableSortEvents = new EventEmitter()
   events = new EventEmitter()
+  currentWorkplaceLoadRequestId = 0
+  tableSettingLoadRequestId = 0
   tableSettings = null
 
   setup() {
@@ -220,20 +222,26 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       [this.s.lastUpdate, this.s.resizing, this.s.tableSettingFullCacheKey]
     )
 
-    useMemo(() => {
+    // Table bootstrapping should start after mount so fast async completions cannot land before ShapeComponent is ready.
+    useEffect(() => {
       if (this.props.workplace) {
-        this.loadCurrentWorkplace().then(() => {
-          this.loadCurrentWorkplaceCount()
-        })
+        this.loadCurrentWorkplace()
       }
-    }, [this.p.currentUser?.id()])
 
-    useMemo(() => {
-      // Some headless RN-web runs never deliver the initial layout callback, so bootstrap table settings eagerly.
-      if (!this.tt.tableSettings) {
-        this.loadTableSetting()
+      return () => {
+        this.currentWorkplaceLoadRequestId += 1
       }
-    }, [this.p.currentUser?.id()])
+    }, [this.p.currentUser?.id(), this.p.modelClass])
+
+    // Load table settings after mount for the same reason as collection/model hooks: avoid pre-mount state writes.
+    useEffect(() => {
+      // Always bootstrap table settings from the mounted effect so discarded pre-mount runs cannot strand the table.
+      this.loadTableSetting()
+
+      return () => {
+        this.tableSettingLoadRequestId += 1
+      }
+    }, [this.p.currentUser?.id(), this.p.modelClass])
 
     useModelEvent(this.s.currentWorkplace, "workplace_links_created", this.tt.onLinksCreated)
     useModelEvent(this.s.currentWorkplace, "workplace_links_destroyed", this.tt.onLinksDestroyed)
@@ -281,11 +289,18 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   onDragEndAnimation = ({item}) => item.animatedZIndex.setValue(0)
 
   async loadCurrentWorkplace() {
+    // Only the latest workplace bootstrap request may update table state.
+    const requestId = this.currentWorkplaceLoadRequestId + 1
+
+    this.currentWorkplaceLoadRequestId = requestId
     const Workplace = modelClassRequire("Workplace")
     const result = await Workplace.current()
     const currentWorkplace = dig(result, "current", 0)
 
+    if (requestId != this.currentWorkplaceLoadRequestId) return
+
     this.setState({currentWorkplace})
+    this.loadCurrentWorkplaceCount()
   }
 
   async loadCurrentWorkplaceCount() {
@@ -312,11 +327,17 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   }
 
   async loadTableSetting() {
+    // Ignore late table-setting responses after navigation or remounts.
+    const requestId = this.tableSettingLoadRequestId + 1
+
+    this.tableSettingLoadRequestId = requestId
     this.tableSettings = new TableSettings({table: this})
 
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
 
     if (!tableSetting) throw new Error("No tableSetting returned by tableSettings.loadExistingOrCreateTableSettings()")
+
+    if (requestId != this.tableSettingLoadRequestId) return
 
     const {columns, preload} = this.tableSettings.preparedColumns(tableSetting)
     const {width} = this.s
@@ -377,6 +398,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       "showNoRecordsAvailableContent",
       "showNoRecordsFoundContent"
     )
+    const safeQParams = qParams || {}
 
     if (collection && collection.args.modelClass.modelClassData().name != modelClass.modelClassData().name) {
       throw new Error(
@@ -393,22 +415,22 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       >
         {showNoRecordsAvailableContent &&
           <div className="live-table--no-records-available-content">
-            {noRecordsAvailableContent({models, qParams, overallCount})}
+            {noRecordsAvailableContent({models, qParams: safeQParams, overallCount})}
           </div>
         }
         {showNoRecordsFoundContent &&
           <div className="live-table--no-records-found-content">
-            {noRecordsFoundContent({models, qParams, overallCount})}
+            {noRecordsFoundContent({models, qParams: safeQParams, overallCount})}
           </div>
         }
         {showFilters &&
           <Filters currentUser={currentUser} modelClass={modelClass} queryName={queryName} querySName={querySName} />
         }
         {(() => {
-          if (qParams && query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent) {
+          if (query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent) {
             return this.cardOrTable()
           } else {
-            return this.loadingContent({models, qParams, query, result})
+            return this.loadingContent({models, qParams: safeQParams, query, result})
           }
         })()}
       </View>
@@ -575,8 +597,9 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       ...restProps
     } = this.props
     const {models, qParams, query, result} = digs(this.collection, "models", "qParams", "query", "result")
+    const safeQParams = qParams || {}
 
-    const headerContent = this.tableHeaderContent({models, qParams, query, result})
+    const headerContent = this.tableHeaderContent({models, qParams: safeQParams, query, result})
     let PaginationComponent
 
     if (!paginateContent) {
@@ -689,7 +712,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {filterContent, filterSubmitButton} = this.p
     const {queryQName} = this.s
     const {filterSubmitLabel} = this.props
-    const {qParams} = digs(this.collection, "qParams")
+    const actualQParams = digs(this.collection, "qParams") || {}
 
     return (
       <Form
@@ -698,13 +721,13 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         onSubmit={this.tt.onFilterFormSubmit}
         setForm={this.setStates.filterForm}
       >
-        {"s" in qParams &&
-          <input name="s" type="hidden" value={qParams.s} />
+        {"s" in actualQParams &&
+          <input name="s" type="hidden" value={actualQParams.s} />
         }
         {filterContent({
           onFilterChanged: submitFilter,
           onFilterChangedWithDelay: submitFilterDebounce,
-          qParams,
+          qParams: actualQParams,
           queryQName
         })}
         {filterSubmitButton &&

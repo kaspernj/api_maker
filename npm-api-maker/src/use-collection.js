@@ -3,9 +3,9 @@ import debounce from "debounce"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.js"
-import {useCallback, useLayoutEffect, useMemo, useRef} from "react"
+import {useCallback, useEffect, useMemo, useRef} from "react"
 import useCreatedEvent from "./use-created-event.js"
-import useShape from "set-state-compare/build/use-shape.js"
+import useShape from "./use-shape.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 /**
@@ -161,7 +161,6 @@ const useCollection = (props, cacheKeys = []) => {
     const loadModelsGeneration = loadModelsGenerationRef.current + 1
 
     loadModelsGenerationRef.current = loadModelsGeneration
-
     let query = s.props.collection?.clone() || s.p.modelClass.ransack()
 
     if (s.props.pagination) {
@@ -282,7 +281,8 @@ const useCollection = (props, cacheKeys = []) => {
     loadModelsDebounce()
   }, [])
 
-  useMemo(
+  // Collection loading has to wait until mount so fast responses cannot get stranded in ShapeHook's pre-mount queue.
+  useEffect(
     () => {
       if (!("ifCondition" in s.props) || s.props.ifCondition) {
         loadQParams()
@@ -290,7 +290,9 @@ const useCollection = (props, cacheKeys = []) => {
       }
     },
     [
+      modelClass,
       s.props.ifCondition,
+      s.s.queryName,
       s.m.queryParams[s.s.queryQName],
       s.m.queryParams[s.s.queryPageName],
       s.m.queryParams[s.s.queryPerKey],
@@ -299,21 +301,21 @@ const useCollection = (props, cacheKeys = []) => {
     ].concat(cacheKeys)
   )
 
-  useMemo(() => {
+  useEffect(() => {
     if (s.props.noRecordsAvailableContent) {
       loadOverallCount()
     }
-  }, [])
+  }, [modelClass])
 
   useCreatedEvent(s.p.modelClass, onCreated)
 
   // Invalidate any in-flight async responses so unmounted hooks cannot write stale state.
-  useLayoutEffect(() => () => {
+  useEffect(() => () => {
     loadModelsGenerationRef.current += 1
     loadOverallCountGenerationRef.current += 1
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const connections = []
 
     if (s.s.models) {
