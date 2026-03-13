@@ -711,7 +711,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const {filterContent, filterSubmitButton} = this.p
     const {queryQName} = this.s
     const {filterSubmitLabel} = this.props
-    const actualQParams = digs(this.collection, "qParams") || {}
+    const actualQParams = digg(this.collection, "qParams") || {}
 
     return (
       <Form
