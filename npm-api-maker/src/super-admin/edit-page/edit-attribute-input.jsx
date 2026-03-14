@@ -19,19 +19,21 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   })
 
   setup() {
+    const {name} = this.p
+
     this.form = useForm()
     this.inputRef = useRef()
     this.initialValue = this.defaultValue()
 
     useEffect(() => {
       if (this.form) {
-        this.form.setValue(this.p.name, this.initialValue)
-        this.form.setValueReader(this.p.name, this.tt.readCurrentValue)
+        this.form.setValue(name, this.initialValue)
+        this.form.setValueReader(name, this.tt.readCurrentValue)
       }
 
       return () => {
         if (this.form) {
-          this.form.unsetValue(this.p.name)
+          this.form.unsetValue(name)
         }
       }
     }, [])
@@ -79,8 +81,10 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   }
 
   onChangeText = (newValue) => {
+    const {name} = this.p
+
     if (this.form) {
-      this.form.setValue(this.p.name, newValue)
+      this.form.setValue(name, newValue)
     }
   }
 
