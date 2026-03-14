@@ -14,7 +14,6 @@ const useForm = () => useContext(FormContext)
 class FormInputs {
   constructor(props) {
     this.inputs = {}
-    this.inputValueReaders = {}
     this.onSubmit = props?.onSubmit
   }
 
@@ -23,7 +22,7 @@ class FormInputs {
     const formDataObjectizer = new FormDataObjectizer()
 
     for(const key in this.inputs) {
-      const value = this.readValue(key)
+      const value = this.inputs[key]
 
       formDataObjectizer.treatInitial(key, value, result)
     }
@@ -41,31 +40,10 @@ class FormInputs {
     this.inputs[name] = value
   }
 
-  setValueReader(name, reader) {
-    if (!name) throw new Error("'name' is required")
-
-    this.inputValueReaders[name] = reader
-  }
-
-  readValue(name) {
-    const reader = this.inputValueReaders[name]
-
-    if (reader) {
-      const value = reader()
-
-      if (typeof value != "undefined") {
-        return value
-      }
-    }
-
-    return this.inputs[name]
-  }
-
   unsetValue(name) {
     if (!name) throw new Error("'name' is required")
 
     delete this.inputs[name]
-    delete this.inputValueReaders[name]
   }
 
   setValueWithHidden(name, value) {

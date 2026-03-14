@@ -97,7 +97,14 @@ private
         input_test_id = "api-maker/super-admin/edit-page/input-#{id}"
         checkbox_selector = "[data-component='api-maker/utils/checkbox'] [data-id='#{id}'] input[type='checkbox']"
         component = wait_for_and_find("[data-testid='#{input_test_id}'], #{checkbox_selector}, input[data-id='#{id}'], textarea[data-id='#{id}']")
-        component.set(value)
+
+        if component.tag_name == "input" && component[:type] == "checkbox"
+          component.set(value)
+        else
+          component.click
+          component.native.clear
+          component.send_keys(value.to_s)
+        end
       end
     end
   end

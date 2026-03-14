@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import React, {useEffect, useRef} from "react"
+import React, {useEffect} from "react"
 import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
@@ -22,19 +22,11 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     const {name} = this.p
 
     this.form = useForm()
-    this.inputRef = useRef()
     this.initialValue = this.defaultValue()
 
     useEffect(() => {
       if (this.form) {
         this.form.setValue(name, this.initialValue)
-        this.form.setValueReader(name, this.tt.readCurrentValue)
-      }
-
-      return () => {
-        if (this.form) {
-          this.form.unsetValue(name)
-        }
       }
     }, [])
   }
@@ -63,7 +55,6 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
             }, [attributeName, id, name])}
             defaultValue={this.initialValue}
             onChangeText={this.tt.onChangeText}
-            ref={this.inputRef}
             style={this.cache("textInputStyle", {
               paddingTop: 9,
               paddingRight: 13,
@@ -87,8 +78,6 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
       this.form.setValue(name, newValue)
     }
   }
-
-  readCurrentValue = () => this.inputRef.current?.value
 
   inputTestId = () => `api-maker/super-admin/edit-page/input-${this.p.id}`
 }))
