@@ -35,7 +35,6 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
 
   render() {
     const {attributeName, id, label, model, name} = this.p
-    const inputTestId = this.inputTestId()
 
     if (!(attributeName in model)) {
       throw new Error(`${attributeName} isn't set on the resource ${model.modelClassData().name}`)
@@ -64,7 +63,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               backgroundColor: "#fff",
               border: "1px solid #cecece"
             })}
-            testID={inputTestId}
+            testID={`api-maker/super-admin/edit-page/input-${id}`}
           />
         </View>
       </View>
@@ -78,6 +77,4 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
       this.form.setValue(name, newValue)
     }
   }
-
-  inputTestId = () => `api-maker/super-admin/edit-page/input-${this.p.id}`
 }))

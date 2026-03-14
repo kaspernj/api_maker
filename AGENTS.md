@@ -23,6 +23,7 @@ Notes:
 - In `ApiMaker::ModelContentGeneratorService`, handle Ransack allowlist runtime errors (`"Ransack needs ..."`) for associations/attributes/scopes by returning `[]` so frontend model generation does not crash on third-party models.
 - Do not “fix” flaky specs by only increasing waits/timeouts. First determine whether behavior regressed (for example, element never rendered) and collect/inspect CI artifacts before adjusting timing.
 - Avoid unnecessary defensive conditions for guaranteed contracts. Prefer failing fast over silently accepting impossible states.
+- Do not add helper methods for simple values or expressions that are only used in one place; inline them at the usage site instead.
 - In JavaScript class method definitions, use `methodName(args)` (no space before parentheses).
 - Keep single-tag JSDoc blocks on one line (for example `/** @returns {boolean} */`).
 - In ShapeHook classes, keep `setup()` as the first instance method.
