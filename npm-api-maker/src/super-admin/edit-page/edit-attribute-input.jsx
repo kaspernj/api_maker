@@ -53,7 +53,6 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
             }, [attributeName, id, name])}
             defaultValue={this.initialValue}
             onChange={this.tt.onChange}
-            onChangeText={this.tt.onChangeText}
             style={this.cache("textInputStyle", {
               paddingTop: 9,
               paddingRight: 13,
@@ -72,12 +71,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
 
   onChange = (event) => {
     if (this.form) {
-      this.form.setValue(this.p.name, event.target.value)
-    }
-  }
-
-  onChangeText = (newValue) => {
-    if (this.form) {
+      const newValue = event?.nativeEvent?.text ?? event?.target?.value
       this.form.setValue(this.p.name, newValue)
     }
   }
