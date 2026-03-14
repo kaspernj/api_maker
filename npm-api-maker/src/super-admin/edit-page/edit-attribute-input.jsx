@@ -7,7 +7,7 @@ import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {useForm} from "../../form"
-import {View} from "react-native"
+import {TextInput, View} from "react-native"
 
 export default memo(shapeComponent(class EditAttributeInput extends BaseComponent {
   static propTypes = propTypesExact({
@@ -20,6 +20,9 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
 
   setup() {
     this.form = useForm()
+    this.useStates({
+      value: this.defaultValue()
+    })
     this.initialValue = this.defaultValue()
 
     useEffect(() => {
@@ -32,8 +35,9 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   defaultValue = () => this.p.model[this.p.attributeName]() || ""
 
   render() {
-    const {attributeName, label, model, name} = this.p
+    const {attributeName, id, label, model, name} = this.p
     const inputTestId = this.inputTestId()
+    const {value} = this.s
 
     if (!(attributeName in model)) {
       throw new Error(`${attributeName} isn't set on the resource ${model.modelClassData().name}`)
@@ -45,12 +49,15 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
           {label}
         </Text>
         <View>
-          <input
-            data-attribute={attributeName}
-            data-testid={inputTestId}
+          {this.form?.setValueWithHidden(name, value)}
+          <TextInput
+            dataSet={this.cache("textInputDataSet", {
+              attribute: attributeName,
+              id,
+              name
+            }, [attributeName, id, name])}
             defaultValue={this.initialValue}
-            name={name}
-            onChange={this.tt.onChange}
+            onChangeText={this.tt.onChangeText}
             style={this.cache("textInputStyle", {
               paddingTop: 9,
               paddingRight: 13,
@@ -60,16 +67,19 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               backgroundColor: "#fff",
               border: "1px solid #cecece"
             })}
+            testID={inputTestId}
           />
         </View>
       </View>
     )
   }
 
-  onChange = (event) => {
+  onChangeText = (newValue) => {
     if (this.form) {
-      this.form.setValue(this.p.name, event.target.value)
+      this.form.setValue(this.p.name, newValue)
     }
+
+    this.setState({value: newValue})
   }
 
   inputTestId = () => `api-maker/super-admin/edit-page/input-${this.p.id}`
