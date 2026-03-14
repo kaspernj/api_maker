@@ -101,9 +101,7 @@ private
         if component.tag_name == "input" && component[:type] == "checkbox"
           component.set(value)
         else
-          component.click
-          component.native.clear
-          component.send_keys(value.to_s)
+          set_text_input(component, value)
         end
       end
     end
