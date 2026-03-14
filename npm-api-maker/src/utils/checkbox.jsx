@@ -12,7 +12,8 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
   static defaultProps = {
     dataSet: null,
     label: undefined,
-    style: null
+    style: null,
+    testID: undefined
   }
 
   static propTypes = propTypesExact({
@@ -21,7 +22,8 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
     defaultChecked: PropTypes.bool,
     label: PropTypes.string,
     onCheckedChange: PropTypes.func,
-    style: PropTypes.object
+    style: PropTypes.object,
+    testID: PropTypes.string
   })
 
   setup() {
@@ -39,7 +41,7 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
   }
 
   render() {
-    const {dataSet, label, style} = this.p
+    const {dataSet, label, style, testID} = this.p
     const isChecked = this.calculateChecked()
     const actualStyle = useMemo(() => Object.assign({flexDirection: "row", alignItems: "center"}, style), [style])
     const actualDataSet = useMemo(() => Object.assign({checked: isChecked}, dataSet), [dataSet, isChecked])
@@ -49,7 +51,7 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
         dataSet={this.cache("viewContainerDataSet", {component: "api-maker/utils/checkbox"})}
         style={actualStyle}
       >
-        <CheckBox dataSet={actualDataSet} onValueChange={this.tt.onValueChange} value={isChecked} />
+        <CheckBox dataSet={actualDataSet} onValueChange={this.tt.onValueChange} testID={testID} value={isChecked} />
         {label &&
           <Pressable onPress={this.tt.onLabelPressed}>
             <Text style={this.cache("textStyle", {marginLeft: 3})}>

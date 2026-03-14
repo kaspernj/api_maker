@@ -1,6 +1,5 @@
 /* eslint-disable sort-imports */
 import React, {useEffect} from "react"
-import {TextInput, View} from "react-native"
 import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
@@ -8,6 +7,7 @@ import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {useForm} from "../../form"
+import {View} from "react-native"
 
 export default memo(shapeComponent(class EditAttributeInput extends BaseComponent {
   static propTypes = propTypesExact({
@@ -19,14 +19,12 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   })
 
   setup() {
-    const {name} = this.p
-
     this.form = useForm()
     this.initialValue = this.defaultValue()
 
     useEffect(() => {
       if (this.form) {
-        this.form.setValue(name, this.initialValue)
+        this.form.setValue(this.p.name, this.initialValue)
       }
     }, [])
   }
@@ -34,7 +32,8 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   defaultValue = () => this.p.model[this.p.attributeName]() || ""
 
   render() {
-    const {attributeName, id, label, model, name} = this.p
+    const {attributeName, label, model, name} = this.p
+    const inputTestId = this.inputTestId()
 
     if (!(attributeName in model)) {
       throw new Error(`${attributeName} isn't set on the resource ${model.modelClassData().name}`)
@@ -46,14 +45,12 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
           {label}
         </Text>
         <View>
-          <TextInput
-            dataSet={this.cache("textInputDataSet", {
-              attribute: attributeName,
-              id,
-              name
-            }, [attributeName, id, name])}
+          <input
+            data-attribute={attributeName}
+            data-testid={inputTestId}
             defaultValue={this.initialValue}
-            onChangeText={this.tt.onChangeText}
+            name={name}
+            onChange={this.tt.onChange}
             style={this.cache("textInputStyle", {
               paddingTop: 9,
               paddingRight: 13,
@@ -69,9 +66,11 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     )
   }
 
-  onChangeText = (newValue) => {
+  onChange = (event) => {
     if (this.form) {
-      this.form.setValue(this.p.name, newValue)
+      this.form.setValue(this.p.name, event.target.value)
     }
   }
+
+  inputTestId = () => `api-maker/super-admin/edit-page/input-${this.p.id}`
 }))
