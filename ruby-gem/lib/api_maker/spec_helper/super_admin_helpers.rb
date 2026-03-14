@@ -96,7 +96,7 @@ private
         id = "#{resource.underscore_name.singularize}_#{input_name}"
         input_test_id = "api-maker/super-admin/edit-page/input-#{id}"
         checkbox_selector = "[data-component='api-maker/utils/checkbox'] [data-id='#{id}'] input[type='checkbox']"
-        component = wait_for_and_find("[data-testid='#{input_test_id}'], #{checkbox_selector}, input[data-id='#{id}'], textarea[data-id='#{id}']")
+        component = find_super_admin_input(id:, input_test_id:, checkbox_selector:, value:)
 
         if component.tag_name == "input" && component[:type] == "checkbox"
           component.set(value)
@@ -169,6 +169,20 @@ private
       raise if attempts > 1
 
       retry
+    end
+  end
+
+  def find_super_admin_input(id:, input_test_id:, checkbox_selector:, value:)
+    test_id_selector = "[data-testid='#{input_test_id}']"
+    test_id_component = all(test_id_selector, visible: true, wait: 0).first
+
+    return test_id_component if test_id_component
+
+    if value == true || value == false
+      wait_for_and_find(checkbox_selector)
+    else
+      text_input_selector = "input[data-id='#{id}'], textarea[data-id='#{id}']"
+      wait_for_and_find(text_input_selector)
     end
   end
 end
