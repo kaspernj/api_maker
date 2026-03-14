@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import React, {useEffect} from "react"
+import React, {useEffect, useRef} from "react"
 import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
@@ -20,11 +20,19 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
 
   setup() {
     this.form = useForm()
+    this.inputRef = useRef()
     this.initialValue = this.defaultValue()
 
     useEffect(() => {
       if (this.form) {
         this.form.setValue(this.p.name, this.initialValue)
+        this.form.setValueReader(this.p.name, this.tt.readCurrentValue)
+      }
+
+      return () => {
+        if (this.form) {
+          this.form.unsetValue(this.p.name)
+        }
       }
     }, [])
   }
@@ -52,7 +60,8 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               name
             }, [attributeName, id, name])}
             defaultValue={this.initialValue}
-            onChange={this.tt.onChange}
+            onChangeText={this.tt.onChangeText}
+            ref={this.inputRef}
             style={this.cache("textInputStyle", {
               paddingTop: 9,
               paddingRight: 13,
@@ -69,12 +78,13 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     )
   }
 
-  onChange = (event) => {
+  onChangeText = (newValue) => {
     if (this.form) {
-      const newValue = event?.nativeEvent?.text ?? event?.target?.value
       this.form.setValue(this.p.name, newValue)
     }
   }
+
+  readCurrentValue = () => this.inputRef.current?.value
 
   inputTestId = () => `api-maker/super-admin/edit-page/input-${this.p.id}`
 }))
