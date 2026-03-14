@@ -4,6 +4,8 @@ Generates Rails API endpoints and JavaScript API files for Webpack and more by i
 
 When debugging or implementing changes reveals a reusable lesson, document it before finishing in this README/docs, the relevant Codex skill files, and the applicable `AGENTS.md` files so the workflow improvement is preserved.
 
+If a RuboCop config exists for the Ruby project you are changing, run RuboCop on the changed Ruby files before pushing or opening a PR.
+
 ## Installation
 Add this line to your application's Gemfile:
 

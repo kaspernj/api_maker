@@ -14,6 +14,7 @@ Notes:
 - Do not add `# frozen_string_literal: true` to files.
 - Prefer multiple small, individually working commits when possible.
 - Always run Rubocop on changed Ruby files.
+- If a RuboCop config exists for the current Ruby project, run RuboCop on changed Ruby files before pushing or opening a PR.
 - Always run ESLint on changed or new JavaScript files.
 - Add concise comments for non-obvious groups of code so the intent and invariants are clear without reverse-engineering the flow.
 - ESLint `sort-imports` orders import lines by member syntax group (none/all/multiple/single) and then the first local specifier name, not by module specifier; adjust import order accordingly.
