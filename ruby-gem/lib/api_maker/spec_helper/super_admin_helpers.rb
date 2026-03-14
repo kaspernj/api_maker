@@ -94,9 +94,15 @@ private
         )
       else
         id = "#{resource.underscore_name.singularize}_#{input_name}"
+        input_test_id = "api-maker/super-admin/edit-page/input-#{id}"
         checkbox_selector = "[data-component='api-maker/utils/checkbox'] [data-id='#{id}'] input[type='checkbox']"
-        component = wait_for_and_find("#{checkbox_selector}, input[data-id='#{id}'], textarea[data-id='#{id}']")
-        component.set(value)
+        component = wait_for_and_find("[data-testid='#{input_test_id}'], #{checkbox_selector}, input[data-id='#{id}'], textarea[data-id='#{id}']")
+
+        if component.tag_name == "input" && component[:type] == "checkbox"
+          component.set(value)
+        else
+          set_text_input(component, value)
+        end
       end
     end
   end

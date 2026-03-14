@@ -2,6 +2,8 @@
 
 Generates Rails API endpoints and JavaScript API files for Webpack and more by inspecting your models and serializers.
 
+When debugging or implementing changes reveals a reusable lesson, document it before finishing in this README/docs, the relevant Codex skill files, and the applicable `AGENTS.md` files so the workflow improvement is preserved.
+
 ## Installation
 Add this line to your application's Gemfile:
 

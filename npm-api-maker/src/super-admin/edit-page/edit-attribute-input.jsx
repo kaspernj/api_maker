@@ -1,6 +1,5 @@
 /* eslint-disable sort-imports */
 import React, {useEffect} from "react"
-import {TextInput, View} from "react-native"
 import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
@@ -8,6 +7,7 @@ import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {useForm} from "../../form"
+import {TextInput, View} from "react-native"
 
 export default memo(shapeComponent(class EditAttributeInput extends BaseComponent {
   static propTypes = propTypesExact({
@@ -63,6 +63,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               backgroundColor: "#fff",
               border: "1px solid #cecece"
             })}
+            testID={`api-maker/super-admin/edit-page/input-${id}`}
           />
         </View>
       </View>
@@ -71,7 +72,8 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
 
   onChangeText = (newValue) => {
     if (this.form) {
-      this.form.setValue(this.p.name, newValue)
+      const {name} = this.p
+      this.form.setValue(name, newValue)
     }
   }
 }))

@@ -70,6 +70,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
           label={label}
           onCheckedChange={this.tt.onCheckedChange}
           style={styles.checkbox}
+          testID={`api-maker/super-admin/edit-page/input-${this.p.id}`}
         />
       </View>
     )
