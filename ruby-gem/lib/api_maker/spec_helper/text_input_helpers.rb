@@ -3,7 +3,7 @@ module ApiMaker::SpecHelper::TextInputHelpers
     if browser_firefox?
       component.click
       component.native.clear
-      component.send_keys(value.to_s)
+      component.send_keys(value)
     else
       component.set(value)
     end

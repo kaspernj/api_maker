@@ -5,6 +5,7 @@ Notes:
 - Prefer React Native components for all new code, including spec/dummy pages.
 - Do not edit `build/` outputs manually; regenerate with the appropriate build command instead.
 - Do not force-add ignored `build/` outputs to git; keep PRs focused on source changes and let release/build workflows regenerate package artifacts.
+- When a debugging or implementation session reveals a reusable lesson, document it before finishing in this repo's README/docs, relevant skills, and the applicable `AGENTS.md` files.
 - Only run builds when releasing a new package; development runs against source files.
 - When using `gh pr create/edit`, pass multi-line bodies with real newlines (not literal `\n`) so GitHub renders them correctly.
 - Avoid unrelated changes (for example, adding placeholder modules in specs) unless they are necessary for the requested change.
