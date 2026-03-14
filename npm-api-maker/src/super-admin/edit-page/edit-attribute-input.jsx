@@ -20,9 +20,6 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
 
   setup() {
     this.form = useForm()
-    this.useStates({
-      value: this.defaultValue()
-    })
     this.initialValue = this.defaultValue()
 
     useEffect(() => {
@@ -37,7 +34,6 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
   render() {
     const {attributeName, id, label, model, name} = this.p
     const inputTestId = this.inputTestId()
-    const {value} = this.s
 
     if (!(attributeName in model)) {
       throw new Error(`${attributeName} isn't set on the resource ${model.modelClassData().name}`)
@@ -49,7 +45,6 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
           {label}
         </Text>
         <View>
-          {this.form?.setValueWithHidden(name, value)}
           <TextInput
             dataSet={this.cache("textInputDataSet", {
               attribute: attributeName,
@@ -57,6 +52,7 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
               name
             }, [attributeName, id, name])}
             defaultValue={this.initialValue}
+            onChange={this.tt.onChange}
             onChangeText={this.tt.onChangeText}
             style={this.cache("textInputStyle", {
               paddingTop: 9,
@@ -74,12 +70,16 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     )
   }
 
+  onChange = (event) => {
+    if (this.form) {
+      this.form.setValue(this.p.name, event.target.value)
+    }
+  }
+
   onChangeText = (newValue) => {
     if (this.form) {
       this.form.setValue(this.p.name, newValue)
     }
-
-    this.setState({value: newValue})
   }
 
   inputTestId = () => `api-maker/super-admin/edit-page/input-${this.p.id}`
