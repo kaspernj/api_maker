@@ -176,7 +176,19 @@ private
     test_id_selector = "[data-testid='#{input_test_id}']"
     test_id_component = all(test_id_selector, visible: true, wait: 0).first
 
-    return test_id_component if test_id_component
+    if test_id_component
+      if value == true || value == false
+        test_id_checkbox = test_id_component.all("input[type='checkbox']", visible: true, wait: 0).first
+
+        return test_id_checkbox if test_id_checkbox
+      else
+        test_id_text_input = test_id_component.all("input, textarea", visible: true, wait: 0).first
+
+        return test_id_text_input if test_id_text_input
+      end
+
+      return test_id_component
+    end
 
     if value == true || value == false
       wait_for_and_find(checkbox_selector)
