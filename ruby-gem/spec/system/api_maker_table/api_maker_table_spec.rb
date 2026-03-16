@@ -15,6 +15,15 @@ describe "bootstrap - live table" do
   let(:project_name_identifier) { "project--attribute-name--sort-key-projectName" }
   let(:created_at_identifier) { "attribute-createdAt--sort-key-createdAt" }
   let(:finished_identifier) { "attribute-finished--sort-key-finished" }
+  let(:expected_created_columns_with_positions) do
+    [
+      [id_identifier, 1],
+      [name_identifier, 2],
+      [project_name_identifier, 3],
+      [created_at_identifier, 4],
+      [finished_identifier, 5]
+    ]
+  end
 
   it "renders a table with rows" do
     task1
@@ -62,15 +71,25 @@ describe "bootstrap - live table" do
         .columns
         .order(:position)
         .pluck(:identifier, :position)
-    ).to eq(
-      [
-        [id_identifier, 1],
-        [name_identifier, 2],
-        [project_name_identifier, 3],
-        [created_at_identifier, 4],
-        [finished_identifier, 5]
-      ]
-    )
+    ).to eq(expected_created_columns_with_positions)
+  end
+
+  it "creates table-setting columns in the declared order" do
+    task1
+    task2
+
+    login_as user_admin
+    visit bootstrap_live_table_path
+    wait_for_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
+
+    expect(
+      ApiMakerTable::TableSetting
+        .last!
+        .columns
+        .order(:position)
+        .pluck(:identifier, :position)
+    ).to eq(expected_created_columns_with_positions)
   end
 
   it "supports custom date formatter callbacks on table props" do
