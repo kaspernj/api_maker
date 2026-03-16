@@ -33,6 +33,7 @@ import selectCalculator from "./select-calculator.js"
 import Select from "../inputs/select"
 import Settings from "./settings/index"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import shouldRenderLoadingContent from "./should-render-loading-content.js"
 import TableSettings from "./table-settings.js"
 import Text from "../utils/text"
 import uniqunize from "uniqunize"
@@ -406,6 +407,14 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       )
     }
 
+    const shouldShowLoadingContent = shouldRenderLoadingContent({
+      models,
+      query,
+      result,
+      showNoRecordsAvailableContent,
+      showNoRecordsFoundContent
+    })
+
     return (
       <View
         dataSet={dataSets[`rootView-${this.className()}`] ||= {class: this.className()}}
@@ -425,13 +434,12 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         {showFilters &&
           <Filters currentUser={currentUser} modelClass={modelClass} queryName={queryName} querySName={querySName} />
         }
-        {(() => {
-          if (query && result && models && !showNoRecordsAvailableContent && !showNoRecordsFoundContent) {
-            return this.cardOrTable()
-          } else {
-            return this.loadingContent({models, qParams: safeQParams, query, result})
-          }
-        })()}
+        {shouldShowLoadingContent &&
+          this.loadingContent({models, qParams: safeQParams, query, result})
+        }
+        {!shouldShowLoadingContent && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
+          this.cardOrTable()
+        }
       </View>
     )
   }

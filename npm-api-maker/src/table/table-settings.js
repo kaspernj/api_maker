@@ -219,8 +219,8 @@ export default class ApiMakerTableSettings {
       }
     }
 
-    // Update existing columns to match the current column definition order and metadata.
-    for (const {column, identifier, position} of columnsWithPositions) {
+    // Update existing columns to match the current column metadata without overwriting user-saved order.
+    for (const {column, identifier} of columnsWithPositions) {
       const tableSettingColumn = existingColumns.find((tableSettingColumn) => tableSettingColumn.identifier() == identifier)
 
       if (tableSettingColumn) {
@@ -252,11 +252,6 @@ export default class ApiMakerTableSettings {
           columnChanged = true
         }
 
-        if (tableSettingColumn.position() != position) {
-          logger.debug(() => `Position changed on ${column.label} from ${tableSettingColumn.position()} to ${position}`)
-          columnChanged = true
-        }
-
         if (columnChanged) {
           const columnKey = ++columnsKeyCount
 
@@ -265,7 +260,6 @@ export default class ApiMakerTableSettings {
             attribute_name: column.attribute,
             id: tableSettingColumn.id(),
             path: column.path,
-            position,
             sort_key: column.sortKey
           }
         }
