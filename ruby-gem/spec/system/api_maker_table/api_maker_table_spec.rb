@@ -10,6 +10,9 @@ describe "bootstrap - live table" do
   let(:no_tasks_available_content) { ".no-tasks-available-content" }
   let(:no_tasks_found_content) { ".no-tasks-found-content" }
 
+  let(:id_identifier) { "attribute-id--sort-key-id" }
+  let(:name_identifier) { "attribute-name--sort-key-name" }
+  let(:project_name_identifier) { "project--attribute-name--sort-key-projectName" }
   let(:created_at_identifier) { "attribute-createdAt--sort-key-createdAt" }
   let(:finished_identifier) { "attribute-finished--sort-key-finished" }
 
@@ -52,6 +55,21 @@ describe "bootstrap - live table" do
     expect(finished_column).to have_attributes(
       attribute_name: "finished",
       visible: nil
+    )
+
+    expect(
+      created_table_setting
+        .columns
+        .order(:position)
+        .pluck(:identifier, :position)
+    ).to eq(
+      [
+        [id_identifier, 1],
+        [name_identifier, 2],
+        [project_name_identifier, 3],
+        [created_at_identifier, 4],
+        [finished_identifier, 5]
+      ]
     )
   end
 
