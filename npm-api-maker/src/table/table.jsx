@@ -410,9 +410,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     const shouldShowLoadingContent = shouldRenderLoadingContent({
       models,
       query,
-      result,
-      showNoRecordsAvailableContent,
-      showNoRecordsFoundContent
+      result
     })
 
     return (
@@ -437,7 +435,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         {shouldShowLoadingContent &&
           this.loadingContent({models, qParams: safeQParams, query, result})
         }
-        {!shouldShowLoadingContent && !showNoRecordsAvailableContent && !showNoRecordsFoundContent &&
+        {!shouldShowLoadingContent &&
           this.cardOrTable()
         }
       </View>
