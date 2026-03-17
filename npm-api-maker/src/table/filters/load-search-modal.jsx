@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-max-depth, react/jsx-no-literals, sort-imports */
 import React, {useMemo} from "react"
 import {Pressable, View} from "react-native"
-import apiMakerConfig from "@kaspernj/api-maker/build/config.js"
 import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
@@ -12,6 +11,7 @@ import Params from "../../params.js"
 import {TableSearch} from "models.js"
 import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import apiMakerConfig from "../../config.js"
 
 const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
   render() {

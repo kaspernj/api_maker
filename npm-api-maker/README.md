@@ -8,6 +8,10 @@ Client-side library for ApiMaker-powered Rails APIs. It provides model classes, 
 npm install @kaspernj/api-maker
 ```
 
+When working on this package locally, `npm install` uses the checked-in [`.npmrc`](/home/dev/Development/api_maker/npm-api-maker/.npmrc) with `legacy-peer-deps=true`. This keeps the ESLint 10 toolchain installable until `eslint-plugin-react` publishes an ESLint 10 peer range.
+
+Peer-provided runtime packages that `npm-api-maker` imports in its own source, tests, or linked local/CI builds stay installed in this repo's `devDependencies` as well. For example, `react-native-vector-icons`, `flash-notifications`, `history`, and `i18n-on-steroids` are still peer-facing for consumers, but they must also exist locally when webpack, ESLint, or Jest resolves modules from the package directory itself.
+
 ## Quick start
 
 ApiMaker models are generated from `model-recipes.json` (usually emitted by the Rails gem). Import the models and set up the shared config before making requests.
