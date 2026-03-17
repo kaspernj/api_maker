@@ -10,7 +10,7 @@ npm install @kaspernj/api-maker
 
 When working on this package locally, `npm install` uses the checked-in [`.npmrc`](/home/dev/Development/api_maker/npm-api-maker/.npmrc) with `legacy-peer-deps=true`. This keeps the ESLint 10 toolchain installable until `eslint-plugin-react` publishes an ESLint 10 peer range.
 
-`react-native-vector-icons` remains a peer dependency for consumers and is also installed as a dev dependency for this repo. That keeps linked local/CI builds working when webpack resolves `npm-api-maker/build/*` imports from the package directory itself.
+Peer-provided runtime packages that `npm-api-maker` imports in its own source, tests, or linked local/CI builds stay installed in this repo's `devDependencies` as well. For example, `react-native-vector-icons`, `flash-notifications`, `history`, and `i18n-on-steroids` are still peer-facing for consumers, but they must also exist locally when webpack, ESLint, or Jest resolves modules from the package directory itself.
 
 ## Quick start
 

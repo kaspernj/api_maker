@@ -12,6 +12,9 @@ export default defineConfig([
   js.configs.recommended,
   {
     ignores: ["dist/*"],
+    linterOptions: {
+      reportUnusedDisableDirectives: "off"
+    },
     languageOptions: {
       globals: {
         ...globals.jest

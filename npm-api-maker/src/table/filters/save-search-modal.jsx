@@ -1,5 +1,4 @@
 /* eslint-disable react/button-has-type, sort-imports */
-import apiMakerConfig from "@kaspernj/api-maker/build/config.js"
 import BaseComponent from "../../base-component"
 import Checkbox from "../../bootstrap/checkbox"
 import {digg} from "diggerize"
@@ -11,6 +10,7 @@ import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import memo from "set-state-compare/build/memo.js"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import apiMakerConfig from "../../config.js"
 
 const TableSearch = modelClassRequire("TableSearch")
 

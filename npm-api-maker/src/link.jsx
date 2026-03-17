@@ -1,12 +1,12 @@
 /* eslint-disable sort-imports */
 import {Platform, Pressable, StyleSheet} from "react-native"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useApiMaker} from "@kaspernj/api-maker/build/with-api-maker.js"
 import BaseComponent from "./base-component"
 import PropTypes from "prop-types"
 import React from "react"
 import dataSetToAttributes from "./data-set-to-attributes.js"
 import memo from "set-state-compare/build/memo.js"
+import {useApiMaker} from "./with-api-maker.jsx"
 
 export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   static propTypes = {

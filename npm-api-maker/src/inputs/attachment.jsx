@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import {Input as ApiMakerInput} from "@kaspernj/api-maker/build/inputs/input"
+import ApiMakerInput from "./input.jsx"
 import {digg} from "diggerize"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import BaseComponent from "../base-component"
@@ -21,7 +21,15 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
 
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.inputs.attachment"})
-    const {inputProps} = useInput({props: this.props})
+    const {inputProps} = useInput({
+      props: {
+        inputProps: {name: "", wrapperOpts: {}},
+        inputRef: undefined,
+        type: "file",
+        ...this.props
+      },
+      wrapperOptions: {type: "file"}
+    })
 
     this.setInstance({inputProps, t})
     this.useStates({
