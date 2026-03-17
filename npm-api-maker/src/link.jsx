@@ -6,7 +6,7 @@ import PropTypes from "prop-types"
 import React from "react"
 import dataSetToAttributes from "./data-set-to-attributes.js"
 import memo from "set-state-compare/build/memo.js"
-import {useApiMaker} from "./with-api-maker.jsx"
+import {useApiMaker} from "./with-api-maker"
 
 export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
   static propTypes = {

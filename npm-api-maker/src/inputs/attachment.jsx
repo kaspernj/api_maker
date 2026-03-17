@@ -1,5 +1,5 @@
 /* eslint-disable sort-imports */
-import ApiMakerInput from "./input.jsx"
+import ApiMakerInput from "./input"
 import {digg} from "diggerize"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import BaseComponent from "../base-component"
