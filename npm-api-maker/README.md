@@ -10,6 +10,8 @@ npm install @kaspernj/api-maker
 
 When working on this package locally, `npm install` uses the checked-in [`.npmrc`](/home/dev/Development/api_maker/npm-api-maker/.npmrc) with `legacy-peer-deps=true`. This keeps the ESLint 10 toolchain installable until `eslint-plugin-react` publishes an ESLint 10 peer range.
 
+`react-native-vector-icons` remains a peer dependency for consumers and is also installed as a dev dependency for this repo. That keeps linked local/CI builds working when webpack resolves `npm-api-maker/build/*` imports from the package directory itself.
+
 ## Quick start
 
 ApiMaker models are generated from `model-recipes.json` (usually emitted by the Rails gem). Import the models and set up the shared config before making requests.

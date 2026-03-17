@@ -34,3 +34,4 @@ Notes:
 - To typecheck a single file, run `npm run typecheck:file --file=src/path/to/file.js` from `npm-api-maker/` (you can also pass `npm-api-maker/src/...` or set `FILE=src/path/to/file.js`).
 - Do not "fix" render/update bugs by replacing `useMemo()` with `useEffect()` as a blanket change; preserve hook semantics and debug the underlying state flow first.
 - In `npm-api-maker`, keep the checked-in `.npmrc` with `legacy-peer-deps=true` while the package targets ESLint 10 and `eslint-plugin-react` has not yet published an ESLint 10 peer range; remove that workaround only after the upstream peer support lands.
+- In `npm-api-maker`, keep runtime imports that are needed by linked local/CI builds (for example `react-native-vector-icons`) installed in `devDependencies` as well as `peerDependencies` when webpack resolves the linked package from its own directory.
