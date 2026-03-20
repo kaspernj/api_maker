@@ -77,6 +77,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
 
     useMemo(() => {
       CommandsPool.current().globalRequestData.layout = "admin"
+      CommandsPool.current().globalRequestData.super_admin = true
       CommandsPool.current().globalRequestData.locale = locale
     }, [locale])
   }
