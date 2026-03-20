@@ -46,6 +46,32 @@ describe ApiMaker::CommandRequestExecutor do
     expect(response.fetch(:responses).fetch("1").dig(:data, :api_maker_args, :layout)).to eq("user")
   end
 
+  it "uses the already-merged payload for HTTP form requests" do
+    expect(controller).to receive(:with_request_context).and_yield
+
+    response = described_class.execute!(
+      controller:,
+      payload: {
+        "json" => "{\"pool\":{\"collection\":{\"tasks\":{\"test_collection\":{\"1\":{\"args\":{},\"id\":1}}}}}}",
+        "pool" => {
+          "collection" => {
+            "tasks" => {
+              "test_collection" => {
+                "1" => {
+                  "args" => {},
+                  "id" => 1
+                }
+              }
+            }
+          }
+        }
+      }
+    )
+
+    expect(response).to include(:responses)
+    expect(response.fetch(:responses).fetch("1")).to include(type: :success)
+  end
+
   it "wraps websocket command args in action controller parameters" do
     expect(controller).to receive(:with_request_context).and_yield
 

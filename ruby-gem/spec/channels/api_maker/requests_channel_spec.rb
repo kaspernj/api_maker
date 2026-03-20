@@ -55,4 +55,13 @@ describe ApiMaker::RequestsChannel do
       expect(channel.api_maker_locals).to eq({})
     end
   end
+
+  describe "#pending_request_ids" do
+    it "returns an empty array when the channel has already been unsubscribed" do
+      channel = described_class.allocate
+      channel.instance_variable_set(:@pending_request_ids_by_fingerprint, nil)
+
+      expect(channel.__send__(:pending_request_ids, "fingerprint-1")).to eq([])
+    end
+  end
 end

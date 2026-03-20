@@ -17,6 +17,9 @@ describe ApiMaker::ActionCableRequestContext do
     Object.new.tap do |object|
       object.define_singleton_method(:api_maker_locals) { {} }
       object.define_singleton_method(:connection) { connection_instance }
+      object.define_singleton_method(:update_api_maker_current_user!) do |_current_user|
+        nil
+      end
     end
   end
   let(:request_context) do
@@ -29,14 +32,14 @@ describe ApiMaker::ActionCableRequestContext do
 
   it "signs users in through warden and updates the channel connection user" do
     expect(warden).to receive(:set_user).with(user, scope: :user)
-    expect(connection).to receive(:current_user=).with(user)
+    expect(channel).to receive(:update_api_maker_current_user!).with(user)
 
     request_context.sign_in(user)
   end
 
   it "signs users out through warden and clears the channel connection user" do
     expect(warden).to receive(:logout).with(:user)
-    expect(connection).to receive(:current_user=).with(nil)
+    expect(channel).to receive(:update_api_maker_current_user!).with(nil)
 
     request_context.sign_out(user)
   end
@@ -54,7 +57,7 @@ describe ApiMaker::ActionCableRequestContext do
     end
 
     expect(warden).to receive(:set_user).with(user, scope: :user)
-    expect(connection).to receive(:current_user=).with(user)
+    expect(channel).to receive(:update_api_maker_current_user!).with(user)
 
     request_context.sign_in(user)
 
@@ -98,9 +101,14 @@ describe ApiMaker::ActionCableRequestContext do
     )
   end
 
+  it "stores itself as the controller in api_maker_args" do
+    expect(request_context.api_maker_args[:controller]).to eq(request_context)
+  end
+
   it "loads and persists the shared session shadow store around websocket requests" do
     request = instance_double(ActionDispatch::Request)
     allow(request_context).to receive_messages(request:, session: {}, cookies: {})
+    allow(warden).to receive(:user).with(:user).and_return(nil)
 
     channel.define_singleton_method(:load_session_state) do |**args|
       @load_session_state_args = args

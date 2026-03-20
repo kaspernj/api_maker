@@ -4,7 +4,7 @@ class ApiMaker::ActionCableRequestContext
   delegate :current_user, to: :channel
 
   def initialize(api_maker_args:, channel:, request_fingerprint:)
-    @api_maker_args = api_maker_args
+    @api_maker_args = api_maker_args.merge(controller: self)
     @api_maker_locals = channel.api_maker_locals
     @channel = channel
     @request_fingerprint = request_fingerprint
@@ -114,9 +114,9 @@ private
     return unless scope.to_sym == :user
 
     api_maker_args[:current_user] = user
+    return channel.update_api_maker_current_user!(user) if channel.respond_to?(:update_api_maker_current_user!)
 
     channel.connection.current_user = user if channel.connection.respond_to?(:current_user=)
-
     channel.instance_variable_set(:@current_user, user)
   end
 

@@ -30,9 +30,11 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
   end
 
   def merged_payload
-    @merged_payload ||= if payload.key?("json")
+    @merged_payload ||= if payload.key?("json") && !payload.key?("pool") && !payload.key?(:pool)
+      json_payload = payload.fetch("json")
+      json_payload = JSON.parse(json_payload) if json_payload.is_a?(String)
       raw_payload = payload.except("json")
-      ApiMaker::DeepMergeParams.execute!(payload.fetch("json"), raw_payload)
+      ApiMaker::DeepMergeParams.execute!(json_payload, raw_payload)
     else
       payload
     end
