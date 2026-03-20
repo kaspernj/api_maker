@@ -28,7 +28,6 @@ describe ApiMaker::RequestsChannel do
     it "passes locale and time zone offset from global request data" do
       channel = described_class.allocate
       channel.define_singleton_method(:current_user) { nil }
-      channel.define_singleton_method(:api_maker_locals) { {} }
 
       request_context = channel.__send__(
         :request_context,
@@ -48,6 +47,12 @@ describe ApiMaker::RequestsChannel do
         time_zone_offset: -18_000
       )
       expect(request_context.request_fingerprint).to eq("fingerprint-1")
+    end
+
+    it "provides default api maker locals" do
+      channel = described_class.allocate
+
+      expect(channel.api_maker_locals).to eq({})
     end
   end
 end

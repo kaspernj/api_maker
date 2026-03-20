@@ -78,7 +78,9 @@ export default class ApiMakerSessionStatusUpdater {
       return this.csrfToken
     }
 
-    throw new Error("CSRF token hasn't been set")
+    logger.debug("No CSRF token available after updating session status")
+
+    return undefined
   }
 
   /** sessionStatus. */

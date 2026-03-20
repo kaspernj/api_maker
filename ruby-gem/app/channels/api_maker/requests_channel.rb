@@ -1,6 +1,10 @@
 require "digest"
 
 class ApiMaker::RequestsChannel < ApplicationCable::Channel
+  def api_maker_locals
+    @api_maker_locals ||= {}
+  end
+
   def subscribed
     @request_cache = {}
     @request_cache_order = []
@@ -58,6 +62,20 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
     @pending_request_ids_by_fingerprint = nil
   end
 
+  def transmit_command_event(command_id:, payload:, request_fingerprint:, type:)
+    request_ids = @pending_request_ids_by_fingerprint[request_fingerprint] || []
+
+    request_ids.each do |request_id|
+      transmit(
+        {
+          command_id:,
+          request_id:,
+          type:
+        }.merge(payload)
+      )
+    end
+  end
+
 private
 
   def cache_response(fingerprint, response)
@@ -89,20 +107,6 @@ private
         request: data.fetch("request")
       )
     )
-  end
-
-  def transmit_command_event(command_id:, payload:, request_fingerprint:, type:)
-    request_ids = @pending_request_ids_by_fingerprint[request_fingerprint] || []
-
-    request_ids.each do |request_id|
-      transmit(
-        {
-          command_id:,
-          request_id:,
-          type:
-        }.merge(payload)
-      )
-    end
   end
 
   def transmit_received(request_id)
