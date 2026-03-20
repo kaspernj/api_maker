@@ -1,4 +1,4 @@
-/* eslint-disable arrow-body-style, import/no-unresolved, newline-per-chained-call, sort-imports */
+/* eslint-disable arrow-body-style, import/no-unresolved, sort-imports */
 import columnIdentifier from "./column-identifier.js"
 import columnVisible from "./column-visible.js"
 import {digg} from "diggerize"
@@ -37,6 +37,13 @@ export default class ApiMakerTableSettings {
 
   /** columns. */
   columns = () => digg(this, "table", "columnsAsArray")()
+
+  /** columnsWithPositions. */
+  columnsWithPositions = () => {
+    return this
+      .columns()
+      .map((column, columnIndex) => ({column, identifier: columnIdentifier(column), position: columnIndex + 1}))
+  }
 
   /** currentUser. */
   currentUser = () => digg(this, "table", "props", "currentUser")
@@ -154,14 +161,8 @@ export default class ApiMakerTableSettings {
       columns_attributes: {}
     }
 
-    const columns = this.columns()
-
-    for (const columnKey in columns) {
-      const column = digg(columns, columnKey)
-      const identifier = columnIdentifier(column)
-      const columnData = this.columnSaveData(column, {identifier, position: columnKey})
-
-      tableSettingData.columns_attributes[columnKey] = columnData
+    for (const [columnKey, {column, identifier, position}] of this.columnsWithPositions().entries()) {
+      tableSettingData.columns_attributes[columnKey] = this.columnSaveData(column, {identifier, position})
     }
 
     const tableSetting = new TableSetting()
@@ -191,16 +192,16 @@ export default class ApiMakerTableSettings {
   /** updateTableSetting. */
   updateTableSetting = async (tableSetting) => {
     const changedAttributesList = ["attributeName", "sortKey"]
-    const columns = this.columns()
+    const columnsWithPositions = this.columnsWithPositions()
     const columnsData = {}
     const tableSettingData = {columns_attributes: columnsData}
+    const existingColumns = tableSetting.columns().loaded()
     let columnsKeyCount = 0
     let changed = false
 
     // Add missing columns
-    for (const column of columns) {
-      const identifier = columnIdentifier(column)
-      const tableSettingColumn = tableSetting.columns().loaded().find((tableSettingColumn) => tableSettingColumn.identifier() == identifier)
+    for (const {column, identifier, position} of columnsWithPositions) {
+      const tableSettingColumn = existingColumns.find((tableSettingColumn) => tableSettingColumn.identifier() == identifier)
 
       if (!tableSettingColumn) {
         const columnKey = ++columnsKeyCount
@@ -209,20 +210,20 @@ export default class ApiMakerTableSettings {
           column,
           {
             identifier,
-            position: tableSetting.columns().loaded().length + columnKey
+            position
           }
         )
 
-        logger.debug(() => `Changed because of new column: ${column.label}`)
+        logger.debug(() => `Changed because of new column at position ${position}: ${column.label}`)
         changed = true
       }
     }
 
-    for (const tableSettingColumn of tableSetting.columns().loaded()) {
-      const column = columns.find((column) => columnIdentifier(column) == tableSettingColumn.identifier())
+    // Update existing columns to match the current column metadata without overwriting user-saved order.
+    for (const {column, identifier} of columnsWithPositions) {
+      const tableSettingColumn = existingColumns.find((tableSettingColumn) => tableSettingColumn.identifier() == identifier)
 
-      if (column) {
-        // TODO: Update column if changed
+      if (tableSettingColumn) {
         let columnChanged = false
 
         for (const changedAttribute of changedAttributesList) {
@@ -256,14 +257,20 @@ export default class ApiMakerTableSettings {
 
           changed = true
           columnsData[columnKey] = {
-            attribute_name: column.attributeName,
+            attribute_name: column.attribute,
             id: tableSettingColumn.id(),
             path: column.path,
             sort_key: column.sortKey
           }
         }
-      } else {
-        // Removed saved columns no longer found
+      }
+    }
+
+    for (const tableSettingColumn of existingColumns) {
+      const columnExists = columnsWithPositions.find(({identifier}) => identifier == tableSettingColumn.identifier())
+
+      if (!columnExists) {
+        // Removed saved columns no longer found.
         const columnKey = ++columnsKeyCount
 
         columnsData[columnKey] = {

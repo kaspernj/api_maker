@@ -1,3 +1,4 @@
+import {fixupConfigRules} from "@eslint/compat"
 import {defineConfig} from "eslint/config"
 import expoConfig from "eslint-config-expo/flat.js"
 import globals from "globals"
@@ -6,11 +7,14 @@ import js from "@eslint/js"
 import jsdoc from "eslint-plugin-jsdoc"
 
 export default defineConfig([
-  expoConfig,
-  jest.configs["flat/recommended"],
+  ...fixupConfigRules(expoConfig),
+  ...fixupConfigRules(jest.configs["flat/recommended"]),
   js.configs.recommended,
   {
     ignores: ["dist/*"],
+    linterOptions: {
+      reportUnusedDisableDirectives: "off"
+    },
     languageOptions: {
       globals: {
         ...globals.jest
