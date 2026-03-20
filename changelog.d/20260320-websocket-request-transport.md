@@ -1,0 +1,2 @@
+- Added websocket request transport for ApiMaker commands and services, including per-connection request deduping and response caching.
+- Changed the shared command executor so HTTP and websocket command payloads run through the same backend path.

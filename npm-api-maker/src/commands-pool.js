@@ -2,6 +2,7 @@
 
 import Api from "./api.js"
 import CommandSubmitData from "./command-submit-data.js"
+import Config from "./config.js"
 import CustomError from "./custom-error.js"
 import DestroyError from "./destroy-error.js"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
@@ -13,6 +14,7 @@ import Serializer from "./serializer.js"
 import SessionStatusUpdater from "./session-status-updater.js"
 import ValidationError from "./validation-error.js"
 import {ValidationErrors} from "./validation-errors.js"
+import WebsocketRequestClient from "./websocket-request-client.js"
 
 /**
  * @typedef {object} CommandDataType
@@ -30,17 +32,19 @@ export default class ApiMakerCommandsPool {
   /** addCommand. */
   static addCommand(data, args = {}) {
     let pool
+    const useWebsocketRequests = Config.getWebsocketRequests()
 
-    if (args.instant) {
+    if (args.instant || useWebsocketRequests) {
       pool = new ApiMakerCommandsPool()
       pool.globalRequestData = {...ApiMakerCommandsPool.current().globalRequestData}
+      pool.requestOptions = {...args}
     } else {
       pool = ApiMakerCommandsPool.current()
     }
 
     const promiseResult = pool.addCommand(data)
 
-    if (args.instant) {
+    if (args.instant || useWebsocketRequests) {
       pool.flushRunLast.run()
     } else {
       pool.flushRunLast.queue()
@@ -75,6 +79,9 @@ export default class ApiMakerCommandsPool {
 
     /** @type {Record<string, any>} */
     this.globalRequestData = {}
+
+    /** @type {Record<string, any>} */
+    this.requestOptions = {}
   }
 
   /** addCommand. */
@@ -127,6 +134,14 @@ export default class ApiMakerCommandsPool {
    * @returns {Promise<Record<string, any>>}
    */
   async sendRequest({commandSubmitData, url}) {
+    if (Config.getWebsocketRequests() && commandSubmitData.getFilesCount() == 0) {
+      return await WebsocketRequestClient.current().perform({
+        cacheResponse: this.requestOptions.cacheResponse,
+        global: this.globalRequestData,
+        request: commandSubmitData.getJsonData()
+      })
+    }
+
     let response
 
     for (let i = 0; i < 3; i++) {

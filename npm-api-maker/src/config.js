@@ -22,7 +22,8 @@ const accessors = {
   modal: {required: false},
   navigation: {required: true},
   routes: {required: false},
-  routeDefinitions: {required: false}
+  routeDefinitions: {required: false},
+  websocketRequests: {required: false}
 }
 
 /** ApiMakerConfig. */
@@ -43,6 +44,24 @@ class ApiMakerConfig {
 
   /** @returns {string} */
   getHost() { throw new Error("'getHost' not implemented") }
+
+  /** @returns {string | undefined} */
+  getCableUrl() { throw new Error("'getCableUrl' not implemented") }
+
+  /**
+   * @param {string | undefined} _newValue
+   * @returns {void}
+   */
+  setCableUrl(_newValue) { throw new Error("'setCableUrl' not implemented") }
+
+  /** @returns {boolean | undefined} */
+  getWebsocketRequests() { throw new Error("'getWebsocketRequests' not implemented") }
+
+  /**
+   * @param {boolean | undefined} _newValue
+   * @returns {void}
+   */
+  setWebsocketRequests(_newValue) { throw new Error("'setWebsocketRequests' not implemented") }
 }
 
 for (const accessorName in accessors) {

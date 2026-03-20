@@ -80,9 +80,7 @@ class ApiMaker::BaseResource
   end
 
   def self.collection_commands(*list)
-    list.each do |collection_command|
-      ApiMaker::MemoryStorage.current.add(self, :collection_commands, collection_command)
-    end
+    add_commands(:collection_commands, list)
   end
 
   def self.collection_name
@@ -103,8 +101,24 @@ class ApiMaker::BaseResource
   end
 
   def self.member_commands(*list)
-    list.each do |member_command|
-      ApiMaker::MemoryStorage.current.add(self, :member_commands, member_command)
+    add_commands(:member_commands, list)
+  end
+
+  def self.add_commands(mode, list)
+    list.each do |command_definition|
+      normalized_command_definitions(command_definition).each do |command_name, command_args|
+        ApiMaker::MemoryStorage.current.add(self, mode, command_name, command_args)
+      end
+    end
+  end
+
+  def self.normalized_command_definitions(command_definition)
+    if command_definition.is_a?(Hash)
+      command_definition.map do |command_name, command_args|
+        [command_name, command_args || {}]
+      end
+    else
+      [[command_definition, {}]]
     end
   end
 

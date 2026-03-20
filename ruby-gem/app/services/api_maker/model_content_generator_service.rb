@@ -46,8 +46,11 @@ private
 
     result = {}
     collection_commands = ApiMaker::MemoryStorage.current.storage_for(resource, :collection_commands)
-    collection_commands.each_key do |collection_command_name|
-      result[collection_command_name] = {name: collection_command_name}
+    collection_commands.each do |collection_command_name, collection_command_data|
+      result[collection_command_name] = {
+        args: frontend_command_args(collection_command_data.fetch(:args)),
+        name: collection_command_name
+      }
     end
 
     result
@@ -81,11 +84,20 @@ private
 
     result = {}
     member_commands = ApiMaker::MemoryStorage.current.storage_for(resource, :member_commands)
-    member_commands.each_key do |member_command_name|
-      result[member_command_name] = {name: member_command_name}
+    member_commands.each do |member_command_name, member_command_data|
+      result[member_command_name] = {
+        args: frontend_command_args(member_command_data.fetch(:args)),
+        name: member_command_name
+      }
     end
 
     result
+  end
+
+  def frontend_command_args(command_args)
+    command_args.deep_transform_keys do |key|
+      key.to_s.camelize(:lower)
+    end
   end
 
   def model_content

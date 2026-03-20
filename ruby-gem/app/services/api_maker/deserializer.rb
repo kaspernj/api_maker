@@ -20,7 +20,11 @@ class ApiMaker::Deserializer < ApiMaker::ApplicationService
   end
 
   def deserialize_api_maker_collection(arg)
-    permitted_arg = arg.permit!.to_h
+    permitted_arg = if arg.respond_to?(:permit!)
+      arg.permit!.to_h
+    else
+      arg.to_h
+    end
     query_args = permitted_arg.fetch("value").fetch("queryArgs")
     collection_args = {
       query_params: {},

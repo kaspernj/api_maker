@@ -113,8 +113,10 @@ class ApiMaker::BaseCommand
   end
 
   def self.run_command(collection:, command_id:, command_data:, command_response:, controller:)
+    deserialized_args = ApiMaker::Deserializer.execute!(arg: command_data[:args])
+
     command = ApiMaker::IndividualCommand.new(
-      args: ApiMaker::Deserializer.execute!(arg: command_data[:args]),
+      args: normalize_command_args(deserialized_args),
       collection:,
       command: self,
       id: command_id,
@@ -142,6 +144,14 @@ class ApiMaker::BaseCommand
 
       command.error(error_response)
     end
+  end
+
+  def self.normalize_command_args(args)
+    return args unless args.is_a?(Hash)
+
+    return args if args.is_a?(ActionController::Parameters)
+
+    ActionController::Parameters.new(args)
   end
 
   def execute_service_or_fail(service_class, ...)
