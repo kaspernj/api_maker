@@ -135,7 +135,16 @@ export default class ApiMakerSessionStatusUpdater {
 
     const result = await this.sessionStatus()
 
+    this.applyResult(result)
+  }
+
+  /**
+   * @param {Record<string, any>} result
+   * @returns {void}
+   */
+  applyResult(result) {
     logger.debug(() => `Result: ${JSON.stringify(result, null, 2)}`)
+
     this.updateMetaElementsFromResult(result)
     this.updateUserSessionsFromResult(result)
   }
@@ -143,6 +152,10 @@ export default class ApiMakerSessionStatusUpdater {
   /** updateMetaElementsFromResult. */
   updateMetaElementsFromResult(result) {
     logger.debug("updateMetaElementsFromResult")
+
+    if (!result.csrf_token) {
+      return
+    }
 
     this.csrfToken = result.csrf_token
 

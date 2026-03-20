@@ -92,10 +92,50 @@ describe("ApiMakerWebsocketRequestClient", () => {
     })
   })
 
-  it("resets the subscription state after disconnects", () => {
+  it("emits received, progress, and log callbacks before the final response", async() => {
+    const onLog = jest.fn()
+    const onProgress = jest.fn()
+    const onReceived = jest.fn()
+    const request = {pool: {service: {calls: {services: {1: {args: {}, id: 1}}}}}}
+    const promise = client.perform({global: {layout: "user"}, onLog, onProgress, onReceived, request})
+
+    client.onReceived({
+      request_id: 1,
+      type: "api_maker_request_received"
+    })
+    client.onReceived({
+      count: 2,
+      progress: 0.5,
+      request_id: 1,
+      total: 4,
+      type: "api_maker_command_progress"
+    })
+    client.onReceived({
+      message: "Calculating stuff",
+      request_id: 1,
+      type: "api_maker_command_log"
+    })
+    client.onReceived({
+      request_id: 1,
+      response: {responses: {1: {data: {ok: true}, type: "success"}}},
+      type: "api_maker_request_response"
+    })
+
+    await expect(promise).resolves.toEqual({
+      responses: {1: {data: {ok: true}, type: "success"}}
+    })
+    expect(onReceived).toHaveBeenCalledWith({request_id: 1, type: "api_maker_request_received"})
+    expect(onProgress).toHaveBeenCalledWith({count: 2, progress: 0.5, total: 4})
+    expect(onLog).toHaveBeenCalledWith("Calculating stuff")
+  })
+
+  it("resets the subscription state after disconnects", async() => {
+    const promise = client.perform({global: {layout: "user"}, request: {pool: {}}})
+
     client.onDisconnected()
 
     expect(client.subscription).toBeNull()
     expect(client.subscriptionState).toBe("disconnected")
+    await expect(promise).rejects.toThrow("Websocket request subscription disconnected")
   })
 })

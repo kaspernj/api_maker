@@ -1,12 +1,13 @@
 class ApiMaker::ActionCableRequestContext
-  attr_reader :api_maker_args, :api_maker_locals, :channel
+  attr_reader :api_maker_args, :api_maker_locals, :channel, :request_fingerprint
 
   delegate :current_user, to: :channel
 
-  def initialize(api_maker_args:, channel:)
+  def initialize(api_maker_args:, channel:, request_fingerprint:)
     @api_maker_args = api_maker_args
     @api_maker_locals = channel.api_maker_locals
     @channel = channel
+    @request_fingerprint = request_fingerprint
   end
 
   def cookies
@@ -79,6 +80,16 @@ class ApiMaker::ActionCableRequestContext
     @current_ability = nil
   end
 
+  def session_status_result
+    ApiMaker::SessionStatusResult.new(controller: self).result
+  end
+
+  def transmit_command_event(command_id:, payload:, type:)
+    return unless channel.respond_to?(:transmit_command_event)
+
+    channel.transmit_command_event(command_id:, payload:, request_fingerprint:, type:)
+  end
+
 private
 
   def warden
@@ -101,9 +112,11 @@ private
 
   def update_connection_current_user(user, scope)
     return unless scope.to_sym == :user
-    return unless channel.connection.respond_to?(:current_user=)
 
-    channel.connection.current_user = user
+    api_maker_args[:current_user] = user
+
+    channel.connection.current_user = user if channel.connection.respond_to?(:current_user=)
+
     channel.instance_variable_set(:@current_user, user)
   end
 

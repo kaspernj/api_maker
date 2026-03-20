@@ -38,7 +38,8 @@ describe ApiMaker::RequestsChannel do
             "locale" => "da",
             "time_zone_offset" => -18_000
           }
-        }
+        },
+        request_fingerprint: "fingerprint-1"
       )
 
       expect(request_context.api_maker_args).to include(
@@ -46,6 +47,7 @@ describe ApiMaker::RequestsChannel do
         locale: "da",
         time_zone_offset: -18_000
       )
+      expect(request_context.request_fingerprint).to eq("fingerprint-1")
     end
   end
 end

@@ -12,10 +12,14 @@ describe("ApiMakerCommandsPool", () => {
     const pool = new ApiMakerCommandsPool()
     const perform = jest.spyOn(WebsocketRequestClient.current(), "perform").mockResolvedValue({via: "websocket"})
 
-    pool.requestOptions = {forceHttp: true}
     jest.spyOn(Config, "getWebsocketRequests").mockReturnValue(true)
 
     const response = await pool.sendRequest({
+      commandExecution: {
+        addLog: jest.fn(),
+        setProgress: jest.fn(),
+        setReceived: jest.fn()
+      },
       commandSubmitData: {
         getFilesCount: () => 0,
         getFormData: () => new FormData(),
@@ -27,6 +31,9 @@ describe("ApiMakerCommandsPool", () => {
     expect(perform).toHaveBeenCalledWith({
       cacheResponse: undefined,
       global: {},
+      onLog: expect.any(Function),
+      onProgress: expect.any(Function),
+      onReceived: expect.any(Function),
       request: {pool: {}}
     })
     expect(response).toEqual({via: "websocket"})

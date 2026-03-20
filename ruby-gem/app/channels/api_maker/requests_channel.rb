@@ -13,6 +13,7 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
     request_ids = @pending_request_ids_by_fingerprint[fingerprint]
 
     if request_ids
+      transmit_received(data.fetch("request_id"))
       request_ids << data.fetch("request_id")
       return
     end
@@ -20,14 +21,16 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
     cached_response = @request_cache[fingerprint]
 
     if cached_response
+      transmit_received(data.fetch("request_id"))
       transmit_response(data.fetch("request_id"), cached_response)
       return
     end
 
     @pending_request_ids_by_fingerprint[fingerprint] = [data.fetch("request_id")]
+    transmit_received(data.fetch("request_id"))
 
     response = ApiMaker::CommandRequestExecutor.execute!(
-      controller: request_context(data),
+      controller: request_context(data, request_fingerprint: fingerprint),
       payload: data.fetch("request")
     )
 
@@ -71,10 +74,11 @@ private
     @pending_request_ids_by_fingerprint.delete(fingerprint) || []
   end
 
-  def request_context(data)
+  def request_context(data, request_fingerprint:)
     ApiMaker::ActionCableRequestContext.new(
       api_maker_args: {current_user:}.merge((data["global"] || {}).symbolize_keys),
-      channel: self
+      channel: self,
+      request_fingerprint:
     )
   end
 
@@ -84,6 +88,29 @@ private
         global: data["global"],
         request: data.fetch("request")
       )
+    )
+  end
+
+  def transmit_command_event(command_id:, payload:, request_fingerprint:, type:)
+    request_ids = @pending_request_ids_by_fingerprint[request_fingerprint] || []
+
+    request_ids.each do |request_id|
+      transmit(
+        {
+          command_id:,
+          request_id:,
+          type:
+        }.merge(payload)
+      )
+    end
+  end
+
+  def transmit_received(request_id)
+    transmit(
+      {
+        request_id:,
+        type: "api_maker_request_received"
+      }
     )
   end
 

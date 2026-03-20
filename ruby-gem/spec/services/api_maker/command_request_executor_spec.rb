@@ -19,6 +19,7 @@ describe ApiMaker::CommandRequestExecutor do
 
   before do
     allow(controller).to receive(:with_request_context).and_yield
+    allow(controller).to receive(:transmit_command_event)
   end
 
   it "executes collection commands through the shared request payload" do
@@ -96,5 +97,50 @@ describe ApiMaker::CommandRequestExecutor do
         }
       }
     )
+  end
+
+  it "transmits command progress and log events through current_command" do
+    response = described_class.execute!(
+      controller:,
+      payload: {
+        "pool" => {
+          "service" => {
+            "calls" => {
+              "services" => {
+                "1" => {
+                  "args" => {
+                    "service_args" => {},
+                    "service_name" => "CommandProgressTest"
+                  },
+                  "id" => 1
+                }
+              }
+            }
+          }
+        }
+      }
+    )
+
+    expect(controller).to have_received(:transmit_command_event).with(
+      command_id: "1",
+      payload: {total: 4},
+      type: "api_maker_command_progress"
+    )
+    expect(controller).to have_received(:transmit_command_event).with(
+      command_id: "1",
+      payload: {count: 1, progress: 0.25, total: 4},
+      type: "api_maker_command_progress"
+    )
+    expect(controller).to have_received(:transmit_command_event).with(
+      command_id: "1",
+      payload: {message: "Started"},
+      type: "api_maker_command_log"
+    )
+    expect(controller).to have_received(:transmit_command_event).with(
+      command_id: "1",
+      payload: {count: 1, progress: 0.5, total: 4},
+      type: "api_maker_command_progress"
+    )
+    expect(response.fetch(:responses).fetch("1").fetch(:data)).to include(current_command_present: true)
   end
 end

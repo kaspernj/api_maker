@@ -79,7 +79,11 @@ export default class ApiMakerDevise {
     ApiMakerDevise.updateSession(model)
 
     if (shared.apiMakerSessionStatusUpdater) {
-      await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
+      if (response.session_status) {
+        shared.apiMakerSessionStatusUpdater.applyResult(response.session_status)
+      } else {
+        await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
+      }
     }
 
     if (!args.skipSignInEvent) {
@@ -120,7 +124,11 @@ export default class ApiMakerDevise {
     ApiMakerDevise.callSignOutEvent(args)
 
     if (shared.apiMakerSessionStatusUpdater) {
-      await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
+      if (response.session_status) {
+        shared.apiMakerSessionStatusUpdater.applyResult(response.session_status)
+      } else {
+        await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
+      }
     }
 
     return response

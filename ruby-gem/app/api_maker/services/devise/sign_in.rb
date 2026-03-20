@@ -13,7 +13,7 @@ class Services::Devise::SignIn < ApiMaker::BaseService
       controller.sign_in(model, scope:)
       remember_me(model) if args.dig(:args, :rememberMe)
       reset_current_ability
-      succeed!(model: sign_in_model_result)
+      succeed!(model: sign_in_model_result, session_status: controller.session_status_result)
     else
       fail! invalid_error_message, type: :invalid
     end

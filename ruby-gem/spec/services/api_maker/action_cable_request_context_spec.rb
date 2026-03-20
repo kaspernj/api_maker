@@ -22,7 +22,8 @@ describe ApiMaker::ActionCableRequestContext do
   let(:request_context) do
     described_class.new(
       api_maker_args: {current_user: nil},
-      channel:
+      channel:,
+      request_fingerprint: "fingerprint-1"
     )
   end
 
@@ -58,5 +59,42 @@ describe ApiMaker::ActionCableRequestContext do
     request_context.sign_in(user)
 
     expect(channel.instance_variable_get(:@hook_args)).to eq({model: user, scope: :user})
+    expect(request_context.api_maker_args[:current_user]).to eq(user)
+  end
+
+  it "forwards command events through the channel" do
+    channel.define_singleton_method(:transmit_command_event) do |**args|
+      @transmitted_command_event = args
+    end
+
+    request_context.transmit_command_event(
+      command_id: "1",
+      payload: {progress: 0.5},
+      type: "api_maker_command_progress"
+    )
+
+    expect(channel.instance_variable_get(:@transmitted_command_event)).to eq(
+      command_id: "1",
+      payload: {progress: 0.5},
+      request_fingerprint: "fingerprint-1",
+      type: "api_maker_command_progress"
+    )
+  end
+
+  it "returns session status for the current websocket state" do
+    expect(warden).to receive(:user).with(:user).and_return(user)
+    expect(warden).to receive(:authenticated?).with(:user).and_return(true)
+
+    result = request_context.session_status_result
+
+    expect(result).to include(
+      devise: {timeout_in: Devise.timeout_in.to_i},
+      scopes: {
+        "user" => {
+          primary_key: user.id,
+          signed_in: true
+        }
+      }
+    )
   end
 end
