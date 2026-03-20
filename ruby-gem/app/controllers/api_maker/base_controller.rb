@@ -5,10 +5,6 @@ class ApiMaker::BaseController < ApplicationController
 
   rescue_from Exception, with: :render_error
 
-  def session_status_result
-    ApiMaker::SessionStatusResult.new(controller: self).result
-  end
-
 private
 
   def current_ability

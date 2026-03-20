@@ -14,18 +14,20 @@ describe Services::Devise::SignOut do
 
   it "returns session status after sign out" do
     user = create(:user)
+    session_status_result = {scopes: {"user" => {signed_in: false}}}
+    session_status = instance_double(ApiMaker::SessionStatusResult, result: session_status_result)
     controller = instance_double(
       ApiMaker::ActionCableRequestContext,
       current_user: user,
-      session_status_result: {scopes: {"user" => {signed_in: false}}},
       sign_out: nil
     )
+    expect(ApiMaker::SessionStatusResult).to receive(:new).with(controller:).and_return(session_status)
 
     response = Services::Devise::SignOut.execute(
       args: {args: {scope: "user"}},
       controller:
     )
 
-    expect(response.result).to include(session_status: {scopes: {"user" => {signed_in: false}}})
+    expect(response.result).to include(session_status: session_status_result)
   end
 end
