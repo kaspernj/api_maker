@@ -7,15 +7,16 @@ class SessionShadowStoreSpecSession < Hash
 end
 
 describe ApiMaker::SessionShadowStore do
-  let(:session_id) { "session-id-1" }
+  let(:session_id) { "old-session-id" }
   let(:session_object_id) { SessionShadowStoreSpecSessionId.new(session_id) }
+  let(:request_env) { {} }
   let(:session) do
     SessionShadowStoreSpecSession.new.tap do |session_hash|
       session_hash.id = session_object_id
       session_hash["locale"] = "en"
     end
   end
-  let(:request) { instance_double(ActionDispatch::Request, session:) }
+  let(:request) { instance_double(ActionDispatch::Request, env: request_env, session:) }
 
   before do
     Rails.cache.clear
@@ -54,5 +55,27 @@ describe ApiMaker::SessionShadowStore do
     described_class.load!(request:)
 
     expect(session).not_to have_key("warden.user.user.key")
+  end
+
+  it "persists under both the loaded session id and the current session id when the session rotates" do
+    Rails.cache.write(
+      described_class.cache_key("old-session-id"),
+      {"locale" => "en"},
+      expires_in: described_class::EXPIRES_IN
+    )
+
+    described_class.load!(request:)
+
+    session.id = SessionShadowStoreSpecSessionId.new("new-session-id")
+    session["warden.user.user.key"] = ["User", "123"]
+
+    described_class.persist!(request:)
+
+    expect(
+      Rails.cache.read(described_class.cache_key("old-session-id"))
+    ).to include("warden.user.user.key" => ["User", "123"])
+    expect(
+      Rails.cache.read(described_class.cache_key("new-session-id"))
+    ).to include("warden.user.user.key" => ["User", "123"])
   end
 end

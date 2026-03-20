@@ -1,59 +1,60 @@
 require "digest"
 
 class ApiMaker::RequestsChannel < ApplicationCable::Channel
-  def api_maker_locals
-    @api_maker_locals ||= {}
-  end
-
   def subscribed
+    @execute_mutex = Mutex.new
     @request_cache = {}
     @request_cache_order = []
     @pending_request_ids_by_fingerprint = {}
   end
 
   def execute(data)
-    fingerprint = nil
-    fingerprint = request_fingerprint(data)
-    request_ids = @pending_request_ids_by_fingerprint[fingerprint]
+    @execute_mutex.synchronize do
+      fingerprint = nil
+      return unless @pending_request_ids_by_fingerprint
 
-    if request_ids
+      fingerprint = request_fingerprint(data)
+      request_ids = @pending_request_ids_by_fingerprint[fingerprint]
+
+      if request_ids
+        transmit_received(data.fetch("request_id"))
+        request_ids << data.fetch("request_id")
+        return
+      end
+
+      cached_response = @request_cache[fingerprint]
+
+      if cached_response
+        transmit_received(data.fetch("request_id"))
+        transmit_response(data.fetch("request_id"), cached_response)
+        return
+      end
+
+      @pending_request_ids_by_fingerprint[fingerprint] = [data.fetch("request_id")]
       transmit_received(data.fetch("request_id"))
-      request_ids << data.fetch("request_id")
-      return
-    end
 
-    cached_response = @request_cache[fingerprint]
-
-    if cached_response
-      transmit_received(data.fetch("request_id"))
-      transmit_response(data.fetch("request_id"), cached_response)
-      return
-    end
-
-    @pending_request_ids_by_fingerprint[fingerprint] = [data.fetch("request_id")]
-    transmit_received(data.fetch("request_id"))
-
-    response = ApiMaker::CommandRequestExecutor.execute!(
-      controller: request_context(data, request_fingerprint: fingerprint),
-      payload: data.fetch("request")
-    )
-
-    cache_response(fingerprint, response) if data["cache_response"]
-    pending_request_ids(fingerprint).each do |request_id|
-      transmit_response(request_id, response)
-    end
-  rescue => e # rubocop:disable Style/RescueStandardError
-    pending_request_ids(fingerprint).each do |request_id|
-      transmit(
-        {
-          request_id:,
-          response: {errors: [{message: e.message, type: :runtime_error}], success: false},
-          type: "api_maker_request_error"
-        }
+      response = ApiMaker::CommandRequestExecutor.execute!(
+        controller: request_context(data, request_fingerprint: fingerprint),
+        payload: data.fetch("request")
       )
-    end
 
-    raise e
+      cache_response(fingerprint, response) if data["cache_response"]
+      pending_request_ids(fingerprint).each do |request_id|
+        transmit_response(request_id, response)
+      end
+    rescue => e # rubocop:disable Style/RescueStandardError
+      pending_request_ids(fingerprint).each do |request_id|
+        transmit(
+          {
+            request_id:,
+            response: {errors: [{message: e.message, type: :runtime_error}], success: false},
+            type: "api_maker_request_error"
+          }
+        )
+      end
+
+      raise e
+    end
   end
 
   def unsubscribed
@@ -63,7 +64,7 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
   end
 
   def transmit_command_event(command_id:, payload:, request_fingerprint:, type:)
-    request_ids = @pending_request_ids_by_fingerprint[request_fingerprint] || []
+    request_ids = @pending_request_ids_by_fingerprint&.[](request_fingerprint) || []
 
     request_ids.each do |request_id|
       transmit(
@@ -89,7 +90,7 @@ private
   end
 
   def pending_request_ids(fingerprint)
-    @pending_request_ids_by_fingerprint.delete(fingerprint) || []
+    @pending_request_ids_by_fingerprint&.delete(fingerprint) || []
   end
 
   def request_context(data, request_fingerprint:)
