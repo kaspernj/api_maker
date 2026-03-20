@@ -22,7 +22,6 @@ class ApiMaker::SessionShadowStore
     return if session_id.blank?
 
     request.env[LOADED_SESSION_ID_ENV_KEY] = session_id
-
     Rails.cache.read(cache_key(session_id))
   end
 
