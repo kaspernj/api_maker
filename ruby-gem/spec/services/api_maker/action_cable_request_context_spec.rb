@@ -97,4 +97,24 @@ describe ApiMaker::ActionCableRequestContext do
       }
     )
   end
+
+  it "loads and persists the shared session shadow store around websocket requests" do
+    request = instance_double(ActionDispatch::Request)
+    allow(request_context).to receive_messages(request:, session: {}, cookies: {})
+
+    channel.define_singleton_method(:load_session_state) do |**args|
+      @load_session_state_args = args
+    end
+    channel.define_singleton_method(:persist_session_state) do |**args|
+      @persist_session_state_args = args
+    end
+
+    expect(ApiMaker::SessionShadowStore).to receive(:load!).with(request:)
+    expect(ApiMaker::SessionShadowStore).to receive(:persist!).with(request:)
+
+    request_context.with_request_context { nil }
+
+    expect(channel.instance_variable_get(:@load_session_state_args)).to be_nil
+    expect(channel.instance_variable_get(:@persist_session_state_args)).to be_nil
+  end
 end
