@@ -61,6 +61,18 @@ describe "bootstrap - string input" do
     wait_for_selector "#user_image[name='user[image]']"
   end
 
+  it "hides the file input when purging an existing attachment" do
+    login_as user
+    visit bootstrap_attachment_input_path
+    wait_for_selector ".content-container"
+    wait_for_selector "#attachment_input"
+    wait_for_selector "#attachment_input_purge"
+
+    wait_for_and_find("#attachment_input_purge").click
+
+    wait_for_no_selector "#attachment_input"
+  end
+
   it "renders several components for money" do
     login_as user
     visit bootstrap_string_input_money_path(project_id: project.id)

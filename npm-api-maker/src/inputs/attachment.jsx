@@ -14,16 +14,18 @@ import useInput from "../use-input.js"
 export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseComponent {
   static propTypes = {
     className: PropTypes.string,
-    model: PropTypes.object.isRequired,
+    contentType: PropTypes.string,
+    model: PropTypes.object,
     onPurgeChanged: PropTypes.func,
-    purgeName: PropTypes.string
+    purgeName: PropTypes.string,
+    url: PropTypes.string
   }
 
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.inputs.attachment"})
     const {inputProps} = useInput({
       props: {
-        inputProps: {name: "", wrapperOpts: {}},
+        inputProps: {name: ""},
         inputRef: undefined,
         type: "file",
         ...this.props
@@ -39,7 +41,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
 
   render() {
     const {inputProps, t} = this.tt
-    const {attribute, checkboxComponent, className, label, model, name, onPurgeChanged, purgeName, wrapperOpts, ...restProps} = this.props
+    const {attribute, checkboxComponent, className, contentType, id, label, model, name, onPurgeChanged, purgeName, url, wrapperOpts, ...restProps} = this.props
     const CheckboxComponent = checkboxComponent || Checkbox
     const newInputProps = Object.assign({}, inputProps, {type: "file"}) // eslint-disable-line prefer-object-spread
 
@@ -52,7 +54,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
         }
         {this.getUrl() &&
           <div className="input-checkbox" style={{paddingTop: "15px", paddingBottom: "15px"}}>
-            <CheckboxComponent id={this.getPurgeInputId()} name={this.getPurgeInputName()} onChange={this.props.onPurgeChanged} />
+            <CheckboxComponent id={this.getPurgeInputId()} name={this.getPurgeInputName()} onChange={this.tt.onPurgeChanged} />
             <label className="checkbox-label" htmlFor={this.getPurgeInputId()}>
               {t("js.shared.delete")}
             </label>
@@ -71,10 +73,15 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
   }
 
   getContentType() {
+    if ("contentType" in this.props) return this.props.contentType
+
     const {attribute, model} = this.p
     const attributeName = `${attribute}ContentType`
+    const modelClassName = model ? model.modelClassData().name : "Attachment"
 
-    if (!(attributeName in model)) throw new Error(`No such method on ${model.modelClassData().name}: ${attributeName}`)
+    if (!model) return null
+
+    if (!(attributeName in model)) throw new Error(`No such method on ${modelClassName}: ${attributeName}`)
 
     return model[attributeName]()
   }
@@ -99,10 +106,15 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
   }
 
   getUrl() {
+    if ("url" in this.props) return this.props.url
+
     const {attribute, model} = this.p
     const attributeName = `${attribute}Url`
+    const modelClassName = model ? model.modelClassData().name : "Attachment"
 
-    if (!(attributeName in model)) throw new Error(`No such method on ${model.modelClassData().name}: ${attributeName}`)
+    if (!model) return null
+
+    if (!(attributeName in model)) throw new Error(`No such method on ${modelClassName}: ${attributeName}`)
 
     return model[attributeName]()
   }
