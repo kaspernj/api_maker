@@ -38,6 +38,8 @@ module ApiMaker
   autoload :ResultParser, "#{dir}/result_parser"
   autoload :SearchToRansackParams, "#{dir}/search_to_ransack_params"
   autoload :Serializer, "#{dir}/serializer"
+  autoload :SessionShadowMiddleware, "#{dir}/session_shadow_middleware"
+  autoload :SessionShadowStore, "#{dir}/session_shadow_store"
   autoload :SessionStatusResult, "#{dir}/session_status_result"
   autoload :SpecHelper, "#{dir}/spec_helper"
 end
