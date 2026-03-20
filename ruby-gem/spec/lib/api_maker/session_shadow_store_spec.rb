@@ -36,8 +36,23 @@ describe ApiMaker::SessionShadowStore do
       expires_in: described_class::EXPIRES_IN
     )
 
+    expect(session).to receive(:clear)
     expect(session).to receive(:update).with({"locale" => "da"})
 
     described_class.load!(request:)
+  end
+
+  it "clears keys that were removed from the cached session data" do
+    session["warden.user.user.key"] = "stale-auth-data"
+
+    Rails.cache.write(
+      described_class.cache_key(session_id),
+      {},
+      expires_in: described_class::EXPIRES_IN
+    )
+
+    described_class.load!(request:)
+
+    expect(session).not_to have_key("warden.user.user.key")
   end
 end

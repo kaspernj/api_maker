@@ -4,8 +4,9 @@ class ApiMaker::SessionShadowStore
 
   def self.load!(request:)
     session_data = read(request:)
-    return if session_data.blank?
+    return if session_data.nil?
 
+    request.session.clear
     request.session.update(session_data)
   end
 

@@ -133,15 +133,11 @@ private
   end
 
   def load_session_state
-    return unless channel.respond_to?(:load_session_state)
-
-    channel.load_session_state(request:)
+    ApiMaker::SessionShadowStore.load!(request:)
   end
 
   def persist_session_state
-    return unless channel.respond_to?(:persist_session_state)
-
-    channel.persist_session_state(request:)
+    ApiMaker::SessionShadowStore.persist!(request:)
   end
 
   def resolved_locale
