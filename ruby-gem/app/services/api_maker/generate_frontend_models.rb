@@ -142,8 +142,11 @@ private
     collection_name = model_content.dig(:model_class_data, :collectionName)
 
     collection_commands.values.flat_map do |command|
+      command_args = command.fetch(:args)
       command_name = command.fetch(:name).to_s
       method_name = js_method_name(command_name)
+      command_args_lines = command_args_lines(command_args)
+      merged_command_args_expression = merged_command_args_expression(command_args)
 
       [
         "",
@@ -154,6 +157,7 @@ private
         "   * @returns {Promise<TCommandResponse>}",
         "   */",
         "  static #{method_name}(args, commandArgs = {}) {",
+        *command_args_lines,
         "    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(",
         "      {",
         "        args,",
@@ -161,7 +165,7 @@ private
         "        collectionName: \"#{collection_name}\",",
         "        type: \"collection\"",
         "      },",
-        "      commandArgs",
+        "      #{merged_command_args_expression}",
         "    ))",
         "  }"
       ]
@@ -172,8 +176,11 @@ private
     collection_name = model_content.dig(:model_class_data, :collectionName)
 
     member_commands.values.flat_map do |command|
+      command_args = command.fetch(:args)
       command_name = command.fetch(:name).to_s
       method_name = js_method_name(command_name)
+      command_args_lines = command_args_lines(command_args)
+      merged_command_args_expression = merged_command_args_expression(command_args)
 
       [
         "",
@@ -184,6 +191,7 @@ private
         "   * @returns {Promise<TCommandResponse>}",
         "   */",
         "  #{method_name}(args, commandArgs = {}) {",
+        *command_args_lines,
         "    return /** @type {Promise<TCommandResponse>} */ (this._callMemberCommand(",
         "      {",
         "        args,",
@@ -192,11 +200,26 @@ private
         "        collectionName: \"#{collection_name}\",",
         "        type: \"member\"",
         "      },",
-        "      commandArgs",
+        "      #{merged_command_args_expression}",
         "    ))",
         "  }"
       ]
     end
+  end
+
+  def command_args_lines(command_args)
+    return [] if command_args.empty?
+
+    [
+      "    const defaultCommandArgs = #{JSON.pretty_generate(command_args)}",
+      ""
+    ]
+  end
+
+  def merged_command_args_expression(command_args)
+    return "commandArgs" if command_args.empty?
+
+    "{...defaultCommandArgs, ...commandArgs}"
   end
 
   def relationship_method_lines(relationships:, model_content:, model_class_name:)

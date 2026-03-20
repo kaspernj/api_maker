@@ -21,6 +21,14 @@ class ApiMaker::CommandResponse
     respond_to_command(id, data, :success)
   end
 
+  def log_for_command(id, message)
+    transmit_command_event(id, {message:}, "api_maker_command_log")
+  end
+
+  def progress_for_command(id, data)
+    transmit_command_event(id, data, "api_maker_command_progress")
+  end
+
   def join_threads
     ActiveSupport::Dependencies.interlock.permit_concurrent_loads do
       @threads.each(&:join)
@@ -46,6 +54,12 @@ class ApiMaker::CommandResponse
   end
 
 private
+
+  def transmit_command_event(id, payload, type)
+    return unless controller.respond_to?(:transmit_command_event)
+
+    controller.transmit_command_event(command_id: id, payload:, type:)
+  end
 
   def spawn_thread(&blk)
     parent_thread = Thread.current

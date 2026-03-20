@@ -78,7 +78,9 @@ export default class ApiMakerSessionStatusUpdater {
       return this.csrfToken
     }
 
-    throw new Error("CSRF token hasn't been set")
+    logger.debug("No CSRF token available after updating session status")
+
+    return undefined
   }
 
   /** sessionStatus. */
@@ -135,7 +137,16 @@ export default class ApiMakerSessionStatusUpdater {
 
     const result = await this.sessionStatus()
 
+    this.applyResult(result)
+  }
+
+  /**
+   * @param {Record<string, any>} result
+   * @returns {void}
+   */
+  applyResult(result) {
     logger.debug(() => `Result: ${JSON.stringify(result, null, 2)}`)
+
     this.updateMetaElementsFromResult(result)
     this.updateUserSessionsFromResult(result)
   }
@@ -143,6 +154,10 @@ export default class ApiMakerSessionStatusUpdater {
   /** updateMetaElementsFromResult. */
   updateMetaElementsFromResult(result) {
     logger.debug("updateMetaElementsFromResult")
+
+    if (!result.csrf_token) {
+      return
+    }
 
     this.csrfToken = result.csrf_token
 

@@ -74,6 +74,7 @@ export default class ApiMakerModelRecipesModelLoader {
   addQueryCommandsToModelClass (ModelClass, collectionCommands) {
     for (const collectionCommandName in collectionCommands) {
       const methodName = inflection.camelize(collectionCommandName, true)
+      const collectionCommand = collectionCommands[collectionCommandName]
 
       ModelClass[methodName] = function (args, commandArgs = {}) {
         return this._callCollectionCommand(
@@ -83,7 +84,7 @@ export default class ApiMakerModelRecipesModelLoader {
             collectionName: digg(this.modelClassData(), "collectionName"),
             type: "collection"
           },
-          commandArgs
+          {...digg(collectionCommand, "args"), ...commandArgs}
         )
       }
     }
@@ -93,6 +94,7 @@ export default class ApiMakerModelRecipesModelLoader {
   addMemberCommandsToModelClass (ModelClass, memberCommands) {
     for (const memberCommandName in memberCommands) {
       const methodName = inflection.camelize(memberCommandName, true)
+      const memberCommand = memberCommands[memberCommandName]
 
       ModelClass.prototype[methodName] = function (args, commandArgs = {}) {
         return this._callMemberCommand(
@@ -103,7 +105,7 @@ export default class ApiMakerModelRecipesModelLoader {
             collectionName: this.modelClassData().collectionName,
             type: "member"
           },
-          commandArgs
+          {...digg(memberCommand, "args"), ...commandArgs}
         )
       }
     }

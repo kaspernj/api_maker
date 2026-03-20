@@ -1,7 +1,9 @@
 // @ts-check
 
 import Api from "./api.js"
+import ApiMakerCommandExecution from "./command-execution.js"
 import CommandSubmitData from "./command-submit-data.js"
+import Config from "./config.js"
 import CustomError from "./custom-error.js"
 import DestroyError from "./destroy-error.js"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
@@ -13,11 +15,11 @@ import Serializer from "./serializer.js"
 import SessionStatusUpdater from "./session-status-updater.js"
 import ValidationError from "./validation-error.js"
 import {ValidationErrors} from "./validation-errors.js"
+import WebsocketRequestClient from "./websocket-request-client.js"
 
 /**
  * @typedef {object} CommandDataType
- * @property {Function} resolve
- * @property {Function} reject
+ * @property {ApiMakerCommandExecution} commandExecution
  * @property {string} stack
  */
 
@@ -30,17 +32,19 @@ export default class ApiMakerCommandsPool {
   /** addCommand. */
   static addCommand(data, args = {}) {
     let pool
+    const useWebsocketRequests = Config.getWebsocketRequests()
 
-    if (args.instant) {
+    if (args.instant || useWebsocketRequests) {
       pool = new ApiMakerCommandsPool()
       pool.globalRequestData = {...ApiMakerCommandsPool.current().globalRequestData}
+      pool.requestOptions = {...args}
     } else {
       pool = ApiMakerCommandsPool.current()
     }
 
     const promiseResult = pool.addCommand(data)
 
-    if (args.instant) {
+    if (args.instant || useWebsocketRequests) {
       pool.flushRunLast.run()
     } else {
       pool.flushRunLast.queue()
@@ -75,44 +79,46 @@ export default class ApiMakerCommandsPool {
 
     /** @type {Record<string, any>} */
     this.globalRequestData = {}
+
+    /** @type {Record<string, any>} */
+    this.requestOptions = {}
   }
 
   /** addCommand. */
   addCommand(data) {
     const stack = Error().stack
+    const id = this.currentId
+    const commandExecution = new ApiMakerCommandExecution()
+    const commandType = data.type
+    const commandName = data.command
+    const collectionName = data.collectionName
 
-    return new Promise((resolve, reject) => {
-      const id = this.currentId
-      this.currentId += 1
+    this.currentId += 1
+    this.pool[id] = {commandExecution, stack}
 
-      const commandType = data.type
-      const commandName = data.command
-      const collectionName = data.collectionName
+    if (!this.poolData[commandType]) this.poolData[commandType] = {}
+    if (!this.poolData[commandType][collectionName]) this.poolData[commandType][collectionName] = {}
+    if (!this.poolData[commandType][collectionName][commandName]) this.poolData[commandType][collectionName][commandName] = {}
 
-      this.pool[id] = {resolve, reject, stack}
+    let args
 
-      if (!this.poolData[commandType]) this.poolData[commandType] = {}
-      if (!this.poolData[commandType][collectionName]) this.poolData[commandType][collectionName] = {}
-      if (!this.poolData[commandType][collectionName][commandName]) this.poolData[commandType][collectionName][commandName] = {}
+    if (data.args?.nodeName == "FORM") {
+      const formData = new FormData(data.args)
 
-      let args
+      args = FormDataObjectizer.toObject(formData)
+    } else if (data.args instanceof FormData) {
+      args = FormDataObjectizer.toObject(data.args)
+    } else {
+      args = Serializer.serialize(data.args)
+    }
 
-      if (data.args?.nodeName == "FORM") {
-        const formData = new FormData(data.args)
+    this.poolData[commandType][collectionName][commandName][id] = {
+      args,
+      primary_key: data.primaryKey,
+      id
+    }
 
-        args = FormDataObjectizer.toObject(formData)
-      } else if (data.args instanceof FormData) {
-        args = FormDataObjectizer.toObject(data.args)
-      } else {
-        args = Serializer.serialize(data.args)
-      }
-
-      this.poolData[commandType][collectionName][commandName][id] = {
-        args,
-        primary_key: data.primaryKey,
-        id
-      }
-    })
+    return commandExecution
   }
 
   /** @returns {number} */
@@ -124,9 +130,21 @@ export default class ApiMakerCommandsPool {
    * @param {object} args
    * @param {string} args.url
    * @param {CommandSubmitData} args.commandSubmitData
+   * @param {ApiMakerCommandExecution} [args.commandExecution]
    * @returns {Promise<Record<string, any>>}
    */
-  async sendRequest({commandSubmitData, url}) {
+  async sendRequest({commandExecution, commandSubmitData, url}) {
+    if (Config.getWebsocketRequests() && commandSubmitData.getFilesCount() == 0) {
+      return await WebsocketRequestClient.current().perform({
+        cacheResponse: this.requestOptions.cacheResponse,
+        global: this.globalRequestData,
+        onLog: (message) => commandExecution?.addLog(message),
+        onProgress: (progressData) => commandExecution?.setProgress(progressData),
+        onReceived: (receivedData) => commandExecution?.setReceived(receivedData),
+        request: commandSubmitData.getJsonData()
+      })
+    }
+
     let response
 
     for (let i = 0; i < 3; i++) {
@@ -169,7 +187,8 @@ export default class ApiMakerCommandsPool {
 
       const commandSubmitData = new CommandSubmitData(submitData)
       const url = "/api_maker/commands"
-      const response = await this.sendRequest({commandSubmitData, url})
+      const commandExecution = Object.values(currentPool)[0]?.commandExecution
+      const response = await this.sendRequest({commandExecution, commandSubmitData, url})
 
       for (const commandId in response.responses) {
         const commandResponse = response.responses[commandId]
@@ -186,7 +205,7 @@ export default class ApiMakerCommandsPool {
         }
 
         if (responseType == "success") {
-          commandData.resolve(commandResponseData)
+          commandData.commandExecution.resolve(commandResponseData)
         } else if (responseType == "error") {
           const error = new CustomError("Command error", {response: commandResponseData})
 
@@ -195,7 +214,7 @@ export default class ApiMakerCommandsPool {
             .slice(1)
             .join("\n")
 
-          commandData.reject(error)
+          commandData.commandExecution.reject(error)
         } else if (responseType == "failed") {
           this.handleFailedResponse(commandData, commandResponseData)
         } else {
@@ -238,7 +257,7 @@ export default class ApiMakerCommandsPool {
       error = new CustomError(errorMessage, {response: commandResponseData})
     }
 
-    commandData.reject(error)
+    commandData.commandExecution.reject(error)
   }
 
   /** isActive. */

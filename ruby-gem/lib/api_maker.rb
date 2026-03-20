@@ -20,6 +20,8 @@ module ApiMaker
   autoload :CollectionSerializer, "#{dir}/collection_serializer"
   autoload :CommandSpecHelper, "#{dir}/command_spec_helper"
   autoload :Configuration, "#{dir}/configuration"
+  autoload :Current, "#{dir}/current"
+  autoload :CurrentCommand, "#{dir}/current_command"
   autoload :ExpectToBeAbleToHelper, "#{dir}/expect_to_able_to_helper"
   autoload :IndividualCommand, "#{dir}/individual_command"
   autoload :Loader, "#{dir}/loader"
@@ -36,6 +38,7 @@ module ApiMaker
   autoload :ResultParser, "#{dir}/result_parser"
   autoload :SearchToRansackParams, "#{dir}/search_to_ransack_params"
   autoload :Serializer, "#{dir}/serializer"
+  autoload :SessionStatusResult, "#{dir}/session_status_result"
   autoload :SpecHelper, "#{dir}/spec_helper"
 end
 

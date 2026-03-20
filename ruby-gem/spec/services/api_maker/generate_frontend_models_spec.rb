@@ -45,6 +45,8 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).not_to include("@returns {Promise<any>}")
         expect(task_content).to include("BaseModel._callCollectionCommand(")
         expect(task_content).to include("static testCollection(args, commandArgs = {})")
+        expect(task_content).to include("const defaultCommandArgs = {\n  \"cacheResponse\": true\n}")
+        expect(task_content).to include("      {...defaultCommandArgs, ...commandArgs}")
         expect(task_content).to include("testMember(args, commandArgs = {})")
         expect(task_content).to include("project()")
         expect(task_content).to include("_readBelongsToReflection({modelClass: Project, reflectionName: \"project\"})")

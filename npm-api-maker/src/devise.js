@@ -77,7 +77,18 @@ export default class ApiMakerDevise {
     if (Array.isArray(model)) model = model[0]
 
     ApiMakerDevise.updateSession(model)
-    events.emit("onDeviseSignIn", {username, ...args})
+
+    if (shared.apiMakerSessionStatusUpdater) {
+      if (response.session_status) {
+        shared.apiMakerSessionStatusUpdater.applyResult(response.session_status)
+      } else {
+        await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
+      }
+    }
+
+    if (!args.skipSignInEvent) {
+      events.emit("onDeviseSignIn", {username, ...args})
+    }
 
     return {model, response}
   }
@@ -112,9 +123,12 @@ export default class ApiMakerDevise {
     ApiMakerDevise.setSignedOut(args)
     ApiMakerDevise.callSignOutEvent(args)
 
-    // Cannot use the class because they would both import each other
     if (shared.apiMakerSessionStatusUpdater) {
-      shared.apiMakerSessionStatusUpdater.updateSessionStatus()
+      if (response.session_status) {
+        shared.apiMakerSessionStatusUpdater.applyResult(response.session_status)
+      } else {
+        await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
+      }
     }
 
     return response

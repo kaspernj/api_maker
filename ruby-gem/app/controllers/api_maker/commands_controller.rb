@@ -2,28 +2,7 @@ class ApiMaker::CommandsController < ApiMaker::BaseController
   wrap_parameters false
 
   def create
-    command_response = ApiMaker::CommandResponse.new(controller: self)
-    controller = self
-
-    merged_params.fetch(:pool).each do |command_type, command_type_data|
-      command_type_data.each do |resource_plural_name, command_model_data|
-        command_model_data.each do |command_name, command_data|
-          ApiMaker.const_get("#{command_type.camelize}CommandService").execute!(
-            ability: current_ability,
-            api_maker_args:,
-            command_response:,
-            commands: command_data,
-            command_name:,
-            controller:,
-            resource_name: resource_plural_name
-          )
-        end
-      end
-    end
-
-    command_response.join_threads
-
-    render json: {responses: command_response.result}
+    render json: ApiMaker::CommandRequestExecutor.execute!(controller: self, payload: merged_params.permit!.to_h)
   end
 
   def json_params
