@@ -26,6 +26,7 @@ da:
         filter: Filter
     shared:
       are_you_sure: Er du sikker?
+      delete: "Slet"
   models:
     task:
       closed: Lukket

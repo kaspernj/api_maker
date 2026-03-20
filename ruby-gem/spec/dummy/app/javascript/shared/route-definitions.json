@@ -1,6 +1,7 @@
 {
   "routes": [
     {"name": "bootstrap_attribute_rows", "path": "/bootstrap/attribute-rows", "component": "bootstrap/attribute-rows"},
+    {"name": "bootstrap_attachment_input", "path": "/bootstrap/attachment-input", "component": "bootstrap/attachment-input"},
     {"name": "bootstrap_checkbox_boolean", "path": "/bootstrap/checkbox-boolean", "component": "bootstrap/checkbox-boolean"},
     {"name": "bootstrap_checkboxes", "path": "/bootstrap/checkboxes", "component": "bootstrap/checkboxes"},
     {"name": "bootstrap_live_table", "path": "/bootstrap/live-table", "component": "bootstrap/live-table"},

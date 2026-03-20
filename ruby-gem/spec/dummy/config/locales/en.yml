@@ -70,6 +70,7 @@ en:
       couldnt_submit_because_of_validation_errors: Couldn't submit because of validation errors
     shared:
       are_you_sure: Are you sure?
+      delete: "Delete"
   models:
     task:
       closed: Closed
