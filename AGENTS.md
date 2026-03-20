@@ -26,6 +26,7 @@ Notes:
 - Do not “fix” flaky specs by only increasing waits/timeouts. First determine whether behavior regressed (for example, element never rendered) and collect/inspect CI artifacts before adjusting timing.
 - Avoid unnecessary defensive conditions for guaranteed contracts. Prefer failing fast over silently accepting impossible states.
 - Do not add helper methods for simple values or expressions that are only used in one place; inline them at the usage site instead.
+- Keep `testID` values unique within a rendered screen/component so selectors stay unambiguous.
 - In Selenium/spec helpers, do not assume a `testID` selector points at the editable control itself; React Native Web may put the `testID` on a wrapper, so descend to the real `input`/`textarea`/checkbox element before typing or clearing.
 - In JavaScript class method definitions, use `methodName(args)` (no space before parentheses).
 - Keep single-tag JSDoc blocks on one line (for example `/** @returns {boolean} */`).
