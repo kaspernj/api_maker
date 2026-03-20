@@ -63,6 +63,7 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
             defaultValue={null}
             inputProps={newInputProps}
             model={model}
+            type="file"
           />
         }
       </div>
