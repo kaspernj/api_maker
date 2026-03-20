@@ -1,0 +1,1 @@
+- Moved the websocket session shadow store and middleware into ApiMaker so apps using websocket requests do not need app-specific copies.

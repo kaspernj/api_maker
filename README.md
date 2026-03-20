@@ -282,7 +282,7 @@ import ApiMakerConfig from "@kaspernj/api-maker/build/config.js"
 ApiMakerConfig.setWebsocketRequests(true)
 ```
 
-When websocket requests are enabled, make sure your ActionCable channel exposes the same request context that your normal controllers provide. In practice that means `current_user`, the CanCan ability, and any `api_maker_args` data needed by serializers and commands.
+ApiMaker automatically installs its session-shadow middleware so websocket-side session changes can be observed by later HTTP requests. Your ActionCable channel still needs to expose the same request context that your normal controllers provide. In practice that means `current_user`, the CanCan ability, and any `api_maker_args` data needed by serializers and commands.
 
 ## Usage
 
