@@ -21,8 +21,6 @@ describe Services::Devise::SignOut do
       sign_out: nil
     )
 
-    allow(controller).to receive(:current_user).and_return(user)
-
     response = Services::Devise::SignOut.execute(
       args: {args: {scope: "user"}},
       controller:
