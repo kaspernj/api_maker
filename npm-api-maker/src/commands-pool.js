@@ -134,7 +134,7 @@ export default class ApiMakerCommandsPool {
    * @returns {Promise<Record<string, any>>}
    */
   async sendRequest({commandExecution, commandSubmitData, url}) {
-    if (Config.getWebsocketRequests() && commandSubmitData.getFilesCount() == 0) {
+    if (Config.getWebsocketRequests() && !this.requestOptions.forceHttp && commandSubmitData.getFilesCount() == 0) {
       return await WebsocketRequestClient.current().perform({
         cacheResponse: this.requestOptions.cacheResponse,
         global: this.globalRequestData,

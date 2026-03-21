@@ -1,8 +1,10 @@
+import * as inflection from "inflection" // eslint-disable-line sort-imports
+import config from "./config.js"
 import {createContext} from "react"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
 import events from "./events.js"
-import * as inflection from "inflection" // eslint-disable-line sort-imports
 import modelClassRequire from "./model-class-require.js"
+import SessionStatusUpdater from "./session-status-updater.js" // eslint-disable-line sort-imports
 import Services from "./services.js" // eslint-disable-line sort-imports
 
 if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
@@ -76,21 +78,54 @@ export default class ApiMakerDevise {
 
     if (Array.isArray(model)) model = model[0]
 
-    ApiMakerDevise.updateSession(model)
+    const sessionStatusUpdater = SessionStatusUpdater.current()
 
-    if (shared.apiMakerSessionStatusUpdater) {
+    if (config.getWebsocketRequests()) {
       if (response.session_status) {
-        shared.apiMakerSessionStatusUpdater.applyResult(response.session_status)
-      } else {
-        await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
+        sessionStatusUpdater.updateMetaElementsFromResult(response.session_status)
       }
+
+      await ApiMakerDevise.persistSession({
+        rememberMe: args.rememberMe,
+        scope: args.scope,
+        shadowSessionToken: response.session_status?.shadow_session_token,
+        signedIn: true
+      })
+    } else if (response.session_status) {
+      sessionStatusUpdater.applyResult(response.session_status)
+    } else {
+      await sessionStatusUpdater.updateSessionStatus()
     }
+
+    ApiMakerDevise.updateSession(model)
 
     if (!args.skipSignInEvent) {
       events.emit("onDeviseSignIn", {username, ...args})
     }
 
     return {model, response}
+  }
+
+  /**
+   * Synchronizes the current backend auth state into real HTTP response cookies.
+   *
+   * @param {Record<string, any>} [args]
+   * @returns {Promise<any>}
+   */
+  static async persistSession(args = {}) {
+    if (!args.scope) args.scope = "user"
+
+    const response = await Services.current().sendRequest("Devise::PersistSession", args, {forceHttp: true})
+
+    const sessionStatusUpdater = SessionStatusUpdater.current()
+
+    if (response.session_status) {
+      sessionStatusUpdater.applyResult(response.session_status)
+    } else {
+      await sessionStatusUpdater.updateSessionStatus()
+    }
+
+    return response
   }
 
   /** updateSession. */
@@ -120,15 +155,21 @@ export default class ApiMakerDevise {
     }
 
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
-    ApiMakerDevise.setSignedOut(args)
-    ApiMakerDevise.callSignOutEvent(args)
 
-    if (shared.apiMakerSessionStatusUpdater) {
+    const sessionStatusUpdater = SessionStatusUpdater.current()
+
+    if (config.getWebsocketRequests()) {
       if (response.session_status) {
-        shared.apiMakerSessionStatusUpdater.applyResult(response.session_status)
-      } else {
-        await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
+        sessionStatusUpdater.updateMetaElementsFromResult(response.session_status)
       }
+
+      await ApiMakerDevise.persistSession({scope: args.scope, signedIn: false})
+    } else if (response.session_status) {
+      sessionStatusUpdater.applyResult(response.session_status)
+    } else {
+      await sessionStatusUpdater.updateSessionStatus()
+      ApiMakerDevise.setSignedOut(args)
+      ApiMakerDevise.callSignOutEvent(args)
     }
 
     return response

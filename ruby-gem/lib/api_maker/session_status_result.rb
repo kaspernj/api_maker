@@ -24,6 +24,7 @@ class ApiMaker::SessionStatusResult
       devise: {
         timeout_in: Devise.timeout_in.to_i
       },
+      shadow_session_token:,
       scopes:
     }
   end
@@ -34,6 +35,12 @@ private
     return unless controller.respond_to?(:form_authenticity_token)
 
     controller.form_authenticity_token
+  end
+
+  def shadow_session_token
+    return unless controller.respond_to?(:shadow_session_token)
+
+    controller.shadow_session_token
   end
 
   def current_model_for_scope(scope_name:)
