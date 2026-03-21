@@ -10,8 +10,6 @@ import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 const emptyObject = {}
 
-export const queryParamsOrEmpty = (queryParams) => queryParams || emptyObject
-
 /**
  * @typedef {object} UseCollectionResult
  * @property {Array<import("./base-model.js").default>} models
@@ -87,19 +85,7 @@ const useCollection = (props, cacheKeys = []) => {
   const loadOverallCountGenerationRef = useRef(0)
 
   s.meta.queryParams = useQueryParams()
-  const queryParams = queryParamsOrEmpty(s.m.queryParams)
-
-  const hasQParams = useCallback(() => {
-    if (queryQName in queryParams) return true
-
-    return false
-  }, [queryParams, queryQName])
-
-  const qParams = useCallback(() => {
-    if (hasQParams()) return JSON.parse(digg(queryParams, queryQName))
-
-    return {}
-  }, [hasQParams, queryParams, queryQName])
+  const queryParams = s.m.queryParams || emptyObject
 
   s.useStates({
     models: undefined,
@@ -115,9 +101,7 @@ const useCollection = (props, cacheKeys = []) => {
     showNoRecordsAvailableContent: false,
     showNoRecordsFoundContent: false
   })
-  s.useStates({
-    qParams: () => qParams()
-  })
+  s.useStates({qParams: {}})
 
   let modelIdsCacheString
 
@@ -148,8 +132,12 @@ const useCollection = (props, cacheKeys = []) => {
   }, [])
 
   const loadQParams = useCallback(() => {
-    const qParamsToSet = hasQParams() ? qParams() : Object.assign({}, s.props.defaultParams)
+    let qParamsToSet = Object.assign({}, s.props.defaultParams)
     const searchParams = []
+
+    if (queryQName in queryParams) {
+      qParamsToSet = JSON.parse(digg(queryParams, queryQName))
+    }
 
     if (queryParams[querySName]) {
       for (const rawSearchParam of queryParams[querySName]) {
@@ -163,7 +151,7 @@ const useCollection = (props, cacheKeys = []) => {
       qParams: qParamsToSet,
       searchParams
     })
-  }, [hasQParams, qParams, queryParams, s.props.defaultParams, querySName])
+  }, [queryParams, s.props.defaultParams, queryQName, querySName])
 
   const loadModels = useCallback(async () => {
     // Only the newest collection request is allowed to update state after navigation/filter changes.
