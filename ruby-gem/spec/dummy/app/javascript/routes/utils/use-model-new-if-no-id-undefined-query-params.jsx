@@ -12,12 +12,13 @@ function UseModelNewIfNoIdUndefinedQueryParamsContent() {
       defaults: () => ({name: "Default task name"})
     }
   })
+  const taskName = task ? task.readAttribute("name") : "Loading"
 
   return (
     <Layout>
       <View>
         <Text dataSet={{testid: "utils-use-model-new-if-no-id-undefined-query-params"}}>
-          {task.readAttribute("name")}
+          {taskName}
         </Text>
       </View>
     </Layout>
