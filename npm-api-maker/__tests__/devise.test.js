@@ -42,7 +42,7 @@ describe("ApiMakerDevise", () => {
       .mockResolvedValueOnce({
         session_status: {csrf_token: "token-2", scopes: {user: {signed_in: true}}},
         success: true
-    })
+      })
     const applyResult = jest.fn()
     const updateMetaElementsFromResult = jest.fn()
     const updateSessionStatus = jest.fn().mockResolvedValue(undefined)
@@ -81,7 +81,7 @@ describe("ApiMakerDevise", () => {
       .mockResolvedValueOnce({
         session_status: {csrf_token: "token-3", scopes: {user: {signed_in: false}}},
         success: true
-    })
+      })
     const applyResult = jest.fn()
     const updateMetaElementsFromResult = jest.fn()
     const updateSessionStatus = jest.fn().mockResolvedValue(undefined)
