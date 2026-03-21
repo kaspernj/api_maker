@@ -158,7 +158,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
   if (s.meta.syncNewModel == undefined) s.meta.syncNewModel = false
   if (s.meta.newIfNoIdDefaultsResult == undefined) s.meta.newIfNoIdDefaultsResult = null
 
-  if (s.m.active && s.props.newIfNoId && !s.m.modelId && !s.s.model && !s.m.syncNewModel && s.m.queryParams != undefined) {
+  if (s.m.active && s.props.newIfNoId && !s.m.modelId && !s.s.model && !s.m.syncNewModel) {
     if (s.props.newIfNoId?.defaults && s.m.newIfNoIdDefaultsResult === null) {
       const defaultsResult = s.props.newIfNoId.defaults()
 
