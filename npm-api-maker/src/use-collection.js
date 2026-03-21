@@ -79,6 +79,10 @@ const useCollection = (props, cacheKeys = []) => {
 
   const s = useShape(props)
   const queryName = initialQueryName || digg(modelClass.modelClassData(), "collectionKey")
+  const queryPerKey = `${queryName}_per`
+  const queryQName = `${queryName}_q`
+  const querySName = `${queryName}_s`
+  const queryPageName = `${queryName}_page`
   const loadModelsGenerationRef = useRef(0)
   const loadOverallCountGenerationRef = useRef(0)
 
@@ -86,26 +90,26 @@ const useCollection = (props, cacheKeys = []) => {
   const queryParams = queryParamsOrEmpty(s.m.queryParams)
 
   const hasQParams = useCallback(() => {
-    if (s.s.queryQName in queryParams) return true
+    if (queryQName in queryParams) return true
 
     return false
-  }, [queryParams, s.s.queryQName])
+  }, [queryParams, queryQName])
 
   const qParams = useCallback(() => {
-    if (hasQParams()) return JSON.parse(digg(queryParams, s.s.queryQName))
+    if (hasQParams()) return JSON.parse(digg(queryParams, queryQName))
 
     return {}
-  }, [hasQParams, queryParams, s.s.queryQName])
+  }, [hasQParams, queryParams, queryQName])
 
   s.useStates({
     models: undefined,
     overallCount: undefined,
     query: undefined,
     queryName,
-    queryPerKey: `${queryName}_per`,
-    queryQName: `${queryName}_q`,
-    querySName: `${queryName}_s`,
-    queryPageName: `${queryName}_page`,
+    queryPerKey,
+    queryQName,
+    querySName,
+    queryPageName,
     result: undefined,
     searchParams: undefined,
     showNoRecordsAvailableContent: false,
@@ -147,8 +151,8 @@ const useCollection = (props, cacheKeys = []) => {
     const qParamsToSet = hasQParams() ? qParams() : Object.assign({}, s.props.defaultParams)
     const searchParams = []
 
-    if (queryParams[s.s.querySName]) {
-      for (const rawSearchParam of queryParams[s.s.querySName]) {
+    if (queryParams[querySName]) {
+      for (const rawSearchParam of queryParams[querySName]) {
         const parsedSearchParam = JSON.parse(rawSearchParam)
 
         searchParams.push(parsedSearchParam)
@@ -159,7 +163,7 @@ const useCollection = (props, cacheKeys = []) => {
       qParams: qParamsToSet,
       searchParams
     })
-  }, [hasQParams, qParams, queryParams, s.props.defaultParams, s.s.querySName])
+  }, [hasQParams, qParams, queryParams, s.props.defaultParams, querySName])
 
   const loadModels = useCallback(async () => {
     // Only the newest collection request is allowed to update state after navigation/filter changes.
@@ -169,8 +173,8 @@ const useCollection = (props, cacheKeys = []) => {
     let query = s.props.collection?.clone() || s.p.modelClass.ransack()
 
     if (s.props.pagination) {
-      const page = queryParams[s.s.queryPageName] || 1
-      let per = queryParams[s.s.queryPerKey] || 30
+      const page = queryParams[queryPageName] || 1
+      let per = queryParams[queryPerKey] || 30
 
       if (per == "all") {
         per = 999_999_999
@@ -186,9 +190,9 @@ const useCollection = (props, cacheKeys = []) => {
     query = query
       .ransack(s.s.qParams)
       .search(s.s.searchParams)
-      .searchKey(s.s.queryQName)
-      .pageKey(s.s.queryPageName)
-      .perKey(s.s.queryPerKey)
+      .searchKey(queryQName)
+      .pageKey(queryPageName)
+      .perKey(queryPerKey)
 
     if (s.props.abilities) query.abilities(s.p.abilities)
     if (s.props.limit !== undefined) query.limit(s.p.limit)
@@ -298,10 +302,10 @@ const useCollection = (props, cacheKeys = []) => {
       modelClass,
       s.props.ifCondition,
       s.s.queryName,
-      queryParams[s.s.queryQName],
-      queryParams[s.s.queryPageName],
-      queryParams[s.s.queryPerKey],
-      queryParams[s.s.querySName],
+      queryParams[queryQName],
+      queryParams[queryPageName],
+      queryParams[queryPerKey],
+      queryParams[querySName],
       collection
     ].concat(cacheKeys)
   )
