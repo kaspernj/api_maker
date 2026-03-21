@@ -151,7 +151,7 @@ class UseCollectionShapeHook extends ShapeHook {
     const baseQuery = this.p.collection || this.p.modelClass.all()
     const overallCount = await baseQuery.count()
 
-    if (!this.isMounted() || loadOverallCountGeneration != this.loadOverallCountGeneration) return
+    if (loadOverallCountGeneration != this.loadOverallCountGeneration) return
 
     this.setState({
       overallCount,
@@ -160,7 +160,7 @@ class UseCollectionShapeHook extends ShapeHook {
     })
   }
 
-  /** @returns {void} */
+  /** @returns {{qParams: Record<string, any>, searchParams: string[]}} */
   loadQParams() {
     let qParamsToSet = Object.assign({}, this.p.defaultParams)
     const searchParams = []
@@ -181,12 +181,36 @@ class UseCollectionShapeHook extends ShapeHook {
       qParams: qParamsToSet,
       searchParams
     })
+
+    return {
+      qParams: qParamsToSet,
+      searchParams
+    }
   }
 
-  /** @returns {Promise<void>} */
-  loadModels = async () => {
+  /**
+   * @param {object} [args]
+   * @param {Record<string, any>} [args.qParams]
+   * @param {string[]} [args.searchParams]
+   * @returns {{qParams: Record<string, any>, searchParams: string[]}}
+   */
+  loadModelsArgs(args = {}) {
+    return {
+      qParams: args.qParams ?? this.s.qParams,
+      searchParams: args.searchParams ?? this.s.searchParams
+    }
+  }
+
+  /**
+   * @param {object} [args]
+   * @param {Record<string, any>} [args.qParams]
+   * @param {string[]} [args.searchParams]
+   * @returns {Promise<void>}
+   */
+  loadModels = async (args = {}) => {
     // Only the newest collection request is allowed to update state after navigation/filter changes.
     const loadModelsGeneration = this.loadModelsGeneration + 1
+    const {qParams, searchParams} = this.loadModelsArgs(args)
 
     this.loadModelsGeneration = loadModelsGeneration
     let query = this.p.collection?.clone() || this.p.modelClass.ransack()
@@ -207,8 +231,8 @@ class UseCollectionShapeHook extends ShapeHook {
     if (this.p.groupBy) query = query.groupBy(...this.p.groupBy)
 
     query = query
-      .ransack(this.s.qParams)
-      .search(this.s.searchParams)
+      .ransack(qParams)
+      .search(searchParams)
       .searchKey(this.queryQName())
       .pageKey(this.queryPageName())
       .perKey(this.queryPerKey())
@@ -230,7 +254,7 @@ class UseCollectionShapeHook extends ShapeHook {
 
     const models = result.models()
 
-    if (!this.isMounted() || loadModelsGeneration != this.loadModelsGeneration) return
+    if (loadModelsGeneration != this.loadModelsGeneration) return
 
     if (this.p.onModelsLoaded) {
       this.p.onModelsLoaded({
@@ -273,12 +297,18 @@ class UseCollectionShapeHook extends ShapeHook {
   }
 
   /** @returns {void} */
+  componentDidMount() {
+    this.setState({readyToLoad: true})
+  }
+
+  /** @returns {void} */
   setup() {
     this.useStates({
       models: undefined,
       overallCount: undefined,
       qParams: {},
       query: undefined,
+      readyToLoad: false,
       result: undefined,
       searchParams: undefined,
       showNoRecordsAvailableContent: false,
@@ -286,12 +316,24 @@ class UseCollectionShapeHook extends ShapeHook {
     })
     this.setInstance({queryParams: useQueryParams()})
 
-    // Collection loading has to wait until mount so fast responses cannot get stranded in ShapeHook's pre-mount queue.
+    // Wait until componentDidMount has flipped readyToLoad so the first load runs after useShapeHook has marked the hook mounted.
     useEffect(
       () => {
-        if (!("ifCondition" in this.props) || this.p.ifCondition) {
-          this.loadQParams()
-          this.loadModels()
+        if (!this.s.readyToLoad) return
+        let ifConditionMet
+
+        if (typeof this.p.ifCondition == "function") {
+          ifConditionMet = this.p.ifCondition()
+        } else if (this.p.ifCondition === undefined) {
+          ifConditionMet = true
+        } else {
+          ifConditionMet = this.p.ifCondition
+        }
+
+        if (ifConditionMet) {
+          const {qParams, searchParams} = this.loadQParams()
+
+          this.loadModels({qParams, searchParams})
         }
       },
       [
@@ -302,15 +344,17 @@ class UseCollectionShapeHook extends ShapeHook {
         this.queryParams?.[this.queryPageName()],
         this.queryParams?.[this.queryPerKey()],
         this.queryParams?.[this.querySName()],
+        this.s.readyToLoad,
         this.p.collection
       ].concat(this.p.cacheKeys)
     )
 
     useEffect(() => {
+      if (!this.s.readyToLoad) return
       if (this.p.noRecordsAvailableContent) {
         this.loadOverallCount()
       }
-    }, [this.p.modelClass])
+    }, [this.p.modelClass, this.s.readyToLoad])
 
     useCreatedEvent(this.p.modelClass, () => this.onCreated())
 
