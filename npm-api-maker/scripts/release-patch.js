@@ -1,7 +1,7 @@
+import {execSync} from "node:child_process"
 import fs from "node:fs"
 import path from "node:path"
-import {execSync} from "node:child_process"
-import {fileURLToPath} from "node:url"
+import {fileURLToPath} from "node:url" // eslint-disable-line sort-imports
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -36,6 +36,15 @@ class ReleasePatch {
     }
   }
 
+  checkoutMaster() {
+    this.run("git checkout master", {cwd: this.repoRoot})
+  }
+
+  updateMasterFromOrigin() {
+    this.run("git fetch origin", {cwd: this.repoRoot})
+    this.run("git merge origin/master", {cwd: this.repoRoot})
+  }
+
   bumpPatch() {
     this.run("npm version patch --no-git-tag-version", {cwd: this.packageDir})
   }
@@ -66,7 +75,7 @@ class ReleasePatch {
     try {
       const whoami = this.runQuiet("npm whoami", {cwd: this.packageDir})
       if (whoami) return
-    } catch (error) {
+    } catch {
       // Fall through to login.
     }
 
@@ -92,9 +101,10 @@ class ReleasePatch {
 
   execute() {
     this.requireCleanGit()
-    if (this.requireMaster) {
-      this.requireMasterBranch()
-    }
+    if (this.requireMaster) this.requireMasterBranch()
+
+    this.checkoutMaster()
+    this.updateMasterFromOrigin()
 
     this.bumpPatch()
     this.build()
@@ -109,4 +119,5 @@ class ReleasePatch {
   }
 }
 
+// eslint-disable-next-line jest/require-hook
 new ReleasePatch().execute()
