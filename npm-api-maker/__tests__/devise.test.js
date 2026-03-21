@@ -11,9 +11,10 @@ describe("ApiMakerDevise", () => {
 
   it("can skip the initial sign in event until the caller has refreshed session data", async() => {
     const applyResult = jest.fn()
+    const updateMetaElementsFromResult = jest.fn()
     const updateSessionStatus = jest.fn().mockResolvedValue(undefined)
     const sendRequest = jest.spyOn(Services.current(), "sendRequest").mockResolvedValue({model: null})
-    jest.spyOn(SessionStatusUpdater, "current").mockReturnValue({applyResult, updateSessionStatus})
+    jest.spyOn(SessionStatusUpdater, "current").mockReturnValue({applyResult, updateMetaElementsFromResult, updateSessionStatus})
     const emit = jest.spyOn(ApiMakerDevise.events(), "emit").mockImplementation(() => {})
 
     await ApiMakerDevise.signIn("teacher@example.com", "secret", {skipSignInEvent: true})
@@ -28,6 +29,7 @@ describe("ApiMakerDevise", () => {
     )
     expect(updateSessionStatus).toHaveBeenCalledTimes(1)
     expect(applyResult).not.toHaveBeenCalled()
+    expect(updateMetaElementsFromResult).not.toHaveBeenCalled()
     expect(emit).not.toHaveBeenCalledWith("onDeviseSignIn", expect.anything())
   })
 
@@ -40,12 +42,13 @@ describe("ApiMakerDevise", () => {
       .mockResolvedValueOnce({
         session_status: {csrf_token: "token-2", scopes: {user: {signed_in: true}}},
         success: true
-      })
+    })
     const applyResult = jest.fn()
+    const updateMetaElementsFromResult = jest.fn()
     const updateSessionStatus = jest.fn().mockResolvedValue(undefined)
 
     jest.spyOn(config, "getWebsocketRequests").mockReturnValue(true)
-    jest.spyOn(SessionStatusUpdater, "current").mockReturnValue({applyResult, updateSessionStatus})
+    jest.spyOn(SessionStatusUpdater, "current").mockReturnValue({applyResult, updateMetaElementsFromResult, updateSessionStatus})
 
     await ApiMakerDevise.signIn("teacher@example.com", "secret")
 
@@ -64,6 +67,7 @@ describe("ApiMakerDevise", () => {
       {rememberMe: undefined, scope: "user", shadowSessionToken: "shadow-token", signedIn: true},
       {forceHttp: true}
     )
+    expect(updateMetaElementsFromResult).toHaveBeenCalledWith({csrf_token: "token-1", scopes: {user: {signed_in: true}}, shadow_session_token: "shadow-token"})
     expect(applyResult).toHaveBeenCalledWith({csrf_token: "token-2", scopes: {user: {signed_in: true}}})
     expect(updateSessionStatus).not.toHaveBeenCalled()
   })
@@ -77,12 +81,13 @@ describe("ApiMakerDevise", () => {
       .mockResolvedValueOnce({
         session_status: {csrf_token: "token-3", scopes: {user: {signed_in: false}}},
         success: true
-      })
+    })
     const applyResult = jest.fn()
+    const updateMetaElementsFromResult = jest.fn()
     const updateSessionStatus = jest.fn().mockResolvedValue(undefined)
 
     jest.spyOn(config, "getWebsocketRequests").mockReturnValue(true)
-    jest.spyOn(SessionStatusUpdater, "current").mockReturnValue({applyResult, updateSessionStatus})
+    jest.spyOn(SessionStatusUpdater, "current").mockReturnValue({applyResult, updateMetaElementsFromResult, updateSessionStatus})
 
     await ApiMakerDevise.signOut()
 
@@ -99,6 +104,7 @@ describe("ApiMakerDevise", () => {
       {scope: "user", signedIn: false},
       {forceHttp: true}
     )
+    expect(updateMetaElementsFromResult).toHaveBeenCalledWith({csrf_token: "token-2", scopes: {user: {signed_in: false}}})
     expect(applyResult).toHaveBeenCalledWith({csrf_token: "token-3", scopes: {user: {signed_in: false}}})
     expect(updateSessionStatus).not.toHaveBeenCalled()
   })

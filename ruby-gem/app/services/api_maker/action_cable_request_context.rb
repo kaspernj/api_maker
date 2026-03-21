@@ -20,6 +20,8 @@ class ApiMaker::ActionCableRequestContext
       session_statuses_controller.set_request!(request)
       session_statuses_controller.set_response!(ActionDispatch::Response.new)
       session_statuses_controller.__send__(:form_authenticity_token)
+    rescue ActionDispatch::Request::Session::DisabledSessionError
+      nil
     end
   end
 

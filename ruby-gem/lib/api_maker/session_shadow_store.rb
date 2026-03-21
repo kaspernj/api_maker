@@ -37,7 +37,7 @@ class ApiMaker::SessionShadowStore
   end
 
   def self.signed_token_for(request:)
-    session_id = session_id_for(request:)
+    session_id = session_id_for_signed_token(request:)
     return if session_id.blank?
 
     verifier.generate({session_id:}, purpose: CACHE_KEY_PREFIX)
@@ -66,6 +66,10 @@ class ApiMaker::SessionShadowStore
 
   def self.verifier
     Rails.application.message_verifier(CACHE_KEY_PREFIX)
+  end
+
+  def self.session_id_for_signed_token(request:)
+    request.env[LOADED_SESSION_ID_ENV_KEY].presence || session_id_for(request:)
   end
 
   def self.session_id_from_signed_token(token:)

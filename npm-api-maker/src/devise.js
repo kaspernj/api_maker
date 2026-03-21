@@ -81,6 +81,10 @@ export default class ApiMakerDevise {
     const sessionStatusUpdater = SessionStatusUpdater.current()
 
     if (config.getWebsocketRequests()) {
+      if (response.session_status) {
+        sessionStatusUpdater.updateMetaElementsFromResult(response.session_status)
+      }
+
       await ApiMakerDevise.persistSession({
         rememberMe: args.rememberMe,
         scope: args.scope,
@@ -155,15 +159,18 @@ export default class ApiMakerDevise {
     const sessionStatusUpdater = SessionStatusUpdater.current()
 
     if (config.getWebsocketRequests()) {
+      if (response.session_status) {
+        sessionStatusUpdater.updateMetaElementsFromResult(response.session_status)
+      }
+
       await ApiMakerDevise.persistSession({scope: args.scope, signedIn: false})
     } else if (response.session_status) {
       sessionStatusUpdater.applyResult(response.session_status)
     } else {
       await sessionStatusUpdater.updateSessionStatus()
+      ApiMakerDevise.setSignedOut(args)
+      ApiMakerDevise.callSignOutEvent(args)
     }
-
-    ApiMakerDevise.setSignedOut(args)
-    ApiMakerDevise.callSignOutEvent(args)
 
     return response
   }
