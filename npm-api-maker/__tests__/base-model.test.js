@@ -36,6 +36,48 @@ describe("BaseModel", () => {
     })
   })
 
+  describe("ensureAssociationLoaded", () => {
+    it("loads an unloaded belongs_to association", async() => {
+      const model = new BaseModel()
+      const account = {id: 5}
+      const accountMethod = () => account
+      const loadAccountMethod = async() => account
+
+      model.modelClassData = () => ({
+        name: "User",
+        relationships: [{name: "account", macro: "belongs_to"}]
+      })
+      model.relationships = {}
+      model.relationshipsCache = {}
+      model.account = accountMethod
+      model.loadAccount = loadAccountMethod
+      const loadAccountSpy = jest.spyOn(model, "loadAccount")
+
+      await expect(model.ensureAssociationLoaded("account")).resolves.toEqual(account)
+      expect(loadAccountSpy).toHaveBeenCalledTimes(1)
+    })
+
+    it("returns the loaded has_many relationship without reloading", async() => {
+      const model = new BaseModel()
+      const projects = [{id: 1}]
+      const projectsMethod = () => ({loaded: () => projects})
+      const loadProjectsMethod = async() => projects
+
+      model.modelClassData = () => ({
+        name: "User",
+        relationships: [{name: "projects", macro: "has_many"}]
+      })
+      model.relationships = {}
+      model.relationshipsCache = {projects}
+      model.projects = projectsMethod
+      model.loadProjects = loadProjectsMethod
+      const loadProjectsSpy = jest.spyOn(model, "loadProjects")
+
+      await expect(model.ensureAssociationLoaded("projects")).resolves.toEqual(projects)
+      expect(loadProjectsSpy).not.toHaveBeenCalled()
+    })
+  })
+
   describe("parseValidationErrors", () => {
     const error = new ValidationError({
       getUnhandledErrorMessage: () => "Some validation error",

@@ -2,6 +2,39 @@ import ApiMakerModelRecipesModelLoader from "../src/model-recipes-model-loader.j
 import {jest} from "@jest/globals"
 
 describe("ApiMakerModelRecipesModelLoader", () => {
+  it("defines ensure helpers for runtime recipe relationships", async() => {
+    const modelRecipe = {
+      attributes: {},
+      collection_commands: {},
+      member_commands: {},
+      model_class_data: {
+        collectionName: "users",
+        name: "User"
+      },
+      relationships: {
+        account: {
+          active_record: {name: "User", primary_key: "id"},
+          class_name: "Account",
+          foreign_key: "account_id",
+          klass: {primary_key: "id"},
+          options: {as: null, primary_key: null, through: null},
+          resource_name: "Account",
+          type: "belongs_to"
+        }
+      }
+    }
+    const loader = new ApiMakerModelRecipesModelLoader({
+      modelRecipe,
+      modelRecipesLoader: {getModelClass: () => null}
+    })
+    const ModelClass = loader.createClass()
+    const model = new ModelClass()
+    const ensureAssociationLoadedSpy = jest.spyOn(model, "ensureAssociationLoaded").mockResolvedValue({id: 5})
+
+    await expect(model.ensureAccountLoaded()).resolves.toEqual({id: 5})
+    expect(ensureAssociationLoadedSpy).toHaveBeenCalledWith("account")
+  })
+
   it("merges command args into generated collection and member command calls", () => {
     const modelRecipe = {
       attributes: {},

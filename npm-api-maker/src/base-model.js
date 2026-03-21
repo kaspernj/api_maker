@@ -601,6 +601,46 @@ export default class BaseModel {
   }
 
   /**
+   * @param {string} associationName
+   * @returns {Promise<any>}
+   */
+  async ensureAssociationLoaded(associationName) {
+    return this.ensureAssociationLoadedUnderscore(inflection.underscore(associationName))
+  }
+
+  /**
+   * @param {string} associationNameUnderscore
+   * @returns {Promise<any>}
+   */
+  async ensureAssociationLoadedUnderscore(associationNameUnderscore) {
+    const reflection = this.modelClassData().relationships.find((relationship) => relationship.name == associationNameUnderscore)
+
+    if (!reflection) {
+      const relationshipNames = this.modelClassData().relationships.map((relationship) => relationship.name)
+
+      throw new Error(`Could not find the relation ${associationNameUnderscore} on ${this.modelClassData().name}: ${relationshipNames.join(", ")}`)
+    }
+
+    const methodName = inflection.camelize(associationNameUnderscore, true)
+    const loadMethodName = inflection.camelize(`load_${associationNameUnderscore}`, true)
+
+    if (!(methodName in this)) throw new Error(`No such association method on ${this.modelClassData().name}: ${methodName}`)
+    if (!(loadMethodName in this)) throw new Error(`No such association load method on ${this.modelClassData().name}: ${loadMethodName}`)
+
+    if (this.isAssociationLoadedUnderscore(associationNameUnderscore)) {
+      const loadedAssociation = this[methodName]()
+
+      if (reflection.macro == "has_many") {
+        return loadedAssociation.loaded()
+      }
+
+      return loadedAssociation
+    }
+
+    return this[loadMethodName]()
+  }
+
+  /**
    * @param {object} args
    * @param {any} args.error
    * @param {BaseModel} [args.model]
