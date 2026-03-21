@@ -89,10 +89,6 @@ describe("useModel", () => {
       })
     }).not.toThrow()
 
-    expect(result.schoolClass).toBeInstanceOf(FakeSchoolClass)
-    expect(result.schoolClass.args).toEqual({
-      data: {a: {}},
-      isNewRecord: true
-    })
+    expect(result.schoolClass).toBeUndefined()
   })
 })

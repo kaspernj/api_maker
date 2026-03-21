@@ -152,11 +152,13 @@ const useModel = (modelClassArg, argsArg = {}) => {
     cacheArgs.push(...args.cacheArgs)
   }
 
+  cacheArgs.push(queryParams)
+
   s.updateMeta({args, modelId, modelVariableName, queryParams})
   if (s.meta.syncNewModel == undefined) s.meta.syncNewModel = false
   if (s.meta.newIfNoIdDefaultsResult == undefined) s.meta.newIfNoIdDefaultsResult = null
 
-  if (s.m.active && s.props.newIfNoId && !s.m.modelId && !s.s.model && !s.m.syncNewModel) {
+  if (s.m.active && s.props.newIfNoId && !s.m.modelId && !s.s.model && !s.m.syncNewModel && s.m.queryParams != undefined) {
     if (s.props.newIfNoId?.defaults && s.m.newIfNoIdDefaultsResult === null) {
       const defaultsResult = s.props.newIfNoId.defaults()
 
