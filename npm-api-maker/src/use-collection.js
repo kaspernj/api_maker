@@ -8,6 +8,10 @@ import useCreatedEvent from "./use-created-event.js"
 import useShape from "./use-shape.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
+const emptyObject = {}
+
+export const queryParamsOrEmpty = (queryParams) => queryParams || emptyObject
+
 /**
  * @typedef {object} UseCollectionResult
  * @property {Array<import("./base-model.js").default>} models
@@ -79,18 +83,19 @@ const useCollection = (props, cacheKeys = []) => {
   const loadOverallCountGenerationRef = useRef(0)
 
   s.meta.queryParams = useQueryParams()
+  const queryParams = queryParamsOrEmpty(s.m.queryParams)
 
   const hasQParams = useCallback(() => {
-    if (s.s.queryQName in s.m.queryParams) return true
+    if (s.s.queryQName in queryParams) return true
 
     return false
-  }, [])
+  }, [queryParams, s.s.queryQName])
 
   const qParams = useCallback(() => {
-    if (hasQParams()) return JSON.parse(digg(s.m.queryParams, s.s.queryQName))
+    if (hasQParams()) return JSON.parse(digg(queryParams, s.s.queryQName))
 
     return {}
-  }, [])
+  }, [hasQParams, queryParams, s.s.queryQName])
 
   s.useStates({
     models: undefined,
@@ -142,8 +147,8 @@ const useCollection = (props, cacheKeys = []) => {
     const qParamsToSet = hasQParams() ? qParams() : Object.assign({}, s.props.defaultParams)
     const searchParams = []
 
-    if (s.m.queryParams[s.s.querySName]) {
-      for (const rawSearchParam of s.m.queryParams[s.s.querySName]) {
+    if (queryParams[s.s.querySName]) {
+      for (const rawSearchParam of queryParams[s.s.querySName]) {
         const parsedSearchParam = JSON.parse(rawSearchParam)
 
         searchParams.push(parsedSearchParam)
@@ -154,7 +159,7 @@ const useCollection = (props, cacheKeys = []) => {
       qParams: qParamsToSet,
       searchParams
     })
-  }, [])
+  }, [hasQParams, qParams, queryParams, s.props.defaultParams, s.s.querySName])
 
   const loadModels = useCallback(async () => {
     // Only the newest collection request is allowed to update state after navigation/filter changes.
@@ -164,8 +169,8 @@ const useCollection = (props, cacheKeys = []) => {
     let query = s.props.collection?.clone() || s.p.modelClass.ransack()
 
     if (s.props.pagination) {
-      const page = s.m.queryParams[s.s.queryPageName] || 1
-      let per = s.m.queryParams[s.s.queryPerKey] || 30
+      const page = queryParams[s.s.queryPageName] || 1
+      let per = queryParams[s.s.queryPerKey] || 30
 
       if (per == "all") {
         per = 999_999_999
@@ -220,7 +225,7 @@ const useCollection = (props, cacheKeys = []) => {
       showNoRecordsAvailableContent: showNoRecordsAvailableContent({models}),
       showNoRecordsFoundContent: showNoRecordsFoundContent({models})
     })
-  }, [])
+  }, [queryParams])
 
   const loadModelsDebounce = useCallback(debounce(loadModels), [])
   const onModelDestroyed = useCallback((args) => {
@@ -293,10 +298,10 @@ const useCollection = (props, cacheKeys = []) => {
       modelClass,
       s.props.ifCondition,
       s.s.queryName,
-      s.m.queryParams[s.s.queryQName],
-      s.m.queryParams[s.s.queryPageName],
-      s.m.queryParams[s.s.queryPerKey],
-      s.m.queryParams[s.s.querySName],
+      queryParams[s.s.queryQName],
+      queryParams[s.s.queryPageName],
+      queryParams[s.s.queryPerKey],
+      queryParams[s.s.querySName],
       collection
     ].concat(cacheKeys)
   )
