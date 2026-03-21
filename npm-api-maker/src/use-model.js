@@ -92,7 +92,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
   const loadNewModel = useCallback(async (loadModelGeneration) => {
     const ModelClass = modelClass
     const paramKey = ModelClass.modelName().paramKey()
-    const modelDataFromParams = s.m.queryParams[paramKey] || {}
+    const modelDataFromParams = s.m.queryParams?.[paramKey] || {}
 
     let defaults = {}
 
@@ -152,11 +152,13 @@ const useModel = (modelClassArg, argsArg = {}) => {
     cacheArgs.push(...args.cacheArgs)
   }
 
+  cacheArgs.push(queryParams)
+
   s.updateMeta({args, modelId, modelVariableName, queryParams})
   if (s.meta.syncNewModel == undefined) s.meta.syncNewModel = false
   if (s.meta.newIfNoIdDefaultsResult == undefined) s.meta.newIfNoIdDefaultsResult = null
 
-  if (s.m.active && s.props.newIfNoId && !s.m.modelId && !s.s.model && !s.m.syncNewModel) {
+  if (s.m.active && s.props.newIfNoId && !s.m.modelId && !s.s.model && !s.m.syncNewModel && s.m.queryParams != undefined) {
     if (s.props.newIfNoId?.defaults && s.m.newIfNoIdDefaultsResult === null) {
       const defaultsResult = s.props.newIfNoId.defaults()
 
@@ -172,7 +174,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     if (!(s.m.newIfNoIdDefaultsResult && typeof s.m.newIfNoIdDefaultsResult.then == "function")) {
       const ModelClass = modelClass
       const paramKey = ModelClass.modelName().paramKey()
-      const modelDataFromParams = s.m.queryParams[paramKey] || {}
+      const modelDataFromParams = s.m.queryParams?.[paramKey] || {}
       const modelData = Object.assign(s.m.newIfNoIdDefaultsResult || {}, s.props.newAttributes, modelDataFromParams)
       const model = new ModelClass({
         isNewRecord: true,
