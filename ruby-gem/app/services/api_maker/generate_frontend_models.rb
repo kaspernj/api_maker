@@ -252,6 +252,7 @@ private
     method_name = js_method_name(relationship_name)
     related_model_jsdoc_type = relationship_jsdoc_type(relationship)
     load_method_name = js_method_name("load_#{relationship_name}")
+    ensure_method_name = js_method_name("ensure_#{relationship_name}_loaded")
     foreign_key_method_name = js_method_name(relationship.fetch(:foreign_key))
     options_primary_key = relationship.dig(:options, :primary_key)
     klass_primary_key = relationship.dig(:klass, :primary_key)
@@ -282,6 +283,11 @@ private
       "      },",
       "      {ransack}",
       "    )",
+      "  }",
+      "",
+      "  /** @returns {Promise<#{related_model_jsdoc_type} | null>} */",
+      "  #{ensure_method_name}() {",
+      "    return this.ensureAssociationLoaded(\"#{relationship_name}\")",
       "  }"
     ]
   end
@@ -290,6 +296,7 @@ private
     relationship_name = relationship_key_name.to_s
     method_name = js_method_name(relationship_name)
     load_method_name = js_method_name("load_#{relationship_name}")
+    ensure_method_name = js_method_name("ensure_#{relationship_name}_loaded")
     related_model_jsdoc_type = relationship_jsdoc_type(relationship)
     active_record_name = relationship.dig(:active_record, :name)
     foreign_key = relationship.fetch(:foreign_key)
@@ -409,6 +416,13 @@ private
     end
 
     lines << "  }"
+    lines.push(
+      "",
+      "  /** @returns {Promise<Array<#{related_model_jsdoc_type}>>} */",
+      "  #{ensure_method_name}() {",
+      "    return this.ensureAssociationLoaded(\"#{relationship_name}\")",
+      "  }"
+    )
     lines
   end
 
@@ -416,6 +430,7 @@ private
     relationship_name = relationship_key_name.to_s
     method_name = js_method_name(relationship_name)
     load_method_name = js_method_name("load_#{relationship_name}")
+    ensure_method_name = js_method_name("ensure_#{relationship_name}_loaded")
     related_model_jsdoc_type = relationship_jsdoc_type(relationship)
     active_record_primary_key = relationship.dig(:active_record, :primary_key)
     foreign_key = relationship.fetch(:foreign_key)
@@ -478,7 +493,14 @@ private
       )
     end
 
-    lines << "  }"
+    lines.push(
+      "  }",
+      "",
+      "  /** @returns {Promise<#{related_model_jsdoc_type} | null>} */",
+      "  #{ensure_method_name}() {",
+      "    return this.ensureAssociationLoaded(\"#{relationship_name}\")",
+      "  }"
+    )
     lines
   end
 
