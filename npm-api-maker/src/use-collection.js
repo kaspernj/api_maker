@@ -83,7 +83,6 @@ const useCollection = (props, cacheKeys = []) => {
   const loadOverallCountGenerationRef = useRef(0)
 
   s.meta.queryParams = useQueryParams()
-  const queryParams = s.m.queryParams
 
   s.useStates({
     models: undefined,
@@ -133,12 +132,12 @@ const useCollection = (props, cacheKeys = []) => {
     let qParamsToSet = Object.assign({}, s.props.defaultParams)
     const searchParams = []
 
-    if (queryParams && queryQName in queryParams) {
-      qParamsToSet = JSON.parse(digg(queryParams, queryQName))
+    if (s.m.queryParams && queryQName in s.m.queryParams) {
+      qParamsToSet = JSON.parse(digg(s.m.queryParams, queryQName))
     }
 
-    if (queryParams?.[querySName]) {
-      for (const rawSearchParam of queryParams[querySName]) {
+    if (s.m.queryParams?.[querySName]) {
+      for (const rawSearchParam of s.m.queryParams[querySName]) {
         const parsedSearchParam = JSON.parse(rawSearchParam)
 
         searchParams.push(parsedSearchParam)
@@ -149,7 +148,7 @@ const useCollection = (props, cacheKeys = []) => {
       qParams: qParamsToSet,
       searchParams
     })
-  }, [queryParams, s.props.defaultParams, queryQName, querySName])
+  }, [s.m.queryParams, s.props.defaultParams, queryQName, querySName])
 
   const loadModels = useCallback(async () => {
     // Only the newest collection request is allowed to update state after navigation/filter changes.
@@ -159,8 +158,8 @@ const useCollection = (props, cacheKeys = []) => {
     let query = s.props.collection?.clone() || s.p.modelClass.ransack()
 
     if (s.props.pagination) {
-      const page = queryParams?.[queryPageName] || 1
-      let per = queryParams?.[queryPerKey] || 30
+      const page = s.m.queryParams?.[queryPageName] || 1
+      let per = s.m.queryParams?.[queryPerKey] || 30
 
       if (per == "all") {
         per = 999_999_999
@@ -215,7 +214,7 @@ const useCollection = (props, cacheKeys = []) => {
       showNoRecordsAvailableContent: showNoRecordsAvailableContent({models}),
       showNoRecordsFoundContent: showNoRecordsFoundContent({models})
     })
-  }, [queryParams])
+  }, [s.m.queryParams])
 
   const loadModelsDebounce = useMemo(() => debounce(loadModels), [loadModels])
   const onModelDestroyed = useCallback((args) => {
@@ -288,10 +287,10 @@ const useCollection = (props, cacheKeys = []) => {
       modelClass,
       s.props.ifCondition,
       s.s.queryName,
-      queryParams?.[queryQName],
-      queryParams?.[queryPageName],
-      queryParams?.[queryPerKey],
-      queryParams?.[querySName],
+      s.m.queryParams?.[queryQName],
+      s.m.queryParams?.[queryPageName],
+      s.m.queryParams?.[queryPerKey],
+      s.m.queryParams?.[querySName],
       collection
     ].concat(cacheKeys)
   )
