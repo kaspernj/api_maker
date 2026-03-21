@@ -8,8 +8,6 @@ import useCreatedEvent from "./use-created-event.js"
 import useShape from "./use-shape.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
-const emptyObject = {}
-
 /**
  * @typedef {object} UseCollectionResult
  * @property {Array<import("./base-model.js").default>} models
@@ -85,7 +83,7 @@ const useCollection = (props, cacheKeys = []) => {
   const loadOverallCountGenerationRef = useRef(0)
 
   s.meta.queryParams = useQueryParams()
-  const queryParams = s.m.queryParams || emptyObject
+  const queryParams = s.m.queryParams
 
   s.useStates({
     models: undefined,
@@ -135,11 +133,11 @@ const useCollection = (props, cacheKeys = []) => {
     let qParamsToSet = Object.assign({}, s.props.defaultParams)
     const searchParams = []
 
-    if (queryQName in queryParams) {
+    if (queryParams && queryQName in queryParams) {
       qParamsToSet = JSON.parse(digg(queryParams, queryQName))
     }
 
-    if (queryParams[querySName]) {
+    if (queryParams?.[querySName]) {
       for (const rawSearchParam of queryParams[querySName]) {
         const parsedSearchParam = JSON.parse(rawSearchParam)
 
@@ -161,8 +159,8 @@ const useCollection = (props, cacheKeys = []) => {
     let query = s.props.collection?.clone() || s.p.modelClass.ransack()
 
     if (s.props.pagination) {
-      const page = queryParams[queryPageName] || 1
-      let per = queryParams[queryPerKey] || 30
+      const page = queryParams?.[queryPageName] || 1
+      let per = queryParams?.[queryPerKey] || 30
 
       if (per == "all") {
         per = 999_999_999
@@ -290,10 +288,10 @@ const useCollection = (props, cacheKeys = []) => {
       modelClass,
       s.props.ifCondition,
       s.s.queryName,
-      queryParams[queryQName],
-      queryParams[queryPageName],
-      queryParams[queryPerKey],
-      queryParams[querySName],
+      queryParams?.[queryQName],
+      queryParams?.[queryPageName],
+      queryParams?.[queryPerKey],
+      queryParams?.[querySName],
       collection
     ].concat(cacheKeys)
   )
