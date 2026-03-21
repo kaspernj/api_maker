@@ -3,6 +3,7 @@ import {useCallback, useEffect, useRef} from "react"
 import Devise from "./devise.js"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.js"
+import Params from "./params.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import useShape from "./use-shape.js"
 
@@ -25,6 +26,11 @@ import useShape from "./use-shape.js"
 // eslint-disable-next-line complexity
 const useModel = (modelClassArg, argsArg = {}) => {
   const queryParams = useQueryParams()
+  const effectiveQueryParams = queryParams ?? (
+    typeof globalThis.location?.search == "string"
+      ? Params.parse()
+      : undefined
+  )
   const loadModelGenerationRef = useRef(0)
   let args, modelClass
 
@@ -152,9 +158,9 @@ const useModel = (modelClassArg, argsArg = {}) => {
     cacheArgs.push(...args.cacheArgs)
   }
 
-  cacheArgs.push(queryParams)
+  cacheArgs.push(effectiveQueryParams)
 
-  s.updateMeta({args, modelId, modelVariableName, queryParams})
+  s.updateMeta({args, modelId, modelVariableName, queryParams: effectiveQueryParams})
   if (s.meta.syncNewModel == undefined) s.meta.syncNewModel = false
   if (s.meta.newIfNoIdDefaultsResult == undefined) s.meta.newIfNoIdDefaultsResult = null
 

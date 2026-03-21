@@ -57,10 +57,18 @@ describe("useModel", () => {
     mockUseRef.mockClear()
     mockUseQueryParams.mockReset()
     mockUseShape.mockReset()
+    Object.defineProperty(globalThis, "location", {
+      configurable: true,
+      value: {search: ""}
+    })
   })
 
-  it("does not crash when query params are undefined and newIfNoId is used", async() => {
+  it("uses location query params when the query params context is undefined", async() => {
     mockUseQueryParams.mockReturnValue(undefined)
+    Object.defineProperty(globalThis, "location", {
+      configurable: true,
+      value: {search: "?school_class[name]=The%20Pack"}
+    })
 
     mockUseShape.mockImplementation((props) => {
       const state = {}
@@ -89,6 +97,51 @@ describe("useModel", () => {
       })
     }).not.toThrow()
 
-    expect(result.schoolClass).toBeUndefined()
+    expect(result.schoolClass).toBeInstanceOf(FakeSchoolClass)
+    expect(result.schoolClass.args).toEqual({
+      data: {a: {name: "The Pack"}},
+      isNewRecord: true
+    })
+  })
+
+  it("does not crash when query params and location are unavailable", async() => {
+    mockUseQueryParams.mockReturnValue(undefined)
+    Object.defineProperty(globalThis, "location", {
+      configurable: true,
+      value: undefined
+    })
+
+    mockUseShape.mockImplementation((props) => {
+      const state = {}
+      const meta = {}
+
+      return {
+        meta,
+        props,
+        state,
+        m: meta,
+        p: props,
+        s: state,
+        set: (statesList) => Object.assign(state, statesList),
+        updateMeta: (newMeta) => Object.assign(meta, newMeta),
+        useStates: (statesList) => Object.assign(state, statesList)
+      }
+    })
+
+    const {default: useModel} = await import("../src/use-model.js")
+    let result
+
+    expect(() => {
+      result = useModel(FakeSchoolClass, {
+        match: {params: {}},
+        newIfNoId: true
+      })
+    }).not.toThrow()
+
+    expect(result.schoolClass).toBeInstanceOf(FakeSchoolClass)
+    expect(result.schoolClass.args).toEqual({
+      data: {a: {}},
+      isNewRecord: true
+    })
   })
 })
