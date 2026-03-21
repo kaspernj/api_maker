@@ -3,7 +3,7 @@ class Services::Devise::PersistSession < ApiMaker::BaseService
 
   def perform
     if args.key?(:signedIn) && !args[:signedIn]
-      controller.sign_out(scope.to_sym)
+      warden.logout(scope.to_sym)
     else
       sign_in_current_model_or_sign_out
     end
@@ -62,10 +62,10 @@ class Services::Devise::PersistSession < ApiMaker::BaseService
 
   def sign_in_current_model_or_sign_out
     if current_model
-      controller.sign_in(current_model, scope: scope.to_sym)
+      warden.set_user(current_model, scope: scope.to_sym)
       remember_me(current_model) if args[:rememberMe]
     else
-      controller.sign_out(scope.to_sym)
+      warden.logout(scope.to_sym)
     end
   end
 

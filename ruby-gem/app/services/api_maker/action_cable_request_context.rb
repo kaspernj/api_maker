@@ -29,21 +29,21 @@ class ApiMaker::ActionCableRequestContext
     @current_ability ||= ApiMaker::Configuration.current.ability_class.new(api_maker_args:, locals: api_maker_locals)
   end
 
-  def sign_in(model, scope: nil)
+  def sign_in(model, scope: nil, run_hooks: true)
     scope_to_use = scope || Devise::Mapping.find_scope!(model)
 
     warden.set_user(model, scope: scope_to_use)
     update_connection_current_user(model, scope_to_use)
-    run_sign_in_hooks(model, scope_to_use)
+    run_sign_in_hooks(model, scope_to_use) if run_hooks
     reset_current_ability
   end
 
-  def sign_out(model)
+  def sign_out(model, run_hooks: true)
     scope_to_use = Devise::Mapping.find_scope!(model)
 
     warden.logout(scope_to_use)
     update_connection_current_user(nil, scope_to_use)
-    run_sign_out_hooks(model, scope_to_use)
+    run_sign_out_hooks(model, scope_to_use) if run_hooks
     reset_current_ability
   end
 
