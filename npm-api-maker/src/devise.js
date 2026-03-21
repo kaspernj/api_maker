@@ -78,19 +78,7 @@ export default class ApiMakerDevise {
 
     if (Array.isArray(model)) model = model[0]
 
-    ApiMakerDevise.updateSession(model)
-
     const sessionStatusUpdater = SessionStatusUpdater.current()
-
-    if (response.session_status) {
-      sessionStatusUpdater.applyResult(response.session_status)
-    } else {
-      await sessionStatusUpdater.updateSessionStatus()
-    }
-
-    if (!args.skipSignInEvent) {
-      events.emit("onDeviseSignIn", {username, ...args})
-    }
 
     if (config.getWebsocketRequests()) {
       await ApiMakerDevise.persistSession({
@@ -99,6 +87,16 @@ export default class ApiMakerDevise {
         shadowSessionToken: response.session_status?.shadow_session_token,
         signedIn: true
       })
+    } else if (response.session_status) {
+      sessionStatusUpdater.applyResult(response.session_status)
+    } else {
+      await sessionStatusUpdater.updateSessionStatus()
+    }
+
+    ApiMakerDevise.updateSession(model)
+
+    if (!args.skipSignInEvent) {
+      events.emit("onDeviseSignIn", {username, ...args})
     }
 
     return {model, response}
@@ -153,20 +151,19 @@ export default class ApiMakerDevise {
     }
 
     const response = await Services.current().sendRequest("Devise::SignOut", {args})
-    ApiMakerDevise.setSignedOut(args)
-    ApiMakerDevise.callSignOutEvent(args)
 
     const sessionStatusUpdater = SessionStatusUpdater.current()
 
-    if (response.session_status) {
+    if (config.getWebsocketRequests()) {
+      await ApiMakerDevise.persistSession({scope: args.scope, signedIn: false})
+    } else if (response.session_status) {
       sessionStatusUpdater.applyResult(response.session_status)
     } else {
       await sessionStatusUpdater.updateSessionStatus()
     }
 
-    if (config.getWebsocketRequests()) {
-      await ApiMakerDevise.persistSession({scope: args.scope, signedIn: false})
-    }
+    ApiMakerDevise.setSignedOut(args)
+    ApiMakerDevise.callSignOutEvent(args)
 
     return response
   }

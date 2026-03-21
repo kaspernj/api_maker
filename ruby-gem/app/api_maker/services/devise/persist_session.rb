@@ -38,7 +38,7 @@ class Services::Devise::PersistSession < ApiMaker::BaseService
   def current_model_from_shadow_session
     return if args[:shadowSessionToken].blank?
 
-    shadow_session_data = ApiMaker::SessionShadowStore.read_signed(token: args[:shadowSessionToken])
+    shadow_session_data = ApiMaker::SessionShadowStore.read_signed(request: controller.request, token: args[:shadowSessionToken])
     return if shadow_session_data.blank?
 
     model_from_session_key(shadow_session_data["warden.user.#{scope}.key"])

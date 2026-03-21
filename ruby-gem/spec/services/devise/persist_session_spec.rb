@@ -52,4 +52,19 @@ describe Services::Devise::PersistSession do
 
     expect(response).to include(session_status: session_status_result, success: true)
   end
+
+  it "requires the signed shadow session token to match the current session id" do
+    request_session = {"session_id" => "current-session"}
+    request_with_session = instance_double(ActionDispatch::Request, env: {}, session: request_session)
+
+    expect(controller).to receive(:request).and_return(request_with_session).at_least(:once)
+    expect(controller).to receive(:current_user).and_return(nil)
+    expect(ApiMaker::SessionShadowStore).to receive(:read_signed).with(request: request_with_session, token: "signed-token").and_return(nil)
+    expect(controller).to receive(:sign_out).with(:user)
+    expect(ApiMaker::SessionStatusResult).to receive(:new).with(controller:).and_return(session_status)
+
+    response = described_class.execute!(args: {shadowSessionToken: "signed-token"}, controller:)
+
+    expect(response).to include(session_status: session_status_result, success: true)
+  end
 end
