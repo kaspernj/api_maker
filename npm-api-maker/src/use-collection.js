@@ -320,7 +320,17 @@ class UseCollectionShapeHook extends ShapeHook {
     useEffect(
       () => {
         if (!this.s.readyToLoad) return
-        if (this.p.ifCondition === undefined || this.p.ifCondition()) {
+        let ifConditionMet
+
+        if (typeof this.p.ifCondition == "function") {
+          ifConditionMet = this.p.ifCondition()
+        } else if (this.p.ifCondition === undefined) {
+          ifConditionMet = true
+        } else {
+          ifConditionMet = this.p.ifCondition
+        }
+
+        if (ifConditionMet) {
           const {qParams, searchParams} = this.loadQParams()
 
           this.loadModels({qParams, searchParams})
