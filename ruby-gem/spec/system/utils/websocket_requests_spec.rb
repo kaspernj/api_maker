@@ -3,6 +3,7 @@ require "rails_helper"
 describe "utils - websocket requests" do
   let!(:admin_user) { create :user, :admin, email: "admin@example.com", password: "password", password_confirmation: "password" }
   let!(:admin_user_role) { create :user_role, role: "partner", user: admin_user }
+  let(:browser) { Capybara.current_session.driver.browser }
 
   it "runs commands and devise auth over websocket requests" do
     admin_user
@@ -26,10 +27,12 @@ describe "utils - websocket requests" do
     wait_for_selector("[data-testid='websocket-sign-in-preload-count']", text: "1")
     wait_for_selector("[data-testid='websocket-signed-in-state']", text: "true")
     wait_for_selector("[data-testid='websocket-session-status-calls']", text: "0")
+    wait_for_expect { expect(browser.manage.all_cookies.pluck(:name)).to include("remember_user_token") }
 
     wait_for_and_find("[data-testid='websocket-sign-out-button']").click
 
     wait_for_selector("[data-testid='websocket-signed-in-state']", text: "false")
     wait_for_selector("[data-testid='websocket-session-status-calls']", text: "0")
+    wait_for_expect { expect(browser.manage.all_cookies.pluck(:name)).not_to include("remember_user_token") }
   end
 end

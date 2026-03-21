@@ -70,7 +70,7 @@ export default function RoutesUtilsWebsocketRequests() {
 
   /** @returns {Promise<void>} */
   async function onSignIn() {
-    const response = await Devise.signIn("admin@example.com", "password", {loadQuery: User.ransack().preload("user_roles")})
+    const response = await Devise.signIn("admin@example.com", "password", {loadQuery: User.ransack().preload("user_roles"), rememberMe: true})
     const currentUser = Devise.currentUser()
     const preloadedUserRoles = response.response.model[0].preloadedRelationships.user_roles
 

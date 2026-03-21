@@ -1,8 +1,10 @@
+import * as inflection from "inflection" // eslint-disable-line sort-imports
+import config from "./config.js"
 import {createContext} from "react"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
 import events from "./events.js"
-import * as inflection from "inflection" // eslint-disable-line sort-imports
 import modelClassRequire from "./model-class-require.js"
+import SessionStatusUpdater from "./session-status-updater.js" // eslint-disable-line sort-imports
 import Services from "./services.js" // eslint-disable-line sort-imports
 
 if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
@@ -78,19 +80,50 @@ export default class ApiMakerDevise {
 
     ApiMakerDevise.updateSession(model)
 
-    if (shared.apiMakerSessionStatusUpdater) {
-      if (response.session_status) {
-        shared.apiMakerSessionStatusUpdater.applyResult(response.session_status)
-      } else {
-        await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
-      }
+    const sessionStatusUpdater = SessionStatusUpdater.current()
+
+    if (response.session_status) {
+      sessionStatusUpdater.applyResult(response.session_status)
+    } else {
+      await sessionStatusUpdater.updateSessionStatus()
     }
 
     if (!args.skipSignInEvent) {
       events.emit("onDeviseSignIn", {username, ...args})
     }
 
+    if (config.getWebsocketRequests()) {
+      await ApiMakerDevise.persistSession({
+        rememberMe: args.rememberMe,
+        scope: args.scope,
+        shadowSessionToken: response.session_status?.shadow_session_token,
+        signedIn: true
+      })
+    }
+
     return {model, response}
+  }
+
+  /**
+   * Synchronizes the current backend auth state into real HTTP response cookies.
+   *
+   * @param {Record<string, any>} [args]
+   * @returns {Promise<any>}
+   */
+  static async persistSession(args = {}) {
+    if (!args.scope) args.scope = "user"
+
+    const response = await Services.current().sendRequest("Devise::PersistSession", args, {forceHttp: true})
+
+    const sessionStatusUpdater = SessionStatusUpdater.current()
+
+    if (response.session_status) {
+      sessionStatusUpdater.applyResult(response.session_status)
+    } else {
+      await sessionStatusUpdater.updateSessionStatus()
+    }
+
+    return response
   }
 
   /** updateSession. */
@@ -123,12 +156,16 @@ export default class ApiMakerDevise {
     ApiMakerDevise.setSignedOut(args)
     ApiMakerDevise.callSignOutEvent(args)
 
-    if (shared.apiMakerSessionStatusUpdater) {
-      if (response.session_status) {
-        shared.apiMakerSessionStatusUpdater.applyResult(response.session_status)
-      } else {
-        await shared.apiMakerSessionStatusUpdater.updateSessionStatus()
-      }
+    const sessionStatusUpdater = SessionStatusUpdater.current()
+
+    if (response.session_status) {
+      sessionStatusUpdater.applyResult(response.session_status)
+    } else {
+      await sessionStatusUpdater.updateSessionStatus()
+    }
+
+    if (config.getWebsocketRequests()) {
+      await ApiMakerDevise.persistSession({scope: args.scope, signedIn: false})
     }
 
     return response

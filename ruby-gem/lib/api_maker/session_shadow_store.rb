@@ -25,6 +25,20 @@ class ApiMaker::SessionShadowStore
     Rails.cache.read(cache_key(session_id))
   end
 
+  def self.read_signed(token:)
+    session_id = verifier.verified(token, purpose: CACHE_KEY_PREFIX)
+    return if session_id.blank?
+
+    Rails.cache.read(cache_key(session_id))
+  end
+
+  def self.signed_token_for(request:)
+    session_id = session_id_for(request:)
+    return if session_id.blank?
+
+    verifier.generate(session_id, purpose: CACHE_KEY_PREFIX)
+  end
+
   def self.cache_key(session_id)
     "#{CACHE_KEY_PREFIX}:#{session_id}"
   end
@@ -38,5 +52,9 @@ class ApiMaker::SessionShadowStore
       request.env[LOADED_SESSION_ID_ENV_KEY],
       session_id_for(request:)
     ].compact_blank.uniq
+  end
+
+  def self.verifier
+    Rails.application.message_verifier(CACHE_KEY_PREFIX)
   end
 end

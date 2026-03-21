@@ -14,6 +14,15 @@ class ApiMaker::ActionCableRequestContext
     request.cookie_jar
   end
 
+  def form_authenticity_token
+    @form_authenticity_token ||= begin
+      session_statuses_controller = ApiMaker::SessionStatusesController.new
+      session_statuses_controller.set_request!(request)
+      session_statuses_controller.set_response!(ActionDispatch::Response.new)
+      session_statuses_controller.__send__(:form_authenticity_token)
+    end
+  end
+
   def current_ability
     @current_ability ||= ApiMaker::Configuration.current.ability_class.new(api_maker_args:, locals: api_maker_locals)
   end
@@ -82,6 +91,10 @@ class ApiMaker::ActionCableRequestContext
 
   def session_status_result
     ApiMaker::SessionStatusResult.new(controller: self).result
+  end
+
+  def shadow_session_token
+    ApiMaker::SessionShadowStore.signed_token_for(request:)
   end
 
   def transmit_command_event(command_id:, payload:, type:)
