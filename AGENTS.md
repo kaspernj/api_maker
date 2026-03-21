@@ -25,6 +25,7 @@ Notes:
 - In `ApiMaker::ModelContentGeneratorService`, handle Ransack allowlist runtime errors (`"Ransack needs ..."`) for associations/attributes/scopes by returning `[]` so frontend model generation does not crash on third-party models.
 - Do not “fix” flaky specs by only increasing waits/timeouts. First determine whether behavior regressed (for example, element never rendered) and collect/inspect CI artifacts before adjusting timing.
 - Avoid unnecessary defensive conditions for guaranteed contracts. Prefer failing fast over silently accepting impossible states.
+- Before adding fallback logic for hook/context timing, inspect the provider source first; do not assume first-render hydration gaps without source confirmation.
 - Do not add helper methods for simple values or expressions that are only used in one place; inline them at the usage site instead.
 - Keep `testID` values unique within a rendered screen/component so selectors stay unambiguous.
 - In Selenium/spec helpers, do not assume a `testID` selector points at the editable control itself; React Native Web may put the `testID` on a wrapper, so descend to the real `input`/`textarea`/checkbox element before typing or clearing.
@@ -36,3 +37,4 @@ Notes:
 - Do not "fix" render/update bugs by replacing `useMemo()` with `useEffect()` as a blanket change; preserve hook semantics and debug the underlying state flow first.
 - In `npm-api-maker`, keep the checked-in `.npmrc` with `legacy-peer-deps=true` while the package targets ESLint 10 and `eslint-plugin-react` has not yet published an ESLint 10 peer range; remove that workaround only after the upstream peer support lands.
 - In `npm-api-maker`, keep peer-facing runtime imports that are needed by linked local/CI builds, lint, or tests (for example `react-native-vector-icons`, `flash-notifications`, `history`, and `i18n-on-steroids`) installed in `devDependencies` as well when tooling resolves modules from the package directory itself.
+- In `on-location-changed`, `WithLocationPath` initializes `queryParams` synchronously from `globalThis.location.search` via `useState(params())`; `useQueryParams()` being `undefined` indicates a missing/explicitly-undefined provider, not a normal first-render hydration phase.
