@@ -227,7 +227,7 @@ const useCollection = (props, cacheKeys = []) => {
     })
   }, [queryParams])
 
-  const loadModelsDebounce = useCallback(debounce(loadModels), [])
+  const loadModelsDebounce = useMemo(() => debounce(loadModels), [loadModels])
   const onModelDestroyed = useCallback((args) => {
     s.set({
       models: s.s.models.filter((model) => model.id() != args.model.id())
@@ -239,7 +239,7 @@ const useCollection = (props, cacheKeys = []) => {
     const foundModel = s.s.models.find((model) => model.id() == updatedModel.id())
 
     if (foundModel) loadModelsDebounce()
-  }, [])
+  }, [loadModelsDebounce])
 
   const showNoRecordsAvailableContent = useCallback((args) => {
     let models, overallCount
@@ -284,7 +284,7 @@ const useCollection = (props, cacheKeys = []) => {
 
   const onCreated = useCallback(() => {
     loadModelsDebounce()
-  }, [])
+  }, [loadModelsDebounce])
 
   // Collection loading has to wait until mount so fast responses cannot get stranded in ShapeHook's pre-mount queue.
   useEffect(
@@ -319,6 +319,10 @@ const useCollection = (props, cacheKeys = []) => {
     loadModelsGenerationRef.current += 1
     loadOverallCountGenerationRef.current += 1
   }, [])
+
+  useEffect(() => () => {
+    loadModelsDebounce.clear?.()
+  }, [loadModelsDebounce])
 
   useEffect(() => {
     const connections = []
