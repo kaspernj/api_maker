@@ -1,7 +1,4 @@
-# rubocop:disable Style/FrozenStringLiteralComment, Style/ClassAndModuleChildren
-# Returns the signed-in user's current workplace when available.
 class Commands::Workplaces::Current < Commands::ApplicationCommand
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def execute!
     workplace = current_workplace
     workplace_query = WorkerPlugins::Workplace.where(id: workplace)
@@ -13,19 +10,17 @@ class Commands::Workplaces::Current < Commands::ApplicationCommand
       query_params: args&.dig(:params)
     )
 
-    response = { current: collection_serializer }
+    response = {current: collection_serializer}
 
     # Support to count links to avoid doing another commands in the bottom bar
     if args&.dig(:links_count)
       response[:links_count] = if workplace.present?
-                                 workplace.workplace_links.ransack(args.dig(:links_count, :ransack)).result.count
-                               else
-                                 0
-                               end
+        workplace.workplace_links.ransack(args.dig(:links_count, :ransack)).result.count
+      else
+        0
+      end
     end
 
     succeed!(response)
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 end
-# rubocop:enable Style/FrozenStringLiteralComment, Style/ClassAndModuleChildren

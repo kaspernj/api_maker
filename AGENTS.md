@@ -12,6 +12,7 @@ Notes:
 - Before committing, review the current diff and propose commit message(s) grouped by logical change sets.
 - Prefer `describe` over `RSpec.describe` in specs.
 - Do not add `# frozen_string_literal: true` to files.
+- Before adding RuboCop disable directives, check the existing repo RuboCop config first and prefer code that passes under that config without new disables; avoid review-only style churn.
 - Prefer multiple small, individually working commits when possible.
 - Always run Rubocop on changed Ruby files.
 - If a RuboCop config exists for the current Ruby project, run RuboCop on changed Ruby files before pushing or opening a PR.
