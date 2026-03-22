@@ -16,8 +16,10 @@ class Commands::Workplaces::Current < Commands::ApplicationCommand
     if args&.dig(:links_count)
       response[:links_count] = if workplace.present?
         workplace.workplace_links.ransack(args.dig(:links_count, :ransack)).result.count
-      else
+      elsif current_user.nil?
         0
+      else
+        fail!("Current workplace could not be loaded")
       end
     end
 
