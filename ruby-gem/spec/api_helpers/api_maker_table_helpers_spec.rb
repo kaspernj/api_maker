@@ -73,6 +73,12 @@ describe "api_maker_table helpers" do
   end
 
   describe "#current_workplace" do
+    it "returns nil when current_user is nil" do
+      helper = helper_host_class.new(nil)
+
+      expect(helper.current_workplace).to be_nil
+    end
+
     it "returns nil when the lock is never acquired" do
       user = fake_user_class.new(current_workplace: nil, lock_results: [false, false, false])
       helper = helper_host_class.new(user)

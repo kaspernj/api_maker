@@ -1,5 +1,10 @@
+# rubocop:disable Style/FrozenStringLiteralComment, Style/ClassAndModuleChildren
+# Helpers for API Maker table workplace state.
 module ApiHelpers::ApiMakerTableHelpers
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def current_workplace
+    return nil unless current_user
+
     @current_workplace ||= begin
       workplace = nil
       lock_key = "API-MAKER-CURRENT-WORKPLACE-#{current_user.id}"
@@ -13,7 +18,7 @@ module ApiHelpers::ApiMakerTableHelpers
           current_user.reload
 
           unless current_user.current_workplace
-            current_user.create_current_workplace!(name: "Current workplace", user: current_user)
+            current_user.create_current_workplace!(name: 'Current workplace', user: current_user)
             current_user.save!
           end
 
@@ -36,4 +41,6 @@ module ApiHelpers::ApiMakerTableHelpers
       workplace
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 end
+# rubocop:enable Style/FrozenStringLiteralComment, Style/ClassAndModuleChildren
