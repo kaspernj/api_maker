@@ -61,6 +61,7 @@ export default class ApiMakerWebsocketRequestClient {
         cacheResponse,
         deliveryState: "queued",
         fingerprint,
+        lastCommandEventSequence: 0,
         onLogCallbacks: onLog ? [onLog] : [],
         onProgressCallbacks: onProgress ? [onProgress] : [],
         onReceivedCallbacks: onReceived ? [onReceived] : [],
@@ -175,6 +176,7 @@ export default class ApiMakerWebsocketRequestClient {
         this.ensureSubscription().perform("execute", {
           cache_response: latestPendingRequest.cacheResponse,
           global: latestPendingRequest.global,
+          last_command_event_sequence: latestPendingRequest.lastCommandEventSequence,
           request: latestPendingRequest.request,
           request_id: requestId,
           request_uid: latestPendingRequest.requestUid
@@ -251,6 +253,10 @@ export default class ApiMakerWebsocketRequestClient {
     if (!pendingRequest) {
       logger.debug(() => ["Ignoring websocket response without a pending request", {data}])
       return
+    }
+
+    if (data.command_event_sequence && data.command_event_sequence > pendingRequest.lastCommandEventSequence) {
+      pendingRequest.lastCommandEventSequence = data.command_event_sequence
     }
 
     if (data.type == "api_maker_command_log") {

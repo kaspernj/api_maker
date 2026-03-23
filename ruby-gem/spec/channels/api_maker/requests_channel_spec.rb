@@ -88,4 +88,24 @@ describe ApiMaker::RequestsChannel do
       expect(channel.api_maker_locals).to eq({})
     end
   end
+
+  describe "#last_command_event_sequence_for_request_id" do
+    it "tracks replayed command event sequences per request id" do
+      channel = described_class.allocate
+      channel.define_singleton_method(:transmit) { |_payload| nil }
+
+      channel.__send__(
+        :transmit_command_event_for_request,
+        command_event: {
+          command_event_sequence: 3,
+          command_id: "1",
+          payload: {progress: 0.75},
+          type: "api_maker_command_progress"
+        },
+        request_id: 11
+      )
+
+      expect(channel.last_command_event_sequence_for_request_id(11)).to eq(3)
+    end
+  end
 end

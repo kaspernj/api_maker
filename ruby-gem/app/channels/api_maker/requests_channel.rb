@@ -1,22 +1,30 @@
 require "digest"
 
 class ApiMaker::RequestsChannel < ApplicationCable::Channel
-  def subscribed; end
+  def subscribed
+    @last_command_event_sequence_by_request_id = {}
+  end
 
   def execute(data)
     fingerprint = request_fingerprint(data)
     request_uid = data["request_uid"].presence || legacy_request_uid(data:, request_fingerprint: fingerprint)
+    request_id = data.fetch("request_id")
+    @last_command_event_sequence_by_request_id[request_id] = data["last_command_event_sequence"].to_i
     request_registration = ApiMaker::RequestsRegistry.register_request(
       channel: self,
       request_fingerprint: fingerprint,
-      request_id: data.fetch("request_id"),
+      request_id:,
       request_uid:
     )
 
-    transmit_received(data.fetch("request_id"))
+    transmit_received(request_id)
+    replay_command_events(
+      command_events: request_registration.fetch(:command_events),
+      request_id:
+    )
 
     if request_registration.fetch(:response_payload)
-      transmit_request_payload(request_id: data.fetch("request_id"), response_payload: request_registration.fetch(:response_payload))
+      transmit_request_payload(request_id:, response_payload: request_registration.fetch(:response_payload))
       return
     end
 
@@ -48,21 +56,32 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
     ApiMaker::RequestsRegistry.unregister_channel(self)
   end
 
+  def last_command_event_sequence_for_request_id(request_id)
+    @last_command_event_sequence_by_request_id&.fetch(request_id, 0) || 0
+  end
+
   def transmit_command_event(command_id:, payload:, request_uid:, type:)
+    command_event = ApiMaker::RequestsRegistry.record_command_event(command_id:, payload:, request_uid:, type:)
+    return unless command_event
+
     ApiMaker::RequestsRegistry.request_subscriptions(request_uid:).each do |request_subscription|
       request_subscription.fetch(:request_ids).each do |request_id|
-        request_subscription.fetch(:channel).transmit(
-          {
-            command_id:,
-            request_id:,
-            type:
-          }.merge(payload)
+        request_subscription.fetch(:channel).__send__(
+          :transmit_command_event_for_request,
+          command_event:,
+          request_id:
         )
       end
     end
   end
 
 private
+
+  def replay_command_events(command_events:, request_id:)
+    command_events.each do |command_event|
+      transmit_command_event_for_request(command_event:, request_id:)
+    end
+  end
 
   def legacy_request_uid(data:, request_fingerprint:)
     legacy_scope = current_session_id.presence || current_user&.id || object_id
@@ -115,10 +134,24 @@ private
     )
   end
 
+  def transmit_command_event_for_request(command_event:, request_id:)
+    @last_command_event_sequence_by_request_id ||= {}
+    @last_command_event_sequence_by_request_id[request_id] = command_event.fetch(:command_event_sequence)
+
+    transmit(
+      {
+        command_event_sequence: command_event.fetch(:command_event_sequence),
+        command_id: command_event.fetch(:command_id),
+        request_id:,
+        type: command_event.fetch(:type)
+      }.merge(command_event.fetch(:payload))
+    )
+  end
+
   def transmit_request_payloads(request_uid:, response_payload:)
     ApiMaker::RequestsRegistry.request_subscriptions(request_uid:).each do |request_subscription|
       request_subscription.fetch(:request_ids).each do |request_id|
-        request_subscription.fetch(:channel).transmit_request_payload(request_id:, response_payload:)
+        request_subscription.fetch(:channel).__send__(:transmit_request_payload, request_id:, response_payload:)
       end
     end
   end

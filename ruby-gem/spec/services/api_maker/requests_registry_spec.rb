@@ -25,10 +25,12 @@ describe ApiMaker::RequestsRegistry do
     )
 
     expect(first_registration).to eq(
+      command_events: [],
       response_payload: nil,
       start_execution: true
     )
     expect(second_registration).to eq(
+      command_events: [],
       response_payload: nil,
       start_execution: false
     )
@@ -73,6 +75,7 @@ describe ApiMaker::RequestsRegistry do
     )
 
     expect(repeated_registration).to eq(
+      command_events: [],
       response_payload:,
       start_execution: false
     )
@@ -131,5 +134,54 @@ describe ApiMaker::RequestsRegistry do
         ]
       )
     end
+  end
+
+  it "returns only command events newer than the channel resume sequence" do
+    channel = instance_double(ApiMaker::RequestsChannel)
+
+    allow(channel).to receive(:last_command_event_sequence_for_request_id).with(1).and_return(2)
+
+    described_class.register_request(
+      channel:,
+      request_fingerprint: "fingerprint-1",
+      request_id: 1,
+      request_uid: "request-1"
+    )
+    described_class.record_command_event(
+      command_id: "1",
+      payload: {message: "Started"},
+      request_uid: "request-1",
+      type: "api_maker_command_log"
+    )
+    described_class.record_command_event(
+      command_id: "1",
+      payload: {progress: 0.5},
+      request_uid: "request-1",
+      type: "api_maker_command_progress"
+    )
+    described_class.record_command_event(
+      command_id: "1",
+      payload: {progress: 0.75},
+      request_uid: "request-1",
+      type: "api_maker_command_progress"
+    )
+
+    registration = described_class.register_request(
+      channel:,
+      request_fingerprint: "fingerprint-1",
+      request_id: 1,
+      request_uid: "request-1"
+    )
+
+    expect(registration.fetch(:command_events)).to eq(
+      [
+        {
+          command_event_sequence: 3,
+          command_id: "1",
+          payload: {progress: 0.75},
+          type: "api_maker_command_progress"
+        }
+      ]
+    )
   end
 end

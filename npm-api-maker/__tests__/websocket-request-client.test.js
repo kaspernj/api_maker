@@ -79,6 +79,7 @@ describe("ApiMakerWebsocketRequestClient", () => {
     expect(client.subscription.perform).toHaveBeenCalledWith("execute", {
       cache_response: undefined,
       global: {layout: "user"},
+      last_command_event_sequence: 0,
       request,
       request_id: 1,
       request_uid: expect.any(String)
@@ -154,6 +155,50 @@ describe("ApiMakerWebsocketRequestClient", () => {
     expect(nextSubscription.perform).toHaveBeenCalledWith("execute", {
       cache_response: undefined,
       global: {layout: "user"},
+      last_command_event_sequence: 0,
+      request: {pool: {}},
+      request_id: 1,
+      request_uid: expect.any(String)
+    })
+
+    client.onReceived({
+      request_id: 1,
+      response: {responses: {1: {data: {ok: true}, type: "success"}}},
+      type: "api_maker_request_response"
+    })
+
+    await expect(promise).resolves.toEqual({
+      responses: {1: {data: {ok: true}, type: "success"}}
+    })
+  })
+
+  it("sends the latest received command event sequence when reconnecting", async() => {
+    const nextSubscription = {perform: jest.fn()}
+
+    jest.spyOn(client, "ensureSubscription").mockImplementation(() => {
+      client.subscription = nextSubscription
+      client.subscriptionState = "connecting"
+      return nextSubscription
+    })
+
+    const promise = client.perform({global: {layout: "user"}, request: {pool: {}}})
+
+    client.onReceived({
+      command_event_sequence: 4,
+      count: 2,
+      progress: 0.5,
+      request_id: 1,
+      total: 4,
+      type: "api_maker_command_progress"
+    })
+    client.onDisconnected()
+    client.onConnected()
+    await Promise.resolve()
+
+    expect(nextSubscription.perform).toHaveBeenCalledWith("execute", {
+      cache_response: undefined,
+      global: {layout: "user"},
+      last_command_event_sequence: 4,
       request: {pool: {}},
       request_id: 1,
       request_uid: expect.any(String)

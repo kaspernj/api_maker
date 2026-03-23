@@ -29,7 +29,9 @@ class ApiMaker::RequestsRegistry
           raise "Request fingerprint mismatch for request UID: #{request_uid}" if entry.fetch(:request_fingerprint) != request_fingerprint
         else
           entry = {
+            command_events: [],
             execution_started: false,
+            next_command_event_sequence: 1,
             request_fingerprint:,
             request_subscriptions: {}.compare_by_identity,
             response_payload: nil,
@@ -46,9 +48,35 @@ class ApiMaker::RequestsRegistry
         entry[:execution_started] = true if start_execution
 
         {
+          command_events: command_events_since(
+            entry:,
+            last_command_event_sequence: channel_last_command_event_sequence(channel:, request_id:)
+          ),
           response_payload: entry[:response_payload],
           start_execution:
         }
+      end
+    end
+
+    def record_command_event(command_id:, payload:, request_uid:, type:)
+      mutex.synchronize do
+        cleanup_expired_entries!
+
+        entry = entries[request_uid]
+        return unless entry
+
+        event = {
+          command_event_sequence: entry.fetch(:next_command_event_sequence),
+          command_id:,
+          payload:,
+          type:
+        }
+
+        entry[:next_command_event_sequence] += 1
+        entry[:command_events] << event
+        entry[:touched_at] = Time.current
+
+        event
       end
     end
 
@@ -96,6 +124,18 @@ class ApiMaker::RequestsRegistry
 
     def mutex
       @mutex ||= Mutex.new
+    end
+
+    def channel_last_command_event_sequence(channel:, request_id:)
+      return 0 unless channel.respond_to?(:last_command_event_sequence_for_request_id)
+
+      channel.last_command_event_sequence_for_request_id(request_id)
+    end
+
+    def command_events_since(entry:, last_command_event_sequence:)
+      entry.fetch(:command_events)
+        .select { |command_event| command_event.fetch(:command_event_sequence) > last_command_event_sequence }
+        .map(&:dup)
     end
 
     def register_request_subscription(entry:, channel:, request_id:)
