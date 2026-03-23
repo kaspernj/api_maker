@@ -12,6 +12,7 @@ Notes:
 - Before committing, review the current diff and propose commit message(s) grouped by logical change sets.
 - Prefer `describe` over `RSpec.describe` in specs.
 - Do not add `# frozen_string_literal: true` to files.
+- Before adding RuboCop disable directives, check the existing repo RuboCop config first and prefer code that passes under that config without new disables; avoid review-only style churn.
 - Prefer multiple small, individually working commits when possible.
 - Always run Rubocop on changed Ruby files.
 - If a RuboCop config exists for the current Ruby project, run RuboCop on changed Ruby files before pushing or opening a PR.
@@ -25,6 +26,7 @@ Notes:
 - In `ApiMaker::ModelContentGeneratorService`, handle Ransack allowlist runtime errors (`"Ransack needs ..."`) for associations/attributes/scopes by returning `[]` so frontend model generation does not crash on third-party models.
 - Do not “fix” flaky specs by only increasing waits/timeouts. First determine whether behavior regressed (for example, element never rendered) and collect/inspect CI artifacts before adjusting timing.
 - Avoid unnecessary defensive conditions for guaranteed contracts. Prefer failing fast over silently accepting impossible states.
+- In ApiMaker table workplace helpers and commands, `current_user` may legitimately be `nil` for websocket/content-parser requests; return `nil`/empty results for current-workplace lookups instead of dereferencing the user.
 - Before adding fallback logic for hook/context timing, inspect the provider source first; do not assume first-render hydration gaps without source confirmation.
 - Do not add helper methods for simple values or expressions that are only used in one place; inline them at the usage site instead.
 - Keep `testID` values unique within a rendered screen/component so selectors stay unambiguous.

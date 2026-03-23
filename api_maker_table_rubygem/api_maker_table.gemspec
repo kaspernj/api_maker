@@ -17,5 +17,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "acts_as_list"
   spec.add_dependency "rails", ">= 6.0.0"
   spec.add_dependency "service_pattern"
-  spec.add_dependency "worker_plugins", ">= 0.0.6"
+  spec.add_dependency "worker_plugins", ">= 0.0.9"
 end

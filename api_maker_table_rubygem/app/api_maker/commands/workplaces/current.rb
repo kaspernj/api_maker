@@ -1,6 +1,7 @@
 class Commands::Workplaces::Current < Commands::ApplicationCommand
   def execute!
-    workplace_query = WorkerPlugins::Workplace.where(id: current_workplace)
+    workplace = current_workplace
+    workplace_query = WorkerPlugins::Workplace.where(id: workplace)
 
     # Support passing params to also load abilities and avoid doing another commands for this in the bottom bar
     collection_serializer = ApiMaker::CollectionSerializer.new(
@@ -13,11 +14,13 @@ class Commands::Workplaces::Current < Commands::ApplicationCommand
 
     # Support to count links to avoid doing another commands in the bottom bar
     if args&.dig(:links_count)
-      response[:links_count] = current_workplace
-        .workplace_links
-        .ransack(args.dig(:links_count, :ransack))
-        .result
-        .count
+      response[:links_count] = if workplace.present?
+        workplace.workplace_links.ransack(args.dig(:links_count, :ransack)).result.count
+      elsif current_user.nil? && current_session_id.blank?
+        0
+      else
+        fail!("Current workplace could not be loaded")
+      end
     end
 
     succeed!(response)
