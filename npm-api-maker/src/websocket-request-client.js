@@ -59,26 +59,19 @@ export default class ApiMakerWebsocketRequestClient {
 
       this.pendingRequests[requestId] = {
         cacheResponse,
+        deliveryState: "queued",
         fingerprint,
         onLogCallbacks: onLog ? [onLog] : [],
         onProgressCallbacks: onProgress ? [onProgress] : [],
         onReceivedCallbacks: onReceived ? [onReceived] : [],
+        global,
+        request,
+        requestUid: this.generateRequestUid(requestId),
         reject,
         resolve
       }
 
-      this.waitForSubscription().then(() => {
-        this.ensureSubscription().perform("execute", {
-          cache_response: cacheResponse,
-          global,
-          request,
-          request_id: requestId
-        })
-      })
-        .catch((error) => {
-          delete this.pendingRequests[requestId]
-          reject(error)
-        })
+      this.sendPendingRequest(requestId)
     })
 
     this.pendingRequestsByFingerprint[fingerprint] = {promise, requestId: this.currentRequestId - 1}
@@ -136,20 +129,104 @@ export default class ApiMakerWebsocketRequestClient {
     })
   }
 
+  /**
+   * @param {number} requestId
+   * @returns {string}
+   */
+  generateRequestUid (requestId) {
+    if (globalThis.crypto?.randomUUID) {
+      return globalThis.crypto.randomUUID()
+    }
+
+    return `api-maker-request-${Date.now()}-${requestId}`
+  }
+
+  /**
+   * @param {number} requestId
+   * @returns {void}
+   */
+  sendPendingRequest (requestId) {
+    const pendingRequest = this.pendingRequests[requestId]
+
+    if (!pendingRequest) {
+      return
+    }
+
+    if (pendingRequest.deliveryState != "queued") {
+      return
+    }
+
+    pendingRequest.deliveryState = "waiting_for_connection"
+
+    this.waitForSubscription()
+      .then(() => {
+        const latestPendingRequest = this.pendingRequests[requestId]
+
+        if (!latestPendingRequest) {
+          return
+        }
+
+        if (latestPendingRequest.deliveryState != "waiting_for_connection") {
+          return
+        }
+
+        latestPendingRequest.deliveryState = "sent"
+
+        this.ensureSubscription().perform("execute", {
+          cache_response: latestPendingRequest.cacheResponse,
+          global: latestPendingRequest.global,
+          request: latestPendingRequest.request,
+          request_id: requestId,
+          request_uid: latestPendingRequest.requestUid
+        })
+      })
+      .catch((error) => {
+        const latestPendingRequest = this.pendingRequests[requestId]
+
+        if (!latestPendingRequest) {
+          return
+        }
+
+        if (this.subscriptionState == "rejected") {
+          delete this.pendingRequests[requestId]
+          latestPendingRequest.reject(error)
+          return
+        }
+
+        latestPendingRequest.deliveryState = "queued"
+      })
+  }
+
+  /** @returns {void} */
+  resendQueuedRequests () {
+    Object.entries(this.pendingRequests).forEach(([requestId, pendingRequest]) => {
+      if (pendingRequest.deliveryState == "queued") {
+        this.sendPendingRequest(parseInt(requestId, 10))
+      }
+    })
+  }
+
   /** @returns {void} */
   onConnected = () => {
     logger.debug("Websocket request subscription connected")
     this.subscriptionState = "connected"
     this.resolveSubscriptionReadyPromise?.()
+    this.resendQueuedRequests()
   }
 
   /** @returns {void} */
   onDisconnected = () => {
     logger.debug("Websocket request subscription disconnected")
-    this.rejectPendingRequests(new Error("Websocket request subscription disconnected"))
+    Object.values(this.pendingRequests).forEach((pendingRequest) => {
+      if (pendingRequest.deliveryState != "completed") {
+        pendingRequest.deliveryState = "queued"
+      }
+    })
+
     this.subscriptionState = "disconnected"
     this.subscription = null
     this.resetSubscriptionReadyPromise()
+    this.ensureSubscription()
   }
 
   /** @returns {void} */
@@ -187,6 +264,7 @@ export default class ApiMakerWebsocketRequestClient {
 
       pendingRequest.onProgressCallbacks.forEach((callback) => callback(progressData))
     } else if (data.type == "api_maker_request_received") {
+      pendingRequest.deliveryState = "received"
       pendingRequest.onReceivedCallbacks.forEach((callback) => callback(data))
     } else if (data.type == "api_maker_request_response") {
       delete this.pendingRequests[data.request_id]

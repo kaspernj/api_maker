@@ -39,7 +39,8 @@ describe ApiMaker::RequestsChannel do
             "time_zone_offset" => -18_000
           }
         },
-        request_fingerprint: "fingerprint-1"
+        request_fingerprint: "fingerprint-1",
+        request_uid: "request-1"
       )
 
       expect(request_context.api_maker_args).to include(
@@ -49,21 +50,13 @@ describe ApiMaker::RequestsChannel do
         time_zone_offset: -18_000
       )
       expect(request_context.request_fingerprint).to eq("fingerprint-1")
+      expect(request_context.request_uid).to eq("request-1")
     end
 
     it "provides default api maker locals" do
       channel = described_class.allocate
 
       expect(channel.api_maker_locals).to eq({})
-    end
-  end
-
-  describe "#pending_request_ids" do
-    it "returns an empty array when the channel has already been unsubscribed" do
-      channel = described_class.allocate
-      channel.instance_variable_set(:@pending_request_ids_by_fingerprint, nil)
-
-      expect(channel.__send__(:pending_request_ids, "fingerprint-1")).to eq([])
     end
   end
 end

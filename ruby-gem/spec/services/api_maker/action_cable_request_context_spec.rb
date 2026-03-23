@@ -27,7 +27,8 @@ describe ApiMaker::ActionCableRequestContext do
     described_class.new(
       api_maker_args: {current_user: nil},
       channel:,
-      request_fingerprint: "fingerprint-1"
+      request_fingerprint: "fingerprint-1",
+      request_uid: "request-1"
     )
   end
 
@@ -80,7 +81,7 @@ describe ApiMaker::ActionCableRequestContext do
     expect(channel.instance_variable_get(:@transmitted_command_event)).to eq(
       command_id: "1",
       payload: {progress: 0.5},
-      request_fingerprint: "fingerprint-1",
+      request_uid: "request-1",
       type: "api_maker_command_progress"
     )
   end

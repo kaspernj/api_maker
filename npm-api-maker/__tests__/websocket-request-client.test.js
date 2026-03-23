@@ -39,6 +39,8 @@ describe("ApiMakerWebsocketRequestClient", () => {
       request
     })
 
+    await Promise.resolve()
+
     client.onReceived({
       request_id: 1,
       response: {responses: {1: {data: {cached: true}, type: "success"}}},
@@ -78,7 +80,8 @@ describe("ApiMakerWebsocketRequestClient", () => {
       cache_response: undefined,
       global: {layout: "user"},
       request,
-      request_id: 1
+      request_id: 1,
+      request_uid: expect.any(String)
     })
 
     client.onReceived({
@@ -130,12 +133,40 @@ describe("ApiMakerWebsocketRequestClient", () => {
   })
 
   it("resets the subscription state after disconnects", async() => {
+    const nextSubscription = {perform: jest.fn()}
+    jest.spyOn(client, "ensureSubscription").mockImplementation(() => {
+      client.subscription = nextSubscription
+      client.subscriptionState = "connecting"
+      return nextSubscription
+    })
+
     const promise = client.perform({global: {layout: "user"}, request: {pool: {}}})
 
     client.onDisconnected()
 
-    expect(client.subscription).toBeNull()
-    expect(client.subscriptionState).toBe("disconnected")
-    await expect(promise).rejects.toThrow("Websocket request subscription disconnected")
+    expect(client.ensureSubscription).toHaveBeenCalled()
+    expect(client.subscription).toBe(nextSubscription)
+    expect(client.subscriptionState).toBe("connecting")
+
+    client.onConnected()
+    await Promise.resolve()
+
+    expect(nextSubscription.perform).toHaveBeenCalledWith("execute", {
+      cache_response: undefined,
+      global: {layout: "user"},
+      request: {pool: {}},
+      request_id: 1,
+      request_uid: expect.any(String)
+    })
+
+    client.onReceived({
+      request_id: 1,
+      response: {responses: {1: {data: {ok: true}, type: "success"}}},
+      type: "api_maker_request_response"
+    })
+
+    await expect(promise).resolves.toEqual({
+      responses: {1: {data: {ok: true}, type: "success"}}
+    })
   })
 })

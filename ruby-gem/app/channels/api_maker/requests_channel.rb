@@ -1,103 +1,75 @@
 require "digest"
 
 class ApiMaker::RequestsChannel < ApplicationCable::Channel
-  def subscribed
-    @execute_mutex = Mutex.new
-    @request_cache = {}
-    @request_cache_order = []
-    @pending_request_ids_by_fingerprint = {}
-  end
+  def subscribed; end
 
   def execute(data)
-    @execute_mutex.synchronize do
-      fingerprint = nil
-      return unless @pending_request_ids_by_fingerprint
+    fingerprint = request_fingerprint(data)
+    request_uid = data["request_uid"].presence || "legacy-request-#{fingerprint}-#{data.fetch("request_id")}"
+    request_registration = ApiMaker::RequestsRegistry.register_request(
+      channel: self,
+      request_fingerprint: fingerprint,
+      request_id: data.fetch("request_id"),
+      request_uid:
+    )
 
-      fingerprint = request_fingerprint(data)
-      request_ids = @pending_request_ids_by_fingerprint[fingerprint]
+    transmit_received(data.fetch("request_id"))
 
-      if request_ids
-        transmit_received(data.fetch("request_id"))
-        request_ids << data.fetch("request_id")
-        return
-      end
-
-      cached_response = @request_cache[fingerprint]
-
-      if cached_response
-        transmit_received(data.fetch("request_id"))
-        transmit_response(data.fetch("request_id"), cached_response)
-        return
-      end
-
-      @pending_request_ids_by_fingerprint[fingerprint] = [data.fetch("request_id")]
-      transmit_received(data.fetch("request_id"))
-
-      response = ApiMaker::CommandRequestExecutor.execute!(
-        controller: request_context(data, request_fingerprint: fingerprint),
-        payload: data.fetch("request")
-      )
-
-      cache_response(fingerprint, response) if data["cache_response"]
-      pending_request_ids(fingerprint).each do |request_id|
-        transmit_response(request_id, response)
-      end
-    rescue => e # rubocop:disable Style/RescueStandardError
-      pending_request_ids(fingerprint).each do |request_id|
-        transmit(
-          {
-            request_id:,
-            response: {errors: [{message: e.message, type: :runtime_error}], success: false},
-            type: "api_maker_request_error"
-          }
-        )
-      end
-
-      raise e
+    if request_registration.fetch(:response_payload)
+      transmit_request_payload(request_id: data.fetch("request_id"), response_payload: request_registration.fetch(:response_payload))
+      return
     end
+
+    return unless request_registration.fetch(:start_execution)
+
+    response = ApiMaker::CommandRequestExecutor.execute!(
+      controller: request_context(data, request_fingerprint: fingerprint, request_uid:),
+      payload: data.fetch("request")
+    )
+    response_payload = {
+      response:,
+      type: "api_maker_request_response"
+    }
+
+    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :completed)
+    transmit_request_payloads(request_uid:, response_payload:)
+  rescue => e # rubocop:disable Style/RescueStandardError
+    response_payload = {
+      response: {errors: [{message: e.message, type: :runtime_error}], success: false},
+      type: "api_maker_request_error"
+    }
+
+    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
+    transmit_request_payloads(request_uid:, response_payload:) if request_uid
+    raise e
   end
 
   def unsubscribed
-    @request_cache = nil
-    @request_cache_order = nil
-    @pending_request_ids_by_fingerprint = nil
+    ApiMaker::RequestsRegistry.unregister_channel(self)
   end
 
-  def transmit_command_event(command_id:, payload:, request_fingerprint:, type:)
-    request_ids = @pending_request_ids_by_fingerprint&.[](request_fingerprint) || []
-
-    request_ids.each do |request_id|
-      transmit(
-        {
-          command_id:,
-          request_id:,
-          type:
-        }.merge(payload)
-      )
+  def transmit_command_event(command_id:, payload:, request_uid:, type:)
+    ApiMaker::RequestsRegistry.request_subscriptions(request_uid:).each do |request_subscription|
+      request_subscription.fetch(:request_ids).each do |request_id|
+        request_subscription.fetch(:channel).transmit(
+          {
+            command_id:,
+            request_id:,
+            type:
+          }.merge(payload)
+        )
+      end
     end
   end
 
 private
 
-  def cache_response(fingerprint, response)
-    @request_cache[fingerprint] = response
-    @request_cache_order << fingerprint
-
-    return unless @request_cache_order.length > 100
-
-    oldest_fingerprint = @request_cache_order.shift
-    @request_cache.delete(oldest_fingerprint)
-  end
-
-  def pending_request_ids(fingerprint)
-    @pending_request_ids_by_fingerprint&.delete(fingerprint) || []
-  end
-
-  def request_context(data, request_fingerprint:)
+  def request_context(data, request_fingerprint:, request_uid:)
     ApiMaker::ActionCableRequestContext.new(
       api_maker_args: {current_user:}.merge((data["global"] || {}).symbolize_keys),
       channel: self,
-      request_fingerprint:
+      request_fingerprint:,
+      request_uid:
     )
   end
 
@@ -127,5 +99,21 @@ private
         type: "api_maker_request_response"
       }
     )
+  end
+
+  def transmit_request_payload(request_id:, response_payload:)
+    transmit(
+      {
+        request_id:
+      }.merge(response_payload)
+    )
+  end
+
+  def transmit_request_payloads(request_uid:, response_payload:)
+    ApiMaker::RequestsRegistry.request_subscriptions(request_uid:).each do |request_subscription|
+      request_subscription.fetch(:request_ids).each do |request_id|
+        request_subscription.fetch(:channel).transmit_request_payload(request_id:, response_payload:)
+      end
+    end
   end
 end
