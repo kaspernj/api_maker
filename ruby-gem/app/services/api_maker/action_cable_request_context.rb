@@ -1,9 +1,9 @@
 class ApiMaker::ActionCableRequestContext
-  attr_reader :api_maker_args, :api_maker_locals, :channel, :request_fingerprint
+  attr_reader :api_maker_args, :api_maker_locals, :channel, :request_fingerprint, :request_uid
 
   delegate :current_user, to: :channel
 
-  def initialize(api_maker_args:, channel:, request_fingerprint:)
+  def initialize(api_maker_args:, channel:, request_fingerprint:, request_uid:)
     @channel = channel
     @api_maker_args = api_maker_args.merge(
       controller: self,
@@ -11,6 +11,7 @@ class ApiMaker::ActionCableRequestContext
     )
     @api_maker_locals = channel.api_maker_locals
     @request_fingerprint = request_fingerprint
+    @request_uid = request_uid
   end
 
   def cookies
@@ -109,7 +110,7 @@ class ApiMaker::ActionCableRequestContext
   def transmit_command_event(command_id:, payload:, type:)
     return unless channel.respond_to?(:transmit_command_event)
 
-    channel.transmit_command_event(command_id:, payload:, request_fingerprint:, type:)
+    channel.transmit_command_event(command_id:, payload:, request_uid:, type:)
   end
 
 private

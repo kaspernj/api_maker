@@ -1,6 +1,35 @@
 require "rails_helper"
 
 describe ApiMaker::RequestsChannel do
+  describe "#legacy_request_uid" do
+    it "isolates legacy request UIDs by current session" do
+      channel_one = described_class.allocate
+      channel_two = described_class.allocate
+      payload = {
+        "request" => {"pool" => {"service" => {}}},
+        "request_id" => 1
+      }
+
+      channel_one.define_singleton_method(:current_session_id) { "session-1" }
+      channel_one.define_singleton_method(:current_user) { nil }
+      channel_two.define_singleton_method(:current_session_id) { "session-2" }
+      channel_two.define_singleton_method(:current_user) { nil }
+
+      request_uid_one = channel_one.__send__(
+        :legacy_request_uid,
+        data: payload,
+        request_fingerprint: "fingerprint-1"
+      )
+      request_uid_two = channel_two.__send__(
+        :legacy_request_uid,
+        data: payload,
+        request_fingerprint: "fingerprint-1"
+      )
+
+      expect(request_uid_one).not_to eq(request_uid_two)
+    end
+  end
+
   describe "#request_fingerprint" do
     it "includes global data in the fingerprint" do
       channel = described_class.allocate
@@ -39,7 +68,8 @@ describe ApiMaker::RequestsChannel do
             "time_zone_offset" => -18_000
           }
         },
-        request_fingerprint: "fingerprint-1"
+        request_fingerprint: "fingerprint-1",
+        request_uid: "request-1"
       )
 
       expect(request_context.api_maker_args).to include(
@@ -49,6 +79,7 @@ describe ApiMaker::RequestsChannel do
         time_zone_offset: -18_000
       )
       expect(request_context.request_fingerprint).to eq("fingerprint-1")
+      expect(request_context.request_uid).to eq("request-1")
     end
 
     it "provides default api maker locals" do
@@ -58,12 +89,23 @@ describe ApiMaker::RequestsChannel do
     end
   end
 
-  describe "#pending_request_ids" do
-    it "returns an empty array when the channel has already been unsubscribed" do
+  describe "#last_command_event_sequence_for_request_id" do
+    it "tracks replayed command event sequences per request id" do
       channel = described_class.allocate
-      channel.instance_variable_set(:@pending_request_ids_by_fingerprint, nil)
+      channel.define_singleton_method(:transmit) { |_payload| nil }
 
-      expect(channel.__send__(:pending_request_ids, "fingerprint-1")).to eq([])
+      channel.__send__(
+        :transmit_command_event_for_request,
+        command_event: {
+          command_event_sequence: 3,
+          command_id: "1",
+          payload: {progress: 0.75},
+          type: "api_maker_command_progress"
+        },
+        request_id: 11
+      )
+
+      expect(channel.last_command_event_sequence_for_request_id(11)).to eq(3)
     end
   end
 end
