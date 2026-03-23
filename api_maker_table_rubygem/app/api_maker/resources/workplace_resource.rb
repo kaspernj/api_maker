@@ -28,10 +28,12 @@ class Resources::WorkplaceResource < Resources::ApplicationResource
   relationships :workplace_links
 
   def abilities
+    can :current, WorkerPlugins::Workplace
+
     owner_args = workplace_owner_args
     return unless owner_args
 
-    can COLLECTION_ABILITIES, WorkerPlugins::Workplace
+    can COLLECTION_ABILITIES - [:current], WorkerPlugins::Workplace
     can USER_ABILITIES, WorkerPlugins::Workplace, owner_args
   end
 
