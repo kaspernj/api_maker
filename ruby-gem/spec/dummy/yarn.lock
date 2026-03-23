@@ -1234,11 +1234,12 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@>= 1.0.2119":
-  version "1.0.2119"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2119.tgz#b8869e0c7b3a11f7970e6e46c58426bcf84b8141"
-  integrity sha512-qZzHBZ3AsURjepxgaUBnvdtvGXIud19rJFzV7CTIdjDLVlbeArsM5lkv3nU+SWTJdnxh030lq/MTDmv0UsWKYw==
+"@kaspernj/api-maker@>= 1.0.2133":
+  version "1.0.2133"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2133.tgz#1f725a333742b62fedbe40d4b6302b07f3d6fa9d"
+  integrity sha512-4CysTi1JzwZYK1J8FLcGfQOt4/07GruYjmcw08HHes2vh/RCoqGBjlekNyRaIgPv4nINJ+FemYDmHvUPX6MtDQ==
   dependencies:
+    classnames "^2.5.1"
     clone-deep ">= 4.0.1"
     debounce ">= 2.0.0"
     diggerize ">= 1.0.10"
@@ -1255,6 +1256,7 @@
     numberable ">= 1.0.0"
     object-to-formdata ">= 4.1.0"
     on-location-changed ">= 1.0.18"
+    prop-types-exact "^1.2.7"
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
     responsive-breakpoints ">= 0.1.3"
