@@ -5,7 +5,7 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
 
   def execute(data)
     fingerprint = request_fingerprint(data)
-    request_uid = data["request_uid"].presence || "legacy-request-#{fingerprint}-#{data.fetch("request_id")}"
+    request_uid = data["request_uid"].presence || legacy_request_uid(data:, request_fingerprint: fingerprint)
     request_registration = ApiMaker::RequestsRegistry.register_request(
       channel: self,
       request_fingerprint: fingerprint,
@@ -63,6 +63,12 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
   end
 
 private
+
+  def legacy_request_uid(data:, request_fingerprint:)
+    legacy_scope = current_session_id.presence || current_user&.id || object_id
+
+    "legacy-request-#{legacy_scope}-#{request_fingerprint}-#{data.fetch("request_id")}"
+  end
 
   def request_context(data, request_fingerprint:, request_uid:)
     ApiMaker::ActionCableRequestContext.new(

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe ApiMaker::RequestsRegistry do
+  include ActiveSupport::Testing::TimeHelpers
+
   before do
     described_class.clear!
   end
@@ -94,5 +96,40 @@ describe ApiMaker::RequestsRegistry do
         request_uid: "request-1"
       )
     end.to raise_error("Request fingerprint mismatch for request UID: request-1")
+  end
+
+  it "refreshes active requests when subscriptions are read" do
+    channel = instance_double(ApiMaker::RequestsChannel)
+
+    travel_to(Time.zone.parse("2026-03-23 11:00:00 UTC")) do
+      described_class.register_request(
+        channel:,
+        request_fingerprint: "fingerprint-1",
+        request_id: 1,
+        request_uid: "request-1"
+      )
+    end
+
+    travel_to(Time.zone.parse("2026-03-23 11:04:00 UTC")) do
+      expect(described_class.request_subscriptions(request_uid: "request-1")).to eq(
+        [
+          {
+            channel:,
+            request_ids: [1]
+          }
+        ]
+      )
+    end
+
+    travel_to(Time.zone.parse("2026-03-23 11:08:00 UTC")) do
+      expect(described_class.request_subscriptions(request_uid: "request-1")).to eq(
+        [
+          {
+            channel:,
+            request_ids: [1]
+          }
+        ]
+      )
+    end
   end
 end

@@ -1,6 +1,35 @@
 require "rails_helper"
 
 describe ApiMaker::RequestsChannel do
+  describe "#legacy_request_uid" do
+    it "isolates legacy request UIDs by current session" do
+      channel_one = described_class.allocate
+      channel_two = described_class.allocate
+      payload = {
+        "request" => {"pool" => {"service" => {}}},
+        "request_id" => 1
+      }
+
+      channel_one.define_singleton_method(:current_session_id) { "session-1" }
+      channel_one.define_singleton_method(:current_user) { nil }
+      channel_two.define_singleton_method(:current_session_id) { "session-2" }
+      channel_two.define_singleton_method(:current_user) { nil }
+
+      request_uid_one = channel_one.__send__(
+        :legacy_request_uid,
+        data: payload,
+        request_fingerprint: "fingerprint-1"
+      )
+      request_uid_two = channel_two.__send__(
+        :legacy_request_uid,
+        data: payload,
+        request_fingerprint: "fingerprint-1"
+      )
+
+      expect(request_uid_one).not_to eq(request_uid_two)
+    end
+  end
+
   describe "#request_fingerprint" do
     it "includes global data in the fingerprint" do
       channel = described_class.allocate

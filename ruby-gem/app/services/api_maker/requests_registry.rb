@@ -59,6 +59,8 @@ class ApiMaker::RequestsRegistry
         entry = entries[request_uid]
         next [] unless entry
 
+        entry[:touched_at] = Time.current
+
         entry.fetch(:request_subscriptions).values.map do |request_subscription|
           {
             channel: request_subscription.fetch(:channel),
