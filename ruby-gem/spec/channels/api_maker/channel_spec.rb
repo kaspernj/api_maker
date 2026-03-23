@@ -38,7 +38,7 @@ describe ApiMaker::Channel do
       end
       stub_const("SpecChannelAbility", ability_class)
 
-      allow(ApiMaker::Configuration.current).to receive(:ability_class).and_return(SpecChannelAbility)
+      expect(ApiMaker::Configuration.current).to receive(:ability_class).and_return(SpecChannelAbility)
       allow(connection).to receive(:respond_to?) do |method_name|
         [:current_user, :current_user=].include?(method_name)
       end
