@@ -19,4 +19,38 @@ describe ApiMaker::Channel do
       expect(channel.instance_variable_get(:@current_user)).to eq("user-1")
     end
   end
+
+  describe "#current_ability" do
+    it "includes the current session id in api_maker args" do
+      connection = instance_double(ApplicationCable::Connection, env: {}, current_user: nil)
+      channel = described_class.allocate
+      captured_api_maker_args = nil
+
+      channel.define_singleton_method(:connection) { connection }
+      channel.define_singleton_method(:params) { {global: {layout: "user"}} }
+      channel.define_singleton_method(:current_session_id) { "session-1" }
+
+      ability_class = Class.new do
+        define_method(:initialize) do |api_maker_args:, locals:|
+          captured_api_maker_args = api_maker_args
+          @locals = locals
+        end
+      end
+      stub_const("SpecChannelAbility", ability_class)
+
+      allow(ApiMaker::Configuration.current).to receive(:ability_class).and_return(SpecChannelAbility)
+      allow(connection).to receive(:respond_to?) do |method_name|
+        [:current_user, :current_user=].include?(method_name)
+      end
+      allow(connection).to receive(:current_user=).with(nil)
+
+      channel.current_ability
+
+      expect(captured_api_maker_args).to include(
+        current_session_id: "session-1",
+        current_user: nil,
+        layout: "user"
+      )
+    end
+  end
 end

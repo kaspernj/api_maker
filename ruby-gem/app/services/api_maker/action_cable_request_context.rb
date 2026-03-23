@@ -4,9 +4,12 @@ class ApiMaker::ActionCableRequestContext
   delegate :current_user, to: :channel
 
   def initialize(api_maker_args:, channel:, request_fingerprint:)
-    @api_maker_args = api_maker_args.merge(controller: self)
-    @api_maker_locals = channel.api_maker_locals
     @channel = channel
+    @api_maker_args = api_maker_args.merge(
+      controller: self,
+      current_session_id: api_maker_args[:current_session_id].presence || channel.current_session_id
+    )
+    @api_maker_locals = channel.api_maker_locals
     @request_fingerprint = request_fingerprint
   end
 
@@ -27,6 +30,10 @@ class ApiMaker::ActionCableRequestContext
 
   def current_ability
     @current_ability ||= ApiMaker::Configuration.current.ability_class.new(api_maker_args:, locals: api_maker_locals)
+  end
+
+  def current_session_id
+    api_maker_args[:current_session_id]
   end
 
   def sign_in(model, scope: nil, run_hooks: true)

@@ -11,6 +11,7 @@ class ApiMaker::Channel < ActionCable::Channel::Base
     @current_ability ||= ApiMaker::Configuration.current.ability_class.new(
       api_maker_args: {
         current_user:,
+        current_session_id:,
         layout: params.dig(:global, :layout)
       },
       locals: api_maker_locals
@@ -19,6 +20,10 @@ class ApiMaker::Channel < ActionCable::Channel::Base
 
   def current_user
     sync_api_maker_current_user!
+  end
+
+  def current_session_id
+    @current_session_id ||= ApiMaker::SessionShadowStore.session_id_for(request: current_request)
   end
 
   def load_session_state(request:)
@@ -45,6 +50,14 @@ class ApiMaker::Channel < ActionCable::Channel::Base
   end
 
 private
+
+  def current_request
+    if connection.respond_to?(:request)
+      connection.request
+    else
+      ActionDispatch::Request.new(connection.env)
+    end
+  end
 
   def handle_api_maker_current_user_change(previous_user:, current_user:); end
 

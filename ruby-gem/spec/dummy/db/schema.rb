@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_05_095320) do
+ActiveRecord::Schema[7.0].define(version: 2026_03_22_195540) do
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "task_id", null: false
@@ -209,7 +209,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_05_095320) do
   create_table "worker_plugins_workplace_links", force: :cascade do |t|
     t.integer "workplace_id", null: false
     t.string "resource_type", null: false
-    t.integer "resource_id", null: false
+    t.string "resource_id", null: false
     t.json "custom_data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -221,11 +221,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_05_095320) do
   create_table "worker_plugins_workplaces", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "active", default: false, null: false
+    t.string "user_type"
     t.integer "user_id"
+    t.string "session_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["active"], name: "index_worker_plugins_workplaces_on_active"
-    t.index ["user_id"], name: "index_worker_plugins_workplaces_on_user_id"
+    t.index ["session_id"], name: "index_worker_plugins_workplaces_on_session_id", unique: true
+    t.index ["user_type", "user_id"], name: "index_worker_plugins_workplaces_on_user"
   end
 
   add_foreign_key "account_marked_tasks", "accounts"

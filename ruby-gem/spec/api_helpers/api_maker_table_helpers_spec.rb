@@ -64,16 +64,17 @@ describe "api_maker_table helpers" do
     Class.new do
       include ApiHelpers::ApiMakerTableHelpers
 
-      attr_reader :current_user
+      attr_reader :api_maker_args, :current_user
 
-      def initialize(user)
+      def initialize(user, api_maker_args: {})
         @current_user = user
+        @api_maker_args = api_maker_args
       end
     end
   end
 
   describe "#current_workplace" do
-    it "returns nil when current_user is nil" do
+    it "returns nil when there is no current user or session" do
       helper = helper_host_class.new(nil)
 
       expect(helper.current_workplace).to be_nil
@@ -110,6 +111,17 @@ describe "api_maker_table helpers" do
       expect(workplace).to be_a(fake_workplace_class)
       expect(workplace.name).to eq("Current workplace")
       expect(user).to be_created
+    end
+
+    it "creates a session-owned workplace for guest sessions" do
+      helper = helper_host_class.new(nil, api_maker_args: {current_session_id: "session-1"})
+
+      workplace = helper.current_workplace
+
+      expect(workplace).to be_a(WorkerPlugins::Workplace)
+      expect(workplace.name).to eq("Current workplace")
+      expect(workplace.session_id).to eq("session-1")
+      expect(workplace.user).to be_nil
     end
   end
 end

@@ -17,6 +17,7 @@ describe ApiMaker::ActionCableRequestContext do
     Object.new.tap do |object|
       object.define_singleton_method(:api_maker_locals) { {} }
       object.define_singleton_method(:connection) { connection_instance }
+      object.define_singleton_method(:current_session_id) { "session-1" }
       object.define_singleton_method(:update_api_maker_current_user!) do |_current_user|
         nil
       end
@@ -103,6 +104,11 @@ describe ApiMaker::ActionCableRequestContext do
 
   it "stores itself as the controller in api_maker_args" do
     expect(request_context.api_maker_args[:controller]).to eq(request_context)
+  end
+
+  it "stores the current session id in api_maker_args" do
+    expect(request_context.api_maker_args[:current_session_id]).to eq("session-1")
+    expect(request_context.current_session_id).to eq("session-1")
   end
 
   it "loads and persists the shared session shadow store around websocket requests" do
