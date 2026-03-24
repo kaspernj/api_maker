@@ -87,11 +87,17 @@ private
     @resolved_concurrency_mode ||= begin
       configured = ApiMaker::Configuration.current.request_concurrency_mode
 
-      if configured == :auto
+      mode = if configured == :auto
         fiber_isolation? ? :multi_connection : :mutex
       else
         configured
       end
+
+      unless ApiMaker::Configuration::REQUEST_CONCURRENCY_MODES.include?(mode)
+        raise ArgumentError, "Invalid request_concurrency_mode: #{mode.inspect}. Must be one of #{ApiMaker::Configuration::REQUEST_CONCURRENCY_MODES.inspect}"
+      end
+
+      mode
     end
   end
 
