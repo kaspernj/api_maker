@@ -1,4 +1,6 @@
 class ApiMaker::Configuration
+  REQUEST_CONCURRENCY_MODES = [:auto, :mutex, :multi_connection, :none].freeze
+
   attr_accessor(
     :ability_class_name,
     :before_create_event_callbacks,
@@ -7,6 +9,7 @@ class ApiMaker::Configuration
     :on_thread_callbacks,
     :profiling,
     :react_native_path,
+    :request_concurrency_mode,
     :threadding
   )
 
@@ -31,6 +34,7 @@ class ApiMaker::Configuration
     self.before_create_event_callbacks = []
     self.devise_sign_in_enabled = true
     self.devise_sign_out_enabled = true
+    self.request_concurrency_mode = :auto
     self.threadding = true
 
     @on_error = []
