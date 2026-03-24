@@ -40,6 +40,11 @@ class ApiMaker::ActionCableRequestContext
   def sign_in(model, scope: nil, run_hooks: true)
     scope_to_use = scope || Devise::Mapping.find_scope!(model)
 
+    # Skip Devise's timeoutable hook during ActionCable sign-in. The hook
+    # throws :warden when the session is timed out, which is normally caught
+    # by the Warden Rack middleware. ActionCable has no such middleware, so
+    # the throw becomes an UncaughtThrowError.
+    channel.connection.env["devise.skip_timeout"] = true
     warden.set_user(model, scope: scope_to_use)
     update_connection_current_user(model, scope_to_use)
     run_sign_in_hooks(model, scope_to_use) if run_hooks
