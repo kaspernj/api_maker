@@ -30,17 +30,22 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
 
     return unless request_registration.fetch(:start_execution)
 
-    response = ApiMaker::CommandRequestExecutor.execute!(
-      controller: request_context(data, request_fingerprint: fingerprint, request_uid:),
-      payload: data.fetch("request")
-    )
-    response_payload = {
-      response:,
-      type: "api_maker_request_response"
-    }
+    # Check out a dedicated connection so concurrent requests on the same
+    # channel (running in separate Fibers) don't share the thread's default
+    # connection and trigger "This connection is in use by" errors.
+    ActiveRecord::Base.connection_pool.with_connection do
+      response = ApiMaker::CommandRequestExecutor.execute!(
+        controller: request_context(data, request_fingerprint: fingerprint, request_uid:),
+        payload: data.fetch("request")
+      )
+      response_payload = {
+        response:,
+        type: "api_maker_request_response"
+      }
 
-    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :completed)
-    transmit_request_payloads(request_uid:, response_payload:)
+      ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :completed)
+      transmit_request_payloads(request_uid:, response_payload:)
+    end
   rescue => e # rubocop:disable Style/RescueStandardError
     response_payload = {
       response: {errors: [{message: e.message, type: :runtime_error}], success: false},
