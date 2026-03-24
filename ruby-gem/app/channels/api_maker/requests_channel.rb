@@ -3,7 +3,7 @@ require "digest"
 class ApiMaker::RequestsChannel < ApplicationCable::Channel
   def subscribed
     @last_command_event_sequence_by_request_id = {}
-    @execute_mutex = Mutex.new if resolved_concurrency_mode == :mutex
+    @execute_mutex = Mutex.new unless fiber_isolation?
   end
 
   def execute(data)
@@ -73,25 +73,10 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
 private
 
   def execute_command(data, fingerprint:, request_uid:)
-    case resolved_concurrency_mode
-    when :mutex
+    if @execute_mutex
       @execute_mutex.synchronize { run_command_executor(data, fingerprint:, request_uid:) }
-    when :multi_connection
+    else
       ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
-    when :none
-      run_command_executor(data, fingerprint:, request_uid:)
-    end
-  end
-
-  def resolved_concurrency_mode
-    @resolved_concurrency_mode ||= begin
-      configured = ApiMaker::Configuration.current.request_concurrency_mode
-
-      if configured == :auto
-        fiber_isolation? ? :multi_connection : :mutex
-      else
-        configured
-      end
     end
   end
 
