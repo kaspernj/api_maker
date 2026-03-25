@@ -104,7 +104,7 @@ private
   def fiber_isolation?
     ActiveSupport::IsolatedExecutionState.respond_to?(:isolation_level) &&
       ActiveSupport::IsolatedExecutionState.isolation_level == :fiber
-  rescue
+  rescue StandardError
     false
   end
 
