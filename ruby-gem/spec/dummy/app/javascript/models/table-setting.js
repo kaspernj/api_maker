@@ -1,6 +1,8 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 import Collection from "@kaspernj/api-maker/build/collection.js"
-import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
+import TableSettingColumn from "./table-setting-column.js"
 
 const modelClassData = {
   "attributes": {
@@ -139,8 +141,8 @@ const modelClassData = {
 }
 
 /** Frontend model for TableSetting. */
-class TableSetting extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class TableSetting extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -173,8 +175,6 @@ class TableSetting extends BaseModel {
   columns() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("TableSettingColumn")
-
     const ransack = {}
 
     ransack["table_setting_id_eq"] = this.id()
@@ -183,8 +183,7 @@ class TableSetting extends BaseModel {
       {
         reflectionName: "columns",
         model: this,
-        modelName: "ApiMakerTable::TableSettingColumn",
-        modelClass
+        modelClass: TableSettingColumn
       },
       {ransack}
     )
@@ -194,8 +193,6 @@ class TableSetting extends BaseModel {
   loadColumns() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("TableSettingColumn")
-
     const ransack = {}
 
     ransack["table_setting_id_eq"] = this.id()
@@ -204,11 +201,9 @@ class TableSetting extends BaseModel {
       {
         reflectionName: "columns",
         model: this,
-        modelClass
+        modelClass: TableSettingColumn
       },
       {ransack}
     )
   }
 }
-
-export default TableSetting

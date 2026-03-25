@@ -1,6 +1,9 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 import Collection from "@kaspernj/api-maker/build/collection.js"
-import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
+import Task from "./task.js"
+import UserRole from "./user-role.js"
 
 const modelClassData = {
   "attributes": {
@@ -368,8 +371,8 @@ const modelClassData = {
 }
 
 /** Frontend model for User. */
-class User extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class User extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -386,7 +389,7 @@ class User extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {string | null} */
+  /** @returns {Date | null} */
   birthdayAt() {
     return this.readAttributeUnderscore("birthday_at")
   }
@@ -398,7 +401,7 @@ class User extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {string} */
+  /** @returns {Date} */
   createdAt() {
     return this.readAttributeUnderscore("created_at")
   }
@@ -470,7 +473,7 @@ class User extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {string} */
+  /** @returns {Date} */
   updatedAt() {
     return this.readAttributeUnderscore("updated_at")
   }
@@ -486,8 +489,6 @@ class User extends BaseModel {
   supportedTasks() {
     if (!("email" in this)) throw new Error("No such primary key method: email")
 
-    const modelClass = modelClassRequire("Task")
-
     const ransack = {}
 
     ransack["support_email_eq"] = this.email()
@@ -496,8 +497,7 @@ class User extends BaseModel {
       {
         reflectionName: "supported_tasks",
         model: this,
-        modelName: "Task",
-        modelClass
+        modelClass: Task
       },
       {ransack}
     )
@@ -507,8 +507,6 @@ class User extends BaseModel {
   loadSupportedTasks() {
     if (!("email" in this)) throw new Error("No such primary key method: email")
 
-    const modelClass = modelClassRequire("Task")
-
     const ransack = {}
 
     ransack["support_email_eq"] = this.email()
@@ -517,7 +515,7 @@ class User extends BaseModel {
       {
         reflectionName: "supported_tasks",
         model: this,
-        modelClass
+        modelClass: Task
       },
       {ransack}
     )
@@ -527,8 +525,6 @@ class User extends BaseModel {
   tasks() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("Task")
-
     const ransack = {}
 
     ransack["user_id_eq"] = this.id()
@@ -537,8 +533,7 @@ class User extends BaseModel {
       {
         reflectionName: "tasks",
         model: this,
-        modelName: "Task",
-        modelClass
+        modelClass: Task
       },
       {ransack}
     )
@@ -548,8 +543,6 @@ class User extends BaseModel {
   loadTasks() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("Task")
-
     const ransack = {}
 
     ransack["user_id_eq"] = this.id()
@@ -558,7 +551,7 @@ class User extends BaseModel {
       {
         reflectionName: "tasks",
         model: this,
-        modelClass
+        modelClass: Task
       },
       {ransack}
     )
@@ -568,8 +561,6 @@ class User extends BaseModel {
   userRoles() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("UserRole")
-
     const ransack = {}
 
     ransack["user_id_eq"] = this.id()
@@ -578,8 +569,7 @@ class User extends BaseModel {
       {
         reflectionName: "user_roles",
         model: this,
-        modelName: "UserRole",
-        modelClass
+        modelClass: UserRole
       },
       {ransack}
     )
@@ -589,8 +579,6 @@ class User extends BaseModel {
   loadUserRoles() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("UserRole")
-
     const ransack = {}
 
     ransack["user_id_eq"] = this.id()
@@ -599,11 +587,9 @@ class User extends BaseModel {
       {
         reflectionName: "user_roles",
         model: this,
-        modelClass
+        modelClass: UserRole
       },
       {ransack}
     )
   }
 }
-
-export default User

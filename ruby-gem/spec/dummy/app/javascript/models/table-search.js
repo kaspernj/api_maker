@@ -1,3 +1,5 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 
 const modelClassData = {
@@ -195,13 +197,13 @@ const modelClassData = {
 }
 
 /** Frontend model for TableSearch. */
-class TableSearch extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class TableSearch extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
 
-  /** @returns {string} */
+  /** @returns {Date} */
   createdAt() {
     return this.readAttributeUnderscore("created_at")
   }
@@ -261,7 +263,7 @@ class TableSearch extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {string} */
+  /** @returns {Date} */
   updatedAt() {
     return this.readAttributeUnderscore("updated_at")
   }
@@ -297,5 +299,3 @@ class TableSearch extends BaseModel {
     return this._isPresent(value)
   }
 }
-
-export default TableSearch

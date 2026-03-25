@@ -1,5 +1,7 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
-import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
+import TableSetting from "./table-setting.js"
 
 const modelClassData = {
   "attributes": {
@@ -231,8 +233,8 @@ const modelClassData = {
 }
 
 /** Frontend model for TableSettingColumn. */
-class TableSettingColumn extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class TableSettingColumn extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -335,7 +337,7 @@ class TableSettingColumn extends BaseModel {
 
   /** @returns {import("./table-setting.js").default | null} */
   tableSetting() {
-    return this._readBelongsToReflection({reflectionName: "table_setting"})
+    return this._readBelongsToReflection({modelClass: TableSetting, reflectionName: "table_setting"})
   }
 
   /** @returns {Promise<import("./table-setting.js").default | null>} */
@@ -343,16 +345,17 @@ class TableSettingColumn extends BaseModel {
     if (!("tableSettingId" in this)) throw new Error("Foreign key method wasn't defined: tableSettingId")
 
     const id = this.tableSettingId()
-    const modelClass = modelClassRequire("TableSetting")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "table_setting", model: this, modelClass},
+      {
+        reflectionName: "table_setting",
+        model: this,
+        modelClass: TableSetting
+      },
       {ransack}
     )
   }
 }
-
-export default TableSettingColumn

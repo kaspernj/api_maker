@@ -1,6 +1,9 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 import Collection from "@kaspernj/api-maker/build/collection.js"
-import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
+import Project from "./project.js"
+import Task from "./task.js"
 
 const modelClassData = {
   "attributes": {
@@ -199,8 +202,8 @@ const modelClassData = {
 }
 
 /** Frontend model for Account. */
-class Account extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class Account extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -245,8 +248,6 @@ class Account extends BaseModel {
   projects() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("Project")
-
     const ransack = {}
 
     ransack["account_id_eq"] = this.id()
@@ -255,8 +256,7 @@ class Account extends BaseModel {
       {
         reflectionName: "projects",
         model: this,
-        modelName: "Project",
-        modelClass
+        modelClass: Project
       },
       {ransack}
     )
@@ -266,8 +266,6 @@ class Account extends BaseModel {
   loadProjects() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("Project")
-
     const ransack = {}
 
     ransack["account_id_eq"] = this.id()
@@ -276,7 +274,7 @@ class Account extends BaseModel {
       {
         reflectionName: "projects",
         model: this,
-        modelClass
+        modelClass: Project
       },
       {ransack}
     )
@@ -284,14 +282,11 @@ class Account extends BaseModel {
 
   /** @returns {import("@kaspernj/api-maker/build/collection.js").default<typeof import("./task.js").default>} */
   tasks() {
-    const modelClass = modelClassRequire("Task")
-
     return new Collection(
       {
         reflectionName: "tasks",
         model: this,
-        modelName: "Task",
-        modelClass
+        modelClass: Task
       },
       {
         params: {
@@ -307,13 +302,11 @@ class Account extends BaseModel {
 
   /** @returns {Promise<Array<import("./task.js").default>>} */
   loadTasks() {
-    const modelClass = modelClassRequire("Task")
-
     return this._loadHasManyReflection(
       {
         reflectionName: "tasks",
         model: this,
-        modelClass
+        modelClass: Task
       },
       {
         params: {
@@ -327,5 +320,3 @@ class Account extends BaseModel {
     )
   }
 }
-
-export default Account

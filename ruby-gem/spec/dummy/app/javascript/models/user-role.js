@@ -1,5 +1,7 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
-import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
+import User from "./user.js"
 
 const modelClassData = {
   "attributes": {
@@ -122,8 +124,8 @@ const modelClassData = {
 }
 
 /** Frontend model for UserRole. */
-class UserRole extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class UserRole extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -166,7 +168,7 @@ class UserRole extends BaseModel {
 
   /** @returns {import("./user.js").default | null} */
   user() {
-    return this._readBelongsToReflection({reflectionName: "user"})
+    return this._readBelongsToReflection({modelClass: User, reflectionName: "user"})
   }
 
   /** @returns {Promise<import("./user.js").default | null>} */
@@ -174,16 +176,17 @@ class UserRole extends BaseModel {
     if (!("userId" in this)) throw new Error("Foreign key method wasn't defined: userId")
 
     const id = this.userId()
-    const modelClass = modelClassRequire("User")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "user", model: this, modelClass},
+      {
+        reflectionName: "user",
+        model: this,
+        modelClass: User
+      },
       {ransack}
     )
   }
 }
-
-export default UserRole
