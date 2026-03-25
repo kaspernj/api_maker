@@ -3,6 +3,7 @@ import React, {useMemo} from "react"
 import {View} from "react-native"
 import BaseComponent from "../../base-component"
 import CommandsPool from "../../commands-pool.js"
+// @ts-expect-error Runtime-resolved module
 import config from "super-admin/config" // eslint-disable-line import/no-unresolved
 import Header from "./header/index"
 import memo from "set-state-compare/build/memo.js"

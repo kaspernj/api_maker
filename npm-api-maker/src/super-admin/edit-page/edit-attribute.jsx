@@ -5,6 +5,7 @@ import EditAttributeCheckbox from "./edit-attribute-checkbox"
 import EditAttributeContent from "./edit-attribute-content"
 import EditAttributeInput from "./edit-attribute-input"
 import * as inflection from "inflection"
+// @ts-expect-error Runtime-resolved module
 import Locales from "shared/locales.js" // eslint-disable-line import/no-unresolved
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"

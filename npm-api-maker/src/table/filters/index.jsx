@@ -8,6 +8,7 @@ import LoadSearchModal from "./load-search-modal"
 import SaveSearchModal from "./save-search-modal"
 import Params from "../../params.js"
 import PropTypes from "prop-types"
+// @ts-expect-error Runtime-resolved module
 import {TableSearch} from "models.js"
 import memo from "set-state-compare/build/memo.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"

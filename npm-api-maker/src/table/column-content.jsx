@@ -7,6 +7,15 @@ import React from "react"
 import Text from "../utils/text"
 
 export default class ApiMakerTableColumnContent {
+  /**
+   * @param {object} args
+   * @param {any} args.column
+   * @param {any} args.l
+   * @param {string} [args.mode]
+   * @param {any} args.model
+   * @param {Function} [args.t]
+   * @param {any} args.table
+   */
   constructor({column, l, mode = "react-native", model, t, table}) {
     this.column = column
     this.l = l

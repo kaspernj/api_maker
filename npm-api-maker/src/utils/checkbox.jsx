@@ -1,4 +1,5 @@
 /* eslint-disable prefer-object-spread, sort-imports */
+// @ts-expect-error CheckBox removed from react-native core in newer versions
 import {CheckBox, Pressable, View} from "react-native"
 import React, {useMemo} from "react"
 import BaseComponent from "../base-component"

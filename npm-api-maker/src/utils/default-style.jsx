@@ -2,9 +2,9 @@ import React, {createContext, useContext, useMemo} from "react"
 import {incorporate} from "incorporator"
 import memo from "set-state-compare/build/memo.js"
 
-const DefaultStyleContext = createContext({
+const DefaultStyleContext = createContext(/** @type {Record<string, any>} */ ({
   Text: []
-})
+}))
 
 const useDefaultStyle = () => {
   const defaultStyle = useContext(DefaultStyleContext)
@@ -63,6 +63,7 @@ const WithDefaultStyle = memo(({children, style, ...restProps}) => {
       }
     }
 
+    /** @type {Record<string, any>} */
     const newDefaultStyle = {}
 
     incorporate(newDefaultStyle, defaultStyle, style)

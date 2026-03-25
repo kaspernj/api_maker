@@ -27,7 +27,7 @@ export default memo(shapeComponent(class ColumnRow extends BaseComponent {
 
   render() {
     const {column, table, tableSettingColumn} = this.p
-    const checkboxProps = {}
+    const checkboxProps = /** @type {Record<string, any>} */ ({})
 
     if (tableSettingColumn.visible() === true) {
       checkboxProps.checked = "checked"
