@@ -1,6 +1,12 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 import Collection from "@kaspernj/api-maker/build/collection.js"
-import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
+import Account from "./account.js"
+import Comment from "./comment.js"
+import Customer from "./customer.js"
+import Project from "./project.js"
+import User from "./user.js"
 
 const modelClassData = {
   "attributes": {
@@ -354,8 +360,8 @@ const modelClassData = {
 }
 
 /** Frontend model for Task. */
-class Task extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class Task extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -468,7 +474,7 @@ class Task extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {string} */
+  /** @returns {Date} */
   createdAt() {
     return this.readAttributeUnderscore("created_at")
   }
@@ -487,7 +493,7 @@ class Task extends BaseModel {
    * @returns {Promise<TCommandResponse>}
    */
   static commandSerialize(args, commandArgs = {}) {
-    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(
+    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(
       {
         args,
         command: "command_serialize",
@@ -505,7 +511,7 @@ class Task extends BaseModel {
    * @returns {Promise<TCommandResponse>}
    */
   static testCollection(args, commandArgs = {}) {
-    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(
+    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(
       {
         args,
         command: "test_collection",
@@ -537,7 +543,7 @@ class Task extends BaseModel {
 
   /** @returns {import("./account.js").default | null} */
   account() {
-    return this._readHasOneReflection({reflectionName: "account"})
+    return this._readHasOneReflection({modelClass: Account, reflectionName: "account"})
   }
 
   /** @returns {Promise<import("./account.js").default | null>} */
@@ -545,10 +551,13 @@ class Task extends BaseModel {
     if (!("id" in this)) throw new Error("Primary key method wasn't defined: id")
 
     const id = this.id()
-    const modelClass = modelClassRequire("Account")
 
     return this._loadHasOneReflection(
-      {reflectionName: "account", model: this, modelClass},
+      {
+        reflectionName: "account",
+        model: this,
+        modelClass: Account
+      },
       {
         params: {
           through: {
@@ -563,7 +572,7 @@ class Task extends BaseModel {
 
   /** @returns {import("./customer.js").default | null} */
   accountCustomer() {
-    return this._readHasOneReflection({reflectionName: "account_customer"})
+    return this._readHasOneReflection({modelClass: Customer, reflectionName: "account_customer"})
   }
 
   /** @returns {Promise<import("./customer.js").default | null>} */
@@ -571,10 +580,13 @@ class Task extends BaseModel {
     if (!("id" in this)) throw new Error("Primary key method wasn't defined: id")
 
     const id = this.id()
-    const modelClass = modelClassRequire("Customer")
 
     return this._loadHasOneReflection(
-      {reflectionName: "account_customer", model: this, modelClass},
+      {
+        reflectionName: "account_customer",
+        model: this,
+        modelClass: Customer
+      },
       {
         params: {
           through: {
@@ -591,8 +603,6 @@ class Task extends BaseModel {
   comments() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("Comment")
-
     const ransack = {}
 
     ransack["resource_id_eq"] = this.id()
@@ -602,8 +612,7 @@ class Task extends BaseModel {
       {
         reflectionName: "comments",
         model: this,
-        modelName: "Comment",
-        modelClass
+        modelClass: Comment
       },
       {ransack}
     )
@@ -612,8 +621,6 @@ class Task extends BaseModel {
   /** @returns {Promise<Array<import("./comment.js").default>>} */
   loadComments() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
-
-    const modelClass = modelClassRequire("Comment")
 
     const ransack = {}
 
@@ -624,7 +631,7 @@ class Task extends BaseModel {
       {
         reflectionName: "comments",
         model: this,
-        modelClass
+        modelClass: Comment
       },
       {ransack}
     )
@@ -632,7 +639,7 @@ class Task extends BaseModel {
 
   /** @returns {import("./project.js").default | null} */
   project() {
-    return this._readBelongsToReflection({reflectionName: "project"})
+    return this._readBelongsToReflection({modelClass: Project, reflectionName: "project"})
   }
 
   /** @returns {Promise<import("./project.js").default | null>} */
@@ -640,20 +647,23 @@ class Task extends BaseModel {
     if (!("projectId" in this)) throw new Error("Foreign key method wasn't defined: projectId")
 
     const id = this.projectId()
-    const modelClass = modelClassRequire("Project")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "project", model: this, modelClass},
+      {
+        reflectionName: "project",
+        model: this,
+        modelClass: Project
+      },
       {ransack}
     )
   }
 
   /** @returns {import("./user.js").default | null} */
   user() {
-    return this._readBelongsToReflection({reflectionName: "user"})
+    return this._readBelongsToReflection({modelClass: User, reflectionName: "user"})
   }
 
   /** @returns {Promise<import("./user.js").default | null>} */
@@ -661,16 +671,17 @@ class Task extends BaseModel {
     if (!("userId" in this)) throw new Error("Foreign key method wasn't defined: userId")
 
     const id = this.userId()
-    const modelClass = modelClassRequire("User")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "user", model: this, modelClass},
+      {
+        reflectionName: "user",
+        model: this,
+        modelClass: User
+      },
       {ransack}
     )
   }
 }
-
-export default Task

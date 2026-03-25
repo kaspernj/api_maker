@@ -1,3 +1,5 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 
 const modelClassData = {
@@ -140,8 +142,8 @@ const modelClassData = {
 }
 
 /** Frontend model for WorkplaceLink. */
-class WorkplaceLink extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class WorkplaceLink extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -182,5 +184,3 @@ class WorkplaceLink extends BaseModel {
     return this._isPresent(value)
   }
 }
-
-export default WorkplaceLink

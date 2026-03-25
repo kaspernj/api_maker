@@ -66,7 +66,10 @@ export default class SourceMapsLoader {
     return uniqunize(sources, (source) => source.originalUrl)
   }
 
-  /** getSourcesFromError. */
+  /**
+   * @param {Error} error - Error to extract sources from.
+   * @returns {Array<{originalUrl: string, sourceMapUrl: string}>} Sources from error stack.
+   */
   getSourcesFromError(error) {
     const stack = stackTraceParser.parse(error.stack)
     const sources = []
@@ -175,7 +178,10 @@ export default class SourceMapsLoader {
       .map((traceData) => `at ${traceData.methodName} (${traceData.fileString})`)
   }
 
-  /** getStackTraceData. */
+  /**
+   * @param {string} stackTrace - Raw stack trace string.
+   * @returns {Array<{filePath: string | null, fileString: string, methodName: string}>} Parsed trace data.
+   */
   getStackTraceData(stackTrace) {
     const stack = stackTraceParser.parse(stackTrace)
     const newSourceMap = []

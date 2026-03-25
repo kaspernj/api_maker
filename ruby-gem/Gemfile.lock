@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/kaspernj/worker_plugins.git
-  revision: e407e924d071bc57fea13c1b34f20b969a1da38b
-  ref: e407e924d071bc57fea13c1b34f20b969a1da38b
+  revision: 861fd28ff2bf118c6e32016a8dd99bd3225a29ce
+  ref: 861fd28
   specs:
-    worker_plugins (0.0.9)
+    worker_plugins (0.0.12)
 
 PATH
   remote: .
@@ -26,7 +26,7 @@ PATH
       acts_as_list
       rails (>= 6.0.0)
       service_pattern
-      worker_plugins (>= 0.0.9)
+      worker_plugins (>= 0.0.12)
 
 GEM
   remote: https://rubygems.org/

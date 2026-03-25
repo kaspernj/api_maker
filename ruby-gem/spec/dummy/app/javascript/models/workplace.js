@@ -1,6 +1,8 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 import Collection from "@kaspernj/api-maker/build/collection.js"
-import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
+import WorkplaceLink from "./workplace-link.js"
 
 const modelClassData = {
   "attributes": {
@@ -25,80 +27,10 @@ const modelClassData = {
   "nameDasherized": "workplace",
   "pluralName": "worker_plugins_workplaces",
   "ransackable_associations": [
-    {
-      "className": "User",
-      "collectionName": "users",
-      "foreignKey": "user_id",
-      "name": "user",
-      "macro": "belongs_to",
-      "resource_name": "User",
-      "through": null
-    },
-    {
-      "className": "WorkplaceLink",
-      "collectionName": "workplace_links",
-      "foreignKey": "workplace_id",
-      "name": "workplace_links",
-      "macro": "has_many",
-      "resource_name": "WorkplaceLink",
-      "through": null
-    }
+
   ],
   "ransackable_attributes": [
-    {
-      "name": "active",
-      "column": {
-        "default": "0",
-        "name": "active",
-        "null": false,
-        "type": "boolean"
-      }
-    },
-    {
-      "name": "created_at",
-      "column": {
-        "default": null,
-        "name": "created_at",
-        "null": false,
-        "type": "datetime"
-      }
-    },
-    {
-      "name": "id",
-      "column": {
-        "default": null,
-        "name": "id",
-        "null": false,
-        "type": "integer"
-      }
-    },
-    {
-      "name": "name",
-      "column": {
-        "default": null,
-        "name": "name",
-        "null": false,
-        "type": "string"
-      }
-    },
-    {
-      "name": "updated_at",
-      "column": {
-        "default": null,
-        "name": "updated_at",
-        "null": false,
-        "type": "datetime"
-      }
-    },
-    {
-      "name": "user_id",
-      "column": {
-        "default": null,
-        "name": "user_id",
-        "null": true,
-        "type": "integer"
-      }
-    }
+
   ],
   "ransackable_scopes": [
 
@@ -119,8 +51,8 @@ const modelClassData = {
 }
 
 /** Frontend model for Workplace. */
-class Workplace extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class Workplace extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -144,7 +76,7 @@ class Workplace extends BaseModel {
    * @returns {Promise<TCommandResponse>}
    */
   static destroyLinks(args, commandArgs = {}) {
-    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(
+    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(
       {
         args,
         command: "destroy_links",
@@ -162,7 +94,7 @@ class Workplace extends BaseModel {
    * @returns {Promise<TCommandResponse>}
    */
   static createLink(args, commandArgs = {}) {
-    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(
+    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(
       {
         args,
         command: "create_link",
@@ -180,7 +112,7 @@ class Workplace extends BaseModel {
    * @returns {Promise<TCommandResponse>}
    */
   static current(args, commandArgs = {}) {
-    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(
+    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(
       {
         args,
         command: "current",
@@ -198,7 +130,7 @@ class Workplace extends BaseModel {
    * @returns {Promise<TCommandResponse>}
    */
   static linkFor(args, commandArgs = {}) {
-    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(
+    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(
       {
         args,
         command: "link_for",
@@ -216,7 +148,7 @@ class Workplace extends BaseModel {
    * @returns {Promise<TCommandResponse>}
    */
   static switchQueryOnWorkplace(args, commandArgs = {}) {
-    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(
+    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(
       {
         args,
         command: "switch_query_on_workplace",
@@ -307,8 +239,6 @@ class Workplace extends BaseModel {
   workplaceLinks() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("WorkplaceLink")
-
     const ransack = {}
 
     ransack["workplace_id_eq"] = this.id()
@@ -317,8 +247,7 @@ class Workplace extends BaseModel {
       {
         reflectionName: "workplace_links",
         model: this,
-        modelName: "WorkplaceLink",
-        modelClass
+        modelClass: WorkplaceLink
       },
       {ransack}
     )
@@ -328,8 +257,6 @@ class Workplace extends BaseModel {
   loadWorkplaceLinks() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("WorkplaceLink")
-
     const ransack = {}
 
     ransack["workplace_id_eq"] = this.id()
@@ -338,11 +265,9 @@ class Workplace extends BaseModel {
       {
         reflectionName: "workplace_links",
         model: this,
-        modelClass
+        modelClass: WorkplaceLink
       },
       {ransack}
     )
   }
 }
-
-export default Workplace

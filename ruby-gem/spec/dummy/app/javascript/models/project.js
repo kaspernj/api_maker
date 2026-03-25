@@ -1,6 +1,9 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 import Collection from "@kaspernj/api-maker/build/collection.js"
-import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
+import ProjectDetail from "./project-detail.js"
+import Task from "./task.js"
 
 const modelClassData = {
   "attributes": {
@@ -252,8 +255,8 @@ const modelClassData = {
 }
 
 /** Frontend model for Project. */
-class Project extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class Project extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -270,7 +273,7 @@ class Project extends BaseModel {
     return this._isPresent(value)
   }
 
-  /** @returns {string} */
+  /** @returns {Date} */
   createdAt() {
     return this.readAttributeUnderscore("created_at")
   }
@@ -349,7 +352,7 @@ class Project extends BaseModel {
    * @returns {Promise<TCommandResponse>}
    */
   static createProject(args, commandArgs = {}) {
-    return /** @type {Promise<TCommandResponse>} */ (this._callCollectionCommand(
+    return /** @type {Promise<TCommandResponse>} */ (BaseModel._callCollectionCommand(
       {
         args,
         command: "create_project",
@@ -362,7 +365,7 @@ class Project extends BaseModel {
 
   /** @returns {import("./project-detail.js").default | null} */
   projectDetail() {
-    return this._readHasOneReflection({reflectionName: "project_detail"})
+    return this._readHasOneReflection({modelClass: ProjectDetail, reflectionName: "project_detail"})
   }
 
   /** @returns {Promise<import("./project-detail.js").default | null>} */
@@ -370,7 +373,6 @@ class Project extends BaseModel {
     if (!("id" in this)) throw new Error("Primary key method wasn't defined: id")
 
     const id = this.id()
-    const modelClass = modelClassRequire("ProjectDetail")
     const ransack = {}
 
     ransack["project_id_eq"] = id
@@ -379,7 +381,7 @@ class Project extends BaseModel {
       {
         reflectionName: "project_detail",
         model: this,
-        modelClass
+        modelClass: ProjectDetail
       },
       {ransack}
     )
@@ -389,8 +391,6 @@ class Project extends BaseModel {
   tasks() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("Task")
-
     const ransack = {}
 
     ransack["project_id_eq"] = this.id()
@@ -399,8 +399,7 @@ class Project extends BaseModel {
       {
         reflectionName: "tasks",
         model: this,
-        modelName: "Task",
-        modelClass
+        modelClass: Task
       },
       {ransack}
     )
@@ -410,8 +409,6 @@ class Project extends BaseModel {
   loadTasks() {
     if (!("id" in this)) throw new Error("No such primary key method: id")
 
-    const modelClass = modelClassRequire("Task")
-
     const ransack = {}
 
     ransack["project_id_eq"] = this.id()
@@ -420,11 +417,9 @@ class Project extends BaseModel {
       {
         reflectionName: "tasks",
         model: this,
-        modelClass
+        modelClass: Task
       },
       {ransack}
     )
   }
 }
-
-export default Project

@@ -1,3 +1,5 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 
 const modelClassData = {
@@ -71,11 +73,9 @@ const modelClassData = {
 }
 
 /** Frontend model for TaskDetail. */
-class TaskDetail extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class TaskDetail extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
 }
-
-export default TaskDetail
