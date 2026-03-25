@@ -1,6 +1,6 @@
 # npm-api-maker Typecheck JSDoc Fixes
 
-Total: ~166 errors across 61 files.
+Total: ~116 errors remaining (was ~166). Batch 1 done.
 
 ## Error Categories
 
@@ -21,44 +21,9 @@ Total: ~166 errors across 61 files.
 
 ---
 
-## Batch 1: `dataSet` prop on View/Pressable/Modal (TS2322) — ~35 errors
+## Batch 1: `dataSet` prop on View/Pressable/Modal (TS2322) — DONE
 
-The most common error: `dataSet` is not a standard React Native prop. Needs a type augmentation or wrapper.
-
-Files:
-- [ ] `src/bootstrap/attribute-row.jsx` (2)
-- [ ] `src/draggable-sort/item.jsx` (1)
-- [ ] `src/link.jsx` (1)
-- [ ] `src/modal.jsx` (1)
-- [ ] `src/super-admin/edit-page/edit-attribute-checkbox.jsx` (1)
-- [ ] `src/super-admin/edit-page/edit-attribute-input.jsx` (1)
-- [ ] `src/super-admin/index.jsx` (1)
-- [ ] `src/super-admin/layout/header/index.jsx` (4)
-- [ ] `src/super-admin/layout/index.jsx` (2)
-- [ ] `src/super-admin/layout/menu/index.jsx` (7)
-- [ ] `src/super-admin/layout/no-access.jsx` (1)
-- [ ] `src/super-admin/show-nav.jsx` (1)
-- [ ] `src/table/components/column.jsx` (1)
-- [ ] `src/table/components/header.jsx` (1)
-- [ ] `src/table/filters/attribute-element.jsx` (1)
-- [ ] `src/table/filters/filter.jsx` (2)
-- [ ] `src/table/filters/index.jsx` (2)
-- [ ] `src/table/filters/load-search-modal.jsx` (5)
-- [ ] `src/table/filters/reflection-element.jsx` (1)
-- [ ] `src/table/filters/scope-element.jsx` (1)
-- [ ] `src/table/header-select.jsx` (1)
-- [ ] `src/table/model-column.jsx` (2)
-- [ ] `src/table/model-row.jsx` (1)
-- [ ] `src/table/settings/column-row.jsx` (1)
-- [ ] `src/table/settings/download-action.jsx` (1)
-- [ ] `src/table/settings/index.jsx` (1)
-- [ ] `src/table/table.jsx` (5)
-- [ ] `src/utils/card.jsx` (1)
-- [ ] `src/utils/checkbox.jsx` (1)
-- [ ] `src/utils/checkboxes.jsx` (1)
-- [ ] `src/utils/modal.jsx` (1)
-
-**Approach:** Add a global type augmentation `.d.ts` for `dataSet` on `ViewProps`, `PressableProps`, `ModalProps`, etc. This single fix should resolve ~35 errors.
+Fixed by adding `src/react-native-augments.d.ts` with type augmentations for `dataSet` on `ViewProps`, `PressableProps`, `TextInputProps`, and `ModalProps`. Also added `className` on `ViewProps`. Resolved ~50 errors.
 
 ---
 
