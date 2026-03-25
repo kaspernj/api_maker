@@ -1096,10 +1096,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@>= 1.0.2133":
-  version "1.0.2133"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2133.tgz#1f725a333742b62fedbe40d4b6302b07f3d6fa9d"
-  integrity sha512-4CysTi1JzwZYK1J8FLcGfQOt4/07GruYjmcw08HHes2vh/RCoqGBjlekNyRaIgPv4nINJ+FemYDmHvUPX6MtDQ==
+"@kaspernj/api-maker@>= 1.0.2139":
+  version "1.0.2142"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2142.tgz#7d4815c3d37edf44e486f3fb85aee7545ad65332"
+  integrity sha512-RZYsur2j7irdenv3BQYNRemUGSzUTHb2AAPybU4WFE0n3hzNjw/hXXzjxE0a4+m66RBWGG7Gikck8J5x06iddg==
   dependencies:
     classnames "^2.5.1"
     clone-deep ">= 4.0.1"
@@ -4994,9 +4994,9 @@ yallist@^3.0.2:
   integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
 
 yaml@^1.10.0:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
-  integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
+  version "1.10.3"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.3.tgz#76e407ed95c42684fb8e14641e5de62fe65bbcb3"
+  integrity sha512-vIYeF1u3CjlhAFekPPAk2h/Kv4T3mAkMox5OymRiJQB0spDP10LHvt+K7G9Ny6NuuMAb25/6n1qyUjAcGNf/AA==
 
 yargs-parser@^21.1.1:
   version "21.1.1"
