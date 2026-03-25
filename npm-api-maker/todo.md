@@ -1,6 +1,6 @@
 # npm-api-maker Typecheck JSDoc Fixes
 
-Total: ~97 errors remaining (was ~166). Batches 1 and 2 done.
+Total: ~83 errors remaining (was ~166). Batches 1, 2, and 3 done.
 
 ## Error Categories
 
@@ -36,20 +36,11 @@ Resolved ~19 errors. Also fixed duplicate `ModalProps` augmentation from Batch 1
 
 ---
 
-## Batch 3: `useInput` / input hook return type (TS2739/TS2339/TS2554) — ~15 errors
+## Batch 3: `useInput` / input hook return type (TS2739/TS2339/TS2554) — DONE
 
-`useInput` return type mismatches: missing `inputRef`, `type`, `inputProps`, `wrapperOpts`, `values`.
-
-Files:
-- [ ] `src/use-input.js` (6)
-- [ ] `src/bootstrap/checkbox.jsx` (1)
-- [ ] `src/bootstrap/checkboxes.jsx` (1)
-- [ ] `src/inputs/checkbox.jsx` (1)
-- [ ] `src/inputs/input-wrapper.jsx` (1)
-- [ ] `src/inputs/attachment.jsx` (1)
-- [ ] `src/utils/checkboxes.jsx` (1)
-
-**Approach:** Fix the `useInput` return type JSDoc and align callers.
+Fixed by loosening `useInput` JSDoc `@param` types to `Record<string, any>` for `props`
+and `wrapperOptions`, updating `@returns` to include `restProps`, and changing `this.form`
+to `this.tt.form` in checkboxes components. Resolved ~14 errors.
 
 ---
 
