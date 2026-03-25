@@ -154,7 +154,7 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
 
     try {
       await Devise.signOut()
-      FlashNotifications.success(this.t(".you_have_been_signed_out", {defaultValue: "You have been signed out"}))
+      FlashNotifications.success(this.tt.t(".you_have_been_signed_out", {defaultValue: "You have been signed out"}))
     } catch (error) {
       FlashNotifications.errorResponse(error)
     }

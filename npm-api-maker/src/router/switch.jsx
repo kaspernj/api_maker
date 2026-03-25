@@ -6,7 +6,7 @@ import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 
-const CurrentSwitchContext = createContext([])
+const CurrentSwitchContext = createContext(/** @type {any} */ ({}))
 
 const Switch = memo(shapeComponent(class Switch extends BaseComponent {
   static defaultProps = {

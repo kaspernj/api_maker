@@ -1,6 +1,6 @@
 # npm-api-maker Typecheck JSDoc Fixes
 
-Total: ~65 errors remaining (was ~166). Batches 1, 2, 3, and 6 done.
+Total: ~28 errors remaining (was ~166). Batches 1, 2, 3, 4, 5 (partial), 6, and 7 done.
 
 ## Error Categories
 
@@ -44,15 +44,10 @@ to `this.tt.form` in checkboxes components. Resolved ~14 errors.
 
 ---
 
-## Batch 4: Style type mismatches (TS2322) — ~5 errors
+## Batch 4: Style type mismatches (TS2322) — PARTIAL
 
-Style values like `"100vh"`, `display: string`, responsive `base`/`lgUp`/`mdDown` props.
-
-Files:
-- [ ] `src/super-admin/layout/index.jsx` (7: `"100vh"`, `base`/`lgUp`/`mdDown`/`mdUp` on ViewStyle)
-- [ ] `src/super-admin/layout/header/index.jsx` (3: `display: string`, `flexDirection: string`, etc.)
-
-**Approach:** Use proper responsive style typing or cast responsive style objects.
+Fixed `super-admin/layout/index.jsx` responsive styles (converted to plain typed object).
+Remaining: `super-admin/layout/header/index.jsx` style string types (3 errors).
 
 ---
 
@@ -87,19 +82,17 @@ Resolved all 18 errors.
 
 ---
 
-## Batch 7: Instance property access on class components (TS2339) — ~15 errors
+## Batch 7: Instance properties, config methods, style types (TS2339) — DONE
 
-Properties like `controller`, `panResponder`, `events`, `position` not declared on class.
+Fixed all 34 TS2339 errors plus related TS2353/style errors by:
+- Adding typed class field declarations for draggable-sort components
+- Adding explicit method stubs for dynamic ApiMakerConfig accessors
+- Changing `this.t(...)` to `this.tt.t(...)` in table and menu components
+- Widening `modelClassRequire` and `useCurrentUser` return types
+- Converting responsive StyleSheet.create to plain typed object
+- Casting `import.meta.webpackContext` and `CurrentSwitchContext` default
 
-Files:
-- [ ] `src/draggable-sort/index.jsx` (7: `controller` x6, `panResponder`)
-- [ ] `src/draggable-sort/item.jsx` (3: `events`, `panResponder`, `position`)
-- [ ] `src/table/worker-plugins-checkbox.jsx` (4: `createLink`, `destroyLinks`, `linkFor`, `linkLoaded`)
-- [ ] `src/table/table.jsx` (1: `current` on `typeof BaseModel`)
-- [ ] `src/super-admin/index.jsx` (1: `id` on `BaseModel`)
-- [ ] `src/super-admin/layout/no-access.jsx` (1: `userRoles` on `BaseModel`)
-
-**Approach:** Add class field JSDoc declarations or `@typedef` augmentations.
+Resolved ~37 errors.
 
 ---
 

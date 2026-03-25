@@ -13,7 +13,7 @@ logger.setDebug(false)
  * @param {object} props
  * @param {string} [props.scope]
  * @param {boolean} [props.withData]
- * @returns {import("./base-model.js").default}
+ * @returns {import("./base-model.js").default & Record<string, any>}
  */
 const useCurrentUser = (props = {}) => {
   const {scope = "user", withData, ...restProps} = props

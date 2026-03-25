@@ -1,6 +1,6 @@
 /* eslint-disable no-return-assign, react/jsx-closing-bracket-location, sort-imports */
 import React, {useMemo} from "react"
-import {StyleSheet, View} from "react-native"
+import {View} from "react-native"
 import BaseComponent from "../../base-component"
 import CommandsPool from "../../commands-pool.js"
 import config from "super-admin/config" // eslint-disable-line import/no-unresolved
@@ -17,7 +17,8 @@ import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
 
 const NoAccess = React.lazy(() => import("./no-access"))
 
-const styles = StyleSheet.create({
+/** @type {Record<string, any>} */
+const styles = {
   appLayoutContentContainer: {
     base: {
       minHeight: "100vh",
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     color: "#000"
   }
-})
+}
 
 const dataSets = {}
 

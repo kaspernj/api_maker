@@ -506,7 +506,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     const loadingContent = (
       <View dataSet={dataSets.loading ||= {class: "api-maker--table--loading"}}>
-        <Text>{this.t(".loading_dot_dot_dit", {defaultValue: "Loading..."})}</Text>
+        <Text>{this.tt.t(".loading_dot_dot_dit", {defaultValue: "Loading..."})}</Text>
       </View>
     )
 
@@ -740,7 +740,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
             className="btn btn-primary live-table--submit-filter-button"
             type="submit"
             style={styles.filterSubmitButton ||= {marginTop: "8px"}}
-            value={filterSubmitLabel || this.t(".filter", {defaultValue: "Filter"})}
+            value={filterSubmitLabel || this.tt.t(".filter", {defaultValue: "Filter"})}
           />
         }
       </Form>
@@ -768,7 +768,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       return (
         <View>
           <Text>
-            {this.t(".loading_dot_dot_dot", {defaultValue: "Loading..."})}
+            {this.tt.t(".loading_dot_dot_dot", {defaultValue: "Loading..."})}
           </Text>
         </View>
       )
@@ -958,11 +958,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       <View style={styles.tableFooterRootViewStyle ||= {flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
         <View dataSet={dataSets.showingCounts ||= {class: "showing-counts"}} style={styles.showingCounts ||= {flexDirection: "row"}}>
           <Text>
-            {this.t(".showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
+            {this.tt.t(".showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
           </Text>
           {this.p.workplace && this.s.currentWorkplaceCount !== null &&
             <Text style={styles.xSelectedTextStyle ||= {marginLeft: 3}}>
-              {this.t(".x_selected", {defaultValue: "%{selected} selected.", selected: this.s.currentWorkplaceCount})}
+              {this.tt.t(".x_selected", {defaultValue: "%{selected} selected.", selected: this.s.currentWorkplaceCount})}
             </Text>
           }
         </View>
