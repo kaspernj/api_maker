@@ -1,6 +1,7 @@
 {
   "routes": [
     {"name": "bootstrap_attribute_rows", "path": "/bootstrap/attribute-rows", "component": "bootstrap/attribute-rows"},
+    {"name": "bootstrap_attachment_input", "path": "/bootstrap/attachment-input", "component": "bootstrap/attachment-input"},
     {"name": "bootstrap_checkbox_boolean", "path": "/bootstrap/checkbox-boolean", "component": "bootstrap/checkbox-boolean"},
     {"name": "bootstrap_checkboxes", "path": "/bootstrap/checkboxes", "component": "bootstrap/checkboxes"},
     {"name": "bootstrap_live_table", "path": "/bootstrap/live-table", "component": "bootstrap/live-table"},
@@ -22,8 +23,10 @@
     {"name": "utils_link_padding", "path": "/utils/link-padding", "component": "utils/link-padding"},
     {"name": "utils_global_request_data", "path": "/utils/global-request-data", "component": "utils/global-request-data"},
     {"name": "utils_global_request_data_non_instant", "path": "/utils/global-request-data-non-instant", "component": "utils/global-request-data-non-instant"},
+    {"name": "utils_websocket_requests", "path": "/utils/websocket-requests", "component": "utils/websocket-requests"},
     {"name": "utils_use_breakpoint", "path": "/utils/use-breakpoint", "component": "utils/use-breakpoint"},
     {"name": "utils_use_model_new_if_no_id", "path": "/utils/use-model-new-if-no-id", "component": "utils/use-model-new-if-no-id"},
+    {"name": "utils_use_model_new_if_no_id_undefined_query_params", "path": "/utils/use-model-new-if-no-id-undefined-query-params", "component": "utils/use-model-new-if-no-id-undefined-query-params"},
     {"name": "utils_use_model_new_if_no_id_async", "path": "/utils/use-model-new-if-no-id-async", "component": "utils/use-model-new-if-no-id-async"},
 
     {"name": "models_command_serialize", "path": "/models/command-serialize", "component": "models/command-serialize"},

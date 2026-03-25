@@ -31,4 +31,8 @@ class ApiMaker::BaseService < ServicePattern::Service
   def reset_current_ability
     controller.__send__(:reset_current_ability)
   end
+
+  def current_command
+    ApiMaker::Current.command
+  end
 end

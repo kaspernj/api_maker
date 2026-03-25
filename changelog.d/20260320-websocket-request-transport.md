@@ -1,0 +1,3 @@
+- Added websocket request transport for ApiMaker commands and services, including per-connection request deduping and response caching.
+- Changed the shared command executor so HTTP and websocket command payloads run through the same backend path.
+- Added awaitable websocket command handles with received/progress/log callbacks and `current_command` progress reporting on the Ruby side.

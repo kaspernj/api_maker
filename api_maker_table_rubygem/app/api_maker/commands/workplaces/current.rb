@@ -14,19 +14,15 @@ class Commands::Workplaces::Current < Commands::ApplicationCommand
 
     # Support to count links to avoid doing another commands in the bottom bar
     if args&.dig(:links_count)
-      response[:links_count] = workplace
-        .workplace_links
-        .ransack(args.dig(:links_count, :ransack))
-        .result
-        .count
+      response[:links_count] = if workplace.present?
+        workplace.workplace_links.ransack(args.dig(:links_count, :ransack)).result.count
+      elsif current_user.nil? && current_session_id.blank?
+        0
+      else
+        fail!("Current workplace could not be loaded")
+      end
     end
 
     succeed!(response)
-  rescue NameError => e
-    Rails.logger.error "[Workplaces::Current] NameError: #{e.message}"
-    Rails.logger.error "[Workplaces::Current] Workplace columns: #{WorkerPlugins::Workplace.column_names.inspect}"
-    Rails.logger.error "[Workplaces::Current] Resource attributes: #{Resources::WorkplaceResource._attributes.keys.inspect}"
-    Rails.logger.error "[Workplaces::Current] Backtrace:\n#{e.backtrace.first(20).join("\n")}"
-    raise
   end
 end

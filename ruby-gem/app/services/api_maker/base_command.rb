@@ -113,8 +113,11 @@ class ApiMaker::BaseCommand
   end
 
   def self.run_command(collection:, command_id:, command_data:, command_response:, controller:)
+    deserialized_args = ApiMaker::Deserializer.execute!(arg: command_data[:args])
+    current_command = ApiMaker::CurrentCommand.new(command_id:, command_response:)
+
     command = ApiMaker::IndividualCommand.new(
-      args: ApiMaker::Deserializer.execute!(arg: command_data[:args]),
+      args: normalize_command_args(deserialized_args),
       collection:,
       command: self,
       id: command_id,
@@ -123,7 +126,9 @@ class ApiMaker::BaseCommand
     )
 
     begin
-      yield command
+      ApiMaker::Current.set(command: current_command) do
+        yield command
+      end
     rescue => e # rubocop:disable Style/RescueStandardError
       error_response = {
         success: false,
@@ -144,6 +149,14 @@ class ApiMaker::BaseCommand
     end
   end
 
+  def self.normalize_command_args(args)
+    return args unless args.is_a?(Hash)
+
+    return args if args.is_a?(ActionController::Parameters)
+
+    ActionController::Parameters.new(args)
+  end
+
   def execute_service_or_fail(service_class, ...)
     self.execute_service_or_fail_response = service_class.execute(...)
 
@@ -156,6 +169,10 @@ class ApiMaker::BaseCommand
 
   def execute_service_or_fail_result
     execute_service_or_fail_response.result
+  end
+
+  def current_command
+    ApiMaker::Current.command
   end
 
   def fail_command_from_service_error_response(response)

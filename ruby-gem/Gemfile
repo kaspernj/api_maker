@@ -60,4 +60,6 @@ group :test do
   elsif File.exist?("/home/dev/api_maker/api_maker_table_rubygem")
     gem "api_maker_table", path: "/home/dev/api_maker/api_maker_table_rubygem"
   end
+
+  gem "worker_plugins", git: "https://github.com/kaspernj/worker_plugins.git", ref: "e407e924d071bc57fea13c1b34f20b969a1da38b"
 end

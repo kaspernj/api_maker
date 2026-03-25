@@ -36,4 +36,37 @@ describe ApiMaker::ServiceCommand do
       }
     )
   end
+
+  it "accepts hash-with-indifferent-access service args" do
+    response = ApiMaker::ServiceCommand
+      .new(
+        ability: nil,
+        api_maker_args: nil,
+        collection: nil,
+        collection_instance: nil,
+        command: ApiMaker::IndividualCommand.new(
+          id: nil,
+          args: {
+            service_args: ActiveSupport::HashWithIndifferentAccess.new(test: "works"),
+            service_name: "EchoArgsTest"
+          },
+          collection: nil,
+          command: nil,
+          response: command_response
+        ),
+        commands: nil,
+        command_response:,
+        controller: nil
+      )
+      .execute_with_response
+
+    expect(response).to eq(
+      type: :success,
+      data: {
+        args: {
+          "test" => "works"
+        }
+      }
+    )
+  end
 end

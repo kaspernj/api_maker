@@ -6,7 +6,13 @@ class ApiMaker::ServiceCommand < ApiMaker::BaseCommand
       service_constant_name = "Services::#{service_name}"
       service_constant = service_constant_name.constantize
       service_args = if args[:service_args]
-        args.fetch(:service_args)&.permit!&.to_h
+        raw_service_args = args.fetch(:service_args)
+
+        if raw_service_args.respond_to?(:permit!)
+          raw_service_args.permit!.to_h.with_indifferent_access
+        else
+          raw_service_args.to_h.with_indifferent_access
+        end
       else
         {}
       end

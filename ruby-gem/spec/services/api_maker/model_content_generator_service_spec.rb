@@ -22,5 +22,24 @@ describe ApiMaker::ModelContentGeneratorService do
     it "doesnt include relationships not defined in the serializer" do
       expect(content_project.fetch(:relationships).keys).not_to include :project_secrets
     end
+
+    it "includes frontend command args for commands" do
+      expect(content_task.fetch(:collection_commands).fetch(:test_collection)).to eq(
+        {
+          args: {
+            "cacheResponse" => true
+          },
+          name: :test_collection
+        }
+      )
+      expect(content_task.fetch(:member_commands).fetch(:test_member)).to eq(
+        {
+          args: {
+            "cacheResponse" => true
+          },
+          name: :test_member
+        }
+      )
+    end
   end
 end

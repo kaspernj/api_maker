@@ -52,9 +52,25 @@ describe "bootstrap - string input" do
     visit bootstrap_string_input_file_path
     wait_for_selector ".content-container"
 
-    expect(wait_for_and_find("#user_image")[:name]).to eq ""
+    input = wait_for_and_find("#user_image")
+
+    expect(input[:type]).to eq "file"
+    expect(input[:name]).to eq ""
+
     attach_file "user_image", Rails.root.join("Gemfile")
     wait_for_selector "#user_image[name='user[image]']"
+  end
+
+  it "hides the file input when purging an existing attachment" do
+    login_as user
+    visit bootstrap_attachment_input_path
+    wait_for_selector ".content-container"
+    wait_for_selector "#attachment_input"
+    wait_for_selector "#attachment_input_purge"
+
+    wait_for_and_find("#attachment_input_purge").click
+
+    wait_for_no_selector "#attachment_input"
   end
 
   it "renders several components for money" do

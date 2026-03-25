@@ -92,7 +92,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
   const loadNewModel = useCallback(async (loadModelGeneration) => {
     const ModelClass = modelClass
     const paramKey = ModelClass.modelName().paramKey()
-    const modelDataFromParams = s.m.queryParams[paramKey] || {}
+    const modelDataFromParams = s.m.queryParams?.[paramKey] || {}
 
     let defaults = {}
 
@@ -152,6 +152,8 @@ const useModel = (modelClassArg, argsArg = {}) => {
     cacheArgs.push(...args.cacheArgs)
   }
 
+  cacheArgs.push(queryParams)
+
   s.updateMeta({args, modelId, modelVariableName, queryParams})
   if (s.meta.syncNewModel == undefined) s.meta.syncNewModel = false
   if (s.meta.newIfNoIdDefaultsResult == undefined) s.meta.newIfNoIdDefaultsResult = null
@@ -172,7 +174,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     if (!(s.m.newIfNoIdDefaultsResult && typeof s.m.newIfNoIdDefaultsResult.then == "function")) {
       const ModelClass = modelClass
       const paramKey = ModelClass.modelName().paramKey()
-      const modelDataFromParams = s.m.queryParams[paramKey] || {}
+      const modelDataFromParams = s.m.queryParams?.[paramKey] || {}
       const modelData = Object.assign(s.m.newIfNoIdDefaultsResult || {}, s.props.newAttributes, modelDataFromParams)
       const model = new ModelClass({
         isNewRecord: true,

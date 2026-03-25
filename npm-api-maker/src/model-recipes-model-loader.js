@@ -74,6 +74,7 @@ export default class ApiMakerModelRecipesModelLoader {
   addQueryCommandsToModelClass (ModelClass, collectionCommands) {
     for (const collectionCommandName in collectionCommands) {
       const methodName = inflection.camelize(collectionCommandName, true)
+      const collectionCommand = collectionCommands[collectionCommandName]
 
       ModelClass[methodName] = function (args, commandArgs = {}) {
         return this._callCollectionCommand(
@@ -83,7 +84,7 @@ export default class ApiMakerModelRecipesModelLoader {
             collectionName: digg(this.modelClassData(), "collectionName"),
             type: "collection"
           },
-          commandArgs
+          {...digg(collectionCommand, "args"), ...commandArgs}
         )
       }
     }
@@ -93,6 +94,7 @@ export default class ApiMakerModelRecipesModelLoader {
   addMemberCommandsToModelClass (ModelClass, memberCommands) {
     for (const memberCommandName in memberCommands) {
       const methodName = inflection.camelize(memberCommandName, true)
+      const memberCommand = memberCommands[memberCommandName]
 
       ModelClass.prototype[methodName] = function (args, commandArgs = {}) {
         return this._callMemberCommand(
@@ -103,7 +105,7 @@ export default class ApiMakerModelRecipesModelLoader {
             collectionName: this.modelClassData().collectionName,
             type: "member"
           },
-          commandArgs
+          {...digg(memberCommand, "args"), ...commandArgs}
         )
       }
     }
@@ -136,6 +138,7 @@ export default class ApiMakerModelRecipesModelLoader {
         "resource_name",
         "type"
       )
+      const ensureMethodName = inflection.camelize(`ensure_${relationshipName}_loaded`, true)
       const loadMethodName = inflection.camelize(`load_${relationshipName}`, true)
       const modelMethodName = inflection.camelize(relationshipName, true)
 
@@ -151,6 +154,7 @@ export default class ApiMakerModelRecipesModelLoader {
           relationshipName,
           resourceName
         })
+        this.defineEnsureAssociationLoadedMethod({ensureMethodName, ModelClass, relationshipName})
       } else if (type == "has_many") {
         this.defineHasManyGetMethod({
           activeRecordName,
@@ -175,6 +179,7 @@ export default class ApiMakerModelRecipesModelLoader {
           relationshipName,
           resourceName
         })
+        this.defineEnsureAssociationLoadedMethod({ensureMethodName, ModelClass, relationshipName})
       } else if (type == "has_one") {
         this.defineHasOneGetMethd({ModelClass, modelMethodName, relationshipName})
         this.defineHasOneLoadMethod({
@@ -188,9 +193,17 @@ export default class ApiMakerModelRecipesModelLoader {
           relationshipName,
           resourceName
         })
+        this.defineEnsureAssociationLoadedMethod({ensureMethodName, ModelClass, relationshipName})
       } else {
         throw new Error(`Unknown relationship type: ${type}`)
       }
+    }
+  }
+
+  /** defineEnsureAssociationLoadedMethod. */
+  defineEnsureAssociationLoadedMethod ({ensureMethodName, ModelClass, relationshipName}) {
+    ModelClass.prototype[ensureMethodName] = function () {
+      return this.ensureAssociationLoaded(relationshipName)
     }
   }
 

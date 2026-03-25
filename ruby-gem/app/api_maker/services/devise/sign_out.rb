@@ -4,6 +4,6 @@ class Services::Devise::SignOut < ApiMaker::BaseService
     scope = args.dig(:args, :scope).presence || "user"
     current_model = controller.__send__(:"current_#{scope}")
     controller.sign_out current_model
-    succeed!(success: true)
+    succeed!(session_status: ApiMaker::SessionStatusResult.new(controller:).result, success: true)
   end
 end

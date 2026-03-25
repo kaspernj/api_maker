@@ -102,6 +102,47 @@ The relationship name is stored in `snake_case`, so `preloadRelationship("Accoun
 
 `config` is a shared singleton. Some helpers (forms, routing, navigation, and money inputs) require config values like `history`, `linkTo`, `navigation`, and `currenciesCollection` to be set. If a required value is missing, the getter throws an error to avoid silent failures.
 
+### Websocket requests
+
+ApiMaker can send commands and services over ActionCable instead of the HTTP commands endpoint:
+
+```js
+import config from "@kaspernj/api-maker/build/config.js"
+
+config.setWebsocketRequests(true)
+```
+
+This keeps request/response traffic on the shared websocket connection and lets the client reuse websocket-side request deduping and response caching.
+
+When a command runs over websocket, the returned value is an awaitable command handle. It behaves like a promise, so existing code still works:
+
+```js
+const result = await User.customCommand({message: "Hello world"})
+```
+
+The same handle also exposes progress and log hooks for long-running commands:
+
+```js
+const command = User.customCommand({message: "Hello world"})
+
+command.onReceived(() => console.log("received"))
+command.onProgress(({progress, count, total}) => console.log(progress, count, total))
+command.onLog((message) => console.log(message))
+
+const result = await command
+const latestProgress = await command.progress()
+const logs = command.logs()
+```
+
+On the Ruby side, websocket-backed commands and services can report progress through `current_command`:
+
+```ruby
+current_command.total = 10
+current_command.log("Starting")
+current_command.increment!
+current_command.progress = 0.5
+```
+
 ## Realtime model events
 
 For model-specific websocket events in React/ShapeComponent UI code, prefer `useModelEvent` over manual `ModelEvents.connect(...)` subscriptions. The hook handles subscription lifecycle automatically and avoids leaked listeners.

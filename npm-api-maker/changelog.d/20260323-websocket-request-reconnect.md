@@ -1,0 +1,1 @@
+Fixed websocket request reconnect handling so pending Api Maker requests are retried after the subscription reconnects, while keeping a stable request UID that lets the Ruby channel resume in-flight work without duplicating command execution.

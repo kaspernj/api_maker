@@ -274,6 +274,16 @@ private # rubocop:disable Layout/IndentationWidth
 end
 ```
 
+To send ApiMaker commands and services over ActionCable instead of the HTTP commands endpoint, enable websocket requests in the frontend config:
+
+```js
+import ApiMakerConfig from "@kaspernj/api-maker/build/config.js"
+
+ApiMakerConfig.setWebsocketRequests(true)
+```
+
+ApiMaker automatically installs its session-shadow middleware so websocket-side session changes can be observed by later HTTP requests. Your ActionCable channel still needs to expose the same request context that your normal controllers provide. In practice that means `current_user`, the CanCan ability, and any `api_maker_args` data needed by serializers and commands.
+
 ## Usage
 
 ### Generating frontend models to multiple apps

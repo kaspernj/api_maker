@@ -1,17 +1,17 @@
 /* eslint-disable no-unused-vars, no-use-before-define, prefer-object-spread, sort-imports */
+import {ShapeHook, useShapeHook} from "set-state-compare"
 import debounce from "debounce"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.js"
-import {useCallback, useEffect, useMemo, useRef} from "react"
+import {useEffect} from "react"
 import useCreatedEvent from "./use-created-event.js"
-import useShape from "./use-shape.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
 /**
  * @typedef {object} UseCollectionResult
  * @property {Array<import("./base-model.js").default>} models
- * @property {Array<number | string>} modelIdsCacheString
+ * @property {string} modelIdsCacheString
  * @property {number} overallCount
  * @property {import("./collection.js").default} query
  * @property {string} queryName
@@ -47,6 +47,343 @@ import useQueryParams from "on-location-changed/build/use-query-params.js"
  * @param {any[]} cacheKeys
  * @returns {UseCollectionResult & Record<string, any>}
  */
+/** Hook state container for useCollection. */
+class UseCollectionShapeHook extends ShapeHook {
+  /** Constructor. */
+  constructor(props) {
+    super(props)
+    this.loadModelsGeneration = 0
+    this.loadOverallCountGeneration = 0
+    this.queryParams = undefined
+  }
+
+  /** @returns {string} */
+  queryName() {
+    return this.p.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey")
+  }
+
+  /** @returns {string} */
+  queryPerKey() {
+    return `${this.queryName()}_per`
+  }
+
+  /** @returns {string} */
+  queryQName() {
+    return `${this.queryName()}_q`
+  }
+
+  /** @returns {string} */
+  querySName() {
+    return `${this.queryName()}_s`
+  }
+
+  /** @returns {string} */
+  queryPageName() {
+    return `${this.queryName()}_page`
+  }
+
+  /** @returns {string} */
+  modelIdsCacheString() {
+    if (this.s.models === undefined) {
+      return "models-undefined"
+    } else if (this.s.models.length === 0) {
+      return "no-models"
+    } else {
+      return this.s.models.map((model) => model.cacheKey())?.join("---")
+    }
+  }
+
+  /** @returns {Function & {clear?: () => void}} */
+  loadModelsDebounce() {
+    return this.cache("loadModelsDebounce", () => debounce(() => this.loadModels()))
+  }
+
+  /** @param {Record<string, any>} args */
+  showNoRecordsAvailableContent(args) {
+    let models, overallCount
+
+    if (args.models !== undefined) {
+      models = args.models
+    } else if (this.s.models !== undefined) {
+      models = this.s.models
+    }
+
+    if (args.overallCount !== undefined) {
+      overallCount = args.overallCount
+    } else if (this.s.overallCount !== undefined) {
+      overallCount = this.s.overallCount
+    }
+
+    if (models === undefined || overallCount === undefined || this.p.noRecordsAvailableContent === undefined) return false
+    if (models.length === 0 && overallCount === 0 && this.p.noRecordsAvailableContent) return true
+  }
+
+  /** @param {Record<string, any>} args */
+  showNoRecordsFoundContent(args) {
+    let models, overallCount
+
+    if (args.models !== undefined) {
+      models = args.models
+    } else if (this.s.models !== undefined) {
+      models = this.s.models
+    }
+
+    if (args.overallCount !== undefined) {
+      overallCount = args.overallCount
+    } else if (this.s.overallCount !== undefined) {
+      overallCount = this.s.overallCount
+    }
+
+    if (models === undefined || this.p.noRecordsFoundContent === undefined) return false
+
+    // Dont show noRecordsAvailableContent together with noRecordsAvailableContent
+    if (models.length === 0 && overallCount === 0 && this.p.noRecordsAvailableContent) return false
+    if (models.length === 0 && this.p.noRecordsFoundContent) return true
+  }
+
+  /** @returns {Promise<void>} */
+  loadOverallCount = async () => {
+    // Ignore late overall-count responses once a newer load cycle has started or the hook unmounted.
+    const loadOverallCountGeneration = this.loadOverallCountGeneration + 1
+
+    this.loadOverallCountGeneration = loadOverallCountGeneration
+
+    const baseQuery = this.p.collection || this.p.modelClass.all()
+    const overallCount = await baseQuery.count()
+
+    if (loadOverallCountGeneration != this.loadOverallCountGeneration) return
+
+    this.setState({
+      overallCount,
+      showNoRecordsAvailableContent: this.showNoRecordsAvailableContent({overallCount}),
+      showNoRecordsFoundContent: this.showNoRecordsFoundContent({overallCount})
+    })
+  }
+
+  /** @returns {{qParams: Record<string, any>, searchParams: string[]}} */
+  loadQParams() {
+    let qParamsToSet = Object.assign({}, this.p.defaultParams)
+    const searchParams = []
+
+    if (this.queryParams && this.queryQName() in this.queryParams) {
+      qParamsToSet = JSON.parse(digg(this.queryParams, this.queryQName()))
+    }
+
+    if (this.queryParams?.[this.querySName()]) {
+      for (const rawSearchParam of this.queryParams[this.querySName()]) {
+        const parsedSearchParam = JSON.parse(rawSearchParam)
+
+        searchParams.push(parsedSearchParam)
+      }
+    }
+
+    this.setState({
+      qParams: qParamsToSet,
+      searchParams
+    })
+
+    return {
+      qParams: qParamsToSet,
+      searchParams
+    }
+  }
+
+  /**
+   * @param {object} [args]
+   * @param {Record<string, any>} [args.qParams]
+   * @param {string[]} [args.searchParams]
+   * @returns {{qParams: Record<string, any>, searchParams: string[]}}
+   */
+  loadModelsArgs(args = {}) {
+    return {
+      qParams: args.qParams ?? this.s.qParams,
+      searchParams: args.searchParams ?? this.s.searchParams
+    }
+  }
+
+  /**
+   * @param {object} [args]
+   * @param {Record<string, any>} [args.qParams]
+   * @param {string[]} [args.searchParams]
+   * @returns {Promise<void>}
+   */
+  loadModels = async (args = {}) => {
+    // Only the newest collection request is allowed to update state after navigation/filter changes.
+    const loadModelsGeneration = this.loadModelsGeneration + 1
+    const {qParams, searchParams} = this.loadModelsArgs(args)
+
+    this.loadModelsGeneration = loadModelsGeneration
+    let query = this.p.collection?.clone() || this.p.modelClass.ransack()
+
+    if (this.p.pagination) {
+      const page = this.queryParams?.[this.queryPageName()] || 1
+      let per = this.queryParams?.[this.queryPerKey()] || 30
+
+      if (per == "all") {
+        per = 999_999_999
+      } else {
+        per = Number(per)
+      }
+
+      query.page(page).per(per)
+    }
+
+    if (this.p.groupBy) query = query.groupBy(...this.p.groupBy)
+
+    query = query
+      .ransack(qParams)
+      .search(searchParams)
+      .searchKey(this.queryQName())
+      .pageKey(this.queryPageName())
+      .perKey(this.queryPerKey())
+
+    if (this.p.abilities) query.abilities(this.p.abilities)
+    if (this.p.limit !== undefined) query.limit(this.p.limit)
+    if (this.p.preloads) query.preload(this.p.preloads)
+    if (this.p.ransack) query.ransack(this.p.ransack)
+    if (this.p.select) query.select(this.p.select)
+    if (this.p.selectColumns) query.selectColumns(this.p.selectColumns)
+
+    let result
+
+    if (this.p.queryMethod) {
+      result = await this.p.queryMethod({query})
+    } else {
+      result = await query.result()
+    }
+
+    const models = result.models()
+
+    if (loadModelsGeneration != this.loadModelsGeneration) return
+
+    if (this.p.onModelsLoaded) {
+      this.p.onModelsLoaded({
+        models,
+        qParams: this.s.qParams,
+        query,
+        result
+      })
+    }
+
+    this.setState({
+      models,
+      query,
+      result,
+      showNoRecordsAvailableContent: this.showNoRecordsAvailableContent({models}),
+      showNoRecordsFoundContent: this.showNoRecordsFoundContent({models})
+    })
+  }
+
+  /** @param {{model: import("./base-model.js").default}} args */
+  onModelDestroyed(args) {
+    const destroyedModel = digg(args, "model")
+
+    this.setState({
+      models: this.s.models.filter((model) => model.id() != destroyedModel.id())
+    })
+  }
+
+  /** @param {{model: import("./base-model.js").default}} args */
+  onModelUpdated(args) {
+    const updatedModel = digg(args, "model")
+    const foundModel = this.s.models.find((model) => model.id() == updatedModel.id())
+
+    if (foundModel) this.loadModelsDebounce()()
+  }
+
+  /** @returns {void} */
+  onCreated() {
+    this.loadModelsDebounce()()
+  }
+
+  /** @returns {void} */
+  componentDidMount() {
+    this.setState({readyToLoad: true})
+  }
+
+  /** @returns {void} */
+  setup() {
+    this.useStates({
+      models: undefined,
+      overallCount: undefined,
+      qParams: {},
+      query: undefined,
+      readyToLoad: false,
+      result: undefined,
+      searchParams: undefined,
+      showNoRecordsAvailableContent: false,
+      showNoRecordsFoundContent: false
+    })
+    this.setInstance({queryParams: useQueryParams()})
+
+    // Wait until componentDidMount has flipped readyToLoad so the first load runs after useShapeHook has marked the hook mounted.
+    useEffect(
+      () => {
+        if (!this.s.readyToLoad) return
+        let ifConditionMet
+
+        if (typeof this.p.ifCondition == "function") {
+          ifConditionMet = this.p.ifCondition()
+        } else if (this.p.ifCondition === undefined) {
+          ifConditionMet = true
+        } else {
+          ifConditionMet = this.p.ifCondition
+        }
+
+        if (ifConditionMet) {
+          const {qParams, searchParams} = this.loadQParams()
+
+          this.loadModels({qParams, searchParams})
+        }
+      },
+      [
+        this.p.modelClass,
+        this.p.ifCondition,
+        this.queryName(),
+        this.queryParams?.[this.queryQName()],
+        this.queryParams?.[this.queryPageName()],
+        this.queryParams?.[this.queryPerKey()],
+        this.queryParams?.[this.querySName()],
+        this.s.readyToLoad,
+        this.p.collection
+      ].concat(this.p.cacheKeys)
+    )
+
+    useEffect(() => {
+      if (!this.s.readyToLoad) return
+      if (this.p.noRecordsAvailableContent) {
+        this.loadOverallCount()
+      }
+    }, [this.p.modelClass, this.s.readyToLoad])
+
+    useCreatedEvent(this.p.modelClass, () => this.onCreated())
+
+    // Invalidate any in-flight async responses so unmounted hooks cannot write stale state.
+    useEffect(() => () => {
+      this.loadModelsGeneration += 1
+      this.loadOverallCountGeneration += 1
+      this.loadModelsDebounce().clear?.()
+    }, [])
+
+    useEffect(() => {
+      const connections = []
+
+      if (this.s.models) {
+        for (const model of this.s.models) {
+          connections.push(ModelEvents.connectUpdated(model, (args) => this.onModelUpdated(args)))
+          connections.push(ModelEvents.connectDestroyed(model, (args) => this.onModelDestroyed(args)))
+        }
+      }
+
+      return () => {
+        for (const connection of connections) {
+          connection.unsubscribe()
+        }
+      }
+    }, [this.modelIdsCacheString()])
+  }
+}
+
 const useCollection = (props, cacheKeys = []) => {
   const {
     abilities,
@@ -62,7 +399,7 @@ const useCollection = (props, cacheKeys = []) => {
     pagination = false,
     preloads = [],
     queryMethod,
-    queryName: initialQueryName,
+    queryName,
     ransack,
     select = {},
     selectColumns,
@@ -73,270 +410,36 @@ const useCollection = (props, cacheKeys = []) => {
     throw new Error(`Unknown props given to useCollection: ${Object.keys(restProps).join(", ")}`)
   }
 
-  const s = useShape(props)
-  const queryName = initialQueryName || digg(modelClass.modelClassData(), "collectionKey")
-  const loadModelsGenerationRef = useRef(0)
-  const loadOverallCountGenerationRef = useRef(0)
-
-  s.meta.queryParams = useQueryParams()
-
-  const hasQParams = useCallback(() => {
-    if (s.s.queryQName in s.m.queryParams) return true
-
-    return false
-  }, [])
-
-  const qParams = useCallback(() => {
-    if (hasQParams()) return JSON.parse(digg(s.m.queryParams, s.s.queryQName))
-
-    return {}
-  }, [])
-
-  s.useStates({
-    models: undefined,
-    overallCount: undefined,
-    query: undefined,
+  const shapeHook = useShapeHook(UseCollectionShapeHook, {
+    abilities,
+    cacheKeys,
+    collection,
+    defaultParams,
+    groupBy,
+    ifCondition,
+    limit,
+    modelClass,
+    noRecordsAvailableContent,
+    noRecordsFoundContent,
+    onModelsLoaded,
+    pagination,
+    preloads,
+    queryMethod,
     queryName,
-    queryPerKey: `${queryName}_per`,
-    queryQName: `${queryName}_q`,
-    querySName: `${queryName}_s`,
-    queryPageName: `${queryName}_page`,
-    result: undefined,
-    searchParams: undefined,
-    showNoRecordsAvailableContent: false,
-    showNoRecordsFoundContent: false
+    ransack,
+    select,
+    selectColumns
   })
-  s.useStates({
-    qParams: () => qParams()
-  })
+  const result = /** @type {UseCollectionResult & Record<string, any>} */ (Object.assign({}, shapeHook.state))
+  const modelVariableName = inflection.pluralize(inflection.camelize(shapeHook.p.modelClass.modelClassData().name, true))
 
-  let modelIdsCacheString
-
-  if (s.s.models === undefined) {
-    modelIdsCacheString = "models-undefined"
-  } else if (s.s.models.length === 0) {
-    modelIdsCacheString = "no-models"
-  } else {
-    modelIdsCacheString = s.s.models.map((model) => model.cacheKey())?.join("---")
-  }
-
-  const loadOverallCount = useCallback(async () => {
-    // Ignore late overall-count responses once a newer load cycle has started or the hook unmounted.
-    const loadOverallCountGeneration = loadOverallCountGenerationRef.current + 1
-
-    loadOverallCountGenerationRef.current = loadOverallCountGeneration
-
-    const baseQuery = s.p.collection || s.p.modelClass.all()
-    const overallCount = await baseQuery.count()
-
-    if (loadOverallCountGeneration != loadOverallCountGenerationRef.current) return
-
-    s.set({
-      overallCount,
-      showNoRecordsAvailableContent: showNoRecordsAvailableContent({overallCount}),
-      showNoRecordsFoundContent: showNoRecordsFoundContent({overallCount})
-    })
-  }, [])
-
-  const loadQParams = useCallback(() => {
-    const qParamsToSet = hasQParams() ? qParams() : Object.assign({}, s.props.defaultParams)
-    const searchParams = []
-
-    if (s.m.queryParams[s.s.querySName]) {
-      for (const rawSearchParam of s.m.queryParams[s.s.querySName]) {
-        const parsedSearchParam = JSON.parse(rawSearchParam)
-
-        searchParams.push(parsedSearchParam)
-      }
-    }
-
-    s.set({
-      qParams: qParamsToSet,
-      searchParams
-    })
-  }, [])
-
-  const loadModels = useCallback(async () => {
-    // Only the newest collection request is allowed to update state after navigation/filter changes.
-    const loadModelsGeneration = loadModelsGenerationRef.current + 1
-
-    loadModelsGenerationRef.current = loadModelsGeneration
-    let query = s.props.collection?.clone() || s.p.modelClass.ransack()
-
-    if (s.props.pagination) {
-      const page = s.m.queryParams[s.s.queryPageName] || 1
-      let per = s.m.queryParams[s.s.queryPerKey] || 30
-
-      if (per == "all") {
-        per = 999_999_999
-      } else {
-        per = Number(per)
-      }
-
-      query.page(page).per(per)
-    }
-
-    if (s.props.groupBy) query = query.groupBy(...s.p.groupBy)
-
-    query = query
-      .ransack(s.s.qParams)
-      .search(s.s.searchParams)
-      .searchKey(s.s.queryQName)
-      .pageKey(s.s.queryPageName)
-      .perKey(s.s.queryPerKey)
-
-    if (s.props.abilities) query.abilities(s.p.abilities)
-    if (s.props.limit !== undefined) query.limit(s.p.limit)
-    if (s.props.preloads) query.preload(s.p.preloads)
-    if (s.props.ransack) query.ransack(s.props.ransack)
-    if (s.props.select) query.select(s.p.select)
-    if (s.props.selectColumns) query.selectColumns(s.p.selectColumns)
-
-    let result
-
-    if (s.props.queryMethod) {
-      result = await s.p.queryMethod({query})
-    } else {
-      result = await query.result()
-    }
-
-    const models = result.models()
-
-    if (loadModelsGeneration != loadModelsGenerationRef.current) return
-
-    if (s.props.onModelsLoaded) {
-      s.p.onModelsLoaded({
-        models,
-        qParams: s.s.qParams,
-        query,
-        result
-      })
-    }
-
-    s.set({
-      models: result.models(),
-      query,
-      result,
-      showNoRecordsAvailableContent: showNoRecordsAvailableContent({models}),
-      showNoRecordsFoundContent: showNoRecordsFoundContent({models})
-    })
-  }, [])
-
-  const loadModelsDebounce = useCallback(debounce(loadModels), [])
-  const onModelDestroyed = useCallback((args) => {
-    s.set({
-      models: s.s.models.filter((model) => model.id() != args.model.id())
-    })
-  }, [])
-
-  const onModelUpdated = useCallback((args) => {
-    const updatedModel = digg(args, "model")
-    const foundModel = s.s.models.find((model) => model.id() == updatedModel.id())
-
-    if (foundModel) loadModelsDebounce()
-  }, [])
-
-  const showNoRecordsAvailableContent = useCallback((args) => {
-    let models, overallCount
-
-    if (args.models !== undefined) {
-      models = args.models
-    } else if (s.s.models !== undefined) {
-      models = s.s.models
-    }
-
-    if (args.overallCount !== undefined) {
-      overallCount = args.overallCount
-    } else if (s.s.overallCount !== undefined) {
-      overallCount = s.s.overallCount
-    }
-
-    if (models === undefined || overallCount === undefined || s.p.noRecordsAvailableContent === undefined) return false
-    if (models.length === 0 && overallCount === 0 && s.p.noRecordsAvailableContent) return true
-  }, [])
-
-  const showNoRecordsFoundContent = useCallback((args) => {
-    let models, overallCount
-
-    if (args.models !== undefined) {
-      models = args.models
-    } else if (s.s.models !== undefined) {
-      models = s.s.models
-    }
-
-    if (args.overallCount !== undefined) {
-      overallCount = args.overallCount
-    } else if (s.s.overallCount !== undefined) {
-      overallCount = s.s.overallCount
-    }
-
-    if (models === undefined || s.props.noRecordsFoundContent === undefined) return false
-
-    // Dont show noRecordsAvailableContent together with noRecordsAvailableContent
-    if (models.length === 0 && overallCount === 0 && s.props.noRecordsAvailableContent) return false
-    if (models.length === 0 && s.props.noRecordsFoundContent) return true
-  }, [])
-
-  const onCreated = useCallback(() => {
-    loadModelsDebounce()
-  }, [])
-
-  // Collection loading has to wait until mount so fast responses cannot get stranded in ShapeHook's pre-mount queue.
-  useEffect(
-    () => {
-      if (!("ifCondition" in s.props) || s.props.ifCondition) {
-        loadQParams()
-        loadModels()
-      }
-    },
-    [
-      modelClass,
-      s.props.ifCondition,
-      s.s.queryName,
-      s.m.queryParams[s.s.queryQName],
-      s.m.queryParams[s.s.queryPageName],
-      s.m.queryParams[s.s.queryPerKey],
-      s.m.queryParams[s.s.querySName],
-      collection
-    ].concat(cacheKeys)
-  )
-
-  useEffect(() => {
-    if (s.props.noRecordsAvailableContent) {
-      loadOverallCount()
-    }
-  }, [modelClass])
-
-  useCreatedEvent(s.p.modelClass, onCreated)
-
-  // Invalidate any in-flight async responses so unmounted hooks cannot write stale state.
-  useEffect(() => () => {
-    loadModelsGenerationRef.current += 1
-    loadOverallCountGenerationRef.current += 1
-  }, [])
-
-  useEffect(() => {
-    const connections = []
-
-    if (s.s.models) {
-      for(const model of s.s.models) {
-        connections.push(ModelEvents.connectUpdated(model, onModelUpdated))
-        connections.push(ModelEvents.connectDestroyed(model, onModelDestroyed))
-      }
-    }
-
-    return () => {
-      for(const connection of connections) {
-        connection.unsubscribe()
-      }
-    }
-  }, [modelIdsCacheString])
-
-  const result = /** @type {UseCollectionResult & Record<string, any>} */ (Object.assign({}, s.state))
-  const modelVariableName = inflection.pluralize(inflection.camelize(modelClass.modelClassData().name, true))
-
-  result.modelIdsCacheString = modelIdsCacheString
-  result[modelVariableName] = s.s.models
+  result.modelIdsCacheString = shapeHook.modelIdsCacheString()
+  result.queryName = shapeHook.queryName()
+  result.queryPerKey = shapeHook.queryPerKey()
+  result.queryQName = shapeHook.queryQName()
+  result.querySName = shapeHook.querySName()
+  result.queryPageName = shapeHook.queryPageName()
+  result[modelVariableName] = shapeHook.s.models
 
   return result
 }

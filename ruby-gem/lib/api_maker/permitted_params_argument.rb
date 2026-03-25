@@ -11,6 +11,14 @@ class ApiMaker::PermittedParamsArgument
   end
 
   def params
-    @params ||= command.args&.dig(:save) || {}
+    @params ||= begin
+      raw_params = command.args&.dig(:save) || {}
+
+      if raw_params.is_a?(ActionController::Parameters)
+        raw_params
+      else
+        ActionController::Parameters.new(raw_params)
+      end
+    end
   end
 end
