@@ -3,6 +3,7 @@ require "digest"
 class ApiMaker::RequestsChannel < ApplicationCable::Channel
   def subscribed
     @last_command_event_sequence_by_request_id = {}
+    @execute_mutex = Mutex.new if resolved_concurrency_mode == :mutex
   end
 
   def execute(data)
@@ -30,22 +31,11 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
 
     return unless request_registration.fetch(:start_execution)
 
-    # Check out a dedicated connection so concurrent requests on the same
-    # channel (running in separate Fibers) don't share the thread's default
-    # connection and trigger "This connection is in use by" errors.
-    ActiveRecord::Base.connection_pool.with_connection do
-      response = ApiMaker::CommandRequestExecutor.execute!(
-        controller: request_context(data, request_fingerprint: fingerprint, request_uid:),
-        payload: data.fetch("request")
-      )
-      response_payload = {
-        response:,
-        type: "api_maker_request_response"
-      }
-
-      ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :completed)
-      transmit_request_payloads(request_uid:, response_payload:)
-    end
+    # With Fiber-level isolation each Fiber gets its own DB connection from
+    # the pool, so requests can run concurrently. Without it (e.g. test env
+    # using transactional fixtures) we fall back to a mutex so concurrent
+    # Fibers don't conflict on the shared thread connection.
+    execute_command(data, fingerprint:, request_uid:)
   rescue => e # rubocop:disable Style/RescueStandardError
     response_payload = {
       response: {errors: [{message: e.message, type: :runtime_error}], success: false},
@@ -81,6 +71,56 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
   end
 
 private
+
+  def execute_command(data, fingerprint:, request_uid:)
+    case resolved_concurrency_mode
+    when :mutex
+      @execute_mutex.synchronize { run_command_executor(data, fingerprint:, request_uid:) }
+    when :multi_connection
+      ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
+    when :none
+      run_command_executor(data, fingerprint:, request_uid:)
+    end
+  end
+
+  def resolved_concurrency_mode
+    @resolved_concurrency_mode ||= begin
+      configured = ApiMaker::Configuration.current.request_concurrency_mode
+
+      mode = if configured == :auto
+        fiber_isolation? ? :multi_connection : :mutex
+      else
+        configured
+      end
+
+      unless ApiMaker::Configuration::REQUEST_CONCURRENCY_MODES.include?(mode)
+        raise ArgumentError, "Invalid request_concurrency_mode: #{mode.inspect}. Must be one of #{ApiMaker::Configuration::REQUEST_CONCURRENCY_MODES.inspect}"
+      end
+
+      mode
+    end
+  end
+
+  def fiber_isolation?
+    ActiveSupport::IsolatedExecutionState.respond_to?(:isolation_level) &&
+      ActiveSupport::IsolatedExecutionState.isolation_level == :fiber
+  rescue StandardError
+    false
+  end
+
+  def run_command_executor(data, fingerprint:, request_uid:)
+    response = ApiMaker::CommandRequestExecutor.execute!(
+      controller: request_context(data, request_fingerprint: fingerprint, request_uid:),
+      payload: data.fetch("request")
+    )
+    response_payload = {
+      response:,
+      type: "api_maker_request_response"
+    }
+
+    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :completed)
+    transmit_request_payloads(request_uid:, response_payload:)
+  end
 
   def replay_command_events(command_events:, request_id:)
     command_events.each do |command_event|
