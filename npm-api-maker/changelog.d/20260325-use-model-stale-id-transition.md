@@ -1,0 +1,1 @@
+Fixed `useModel` so it does not expose a stale loaded model while a new ID from route/query params is loading. This prevents member commands from being sent for the previously viewed record during navigation transitions.
