@@ -269,7 +269,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       noRecordsAvailableContent: this.props.noRecordsAvailableContent,
       noRecordsFoundContent: this.props.noRecordsFoundContent,
       pagination: true,
-      preloads: this.state.preload,
+      preloads: this.s.preload,
       queryMethod: this.props.queryMethod,
       queryName,
       select,
@@ -356,7 +356,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     })
   }
 
-  updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.state.tableSetting.fullCacheKey()})
+  updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.s.tableSetting.fullCacheKey()})
 
   columnsAsArray = () => {
     if (typeof this.props.columns == "function") {
@@ -724,7 +724,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         formRef={filterFormRef}
         htmlFormProps={styles.filterFormHtmlProps ||= {className: "live-table--filter-form"}}
         onSubmit={this.tt.onFilterFormSubmit}
-        setForm={this.setStates.filterForm}
+        setForm={/** @type {Record<string, any>} */ (this.setStates).filterForm}
       >
         {"s" in actualQParams &&
           <input name="s" type="hidden" value={actualQParams.s} />
@@ -749,7 +749,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   onFilterClicked = (e) => {
     e.preventDefault()
-    this.setState({showFilters: !this.state.showFilters})
+    this.setState({showFilters: !this.s.showFilters})
   }
 
   onPerPageChanged = (e) => {
@@ -911,6 +911,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     )
   }
 
+  /** @param {Record<string, any>} [args] */
   tableControls({models, qParams, query, result} = {}) {
     const {controls} = this.props
     const {showSettings} = this.s

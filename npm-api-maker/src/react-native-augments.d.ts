@@ -14,7 +14,4 @@ declare module "react-native" {
     dataSet?: Record<string, string | number | boolean | undefined>
   }
 
-  interface ModalProps {
-    dataSet?: Record<string, string | number | boolean | undefined>
-  }
 }

@@ -69,7 +69,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckAllCheck
 
   render() {
     const {className, style} = this.props
-    const {checked, indeterminate} = this.state
+    const {checked, indeterminate} = this.s
 
     return (
       <Checkbox
