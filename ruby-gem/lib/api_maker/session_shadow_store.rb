@@ -25,7 +25,7 @@ class ApiMaker::SessionShadowStore
     Rails.cache.read(cache_key(session_id))
   end
 
-  def self.read_signed(request:, token:)
+  def self.read_signed(request: nil, token:) # rubocop:disable Lint/UnusedMethodArgument
     session_id = session_id_from_signed_token(token:)
 
     return if session_id.blank?
