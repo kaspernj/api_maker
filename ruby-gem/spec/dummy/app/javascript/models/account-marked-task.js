@@ -1,5 +1,8 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
-import modelClassRequire from "@kaspernj/api-maker/build/model-class-require.js"
+import Account from "./account.js"
+import Task from "./task.js"
 
 const modelClassData = {
   "attributes": {
@@ -140,8 +143,8 @@ const modelClassData = {
 }
 
 /** Frontend model for AccountMarkedTask. */
-class AccountMarkedTask extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class AccountMarkedTask extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -184,7 +187,7 @@ class AccountMarkedTask extends BaseModel {
 
   /** @returns {import("./account.js").default | null} */
   account() {
-    return this._readBelongsToReflection({reflectionName: "account"})
+    return this._readBelongsToReflection({modelClass: Account, reflectionName: "account"})
   }
 
   /** @returns {Promise<import("./account.js").default | null>} */
@@ -192,20 +195,23 @@ class AccountMarkedTask extends BaseModel {
     if (!("accountId" in this)) throw new Error("Foreign key method wasn't defined: accountId")
 
     const id = this.accountId()
-    const modelClass = modelClassRequire("Account")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "account", model: this, modelClass},
+      {
+        reflectionName: "account",
+        model: this,
+        modelClass: Account
+      },
       {ransack}
     )
   }
 
   /** @returns {import("./task.js").default | null} */
   task() {
-    return this._readBelongsToReflection({reflectionName: "task"})
+    return this._readBelongsToReflection({modelClass: Task, reflectionName: "task"})
   }
 
   /** @returns {Promise<import("./task.js").default | null>} */
@@ -213,16 +219,17 @@ class AccountMarkedTask extends BaseModel {
     if (!("taskId" in this)) throw new Error("Foreign key method wasn't defined: taskId")
 
     const id = this.taskId()
-    const modelClass = modelClassRequire("Task")
     const ransack = {}
 
     ransack["id_eq"] = id
 
     return this._loadBelongsToReflection(
-      {reflectionName: "task", model: this, modelClass},
+      {
+        reflectionName: "task",
+        model: this,
+        modelClass: Task
+      },
       {ransack}
     )
   }
 }
-
-export default AccountMarkedTask

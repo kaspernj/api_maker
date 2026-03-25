@@ -106,28 +106,10 @@
         ],
         "ransackable_attributes": [
           {
-            "name": "id",
-            "column": {
-              "default": null,
-              "name": "id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
             "name": "account_id",
             "column": {
               "default": null,
               "name": "account_id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "task_id",
-            "column": {
-              "default": null,
-              "name": "task_id",
               "null": false,
               "type": "integer"
             }
@@ -139,6 +121,24 @@
               "name": "created_at",
               "null": false,
               "type": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "column": {
+              "default": null,
+              "name": "id",
+              "null": false,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "task_id",
+            "column": {
+              "default": null,
+              "name": "task_id",
+              "null": false,
+              "type": "integer"
             }
           },
           {
@@ -295,15 +295,6 @@
         "pluralName": "accounts",
         "ransackable_associations": [
           {
-            "className": "Customer",
-            "collectionName": "customers",
-            "foreignKey": "customer_id",
-            "name": "customer",
-            "macro": "belongs_to",
-            "resource_name": "Customer",
-            "through": null
-          },
-          {
             "className": "AccountMarkedTask",
             "collectionName": "account_marked_tasks",
             "foreignKey": "account_id",
@@ -313,21 +304,21 @@
             "through": null
           },
           {
-            "className": "Task",
-            "collectionName": "tasks",
-            "foreignKey": "task_id",
-            "name": "tasks",
-            "macro": "has_many",
-            "resource_name": "Task",
-            "through": "account_marked_tasks"
+            "className": "Customer",
+            "collectionName": "customers",
+            "foreignKey": "parent_id",
+            "name": "commune",
+            "macro": "has_one",
+            "resource_name": "Customer",
+            "through": "customer"
           },
           {
-            "className": "Project",
-            "collectionName": "projects",
-            "foreignKey": "account_id",
-            "name": "projects",
-            "macro": "has_many",
-            "resource_name": "Project",
+            "className": "Customer",
+            "collectionName": "customers",
+            "foreignKey": "customer_id",
+            "name": "customer",
+            "macro": "belongs_to",
+            "resource_name": "Customer",
             "through": null
           },
           {
@@ -349,6 +340,24 @@
             "through": "projects"
           },
           {
+            "className": "Project",
+            "collectionName": "projects",
+            "foreignKey": "account_id",
+            "name": "projects",
+            "macro": "has_many",
+            "resource_name": "Project",
+            "through": null
+          },
+          {
+            "className": "Task",
+            "collectionName": "tasks",
+            "foreignKey": "task_id",
+            "name": "tasks",
+            "macro": "has_many",
+            "resource_name": "Task",
+            "through": "account_marked_tasks"
+          },
+          {
             "className": "User",
             "collectionName": "users",
             "foreignKey": "user_id",
@@ -356,50 +365,14 @@
             "macro": "has_many",
             "resource_name": "User",
             "through": "tasks"
-          },
-          {
-            "className": "Customer",
-            "collectionName": "customers",
-            "foreignKey": "parent_id",
-            "name": "commune",
-            "macro": "has_one",
-            "resource_name": "Customer",
-            "through": "customer"
           }
         ],
         "ransackable_attributes": [
-          {
-            "name": "id",
-            "column": {
-              "default": null,
-              "name": "id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "name",
-            "column": {
-              "default": null,
-              "name": "name",
-              "null": true,
-              "type": "string"
-            }
-          },
           {
             "name": "created_at",
             "column": {
               "default": null,
               "name": "created_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "updated_at",
-            "column": {
-              "default": null,
-              "name": "updated_at",
               "null": false,
               "type": "datetime"
             }
@@ -419,6 +392,33 @@
               "default": null,
               "name": "deleted_at",
               "null": true,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "column": {
+              "default": null,
+              "name": "id",
+              "null": false,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "name",
+            "column": {
+              "default": null,
+              "name": "name",
+              "null": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at",
+            "column": {
+              "default": null,
+              "name": "updated_at",
+              "null": false,
               "type": "datetime"
             }
           }
@@ -532,134 +532,10 @@
         "nameDasherized": "activity",
         "pluralName": "public_activity_activities",
         "ransackable_associations": [
-          {
-            "className": "Trackable",
-            "collectionName": null,
-            "foreignKey": "trackable_id",
-            "name": "trackable",
-            "macro": "belongs_to",
-            "resource_name": null,
-            "through": null
-          },
-          {
-            "className": "Owner",
-            "collectionName": null,
-            "foreignKey": "owner_id",
-            "name": "owner",
-            "macro": "belongs_to",
-            "resource_name": null,
-            "through": null
-          },
-          {
-            "className": "Recipient",
-            "collectionName": null,
-            "foreignKey": "recipient_id",
-            "name": "recipient",
-            "macro": "belongs_to",
-            "resource_name": null,
-            "through": null
-          }
+
         ],
         "ransackable_attributes": [
-          {
-            "name": "id",
-            "column": {
-              "default": null,
-              "name": "id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "trackable_type",
-            "column": {
-              "default": null,
-              "name": "trackable_type",
-              "null": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "trackable_id",
-            "column": {
-              "default": null,
-              "name": "trackable_id",
-              "null": true,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "owner_type",
-            "column": {
-              "default": null,
-              "name": "owner_type",
-              "null": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "owner_id",
-            "column": {
-              "default": null,
-              "name": "owner_id",
-              "null": true,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "key",
-            "column": {
-              "default": null,
-              "name": "key",
-              "null": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "parameters",
-            "column": {
-              "default": null,
-              "name": "parameters",
-              "null": true,
-              "type": "text"
-            }
-          },
-          {
-            "name": "recipient_type",
-            "column": {
-              "default": null,
-              "name": "recipient_type",
-              "null": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "recipient_id",
-            "column": {
-              "default": null,
-              "name": "recipient_id",
-              "null": true,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "created_at",
-            "column": {
-              "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "updated_at",
-            "column": {
-              "default": null,
-              "name": "updated_at",
-              "null": false,
-              "type": "datetime"
-            }
-          }
+
         ],
         "ransackable_scopes": [
 
@@ -760,37 +636,10 @@
         ],
         "ransackable_attributes": [
           {
-            "name": "id",
-            "column": {
-              "default": null,
-              "name": "id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
             "name": "author_id",
             "column": {
               "default": null,
               "name": "author_id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "resource_type",
-            "column": {
-              "default": null,
-              "name": "resource_type",
-              "null": false,
-              "type": "string"
-            }
-          },
-          {
-            "name": "resource_id",
-            "column": {
-              "default": null,
-              "name": "resource_id",
               "null": false,
               "type": "integer"
             }
@@ -811,6 +660,33 @@
               "name": "created_at",
               "null": false,
               "type": "datetime"
+            }
+          },
+          {
+            "name": "id",
+            "column": {
+              "default": null,
+              "name": "id",
+              "null": false,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "resource_id",
+            "column": {
+              "default": null,
+              "name": "resource_id",
+              "null": false,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "resource_type",
+            "column": {
+              "default": null,
+              "name": "resource_type",
+              "null": false,
+              "type": "string"
             }
           },
           {
@@ -937,40 +813,13 @@
             "through": null
           },
           {
-            "className": "Project",
-            "collectionName": "projects",
-            "foreignKey": "account_id",
-            "name": "projects",
-            "macro": "has_many",
-            "resource_name": "Project",
-            "through": "accounts"
-          },
-          {
-            "className": "ProjectDetail",
-            "collectionName": "project_details",
-            "foreignKey": "project_id",
-            "name": "project_details",
-            "macro": "has_many",
-            "resource_name": "ProjectDetail",
-            "through": "projects"
-          },
-          {
-            "className": "Task",
-            "collectionName": "tasks",
-            "foreignKey": "project_id",
-            "name": "tasks",
-            "macro": "has_many",
-            "resource_name": "Task",
-            "through": "projects"
-          },
-          {
-            "className": "CustomerRelationship",
-            "collectionName": null,
+            "className": "Customer",
+            "collectionName": "customers",
             "foreignKey": "child_id",
-            "name": "parent_relationships",
+            "name": "children",
             "macro": "has_many",
-            "resource_name": null,
-            "through": null
+            "resource_name": "Customer",
+            "through": "children_relationships"
           },
           {
             "className": "CustomerRelationship",
@@ -984,29 +833,11 @@
           {
             "className": "Customer",
             "collectionName": "customers",
-            "foreignKey": "child_id",
-            "name": "children",
-            "macro": "has_many",
-            "resource_name": "Customer",
-            "through": "children_relationships"
-          },
-          {
-            "className": "Customer",
-            "collectionName": "customers",
             "foreignKey": "parent_id",
-            "name": "parents",
-            "macro": "has_many",
+            "name": "commune",
+            "macro": "has_one",
             "resource_name": "Customer",
-            "through": "parent_relationships"
-          },
-          {
-            "className": "CustomerRelationship",
-            "collectionName": null,
-            "foreignKey": "parent_id",
-            "name": "commune_for_relationships",
-            "macro": "has_many",
-            "resource_name": null,
-            "through": null
+            "through": "commune_relationship"
           },
           {
             "className": "Customer",
@@ -1020,6 +851,15 @@
           {
             "className": "CustomerRelationship",
             "collectionName": null,
+            "foreignKey": "parent_id",
+            "name": "commune_for_relationships",
+            "macro": "has_many",
+            "resource_name": null,
+            "through": null
+          },
+          {
+            "className": "CustomerRelationship",
+            "collectionName": null,
             "foreignKey": "child_id",
             "name": "commune_relationship",
             "macro": "has_one",
@@ -1027,16 +867,61 @@
             "through": null
           },
           {
+            "className": "CustomerRelationship",
+            "collectionName": null,
+            "foreignKey": "child_id",
+            "name": "parent_relationships",
+            "macro": "has_many",
+            "resource_name": null,
+            "through": null
+          },
+          {
             "className": "Customer",
             "collectionName": "customers",
             "foreignKey": "parent_id",
-            "name": "commune",
-            "macro": "has_one",
+            "name": "parents",
+            "macro": "has_many",
             "resource_name": "Customer",
-            "through": "commune_relationship"
+            "through": "parent_relationships"
+          },
+          {
+            "className": "ProjectDetail",
+            "collectionName": "project_details",
+            "foreignKey": "project_id",
+            "name": "project_details",
+            "macro": "has_many",
+            "resource_name": "ProjectDetail",
+            "through": "projects"
+          },
+          {
+            "className": "Project",
+            "collectionName": "projects",
+            "foreignKey": "account_id",
+            "name": "projects",
+            "macro": "has_many",
+            "resource_name": "Project",
+            "through": "accounts"
+          },
+          {
+            "className": "Task",
+            "collectionName": "tasks",
+            "foreignKey": "project_id",
+            "name": "tasks",
+            "macro": "has_many",
+            "resource_name": "Task",
+            "through": "projects"
           }
         ],
         "ransackable_attributes": [
+          {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
+              "null": false,
+              "type": "datetime"
+            }
+          },
           {
             "name": "id",
             "column": {
@@ -1053,15 +938,6 @@
               "name": "name",
               "null": true,
               "type": "string"
-            }
-          },
-          {
-            "name": "created_at",
-            "column": {
-              "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
             }
           },
           {
@@ -1175,24 +1051,6 @@
         "pluralName": "project_details",
         "ransackable_associations": [
           {
-            "className": "Project",
-            "collectionName": "projects",
-            "foreignKey": "project_id",
-            "name": "project",
-            "macro": "belongs_to",
-            "resource_name": "Project",
-            "through": null
-          },
-          {
-            "className": "ProjectDetailFile",
-            "collectionName": null,
-            "foreignKey": "project_detail_id",
-            "name": "project_detail_files",
-            "macro": "has_many",
-            "resource_name": null,
-            "through": null
-          },
-          {
             "className": "Account",
             "collectionName": "accounts",
             "foreignKey": "account_id",
@@ -1209,9 +1067,54 @@
             "macro": "has_many",
             "resource_name": "Customer",
             "through": "accounts"
+          },
+          {
+            "className": "Project",
+            "collectionName": "projects",
+            "foreignKey": "project_id",
+            "name": "project",
+            "macro": "belongs_to",
+            "resource_name": "Project",
+            "through": null
+          },
+          {
+            "className": "ProjectDetailFile",
+            "collectionName": null,
+            "foreignKey": "project_detail_id",
+            "name": "project_detail_files",
+            "macro": "has_many",
+            "resource_name": null,
+            "through": null
           }
         ],
         "ransackable_attributes": [
+          {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
+              "null": false,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "deleted_at",
+            "column": {
+              "default": null,
+              "name": "deleted_at",
+              "null": true,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "details",
+            "column": {
+              "default": null,
+              "name": "details",
+              "null": true,
+              "type": "string"
+            }
+          },
           {
             "name": "id",
             "column": {
@@ -1231,38 +1134,11 @@
             }
           },
           {
-            "name": "details",
-            "column": {
-              "default": null,
-              "name": "details",
-              "null": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "created_at",
-            "column": {
-              "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
             "name": "updated_at",
             "column": {
               "default": null,
               "name": "updated_at",
               "null": false,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "deleted_at",
-            "column": {
-              "default": null,
-              "name": "deleted_at",
-              "null": true,
               "type": "datetime"
             }
           }
@@ -1484,24 +1360,6 @@
             "through": null
           },
           {
-            "className": "ProjectSecret",
-            "collectionName": null,
-            "foreignKey": "project_id",
-            "name": "project_secrets",
-            "macro": "has_many",
-            "resource_name": null,
-            "through": null
-          },
-          {
-            "className": "Task",
-            "collectionName": "tasks",
-            "foreignKey": "project_id",
-            "name": "tasks",
-            "macro": "has_many",
-            "resource_name": "Task",
-            "through": null
-          },
-          {
             "className": "Customer",
             "collectionName": "customers",
             "foreignKey": "customer_id",
@@ -1518,25 +1376,34 @@
             "macro": "has_one",
             "resource_name": "ProjectDetail",
             "through": null
+          },
+          {
+            "className": "ProjectSecret",
+            "collectionName": null,
+            "foreignKey": "project_id",
+            "name": "project_secrets",
+            "macro": "has_many",
+            "resource_name": null,
+            "through": null
+          },
+          {
+            "className": "Task",
+            "collectionName": "tasks",
+            "foreignKey": "project_id",
+            "name": "tasks",
+            "macro": "has_many",
+            "resource_name": "Task",
+            "through": null
           }
         ],
         "ransackable_attributes": [
           {
-            "name": "id",
+            "name": "account_id",
             "column": {
               "default": null,
-              "name": "id",
-              "null": false,
+              "name": "account_id",
+              "null": true,
               "type": "integer"
-            }
-          },
-          {
-            "name": "name",
-            "column": {
-              "default": null,
-              "name": "name",
-              "null": false,
-              "type": "string"
             }
           },
           {
@@ -1549,21 +1416,39 @@
             }
           },
           {
-            "name": "updated_at",
+            "name": "deleted_at",
             "column": {
               "default": null,
-              "name": "updated_at",
-              "null": false,
+              "name": "deleted_at",
+              "null": true,
               "type": "datetime"
             }
           },
           {
-            "name": "account_id",
+            "name": "id",
             "column": {
               "default": null,
-              "name": "account_id",
-              "null": true,
+              "name": "id",
+              "null": false,
               "type": "integer"
+            }
+          },
+          {
+            "name": "illegal",
+            "column": {
+              "default": "0",
+              "name": "illegal",
+              "null": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "name",
+            "column": {
+              "default": null,
+              "name": "name",
+              "null": false,
+              "type": "string"
             }
           },
           {
@@ -1585,30 +1470,21 @@
             }
           },
           {
-            "name": "deleted_at",
-            "column": {
-              "default": null,
-              "name": "deleted_at",
-              "null": true,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "illegal",
-            "column": {
-              "default": "0",
-              "name": "illegal",
-              "null": false,
-              "type": "boolean"
-            }
-          },
-          {
             "name": "public",
             "column": {
               "default": "0",
               "name": "public",
               "null": false,
               "type": "boolean"
+            }
+          },
+          {
+            "name": "updated_at",
+            "column": {
+              "default": null,
+              "name": "updated_at",
+              "null": false,
+              "type": "datetime"
             }
           }
         ],
@@ -1889,6 +1765,15 @@
         ],
         "ransackable_attributes": [
           {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
+              "null": false,
+              "type": "datetime"
+            }
+          },
+          {
             "name": "id",
             "column": {
               "default": null,
@@ -1907,6 +1792,15 @@
             }
           },
           {
+            "name": "public",
+            "column": {
+              "default": "0",
+              "name": "public",
+              "null": false,
+              "type": "boolean"
+            }
+          },
+          {
             "name": "query_params",
             "column": {
               "default": null,
@@ -1916,12 +1810,12 @@
             }
           },
           {
-            "name": "user_type",
+            "name": "updated_at",
             "column": {
               "default": null,
-              "name": "user_type",
-              "null": true,
-              "type": "string"
+              "name": "updated_at",
+              "null": false,
+              "type": "datetime"
             }
           },
           {
@@ -1934,30 +1828,12 @@
             }
           },
           {
-            "name": "public",
-            "column": {
-              "default": "0",
-              "name": "public",
-              "null": false,
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "created_at",
+            "name": "user_type",
             "column": {
               "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "updated_at",
-            "column": {
-              "default": null,
-              "name": "updated_at",
-              "null": false,
-              "type": "datetime"
+              "name": "user_type",
+              "null": true,
+              "type": "string"
             }
           }
         ],
@@ -2183,19 +2059,28 @@
         ],
         "ransackable_attributes": [
           {
+            "name": "attribute_name",
+            "column": {
+              "default": null,
+              "name": "attribute_name",
+              "null": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
+              "null": false,
+              "type": "datetime"
+            }
+          },
+          {
             "name": "id",
             "column": {
               "default": null,
               "name": "id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "table_setting_id",
-            "column": {
-              "default": null,
-              "name": "table_setting_id",
               "null": false,
               "type": "integer"
             }
@@ -2210,30 +2095,12 @@
             }
           },
           {
-            "name": "attribute_name",
-            "column": {
-              "default": null,
-              "name": "attribute_name",
-              "null": true,
-              "type": "string"
-            }
-          },
-          {
             "name": "path",
             "column": {
               "default": null,
               "name": "path",
               "null": true,
               "type": "text"
-            }
-          },
-          {
-            "name": "sort_key",
-            "column": {
-              "default": null,
-              "name": "sort_key",
-              "null": true,
-              "type": "string"
             }
           },
           {
@@ -2246,21 +2113,21 @@
             }
           },
           {
-            "name": "visible",
+            "name": "sort_key",
             "column": {
               "default": null,
-              "name": "visible",
+              "name": "sort_key",
               "null": true,
-              "type": "boolean"
+              "type": "string"
             }
           },
           {
-            "name": "created_at",
+            "name": "table_setting_id",
             "column": {
               "default": null,
-              "name": "created_at",
+              "name": "table_setting_id",
               "null": false,
-              "type": "datetime"
+              "type": "integer"
             }
           },
           {
@@ -2270,6 +2137,15 @@
               "name": "updated_at",
               "null": false,
               "type": "datetime"
+            }
+          },
+          {
+            "name": "visible",
+            "column": {
+              "default": null,
+              "name": "visible",
+              "null": true,
+              "type": "boolean"
             }
           },
           {
@@ -2387,15 +2263,6 @@
         "pluralName": "api_maker_table_table_settings",
         "ransackable_associations": [
           {
-            "className": "User",
-            "collectionName": null,
-            "foreignKey": "user_id",
-            "name": "user",
-            "macro": "belongs_to",
-            "resource_name": null,
-            "through": null
-          },
-          {
             "className": "ApiMakerTable::TableSettingColumn",
             "collectionName": "table_setting_columns",
             "foreignKey": "table_setting_id",
@@ -2403,32 +2270,41 @@
             "macro": "has_many",
             "resource_name": "TableSettingColumn",
             "through": null
+          },
+          {
+            "className": "User",
+            "collectionName": null,
+            "foreignKey": "user_id",
+            "name": "user",
+            "macro": "belongs_to",
+            "resource_name": null,
+            "through": null
           }
         ],
         "ransackable_attributes": [
+          {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
+              "null": false,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "fixed_table_layout",
+            "column": {
+              "default": "0",
+              "name": "fixed_table_layout",
+              "null": false,
+              "type": "boolean"
+            }
+          },
           {
             "name": "id",
             "column": {
               "default": null,
               "name": "id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "user_type",
-            "column": {
-              "default": null,
-              "name": "user_type",
-              "null": false,
-              "type": "string"
-            }
-          },
-          {
-            "name": "user_id",
-            "column": {
-              "default": null,
-              "name": "user_id",
               "null": false,
               "type": "integer"
             }
@@ -2443,15 +2319,6 @@
             }
           },
           {
-            "name": "created_at",
-            "column": {
-              "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
             "name": "updated_at",
             "column": {
               "default": null,
@@ -2461,12 +2328,21 @@
             }
           },
           {
-            "name": "fixed_table_layout",
+            "name": "user_id",
             "column": {
-              "default": "0",
-              "name": "fixed_table_layout",
+              "default": null,
+              "name": "user_id",
               "null": false,
-              "type": "boolean"
+              "type": "integer"
+            }
+          },
+          {
+            "name": "user_type",
+            "column": {
+              "default": null,
+              "name": "user_type",
+              "null": false,
+              "type": "string"
             }
           }
         ],
@@ -2542,6 +2418,15 @@
         ],
         "ransackable_attributes": [
           {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
+              "null": false,
+              "type": "datetime"
+            }
+          },
+          {
             "name": "id",
             "column": {
               "default": null,
@@ -2557,15 +2442,6 @@
               "name": "task_id",
               "null": false,
               "type": "integer"
-            }
-          },
-          {
-            "name": "created_at",
-            "column": {
-              "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
             }
           },
           {
@@ -2822,22 +2698,22 @@
         "pluralName": "tasks",
         "ransackable_associations": [
           {
-            "className": "Project",
-            "collectionName": "projects",
-            "foreignKey": "project_id",
-            "name": "project",
-            "macro": "belongs_to",
-            "resource_name": "Project",
-            "through": null
+            "className": "Account",
+            "collectionName": "accounts",
+            "foreignKey": "account_id",
+            "name": "account",
+            "macro": "has_one",
+            "resource_name": "Account",
+            "through": "project"
           },
           {
-            "className": "User",
-            "collectionName": "users",
-            "foreignKey": "user_id",
-            "name": "user",
-            "macro": "belongs_to",
-            "resource_name": "User",
-            "through": null
+            "className": "Customer",
+            "collectionName": "customers",
+            "foreignKey": "customer_id",
+            "name": "account_customer",
+            "macro": "has_one",
+            "resource_name": "Customer",
+            "through": "account"
           },
           {
             "className": "AccountMarkedTask",
@@ -2861,8 +2737,8 @@
             "className": "Comment",
             "collectionName": "comments",
             "foreignKey": "resource_id",
-            "name": "comments",
-            "macro": "has_many",
+            "name": "comment",
+            "macro": "has_one",
             "resource_name": "Comment",
             "through": null
           },
@@ -2870,19 +2746,10 @@
             "className": "Comment",
             "collectionName": "comments",
             "foreignKey": "resource_id",
-            "name": "comment",
-            "macro": "has_one",
+            "name": "comments",
+            "macro": "has_many",
             "resource_name": "Comment",
             "through": null
-          },
-          {
-            "className": "Account",
-            "collectionName": "accounts",
-            "foreignKey": "account_id",
-            "name": "account",
-            "macro": "has_one",
-            "resource_name": "Account",
-            "through": "project"
           },
           {
             "className": "Customer",
@@ -2894,13 +2761,13 @@
             "through": "account"
           },
           {
-            "className": "Customer",
-            "collectionName": "customers",
-            "foreignKey": "customer_id",
-            "name": "account_customer",
-            "macro": "has_one",
-            "resource_name": "Customer",
-            "through": "account"
+            "className": "Project",
+            "collectionName": "projects",
+            "foreignKey": "project_id",
+            "name": "project",
+            "macro": "belongs_to",
+            "resource_name": "Project",
+            "through": null
           },
           {
             "className": "ProjectDetail",
@@ -2910,9 +2777,36 @@
             "macro": "has_one",
             "resource_name": "ProjectDetail",
             "through": "project"
+          },
+          {
+            "className": "User",
+            "collectionName": "users",
+            "foreignKey": "user_id",
+            "name": "user",
+            "macro": "belongs_to",
+            "resource_name": "User",
+            "through": null
           }
         ],
         "ransackable_attributes": [
+          {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
+              "null": false,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "finished",
+            "column": {
+              "default": "0",
+              "name": "finished",
+              "null": false,
+              "type": "boolean"
+            }
+          },
           {
             "name": "id",
             "column": {
@@ -2932,6 +2826,15 @@
             }
           },
           {
+            "name": "priority",
+            "column": {
+              "default": null,
+              "name": "priority",
+              "null": true,
+              "type": "integer"
+            }
+          },
+          {
             "name": "project_id",
             "column": {
               "default": null,
@@ -2941,12 +2844,21 @@
             }
           },
           {
-            "name": "created_at",
+            "name": "state",
+            "column": {
+              "default": "open",
+              "name": "state",
+              "null": false,
+              "type": "string"
+            }
+          },
+          {
+            "name": "support_email",
             "column": {
               "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
+              "name": "support_email",
+              "null": true,
+              "type": "string"
             }
           },
           {
@@ -2965,42 +2877,6 @@
               "name": "user_id",
               "null": true,
               "type": "integer"
-            }
-          },
-          {
-            "name": "finished",
-            "column": {
-              "default": "0",
-              "name": "finished",
-              "null": false,
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "state",
-            "column": {
-              "default": "open",
-              "name": "state",
-              "null": false,
-              "type": "string"
-            }
-          },
-          {
-            "name": "priority",
-            "column": {
-              "default": null,
-              "name": "priority",
-              "null": true,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "support_email",
-            "column": {
-              "default": null,
-              "name": "support_email",
-              "null": true,
-              "type": "string"
             }
           }
         ],
@@ -3353,15 +3229,6 @@
         "pluralName": "users",
         "ransackable_associations": [
           {
-            "className": "WorkerPlugins::Workplace",
-            "collectionName": "workplaces",
-            "foreignKey": "current_workplace_id",
-            "name": "current_workplace",
-            "macro": "belongs_to",
-            "resource_name": "Workplace",
-            "through": null
-          },
-          {
             "className": "Comment",
             "collectionName": "comments",
             "foreignKey": "author_id",
@@ -3371,30 +3238,12 @@
             "through": null
           },
           {
-            "className": "Task",
-            "collectionName": "tasks",
-            "foreignKey": "user_id",
-            "name": "tasks",
-            "macro": "has_many",
-            "resource_name": "Task",
-            "through": null
-          },
-          {
-            "className": "Task",
-            "collectionName": "tasks",
-            "foreignKey": "support_email",
-            "name": "supported_tasks",
-            "macro": "has_many",
-            "resource_name": "Task",
-            "through": null
-          },
-          {
-            "className": "UserRole",
-            "collectionName": "user_roles",
-            "foreignKey": "user_id",
-            "name": "user_roles",
-            "macro": "has_many",
-            "resource_name": "UserRole",
+            "className": "WorkerPlugins::Workplace",
+            "collectionName": "workplaces",
+            "foreignKey": "current_workplace_id",
+            "name": "current_workplace",
+            "macro": "belongs_to",
+            "resource_name": "Workplace",
             "through": null
           },
           {
@@ -3414,15 +3263,87 @@
             "macro": "has_one",
             "resource_name": null,
             "through": "image_attachment"
+          },
+          {
+            "className": "Task",
+            "collectionName": "tasks",
+            "foreignKey": "support_email",
+            "name": "supported_tasks",
+            "macro": "has_many",
+            "resource_name": "Task",
+            "through": null
+          },
+          {
+            "className": "Task",
+            "collectionName": "tasks",
+            "foreignKey": "user_id",
+            "name": "tasks",
+            "macro": "has_many",
+            "resource_name": "Task",
+            "through": null
+          },
+          {
+            "className": "UserRole",
+            "collectionName": "user_roles",
+            "foreignKey": "user_id",
+            "name": "user_roles",
+            "macro": "has_many",
+            "resource_name": "UserRole",
+            "through": null
           }
         ],
         "ransackable_attributes": [
           {
-            "name": "id",
+            "name": "admin",
+            "column": {
+              "default": "0",
+              "name": "admin",
+              "null": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "birthday_at",
             "column": {
               "default": null,
-              "name": "id",
+              "name": "birthday_at",
+              "null": true,
+              "type": "date"
+            }
+          },
+          {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
               "null": false,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "current_sign_in_at",
+            "column": {
+              "default": null,
+              "name": "current_sign_in_at",
+              "null": true,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "current_sign_in_ip",
+            "column": {
+              "default": null,
+              "name": "current_sign_in_ip",
+              "null": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "current_workplace_id",
+            "column": {
+              "default": null,
+              "name": "current_workplace_id",
+              "null": true,
               "type": "integer"
             }
           },
@@ -3445,120 +3366,21 @@
             }
           },
           {
-            "name": "reset_password_token",
-            "column": {
-              "default": null,
-              "name": "reset_password_token",
-              "null": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "reset_password_sent_at",
-            "column": {
-              "default": null,
-              "name": "reset_password_sent_at",
-              "null": true,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "remember_created_at",
-            "column": {
-              "default": null,
-              "name": "remember_created_at",
-              "null": true,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "sign_in_count",
-            "column": {
-              "default": "0",
-              "name": "sign_in_count",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "current_sign_in_at",
-            "column": {
-              "default": null,
-              "name": "current_sign_in_at",
-              "null": true,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "last_sign_in_at",
-            "column": {
-              "default": null,
-              "name": "last_sign_in_at",
-              "null": true,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "current_sign_in_ip",
-            "column": {
-              "default": null,
-              "name": "current_sign_in_ip",
-              "null": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "last_sign_in_ip",
-            "column": {
-              "default": null,
-              "name": "last_sign_in_ip",
-              "null": true,
-              "type": "string"
-            }
-          },
-          {
-            "name": "created_at",
-            "column": {
-              "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "updated_at",
-            "column": {
-              "default": null,
-              "name": "updated_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "birthday_at",
-            "column": {
-              "default": null,
-              "name": "birthday_at",
-              "null": true,
-              "type": "date"
-            }
-          },
-          {
-            "name": "admin",
-            "column": {
-              "default": "0",
-              "name": "admin",
-              "null": false,
-              "type": "boolean"
-            }
-          },
-          {
             "name": "first_name",
             "column": {
               "default": null,
               "name": "first_name",
               "null": true,
               "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "column": {
+              "default": null,
+              "name": "id",
+              "null": false,
+              "type": "integer"
             }
           },
           {
@@ -3571,12 +3393,66 @@
             }
           },
           {
-            "name": "current_workplace_id",
+            "name": "last_sign_in_at",
             "column": {
               "default": null,
-              "name": "current_workplace_id",
+              "name": "last_sign_in_at",
               "null": true,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "last_sign_in_ip",
+            "column": {
+              "default": null,
+              "name": "last_sign_in_ip",
+              "null": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "remember_created_at",
+            "column": {
+              "default": null,
+              "name": "remember_created_at",
+              "null": true,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "reset_password_sent_at",
+            "column": {
+              "default": null,
+              "name": "reset_password_sent_at",
+              "null": true,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "reset_password_token",
+            "column": {
+              "default": null,
+              "name": "reset_password_token",
+              "null": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "sign_in_count",
+            "column": {
+              "default": "0",
+              "name": "sign_in_count",
+              "null": false,
               "type": "integer"
+            }
+          },
+          {
+            "name": "updated_at",
+            "column": {
+              "default": null,
+              "name": "updated_at",
+              "null": false,
+              "type": "datetime"
             }
           }
         ],
@@ -3772,19 +3648,19 @@
         ],
         "ransackable_attributes": [
           {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
+              "null": false,
+              "type": "datetime"
+            }
+          },
+          {
             "name": "id",
             "column": {
               "default": null,
               "name": "id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "user_id",
-            "column": {
-              "default": null,
-              "name": "user_id",
               "null": false,
               "type": "integer"
             }
@@ -3799,21 +3675,21 @@
             }
           },
           {
-            "name": "created_at",
-            "column": {
-              "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
             "name": "updated_at",
             "column": {
               "default": null,
               "name": "updated_at",
               "null": false,
               "type": "datetime"
+            }
+          },
+          {
+            "name": "user_id",
+            "column": {
+              "default": null,
+              "name": "user_id",
+              "null": false,
+              "type": "integer"
             }
           }
         ],
@@ -3944,15 +3820,6 @@
         "pluralName": "worker_plugins_workplace_links",
         "ransackable_associations": [
           {
-            "className": "Workplace",
-            "collectionName": "workplaces",
-            "foreignKey": "workplace_id",
-            "name": "workplace",
-            "macro": "belongs_to",
-            "resource_name": "Workplace",
-            "through": null
-          },
-          {
             "className": "Resource",
             "collectionName": null,
             "foreignKey": "resource_id",
@@ -3960,9 +3827,36 @@
             "macro": "belongs_to",
             "resource_name": null,
             "through": null
+          },
+          {
+            "className": "Workplace",
+            "collectionName": "workplaces",
+            "foreignKey": "workplace_id",
+            "name": "workplace",
+            "macro": "belongs_to",
+            "resource_name": "Workplace",
+            "through": null
           }
         ],
         "ransackable_attributes": [
+          {
+            "name": "created_at",
+            "column": {
+              "default": null,
+              "name": "created_at",
+              "null": false,
+              "type": "datetime"
+            }
+          },
+          {
+            "name": "custom_data",
+            "column": {
+              "default": null,
+              "name": "custom_data",
+              "null": true,
+              "type": "json"
+            }
+          },
           {
             "name": "id",
             "column": {
@@ -3973,10 +3867,10 @@
             }
           },
           {
-            "name": "workplace_id",
+            "name": "resource_id",
             "column": {
               "default": null,
-              "name": "workplace_id",
+              "name": "resource_id",
               "null": false,
               "type": "integer"
             }
@@ -3991,39 +3885,21 @@
             }
           },
           {
-            "name": "resource_id",
-            "column": {
-              "default": null,
-              "name": "resource_id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "custom_data",
-            "column": {
-              "default": null,
-              "name": "custom_data",
-              "null": true,
-              "type": "json"
-            }
-          },
-          {
-            "name": "created_at",
-            "column": {
-              "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
             "name": "updated_at",
             "column": {
               "default": null,
               "name": "updated_at",
               "null": false,
               "type": "datetime"
+            }
+          },
+          {
+            "name": "workplace_id",
+            "column": {
+              "default": null,
+              "name": "workplace_id",
+              "null": false,
+              "type": "integer"
             }
           }
         ],
@@ -4110,80 +3986,10 @@
         "nameDasherized": "workplace",
         "pluralName": "worker_plugins_workplaces",
         "ransackable_associations": [
-          {
-            "className": "WorkplaceLink",
-            "collectionName": "workplace_links",
-            "foreignKey": "workplace_id",
-            "name": "workplace_links",
-            "macro": "has_many",
-            "resource_name": "WorkplaceLink",
-            "through": null
-          },
-          {
-            "className": "User",
-            "collectionName": "users",
-            "foreignKey": "user_id",
-            "name": "user",
-            "macro": "belongs_to",
-            "resource_name": "User",
-            "through": null
-          }
+
         ],
         "ransackable_attributes": [
-          {
-            "name": "id",
-            "column": {
-              "default": null,
-              "name": "id",
-              "null": false,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "name",
-            "column": {
-              "default": null,
-              "name": "name",
-              "null": false,
-              "type": "string"
-            }
-          },
-          {
-            "name": "active",
-            "column": {
-              "default": "0",
-              "name": "active",
-              "null": false,
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "user_id",
-            "column": {
-              "default": null,
-              "name": "user_id",
-              "null": true,
-              "type": "integer"
-            }
-          },
-          {
-            "name": "created_at",
-            "column": {
-              "default": null,
-              "name": "created_at",
-              "null": false,
-              "type": "datetime"
-            }
-          },
-          {
-            "name": "updated_at",
-            "column": {
-              "default": null,
-              "name": "updated_at",
-              "null": false,
-              "type": "datetime"
-            }
-          }
+
         ],
         "ransackable_scopes": [
 

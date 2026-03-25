@@ -1,3 +1,5 @@
+// @ts-check
+
 import BaseModel from "@kaspernj/api-maker/build/base-model.js"
 
 const modelClassData = {
@@ -192,8 +194,8 @@ const modelClassData = {
 }
 
 /** Frontend model for Customer. */
-class Customer extends BaseModel {
-  /** @returns {Record<string, any>} */
+export default class Customer extends BaseModel {
+  /** @returns {typeof modelClassData} */
   static modelClassData() {
     return modelClassData
   }
@@ -222,5 +224,3 @@ class Customer extends BaseModel {
     return this._isPresent(value)
   }
 }
-
-export default Customer
