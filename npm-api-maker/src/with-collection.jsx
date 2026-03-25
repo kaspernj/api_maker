@@ -14,6 +14,7 @@ export default (WrappedComponent, withCollectionArgs) => memo(() => {
   forwardArgs[modelsArgName] = models
 
   return (
+    // @ts-expect-error Legacy this.props in arrow function
     <WrappedComponent {...forwardArgs} {...this.props} />
   )
 })

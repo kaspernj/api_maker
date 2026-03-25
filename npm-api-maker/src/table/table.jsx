@@ -52,7 +52,7 @@ import WorkerPluginsCheckAllCheckbox from "./worker-plugins-check-all-checkbox"
 const dataSets = {}
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const styles = {}
-const TableContext = createContext()
+const TableContext = createContext(undefined)
 
 const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {
   setup() {
@@ -176,7 +176,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     this.setInstance({
       breakpoint,
-      filterFormRef: useRef(),
+      filterFormRef: useRef(undefined),
       mdUp,
       t
     })
@@ -269,7 +269,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       noRecordsAvailableContent: this.props.noRecordsAvailableContent,
       noRecordsFoundContent: this.props.noRecordsFoundContent,
       pagination: true,
-      preloads: this.state.preload,
+      preloads: this.s.preload,
       queryMethod: this.props.queryMethod,
       queryName,
       select,
@@ -356,7 +356,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     })
   }
 
-  updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.state.tableSetting.fullCacheKey()})
+  updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.s.tableSetting.fullCacheKey()})
 
   columnsAsArray = () => {
     if (typeof this.props.columns == "function") {
@@ -506,7 +506,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     const loadingContent = (
       <View dataSet={dataSets.loading ||= {class: "api-maker--table--loading"}}>
-        <Text>{this.t(".loading_dot_dot_dit", {defaultValue: "Loading..."})}</Text>
+        <Text>{this.tt.t(".loading_dot_dot_dit", {defaultValue: "Loading..."})}</Text>
       </View>
     )
 
@@ -724,7 +724,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         formRef={filterFormRef}
         htmlFormProps={styles.filterFormHtmlProps ||= {className: "live-table--filter-form"}}
         onSubmit={this.tt.onFilterFormSubmit}
-        setForm={this.setStates.filterForm}
+        setForm={/** @type {Record<string, any>} */ (this.setStates).filterForm}
       >
         {"s" in actualQParams &&
           <input name="s" type="hidden" value={actualQParams.s} />
@@ -740,7 +740,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
             className="btn btn-primary live-table--submit-filter-button"
             type="submit"
             style={styles.filterSubmitButton ||= {marginTop: "8px"}}
-            value={filterSubmitLabel || this.t(".filter", {defaultValue: "Filter"})}
+            value={filterSubmitLabel || this.tt.t(".filter", {defaultValue: "Filter"})}
           />
         }
       </Form>
@@ -749,7 +749,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   onFilterClicked = (e) => {
     e.preventDefault()
-    this.setState({showFilters: !this.state.showFilters})
+    this.setState({showFilters: !this.s.showFilters})
   }
 
   onPerPageChanged = (e) => {
@@ -768,7 +768,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       return (
         <View>
           <Text>
-            {this.t(".loading_dot_dot_dot", {defaultValue: "Loading..."})}
+            {this.tt.t(".loading_dot_dot_dot", {defaultValue: "Loading..."})}
           </Text>
         </View>
       )
@@ -911,6 +911,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     )
   }
 
+  /** @param {Record<string, any>} [args] */
   tableControls({models, qParams, query, result} = {}) {
     const {controls} = this.props
     const {showSettings} = this.s
@@ -957,11 +958,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
       <View style={styles.tableFooterRootViewStyle ||= {flexDirection: "row", justifyContent: "space-between", marginTop: 10}}>
         <View dataSet={dataSets.showingCounts ||= {class: "showing-counts"}} style={styles.showingCounts ||= {flexDirection: "row"}}>
           <Text>
-            {this.t(".showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
+            {this.tt.t(".showing_from_to_out_of_total", {defaultValue, from, to, total_count: totalCount})}
           </Text>
           {this.p.workplace && this.s.currentWorkplaceCount !== null &&
             <Text style={styles.xSelectedTextStyle ||= {marginLeft: 3}}>
-              {this.t(".x_selected", {defaultValue: "%{selected} selected.", selected: this.s.currentWorkplaceCount})}
+              {this.tt.t(".x_selected", {defaultValue: "%{selected} selected.", selected: this.s.currentWorkplaceCount})}
             </Text>
           }
         </View>

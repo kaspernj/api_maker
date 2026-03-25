@@ -177,15 +177,15 @@ export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
     }
   }
 
-  onPress = () => {
+  onPress = (e, ...restArgs) => {
     const {onClick, onPress} = this.props
 
     if (onClick) {
-      onClick(e, ...restArgs) // eslint-disable-line no-undef
+      onClick(e, ...restArgs)
     }
 
     if (onPress) {
-      onPress(e, ...restArgs) // eslint-disable-line no-undef
+      onPress(e, ...restArgs)
     }
 
     this.redirect()

@@ -18,7 +18,7 @@ export default memo(shapeComponent(class ColumnRow extends BaseComponent {
 
   setup() {
     this.checked = this.p.tableSettingColumn.visible()
-    this.checkboxRef = useRef()
+    this.checkboxRef = useRef(undefined)
 
     useEffect(() => {
       this.updateCheckboxChecked()
@@ -27,7 +27,7 @@ export default memo(shapeComponent(class ColumnRow extends BaseComponent {
 
   render() {
     const {column, table, tableSettingColumn} = this.p
-    const checkboxProps = {}
+    const checkboxProps = /** @type {Record<string, any>} */ ({})
 
     if (tableSettingColumn.visible() === true) {
       checkboxProps.checked = "checked"

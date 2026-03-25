@@ -46,7 +46,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
 
   render() {
     const {className, model, style} = this.props
-    const {checked, linkLoaded} = this.state
+    const {checked, linkLoaded} = this.s
 
     if (!linkLoaded) {
       return null

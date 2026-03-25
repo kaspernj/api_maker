@@ -2,7 +2,7 @@
 import Text from "./text"
 import React from "react"
 
-export default React.memo(function ApiMakerUtilsHeader(props) {
+export default React.memo(function ApiMakerUtilsHeader(/** @type {Record<string, any>} */ props) {
   const {style, ...restProps} = props
 
   const actualStyle = React.useMemo(() => {

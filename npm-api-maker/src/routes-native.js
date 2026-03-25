@@ -32,12 +32,13 @@ export default class ApiMakerRoutesNative {
       const urlMethodName = `${inflection.camelize(name, true)}Url`
 
       if (routeDefinitionArgs && routeDefinitionArgs.localized) {
-        const localizedRoutes = /** @type {Record<string, PathPart[]>} */ {}
+        const localizedRoutes = /** @type {Record<string, PathPart[]>} */ ({})
 
         for (const locale in this.routeTranslationParts) {
           let variableCount = 0
 
-          const localizedPathParts = /** @type {PathPart[]} */ [
+          /** @type {PathPart[]} */
+          const localizedPathParts = [
             {type: "pathPart", name: ""},
             {type: "pathPart", name: locale}
           ]

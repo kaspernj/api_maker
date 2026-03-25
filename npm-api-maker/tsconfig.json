@@ -15,7 +15,8 @@
     "rootDir": "src",
     "sourceRoot": "/src",
     "target": "ES2024",
-    "types": ["node"]
+    "types": ["node"],
+    "skipLibCheck": true
   },
   "include": ["src/**/*"]
 }

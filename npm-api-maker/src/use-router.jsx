@@ -56,7 +56,7 @@ const useRouter = (props) => {
         params.push({locale})
 
         if (!(routePathName in routes))
-          throw new Error(`${routePathName} not found in routes: ${Object.keys(routes, ", ")}`)
+          throw new Error(`${routePathName} not found in routes: ${Object.keys(routes).join(", ")}`)
 
         const routePath = routes[routePathName](...params).replace(/[/]+$/, "")
         const groups = []

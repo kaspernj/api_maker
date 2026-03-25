@@ -22,7 +22,7 @@ export default memo(shapeComponent(class ApiMakerTableSettings extends BaseCompo
   setup() {
     const {l, t} = useI18n({namespace: "js.api_maker.table.settings"})
 
-    this.rootRef = useRef()
+    this.rootRef = useRef(undefined)
     this.l = l
     this.t = t
   }

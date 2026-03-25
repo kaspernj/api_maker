@@ -11,6 +11,12 @@ import propTypesExact from "prop-types-exact"
 import useEventEmitter from "ya-use-event-emitter"
 
 export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
+  /** @type {import("./controller.js").default} */
+  controller
+
+  /** @type {import("react-native").PanResponderInstance} */
+  panResponder
+
   static defaultProps = {
     activeItemStyle: {backgroundColor: "#fff"},
     horizontal: false

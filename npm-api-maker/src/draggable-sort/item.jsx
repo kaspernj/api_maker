@@ -19,6 +19,15 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
     renderItem: PropTypes.func.isRequired
   })
 
+  /** @type {import("eventemitter3").EventEmitter} */
+  events
+
+  /** @type {import("react-native").Animated.ValueXY} */
+  position
+
+  /** @type {import("react-native").PanResponderInstance} */
+  panResponder
+
   initialLayout = null
 
   setup() {

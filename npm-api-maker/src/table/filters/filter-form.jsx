@@ -58,7 +58,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     this.setInstance({
       breakpoint: useBreakpoint(),
       t,
-      valueInputRef: useRef(),
+      valueInputRef: useRef(undefined),
     })
 
     useMemo(() => {
