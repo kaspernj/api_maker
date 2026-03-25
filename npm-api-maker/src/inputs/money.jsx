@@ -40,10 +40,10 @@ export default memo(shapeComponent(class ApiMakerInputsMoney extends ShapeCompon
   })
 
   setup() {
-    this.inputRef = useRef()
-    this.currencyRefBackup = useRef()
+    this.inputRef = useRef(undefined)
+    this.currencyRefBackup = useRef(undefined)
     this.currencyRef = this.props.currencyRef || this.currencyRefBackup
-    this.wholeRefBackup = useRef()
+    this.wholeRefBackup = useRef(undefined)
     this.wholeRef = this.props.wholeRef || this.wholeRefBackup
   }
 

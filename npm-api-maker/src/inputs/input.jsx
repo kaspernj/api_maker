@@ -43,7 +43,7 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
     const {defaultValue, name} = inputProps
 
     this.form = useForm()
-    this.visibleInputRef = useRef()
+    this.visibleInputRef = useRef(undefined)
     this.t = t
 
     this.useStates({

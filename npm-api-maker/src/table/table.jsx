@@ -52,7 +52,7 @@ import WorkerPluginsCheckAllCheckbox from "./worker-plugins-check-all-checkbox"
 const dataSets = {}
 const paginationOptions = [30, 60, 90, ["All", "all"]]
 const styles = {}
-const TableContext = createContext()
+const TableContext = createContext(undefined)
 
 const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {
   setup() {
@@ -176,7 +176,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     this.setInstance({
       breakpoint,
-      filterFormRef: useRef(),
+      filterFormRef: useRef(undefined),
       mdUp,
       t
     })

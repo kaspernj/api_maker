@@ -13,7 +13,7 @@ import useModelEvent from "../use-model-event.js"
 const Checkbox = memo(shapeComponent(class Checkbox extends BaseComponent {
   render() {
     const {indeterminate, ...restProps} = this.props
-    const checkboxRef = useRef()
+    const checkboxRef = useRef(undefined)
 
     useEffect(() => {
       checkboxRef.current.indeterminate = indeterminate
@@ -50,7 +50,7 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckAllCheck
     const previousParams = prevProps.query.params()
     const currentParams = this.props.query.params()
 
-    if (simpleObjectDifferent(previousParams, currentParams)) {
+    if (simpleObjectDifferent(previousParams, currentParams, true)) {
       this.updateAllChecked()
     }
   }

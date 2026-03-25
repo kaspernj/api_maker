@@ -54,7 +54,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
   setup() {
     const {name: breakpoint, mdUp} = useBreakpoint()
 
-    this.headerActionsRef = useRef()
+    this.headerActionsRef = useRef(undefined)
     this.setInstance({breakpoint, mdUp})
     this.useStates({
       headerActionsActive: false

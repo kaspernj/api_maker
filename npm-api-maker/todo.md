@@ -1,6 +1,6 @@
 # npm-api-maker Typecheck JSDoc Fixes
 
-Total: ~83 errors remaining (was ~166). Batches 1, 2, and 3 done.
+Total: ~65 errors remaining (was ~166). Batches 1, 2, 3, and 6 done.
 
 ## Error Categories
 
@@ -73,25 +73,17 @@ Files:
 
 ---
 
-## Batch 6: Wrong argument counts (TS2554) — 18 errors
+## Batch 6: Wrong argument counts (TS2554) — DONE
 
-Calling functions with wrong number of arguments (likely missing JSDoc `@param`).
+Fixed by:
+- Adding `undefined` initial value to `useRef()` calls (12 instances)
+- Adding `undefined` default to `createContext()` calls (2 instances)
+- Adding missing `[]` dependency array to `useCallback` (1 instance)
+- Fixing `Object.keys(routes, ", ")` to `Object.keys(routes).join(", ")` (actual bug)
+- Making `sendRequest` `args` param optional in JSDoc
+- Adding `true` for required `checkLength` param in `simpleObjectDifferent`
 
-Files:
-- [ ] `src/bootstrap/card.jsx` (1)
-- [ ] `src/inputs/input.jsx` (1)
-- [ ] `src/inputs/money.jsx` (3)
-- [ ] `src/super-admin/layout/header/index.jsx` (1)
-- [ ] `src/table/filters/filter-form.jsx` (2)
-- [ ] `src/table/settings/column-row.jsx` (1)
-- [ ] `src/table/settings/index.jsx` (1)
-- [ ] `src/table/table.jsx` (2)
-- [ ] `src/table/worker-plugins-check-all-checkbox.jsx` (2)
-- [ ] `src/use-input.js` (1)
-- [ ] `src/use-router.jsx` (1)
-- [ ] `src/with-api-maker.jsx` (1)
-
-**Approach:** Fix JSDoc `@param` annotations on called functions or add overloads.
+Resolved all 18 errors.
 
 ---
 

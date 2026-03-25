@@ -22,7 +22,7 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   }
 
   const s = useShape(props)
-  const backupRef = useRef()
+  const backupRef = useRef(undefined)
 
   s.useStates({
     form: undefined
@@ -76,7 +76,7 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
     }
   }, [])
 
-  const inputRef = useCallback(() => s.props.inputRef || backupRef)
+  const inputRef = useCallback(() => s.props.inputRef || backupRef, [])
 
   const inputType = useCallback(() => {
     if ("type" in s.props) {
