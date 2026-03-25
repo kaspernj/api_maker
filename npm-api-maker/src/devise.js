@@ -1,4 +1,5 @@
 import * as inflection from "inflection" // eslint-disable-line sort-imports
+import {resetChannelsConsumer} from "./channels-consumer.js"
 import config from "./config.js"
 import {createContext} from "react"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
@@ -91,6 +92,11 @@ export default class ApiMakerDevise {
       await sessionStatusUpdater.updateSessionStatus()
     }
 
+    // Reset the ActionCable connection so it reconnects with the new
+    // session cookies. Without this, WebSocket commands would still run
+    // as the previous (anonymous/old) user.
+    resetChannelsConsumer()
+
     ApiMakerDevise.updateSession(model)
 
     if (!args.skipSignInEvent) {
@@ -159,6 +165,11 @@ export default class ApiMakerDevise {
       ApiMakerDevise.setSignedOut(args)
       ApiMakerDevise.callSignOutEvent(args)
     }
+
+    // Reset the ActionCable connection so it reconnects without the
+    // old user's session. Without this, WebSocket commands would still
+    // run as the signed-out user.
+    resetChannelsConsumer()
 
     return response
   }
