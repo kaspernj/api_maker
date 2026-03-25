@@ -72,7 +72,12 @@ export default class ApiMakerDevise {
     if (!args.scope) args.scope = "user"
 
     const postData = {username, password, args}
-    const response = await Services.current().sendRequest("Devise::SignIn", postData)
+
+    // Always use HTTP for sign-in so Devise sets the session cookie and
+    // remember-me token directly in the HTTP response. WebSocket sign-in
+    // cannot set cookies (no HTTP response headers), so it relied on a
+    // fragile Rails.cache-based shadow session handoff via persistSession.
+    const response = await Services.current().sendRequest("Devise::SignIn", postData, {forceHttp: true})
 
     let model = response.model
 
@@ -80,18 +85,7 @@ export default class ApiMakerDevise {
 
     const sessionStatusUpdater = SessionStatusUpdater.current()
 
-    if (config.getWebsocketRequests()) {
-      if (response.session_status) {
-        sessionStatusUpdater.updateMetaElementsFromResult(response.session_status)
-      }
-
-      await ApiMakerDevise.persistSession({
-        rememberMe: args.rememberMe,
-        scope: args.scope,
-        shadowSessionToken: response.session_status?.shadow_session_token,
-        signedIn: true
-      })
-    } else if (response.session_status) {
+    if (response.session_status) {
       sessionStatusUpdater.applyResult(response.session_status)
     } else {
       await sessionStatusUpdater.updateSessionStatus()
@@ -154,17 +148,11 @@ export default class ApiMakerDevise {
       args.scope = "user"
     }
 
-    const response = await Services.current().sendRequest("Devise::SignOut", {args})
+    const response = await Services.current().sendRequest("Devise::SignOut", {args}, {forceHttp: true})
 
     const sessionStatusUpdater = SessionStatusUpdater.current()
 
-    if (config.getWebsocketRequests()) {
-      if (response.session_status) {
-        sessionStatusUpdater.updateMetaElementsFromResult(response.session_status)
-      }
-
-      await ApiMakerDevise.persistSession({scope: args.scope, signedIn: false})
-    } else if (response.session_status) {
+    if (response.session_status) {
       sessionStatusUpdater.applyResult(response.session_status)
     } else {
       await sessionStatusUpdater.updateSessionStatus()
