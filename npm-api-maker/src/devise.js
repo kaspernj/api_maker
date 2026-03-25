@@ -1,10 +1,9 @@
 import * as inflection from "inflection" // eslint-disable-line sort-imports
-import {resetChannelsConsumer} from "./channels-consumer.js"
-import config from "./config.js"
 import {createContext} from "react"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
 import events from "./events.js"
 import modelClassRequire from "./model-class-require.js"
+import {resetChannelsConsumer} from "./channels-consumer.js"
 import SessionStatusUpdater from "./session-status-updater.js" // eslint-disable-line sort-imports
 import Services from "./services.js" // eslint-disable-line sort-imports
 
