@@ -42,6 +42,8 @@ import objectToFormData from "object-to-formdata"
  * @property {boolean} [throwValidationError]
  */
 
+/** @typedef {{new (...args: Array<any>): BaseModel, apiMakerType: string} & Record<string, any>} BaseModelClassType */
+
 const objectToUnderscore = (object) => {
   const newObject = {}
 
@@ -55,7 +57,8 @@ const objectToUnderscore = (object) => {
 }
 
 /** BaseModel. */
-export default class BaseModel {
+/** @type {BaseModelClassType} */
+const BaseModel = class BaseModel {
   static apiMakerType = "BaseModel"
 
   /** @returns {Attribute[]} */
@@ -95,7 +98,9 @@ export default class BaseModel {
    * @param {ValidationErrors} validationErrors
    * @returns {CustomEvent}
    */
-  static newCustomEvent = (validationErrors) => new CustomEvent("validation-errors", {detail: validationErrors})
+  static newCustomEvent(validationErrors) {
+    return new CustomEvent("validation-errors", {detail: validationErrors})
+  }
 
   /**
    * @param {ValidationErrors} validationErrors
@@ -253,7 +258,7 @@ export default class BaseModel {
    * @param {object} [args.data]
    * @param {Record<string, any>} [args.a]
    * @param {Record<string, any>} [args.b]
-   * @param {Collection<typeof import("./base-model.js").default>} [args.collection]
+   * @param {Collection<any>} [args.collection]
    */
   constructor(args = {}) {
     this.changes = {}
@@ -1020,9 +1025,9 @@ export default class BaseModel {
     return {valid: response.valid, errors: response.errors}
   }
 
-  /** @returns {typeof import("./base-model.js").default & Record<string, any>} */
+  /** @returns {Record<string, any>} */
   modelClass() {
-    return /** @type {typeof import("./base-model.js").default & Record<string, any>} */ (this.constructor)
+    return /** @type {Record<string, any>} */ (this.constructor)
   }
 
   /**
@@ -1085,7 +1090,9 @@ export default class BaseModel {
    * @param {Record<string, any>} commandArgs
    * @returns {Promise<object>}
    */
-  _callMemberCommand = (args, commandArgs) => CommandsPool.addCommand(args, commandArgs)
+  _callMemberCommand(args, commandArgs) {
+    return CommandsPool.addCommand(args, commandArgs)
+  }
 
   /**
    * @param {FormData | Record<string, any>} [args]
@@ -1270,7 +1277,7 @@ export default class BaseModel {
    * @param {Record<string, any>} [args.data.b]
    * @param {Record<string, any>} [args.data.a]
    * @param {any} [args.data.r]
-   * @param {Collection<typeof import("./base-model.js").default>} [args.collection]
+   * @param {Collection<any>} [args.collection]
    * @returns {void}
    */
   _readModelDataFromArgs(args) {
@@ -1337,3 +1344,5 @@ export default class BaseModel {
   /** @returns {number|string} */
   primaryKey() { return this.readAttributeUnderscore(this.modelClass().primaryKey()) }
 }
+
+export default BaseModel
