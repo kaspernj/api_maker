@@ -161,7 +161,14 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
   }
 
   loadSubscribedTask = async () => {
-    const subscribedTask = await Task.ransack({name_eq: "Initial subscribed task"}).first()
+    const subscribedTaskId = this.s.subscribedTask?.id()
+    let subscribedTask
+
+    if (subscribedTaskId) {
+      subscribedTask = await Task.ransack({id_eq: subscribedTaskId}).first()
+    } else {
+      subscribedTask = await Task.ransack({name_eq: "Initial subscribed task"}).first()
+    }
 
     this.setState({
       subscribedTask,

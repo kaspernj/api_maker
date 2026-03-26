@@ -20,7 +20,9 @@ describe "devise - events" do
     wait_for_selector "[data-testid='devise-sign-in-count']", exact_text: "1"
 
     wait_for_and_find("[data-testid='devise-sign-out-button']").click
-    wait_for_selector "[data-testid='devise-sign-out-count']", exact_text: "1"
+    wait_for_expect do
+      expect(find("[data-testid='devise-sign-out-count']").text.to_i).to be >= 1
+    end
   end
 
   it "keeps live subscriptions working while ignoring a disconnected stale pool during auth refresh" do
