@@ -1096,10 +1096,10 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/util/-/util-1.2.0.tgz#0fe9a92de72308c566ebcebe8b5a3f01d3149df2"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@>= 1.0.2133":
-  version "1.0.2133"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2133.tgz#1f725a333742b62fedbe40d4b6302b07f3d6fa9d"
-  integrity sha512-4CysTi1JzwZYK1J8FLcGfQOt4/07GruYjmcw08HHes2vh/RCoqGBjlekNyRaIgPv4nINJ+FemYDmHvUPX6MtDQ==
+"@kaspernj/api-maker@>= 1.0.2139":
+  version "1.0.2142"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2142.tgz#7d4815c3d37edf44e486f3fb85aee7545ad65332"
+  integrity sha512-RZYsur2j7irdenv3BQYNRemUGSzUTHb2AAPybU4WFE0n3hzNjw/hXXzjxE0a4+m66RBWGG7Gikck8J5x06iddg==
   dependencies:
     classnames "^2.5.1"
     clone-deep ">= 4.0.1"
@@ -3754,9 +3754,9 @@ picocolors@^1.1.1:
   integrity sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==
 
 picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
-  integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.2.tgz#5a942915e26b372dc0f0e6753149a16e6b1c5601"
+  integrity sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==
 
 pkg-dir@^4.2.0:
   version "4.2.0"
