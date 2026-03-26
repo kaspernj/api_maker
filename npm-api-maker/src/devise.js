@@ -1,4 +1,5 @@
 import * as inflection from "inflection" // eslint-disable-line sort-imports
+import CableConnectionPool from "./cable-connection-pool.js"
 import {createContext} from "react"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
 import events from "./events.js"
@@ -174,11 +175,13 @@ export default class ApiMakerDevise {
    */
   static async syncSessionStatusAndRefreshWebsocket(args) {
     const sessionStatus = await ApiMakerDevise.syncSessionStatusFromHttpResponse(args.httpResponse)
-
-    await ApiMakerDevise.refreshWebsocketSession({
+    const websocketArgs = {
       ...args.websocketArgs,
       shadowSessionToken: sessionStatus.shadow_session_token
-    })
+    }
+
+    await ApiMakerDevise.refreshWebsocketSession(websocketArgs)
+    await ApiMakerDevise.refreshSubscriptionAuthentication(websocketArgs)
 
     return sessionStatus
   }
@@ -204,6 +207,16 @@ export default class ApiMakerDevise {
    */
   static async refreshWebsocketSession(args) {
     return Services.current().sendRequest("Devise::PersistSession", args)
+  }
+
+  /**
+   * Refreshes auth on the existing subscriptions channel pools.
+   *
+   * @param {Record<string, any>} args
+   * @returns {Promise<void>}
+   */
+  static async refreshSubscriptionAuthentication(args) {
+    await CableConnectionPool.current().refreshAuthentication(args)
   }
 
   /** Constructor. */
