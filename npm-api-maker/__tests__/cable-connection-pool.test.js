@@ -1,5 +1,5 @@
-import CableConnectionPool from "../build/cable-connection-pool.js"
-import CableSubscriptionPool from "../build/cable-subscription-pool"
+import CableConnectionPool from "../src/cable-connection-pool.js"
+import CableSubscriptionPool from "../src/cable-subscription-pool.js"
 import {digg} from "diggerize"
 
 describe("CableConnectionPool", () => {
@@ -50,9 +50,9 @@ describe("CableConnectionPool", () => {
         cableConnectionPool.upcomingSubscriptionData = {}
         cableConnectionPool.upcomingSubscriptions = {}
 
-        const cableSubscriptionPool = {subscriptionData, subscriptions}
+        const nextCableSubscriptionPool = {subscriptionData, subscriptions}
 
-        cableConnectionPool.cableSubscriptionPools.push(cableSubscriptionPool)
+        cableConnectionPool.cableSubscriptionPools.push(nextCableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectDestroyed("Contact", "modelId", () => { })
@@ -113,9 +113,9 @@ describe("CableConnectionPool", () => {
         this.upcomingSubscriptionData = {}
         this.upcomingSubscriptions = {}
 
-        const cableSubscriptionPool = {subscriptionData, subscriptions}
+        const nextCableSubscriptionPool = {subscriptionData, subscriptions}
 
-        this.cableSubscriptionPools.push(cableSubscriptionPool)
+        this.cableSubscriptionPools.push(nextCableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.scheduleConnectUpcomingRunLast.queue = () => cableConnectionPool.connectUpcoming()
@@ -148,9 +148,9 @@ describe("CableConnectionPool", () => {
         cableConnectionPool.upcomingSubscriptionData = {}
         cableConnectionPool.upcomingSubscriptions = {}
 
-        const cableSubscriptionPool = {subscriptionData, subscriptions}
+        const nextCableSubscriptionPool = {subscriptionData, subscriptions}
 
-        cableConnectionPool.cableSubscriptionPools.push(cableSubscriptionPool)
+        cableConnectionPool.cableSubscriptionPools.push(nextCableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectUpdate("Contact", "modelId", () => console.log("Update callback"))

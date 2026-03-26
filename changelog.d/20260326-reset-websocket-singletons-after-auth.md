@@ -1,0 +1,1 @@
+Fixed Api Maker auth synchronization after Devise sign-in and sign-out by refreshing websocket auth inside the existing ActionCable connection after the HTTP session changes. This keeps websocket commands aligned with the new authorized user without reconnecting the whole consumer.
