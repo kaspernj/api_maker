@@ -117,6 +117,8 @@ export default class ApiMakerCableSubscriptionPool {
 
   /** onConnected. */
   onConnected = () => {
+    this.connected = true
+
     this.forEachSubscription(({subscription}) => {
       subscription.events.emit("connected")
     })
