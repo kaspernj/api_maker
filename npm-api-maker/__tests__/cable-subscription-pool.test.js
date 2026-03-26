@@ -84,6 +84,38 @@ describe("CableSubscriptionPool", () => {
       cableSubscriptionPool.onDisconnected()
 
       await expect(promise).rejects.toThrow("Subscription auth refresh was interrupted by a disconnect")
+      expect(cableSubscriptionPool.isConnected()).toEqual(false)
+    })
+
+    it("skips future auth refreshes after the websocket disconnects", async() => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+
+      cableSubscriptionPool.connected = true
+      cableSubscriptionPool.subscription = {perform: jest.fn()}
+      cableSubscriptionPool.onDisconnected()
+
+      await expect(cableSubscriptionPool.refreshAuthentication({scope: "user", signedIn: false})).resolves.toBeUndefined()
+      expect(cableSubscriptionPool.subscription.perform).not.toHaveBeenCalled()
+    })
+
+    it("allows auth refreshes again after the websocket reconnects", async() => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const perform = jest.fn()
+
+      cableSubscriptionPool.connected = true
+      cableSubscriptionPool.subscription = {perform}
+      cableSubscriptionPool.subscriptions = {}
+      cableSubscriptionPool.onDisconnected()
+      cableSubscriptionPool.onConnected()
+
+      const promise = cableSubscriptionPool.refreshAuthentication({scope: "user", signedIn: false})
+
+      expect(perform).toHaveBeenCalledWith("refresh_auth", {scope: "user", signedIn: false})
+
+      cableSubscriptionPool.onReceived({type: "api_maker_subscription_auth_refreshed"})
+
+      await expect(promise).resolves.toBeUndefined()
+      expect(cableSubscriptionPool.isConnected()).toEqual(true)
     })
   })
 })

@@ -2,6 +2,7 @@ import React, {memo} from "react"
 import {Pressable, Text, View} from "react-native"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import {useMemo} from "react"
+import CableConnectionPool from "@kaspernj/api-maker/build/cable-connection-pool.js"
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import Services from "@kaspernj/api-maker/build/services.js"
 import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
@@ -50,6 +51,9 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
         <Pressable testID="devise-sign-out-button" onPress={this.tt.onSignOutClicked}>
           <Text>Sign out</Text>
         </Pressable>
+        <Pressable testID="devise-disconnect-and-sign-out-button" onPress={this.tt.onDisconnectAndSignOutClicked}>
+          <Text>Disconnect and sign out</Text>
+        </Pressable>
         <Pressable testID="devise-sign-out-fail-button" onPress={this.tt.onSignOutFailClicked}>
           <Text>Sign out (fail)</Text>
         </Pressable>
@@ -67,6 +71,17 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
   }
 
   onSignOutClicked = async () => {
+    await Devise.signOut()
+  }
+
+  onDisconnectAndSignOutClicked = async () => {
+    const cableSubscriptionPool = CableConnectionPool.current().cableSubscriptionPools[0]
+
+    if (!cableSubscriptionPool) {
+      throw new Error("Expected at least one cable subscription pool before signing out")
+    }
+
+    cableSubscriptionPool.onDisconnected()
     await Devise.signOut()
   }
 
