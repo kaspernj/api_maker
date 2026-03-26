@@ -1,0 +1,1 @@
+Fixed Api Maker websocket auth refresh after Devise sign-in and sign-out by updating `ApiMaker::SubscriptionsChannel` auth in place and re-binding the existing server-side streams without recreating the client-side subscription pools.

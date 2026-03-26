@@ -139,5 +139,17 @@ export default class ApiMakerCableConnectionPool {
     this.cableSubscriptionPools.push(cableSubscriptionPool)
   }
 
+  /**
+   * Refreshes auth across the existing subscription pools.
+   *
+   * @param {Record<string, any>} args
+   * @returns {Promise<void>}
+   */
+  async refreshAuthentication (args) {
+    await Promise.all(
+      this.cableSubscriptionPools.map((cableSubscriptionPool) => cableSubscriptionPool.refreshAuthentication(args))
+    )
+  }
+
   scheduleConnectUpcomingRunLast = new RunLast(this.connectUpcoming)
 }

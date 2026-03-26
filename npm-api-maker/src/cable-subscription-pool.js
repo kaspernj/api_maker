@@ -12,6 +12,7 @@ export default class ApiMakerCableSubscriptionPool {
   /** Constructor. */
   constructor () {
     this.activeSubscriptions = 0
+    this.authRefreshCallbacks = {}
     this.connected = false
   }
 
@@ -34,6 +35,31 @@ export default class ApiMakerCableSubscriptionPool {
       }
     )
     this.connected = true
+  }
+
+  /**
+   * Refreshes auth for the existing subscription without recreating the pool.
+   *
+   * @param {Record<string, any>} args
+   * @returns {Promise<void>}
+   */
+  refreshAuthentication (args) {
+    if (!this.connected || !this.subscription) {
+      return Promise.resolve()
+    }
+
+    if (this.authRefreshCallbacks.promise) {
+      return this.authRefreshCallbacks.promise
+    }
+
+    this.authRefreshCallbacks.promise = new Promise((resolve, reject) => {
+      this.authRefreshCallbacks.resolve = resolve
+      this.authRefreshCallbacks.reject = reject
+    })
+
+    this.subscription.perform("refresh_auth", args)
+
+    return this.authRefreshCallbacks.promise
   }
 
   /** forEachSubscription. */
@@ -92,6 +118,16 @@ export default class ApiMakerCableSubscriptionPool {
 
   /** onReceived. */
   onReceived = (rawData) => {
+    if (rawData.type == "api_maker_subscription_auth_refreshed") {
+      this.resolveAuthRefresh()
+      return
+    }
+
+    if (rawData.type == "api_maker_subscription_auth_refresh_error") {
+      this.rejectAuthRefresh(new Error(rawData.error?.message || "Subscription auth refresh failed"))
+      return
+    }
+
     const data = Deserializer.parse(rawData)
     const {a: args, e: eventName, m: model, mi: modelId, mt: modelType, t: type} = data
     const subscriptions = digg(this, "subscriptions")
@@ -139,6 +175,26 @@ export default class ApiMakerCableSubscriptionPool {
   /** onSubscribed. */
   onSubscribed = () => {
     logger.debug("onSubscribed")
+  }
+
+  /** @returns {void} */
+  clearAuthRefreshCallbacks () {
+    this.authRefreshCallbacks = {}
+  }
+
+  /** @returns {void} */
+  resolveAuthRefresh () {
+    this.authRefreshCallbacks.resolve?.()
+    this.clearAuthRefreshCallbacks()
+  }
+
+  /**
+   * @param {Error} error
+   * @returns {void}
+   */
+  rejectAuthRefresh (error) {
+    this.authRefreshCallbacks.reject?.(error)
+    this.clearAuthRefreshCallbacks()
   }
 
   /** onUnsubscribe. */
