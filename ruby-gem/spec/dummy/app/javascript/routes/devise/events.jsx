@@ -16,6 +16,7 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
     this.useStates({
       subscribedTask: null,
       subscribedTaskName: "",
+      taskSubscriptionConnected: "false",
       subscribedUser: null,
       subscriptionConnected: "false",
       subscriptionUpdateCount: 0,
@@ -30,11 +31,11 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
       void this.loadSubscribedUser()
     }, [])
     useUpdatedEvent(this.s.subscribedUser, this.tt.onSubscribedUserUpdated, {onConnected: this.tt.onSubscriptionConnected})
-    useUpdatedEvent(this.s.subscribedTask, this.tt.onSubscribedTaskUpdated)
+    useUpdatedEvent(this.s.subscribedTask, this.tt.onSubscribedTaskUpdated, {onConnected: this.tt.onTaskSubscriptionConnected})
   }
 
   render() {
-    const {signInCount, signOutCount, subscribedTaskName, subscriptionConnected, subscriptionUpdateCount, taskUpdateCount} = this.state
+    const {signInCount, signOutCount, subscribedTaskName, subscriptionConnected, subscriptionUpdateCount, taskSubscriptionConnected, taskUpdateCount} = this.state
 
     return (
       <Layout className="routes-devise-events">
@@ -49,6 +50,9 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
         </View>
         <View testID="devise-sign-out-count">
           <Text>{signOutCount}</Text>
+        </View>
+        <View testID="devise-task-subscription-connected">
+          <Text>{taskSubscriptionConnected}</Text>
         </View>
         <View testID="devise-task-update-count">
           <Text>{taskUpdateCount}</Text>
@@ -89,6 +93,7 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
     this.setState({taskUpdateCount: this.state.taskUpdateCount + 1})
   }
   onSubscriptionConnected = () => this.setState({subscriptionConnected: "true"})
+  onTaskSubscriptionConnected = () => this.setState({taskSubscriptionConnected: "true"})
 
   onSignInClicked = async () => {
     await Devise.signIn("admin@example.com", "password")
@@ -156,7 +161,7 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
   }
 
   loadSubscribedTask = async () => {
-    const subscribedTask = await Task.ransack({s: "id desc"}).first()
+    const subscribedTask = await Task.ransack({name_eq: "Initial subscribed task"}).first()
 
     this.setState({
       subscribedTask,

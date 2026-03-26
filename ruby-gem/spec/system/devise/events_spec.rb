@@ -34,6 +34,7 @@ describe "devise - events" do
     wait_for_selector "[data-testid='devise-sign-in-count']", exact_text: "1"
     wait_for_and_find("[data-testid='devise-subscribe-to-task-button']").click
     wait_for_selector "[data-testid='devise-subscribed-task-name']", exact_text: "Initial subscribed task"
+    wait_for_selector "[data-testid='devise-task-subscription-connected']", exact_text: "true"
     wait_for_and_find("[data-testid='devise-add-disconnected-stale-pool-button']").click
     wait_for_and_find("[data-testid='devise-sign-out-button']").click
     wait_for_expect do
