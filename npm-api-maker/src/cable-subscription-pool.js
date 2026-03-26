@@ -6,6 +6,7 @@ import getChannelsConsumer from "./channels-consumer.js"
 import Logger from "./logger.js" // eslint-disable-line sort-imports
 
 const logger = new Logger({name: "ApiMaker / CableSubscriptionPool"})
+const AUTH_REFRESH_TIMEOUT_MS = 5000
 
 /** Subscription pool for sharing channel subscriptions. */
 export default class ApiMakerCableSubscriptionPool {
@@ -30,7 +31,9 @@ export default class ApiMakerCableSubscriptionPool {
       },
       {
         connected: this.onConnected,
+        disconnected: this.onDisconnected,
         received: this.onReceived,
+        rejected: this.onRejected,
         subscribed: this.onSubscribed
       }
     )
@@ -55,6 +58,9 @@ export default class ApiMakerCableSubscriptionPool {
     this.authRefreshCallbacks.promise = new Promise((resolve, reject) => {
       this.authRefreshCallbacks.resolve = resolve
       this.authRefreshCallbacks.reject = reject
+      this.authRefreshCallbacks.timeoutId = setTimeout(() => {
+        this.rejectAuthRefresh(new Error("Subscription auth refresh timed out"))
+      }, AUTH_REFRESH_TIMEOUT_MS)
     })
 
     this.subscription.perform("refresh_auth", args)
@@ -114,6 +120,11 @@ export default class ApiMakerCableSubscriptionPool {
     this.forEachSubscription(({subscription}) => {
       subscription.events.emit("connected")
     })
+  }
+
+  /** onDisconnected. */
+  onDisconnected = () => {
+    this.rejectAuthRefresh(new Error("Subscription auth refresh was interrupted by a disconnect"))
   }
 
   /** onReceived. */
@@ -177,8 +188,17 @@ export default class ApiMakerCableSubscriptionPool {
     logger.debug("onSubscribed")
   }
 
+  /** onRejected. */
+  onRejected = () => {
+    this.rejectAuthRefresh(new Error("Subscription auth refresh was rejected"))
+  }
+
   /** @returns {void} */
   clearAuthRefreshCallbacks () {
+    if (this.authRefreshCallbacks.timeoutId) {
+      clearTimeout(this.authRefreshCallbacks.timeoutId)
+    }
+
     this.authRefreshCallbacks = {}
   }
 

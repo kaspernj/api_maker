@@ -1,12 +1,6 @@
 class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
   def subscribed
-    if respond_to?(:around_api_maker_subscribe_to_events)
-      around_api_maker_subscribe_to_events do
-        subscribe_to_events!
-      end
-    else
-      subscribe_to_events!
-    end
+    resubscribe_to_events!
   end
 
   def refresh_auth(data)
@@ -19,7 +13,7 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
       )
 
       stop_all_streams
-      subscribe_to_events!
+      resubscribe_to_events!
     end
 
     transmit(type: "api_maker_subscription_auth_refreshed")
@@ -40,6 +34,16 @@ private
       request_fingerprint: "subscriptions-channel-auth-refresh",
       request_uid: "subscriptions-channel-auth-refresh-#{object_id}"
     )
+  end
+
+  def resubscribe_to_events!
+    if respond_to?(:around_api_maker_subscribe_to_events)
+      around_api_maker_subscribe_to_events do
+        subscribe_to_events!
+      end
+    else
+      subscribe_to_events!
+    end
   end
 
   def subscribe_to_events!

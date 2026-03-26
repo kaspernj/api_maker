@@ -2,6 +2,10 @@ import CableSubscriptionPool from "../src/cable-subscription-pool.js"
 import {jest} from "@jest/globals"
 
 describe("CableSubscriptionPool", () => {
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   describe("onUnsubscribe", () => {
     it("unsubscribes from ActionCable", () => {
       const cableSubscriptionPool = new CableSubscriptionPool()
@@ -53,6 +57,33 @@ describe("CableSubscriptionPool", () => {
       })
 
       await expect(promise).rejects.toThrow("No session")
+    })
+
+    it("rejects when the auth refresh acknowledgement never arrives", async() => {
+      jest.useFakeTimers()
+      const cableSubscriptionPool = new CableSubscriptionPool()
+
+      cableSubscriptionPool.connected = true
+      cableSubscriptionPool.subscription = {perform: jest.fn()}
+
+      const promise = cableSubscriptionPool.refreshAuthentication({scope: "user", signedIn: false})
+
+      jest.advanceTimersByTime(5000)
+
+      await expect(promise).rejects.toThrow("Subscription auth refresh timed out")
+    })
+
+    it("rejects when the websocket disconnects before the auth refresh completes", async() => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+
+      cableSubscriptionPool.connected = true
+      cableSubscriptionPool.subscription = {perform: jest.fn()}
+
+      const promise = cableSubscriptionPool.refreshAuthentication({scope: "user", signedIn: false})
+
+      cableSubscriptionPool.onDisconnected()
+
+      await expect(promise).rejects.toThrow("Subscription auth refresh was interrupted by a disconnect")
     })
   })
 })

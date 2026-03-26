@@ -17,7 +17,7 @@ describe ApiMaker::SubscriptionsChannel do
         controller: request_context
       )
       expect(channel).to receive(:stop_all_streams)
-      expect(channel).to receive(:subscribe_to_events!)
+      expect(channel).to receive(:resubscribe_to_events!)
       expect(channel).to receive(:transmit).with(type: "api_maker_subscription_auth_refreshed")
 
       channel.refresh_auth("signedIn" => false)
