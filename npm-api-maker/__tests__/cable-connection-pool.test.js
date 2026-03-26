@@ -1,8 +1,13 @@
-import CableConnectionPool from "../build/cable-connection-pool.js"
-import CableSubscriptionPool from "../build/cable-subscription-pool"
+import CableConnectionPool from "../src/cable-connection-pool.js"
+import CableSubscriptionPool from "../src/cable-subscription-pool.js"
 import {digg} from "diggerize"
+import {jest} from "@jest/globals"
 
 describe("CableConnectionPool", () => {
+  afterEach(() => {
+    CableConnectionPool.resetCurrent()
+  })
+
   describe("connectCreated", () => {
     it("creates a new create event and connects", () => {
       const cableConnectionPool = new CableConnectionPool()
@@ -50,9 +55,9 @@ describe("CableConnectionPool", () => {
         cableConnectionPool.upcomingSubscriptionData = {}
         cableConnectionPool.upcomingSubscriptions = {}
 
-        const cableSubscriptionPool = {subscriptionData, subscriptions}
+        const nextCableSubscriptionPool = {subscriptionData, subscriptions}
 
-        cableConnectionPool.cableSubscriptionPools.push(cableSubscriptionPool)
+        cableConnectionPool.cableSubscriptionPools.push(nextCableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectDestroyed("Contact", "modelId", () => { })
@@ -113,9 +118,9 @@ describe("CableConnectionPool", () => {
         this.upcomingSubscriptionData = {}
         this.upcomingSubscriptions = {}
 
-        const cableSubscriptionPool = {subscriptionData, subscriptions}
+        const nextCableSubscriptionPool = {subscriptionData, subscriptions}
 
-        this.cableSubscriptionPools.push(cableSubscriptionPool)
+        this.cableSubscriptionPools.push(nextCableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.scheduleConnectUpcomingRunLast.queue = () => cableConnectionPool.connectUpcoming()
@@ -148,9 +153,9 @@ describe("CableConnectionPool", () => {
         cableConnectionPool.upcomingSubscriptionData = {}
         cableConnectionPool.upcomingSubscriptions = {}
 
-        const cableSubscriptionPool = {subscriptionData, subscriptions}
+        const nextCableSubscriptionPool = {subscriptionData, subscriptions}
 
-        cableConnectionPool.cableSubscriptionPools.push(cableSubscriptionPool)
+        cableConnectionPool.cableSubscriptionPools.push(nextCableSubscriptionPool)
       }
       cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
       cableConnectionPool.connectUpdate("Contact", "modelId", () => console.log("Update callback"))
@@ -218,5 +223,19 @@ describe("CableConnectionPool", () => {
       expect(subscriptions.length).toEqual(1)
       expect(connectedUnsubscribeEvent).toEqual(true)
     })
+  })
+
+  it("disconnects existing subscription pools and clears queued subscriptions on reset", () => {
+    const connectionPool = CableConnectionPool.current()
+    const disconnect = jest.fn()
+
+    connectionPool.cableSubscriptionPools = [{disconnect}]
+    connectionPool.upcomingSubscriptionData = {User: {updates: ["1"]}}
+    connectionPool.upcomingSubscriptions = {User: {updates: {1: []}}}
+
+    CableConnectionPool.resetCurrent()
+
+    expect(disconnect).toHaveBeenCalledTimes(1)
+    expect(CableConnectionPool.current()).not.toBe(connectionPool)
   })
 })

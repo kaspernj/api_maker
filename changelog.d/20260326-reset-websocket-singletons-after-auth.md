@@ -1,0 +1,1 @@
+Fixed Api Maker websocket cleanup after Devise sign-in and sign-out by resetting websocket request and model-event singleton pools together with the ActionCable consumer. This prevents stale websocket subscriptions and pending request state from leaking across auth changes.

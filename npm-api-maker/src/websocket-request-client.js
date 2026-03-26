@@ -16,6 +16,16 @@ export default class ApiMakerWebsocketRequestClient {
     return shared.currentApiMakerWebsocketRequestClient
   }
 
+  /** @returns {void} */
+  static resetCurrent () {
+    if (!shared.currentApiMakerWebsocketRequestClient) {
+      return
+    }
+
+    shared.currentApiMakerWebsocketRequestClient.reset()
+    delete shared.currentApiMakerWebsocketRequestClient
+  }
+
   /** Constructor. */
   constructor () {
     this.currentRequestId = 1
@@ -23,6 +33,21 @@ export default class ApiMakerWebsocketRequestClient {
     this.pendingRequestsByFingerprint = {}
     this.responseCache = {}
     this.subscriptionState = "new"
+  }
+
+  /** @returns {void} */
+  reset () {
+    if (this.subscription?.unsubscribe) {
+      this.subscription.unsubscribe()
+    }
+
+    this.rejectPendingRequests(new Error("Websocket request client reset"))
+    this.subscription = null
+    this.subscriptionState = "new"
+    this.responseCache = {}
+    this.subscriptionReadyPromise = null
+    this.resolveSubscriptionReadyPromise = null
+    this.rejectSubscriptionReadyPromise = null
   }
 
   /**

@@ -214,4 +214,19 @@ describe("ApiMakerWebsocketRequestClient", () => {
       responses: {1: {data: {ok: true}, type: "success"}}
     })
   })
+
+  it("resets pending requests and clears the singleton client", async() => {
+    const singletonClient = ApiMakerWebsocketRequestClient.current()
+
+    singletonClient.subscription = {unsubscribe: jest.fn()}
+    singletonClient.subscriptionState = "connected"
+    const promise = singletonClient.perform({global: {layout: "user"}, request: {pool: {}}})
+
+    ApiMakerWebsocketRequestClient.resetCurrent()
+
+    expect(singletonClient.subscription).toBeNull()
+    expect(singletonClient.subscriptionState).toBe("new")
+    await expect(promise).rejects.toThrow("Websocket request client reset")
+    expect(ApiMakerWebsocketRequestClient.current()).not.toBe(singletonClient)
+  })
 })

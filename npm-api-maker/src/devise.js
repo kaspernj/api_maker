@@ -1,4 +1,5 @@
 import * as inflection from "inflection" // eslint-disable-line sort-imports
+import CableConnectionPool from "./cable-connection-pool.js"
 import {createContext} from "react"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
 import events from "./events.js"
@@ -6,6 +7,7 @@ import modelClassRequire from "./model-class-require.js"
 import {resetChannelsConsumer} from "./channels-consumer.js"
 import SessionStatusUpdater from "./session-status-updater.js" // eslint-disable-line sort-imports
 import Services from "./services.js" // eslint-disable-line sort-imports
+import WebsocketRequestClient from "./websocket-request-client.js"
 
 if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
 
@@ -95,6 +97,8 @@ export default class ApiMakerDevise {
     // session cookies. Without this, WebSocket commands would still run
     // as the previous (anonymous/old) user.
     resetChannelsConsumer()
+    WebsocketRequestClient.resetCurrent()
+    CableConnectionPool.resetCurrent()
 
     ApiMakerDevise.updateSession(model)
 
@@ -169,6 +173,8 @@ export default class ApiMakerDevise {
     // old user's session. Without this, WebSocket commands would still
     // run as the signed-out user.
     resetChannelsConsumer()
+    WebsocketRequestClient.resetCurrent()
+    CableConnectionPool.resetCurrent()
 
     return response
   }

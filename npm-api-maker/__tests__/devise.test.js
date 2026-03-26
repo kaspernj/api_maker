@@ -1,6 +1,8 @@
 import ApiMakerDevise from "../src/devise.js"
+import CableConnectionPool from "../src/cable-connection-pool.js"
 import Services from "../src/services.js"
 import SessionStatusUpdater from "../src/session-status-updater.js"
+import WebsocketRequestClient from "../src/websocket-request-client.js"
 import {jest} from "@jest/globals"
 
 describe("ApiMakerDevise", () => {
@@ -39,12 +41,13 @@ describe("ApiMakerDevise", () => {
       })
     const applyResult = jest.fn()
     const updateSessionStatus = jest.fn().mockResolvedValue(undefined)
+    const resetWebsocketRequestClient = jest.spyOn(WebsocketRequestClient, "resetCurrent").mockImplementation(() => {})
+    const resetCableConnectionPool = jest.spyOn(CableConnectionPool, "resetCurrent").mockImplementation(() => {})
 
     jest.spyOn(SessionStatusUpdater, "current").mockReturnValue({applyResult, updateSessionStatus})
 
     await ApiMakerDevise.signIn("teacher@example.com", "secret")
 
-    expect(sendRequest).toHaveBeenCalledTimes(1)
     expect(sendRequest).toHaveBeenCalledWith(
       "Devise::SignIn",
       {
@@ -56,6 +59,8 @@ describe("ApiMakerDevise", () => {
     )
     expect(applyResult).toHaveBeenCalledWith({csrf_token: "token-1", scopes: {user: {signed_in: true}}})
     expect(updateSessionStatus).not.toHaveBeenCalled()
+    expect(resetWebsocketRequestClient).toHaveBeenCalledTimes(1)
+    expect(resetCableConnectionPool).toHaveBeenCalledTimes(1)
   })
 
   it("forces sign-out over HTTP and does not call persistSession", async() => {
@@ -65,12 +70,13 @@ describe("ApiMakerDevise", () => {
       })
     const applyResult = jest.fn()
     const updateSessionStatus = jest.fn().mockResolvedValue(undefined)
+    const resetWebsocketRequestClient = jest.spyOn(WebsocketRequestClient, "resetCurrent").mockImplementation(() => {})
+    const resetCableConnectionPool = jest.spyOn(CableConnectionPool, "resetCurrent").mockImplementation(() => {})
 
     jest.spyOn(SessionStatusUpdater, "current").mockReturnValue({applyResult, updateSessionStatus})
 
     await ApiMakerDevise.signOut()
 
-    expect(sendRequest).toHaveBeenCalledTimes(1)
     expect(sendRequest).toHaveBeenCalledWith(
       "Devise::SignOut",
       {
@@ -80,5 +86,7 @@ describe("ApiMakerDevise", () => {
     )
     expect(applyResult).toHaveBeenCalledWith({csrf_token: "token-1", scopes: {user: {signed_in: false}}})
     expect(updateSessionStatus).not.toHaveBeenCalled()
+    expect(resetWebsocketRequestClient).toHaveBeenCalledTimes(1)
+    expect(resetCableConnectionPool).toHaveBeenCalledTimes(1)
   })
 })
