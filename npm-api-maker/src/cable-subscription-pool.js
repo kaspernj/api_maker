@@ -124,6 +124,7 @@ export default class ApiMakerCableSubscriptionPool {
 
   /** onDisconnected. */
   onDisconnected = () => {
+    this.connected = false
     this.rejectAuthRefresh(new Error("Subscription auth refresh was interrupted by a disconnect"))
   }
 
@@ -190,6 +191,7 @@ export default class ApiMakerCableSubscriptionPool {
 
   /** onRejected. */
   onRejected = () => {
+    this.connected = false
     this.rejectAuthRefresh(new Error("Subscription auth refresh was rejected"))
   }
 

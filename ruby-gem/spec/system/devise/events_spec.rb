@@ -21,4 +21,16 @@ describe "devise - events" do
     wait_for_and_find("[data-testid='devise-sign-out-button']").click
     wait_for_selector "[data-testid='devise-sign-out-count']", exact_text: "1"
   end
+
+  it "signs out after a stale subscription pool disconnects" do
+    admin_user
+    visit devise_events_path
+
+    wait_for_selector "[data-testid='devise-subscription-connected']", exact_text: "true"
+    wait_for_selector "[data-testid='devise-sign-out-count']", exact_text: "0"
+    wait_for_and_find("[data-testid='devise-sign-in-button']").click
+    wait_for_selector "[data-testid='devise-sign-in-count']", exact_text: "1"
+    wait_for_and_find("[data-testid='devise-disconnect-and-sign-out-button']").click
+    wait_for_selector "[data-testid='devise-sign-out-count']", exact_text: "1"
+  end
 end

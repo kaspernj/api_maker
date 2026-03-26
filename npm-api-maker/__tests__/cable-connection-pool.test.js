@@ -1,6 +1,7 @@
 import CableConnectionPool from "../src/cable-connection-pool.js"
 import CableSubscriptionPool from "../src/cable-subscription-pool.js"
 import {digg} from "diggerize"
+import {jest} from "@jest/globals"
 
 describe("CableConnectionPool", () => {
   describe("connectCreated", () => {
@@ -217,6 +218,27 @@ describe("CableConnectionPool", () => {
 
       expect(subscriptions.length).toEqual(1)
       expect(connectedUnsubscribeEvent).toEqual(true)
+    })
+  })
+
+  describe("refreshAuthentication", () => {
+    it("only refreshes pools that are still connected", async() => {
+      const cableConnectionPool = new CableConnectionPool()
+      const disconnectedPool = new CableSubscriptionPool()
+      const connectedPool = new CableSubscriptionPool()
+      const connectedRefresh = jest.fn(() => Promise.resolve())
+
+      disconnectedPool.connected = true
+      disconnectedPool.subscription = {perform: jest.fn()}
+      disconnectedPool.onDisconnected()
+      connectedPool.connected = true
+      connectedPool.refreshAuthentication = connectedRefresh
+      cableConnectionPool.cableSubscriptionPools = [disconnectedPool, connectedPool]
+
+      await cableConnectionPool.refreshAuthentication({scope: "user", signedIn: false})
+
+      expect(disconnectedPool.subscription.perform).not.toHaveBeenCalled()
+      expect(connectedRefresh).toHaveBeenCalledWith({scope: "user", signedIn: false})
     })
   })
 })
