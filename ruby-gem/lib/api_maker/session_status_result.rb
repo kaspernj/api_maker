@@ -38,9 +38,9 @@ private
   end
 
   def shadow_session_token
-    return unless controller.respond_to?(:shadow_session_token, true)
+    return unless controller.respond_to?(:request)
 
-    controller.__send__(:shadow_session_token)
+    ApiMaker::SessionShadowStore.signed_token_for(request: controller.request)
   end
 
   def current_model_for_scope(scope_name:)

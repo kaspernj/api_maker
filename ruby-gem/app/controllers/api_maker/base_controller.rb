@@ -19,10 +19,6 @@ private
     @api_maker_locals ||= {}
   end
 
-  def shadow_session_token
-    ApiMaker::SessionShadowStore.signed_token_for(request:)
-  end
-
   def render_error(error)
     if error.is_a?(ActionController::InvalidAuthenticityToken)
       render json: {
