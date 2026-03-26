@@ -16,43 +16,13 @@ export default class ApiMakerWebsocketRequestClient {
     return shared.currentApiMakerWebsocketRequestClient
   }
 
-  /** @returns {void} */
-  static resetCurrent () {
-    if (!shared.currentApiMakerWebsocketRequestClient) {
-      return
-    }
-
-    shared.currentApiMakerWebsocketRequestClient.reset()
-    delete shared.currentApiMakerWebsocketRequestClient
-  }
-
   /** Constructor. */
   constructor () {
     this.currentRequestId = 1
-    this.disposed = false
     this.pendingRequests = {}
     this.pendingRequestsByFingerprint = {}
     this.responseCache = {}
     this.subscriptionState = "new"
-  }
-
-  /** @returns {void} */
-  reset () {
-    this.disposed = true
-    if (this.subscription?.unsubscribe) {
-      this.subscription.unsubscribe()
-    }
-
-    const error = new Error("Websocket request client reset")
-
-    this.rejectPendingRequests(error)
-    this.rejectSubscriptionReadyPromise?.(error)
-    this.subscription = null
-    this.subscriptionState = "new"
-    this.responseCache = {}
-    this.subscriptionReadyPromise = null
-    this.resolveSubscriptionReadyPromise = null
-    this.rejectSubscriptionReadyPromise = null
   }
 
   /**
@@ -118,10 +88,6 @@ export default class ApiMakerWebsocketRequestClient {
 
   /** @returns {any} */
   ensureSubscription () {
-    if (this.disposed) {
-      throw new Error("Websocket request client has been reset")
-    }
-
     if (!this.subscription) {
       logger.debug("Creating websocket request subscription")
       this.subscriptionState = "connecting"
@@ -244,10 +210,6 @@ export default class ApiMakerWebsocketRequestClient {
 
   /** @returns {void} */
   onConnected = () => {
-    if (this.disposed) {
-      return
-    }
-
     logger.debug("Websocket request subscription connected")
     this.subscriptionState = "connected"
     this.resolveSubscriptionReadyPromise?.()
@@ -256,10 +218,6 @@ export default class ApiMakerWebsocketRequestClient {
 
   /** @returns {void} */
   onDisconnected = () => {
-    if (this.disposed) {
-      return
-    }
-
     logger.debug("Websocket request subscription disconnected")
     Object.values(this.pendingRequests).forEach((pendingRequest) => {
       if (pendingRequest.deliveryState != "completed") {
@@ -275,10 +233,6 @@ export default class ApiMakerWebsocketRequestClient {
 
   /** @returns {void} */
   onRejected = () => {
-    if (this.disposed) {
-      return
-    }
-
     const error = new Error("Websocket request subscription was rejected")
 
     logger.error(error)

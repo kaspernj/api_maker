@@ -1,13 +1,8 @@
 import CableConnectionPool from "../src/cable-connection-pool.js"
 import CableSubscriptionPool from "../src/cable-subscription-pool.js"
 import {digg} from "diggerize"
-import {jest} from "@jest/globals"
 
 describe("CableConnectionPool", () => {
-  afterEach(() => {
-    CableConnectionPool.resetCurrent()
-  })
-
   describe("connectCreated", () => {
     it("creates a new create event and connects", () => {
       const cableConnectionPool = new CableConnectionPool()
@@ -223,21 +218,5 @@ describe("CableConnectionPool", () => {
       expect(subscriptions.length).toEqual(1)
       expect(connectedUnsubscribeEvent).toEqual(true)
     })
-  })
-
-  it("disconnects existing subscription pools and clears queued subscriptions on reset", () => {
-    const connectionPool = CableConnectionPool.current()
-    const disconnect = jest.fn()
-    const clearTimeout = jest.spyOn(connectionPool.scheduleConnectUpcomingRunLast, "clearTimeout")
-
-    connectionPool.cableSubscriptionPools = [{disconnect}]
-    connectionPool.upcomingSubscriptionData = {User: {updates: ["1"]}}
-    connectionPool.upcomingSubscriptions = {User: {updates: {1: []}}}
-
-    CableConnectionPool.resetCurrent()
-
-    expect(disconnect).toHaveBeenCalledTimes(1)
-    expect(clearTimeout).toHaveBeenCalledTimes(1)
-    expect(CableConnectionPool.current()).not.toBe(connectionPool)
   })
 })

@@ -17,7 +17,6 @@ export default class ApiMakerCableSubscriptionPool {
 
   /** connect. */
   connect (subscriptionData) {
-    this.subscriptionData = subscriptionData
     const globalData = CommandsPool.current().globalRequestData
 
     logger.debug(() => ["Creating subscription", {subscriptionData}])
@@ -83,15 +82,6 @@ export default class ApiMakerCableSubscriptionPool {
 
   /** isConnected. */
   isConnected = () => digg(this, "connected")
-
-  /** @returns {void} */
-  disconnect () {
-    if (this.subscription?.unsubscribe) {
-      this.subscription.unsubscribe()
-    }
-
-    this.connected = false
-  }
 
   /** onConnected. */
   onConnected = () => {

@@ -9,7 +9,6 @@ const shared = {}
 export default class ApiMakerCableConnectionPool {
   cableSubscriptionPools = []
   connections = {}
-  disposed = false
   upcomingSubscriptionData = {}
   upcomingSubscriptions = {}
 
@@ -18,16 +17,6 @@ export default class ApiMakerCableConnectionPool {
     if (!shared.apiMakerCableConnectionPool) shared.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
 
     return shared.apiMakerCableConnectionPool
-  }
-
-  /** @returns {void} */
-  static resetCurrent () {
-    if (!shared.apiMakerCableConnectionPool) {
-      return
-    }
-
-    shared.apiMakerCableConnectionPool.reset()
-    delete shared.apiMakerCableConnectionPool
   }
 
   /** connectEventToExistingSubscription. */
@@ -136,10 +125,6 @@ export default class ApiMakerCableConnectionPool {
 
   /** connectUpcoming. */
   connectUpcoming = () => {
-    if (this.disposed) {
-      return
-    }
-
     const subscriptionData = this.upcomingSubscriptionData
     const subscriptions = this.upcomingSubscriptions
 
@@ -152,17 +137,6 @@ export default class ApiMakerCableConnectionPool {
     cableSubscriptionPool.connect(subscriptionData)
 
     this.cableSubscriptionPools.push(cableSubscriptionPool)
-  }
-
-  /** @returns {void} */
-  reset () {
-    this.disposed = true
-    this.scheduleConnectUpcomingRunLast.clearTimeout()
-    this.cableSubscriptionPools.forEach((cableSubscriptionPool) => cableSubscriptionPool.disconnect())
-    this.cableSubscriptionPools = []
-    this.connections = {}
-    this.upcomingSubscriptionData = {}
-    this.upcomingSubscriptions = {}
   }
 
   scheduleConnectUpcomingRunLast = new RunLast(this.connectUpcoming)

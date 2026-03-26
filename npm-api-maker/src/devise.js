@@ -1,13 +1,10 @@
 import * as inflection from "inflection" // eslint-disable-line sort-imports
-import CableConnectionPool from "./cable-connection-pool.js"
 import {createContext} from "react"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
 import events from "./events.js"
 import modelClassRequire from "./model-class-require.js"
-import {resetChannelsConsumer} from "./channels-consumer.js"
 import SessionStatusUpdater from "./session-status-updater.js" // eslint-disable-line sort-imports
 import Services from "./services.js" // eslint-disable-line sort-imports
-import WebsocketRequestClient from "./websocket-request-client.js"
 
 if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
 
@@ -75,30 +72,23 @@ export default class ApiMakerDevise {
 
     const postData = {username, password, args}
 
-    // Always use HTTP for sign-in so Devise sets the session cookie and
-    // remember-me token directly in the HTTP response. WebSocket sign-in
-    // cannot set cookies (no HTTP response headers), so it relied on a
-    // fragile Rails.cache-based shadow session handoff via persistSession.
+    // Sign in over HTTP first so Devise can write the real session cookie and
+    // remember-me token in the HTTP response.
     const response = await Services.current().sendRequest("Devise::SignIn", postData, {forceHttp: true})
 
     let model = response.model
 
     if (Array.isArray(model)) model = model[0]
 
-    const sessionStatusUpdater = SessionStatusUpdater.current()
-
-    if (response.session_status) {
-      sessionStatusUpdater.applyResult(response.session_status)
-    } else {
-      await sessionStatusUpdater.updateSessionStatus()
-    }
-
-    // Reset the ActionCable connection so it reconnects with the new
-    // session cookies. Without this, WebSocket commands would still run
-    // as the previous (anonymous/old) user.
-    resetChannelsConsumer()
-    WebsocketRequestClient.resetCurrent()
-    CableConnectionPool.resetCurrent()
+    await ApiMakerDevise.syncSessionStatusAndRefreshWebsocket({
+      httpResponse: response,
+      scope: args.scope,
+      websocketArgs: {
+        rememberMe: args.rememberMe,
+        scope: args.scope,
+        signedIn: true
+      }
+    })
 
     ApiMakerDevise.updateSession(model)
 
@@ -158,25 +148,62 @@ export default class ApiMakerDevise {
     }
 
     const response = await Services.current().sendRequest("Devise::SignOut", {args}, {forceHttp: true})
+    const sessionStatus = await ApiMakerDevise.syncSessionStatusAndRefreshWebsocket({
+      httpResponse: response,
+      scope: args.scope,
+      websocketArgs: {
+        scope: args.scope,
+        signedIn: false
+      }
+    })
 
-    const sessionStatusUpdater = SessionStatusUpdater.current()
-
-    if (response.session_status) {
-      sessionStatusUpdater.applyResult(response.session_status)
-    } else {
-      await sessionStatusUpdater.updateSessionStatus()
+    if (!sessionStatus.scopes?.[args.scope]?.signed_in) {
       ApiMakerDevise.setSignedOut(args)
       ApiMakerDevise.callSignOutEvent(args)
     }
 
-    // Reset the ActionCable connection so it reconnects without the
-    // old user's session. Without this, WebSocket commands would still
-    // run as the signed-out user.
-    resetChannelsConsumer()
-    WebsocketRequestClient.resetCurrent()
-    CableConnectionPool.resetCurrent()
-
     return response
+  }
+
+  /**
+   * Applies the latest HTTP session status locally, then refreshes the
+   * existing websocket connection so ApiMaker commands use the same auth.
+   *
+   * @param {Record<string, any>} args
+   * @returns {Promise<Record<string, any>>}
+   */
+  static async syncSessionStatusAndRefreshWebsocket(args) {
+    const sessionStatus = await ApiMakerDevise.syncSessionStatusFromHttpResponse(args.httpResponse)
+
+    await ApiMakerDevise.refreshWebsocketSession({
+      ...args.websocketArgs,
+      shadowSessionToken: sessionStatus.shadow_session_token
+    })
+
+    return sessionStatus
+  }
+
+  /**
+   * @param {Record<string, any>} httpResponse
+   * @returns {Promise<Record<string, any>>}
+   */
+  static async syncSessionStatusFromHttpResponse(httpResponse) {
+    const sessionStatusUpdater = SessionStatusUpdater.current()
+    const sessionStatus = httpResponse.session_status || await sessionStatusUpdater.sessionStatus()
+
+    sessionStatusUpdater.applyResult(sessionStatus)
+
+    return sessionStatus
+  }
+
+  /**
+   * Refreshes ApiMaker auth inside the existing websocket connection.
+   *
+   * @param {Record<string, any>} args
+   * @returns {Promise<any>}
+   */
+  static async refreshWebsocketSession(args) {
+    return Services.current().sendRequest("Devise::PersistSession", args)
   }
 
   /** Constructor. */
