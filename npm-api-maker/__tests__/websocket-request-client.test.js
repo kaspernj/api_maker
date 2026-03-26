@@ -229,4 +229,15 @@ describe("ApiMakerWebsocketRequestClient", () => {
     await expect(promise).rejects.toThrow("Websocket request client reset")
     expect(ApiMakerWebsocketRequestClient.current()).not.toBe(singletonClient)
   })
+
+  it("ignores delayed disconnect callbacks after reset", () => {
+    const singletonClient = ApiMakerWebsocketRequestClient.current()
+    const ensureSubscription = jest.spyOn(singletonClient, "ensureSubscription")
+
+    ApiMakerWebsocketRequestClient.resetCurrent()
+    singletonClient.onDisconnected()
+
+    expect(ensureSubscription).not.toHaveBeenCalled()
+    expect(singletonClient.subscription).toBeNull()
+  })
 })

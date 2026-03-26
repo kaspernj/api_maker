@@ -228,6 +228,7 @@ describe("CableConnectionPool", () => {
   it("disconnects existing subscription pools and clears queued subscriptions on reset", () => {
     const connectionPool = CableConnectionPool.current()
     const disconnect = jest.fn()
+    const clearTimeout = jest.spyOn(connectionPool.scheduleConnectUpcomingRunLast, "clearTimeout")
 
     connectionPool.cableSubscriptionPools = [{disconnect}]
     connectionPool.upcomingSubscriptionData = {User: {updates: ["1"]}}
@@ -236,6 +237,7 @@ describe("CableConnectionPool", () => {
     CableConnectionPool.resetCurrent()
 
     expect(disconnect).toHaveBeenCalledTimes(1)
+    expect(clearTimeout).toHaveBeenCalledTimes(1)
     expect(CableConnectionPool.current()).not.toBe(connectionPool)
   })
 })

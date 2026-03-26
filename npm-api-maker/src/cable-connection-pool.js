@@ -9,6 +9,7 @@ const shared = {}
 export default class ApiMakerCableConnectionPool {
   cableSubscriptionPools = []
   connections = {}
+  disposed = false
   upcomingSubscriptionData = {}
   upcomingSubscriptions = {}
 
@@ -135,6 +136,10 @@ export default class ApiMakerCableConnectionPool {
 
   /** connectUpcoming. */
   connectUpcoming = () => {
+    if (this.disposed) {
+      return
+    }
+
     const subscriptionData = this.upcomingSubscriptionData
     const subscriptions = this.upcomingSubscriptions
 
@@ -151,6 +156,8 @@ export default class ApiMakerCableConnectionPool {
 
   /** @returns {void} */
   reset () {
+    this.disposed = true
+    this.scheduleConnectUpcomingRunLast.clearTimeout()
     this.cableSubscriptionPools.forEach((cableSubscriptionPool) => cableSubscriptionPool.disconnect())
     this.cableSubscriptionPools = []
     this.connections = {}
