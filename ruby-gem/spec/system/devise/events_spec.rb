@@ -7,6 +7,8 @@ describe "devise - events" do
     admin_user
     visit devise_events_path
 
+    wait_for_selector "[data-testid='devise-subscription-connected']", exact_text: "true"
+    wait_for_selector "[data-testid='devise-subscription-update-count']", exact_text: "0"
     wait_for_selector "[data-testid='devise-sign-in-count']", exact_text: "0"
     wait_for_selector "[data-testid='devise-sign-out-count']", exact_text: "0"
 

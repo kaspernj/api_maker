@@ -16,12 +16,12 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
       resubscribe_to_events!
     end
 
-    transmit(type: "api_maker_subscription_auth_refreshed")
+    transmit({type: "api_maker_subscription_auth_refreshed"})
   rescue StandardError => e
-    transmit(
+    transmit({
       error: {message: e.message},
       type: "api_maker_subscription_auth_refresh_error"
-    )
+    })
     raise
   end
 
