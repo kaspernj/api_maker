@@ -74,3 +74,7 @@ builds:
         name: Expo Doctor
         script:
           - cd npm-api-maker && npx expo-doctor
+      build_15:
+        name: Typecheck
+        script:
+          - cd npm-api-maker && npm run typecheck

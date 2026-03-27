@@ -1,5 +1,42 @@
 class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
   def subscribed
+    resubscribe_to_events!
+  end
+
+  def refresh_auth(data)
+    request_context = subscription_request_context(data)
+
+    request_context.with_request_context do
+      Services::Devise::PersistSession.execute!(
+        args: data.to_h.deep_symbolize_keys,
+        controller: request_context
+      )
+
+      stop_all_streams
+      resubscribe_to_events!
+    end
+
+    transmit({type: "api_maker_subscription_auth_refreshed"})
+  rescue StandardError => e
+    transmit({
+      error: {message: e.message},
+      type: "api_maker_subscription_auth_refresh_error"
+    })
+    raise
+  end
+
+private
+
+  def subscription_request_context(_data)
+    ApiMaker::ActionCableRequestContext.new(
+      api_maker_args: {current_user:}.merge((params[:global] || {}).symbolize_keys),
+      channel: self,
+      request_fingerprint: "subscriptions-channel-auth-refresh",
+      request_uid: "subscriptions-channel-auth-refresh-#{object_id}"
+    )
+  end
+
+  def resubscribe_to_events!
     if respond_to?(:around_api_maker_subscribe_to_events)
       around_api_maker_subscribe_to_events do
         subscribe_to_events!
@@ -8,8 +45,6 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
       subscribe_to_events!
     end
   end
-
-private
 
   def subscribe_to_events!
     params[:subscription_data].each do |model_name, subscription_types|

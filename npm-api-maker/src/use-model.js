@@ -244,15 +244,29 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.onDestroyed, s.s.model?.id()])
 
-  const result = {
-    model: s.s.model,
-    modelId,
-    notFound: s.s.notFound
+  let model = s.s.model
+  let notFound = s.s.notFound
+
+  if (!s.m.active) {
+    model = undefined
+    notFound = undefined
+  } else if (modelId && model && model.id() != modelId) {
+    model = undefined
+    notFound = undefined
+  } else if (!modelId && !args.query && !s.props.newIfNoId) {
+    model = undefined
+    notFound = undefined
   }
 
-  result[modelVariableName] = s.s.model
+  const result = {
+    model,
+    modelId,
+    notFound
+  }
+
+  result[modelVariableName] = model
   result[`${modelVariableName}Id`] = modelId
-  result[`${modelVariableName}NotFound`] = s.s.notFound
+  result[`${modelVariableName}NotFound`] = notFound
 
   return result
 }

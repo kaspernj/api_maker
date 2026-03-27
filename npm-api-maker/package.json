@@ -1,7 +1,7 @@
 {
   "name": "@kaspernj/api-maker",
   "type": "module",
-  "version": "1.0.2139",
+  "version": "1.0.2146",
   "description": "My new module",
   "files": [
     "build/**"
@@ -9,7 +9,7 @@
   "types": "build/index.d.ts",
   "main": "build/index.js",
   "scripts": {
-    "build": "rm -rf build && tsc || true",
+    "build": "rm -rf build && tsc",
     "clean": "expo-module clean",
     "lint": "expo-module lint -- --max-warnings 0",
     "test": "NODE_OPTIONS=--experimental-vm-modules expo-module test",

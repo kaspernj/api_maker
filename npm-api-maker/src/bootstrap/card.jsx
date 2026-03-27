@@ -31,7 +31,7 @@ export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseCompo
   }
 
   setup() {
-    this.cardRef = useRef()
+    this.cardRef = useRef(undefined)
 
     this.useStates({
       expanded: this.props.defaultExpanded

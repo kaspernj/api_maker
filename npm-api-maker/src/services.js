@@ -13,7 +13,7 @@ export default class ApiMakerServices {
 
   /**
    * @param {string} serviceName
-   * @param {Record<string, any>} args
+   * @param {Record<string, any>} [args]
    * @param {Record<string, any>} [options]
    * @returns {Promise<any>}
    */

@@ -40,3 +40,29 @@ Notes:
 - In `npm-api-maker`, keep the checked-in `.npmrc` with `legacy-peer-deps=true` while the package targets ESLint 10 and `eslint-plugin-react` has not yet published an ESLint 10 peer range; remove that workaround only after the upstream peer support lands.
 - In `npm-api-maker`, keep peer-facing runtime imports that are needed by linked local/CI builds, lint, or tests (for example `react-native-vector-icons`, `flash-notifications`, `history`, and `i18n-on-steroids`) installed in `devDependencies` as well when tooling resolves modules from the package directory itself.
 - In `on-location-changed`, `WithLocationPath` initializes `queryParams` synchronously from `globalThis.location.search` via `useState(params())`; `useQueryParams()` being `undefined` indicates a missing/explicitly-undefined provider, not a normal first-render hydration phase.
+
+## API Maker Usage in Consuming Projects
+- For Peakflow/API Maker-style frontend-model backends, keep resource metadata and authorization abilities co-located in one resource class tree; do not split them into parallel `resources` and `authorization/resources` directories.
+- Prefer ApiMaker commands in `app/api_maker/commands` for new app actions instead of adding custom Rails controllers when ApiMaker can support the flow.
+- In Rails apps using ApiMaker, prefer ApiMaker model/model-class websocket events over custom ActionCable channels when possible; add a custom channel only when ApiMaker events cannot represent the required stream.
+- In ApiMaker realtime UIs, use model-level update subscriptions when the UI needs updated model attributes; model-class events carry event names/args, not serialized updated models.
+- For realtime UI backed by ApiMaker events, do one initial fetch and then rely on websocket/model events; do not add browser polling unless there is a documented hard requirement that events cannot satisfy.
+- Use the Layout `header` prop for screen titles; avoid custom per-screen headers unless explicitly requested.
+- Use `Text` from `@kaspernj/api-maker/build/utils/text` for default styles.
+- Prefer `useBreakpoint()` (responsive-breakpoints via Api Maker dependencies) over `useWindowDimensions()` for responsive logic.
+- When using API Maker `Link` on web (renders as an `<a>`), center content with an inner `View` instead of relying on flex alignment on the anchor itself.
+- Prefer `Form` from `@kaspernj/api-maker/build/form` with uncontrolled inputs to avoid state-driven re-renders.
+- When multiple screens repeat the same label + input form markup, extract a shared form input component (for example a screen-specific base text input) instead of duplicating blocks.
+- Use Api Maker `Form` and `formObjectRef` to track uncontrolled input values instead of manual instance fields.
+- In ShapeComponents using Api Maker `Form`, pass both `formObjectRef` and `setForm`, then read values via `this.formObjectRef.current || this.form` to avoid mount-timing races.
+- Use Api Maker `Icon` for icons instead of raw `<i>` tags or FontAwesome class names on `Text`.
+- In app code, prefer importing frontend models from individual files (for example `models/project.js`) instead of aggregating through `models`.
+- In app code, avoid `import {...} from "models"`; import each frontend model from its dedicated model file path.
+- Prefer link-based navigation (`Link` with `to`) for navigation-only actions so users can open routes in new tabs/windows; use `AppHistory.push`/`Params.changeParams` only when imperative navigation is required by side effects or control flow.
+- For Api Maker `Link` on web (anchor rendering), use mouse events (`onMouseEnter`/`onMouseLeave`) for hover behavior instead of `onHoverIn`/`onHoverOut`.
+- For Link rows that render text, keep visual text styles (for example `color` and underline decoration) on the inner `Text` element rather than the `Link` wrapper.
+- Use `useQueryParams` when building filterable routes in React UI.
+- Layout `controls` props must be callbacks; do not pass React nodes directly.
+- In ShapeComponent routes, pass `controls={this.tt.controls}` and set `controls` on `this.setInstance(...)`.
+- Prefer passing `navbarControls` as a callback and let `Layout` resolve it, rather than pre-rendering.
+- When layout controls depend on a model, pass `cacheKey` (like `model?.id()`) to force re-renders.

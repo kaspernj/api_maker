@@ -1,7 +1,7 @@
 import * as inflection from "inflection"
 import {digg, digs} from "diggerize"
 
-const modelConfigRequireContext = import.meta.webpackContext("super-admin/model-configs", {
+const modelConfigRequireContext = /** @type {any} */ (import.meta).webpackContext("super-admin/model-configs", {
   recursive: true,
   regExp: /\.(jsx|js)$/
 })

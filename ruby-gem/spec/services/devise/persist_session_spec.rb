@@ -35,6 +35,7 @@ describe Services::Devise::PersistSession do
 
   it "signs out the scope when explicitly asked to materialize a signed-out session" do
     expect(controller).to receive(:request).and_return(request).at_least(:once)
+    expect(warden).to receive(:user).with(:user).and_return(nil)
     expect(warden).to receive(:logout).with(:user)
     expect(ApiMaker::SessionStatusResult).to receive(:new).with(controller:).and_return(session_status)
 
@@ -70,6 +71,21 @@ describe Services::Devise::PersistSession do
     expect(ApiMaker::SessionStatusResult).to receive(:new).with(controller:).and_return(session_status)
 
     response = described_class.execute!(args: {shadowSessionToken: "signed-token"}, controller:)
+
+    expect(response).to include(session_status: session_status_result, success: true)
+  end
+
+  it "uses the ActionCable request context sign in path when available" do
+    action_cable_controller = instance_double(ApiMaker::ActionCableRequestContext)
+
+    allow(action_cable_controller).to receive(:is_a?).with(ApiMaker::ActionCableRequestContext).and_return(true)
+    expect(action_cable_controller).to receive(:request).and_return(request).at_least(:once)
+    expect(action_cable_controller).to receive(:current_user).at_least(:once).and_return(user)
+    expect(action_cable_controller).to receive(:sign_in).with(user, scope: "user", run_hooks: false)
+    expect(ApiMaker::SessionStatusResult).to receive(:new).with(controller: action_cable_controller).and_return(session_status)
+    expect(warden).to receive(:user).with(:user).and_return(nil)
+
+    response = described_class.execute!(args: {signedIn: true}, controller: action_cable_controller)
 
     expect(response).to include(session_status: session_status_result, success: true)
   end

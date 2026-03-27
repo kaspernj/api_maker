@@ -62,6 +62,18 @@ class ApiMakerConfig {
    * @returns {void}
    */
   setWebsocketRequests(_newValue) { throw new Error("'setWebsocketRequests' not implemented") }
+
+  /** @returns {any} */
+  getCurrenciesCollection() { throw new Error("'getCurrenciesCollection' not implemented") }
+
+  /** @returns {any} */
+  getModal() { throw new Error("'getModal' not implemented") }
+
+  /** @returns {Record<string, any>} */
+  getRouteDefinitions() { throw new Error("'getRouteDefinitions' not implemented") }
+
+  /** @returns {Record<string, any>} */
+  getRoutes() { throw new Error("'getRoutes' not implemented") }
 }
 
 for (const accessorName in accessors) {

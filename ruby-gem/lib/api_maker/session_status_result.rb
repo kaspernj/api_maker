@@ -32,15 +32,15 @@ class ApiMaker::SessionStatusResult
 private
 
   def csrf_token
-    return unless controller.respond_to?(:form_authenticity_token)
+    return unless controller.respond_to?(:form_authenticity_token, true)
 
-    controller.form_authenticity_token
+    controller.__send__(:form_authenticity_token)
   end
 
   def shadow_session_token
-    return unless controller.respond_to?(:shadow_session_token)
+    return unless controller.respond_to?(:request)
 
-    controller.shadow_session_token
+    ApiMaker::SessionShadowStore.signed_token_for(request: controller.request)
   end
 
   def current_model_for_scope(scope_name:)

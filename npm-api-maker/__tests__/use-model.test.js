@@ -95,4 +95,40 @@ describe("useModel", () => {
       isNewRecord: true
     })
   })
+
+  it("does not expose a stale loaded model after the query-param ID changes", async() => {
+    mockUseQueryParams.mockReturnValue({school_class_id: "new-school-class-id"})
+
+    mockUseShape.mockImplementation((props) => {
+      const state = {
+        model: new FakeSchoolClass({
+          data: {a: {id: "old-school-class-id"}}
+        }),
+        notFound: false
+      }
+      const meta = {}
+
+      return {
+        meta,
+        props,
+        state,
+        m: meta,
+        p: props,
+        s: state,
+        set: (statesList) => Object.assign(state, statesList),
+        updateMeta: (newMeta) => Object.assign(meta, newMeta),
+        useStates: () => {}
+      }
+    })
+
+    const {default: useModel} = await import("../src/use-model.js")
+    const result = useModel(FakeSchoolClass, {
+      active: true,
+      loadByQueryParam: ({queryParams}) => queryParams.school_class_id
+    })
+
+    expect(result.schoolClassId).toBe("new-school-class-id")
+    expect(result.schoolClass).toBeUndefined()
+    expect(result.schoolClassNotFound).toBeUndefined()
+  })
 })

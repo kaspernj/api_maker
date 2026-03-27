@@ -25,14 +25,15 @@ class ApiMaker::SessionShadowStore
     Rails.cache.read(cache_key(session_id))
   end
 
-  def self.read_signed(request:, token:)
+  def self.read_signed(request: nil, token:) # rubocop:disable Lint/UnusedMethodArgument
     session_id = session_id_from_signed_token(token:)
-    current_session_id = session_id_for(request:)
 
     return if session_id.blank?
-    return if current_session_id.blank?
-    return if session_id != current_session_id
 
+    # The token is cryptographically signed by Rails.application.message_verifier,
+    # so the session_id it carries is trustworthy without cross-checking against
+    # the current request's session. This allows persistSession HTTP calls to
+    # resolve the user after a WebSocket sign-in where the HTTP session ID differs.
     Rails.cache.read(cache_key(session_id))
   end
 

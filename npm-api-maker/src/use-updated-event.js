@@ -46,7 +46,7 @@ const modelsByIdFromInput = (modelOrModels) => {
  * @param {object} [props]
  * @param {boolean} [props.active]
  * @param {number} [props.debounce]
- * @param {Function} [props.onConnected]
+ * @param {(...args: any[]) => void} [props.onConnected]
  * @returns {void}
  */
 const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {

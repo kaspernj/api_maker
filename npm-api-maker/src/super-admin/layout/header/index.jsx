@@ -54,7 +54,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
   setup() {
     const {name: breakpoint, mdUp} = useBreakpoint()
 
-    this.headerActionsRef = useRef()
+    this.headerActionsRef = useRef(undefined)
     this.setInstance({breakpoint, mdUp})
     this.useStates({
       headerActionsActive: false
@@ -67,6 +67,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
     const {breakpoint, mdUp} = this.tt
     const {actions, onTriggerMenu, title} = this.props
 
+    /** @type {Record<string, any>} */
     const headerStyle = {
       display: "flex",
       flexDirection: "row",
@@ -78,12 +79,12 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
       backgroundColor: "#fff"
     }
 
-    const headerActionsContainerStyle = {}
-    const headerActionsStyle = {
+    const headerActionsContainerStyle = /** @type {Record<string, any>} */ ({})
+    const headerActionsStyle = /** @type {Record<string, any>} */ ({
       flexDirection: mdUp ? "row" : "column",
       alignItems: mdUp ? "flex-start" : "stretch",
       gap: mdUp ? 8 : 0
-    }
+    })
 
     if (breakpoint == "xs" || breakpoint == "sm") {
       headerStyle.position = "absolute"

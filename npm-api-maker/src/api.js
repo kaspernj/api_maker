@@ -130,7 +130,7 @@ export default class Api { // eslint-disable-line padded-blocks
    * @returns {Promise<any>}
    */
   static async requestLocal(args) {
-    let headers = {}
+    let headers = /** @type {Record<string, string>} */ ({})
 
     if (args.headers) {
       headers = {...args.headers}

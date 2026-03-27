@@ -8,6 +8,7 @@ import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Params from "../../params.js"
+// @ts-expect-error Runtime-resolved module
 import {TableSearch} from "models.js"
 import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
@@ -126,7 +127,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal ext
             {t(".choose_a_search", {defaultValue: "Choose a search"})}
           </Text>
         </View>
-        {this.state.searches?.map((search) =>
+        {this.s.searches?.map((search) =>
           <SearchLink
             key={search.id()}
             onClick={this.tt.onSearchClicked}
@@ -153,7 +154,7 @@ export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal ext
 
   onSearchDeleted = ({search}) => {
     this.setState({
-      searches: this.state.searches.filter((existingSearch) => existingSearch.id() != search.id())
+      searches: this.s.searches.filter((existingSearch) => existingSearch.id() != search.id())
     })
   }
 }))

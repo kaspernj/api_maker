@@ -42,6 +42,8 @@ import objectToFormData from "object-to-formdata"
  * @property {boolean} [throwValidationError]
  */
 
+/** @typedef {{new (...args: Array<any>): BaseModel, apiMakerType: string} & Record<string, any>} BaseModelClassType */
+
 const objectToUnderscore = (object) => {
   const newObject = {}
 
@@ -55,7 +57,8 @@ const objectToUnderscore = (object) => {
 }
 
 /** BaseModel. */
-export default class BaseModel {
+/** @type {BaseModelClassType} */
+const BaseModel = class BaseModel {
   static apiMakerType = "BaseModel"
 
   /** @returns {Attribute[]} */
@@ -95,7 +98,9 @@ export default class BaseModel {
    * @param {ValidationErrors} validationErrors
    * @returns {CustomEvent}
    */
-  static newCustomEvent = (validationErrors) => new CustomEvent("validation-errors", {detail: validationErrors})
+  static newCustomEvent(validationErrors) {
+    return new CustomEvent("validation-errors", {detail: validationErrors})
+  }
 
   /**
    * @param {ValidationErrors} validationErrors
@@ -111,17 +116,15 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof import("./base-model.js").default} T
-   * @this {T}
    * @param {number | string} id
-   * @returns {Promise<InstanceType<T>>}
+   * @returns {Promise<any>}
    */
   static async find(id) {
     const query = /** @type {Record<string, any>} */ ({})
 
     query[`${this.primaryKey()}_eq`] = id
 
-    const model = /** @type {InstanceType<T>} */ (await this.ransack(query).first())
+    const model = await this.ransack(query).first()
 
     if (model) {
       return model
@@ -131,12 +134,10 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof import("./base-model.js").default} T
-   * @this {T}
    * @param {Record<string, any>} findOrCreateByArgs
    * @param {object} [args]
    * @param {Record<string, any>} [args.additionalData]
-   * @returns {Promise<InstanceType<T>>}
+   * @returns {Promise<any>}
    */
   static async findOrCreateBy(findOrCreateByArgs, args = {}) {
     const result = await Services.current().sendRequest("Models::FindOrCreateBy", {
@@ -144,7 +145,7 @@ export default class BaseModel {
       find_or_create_by_args: findOrCreateByArgs,
       resource_name: digg(this.modelClassData(), "name")
     })
-    const model = /** @type {InstanceType<T>} */ (digg(result, "model"))
+    const model = digg(result, "model")
 
     return model
   }
@@ -160,20 +161,16 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof import("./base-model.js").default} MC
-   * @this {MC}
    * @param {Record<string, any>} [query]
-   * @returns {import("./collection.js").default<MC>}
+   * @returns {import("./collection.js").default<any>}
    */
   static ransack(query = {}) {
     return new Collection({modelClass: this}, {ransack: query})
   }
 
   /**
-   * @template {typeof import("./base-model.js").default} MC
-   * @this {MC}
    * @param {Record<string, any>} [select]
-   * @returns {import("./collection.js").default<MC>}
+   * @returns {import("./collection.js").default<any>}
    */
   static select(select) {
     return this.ransack().select(select)
@@ -261,7 +258,7 @@ export default class BaseModel {
    * @param {object} [args.data]
    * @param {Record<string, any>} [args.a]
    * @param {Record<string, any>} [args.b]
-   * @param {Collection<typeof import("./base-model.js").default>} [args.collection]
+   * @param {Collection<any>} [args.collection]
    */
   constructor(args = {}) {
     this.changes = {}
@@ -344,13 +341,9 @@ export default class BaseModel {
     return this.abilities[abilityName]
   }
 
-  /**
-   * @template {BaseModel} Self
-   * @this {Self}
-   * @returns {Self}
-   */
+  /** @returns {BaseModel} */
   clone() {
-    const ModelClass = /** @type {new (...args: any[]) => Self} */ (this.constructor)
+    const ModelClass = /** @type {new (...args: any[]) => BaseModel} */ (this.constructor)
     const clone = new ModelClass()
 
     clone.abilities = {...this.abilities}
@@ -403,11 +396,7 @@ export default class BaseModel {
     return cacheKeyGenerator.cacheKey()
   }
 
-  /**
-   * @template {typeof import("./base-model.js").default} MC
-   * @this {MC}
-   * @returns {Collection<MC>}
-   */
+  /** @returns {import("./collection.js").default<any>} */
   static all() {
     return this.ransack()
   }
@@ -1036,13 +1025,9 @@ export default class BaseModel {
     return {valid: response.valid, errors: response.errors}
   }
 
-  /**
-   * @template {BaseModel} Self
-   * @this {Self}
-   * @returns {typeof import("./base-model.js").default & (new (...args: any[]) => Self)}
-   */
+  /** @returns {Record<string, any>} */
   modelClass() {
-    return /** @type {typeof import("./base-model.js").default & (new (...args: any[]) => Self)} */ (this.constructor)
+    return /** @type {Record<string, any>} */ (this.constructor)
   }
 
   /**
@@ -1105,7 +1090,9 @@ export default class BaseModel {
    * @param {Record<string, any>} commandArgs
    * @returns {Promise<object>}
    */
-  _callMemberCommand = (args, commandArgs) => CommandsPool.addCommand(args, commandArgs)
+  _callMemberCommand(args, commandArgs) {
+    return CommandsPool.addCommand(args, commandArgs)
+  }
 
   /**
    * @param {FormData | Record<string, any>} [args]
@@ -1182,10 +1169,10 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof import("./base-model.js").default} AssocMC
-   * @param {import("./collection.js").CollectionArgsType<AssocMC>} args
+   *
+   * @param {import("./collection.js").CollectionArgsType<any>} args
    * @param {import("./collection.js").QueryArgsType} queryArgs
-   * @returns {Promise<InstanceType<AssocMC> | null>}
+   * @returns {Promise<any | null>}
    */
   async _loadBelongsToReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationships) {
@@ -1201,9 +1188,9 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof import("./base-model.js").default} AssocMC
-   * @param {{modelClass: AssocMC, reflectionName: string}} args
-   * @returns {InstanceType<AssocMC> | null}
+   *
+   * @param {{modelClass: any, reflectionName: string}} args
+   * @returns {any | null}
    */
   _readBelongsToReflection({reflectionName}) {
     if (reflectionName in this.relationships) {
@@ -1221,10 +1208,10 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof import("./base-model.js").default} AssocMC
-   * @param {import("./collection.js").CollectionArgsType<AssocMC>} args
+   *
+   * @param {import("./collection.js").CollectionArgsType<any>} args
    * @param {import("./collection.js").QueryArgsType} queryArgs
-   * @returns {Promise<Array<InstanceType<AssocMC>>>}
+   * @returns {Promise<Array<any>>}
    */
   async _loadHasManyReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationships) {
@@ -1242,10 +1229,10 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof import("./base-model.js").default} AssocMC
-   * @param {import("./collection.js").CollectionArgsType<AssocMC>} args
+   *
+   * @param {import("./collection.js").CollectionArgsType<any>} args
    * @param {import("./collection.js").QueryArgsType} queryArgs
-   * @returns {Promise<InstanceType<AssocMC>>}
+   * @returns {Promise<any>}
    */
   async _loadHasOneReflection(args, queryArgs = {}) {
     if (args.reflectionName in this.relationships) {
@@ -1263,9 +1250,9 @@ export default class BaseModel {
   }
 
   /**
-   * @template {typeof import("./base-model.js").default} AssocMC
-   * @param {{modelClass: AssocMC, reflectionName: string}} args
-   * @returns {InstanceType<AssocMC> | null}
+   *
+   * @param {{modelClass: any, reflectionName: string}} args
+   * @returns {any | null}
    */
   _readHasOneReflection({reflectionName}) {
     if (reflectionName in this.relationships) {
@@ -1290,7 +1277,7 @@ export default class BaseModel {
    * @param {Record<string, any>} [args.data.b]
    * @param {Record<string, any>} [args.data.a]
    * @param {any} [args.data.r]
-   * @param {Collection<typeof import("./base-model.js").default>} [args.collection]
+   * @param {Collection<any>} [args.collection]
    * @returns {void}
    */
   _readModelDataFromArgs(args) {
@@ -1357,3 +1344,5 @@ export default class BaseModel {
   /** @returns {number|string} */
   primaryKey() { return this.readAttributeUnderscore(this.modelClass().primaryKey()) }
 }
+
+export default BaseModel

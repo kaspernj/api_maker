@@ -14,7 +14,7 @@ export default memo(shapeComponent(class SharedTagble extends BaseComponent {
     )
 
     return (
-      <FlatList style={actualStyle} {...restProps} />
+      <FlatList style={actualStyle} {.../** @type {any} */ (restProps)} />
     )
   }
 }))

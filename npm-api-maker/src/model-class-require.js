@@ -5,7 +5,7 @@ import * as models from "models.js" // eslint-disable-line import/no-unresolved
 
 /**
  * @param {string} modelName
- * @returns {typeof import("./base-model.js").default}
+ * @returns {typeof import("./base-model.js").default & Record<string, any>}
  */
 export default function modelClassRequire(modelName) {
   const requireName = inflection.camelize(modelName)
