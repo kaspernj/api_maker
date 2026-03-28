@@ -234,6 +234,10 @@ export default class ApiMakerCableSubscriptionPool {
 
   /** onUnsubscribe. */
   onUnsubscribe () {
+    if (this.skipDisconnectHandling) {
+      return
+    }
+
     logger.debug(() => `activeSubscriptions before unsub: ${this.activeSubscriptions}`)
     this.activeSubscriptions -= 1
     logger.debug(() => `activeSubscriptions after unsub: ${this.activeSubscriptions}`)

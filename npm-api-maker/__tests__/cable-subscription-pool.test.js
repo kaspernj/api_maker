@@ -136,5 +136,20 @@ describe("CableSubscriptionPool", () => {
       expect(unsubscribe).toHaveBeenCalledTimes(1)
       expect(cableSubscriptionPool.isConnected()).toEqual(false)
     })
+
+    it("ignores later unsubscribe callbacks from wrappers that outlive the pool reset", () => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const unsubscribe = jest.fn()
+
+      cableSubscriptionPool.activeSubscriptions = 1
+      cableSubscriptionPool.connected = true
+      cableSubscriptionPool.subscription = {unsubscribe}
+
+      cableSubscriptionPool.reset()
+      cableSubscriptionPool.onUnsubscribe()
+
+      expect(unsubscribe).toHaveBeenCalledTimes(1)
+      expect(cableSubscriptionPool.activeSubscriptions).toEqual(0)
+    })
   })
 })
