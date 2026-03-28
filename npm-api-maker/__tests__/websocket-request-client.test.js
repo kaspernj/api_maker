@@ -214,4 +214,24 @@ describe("ApiMakerWebsocketRequestClient", () => {
       responses: {1: {data: {ok: true}, type: "success"}}
     })
   })
+
+  it("resets pending requests without reconnecting", async() => {
+    const subscription = {unsubscribe: jest.fn()}
+
+    client.subscription = subscription
+    client.subscriptionState = "connecting"
+    client.resetSubscriptionReadyPromise()
+    jest.spyOn(client, "ensureSubscription")
+
+    const promise = client.perform({global: {layout: "user"}, request: {pool: {}}})
+
+    client.reset()
+    client.onDisconnected()
+
+    await expect(promise).rejects.toThrow("Websocket request client was reset")
+    expect(subscription.unsubscribe).toHaveBeenCalledTimes(1)
+    expect(client.ensureSubscription).toHaveBeenCalledTimes(1)
+    expect(client.subscription).toBeNull()
+    expect(client.subscriptionState).toBe("reset")
+  })
 })
