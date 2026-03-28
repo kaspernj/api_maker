@@ -16,9 +16,20 @@ export default class ApiMakerWebsocketRequestClient {
     return shared.currentApiMakerWebsocketRequestClient
   }
 
+  /** @returns {void} */
+  static resetCurrent () {
+    if (!shared.currentApiMakerWebsocketRequestClient) {
+      return
+    }
+
+    shared.currentApiMakerWebsocketRequestClient.reset()
+    delete shared.currentApiMakerWebsocketRequestClient
+  }
+
   /** Constructor. */
   constructor () {
     this.currentRequestId = 1
+    this.skipReconnect = false
     this.pendingRequests = {}
     this.pendingRequestsByFingerprint = {}
     this.responseCache = {}
@@ -219,6 +230,13 @@ export default class ApiMakerWebsocketRequestClient {
   /** @returns {void} */
   onDisconnected = () => {
     logger.debug("Websocket request subscription disconnected")
+    this.subscription = null
+
+    if (this.skipReconnect) {
+      this.subscriptionState = "reset"
+      return
+    }
+
     Object.values(this.pendingRequests).forEach((pendingRequest) => {
       if (pendingRequest.deliveryState != "completed") {
         pendingRequest.deliveryState = "queued"
@@ -226,13 +244,18 @@ export default class ApiMakerWebsocketRequestClient {
     })
 
     this.subscriptionState = "disconnected"
-    this.subscription = null
     this.resetSubscriptionReadyPromise()
     this.ensureSubscription()
   }
 
   /** @returns {void} */
   onRejected = () => {
+    if (this.skipReconnect) {
+      this.subscriptionState = "reset"
+      this.subscription = null
+      return
+    }
+
     const error = new Error("Websocket request subscription was rejected")
 
     logger.error(error)
@@ -302,5 +325,26 @@ export default class ApiMakerWebsocketRequestClient {
     Object.values(pendingRequests).forEach((pendingRequest) => {
       queueMicrotask(() => pendingRequest.reject(error))
     })
+  }
+
+  /** @returns {void} */
+  reset () {
+    const resetError = new Error("Websocket request client was reset")
+
+    this.skipReconnect = true
+    this.rejectPendingRequests(resetError)
+    this.responseCache = {}
+    this.currentRequestId = 1
+    this.rejectSubscriptionReadyPromise?.(resetError)
+
+    if (this.subscription?.unsubscribe) {
+      this.subscription.unsubscribe()
+    }
+
+    this.subscription = null
+    this.subscriptionState = "new"
+    this.resolveSubscriptionReadyPromise = undefined
+    this.rejectSubscriptionReadyPromise = undefined
+    this.subscriptionReadyPromise = undefined
   }
 }

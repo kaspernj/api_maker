@@ -241,4 +241,29 @@ describe("CableConnectionPool", () => {
       expect(connectedRefresh).toHaveBeenCalledWith({scope: "user", signedIn: false})
     })
   })
+
+  describe("reset", () => {
+    it("resets existing pools and clears queued subscriptions", () => {
+      const cableConnectionPool = new CableConnectionPool()
+      const reset = jest.fn()
+      const clearTimeout = jest.fn()
+
+      cableConnectionPool.cableSubscriptionPools = [{reset}]
+      cableConnectionPool.connections = {Contact: true}
+      cableConnectionPool.upcomingSubscriptionData = {Contact: {updates: ["1"]}}
+      cableConnectionPool.upcomingSubscriptions = {Contact: {updates: {1: []}}}
+      cableConnectionPool.scheduleConnectUpcomingRunLast = {clearTimeout}
+
+      cableConnectionPool.reset()
+
+      expect(clearTimeout).toHaveBeenCalledTimes(1)
+      expect(reset).toHaveBeenCalledTimes(1)
+      expect(cableConnectionPool).toMatchObject({
+        cableSubscriptionPools: [],
+        connections: {},
+        upcomingSubscriptionData: {},
+        upcomingSubscriptions: {}
+      })
+    })
+  })
 })

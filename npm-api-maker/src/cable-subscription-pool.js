@@ -15,6 +15,7 @@ export default class ApiMakerCableSubscriptionPool {
     this.activeSubscriptions = 0
     this.authRefreshCallbacks = {}
     this.connected = false
+    this.skipDisconnectHandling = false
   }
 
   /** connect. */
@@ -127,6 +128,11 @@ export default class ApiMakerCableSubscriptionPool {
   /** onDisconnected. */
   onDisconnected = () => {
     this.connected = false
+
+    if (this.skipDisconnectHandling) {
+      return
+    }
+
     this.rejectAuthRefresh(new Error("Subscription auth refresh was interrupted by a disconnect"))
   }
 
@@ -194,6 +200,11 @@ export default class ApiMakerCableSubscriptionPool {
   /** onRejected. */
   onRejected = () => {
     this.connected = false
+
+    if (this.skipDisconnectHandling) {
+      return
+    }
+
     this.rejectAuthRefresh(new Error("Subscription auth refresh was rejected"))
   }
 
@@ -280,5 +291,20 @@ export default class ApiMakerCableSubscriptionPool {
       // @ts-expect-error
       this.onUnsubscribe(subscription)
     })
+  }
+
+  /** @returns {void} */
+  reset () {
+    this.skipDisconnectHandling = true
+    this.connected = false
+    this.rejectAuthRefresh(new Error("Subscription pool was reset"))
+
+    if (this.subscription?.unsubscribe) {
+      this.subscription.unsubscribe()
+    }
+
+    this.subscription = undefined
+    this.subscriptions = undefined
+    this.activeSubscriptions = 0
   }
 }

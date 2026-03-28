@@ -118,4 +118,23 @@ describe("CableSubscriptionPool", () => {
       expect(cableSubscriptionPool.isConnected()).toEqual(true)
     })
   })
+
+  describe("reset", () => {
+    it("disconnects the subscription and rejects pending auth refresh callbacks", async() => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const unsubscribe = jest.fn()
+
+      cableSubscriptionPool.connected = true
+      cableSubscriptionPool.subscription = {perform: jest.fn(), unsubscribe}
+
+      const promise = cableSubscriptionPool.refreshAuthentication({scope: "user", signedIn: false})
+
+      cableSubscriptionPool.reset()
+      cableSubscriptionPool.onDisconnected()
+
+      await expect(promise).rejects.toThrow("Subscription pool was reset")
+      expect(unsubscribe).toHaveBeenCalledTimes(1)
+      expect(cableSubscriptionPool.isConnected()).toEqual(false)
+    })
+  })
 })
