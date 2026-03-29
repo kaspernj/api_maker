@@ -988,10 +988,10 @@
   resolved "https://registry.npmjs.org/@jsonjoy.com/util/-/util-1.2.0.tgz"
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
-"@kaspernj/api-maker@>= 1.0.2139":
-  version "1.0.2142"
-  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2142.tgz#7d4815c3d37edf44e486f3fb85aee7545ad65332"
-  integrity sha512-RZYsur2j7irdenv3BQYNRemUGSzUTHb2AAPybU4WFE0n3hzNjw/hXXzjxE0a4+m66RBWGG7Gikck8J5x06iddg==
+"@kaspernj/api-maker@>= 1.0.2147":
+  version "1.0.2147"
+  resolved "https://registry.yarnpkg.com/@kaspernj/api-maker/-/api-maker-1.0.2147.tgz#53e2f2f6da19924a407d49b891b3d3fa7ef77c7d"
+  integrity sha512-10W3CInrEz2TsWiyp0pA1nDeB2AU405Up9oMCazOwwOZVJUjr4VRvIOii7CN/uZI3MXpVPVA3rnep616DgsJpQ==
   dependencies:
     classnames "^2.5.1"
     clone-deep ">= 4.0.1"
@@ -3759,14 +3759,14 @@ pvutils@^1.1.3:
   resolved "https://registry.npmjs.org/pvutils/-/pvutils-1.1.5.tgz"
   integrity sha512-KTqnxsgGiQ6ZAzZCVlJH5eOjSnvlyEgx1m8bkRJfOhmGRqfo5KLvmAlACQkrjEtOQ4B7wF9TdSLIs9O90MX9xA==
 
-"qs@>= 6.9.3":
+"qs@>= 6.9.3", qs@^6.10.5:
   version "6.15.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.15.0.tgz#db8fd5d1b1d2d6b5b33adaf87429805f1909e7b3"
   integrity sha512-mAZTtNCeetKMH+pSjrb76NAM8V9a05I9aBZOHztWy/UqcJdQYNsf59vrRKWnojAT9Y+GbIvoTBC++CPHqpDBhQ==
   dependencies:
     side-channel "^1.1.0"
 
-qs@^6.10.5, qs@~6.14.0:
+qs@~6.14.0:
   version "6.14.2"
   resolved "https://registry.npmjs.org/qs/-/qs-6.14.2.tgz"
   integrity sha512-V/yCWTTF7VJ9hIh18Ugr2zhJMP01MY7c5kh4J870L7imm6/DIzBsNLTXzMwUA3yZ5b/KBqLx8Kp3uRvd7xSe3Q==
@@ -3801,12 +3801,12 @@ raw-body@~2.5.3:
     iconv-lite "~0.4.24"
     unpipe "~1.0.0"
 
-react-dom@^19.1.0:
-  version "19.1.0"
-  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.1.0.tgz"
-  integrity sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==
+react-dom@19.2.4:
+  version "19.2.4"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-19.2.4.tgz#6fac6bd96f7db477d966c7ec17c1a2b1ad8e6591"
+  integrity sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==
   dependencies:
-    scheduler "^0.26.0"
+    scheduler "^0.27.0"
 
 react-is@^16.13.1:
   version "16.13.1"
@@ -3832,9 +3832,9 @@ react-native-web@^0.21.2:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.3"
 
-react@^19.1.0:
+react@19.2.4:
   version "19.2.4"
-  resolved "https://registry.npmjs.org/react/-/react-19.2.4.tgz"
+  resolved "https://registry.yarnpkg.com/react/-/react-19.2.4.tgz#438e57baa19b77cb23aab516cf635cd0579ee09a"
   integrity sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==
 
 readable-stream@^2.0.1:
@@ -4031,10 +4031,10 @@ sass@^1.98.0:
   optionalDependencies:
     "@parcel/watcher" "^2.4.1"
 
-scheduler@^0.26.0:
-  version "0.26.0"
-  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.26.0.tgz"
-  integrity sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==
+scheduler@^0.27.0:
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.27.0.tgz#0c4ef82d67d1e5c1e359e8fc76d3a87f045fe5bd"
+  integrity sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==
 
 schema-utils@^3.0.0:
   version "3.3.0"
@@ -4324,15 +4324,10 @@ stimulus@^3.2.2:
     "@hotwired/stimulus" "^3.2.2"
     "@hotwired/stimulus-webpack-helpers" "^1.0.0"
 
-"strftime@>= 0.10.0":
+"strftime@>= 0.10.0", strftime@^0.10.0:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/strftime/-/strftime-0.10.3.tgz#d801427a07f794c1e16a622371efe660fa72123f"
   integrity sha512-DZrDUeIF73eKJ4/GgGuv8UHWcUQPYDYfDeQFj3jrx+JZl6GQE656MbHIpvbo4mEG9a5DgS8GRCc5DxJXD2udDQ==
-
-strftime@^0.10.0:
-  version "0.10.1"
-  resolved "https://registry.npmjs.org/strftime/-/strftime-0.10.1.tgz"
-  integrity sha512-nVvH6JG8KlXFPC0f8lojLgEsPA18lRpLZ+RrJh/NkQV2tqOgZfbas8gcU8SFgnnqR3rWzZPYu6N2A3xzs/8rQg==
 
 string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
