@@ -177,14 +177,52 @@ describe("useModel", () => {
     expect(mockUseUpdatedEvent).toHaveBeenCalledWith(
       loadedModel,
       expect.any(Function),
-      {
-        active: true,
-        onConnected: expect.any(Function)
-      }
+      {onConnected: expect.any(Function)}
     )
 
     const [, reloadModel, props] = mockUseUpdatedEvent.mock.calls[0]
 
     expect(props.onConnected).toBe(reloadModel)
+  })
+
+  it("does not subscribe to update events when eventUpdated is not enabled", async() => {
+    mockUseQueryParams.mockReturnValue({})
+
+    const loadedModel = new FakeSchoolClass({
+      data: {a: {id: "school-class-id"}}
+    })
+
+    mockUseShape.mockImplementation((props) => {
+      const state = {
+        model: loadedModel,
+        notFound: false
+      }
+      const meta = {}
+
+      return {
+        meta,
+        props,
+        state,
+        m: meta,
+        p: props,
+        s: state,
+        set: (statesList) => Object.assign(state, statesList),
+        updateMeta: (newMeta) => Object.assign(meta, newMeta),
+        useStates: () => {}
+      }
+    })
+
+    const {default: useModel} = await import("../src/use-model.js")
+
+    useModel(FakeSchoolClass, {
+      loadByQueryParam: () => "school-class-id"
+    })
+
+    expect(mockUseUpdatedEvent).toHaveBeenCalledTimes(1)
+    expect(mockUseUpdatedEvent).toHaveBeenCalledWith(
+      undefined,
+      expect.any(Function),
+      {onConnected: expect.any(Function)}
+    )
   })
 })

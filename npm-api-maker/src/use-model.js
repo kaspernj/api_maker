@@ -211,8 +211,7 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.events])
 
-  useUpdatedEvent(s.s.model, loadModel, {
-    active: Boolean(args.eventUpdated),
+  useUpdatedEvent(args.eventUpdated ? s.s.model : undefined, loadModel, {
     onConnected: loadModel
   })
 
