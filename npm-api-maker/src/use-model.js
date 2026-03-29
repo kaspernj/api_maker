@@ -5,6 +5,7 @@ import * as inflection from "inflection"
 import ModelEvents from "./model-events.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import useShape from "./use-shape.js"
+import useUpdatedEvent from "./use-updated-event.js"
 
 /**
  * @typedef {object} useModelArgs
@@ -85,6 +86,17 @@ const useModel = (modelClassArg, argsArg = {}) => {
     const model = await query.first()
 
     if (loadModelGeneration != loadModelGenerationRef.current) return
+
+    if (
+      s.s.model &&
+      model &&
+      !s.s.notFound &&
+      s.s.model.fullCacheKey() == model.fullCacheKey()
+    ) {
+      return
+    } else if (!s.s.model && !model && s.s.notFound) {
+      return
+    }
 
     s.set({model, notFound: !model})
   }, [])
@@ -210,17 +222,9 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.events])
 
-  useEffect(() => {
-    let connectUpdated
-
-    if (s.s.model && args.eventUpdated) {
-      connectUpdated = ModelEvents.connectUpdated(s.s.model, loadModel)
-    }
-
-    return () => {
-      connectUpdated?.unsubscribe()
-    }
-  }, [args.eventUpdated, s.s.model?.id()])
+  useUpdatedEvent(args.eventUpdated ? s.s.model : undefined, loadModel, {
+    onConnected: loadModel
+  })
 
   useEffect(() => {
     Devise.events().addListener("onDeviseSignIn", onSignedIn)
