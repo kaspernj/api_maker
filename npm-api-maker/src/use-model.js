@@ -87,6 +87,17 @@ const useModel = (modelClassArg, argsArg = {}) => {
 
     if (loadModelGeneration != loadModelGenerationRef.current) return
 
+    if (
+      s.s.model &&
+      model &&
+      !s.s.notFound &&
+      s.s.model.fullCacheKey() == model.fullCacheKey()
+    ) {
+      return
+    } else if (!s.s.model && !model && s.s.notFound) {
+      return
+    }
+
     s.set({model, notFound: !model})
   }, [])
 

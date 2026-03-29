@@ -6,6 +6,7 @@ const mockUseRef = jest.fn((value) => ({current: value}))
 const mockUseQueryParams = jest.fn()
 const mockUseShape = jest.fn()
 const mockUseUpdatedEvent = jest.fn()
+const mockQueryFirst = jest.fn()
 
 jest.unstable_mockModule("react", () => {
   const actual = jest.requireActual("react")
@@ -48,12 +49,22 @@ describe("useModel", () => {
       }
     }
 
+    static ransack() {
+      return {
+        first: mockQueryFirst
+      }
+    }
+
     constructor(args) {
       this.args = args
     }
 
     id() {
       return this.args.data.a.id
+    }
+
+    fullCacheKey() {
+      return this.args.data.a.fullCacheKey || this.args.data.a.id
     }
   }
 
@@ -64,6 +75,7 @@ describe("useModel", () => {
     mockUseQueryParams.mockReset()
     mockUseShape.mockReset()
     mockUseUpdatedEvent.mockReset()
+    mockQueryFirst.mockReset()
   })
 
   it("does not crash when query params are undefined and newIfNoId is used", async() => {
@@ -224,5 +236,52 @@ describe("useModel", () => {
       expect.any(Function),
       {onConnected: expect.any(Function)}
     )
+  })
+
+  it("does not set state again when the connected reload returns the same model data", async() => {
+    mockUseQueryParams.mockReturnValue({})
+
+    const state = {
+      model: new FakeSchoolClass({
+        data: {a: {id: "school-class-id", fullCacheKey: "same-model"}}
+      }),
+      notFound: false
+    }
+    const set = jest.fn((statesList) => Object.assign(state, statesList))
+
+    mockQueryFirst.mockResolvedValue(
+      new FakeSchoolClass({
+        data: {a: {id: "school-class-id", fullCacheKey: "same-model"}}
+      })
+    )
+
+    mockUseShape.mockImplementation((props) => {
+      const meta = {}
+
+      return {
+        meta,
+        props,
+        state,
+        m: meta,
+        p: props,
+        s: state,
+        set,
+        updateMeta: (newMeta) => Object.assign(meta, newMeta),
+        useStates: () => {}
+      }
+    })
+
+    const {default: useModel} = await import("../src/use-model.js")
+
+    useModel(FakeSchoolClass, {
+      eventUpdated: true,
+      loadByQueryParam: () => "school-class-id"
+    })
+
+    const [, , props] = mockUseUpdatedEvent.mock.calls[0]
+
+    await props.onConnected()
+
+    expect(set).not.toHaveBeenCalled()
   })
 })
