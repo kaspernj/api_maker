@@ -5,6 +5,7 @@ const mockUseEffect = jest.fn()
 const mockUseRef = jest.fn((value) => ({current: value}))
 const mockUseQueryParams = jest.fn()
 const mockUseShape = jest.fn()
+const mockUseUpdatedEvent = jest.fn()
 
 jest.unstable_mockModule("react", () => {
   const actual = jest.requireActual("react")
@@ -25,6 +26,11 @@ jest.unstable_mockModule("on-location-changed/build/use-query-params.js", () => 
 jest.unstable_mockModule("../src/use-shape.js", () => ({
   __esModule: true,
   default: (...args) => mockUseShape(...args)
+}))
+
+jest.unstable_mockModule("../src/use-updated-event.js", () => ({
+  __esModule: true,
+  default: (...args) => mockUseUpdatedEvent(...args)
 }))
 
 describe("useModel", () => {
@@ -57,6 +63,7 @@ describe("useModel", () => {
     mockUseRef.mockClear()
     mockUseQueryParams.mockReset()
     mockUseShape.mockReset()
+    mockUseUpdatedEvent.mockReset()
   })
 
   it("does not crash when query params are undefined and newIfNoId is used", async() => {
@@ -130,5 +137,54 @@ describe("useModel", () => {
     expect(result.schoolClassId).toBe("new-school-class-id")
     expect(result.schoolClass).toBeUndefined()
     expect(result.schoolClassNotFound).toBeUndefined()
+  })
+
+  it("reloads the model when the update subscription connects for eventUpdated models", async() => {
+    mockUseQueryParams.mockReturnValue({})
+
+    const loadedModel = new FakeSchoolClass({
+      data: {a: {id: "school-class-id"}}
+    })
+
+    mockUseShape.mockImplementation((props) => {
+      const state = {
+        model: loadedModel,
+        notFound: false
+      }
+      const meta = {}
+
+      return {
+        meta,
+        props,
+        state,
+        m: meta,
+        p: props,
+        s: state,
+        set: (statesList) => Object.assign(state, statesList),
+        updateMeta: (newMeta) => Object.assign(meta, newMeta),
+        useStates: () => {}
+      }
+    })
+
+    const {default: useModel} = await import("../src/use-model.js")
+
+    useModel(FakeSchoolClass, {
+      eventUpdated: true,
+      loadByQueryParam: () => "school-class-id"
+    })
+
+    expect(mockUseUpdatedEvent).toHaveBeenCalledTimes(1)
+    expect(mockUseUpdatedEvent).toHaveBeenCalledWith(
+      loadedModel,
+      expect.any(Function),
+      {
+        active: true,
+        onConnected: expect.any(Function)
+      }
+    )
+
+    const [, reloadModel, props] = mockUseUpdatedEvent.mock.calls[0]
+
+    expect(props.onConnected).toBe(reloadModel)
   })
 })

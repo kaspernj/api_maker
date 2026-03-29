@@ -5,6 +5,7 @@ import * as inflection from "inflection"
 import ModelEvents from "./model-events.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import useShape from "./use-shape.js"
+import useUpdatedEvent from "./use-updated-event.js"
 
 /**
  * @typedef {object} useModelArgs
@@ -210,17 +211,10 @@ const useModel = (modelClassArg, argsArg = {}) => {
     }
   }, [args.events])
 
-  useEffect(() => {
-    let connectUpdated
-
-    if (s.s.model && args.eventUpdated) {
-      connectUpdated = ModelEvents.connectUpdated(s.s.model, loadModel)
-    }
-
-    return () => {
-      connectUpdated?.unsubscribe()
-    }
-  }, [args.eventUpdated, s.s.model?.id()])
+  useUpdatedEvent(s.s.model, loadModel, {
+    active: Boolean(args.eventUpdated),
+    onConnected: loadModel
+  })
 
   useEffect(() => {
     Devise.events().addListener("onDeviseSignIn", onSignedIn)
