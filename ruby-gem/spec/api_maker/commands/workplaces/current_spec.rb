@@ -10,9 +10,7 @@ describe Commands::Workplaces::Current do
         @id = 1
       end
 
-      def with_advisory_lock!(*)
-        false
-      end
+      define_method(:with_advisory_lock!) { |_| false }
 
       def reload
         self

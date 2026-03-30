@@ -174,15 +174,15 @@ private
 
   def find_super_admin_input(id:, input_test_id:, checkbox_selector:, value:)
     test_id_selector = "[data-testid='#{input_test_id}']"
-    test_id_component = all(test_id_selector, visible: true, wait: 0).first
+    test_id_component = first(test_id_selector, visible: true, wait: 0)
 
     if test_id_component
       if value == true || value == false
-        test_id_checkbox = test_id_component.all("input[type='checkbox']", visible: true, wait: 0).first
+        test_id_checkbox = test_id_component.first("input[type='checkbox']", visible: true, wait: 0)
 
         return test_id_checkbox if test_id_checkbox
       else
-        test_id_text_input = test_id_component.all("input, textarea", visible: true, wait: 0).first
+        test_id_text_input = test_id_component.first("input, textarea", visible: true, wait: 0)
 
         return test_id_text_input if test_id_text_input
       end

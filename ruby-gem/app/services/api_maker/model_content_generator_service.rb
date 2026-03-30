@@ -31,11 +31,11 @@ private
   end
 
   def attribute_translated?(attribute_name)
-    model_class
-      .reflections["translations"]
-      &.klass
-      &.columns
-      &.any? { |column| column.name == attribute_name }
+    reflection = model_class.reflections["translations"]
+
+    return false unless reflection
+
+    reflection.klass.columns.any? { |column| column.name == attribute_name }
   rescue ActiveRecord::StatementInvalid
     # This happens if the table or column doesn't exist - like if we are running during a migration
     false

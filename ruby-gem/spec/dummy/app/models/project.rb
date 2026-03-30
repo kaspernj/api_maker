@@ -10,7 +10,7 @@ class Project < ApplicationRecord
   has_many :tasks, dependent: :restrict_with_error, inverse_of: :project
 
   has_one :customer, through: :account
-  has_one :project_detail, -> { where(deleted_at: nil) }, dependent: :destroy
+  has_one :project_detail, -> { where(deleted_at: nil) }, dependent: :destroy, inverse_of: :project
 
   validates :name, presence: true
   validates :name, presence: true, length: {maximum: 110}

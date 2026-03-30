@@ -50,9 +50,7 @@ describe "api_maker_table helpers" do
         current_workplace
       end
 
-      def save!
-        true
-      end
+      define_method(:save!) { true }
 
       def created?
         @created

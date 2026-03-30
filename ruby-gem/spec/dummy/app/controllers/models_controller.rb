@@ -5,6 +5,11 @@ class ModelsController < ApplicationController
 
   def create; end
 
+  def update
+    @project = Project.find(params[:project_id])
+    @project.update!(name: "not-renamed")
+  end
+
   def destroy
     @project = Project.find(params[:project_id])
   end
@@ -20,9 +25,4 @@ class ModelsController < ApplicationController
   def preload; end
 
   def ransack; end
-
-  def update
-    @project = Project.find(params[:project_id])
-    @project.update!(name: "not-renamed")
-  end
 end

@@ -8,9 +8,9 @@ class User < ApplicationRecord
 
   belongs_to :current_workplace, class_name: "WorkerPlugins::Workplace", optional: true
 
-  has_many :comments, dependent: :restrict_with_error, foreign_key: :author_id
+  has_many :comments, dependent: :restrict_with_error, foreign_key: :author_id, inverse_of: :author
   has_many :tasks, dependent: :destroy
-  has_many :supported_tasks, class_name: "Task", foreign_key: :support_email, primary_key: :email
+  has_many :supported_tasks, class_name: "Task", dependent: :nullify, foreign_key: :support_email, inverse_of: false, primary_key: :email
   has_many :user_roles, dependent: :destroy
 
   accepts_nested_attributes_for :tasks

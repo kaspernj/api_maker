@@ -6,10 +6,7 @@ class FixTableSettingColumnsPosition < ActiveRecord::Migration[7.0]
       columns.each_with_index do |column, column_index|
         position = column.fetch("position")
 
-        if position != column_index
-          puts "UPDATING POSITION FROM #{position} TO #{column_index}"
-          run_query("UPDATE table_setting_columns SET position = '#{column_index}' WHERE id = '#{column.fetch("id")}'")
-        end
+        run_query("UPDATE table_setting_columns SET position = '#{column_index}' WHERE id = '#{column.fetch("id")}'") if position != column_index
       end
     end
   end

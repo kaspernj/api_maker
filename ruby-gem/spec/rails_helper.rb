@@ -149,7 +149,7 @@ RSpec.configure do |config|
   config.after(:each, type: :system) do |example|
     if example.exception
       browser_log_artifact = write_browser_logs_artifact(example)
-      puts "\n[Browser Logs]: #{browser_log_artifact}\n" if browser_log_artifact
+      Rails.logger.info("\n[Browser Logs]: #{browser_log_artifact}\n") if browser_log_artifact
     end
   end
 end

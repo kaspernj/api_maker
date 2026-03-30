@@ -10,7 +10,7 @@ class Task < ApplicationRecord
   has_many :accounts, through: :account_marked_tasks, inverse_of: :tasks
   has_many :comments, as: :resource, dependent: :destroy
 
-  has_one :comment, as: :resource # Used to test has-one-preloader
+  has_one :comment, as: :resource, dependent: :destroy # Used to test has-one-preloader
 
   has_one :account, through: :project
   has_one :customer, through: :account

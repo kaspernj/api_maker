@@ -282,9 +282,7 @@ class ApiMaker::BaseResource
     "#<#{self.class.name}:#{__id__}>"
   end
 
-  def model_class
-    self.class.model_class
-  end
+  delegate :model_class, to: :class
 
 private
 

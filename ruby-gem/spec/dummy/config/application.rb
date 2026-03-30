@@ -29,6 +29,7 @@ require "cancancan"
 require "devise"
 require "js-routes"
 
+# rubocop:disable Style/OneClassPerFile
 module Dummy; end
 
 class Dummy::Application < Rails::Application
@@ -46,3 +47,4 @@ class Dummy::Application < Rails::Application
 
   config.hosts << ENV.fetch("ALLOWED_HOST") if ENV["ALLOWED_HOST"].present?
 end
+# rubocop:enable Style/OneClassPerFile

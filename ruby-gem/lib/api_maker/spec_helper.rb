@@ -161,7 +161,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
       if heartbeat
         now = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         if now - last_heartbeat_at >= heartbeat_interval_sec
-          print "."
+          Rails.logger.debug "."
           $stdout.flush
           last_heartbeat_at = now
           printed_heartbeat = true
@@ -173,7 +173,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     end
   ensure
     if printed_heartbeat
-      print "\n"
+      Rails.logger.debug "\n"
       $stdout.flush
     end
   end
