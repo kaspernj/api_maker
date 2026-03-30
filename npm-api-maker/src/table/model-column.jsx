@@ -13,7 +13,7 @@ import memo from "set-state-compare/build/memo.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
 import {useBreakpoint} from "responsive-breakpoints"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n.js"
 
 export default memo(shapeComponent(class ApiMakerTableModelColumn extends BaseComponent {
   static propTypes = propTypesExact({

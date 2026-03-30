@@ -8,7 +8,7 @@ import MoneyFormatter from "../money-formatter.js" // eslint-disable-line sort-i
 import PropTypes from "prop-types"
 import Text from "../utils/text"
 import memo from "set-state-compare/build/memo.js"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n.js"
 
 const dataSets = {}
 

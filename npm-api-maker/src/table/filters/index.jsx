@@ -13,7 +13,7 @@ import {TableSearch} from "models.js"
 import memo from "set-state-compare/build/memo.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import React from "react"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import {View} from "react-native"
 
