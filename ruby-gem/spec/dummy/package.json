@@ -23,7 +23,7 @@
     "@babel/preset-react": "^7.28.5",
     "@babel/runtime": "7",
     "@kaspernj/api-maker": ">= 1.0.2147",
-    "@rails/actioncable": "^8.1.200",
+    "@rails/actioncable": "^8.1.300",
     "@swc/core": "^1.15.21",
     "babel-loader": "10",
     "babel-plugin-dynamic-import-node": "^2.3.3",
