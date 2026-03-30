@@ -32,6 +32,16 @@ describe("BaseModel", () => {
       expect(() => user.fullCacheKey()).not.toThrow()
       expect(user.fullCacheKey()).toEqual(expect.any(String))
     })
+
+    it("falls back to the unique key when a loaded primary key is empty", () => {
+      const user = new User({a: {email: "teacher@example.com", id: null}})
+
+      user.newRecord = false
+      user.uniqueKey = () => "temporary-cache-key"
+
+      expect(() => user.fullCacheKey()).not.toThrow()
+      expect(user.fullCacheKey()).toEqual(expect.any(String))
+    })
   })
 
   describe("update", () => {

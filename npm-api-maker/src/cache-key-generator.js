@@ -108,7 +108,11 @@ export default class CacheKeyGenerator {
     const primaryKeyName = model.modelClass().primaryKey()
 
     if (model.isAttributeLoaded(primaryKeyName)) {
-      return model.primaryKey()
+      const primaryKeyValue = model.primaryKey()
+
+      if (primaryKeyValue !== null && primaryKeyValue !== undefined && primaryKeyValue !== "") {
+        return primaryKeyValue
+      }
     }
 
     return model.uniqueKey()
