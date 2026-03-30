@@ -1,0 +1,1 @@
+Fixed `fullCacheKey()` handling for persisted models loaded without their primary key selected. Cache-key generation now falls back to `uniqueKey()` instead of raising attribute-not-loaded errors for partial-select models used by `useModel`.

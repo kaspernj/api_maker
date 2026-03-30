@@ -31,12 +31,12 @@ export default class CacheKeyGenerator {
   /** recordModel. */
   recordModel(relationshipType, model) {
     this.allModels.push(model)
-    this.readModels[relationshipType][model.id() || model.uniqueKey()] = true
+    this.readModels[relationshipType][this.modelIdentity(model)] = true
   }
 
   /** isModelRecorded. */
   isModelRecorded(relationshipType, model) {
-    if (model.id() in this.readModels[relationshipType]) {
+    if (this.modelIdentity(model) in this.readModels[relationshipType]) {
       return true
     }
   }
@@ -86,7 +86,7 @@ export default class CacheKeyGenerator {
     md5.append("--model--")
     md5.append(model.modelClassData().name)
     md5.append("--unique-key--")
-    md5.append(model.id() || model.uniqueKey())
+    md5.append(this.modelIdentity(model))
 
     if (model.markedForDestruction()) {
       md5.append("--marked-for-destruction--")
@@ -101,5 +101,20 @@ export default class CacheKeyGenerator {
       md5.append("--attribute--")
       md5.append(`${model.readAttributeUnderscore(attributeName)}`)
     }
+  }
+
+  /** @returns {number | string} */
+  modelIdentity(model) {
+    const primaryKeyName = model.modelClass().primaryKey()
+
+    if (model.isAttributeLoaded(primaryKeyName)) {
+      const primaryKeyValue = model.primaryKey()
+
+      if (primaryKeyValue !== null && primaryKeyValue !== undefined && primaryKeyValue !== "") {
+        return primaryKeyValue
+      }
+    }
+
+    return model.uniqueKey()
   }
 }
