@@ -2,6 +2,8 @@ require "fileutils"
 
 module ApiMaker::SpecHelper::BrowserLogs
   def browser_logs
+    return [] if browser_unavailable?
+
     logs = if browser_firefox?
       []
     else
@@ -26,6 +28,8 @@ module ApiMaker::SpecHelper::BrowserLogs
   end
 
   def write_browser_logs_artifact(example)
+    return if browser_unavailable?
+
     logs = uniq_logs(recorded_browser_logs + browser_logs)
     artifact_dir = Rails.root.join("tmp/capybara/browser_logs")
     FileUtils.mkdir_p(artifact_dir)
@@ -43,6 +47,13 @@ module ApiMaker::SpecHelper::BrowserLogs
   end
 
 private
+
+  def browser_unavailable?
+    page.driver.browser
+    false
+  rescue Selenium::WebDriver::Error::WebDriverError, EOFError
+    true
+  end
 
   def uniq_logs(logs)
     logs.uniq { |log| [log.try(:timestamp), log.try(:level), log.try(:message)] }
