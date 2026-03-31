@@ -154,7 +154,7 @@ RSpec.configure do |config|
     if example.metadata[:mobile]
       # Size of a iPhone 12
       resize_to(414, 985)
-    elsif ENV["SELENIUM_DRIVER"] != "firefox"
+    else
       resize_to(1920, 1080)
     end
   end
