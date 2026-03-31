@@ -10,7 +10,7 @@ import propTypesExact from "prop-types-exact"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
-import useI18n from "i18n-on-steroids/src/use-i18n.js"
+import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useSorting from "./use-sorting.js"
 
 export default memo(shapeComponent(class ApiMakerTableHeaderSelect extends BaseComponent {

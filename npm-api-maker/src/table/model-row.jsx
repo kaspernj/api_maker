@@ -16,7 +16,7 @@ import React from "react"
 import Row from "./components/row"
 import memo from "set-state-compare/build/memo.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import useI18n from "i18n-on-steroids/src/use-i18n.js"
+import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import WorkerPluginsCheckbox from "./worker-plugins-checkbox"
 
 export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {

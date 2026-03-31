@@ -7,7 +7,7 @@ import BaseComponent from "../base-component"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
-import useI18n from "i18n-on-steroids/src/use-i18n.js"
+import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 const CurrentPathContext = createContext([])
 const ParamsContext = createContext({})
