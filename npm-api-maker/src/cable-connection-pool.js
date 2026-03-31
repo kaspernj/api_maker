@@ -19,6 +19,16 @@ export default class ApiMakerCableConnectionPool {
     return shared.apiMakerCableConnectionPool
   }
 
+  /** @returns {void} */
+  static resetCurrent () {
+    if (!shared.apiMakerCableConnectionPool) {
+      return
+    }
+
+    shared.apiMakerCableConnectionPool.reset()
+    delete shared.apiMakerCableConnectionPool
+  }
+
   /** connectEventToExistingSubscription. */
   connectEventToExistingSubscription ({path, subscription, value}) {
     for (const cableSubscriptionPool of this.cableSubscriptionPools) {
@@ -149,6 +159,20 @@ export default class ApiMakerCableConnectionPool {
     await Promise.all(
       this.cableSubscriptionPools.map((cableSubscriptionPool) => cableSubscriptionPool.refreshAuthentication(args))
     )
+  }
+
+  /** @returns {void} */
+  reset () {
+    this.scheduleConnectUpcomingRunLast.clearTimeout()
+
+    this.cableSubscriptionPools.forEach((cableSubscriptionPool) => {
+      cableSubscriptionPool.reset()
+    })
+
+    this.cableSubscriptionPools = []
+    this.connections = {}
+    this.upcomingSubscriptionData = {}
+    this.upcomingSubscriptions = {}
   }
 
   scheduleConnectUpcomingRunLast = new RunLast(this.connectUpcoming)
