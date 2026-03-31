@@ -254,6 +254,29 @@ describe("ApiMakerWebsocketRequestClient", () => {
     await expect(idlePromise).resolves.toBeUndefined()
   })
 
+  it("resolves idle waits after request promise callbacks have been queued", async() => {
+    const events = []
+    const promise = client.perform({global: {layout: "user"}, request: {pool: {}}})
+    const idlePromise = client.waitForIdle()
+
+    promise.then(() => {
+      events.push("request")
+    })
+    idlePromise.then(() => {
+      events.push("idle")
+    })
+
+    client.onReceived({
+      request_id: 1,
+      response: {responses: {1: {data: {ok: true}, type: "success"}}},
+      type: "api_maker_request_response"
+    })
+
+    await Promise.all([promise, idlePromise])
+
+    expect(events).toEqual(["request", "idle"])
+  })
+
   it("times out while waiting for websocket requests to finish", async() => {
     jest.useFakeTimers()
 

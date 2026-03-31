@@ -332,21 +332,21 @@ export default class ApiMakerWebsocketRequestClient {
       pendingRequest.onReceivedCallbacks.forEach((callback) => callback(data))
     } else if (data.type == "api_maker_request_response") {
       delete this.pendingRequests[data.request_id]
-      this.resolveIdleWaitersIfIdle()
 
       if (pendingRequest.cacheResponse) {
         this.responseCache[pendingRequest.fingerprint] = data.response
       }
 
       pendingRequest.resolve(data.response)
+      this.resolveIdleWaitersIfIdle()
     } else if (data.type == "api_maker_request_error") {
       delete this.pendingRequests[data.request_id]
-      this.resolveIdleWaitersIfIdle()
       pendingRequest.reject(new CustomError("Websocket request failed", {response: data.response}))
+      this.resolveIdleWaitersIfIdle()
     } else {
       delete this.pendingRequests[data.request_id]
-      this.resolveIdleWaitersIfIdle()
       pendingRequest.reject(new Error(`Unknown websocket request response type: ${data.type}`))
+      this.resolveIdleWaitersIfIdle()
     }
   }
 
@@ -359,11 +359,12 @@ export default class ApiMakerWebsocketRequestClient {
 
     this.pendingRequests = {}
     this.pendingRequestsByFingerprint = {}
-    this.resolveIdleWaitersIfIdle()
 
     Object.values(pendingRequests).forEach((pendingRequest) => {
       queueMicrotask(() => pendingRequest.reject(error))
     })
+
+    this.resolveIdleWaitersIfIdle()
   }
 
   /** @returns {void} */
