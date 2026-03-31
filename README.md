@@ -745,6 +745,13 @@ Its kinda fucked up to run system specs, but this command should work from the r
 rm -rf spec/dummy/public/packs/ && cd spec/dummy/ && bin/shakapacker && cd ../.. && xvfb-run bundle exec appraisal "rails 7" rspec spec/system/api_maker_table/api_maker_table_spec.rb
 ```
 
+For Firefox system specs, use the headless Firefox path directly instead of wrapping the run in `xvfb-run`:
+```bash
+SELENIUM_DRIVER=firefox ruby-gem/scripts/run-system-spec.sh spec/system/api_maker_table/api_maker_table_spec.rb
+```
+
+Capybara RSpec already resets browser sessions after each example. Do not add extra `Capybara.reset_sessions!` calls in pre-example hooks here; that duplicate browser churn hurts Firefox performance substantially.
+
 ## Contributing
 Contribution directions go here.
 

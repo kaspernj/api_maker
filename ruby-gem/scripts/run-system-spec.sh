@@ -12,4 +12,8 @@ cd "${repo_root}/ruby-gem"
 
 rm -rf spec/dummy/public/packs/
 (cd spec/dummy && bundle _2.3.15_ exec bin/shakapacker)
-xvfb-run bundle _2.3.15_ exec appraisal "rails 7" rspec "${spec_args[@]}"
+if [ "${SELENIUM_DRIVER:-}" = "firefox" ]; then
+  bundle _2.3.15_ exec appraisal "rails 7" rspec "${spec_args[@]}"
+else
+  xvfb-run bundle _2.3.15_ exec appraisal "rails 7" rspec "${spec_args[@]}"
+fi
