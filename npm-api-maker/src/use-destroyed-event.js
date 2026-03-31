@@ -44,6 +44,7 @@ class UseDestroyedEventShapeHook extends ShapeHook {
   static defaultProps = {
     active: true,
     debounce: undefined,
+    model: undefined,
     onConnected: undefined
   }
 
