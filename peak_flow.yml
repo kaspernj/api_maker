@@ -41,7 +41,7 @@ builds:
         environment:
           SELENIUM_DRIVER: firefox
         script:
-          - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
+          - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/system
       rails_7_chrome:
         name: Chrome Rails 7 Ruby 3.3.5
         script:
@@ -51,7 +51,7 @@ builds:
         environment:
           SELENIUM_DRIVER: firefox
         script:
-          - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
+          - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/system
       build_10:
         name: Jest
         script:

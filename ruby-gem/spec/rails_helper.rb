@@ -48,6 +48,19 @@ Capybara.register_driver :headless_chrome do |app|
   )
 end
 
+Capybara.register_driver :headless_firefox do |app|
+  options = Selenium::WebDriver::Firefox::Options.new
+  options.add_argument("-headless")
+  options.add_argument("--width=1920")
+  options.add_argument("--height=1080")
+
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :firefox,
+    options:
+  )
+end
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -116,7 +129,7 @@ RSpec.configure do |config|
 
   config.prepend_before(:each, type: :system) do
     if ENV["SELENIUM_DRIVER"] == "firefox"
-      driven_by :selenium, using: :firefox
+      driven_by :headless_firefox
     else
       driven_by :headless_chrome
     end
@@ -141,7 +154,7 @@ RSpec.configure do |config|
     if example.metadata[:mobile]
       # Size of a iPhone 12
       resize_to(414, 985)
-    else
+    elsif ENV["SELENIUM_DRIVER"] != "firefox"
       resize_to(1920, 1080)
     end
   end
