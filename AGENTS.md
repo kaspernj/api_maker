@@ -23,6 +23,7 @@ Notes:
 - When you fix something in this repo, keep the change on a feature branch and make sure there is a matching PR for that branch before you consider the work complete.
 - For system specs, use `ruby-gem/scripts/run-system-spec.sh [spec/path.rb:line]` (wraps the README system spec command).
 - For Firefox system specs in this repo, prefer the headless Firefox path (`SELENIUM_DRIVER=firefox ruby-gem/scripts/run-system-spec.sh ...`) and do not wrap that path in `xvfb-run`; Chrome still uses the xvfb-backed path.
+- Do not add `Capybara.reset_sessions!` in `before(:each)` hooks here. Capybara RSpec already resets sessions after each example, and duplicate pre-example resets add major Firefox overhead.
 - When installing gems, run `bundle install` in both `ruby-gem/` and `ruby-gem/spec/dummy/` before running specs.
 - If `ruby-gem/scripts/run-system-spec.sh` fails, run the README system spec command manually from `ruby-gem/`.
 - In `ApiMaker::ModelContentGeneratorService`, handle Ransack allowlist runtime errors (`"Ransack needs ..."`) for associations/attributes/scopes by returning `[]` so frontend model generation does not crash on third-party models.

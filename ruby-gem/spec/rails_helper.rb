@@ -140,9 +140,12 @@ RSpec.configure do |config|
     ApiMaker::ModelsGeneratorService.execute!
   end
 
-  config.before do
-    Capybara.reset_sessions!
+  config.before(type: :system) do
+    # Capybara RSpec already resets sessions after each example; keep only the local size cache reset here.
     reset_window_size_cache
+  end
+
+  config.before do
     Warden.test_reset!
   end
 

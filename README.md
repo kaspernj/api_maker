@@ -750,6 +750,8 @@ For Firefox system specs, use the headless Firefox path directly instead of wrap
 SELENIUM_DRIVER=firefox ruby-gem/scripts/run-system-spec.sh spec/system/api_maker_table/api_maker_table_spec.rb
 ```
 
+Capybara RSpec already resets browser sessions after each example. Do not add extra `Capybara.reset_sessions!` calls in pre-example hooks here; that duplicate browser churn hurts Firefox performance substantially.
+
 ## Contributing
 Contribution directions go here.
 
