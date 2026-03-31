@@ -20,6 +20,7 @@ Notes:
 - Add concise comments for non-obvious groups of code so the intent and invariants are clear without reverse-engineering the flow.
 - ESLint `sort-imports` orders import lines by member syntax group (none/all/multiple/single) and then the first local specifier name, not by module specifier; adjust import order accordingly.
 - When creating PRs, choose a sensible branch name and commit messages without prompting.
+- When you fix something in this repo, keep the change on a feature branch and make sure there is a matching PR for that branch before you consider the work complete.
 - For system specs, use `ruby-gem/scripts/run-system-spec.sh [spec/path.rb:line]` (wraps the README system spec command).
 - When installing gems, run `bundle install` in both `ruby-gem/` and `ruby-gem/spec/dummy/` before running specs.
 - If `ruby-gem/scripts/run-system-spec.sh` fails, run the README system spec command manually from `ruby-gem/`.

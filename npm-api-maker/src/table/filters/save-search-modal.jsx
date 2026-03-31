@@ -9,7 +9,7 @@ import modelClassRequire from "../../model-class-require.js"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import memo from "set-state-compare/build/memo.js"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n.js"
 import apiMakerConfig from "../../config.js"
 
 const TableSearch = modelClassRequire("TableSearch")

@@ -8,7 +8,7 @@ import PropTypes from "prop-types"
 import React from "react"
 import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import memo from "set-state-compare/build/memo.js"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n.js"
 import useInput from "../use-input.js"
 
 export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseComponent {

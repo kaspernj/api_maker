@@ -6,7 +6,7 @@ import {View} from "react-native"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import useCurrentUser from "../../use-current-user.js"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n.js"
 
 const dataSets = {}
 

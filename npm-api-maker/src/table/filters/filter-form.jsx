@@ -24,7 +24,7 @@ import Services from "../../services.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {useBreakpoint} from "responsive-breakpoints"
-import useI18n from "i18n-on-steroids/src/use-i18n.mjs"
+import useI18n from "i18n-on-steroids/src/use-i18n.js"
 
 const styles = {}
 
