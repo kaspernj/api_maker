@@ -10,7 +10,7 @@ import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useCanCan from "../../../use-can-can.js"
-import useI18n from "i18n-on-steroids/src/use-i18n.js"
+import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 export default memo(shapeComponent(class ComponentsAdminLayoutMenuContent extends BaseComponent {
   static propTypes = PropTypesExact({

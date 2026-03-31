@@ -11,7 +11,7 @@ import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 import replaceall from "replaceall"
 import strftime from "strftime"
-import useI18n from "i18n-on-steroids/src/use-i18n.js"
+import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useUpdatedEvent from "../use-updated-event.js"
 
 const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extends BaseComponent {

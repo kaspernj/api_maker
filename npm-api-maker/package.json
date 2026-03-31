@@ -1,7 +1,7 @@
 {
   "name": "@kaspernj/api-maker",
   "type": "module",
-  "version": "1.0.2152",
+  "version": "1.0.2153",
   "description": "My new module",
   "files": [
     "build/**"
@@ -88,7 +88,7 @@
     "expo-module-scripts": "^55.0.2",
     "flash-notifications": "^0.0.42",
     "history": "^5.3.0",
-    "i18n-on-steroids": "^1.0.22",
+    "i18n-on-steroids": "^1.0.24",
     "jest": "~29.7.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -101,7 +101,7 @@
     "expo": "*",
     "flash-notifications": ">= 0.0.33",
     "history": "^5.3.0",
-    "i18n-on-steroids": ">= 1.0.22",
+    "i18n-on-steroids": ">= 1.0.24",
     "react": ">=18.3.0",
     "react-dom": ">=18.3.0",
     "react-native": "*",
