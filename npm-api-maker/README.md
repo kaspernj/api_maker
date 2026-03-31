@@ -143,6 +143,24 @@ current_command.increment!
 current_command.progress = 0.5
 ```
 
+### Waiting for websocket requests to go idle
+
+For app/test cleanup flows that need to avoid leaking in-flight websocket command work into later state, use the realtime reset helper that waits for pending websocket requests before disconnecting the realtime runtime:
+
+```js
+import {waitForRealtimeRuntimeIdleAndReset} from "@kaspernj/api-maker/build/reset-realtime-runtime-state"
+
+await waitForRealtimeRuntimeIdleAndReset({timeoutMs: 5000})
+```
+
+The synchronous default export still exists for immediate resets where waiting is not required:
+
+```js
+import resetRealtimeRuntimeState from "@kaspernj/api-maker/build/reset-realtime-runtime-state"
+
+resetRealtimeRuntimeState()
+```
+
 ## Realtime model events
 
 For model-specific websocket events in React/ShapeComponent UI code, prefer `useModelEvent` over manual `ModelEvents.connect(...)` subscriptions. The hook handles subscription lifecycle automatically and avoids leaked listeners.

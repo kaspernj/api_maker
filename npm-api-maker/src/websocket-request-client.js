@@ -7,6 +7,8 @@ const shared = {}
 
 /** Shared websocket request client for ApiMaker command/service execution. */
 export default class ApiMakerWebsocketRequestClient {
+  idleWaiters = []
+
   /** @returns {ApiMakerWebsocketRequestClient} */
   static current () {
     if (!shared.currentApiMakerWebsocketRequestClient) {
@@ -34,6 +36,39 @@ export default class ApiMakerWebsocketRequestClient {
     this.pendingRequestsByFingerprint = {}
     this.responseCache = {}
     this.subscriptionState = "new"
+  }
+
+  /** @returns {number} */
+  pendingRequestsCount () {
+    return Object.keys(this.pendingRequests).length
+  }
+
+  /**
+   * Waits for all in-flight websocket requests to complete.
+   *
+   * @param {object} [args]
+   * @param {number} [args.timeoutMs]
+   * @returns {Promise<void>}
+   */
+  waitForIdle ({timeoutMs = 5000} = {}) {
+    if (this.pendingRequestsCount() == 0) {
+      return Promise.resolve()
+    }
+
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        this.idleWaiters = this.idleWaiters.filter((idleWaiter) => idleWaiter.reject != reject)
+        reject(new Error(`Timed out while waiting for websocket requests to finish. Pending requests: ${this.pendingRequestsCount()}`))
+      }, timeoutMs)
+
+      this.idleWaiters.push({
+        reject,
+        resolve: () => {
+          clearTimeout(timeout)
+          resolve()
+        }
+      })
+    })
   }
 
   /**
@@ -297,6 +332,7 @@ export default class ApiMakerWebsocketRequestClient {
       pendingRequest.onReceivedCallbacks.forEach((callback) => callback(data))
     } else if (data.type == "api_maker_request_response") {
       delete this.pendingRequests[data.request_id]
+      this.resolveIdleWaitersIfIdle()
 
       if (pendingRequest.cacheResponse) {
         this.responseCache[pendingRequest.fingerprint] = data.response
@@ -305,9 +341,11 @@ export default class ApiMakerWebsocketRequestClient {
       pendingRequest.resolve(data.response)
     } else if (data.type == "api_maker_request_error") {
       delete this.pendingRequests[data.request_id]
+      this.resolveIdleWaitersIfIdle()
       pendingRequest.reject(new CustomError("Websocket request failed", {response: data.response}))
     } else {
       delete this.pendingRequests[data.request_id]
+      this.resolveIdleWaitersIfIdle()
       pendingRequest.reject(new Error(`Unknown websocket request response type: ${data.type}`))
     }
   }
@@ -321,10 +359,23 @@ export default class ApiMakerWebsocketRequestClient {
 
     this.pendingRequests = {}
     this.pendingRequestsByFingerprint = {}
+    this.resolveIdleWaitersIfIdle()
 
     Object.values(pendingRequests).forEach((pendingRequest) => {
       queueMicrotask(() => pendingRequest.reject(error))
     })
+  }
+
+  /** @returns {void} */
+  resolveIdleWaitersIfIdle () {
+    if (this.pendingRequestsCount() > 0 || this.idleWaiters.length == 0) {
+      return
+    }
+
+    const idleWaiters = this.idleWaiters
+
+    this.idleWaiters = []
+    idleWaiters.forEach((idleWaiter) => idleWaiter.resolve())
   }
 
   /** @returns {void} */
