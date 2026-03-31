@@ -63,6 +63,9 @@ end
 #
 Dir[File.join(__dir__, "support", "**", "*.rb")].each { |f| require f }
 
+require "action_dispatch/system_test_case"
+ActionDispatch::SystemTesting::TestHelpers::ScreenshotHelper.prepend(FirefoxSystemTestFailureHandling)
+
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 # ActiveRecord::Migration.maintain_test_schema!

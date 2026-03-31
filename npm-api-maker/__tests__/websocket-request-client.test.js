@@ -234,4 +234,64 @@ describe("ApiMakerWebsocketRequestClient", () => {
     expect(client.subscription).toBeNull()
     expect(client.subscriptionState).toBe("reset")
   })
+
+  it("waits for pending websocket requests to finish", async() => {
+    const promise = client.perform({global: {layout: "user"}, request: {pool: {}}})
+    const idlePromise = client.waitForIdle()
+
+    await Promise.resolve()
+    expect(client.pendingRequestsCount()).toBe(1)
+
+    client.onReceived({
+      request_id: 1,
+      response: {responses: {1: {data: {ok: true}, type: "success"}}},
+      type: "api_maker_request_response"
+    })
+
+    await expect(promise).resolves.toEqual({
+      responses: {1: {data: {ok: true}, type: "success"}}
+    })
+    await expect(idlePromise).resolves.toBeUndefined()
+  })
+
+  it("resolves idle waits after request promise callbacks have been queued", async() => {
+    const events = []
+    const promise = client.perform({global: {layout: "user"}, request: {pool: {}}})
+    const idlePromise = client.waitForIdle()
+
+    promise.then(() => {
+      events.push("request")
+    })
+    idlePromise.then(() => {
+      events.push("idle")
+    })
+
+    client.onReceived({
+      request_id: 1,
+      response: {responses: {1: {data: {ok: true}, type: "success"}}},
+      type: "api_maker_request_response"
+    })
+
+    await Promise.all([promise, idlePromise])
+
+    expect(events).toEqual(["request", "idle"])
+  })
+
+  it("times out while waiting for websocket requests to finish", async() => {
+    jest.useFakeTimers()
+
+    try {
+      client.perform({global: {layout: "user"}, request: {pool: {}}})
+      const idlePromise = client.waitForIdle({timeoutMs: 25})
+      const idleRejection = idlePromise.catch((error) => error)
+
+      await jest.advanceTimersByTimeAsync(25)
+      await expect(idleRejection).resolves.toHaveProperty(
+        "message",
+        "Timed out while waiting for websocket requests to finish. Pending requests: 1"
+      )
+    } finally {
+      jest.useRealTimers()
+    }
+  })
 })
