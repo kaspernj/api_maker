@@ -2,8 +2,8 @@ require "fileutils"
 
 module ApiMaker::SpecHelper::BrowserLogs
   def begin_browser_log_capture!
-    @browser_log_cutoff_timestamp = (Time.now.to_f * 1000).floor
     @recorded_browser_logs = []
+    browser_logs
   end
 
   def browser_logs
@@ -14,8 +14,6 @@ module ApiMaker::SpecHelper::BrowserLogs
     else
       chrome_logs
     end
-
-    logs = filter_browser_logs(logs)
 
     @recorded_browser_logs ||= []
     @recorded_browser_logs += logs
@@ -60,19 +58,6 @@ private
     false
   rescue Selenium::WebDriver::Error::WebDriverError, EOFError
     true
-  end
-
-  def filter_browser_logs(logs)
-    cutoff_timestamp = @browser_log_cutoff_timestamp
-    return logs unless cutoff_timestamp
-
-    logs.select do |log|
-      browser_log_timestamp(log) >= cutoff_timestamp
-    end
-  end
-
-  def browser_log_timestamp(log)
-    log.try(:timestamp).to_i
   end
 
   def uniq_logs(logs)
