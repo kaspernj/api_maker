@@ -152,11 +152,9 @@ RSpec.configure do |config|
     Warden.test_reset!
   end
 
-  config.before(:each, :system) do
-    browser_logs # Clear the logs
-  end
-
   config.before(:each, type: :system) do |example|
+    begin_browser_log_capture!
+
     if example.metadata[:mobile]
       # Size of a iPhone 12
       resize_to(414, 985)

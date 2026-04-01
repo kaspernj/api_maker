@@ -1,6 +1,11 @@
 require "fileutils"
 
 module ApiMaker::SpecHelper::BrowserLogs
+  def begin_browser_log_capture!
+    @recorded_browser_logs = []
+    browser_logs
+  end
+
   def browser_logs
     return [] if browser_unavailable?
 
