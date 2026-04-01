@@ -127,7 +127,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   end
 
   def recorded_browser_logs
-    @recorded_browser_logs || []
+    filter_browser_logs(@recorded_browser_logs || [])
   end
 
   def reset_indexeddb
