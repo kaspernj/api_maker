@@ -48,6 +48,7 @@ export default class ApiMakerCableConnectionPool {
 
           existingSubscriptions.push(subscription)
           cableSubscriptionPool.connectUnsubscriptionForSubscription(subscription)
+          subscription.events.emit("connected")
 
           return true
         }

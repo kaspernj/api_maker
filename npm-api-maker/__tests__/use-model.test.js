@@ -1,32 +1,65 @@
 import {jest} from "@jest/globals"
 
-const mockUseCallback = jest.fn((callback) => callback)
 const mockUseEffect = jest.fn()
-const mockUseRef = jest.fn((value) => ({current: value}))
 const mockUseQueryParams = jest.fn()
-const mockUseShape = jest.fn()
 const mockUseUpdatedEvent = jest.fn()
 const mockQueryFirst = jest.fn()
+let lastShapeHook
 
 jest.unstable_mockModule("react", () => {
   const actual = jest.requireActual("react")
 
   return {
     ...actual,
-    useCallback: (...args) => mockUseCallback(...args),
-    useEffect: (...args) => mockUseEffect(...args),
-    useRef: (...args) => mockUseRef(...args)
+    useEffect: (...args) => mockUseEffect(...args)
+  }
+})
+
+jest.unstable_mockModule("set-state-compare", () => {
+  class MockShapeHook {
+    constructor(props) {
+      this.props = props
+      this.p = props
+      this.state = {}
+      this.s = this.state
+    }
+
+    setState = (statesList) => {
+      Object.assign(this.state, statesList)
+    }
+
+    setInstance(instances) {
+      Object.assign(this, instances)
+    }
+
+    useStates(statesList) {
+      Object.keys(statesList).forEach((key) => {
+        const value = statesList[key]
+
+        if (!(key in this.state)) {
+          this.state[key] = typeof value == "function" ? value() : value
+        }
+      })
+    }
+  }
+
+  return {
+    __esModule: true,
+    ShapeHook: MockShapeHook,
+    useShapeHook: (ShapeHookClass, props) => {
+      const shapeHook = new ShapeHookClass(props)
+
+      shapeHook.setup()
+      lastShapeHook = shapeHook
+
+      return shapeHook
+    }
   }
 })
 
 jest.unstable_mockModule("on-location-changed/build/use-query-params.js", () => ({
   __esModule: true,
   default: (...args) => mockUseQueryParams(...args)
-}))
-
-jest.unstable_mockModule("../src/use-shape.js", () => ({
-  __esModule: true,
-  default: (...args) => mockUseShape(...args)
 }))
 
 jest.unstable_mockModule("../src/use-updated-event.js", () => ({
@@ -49,6 +82,10 @@ describe("useModel", () => {
       }
     }
 
+    static primaryKey() {
+      return "id"
+    }
+
     static ransack() {
       return {
         first: mockQueryFirst
@@ -69,34 +106,15 @@ describe("useModel", () => {
   }
 
   beforeEach(() => {
-    mockUseCallback.mockClear()
+    lastShapeHook = undefined
     mockUseEffect.mockClear()
-    mockUseRef.mockClear()
     mockUseQueryParams.mockReset()
-    mockUseShape.mockReset()
     mockUseUpdatedEvent.mockReset()
     mockQueryFirst.mockReset()
   })
 
   it("does not crash when query params are undefined and newIfNoId is used", async() => {
     mockUseQueryParams.mockReturnValue(undefined)
-
-    mockUseShape.mockImplementation((props) => {
-      const state = {}
-      const meta = {}
-
-      return {
-        meta,
-        props,
-        state,
-        m: meta,
-        p: props,
-        s: state,
-        set: (statesList) => Object.assign(state, statesList),
-        updateMeta: (newMeta) => Object.assign(meta, newMeta),
-        useStates: (statesList) => Object.assign(state, statesList)
-      }
-    })
 
     const {default: useModel} = await import("../src/use-model.js")
     let result
@@ -115,30 +133,22 @@ describe("useModel", () => {
     })
   })
 
-  it("does not expose a stale loaded model after the query-param ID changes", async() => {
-    mockUseQueryParams.mockReturnValue({school_class_id: "new-school-class-id"})
+  it("keeps async new-model defaults pending until they resolve", async() => {
+    mockUseQueryParams.mockReturnValue(undefined)
 
-    mockUseShape.mockImplementation((props) => {
-      const state = {
-        model: new FakeSchoolClass({
-          data: {a: {id: "old-school-class-id"}}
-        }),
-        notFound: false
-      }
-      const meta = {}
-
-      return {
-        meta,
-        props,
-        state,
-        m: meta,
-        p: props,
-        s: state,
-        set: (statesList) => Object.assign(state, statesList),
-        updateMeta: (newMeta) => Object.assign(meta, newMeta),
-        useStates: () => {}
+    const {default: useModel} = await import("../src/use-model.js")
+    const result = useModel(FakeSchoolClass, {
+      match: {params: {}},
+      newIfNoId: {
+        defaults: () => new Promise(() => {})
       }
     })
+
+    expect(result.schoolClass).toBeUndefined()
+  })
+
+  it("does not expose a stale loaded model after the query-param ID changes", async() => {
+    mockUseQueryParams.mockReturnValue({school_class_id: "new-school-class-id"})
 
     const {default: useModel} = await import("../src/use-model.js")
     const result = useModel(FakeSchoolClass, {
@@ -154,30 +164,6 @@ describe("useModel", () => {
   it("reloads the model when the update subscription connects for eventUpdated models", async() => {
     mockUseQueryParams.mockReturnValue({})
 
-    const loadedModel = new FakeSchoolClass({
-      data: {a: {id: "school-class-id"}}
-    })
-
-    mockUseShape.mockImplementation((props) => {
-      const state = {
-        model: loadedModel,
-        notFound: false
-      }
-      const meta = {}
-
-      return {
-        meta,
-        props,
-        state,
-        m: meta,
-        p: props,
-        s: state,
-        set: (statesList) => Object.assign(state, statesList),
-        updateMeta: (newMeta) => Object.assign(meta, newMeta),
-        useStates: () => {}
-      }
-    })
-
     const {default: useModel} = await import("../src/use-model.js")
 
     useModel(FakeSchoolClass, {
@@ -187,42 +173,22 @@ describe("useModel", () => {
 
     expect(mockUseUpdatedEvent).toHaveBeenCalledTimes(1)
     expect(mockUseUpdatedEvent).toHaveBeenCalledWith(
-      loadedModel,
+      expect.objectContaining({
+        args: {
+          data: {a: {id: "school-class-id"}}
+        }
+      }),
       expect.any(Function),
       {onConnected: expect.any(Function)}
     )
 
     const [, reloadModel, props] = mockUseUpdatedEvent.mock.calls[0]
 
-    expect(props.onConnected).toBe(reloadModel)
+    expect(props.onConnected).not.toBe(reloadModel)
   })
 
   it("does not subscribe to update events when eventUpdated is not enabled", async() => {
     mockUseQueryParams.mockReturnValue({})
-
-    const loadedModel = new FakeSchoolClass({
-      data: {a: {id: "school-class-id"}}
-    })
-
-    mockUseShape.mockImplementation((props) => {
-      const state = {
-        model: loadedModel,
-        notFound: false
-      }
-      const meta = {}
-
-      return {
-        meta,
-        props,
-        state,
-        m: meta,
-        p: props,
-        s: state,
-        set: (statesList) => Object.assign(state, statesList),
-        updateMeta: (newMeta) => Object.assign(meta, newMeta),
-        useStates: () => {}
-      }
-    })
 
     const {default: useModel} = await import("../src/use-model.js")
 
@@ -241,13 +207,9 @@ describe("useModel", () => {
   it("does not set state again when the connected reload returns the same model data", async() => {
     mockUseQueryParams.mockReturnValue({})
 
-    const state = {
-      model: new FakeSchoolClass({
-        data: {a: {id: "school-class-id", fullCacheKey: "same-model"}}
-      }),
-      notFound: false
-    }
-    const set = jest.fn((statesList) => Object.assign(state, statesList))
+    const sameModel = new FakeSchoolClass({
+      data: {a: {id: "school-class-id", fullCacheKey: "same-model"}}
+    })
 
     mockQueryFirst.mockResolvedValue(
       new FakeSchoolClass({
@@ -255,21 +217,31 @@ describe("useModel", () => {
       })
     )
 
-    mockUseShape.mockImplementation((props) => {
-      const meta = {}
-
-      return {
-        meta,
-        props,
-        state,
-        m: meta,
-        p: props,
-        s: state,
-        set,
-        updateMeta: (newMeta) => Object.assign(meta, newMeta),
-        useStates: () => {}
-      }
+    const {default: useModel} = await import("../src/use-model.js")
+    useModel(FakeSchoolClass, {
+      eventUpdated: true,
+      loadByQueryParam: () => "school-class-id"
     })
+    const [, reloadModel] = mockUseUpdatedEvent.mock.calls[0]
+    const originalSetState = lastShapeHook.setState
+    const setStateSpy = jest.spyOn(lastShapeHook, "setState")
+
+    lastShapeHook.state.model = sameModel
+    lastShapeHook.state.notFound = false
+    setStateSpy.mockImplementation((statesList) => originalSetState(statesList))
+    await reloadModel()
+
+    expect(setStateSpy).not.toHaveBeenCalled()
+    expect(mockQueryFirst).toHaveBeenCalledTimes(1)
+  })
+
+  it("waits for the update subscription to connect before the first load when the model ID is known", async() => {
+    mockUseQueryParams.mockReturnValue({})
+    const loadedModel = new FakeSchoolClass({
+      data: {a: {id: "school-class-id", fullCacheKey: "school-class-id"}}
+    })
+
+    mockQueryFirst.mockResolvedValue(loadedModel)
 
     const {default: useModel} = await import("../src/use-model.js")
 
@@ -278,10 +250,15 @@ describe("useModel", () => {
       loadByQueryParam: () => "school-class-id"
     })
 
-    const [, , props] = mockUseUpdatedEvent.mock.calls[0]
+    expect(mockQueryFirst).not.toHaveBeenCalled()
+
+    const [, onUpdated, props] = mockUseUpdatedEvent.mock.calls[0]
+
+    expect(props.onConnected).not.toBe(onUpdated)
 
     await props.onConnected()
 
-    expect(set).not.toHaveBeenCalled()
+    expect(mockQueryFirst).toHaveBeenCalledTimes(1)
+    expect(lastShapeHook.state.model).toBe(loadedModel)
   })
 })

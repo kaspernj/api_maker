@@ -1,267 +1,402 @@
 /* eslint-disable sort-imports */
-import {useCallback, useEffect, useRef} from "react"
+import {ShapeHook, useShapeHook} from "set-state-compare"
+import {useEffect} from "react"
 import Devise from "./devise.js"
 import * as inflection from "inflection"
 import ModelEvents from "./model-events.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
-import useShape from "./use-shape.js"
 import useUpdatedEvent from "./use-updated-event.js"
 
 /**
  * @typedef {object} useModelArgs
  * @property {(arg: object) => Function} [callback]
  * @property {(arg: object) => object} [args]
- * @property {() => number|string} [loadByQueryParam]
+ * @property {(args: {queryParams: Record<string, any> | undefined}) => number|string} [loadByQueryParam]
  * @property {any[]} [cacheArgs]
  * @property {{params: object}} [match]
  * @property {(ctx: { model: import("./base-model.js").default }) => void} [onDestroyed]
  * @property {import("./collection.js").default} [query]
  */
 
-/**
- * @param {Function|object} modelClassArg
- * @param {object | ((args: {modelClass: typeof import("./base-model.js").default}) => useModelArgs)} [argsArg]
- */
-/** useModel. */
-// eslint-disable-next-line complexity
-const useModel = (modelClassArg, argsArg = {}) => {
-  const queryParams = useQueryParams()
-  const loadModelGenerationRef = useRef(0)
-  let args, modelClass
+/** Hook state container for useModel. */
+class UseModelShapeHook extends ShapeHook {
+  updatedConnectionFallbackTimeoutId = undefined
 
-  if (typeof argsArg == "function") {
-    args = argsArg({modelClass})
-  } else {
-    args = argsArg
+  /** Constructor. */
+  constructor(props) {
+    super(props)
+    this.initialLoadTriggered = false
+    this.loadModelGeneration = 0
+    this.newIfNoIdDefaultsResult = null
+    this.queryParams = undefined
+    this.updatedConnectionReady = false
   }
 
-  const s = useShape(args)
-
-  s.useStates({
-    model: undefined,
-    notFound: undefined
-  })
-
-  if ("active" in s.props && !s.props.active) {
-    s.meta.active = false
-  } else {
-    s.meta.active = true
+  /** @returns {boolean} */
+  active() {
+    return !("active" in this.args()) || Boolean(this.args().active)
   }
 
-  if (typeof modelClassArg == "object") {
-    modelClass = modelClassArg.callback({queryParams})
-  } else {
-    modelClass = modelClassArg
-  }
-
-  const paramsVariableName = `${modelClass.modelName().paramKey()}_id`
-  let modelId
-
-  if (args.loadByQueryParam) {
-    modelId = args.loadByQueryParam({queryParams})
-  } else if (!args.query) {
-    if (!args.match) throw new Error("Both 'loadByQueryParam' and 'match' wasn't given")
-
-    modelId = args.match.params[paramsVariableName] || args.match.params.id
-  }
-
-  const modelVariableName = inflection.camelize(modelClass.modelClassData().name, true)
-  const cacheArgs = [modelId]
-
-  const loadExistingModel = useCallback(async (loadModelGeneration) => {
-    let query
-
-    if (s.m.modelId) {
-      query = modelClass.ransack({id_eq: s.m.modelId})
-    } else if (s.m.args.query) {
-      query = s.m.args.query.clone()
-    } else {
-      throw new Error(`No model ID was given: ${s.m.modelId} by '${paramsVariableName}' in query params: ${Object.keys(s.props.match.params).join(", ")}`)
+  /** @returns {useModelArgs & Record<string, any>} */
+  args() {
+    if (typeof this.p.argsArg == "function") {
+      return this.p.argsArg({modelClass: this.modelClass()})
     }
 
-    if (s.props.abilities) query.abilities(s.p.abilities)
-    if (s.props.preload) query.preload(s.p.preload)
-    if (s.props.select) query.select(s.p.select)
+    return this.p.argsArg || {}
+  }
+
+  /** @returns {typeof import("./base-model.js").default} */
+  modelClass() {
+    if (typeof this.p.modelClassArg == "object") {
+      return this.p.modelClassArg.callback({queryParams: this.queryParams})
+    }
+
+    return this.p.modelClassArg
+  }
+
+  /** @returns {string} */
+  paramsVariableName() {
+    return `${this.modelClass().modelName()
+      .paramKey()}_id`
+  }
+
+  /** @returns {number | string | undefined} */
+  modelId() {
+    if (this.args().loadByQueryParam) {
+      return this.args().loadByQueryParam({queryParams: this.queryParams})
+    } else if (this.args().query) {
+      return undefined
+    } else if (!this.args().match) {
+      throw new Error("Both 'loadByQueryParam' and 'match' wasn't given")
+    }
+
+    return this.args().match.params[this.paramsVariableName()] || this.args().match.params.id
+  }
+
+  /** @returns {string} */
+  modelVariableName() {
+    return inflection.camelize(this.modelClass().modelClassData().name, true)
+  }
+
+  /** @returns {any[]} */
+  cacheArgs() {
+    return [this.modelId()].concat(this.args().cacheArgs || [], this.queryParams)
+  }
+
+  /** @returns {boolean} */
+  shouldWaitForUpdatedConnection() {
+    return Boolean(this.args().eventUpdated && this.modelId() && !this.s.model)
+  }
+
+  /** @returns {object} */
+  newModelDataFromParams() {
+    return this.queryParams?.[this.modelClass().modelName()
+      .paramKey()] || {}
+  }
+
+  /** @returns {boolean} */
+  hasAsyncDefaults() {
+    return Boolean(this.newIfNoIdDefaultsResult && typeof this.newIfNoIdDefaultsResult.then == "function")
+  }
+
+  /** @returns {object | null} */
+  syncDefaultsForNewModel() {
+    if (!this.args().newIfNoId?.defaults) {
+      return {}
+    } else if (this.hasAsyncDefaults()) {
+      return null
+    }
+
+    if (this.newIfNoIdDefaultsResult === null) {
+      const defaultsResult = this.args().newIfNoId.defaults()
+
+      if (defaultsResult && typeof defaultsResult.then == "function") {
+        this.newIfNoIdDefaultsResult = defaultsResult.catch((error) => {
+          throw error
+        })
+
+        return null
+      }
+
+      this.newIfNoIdDefaultsResult = defaultsResult
+    }
+
+    return this.newIfNoIdDefaultsResult || {}
+  }
+
+  /** @returns {import("./base-model.js").default | undefined} */
+  syncNewModel() {
+    if (!this.active() || !this.args().newIfNoId || this.modelId()) {
+      return undefined
+    }
+
+    const defaults = this.syncDefaultsForNewModel()
+
+    if (defaults === null) {
+      return undefined
+    }
+
+    return new (this.modelClass())({
+      isNewRecord: true,
+      data: {a: Object.assign(defaults, this.args().newAttributes, this.newModelDataFromParams())}
+    })
+  }
+
+  /** @returns {import("./base-model.js").default | undefined} */
+  subscriptionModel() {
+    if (!this.args().eventUpdated) {
+      return undefined
+    } else if (this.s.model) {
+      return this.s.model
+    } else if (!this.modelId()) {
+      return undefined
+    }
+
+    return new (this.modelClass())({
+      data: {a: {[this.modelClass().primaryKey()]: this.modelId()}}
+    })
+  }
+
+  /** @param {number} loadModelGeneration */
+  loadExistingModel = async (loadModelGeneration) => {
+    let query
+
+    if (this.modelId()) {
+      query = this.modelClass().ransack({id_eq: this.modelId()})
+    } else if (this.args().query) {
+      query = this.args().query.clone()
+    } else {
+      const matchParams = this.args().match?.params || {}
+
+      throw new Error(`No model ID was given: ${this.modelId()} by '${this.paramsVariableName()}' in query params: ${Object.keys(matchParams).join(", ")}`)
+    }
+
+    if (this.args().abilities) query.abilities(this.args().abilities)
+    if (this.args().preload) query.preload(this.args().preload)
+    if (this.args().select) query.select(this.args().select)
 
     const model = await query.first()
 
-    if (loadModelGeneration != loadModelGenerationRef.current) return
+    if (loadModelGeneration != this.loadModelGeneration) return
 
     if (
-      s.s.model &&
+      this.s.model &&
       model &&
-      !s.s.notFound &&
-      s.s.model.fullCacheKey() == model.fullCacheKey()
+      !this.s.notFound &&
+      this.s.model.fullCacheKey() == model.fullCacheKey()
     ) {
       return
-    } else if (!s.s.model && !model && s.s.notFound) {
+    } else if (!this.s.model && !model && this.s.notFound) {
       return
     }
 
-    s.set({model, notFound: !model})
-  }, [])
+    this.setState({model, notFound: !model})
+  }
 
-  const loadNewModel = useCallback(async (loadModelGeneration) => {
-    const ModelClass = modelClass
-    const paramKey = ModelClass.modelName().paramKey()
-    const modelDataFromParams = s.m.queryParams?.[paramKey] || {}
-
+  /** @param {number} loadModelGeneration */
+  loadNewModel = async (loadModelGeneration) => {
     let defaults = {}
 
-    if (s.props.newIfNoId?.defaults) {
-      let defaultsResult = s.m.newIfNoIdDefaultsResult
+    if (this.args().newIfNoId?.defaults) {
+      let defaultsResult = this.newIfNoIdDefaultsResult
 
       if (defaultsResult === null) {
-        defaultsResult = s.props.newIfNoId.defaults()
+        defaultsResult = this.args().newIfNoId.defaults()
       }
 
-      s.meta.newIfNoIdDefaultsResult = null
+      this.newIfNoIdDefaultsResult = null
       defaults = await defaultsResult
     }
 
-    const modelData = Object.assign(defaults, s.props.newAttributes, modelDataFromParams)
-    const model = new ModelClass({
+    const model = new (this.modelClass())({
       isNewRecord: true,
-      data: {a: modelData}
+      data: {a: Object.assign(defaults, this.args().newAttributes, this.newModelDataFromParams())}
     })
 
-    if (loadModelGeneration != loadModelGenerationRef.current) return
+    if (loadModelGeneration != this.loadModelGeneration) return
 
-    s.set({model})
-  }, [])
+    this.setState({model, notFound: false})
+  }
 
-  const loadModel = useCallback(async () => {
+  /** @returns {Promise<void>} */
+  loadModel = async () => {
     // Only the newest model request may update state after route or auth changes.
-    const loadModelGeneration = loadModelGenerationRef.current + 1
+    const loadModelGeneration = this.loadModelGeneration + 1
 
-    loadModelGenerationRef.current = loadModelGeneration
-    if (!s.m.active) {
-      // Not active - don't do anything
-    } else if (s.props.newIfNoId && !s.m.modelId) {
-      return await loadNewModel(loadModelGeneration)
-    } else if (!s.props.optional || s.m.modelId || s.m.args.query) {
-      return await loadExistingModel(loadModelGeneration)
+    this.initialLoadTriggered = true
+    this.loadModelGeneration = loadModelGeneration
+    if (this.active() && this.args().newIfNoId && !this.modelId()) {
+      await this.loadNewModel(loadModelGeneration)
+    } else if (this.active() && (!this.args().optional || this.modelId() || this.args().query)) {
+      await this.loadExistingModel(loadModelGeneration)
     }
-  }, [])
-
-  const onDestroyed = useCallback(({model}) => {
-    const forwardArgs = {model}
-
-    forwardArgs[s.m.modelVariableName] = model
-
-    s.p.onDestroyed(forwardArgs)
-  }, [])
-
-  const onSignedIn = useCallback(() => {
-    loadModel()
-  }, [])
-
-  const onSignedOut = useCallback(() => {
-    loadModel()
-  }, [])
-
-  if (args.cacheArgs) {
-    cacheArgs.push(...args.cacheArgs)
   }
 
-  cacheArgs.push(queryParams)
+  /** @returns {void} */
+  clearUpdatedConnectionFallbackTimeout() {
+    if (this.updatedConnectionFallbackTimeoutId) {
+      clearTimeout(this.updatedConnectionFallbackTimeoutId)
+      this.updatedConnectionFallbackTimeoutId = undefined
+    }
+  }
 
-  s.updateMeta({args, modelId, modelVariableName, queryParams})
-  if (s.meta.syncNewModel == undefined) s.meta.syncNewModel = false
-  if (s.meta.newIfNoIdDefaultsResult == undefined) s.meta.newIfNoIdDefaultsResult = null
+  /** @returns {void} */
+  ensureInitialLoadFallback() {
+    if (!this.shouldWaitForUpdatedConnection() || this.initialLoadTriggered) {
+      return
+    }
 
-  if (s.m.active && s.props.newIfNoId && !s.m.modelId && !s.s.model && !s.m.syncNewModel) {
-    if (s.props.newIfNoId?.defaults && s.m.newIfNoIdDefaultsResult === null) {
-      const defaultsResult = s.props.newIfNoId.defaults()
-
-      if (defaultsResult && typeof defaultsResult.then == "function") {
-        s.meta.newIfNoIdDefaultsResult = defaultsResult.catch((error) => {
-          throw error
-        })
-      } else {
-        s.meta.newIfNoIdDefaultsResult = defaultsResult
+    this.clearUpdatedConnectionFallbackTimeout()
+    this.updatedConnectionFallbackTimeoutId = setTimeout(() => {
+      if (!this.updatedConnectionReady && !this.initialLoadTriggered) {
+        this.loadModel()
       }
-    }
+    }, 1000)
+  }
 
-    if (!(s.m.newIfNoIdDefaultsResult && typeof s.m.newIfNoIdDefaultsResult.then == "function")) {
-      const ModelClass = modelClass
-      const paramKey = ModelClass.modelName().paramKey()
-      const modelDataFromParams = s.m.queryParams?.[paramKey] || {}
-      const modelData = Object.assign(s.m.newIfNoIdDefaultsResult || {}, s.props.newAttributes, modelDataFromParams)
-      const model = new ModelClass({
-        isNewRecord: true,
-        data: {a: modelData}
-      })
+  /** @param {{model: import("./base-model.js").default}} args */
+  onDestroyed = (args) => {
+    const forwardArgs = {model: args.model}
 
-      s.meta.syncNewModel = model
-      s.set({model})
+    forwardArgs[this.modelVariableName()] = args.model
+
+    this.args().onDestroyed(forwardArgs)
+  }
+
+  /** @returns {void} */
+  onSignedIn = () => {
+    this.loadModel()
+  }
+
+  /** @returns {void} */
+  onSignedOut = () => {
+    this.loadModel()
+  }
+
+  /** @returns {void} */
+  onUpdatedEventConnected = () => {
+    this.updatedConnectionReady = true
+    this.clearUpdatedConnectionFallbackTimeout()
+
+    if (this.shouldWaitForUpdatedConnection() && !this.initialLoadTriggered) {
+      this.loadModel()
     }
   }
 
-  // Start async model loading after mount so ShapeHook state updates do not race the mount lifecycle.
-  useEffect(
-    () => { loadModel() },
-    cacheArgs
-  )
+  /** @returns {import("./base-model.js").default | undefined} */
+  visibleModel() {
+    let model = this.s.model
 
-  useEffect(() => () => {
-    loadModelGenerationRef.current += 1
-  }, [])
-
-  useEffect(() => {
-    let reloadModelCallback
-
-    if (args.events) {
-      reloadModelCallback = args.events.addListener("reloadModel", loadModel)
+    if (!model) {
+      model = this.syncNewModel()
     }
 
-    return () => {
-      if (reloadModelCallback) {
-        args.events.removeListener("reloadModel", loadModel)
+    if (!this.active()) {
+      return undefined
+    } else if (this.modelId() && model && model.id() != this.modelId()) {
+      return undefined
+    } else if (!this.modelId() && !this.args().query && !this.args().newIfNoId) {
+      return undefined
+    }
+
+    return model
+  }
+
+  /** @returns {boolean | undefined} */
+  visibleNotFound() {
+    if (!this.active()) {
+      return undefined
+    } else if (this.modelId() && this.visibleModel() === undefined) {
+      return undefined
+    } else if (!this.modelId() && !this.args().query && !this.args().newIfNoId) {
+      return undefined
+    }
+
+    return this.s.notFound
+  }
+
+  /** @returns {void} */
+  setup() {
+    this.useStates({
+      model: undefined,
+      notFound: undefined
+    })
+    this.setInstance({queryParams: useQueryParams()})
+
+    useEffect(
+      () => {
+        if (this.s.model === undefined) {
+          const syncNewModel = this.syncNewModel()
+
+          if (syncNewModel) {
+            this.setState({model: syncNewModel, notFound: false})
+          }
+        }
+
+        if (this.shouldWaitForUpdatedConnection()) {
+          this.ensureInitialLoadFallback()
+        } else {
+          this.loadModel()
+        }
+      },
+      this.cacheArgs()
+    )
+
+    // Invalidate in-flight async responses so stale loads cannot write after unmount.
+    useEffect(() => () => {
+      this.clearUpdatedConnectionFallbackTimeout()
+      this.loadModelGeneration += 1
+    }, [])
+
+    useEffect(() => {
+      if (!this.args().events) return
+
+      this.args().events.addListener("reloadModel", this.loadModel)
+
+      return () => {
+        this.args().events.removeListener("reloadModel", this.loadModel)
       }
-    }
-  }, [args.events])
+    }, [this.args().events])
 
-  useUpdatedEvent(args.eventUpdated ? s.s.model : undefined, loadModel, {
-    onConnected: loadModel
-  })
+    useUpdatedEvent(this.subscriptionModel(), this.loadModel, {
+      onConnected: this.onUpdatedEventConnected
+    })
 
-  useEffect(() => {
-    Devise.events().addListener("onDeviseSignIn", onSignedIn)
-    Devise.events().addListener("onDeviseSignOut", onSignedOut)
+    useEffect(() => {
+      Devise.events().addListener("onDeviseSignIn", this.onSignedIn)
+      Devise.events().addListener("onDeviseSignOut", this.onSignedOut)
 
-    return () => {
-      Devise.events().removeListener("onDeviseSignIn", onSignedIn)
-      Devise.events().removeListener("onDeviseSignOut", onSignedOut)
-    }
-  })
+      return () => {
+        Devise.events().removeListener("onDeviseSignIn", this.onSignedIn)
+        Devise.events().removeListener("onDeviseSignOut", this.onSignedOut)
+      }
+    })
 
-  useEffect(() => {
-    let connectDestroyed
+    useEffect(() => {
+      if (!this.s.model || !this.args().onDestroyed) return
 
-    if (s.s.model && args.onDestroyed) {
-      connectDestroyed = ModelEvents.connectDestroyed(s.s.model, onDestroyed)
-    }
+      const connectDestroyed = ModelEvents.connectDestroyed(this.s.model, this.onDestroyed)
 
-    return () => {
-      connectDestroyed?.unsubscribe()
-    }
-  }, [args.onDestroyed, s.s.model?.id()])
-
-  let model = s.s.model
-  let notFound = s.s.notFound
-
-  if (!s.m.active) {
-    model = undefined
-    notFound = undefined
-  } else if (modelId && model && model.id() != modelId) {
-    model = undefined
-    notFound = undefined
-  } else if (!modelId && !args.query && !s.props.newIfNoId) {
-    model = undefined
-    notFound = undefined
+      return () => {
+        connectDestroyed.unsubscribe()
+      }
+    }, [this.args().onDestroyed, this.s.model ? this.s.model.id() : undefined])
   }
+}
 
+/**
+ * @param {Function|object} modelClassArg
+ * @param {object | ((args: {modelClass: typeof import("./base-model.js").default}) => useModelArgs)} [argsArg]
+ * @returns {Record<string, any>}
+ */
+/** useModel. */
+const useModel = (modelClassArg, argsArg = {}) => {
+  const shapeHook = useShapeHook(UseModelShapeHook, {argsArg, modelClassArg})
+  const model = shapeHook.visibleModel()
+  const modelId = shapeHook.modelId()
+  const notFound = shapeHook.visibleNotFound()
+  const modelVariableName = shapeHook.modelVariableName()
   const result = {
     model,
     modelId,
