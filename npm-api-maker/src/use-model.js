@@ -46,7 +46,7 @@ class UseModelShapeHook extends ShapeHook {
     return this.p.argsArg || {}
   }
 
-  /** @returns {typeof import("./base-model.js").default & Record<string, any>} */
+  /** @returns {typeof import("./base-model.js").default} */
   modelClass() {
     if (typeof this.p.modelClassArg == "object") {
       return this.p.modelClassArg.callback({queryParams: this.queryParams})
