@@ -133,6 +133,20 @@ describe("useModel", () => {
     })
   })
 
+  it("keeps async new-model defaults pending until they resolve", async() => {
+    mockUseQueryParams.mockReturnValue(undefined)
+
+    const {default: useModel} = await import("../src/use-model.js")
+    const result = useModel(FakeSchoolClass, {
+      match: {params: {}},
+      newIfNoId: {
+        defaults: () => new Promise(() => {})
+      }
+    })
+
+    expect(result.schoolClass).toBeUndefined()
+  })
+
   it("does not expose a stale loaded model after the query-param ID changes", async() => {
     mockUseQueryParams.mockReturnValue({school_class_id: "new-school-class-id"})
 
@@ -170,7 +184,7 @@ describe("useModel", () => {
 
     const [, reloadModel, props] = mockUseUpdatedEvent.mock.calls[0]
 
-    expect(props.onConnected).toBe(reloadModel)
+    expect(props.onConnected).not.toBe(reloadModel)
   })
 
   it("does not subscribe to update events when eventUpdated is not enabled", async() => {
@@ -240,7 +254,7 @@ describe("useModel", () => {
 
     const [, onUpdated, props] = mockUseUpdatedEvent.mock.calls[0]
 
-    expect(props.onConnected).toBe(onUpdated)
+    expect(props.onConnected).not.toBe(onUpdated)
 
     await props.onConnected()
 

@@ -20,12 +20,16 @@ import useUpdatedEvent from "./use-updated-event.js"
 
 /** Hook state container for useModel. */
 class UseModelShapeHook extends ShapeHook {
+  updatedConnectionFallbackTimeoutId = undefined
+
   /** Constructor. */
   constructor(props) {
     super(props)
+    this.initialLoadTriggered = false
     this.loadModelGeneration = 0
     this.newIfNoIdDefaultsResult = null
     this.queryParams = undefined
+    this.updatedConnectionReady = false
   }
 
   /** @returns {boolean} */
@@ -100,6 +104,8 @@ class UseModelShapeHook extends ShapeHook {
   syncDefaultsForNewModel() {
     if (!this.args().newIfNoId?.defaults) {
       return {}
+    } else if (this.hasAsyncDefaults()) {
+      return null
     }
 
     if (this.newIfNoIdDefaultsResult === null) {
@@ -218,12 +224,35 @@ class UseModelShapeHook extends ShapeHook {
     // Only the newest model request may update state after route or auth changes.
     const loadModelGeneration = this.loadModelGeneration + 1
 
+    this.initialLoadTriggered = true
     this.loadModelGeneration = loadModelGeneration
     if (this.active() && this.args().newIfNoId && !this.modelId()) {
       await this.loadNewModel(loadModelGeneration)
     } else if (this.active() && (!this.args().optional || this.modelId() || this.args().query)) {
       await this.loadExistingModel(loadModelGeneration)
     }
+  }
+
+  /** @returns {void} */
+  clearUpdatedConnectionFallbackTimeout() {
+    if (this.updatedConnectionFallbackTimeoutId) {
+      clearTimeout(this.updatedConnectionFallbackTimeoutId)
+      this.updatedConnectionFallbackTimeoutId = undefined
+    }
+  }
+
+  /** @returns {void} */
+  ensureInitialLoadFallback() {
+    if (!this.shouldWaitForUpdatedConnection() || this.initialLoadTriggered) {
+      return
+    }
+
+    this.clearUpdatedConnectionFallbackTimeout()
+    this.updatedConnectionFallbackTimeoutId = setTimeout(() => {
+      if (!this.updatedConnectionReady && !this.initialLoadTriggered) {
+        this.loadModel()
+      }
+    }, 1000)
   }
 
   /** @param {{model: import("./base-model.js").default}} args */
@@ -243,6 +272,16 @@ class UseModelShapeHook extends ShapeHook {
   /** @returns {void} */
   onSignedOut = () => {
     this.loadModel()
+  }
+
+  /** @returns {void} */
+  onUpdatedEventConnected = () => {
+    this.updatedConnectionReady = true
+    this.clearUpdatedConnectionFallbackTimeout()
+
+    if (this.shouldWaitForUpdatedConnection() && !this.initialLoadTriggered) {
+      this.loadModel()
+    }
   }
 
   /** @returns {import("./base-model.js").default | undefined} */
@@ -295,7 +334,9 @@ class UseModelShapeHook extends ShapeHook {
           }
         }
 
-        if (!this.shouldWaitForUpdatedConnection()) {
+        if (this.shouldWaitForUpdatedConnection()) {
+          this.ensureInitialLoadFallback()
+        } else {
           this.loadModel()
         }
       },
@@ -304,6 +345,7 @@ class UseModelShapeHook extends ShapeHook {
 
     // Invalidate in-flight async responses so stale loads cannot write after unmount.
     useEffect(() => () => {
+      this.clearUpdatedConnectionFallbackTimeout()
       this.loadModelGeneration += 1
     }, [])
 
@@ -318,7 +360,7 @@ class UseModelShapeHook extends ShapeHook {
     }, [this.args().events])
 
     useUpdatedEvent(this.subscriptionModel(), this.loadModel, {
-      onConnected: this.loadModel
+      onConnected: this.onUpdatedEventConnected
     })
 
     useEffect(() => {
