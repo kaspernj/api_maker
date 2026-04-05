@@ -23,6 +23,7 @@ const accessors = {
   navigation: {required: true},
   routes: {required: false},
   routeDefinitions: {required: false},
+  useHtmlForm: {default: true, required: false},
   websocketRequests: {required: false}
 }
 
