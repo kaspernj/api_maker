@@ -92,8 +92,8 @@ for (const accessorName in accessors) {
   }
 
   ApiMakerConfig.prototype[`get${camelizedAccessor}`] = function (...args) {
-    if (!this.global[accessorName]) {
-      if (accessorData.default) return accessorData.default
+    if (this.global[accessorName] === undefined) {
+      if (accessorData.default !== undefined) return accessorData.default
       if (accessorData.required) throw new Error(`${accessorName} hasn't been set`)
     }
 
