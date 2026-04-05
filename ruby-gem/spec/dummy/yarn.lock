@@ -2893,12 +2893,12 @@ hyphenate-style-name@^1.0.3:
   resolved "https://registry.npmjs.org/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz"
   integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
 
-i18n-on-steroids@^1.0.21:
-  version "1.0.21"
-  resolved "https://registry.npmjs.org/i18n-on-steroids/-/i18n-on-steroids-1.0.21.tgz"
-  integrity sha512-J0/Ht4osD8gVqlmTY0kDSk9L4yXV15fcFi7/kRVrTpvkt0u/q6Jhl1poHtaSs1D12bLS9gjVZG9wN6RgymXH3Q==
+i18n-on-steroids@^1.0.24:
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/i18n-on-steroids/-/i18n-on-steroids-1.0.24.tgz#902d9f301cfa14888b42e2849b24e584e489f6ad"
+  integrity sha512-ftJ73yUjm5QLO0iI/ulqV1jCB25Z5brl3rLvq5rAZ1ExWvMnx1fVmMJIxOwZsXWVBg8WObjOXkh07Lsq/SgVBg==
   dependencies:
-    diggerize "^1.0.5"
+    diggerize "^1.0.10"
     numberable "^1.0.0"
     strftime "^0.10.0"
 
