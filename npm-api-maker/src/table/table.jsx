@@ -725,6 +725,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
         htmlFormProps={styles.filterFormHtmlProps ||= {className: "live-table--filter-form"}}
         onSubmit={this.tt.onFilterFormSubmit}
         setForm={/** @type {Record<string, any>} */ (this.setStates).filterForm}
+        useHtmlForm
       >
         {"s" in actualQParams &&
           <input name="s" type="hidden" value={actualQParams.s} />

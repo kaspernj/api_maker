@@ -42,6 +42,7 @@ function RoutesUtilsForm() {
           form={form}
           htmlFormProps={htmlFormProps}
           onSubmit={onSubmit}
+          useHtmlForm
         >
           <TextInput testID="utils-form-input" onChangeText={onChangeText} />
           <input data-testid="utils-form-submit" type="submit" value="Submit" />

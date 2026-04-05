@@ -79,7 +79,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends Base
 
     return (
       <View testID="super-admin--edit-page">
-        <Form formObjectRef={this.formObjectRef} formRef={this.formRef}>
+        <Form formObjectRef={this.formObjectRef} formRef={this.formRef} useHtmlForm>
           {model && attributes?.map((attribute) => (
             <EditAttribute attribute={attribute} key={attribute.attribute} model={model} modelClass={modelClass} />
           ))}
