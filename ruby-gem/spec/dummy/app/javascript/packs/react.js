@@ -26,6 +26,7 @@ const Modal = (props) => {
 import ApiMakerConfig from "@kaspernj/api-maker/build/config.js"
 ApiMakerConfig.setHistory(history)
 ApiMakerConfig.setModal(() => Modal)
+ApiMakerConfig.setUseHtmlForm(true)
 
 // Devise
 import Devise from "@kaspernj/api-maker/build/devise.js"
