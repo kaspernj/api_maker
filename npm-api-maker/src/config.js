@@ -75,6 +75,15 @@ class ApiMakerConfig {
 
   /** @returns {Record<string, any>} */
   getRoutes() { throw new Error("'getRoutes' not implemented") }
+
+  /** @returns {boolean} */
+  getUseHtmlForm() { throw new Error("'getUseHtmlForm' not implemented") }
+
+  /**
+   * @param {boolean} _newValue
+   * @returns {void}
+   */
+  setUseHtmlForm(_newValue) { throw new Error("'setUseHtmlForm' not implemented") }
 }
 
 for (const accessorName in accessors) {
