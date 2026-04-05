@@ -23,6 +23,7 @@ const accessors = {
   navigation: {required: true},
   routes: {required: false},
   routeDefinitions: {required: false},
+  useHtmlForm: {default: false, required: false},
   websocketRequests: {required: false}
 }
 
@@ -74,6 +75,15 @@ class ApiMakerConfig {
 
   /** @returns {Record<string, any>} */
   getRoutes() { throw new Error("'getRoutes' not implemented") }
+
+  /** @returns {boolean} */
+  getUseHtmlForm() { throw new Error("'getUseHtmlForm' not implemented") }
+
+  /**
+   * @param {boolean} _newValue
+   * @returns {void}
+   */
+  setUseHtmlForm(_newValue) { throw new Error("'setUseHtmlForm' not implemented") }
 }
 
 for (const accessorName in accessors) {
@@ -91,8 +101,8 @@ for (const accessorName in accessors) {
   }
 
   ApiMakerConfig.prototype[`get${camelizedAccessor}`] = function (...args) {
-    if (!this.global[accessorName]) {
-      if (accessorData.default) return accessorData.default
+    if (this.global[accessorName] === undefined) {
+      if (accessorData.default !== undefined) return accessorData.default
       if (accessorData.required) throw new Error(`${accessorName} hasn't been set`)
     }
 

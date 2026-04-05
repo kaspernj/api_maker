@@ -2,6 +2,7 @@
 import React, {createContext, useContext, useEffect, useMemo} from "react"
 import {Platform} from "react-native"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import apiMakerConfig from "./config.js"
 import BaseComponent from "./base-component"
 import FormDataObjectizer from "form-data-objectizer"
 import PropTypes from "prop-types"
@@ -69,13 +70,15 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
     formRef: PropTypes.object,
     htmlFormProps: PropTypes.object,
     onSubmit: PropTypes.func,
-    setForm: PropTypes.func
+    setForm: PropTypes.func,
+    useHtmlForm: PropTypes.bool
   })
 
   render() {
-    const {children, form: givenForm, formObjectRef, formRef, htmlFormProps, onSubmit, setForm} = this.props
+    const {children, form: givenForm, formObjectRef, formRef, htmlFormProps, onSubmit, setForm, useHtmlForm: useHtmlFormProp} = this.props
     const localForm = useMemo(() => new FormInputs({onSubmit}), [])
     const form = givenForm || localForm
+    const shouldUseHtmlForm = Platform.OS === "web" && (typeof useHtmlFormProp === "boolean" ? useHtmlFormProp : apiMakerConfig.getUseHtmlForm())
 
     form.onSubmit = onSubmit
 
@@ -101,12 +104,12 @@ const Form = memo(shapeComponent(class Form extends BaseComponent {
 
     return (
       <FormContext.Provider value={form}>
-        {Platform.OS == "web" &&
+        {shouldUseHtmlForm &&
           <form {...htmlFormProps} onSubmit={this.tt.onFormSubmit} ref={formRef}>
             {children}
           </form>
         }
-        {Platform.OS != "web" && this.props.children}
+        {!shouldUseHtmlForm && children}
       </FormContext.Provider>
     )
   }
