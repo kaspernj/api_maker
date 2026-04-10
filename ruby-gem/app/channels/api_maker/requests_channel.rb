@@ -78,9 +78,7 @@ private
       @execute_mutex.synchronize do
         ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
       end
-    when :multi_connection
-      ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
-    when :none
+    when :multi_connection, :none
       ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
     end
   end
