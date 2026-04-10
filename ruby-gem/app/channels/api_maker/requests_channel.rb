@@ -75,11 +75,11 @@ private
   def execute_command(data, fingerprint:, request_uid:)
     case resolved_concurrency_mode
     when :mutex
-      @execute_mutex.synchronize { run_command_executor(data, fingerprint:, request_uid:) }
-    when :multi_connection
+      @execute_mutex.synchronize do
+        ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
+      end
+    when :multi_connection, :none
       ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
-    when :none
-      run_command_executor(data, fingerprint:, request_uid:)
     end
   end
 
