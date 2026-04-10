@@ -6,14 +6,16 @@ class ApiMaker::SubscriptionsChannel < ApplicationCable::Channel
   def refresh_auth(data)
     request_context = subscription_request_context(data)
 
-    request_context.with_request_context do
-      Services::Devise::PersistSession.execute!(
-        args: data.to_h.deep_symbolize_keys,
-        controller: request_context
-      )
+    ActiveRecord::Base.connection_pool.with_connection do
+      request_context.with_request_context do
+        Services::Devise::PersistSession.execute!(
+          args: data.to_h.deep_symbolize_keys,
+          controller: request_context
+        )
 
-      stop_all_streams
-      resubscribe_to_events!
+        stop_all_streams
+        resubscribe_to_events!
+      end
     end
 
     transmit({type: "api_maker_subscription_auth_refreshed"})
@@ -37,12 +39,14 @@ private
   end
 
   def resubscribe_to_events!
-    if respond_to?(:around_api_maker_subscribe_to_events)
-      around_api_maker_subscribe_to_events do
+    ActiveRecord::Base.connection_pool.with_connection do
+      if respond_to?(:around_api_maker_subscribe_to_events)
+        around_api_maker_subscribe_to_events do
+          subscribe_to_events!
+        end
+      else
         subscribe_to_events!
       end
-    else
-      subscribe_to_events!
     end
   end
 
@@ -83,23 +87,25 @@ private
 
     channel_name = model_class.api_maker_broadcast_create_channel_name
     stream_from(channel_name, coder: ActiveSupport::JSON) do |data|
-      ApiMaker::Configuration.current.before_create_event_callbacks.each do |callback|
-        callback.call(data:)
-      end
+      ActiveRecord::Base.connection_pool.with_connection do
+        ApiMaker::Configuration.current.before_create_event_callbacks.each do |callback|
+          callback.call(data:)
+        end
 
-      # We need to look the model up to evaluate if the user has access
-      model_class = data.fetch("mcn").safe_constantize
+        # We need to look the model up to evaluate if the user has access
+        model_class = data.fetch("mcn").safe_constantize
 
-      Rails.logger.debug { "API maker: ConnectCreates for #{model_class.name}" }
-      model_exists = model_class
-        .accessible_by(current_ability, ability_name)
-        .exists?(model_class.primary_key => data.fetch("mi"))
+        Rails.logger.debug { "API maker: ConnectCreates for #{model_class.name}" }
+        model_exists = model_class
+          .accessible_by(current_ability, ability_name)
+          .exists?(model_class.primary_key => data.fetch("mi"))
 
-      # Transmit the data to JS if its found (and thereby allowed)
-      if model_exists
-        transmit data
-      else
-        Rails.logger.warn { "API maker: No access to connect to #{model_class.name} #{ability_name}" }
+        # Transmit the data to JS if its found (and thereby allowed)
+        if model_exists
+          transmit data
+        else
+          Rails.logger.warn { "API maker: No access to connect to #{model_class.name} #{ability_name}" }
+        end
       end
     end
   end
