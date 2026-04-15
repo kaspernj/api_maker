@@ -111,63 +111,79 @@ describe ApiMaker::RequestsChannel do
 
   describe "#with_watchdog" do
     let(:channel) { described_class.allocate }
+    let(:connection) { instance_double(ActiveRecord::ConnectionAdapters::AbstractAdapter) }
+
+    before do
+      allow(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).and_return(:other)
+    end
 
     it "returns the block result when completion beats the timeout" do
-      result = channel.__send__(:with_watchdog, 5) { 42 }
+      result = channel.__send__(:with_watchdog, connection, 5) { 42 }
 
       expect(result).to eq(42)
     end
 
     it "is a no-op when timeout is nil or non-positive" do
-      expect(channel.__send__(:with_watchdog, nil) { :ok }).to eq(:ok)
-      expect(channel.__send__(:with_watchdog, 0) { :ok }).to eq(:ok)
+      expect(channel.__send__(:with_watchdog, connection, nil) { :ok }).to eq(:ok)
+      expect(channel.__send__(:with_watchdog, connection, 0) { :ok }).to eq(:ok)
     end
 
     it "raises ApiMaker::CommandTimeoutError when the block exceeds the timeout" do
       expect do
-        channel.__send__(:with_watchdog, 0.05) { sleep 2 }
+        channel.__send__(:with_watchdog, connection, 0.05) { sleep 2 }
       end.to raise_error(ApiMaker::CommandTimeoutError, /exceeded timeout/)
     end
   end
 
   describe "#with_statement_timeout" do
     let(:channel) { described_class.allocate }
+    let(:connection) { instance_double(ActiveRecord::ConnectionAdapters::AbstractAdapter) }
 
-    it "is a no-op on non-postgres adapters" do
-      allow(ApiMaker::DatabaseType).to receive(:postgres?).and_return(false)
+    it "is a no-op on unknown adapters" do
+      allow(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).and_return(:other)
 
       expect do |probe|
-        channel.__send__(:with_statement_timeout, 10, &probe)
+        channel.__send__(:with_statement_timeout, connection, 10, &probe)
       end.to yield_with_no_args
     end
 
     it "is a no-op when timeout is nil or non-positive" do
-      expect(channel.__send__(:with_statement_timeout, nil) { :ok }).to eq(:ok)
-      expect(channel.__send__(:with_statement_timeout, 0) { :ok }).to eq(:ok)
+      expect(channel.__send__(:with_statement_timeout, connection, nil) { :ok }).to eq(:ok)
+      expect(channel.__send__(:with_statement_timeout, connection, 0) { :ok }).to eq(:ok)
     end
 
     it "sets and resets statement_timeout around the block on postgres" do
-      allow(ApiMaker::DatabaseType).to receive(:postgres?).and_return(true)
+      allow(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).and_return(:postgres)
+      expect(connection).to receive(:execute).with("SET statement_timeout = 10000").ordered
+      expect(connection).to receive(:execute).with("RESET statement_timeout").ordered
 
-      fake_connection = instance_double(ActiveRecord::ConnectionAdapters::AbstractAdapter)
-      allow(ActiveRecord::Base).to receive(:connection).and_return(fake_connection)
-      expect(fake_connection).to receive(:execute).with("SET statement_timeout = 10000").ordered
-      expect(fake_connection).to receive(:execute).with("RESET statement_timeout").ordered
-
-      channel.__send__(:with_statement_timeout, 10) { :ok }
+      channel.__send__(:with_statement_timeout, connection, 10) { :ok }
     end
 
-    it "still resets statement_timeout if the block raises" do
-      allow(ApiMaker::DatabaseType).to receive(:postgres?).and_return(true)
-
-      fake_connection = instance_double(ActiveRecord::ConnectionAdapters::AbstractAdapter)
-      allow(ActiveRecord::Base).to receive(:connection).and_return(fake_connection)
-      expect(fake_connection).to receive(:execute).with("SET statement_timeout = 5000").ordered
-      expect(fake_connection).to receive(:execute).with("RESET statement_timeout").ordered
+    it "still resets statement_timeout if the block raises on postgres" do
+      allow(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).and_return(:postgres)
+      expect(connection).to receive(:execute).with("SET statement_timeout = 5000").ordered
+      expect(connection).to receive(:execute).with("RESET statement_timeout").ordered
 
       expect do
-        channel.__send__(:with_statement_timeout, 5) { raise "boom" }
+        channel.__send__(:with_statement_timeout, connection, 5) { raise "boom" }
       end.to raise_error("boom")
+    end
+
+    it "sets and resets max_execution_time on mysql" do
+      allow(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).and_return(:mysql)
+      expect(connection).to receive(:execute).with("SET SESSION max_execution_time = 7500").ordered
+      expect(connection).to receive(:execute).with("SET SESSION max_execution_time = 0").ordered
+
+      channel.__send__(:with_statement_timeout, connection, 7.5) { :ok }
+    end
+
+    it "sets and resets max_statement_time on mariadb" do
+      allow(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).and_return(:mariadb)
+      expect(connection).to receive(:execute).with("SET SESSION max_statement_time = 7.5").ordered
+      expect(connection).to receive(:execute).with("SET SESSION max_statement_time = 0").ordered
+
+      channel.__send__(:with_statement_timeout, connection, 7.5) { :ok }
     end
   end
 

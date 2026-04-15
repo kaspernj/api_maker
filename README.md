@@ -698,7 +698,13 @@ ApiMaker::Configuration.configure do |config|
 end
 ```
 
-On PostgreSQL the timeout is also applied as `statement_timeout` on the request's connection and reset when the command releases the connection, so runaway queries abort in-DB. On non-PostgreSQL adapters only the Ruby-level watchdog applies.
+On top of the Ruby-level watchdog, the timeout is also applied as a session-level statement timeout on the request's connection and reset when the command releases it, so runaway queries abort in-DB:
+
+- **PostgreSQL**: `statement_timeout` (all statements).
+- **MariaDB**: `max_statement_time` (all statements).
+- **MySQL**: `max_execution_time` (read-only `SELECT` only — writes and DDL only get the Ruby watchdog, since MySQL does not offer a general session-level statement timeout).
+
+Detection is per connection pool (cached), so multi-DB apps get the correct variable per pool. Only the connection checked out at the channel level is bounded; commands that touch additional connection pools only get the Ruby watchdog. Other adapters (e.g. SQLite) only get the Ruby watchdog.
 
 ## Reporting errors
 

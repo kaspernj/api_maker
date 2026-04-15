@@ -1,6 +1,10 @@
 require "digest"
 
 class ApiMaker::RequestsChannel < ApplicationCable::Channel
+  DB_TIMEOUT_ERRORS = [ActiveRecord::QueryCanceled].tap do |errors|
+    errors << ActiveRecord::StatementTimeout if defined?(ActiveRecord::StatementTimeout)
+  end.freeze
+
   def subscribed
     @last_command_event_sequence_by_request_id = {}
     @execute_mutex = Mutex.new if resolved_concurrency_mode == :mutex
@@ -36,7 +40,7 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
     # using transactional fixtures) we fall back to a mutex so concurrent
     # Fibers don't conflict on the shared thread connection.
     execute_command(data, fingerprint:, request_uid:)
-  rescue ApiMaker::CommandTimeoutError, ActiveRecord::QueryCanceled => e
+  rescue ApiMaker::CommandTimeoutError, *DB_TIMEOUT_ERRORS => e
     response_payload = {
       response: {errors: [{message: e.message, type: :timeout_error}], success: false},
       type: "api_maker_request_error"
@@ -93,48 +97,67 @@ private
 
   def run_command_executor_with_timeout(data, fingerprint:, request_uid:)
     timeout_seconds = ApiMaker::Configuration.current.command_timeout
+    connection = ActiveRecord::Base.connection
 
-    with_statement_timeout(timeout_seconds) do
-      with_watchdog(timeout_seconds) do
+    with_statement_timeout(connection, timeout_seconds) do
+      with_watchdog(connection, timeout_seconds) do
         run_command_executor(data, fingerprint:, request_uid:)
       end
     end
   end
 
-  # Sets PostgreSQL statement_timeout for the duration of the block so DB
+  # Sets a DB-level statement timeout for the duration of the block so
   # queries abort in-DB when the overall command timeout is exceeded.
-  # Always resets the timeout in ensure so the connection is safe to
-  # return to the pool.
-  def with_statement_timeout(timeout_seconds)
+  # Always resets in ensure so the connection is safe to return to the pool.
+  # Only the connection checked out at the channel level is bounded; commands
+  # that touch other connection pools only get the Ruby watchdog.
+  def with_statement_timeout(connection, timeout_seconds)
     return yield if timeout_seconds.nil? || timeout_seconds <= 0
-    return yield unless ApiMaker::DatabaseType.postgres?
 
-    connection = ActiveRecord::Base.connection
-    timeout_ms = (timeout_seconds * 1000).to_i
+    set_sql, reset_sql = statement_timeout_sql(connection, timeout_seconds)
+    return yield unless set_sql
 
     begin
-      connection.execute("SET statement_timeout = #{timeout_ms}")
+      connection.execute(set_sql)
       yield
     ensure
       begin
-        connection.execute("RESET statement_timeout")
+        connection.execute(reset_sql)
       rescue StandardError => e
         ApiMaker::Configuration.current.report_error(e)
       end
     end
   end
 
+  # MySQL's max_execution_time only bounds read-only SELECTs; the Ruby watchdog
+  # catches writes that overrun. MariaDB's max_statement_time covers all
+  # statements. PostgreSQL's statement_timeout covers all statements.
+  def statement_timeout_sql(connection, timeout_seconds)
+    case ApiMaker::ConnectionDatabaseKind.for(connection)
+    when :postgres
+      timeout_ms = (timeout_seconds * 1000).to_i
+      ["SET statement_timeout = #{timeout_ms}", "RESET statement_timeout"]
+    when :mysql
+      timeout_ms = (timeout_seconds * 1000).to_i
+      ["SET SESSION max_execution_time = #{timeout_ms}", "SET SESSION max_execution_time = 0"]
+    when :mariadb
+      seconds = timeout_seconds.to_f
+      ["SET SESSION max_statement_time = #{seconds}", "SET SESSION max_statement_time = 0"]
+    end
+  end
+
   # Spawns a per-request timer thread that, when the timeout expires,
   # cancels any in-flight PG query via the out-of-band protocol and
   # raises ApiMaker::CommandTimeoutError on the worker thread so pure-Ruby
-  # work also unwinds. No-op on normal completion.
-  def with_watchdog(timeout_seconds)
+  # work also unwinds. No-op on normal completion. MySQL/MariaDB rely on
+  # the session-level statement timeout plus the Thread#raise path.
+  def with_watchdog(connection, timeout_seconds)
     return yield if timeout_seconds.nil? || timeout_seconds <= 0
 
     worker = Thread.current
     state_mutex = Mutex.new
     finished = false
-    raw_connection = watchdog_raw_connection
+    raw_connection = watchdog_raw_connection(connection)
 
     timer = Thread.new do
       sleep timeout_seconds
@@ -158,10 +181,10 @@ private
     end
   end
 
-  def watchdog_raw_connection
-    return nil unless ApiMaker::DatabaseType.postgres?
+  def watchdog_raw_connection(connection)
+    return nil unless ApiMaker::ConnectionDatabaseKind.for(connection) == :postgres
 
-    ActiveRecord::Base.connection.raw_connection
+    connection.raw_connection
   rescue StandardError
     nil
   end
