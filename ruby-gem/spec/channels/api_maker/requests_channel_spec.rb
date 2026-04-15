@@ -108,4 +108,72 @@ describe ApiMaker::RequestsChannel do
       expect(channel.last_command_event_sequence_for_request_id(11)).to eq(3)
     end
   end
+
+  describe "#with_watchdog" do
+    let(:channel) { described_class.allocate }
+
+    it "returns the block result when completion beats the timeout" do
+      result = channel.__send__(:with_watchdog, 5) { 42 }
+
+      expect(result).to eq(42)
+    end
+
+    it "is a no-op when timeout is nil or non-positive" do
+      expect(channel.__send__(:with_watchdog, nil) { :ok }).to eq(:ok)
+      expect(channel.__send__(:with_watchdog, 0) { :ok }).to eq(:ok)
+    end
+
+    it "raises ApiMaker::CommandTimeoutError when the block exceeds the timeout" do
+      expect do
+        channel.__send__(:with_watchdog, 0.05) { sleep 2 }
+      end.to raise_error(ApiMaker::CommandTimeoutError, /exceeded timeout/)
+    end
+  end
+
+  describe "#with_statement_timeout" do
+    let(:channel) { described_class.allocate }
+
+    it "is a no-op on non-postgres adapters" do
+      allow(ApiMaker::DatabaseType).to receive(:postgres?).and_return(false)
+
+      expect do |probe|
+        channel.__send__(:with_statement_timeout, 10, &probe)
+      end.to yield_with_no_args
+    end
+
+    it "is a no-op when timeout is nil or non-positive" do
+      expect(channel.__send__(:with_statement_timeout, nil) { :ok }).to eq(:ok)
+      expect(channel.__send__(:with_statement_timeout, 0) { :ok }).to eq(:ok)
+    end
+
+    it "sets and resets statement_timeout around the block on postgres" do
+      allow(ApiMaker::DatabaseType).to receive(:postgres?).and_return(true)
+
+      fake_connection = instance_double(ActiveRecord::ConnectionAdapters::AbstractAdapter)
+      allow(ActiveRecord::Base).to receive(:connection).and_return(fake_connection)
+      expect(fake_connection).to receive(:execute).with("SET statement_timeout = 10000").ordered
+      expect(fake_connection).to receive(:execute).with("RESET statement_timeout").ordered
+
+      channel.__send__(:with_statement_timeout, 10) { :ok }
+    end
+
+    it "still resets statement_timeout if the block raises" do
+      allow(ApiMaker::DatabaseType).to receive(:postgres?).and_return(true)
+
+      fake_connection = instance_double(ActiveRecord::ConnectionAdapters::AbstractAdapter)
+      allow(ActiveRecord::Base).to receive(:connection).and_return(fake_connection)
+      expect(fake_connection).to receive(:execute).with("SET statement_timeout = 5000").ordered
+      expect(fake_connection).to receive(:execute).with("RESET statement_timeout").ordered
+
+      expect do
+        channel.__send__(:with_statement_timeout, 5) { raise "boom" }
+      end.to raise_error("boom")
+    end
+  end
+
+  describe "command timeout configuration" do
+    it "defaults ApiMaker::Configuration#command_timeout to 60 seconds" do
+      expect(ApiMaker::Configuration.new.command_timeout).to eq(60)
+    end
+  end
 end

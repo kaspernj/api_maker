@@ -36,6 +36,14 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
     # using transactional fixtures) we fall back to a mutex so concurrent
     # Fibers don't conflict on the shared thread connection.
     execute_command(data, fingerprint:, request_uid:)
+  rescue ApiMaker::CommandTimeoutError, ActiveRecord::QueryCanceled => e
+    response_payload = {
+      response: {errors: [{message: e.message, type: :timeout_error}], success: false},
+      type: "api_maker_request_error"
+    }
+
+    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
+    transmit_request_payloads(request_uid:, response_payload:) if request_uid
   rescue => e # rubocop:disable Style/RescueStandardError
     response_payload = {
       response: {errors: [{message: e.message, type: :runtime_error}], success: false},
@@ -75,12 +83,96 @@ private
   def execute_command(data, fingerprint:, request_uid:)
     case resolved_concurrency_mode
     when :mutex
-      @execute_mutex.synchronize { run_command_executor(data, fingerprint:, request_uid:) }
+      @execute_mutex.synchronize { run_command_executor_with_timeout(data, fingerprint:, request_uid:) }
     when :multi_connection
-      ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
+      ActiveRecord::Base.connection_pool.with_connection { run_command_executor_with_timeout(data, fingerprint:, request_uid:) }
     when :none
-      run_command_executor(data, fingerprint:, request_uid:)
+      run_command_executor_with_timeout(data, fingerprint:, request_uid:)
     end
+  end
+
+  def run_command_executor_with_timeout(data, fingerprint:, request_uid:)
+    timeout_seconds = ApiMaker::Configuration.current.command_timeout
+
+    with_statement_timeout(timeout_seconds) do
+      with_watchdog(timeout_seconds) do
+        run_command_executor(data, fingerprint:, request_uid:)
+      end
+    end
+  end
+
+  # Sets PostgreSQL statement_timeout for the duration of the block so DB
+  # queries abort in-DB when the overall command timeout is exceeded.
+  # Always resets the timeout in ensure so the connection is safe to
+  # return to the pool.
+  def with_statement_timeout(timeout_seconds)
+    return yield if timeout_seconds.nil? || timeout_seconds <= 0
+    return yield unless ApiMaker::DatabaseType.postgres?
+
+    connection = ActiveRecord::Base.connection
+    timeout_ms = (timeout_seconds * 1000).to_i
+
+    begin
+      connection.execute("SET statement_timeout = #{timeout_ms}")
+      yield
+    ensure
+      begin
+        connection.execute("RESET statement_timeout")
+      rescue StandardError => e
+        ApiMaker::Configuration.current.report_error(e)
+      end
+    end
+  end
+
+  # Spawns a per-request timer thread that, when the timeout expires,
+  # cancels any in-flight PG query via the out-of-band protocol and
+  # raises ApiMaker::CommandTimeoutError on the worker thread so pure-Ruby
+  # work also unwinds. No-op on normal completion.
+  def with_watchdog(timeout_seconds)
+    return yield if timeout_seconds.nil? || timeout_seconds <= 0
+
+    worker = Thread.current
+    state_mutex = Mutex.new
+    finished = false
+    raw_connection = watchdog_raw_connection
+
+    timer = Thread.new do
+      sleep timeout_seconds
+      state_mutex.synchronize do
+        next if finished
+
+        finished = true
+        cancel_raw_connection(raw_connection)
+        worker.raise(ApiMaker::CommandTimeoutError.new("Command exceeded timeout of #{timeout_seconds}s"))
+      end
+    rescue StandardError => e
+      ApiMaker::Configuration.current.report_error(e)
+    end
+
+    begin
+      yield
+    ensure
+      state_mutex.synchronize { finished = true }
+      timer.kill if timer.alive?
+      timer.join
+    end
+  end
+
+  def watchdog_raw_connection
+    return nil unless ApiMaker::DatabaseType.postgres?
+
+    ActiveRecord::Base.connection.raw_connection
+  rescue StandardError
+    nil
+  end
+
+  def cancel_raw_connection(raw_connection)
+    return if raw_connection.nil?
+    return unless raw_connection.respond_to?(:cancel)
+
+    raw_connection.cancel
+  rescue StandardError => e
+    ApiMaker::Configuration.current.report_error(e)
   end
 
   def resolved_concurrency_mode

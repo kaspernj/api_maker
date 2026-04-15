@@ -688,6 +688,18 @@ end
 ```
 
 
+## Command timeout
+
+Websocket-dispatched commands are guarded by a configurable timeout. When a command exceeds it, the server cancels any in-flight DB work and returns an error payload with `type: :timeout_error`. Default is 60 seconds.
+
+```ruby
+ApiMaker::Configuration.configure do |config|
+  config.command_timeout = 120 # seconds; 0 or nil disables the timeout
+end
+```
+
+On PostgreSQL the timeout is also applied as `statement_timeout` on the request's connection and reset when the command releases the connection, so runaway queries abort in-DB. On non-PostgreSQL adapters only the Ruby-level watchdog applies.
+
 ## Reporting errors
 
 Add an intializer with something like this:

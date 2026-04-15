@@ -19,6 +19,7 @@ module ApiMaker
   autoload :Collection, "#{dir}/collection"
   autoload :CollectionSerializer, "#{dir}/collection_serializer"
   autoload :CommandSpecHelper, "#{dir}/command_spec_helper"
+  autoload :CommandTimeoutError, "#{dir}/command_timeout_error"
   autoload :Configuration, "#{dir}/configuration"
   autoload :Current, "#{dir}/current"
   autoload :CurrentCommand, "#{dir}/current_command"
