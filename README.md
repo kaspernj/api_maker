@@ -704,7 +704,7 @@ On top of the Ruby-level watchdog, the timeout is also applied as a session-leve
 - **MariaDB**: `max_statement_time` (all statements).
 - **MySQL**: `max_execution_time` (read-only `SELECT` only — writes and DDL only get the Ruby watchdog, since MySQL does not offer a general session-level statement timeout).
 
-Detection is per connection pool (cached), so multi-DB apps get the correct variable per pool. Only the connection checked out at the channel level is bounded; commands that touch additional connection pools only get the Ruby watchdog. Other adapters (e.g. SQLite) only get the Ruby watchdog.
+The guard runs inside each command's own execution thread (via `ApiMaker::CommandResponse#with_thread`), so the session variable is set on the same connection that issues the command's SQL — including in the default threaded runtime where each command thread checks out its own connection. If a command exceeds the timeout, `ApiMaker::CommandTimeoutError` propagates from its thread through `join_threads` into the channel so the worker aborts instead of continuing to run and apply side effects after the client has already received the timeout response. Detection is per connection pool (cached). Other adapters (e.g. SQLite) only get the Ruby watchdog.
 
 ## Reporting errors
 

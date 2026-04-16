@@ -47,7 +47,7 @@ class ApiMaker::CommandResponse
 
   def with_thread(&)
     if Rails.env.test? || !threadding?
-      yield
+      ApiMaker::CommandTimeoutGuard.wrap(&)
     else
       spawn_thread(&)
     end
@@ -65,28 +65,45 @@ private
     parent_thread = Thread.current
 
     @threads << Thread.new do
-      child_thread = Thread.current
+      # Errors are either reported via report_thread_error below or re-raised
+      # to join_threads for the channel rescue to handle, so suppress Ruby's
+      # default thread-death stderr print to avoid duplicate output.
+      Thread.current.report_on_exception = false
+      run_thread_body(parent_thread:, child_thread: Thread.current, &blk)
+    rescue ApiMaker::CommandTimeoutError
+      # Propagate so join_threads re-raises in the channel thread and the
+      # request returns a timeout_error response instead of silently dropping
+      # the command and leaving the worker to finish its side effects.
+      raise
+    rescue => e # rubocop:disable Style/RescueStandardError
+      report_thread_error(e)
+    end
+  end
 
-      Rails.application.executor.wrap do
-        ApiMaker::Configuration.current.on_thread_callbacks&.each do |on_thread_callback|
-          on_thread_callback.call(parent_thread:, child_thread:)
-        end
+  def run_thread_body(parent_thread:, child_thread:, &blk)
+    Rails.application.executor.wrap do
+      ApiMaker::Configuration.current.on_thread_callbacks&.each do |on_thread_callback|
+        on_thread_callback.call(parent_thread:, child_thread:)
+      end
 
+      ApiMaker::CommandTimeoutGuard.wrap do
         I18n.with_locale(locale, &blk)
       end
-    rescue => e # rubocop:disable Style/RescueStandardError
-      puts e.inspect
-      puts Rails.backtrace_cleaner.clean(e.backtrace)
-
-      Rails.logger.error e.message
-      Rails.logger.error Rails.backtrace_cleaner.clean(e.backtrace).join("\n")
-
-      ApiMaker::Configuration.current.report_error(
-        command: nil,
-        controller:,
-        error: e,
-        response: nil
-      )
     end
+  end
+
+  def report_thread_error(error)
+    puts error.inspect
+    puts Rails.backtrace_cleaner.clean(error.backtrace)
+
+    Rails.logger.error error.message
+    Rails.logger.error Rails.backtrace_cleaner.clean(error.backtrace).join("\n")
+
+    ApiMaker::Configuration.current.report_error(
+      command: nil,
+      controller:,
+      error:,
+      response: nil
+    )
   end
 end

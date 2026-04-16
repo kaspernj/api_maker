@@ -88,114 +88,11 @@ private
     case resolved_concurrency_mode
     when :mutex
       @execute_mutex.synchronize do
-        ActiveRecord::Base.connection_pool.with_connection { run_command_executor_with_timeout(data, fingerprint:, request_uid:) }
+        ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
       end
     when :multi_connection, :none
-      ActiveRecord::Base.connection_pool.with_connection { run_command_executor_with_timeout(data, fingerprint:, request_uid:) }
+      ActiveRecord::Base.connection_pool.with_connection { run_command_executor(data, fingerprint:, request_uid:) }
     end
-  end
-
-  def run_command_executor_with_timeout(data, fingerprint:, request_uid:)
-    timeout_seconds = ApiMaker::Configuration.current.command_timeout
-    connection = ActiveRecord::Base.connection
-
-    with_statement_timeout(connection, timeout_seconds) do
-      with_watchdog(connection, timeout_seconds) do
-        run_command_executor(data, fingerprint:, request_uid:)
-      end
-    end
-  end
-
-  # Sets a DB-level statement timeout for the duration of the block so
-  # queries abort in-DB when the overall command timeout is exceeded.
-  # Always resets in ensure so the connection is safe to return to the pool.
-  # Only the connection checked out at the channel level is bounded; commands
-  # that touch other connection pools only get the Ruby watchdog.
-  def with_statement_timeout(connection, timeout_seconds)
-    return yield if timeout_seconds.nil? || timeout_seconds <= 0
-
-    set_sql, reset_sql = statement_timeout_sql(connection, timeout_seconds)
-    return yield unless set_sql
-
-    begin
-      connection.execute(set_sql)
-      yield
-    ensure
-      begin
-        connection.execute(reset_sql)
-      rescue StandardError => e
-        ApiMaker::Configuration.current.report_error(e)
-      end
-    end
-  end
-
-  # MySQL's max_execution_time only bounds read-only SELECTs; the Ruby watchdog
-  # catches writes that overrun. MariaDB's max_statement_time covers all
-  # statements. PostgreSQL's statement_timeout covers all statements.
-  def statement_timeout_sql(connection, timeout_seconds)
-    case ApiMaker::ConnectionDatabaseKind.for(connection)
-    when :postgres
-      timeout_ms = (timeout_seconds * 1000).to_i
-      ["SET statement_timeout = #{timeout_ms}", "RESET statement_timeout"]
-    when :mysql
-      timeout_ms = (timeout_seconds * 1000).to_i
-      ["SET SESSION max_execution_time = #{timeout_ms}", "SET SESSION max_execution_time = 0"]
-    when :mariadb
-      seconds = timeout_seconds.to_f
-      ["SET SESSION max_statement_time = #{seconds}", "SET SESSION max_statement_time = 0"]
-    end
-  end
-
-  # Spawns a per-request timer thread that, when the timeout expires,
-  # cancels any in-flight PG query via the out-of-band protocol and
-  # raises ApiMaker::CommandTimeoutError on the worker thread so pure-Ruby
-  # work also unwinds. No-op on normal completion. MySQL/MariaDB rely on
-  # the session-level statement timeout plus the Thread#raise path.
-  def with_watchdog(connection, timeout_seconds)
-    return yield if timeout_seconds.nil? || timeout_seconds <= 0
-
-    worker = Thread.current
-    state_mutex = Mutex.new
-    finished = false
-    raw_connection = watchdog_raw_connection(connection)
-
-    timer = Thread.new do
-      sleep timeout_seconds
-      state_mutex.synchronize do
-        next if finished
-
-        finished = true
-        cancel_raw_connection(raw_connection)
-        worker.raise(ApiMaker::CommandTimeoutError.new("Command exceeded timeout of #{timeout_seconds}s"))
-      end
-    rescue StandardError => e
-      ApiMaker::Configuration.current.report_error(e)
-    end
-
-    begin
-      yield
-    ensure
-      state_mutex.synchronize { finished = true }
-      timer.kill if timer.alive?
-      timer.join
-    end
-  end
-
-  def watchdog_raw_connection(connection)
-    return nil unless ApiMaker::ConnectionDatabaseKind.for(connection) == :postgres
-
-    connection.raw_connection
-  rescue StandardError
-    nil
-  end
-
-  def cancel_raw_connection(raw_connection)
-    return if raw_connection.nil?
-    return unless raw_connection.respond_to?(:cancel)
-
-    raw_connection.cancel
-  rescue StandardError => e
-    ApiMaker::Configuration.current.report_error(e)
   end
 
   def resolved_concurrency_mode
