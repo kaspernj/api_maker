@@ -38,6 +38,14 @@ class ApiMaker::BaseCommand
     end
   end
 
+  def self.command_error_type(error)
+    if error.is_a?(ApiMaker::IndividualCommand::NotFoundOrNoAccessError)
+      :not_found_or_no_access
+    else
+      :runtime_error
+    end
+  end
+
   def self.execute_in_thread!(ability:, api_maker_args:, collection:, commands:, command_response:, controller:)
     command_response.with_thread do
       if const_defined?(:CollectionInstance)
@@ -130,9 +138,11 @@ class ApiMaker::BaseCommand
         yield command
       end
     rescue => e # rubocop:disable Style/RescueStandardError
+      error_type = command_error_type(e)
       error_response = {
+        error_type:,
         success: false,
-        errors: [{message: command_error_message(e), type: :runtime_error}]
+        errors: [{message: command_error_message(e), type: error_type}]
       }
 
       Rails.logger.error e.message

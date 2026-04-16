@@ -1,11 +1,15 @@
 import ApiMakerCommandsPool from "../src/commands-pool.js"
 import Config from "../src/config.js"
+import Devise from "../src/devise.js"
+import SessionStatusUpdater from "../src/session-status-updater.js"
 import WebsocketRequestClient from "../src/websocket-request-client.js"
 import {jest} from "@jest/globals"
 
 describe("ApiMakerCommandsPool", () => {
   afterEach(() => {
     jest.restoreAllMocks()
+    delete globalThis.apiMakerDeviseCurrent
+    globalThis.ApiMakerDevise = {scopes: {}}
   })
 
   it("uses websocket requests whenever they are enabled and no files are present", async() => {
@@ -37,5 +41,50 @@ describe("ApiMakerCommandsPool", () => {
       request: {pool: {}}
     })
     expect(response).toEqual({via: "websocket"})
+  })
+
+  it("refreshes session status when a failed command reports not_found_or_no_access while signed in", async() => {
+    const pool = new ApiMakerCommandsPool()
+    const commandExecution = {
+      reject: jest.fn(),
+      resolve: jest.fn()
+    }
+    const refreshSessionStatus = jest.spyOn(SessionStatusUpdater.current(), "updateSessionStatus").mockResolvedValue(undefined)
+
+    Devise.addUserScope("user")
+    globalThis.apiMakerDeviseCurrent = {user: {id: "user-1"}}
+
+    await pool.handleFailedResponse(
+      {commandExecution},
+      {
+        error_type: "not_found_or_no_access",
+        errors: [{message: "no access", type: "not_found_or_no_access"}]
+      }
+    )
+
+    expect(refreshSessionStatus).toHaveBeenCalledTimes(1)
+    expect(commandExecution.reject).toHaveBeenCalledTimes(1)
+  })
+
+  it("does not refresh session status when no registered scope is signed in", async() => {
+    const pool = new ApiMakerCommandsPool()
+    const commandExecution = {
+      reject: jest.fn(),
+      resolve: jest.fn()
+    }
+    const refreshSessionStatus = jest.spyOn(SessionStatusUpdater.current(), "updateSessionStatus").mockResolvedValue(undefined)
+
+    Devise.addUserScope("user")
+
+    await pool.handleFailedResponse(
+      {commandExecution},
+      {
+        error_type: "not_found_or_no_access",
+        errors: [{message: "no access", type: "not_found_or_no_access"}]
+      }
+    )
+
+    expect(refreshSessionStatus).not.toHaveBeenCalled()
+    expect(commandExecution.reject).toHaveBeenCalledTimes(1)
   })
 })

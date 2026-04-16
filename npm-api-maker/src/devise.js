@@ -54,6 +54,7 @@ export default class ApiMakerDevise {
     const getScopeName = `get${scopeCamelized}Scope`
     const scopeInstance = new DeviseScope(scope, args)
 
+    shared.scopes[scope] = true
     ApiMakerDevise[currentMethodName] = () => ApiMakerDevise.current().getCurrentScope(scope)
     ApiMakerDevise[isSignedInMethodName] = () => Boolean(ApiMakerDevise.current().getCurrentScope(scope))
     ApiMakerDevise[getArgsMethodName] = () => args
@@ -66,6 +67,11 @@ export default class ApiMakerDevise {
     const getScopeName = `get${scopeCamelized}Scope`
 
     return ApiMakerDevise[getScopeName]()
+  }
+
+  /** @returns {string[]} */
+  static registeredScopes() {
+    return Object.keys(shared.scopes)
   }
 
   static async signIn(username, password, args = {}) {

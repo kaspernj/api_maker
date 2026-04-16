@@ -141,4 +141,10 @@ describe ApiMaker::BaseCommand do
     expect(result.fetch(:test_collection_command_called)).to be true
     expect(result.dig!(:api_maker_args, :passed)).to be true
   end
+
+  it "classifies not_found_or_no_access errors with a dedicated error type" do
+    error = ApiMaker::IndividualCommand::NotFoundOrNoAccessError.new("no access")
+
+    expect(described_class.command_error_type(error)).to eq(:not_found_or_no_access)
+  end
 end
