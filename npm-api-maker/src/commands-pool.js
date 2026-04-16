@@ -7,6 +7,7 @@ import Config from "./config.js"
 import CustomError from "./custom-error.js"
 import DestroyError from "./destroy-error.js"
 import Deserializer from "./deserializer.js" // eslint-disable-line sort-imports
+import Devise from "./devise.js"
 import {dig, digg} from "diggerize" // eslint-disable-line sort-imports
 import events from "./events.js"
 import FormDataObjectizer from "form-data-objectizer" // eslint-disable-line sort-imports
@@ -190,7 +191,7 @@ export default class ApiMakerCommandsPool {
       const commandExecution = Object.values(currentPool)[0]?.commandExecution
       const response = await this.sendRequest({commandExecution, commandSubmitData, url})
 
-      for (const commandId in response.responses) {
+      await Promise.all(Object.keys(response.responses).map(async(commandId) => {
         const commandResponse = response.responses[commandId]
         const commandResponseData = Deserializer.parse(commandResponse.data)
         const commandData = currentPool[parseInt(commandId, 10)]
@@ -216,11 +217,11 @@ export default class ApiMakerCommandsPool {
 
           commandData.commandExecution.reject(error)
         } else if (responseType == "failed") {
-          this.handleFailedResponse(commandData, commandResponseData)
+          await this.handleFailedResponse(commandData, commandResponseData)
         } else {
           throw new Error(`Unhandled response type: ${responseType}`)
         }
-      }
+      }))
     } finally {
       this.flushCount--
     }
@@ -232,9 +233,11 @@ export default class ApiMakerCommandsPool {
    * @param {string} commandResponseData.error_type
    * @param {string[]} commandResponseData.errors
    * @param {string[]} commandResponseData.validation_errors
-   * @returns {void}
+   * @returns {Promise<void>}
    */
-  handleFailedResponse(commandData, commandResponseData) {
+  async handleFailedResponse(commandData, commandResponseData) {
+    await this.refreshSessionStatusForNoAccessError(commandResponseData)
+
     let error
 
     if (commandResponseData.error_type == "destroy_error") {
@@ -258,6 +261,22 @@ export default class ApiMakerCommandsPool {
     }
 
     commandData.commandExecution.reject(error)
+  }
+
+  /**
+   * @param {Record<string, any>} commandResponseData
+   * @returns {Promise<void>}
+   */
+  async refreshSessionStatusForNoAccessError(commandResponseData) {
+    if (commandResponseData.error_type != "not_found_or_no_access") {
+      return
+    }
+
+    if (!Object.values(Devise.current().currents).some(Boolean)) {
+      return
+    }
+
+    await SessionStatusUpdater.current().updateSessionStatus()
   }
 
   /** isActive. */

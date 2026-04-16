@@ -1,0 +1,1 @@
+"ApiMaker now classifies websocket member-command no-access failures with a dedicated `not_found_or_no_access` error type and refreshes frontend session status when those failures happen against a stale signed-in client."
