@@ -108,4 +108,10 @@ describe ApiMaker::RequestsChannel do
       expect(channel.last_command_event_sequence_for_request_id(11)).to eq(3)
     end
   end
+
+  describe "command timeout configuration" do
+    it "defaults ApiMaker::Configuration#command_timeout to 60 seconds" do
+      expect(ApiMaker::Configuration.new.command_timeout).to eq(60)
+    end
+  end
 end

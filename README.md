@@ -688,6 +688,24 @@ end
 ```
 
 
+## Command timeout
+
+Websocket-dispatched commands are guarded by a configurable timeout. When a command exceeds it, the server cancels any in-flight DB work and returns an error payload with `type: :timeout_error`. Default is 60 seconds.
+
+```ruby
+ApiMaker::Configuration.configure do |config|
+  config.command_timeout = 120 # seconds; 0 or nil disables the timeout
+end
+```
+
+On top of the Ruby-level watchdog, the timeout is also applied as a session-level statement timeout on the request's connection and reset when the command releases it, so runaway queries abort in-DB:
+
+- **PostgreSQL**: `statement_timeout` (all statements).
+- **MariaDB**: `max_statement_time` (all statements).
+- **MySQL**: `max_execution_time` (read-only `SELECT` only — writes and DDL only get the Ruby watchdog, since MySQL does not offer a general session-level statement timeout).
+
+The guard runs inside each command's own execution thread (via `ApiMaker::CommandResponse#with_thread`), so the session variable is set on the same connection that issues the command's SQL — including in the default threaded runtime where each command thread checks out its own connection. If a command exceeds the timeout, `ApiMaker::CommandTimeoutError` propagates from its thread through `join_threads` into the channel so the worker aborts instead of continuing to run and apply side effects after the client has already received the timeout response. Detection is per connection pool (cached). Other adapters (e.g. SQLite) only get the Ruby watchdog.
+
 ## Reporting errors
 
 Add an intializer with something like this:

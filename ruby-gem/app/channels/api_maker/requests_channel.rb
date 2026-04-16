@@ -1,6 +1,10 @@
 require "digest"
 
 class ApiMaker::RequestsChannel < ApplicationCable::Channel
+  DB_TIMEOUT_ERRORS = [ActiveRecord::QueryCanceled].tap do |errors|
+    errors << ActiveRecord::StatementTimeout if defined?(ActiveRecord::StatementTimeout)
+  end.freeze
+
   def subscribed
     @last_command_event_sequence_by_request_id = {}
     @execute_mutex = Mutex.new if resolved_concurrency_mode == :mutex
@@ -36,6 +40,14 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
     # using transactional fixtures) we fall back to a mutex so concurrent
     # Fibers don't conflict on the shared thread connection.
     execute_command(data, fingerprint:, request_uid:)
+  rescue ApiMaker::CommandTimeoutError, *DB_TIMEOUT_ERRORS => e
+    response_payload = {
+      response: {errors: [{message: e.message, type: :timeout_error}], success: false},
+      type: "api_maker_request_error"
+    }
+
+    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
+    transmit_request_payloads(request_uid:, response_payload:) if request_uid
   rescue => e # rubocop:disable Style/RescueStandardError
     response_payload = {
       response: {errors: [{message: e.message, type: :runtime_error}], success: false},

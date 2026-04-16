@@ -1,9 +1,11 @@
 class ApiMaker::Configuration
   REQUEST_CONCURRENCY_MODES = [:auto, :mutex, :multi_connection, :none].freeze
+  DEFAULT_COMMAND_TIMEOUT = 60
 
   attr_accessor(
     :ability_class_name,
     :before_create_event_callbacks,
+    :command_timeout,
     :devise_sign_in_enabled,
     :devise_sign_out_enabled,
     :on_thread_callbacks,
@@ -32,6 +34,7 @@ class ApiMaker::Configuration
   def initialize
     self.ability_class_name = "ApiMaker::Ability"
     self.before_create_event_callbacks = []
+    self.command_timeout = DEFAULT_COMMAND_TIMEOUT
     self.devise_sign_in_enabled = true
     self.devise_sign_out_enabled = true
     self.request_concurrency_mode = :auto
