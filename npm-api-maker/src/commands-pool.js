@@ -272,7 +272,11 @@ export default class ApiMakerCommandsPool {
       return
     }
 
-    if (!Object.values(Devise.current().currents).some(Boolean)) {
+    const signedInScope = Devise
+      .registeredScopes()
+      .find((scope) => Devise.current().hasCurrentScope(scope) || Devise.current().hasGlobalCurrentScope(scope))
+
+    if (!signedInScope) {
       return
     }
 

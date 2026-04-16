@@ -8,6 +8,8 @@ import {jest} from "@jest/globals"
 describe("ApiMakerCommandsPool", () => {
   afterEach(() => {
     jest.restoreAllMocks()
+    delete globalThis.apiMakerDeviseCurrent
+    globalThis.ApiMakerDevise = {scopes: {}}
   })
 
   it("uses websocket requests whenever they are enabled and no files are present", async() => {
@@ -49,7 +51,8 @@ describe("ApiMakerCommandsPool", () => {
     }
     const refreshSessionStatus = jest.spyOn(SessionStatusUpdater.current(), "updateSessionStatus").mockResolvedValue(undefined)
 
-    Devise.current().currents.user = {id: () => "user-1"}
+    Devise.addUserScope("user")
+    globalThis.apiMakerDeviseCurrent = {user: {id: "user-1"}}
 
     await pool.handleFailedResponse(
       {commandExecution},
@@ -60,6 +63,28 @@ describe("ApiMakerCommandsPool", () => {
     )
 
     expect(refreshSessionStatus).toHaveBeenCalledTimes(1)
+    expect(commandExecution.reject).toHaveBeenCalledTimes(1)
+  })
+
+  it("does not refresh session status when no registered scope is signed in", async() => {
+    const pool = new ApiMakerCommandsPool()
+    const commandExecution = {
+      reject: jest.fn(),
+      resolve: jest.fn()
+    }
+    const refreshSessionStatus = jest.spyOn(SessionStatusUpdater.current(), "updateSessionStatus").mockResolvedValue(undefined)
+
+    Devise.addUserScope("user")
+
+    await pool.handleFailedResponse(
+      {commandExecution},
+      {
+        error_type: "not_found_or_no_access",
+        errors: [{message: "no access", type: "not_found_or_no_access"}]
+      }
+    )
+
+    expect(refreshSessionStatus).not.toHaveBeenCalled()
     expect(commandExecution.reject).toHaveBeenCalledTimes(1)
   })
 })
