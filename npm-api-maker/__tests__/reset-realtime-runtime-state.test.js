@@ -9,6 +9,11 @@ describe("resetRealtimeRuntimeState", () => {
     delete globalThis.apiMakerChannelsConsumer
   })
 
+  it("auto-registers the reset hook on globalThis for Ruby system-test helpers", () => {
+    // eslint-disable-next-line no-underscore-dangle
+    expect(globalThis.__apiMakerResetRealtimeRuntimeForSystemSpecs).toBe(waitForRealtimeRuntimeIdleAndReset)
+  })
+
   it("waits for websocket requests to go idle before resetting the realtime runtime", async() => {
     const waitForIdle = jest.fn().mockResolvedValue(undefined)
 

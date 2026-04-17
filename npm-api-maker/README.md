@@ -161,6 +161,26 @@ import resetRealtimeRuntimeState from "@kaspernj/api-maker/build/reset-realtime-
 resetRealtimeRuntimeState()
 ```
 
+### System test ActionCable cleanup (Ruby)
+
+When using `use_transactional_fixtures = true` with system specs, ActionCable disconnect Fibers can hold the shared DB connection after the browser is killed, causing all subsequent tests to fail. Api Maker provides two helpers to prevent this:
+
+**`reset_api_maker_realtime_runtime!`** — calls the auto-registered JS hook to gracefully disconnect ActionCable from the browser side before quitting the session. Returns `:ok`, `:missing`, `:error`, or `:unavailable`.
+
+**`wait_for_action_cable_connections_to_close!`** — waits for server-side ActionCable connections to drain so disconnect Fibers release the shared DB connection.
+
+Wire both into your test cleanup:
+
+```ruby
+# In your rails_helper.rb ensure block, after resetting Capybara sessions
+# and before DatabaseCleaner.clean:
+reset_api_maker_realtime_runtime!
+Capybara.reset!
+wait_for_action_cable_connections_to_close!
+```
+
+The JS hook is auto-registered on `globalThis.__apiMakerResetRealtimeRuntimeForSystemSpecs` when the module is loaded — downstream projects no longer need to register it manually.
+
 ## Realtime model events
 
 For model-specific websocket events in React/ShapeComponent UI code, prefer `useModelEvent` over manual `ModelEvents.connect(...)` subscriptions. The hook handles subscription lifecycle automatically and avoids leaked listeners.
