@@ -4,6 +4,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   autoload :ExecuteCollectionCommand, "#{__dir__}/spec_helper/execute_collection_command"
   autoload :ExecuteMemberCommand, "#{__dir__}/spec_helper/execute_member_command"
 
+  require_relative "spec_helper/action_cable_cleanup"
   require_relative "spec_helper/attribute_row_helpers"
   require_relative "spec_helper/browser_logs"
   require_relative "spec_helper/expect_no_browser_errors"
@@ -14,6 +15,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   require_relative "spec_helper/wait_for_flash_message"
   require_relative "spec_helper/wait_for_selector"
   require_relative "spec_helper/worker_plugins_helpers"
+  include ActionCableCleanup
   include BrowserLogs
   include ApiMaker::ExpectToBeAbleToHelper
   include AttributeRowHelpers

@@ -21,5 +21,10 @@ const waitForRealtimeRuntimeIdleAndReset = async({timeoutMs = 5000} = {}) => {
   resetRealtimeRuntimeState()
 }
 
+// Auto-register the reset hook so Ruby system-test helpers can call it
+// without downstream projects needing to wire it up manually.
+// eslint-disable-next-line no-underscore-dangle
+globalThis.__apiMakerResetRealtimeRuntimeForSystemSpecs = waitForRealtimeRuntimeIdleAndReset
+
 export {waitForRealtimeRuntimeIdleAndReset}
 export default resetRealtimeRuntimeState
