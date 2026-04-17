@@ -29,9 +29,9 @@ module ApiMaker::SpecHelper::ActionCableCleanup
 
     status = :unavailable
     api_maker_ignore_capybara_disconnect do
-      result = session.evaluate_async_script(<<~JS, 5)
-        const done = arguments[0]
-        const timeoutMs = arguments[1]
+      result = session.evaluate_async_script(<<~JS, 5000)
+        const timeoutMs = arguments[0]
+        const done = arguments[arguments.length - 1]
         const resetHook = globalThis.__apiMakerResetRealtimeRuntimeForSystemSpecs
 
         if (!resetHook) {
