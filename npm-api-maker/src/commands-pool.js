@@ -208,14 +208,7 @@ export default class ApiMakerCommandsPool {
         if (responseType == "success") {
           commandData.commandExecution.resolve(commandResponseData)
         } else if (responseType == "error") {
-          const error = new CustomError("Command error", {response: commandResponseData})
-
-          error.stack += "\n"
-          error.stack += commandData.stack.split("\n")
-            .slice(1)
-            .join("\n")
-
-          commandData.commandExecution.reject(error)
+          this.rejectWithCallerStack(commandData, new CustomError("Command error", {response: commandResponseData}))
         } else if (responseType == "failed") {
           await this.handleFailedResponse(commandData, commandResponseData)
         } else {
@@ -251,13 +244,34 @@ export default class ApiMakerCommandsPool {
 
       events.emit("onValidationErrors", validationErrors)
     } else {
-      let errorMessage
-
-      if (!commandResponseData.errors) {
-        errorMessage = "Command failed"
-      }
+      const errorMessage = commandResponseData.errors ? undefined : "Command failed"
 
       error = new CustomError(errorMessage, {response: commandResponseData})
+    }
+
+    this.rejectWithCallerStack(commandData, error)
+  }
+
+  /**
+   * Rejects the command with the given error, splicing the caller's stack (captured synchronously in addCommand) onto error.stack.
+   * Needed because error.stack is frozen at construction time inside flush()'s microtask and therefore loses the caller's frames.
+   * @param {CommandDataType} commandData
+   * @param {Error} error
+   * @returns {void}
+   */
+  rejectWithCallerStack(commandData, error) {
+    if (commandData.stack) {
+      // V8 prefixes "Error\n" as a header; JSC/SpiderMonkey stacks start directly with a frame.
+      const callerFrames = commandData.stack.startsWith("Error")
+        ? commandData.stack
+          .split("\n")
+          .slice(1)
+          .join("\n")
+        : commandData.stack
+
+      if (callerFrames) {
+        error.stack = `${error.stack ?? ""}\n${callerFrames}`
+      }
     }
 
     commandData.commandExecution.reject(error)

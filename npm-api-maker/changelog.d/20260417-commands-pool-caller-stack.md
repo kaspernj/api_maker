@@ -1,0 +1,1 @@
+Fixed `ApiMakerCommandsPool` losing the caller's stack trace on `failed`, `destroy_error`, and `validation_error` responses. The caller stack captured synchronously in `addCommand()` is now spliced onto the rejection error through a shared `rejectWithCallerStack` helper (applied to every reject site), and the splice handles both V8- and JSC/SpiderMonkey-shaped stack strings.
