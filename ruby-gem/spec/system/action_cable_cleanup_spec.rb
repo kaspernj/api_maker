@@ -23,7 +23,7 @@ describe "ActionCableCleanup" do
     end
 
     it "waits until connections drain" do
-      fake_connection = instance_double("ActionCable::Connection::Base")
+      fake_connection = instance_double(ActionCable::Connection::Base)
       connections = ActionCable.server.connections
 
       connections << fake_connection
@@ -42,7 +42,7 @@ describe "ActionCableCleanup" do
     end
 
     it "respects the timeout when connections do not drain" do
-      fake_connection = instance_double("ActionCable::Connection::Base")
+      fake_connection = instance_double(ActionCable::Connection::Base)
       connections = ActionCable.server.connections
 
       connections << fake_connection
