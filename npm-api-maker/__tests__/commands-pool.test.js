@@ -87,4 +87,113 @@ describe("ApiMakerCommandsPool", () => {
     expect(refreshSessionStatus).not.toHaveBeenCalled()
     expect(commandExecution.reject).toHaveBeenCalledTimes(1)
   })
+
+  describe("rejectWithCallerStack", () => {
+    it("appends V8-style caller frames (stripping the 'Error' header) to the rejection error", () => {
+      const pool = new ApiMakerCommandsPool()
+      const commandExecution = {reject: jest.fn()}
+      const error = new Error("boom")
+
+      error.stack = "Error: boom\n    at flush (commands-pool.js:1:1)"
+
+      const callerStack = "Error\n    at callerFrame (some-file.js:1:1)\n    at outerFrame (other-file.js:2:2)"
+
+      pool.rejectWithCallerStack({commandExecution, stack: callerStack}, error)
+
+      expect(commandExecution.reject).toHaveBeenCalledTimes(1)
+      const rejected = commandExecution.reject.mock.calls[0][0]
+
+      expect(rejected).toBe(error)
+      expect(rejected.stack).toContain("at flush (commands-pool.js:1:1)")
+      expect(rejected.stack).toContain("at callerFrame (some-file.js:1:1)")
+      expect(rejected.stack).toContain("at outerFrame (other-file.js:2:2)")
+    })
+
+    it("keeps non-V8 caller frames intact (no 'Error' header to strip)", () => {
+      const pool = new ApiMakerCommandsPool()
+      const commandExecution = {reject: jest.fn()}
+      const error = new Error("boom")
+
+      error.stack = "flushInternal@commands-pool.js:1:1"
+
+      const callerStack = "callerFrame@some-file.js:10:5\nouterFrame@other-file.js:2:2"
+
+      pool.rejectWithCallerStack({commandExecution, stack: callerStack}, error)
+
+      const rejected = commandExecution.reject.mock.calls[0][0]
+
+      expect(rejected.stack).toContain("flushInternal@commands-pool.js:1:1")
+      expect(rejected.stack).toContain("callerFrame@some-file.js:10:5")
+      expect(rejected.stack).toContain("outerFrame@other-file.js:2:2")
+    })
+
+    it("rejects without touching the stack when no caller stack was captured", () => {
+      const pool = new ApiMakerCommandsPool()
+      const commandExecution = {reject: jest.fn()}
+      const error = new Error("boom")
+      const originalStack = error.stack
+
+      pool.rejectWithCallerStack({commandExecution}, error)
+
+      expect(commandExecution.reject).toHaveBeenCalledWith(error)
+      expect(error.stack).toEqual(originalStack)
+    })
+  })
+
+  describe("handleFailedResponse stack preservation", () => {
+    const callerStack = "Error\n    at someCaller (app.js:42:13)"
+
+    it("preserves caller stack on generic command failure", async() => {
+      const pool = new ApiMakerCommandsPool()
+      const commandExecution = {reject: jest.fn(), resolve: jest.fn()}
+
+      await pool.handleFailedResponse(
+        {commandExecution, stack: callerStack},
+        {
+          error_type: "custom_error",
+          errors: [{message: "limit reached"}]
+        }
+      )
+
+      expect(commandExecution.reject).toHaveBeenCalledTimes(1)
+      const rejected = commandExecution.reject.mock.calls[0][0]
+
+      expect(rejected.stack).toContain("at someCaller (app.js:42:13)")
+    })
+
+    it("preserves caller stack on destroy_error", async() => {
+      const pool = new ApiMakerCommandsPool()
+      const commandExecution = {reject: jest.fn(), resolve: jest.fn()}
+
+      await pool.handleFailedResponse(
+        {commandExecution, stack: callerStack},
+        {
+          error_type: "destroy_error",
+          errors: [{message: "cannot destroy"}]
+        }
+      )
+
+      const rejected = commandExecution.reject.mock.calls[0][0]
+
+      expect(rejected.stack).toContain("at someCaller (app.js:42:13)")
+    })
+
+    it("preserves caller stack on validation_error", async() => {
+      const pool = new ApiMakerCommandsPool()
+      const commandExecution = {reject: jest.fn(), resolve: jest.fn()}
+
+      await pool.handleFailedResponse(
+        {commandExecution, stack: callerStack},
+        {
+          error_type: "validation_error",
+          model: {id: "1"},
+          validation_errors: []
+        }
+      )
+
+      const rejected = commandExecution.reject.mock.calls[0][0]
+
+      expect(rejected.stack).toContain("at someCaller (app.js:42:13)")
+    })
+  })
 })
