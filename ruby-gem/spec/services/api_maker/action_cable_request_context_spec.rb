@@ -17,6 +17,7 @@ describe ApiMaker::ActionCableRequestContext do
     Object.new.tap do |object|
       object.define_singleton_method(:api_maker_locals) { {} }
       object.define_singleton_method(:connection) { connection_instance }
+      object.define_singleton_method(:current_user) { connection_instance.current_user }
       object.define_singleton_method(:current_session_id) { "session-1" }
       object.define_singleton_method(:update_api_maker_current_user!) do |_current_user|
         nil
@@ -24,7 +25,9 @@ describe ApiMaker::ActionCableRequestContext do
     end
   end
   let(:request_context) do
-    described_class.new(
+    allow(warden).to receive(:user).with(:user).and_return(nil)
+
+    ApiMaker::ActionCableRequestContext.new(
       api_maker_args: {current_user: nil},
       channel:,
       request_fingerprint: "fingerprint-1",
@@ -87,10 +90,17 @@ describe ApiMaker::ActionCableRequestContext do
   end
 
   it "returns session status for the current websocket state" do
-    expect(warden).to receive(:user).with(:user).and_return(user)
+    expect(warden).to receive(:user).with(:user).and_return(user).twice
     expect(warden).to receive(:authenticated?).with(:user).and_return(true)
 
-    result = request_context.session_status_result
+    context = ApiMaker::ActionCableRequestContext.new(
+      api_maker_args: {},
+      channel:,
+      request_fingerprint: "fingerprint-1",
+      request_uid: "request-1"
+    )
+
+    result = context.session_status_result
 
     expect(result).to include(
       devise: {timeout_in: Devise.timeout_in.to_i},
@@ -101,6 +111,19 @@ describe ApiMaker::ActionCableRequestContext do
         }
       }
     )
+  end
+
+  it "sets current model in api_maker_args for all Devise scopes from warden" do
+    expect(warden).to receive(:user).with(:user).and_return(user)
+
+    context = ApiMaker::ActionCableRequestContext.new(
+      api_maker_args: {},
+      channel:,
+      request_fingerprint: "fingerprint-1",
+      request_uid: "request-1"
+    )
+
+    expect(context.api_maker_args[:current_user]).to eq(user)
   end
 
   it "stores itself as the controller in api_maker_args" do
