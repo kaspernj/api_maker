@@ -27,7 +27,7 @@ describe ApiMaker::ActionCableRequestContext do
   let(:request_context) do
     allow(warden).to receive(:user).with(:user).and_return(nil)
 
-    described_class.new(
+    ApiMaker::ActionCableRequestContext.new(
       api_maker_args: {current_user: nil},
       channel:,
       request_fingerprint: "fingerprint-1",
@@ -90,10 +90,10 @@ describe ApiMaker::ActionCableRequestContext do
   end
 
   it "returns session status for the current websocket state" do
-    allow(warden).to receive(:user).with(:user).and_return(user)
+    expect(warden).to receive(:user).with(:user).and_return(user).twice
     expect(warden).to receive(:authenticated?).with(:user).and_return(true)
 
-    context = described_class.new(
+    context = ApiMaker::ActionCableRequestContext.new(
       api_maker_args: {},
       channel:,
       request_fingerprint: "fingerprint-1",
@@ -116,7 +116,7 @@ describe ApiMaker::ActionCableRequestContext do
   it "sets current model in api_maker_args for all Devise scopes from warden" do
     expect(warden).to receive(:user).with(:user).and_return(user)
 
-    context = described_class.new(
+    context = ApiMaker::ActionCableRequestContext.new(
       api_maker_args: {},
       channel:,
       request_fingerprint: "fingerprint-1",
