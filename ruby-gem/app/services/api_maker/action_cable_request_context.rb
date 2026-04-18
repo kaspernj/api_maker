@@ -7,7 +7,8 @@ class ApiMaker::ActionCableRequestContext
     @channel = channel
     @api_maker_args = api_maker_args.merge(
       controller: self,
-      current_session_id: api_maker_args[:current_session_id].presence || channel.current_session_id
+      current_session_id: api_maker_args[:current_session_id].presence || channel.current_session_id,
+      current_user: channel.current_user
     )
     @api_maker_locals = channel.api_maker_locals
     @request_fingerprint = request_fingerprint

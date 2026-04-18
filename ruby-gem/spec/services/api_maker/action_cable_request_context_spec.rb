@@ -17,6 +17,7 @@ describe ApiMaker::ActionCableRequestContext do
     Object.new.tap do |object|
       object.define_singleton_method(:api_maker_locals) { {} }
       object.define_singleton_method(:connection) { connection_instance }
+      object.define_singleton_method(:current_user) { connection_instance.current_user }
       object.define_singleton_method(:current_session_id) { "session-1" }
       object.define_singleton_method(:update_api_maker_current_user!) do |_current_user|
         nil
@@ -101,6 +102,20 @@ describe ApiMaker::ActionCableRequestContext do
         }
       }
     )
+  end
+
+  it "sets current_user in api_maker_args from the channel" do
+    channel.define_singleton_method(:current_user) { @_test_user }
+    channel.instance_variable_set(:@_test_user, user)
+
+    context = described_class.new(
+      api_maker_args: {},
+      channel:,
+      request_fingerprint: "fingerprint-1",
+      request_uid: "request-1"
+    )
+
+    expect(context.api_maker_args[:current_user]).to eq(user)
   end
 
   it "stores itself as the controller in api_maker_args" do
