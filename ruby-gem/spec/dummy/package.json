@@ -59,7 +59,7 @@
     "style-loader": "^4.0.0",
     "swc-loader": "^0.2.6",
     "terser-webpack-plugin": "5",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.0",
     "webpack": "5",
     "webpack-assets-manifest": "6",
     "webpack-cli": "7",
