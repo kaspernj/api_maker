@@ -11,25 +11,25 @@ import memo from "set-state-compare/build/memo.js"
 
 /**
  * @typedef {object} Props
- * @property {any=} append
- * @property {any=} appendText
- * @property {string=} attribute
- * @property {string=} className
- * @property {any[]=} currenciesCollection
- * @property {string=} currencyName
- * @property {any=} hint
- * @property {any=} hintBottom
- * @property {string=} id
- * @property {any=} label
- * @property {string=} labelClassName
- * @property {object=} model
- * @property {string=} name
- * @property {any=} placeholder
- * @property {any=} prepend
- * @property {any=} prependText
- * @property {boolean=} small
- * @property {string=} type
- * @property {string=} wrapperClassName
+ * @property {any} [append]
+ * @property {any} [appendText]
+ * @property {string} [attribute]
+ * @property {string} [className]
+ * @property {any[]} [currenciesCollection]
+ * @property {string} [currencyName]
+ * @property {any} [hint]
+ * @property {any} [hintBottom]
+ * @property {string} [id]
+ * @property {any} [label]
+ * @property {string} [labelClassName]
+ * @property {object} [model]
+ * @property {string} [name]
+ * @property {any} [placeholder]
+ * @property {any} [prepend]
+ * @property {any} [prependText]
+ * @property {boolean} [small]
+ * @property {string} [type]
+ * @property {string} [wrapperClassName]
  */
 /** @typedef {Record<string, never>} State */
 const ApiMakerBootstrapInput = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapInput extends ShapeComponent {

@@ -9,9 +9,9 @@ import propTypesExact from "prop-types-exact"
 /**
  * @typedef {object} Props
  * @property {any[]} attributes
- * @property {boolean=} checkIfAttributeLoaded
- * @property {Function|string=} defaultDateFormatName
- * @property {Function|string=} defaultDateTimeFormatName
+ * @property {boolean} [checkIfAttributeLoaded]
+ * @property {Function|string} [defaultDateFormatName]
+ * @property {Function|string} [defaultDateTimeFormatName]
  * @property {object} model
  */
 /** @typedef {Record<string, never>} State */

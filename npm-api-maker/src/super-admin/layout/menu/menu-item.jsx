@@ -12,10 +12,10 @@ const dataSets = {}
 
 /**
  * @typedef {object} Props
- * @property {boolean|string=} active
- * @property {string=} className
+ * @property {boolean|string} [active]
+ * @property {string} [className]
  * @property {string} icon
- * @property {any=} label
+ * @property {any} [label]
  */
 /**
  * @typedef {object} State

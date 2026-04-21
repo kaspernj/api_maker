@@ -6,12 +6,19 @@ import modelClassRequire from "../model-class-require.js"
 
 /** Computes table select payloads for queries. */
 class SelectCalculator {
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {object} root0
+   * @param {any} root0.table
+   */
   constructor({table}) {
     this.table = table
   }
 
-  /** selects. */
+  /**
+   * selects.
+   * @returns {any}
+   */
   selects() {
     const {modelClass} = digs(this.table.props, "modelClass")
     const select = this.table.props.select || {}
@@ -65,7 +72,11 @@ class SelectCalculator {
   }
 }
 
-/** selectCalculator. */
-export default function selectCalculator(...props) {
-  return new SelectCalculator(...props).selects()
+/**
+ * selectCalculator.
+ * @param {any} props
+ * @returns {any}
+ */
+export default function selectCalculator(props) {
+  return new SelectCalculator(props).selects()
 }

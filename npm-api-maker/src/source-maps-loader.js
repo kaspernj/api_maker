@@ -24,12 +24,18 @@ export default class SourceMapsLoader {
     this.srcLoaded = {}
   }
 
-  /** loadSourceMapsForScriptTags. */
+  /**
+   * loadSourceMapsForScriptTags.
+   * @param {any} callback
+   */
   loadSourceMapsForScriptTags(callback) {
     this.loadSourceMapsForScriptTagsCallback = callback
   }
 
-  /** sourceMapForSource. */
+  /**
+   * sourceMapForSource.
+   * @param {any} callback
+   */
   sourceMapForSource(callback) {
     this.sourceMapForSourceCallback = callback
   }
@@ -58,7 +64,11 @@ export default class SourceMapsLoader {
     }
   }
 
-  /** getSources. */
+  /**
+   * getSources.
+   * @param {any} error
+   * @returns {any}
+   */
   getSources(error) {
     let sources = this.getSourcesFromScripts()
 
@@ -94,7 +104,10 @@ export default class SourceMapsLoader {
     return sources
   }
 
-  /** getSourcesFromScripts. */
+  /**
+   * getSourcesFromScripts.
+   * @returns {any}
+   */
   getSourcesFromScripts() {
     const scripts = document.querySelectorAll("script")
     const sources = []
@@ -111,7 +124,11 @@ export default class SourceMapsLoader {
     return sources
   }
 
-  /** getMapURL. */
+  /**
+   * getMapURL.
+   * @param {any} args
+   * @returns {any | string}
+   */
   getMapURL(args = {}) {
     const {script, src} = /** @type {any} */ (args)
     const url = this.loadUrl(src)
@@ -124,9 +141,15 @@ export default class SourceMapsLoader {
       // Default to original URL with '.map' appended
       return `${originalUrl}.map`
     }
+
+    return undefined
   }
 
-  /** includeMapURL. */
+  /**
+   * includeMapURL.
+   * @param {any} src
+   * @returns {boolean}
+   */
   includeMapURL = (src) => src.includes("/packs/")
 
   async loadSourceMapForSource({originalUrl, sourceMapUrl}) {
@@ -150,7 +173,11 @@ export default class SourceMapsLoader {
     }
   }
 
-  /** loadUrl. */
+  /**
+   * loadUrl.
+   * @param {any} url
+   * @returns {any}
+   */
   loadUrl(url) {
     const parser = document.createElement("a")
 
@@ -159,7 +186,11 @@ export default class SourceMapsLoader {
     return parser
   }
 
-  /** loadXhr. */
+  /**
+   * loadXhr.
+   * @param {any} xhr
+   * @param {any} url
+   */
   loadXhr(xhr, url) {
     return new Promise((resolve, reject) => {
       xhr.onload = () => {
@@ -173,7 +204,11 @@ export default class SourceMapsLoader {
     })
   }
 
-  /** parseStackTrace. */
+  /**
+   * parseStackTrace.
+   * @param {any} stackTrace
+   * @returns {any}
+   */
   parseStackTrace(stackTrace) {
     return this.getStackTraceData(stackTrace)
       .map((traceData) => `at ${traceData.methodName} (${traceData.fileString})`)

@@ -100,7 +100,7 @@ const SearchLink = memo(shapeComponent(/** @augments {ShapeComponent<SearchLinkP
 
 /**
  * @typedef {object} Props
- * @property {string=} className
+ * @property {string} [className]
  * @property {object} currentUser
  * @property {Function} onEditSearchPressed
  * @property {Function} onRequestClose

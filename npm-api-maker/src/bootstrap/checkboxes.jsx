@@ -16,7 +16,7 @@ import useInput from "../use-input.js"
  * @property {string} inputCheckboxClassName
  * @property {boolean} isDefaultSelected
  * @property {string} inputName
- * @property {Function=} onChange
+ * @property {Function} [onChange]
  * @property {Function} onOptionChecked
  * @property {any[]} option
  * @property {number} optionIndex
@@ -63,13 +63,13 @@ const OptionElement = memo(shapeComponent(/** @augments {ShapeComponent<OptionEl
 
 /**
  * @typedef {object} Props
- * @property {string=} attribute
- * @property {any[]=} defaultValue
- * @property {string=} label
- * @property {string=} labelClassName
- * @property {object=} model
- * @property {string=} name
- * @property {Function=} onChange
+ * @property {string} [attribute]
+ * @property {any[]} [defaultValue]
+ * @property {string} [label]
+ * @property {string} [labelClassName]
+ * @property {object} [model]
+ * @property {string} [name]
+ * @property {Function} [onChange]
  * @property {any[][]} options
  */
 /**

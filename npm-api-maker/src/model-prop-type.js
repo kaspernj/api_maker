@@ -5,7 +5,11 @@ import {digg} from "diggerize"
 
 /** PropType helpers for API Maker models. */
 export default class ApiMakerModelPropType {
-  /** ofModel. */
+  /**
+   * ofModel.
+   * @param {any} modelClass
+   * @returns {any}
+   */
   static ofModel (modelClass) {
     const modelPropTypeInstance = new ApiMakerModelPropType()
 
@@ -21,7 +25,13 @@ export default class ApiMakerModelPropType {
     this._withLoadedAssociations = {}
   }
 
-  /** isNotRequired. */
+  /**
+   * isNotRequired.
+   * @param {any} props
+   * @param {any} propName
+   * @param {any} _componentName
+   * @returns {any}
+   */
   isNotRequired (props, propName, _componentName) {
     const model = props[propName]
 
@@ -30,7 +40,13 @@ export default class ApiMakerModelPropType {
     }
   }
 
-  /** isRequired. */
+  /**
+   * isRequired.
+   * @param {any} props
+   * @param {any} propName
+   * @param {any} _componentName
+   * @returns {any}
+   */
   isRequired (props, propName, _componentName) {
     const model = props[propName]
 
@@ -39,24 +55,39 @@ export default class ApiMakerModelPropType {
     return this.validate({model, propName})
   }
 
-  /** previous. */
+  /**
+   * previous.
+   * @returns {any}
+   */
   previous () {
     if (!this._previousModelPropType) throw new Error("No previous model prop type set")
 
     return this._previousModelPropType
   }
 
-  /** setPreviousModelPropType. */
+  /**
+   * setPreviousModelPropType.
+   * @param {any} previousModelPropType
+   */
   setPreviousModelPropType (previousModelPropType) {
     this._previousModelPropType = previousModelPropType
   }
 
-  /** withModelType. */
+  /**
+   * withModelType.
+   * @param {any} modelClass
+   */
   withModelType (modelClass) {
     this._withModelType = modelClass
   }
 
-  /** validate. */
+  /**
+   * validate.
+   * @param {object} root0
+   * @param {any} root0.model
+   * @param {any} root0.propName
+   * @returns {any}
+   */
   validate ({model, propName}) {
     if (this._withModelType && this._withModelType.name != model.constructor.name)
       return new Error(`Expected ${propName} to be of type ${this._withModelType.name} but it wasn't: ${model.constructor.name}`)
@@ -112,14 +143,22 @@ export default class ApiMakerModelPropType {
     }
   }
 
-  /** withLoadedAbilities. */
+  /**
+   * withLoadedAbilities.
+   * @param {any} arrayOfAbilities
+   * @returns {any}
+   */
   withLoadedAbilities (arrayOfAbilities) {
     this._withLoadedAbilities = arrayOfAbilities
 
     return this
   }
 
-  /** withLoadedAssociation. */
+  /**
+   * withLoadedAssociation.
+   * @param {any} associationName
+   * @returns {any}
+   */
   withLoadedAssociation (associationName) {
     const associationModelPropType = new ApiMakerModelPropType()
 
@@ -129,7 +168,11 @@ export default class ApiMakerModelPropType {
     return associationModelPropType
   }
 
-  /** withLoadedAttributes. */
+  /**
+   * withLoadedAttributes.
+   * @param {any} arrayOfAttributes
+   * @returns {any}
+   */
   withLoadedAttributes (arrayOfAttributes) {
     this._withLoadedAttributes = arrayOfAttributes
 

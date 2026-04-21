@@ -10,9 +10,9 @@ import {useApiMaker} from "./with-api-maker"
 
 /**
  * @typedef {object} Props
- * @property {number|string=} paddingHorizontal
- * @property {number|string=} paddingVertical
- * @property {boolean=} usePressable
+ * @property {number|string} [paddingHorizontal]
+ * @property {number|string} [paddingVertical]
+ * @property {boolean} [usePressable]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerLink extends ShapeComponent {
@@ -47,7 +47,15 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
-  /** Returns a cached style with padding props applied. */
+  /**
+   * Returns a cached style with padding props applied.
+   * @param {object} root0
+   * @param {any} root0.paddingHorizontal
+   * @param {any} root0.paddingVertical
+   * @param {any} root0.style
+   * @param {any} root0.usePressable
+   * @returns {any}
+   */
   linkStyle({paddingHorizontal, paddingVertical, style, usePressable}) {
     if (Platform.OS == "web" && !usePressable) {
       return this.linkStyleForAnchor({paddingHorizontal, paddingVertical, style})
@@ -56,7 +64,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     return this.linkStyleForPressable({paddingHorizontal, paddingVertical, style})
   }
 
-  /** Returns the anchor style with padding props applied. */
+  /**
+   * Returns the anchor style with padding props applied.
+   * @param {object} root0
+   * @param {any} root0.paddingHorizontal
+   * @param {any} root0.paddingVertical
+   * @param {any} root0.style
+   * @returns {any}
+   */
   linkStyleForAnchor({paddingHorizontal, paddingVertical, style}) {
     return this.cache("linkStyleForAnchor", () => {
       const resolvedStyle = this.resolveStyleForAnchor(style)
@@ -73,7 +88,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }, [paddingHorizontal, paddingVertical, style])
   }
 
-  /** Returns a Pressable-compatible style with padding props applied. */
+  /**
+   * Returns a Pressable-compatible style with padding props applied.
+   * @param {object} root0
+   * @param {any} root0.paddingHorizontal
+   * @param {any} root0.paddingVertical
+   * @param {any} root0.style
+   * @returns {any}
+   */
   linkStyleForPressable({paddingHorizontal, paddingVertical, style}) {
     return this.cache("linkStyleForPressable", () => {
       if (typeof style == "function") {
@@ -109,7 +131,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }, [paddingHorizontal, paddingVertical, style])
   }
 
-  /** Resolves a style object for anchor rendering. */
+  /**
+   * Resolves a style object for anchor rendering.
+   * @param {any} style
+   * @returns {any | object}
+   */
   resolveStyleForAnchor(style) {
     if (typeof style == "function") {
       return StyleSheet.flatten(style({pressed: false, focused: false, hovered: false})) || {}
@@ -120,7 +146,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     return style || {}
   }
 
-  /** Returns padding overrides based on the resolved style. */
+  /**
+   * Returns padding overrides based on the resolved style.
+   * @param {object} root0
+   * @param {any} root0.paddingHorizontal
+   * @param {any} root0.paddingVertical
+   * @param {any} root0.style
+   * @returns {any | null}
+   */
   paddingOverridesFromStyle({paddingHorizontal, paddingVertical, style}) {
     const styleObject = StyleSheet.flatten(style) || {}
     const stylePaddingHorizontal = styleObject.paddingHorizontal
@@ -151,7 +184,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     return overrides
   }
 
-  /** Removes padding shorthand values from a style object. */
+  /**
+   * Removes padding shorthand values from a style object.
+   * @param {any} style
+   * @returns {any}
+   */
   stripPaddingShorthand(style) {
     const nextStyle = {...style}
 
@@ -161,7 +198,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     return nextStyle
   }
 
-  /** Returns true when a value is neither null nor undefined. */
+  /**
+   * Returns true when a value is neither null nor undefined.
+   * @param {any} value
+   * @returns {any}
+   */
   isDefined(value) {
     return value !== null && value !== undefined
   }

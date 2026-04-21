@@ -22,7 +22,7 @@ export default class ApiMakerRoutesNative {
 
   /**
    * @param {object} routeDefinitions
-   * @param {{localized?: boolean}=} routeDefinitionArgs
+   * @param {{localized?: boolean}} [routeDefinitionArgs]
    * @returns {void}
    */
   loadRouteDefinitions (routeDefinitions, routeDefinitionArgs) {

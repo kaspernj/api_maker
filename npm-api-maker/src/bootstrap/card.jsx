@@ -9,18 +9,18 @@ import memo from "set-state-compare/build/memo.js"
 
 /**
  * @typedef {object} Props
- * @property {object=} cardRef
- * @property {any=} children
- * @property {string=} className
- * @property {any=} controls
- * @property {boolean=} defaultExpanded
- * @property {boolean=} expandable
- * @property {boolean=} expandableHide
- * @property {any=} footer
- * @property {any=} header
- * @property {boolean=} responsiveTable
- * @property {boolean=} striped
- * @property {boolean=} table
+ * @property {object} [cardRef]
+ * @property {any} [children]
+ * @property {string} [className]
+ * @property {any} [controls]
+ * @property {boolean} [defaultExpanded]
+ * @property {boolean} [expandable]
+ * @property {boolean} [expandableHide]
+ * @property {any} [footer]
+ * @property {any} [header]
+ * @property {boolean} [responsiveTable]
+ * @property {boolean} [striped]
+ * @property {boolean} [table]
  */
 /**
  * @typedef {object} State

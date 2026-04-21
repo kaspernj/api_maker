@@ -77,7 +77,10 @@ const BaseModel = class BaseModel {
     return result
   }
 
-  /** @returns {boolean} */
+  /**
+   * @param {any} attributeName
+   * @returns {boolean}
+   */
   static hasAttribute(attributeName) {
     const attributes = digg(this.modelClassData(), "attributes")
     const lowerCaseAttributeName = inflection.underscore(attributeName)
@@ -229,7 +232,10 @@ const BaseModel = class BaseModel {
     return reflections
   }
 
-  /** @returns {Reflection} */
+  /**
+   * @param {any} name
+   * @returns {Reflection}
+   */
   static reflection(name) {
     const foundReflection = this.reflections().find((reflection) => reflection.name() == name)
 
@@ -244,13 +250,15 @@ const BaseModel = class BaseModel {
     return foundReflection
   }
 
-  /** @returns {string} */
+  /** @returns {string | undefined} */
   static _token() {
     const csrfTokenElement = document.querySelector("meta[name='csrf-token']")
 
     if (csrfTokenElement) {
       return csrfTokenElement.getAttribute("content")
     }
+
+    return undefined
   }
 
   /**
@@ -447,6 +455,7 @@ const BaseModel = class BaseModel {
   /**
    * @param {FormData | Record<string, any>} rawData
    * @param {object} [options]
+   * @returns {Promise<object>}
    */
   async createRaw(rawData, options = {}) {
     const objectData = BaseModel._objectDataFromGivenRawData(rawData, options)
@@ -859,7 +868,11 @@ const BaseModel = class BaseModel {
     }
   }
 
-  /** @returns {Promise<{model: BaseModel, response: object}>} */
+  /**
+   * @param {any} rawData
+   * @param {any} options
+   * @returns {Promise<{model: BaseModel, response: object}>}
+   */
   saveRaw(rawData, options = {}) {
     if (this.isNewRecord()) {
       return this.createRaw(rawData, options)
@@ -1146,7 +1159,10 @@ const BaseModel = class BaseModel {
     }
   }
 
-  /** @returns {boolean} */
+  /**
+   * @param {any} attributeName
+   * @returns {boolean}
+   */
   isAttributeLoaded(attributeName) {
     const attributeNameUnderscore = inflection.underscore(attributeName)
 

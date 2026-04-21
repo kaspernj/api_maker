@@ -13,16 +13,16 @@ import propTypesExact from "prop-types-exact"
 
 /**
  * @typedef {object} Props
- * @property {string=} attribute
- * @property {any[]=} defaultValue
- * @property {string=} id
+ * @property {string} [attribute]
+ * @property {any[]} [defaultValue]
+ * @property {string} [id]
  * @property {object} inputProps
- * @property {any=} label
- * @property {object=} model
- * @property {string=} name
- * @property {Function=} onChange
+ * @property {any} [label]
+ * @property {object} [model]
+ * @property {string} [name]
+ * @property {Function} [onChange]
  * @property {any[]} options
- * @property {object=} wrapperOpts
+ * @property {object} [wrapperOpts]
  */
 /** @typedef {Record<string, never>} State */
 const ApiMakerInputsCheckboxes = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsCheckboxes extends ShapeComponent {

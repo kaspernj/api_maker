@@ -19,7 +19,10 @@ export default class ApiMakerCableSubscriptionPool {
     this.skipDisconnectHandling = false
   }
 
-  /** connect. */
+  /**
+   * connect.
+   * @param {any} subscriptionData
+   */
   connect (subscriptionData) {
     const globalData = CommandsPool.current().globalRequestData
 
@@ -70,7 +73,10 @@ export default class ApiMakerCableSubscriptionPool {
     return this.authRefreshCallbacks.promise
   }
 
-  /** forEachSubscription. */
+  /**
+   * forEachSubscription.
+   * @param {any} callback
+   */
   forEachSubscription (callback) {
     const modelIdModes = ["destroys", "updates"]
     const subscriptions = digg(this, "subscriptions")
@@ -114,7 +120,7 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
-  /** isConnected. */
+  /** @returns {boolean} */
   isConnected = () => digg(this, "connected")
 
   /** onConnected. */
@@ -137,7 +143,10 @@ export default class ApiMakerCableSubscriptionPool {
     this.rejectAuthRefresh(new Error("Subscription auth refresh was interrupted by a disconnect"))
   }
 
-  /** onReceived. */
+  /**
+   * onReceived.
+   * @param {any} rawData
+   */
   onReceived = (rawData) => {
     if (rawData.type == "api_maker_subscription_auth_refreshed") {
       this.resolveAuthRefresh()
@@ -250,7 +259,10 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
-  /** registerSubscriptions. */
+  /**
+   * registerSubscriptions.
+   * @param {any} subscriptions
+   */
   registerSubscriptions (subscriptions) {
     this.subscriptions = subscriptions
 
@@ -284,7 +296,10 @@ export default class ApiMakerCableSubscriptionPool {
     }
   }
 
-  /** connectUnsubscriptionForSubscription. */
+  /**
+   * connectUnsubscriptionForSubscription.
+   * @param {any} subscription
+   */
   connectUnsubscriptionForSubscription (subscription) {
     logger.debug(() => ["Connecting to unsubscribe on subscription", {subscription}])
 

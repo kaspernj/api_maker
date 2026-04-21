@@ -15,12 +15,12 @@ import useSorting from "../table/use-sorting.js"
 /**
  * @typedef {object} Props
  * @property {string} attribute
- * @property {string=} className
- * @property {object=} defaultParams
- * @property {object=} linkComponent
- * @property {Function=} onChanged
+ * @property {string} [className]
+ * @property {object} [defaultParams]
+ * @property {object} [linkComponent]
+ * @property {Function} [onChanged]
  * @property {object} query
- * @property {any=} title
+ * @property {any} [title]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapSortLink extends ShapeComponent {

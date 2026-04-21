@@ -1,5 +1,9 @@
 // @ts-check
-/** Resolve a unique column identifier. */
+/**
+ * Resolve a unique column identifier.
+ * @param {any} column
+ * @returns {string}
+ */
 export default function columnIdentifier(column) {
   if ("identifier" in column) return column.identifier
 

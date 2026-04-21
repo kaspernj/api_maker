@@ -10,9 +10,9 @@ const CurrentSwitchContext = createContext(/** @type {any} */ ({}))
 
 /**
  * @typedef {object} Props
- * @property {any=} children
- * @property {string=} name
- * @property {boolean=} single
+ * @property {any} [children]
+ * @property {string} [name]
+ * @property {boolean} [single]
  */
 /**
  * @typedef {object} State

@@ -24,7 +24,10 @@ class UseCanCanClass extends ShapeHook {
     lastUpdate: new Date()
   })
 
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {any} props
+   */
   constructor(props) {
     super(props)
     this.abilitiesRequestId = 0
@@ -37,7 +40,11 @@ class UseCanCanClass extends ShapeHook {
     this.dependencyKeyNextId = 1
   }
 
-  /** dependencyKeyFor. */
+  /**
+   * dependencyKeyFor.
+   * @param {any} value
+   * @returns {string}
+   */
   dependencyKeyFor(value) {
     if (value === null) return "null"
     if (value === undefined) return "undefined"
@@ -56,14 +63,21 @@ class UseCanCanClass extends ShapeHook {
     return `${valueType}:ref:${this.dependencyKeyMap.get(value)}`
   }
 
-  /** dependencyListKey. */
+  /**
+   * dependencyListKey.
+   * @param {any} list
+   * @returns {any}
+   */
   dependencyListKey(list) {
     if (!Array.isArray(list)) return this.dependencyKeyFor(list)
 
     return list.map((value) => this.dependencyKeyFor(value)).join("|")
   }
 
-  /** loadAbilities. */
+  /**
+   * loadAbilities.
+   * @param {any} reloadKey
+   */
   loadAbilities = async (reloadKey) => {
     // Drop late ability reload completions after dependency changes or unmounts.
     const requestId = this.abilitiesRequestId + 1

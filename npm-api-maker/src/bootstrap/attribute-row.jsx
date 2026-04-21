@@ -15,15 +15,15 @@ const dataSets = {}
 
 /**
  * @typedef {object} Props
- * @property {string=} attribute
- * @property {boolean=} checkIfAttributeLoaded
- * @property {any=} children
- * @property {Function|string=} defaultDateFormatName
- * @property {Function|string=} defaultDateTimeFormatName
- * @property {string=} identifier
- * @property {any|string=} label
- * @property {object=} model
- * @property {any=} value
+ * @property {string} [attribute]
+ * @property {boolean} [checkIfAttributeLoaded]
+ * @property {any} [children]
+ * @property {Function|string} [defaultDateFormatName]
+ * @property {Function|string} [defaultDateTimeFormatName]
+ * @property {string} [identifier]
+ * @property {any|string} [label]
+ * @property {object} [model]
+ * @property {any} [value]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapAttributeRow extends ShapeComponent {
@@ -115,6 +115,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
       return this.valueContent(value)
     }
+
+    return null
   }
 
   /**

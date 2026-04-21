@@ -19,7 +19,11 @@ const tableSettingsLocks = {}
 
 /** Persistent table settings manager. */
 export default class ApiMakerTableSettings {
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {object} root0
+   * @param {any} root0.table
+   */
   constructor({table}) {
     this.table = table
     this.setTableSettingsLock()
@@ -36,23 +40,27 @@ export default class ApiMakerTableSettings {
     this.tableSettingsLock = digg(tableSettingsLocks, identifier)
   }
 
-  /** columns. */
+  /** @returns {any[]} */
   columns = () => this.table.columnsAsArray()
 
-  /** columnsWithPositions. */
+  /** @returns {Array<{column: any, identifier: string, position: number}>} */
   columnsWithPositions = () => {
     return this
       .columns()
       .map((column, columnIndex) => ({column, identifier: columnIdentifier(column), position: columnIndex + 1}))
   }
 
-  /** currentUser. */
+  /** @returns {any} */
   currentUser = () => digg(this, "table", "props", "currentUser")
 
-  /** identifier. */
+  /** @returns {any} */
   identifier = () => digg(this, "table", "state", "identifier")
 
-  /** preparedColumns. */
+  /**
+   * preparedColumns.
+   * @param {any} tableSetting
+   * @returns {{columns: Array<{column: any, tableSettingColumn: any}>, preload: string[]} | undefined}
+   */
   preparedColumns = (tableSetting) => {
     const columns = this.table.columnsAsArray()
     const ordered = this.orderedTableSettingColumns(tableSetting)
@@ -81,7 +89,11 @@ export default class ApiMakerTableSettings {
     return result
   }
 
-  /** orderedTableSettingColumns. */
+  /**
+   * orderedTableSettingColumns.
+   * @param {any} tableSetting
+   * @returns {any[]}
+   */
   orderedTableSettingColumns = (tableSetting) => {
     return tableSetting
       .columns()
@@ -89,7 +101,7 @@ export default class ApiMakerTableSettings {
       .sort((tableSettingColumn1, tableSettingColumn2) => tableSettingColumn1.position() - tableSettingColumn2.position())
   }
 
-  /** loadExistingOrCreateTableSettings. */
+  /** @returns {Promise<any>} */
   loadExistingOrCreateTableSettings = async () => {
     return await this.tableSettingsLock.write(async () => {
       let tableSetting = await this.loadTableSetting()
@@ -106,7 +118,7 @@ export default class ApiMakerTableSettings {
     })
   }
 
-  /** loadTableSetting. */
+  /** @returns {Promise<any>} */
   loadTableSetting = async () => {
     if (!TableSetting) throw new Error("TableSetting model isn't globally available")
 
@@ -122,7 +134,10 @@ export default class ApiMakerTableSettings {
     return tableSetting
   }
 
-  /** currentUserIdOrFallback. */
+  /**
+   * currentUserIdOrFallback.
+   * @returns {any}
+   */
   currentUserIdOrFallback() {
     const currentUser = this.currentUser()
 
@@ -131,7 +146,10 @@ export default class ApiMakerTableSettings {
     return this.anonymouseUserId()
   }
 
-  /** currentUserTypeOrFallback. */
+  /**
+   * currentUserTypeOrFallback.
+   * @returns {any | null}
+   */
   currentUserTypeOrFallback() {
     const currentUser = this.currentUser()
 
@@ -140,7 +158,10 @@ export default class ApiMakerTableSettings {
     return null
   }
 
-  /** anonymouseUserId. */
+  /**
+   * anonymouseUserId.
+   * @returns {any}
+   */
   anonymouseUserId() {
     const variableName = `ApiMakerTableAnonymousUserId-${this.identifier()}`
 
@@ -153,7 +174,7 @@ export default class ApiMakerTableSettings {
     return digg(localStorage, variableName)
   }
 
-  /** createInitialTableSetting. */
+  /** @returns {Promise<any>} */
   createInitialTableSetting = async () => {
     const tableSettingData = {
       identifier: this.identifier(),
@@ -178,7 +199,14 @@ export default class ApiMakerTableSettings {
     return reloadedTableSetting
   }
 
-  /** columnSaveData. */
+  /**
+   * columnSaveData.
+   * @param {any} column
+   * @param {object} root0
+   * @param {any} root0.identifier
+   * @param {any} root0.position
+   * @returns {object}
+   */
   columnSaveData(column, {identifier, position}) {
     return {
       attribute_name: column.attribute,
@@ -190,7 +218,11 @@ export default class ApiMakerTableSettings {
     }
   }
 
-  /** updateTableSetting. */
+  /**
+   * updateTableSetting.
+   * @param {any} tableSetting
+   * @returns {Promise<any>}
+   */
   updateTableSetting = async (tableSetting) => {
     const changedAttributesList = ["attributeName", "sortKey"]
     const columnsWithPositions = this.columnsWithPositions()

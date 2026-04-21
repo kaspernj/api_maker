@@ -12,15 +12,15 @@ import {useForm} from "../form"
 
 /**
  * @typedef {object} Props
- * @property {any=} children
- * @property {boolean=} danger
- * @property {boolean=} disabled
- * @property {string=} icon
- * @property {string=} label
- * @property {Function=} onPress
- * @property {object=} pressableProps
- * @property {boolean=} submit
- * @property {object=} textProps
+ * @property {any} [children]
+ * @property {boolean} [danger]
+ * @property {boolean} [disabled]
+ * @property {string} [icon]
+ * @property {string} [label]
+ * @property {Function} [onPress]
+ * @property {object} [pressableProps]
+ * @property {boolean} [submit]
+ * @property {object} [textProps]
  */
 /**
  * @typedef {object} State

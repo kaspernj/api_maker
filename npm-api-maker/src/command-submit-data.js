@@ -20,7 +20,10 @@ export default class ApiMakerCommandSubmitData {
   /** @returns {Record<string, object>} */
   getJsonData = () => this.jsonData
 
-  /** getRawData. */
+  /**
+   * getRawData.
+   * @returns {any}
+   */
   getRawData () {
     if (!this.rawData) {
       this.rawData = this.traverseObject(this.data, "raw")
@@ -29,7 +32,10 @@ export default class ApiMakerCommandSubmitData {
     return this.rawData
   }
 
-  /** getFormData. */
+  /**
+   * getFormData.
+   * @returns {any}
+   */
   getFormData () {
     const objectForFormData = this.getRawData() || {}
 
@@ -43,7 +49,7 @@ export default class ApiMakerCommandSubmitData {
   /**
    * @param {any} value
    * @param {string} type
-   * @returns
+   * @returns {any}
    */
   convertDynamic(value, type) {
     if (Array.isArray(value)) {

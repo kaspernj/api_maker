@@ -24,7 +24,7 @@ import useModel from "../use-model.js"
 /**
  * @typedef {object} Props
  * @property {Function} modelClass
- * @property {number|string=} modelId
+ * @property {number|string} [modelId]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminEditPage extends ShapeComponent {

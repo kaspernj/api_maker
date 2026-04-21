@@ -3,7 +3,10 @@ import SparkMD5 from "spark-md5"
 
 /** Generates local/full cache keys for models. */
 export default class CacheKeyGenerator {
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {any} model
+   */
   constructor(model) {
     this.model = model
     this.allModels = [model]
@@ -13,7 +16,10 @@ export default class CacheKeyGenerator {
     this.filledModels = false
   }
 
-  /** local. */
+  /**
+   * local.
+   * @returns {any}
+   */
   local() {
     const md5 = new SparkMD5()
 
@@ -22,27 +28,44 @@ export default class CacheKeyGenerator {
     return md5.end()
   }
 
-  /** recordModelType. */
+  /**
+   * recordModelType.
+   * @param {any} relationshipType
+   */
   recordModelType(relationshipType) {
     if (!(relationshipType in this.readModels)) {
       this.readModels[relationshipType] = {}
     }
   }
 
-  /** recordModel. */
+  /**
+   * recordModel.
+   * @param {any} relationshipType
+   * @param {any} model
+   */
   recordModel(relationshipType, model) {
     this.allModels.push(model)
     this.readModels[relationshipType][this.modelIdentity(model)] = true
   }
 
-  /** isModelRecorded. */
+  /**
+   * isModelRecorded.
+   * @param {any} relationshipType
+   * @param {any} model
+   * @returns {boolean}
+   */
   isModelRecorded(relationshipType, model) {
     if (this.modelIdentity(model) in this.readModels[relationshipType]) {
       return true
     }
+
+    return false
   }
 
-  /** fillModels. */
+  /**
+   * fillModels.
+   * @param {any} model
+   */
   fillModels(model) {
     for (const relationshipType in model.relationships) {
       this.recordModelType(relationshipType)
@@ -67,7 +90,10 @@ export default class CacheKeyGenerator {
     this.filledModels = true
   }
 
-  /** cacheKey. */
+  /**
+   * cacheKey.
+   * @returns {any}
+   */
   cacheKey() {
     if (!this.filledModels) {
       this.fillModels(this.model)
@@ -82,7 +108,11 @@ export default class CacheKeyGenerator {
     return md5.end()
   }
 
-  /** feedModel. */
+  /**
+   * feedModel.
+   * @param {any} model
+   * @param {any} md5
+   */
   feedModel(model, md5) {
     md5.append("--model--")
     md5.append(model.modelClassData().name)
@@ -104,7 +134,10 @@ export default class CacheKeyGenerator {
     }
   }
 
-  /** @returns {number | string} */
+  /**
+   * @param {any} model
+   * @returns {number | string}
+   */
   modelIdentity(model) {
     const primaryKeyName = model.modelClass().primaryKey()
 

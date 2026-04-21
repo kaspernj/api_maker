@@ -20,7 +20,10 @@ export default class ApiMakerBaseModelReflection {
   /** @returns {string} */
   foreignKey() { return digg(this, "reflectionData", "foreignKey") }
 
-  /** macro. */
+  /**
+   * macro.
+   * @returns {any}
+   */
   macro() { return digg(this, "reflectionData", "macro") }
 
   /** @returns {typeof import("../base-model.js").default} */

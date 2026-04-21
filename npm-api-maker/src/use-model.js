@@ -35,7 +35,10 @@ class UseModelShapeHook extends ShapeHook {
 
   updatedConnectionFallbackTimeoutId = undefined
 
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {any} props
+   */
   constructor(props) {
     super(props)
     this.initialLoadTriggered = false
@@ -395,11 +398,11 @@ class UseModelShapeHook extends ShapeHook {
 }
 
 /**
+ * useModel.
  * @param {Function|object} modelClassArg
  * @param {object | ((args: {modelClass: typeof import("./base-model.js").default}) => useModelArgs)} [argsArg]
  * @returns {Record<string, any>}
  */
-/** useModel. */
 const useModel = (modelClassArg, argsArg = {}) => {
   const shapeHook = useShapeHook(UseModelShapeHook, {argsArg, modelClassArg})
   const model = shapeHook.visibleModel()

@@ -13,7 +13,10 @@ export default class ApiMakerCableConnectionPool {
   upcomingSubscriptionData = {}
   upcomingSubscriptions = {}
 
-  /** current. */
+  /**
+   * current.
+   * @returns {any}
+   */
   static current () {
     if (!shared.apiMakerCableConnectionPool) shared.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
 
@@ -30,7 +33,14 @@ export default class ApiMakerCableConnectionPool {
     delete shared.apiMakerCableConnectionPool
   }
 
-  /** connectEventToExistingSubscription. */
+  /**
+   * connectEventToExistingSubscription.
+   * @param {object} root0
+   * @param {any} root0.path
+   * @param {any} root0.subscription
+   * @param {any} root0.value
+   * @returns {boolean}
+   */
   connectEventToExistingSubscription ({path, subscription, value}) {
     for (const cableSubscriptionPool of this.cableSubscriptionPools) {
       if (cableSubscriptionPool.isConnected()) {
@@ -59,7 +69,14 @@ export default class ApiMakerCableConnectionPool {
     return false
   }
 
-  /** connectModelEvent. */
+  /**
+   * connectModelEvent.
+   * @param {object} root0
+   * @param {any} root0.callback
+   * @param {any} root0.path
+   * @param {any} root0.value
+   * @returns {any}
+   */
   connectModelEvent ({callback, path, value}) {
     const subscription = new CableSubscription()
 
@@ -116,23 +133,53 @@ export default class ApiMakerCableConnectionPool {
     return subscription
   }
 
-  /** connectCreated. */
+  /**
+   * connectCreated.
+   * @param {any} modelName
+   * @param {any} callback
+   * @returns {any}
+   */
   connectCreated = (modelName, callback) => this.connectModelEvent({callback, value: true, path: [modelName, "creates"]})
 
-  /** connectEvent. */
+  /**
+   * connectEvent.
+   * @param {any} modelName
+   * @param {any} modelId
+   * @param {any} eventName
+   * @param {any} callback
+   * @returns {any}
+   */
   connectEvent = (modelName, modelId, eventName, callback) => this.connectModelEvent({ // eslint-disable-line max-params
     callback,
     value: modelId,
     path: [modelName, "events", eventName]
   })
 
-  /** connectDestroyed. */
+  /**
+   * connectDestroyed.
+   * @param {any} modelName
+   * @param {any} modelId
+   * @param {any} callback
+   * @returns {any}
+   */
   connectDestroyed = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "destroys"]})
 
-  /** connectModelClassEvent. */
+  /**
+   * connectModelClassEvent.
+   * @param {any} modelName
+   * @param {any} eventName
+   * @param {any} callback
+   * @returns {any}
+   */
   connectModelClassEvent = (modelName, eventName, callback) => this.connectModelEvent({callback, value: eventName, path: [modelName, "model_class_events"]})
 
-  /** connectUpdate. */
+  /**
+   * connectUpdate.
+   * @param {any} modelName
+   * @param {any} modelId
+   * @param {any} callback
+   * @returns {any}
+   */
   connectUpdate = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})
 
   /** connectUpcoming. */

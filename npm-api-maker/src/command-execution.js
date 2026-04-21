@@ -88,17 +88,26 @@ export default class ApiMakerCommandExecution {
     return this.resultPromise
   }
 
-  /** @returns {Promise<any>} */
+  /**
+   * @param {any} args
+   * @returns {Promise<any>}
+   */
   then (...args) {
     return this.resultPromise.then(...args)
   }
 
-  /** @returns {Promise<any>} */
+  /**
+   * @param {any} args
+   * @returns {Promise<any>}
+   */
   catch (...args) {
     return this.resultPromise.catch(...args)
   }
 
-  /** @returns {Promise<any>} */
+  /**
+   * @param {any} args
+   * @returns {Promise<any>}
+   */
   finally (...args) {
     return this.resultPromise.finally(...args)
   }

@@ -17,6 +17,7 @@ export default defineConfig([
       jsdoc
     },
     rules: {
+      "jsdoc/check-syntax": "error",
       "jsdoc/check-param-names": "error",
       "jsdoc/check-property-names": "error",
       "jsdoc/check-tag-names": "error",
@@ -26,7 +27,17 @@ export default defineConfig([
       "jsdoc/empty-tags": "error",
       "jsdoc/escape-inline-tags": "error",
       "jsdoc/no-bad-blocks": "error",
+      "jsdoc/no-defaults": "error",
       "jsdoc/no-undefined-types": "error",
+      "jsdoc/require-param": "error",
+      "jsdoc/require-param-name": "error",
+      "jsdoc/require-param-type": "error",
+      "jsdoc/require-property": "error",
+      "jsdoc/require-property-name": "error",
+      "jsdoc/require-property-type": "error",
+      "jsdoc/require-returns": "error",
+      "jsdoc/require-returns-check": "error",
+      "jsdoc/require-returns-type": "error",
       "jsdoc/valid-types": "error"
     }
   },

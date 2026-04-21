@@ -17,7 +17,7 @@ import useSorting from "./use-sorting.js"
  * @typedef {object} Props
  * @property {any[]} preparedColumns
  * @property {Collection} query
- * @property {object=} table
+ * @property {object} [table]
  */
 /**
  * @typedef {object} State

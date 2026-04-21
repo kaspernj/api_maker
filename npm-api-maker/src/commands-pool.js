@@ -30,7 +30,12 @@ const shared = {}
 
 /** ApiMakerCommandsPool. */
 export default class ApiMakerCommandsPool {
-  /** addCommand. */
+  /**
+   * addCommand.
+   * @param {any} data
+   * @param {any} args
+   * @returns {any}
+   */
   static addCommand(data, args = {}) {
     let pool
     const useWebsocketRequests = Config.getWebsocketRequests()
@@ -54,7 +59,10 @@ export default class ApiMakerCommandsPool {
     return promiseResult
   }
 
-  /** current. */
+  /**
+   * current.
+   * @returns {any}
+   */
   static current() {
     if (!shared.currentApiMakerCommandsPool) shared.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
 
@@ -85,7 +93,11 @@ export default class ApiMakerCommandsPool {
     this.requestOptions = {}
   }
 
-  /** addCommand. */
+  /**
+   * addCommand.
+   * @param {any} data
+   * @returns {any}
+   */
   addCommand(data) {
     const stack = Error().stack
     const id = this.currentId
@@ -297,7 +309,10 @@ export default class ApiMakerCommandsPool {
     await SessionStatusUpdater.current().updateSessionStatus()
   }
 
-  /** isActive. */
+  /**
+   * isActive.
+   * @returns {boolean}
+   */
   isActive() {
     if (this.commandsCount() > 0) {
       return true

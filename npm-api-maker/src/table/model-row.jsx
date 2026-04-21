@@ -22,7 +22,7 @@ import WorkerPluginsCheckbox from "./worker-plugins-checkbox"
 /**
  * @typedef {object} Props
  * @property {string} cacheKey
- * @property {any[]=} columns
+ * @property {any[]} [columns]
  * @property {object} columnWidths
  * @property {EventEmitter} events
  * @property {number} index

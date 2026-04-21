@@ -155,7 +155,12 @@ class UseDestroyedEventShapeHook extends ShapeHook {
  * @param {Function} [props.onConnected]
  * @returns {void}
  */
-/** apiMakerUseDestroyedEvent. */
+/**
+ * apiMakerUseDestroyedEvent.
+ * @param {any} model
+ * @param {any} onDestroyed
+ * @param {any} props
+ */
 const apiMakerUseDestroyedEvent = (model, onDestroyed, props = {}) => {
   const {active = true, debounce, onConnected, ...restProps} = props
 

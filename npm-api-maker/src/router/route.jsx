@@ -17,14 +17,14 @@ const useParams = () => useContext(ParamsContext)
 
 /**
  * @typedef {object} Props
- * @property {any=} children
- * @property {string=} component
- * @property {string=} componentPath
- * @property {boolean=} exact
- * @property {boolean=} fallback
- * @property {boolean=} includeInPath
- * @property {Function=} onMatch
- * @property {string|RegExp=} path
+ * @property {any} [children]
+ * @property {string} [component]
+ * @property {string} [componentPath]
+ * @property {boolean} [exact]
+ * @property {boolean} [fallback]
+ * @property {boolean} [includeInPath]
+ * @property {Function} [onMatch]
+ * @property {string|RegExp} [path]
  */
 /**
  * @typedef {object} State

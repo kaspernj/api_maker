@@ -4,7 +4,13 @@ import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
 
 /** Controller for drag-sort row state and events. */
 export default class DraggableSortController {
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {object} root0
+   * @param {any} root0.data
+   * @param {any} root0.events
+   * @param {any} root0.keyExtractor
+   */
   constructor({data, events, keyExtractor}) {
     this.data = data
     this.currentOrder = [...data]
@@ -29,19 +35,36 @@ export default class DraggableSortController {
     }
   }
 
-  /** getEvents. */
+  /** @returns {any} */
   getEvents = () => this.events
 
-  /** getItemDataForItem. */
+  /**
+   * getItemDataForItem.
+   * @param {any} item
+   * @returns {any}
+   */
   getItemDataForItem = (item) => this.getItemDataForIndex(this.data.indexOf(item))
 
-  /** getItemDataForKey. */
+  /**
+   * getItemDataForKey.
+   * @param {any} key
+   * @returns {any}
+   */
   getItemDataForKey = (key) => this.itemData.find((itemDataI) => digg(itemDataI, "key") == key)
 
-  /** getItemDataForIndex. */
+  /**
+   * getItemDataForIndex.
+   * @param {any} index
+   * @returns {any}
+   */
   getItemDataForIndex = (index) => digg(this, "itemData", index)
 
-  /** onDragStart. */
+  /**
+   * onDragStart.
+   * @param {object} root0
+   * @param {any} root0.item
+   * @param {any} root0.itemIndex
+   */
   onDragStart = ({item, itemIndex}) => {
     if (item) {
       this.draggedItem = item
@@ -78,7 +101,14 @@ export default class DraggableSortController {
     this.events.emit("onDragEnd", callbackArgs)
   }
 
-  /** onItemLayout. */
+  /**
+   * onItemLayout.
+   * @param {object} root0
+   * @param {any} root0.events
+   * @param {any} root0.index
+   * @param {any} root0.item
+   * @param {any} root0.layout
+   */
   onItemLayout = ({events, index, item, layout}) => {
     if (!(index in this.itemData)) throw new Error(`Item not found for index ${index}`)
 
@@ -94,7 +124,11 @@ export default class DraggableSortController {
     }
   }
 
-  /** onMove. */
+  /**
+   * onMove.
+   * @param {object} root0
+   * @param {any} root0.gestate
+   */
   onMove = ({gestate}) => {
     // Send move-event to the item being dragged so it will actually move around
     this.draggedItemData?.events?.emit("move", {gestate})
@@ -127,7 +161,10 @@ export default class DraggableSortController {
     }
   }
 
-  /** setInitialDragPosition. */
+  /**
+   * setInitialDragPosition.
+   * @param {any} initialDragPosition
+   */
   setInitialDragPosition = (initialDragPosition) => {
     this.initialDragPosition = initialDragPosition
   }

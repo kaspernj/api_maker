@@ -9,12 +9,12 @@ import useRouter from "./use-router"
 
 /**
  * @typedef {object} Props
- * @property {object=} history
+ * @property {object} [history]
  * @property {any[]} locales
- * @property {React.ComponentType<any>=} notFoundComponent
+ * @property {React.ComponentType<any>} [notFoundComponent]
  * @property {Function} requireComponent
- * @property {object=} routeDefinitions
- * @property {object=} routes
+ * @property {object} [routeDefinitions]
+ * @property {object} [routes]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerRouter extends ShapeComponent {

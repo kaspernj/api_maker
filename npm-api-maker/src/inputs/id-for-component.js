@@ -1,7 +1,11 @@
 // @ts-check
 import * as inflection from "inflection"
 
-/** Build deterministic input id for a component. */
+/**
+ * Build deterministic input id for a component.
+ * @param {any} component
+ * @returns {string}
+ */
 export default function apiMakerIdForComponent(component) {
   if ("id" in component.props) {
     return component.props.id

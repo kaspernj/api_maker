@@ -7,7 +7,11 @@ import Money from "js-money"
 
 /** Deserializes API Maker encoded payloads. */
 export default class ApiMakerDeserializer {
-  /** parse. */
+  /**
+   * parse.
+   * @param {any} object
+   * @returns {any}
+   */
   static parse(object) {
     if (Array.isArray(object)) {
       return object.map((value) => ApiMakerDeserializer.parse(value))

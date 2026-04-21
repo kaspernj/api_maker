@@ -21,28 +21,31 @@ export default class ErrorLogger {
     })
   }
 
-  /** debug. */
+  /**
+   * debug.
+   * @param {any} output
+   */
   debug(...output) {
     if (this.debugging) console.error("ApiMaker ErrorLogger:", ...output)
   }
 
-  /** enable. */
+  /** @returns {void} */
   enable () {
     this.debug("Enable called")
     this.connectOnError()
     this.connectUnhandledRejection()
   }
 
-  /** getErrors. */
+  /** @returns {any[]} */
   getErrors = () => this.errors
 
-  /** hasErrorOccurred. */
+  /** @returns {boolean} */
   hasErrorOccurred = () => digg(this, "errorOccurred")
 
-  /** isLoadingSourceMaps. */
+  /** @returns {boolean} */
   isLoadingSourceMaps = () => digg(this, "sourceMapsLoader", "isLoadingSourceMaps")
 
-  /** isWorkingOnError. */
+  /** @returns {boolean} */
   isWorkingOnError = () => digg(this, "isHandlingError") || this.isLoadingSourceMaps()
 
   /** connectOnError. */

@@ -11,13 +11,13 @@ import Text from "./text"
 
 /**
  * @typedef {object} Props
- * @property {boolean=} checked
- * @property {object=} dataSet
- * @property {boolean=} defaultChecked
- * @property {string=} label
- * @property {Function=} onCheckedChange
- * @property {object=} style
- * @property {string=} testID
+ * @property {boolean} [checked]
+ * @property {object} [dataSet]
+ * @property {boolean} [defaultChecked]
+ * @property {string} [label]
+ * @property {Function} [onCheckedChange]
+ * @property {object} [style]
+ * @property {string} [testID]
  */
 /**
  * @typedef {object} State

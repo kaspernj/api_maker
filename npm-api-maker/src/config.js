@@ -28,6 +28,14 @@ const accessors = {
   websocketRequests: {required: false}
 }
 
+/**
+ * @param {string} methodName
+ * @returns {never}
+ */
+const apiMakerConfigNotImplemented = (methodName) => {
+  throw new Error(`'${methodName}' not implemented`)
+}
+
 /** ApiMakerConfig. */
 class ApiMakerConfig {
   /** Constructor. */
@@ -38,53 +46,71 @@ class ApiMakerConfig {
     this.events = new EventEmitter()
   }
 
-  /** getEvents. */
+  /**
+   * getEvents.
+   * @returns {any}
+   */
   getEvents() { return this.events }
 
   /** @returns {import("history").BrowserHistory} */
-  getHistory() { throw new Error("'getHistory' not implemented") }
+  getHistory() {
+    return apiMakerConfigNotImplemented("getHistory")
+  }
 
   /** @returns {string} */
-  getHost() { throw new Error("'getHost' not implemented") }
+  getHost() {
+    return apiMakerConfigNotImplemented("getHost")
+  }
 
   /** @returns {string | undefined} */
-  getCableUrl() { throw new Error("'getCableUrl' not implemented") }
+  getCableUrl() {
+    return apiMakerConfigNotImplemented("getCableUrl")
+  }
 
   /**
    * @param {string | undefined} _newValue
-   * @returns {void}
    */
-  setCableUrl(_newValue) { throw new Error("'setCableUrl' not implemented") }
+  setCableUrl(_newValue) { apiMakerConfigNotImplemented("setCableUrl") }
 
   /** @returns {boolean | undefined} */
-  getWebsocketRequests() { throw new Error("'getWebsocketRequests' not implemented") }
+  getWebsocketRequests() {
+    return apiMakerConfigNotImplemented("getWebsocketRequests")
+  }
 
   /**
    * @param {boolean | undefined} _newValue
-   * @returns {void}
    */
-  setWebsocketRequests(_newValue) { throw new Error("'setWebsocketRequests' not implemented") }
+  setWebsocketRequests(_newValue) { apiMakerConfigNotImplemented("setWebsocketRequests") }
 
   /** @returns {any} */
-  getCurrenciesCollection() { throw new Error("'getCurrenciesCollection' not implemented") }
+  getCurrenciesCollection() {
+    return apiMakerConfigNotImplemented("getCurrenciesCollection")
+  }
 
   /** @returns {any} */
-  getModal() { throw new Error("'getModal' not implemented") }
+  getModal() {
+    return apiMakerConfigNotImplemented("getModal")
+  }
 
   /** @returns {Record<string, any>} */
-  getRouteDefinitions() { throw new Error("'getRouteDefinitions' not implemented") }
+  getRouteDefinitions() {
+    return apiMakerConfigNotImplemented("getRouteDefinitions")
+  }
 
   /** @returns {Record<string, any>} */
-  getRoutes() { throw new Error("'getRoutes' not implemented") }
+  getRoutes() {
+    return apiMakerConfigNotImplemented("getRoutes")
+  }
 
   /** @returns {boolean} */
-  getUseHtmlForm() { throw new Error("'getUseHtmlForm' not implemented") }
+  getUseHtmlForm() {
+    return apiMakerConfigNotImplemented("getUseHtmlForm")
+  }
 
   /**
    * @param {boolean} _newValue
-   * @returns {void}
    */
-  setUseHtmlForm(_newValue) { throw new Error("'setUseHtmlForm' not implemented") }
+  setUseHtmlForm(_newValue) { apiMakerConfigNotImplemented("setUseHtmlForm") }
 }
 
 for (const accessorName in accessors) {

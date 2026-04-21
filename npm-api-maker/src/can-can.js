@@ -26,14 +26,23 @@ export default class ApiMakerCanCan {
   abilitiesByName = new Map()
   debugTokens = new Set()
 
-  /** current. */
+  /**
+   * current.
+   * @returns {any}
+   */
   static current () {
     if (!shared.currentApiMakerCanCan) shared.currentApiMakerCanCan = new ApiMakerCanCan()
 
     return shared.currentApiMakerCanCan
   }
 
-  /** can. */
+  /**
+   * can.
+   * @param {any} ability
+   * @param {any} subject
+   * @param {any} options
+   * @returns {any | null}
+   */
   can (ability, subject, options = {}) {
     const foundAbility = this.findAbility(ability, subject)
 
@@ -58,7 +67,11 @@ export default class ApiMakerCanCan {
     }
   }
 
-  /** recordMissingAbility. */
+  /**
+   * recordMissingAbility.
+   * @param {any} ability
+   * @param {any} subject
+   */
   recordMissingAbility (ability, subject) {
     let missingAbilitySet = this.missingAbilities.get(subject)
 
@@ -98,7 +111,12 @@ export default class ApiMakerCanCan {
     }
   }
 
-  /** findAbility. */
+  /**
+   * findAbility.
+   * @param {any} ability
+   * @param {any} subject
+   * @returns {any | undefined}
+   */
   findAbility (ability, subject) {
     const abilityKey = this.abilityKey(ability, subject)
     if (!abilityKey) return undefined
@@ -106,22 +124,37 @@ export default class ApiMakerCanCan {
     return this.abilitiesByName.get(abilityKey)
   }
 
-  /** isAbilityLoaded. */
+  /**
+   * isAbilityLoaded.
+   * @param {any} ability
+   * @param {any} subject
+   * @returns {any}
+   */
   isAbilityLoaded (ability, subject) {
     return this.findAbility(ability, subject) !== undefined
   }
 
-  /** isReloading. */
+  /**
+   * isReloading.
+   * @returns {any}
+   */
   isReloading () {
     return this.loadingCount > 0 || this.resettingGeneration !== null
   }
 
-  /** getCacheKey. */
+  /**
+   * getCacheKey.
+   * @returns {any}
+   */
   getCacheKey () {
     return this.cacheKey
   }
 
-  /** setDebug. */
+  /**
+   * setDebug.
+   * @param {any} token
+   * @param {any} enabled
+   */
   setDebug (token, enabled) {
     if (!token) return
 
@@ -132,12 +165,18 @@ export default class ApiMakerCanCan {
     }
   }
 
-  /** isDebugging. */
+  /**
+   * isDebugging.
+   * @returns {any}
+   */
   isDebugging () {
     return this.debugTokens.size > 0
   }
 
-  /** debugLog. */
+  /**
+   * debugLog.
+   * @param {any} message
+   */
   debugLog (message) {
     if (this.isDebugging()) {
       console.log(message)
@@ -187,7 +226,12 @@ export default class ApiMakerCanCan {
     }
   }
 
-  /** loadAbility. */
+  /**
+   * loadAbility.
+   * @param {any} ability
+   * @param {any} subject
+   * @returns {any}
+   */
   loadAbility (ability, subject) {
     return new Promise((resolve) => {
       const normalizedAbility = inflection.underscore(ability)
@@ -355,7 +399,10 @@ export default class ApiMakerCanCan {
     }
   }
 
-  /** indexAbilitiesByName. */
+  /**
+   * indexAbilitiesByName.
+   * @param {any} abilities
+   */
   indexAbilitiesByName (abilities) {
     for (const abilityData of abilities) {
       if (abilityData && typeof abilityData == "object") {
@@ -368,7 +415,12 @@ export default class ApiMakerCanCan {
     }
   }
 
-  /** abilityKey. */
+  /**
+   * abilityKey.
+   * @param {any} ability
+   * @param {any} subject
+   * @returns {null | string}
+   */
   abilityKey (ability, subject) {
     if (!ability) return null
 
@@ -378,7 +430,11 @@ export default class ApiMakerCanCan {
     return `${inflection.underscore(ability)}:${subjectName}`
   }
 
-  /** subjectName. */
+  /**
+   * subjectName.
+   * @param {any} subject
+   * @returns {any | null}
+   */
   subjectName(subject) {
     if (!subject) return null
 
@@ -401,7 +457,10 @@ export default class ApiMakerCanCan {
     return null
   }
 
-  /** reportUnhandledAsyncError. */
+  /**
+   * reportUnhandledAsyncError.
+   * @param {any} error
+   */
   reportUnhandledAsyncError (error) {
     if (!error) return
 

@@ -92,13 +92,19 @@ class ValidationError { // eslint-disable-line padded-blocks
 
 /** ValidationErrors. */
 class ValidationErrors {
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {any} args
+   */
   constructor(args) {
     this.rootModel = digg(args, "model")
     this.validationErrors = digg(args, "validationErrors").map((validationError) => new ValidationError(validationError))
   }
 
-  /** getErrorMessage. */
+  /**
+   * getErrorMessage.
+   * @returns {any}
+   */
   getErrorMessage() {
     const fullErrorMessages = []
 
@@ -111,10 +117,17 @@ class ValidationErrors {
     return fullErrorMessages.join(". ")
   }
 
-  /** getValidationErrors. */
+  /** @returns {ValidationError[]} */
   getValidationErrors = () => this.validationErrors
 
-  /** getValidationErrorsForInput. */
+  /**
+   * getValidationErrorsForInput.
+   * @param {object} root0
+   * @param {any} root0.attribute
+   * @param {any} root0.inputName
+   * @param {any} root0.onMatchValidationError
+   * @returns {any}
+   */
   getValidationErrorsForInput({attribute, inputName, onMatchValidationError}) {
     const validationErrors = this.validationErrors.filter((validationError) => {
       if (onMatchValidationError) {
@@ -129,7 +142,10 @@ class ValidationErrors {
     return validationErrors
   }
 
-  /** getUnhandledErrorMessage. */
+  /**
+   * getUnhandledErrorMessage.
+   * @returns {any}
+   */
   getUnhandledErrorMessage() {
     const unhandledValidationErrors = this.validationErrors.filter((validationError) => !validationError.getHandled())
 

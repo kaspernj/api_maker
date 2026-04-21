@@ -58,15 +58,15 @@ const dataSets = {}
 
 /**
  * @typedef {object} Props
- * @property {any=} actions
- * @property {string=} active
- * @property {any=} children
- * @property {string=} className
- * @property {object=} currentCustomer
- * @property {string=} currentCustomerId
- * @property {object=} currentUser
- * @property {string=} headTitle
- * @property {string=} headerTitle
+ * @property {any} [actions]
+ * @property {string} [active]
+ * @property {any} [children]
+ * @property {string} [className]
+ * @property {object} [currentCustomer]
+ * @property {string} [currentCustomerId]
+ * @property {object} [currentUser]
+ * @property {string} [headTitle]
+ * @property {string} [headerTitle]
  */
 /**
  * @typedef {object} State

@@ -111,43 +111,43 @@ const ListHeaderComponent = memo(shapeComponent(/** @augments {ShapeComponent<He
 
 /**
  * @typedef {object} Props
- * @property {object=} abilities
- * @property {Function=} actionsContent
- * @property {object=} appHistory
- * @property {boolean=} card
- * @property {string=} className
- * @property {Collection=} collection
- * @property {any[]|Function=} columns
- * @property {Function=} controls
- * @property {object=} currentUser
- * @property {Function|string=} defaultDateFormatName
- * @property {Function|string=} defaultDateTimeFormatName
- * @property {object=} defaultParams
- * @property {boolean=} destroyEnabled
- * @property {string=} destroyMessage
- * @property {object=} draggedHeaderStyle
- * @property {Function=} editModelPath
- * @property {boolean=} filterCard
- * @property {Function=} filterContent
- * @property {any=} filterSubmitLabel
- * @property {any[]=} groupBy
- * @property {Function|string=} header
- * @property {string=} identifier
+ * @property {object} [abilities]
+ * @property {Function} [actionsContent]
+ * @property {object} [appHistory]
+ * @property {boolean} [card]
+ * @property {string} [className]
+ * @property {Collection} [collection]
+ * @property {any[]|Function} [columns]
+ * @property {Function} [controls]
+ * @property {object} [currentUser]
+ * @property {Function|string} [defaultDateFormatName]
+ * @property {Function|string} [defaultDateTimeFormatName]
+ * @property {object} [defaultParams]
+ * @property {boolean} [destroyEnabled]
+ * @property {string} [destroyMessage]
+ * @property {object} [draggedHeaderStyle]
+ * @property {Function} [editModelPath]
+ * @property {boolean} [filterCard]
+ * @property {Function} [filterContent]
+ * @property {any} [filterSubmitLabel]
+ * @property {any[]} [groupBy]
+ * @property {Function|string} [header]
+ * @property {string} [identifier]
  * @property {Function} modelClass
- * @property {Function=} noRecordsAvailableContent
- * @property {Function=} noRecordsFoundContent
- * @property {Function=} onModelsLoaded
- * @property {Function=} paginateContent
- * @property {React.ComponentType<any>=} paginationComponent
- * @property {any[]=} preloads
- * @property {Function=} queryMethod
- * @property {string=} queryName
- * @property {object=} select
- * @property {object=} selectColumns
- * @property {object=} styles
- * @property {boolean=} styleUI
- * @property {Function=} viewModelPath
- * @property {boolean=} workplace
+ * @property {Function} [noRecordsAvailableContent]
+ * @property {Function} [noRecordsFoundContent]
+ * @property {Function} [onModelsLoaded]
+ * @property {Function} [paginateContent]
+ * @property {React.ComponentType<any>} [paginationComponent]
+ * @property {any[]} [preloads]
+ * @property {Function} [queryMethod]
+ * @property {string} [queryName]
+ * @property {object} [select]
+ * @property {object} [selectColumns]
+ * @property {object} [styles]
+ * @property {boolean} [styleUI]
+ * @property {Function} [viewModelPath]
+ * @property {boolean} [workplace]
  */
 /**
  * @typedef {object} State
@@ -989,7 +989,10 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
-  /** @param {Record<string, any>} [args] */
+  /**
+   * @param {Record<string, any>} [args]
+   * @returns {React.ReactNode}
+   */
   tableControls({models, qParams, query, result} = {}) {
     const {controls} = this.props
     const {showSettings} = this.s

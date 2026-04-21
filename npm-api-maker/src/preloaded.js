@@ -37,7 +37,11 @@ export default class ApiMakerPreloaded {
     }
   }
 
-  /** @returns {import("./base-model.js").default} */
+  /**
+   * @param {any} type
+   * @param {any} id
+   * @returns {import("./base-model.js").default}
+   */
   getModel(type, id) {
     if (!this.preloaded[type] || !this.preloaded[type][id]) {
       throw new Error(`Could not find a ${type} by that ID: ${id}`)

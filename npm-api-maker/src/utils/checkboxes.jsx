@@ -55,13 +55,13 @@ const OptionElement = memo(shapeComponent(/** @augments {ShapeComponent<OptionEl
 
 /**
  * @typedef {object} Props
- * @property {string=} attribute
- * @property {any[]=} defaultValue
- * @property {string=} label
- * @property {string=} labelClassName
- * @property {object=} model
- * @property {string=} name
- * @property {Function=} onChange
+ * @property {string} [attribute]
+ * @property {any[]} [defaultValue]
+ * @property {string} [label]
+ * @property {string} [labelClassName]
+ * @property {object} [model]
+ * @property {string} [name]
+ * @property {Function} [onChange]
  * @property {any[]} options
  */
 /**

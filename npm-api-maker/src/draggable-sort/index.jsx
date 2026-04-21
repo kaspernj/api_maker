@@ -13,16 +13,16 @@ import useEventEmitter from "ya-use-event-emitter"
 
 /**
  * @typedef {object} Props
- * @property {object=} activeItemStyle
- * @property {Function=} cacheKeyExtractor
+ * @property {object} [activeItemStyle]
+ * @property {Function} [cacheKeyExtractor]
  * @property {any[]} data
- * @property {object=} dataSet
- * @property {EventEmitter=} events
- * @property {boolean=} horizontal
+ * @property {object} [dataSet]
+ * @property {EventEmitter} [events]
+ * @property {boolean} [horizontal]
  * @property {Function} keyExtractor
- * @property {Function=} onDragItemEnd
- * @property {Function=} onDragItemStart
- * @property {Function=} onItemMoved
+ * @property {Function} [onDragItemEnd]
+ * @property {Function} [onDragItemStart]
+ * @property {Function} [onItemMoved]
  * @property {Function} onReordered
  * @property {Function} renderItem
  */

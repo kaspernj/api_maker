@@ -12,7 +12,11 @@ const shared = {}
 
 /** Tracks session and CSRF token freshness. */
 export default class ApiMakerSessionStatusUpdater {
-  /** current. */
+  /**
+   * current.
+   * @param {any} args
+   * @returns {any}
+   */
   static current(args) {
     if (!shared.apiMakerSessionStatusUpdater) {
       shared.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater(args)
@@ -21,7 +25,10 @@ export default class ApiMakerSessionStatusUpdater {
     return shared.apiMakerSessionStatusUpdater
   }
 
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {any} args
+   */
   constructor(args = {}) {
     this.events = {}
     this.timeout = args.timeout || 600000
@@ -84,7 +91,10 @@ export default class ApiMakerSessionStatusUpdater {
     return undefined
   }
 
-  /** sessionStatus. */
+  /**
+   * sessionStatus.
+   * @returns {any}
+   */
   sessionStatus() {
     return new Promise((resolve) => {
       const host = config.getHost()
@@ -104,7 +114,10 @@ export default class ApiMakerSessionStatusUpdater {
     })
   }
 
-  /** onSignedOut. */
+  /**
+   * onSignedOut.
+   * @param {any} callback
+   */
   onSignedOut(callback) {
     // @ts-expect-error
     this.addEvent("onSignedOut", callback)
@@ -152,7 +165,10 @@ export default class ApiMakerSessionStatusUpdater {
     this.updateUserSessionsFromResult(result)
   }
 
-  /** updateMetaElementsFromResult. */
+  /**
+   * updateMetaElementsFromResult.
+   * @param {any} result
+   */
   updateMetaElementsFromResult(result) {
     logger.debug("updateMetaElementsFromResult")
 
@@ -174,14 +190,21 @@ export default class ApiMakerSessionStatusUpdater {
     }
   }
 
-  /** updateUserSessionsFromResult. */
+  /**
+   * updateUserSessionsFromResult.
+   * @param {any} result
+   */
   updateUserSessionsFromResult(result) {
     for (const scopeName in result.scopes) {
       this.updateUserSessionScopeFromResult(scopeName, result.scopes[scopeName])
     }
   }
 
-  /** updateUserSessionScopeFromResult. */
+  /**
+   * updateUserSessionScopeFromResult.
+   * @param {any} scopeName
+   * @param {any} scope
+   */
   updateUserSessionScopeFromResult(scopeName, scope) {
     const deviseIsSignedInMethodName = `is${inflection.camelize(scopeName)}SignedIn`
 

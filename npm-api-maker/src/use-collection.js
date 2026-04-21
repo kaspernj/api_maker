@@ -77,7 +77,10 @@ class UseCollectionShapeHook extends ShapeHook {
     showNoRecordsFoundContent: false
   })
 
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {any} props
+   */
   constructor(props) {
     super(props)
     this.loadModelsGeneration = 0
@@ -126,7 +129,10 @@ class UseCollectionShapeHook extends ShapeHook {
     return this.cache("loadModelsDebounce", () => debounce(() => this.loadModels()))
   }
 
-  /** @param {Record<string, any>} args */
+  /**
+   * @param {Record<string, any>} args
+   * @returns {boolean}
+   */
   showNoRecordsAvailableContent(args) {
     let models, overallCount
 
@@ -144,9 +150,14 @@ class UseCollectionShapeHook extends ShapeHook {
 
     if (models === undefined || overallCount === undefined || this.p.noRecordsAvailableContent === undefined) return false
     if (models.length === 0 && overallCount === 0 && this.p.noRecordsAvailableContent) return true
+
+    return false
   }
 
-  /** @param {Record<string, any>} args */
+  /**
+   * @param {Record<string, any>} args
+   * @returns {boolean}
+   */
   showNoRecordsFoundContent(args) {
     let models, overallCount
 
@@ -167,6 +178,8 @@ class UseCollectionShapeHook extends ShapeHook {
     // Dont show noRecordsAvailableContent together with noRecordsAvailableContent
     if (models.length === 0 && overallCount === 0 && this.p.noRecordsAvailableContent) return false
     if (models.length === 0 && this.p.noRecordsFoundContent) return true
+
+    return false
   }
 
   /** @returns {Promise<void>} */

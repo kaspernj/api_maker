@@ -11,12 +11,12 @@ import useEventEmitter from "ya-use-event-emitter"
 
 /**
  * @typedef {object} Props
- * @property {object=} activeItemStyle
- * @property {string=} cacheKey
+ * @property {object} [activeItemStyle]
+ * @property {string} [cacheKey]
  * @property {object} controller
  * @property {any} item
  * @property {number} itemIndex
- * @property {Function=} onItemMoved
+ * @property {Function} [onItemMoved]
  * @property {Function} renderItem
  */
 /**

@@ -19,7 +19,7 @@ import {View} from "react-native"
 
 /**
  * @typedef {object} Props
- * @property {object=} currentUser
+ * @property {object} [currentUser]
  * @property {Function} modelClass
  * @property {string} queryName
  * @property {string} querySName

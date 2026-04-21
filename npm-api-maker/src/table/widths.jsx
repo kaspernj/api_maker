@@ -78,7 +78,10 @@ export default class TableWidths {
     }
   }
 
-  /** Apply the measured table width after an initial fallback-width bootstrap. */
+  /**
+   * Apply the measured table width after an initial fallback-width bootstrap.
+   * @param {any} width
+   */
   updateTableWidth(width) {
     this.tableWidth = width
     this.usedFallbackWidth = false

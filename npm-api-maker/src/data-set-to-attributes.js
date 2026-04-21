@@ -1,7 +1,11 @@
 // @ts-check
 import * as inflection from "inflection"
 
-/** Convert dataset attributes into normalized params. */
+/**
+ * Convert dataset attributes into normalized params.
+ * @param {any} dataSet
+ * @returns {Record<string, any>}
+ */
 export default function dataSetToAttributes(dataSet) {
   const result = {}
 

@@ -11,7 +11,7 @@ const dataSets = {}
 
 /**
  * @typedef {object} Props
- * @property {boolean=} active
+ * @property {boolean} [active]
  * @property {Function} onScopeClicked
  * @property {string} scope
  */

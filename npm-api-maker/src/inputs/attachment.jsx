@@ -13,12 +13,12 @@ import useInput from "../use-input.js"
 
 /**
  * @typedef {object} Props
- * @property {string=} className
- * @property {string=} contentType
- * @property {object=} model
- * @property {Function=} onPurgeChanged
- * @property {string=} purgeName
- * @property {string=} url
+ * @property {string} [className]
+ * @property {string} [contentType]
+ * @property {object} [model]
+ * @property {Function} [onPurgeChanged]
+ * @property {string} [purgeName]
+ * @property {string} [url]
  */
 /**
  * @typedef {object} State
