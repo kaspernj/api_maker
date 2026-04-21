@@ -9,61 +9,111 @@ import {useEffect} from "react"
 import useCreatedEvent from "./use-created-event.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
+/** @typedef {typeof import("./base-model.js").default} BaseModelClass */
+/** @typedef {import("./base-model.js").default} BaseModelInstance */
+/** @typedef {BaseModelInstance & {id: () => number | string}} BaseModelWithId */
+/** @typedef {import("./collection.js").default} ModelCollection */
+/** @typedef {import("./result.js").default} CollectionResult */
+/** @typedef {import("./collection.js").CollectionSearchParams} UseCollectionSearchParams */
+/** @typedef {import("./collection.js").CollectionRansackParams} UseCollectionRansackParams */
+/** @typedef {import("./collection.js").QueryParamValueMap} UseCollectionDefaultParams */
+/** @typedef {import("./collection.js").QueryParamValue | undefined} UseCollectionQueryParamValue */
+/** @typedef {Record<string, UseCollectionQueryParamValue | string[]>} UseCollectionQueryParams */
+/** @typedef {(args: {query: ModelCollection}) => Promise<CollectionResult> | CollectionResult} UseCollectionQueryMethod */
+/**
+ * @typedef {(args: {
+ *   models: BaseModelInstance[],
+ *   qParams: UseCollectionDefaultParams,
+ *   query: ModelCollection,
+ *   result: CollectionResult
+ * }) => void} OnModelsLoadedCallback
+ */
+/** @typedef {{models?: BaseModelInstance[], overallCount?: number}} NoRecordsStateArgs */
+/** @typedef {{qParams?: UseCollectionDefaultParams, searchParams?: string[]}} LoadModelsArgs */
+/**
+ * @typedef {UseCollectionResult & Record<
+ *   string,
+ *   BaseModelInstance[] | string | number | CollectionResult | ModelCollection | string[] | false | import("react").ReactNode
+ * >} UseCollectionReturnValue
+ */
+/**
+ * @typedef {object} UseCollectionHookProps
+ * @property {Record<string, string[]>} [abilities]
+ * @property {UseCollectionQueryParamValue[]} [cacheKeys]
+ * @property {ModelCollection} [collection]
+ * @property {UseCollectionDefaultParams} [defaultParams]
+ * @property {string[]} [groupBy]
+ * @property {boolean | (() => boolean)} [ifCondition]
+ * @property {number} [limit]
+ * @property {BaseModelClass} modelClass
+ * @property {() => import("react").ReactNode} [noRecordsAvailableContent]
+ * @property {() => import("react").ReactNode} [noRecordsFoundContent]
+ * @property {OnModelsLoadedCallback} [onModelsLoaded]
+ * @property {boolean} [pagination]
+ * @property {string[]} [preloads]
+ * @property {UseCollectionQueryMethod} [queryMethod]
+ * @property {string} [queryName]
+ * @property {UseCollectionRansackParams} [ransack]
+ * @property {Record<string, string[]>} [select]
+ * @property {Record<string, string[]>} [selectColumns]
+ */
 /**
  * @typedef {object} UseCollectionResult
- * @property {Array<import("./base-model.js").default>} models
+ * @property {BaseModelInstance[] | undefined} models
  * @property {string} modelIdsCacheString
- * @property {number} overallCount
- * @property {import("./collection.js").default} query
- * @property {string} queryName
- * @property {string} queryPerKey
- * @property {string} queryQName
- * @property {string} querySName
- * @property {string} queryPageName
- * @property {import("./result.js").default} result
- * @property {string[]} searchParams
- * @property {false | import("react").ReactNode} showNoRecordsAvailableContent
- * @property {false | import("react").ReactNode} showNoRecordsFoundContent
+ * @property {number | undefined} overallCount
+ * @property {UseCollectionDefaultParams} qParams
+ * @property {ModelCollection | undefined} query
+  * @property {string} queryName
+  * @property {string} queryPerKey
+  * @property {string} queryQName
+  * @property {string} querySName
+  * @property {string} queryPageName
+ * @property {boolean} readyToLoad
+ * @property {CollectionResult | undefined} result
+ * @property {string[] | undefined} searchParams
+  * @property {false | import("react").ReactNode} showNoRecordsAvailableContent
+  * @property {false | import("react").ReactNode} showNoRecordsFoundContent
  */
 
 /**
  * @param {object} props
  * @param {Record<string, string[]>} props.abilities
  * @param {import("./collection.js").default} props.collection
- * @param {Record<string, any>} props.defaultParams
+ * @param {UseCollectionDefaultParams} props.defaultParams
  * @param {string[]} props.groupBy
  * @param {function() : boolean} props.ifCondition
  * @param {number} props.limit
- * @param {typeof import("./base-model.js").default} props.modelClass
+ * @param {BaseModelClass} props.modelClass
  * @param {function() : import("react").ReactNode} props.noRecordsAvailableContent
  * @param {function() : import("react").ReactNode} props.noRecordsFoundContent
- * @param {function() : void} props.onModelsLoaded
+ * @param {OnModelsLoadedCallback} props.onModelsLoaded
  * @param {boolean} props.pagination
  * @param {string[]} props.preloads
- * @param {function({query: import("./collection.js").default}) : import("./collection.js").default} props.queryMethod
+ * @param {UseCollectionQueryMethod} props.queryMethod
  * @param {string} props.queryName
- * @param {Record<string, any>} props.ransack
+ * @param {UseCollectionRansackParams} props.ransack
  * @param {Record<string, string[]>} props.select
  * @param {Record<string, string[]>} props.selectColumns
- * @param {any[]} cacheKeys
- * @returns {UseCollectionResult & Record<string, any>}
+ * @param {UseCollectionQueryParamValue[]} cacheKeys
+ * @returns {UseCollectionReturnValue}
  */
 
 /**
  * @typedef {object} UseCollectionState
- * @property {any[] | undefined} models
+ * @property {BaseModelInstance[] | undefined} models
  * @property {number | undefined} overallCount
- * @property {Record<string, any>} qParams
- * @property {import("./collection.js").default | undefined} query
+ * @property {UseCollectionDefaultParams} qParams
+ * @property {ModelCollection | undefined} query
  * @property {boolean} readyToLoad
- * @property {import("./result.js").default | undefined} result
+ * @property {CollectionResult | undefined} result
  * @property {string[] | undefined} searchParams
  * @property {false | import("react").ReactNode} showNoRecordsAvailableContent
  * @property {false | import("react").ReactNode} showNoRecordsFoundContent
  */
 
 /** Hook state container for useCollection. */
-/** @augments {ShapeHook<Record<string, any>, UseCollectionState>} */
+/** @augments {ShapeHook<UseCollectionHookProps, UseCollectionState>} */
 class UseCollectionShapeHook extends ShapeHook {
   state = /** @type {UseCollectionState} */ ({
     models: undefined,
@@ -79,7 +129,7 @@ class UseCollectionShapeHook extends ShapeHook {
 
   /**
    * Constructor.
-   * @param {any} props
+   * @param {UseCollectionHookProps} props
    */
   constructor(props) {
     super(props)
@@ -130,7 +180,7 @@ class UseCollectionShapeHook extends ShapeHook {
   }
 
   /**
-   * @param {Record<string, any>} args
+   * @param {NoRecordsStateArgs} args
    * @returns {boolean}
    */
   showNoRecordsAvailableContent(args) {
@@ -155,7 +205,7 @@ class UseCollectionShapeHook extends ShapeHook {
   }
 
   /**
-   * @param {Record<string, any>} args
+   * @param {NoRecordsStateArgs} args
    * @returns {boolean}
    */
   showNoRecordsFoundContent(args) {
@@ -201,7 +251,7 @@ class UseCollectionShapeHook extends ShapeHook {
     })
   }
 
-  /** @returns {{qParams: Record<string, any>, searchParams: string[]}} */
+  /** @returns {{qParams: UseCollectionDefaultParams, searchParams: string[]}} */
   loadQParams() {
     let qParamsToSet = Object.assign({}, this.p.defaultParams)
     const searchParams = []
@@ -231,9 +281,9 @@ class UseCollectionShapeHook extends ShapeHook {
 
   /**
    * @param {object} [args]
-   * @param {Record<string, any>} [args.qParams]
+   * @param {UseCollectionDefaultParams} [args.qParams]
    * @param {string[]} [args.searchParams]
-   * @returns {{qParams: Record<string, any>, searchParams: string[]}}
+   * @returns {{qParams: UseCollectionDefaultParams, searchParams: string[]}}
    */
   loadModelsArgs(args = {}) {
     return {
@@ -244,7 +294,7 @@ class UseCollectionShapeHook extends ShapeHook {
 
   /**
    * @param {object} [args]
-   * @param {Record<string, any>} [args.qParams]
+   * @param {UseCollectionDefaultParams} [args.qParams]
    * @param {string[]} [args.searchParams]
    * @returns {Promise<void>}
    */
@@ -315,19 +365,19 @@ class UseCollectionShapeHook extends ShapeHook {
     })
   }
 
-  /** @param {{model: import("./base-model.js").default}} args */
+  /** @param {{model: BaseModelInstance}} args */
   onModelDestroyed(args) {
     const destroyedModel = digg(args, "model")
 
     this.setState({
-      models: this.s.models.filter((model) => model.id() != destroyedModel.id())
+      models: this.s.models.filter((model) => /** @type {BaseModelWithId} */ (model).id() != /** @type {BaseModelWithId} */ (destroyedModel).id())
     })
   }
 
-  /** @param {{model: import("./base-model.js").default}} args */
+  /** @param {{model: BaseModelInstance}} args */
   onModelUpdated(args) {
     const updatedModel = digg(args, "model")
-    const foundModel = this.s.models.find((model) => model.id() == updatedModel.id())
+    const foundModel = this.s.models.find((model) => /** @type {BaseModelWithId} */ (model).id() == /** @type {BaseModelWithId} */ (updatedModel).id())
 
     if (foundModel) this.loadModelsDebounce()()
   }
@@ -414,6 +464,11 @@ class UseCollectionShapeHook extends ShapeHook {
   }
 }
 
+/**
+ * @param {UseCollectionHookProps} props
+ * @param {UseCollectionQueryParamValue[]} [cacheKeys]
+ * @returns {UseCollectionReturnValue}
+ */
 const useCollection = (props, cacheKeys = []) => {
   const {
     abilities,
@@ -460,15 +515,17 @@ const useCollection = (props, cacheKeys = []) => {
     select,
     selectColumns
   })
-  const result = /** @type {UseCollectionResult & Record<string, any>} */ (/** @type {unknown} */ (Object.assign({}, shapeHook.state)))
+  const result = /** @type {UseCollectionReturnValue} */ ({
+    ...shapeHook.state,
+    modelIdsCacheString: shapeHook.modelIdsCacheString(),
+    queryName: shapeHook.queryName(),
+    queryPerKey: shapeHook.queryPerKey(),
+    queryQName: shapeHook.queryQName(),
+    querySName: shapeHook.querySName(),
+    queryPageName: shapeHook.queryPageName()
+  })
   const modelVariableName = inflection.pluralize(inflection.camelize(shapeHook.p.modelClass.modelClassData().name, true))
 
-  result.modelIdsCacheString = shapeHook.modelIdsCacheString()
-  result.queryName = shapeHook.queryName()
-  result.queryPerKey = shapeHook.queryPerKey()
-  result.queryQName = shapeHook.queryQName()
-  result.querySName = shapeHook.querySName()
-  result.queryPageName = shapeHook.queryPageName()
   result[modelVariableName] = shapeHook.s.models
 
   return result
