@@ -27,7 +27,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     currencyName: PropTypes.string,
     currencyRef: PropTypes.object,
     defaultValue: PropTypes.object,
-    disabled: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
     id: PropTypes.string,
     inputRef: PropTypes.object,
     label: PropTypes.any,

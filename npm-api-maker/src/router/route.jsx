@@ -43,9 +43,9 @@ const Route = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} *
     children: PropTypes.any,
     component: PropTypes.string,
     componentPath: PropTypes.string,
-    exact: PropTypes.bool.isRequired,
-    fallback: PropTypes.bool.isRequired,
-    includeInPath: PropTypes.bool.isRequired,
+    exact: PropTypes.bool,
+    fallback: PropTypes.bool,
+    includeInPath: PropTypes.bool,
     onMatch: PropTypes.func,
     path: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
   })

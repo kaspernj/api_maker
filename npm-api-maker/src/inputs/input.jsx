@@ -42,12 +42,12 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
 
   static propTypes = {
     attribute: PropTypes.string,
-    autoRefresh: PropTypes.bool.isRequired,
-    autoSubmit: PropTypes.bool.isRequired,
+    autoRefresh: PropTypes.bool,
+    autoSubmit: PropTypes.bool,
     className: PropTypes.string,
     formatValue: PropTypes.func,
     id: PropTypes.string,
-    localizedNumber: PropTypes.bool.isRequired,
+    localizedNumber: PropTypes.bool,
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,

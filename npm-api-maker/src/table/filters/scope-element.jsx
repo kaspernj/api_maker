@@ -21,7 +21,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   static propTypes = {
-    active: PropTypes.bool.isRequired,
+    active: PropTypes.bool,
     onScopeClicked: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired
   }

@@ -44,7 +44,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     data: PropTypes.array.isRequired,
     dataSet: PropTypes.object,
     events: PropTypes.instanceOf(EventEmitter),
-    horizontal: PropTypes.bool.isRequired,
+    horizontal: PropTypes.bool,
     keyExtractor: PropTypes.func.isRequired,
     onDragItemEnd: PropTypes.func,
     onDragItemStart: PropTypes.func,

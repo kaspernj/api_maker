@@ -9,7 +9,7 @@ export default class ApiMakerEventConnection extends React.PureComponent {
   }
 
   static propTypes = propTypesExact({
-    active: PropTypes.bool.isRequired,
+    active: PropTypes.bool,
     model: PropTypes.object.isRequired,
     event: PropTypes.string.isRequired,
     onCall: PropTypes.func.isRequired

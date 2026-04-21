@@ -196,7 +196,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     abilities: PropTypes.object,
     actionsContent: PropTypes.func,
     appHistory: PropTypes.object,
-    card: PropTypes.bool.isRequired,
+    card: PropTypes.bool,
     className: PropTypes.string,
     collection: PropTypes.instanceOf(Collection),
     columns: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
@@ -205,11 +205,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     defaultDateFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     defaultDateTimeFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     defaultParams: PropTypes.object,
-    destroyEnabled: PropTypes.bool.isRequired,
+    destroyEnabled: PropTypes.bool,
     destroyMessage: PropTypes.string,
     draggedHeaderStyle: PropTypes.object,
     editModelPath: PropTypes.func,
-    filterCard: PropTypes.bool.isRequired,
+    filterCard: PropTypes.bool,
     filterContent: PropTypes.func,
     filterSubmitLabel: PropTypes.any,
     groupBy: PropTypes.array,
@@ -221,15 +221,15 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     onModelsLoaded: PropTypes.func,
     paginateContent: PropTypes.func,
     paginationComponent: PropTypes.elementType,
-    preloads: PropTypes.array.isRequired,
+    preloads: PropTypes.array,
     queryMethod: PropTypes.func,
     queryName: PropTypes.string,
     select: PropTypes.object,
     selectColumns: PropTypes.object,
     styles: PropTypes.object,
-    styleUI: PropTypes.bool.isRequired,
+    styleUI: PropTypes.bool,
     viewModelPath: PropTypes.func,
-    workplace: PropTypes.bool.isRequired
+    workplace: PropTypes.bool
   }
 
   draggableSortEvents = new EventEmitter()

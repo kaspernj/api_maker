@@ -36,8 +36,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   static propTypes = {
     attribute: PropTypes.string,
-    autoRefresh: PropTypes.bool.isRequired,
-    autoSubmit: PropTypes.bool.isRequired,
+    autoRefresh: PropTypes.bool,
+    autoSubmit: PropTypes.bool,
     defaultChecked: PropTypes.bool,
     defaultValue: PropTypes.any,
     id: PropTypes.string,

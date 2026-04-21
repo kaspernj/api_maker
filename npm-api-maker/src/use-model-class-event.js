@@ -14,7 +14,7 @@ class UseModelClassEventShapeHook extends ShapeHook {
   }
 
   static propTypes = propTypesExact({
-    active: PropTypes.bool.isRequired,
+    active: PropTypes.bool,
     debounce: PropTypes.oneOfType([
       PropTypes.bool,
       PropTypes.number

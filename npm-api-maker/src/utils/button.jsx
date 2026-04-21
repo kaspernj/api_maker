@@ -40,14 +40,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   static propTypes = propTypesExact({
     children: PropTypes.any,
-    danger: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool.isRequired,
+    danger: PropTypes.bool,
+    disabled: PropTypes.bool,
     icon: PropTypes.string,
     label: PropTypes.string,
     onPress: PropTypes.func,
-    pressableProps: PropTypes.object.isRequired,
-    submit: PropTypes.bool.isRequired,
-    textProps: PropTypes.object.isRequired
+    pressableProps: PropTypes.object,
+    submit: PropTypes.bool,
+    textProps: PropTypes.object
   })
 
   state = {

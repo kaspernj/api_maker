@@ -39,14 +39,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     children: PropTypes.any,
     className: PropTypes.string,
     controls: PropTypes.any,
-    defaultExpanded: PropTypes.bool.isRequired,
-    expandable: PropTypes.bool.isRequired,
-    expandableHide: PropTypes.bool.isRequired,
+    defaultExpanded: PropTypes.bool,
+    expandable: PropTypes.bool,
+    expandableHide: PropTypes.bool,
     footer: PropTypes.any,
     header: PropTypes.any,
-    responsiveTable: PropTypes.bool.isRequired,
+    responsiveTable: PropTypes.bool,
     striped: PropTypes.bool,
-    table: PropTypes.bool.isRequired
+    table: PropTypes.bool
   }
 
   state = {

@@ -34,7 +34,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   static propTypes = {
     attribute: PropTypes.string,
-    checkIfAttributeLoaded: PropTypes.bool.isRequired,
+    checkIfAttributeLoaded: PropTypes.bool,
     children: PropTypes.any,
     defaultDateFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     defaultDateTimeFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),

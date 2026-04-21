@@ -23,7 +23,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   static propTypes = propTypesExact({
     attributes: PropTypes.array.isRequired,
-    checkIfAttributeLoaded: PropTypes.bool.isRequired,
+    checkIfAttributeLoaded: PropTypes.bool,
     defaultDateFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     defaultDateTimeFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     model: PropTypes.object.isRequired
