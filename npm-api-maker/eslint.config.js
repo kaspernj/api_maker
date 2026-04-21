@@ -12,7 +12,16 @@ export default defineConfig([
   ...fixupConfigRules(jest.configs["flat/recommended"]),
   js.configs.recommended,
   {
-    files: ["src/**/*.{js,jsx}"],
+    files: [
+      "src/link.jsx",
+      "src/routes-native.js",
+      "src/session-status-updater.js",
+      "src/use-created-event.js",
+      "src/use-destroyed-event.js",
+      "src/use-model-class-event.js",
+      "src/use-model-event.js",
+      "src/use-updated-event.js"
+    ],
     plugins: {
       jsdoc
     },
@@ -29,6 +38,7 @@ export default defineConfig([
       "jsdoc/no-bad-blocks": "error",
       "jsdoc/no-defaults": "error",
       "jsdoc/no-undefined-types": "error",
+      "jsdoc/reject-any-type": "error",
       "jsdoc/require-param": "error",
       "jsdoc/require-param-name": "error",
       "jsdoc/require-param-type": "error",

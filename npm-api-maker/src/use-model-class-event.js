@@ -8,7 +8,7 @@ import propTypesExact from "prop-types-exact"
 
 /** @typedef {{active?: boolean, debounce?: boolean|number, onConnected?: Function}} UseModelClassEventArgs */
 /** @typedef {typeof import("./base-model.js").default} ModelClassType */
-/** @typedef {(...args: any[]) => void} EventCallback */
+/** @typedef {(...args: unknown[]) => void} EventCallback */
 
 /** Hook state container for model-class event subscriptions. */
 class UseModelClassEventShapeHook extends ShapeHook {
@@ -45,7 +45,7 @@ class UseModelClassEventShapeHook extends ShapeHook {
     )
   }
 
-  /** @param {any[]} callbackArgs */
+  /** @param {unknown[]} callbackArgs */
   onModelClassEventCallback(...callbackArgs) {
     if (!this.p.active) {
       return
