@@ -18,6 +18,42 @@ import ValidationError from "./validation-error.js"
 import {ValidationErrors} from "./validation-errors.js"
 import WebsocketRequestClient from "./websocket-request-client.js"
 
+/** @typedef {object | string | number | boolean | null | undefined} CommandArgumentScalarOrObject */
+/** @typedef {CommandArgumentScalarOrObject | File | FormData | HTMLFormElement | CommandArgumentScalarOrObject[]} CommandArgumentValue */
+/** @typedef {Record<string, CommandArgumentValue>} CommandArgumentMap */
+/**
+ * @typedef {object} CommandDescriptor
+ * @property {CommandArgumentValue} [args]
+ * @property {string} collectionName
+ * @property {string} command
+ * @property {number | string} [primaryKey]
+ * @property {string} type
+ */
+/**
+ * @typedef {object} CommandRequestOptions
+ * @property {boolean} [cacheResponse]
+ * @property {boolean} [forceHttp]
+ * @property {boolean} [instant]
+ */
+/**
+ * @typedef {object} CommandResponseEnvelope
+ * @property {CommandArgumentMap} data
+ * @property {"success" | "error" | "failed"} type
+ */
+/**
+ * @typedef {object} CommandsRequestResponse
+ * @property {Record<string, CommandResponseEnvelope>} responses
+ * @property {boolean} [success]
+ * @property {string} [type]
+ */
+/**
+ * @typedef {object} FailedCommandResponseData
+ * @property {string} error_type
+ * @property {string[]} [errors]
+ * @property {string[]} [validation_errors]
+ * @property {CommandArgumentMap} [model]
+ */
+
 /**
  * @typedef {object} CommandDataType
  * @property {ApiMakerCommandExecution} commandExecution
@@ -32,9 +68,9 @@ const shared = {}
 export default class ApiMakerCommandsPool {
   /**
    * Adds a command to the shared or one-off command pool and schedules a flush.
-   * @param {any} data
-   * @param {any} args
-   * @returns {any}
+   * @param {CommandDescriptor} data
+   * @param {CommandRequestOptions} [args]
+   * @returns {ApiMakerCommandExecution}
    */
   static addCommand(data, args = {}) {
     let pool
@@ -61,7 +97,7 @@ export default class ApiMakerCommandsPool {
 
   /**
    * Returns the shared command pool instance.
-   * @returns {any}
+   * @returns {ApiMakerCommandsPool}
    */
   static current() {
     if (!shared.currentApiMakerCommandsPool) shared.currentApiMakerCommandsPool = new ApiMakerCommandsPool()
@@ -86,17 +122,17 @@ export default class ApiMakerCommandsPool {
 
     this.currentId = 1
 
-    /** @type {Record<string, any>} */
+    /** @type {CommandArgumentMap} */
     this.globalRequestData = {}
 
-    /** @type {Record<string, any>} */
+    /** @type {CommandRequestOptions} */
     this.requestOptions = {}
   }
 
   /**
    * Adds one command execution to this pool instance.
-   * @param {any} data
-   * @returns {any}
+   * @param {CommandDescriptor} data
+   * @returns {ApiMakerCommandExecution}
    */
   addCommand(data) {
     const stack = Error().stack
@@ -144,18 +180,18 @@ export default class ApiMakerCommandsPool {
    * @param {string} args.url
    * @param {CommandSubmitData} args.commandSubmitData
    * @param {ApiMakerCommandExecution} [args.commandExecution]
-   * @returns {Promise<Record<string, any>>}
+   * @returns {Promise<CommandsRequestResponse>}
    */
   async sendRequest({commandExecution, commandSubmitData, url}) {
     if (Config.getWebsocketRequests() && !this.requestOptions.forceHttp && commandSubmitData.getFilesCount() == 0) {
-      return await WebsocketRequestClient.current().perform({
+      return /** @type {Promise<CommandsRequestResponse>} */ (WebsocketRequestClient.current().perform({
         cacheResponse: this.requestOptions.cacheResponse,
         global: this.globalRequestData,
         onLog: (message) => commandExecution?.addLog(message),
         onProgress: (progressData) => commandExecution?.setProgress(progressData),
         onReceived: (receivedData) => commandExecution?.setReceived(receivedData),
         request: commandSubmitData.getJsonData()
-      })
+      }))
     }
 
     let response
@@ -173,7 +209,7 @@ export default class ApiMakerCommandsPool {
         continue // eslint-disable-line no-continue
       }
 
-      return response
+      return /** @type {CommandsRequestResponse} */ (response)
     }
 
     throw new Error("Couldnt successfully execute request")
@@ -234,10 +270,7 @@ export default class ApiMakerCommandsPool {
 
   /**
    * @param {CommandDataType} commandData
-   * @param {object} commandResponseData
-   * @param {string} commandResponseData.error_type
-   * @param {string[]} commandResponseData.errors
-   * @param {string[]} commandResponseData.validation_errors
+   * @param {FailedCommandResponseData} commandResponseData
    * @returns {Promise<void>}
    */
   async handleFailedResponse(commandData, commandResponseData) {
@@ -290,7 +323,7 @@ export default class ApiMakerCommandsPool {
   }
 
   /**
-   * @param {Record<string, any>} commandResponseData
+   * @param {FailedCommandResponseData} commandResponseData
    * @returns {Promise<void>}
    */
   async refreshSessionStatusForNoAccessError(commandResponseData) {
