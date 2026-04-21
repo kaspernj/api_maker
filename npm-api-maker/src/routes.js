@@ -2,9 +2,14 @@
 import * as inflection from "inflection"
 import {digg} from "diggerize"
 
+/** @typedef {string | number | boolean | null | undefined} RouteArgument */
+/** @typedef {(...args: RouteArgument[]) => string} JsRouteFunction */
+/** @typedef {{name: string}} RouteDefinition */
+/** @typedef {{routes: RouteDefinition[]}} RouteDefinitions */
+
 /** Dynamic wrapper around generated JS routes. */
 export default class ApiMakerRoutes {
-  /** @param {{jsRoutes: Record<string, (...args: any[]) => string>, locale?: string, routeDefinitions: {routes: Array<Record<string, any>>}}} args */
+  /** @param {{jsRoutes: Record<string, JsRouteFunction>, locale?: string, routeDefinitions: RouteDefinitions}} args */
   constructor ({jsRoutes, locale, routeDefinitions}) {
     if (!jsRoutes) throw new Error("'jsRoutes' wasn't given")
 

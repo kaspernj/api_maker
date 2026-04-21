@@ -6,6 +6,32 @@ import channelsConsumer from "./channels-consumer.js"
 const logger = new Logger({name: "ApiMaker / WebsocketRequestClient"})
 const shared = {}
 
+/** @typedef {object | string | number | boolean | null | undefined | Array<object | string | number | boolean | null | undefined>} RequestValue */
+/** @typedef {Record<string, RequestValue>} RequestData */
+/**
+ * @typedef {object} WebsocketProgressData
+ * @property {number | undefined} count
+ * @property {number | undefined} progress
+ * @property {number | undefined} total
+ */
+/**
+ * @typedef {RequestData & {
+ *   command_event_sequence?: number,
+ *   count?: number,
+ *   message?: string,
+ *   progress?: number,
+ *   request_id: number,
+ *   response?: RequestData,
+ *   total?: number,
+ *   type: string
+ * }} WebsocketResponseData
+ */
+/**
+ * @typedef {object} WebsocketRequestSubscription
+ * @property {(action: string, data: RequestData) => void} perform
+ * @property {() => void} unsubscribe
+ */
+
 /** Shared websocket request client for ApiMaker command/service execution. */
 export default class ApiMakerWebsocketRequestClient {
   idleWaiters = []
@@ -75,12 +101,12 @@ export default class ApiMakerWebsocketRequestClient {
   /**
    * @param {object} args
    * @param {boolean} [args.cacheResponse]
-   * @param {Record<string, any>} [args.global]
+   * @param {RequestData} [args.global]
    * @param {(value: string) => void} [args.onLog]
-   * @param {(value: Record<string, any>) => void} [args.onProgress]
-   * @param {(value: Record<string, any>) => void} [args.onReceived]
-   * @param {Record<string, any>} args.request
-   * @returns {Promise<Record<string, any>>}
+   * @param {(value: WebsocketProgressData) => void} [args.onProgress]
+   * @param {(value: WebsocketResponseData) => void} [args.onReceived]
+   * @param {RequestData} args.request
+   * @returns {Promise<RequestData>}
    */
   perform ({cacheResponse, global, onLog, onProgress, onReceived, request}) {
     const fingerprint = JSON.stringify({global, request})
@@ -133,7 +159,7 @@ export default class ApiMakerWebsocketRequestClient {
     return promise
   }
 
-  /** @returns {any} */
+  /** @returns {WebsocketRequestSubscription} */
   ensureSubscription () {
     if (!this.subscription) {
       logger.debug("Creating websocket request subscription")
@@ -303,7 +329,7 @@ export default class ApiMakerWebsocketRequestClient {
   }
 
   /**
-   * @param {Record<string, any>} data
+   * @param {WebsocketResponseData} data
    * @returns {void}
    */
   onReceived = (data) => {
