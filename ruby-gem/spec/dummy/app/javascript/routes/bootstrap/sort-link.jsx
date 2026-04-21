@@ -7,15 +7,25 @@ import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
 import {Task} from "models.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
-export default memo(shapeComponent(class BootstrapSortLink extends ShapeComponent {
+/** @typedef {object} BootstrapSortLinkProps */
+
+/**
+ * @typedef {object} BootstrapSortLinkState
+ * @property {import("@kaspernj/api-maker/build/collection.js").default | null} query
+ * @property {string | undefined} queryParamsString
+ * @property {Task[] | null} tasks
+ */
+
+/** @augments {ShapeComponent<BootstrapSortLinkProps, BootstrapSortLinkState>} */
+class BootstrapSortLink extends ShapeComponent {
+  state = /** @type {BootstrapSortLinkState} */ ({
+    query: null,
+    queryParamsString: undefined,
+    tasks: null
+  })
+
   setup() {
     this.queryParams = useQueryParams()
-
-    this.useStates({
-      query: null,
-      queryParamsString: () => JSON.stringify(this.tt.queryParams),
-      tasks: null
-    })
   }
 
   componentDidMount() {
@@ -75,4 +85,6 @@ export default memo(shapeComponent(class BootstrapSortLink extends ShapeComponen
       </div>
     )
   }
-}))
+}
+
+export default memo(shapeComponent(BootstrapSortLink))

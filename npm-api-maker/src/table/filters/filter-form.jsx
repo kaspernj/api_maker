@@ -37,29 +37,27 @@ export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends 
     querySearchName: PropTypes.string.isRequired
   })
 
+  state = {
+    associations: null,
+    attribute: undefined,
+    actualCurrentModelClass: {modelClass: this.p.modelClass},
+    loading: 0,
+    modelClassName: digg(this.p.modelClass.modelClassData(), "className"),
+    path: [],
+    predicate: undefined,
+    predicates: undefined,
+    ransackableAttributes: undefined,
+    ransackableScopes: undefined,
+    scope: this.props.filter.sc,
+    value: this.props.filter.v
+  }
+
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table.filters.filter_form"})
 
-    this.useStates({
-      associations: null,
-      attribute: undefined,
-      actualCurrentModelClass: () => ({modelClass: this.p.modelClass}),
-      loading: 0,
-      modelClassName: digg(this.p.modelClass.modelClassData(), "className"),
-      path: [],
-      predicate: undefined,
-      predicates: undefined,
-      ransackableAttributes: undefined,
-      ransackableScopes: undefined,
-      scope: this.props.filter.sc,
-      value: this.props.filter.v
-    })
-
-    this.setInstance({
-      breakpoint: useBreakpoint(),
-      t,
-      valueInputRef: useRef(undefined),
-    })
+    this.breakpoint = useBreakpoint()
+    this.t = t
+    this.valueInputRef = useRef(undefined)
 
     useMemo(() => {
       this.loadRansackPredicates()

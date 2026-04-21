@@ -9,9 +9,11 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
 
 export default memo(shapeComponent(class ApiMakerSuperAdminShowReflectionLink extends BaseComponent {
-  setup() {
-    this.useStates({count: undefined})
+  state = {
+    count: undefined
+  }
 
+  setup() {
     useMemo(() => {
       this.countRelationship()
     }, [])

@@ -55,11 +55,11 @@ const styles = {}
 const TableContext = createContext(undefined)
 
 const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {
-  setup() {
-    this.useStates({
-      lastUpdate: new Date()
-    })
+  state = {
+    lastUpdate: new Date()
   }
+
+  setup() {}
 
   render() {
     const {mdUp} = useBreakpoint()
@@ -168,18 +168,40 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
   currentWorkplaceLoadRequestId = 0
   tableSettingLoadRequestId = 0
   tableSettings = null
+  state = {
+    columns: this.columnsAsArray(),
+    currentWorkplace: undefined,
+    currentWorkplaceCount: null,
+    filterForm: null,
+    columnsToShow: null,
+    draggedColumn: null,
+    identifier: this.props.identifier || `${digg(this.p.modelClass.modelClassData(), "collectionKey")}-default`,
+    lastUpdate: new Date(),
+    preload: undefined,
+    preparedColumns: undefined,
+    queryName: this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey"),
+    queryQName: `${this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey")}_q`,
+    queryPageName: `${this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey")}_page`,
+    querySName: `${this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey")}_s`,
+    resizing: false,
+    showFilters: false,
+    showSettings: false,
+    tableSetting: undefined,
+    tableSettingLoaded: false,
+    tableSettingFullCacheKey: undefined,
+    width: undefined,
+    widths: null
+  }
 
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table"})
     const {name: breakpoint, mdUp} = useBreakpoint()
     const queryParams = useQueryParams()
 
-    this.setInstance({
-      breakpoint,
-      filterFormRef: useRef(undefined),
-      mdUp,
-      t
-    })
+    this.breakpoint = breakpoint
+    this.filterFormRef = useRef(undefined)
+    this.mdUp = mdUp
+    this.t = t
 
     const collectionKey = digg(this.p.modelClass.modelClassData(), "collectionKey")
     let queryName = this.props.queryName
@@ -188,30 +210,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     const querySName = `${queryName}_s`
 
-    this.useStates({
-      columns: () => this.columnsAsArray(),
-      currentWorkplace: undefined,
-      currentWorkplaceCount: null,
-      filterForm: null,
-      columnsToShow: null,
-      draggedColumn: null,
-      identifier: () => this.props.identifier || `${collectionKey}-default`,
-      lastUpdate: () => new Date(),
-      preload: undefined,
-      preparedColumns: undefined,
-      queryName,
-      queryQName: () => `${queryName}_q`,
-      queryPageName: () => `${queryName}_page`,
-      querySName,
-      resizing: false,
-      showFilters: () => Boolean(queryParams[querySName]),
-      showSettings: false,
-      tableSetting: undefined,
-      tableSettingLoaded: false,
-      tableSettingFullCacheKey: undefined,
-      width: undefined,
-      widths: null
-    })
+    if (this.s.queryName != queryName || this.s.querySName != querySName || this.s.showFilters !== Boolean(queryParams[querySName])) {
+      this.setState({
+        queryName,
+        queryQName: `${queryName}_q`,
+        queryPageName: `${queryName}_page`,
+        querySName,
+        showFilters: Boolean(queryParams[querySName])
+      })
+    }
 
     this.tableContextValue = useMemo(
       () => ({
@@ -358,7 +365,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
   updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.s.tableSetting.fullCacheKey()})
 
-  columnsAsArray = () => {
+  columnsAsArray() {
     if (typeof this.props.columns == "function") {
       return this.props.columns()
     }

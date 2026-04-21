@@ -46,6 +46,9 @@ const dataSets = {}
 
 export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponent {
   loadModelRequestId = 0
+  state = {
+    model: undefined
+  }
 
   setup() {
     this.queryParams = useQueryParams()
@@ -73,9 +76,6 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
       [this.currentUser?.id(), this.modelClass]
     )
 
-    this.useStates({
-      model: undefined
-    })
     useEffect(() => {
       if (this.tt.pageNeedsLoadedModel()) {
         this.loadModel()
@@ -170,7 +170,7 @@ export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponen
           <ShowReflectionActions model={model} modelClass={modelClass} reflectionName={queryParams.model_reflection} />
         }
       </View>, // eslint-disable-line react/jsx-closing-tag-location
-      [canCan.getCacheKey(), configReader?.actions, model, modelClass, pageToShow]
+      [canCan.getCacheKey(), configReader?.modelConfig?.actions, model, modelClass, pageToShow]
     )
 
     return (

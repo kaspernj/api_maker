@@ -69,13 +69,20 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseCo
     headerTitle: PropTypes.string
   })
 
+  state = {
+    menuTriggered: false
+  }
+
   setup() {
     const currentUser = useCurrentUser()
     const {locale, t} = useI18n({namespace: "js.api_maker.super_admin.layout"})
     const {lgUp, mdUp, mdDown} = useBreakpoint()
 
-    this.useStates({menuTriggered: false})
-    this.setInstance({currentUser, lgUp, mdUp, mdDown, t})
+    this.currentUser = currentUser
+    this.lgUp = lgUp
+    this.mdUp = mdUp
+    this.mdDown = mdDown
+    this.t = t
 
     useMemo(() => {
       CommandsPool.current().globalRequestData.layout = "admin"

@@ -24,13 +24,14 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     name: PropTypes.string.isRequired
   })
 
+  state = {
+    checked: this.defaultChecked()
+  }
+
   setup() {
     const {attributeName, id, name} = this.p
 
     this.form = useForm()
-    this.useStates({
-      checked: this.tt.defaultChecked
-    })
 
     this.dataSet = useMemo(
       () => ({
@@ -48,7 +49,9 @@ export default memo(shapeComponent(class EditAttributeInput extends BaseComponen
     }, [])
   }
 
-  defaultChecked = () => this.p.model[this.p.attributeName]() || false
+  defaultChecked() {
+    return this.p.model[this.p.attributeName]() || false
+  }
 
   render() {
     const {dataSet} = this.tt

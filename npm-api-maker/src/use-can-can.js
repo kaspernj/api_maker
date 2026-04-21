@@ -4,8 +4,25 @@ import CanCan from "./can-can.js"
 import Devise from "./devise.js"
 import useEventEmitter from "ya-use-event-emitter"
 
+/**
+ * @typedef {object} UseCanCanProps
+ * @property {() => Array} abilitiesCallback
+ * @property {boolean} debug
+ * @property {any[] | undefined} dependencies
+ */
+
+/**
+ * @typedef {object} UseCanCanState
+ * @property {Date} lastUpdate
+ */
+
 /** UseCanCanClass. */
+/** @augments {ShapeHook<UseCanCanProps, UseCanCanState>} */
 class UseCanCanClass extends ShapeHook {
+  state = /** @type {UseCanCanState} */ ({
+    lastUpdate: new Date()
+  })
+
   /** Constructor. */
   constructor(props) {
     super(props)
@@ -97,10 +114,6 @@ class UseCanCanClass extends ShapeHook {
 
   /** setup. */
   setup() {
-    this.useStates({
-      lastUpdate: () => new Date()
-    })
-
     const {debug, dependencies} = this.p
     const dependencyList = dependencies ?? []
     const dependencyKey = useMemo(() => this.dependencyListKey(dependencyList), dependencyList)

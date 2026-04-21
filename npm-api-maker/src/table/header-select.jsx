@@ -20,15 +20,20 @@ export default memo(shapeComponent(class ApiMakerTableHeaderSelect extends BaseC
     table: PropTypes.object
   })
 
+  state = {
+    modalOpen: false
+  }
+
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table.header_select"})
     const {preparedColumns, query} = this.p
     const {qParams, searchKey, sortAttribute, sortMode} = useSorting({query})
 
-    this.useStates({
-      modalOpen: false
-    })
-    this.setInstance({qParams, searchKey, sortAttribute, sortMode, t})
+    this.qParams = qParams
+    this.searchKey = searchKey
+    this.sortAttribute = sortAttribute
+    this.sortMode = sortMode
+    this.t = t
     this.sortedByPreparedColumn = preparedColumns.find((preparedColumn) => preparedColumn.tableSettingColumn.sortKey() == sortAttribute)
   }
 

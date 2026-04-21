@@ -35,7 +35,11 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseC
     const {t} = useI18n({namespace: "js.api_maker.super_admin.layout.menu"})
     const currentUser = useCurrentUser()
 
-    this.setInstance({currentUser, lgUp, mdDown, mdUp, t})
+    this.currentUser = currentUser
+    this.lgUp = lgUp
+    this.mdDown = mdDown
+    this.mdUp = mdUp
+    this.t = t
   }
 
   render() { // eslint-disable-line complexity

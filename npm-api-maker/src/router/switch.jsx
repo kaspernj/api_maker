@@ -21,14 +21,13 @@ const Switch = memo(shapeComponent(class Switch extends BaseComponent {
   })
 
   pathsMatchedKeys = []
-
-  setup() {
-    this.useStates({
-      lastUpdate: new Date(),
-      pathShown: undefined,
-      pathsMatched: {}
-    })
+  state = {
+    lastUpdate: new Date(),
+    pathShown: undefined,
+    pathsMatched: {}
   }
+
+  setup() {}
 
   render() {
     const {pathShown, pathsMatched} = this.s

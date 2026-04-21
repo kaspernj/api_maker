@@ -20,9 +20,9 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
     const rawValue = this.rawValue()
     this.initialValue = rawValue === null || rawValue === undefined ? "" : rawValue
     this.hasInitialValue = rawValue !== null && rawValue !== undefined
-    this.useStates({
+    this.state = {
       value: this.initialValue
-    })
+    }
 
     useEffect(() => {
       if (this.form && this.hasInitialValue) {

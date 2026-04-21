@@ -15,11 +15,14 @@ import apiMakerConfig from "../../config.js"
 const TableSearch = modelClassRequire("TableSearch")
 
 export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal extends BaseComponent {
+  state = {
+    form: null
+  }
+
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table.filters.save_search_modal"})
 
     this.t = t
-    this.useStates({form: null})
   }
 
   render() {

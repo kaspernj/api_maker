@@ -29,13 +29,12 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
   panResponder
 
   initialLayout = null
+  state = {
+    active: false,
+    dragging: false
+  }
 
   setup() {
-    this.useStates({
-      active: false,
-      dragging: false
-    })
-
     this.events ||= new EventEmitter()
     this.position ||= new Animated.ValueXY()
     this.panResponder ||= PanResponder.create({
@@ -69,7 +68,7 @@ export default memo(shapeComponent(class DraggableSortItem extends ShapeComponen
             if (activeTransform) {
               const normalizedActiveTransform = Array.isArray(activeTransform) ? activeTransform : [activeTransform]
 
-              style.transform = baseTransform.concat(normalizedActiveTransform)
+              style.transform = /** @type {any} */ (baseTransform.concat(normalizedActiveTransform))
             }
 
             Object.assign(style, restActiveStyle)

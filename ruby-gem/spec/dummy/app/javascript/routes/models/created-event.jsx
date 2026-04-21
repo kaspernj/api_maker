@@ -4,11 +4,20 @@ import Layout from "components/layout"
 import {Task} from "models.js"
 import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event.js"
 
-export default memo(shapeComponent(class ModelsCreatedEvent extends ShapeComponent {
+/** @typedef {object} ModelsCreatedEventProps */
+
+/**
+ * @typedef {object} ModelsCreatedEventState
+ * @property {Task[]} tasks
+ */
+
+/** @augments {ShapeComponent<ModelsCreatedEventProps, ModelsCreatedEventState>} */
+class ModelsCreatedEvent extends ShapeComponent {
+  state = /** @type {ModelsCreatedEventState} */ ({
+    tasks: []
+  })
+
   setup() {
-    this.useStates({
-      tasks: []
-    })
     useCreatedEvent(Task, this.tt.onCreated)
   }
 
@@ -39,4 +48,6 @@ export default memo(shapeComponent(class ModelsCreatedEvent extends ShapeCompone
     this.setState({
       tasks: this.state.tasks.concat([task])
     })
-}))
+}
+
+export default memo(shapeComponent(ModelsCreatedEvent))

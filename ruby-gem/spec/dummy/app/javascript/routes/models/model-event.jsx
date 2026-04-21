@@ -6,14 +6,24 @@ import Text from "@kaspernj/api-maker/build/utils/text"
 import {Task} from "models.js"
 import useModelEvent from "@kaspernj/api-maker/build/use-model-event.js"
 
-export default memo(shapeComponent(class ModelsModelEvent extends ShapeComponent {
-  setup() {
-    this.useStates({
-      connected: null,
-      eventCounts: {},
-      tasks: []
-    })
+/** @typedef {object} ModelsModelEventProps */
 
+/**
+ * @typedef {object} ModelsModelEventState
+ * @property {boolean | null} connected
+ * @property {Record<string, number>} eventCounts
+ * @property {Task[]} tasks
+ */
+
+/** @augments {ShapeComponent<ModelsModelEventProps, ModelsModelEventState>} */
+class ModelsModelEvent extends ShapeComponent {
+  state = /** @type {ModelsModelEventState} */ ({
+    connected: null,
+    eventCounts: {},
+    tasks: []
+  })
+
+  setup() {
     useMemo(() => {
       this.loadTasks()
     }, [])
@@ -64,4 +74,6 @@ export default memo(shapeComponent(class ModelsModelEvent extends ShapeComponent
 
     this.setState({tasks: tasks.slice(0, 2)})
   }
-}))
+}
+
+export default memo(shapeComponent(ModelsModelEvent))

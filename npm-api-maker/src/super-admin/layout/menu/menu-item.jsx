@@ -17,12 +17,11 @@ export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem exten
     icon: PropTypes.string.isRequired,
     label: PropTypes.any
   }
-
-  setup() {
-    this.useStates({
-      hover: false
-    })
+  state = {
+    hover: false
   }
+
+  setup() {}
 
   render() {
     const {active, children, className, icon, identifier, label, to, ...restProps} = this.props

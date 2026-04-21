@@ -3,7 +3,10 @@ import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-comp
 import {Task} from "models.js"
 import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
 
-const TaskRow = memo(shapeComponent(class TaskRow extends ShapeComponent {
+/** @typedef {{task: Task}} TaskRowProps */
+
+/** @augments {ShapeComponent<TaskRowProps>} */
+class TaskRow extends ShapeComponent {
   render() {
     const {task} = this.p
 
@@ -13,14 +16,22 @@ const TaskRow = memo(shapeComponent(class TaskRow extends ShapeComponent {
       </div>
     )
   }
-}))
+}
 
-export default memo(shapeComponent(class ModelsDestroyEvent extends ShapeComponent {
-  setup() {
-    this.useStates({
-      tasks: null
-    })
-  }
+const MemoizedTaskRow = memo(shapeComponent(TaskRow))
+
+/** @typedef {object} ModelsDestroyEventProps */
+
+/**
+ * @typedef {object} ModelsDestroyEventState
+ * @property {Task[] | null} tasks
+ */
+
+/** @augments {ShapeComponent<ModelsDestroyEventProps, ModelsDestroyEventState>} */
+class ModelsDestroyEvent extends ShapeComponent {
+  state = /** @type {ModelsDestroyEventState} */ ({
+    tasks: null
+  })
 
   async componentDidMount() {
     const tasks = await Task.ransack().toArray()
@@ -35,7 +46,7 @@ export default memo(shapeComponent(class ModelsDestroyEvent extends ShapeCompone
     return (
       <div className="component-models-destroy-event">
         {tasks && tasks.map(task =>
-          <TaskRow key={task.cacheKey()} task={task} />
+          <MemoizedTaskRow key={task.cacheKey()} task={task} />
         )}
       </div>
     )
@@ -45,4 +56,6 @@ export default memo(shapeComponent(class ModelsDestroyEvent extends ShapeCompone
     this.setState({
       tasks: this.s.tasks.filter(task => task.id() != args.model.id())
     })
-}))
+}
+
+export default memo(shapeComponent(ModelsDestroyEvent))

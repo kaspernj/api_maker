@@ -41,7 +41,8 @@ export default memo(shapeComponent(class ApiMakerSuperAdminShowPage extends Base
     const configReader = useMemo(() => ConfigReader.forModel(modelClass), [modelClass])
     const showConfig = configReader.modelConfig?.show
 
-    this.setInstance({configReader, showConfig})
+    this.configReader = configReader
+    this.showConfig = showConfig
   }
 
   render() {

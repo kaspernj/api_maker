@@ -19,7 +19,19 @@ import useUpdatedEvent from "./use-updated-event.js"
  */
 
 /** Hook state container for useModel. */
+/**
+ * @typedef {object} UseModelState
+ * @property {any | undefined} model
+ * @property {boolean | undefined} notFound
+ */
+
+/** @augments {ShapeHook<Record<string, any>, UseModelState>} */
 class UseModelShapeHook extends ShapeHook {
+  state = /** @type {UseModelState} */ ({
+    model: undefined,
+    notFound: undefined
+  })
+
   updatedConnectionFallbackTimeoutId = undefined
 
   /** Constructor. */
@@ -318,11 +330,7 @@ class UseModelShapeHook extends ShapeHook {
 
   /** @returns {void} */
   setup() {
-    this.useStates({
-      model: undefined,
-      notFound: undefined
-    })
-    this.setInstance({queryParams: useQueryParams()})
+    this.queryParams = useQueryParams()
 
     useEffect(
       () => {

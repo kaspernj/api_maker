@@ -39,11 +39,9 @@ export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComp
     const {inputProps, restProps: useInputRestProps} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
     const {defaultValue, name} = inputProps
 
-    this.setInstance({
-      form: useForm(),
-      inputProps,
-      useInputRestProps
-    })
+    this.form = useForm()
+    this.inputProps = inputProps
+    this.useInputRestProps = useInputRestProps
 
     useMemo(() => {
       if (name) {

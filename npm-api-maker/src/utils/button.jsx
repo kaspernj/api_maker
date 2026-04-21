@@ -34,9 +34,12 @@ export default memo(shapeComponent(class ApiMakerUtilsButton extends ShapeCompon
     textProps: PropTypes.object.isRequired
   })
 
+  state = {
+    hover: false
+  }
+
   setup() {
     this.form = useForm()
-    this.useStates({hover: false})
   }
 
   render() {

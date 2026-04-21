@@ -27,12 +27,10 @@ export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseC
     const {attribute, defaultParams, query} = this.props
     const {qParams, searchKey, sortAttribute, sortMode} = useSorting({defaultParams, query})
 
-    this.setInstance({
-      isSortedByAttribute: sortAttribute == attribute,
-      qParams,
-      searchKey,
-      sortMode
-    })
+    this.isSortedByAttribute = sortAttribute == attribute
+    this.qParams = qParams
+    this.searchKey = searchKey
+    this.sortMode = sortMode
 
     this.queryParams = useQueryParams()
     this.searchKey = this.p.query.queryArgs.searchKey || "q"

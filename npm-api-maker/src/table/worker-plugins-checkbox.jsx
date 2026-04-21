@@ -19,12 +19,12 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox exte
     style: PropTypes.object
   })
 
-  setup() {
-    this.useStates({
-      checked: false,
-      linkLoaded: false
-    })
+  state = {
+    checked: false,
+    linkLoaded: false
+  }
 
+  setup() {
     useMemo(() => {
       this.loadCurrentLink()
     }, [])
