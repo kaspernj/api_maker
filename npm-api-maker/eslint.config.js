@@ -12,6 +12,25 @@ export default defineConfig([
   ...fixupConfigRules(jest.configs["flat/recommended"]),
   js.configs.recommended,
   {
+    files: ["src/**/*.{js,jsx}"],
+    plugins: {
+      jsdoc
+    },
+    rules: {
+      "jsdoc/check-param-names": "error",
+      "jsdoc/check-property-names": "error",
+      "jsdoc/check-tag-names": "error",
+      "jsdoc/check-template-names": "error",
+      "jsdoc/check-types": "error",
+      "jsdoc/check-values": "error",
+      "jsdoc/empty-tags": "error",
+      "jsdoc/escape-inline-tags": "error",
+      "jsdoc/no-bad-blocks": "error",
+      "jsdoc/no-undefined-types": "error",
+      "jsdoc/valid-types": "error"
+    }
+  },
+  {
     ignores: ["dist/*"],
     linterOptions: {
       reportUnusedDisableDirectives: "off"
@@ -20,9 +39,6 @@ export default defineConfig([
       globals: {
         ...globals.jest
       }
-    },
-    plugins: {
-      jsdoc
     },
     rules: {
       "accessor-pairs": "error",
@@ -90,9 +106,6 @@ export default defineConfig([
       "jest/require-hook": "error",
       "jest/require-to-throw-message": "error",
       "jest/require-top-level-describe": "error",
-      "jsdoc/check-tag-names": "error",
-      "jsdoc/check-types": "error",
-      "jsdoc/no-undefined-types": "error",
       "jsx-quotes": "error",
       "key-spacing": "error",
       "keyword-spacing": "off",

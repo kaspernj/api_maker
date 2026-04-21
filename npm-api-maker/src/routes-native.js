@@ -108,16 +108,11 @@ export default class ApiMakerRoutesNative {
    * @returns {string}
    */
   translateRoute ({args, localizedRoutes, pathParts, url}) {
-    let options = /** @type {RouteOptions} */ {}
-
     // Extract options from args if any
     const lastArg = args[args.length - 1]
-
-    if (lastArg && typeof lastArg == "object") {
-      options = /** @type {RouteOptions} */ args.pop()
-    } else {
-      options = {}
-    }
+    const options = lastArg && typeof lastArg == "object"
+      ? /** @type {RouteOptions} */ (args.pop())
+      : /** @type {RouteOptions} */ ({})
 
     // Take locale from options if given or fall back to fallback
     const {locale, host, port, protocol, ...restOptions} = options
