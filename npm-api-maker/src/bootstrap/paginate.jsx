@@ -20,7 +20,9 @@ const NEXT_PAGE_LABEL = "→"
 const LAST_PAGE_LABEL = "⇥"
 const ELLIPSIS_LABEL = "…"
 
-export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootstrapPaginate extends BaseComponent {
   static propTypes = propTypesExact({
     result: PropTypes.oneOfType([
       instanceOfClassName("ApiMakerResult"),

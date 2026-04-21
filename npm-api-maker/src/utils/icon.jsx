@@ -23,7 +23,7 @@ const iconMap = {
 }
 
 /**
- * @typedef {object} ApiMakerUtilsIconProps
+ * @typedef {object} Props
  * @property {string|number=} color
  * @property {object=} dataSet
  * @property {string} name
@@ -31,8 +31,9 @@ const iconMap = {
  * @property {import("react-native").StyleProp<import("react-native").TextStyle>=} style Only `color` is forwarded.
  * @property {("FontAwesome"|"FontAwesome5"|"FontAwesome6"|"MaterialIcons")=} version
  */
-export default memo(shapeComponent(class ApiMakerUtilsIcon extends BaseComponent {
-  /** @type {ApiMakerUtilsIconProps} */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerUtilsIcon extends BaseComponent {
+  /** @type {Props} */
   static propTypes = {
     color: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     dataSet: PropTypes.object,

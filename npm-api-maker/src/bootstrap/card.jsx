@@ -6,7 +6,9 @@ import PropTypes from "prop-types"
 import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import memo from "set-state-compare/build/memo.js"
 
-export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootstrapCard extends BaseComponent {
   static defaultProps = {
     defaultExpanded: true,
     expandable: false,

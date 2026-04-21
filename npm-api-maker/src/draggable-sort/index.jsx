@@ -10,7 +10,9 @@ import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "ya-use-event-emitter"
 
-export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class DraggableSort extends ShapeComponent {
   /** @type {import("./controller.js").default} */
   controller
 

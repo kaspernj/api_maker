@@ -10,7 +10,9 @@ import Text from "../../../utils/text"
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
   static propTypes = {
     active: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     className: PropTypes.string,

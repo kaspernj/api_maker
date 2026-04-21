@@ -7,7 +7,9 @@ import propTypesExact from "prop-types-exact"
 import usePath from "on-location-changed/build/use-path.js"
 import useRouter from "./use-router"
 
-export default memo(shapeComponent(class ApiMakerRouter extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerRouter extends BaseComponent {
   static propTypes = propTypesExact({
     history: PropTypes.object,
     locales: PropTypes.array.isRequired,

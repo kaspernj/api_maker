@@ -15,7 +15,9 @@ import Widths from "./widths"
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
     active: PropTypes.bool.isRequired,
     animatedWidth: PropTypes.instanceOf(Animated.Value).isRequired,

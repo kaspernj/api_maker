@@ -44,7 +44,9 @@ const styles = StyleSheet.create({
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdmin extends BaseComponent {
   loadModelRequestId = 0
   state = {
     model: undefined

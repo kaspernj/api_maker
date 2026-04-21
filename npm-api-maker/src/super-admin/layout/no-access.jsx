@@ -10,7 +10,9 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ComponentsAdminLayoutNoAccess extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ComponentsAdminLayoutNoAccess extends BaseComponent {
   render() {
     const currentUser = useCurrentUser()
     const {t} = useI18n({namespace: "js.api_maker.super_admin.layout.no_access"})

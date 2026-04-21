@@ -6,7 +6,9 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useBreakpoint} from "responsive-breakpoints"
 import {View} from "react-native"
 
-export default memo(shapeComponent(class SharedTableRow extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class SharedTableRow extends BaseComponent {
   render() {
     const {style, ...restProps} = this.props
     const {name: breakpoint, smDown} = useBreakpoint()

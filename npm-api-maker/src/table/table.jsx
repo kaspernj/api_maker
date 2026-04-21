@@ -54,7 +54,9 @@ const paginationOptions = [30, 60, 90, ["All", "all"]]
 const styles = {}
 const TableContext = createContext(undefined)
 
-const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {
+/** @typedef {object} HeaderProps */
+/** @typedef {object} HeaderState */
+const ListHeaderComponent = memo(shapeComponent(/** @augments {BaseComponent<HeaderProps, HeaderState>} */ class ListHeaderComponent extends BaseComponent {
   state = {
     lastUpdate: new Date()
   }
@@ -104,7 +106,9 @@ const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extend
   onColumnVisibilityUpdated = () => this.setState({lastUpdate: new Date()})
 }))
 
-export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTable extends BaseComponent {
   /**
    * @param {object} props
    */

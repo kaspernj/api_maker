@@ -10,7 +10,9 @@ import memo from "set-state-compare/build/memo.js"
 import useInput from "../use-input.js"
 import useUpdatedEvent from "../use-updated-event.js"
 
-export default memo(shapeComponent(class ApiMakerInputsCheckbox extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsCheckbox extends BaseComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,

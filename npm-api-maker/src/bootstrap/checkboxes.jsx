@@ -9,7 +9,9 @@ import propTypesExact from "prop-types-exact"
 import {useForm} from "../form"
 import useInput from "../use-input.js"
 
-const OptionElement = memo(shapeComponent(class OptionElement extends ShapeComponent {
+/** @typedef {object} OptionElementProps */
+/** @typedef {object} OptionElementState */
+const OptionElement = memo(shapeComponent(/** @augments {ShapeComponent<OptionElementProps, OptionElementState>} */ class OptionElement extends ShapeComponent {
   render() {
     const {generatedId, inputCheckboxClassName, isDefaultSelected, inputName, option, optionIndex, options, wrapperOpts} = this.p
     const {errors} = digs(wrapperOpts, "errors")
@@ -46,7 +48,9 @@ const OptionElement = memo(shapeComponent(class OptionElement extends ShapeCompo
   }
 }))
 
-export default memo(shapeComponent(class ApiMakerBootstrapCheckboxes extends ShapeComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapCheckboxes extends ShapeComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,

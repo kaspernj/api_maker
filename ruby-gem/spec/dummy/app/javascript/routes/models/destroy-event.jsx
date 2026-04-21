@@ -4,8 +4,8 @@ import {Task} from "models.js"
 import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
 
 /** @typedef {{task: Task}} TaskRowProps */
-
-/** @augments {ShapeComponent<TaskRowProps>} */
+/** @typedef {object} TaskRowState */
+/** @augments {ShapeComponent<TaskRowProps, TaskRowState>} */
 class TaskRow extends ShapeComponent {
   render() {
     const {task} = this.p

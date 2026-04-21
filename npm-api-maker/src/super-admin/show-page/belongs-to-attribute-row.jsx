@@ -9,7 +9,9 @@ import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 
-export default memo(shapeComponent(class ApiMakerSuperAdminShowPageBelongsToAttributeRow extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminShowPageBelongsToAttributeRow extends BaseComponent {
   render() {
     const {model, modelClass, reflection} = this.props
     const reflectionMethodName = inflection.camelize(reflection.name(), true)

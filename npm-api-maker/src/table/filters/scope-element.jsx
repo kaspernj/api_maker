@@ -9,7 +9,9 @@ import Text from "../../utils/text"
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ScopeElement extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ScopeElement extends BaseComponent {
   static defaultProps = {
     active: false
   }

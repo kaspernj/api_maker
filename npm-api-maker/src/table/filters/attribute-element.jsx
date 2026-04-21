@@ -11,7 +11,9 @@ import Text from "../../utils/text"
 
 const dataSets = {}
 
-export default memo(shapeComponent(class AttributeElement extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class AttributeElement extends BaseComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.bool.isRequired,
     attribute: PropTypes.object.isRequired,

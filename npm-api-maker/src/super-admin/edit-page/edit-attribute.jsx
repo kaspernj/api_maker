@@ -14,7 +14,9 @@ import React from "react"
 import {View} from "react-native"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 
-export default memo(shapeComponent(class EditAttribute extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class EditAttribute extends BaseComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.object.isRequired,
     model: PropTypes.object,

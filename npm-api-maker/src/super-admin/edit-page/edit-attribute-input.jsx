@@ -9,7 +9,9 @@ import Text from "../../utils/text"
 import {useForm} from "../../form"
 import {TextInput, View} from "react-native"
 
-export default memo(shapeComponent(class EditAttributeInput extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class EditAttributeInput extends BaseComponent {
   static propTypes = propTypesExact({
     attributeName: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,

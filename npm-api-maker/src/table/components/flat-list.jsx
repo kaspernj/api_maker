@@ -5,7 +5,9 @@ import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 
-export default memo(shapeComponent(class SharedTagble extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class SharedTagble extends BaseComponent {
   render() {
     const {style, ...restProps} = this.props
     const actualStyle = Object.assign( // eslint-disable-line prefer-object-spread

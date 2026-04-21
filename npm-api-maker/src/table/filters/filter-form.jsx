@@ -28,7 +28,9 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 const styles = {}
 
-export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableFiltersFilterForm extends BaseComponent {
   static propTypes = PropTypesExact({
     filter: PropTypes.object,
     modelClass: PropTypes.func.isRequired,

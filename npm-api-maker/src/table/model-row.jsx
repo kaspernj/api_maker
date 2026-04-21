@@ -19,7 +19,9 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import WorkerPluginsCheckbox from "./worker-plugins-checkbox"
 
-export default memo(shapeComponent(class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
   static propTypes = propTypesExact({
     cacheKey: PropTypes.string.isRequired,
     columns: PropTypes.array,

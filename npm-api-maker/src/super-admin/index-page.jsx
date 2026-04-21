@@ -7,7 +7,9 @@ import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {View} from "react-native"
 
-export default memo(shapeComponent(class ApiMakerSuperAdminIndexPage extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminIndexPage extends BaseComponent {
   static propTypes = {
     modelClass: PropTypes.func.isRequired
   }

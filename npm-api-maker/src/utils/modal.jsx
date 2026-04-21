@@ -8,7 +8,9 @@ import memo from "set-state-compare/build/memo.js"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useBreakpoint} from "responsive-breakpoints"
 
-export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerUtilsComponent extends BaseComponent {
   render() {
     const {smDown} = useBreakpoint()
     const {children, dataSet, ...restProps} = this.props

@@ -11,7 +11,9 @@ import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useCanCan from "../use-can-can.js"
 
-export default memo(shapeComponent(class SuperAdminShowReflectionActions extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class SuperAdminShowReflectionActions extends BaseComponent {
   static propTypes = propTypesExact({
     model: PropTypes.object,
     modelClass: PropTypes.func,

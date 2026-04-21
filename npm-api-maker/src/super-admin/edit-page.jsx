@@ -21,7 +21,9 @@ import propTypesExact from "prop-types-exact"
 import useCurrentUser from "../use-current-user.js"
 import useModel from "../use-model.js"
 
-export default memo(shapeComponent(class ApiMakerSuperAdminEditPage extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminEditPage extends BaseComponent {
   static propTypes = propTypesExact({
     modelClass: PropTypes.func.isRequired,
     modelId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])

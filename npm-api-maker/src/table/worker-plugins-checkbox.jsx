@@ -12,7 +12,9 @@ import useModelEvent from "../use-model-event.js"
 
 const Workplace = modelClassRequire("Workplace")
 
-export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
   static propTypes = PropTypesExact({
     currentWorkplace: PropTypes.object,
     model: PropTypes.object.isRequired,

@@ -62,7 +62,9 @@ class FormInputs {
   }
 }
 
-const Form = memo(shapeComponent(class Form extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+const Form = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class Form extends BaseComponent {
   static propTypes = propTypesExact({
     children: PropTypes.any,
     form: PropTypes.instanceOf(FormInputs),

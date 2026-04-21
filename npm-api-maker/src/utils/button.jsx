@@ -9,7 +9,9 @@ import React from "react"
 import Text from "./text"
 import {useForm} from "../form"
 
-export default memo(shapeComponent(class ApiMakerUtilsButton extends ShapeComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsButton extends ShapeComponent {
   static defaultProps = {
     children: null,
     danger: false,

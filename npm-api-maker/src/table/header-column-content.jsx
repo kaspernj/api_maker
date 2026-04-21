@@ -10,7 +10,9 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import SortLink from "../bootstrap/sort-link"
 import Text from "../utils/text"
 
-export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
     column: PropTypes.object.isRequired,
     sortLinkProps: PropTypes.object,

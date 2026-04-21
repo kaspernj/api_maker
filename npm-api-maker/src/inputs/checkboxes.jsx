@@ -11,7 +11,9 @@ import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 
-const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckboxes extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+const ApiMakerInputsCheckboxes = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsCheckboxes extends BaseComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,

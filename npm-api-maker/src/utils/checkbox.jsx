@@ -9,7 +9,9 @@ import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "./text"
 
-export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerUtilsCheckbox extends BaseComponent {
   static defaultProps = {
     dataSet: null,
     label: undefined,

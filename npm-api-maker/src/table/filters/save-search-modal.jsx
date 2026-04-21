@@ -14,7 +14,9 @@ import apiMakerConfig from "../../config.js"
 
 const TableSearch = modelClassRequire("TableSearch")
 
-export default memo(shapeComponent(class ApiMakerTableFiltersSaveSearchModal extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableFiltersSaveSearchModal extends BaseComponent {
   state = {
     form: null
   }

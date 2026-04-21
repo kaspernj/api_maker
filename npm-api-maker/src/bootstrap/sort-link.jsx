@@ -12,7 +12,9 @@ import urlEncode from "../url-encode.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import useSorting from "../table/use-sorting.js"
 
-export default memo(shapeComponent(class ApiMakerBootstrapSortLink extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootstrapSortLink extends BaseComponent {
   static propTypes = {
     attribute: PropTypes.string.isRequired,
     className: PropTypes.string,

@@ -11,7 +11,9 @@ import memo from "set-state-compare/build/memo.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useInput from "../use-input.js"
 
-export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsAttachment extends BaseComponent {
   static propTypes = {
     className: PropTypes.string,
     contentType: PropTypes.string,

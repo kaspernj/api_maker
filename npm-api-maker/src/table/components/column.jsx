@@ -5,7 +5,9 @@ import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Animated} from "react-native"
 
-export default memo(shapeComponent(class SharedTableColumn extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class SharedTableColumn extends BaseComponent {
   render() {
     const {dataSet, ...restProps} = this.props
     const actualDataSet = Object.assign( // eslint-disable-line prefer-object-spread

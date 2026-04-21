@@ -6,7 +6,9 @@ import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Animated} from "react-native"
 
-export default memo(shapeComponent(class SharedTableHeader extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class SharedTableHeader extends BaseComponent {
   render() {
     const {dataSet, ...restProps} = this.props
     const {component, ...restDataSet} = dataSet || {}

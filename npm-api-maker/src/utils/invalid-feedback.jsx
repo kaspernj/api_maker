@@ -6,7 +6,9 @@ import propTypesExact from "prop-types-exact"
 import React from "react"
 import Text from "./text"
 
-export default memo(shapeComponent(class ApiMakerUtilsInvalidFeedback extends ShapeComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsInvalidFeedback extends ShapeComponent {
   static propTypes = propTypesExact({
     message: PropTypes.string.isRequired
   })

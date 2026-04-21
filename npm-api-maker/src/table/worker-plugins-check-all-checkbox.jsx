@@ -10,7 +10,9 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {simpleObjectDifferent} from "set-state-compare/build/diff-utils.js"
 import useModelEvent from "../use-model-event.js"
 
-const Checkbox = memo(shapeComponent(class Checkbox extends BaseComponent {
+/** @typedef {object} CheckboxProps */
+/** @typedef {object} CheckboxState */
+const Checkbox = memo(shapeComponent(/** @augments {BaseComponent<CheckboxProps, CheckboxState>} */ class Checkbox extends BaseComponent {
   render() {
     const {indeterminate, ...restProps} = this.props
     const checkboxRef = useRef(undefined)
@@ -25,7 +27,9 @@ const Checkbox = memo(shapeComponent(class Checkbox extends BaseComponent {
   }
 }))
 
-export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckAllCheckbox extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableWorkerPluginsCheckAllCheckbox extends BaseComponent {
   static propTypes = propTypesExact({
     currentWorkplace: PropTypes.object,
     query: PropTypes.instanceOf(Collection),

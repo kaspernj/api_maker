@@ -13,7 +13,9 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import {View} from "react-native"
 
-export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminShowNav extends BaseComponent {
   static propTypes = PropTypesExact({
     model: PropTypes.object.isRequired,
     modelClass: PropTypes.func.isRequired

@@ -5,7 +5,9 @@ import BaseComponent from "./base-component"
 import React from "react"
 import memo from "set-state-compare/build/memo.js"
 
-export default memo(shapeComponent(class ApiMakerModal extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerModal extends BaseComponent {
   render() {
     const {children, onRequestClose, ...restProps} = this.props
 

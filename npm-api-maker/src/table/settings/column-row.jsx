@@ -9,7 +9,9 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {View} from "react-native"
 
-export default memo(shapeComponent(class ColumnRow extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ColumnRow extends BaseComponent {
   static propTypes = propTypesExact({
     column: PropTypes.object.isRequired,
     table: PropTypes.object.isRequired,

@@ -8,7 +8,9 @@ import dataSetToAttributes from "./data-set-to-attributes.js"
 import memo from "set-state-compare/build/memo.js"
 import {useApiMaker} from "./with-api-maker"
 
-export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerLink extends BaseComponent {
   static propTypes = {
     paddingHorizontal: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     paddingVertical: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

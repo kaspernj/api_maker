@@ -6,7 +6,9 @@ import BaseComponent from "../base-component"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 
-export default memo(shapeComponent(class ApiMakerBootstrapAttributeRows extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootstrapAttributeRows extends BaseComponent {
   static defaultProps = {
     checkIfAttributeLoaded: false,
     defaultDateFormatName: undefined,

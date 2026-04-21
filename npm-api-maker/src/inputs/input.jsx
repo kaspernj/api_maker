@@ -14,7 +14,9 @@ import strftime from "strftime"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useUpdatedEvent from "../use-updated-event.js"
 
-const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+const ApiMakerInputsInput = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsInput extends BaseComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,

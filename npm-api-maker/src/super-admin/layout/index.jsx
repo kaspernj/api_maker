@@ -56,7 +56,9 @@ const styles = {
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminLayout extends BaseComponent {
   static propTypes = PropTypesExact({ // eslint-disable-line new-cap
     actions: PropTypes.any,
     active: PropTypes.string,

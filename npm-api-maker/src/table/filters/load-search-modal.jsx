@@ -14,7 +14,9 @@ import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import apiMakerConfig from "../../config.js"
 
-const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
+/** @typedef {object} SearchLinkProps */
+/** @typedef {object} SearchLinkState */
+const SearchLink = memo(shapeComponent(/** @augments {BaseComponent<SearchLinkProps, SearchLinkState>} */ class SearchLink extends BaseComponent {
   render() {
     const {search} = this.props
 
@@ -90,7 +92,9 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
   onSearchClicked = () => this.props.onClick({search: this.props.search})
 }))
 
-export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableFiltersLoadSearchModal extends BaseComponent {
   state = {
     editSearch: undefined,
     searches: undefined

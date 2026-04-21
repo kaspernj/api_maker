@@ -15,7 +15,9 @@ const RequireComponentContext = createContext(null)
 const RouteContext = createContext(null)
 const useParams = () => useContext(ParamsContext)
 
-const Route = memo(shapeComponent(class Route extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+const Route = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class Route extends BaseComponent {
   static defaultProps = {
     exact: false,
     fallback: false,

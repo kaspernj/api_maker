@@ -44,7 +44,9 @@ export const useHeaderActionButtonStyle = () => {
   }, [mdUp])
 }
 
-export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
   static propTypes = PropTypesExact({ // eslint-disable-line new-cap
     actions: PropTypes.any,
     onTriggerMenu: PropTypes.func.isRequired,

@@ -7,7 +7,9 @@ import React from "react"
 import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 
-const ApiMakerInputsSelect = memo(shapeComponent(class ApiMakerInputsSelect extends BaseComponent {
+/** @typedef {object} Props */
+/** @typedef {object} State */
+const ApiMakerInputsSelect = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsSelect extends BaseComponent {
   static propTypes = {
     attribute: PropTypes.string,
     children: PropTypes.any,
