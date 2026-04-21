@@ -36,9 +36,9 @@ const apiMakerConfigNotImplemented = (methodName) => {
   throw new Error(`'${methodName}' not implemented`)
 }
 
-/** ApiMakerConfig. */
+/** Stores globally configured Api Maker integration hooks and runtime dependencies. */
 class ApiMakerConfig {
-  /** Constructor. */
+  /** Initializes the shared config state and change emitter. */
   constructor() {
     if (!globalThis.apiMakerConfigGlobal) globalThis.apiMakerConfigGlobal = {}
 
@@ -47,7 +47,7 @@ class ApiMakerConfig {
   }
 
   /**
-   * getEvents.
+   * Returns the event emitter used for config change notifications.
    * @returns {any}
    */
   getEvents() { return this.events }

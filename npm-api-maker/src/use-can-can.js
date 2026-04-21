@@ -17,7 +17,7 @@ import useEventEmitter from "ya-use-event-emitter"
  * @property {Date} lastUpdate
  */
 
-/** UseCanCanClass. */
+/** Shape hook that keeps ability state synchronized with Devise and dependency changes. */
 /** @augments {ShapeHook<UseCanCanProps, UseCanCanState>} */
 class UseCanCanClass extends ShapeHook {
   state = /** @type {UseCanCanState} */ ({
@@ -25,7 +25,7 @@ class UseCanCanClass extends ShapeHook {
   })
 
   /**
-   * Constructor.
+   * Initializes request bookkeeping and debug state for the hook instance.
    * @param {any} props
    */
   constructor(props) {
@@ -41,7 +41,7 @@ class UseCanCanClass extends ShapeHook {
   }
 
   /**
-   * dependencyKeyFor.
+   * Builds a stable dependency key for one primitive or object reference.
    * @param {any} value
    * @returns {string}
    */
@@ -64,7 +64,7 @@ class UseCanCanClass extends ShapeHook {
   }
 
   /**
-   * dependencyListKey.
+   * Builds one cache key for the whole dependency list.
    * @param {any} list
    * @returns {any}
    */
@@ -75,7 +75,7 @@ class UseCanCanClass extends ShapeHook {
   }
 
   /**
-   * loadAbilities.
+   * Loads or reloads abilities and ignores stale async completions.
    * @param {any} reloadKey
    */
   loadAbilities = async (reloadKey) => {
@@ -96,7 +96,7 @@ class UseCanCanClass extends ShapeHook {
     this.setState({lastUpdate: new Date()})
   }
 
-  /** onDeviseChange. */
+  /** Reloads abilities after Devise sign-in or sign-out events. */
   onDeviseChange = () => {
     this.deviseReloadKey += 1
 
@@ -107,7 +107,7 @@ class UseCanCanClass extends ShapeHook {
     this.loadAbilities(`devise:${this.deviseReloadKey}`)
   }
 
-  /** onResetAbilities. */
+  /** Reloads abilities after the global ability cache is reset. */
   onResetAbilities = () => {
     if (this.p.debug) {
       console.log("[useCanCan] onResetAbilities -> loadAbilities()")
@@ -116,7 +116,7 @@ class UseCanCanClass extends ShapeHook {
     this.loadAbilities()
   }
 
-  /** onAbilitiesLoaded. */
+  /** Updates hook state after abilities finish loading elsewhere. */
   onAbilitiesLoaded = () => {
     if (this.p.debug) {
       console.log("[useCanCan] onAbilitiesLoaded")
@@ -127,7 +127,7 @@ class UseCanCanClass extends ShapeHook {
     this.setState({lastUpdate: new Date()})
   }
 
-  /** setup. */
+  /** Wires ability loading, debug state, and event subscriptions for the hook. */
   setup() {
     const {debug, dependencies} = this.p
     const dependencyList = dependencies ?? []

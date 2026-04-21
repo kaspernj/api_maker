@@ -4,7 +4,7 @@ import * as inflection from "inflection"
 import {digg, digs} from "diggerize"
 import modelClassRequire from "./model-class-require.js"
 
-/** ValidationError. */
+/** Wraps one backend validation error entry with matching helpers for inputs. */
 class ValidationError { // eslint-disable-line padded-blocks
 
   /**
@@ -90,10 +90,10 @@ class ValidationError { // eslint-disable-line padded-blocks
   }
 }
 
-/** ValidationErrors. */
+/** Wraps a backend validation-error response and exposes grouped helper methods. */
 class ValidationErrors {
   /**
-   * Constructor.
+   * Creates a validation-error collection from one backend command response.
    * @param {any} args
    */
   constructor(args) {
@@ -102,7 +102,7 @@ class ValidationErrors {
   }
 
   /**
-   * getErrorMessage.
+   * Returns one combined error message string for every validation error.
    * @returns {any}
    */
   getErrorMessage() {
@@ -121,7 +121,7 @@ class ValidationErrors {
   getValidationErrors = () => this.validationErrors
 
   /**
-   * getValidationErrorsForInput.
+   * Returns and marks the validation errors that match one input or custom matcher.
    * @param {object} root0
    * @param {any} root0.attribute
    * @param {any} root0.inputName
@@ -143,7 +143,7 @@ class ValidationErrors {
   }
 
   /**
-   * getUnhandledErrorMessage.
+   * Returns one combined message for validation errors that were never matched to an input.
    * @returns {any}
    */
   getUnhandledErrorMessage() {

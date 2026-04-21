@@ -56,7 +56,7 @@ export default class KeyValueStore {
     return KeyValueStore.set(paramName, qParams)
   }
 
-  /** Constructor. */
+  /** Opens the IndexedDB database used by the shared key/value store. */
   constructor () {
     // @ts-expect-error
     this.database = new Dexie("KeyValueStoreDatabase") // eslint-disable-line no-undef

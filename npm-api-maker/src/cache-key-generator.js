@@ -4,7 +4,7 @@ import SparkMD5 from "spark-md5"
 /** Generates local/full cache keys for models. */
 export default class CacheKeyGenerator {
   /**
-   * Constructor.
+   * Creates a cache-key generator rooted at one model instance.
    * @param {any} model
    */
   constructor(model) {
@@ -17,7 +17,7 @@ export default class CacheKeyGenerator {
   }
 
   /**
-   * local.
+   * Builds a cache key from the root model only.
    * @returns {any}
    */
   local() {
@@ -29,7 +29,7 @@ export default class CacheKeyGenerator {
   }
 
   /**
-   * recordModelType.
+   * Ensures one relationship type has a tracking bucket.
    * @param {any} relationshipType
    */
   recordModelType(relationshipType) {
@@ -39,7 +39,7 @@ export default class CacheKeyGenerator {
   }
 
   /**
-   * recordModel.
+   * Records one related model under its relationship type.
    * @param {any} relationshipType
    * @param {any} model
    */
@@ -49,7 +49,7 @@ export default class CacheKeyGenerator {
   }
 
   /**
-   * isModelRecorded.
+   * Returns true when a related model has already been visited for one relationship type.
    * @param {any} relationshipType
    * @param {any} model
    * @returns {boolean}
@@ -63,7 +63,7 @@ export default class CacheKeyGenerator {
   }
 
   /**
-   * fillModels.
+   * Traverses loaded relationships so they are included in the full cache key.
    * @param {any} model
    */
   fillModels(model) {
@@ -91,7 +91,7 @@ export default class CacheKeyGenerator {
   }
 
   /**
-   * cacheKey.
+   * Builds a cache key that includes the root model and all loaded related models.
    * @returns {any}
    */
   cacheKey() {
@@ -109,7 +109,7 @@ export default class CacheKeyGenerator {
   }
 
   /**
-   * feedModel.
+   * Appends one model's identity and loaded attributes to the running hash.
    * @param {any} model
    * @param {any} md5
    */
