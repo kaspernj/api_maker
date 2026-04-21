@@ -8,7 +8,7 @@ import Money from "js-money"
 /** Deserializes API Maker encoded payloads. */
 export default class ApiMakerDeserializer {
   /**
-   * parse.
+   * Recursively deserializes one API Maker encoded payload tree.
    * @param {any} object
    * @returns {any}
    */

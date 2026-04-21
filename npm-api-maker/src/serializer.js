@@ -4,7 +4,7 @@ import {digg} from "diggerize"
 /** Serializes API Maker payloads and model references. */
 export default class Serializer {
   /**
-   * serialize.
+   * Serializes one value without manually instantiating the serializer class.
    * @param {any} arg
    * @returns {any}
    */
@@ -15,7 +15,7 @@ export default class Serializer {
   }
 
   /**
-   * Constructor.
+   * Creates a serializer bound to one root argument.
    * @param {any} arg
    */
   constructor (arg) {
@@ -23,7 +23,7 @@ export default class Serializer {
   }
 
   /**
-   * serialize.
+   * Serializes the root argument passed to this serializer instance.
    * @returns {any}
    */
   serialize () {
@@ -31,7 +31,7 @@ export default class Serializer {
   }
 
   /**
-   * serializeArgument.
+   * Serializes one scalar, model, collection, array, or plain object value.
    * @param {any} arg
    * @returns {any | object}
    */
@@ -77,7 +77,7 @@ export default class Serializer {
   }
 
   /**
-   * serializeArray.
+   * Serializes each element of one array argument.
    * @param {any} arg
    * @returns {any}
    */
@@ -86,7 +86,7 @@ export default class Serializer {
   }
 
   /**
-   * serializeObject.
+   * Serializes each key and value in one plain object argument.
    * @param {any} arg
    * @returns {any}
    */

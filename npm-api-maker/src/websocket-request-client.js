@@ -29,7 +29,7 @@ export default class ApiMakerWebsocketRequestClient {
     delete shared.currentApiMakerWebsocketRequestClient
   }
 
-  /** Constructor. */
+  /** Initializes one websocket request client instance and its request caches. */
   constructor () {
     this.currentRequestId = 1
     this.skipReconnect = false

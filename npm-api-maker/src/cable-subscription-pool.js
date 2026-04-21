@@ -27,7 +27,7 @@ const AUTH_REFRESH_TIMEOUT_MS = 5000
 
 /** Subscription pool for sharing channel subscriptions. */
 export default class ApiMakerCableSubscriptionPool {
-  /** Constructor. */
+  /** Initializes bookkeeping for one shared ActionCable subscription pool. */
   constructor () {
     this.activeSubscriptions = 0
     this.authRefreshCallbacks = {}

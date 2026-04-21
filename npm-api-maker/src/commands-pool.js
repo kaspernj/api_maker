@@ -28,10 +28,10 @@ import WebsocketRequestClient from "./websocket-request-client.js"
 
 const shared = {}
 
-/** ApiMakerCommandsPool. */
+/** Batches command submissions and flushes them over HTTP or websockets. */
 export default class ApiMakerCommandsPool {
   /**
-   * addCommand.
+   * Adds a command to the shared or one-off command pool and schedules a flush.
    * @param {any} data
    * @param {any} args
    * @returns {any}
@@ -60,7 +60,7 @@ export default class ApiMakerCommandsPool {
   }
 
   /**
-   * current.
+   * Returns the shared command pool instance.
    * @returns {any}
    */
   static current() {
@@ -69,12 +69,12 @@ export default class ApiMakerCommandsPool {
     return shared.currentApiMakerCommandsPool
   }
 
-  /** flush. */
+  /** Flushes the shared command pool immediately. */
   static flush() {
     ApiMakerCommandsPool.current().flush()
   }
 
-  /** Constructor. */
+  /** Initializes one command pool instance with empty queued state. */
   constructor() {
     this.flushCount = 0
 
@@ -94,7 +94,7 @@ export default class ApiMakerCommandsPool {
   }
 
   /**
-   * addCommand.
+   * Adds one command execution to this pool instance.
    * @param {any} data
    * @returns {any}
    */
@@ -179,7 +179,7 @@ export default class ApiMakerCommandsPool {
     throw new Error("Couldnt successfully execute request")
   }
 
-  /** flush. */
+  /** Sends the currently queued commands and resolves or rejects their executions. */
   flush = async () => {
     if (this.commandsCount() == 0) {
       return
@@ -310,7 +310,7 @@ export default class ApiMakerCommandsPool {
   }
 
   /**
-   * isActive.
+   * Returns true while one or more flushes are still in progress.
    * @returns {boolean}
    */
   isActive() {

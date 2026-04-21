@@ -1,7 +1,7 @@
 // @ts-check
 import objectToFormData from "object-to-formdata"
 
-/** ApiMakerCommandSubmitData. */
+/** Prepares command payloads for JSON or multipart submission. */
 export default class ApiMakerCommandSubmitData {
   /**
    * @param {object} data
@@ -21,7 +21,7 @@ export default class ApiMakerCommandSubmitData {
   getJsonData = () => this.jsonData
 
   /**
-   * getRawData.
+   * Returns the raw multipart-friendly payload, generating it lazily on first access.
    * @returns {any}
    */
   getRawData () {
@@ -33,7 +33,7 @@ export default class ApiMakerCommandSubmitData {
   }
 
   /**
-   * getFormData.
+   * Builds a FormData payload that includes both files and serialized JSON metadata.
    * @returns {any}
    */
   getFormData () {

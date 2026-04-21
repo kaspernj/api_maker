@@ -182,7 +182,7 @@ export default class ApiMakerCableConnectionPool {
    */
   connectUpdate = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})
 
-  /** connectUpcoming. */
+  /** Opens one shared ActionCable subscription for all queued logical subscriptions. */
   connectUpcoming = () => {
     const subscriptionData = this.upcomingSubscriptionData
     const subscriptions = this.upcomingSubscriptions

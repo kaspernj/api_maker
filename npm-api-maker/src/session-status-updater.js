@@ -30,7 +30,7 @@ const shared = {}
 /** Tracks session and CSRF token freshness. */
 export default class ApiMakerSessionStatusUpdater {
   /**
-   * current.
+   * Returns the shared session-status updater instance.
    * @param {SessionStatusUpdaterArgs} [args]
    * @returns {ApiMakerSessionStatusUpdater}
    */
@@ -43,7 +43,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   /**
-   * Constructor.
+   * Sets up session-status polling and browser wake/online listeners.
    * @param {SessionStatusUpdaterArgs} [args]
    */
   constructor(args = {}) {
@@ -65,12 +65,12 @@ export default class ApiMakerSessionStatusUpdater {
     this.connectWakeEvent()
   }
 
-  /** connectOnlineEvent. */
+  /** Re-checks session state when the browser comes back online. */
   connectOnlineEvent() {
     window.addEventListener("online", this.updateSessionStatus, false)
   }
 
-  /** connectWakeEvent. */
+  /** Re-checks session state when the device wakes from sleep. */
   connectWakeEvent() {
     wakeEvent(this.updateSessionStatus)
   }
@@ -109,7 +109,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   /**
-   * sessionStatus.
+   * Requests the latest backend session-status payload.
    * @returns {Promise<SessionStatusResult>}
    */
   sessionStatus() {
@@ -132,7 +132,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   /**
-   * onSignedOut.
+   * Registers a callback for frontend sign-out detection.
    * @param {Function} callback
    */
   onSignedOut(callback) {
@@ -140,7 +140,7 @@ export default class ApiMakerSessionStatusUpdater {
     this.addEvent("onSignedOut", callback)
   }
 
-  /** startTimeout. */
+  /** Starts or refreshes the periodic session-status timer. */
   startTimeout() {
     logger.debug("startTimeout")
 
@@ -156,13 +156,13 @@ export default class ApiMakerSessionStatusUpdater {
     )
   }
 
-  /** stopTimeout. */
+  /** Stops the periodic session-status timer if it is running. */
   stopTimeout() {
     if (this.updateTimeout)
       clearTimeout(this.updateTimeout)
   }
 
-  /** updateSessionStatus. */
+  /** Fetches the latest session status and applies it locally. */
   updateSessionStatus = async () => {
     logger.debug("updateSessionStatus")
 
@@ -183,7 +183,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   /**
-   * updateMetaElementsFromResult.
+   * Updates the cached and DOM CSRF token from one session-status response.
    * @param {SessionStatusResult} result
    */
   updateMetaElementsFromResult(result) {
@@ -208,7 +208,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   /**
-   * updateUserSessionsFromResult.
+   * Applies each returned scope status to the frontend Devise cache.
    * @param {SessionStatusResult} result
    */
   updateUserSessionsFromResult(result) {
@@ -218,7 +218,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   /**
-   * updateUserSessionScopeFromResult.
+   * Applies one scope's signed-in state to the frontend Devise cache.
    * @param {string} scopeName
    * @param {SessionStatusScope} scope
    */
