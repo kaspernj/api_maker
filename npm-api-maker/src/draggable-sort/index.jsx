@@ -11,20 +11,64 @@ import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "ya-use-event-emitter"
 
+/** @typedef {import("eventemitter3").EventEmitter} DraggableSortEventEmitter */
+/** @typedef {import("react-native").GestureResponderHandlers} DraggableTouchProps */
+/** @typedef {{x: number, y: number}} DraggablePosition */
+/**
+ * @typedef {object} DraggableSortAnimationArgs
+ * @property {number} duration
+ * @property {(value: number) => number} easing
+ * @property {DraggablePosition} toValue
+ * @property {boolean} useNativeDriver
+ */
+/**
+ * @typedef {object} DraggableSortOnItemMovedArgs
+ * @property {DraggableSortAnimationArgs} [animationArgs]
+ * @property {number} itemIndex
+ * @property {number} x
+ * @property {number} y
+ */
+/**
+ * @typedef {object} DraggableSortDragItemData
+ * @property {number} index
+ * @property {object} item
+ * @property {number} position
+ */
+/**
+ * @typedef {object} DraggableSortDragStartArgs
+ * @property {DraggableSortDragItemData} itemData
+ */
+/**
+ * @typedef {object} DraggableSortDragEndArgs
+ * @property {number} fromIndex
+ * @property {object} fromItem
+ * @property {number} fromPosition
+ * @property {object} item
+ * @property {DraggableSortDragItemData} itemData
+ * @property {object|null} toItem
+ * @property {number|null} toPosition
+ */
+/**
+ * @typedef {object} DraggableSortRenderItemArgs
+ * @property {boolean} isActive
+ * @property {object} item
+ * @property {DraggableTouchProps} touchProps
+ */
+
 /**
  * @typedef {object} Props
- * @property {object} [activeItemStyle]
- * @property {Function} [cacheKeyExtractor]
- * @property {any[]} data
+ * @property {import("react-native").ViewStyle} [activeItemStyle]
+ * @property {(item: object) => string} [cacheKeyExtractor]
+ * @property {object[]} data
  * @property {object} [dataSet]
- * @property {EventEmitter} [events]
+ * @property {DraggableSortEventEmitter} [events]
  * @property {boolean} [horizontal]
- * @property {Function} keyExtractor
- * @property {Function} [onDragItemEnd]
- * @property {Function} [onDragItemStart]
- * @property {Function} [onItemMoved]
- * @property {Function} onReordered
- * @property {Function} renderItem
+ * @property {(item: object) => string} keyExtractor
+ * @property {(args: DraggableSortDragEndArgs) => void} [onDragItemEnd]
+ * @property {(args: DraggableSortDragStartArgs) => void} [onDragItemStart]
+ * @property {(args: DraggableSortOnItemMovedArgs) => void} [onItemMoved]
+ * @property {(args: DraggableSortDragEndArgs) => void|Promise<void>} onReordered
+ * @property {(args: DraggableSortRenderItemArgs) => React.ReactNode} renderItem
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class DraggableSort extends ShapeComponent {
@@ -113,12 +157,20 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
+  /**
+   * Forward drag-start notifications to the optional parent callback.
+   * @param {DraggableSortDragStartArgs} root0
+   */
   onDragItemStart = ({itemData}) => {
     if (this.props.onDragItemStart) {
       this.p.onDragItemStart({itemData})
     }
   }
 
+  /**
+   * Forward drag-end notifications and persist the reordered list when needed.
+   * @param {DraggableSortDragEndArgs} args
+   */
   onDragItemEnd = (args) => {
     if (args.toPosition !== null) {
       this.p.onReordered(args)

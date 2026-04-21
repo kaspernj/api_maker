@@ -6,6 +6,7 @@ import Collection from "./collection.js"
 
 /** @typedef {import("./model-recipes-loader.js").default} ModelRecipesLoaderLike */
 /** @typedef {typeof import("./base-model.js").default} ModelClassLike */
+/** @typedef {ModelClassLike & {modelClassData: () => ModelRecipeClassData}} ModelClassWithData */
 /** @typedef {Record<string, {name: string}>} ModelRecipeAttributes */
 /** @typedef {Record<string, {args?: Record<string, object | string | number | boolean | null | undefined>}>} ModelRecipeCommands */
 /**
@@ -84,7 +85,7 @@ export default class ApiMakerModelRecipesModelLoader {
       {writable: false, value: modelClassName}
     )
 
-    const modelClassConstructor = /** @type {any} */ (ModelClass.prototype.constructor)
+    const modelClassConstructor = /** @type {ModelClassWithData} */ (ModelClass.prototype.constructor)
     modelClassConstructor.modelClassData = () => modelClassData
 
     this.addAttributeMethodsToModelClass(ModelClass, attributes)

@@ -9,15 +9,61 @@ import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "ya-use-event-emitter"
 
+/** @typedef {import("./controller.js").default} DraggableSortController */
+/** @typedef {import("eventemitter3").EventEmitter} DraggableSortEventEmitter */
+/** @typedef {import("react-native").GestureResponderHandlers} DraggableTouchProps */
+/** @typedef {import("react-native").LayoutRectangle} DraggableSortLayout */
+/** @typedef {import("react-native").PanResponderGestureState} DraggableSortGestureState */
+/** @typedef {{x: number, y: number}} DraggablePosition */
+/**
+ * @typedef {object} DraggableSortAnimationArgs
+ * @property {number} duration
+ * @property {(value: number) => number} easing
+ * @property {DraggablePosition} toValue
+ * @property {boolean} useNativeDriver
+ */
+/**
+ * @typedef {object} DraggableSortOnItemMovedArgs
+ * @property {DraggableSortAnimationArgs} [animationArgs]
+ * @property {number} itemIndex
+ * @property {number} x
+ * @property {number} y
+ */
+/**
+ * @typedef {object} DraggableSortRenderItemArgs
+ * @property {boolean} isActive
+ * @property {object} item
+ * @property {DraggableTouchProps} touchProps
+ */
+/**
+ * @typedef {object} DraggableSortItemData
+ * @property {number} index
+ * @property {object} item
+ * @property {number} position
+ */
+/**
+ * @typedef {object} DraggableSortMoveEventArgs
+ * @property {DraggableSortGestureState} gestate
+ */
+/**
+ * @typedef {object} DraggableSortMoveToPositionArgs
+ * @property {number} x
+ * @property {number} y
+ */
+/**
+ * @typedef {object} DraggableSortResetPositionArgs
+ * @property {() => void} [callback]
+ */
+
 /**
  * @typedef {object} Props
- * @property {object} [activeItemStyle]
+ * @property {import("react-native").ViewStyle} [activeItemStyle]
  * @property {string} [cacheKey]
- * @property {object} controller
- * @property {any} item
+ * @property {DraggableSortController} controller
+ * @property {object} item
  * @property {number} itemIndex
- * @property {Function} [onItemMoved]
- * @property {Function} renderItem
+ * @property {(args: DraggableSortOnItemMovedArgs) => void} [onItemMoved]
+ * @property {(args: DraggableSortRenderItemArgs) => React.ReactNode} renderItem
  */
 /**
  * @typedef {object} State
@@ -29,13 +75,13 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     activeItemStyle: PropTypes.object,
     cacheKey: PropTypes.string,
     controller: PropTypes.object.isRequired,
-    item: PropTypes.any.isRequired,
+    item: PropTypes.object.isRequired,
     itemIndex: PropTypes.number.isRequired,
     onItemMoved: PropTypes.func,
     renderItem: PropTypes.func.isRequired
   })
 
-  /** @type {import("eventemitter3").EventEmitter} */
+  /** @type {DraggableSortEventEmitter} */
   events
 
   /** @type {import("react-native").Animated.ValueXY} */
@@ -44,6 +90,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   /** @type {import("react-native").PanResponderInstance} */
   panResponder
 
+  /** @type {DraggableSortLayout|null} */
   initialLayout = null
   state = {
     active: false,
@@ -75,6 +122,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const style = useMemo(
       () => {
         const baseTransform = this.tt.position.getTranslateTransform()
+
+        /** @type {import("react-native").ViewStyle} */
         const style = {transform: baseTransform}
 
         if (active) {
@@ -82,9 +131,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
             const {transform: activeTransform, ...restActiveStyle} = activeItemStyle
 
             if (activeTransform) {
-              const normalizedActiveTransform = Array.isArray(activeTransform) ? activeTransform : [activeTransform]
+              const normalizedActiveTransform = /** @type {NonNullable<import("react-native").TransformsStyle["transform"]>} */ (
+                Array.isArray(activeTransform) ? activeTransform : [activeTransform]
+              )
 
-              style.transform = /** @type {any} */ (baseTransform.concat(normalizedActiveTransform))
+              style.transform = /** @type {import("react-native").ViewStyle["transform"]} */ ([...baseTransform, ...normalizedActiveTransform])
             }
 
             Object.assign(style, restActiveStyle)
@@ -105,6 +156,10 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
+  /**
+   * Activate the dragged item after the controller announces drag start.
+   * @param {{itemData: DraggableSortItemData}} root0
+   */
   onDragStart = ({itemData}) => {
     const newState = {dragging: true}
 
@@ -118,6 +173,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   onDragEndAnimation = () => this.setState({active: false, dragging: false})
 
+  /** @param {{nativeEvent: {layout: DraggableSortLayout}}} e */
   onLayout = (e) => {
     const {controller, item, itemIndex} = this.p
 
@@ -128,7 +184,13 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }
   }
 
+  /**
+   * Move the active item in sync with the current drag gesture.
+   * @param {DraggableSortMoveEventArgs} root0
+   */
   onMove = ({gestate}) => {
+    if (!this.tt.initialLayout) throw new Error("Expected initial layout before moving draggable item")
+
     const x = gestate.dx + this.tt.baseXAtStartedDragging - this.tt.initialLayout.x
     const y = this.tt.initialLayout.y
 
@@ -139,8 +201,16 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }
   }
 
+  /**
+   * Animate a non-dragged item into its new ordered position.
+   * @param {DraggableSortMoveToPositionArgs} root0
+   */
   onMoveToPosition = ({x, y}) => {
+    if (!this.tt.initialLayout) throw new Error("Expected initial layout before animating item position")
+
     const calculatedXFromStartingPosition = x - this.tt.initialLayout.x
+
+    /** @type {DraggableSortAnimationArgs} */
     const animationArgs = {
       duration: 200,
       easing: Easing.inOut(Easing.linear),
@@ -172,8 +242,16 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   getBaseX = () => this.p.controller.getItemDataForIndex(this.p.itemIndex).baseX
 
+  /**
+   * Animate the dragged item back to its base position after drag end.
+   * @param {DraggableSortResetPositionArgs} [args]
+   */
   onResetPosition = (args) => {
+    if (!this.tt.initialLayout) throw new Error("Expected initial layout before resetting item position")
+
     const baseX = this.getBaseX() - this.tt.initialLayout.x
+
+    /** @type {DraggableSortAnimationArgs} */
     const animationArgs = {
       duration: 200,
       easing: Easing.inOut(Easing.linear),
