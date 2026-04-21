@@ -58,6 +58,10 @@ export default memo(shapeComponent(class ApiMakerBootstrapCheckboxes extends Sha
     options: PropTypes.array.isRequired
   })
 
+  state = {
+    checkedOptions: this.defaultCheckedOptions()
+  }
+
   setup() {
     const {inputProps, wrapperOpts} = useInput({props: this.props})
 
@@ -70,19 +74,9 @@ export default memo(shapeComponent(class ApiMakerBootstrapCheckboxes extends Sha
       []
     )
 
-    this.setInstance({
-      form: useForm(),
-      inputProps,
-      wrapperOpts
-    })
-    this.useStates({
-      checkedOptions: () => {
-        if (Array.isArray(this.props.defaultValue)) return this.props.defaultValue
-        if (this.props.defaultValue) return [this.props.defaultValue]
-
-        return []
-      }
-    })
+    this.form = useForm()
+    this.inputProps = inputProps
+    this.wrapperOpts = wrapperOpts
 
     useMemo(() => {
       if (this.tt.form && inputProps.name) {
@@ -166,6 +160,18 @@ export default memo(shapeComponent(class ApiMakerBootstrapCheckboxes extends Sha
     if (this.props.labelClassName) classNames.push(this.props.labelClassName)
 
     return classNames.join(" ")
+  }
+
+  defaultCheckedOptions() {
+    if (Array.isArray(this.props.defaultValue)) {
+      return this.props.defaultValue
+    }
+
+    if (this.props.defaultValue) {
+      return [this.props.defaultValue]
+    }
+
+    return []
   }
 
   onOptionChecked = ({event, option}) => {

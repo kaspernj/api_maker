@@ -26,12 +26,11 @@ export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseCompo
     style: PropTypes.object,
     testID: PropTypes.string
   })
-
-  setup() {
-    this.useStates({
-      checked: this.props.defaultChecked
-    })
+  state = {
+    checked: this.props.defaultChecked
   }
+
+  setup() {}
 
   calculateChecked() {
     if ("checked" in this.props) {

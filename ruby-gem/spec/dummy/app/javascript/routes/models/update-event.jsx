@@ -1,17 +1,26 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import {memo, useMemo} from "react"
+import {memo, useEffect} from "react"
 import React from "react"
 import {Task} from "models.js"
 import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
 
-export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponent {
-  setup() {
-    this.useStates({
-      connected: null,
-      finishedTasks: []
-    })
+/** @typedef {object} ModelsUpdateEventProps */
 
-    useMemo(() => {
+/**
+ * @typedef {object} ModelsUpdateEventState
+ * @property {boolean | null} connected
+ * @property {Task[]} finishedTasks
+ */
+
+/** @augments {ShapeComponent<ModelsUpdateEventProps, ModelsUpdateEventState>} */
+class ModelsUpdateEvent extends ShapeComponent {
+  state = /** @type {ModelsUpdateEventState} */ ({
+    connected: null,
+    finishedTasks: []
+  })
+
+  setup() {
+    useEffect(() => {
       this.loadFinishedTasks()
     }, [])
 
@@ -45,4 +54,6 @@ export default memo(shapeComponent(class ModelsUpdateEvent extends ShapeComponen
 
     this.setState({finishedTasks: finishedTasks.slice(0, 2)})
   }
-}))
+}
+
+export default memo(shapeComponent(ModelsUpdateEvent))

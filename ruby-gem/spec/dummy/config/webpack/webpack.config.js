@@ -1,3 +1,4 @@
+const babel = require("./loaders/babel")
 const erb = require("./loaders/erb")
 const path = require("path")
 const webpack = require("webpack")
@@ -8,6 +9,7 @@ const options = {
   devtool: "source-map",
   module: {
     rules: [
+      babel,
       {
         test: /\.m?js$/,
         resolve: {
@@ -15,6 +17,14 @@ const options = {
         }
       },
       erb,
+      {
+        test: /\.ttf$/,
+        include: [
+          path.resolve(__dirname, "../../node_modules/react-native-vector-icons"),
+          path.resolve(__dirname, "../../../../npm-api-maker/node_modules/react-native-vector-icons")
+        ],
+        loader: "file-loader"
+      },
       {
         test: /\.ya?ml$/,
         exclude: /node_modules/,

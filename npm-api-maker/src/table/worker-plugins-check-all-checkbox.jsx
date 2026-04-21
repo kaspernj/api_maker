@@ -32,12 +32,12 @@ export default memo(shapeComponent(class ApiMakerTableWorkerPluginsCheckAllCheck
     style: PropTypes.object
   })
 
-  setup() {
-    this.useStates({
-      checked: false,
-      indeterminate: false
-    })
+  state = {
+    checked: false,
+    indeterminate: false
+  }
 
+  setup() {
     useMemo(() => {
       this.updateAllChecked()
     }, [])

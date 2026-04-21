@@ -21,25 +21,14 @@ jest.unstable_mockModule("set-state-compare", () => {
       this.props = props
       this.p = props
       this.state = {}
-      this.s = this.state
+    }
+
+    get s() {
+      return this.state
     }
 
     setState = (statesList) => {
       Object.assign(this.state, statesList)
-    }
-
-    setInstance(instances) {
-      Object.assign(this, instances)
-    }
-
-    useStates(statesList) {
-      Object.keys(statesList).forEach((key) => {
-        const value = statesList[key]
-
-        if (!(key in this.state)) {
-          this.state[key] = typeof value == "function" ? value() : value
-        }
-      })
     }
   }
 

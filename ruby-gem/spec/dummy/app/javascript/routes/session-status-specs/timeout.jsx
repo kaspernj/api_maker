@@ -5,12 +5,20 @@ import Layout from "components/layout"
 import useEventEmitter from "ya-use-event-emitter"
 import SessionStatusUpdater from "@kaspernj/api-maker/build/session-status-updater.js"
 
-export default memo(shapeComponent(class SessionStatusSpecsTimeout extends ShapeComponent {
-  setup() {
-    this.useStates({
-      isUserSignedIn: () => Devise.isUserSignedIn()
-    })
+/** @typedef {object} SessionStatusSpecsTimeoutProps */
 
+/**
+ * @typedef {object} SessionStatusSpecsTimeoutState
+ * @property {boolean} isUserSignedIn
+ */
+
+/** @augments {ShapeComponent<SessionStatusSpecsTimeoutProps, SessionStatusSpecsTimeoutState>} */
+class SessionStatusSpecsTimeout extends ShapeComponent {
+  state = /** @type {SessionStatusSpecsTimeoutState} */ ({
+    isUserSignedIn: Devise.isUserSignedIn()
+  })
+
+  setup() {
     useEventEmitter(Devise.events(), "onDeviseSignOut", this.tt.onDeviseSignOut)
   }
 
@@ -34,4 +42,6 @@ export default memo(shapeComponent(class SessionStatusSpecsTimeout extends Shape
   }
 
   onDeviseSignOut = () => this.setState({isUserSignedIn: false})
-}))
+}
+
+export default memo(shapeComponent(SessionStatusSpecsTimeout))

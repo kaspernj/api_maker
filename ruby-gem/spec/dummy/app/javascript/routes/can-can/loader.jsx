@@ -6,12 +6,18 @@ import Layout from "components/layout"
 import LoaderThatSignsOutOnMount from "components/can-can/loader-that-signs-out-on-mount"
 import LoaderWithState from "components/can-can/loader-with-state"
 
-export default memo(shapeComponent(class RoutesCanCanLoader extends ShapeComponent {
-  setup() {
-    this.useStates({
-      showLoaderThatSignsOutOnMount: false
-    })
-  }
+/** @typedef {object} RoutesCanCanLoaderProps */
+
+/**
+ * @typedef {object} RoutesCanCanLoaderState
+ * @property {boolean} showLoaderThatSignsOutOnMount
+ */
+
+/** @augments {ShapeComponent<RoutesCanCanLoaderProps, RoutesCanCanLoaderState>} */
+class RoutesCanCanLoader extends ShapeComponent {
+  state = /** @type {RoutesCanCanLoaderState} */ ({
+    showLoaderThatSignsOutOnMount: false
+  })
 
   render() {
     const {showLoaderThatSignsOutOnMount} = this.s
@@ -52,4 +58,6 @@ export default memo(shapeComponent(class RoutesCanCanLoader extends ShapeCompone
 
     this.setState({showLoaderThatSignsOutOnMount: true})
   }
-}))
+}
+
+export default memo(shapeComponent(RoutesCanCanLoader))

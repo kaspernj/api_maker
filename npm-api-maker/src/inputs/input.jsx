@@ -37,6 +37,10 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
     type: PropTypes.string
   }
 
+  state = {
+    blankInputName: digg(this.props.inputProps, "type") == "file"
+  }
+
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.inputs.input"})
     const {autoRefresh, inputProps, model} = this.p
@@ -45,10 +49,6 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
     this.form = useForm()
     this.visibleInputRef = useRef(undefined)
     this.t = t
-
-    this.useStates({
-      blankInputName: digg(inputProps, "type") == "file"
-    })
 
     useMemo(() => {
       if (name) {

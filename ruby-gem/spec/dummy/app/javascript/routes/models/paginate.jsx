@@ -6,16 +6,27 @@ import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
 import {Task} from "models.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
-export default memo(shapeComponent(class ModelsPaginate extends ShapeComponent {
+/** @typedef {object} ModelsPaginateProps */
+
+/**
+ * @typedef {object} ModelsPaginateState
+ * @property {import("@kaspernj/api-maker/build/collection.js").default | null} query
+ * @property {string | undefined} queryParamsString
+ * @property {import("@kaspernj/api-maker/build/result.js").default | null} result
+ * @property {Task[] | null} tasks
+ */
+
+/** @augments {ShapeComponent<ModelsPaginateProps, ModelsPaginateState>} */
+class ModelsPaginate extends ShapeComponent {
+  state = /** @type {ModelsPaginateState} */ ({
+    query: null,
+    queryParamsString: undefined,
+    result: null,
+    tasks: null
+  })
+
   setup() {
     this.queryParams = useQueryParams()
-
-    this.useStates({
-      query: null,
-      queryParamsString: () => JSON.stringify(this.tt.queryParams),
-      result: null,
-      tasks: null
-    })
   }
 
   componentDidMount() {
@@ -80,4 +91,6 @@ export default memo(shapeComponent(class ModelsPaginate extends ShapeComponent {
       </div>
     )
   }
-}))
+}
+
+export default memo(shapeComponent(ModelsPaginate))

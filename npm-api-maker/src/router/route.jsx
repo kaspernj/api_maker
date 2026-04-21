@@ -39,6 +39,12 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
   lastMatchUpdate = 0
   newParams = null
   pathParts = null
+  state = {
+    Component: null,
+    componentNotFound: null,
+    lastMatchUpdate: 0,
+    matches: false
+  }
 
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.router.route"})
@@ -72,8 +78,6 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
       },
       [givenRoute].concat(this.pathParts)
     )
-
-    this.useStates({Component: null, componentNotFound: null, lastMatchUpdate: 0, matches: false})
 
     useLayoutEffect(() => {
       this.loadMatches()
@@ -183,7 +187,9 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
   updateRouteMatchState({componentPathParts, match, matches, newParams}) {
     const routeDataChanged = this.routeDataChanged({componentPathParts, match, newParams})
 
-    this.setInstance({componentPathParts, match, newParams})
+    this.componentPathParts = componentPathParts
+    this.match = match
+    this.newParams = newParams
     if (routeDataChanged || this.s.matches != matches) {
       this.setState({
         lastMatchUpdate: routeDataChanged ? this.lastMatchUpdate += 1 : this.s.lastMatchUpdate,

@@ -30,12 +30,12 @@ export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseCompo
     table: PropTypes.bool.isRequired
   }
 
+  state = {
+    expanded: this.props.defaultExpanded
+  }
+
   setup() {
     this.cardRef = useRef(undefined)
-
-    this.useStates({
-      expanded: this.props.defaultExpanded
-    })
   }
 
   render () {

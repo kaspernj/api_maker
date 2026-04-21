@@ -51,14 +51,16 @@ export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends 
     title: PropTypes.string
   })
 
+  state = {
+    headerActionsActive: false
+  }
+
   setup() {
     const {name: breakpoint, mdUp} = useBreakpoint()
 
     this.headerActionsRef = useRef(undefined)
-    this.setInstance({breakpoint, mdUp})
-    this.useStates({
-      headerActionsActive: false
-    })
+    this.breakpoint = breakpoint
+    this.mdUp = mdUp
 
     useEventListener(window, "mouseup", this.tt.onWindowMouseUp)
   }

@@ -28,13 +28,16 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
     widths: PropTypes.instanceOf(Widths).isRequired
   })
 
+  state = {
+    resizing: false
+  }
+
   setup() {
     const {name: breakpoint, mdUp, smDown} = useBreakpoint()
 
-    this.setInstance({breakpoint, mdUp, smDown})
-    this.useStates({
-      resizing: false
-    })
+    this.breakpoint = breakpoint
+    this.mdUp = mdUp
+    this.smDown = smDown
 
     this.resizePanResponder = useMemo(
       () => PanResponder.create({
@@ -110,7 +113,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
         <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
         {mdUp &&
           <Animated.View
-            style={this.cache("resizeColumnViewStyle", {
+            style={/** @type {any} */ (this.cache("resizeColumnViewStyle", {
               position: "absolute",
               top: 0,
               right: 0,
@@ -118,7 +121,7 @@ export default memo(shapeComponent(class ApiMakerTableHeaderColumn extends BaseC
               height: "100%",
               cursor: "col-resize",
               zIndex: 9999
-            })}
+            }))}
             {...this.tt.resizePanResponder.panHandlers}
           />
         }

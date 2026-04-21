@@ -10,14 +10,29 @@ const Account = modelClassRequire("Account")
 const Project = modelClassRequire("Project")
 const Task = modelClassRequire("Task")
 
-export default memo(shapeComponent(class Layout extends ShapeComponent {
+/**
+ * @typedef {object} LayoutProps
+ * @property {string} [className]
+ * @property {import("react").ReactNode} [children]
+ */
+
+/**
+ * @typedef {object} LayoutState
+ * @property {Account | null} account
+ * @property {Project | null} project
+ * @property {Task | null} task
+ */
+
+/** @augments {ShapeComponent<LayoutProps, LayoutState>} */
+class Layout extends ShapeComponent {
+  state = /** @type {LayoutState} */ ({
+    account: null,
+    project: null,
+    task: null
+  })
+
   setup() {
     this.currentUser = useCurrentUser()
-    this.useStates({
-      account: null,
-      project: null,
-      task: null
-    })
   }
 
   componentDidMount() {
@@ -122,4 +137,6 @@ export default memo(shapeComponent(class Layout extends ShapeComponent {
       FlashNotifications.errorResponse(error)
     }
   }
-}))
+}
+
+export default memo(shapeComponent(Layout))

@@ -91,14 +91,15 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
 }))
 
 export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal extends BaseComponent {
+  state = {
+    editSearch: undefined,
+    searches: undefined
+  }
+
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table.filters.load_search_modal"})
 
-    this.useStates({
-      editSearch: undefined,
-      searches: undefined
-    })
-    this.setInstance({t})
+    this.t = t
 
     useMemo(() => {
       this.loadSearches()

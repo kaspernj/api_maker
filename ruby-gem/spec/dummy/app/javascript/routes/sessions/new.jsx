@@ -7,14 +7,23 @@ import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
 import useEventEmitter from "ya-use-event-emitter"
 
-export default memo(shapeComponent(class SessionsNew extends ShapeComponent {
+/** @typedef {object} SessionsNewProps */
+
+/**
+ * @typedef {object} SessionsNewState
+ * @property {boolean} isUserSignedIn
+ */
+
+/** @augments {ShapeComponent<SessionsNewProps, SessionsNewState>} */
+class SessionsNew extends ShapeComponent {
+  state = /** @type {SessionsNewState} */ ({
+    isUserSignedIn: Devise.isUserSignedIn()
+  })
+
   setup() {
     this.emailRef = useRef()
     this.passwordRef = useRef()
     this.rememberMeRef = useRef()
-    this.useStates({
-      isUserSignedIn: Devise.isUserSignedIn()
-    })
 
     useEventEmitter(Devise.events(), "onDeviseSignIn", this.tt.onDeviseSigned)
     useEventEmitter(Devise.events(), "onDeviseSignOut", this.tt.onDeviseSigned)
@@ -56,4 +65,6 @@ export default memo(shapeComponent(class SessionsNew extends ShapeComponent {
       FlashNotifications.errorResponse(error)
     }
   }
-}))
+}
+
+export default memo(shapeComponent(SessionsNew))

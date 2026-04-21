@@ -21,6 +21,10 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
     url: PropTypes.string
   }
 
+  state = {
+    purgeChecked: false
+  }
+
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.inputs.attachment"})
     const {inputProps} = useInput({
@@ -33,10 +37,8 @@ export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseCo
       wrapperOptions: {type: "file"}
     })
 
-    this.setInstance({inputProps, t})
-    this.useStates({
-      purgeChecked: false
-    })
+    this.inputProps = inputProps
+    this.t = t
   }
 
   render() {

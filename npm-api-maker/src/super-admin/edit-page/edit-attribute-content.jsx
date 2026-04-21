@@ -15,14 +15,15 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
     name: PropTypes.string.isRequired
   })
 
+  state = {
+    value: undefined
+  }
+
   setup() {
     this.form = useForm()
     const rawValue = this.rawValue()
     this.initialValue = rawValue === null || rawValue === undefined ? "" : rawValue
     this.hasInitialValue = rawValue !== null && rawValue !== undefined
-    this.useStates({
-      value: this.initialValue
-    })
 
     useEffect(() => {
       if (this.form && this.hasInitialValue) {
@@ -48,8 +49,8 @@ export default memo(shapeComponent(class EditAttributeContent extends BaseCompon
         name: this.p.name
       },
       onChangeValue: this.tt.onChangeValue,
-      value: this.s.value
-    }), [attribute.attribute, id, model, this.p.name, this.s.value])
+      value: this.s.value === undefined ? this.initialValue : this.s.value
+    }), [attribute.attribute, id, model, this.initialValue, this.p.name, this.s.value])
 
     return attribute.content(contentArgs)
   }

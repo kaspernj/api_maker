@@ -11,20 +11,36 @@ import Layout from "components/layout"
 import {Task, User} from "models.js"
 import useEventEmitter from "ya-use-event-emitter"
 
-export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
-  setup() {
-    this.useStates({
-      subscribedTask: null,
-      subscribedTaskName: "",
-      taskSubscriptionConnected: "false",
-      subscribedUser: null,
-      subscriptionConnected: "false",
-      subscriptionUpdateCount: 0,
-      taskUpdateCount: 0,
-      signInCount: 0,
-      signOutCount: 0
-    })
+/** @typedef {object} DeviseEventsProps */
 
+/**
+ * @typedef {object} DeviseEventsState
+ * @property {number} signInCount
+ * @property {number} signOutCount
+ * @property {Task | null} subscribedTask
+ * @property {string} subscribedTaskName
+ * @property {User | null} subscribedUser
+ * @property {string} subscriptionConnected
+ * @property {number} subscriptionUpdateCount
+ * @property {string} taskSubscriptionConnected
+ * @property {number} taskUpdateCount
+ */
+
+/** @augments {ShapeComponent<DeviseEventsProps, DeviseEventsState>} */
+class DeviseEvents extends ShapeComponent {
+  state = /** @type {DeviseEventsState} */ ({
+    signInCount: 0,
+    signOutCount: 0,
+    subscribedTask: null,
+    subscribedTaskName: "",
+    subscribedUser: null,
+    subscriptionConnected: "false",
+    subscriptionUpdateCount: 0,
+    taskSubscriptionConnected: "false",
+    taskUpdateCount: 0
+  })
+
+  setup() {
     useEventEmitter(Devise.events(), "onDeviseSignIn", this.tt.onDeviseSignIn)
     useEventEmitter(Devise.events(), "onDeviseSignOut", this.tt.onDeviseSignOut)
     useEffect(() => {
@@ -177,4 +193,6 @@ export default memo(shapeComponent(class DeviseEvents extends ShapeComponent {
 
     return subscribedTask
   }
-}))
+}
+
+export default memo(shapeComponent(DeviseEvents))

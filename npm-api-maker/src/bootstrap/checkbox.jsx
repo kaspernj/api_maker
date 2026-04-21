@@ -33,7 +33,9 @@ export default memo(shapeComponent(class ApiMakerBootstrapCheckbox extends Shape
   setup() {
     const {inputProps, restProps: useInputRestProps, wrapperOpts} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
 
-    this.setInstance({inputProps, useInputRestProps, wrapperOpts})
+    this.inputProps = inputProps
+    this.useInputRestProps = useInputRestProps
+    this.wrapperOpts = wrapperOpts
   }
 
   render () {

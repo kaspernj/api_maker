@@ -47,8 +47,35 @@ import useQueryParams from "on-location-changed/build/use-query-params.js"
  * @param {any[]} cacheKeys
  * @returns {UseCollectionResult & Record<string, any>}
  */
+
+/**
+ * @typedef {object} UseCollectionState
+ * @property {any[] | undefined} models
+ * @property {number | undefined} overallCount
+ * @property {Record<string, any>} qParams
+ * @property {import("./collection.js").default | undefined} query
+ * @property {boolean} readyToLoad
+ * @property {import("./result.js").default | undefined} result
+ * @property {string[] | undefined} searchParams
+ * @property {false | import("react").ReactNode} showNoRecordsAvailableContent
+ * @property {false | import("react").ReactNode} showNoRecordsFoundContent
+ */
+
 /** Hook state container for useCollection. */
+/** @augments {ShapeHook<Record<string, any>, UseCollectionState>} */
 class UseCollectionShapeHook extends ShapeHook {
+  state = /** @type {UseCollectionState} */ ({
+    models: undefined,
+    overallCount: undefined,
+    qParams: {},
+    query: undefined,
+    readyToLoad: false,
+    result: undefined,
+    searchParams: undefined,
+    showNoRecordsAvailableContent: false,
+    showNoRecordsFoundContent: false
+  })
+
   /** Constructor. */
   constructor(props) {
     super(props)
@@ -303,18 +330,7 @@ class UseCollectionShapeHook extends ShapeHook {
 
   /** @returns {void} */
   setup() {
-    this.useStates({
-      models: undefined,
-      overallCount: undefined,
-      qParams: {},
-      query: undefined,
-      readyToLoad: false,
-      result: undefined,
-      searchParams: undefined,
-      showNoRecordsAvailableContent: false,
-      showNoRecordsFoundContent: false
-    })
-    this.setInstance({queryParams: useQueryParams()})
+    this.queryParams = useQueryParams()
 
     // Wait until componentDidMount has flipped readyToLoad so the first load runs after useShapeHook has marked the hook mounted.
     useEffect(
@@ -430,7 +446,7 @@ const useCollection = (props, cacheKeys = []) => {
     select,
     selectColumns
   })
-  const result = /** @type {UseCollectionResult & Record<string, any>} */ (Object.assign({}, shapeHook.state))
+  const result = /** @type {UseCollectionResult & Record<string, any>} */ (/** @type {unknown} */ (Object.assign({}, shapeHook.state)))
   const modelVariableName = inflection.pluralize(inflection.camelize(shapeHook.p.modelClass.modelClassData().name, true))
 
   result.modelIdsCacheString = shapeHook.modelIdsCacheString()

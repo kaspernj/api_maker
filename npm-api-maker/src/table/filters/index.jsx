@@ -25,16 +25,17 @@ export default memo(shapeComponent(class ApiMakerTableFilters extends BaseCompon
     querySName: PropTypes.string.isRequired
   }
 
+  state = {
+    filter: undefined,
+    showLoadSearchModal: undefined,
+    showSaveSearchModal: false
+  }
+
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.table.filters"})
 
     this.queryParams = useQueryParams()
     this.t = t
-    this.useStates({
-      filter: undefined,
-      showLoadSearchModal: undefined,
-      showSaveSearchModal: false
-    })
   }
 
   render() {
