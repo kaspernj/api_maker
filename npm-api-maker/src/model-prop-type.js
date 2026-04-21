@@ -3,12 +3,25 @@
 import * as inflection from "inflection"
 import {digg} from "diggerize"
 
+/** @typedef {typeof import("./base-model.js").default} ApiMakerModelClass */
+/**
+ * @typedef {object} ApiMakerModelInstance
+ * @property {Record<string, boolean>} abilities
+ * @property {{name: string}} constructor
+ * @property {() => boolean} isPersisted
+ * @property {Record<string, object|object[]|null|undefined>} modelData
+ * @property {Record<string, object|object[]|null|undefined>} relationshipsCache
+ */
+/** @typedef {{[propName: string]: ApiMakerModelInstance|undefined}} ModelPropValidatorProps */
+/** @typedef {string} ModelPropName */
+/** @typedef {Error|undefined} ModelPropValidationResult */
+
 /** PropType helpers for API Maker models. */
 export default class ApiMakerModelPropType {
   /**
-   * ofModel.
-   * @param {any} modelClass
-   * @returns {any}
+   * Build a model prop validator that requires a specific model class.
+   * @param {ApiMakerModelClass} modelClass
+   * @returns {ApiMakerModelPropType}
    */
   static ofModel (modelClass) {
     const modelPropTypeInstance = new ApiMakerModelPropType()
@@ -26,11 +39,11 @@ export default class ApiMakerModelPropType {
   }
 
   /**
-   * isNotRequired.
-   * @param {any} props
-   * @param {any} propName
-   * @param {any} _componentName
-   * @returns {any}
+   * Validate an optional model prop.
+   * @param {ModelPropValidatorProps} props
+   * @param {ModelPropName} propName
+   * @param {string} _componentName
+   * @returns {ModelPropValidationResult}
    */
   isNotRequired (props, propName, _componentName) {
     const model = props[propName]
@@ -38,14 +51,16 @@ export default class ApiMakerModelPropType {
     if (model) {
       return this.validate({model, propName})
     }
+
+    return undefined
   }
 
   /**
-   * isRequired.
-   * @param {any} props
-   * @param {any} propName
-   * @param {any} _componentName
-   * @returns {any}
+   * Validate a required model prop.
+   * @param {ModelPropValidatorProps} props
+   * @param {ModelPropName} propName
+   * @param {string} _componentName
+   * @returns {ModelPropValidationResult}
    */
   isRequired (props, propName, _componentName) {
     const model = props[propName]
@@ -56,8 +71,8 @@ export default class ApiMakerModelPropType {
   }
 
   /**
-   * previous.
-   * @returns {any}
+   * Return the previous chained model prop type validator.
+   * @returns {ApiMakerModelPropType}
    */
   previous () {
     if (!this._previousModelPropType) throw new Error("No previous model prop type set")
@@ -66,27 +81,27 @@ export default class ApiMakerModelPropType {
   }
 
   /**
-   * setPreviousModelPropType.
-   * @param {any} previousModelPropType
+   * Store the previous validator so chained association requirements can return to it.
+   * @param {ApiMakerModelPropType} previousModelPropType
    */
   setPreviousModelPropType (previousModelPropType) {
     this._previousModelPropType = previousModelPropType
   }
 
   /**
-   * withModelType.
-   * @param {any} modelClass
+   * Require validated props to contain a specific model class.
+   * @param {ApiMakerModelClass} modelClass
    */
   withModelType (modelClass) {
     this._withModelType = modelClass
   }
 
   /**
-   * validate.
+   * Validate one model instance against all configured model, ability, association, and attribute requirements.
    * @param {object} root0
-   * @param {any} root0.model
-   * @param {any} root0.propName
-   * @returns {any}
+   * @param {ApiMakerModelInstance} root0.model
+   * @param {ModelPropName} root0.propName
+   * @returns {ModelPropValidationResult}
    */
   validate ({model, propName}) {
     if (this._withModelType && this._withModelType.name != model.constructor.name)
@@ -141,12 +156,14 @@ export default class ApiMakerModelPropType {
         }
       }
     }
+
+    return undefined
   }
 
   /**
-   * withLoadedAbilities.
-   * @param {any} arrayOfAbilities
-   * @returns {any}
+   * Require the listed abilities to be preloaded on the model.
+   * @param {string[]} arrayOfAbilities
+   * @returns {ApiMakerModelPropType}
    */
   withLoadedAbilities (arrayOfAbilities) {
     this._withLoadedAbilities = arrayOfAbilities
@@ -155,9 +172,9 @@ export default class ApiMakerModelPropType {
   }
 
   /**
-   * withLoadedAssociation.
-   * @param {any} associationName
-   * @returns {any}
+   * Require a named association to be loaded and return a validator for that association.
+   * @param {string} associationName
+   * @returns {ApiMakerModelPropType}
    */
   withLoadedAssociation (associationName) {
     const associationModelPropType = new ApiMakerModelPropType()
@@ -169,9 +186,9 @@ export default class ApiMakerModelPropType {
   }
 
   /**
-   * withLoadedAttributes.
-   * @param {any} arrayOfAttributes
-   * @returns {any}
+   * Require the listed attributes to be loaded on persisted models.
+   * @param {string[]} arrayOfAttributes
+   * @returns {ApiMakerModelPropType}
    */
   withLoadedAttributes (arrayOfAttributes) {
     this._withLoadedAttributes = arrayOfAttributes

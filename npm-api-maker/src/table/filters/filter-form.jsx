@@ -28,21 +28,60 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 const styles = {}
 
-/** @typedef {Record<string, never>} Props */
+/** @typedef {typeof import("../../../src/base-model.js").default} ApiMakerModelClassLike */
+/**
+ * @typedef {object} FilterAttribute
+ * @property {string} attributeName
+ * @property {string} humanName
+ */
+/**
+ * @typedef {object} FilterReflection
+ * @property {string} humanName
+  * @property {string} modelClassName
+  * @property {string} reflectionName
+  * @property {ApiMakerModelClassLike} resource
+ */
+/**
+ * @typedef {object} FilterPredicate
+ * @property {string} name
+ */
+/**
+ * @typedef {object} AssociationsServiceResult
+ * @property {{human_name: string, model_class_name: string, reflection_name: string, resource: ApiMakerModelClassLike}[]} associations
+ * @property {{attribute_name: string, human_name: string}[]} ransackable_attributes
+ * @property {string[]} ransackable_scopes
+ */
+/**
+ * @typedef {object} FilterConfig
+ * @property {string} [a]
+ * @property {number} filterIndex
+ * @property {string[]} [p]
+ * @property {string} [pre]
+ * @property {string} [sc]
+ * @property {string} [v]
+ */
+/**
+ * @typedef {object} Props
+ * @property {FilterConfig} filter
+ * @property {ApiMakerModelClassLike} modelClass
+ * @property {() => void} onApplyClicked
+ * @property {() => void} onRequestClose
+ * @property {string} querySearchName
+ */
 /**
  * @typedef {object} State
- * @property {object} actualCurrentModelClass
- * @property {any} associations
- * @property {any} attribute
+ * @property {{modelClass: ApiMakerModelClassLike}} actualCurrentModelClass
+ * @property {FilterReflection[]|null} associations
+ * @property {FilterAttribute|undefined} attribute
  * @property {number} loading
- * @property {any} modelClassName
- * @property {any[]} path
- * @property {any} predicate
- * @property {any} predicates
- * @property {any} ransackableAttributes
- * @property {any} ransackableScopes
- * @property {any} scope
- * @property {any} value
+ * @property {string} modelClassName
+ * @property {FilterReflection[]} path
+ * @property {FilterPredicate|undefined} predicate
+ * @property {FilterPredicate[]|undefined} predicates
+ * @property {FilterAttribute[]|undefined} ransackableAttributes
+ * @property {string[]|undefined} ransackableScopes
+ * @property {string|undefined} scope
+ * @property {string|undefined} value
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFiltersFilterForm extends ShapeComponent {
   static propTypes = PropTypesExact({
@@ -90,6 +129,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   currentModelClass = () => digg(this.s.actualCurrentModelClass, "modelClass")
 
+  /**
+   * Normalize association metadata returned from the backend filter service.
+   * @param {AssociationsServiceResult} result
+   * @returns {{associations: FilterReflection[], ransackableAttributes: FilterAttribute[], ransackableScopes: string[]}}
+   */
   parseAssociationData(result) {
     const associations = result.associations.map(({human_name, model_class_name, reflection_name, resource}) => ({
       humanName: human_name,
@@ -111,7 +155,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     try {
       if (!this.s.modelClassName) throw new Error("'modelClassName' not set in state")
 
-      const result = await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
+      const result = /** @type {AssociationsServiceResult} */ (
+        await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
+      )
       const {associations, ransackableAttributes, ransackableScopes} = this.parseAssociationData(result)
 
       this.setState({associations, ransackableAttributes, ransackableScopes})
@@ -135,7 +181,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   async loadInitialValues() {
     if (!this.s.modelClassName) throw new Error("'modelClassName' not set in state")
 
-    let result = await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
+    let result = /** @type {AssociationsServiceResult} */ (
+      await Services.current().sendRequest("Models::Associations", {model_class_name: this.s.modelClassName})
+    )
     let data = this.parseAssociationData(result)
     let modelClassName = this.s.modelClassName
     const path = []
@@ -148,12 +196,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       modelClassName = digg(reflection, "modelClassName")
 
       if (!modelClassName) {
-        const pathNames = path.map((pathPart) => pathPart.name()).join(".")
+        const pathNames = path.map((pathPart) => pathPart.reflectionName).join(".")
 
-        throw new Error(`No model class name from ${pathNames}.${reflection.name()}`)
+        throw new Error(`No model class name from ${pathNames}.${reflection.reflectionName}`)
       }
 
-      result = await Services.current().sendRequest("Models::Associations", {model_class_name: modelClassName})
+      result = /** @type {AssociationsServiceResult} */ (
+        await Services.current().sendRequest("Models::Associations", {model_class_name: modelClassName})
+      )
       data = this.parseAssociationData(result)
 
       path.push(reflection)
@@ -366,6 +416,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     return result
   }
 
+  /** @param {{attribute: FilterAttribute}} root0 */
   onAttributeClicked = ({attribute}) => {
     this.setState({
       attribute,
@@ -380,6 +431,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     this.setState({predicate})
   }
 
+  /** @param {{reflection: FilterReflection}} root0 */
   onReflectionClicked = ({reflection}) => {
     const newPath = this.s.path.concat([reflection])
 
@@ -393,6 +445,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     })
   }
 
+  /** @param {{scope: string}} root0 */
   onScopeClicked = ({scope}) => {
     this.setState({
       attribute: undefined,
