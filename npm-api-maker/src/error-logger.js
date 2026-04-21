@@ -4,7 +4,7 @@ import {digg} from "diggerize"
 
 /** Captures window errors with source-map support. */
 export default class ErrorLogger {
-  /** Constructor. */
+  /** Initializes error tracking state and prepares source-map loading for bundled scripts. */
   constructor () {
     this.debugging = false
     this.errorOccurred = false
@@ -22,7 +22,7 @@ export default class ErrorLogger {
   }
 
   /**
-   * debug.
+   * Logs diagnostic output when debug mode is enabled.
    * @param {any} output
    */
   debug(...output) {
@@ -48,7 +48,7 @@ export default class ErrorLogger {
   /** @returns {boolean} */
   isWorkingOnError = () => digg(this, "isHandlingError") || this.isLoadingSourceMaps()
 
-  /** connectOnError. */
+  /** Subscribes to global `error` events and records them once at a time. */
   connectOnError() {
     window.addEventListener("error", (event) => {
       if (this.debugging) this.debug("Error:", event.message)
@@ -63,7 +63,7 @@ export default class ErrorLogger {
     })
   }
 
-  /** connectUnhandledRejection. */
+  /** Subscribes to global unhandled promise rejections and records them once at a time. */
   connectUnhandledRejection() {
     window.addEventListener("unhandledrejection", (event) => {
       if (this.debugging) this.debug("Unhandled rejection:", event.reason.message)
@@ -120,7 +120,7 @@ export default class ErrorLogger {
     }
   }
 
-  /** testPromiseError. */
+  /** Raises a rejected promise to exercise the unhandled-rejection logger path. */
   testPromiseError() {
     return new Promise((_resolve) => {
       throw new Error("testPromiseError")

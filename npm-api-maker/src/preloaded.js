@@ -2,7 +2,7 @@
 import * as inflection from "inflection"
 import modelClassRequire from "./model-class-require.js"
 
-/** ApiMakerPreloaded. */
+/** Rehydrates preloaded backend models and relationships from one response payload. */
 export default class ApiMakerPreloaded {
   /** @param {Record<string, Record<string, Record<string, Record<string, any>>>>} response */
   constructor (response) {

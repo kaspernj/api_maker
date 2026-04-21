@@ -17,7 +17,7 @@ const logger = new Logger({name: "ApiMaker / SourceMapsLoader"})
 
 /** Loads and resolves source maps for stack traces. */
 export default class SourceMapsLoader {
-  /** Constructor. */
+  /** Initializes source-map caches and loading state for stack-trace resolution. */
   constructor() {
     this.isLoadingSourceMaps = false
     this.sourceMaps = []
@@ -25,7 +25,7 @@ export default class SourceMapsLoader {
   }
 
   /**
-   * loadSourceMapsForScriptTags.
+   * Registers a callback that selects which script tags should have source maps loaded.
    * @param {any} callback
    */
   loadSourceMapsForScriptTags(callback) {
@@ -33,7 +33,7 @@ export default class SourceMapsLoader {
   }
 
   /**
-   * sourceMapForSource.
+   * Registers a callback that resolves the source-map URL for one script source.
    * @param {any} callback
    */
   sourceMapForSource(callback) {
@@ -65,7 +65,7 @@ export default class SourceMapsLoader {
   }
 
   /**
-   * getSources.
+   * Collects unique source/script entries that may need source maps for one error.
    * @param {any} error
    * @returns {any}
    */
@@ -105,7 +105,7 @@ export default class SourceMapsLoader {
   }
 
   /**
-   * getSourcesFromScripts.
+   * Collects source-map candidates from currently loaded script tags.
    * @returns {any}
    */
   getSourcesFromScripts() {
@@ -125,7 +125,7 @@ export default class SourceMapsLoader {
   }
 
   /**
-   * getMapURL.
+   * Resolves the source-map URL for one script source.
    * @param {any} args
    * @returns {any | string}
    */
@@ -146,7 +146,7 @@ export default class SourceMapsLoader {
   }
 
   /**
-   * includeMapURL.
+   * Returns true when a script source should use the default `.map` lookup behavior.
    * @param {any} src
    * @returns {boolean}
    */
@@ -174,7 +174,7 @@ export default class SourceMapsLoader {
   }
 
   /**
-   * loadUrl.
+   * Parses one URL string with an anchor element so its parts can be inspected.
    * @param {any} url
    * @returns {any}
    */
@@ -187,7 +187,7 @@ export default class SourceMapsLoader {
   }
 
   /**
-   * loadXhr.
+   * Resolves when one XHR finishes successfully or rejects on HTTP failure.
    * @param {any} xhr
    * @param {any} url
    */
@@ -205,7 +205,7 @@ export default class SourceMapsLoader {
   }
 
   /**
-   * parseStackTrace.
+   * Formats one raw stack trace into source-mapped display lines.
    * @param {any} stackTrace
    * @returns {any}
    */
