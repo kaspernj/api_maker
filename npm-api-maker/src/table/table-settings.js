@@ -36,7 +36,7 @@ export default class ApiMakerTableSettings {
   }
 
   /** columns. */
-  columns = () => digg(this, "table", "columnsAsArray")()
+  columns = () => this.table.columnsAsArray()
 
   /** columnsWithPositions. */
   columnsWithPositions = () => {

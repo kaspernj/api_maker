@@ -184,7 +184,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     queryPageName: `${this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey")}_page`,
     querySName: `${this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey")}_s`,
     resizing: false,
-    showFilters: false,
+    showFilters: Boolean(Params.parse()[`${this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey")}_s`]),
     showSettings: false,
     tableSetting: undefined,
     tableSettingLoaded: false,
@@ -210,7 +210,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
 
     const querySName = `${queryName}_s`
 
-    if (this.s.queryName != queryName || this.s.querySName != querySName || this.s.showFilters !== Boolean(queryParams[querySName])) {
+    if (this.s.queryName != queryName || this.s.querySName != querySName) {
       this.setState({
         queryName,
         queryQName: `${queryName}_q`,

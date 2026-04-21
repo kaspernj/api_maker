@@ -1,5 +1,5 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import {memo, useMemo} from "react"
+import {memo, useEffect} from "react"
 import React from "react"
 import {View} from "react-native"
 import Text from "@kaspernj/api-maker/build/utils/text"
@@ -24,7 +24,7 @@ class ModelsModelEvent extends ShapeComponent {
   })
 
   setup() {
-    useMemo(() => {
+    useEffect(() => {
       this.loadTasks()
     }, [])
 

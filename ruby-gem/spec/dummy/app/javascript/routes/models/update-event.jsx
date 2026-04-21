@@ -1,5 +1,5 @@
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
-import {memo, useMemo} from "react"
+import {memo, useEffect} from "react"
 import React from "react"
 import {Task} from "models.js"
 import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
@@ -20,7 +20,7 @@ class ModelsUpdateEvent extends ShapeComponent {
   })
 
   setup() {
-    useMemo(() => {
+    useEffect(() => {
       this.loadFinishedTasks()
     }, [])
 
