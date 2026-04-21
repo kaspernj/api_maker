@@ -8,6 +8,22 @@ import Services from "./services.js"
 
 const shared = {}
 
+/**
+ * @typedef {{debug?: boolean}} CanOptions
+ */
+/**
+ * @typedef {typeof import("./base-model.js").default | {
+ *   modelClassData?: () => {name?: string},
+ *   name?: string,
+ *   resourceData?: () => {name?: string}
+ * } | string} AbilitySubject
+ */
+/** @typedef {{ability: string, can: boolean, subject: string}} LoadedAbility */
+/** @typedef {{ability: string, callbacks: Array<() => void>, subject: AbilitySubject}} PendingAbility */
+/** @typedef {{request: Array<{ability: string, subject: AbilitySubject}>}} LoadAbilitiesRequest */
+/** @typedef {{abilities: LoadedAbility[]}} LoadAbilitiesResponse */
+/** @typedef {[AbilitySubject, string[]]} AbilityRequest */
+
 /** Ability helper and query mapper. */
 export default class ApiMakerCanCan {
   abilities = []
@@ -27,8 +43,8 @@ export default class ApiMakerCanCan {
   debugTokens = new Set()
 
   /**
-   * current.
-   * @returns {any}
+   * Returns the shared CanCan helper instance.
+   * @returns {ApiMakerCanCan}
    */
   static current () {
     if (!shared.currentApiMakerCanCan) shared.currentApiMakerCanCan = new ApiMakerCanCan()
@@ -37,11 +53,11 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * can.
-   * @param {any} ability
-   * @param {any} subject
-   * @param {any} options
-   * @returns {any | null}
+   * Returns the loaded permission value for one ability and subject pair.
+   * @param {string} ability
+   * @param {AbilitySubject} subject
+   * @param {CanOptions} options
+   * @returns {boolean | null}
    */
   can (ability, subject, options = {}) {
     const foundAbility = this.findAbility(ability, subject)
@@ -68,9 +84,9 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * recordMissingAbility.
-   * @param {any} ability
-   * @param {any} subject
+   * Queues one ability lookup to be loaded from the backend.
+   * @param {string} ability
+   * @param {AbilitySubject} subject
    */
   recordMissingAbility (ability, subject) {
     let missingAbilitySet = this.missingAbilities.get(subject)
@@ -100,7 +116,7 @@ export default class ApiMakerCanCan {
     this.missingAbilities = new Map()
     this.missingAbilitiesTimeout = null
 
-    const abilitiesToLoad = []
+    const abilitiesToLoad = /** @type {AbilityRequest[]} */ ([])
 
     for (const [subject, abilities] of missingAbilities.entries()) {
       abilitiesToLoad.push([subject, Array.from(abilities)])
@@ -112,10 +128,10 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * findAbility.
-   * @param {any} ability
-   * @param {any} subject
-   * @returns {any | undefined}
+   * Finds one previously loaded ability result.
+   * @param {string} ability
+   * @param {AbilitySubject} subject
+   * @returns {LoadedAbility | undefined}
    */
   findAbility (ability, subject) {
     const abilityKey = this.abilityKey(ability, subject)
@@ -125,35 +141,35 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * isAbilityLoaded.
-   * @param {any} ability
-   * @param {any} subject
-   * @returns {any}
+   * Returns whether one ability has already been loaded.
+   * @param {string} ability
+   * @param {AbilitySubject} subject
+   * @returns {boolean}
    */
   isAbilityLoaded (ability, subject) {
     return this.findAbility(ability, subject) !== undefined
   }
 
   /**
-   * isReloading.
-   * @returns {any}
+   * Returns whether abilities are currently loading or resetting.
+   * @returns {boolean}
    */
   isReloading () {
     return this.loadingCount > 0 || this.resettingGeneration !== null
   }
 
   /**
-   * getCacheKey.
-   * @returns {any}
+   * Returns the cache key that changes whenever loaded abilities change.
+   * @returns {number}
    */
   getCacheKey () {
     return this.cacheKey
   }
 
   /**
-   * setDebug.
-   * @param {any} token
-   * @param {any} enabled
+   * Enables or disables debug logging for one caller token.
+   * @param {string} token
+   * @param {boolean} enabled
    */
   setDebug (token, enabled) {
     if (!token) return
@@ -166,16 +182,16 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * isDebugging.
-   * @returns {any}
+   * Returns whether any caller has enabled CanCan debug logging.
+   * @returns {boolean}
    */
   isDebugging () {
     return this.debugTokens.size > 0
   }
 
   /**
-   * debugLog.
-   * @param {any} message
+   * Writes one debug log message when debugging is enabled.
+   * @param {string} message
    */
   debugLog (message) {
     if (this.isDebugging()) {
@@ -183,6 +199,11 @@ export default class ApiMakerCanCan {
     }
   }
 
+  /**
+   * Loads a batch of abilities from the backend.
+   * @param {AbilityRequest[]} abilities
+   * @returns {Promise<void>}
+   */
   async loadAbilities (abilities) {
     const generation = this.abilitiesGeneration
     const loadSummary = [
@@ -227,10 +248,10 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * loadAbility.
-   * @param {any} ability
-   * @param {any} subject
-   * @returns {any}
+   * Loads one ability and resolves once it is available locally.
+   * @param {string} ability
+   * @param {AbilitySubject} subject
+   * @returns {Promise<void>}
    */
   loadAbility (ability, subject) {
     return new Promise((resolve) => {
@@ -291,6 +312,12 @@ export default class ApiMakerCanCan {
     }
   }
 
+  /**
+   * Resets and reloads one batch of abilities, optionally deduped by key.
+   * @param {AbilityRequest[]} abilities
+   * @param {string | undefined} reloadKey
+   * @returns {Promise<void>}
+   */
   async reloadAbilities (abilities, reloadKey) {
     if (reloadKey && this.reloadPromises.has(reloadKey)) {
       this.debugLog(`[can-can-debug] reloadAbilities:dedupe reloadKey=${reloadKey}`)
@@ -338,9 +365,9 @@ export default class ApiMakerCanCan {
 
     // Load abilities from backend
     try {
-      const result = await Services.current().sendRequest("CanCan::LoadAbilities", {
+      const result = /** @type {LoadAbilitiesResponse} */ (await Services.current().sendRequest("CanCan::LoadAbilities", /** @type {LoadAbilitiesRequest} */ ({
         request: abilitiesToLoadData
-      })
+      })))
       abilities = digg(result, "abilities")
 
       if (!Array.isArray(abilities)) {
@@ -400,8 +427,8 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * indexAbilitiesByName.
-   * @param {any} abilities
+   * Indexes loaded abilities by the lookup key used by `findAbility`.
+   * @param {LoadedAbility[]} abilities
    */
   indexAbilitiesByName (abilities) {
     for (const abilityData of abilities) {
@@ -416,9 +443,9 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * abilityKey.
-   * @param {any} ability
-   * @param {any} subject
+   * Builds the internal key used to look up one ability result.
+   * @param {string} ability
+   * @param {AbilitySubject} subject
    * @returns {null | string}
    */
   abilityKey (ability, subject) {
@@ -431,9 +458,9 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * subjectName.
-   * @param {any} subject
-   * @returns {any | null}
+   * Extracts the subject name sent to the backend ability loader.
+   * @param {AbilitySubject} subject
+   * @returns {string | null}
    */
   subjectName(subject) {
     if (!subject) return null
@@ -458,8 +485,8 @@ export default class ApiMakerCanCan {
   }
 
   /**
-   * reportUnhandledAsyncError.
-   * @param {any} error
+   * Re-throws an async error on the microtask queue for existing handlers.
+   * @param {Error} error
    */
   reportUnhandledAsyncError (error) {
     if (!error) return

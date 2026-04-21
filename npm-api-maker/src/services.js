@@ -8,6 +8,7 @@ const shared = {}
 /**
  * @typedef {object} ServiceRequestOptions
  * @property {boolean} [cacheResponse]
+ * @property {boolean} [forceHttp]
  * @property {ServiceArgs} [global]
  * @property {(value: string) => void} [onLog]
  * @property {(value: {count?: number, progress?: number, total?: number}) => void} [onProgress]
@@ -27,7 +28,7 @@ export default class ApiMakerServices {
    * @param {string} serviceName
    * @param {ServiceArgs} [args]
    * @param {ServiceRequestOptions} [options]
-   * @returns {Promise<ServiceArgs>}
+   * @returns {import("./command-execution.js").default}
    */
   sendRequest (serviceName, args, options = {}) {
     return CommandsPool.addCommand({
