@@ -3,15 +3,18 @@
 import {camelize} from "inflection"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
+/** @typedef {string | number | boolean | null | undefined} SortingParamPrimitive */
+/** @typedef {Record<string, SortingParamPrimitive | object | Array<object | SortingParamPrimitive>>} SortingParams */
+
 /**
- * @param {any} defaultParams
- * @param {any} queryParams
- * @param {any} searchKey
- * @returns {object}
+ * @param {SortingParams | undefined} defaultParams
+ * @param {SortingParams | undefined} queryParams
+ * @param {string} searchKey
+ * @returns {SortingParams}
  */
 function calculateQParams(defaultParams, queryParams, searchKey) {
-  if (searchKey in queryParams) {
-    return JSON.parse(queryParams[searchKey])
+  if (queryParams && searchKey in queryParams && typeof queryParams[searchKey] == "string") {
+    return /** @type {SortingParams} */ (JSON.parse(queryParams[searchKey]))
   } else if (defaultParams) {
     return {...defaultParams}
   }
@@ -21,13 +24,13 @@ function calculateQParams(defaultParams, queryParams, searchKey) {
 
 /**
  * @param {object} args
- * @param {object} [args.defaultParams]
+ * @param {SortingParams} [args.defaultParams]
  * @param {import("../collection.js").default} args.query
  * @returns {{
- *   qParams: object
+ *   qParams: SortingParams
  *   searchKey: string,
- *   sortAttribute: string,
- *   sortMode: string
+ *   sortAttribute: string | null,
+ *   sortMode: string | null
  * }}
  */
 export default function useSorting({defaultParams, query}) {

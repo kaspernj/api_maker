@@ -3,11 +3,16 @@ import * as inflection from "inflection"
 
 /**
  * Convert dataset attributes into normalized params.
- * @param {any} dataSet
- * @returns {Record<string, any>}
+ * @typedef {string | number | boolean | null | undefined} DataSetValue
+ */
+
+/**
+ * Convert dataset attributes into normalized params.
+ * @param {Record<string, DataSetValue>} dataSet
+ * @returns {Record<string, DataSetValue>}
  */
 export default function dataSetToAttributes(dataSet) {
-  const result = {}
+  const result = /** @type {Record<string, DataSetValue>} */ ({})
 
   for (const key in dataSet) {
     const dasherizedKey = `data-${inflection.dasherize(inflection.underscore(key))}`

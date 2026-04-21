@@ -1,9 +1,12 @@
 // @ts-check
 import * as inflection from "inflection"
 
+/** @typedef {{modelClassData: () => {paramKey: string}}} InputModelLike */
+/** @typedef {{props: {attribute?: string, id?: string, model?: InputModelLike}, generatedInputId?: string}} InputComponentLike */
+
 /**
  * Build deterministic input id for a component.
- * @param {any} component
+ * @param {InputComponentLike} component
  * @returns {string}
  */
 export default function apiMakerIdForComponent(component) {

@@ -2,9 +2,11 @@
 import * as inflection from "inflection"
 import modelClassRequire from "./model-class-require.js"
 
+/** @typedef {{preloaded: Record<string, Record<string, object>>}} PreloadedResponse */
+
 /** Rehydrates preloaded backend models and relationships from one response payload. */
 export default class ApiMakerPreloaded {
-  /** @param {Record<string, Record<string, Record<string, Record<string, any>>>>} response */
+  /** @param {PreloadedResponse} response */
   constructor (response) {
     this.response = response
     this.loadPreloadedModels()
@@ -38,8 +40,8 @@ export default class ApiMakerPreloaded {
   }
 
   /**
-   * @param {any} type
-   * @param {any} id
+   * @param {string} type
+   * @param {string | number} id
    * @returns {import("./base-model.js").default}
    */
   getModel(type, id) {
