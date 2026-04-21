@@ -1,5 +1,4 @@
 /* eslint-disable no-multi-spaces, prefer-object-spread, sort-imports */
-import BaseComponent from "../base-component"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome.js"
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5.js"
 import FontAwesome6Icon from "react-native-vector-icons/FontAwesome6.js"
@@ -8,7 +7,7 @@ import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import React, {useMemo} from "react"
 import {StyleSheet} from "react-native"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useMergedStyle} from "./default-style"
 
 const FontAwesomeGlyphMap = FontAwesomeIcon.getRawGlyphMap()
@@ -32,7 +31,7 @@ const iconMap = {
  * @property {("FontAwesome"|"FontAwesome5"|"FontAwesome6"|"MaterialIcons")=} version
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerUtilsIcon extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsIcon extends ShapeComponent {
   /** @type {Props} */
   static propTypes = {
     color: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

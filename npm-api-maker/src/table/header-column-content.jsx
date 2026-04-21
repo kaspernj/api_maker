@@ -1,12 +1,11 @@
 /* eslint-disable sort-imports */
-import BaseComponent from "../base-component"
 import {digs} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
 import {View} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import SortLink from "../bootstrap/sort-link"
 import Text from "../utils/text"
 
@@ -18,7 +17,7 @@ import Text from "../utils/text"
  * @property {object} tableSettingColumn
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableHeaderColumn extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableHeaderColumn extends ShapeComponent {
   static propTypes = propTypesExact({
     column: PropTypes.object.isRequired,
     sortLinkProps: PropTypes.object,

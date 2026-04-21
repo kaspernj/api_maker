@@ -1,11 +1,10 @@
 /* eslint-disable no-return-assign, react/jsx-one-expression-per-line, sort-imports */
-import BaseComponent from "../../../base-component"
 import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import Link from "../../../link"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../../utils/text"
 
 const dataSets = {}
@@ -21,7 +20,7 @@ const dataSets = {}
  * @typedef {object} State
  * @property {boolean} hover
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ComponentsAdminLayoutMenuMenuItem extends ShapeComponent {
   static propTypes = {
     active: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     className: PropTypes.string,

@@ -1,7 +1,6 @@
 /* eslint-disable sort-imports */
 import React, {createContext} from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "../base-component"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
@@ -20,7 +19,7 @@ const CurrentSwitchContext = createContext(/** @type {any} */ ({}))
  * @property {any} pathShown
  * @property {object} pathsMatched
  */
-const Switch = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class Switch extends BaseComponent {
+const Switch = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class Switch extends ShapeComponent {
   static defaultProps = {
     name: "[no name]",
     single: true

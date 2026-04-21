@@ -1,14 +1,13 @@
 /* eslint-disable sort-imports */
-import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useBreakpoint} from "responsive-breakpoints"
 import {View} from "react-native"
 
 /** @typedef {Record<string, never>} Props */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class SharedTableRow extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class SharedTableRow extends ShapeComponent {
   render() {
     const {style, ...restProps} = this.props
     const {name: breakpoint, smDown} = useBreakpoint()

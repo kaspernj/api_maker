@@ -1,7 +1,6 @@
 /* eslint-disable sort-imports */
 import React, {Suspense, memo} from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "./base-component"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import usePath from "on-location-changed/build/use-path.js"
@@ -17,7 +16,7 @@ import useRouter from "./use-router"
  * @property {object=} routes
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerRouter extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerRouter extends ShapeComponent {
   static propTypes = propTypesExact({
     history: PropTypes.object,
     locales: PropTypes.array.isRequired,

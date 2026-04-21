@@ -1,12 +1,11 @@
 /* eslint-disable sort-imports */
-import BaseComponent from "../base-component"
 import {digg} from "diggerize"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import memo from "set-state-compare/build/memo.js"
 import ModelClassTable from "./model-class-table"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import ShowNav from "./show-nav"
 import useModel from "../use-model.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
@@ -18,7 +17,7 @@ import {View} from "react-native"
  * @property {string} modelId
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminShowReflectionPage extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminShowReflectionPage extends ShapeComponent {
   static propTypes = propTypesExact({
     modelClass: PropTypes.func.isRequired,
     modelId: PropTypes.string.isRequired

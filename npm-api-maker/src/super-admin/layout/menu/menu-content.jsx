@@ -1,6 +1,5 @@
 /* eslint-disable new-cap, newline-per-chained-call, sort-imports */
 import React, {useMemo} from "react"
-import BaseComponent from "../../../base-component"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
 import MenuItem from "./menu-item"
@@ -8,13 +7,13 @@ import models from "../../models.js"
 import Params from "../../../params.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import useCanCan from "../../../use-can-can.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 /** @typedef {Record<string, never>} Props */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ComponentsAdminLayoutMenuContent extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ComponentsAdminLayoutMenuContent extends ShapeComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.string
   })

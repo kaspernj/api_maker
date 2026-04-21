@@ -1,10 +1,9 @@
 /* eslint-disable sort-imports */
 import React, {useEffect} from "react"
-import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {useForm} from "../../form"
 import {TextInput, View} from "react-native"
@@ -18,7 +17,7 @@ import {TextInput, View} from "react-native"
  * @property {string} name
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class EditAttributeInput extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class EditAttributeInput extends ShapeComponent {
   static propTypes = propTypesExact({
     attributeName: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,

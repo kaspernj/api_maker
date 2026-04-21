@@ -1,7 +1,6 @@
 /* eslint-disable sort-imports */
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../form"
-import BaseComponent from "../base-component"
 import PropTypes from "prop-types"
 import React from "react"
 import inputWrapper from "./input-wrapper"
@@ -22,7 +21,7 @@ import memo from "set-state-compare/build/memo.js"
  * @property {object} wrapperOpts
  */
 /** @typedef {Record<string, never>} State */
-const ApiMakerInputsSelect = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsSelect extends BaseComponent {
+const ApiMakerInputsSelect = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsSelect extends ShapeComponent {
   static propTypes = {
     attribute: PropTypes.string,
     children: PropTypes.any,

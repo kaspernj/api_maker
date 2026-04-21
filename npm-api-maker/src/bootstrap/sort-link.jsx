@@ -1,6 +1,5 @@
 import * as inflection from "inflection"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "../base-component" // eslint-disable-line sort-imports
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Icon from "../utils/icon"
 import Link from "../link"
 import PropTypes from "prop-types"
@@ -23,7 +22,7 @@ import useSorting from "../table/use-sorting.js"
  * @property {any=} title
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootstrapSortLink extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapSortLink extends ShapeComponent {
   static propTypes = {
     attribute: PropTypes.string.isRequired,
     className: PropTypes.string,

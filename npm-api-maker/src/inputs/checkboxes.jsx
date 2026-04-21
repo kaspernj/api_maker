@@ -1,8 +1,7 @@
 /* eslint-disable sort-imports */
 import * as inflection from "inflection"
 import {digs} from "diggerize"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "../base-component"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import InvalidFeedback from "../bootstrap/invalid-feedback"
 import PropTypes from "prop-types"
 import React from "react"
@@ -25,7 +24,7 @@ import propTypesExact from "prop-types-exact"
  * @property {object=} wrapperOpts
  */
 /** @typedef {Record<string, never>} State */
-const ApiMakerInputsCheckboxes = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsCheckboxes extends BaseComponent {
+const ApiMakerInputsCheckboxes = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsCheckboxes extends ShapeComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,

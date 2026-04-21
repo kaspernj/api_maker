@@ -1,9 +1,8 @@
 /* eslint-disable sort-imports */
 import React, {createContext, useContext, useEffect, useMemo} from "react"
 import {Platform} from "react-native"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import apiMakerConfig from "./config.js"
-import BaseComponent from "./base-component"
 import FormDataObjectizer from "form-data-objectizer"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
@@ -74,7 +73,7 @@ class FormInputs {
  * @property {boolean=} useHtmlForm
  */
 /** @typedef {Record<string, never>} State */
-const Form = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class Form extends BaseComponent {
+const Form = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class Form extends ShapeComponent {
   static propTypes = propTypesExact({
     children: PropTypes.any,
     form: PropTypes.instanceOf(FormInputs),

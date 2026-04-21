@@ -1,11 +1,10 @@
 /* eslint-disable react/jsx-curly-brace-presence, sort-imports */
-import BaseComponent from "../base-component"
 import {digg} from "diggerize"
 import Link from "../link"
 import memo from "set-state-compare/build/memo.js"
 import Params from "../params.js"
 import React, {useMemo} from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
 
 /** @typedef {Record<string, never>} Props */
@@ -13,7 +12,7 @@ import Text from "../utils/text"
  * @typedef {object} State
  * @property {any} count
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminShowReflectionLink extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminShowReflectionLink extends ShapeComponent {
   state = {
     count: undefined
   }

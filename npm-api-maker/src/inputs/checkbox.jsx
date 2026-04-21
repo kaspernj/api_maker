@@ -1,10 +1,9 @@
 /* eslint-disable sort-imports */
 import React, {useMemo} from "react"
 import {digg} from "diggerize"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../form"
 import AutoSubmit from "./auto-submit.js"
-import BaseComponent from "../base-component"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import useInput from "../use-input.js"
@@ -26,7 +25,7 @@ import useUpdatedEvent from "../use-updated-event.js"
  * @property {boolean=} zeroInput
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsCheckbox extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsCheckbox extends ShapeComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,

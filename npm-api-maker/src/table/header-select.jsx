@@ -1,6 +1,5 @@
 /* eslint-disable implicit-arrow-linebreak, react/jsx-sort-props, sort-imports */
 import {Pressable, View} from "react-native"
-import BaseComponent from "../base-component"
 import Collection from "../collection.js"
 import HeaderColumnContent from "./header-column-content"
 import memo from "set-state-compare/build/memo.js"
@@ -8,7 +7,7 @@ import Modal from "../utils/modal"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useSorting from "./use-sorting.js"
@@ -23,7 +22,7 @@ import useSorting from "./use-sorting.js"
  * @typedef {object} State
  * @property {boolean} modalOpen
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableHeaderSelect extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableHeaderSelect extends ShapeComponent {
   static propTypes = propTypesExact({
     preparedColumns: PropTypes.array.isRequired,
     query: PropTypes.instanceOf(Collection).isRequired,

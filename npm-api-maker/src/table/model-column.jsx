@@ -1,7 +1,6 @@
 /* eslint-disable implicit-arrow-linebreak, import/no-unresolved, indent, sort-imports */
 import {Animated, View} from "react-native"
 import React, {useMemo} from "react"
-import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Column from "./components/column"
 import ColumnContent from "./column-content"
@@ -10,7 +9,7 @@ import {EventEmitter} from "eventemitter3"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import memo from "set-state-compare/build/memo.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
 import {useBreakpoint} from "responsive-breakpoints"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
@@ -29,7 +28,7 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
  * @property {object} tableSettingColumn
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableModelColumn extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableModelColumn extends ShapeComponent {
   static propTypes = propTypesExact({
     animatedPosition: PropTypes.instanceOf(Animated.ValueXY).isRequired,
     animatedWidth: PropTypes.instanceOf(Animated.Value).isRequired,

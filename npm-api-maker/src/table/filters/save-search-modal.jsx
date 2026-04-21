@@ -1,5 +1,4 @@
 /* eslint-disable react/button-has-type, sort-imports */
-import BaseComponent from "../../base-component"
 import Checkbox from "../../bootstrap/checkbox"
 import {digg} from "diggerize"
 import {FlashNotifications} from "flash-notifications"
@@ -7,7 +6,7 @@ import {Form} from "../../form"
 import Input from "../../bootstrap/input"
 import modelClassRequire from "../../model-class-require.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import memo from "set-state-compare/build/memo.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import apiMakerConfig from "../../config.js"
@@ -19,7 +18,7 @@ const TableSearch = modelClassRequire("TableSearch")
  * @typedef {object} State
  * @property {any} form
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableFiltersSaveSearchModal extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFiltersSaveSearchModal extends ShapeComponent {
   state = {
     form: null
   }

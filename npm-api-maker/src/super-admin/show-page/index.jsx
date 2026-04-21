@@ -1,14 +1,13 @@
 /* eslint-disable complexity, implicit-arrow-linebreak, max-len, newline-per-chained-call, react/jsx-sort-props, sort-imports */
 import React, {useMemo} from "react"
 import AttributeRow from "../../bootstrap/attribute-row"
-import BaseComponent from "../../base-component"
 import BelongsToAttributeRow from "./belongs-to-attribute-row"
 import ConfigReader from "../config-reader"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
 import * as inflection from "inflection"
 import PropTypes from "prop-types"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import ShowNav from "../show-nav"
 import useModel from "../../use-model.js"
 import {View} from "react-native"
@@ -36,7 +35,7 @@ const AttributePresenter = memo(({attribute, model, modelArgs}) => {
  * @property {Function} modelClass
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminShowPage extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminShowPage extends ShapeComponent {
   static propTypes = {
     modelClass: PropTypes.func.isRequired
   }

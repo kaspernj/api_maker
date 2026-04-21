@@ -1,6 +1,5 @@
 /* eslint-disable implicit-arrow-linebreak, max-len, react/jsx-sort-props, sort-imports */
 import {Pressable} from "react-native"
-import BaseComponent from "../base-component"
 import Column from "./components/column"
 import columnIdentifier from "./column-identifier.js"
 import {EventEmitter} from "eventemitter3"
@@ -15,7 +14,7 @@ import propTypesExact from "prop-types-exact"
 import React from "react"
 import Row from "./components/row"
 import memo from "set-state-compare/build/memo.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import WorkerPluginsCheckbox from "./worker-plugins-checkbox"
 
@@ -31,7 +30,7 @@ import WorkerPluginsCheckbox from "./worker-plugins-checkbox"
  * @property {string} tableSettingFullCacheKey
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootStrapLiveTableModelRow extends ShapeComponent {
   static propTypes = propTypesExact({
     cacheKey: PropTypes.string.isRequired,
     columns: PropTypes.array,

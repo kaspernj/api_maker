@@ -1,12 +1,11 @@
 /* eslint-disable import/no-unresolved, sort-imports */
 import React, {useEffect, useMemo, useRef} from "react"
-import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Collection from "../collection.js"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {simpleObjectDifferent} from "set-state-compare/build/diff-utils.js"
 import useModelEvent from "../use-model-event.js"
 
@@ -19,7 +18,7 @@ import useModelEvent from "../use-model-event.js"
  * @property {object=} style
  */
 /** @typedef {Record<string, never>} CheckboxState */
-const Checkbox = memo(shapeComponent(/** @augments {BaseComponent<CheckboxProps, CheckboxState>} */ class Checkbox extends BaseComponent {
+const Checkbox = memo(shapeComponent(/** @augments {ShapeComponent<CheckboxProps, CheckboxState>} */ class Checkbox extends ShapeComponent {
   render() {
     const {indeterminate, ...restProps} = this.props
     const checkboxRef = useRef(undefined)
@@ -45,7 +44,7 @@ const Checkbox = memo(shapeComponent(/** @augments {BaseComponent<CheckboxProps,
  * @property {boolean} checked
  * @property {boolean} indeterminate
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableWorkerPluginsCheckAllCheckbox extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableWorkerPluginsCheckAllCheckbox extends ShapeComponent {
   static propTypes = propTypesExact({
     currentWorkplace: PropTypes.object,
     query: PropTypes.instanceOf(Collection),

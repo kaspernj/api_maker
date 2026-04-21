@@ -5,7 +5,6 @@
 import {dig, digg, digs} from "diggerize"
 import React, {createContext, useContext, useEffect, useMemo, useRef} from "react"
 import {Animated, Platform, Pressable, View} from "react-native"
-import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
 import Collection from "../collection.js"
@@ -32,7 +31,7 @@ import Row from "./components/row"
 import selectCalculator from "./select-calculator.js"
 import Select from "../inputs/select"
 import Settings from "./settings/index"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import shouldRenderLoadingContent from "./should-render-loading-content.js"
 import TableSettings from "./table-settings.js"
 import Text from "../utils/text"
@@ -59,7 +58,7 @@ const TableContext = createContext(undefined)
  * @typedef {object} HeaderState
  * @property {Date} lastUpdate
  */
-const ListHeaderComponent = memo(shapeComponent(/** @augments {BaseComponent<HeaderProps, HeaderState>} */ class ListHeaderComponent extends BaseComponent {
+const ListHeaderComponent = memo(shapeComponent(/** @augments {ShapeComponent<HeaderProps, HeaderState>} */ class ListHeaderComponent extends ShapeComponent {
   state = {
     lastUpdate: new Date()
   }
@@ -174,7 +173,7 @@ const ListHeaderComponent = memo(shapeComponent(/** @augments {BaseComponent<Hea
  * @property {any} width
  * @property {any} widths
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTable extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTable extends ShapeComponent {
   /**
    * @param {object} props
    */

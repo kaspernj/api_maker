@@ -1,5 +1,4 @@
 /* eslint-disable implicit-arrow-linebreak, react/jsx-no-literals, sort-imports */
-import BaseComponent from "../../base-component"
 import ColumnContent from "../column-content"
 import columnIdentifier from "../column-identifier.js"
 import columnVisible from "../column-visible.js"
@@ -10,7 +9,7 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import {renderToString} from "react-dom/server" // eslint-disable-line import/no-unresolved
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Pressable} from "react-native"
 import Text from "../../utils/text"
 
@@ -20,7 +19,7 @@ import Text from "../../utils/text"
  * @property {object} table
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableSettingsDownloadAction extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableSettingsDownloadAction extends ShapeComponent {
   static propTypes = propTypesExact({
     l: PropTypes.func.isRequired,
     table: PropTypes.object.isRequired

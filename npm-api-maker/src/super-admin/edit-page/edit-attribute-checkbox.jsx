@@ -2,11 +2,10 @@
 import React, {useEffect, useMemo} from "react"
 import {StyleSheet, View} from "react-native"
 import Checkbox from "../../utils/checkbox"
-import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../../form"
 
 const styles = StyleSheet.create({
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
  * @typedef {object} State
  * @property {any} checked
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class EditAttributeInput extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class EditAttributeInput extends ShapeComponent {
   static propTypes = propTypesExact({
     attributeName: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,

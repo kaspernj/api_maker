@@ -1,6 +1,5 @@
 /* eslint-disable import/no-unresolved, no-return-assign, sort-imports */
 import React, {useMemo} from "react"
-import BaseComponent from "../base-component"
 import classNames from "classnames"
 import Header from "./components/header"
 import HeaderColumnContent from "./header-column-content"
@@ -9,7 +8,7 @@ import memo from "set-state-compare/build/memo.js"
 import {Animated, PanResponder} from "react-native"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useBreakpoint} from "responsive-breakpoints"
 import Widths from "./widths"
 
@@ -31,7 +30,7 @@ const dataSets = {}
  * @typedef {object} State
  * @property {boolean} resizing
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableHeaderColumn extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableHeaderColumn extends ShapeComponent {
   static propTypes = propTypesExact({
     active: PropTypes.bool.isRequired,
     animatedWidth: PropTypes.instanceOf(Animated.Value).isRequired,

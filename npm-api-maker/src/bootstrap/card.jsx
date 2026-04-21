@@ -1,9 +1,9 @@
+/* eslint-disable sort-imports */
 import React, {useRef} from "react"
 import {digg, digs} from "diggerize"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "../base-component" // eslint-disable-line sort-imports
-import PropTypes from "prop-types"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import classNames from "classnames" // eslint-disable-line import/no-unresolved
+import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 
 /**
@@ -25,7 +25,7 @@ import memo from "set-state-compare/build/memo.js"
  * @typedef {object} State
  * @property {any} expanded
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootstrapCard extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapCard extends ShapeComponent {
   static defaultProps = {
     defaultExpanded: true,
     expandable: false,

@@ -2,11 +2,10 @@
 /* eslint-disable react/jsx-max-depth, react/jsx-no-literals, sort-imports */
 import React, {useMemo} from "react"
 import {Pressable, View} from "react-native"
-import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Params from "../../params.js"
 // @ts-expect-error Runtime-resolved module
 import {TableSearch} from "models.js"
@@ -22,7 +21,7 @@ import apiMakerConfig from "../../config.js"
  * @property {TableSearch} search
  */
 /** @typedef {Record<string, never>} SearchLinkState */
-const SearchLink = memo(shapeComponent(/** @augments {BaseComponent<SearchLinkProps, SearchLinkState>} */ class SearchLink extends BaseComponent {
+const SearchLink = memo(shapeComponent(/** @augments {ShapeComponent<SearchLinkProps, SearchLinkState>} */ class SearchLink extends ShapeComponent {
   render() {
     const {search} = this.props
 
@@ -111,7 +110,7 @@ const SearchLink = memo(shapeComponent(/** @augments {BaseComponent<SearchLinkPr
  * @property {any} editSearch
  * @property {TableSearch[]|undefined} searches
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableFiltersLoadSearchModal extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFiltersLoadSearchModal extends ShapeComponent {
   state = {
     editSearch: undefined,
     searches: undefined

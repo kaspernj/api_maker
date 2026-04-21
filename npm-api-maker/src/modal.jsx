@@ -1,13 +1,12 @@
 /* eslint-disable sort-imports */
 import {Modal, Pressable, View} from "react-native"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "./base-component"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import React from "react"
 import memo from "set-state-compare/build/memo.js"
 
 /** @typedef {Record<string, never>} Props */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerModal extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerModal extends ShapeComponent {
   render() {
     const {children, onRequestClose, ...restProps} = this.props
 

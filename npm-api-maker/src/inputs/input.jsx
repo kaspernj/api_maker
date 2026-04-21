@@ -1,10 +1,9 @@
 /* eslint-disable sort-imports */
 import React, {useMemo, useRef} from "react"
 import {dig, digg, digs} from "diggerize"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../form"
 import AutoSubmit from "./auto-submit.js"
-import BaseComponent from "../base-component"
 import Money from "./money"
 import PropTypes from "prop-types"
 import inputWrapper from "./input-wrapper"
@@ -33,7 +32,7 @@ import useUpdatedEvent from "../use-updated-event.js"
  * @typedef {object} State
  * @property {any} blankInputName
  */
-const ApiMakerInputsInput = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsInput extends BaseComponent {
+const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsInput extends ShapeComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,

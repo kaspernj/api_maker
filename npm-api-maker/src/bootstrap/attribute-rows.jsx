@@ -1,8 +1,7 @@
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import PropTypes from "prop-types" // eslint-disable-line sort-imports
 import React from "react"
 import AttributeRow from "./attribute-row" // eslint-disable-line sort-imports
-import BaseComponent from "../base-component"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 
@@ -15,7 +14,7 @@ import propTypesExact from "prop-types-exact"
  * @property {object} model
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootstrapAttributeRows extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapAttributeRows extends ShapeComponent {
   static defaultProps = {
     checkIfAttributeLoaded: false,
     defaultDateFormatName: undefined,

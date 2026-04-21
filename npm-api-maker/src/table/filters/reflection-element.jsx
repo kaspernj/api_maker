@@ -1,18 +1,17 @@
 /* eslint-disable new-cap, no-return-assign, sort-imports */
-import BaseComponent from "../../base-component"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import memo from "set-state-compare/build/memo.js"
 import {Pressable} from "react-native"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 
 const dataSets = {}
 
 /** @typedef {Record<string, never>} Props */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ReflectionElement extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ReflectionElement extends ShapeComponent {
   static propTypes = PropTypesExact({
     modelClassName: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,

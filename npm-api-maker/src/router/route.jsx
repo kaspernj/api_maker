@@ -1,9 +1,8 @@
 /* eslint-disable react/jsx-max-depth, sort-imports */
 import React, {createContext, useContext, useEffect, useLayoutEffect, useMemo} from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Switch, {CurrentSwitchContext} from "./switch"
 import {arrayDifferent, simpleObjectDifferent} from "set-state-compare/build/diff-utils.js"
-import BaseComponent from "../base-component"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
@@ -33,7 +32,7 @@ const useParams = () => useContext(ParamsContext)
  * @property {number} lastMatchUpdate
  * @property {boolean} matches
  */
-const Route = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class Route extends BaseComponent {
+const Route = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class Route extends ShapeComponent {
   static defaultProps = {
     exact: false,
     fallback: false,

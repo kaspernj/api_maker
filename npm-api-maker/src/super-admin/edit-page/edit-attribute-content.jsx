@@ -1,9 +1,8 @@
 /* eslint-disable sort-imports */
-import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../../form"
 import {useEffect, useMemo} from "react"
 
@@ -18,7 +17,7 @@ import {useEffect, useMemo} from "react"
  * @typedef {object} State
  * @property {any} value
  */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class EditAttributeContent extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class EditAttributeContent extends ShapeComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,

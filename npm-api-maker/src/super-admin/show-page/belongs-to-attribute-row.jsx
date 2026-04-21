@@ -1,17 +1,22 @@
 /* eslint-disable sort-imports */
 import AttributeRow from "../../bootstrap/attribute-row"
-import BaseComponent from "../../base-component"
 import * as inflection from "inflection"
 import Link from "../../link"
 import memo from "set-state-compare/build/memo.js"
 import Params from "../../params.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 
-/** @typedef {Record<string, never>} Props */
+/**
+ * @typedef {object} Props
+ * @property {any} model
+ * @property {any} modelClass
+ * @property {any} reflection
+ */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminShowPageBelongsToAttributeRow extends BaseComponent {
+/** @augments {ShapeComponent<Props, State>} */
+class ApiMakerSuperAdminShowPageBelongsToAttributeRow extends ShapeComponent {
   render() {
     const {model, modelClass, reflection} = this.props
     const reflectionMethodName = inflection.camelize(reflection.name(), true)
@@ -30,4 +35,6 @@ export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} *
       </AttributeRow>
     )
   }
-}))
+}
+
+export default memo(shapeComponent(ApiMakerSuperAdminShowPageBelongsToAttributeRow))

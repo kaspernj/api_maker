@@ -6,8 +6,7 @@ import FormDataObjectizer from "form-data-objectizer"
 import {incorporate} from "incorporator"
 import {Pressable, View} from "react-native"
 import {digg} from "diggerize"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "../base-component"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import ConfigReader from "./config-reader"
 import EditAttribute from "./edit-page/edit-attribute"
 // @ts-expect-error
@@ -27,7 +26,7 @@ import useModel from "../use-model.js"
  * @property {number|string=} modelId
  */
 /** @typedef {Record<string, never>} State */
-export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminEditPage extends BaseComponent {
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminEditPage extends ShapeComponent {
   static propTypes = propTypesExact({
     modelClass: PropTypes.func.isRequired,
     modelId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
