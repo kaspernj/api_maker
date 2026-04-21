@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-literals, react/jsx-no-useless-fragment, sort-imports */
-import BaseComponent from "../base-component"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import Link from "../link"
@@ -8,10 +7,17 @@ import React, {useMemo} from "react"
 import Params from "../params.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import useCanCan from "../use-can-can.js"
 
-export default memo(shapeComponent(class SuperAdminShowReflectionActions extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {object=} model
+ * @property {Function=} modelClass
+ * @property {string=} reflectionName
+ */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class SuperAdminShowReflectionActions extends ShapeComponent {
   static propTypes = propTypesExact({
     model: PropTypes.object,
     modelClass: PropTypes.func,

@@ -1,5 +1,4 @@
 /* eslint-disable implicit-arrow-linebreak, import/no-unresolved, max-len, react/button-has-type, react/jsx-sort-props, react/no-array-index-key, sort-imports */
-import BaseComponent from "../../base-component"
 import {digg, digs} from "diggerize"
 import Filter from "./filter"
 import FilterForm from "./filter-form"
@@ -11,13 +10,26 @@ import PropTypes from "prop-types"
 // @ts-expect-error Runtime-resolved module
 import {TableSearch} from "models.js"
 import memo from "set-state-compare/build/memo.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import React from "react"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import {View} from "react-native"
 
-export default memo(shapeComponent(class ApiMakerTableFilters extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {object=} currentUser
+ * @property {Function} modelClass
+ * @property {string} queryName
+ * @property {string} querySName
+ */
+/**
+ * @typedef {object} State
+ * @property {any} filter
+ * @property {any} showLoadSearchModal
+ * @property {boolean} showSaveSearchModal
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFilters extends ShapeComponent {
   static propTypes = {
     currentUser: PropTypes.object,
     modelClass: PropTypes.func.isRequired,

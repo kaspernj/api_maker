@@ -5,7 +5,6 @@
 import React, {useMemo, useRef} from "react"
 import {ActivityIndicator, View} from "react-native"
 import AttributeElement from "./attribute-element"
-import BaseComponent from "../../base-component"
 import Button from "../../utils/button"
 import Card from "../../utils/card"
 import {digg, digs} from "diggerize"
@@ -21,14 +20,30 @@ import ReflectionElement from "./reflection-element"
 import ScopeElement from "./scope-element"
 import Select from "../../inputs/select"
 import Services from "../../services.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {useBreakpoint} from "responsive-breakpoints"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 const styles = {}
 
-export default memo(shapeComponent(class ApiMakerTableFiltersFilterForm extends BaseComponent {
+/** @typedef {Record<string, never>} Props */
+/**
+ * @typedef {object} State
+ * @property {object} actualCurrentModelClass
+ * @property {any} associations
+ * @property {any} attribute
+ * @property {number} loading
+ * @property {any} modelClassName
+ * @property {any[]} path
+ * @property {any} predicate
+ * @property {any} predicates
+ * @property {any} ransackableAttributes
+ * @property {any} ransackableScopes
+ * @property {any} scope
+ * @property {any} value
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFiltersFilterForm extends ShapeComponent {
   static propTypes = PropTypesExact({
     filter: PropTypes.object,
     modelClass: PropTypes.func.isRequired,

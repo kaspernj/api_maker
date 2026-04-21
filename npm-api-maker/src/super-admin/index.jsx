@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign, react/jsx-no-literals, react/jsx-no-useless-fragment, react/jsx-one-expression-per-line, sort-imports */
 import React, {useEffect, useMemo} from "react"
 import {Pressable, StyleSheet, View} from "react-native"
-import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader"
 import EditPage from "./edit-page"
 import FlashNotifications from "flash-notifications/build/flash-notifications.js"
@@ -13,7 +12,7 @@ import memo from "set-state-compare/build/memo.js"
 // @ts-expect-error
 import * as models from "models.js" // eslint-disable-line import/no-unresolved
 import Params from "../params.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import ShowPage from "./show-page/index"
 import ShowReflectionActions from "./show-reflection-actions"
 import ShowReflectionPage from "./show-reflection-page"
@@ -44,7 +43,12 @@ const styles = StyleSheet.create({
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ApiMakerSuperAdmin extends BaseComponent {
+/** @typedef {Record<string, never>} Props */
+/**
+ * @typedef {object} State
+ * @property {any} model
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdmin extends ShapeComponent {
   loadModelRequestId = 0
   state = {
     model: undefined

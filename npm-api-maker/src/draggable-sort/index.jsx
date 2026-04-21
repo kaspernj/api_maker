@@ -10,7 +10,23 @@ import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "ya-use-event-emitter"
 
-export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
+/**
+ * @typedef {object} Props
+ * @property {object=} activeItemStyle
+ * @property {Function=} cacheKeyExtractor
+ * @property {any[]} data
+ * @property {object=} dataSet
+ * @property {EventEmitter=} events
+ * @property {boolean=} horizontal
+ * @property {Function} keyExtractor
+ * @property {Function=} onDragItemEnd
+ * @property {Function=} onDragItemStart
+ * @property {Function=} onItemMoved
+ * @property {Function} onReordered
+ * @property {Function} renderItem
+ */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class DraggableSort extends ShapeComponent {
   /** @type {import("./controller.js").default} */
   controller
 
@@ -28,7 +44,7 @@ export default memo(shapeComponent(class DraggableSort extends ShapeComponent {
     data: PropTypes.array.isRequired,
     dataSet: PropTypes.object,
     events: PropTypes.instanceOf(EventEmitter),
-    horizontal: PropTypes.bool.isRequired,
+    horizontal: PropTypes.bool,
     keyExtractor: PropTypes.func.isRequired,
     onDragItemEnd: PropTypes.func,
     onDragItemStart: PropTypes.func,

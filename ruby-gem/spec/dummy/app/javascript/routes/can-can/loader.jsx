@@ -6,7 +6,7 @@ import Layout from "components/layout"
 import LoaderThatSignsOutOnMount from "components/can-can/loader-that-signs-out-on-mount"
 import LoaderWithState from "components/can-can/loader-with-state"
 
-/** @typedef {object} RoutesCanCanLoaderProps */
+/** @typedef {Record<string, never>} RoutesCanCanLoaderProps */
 
 /**
  * @typedef {object} RoutesCanCanLoaderState

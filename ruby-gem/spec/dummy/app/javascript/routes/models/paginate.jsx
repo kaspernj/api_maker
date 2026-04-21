@@ -6,7 +6,7 @@ import SortLink from "@kaspernj/api-maker/build/bootstrap/sort-link"
 import {Task} from "models.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 
-/** @typedef {object} ModelsPaginateProps */
+/** @typedef {Record<string, never>} ModelsPaginateProps */
 
 /**
  * @typedef {object} ModelsPaginateState

@@ -1,9 +1,8 @@
 /* eslint-disable react/jsx-max-depth, sort-imports */
 import React, {createContext, useContext, useEffect, useLayoutEffect, useMemo} from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Switch, {CurrentSwitchContext} from "./switch"
 import {arrayDifferent, simpleObjectDifferent} from "set-state-compare/build/diff-utils.js"
-import BaseComponent from "../base-component"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
@@ -15,7 +14,25 @@ const RequireComponentContext = createContext(null)
 const RouteContext = createContext(null)
 const useParams = () => useContext(ParamsContext)
 
-const Route = memo(shapeComponent(class Route extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {any=} children
+ * @property {string=} component
+ * @property {string=} componentPath
+ * @property {boolean=} exact
+ * @property {boolean=} fallback
+ * @property {boolean=} includeInPath
+ * @property {Function=} onMatch
+ * @property {string|RegExp=} path
+ */
+/**
+ * @typedef {object} State
+ * @property {any} Component
+ * @property {any} componentNotFound
+ * @property {number} lastMatchUpdate
+ * @property {boolean} matches
+ */
+const Route = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class Route extends ShapeComponent {
   static defaultProps = {
     exact: false,
     fallback: false,
@@ -26,9 +43,9 @@ const Route = memo(shapeComponent(class Route extends BaseComponent {
     children: PropTypes.any,
     component: PropTypes.string,
     componentPath: PropTypes.string,
-    exact: PropTypes.bool.isRequired,
-    fallback: PropTypes.bool.isRequired,
-    includeInPath: PropTypes.bool.isRequired,
+    exact: PropTypes.bool,
+    fallback: PropTypes.bool,
+    includeInPath: PropTypes.bool,
     onMatch: PropTypes.func,
     path: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
   })

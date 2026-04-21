@@ -1,5 +1,4 @@
 /* eslint-disable sort-imports */
-import BaseComponent from "../base-component"
 import ConfigReader from "./config-reader"
 import {digg} from "diggerize"
 import hasEditConfig from "./has-edit-config.js"
@@ -8,11 +7,16 @@ import memo from "set-state-compare/build/memo.js"
 import Params from "../params.js"
 import PropTypes from "prop-types"
 import React, {useMemo} from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Table from "../table/table"
 import useCurrentUser from "../use-current-user.js"
 
-export default memo(shapeComponent(class ApiMakerSuperAdminModelClassTable extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {Function} modelClass
+ */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminModelClassTable extends ShapeComponent {
   static propTypes = {
     modelClass: PropTypes.func.isRequired
   }

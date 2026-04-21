@@ -4,7 +4,7 @@ import React from "react"
 import {Task} from "models.js"
 import useUpdatedEvent from "@kaspernj/api-maker/build/use-updated-event.js"
 
-/** @typedef {object} ModelsUpdateEventProps */
+/** @typedef {Record<string, never>} ModelsUpdateEventProps */
 
 /**
  * @typedef {object} ModelsUpdateEventState

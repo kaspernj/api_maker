@@ -1,10 +1,9 @@
 /* eslint-disable sort-imports */
 import React, {useMemo, useRef} from "react"
 import {dig, digg, digs} from "diggerize"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../form"
 import AutoSubmit from "./auto-submit.js"
-import BaseComponent from "../base-component"
 import Money from "./money"
 import PropTypes from "prop-types"
 import inputWrapper from "./input-wrapper"
@@ -14,7 +13,26 @@ import strftime from "strftime"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useUpdatedEvent from "../use-updated-event.js"
 
-const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {string=} attribute
+ * @property {boolean=} autoRefresh
+ * @property {boolean=} autoSubmit
+ * @property {string=} className
+ * @property {Function=} formatValue
+ * @property {string=} id
+ * @property {boolean=} localizedNumber
+ * @property {object=} model
+ * @property {string=} name
+ * @property {Function=} onChange
+ * @property {Function=} onMatchValidationError
+ * @property {string=} type
+ */
+/**
+ * @typedef {object} State
+ * @property {any} blankInputName
+ */
+const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsInput extends ShapeComponent {
   static defaultProps = {
     autoRefresh: false,
     autoSubmit: false,
@@ -24,12 +42,12 @@ const ApiMakerInputsInput = memo(shapeComponent(class ApiMakerInputsInput extend
 
   static propTypes = {
     attribute: PropTypes.string,
-    autoRefresh: PropTypes.bool.isRequired,
-    autoSubmit: PropTypes.bool.isRequired,
+    autoRefresh: PropTypes.bool,
+    autoSubmit: PropTypes.bool,
     className: PropTypes.string,
     formatValue: PropTypes.func,
     id: PropTypes.string,
-    localizedNumber: PropTypes.bool.isRequired,
+    localizedNumber: PropTypes.bool,
     model: PropTypes.object,
     name: PropTypes.string,
     onChange: PropTypes.func,

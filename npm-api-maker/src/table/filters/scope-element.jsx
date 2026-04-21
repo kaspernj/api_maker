@@ -1,21 +1,27 @@
 /* eslint-disable no-return-assign, sort-imports */
-import BaseComponent from "../../base-component"
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import {Pressable} from "react-native"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ScopeElement extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {boolean=} active
+ * @property {Function} onScopeClicked
+ * @property {string} scope
+ */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ScopeElement extends ShapeComponent {
   static defaultProps = {
     active: false
   }
 
   static propTypes = {
-    active: PropTypes.bool.isRequired,
+    active: PropTypes.bool,
     onScopeClicked: PropTypes.func.isRequired,
     scope: PropTypes.string.isRequired
   }

@@ -9,7 +9,23 @@ import React from "react"
 import Text from "./text"
 import {useForm} from "../form"
 
-export default memo(shapeComponent(class ApiMakerUtilsButton extends ShapeComponent {
+/**
+ * @typedef {object} Props
+ * @property {any=} children
+ * @property {boolean=} danger
+ * @property {boolean=} disabled
+ * @property {string=} icon
+ * @property {string=} label
+ * @property {Function=} onPress
+ * @property {object=} pressableProps
+ * @property {boolean=} submit
+ * @property {object=} textProps
+ */
+/**
+ * @typedef {object} State
+ * @property {boolean} hover
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsButton extends ShapeComponent {
   static defaultProps = {
     children: null,
     danger: false,
@@ -24,14 +40,14 @@ export default memo(shapeComponent(class ApiMakerUtilsButton extends ShapeCompon
 
   static propTypes = propTypesExact({
     children: PropTypes.any,
-    danger: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool.isRequired,
+    danger: PropTypes.bool,
+    disabled: PropTypes.bool,
     icon: PropTypes.string,
     label: PropTypes.string,
     onPress: PropTypes.func,
-    pressableProps: PropTypes.object.isRequired,
-    submit: PropTypes.bool.isRequired,
-    textProps: PropTypes.object.isRequired
+    pressableProps: PropTypes.object,
+    submit: PropTypes.bool,
+    textProps: PropTypes.object
   })
 
   state = {

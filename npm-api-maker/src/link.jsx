@@ -1,14 +1,20 @@
 /* eslint-disable sort-imports */
 import {Platform, Pressable, StyleSheet} from "react-native"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "./base-component"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import PropTypes from "prop-types"
 import React from "react"
 import dataSetToAttributes from "./data-set-to-attributes.js"
 import memo from "set-state-compare/build/memo.js"
 import {useApiMaker} from "./with-api-maker"
 
-export default memo(shapeComponent(class ApiMakerLink extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {number|string=} paddingHorizontal
+ * @property {number|string=} paddingVertical
+ * @property {boolean=} usePressable
+ */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerLink extends ShapeComponent {
   static propTypes = {
     paddingHorizontal: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     paddingVertical: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

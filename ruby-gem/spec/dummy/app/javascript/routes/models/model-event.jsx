@@ -6,7 +6,7 @@ import Text from "@kaspernj/api-maker/build/utils/text"
 import {Task} from "models.js"
 import useModelEvent from "@kaspernj/api-maker/build/use-model-event.js"
 
-/** @typedef {object} ModelsModelEventProps */
+/** @typedef {Record<string, never>} ModelsModelEventProps */
 
 /**
  * @typedef {object} ModelsModelEventState

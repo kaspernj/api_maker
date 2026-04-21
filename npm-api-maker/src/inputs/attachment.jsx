@@ -1,8 +1,7 @@
 /* eslint-disable sort-imports */
 import ApiMakerInput from "./input"
 import {digg} from "diggerize"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "../base-component"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Checkbox from "./checkbox"
 import PropTypes from "prop-types"
 import React from "react"
@@ -11,7 +10,20 @@ import memo from "set-state-compare/build/memo.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useInput from "../use-input.js"
 
-export default memo(shapeComponent(class ApiMakerInputsAttachment extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {string=} className
+ * @property {string=} contentType
+ * @property {object=} model
+ * @property {Function=} onPurgeChanged
+ * @property {string=} purgeName
+ * @property {string=} url
+ */
+/**
+ * @typedef {object} State
+ * @property {boolean} purgeChecked
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsAttachment extends ShapeComponent {
   static propTypes = {
     className: PropTypes.string,
     contentType: PropTypes.string,

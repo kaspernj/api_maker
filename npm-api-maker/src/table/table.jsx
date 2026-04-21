@@ -5,7 +5,6 @@
 import {dig, digg, digs} from "diggerize"
 import React, {createContext, useContext, useEffect, useMemo, useRef} from "react"
 import {Animated, Platform, Pressable, View} from "react-native"
-import BaseComponent from "../base-component"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
 import Collection from "../collection.js"
@@ -32,7 +31,7 @@ import Row from "./components/row"
 import selectCalculator from "./select-calculator.js"
 import Select from "../inputs/select"
 import Settings from "./settings/index"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import shouldRenderLoadingContent from "./should-render-loading-content.js"
 import TableSettings from "./table-settings.js"
 import Text from "../utils/text"
@@ -54,7 +53,12 @@ const paginationOptions = [30, 60, 90, ["All", "all"]]
 const styles = {}
 const TableContext = createContext(undefined)
 
-const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extends BaseComponent {
+/** @typedef {Record<string, never>} HeaderProps */
+/**
+ * @typedef {object} HeaderState
+ * @property {Date} lastUpdate
+ */
+const ListHeaderComponent = memo(shapeComponent(/** @augments {ShapeComponent<HeaderProps, HeaderState>} */ class ListHeaderComponent extends ShapeComponent {
   state = {
     lastUpdate: new Date()
   }
@@ -104,7 +108,72 @@ const ListHeaderComponent = memo(shapeComponent(class ListHeaderComponent extend
   onColumnVisibilityUpdated = () => this.setState({lastUpdate: new Date()})
 }))
 
-export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {object=} abilities
+ * @property {Function=} actionsContent
+ * @property {object=} appHistory
+ * @property {boolean=} card
+ * @property {string=} className
+ * @property {Collection=} collection
+ * @property {any[]|Function=} columns
+ * @property {Function=} controls
+ * @property {object=} currentUser
+ * @property {Function|string=} defaultDateFormatName
+ * @property {Function|string=} defaultDateTimeFormatName
+ * @property {object=} defaultParams
+ * @property {boolean=} destroyEnabled
+ * @property {string=} destroyMessage
+ * @property {object=} draggedHeaderStyle
+ * @property {Function=} editModelPath
+ * @property {boolean=} filterCard
+ * @property {Function=} filterContent
+ * @property {any=} filterSubmitLabel
+ * @property {any[]=} groupBy
+ * @property {Function|string=} header
+ * @property {string=} identifier
+ * @property {Function} modelClass
+ * @property {Function=} noRecordsAvailableContent
+ * @property {Function=} noRecordsFoundContent
+ * @property {Function=} onModelsLoaded
+ * @property {Function=} paginateContent
+ * @property {React.ComponentType<any>=} paginationComponent
+ * @property {any[]=} preloads
+ * @property {Function=} queryMethod
+ * @property {string=} queryName
+ * @property {object=} select
+ * @property {object=} selectColumns
+ * @property {object=} styles
+ * @property {boolean=} styleUI
+ * @property {Function=} viewModelPath
+ * @property {boolean=} workplace
+ */
+/**
+ * @typedef {object} State
+ * @property {any[]} columns
+ * @property {any} columnsToShow
+ * @property {object|undefined} currentWorkplace
+ * @property {any} currentWorkplaceCount
+ * @property {any} draggedColumn
+ * @property {any} filterForm
+ * @property {string} identifier
+ * @property {Date} lastUpdate
+ * @property {any} preload
+ * @property {any} preparedColumns
+ * @property {string} queryName
+ * @property {string} queryPageName
+ * @property {string} queryQName
+ * @property {string} querySName
+ * @property {boolean} resizing
+ * @property {boolean} showFilters
+ * @property {boolean} showSettings
+ * @property {any} tableSetting
+ * @property {string|undefined} tableSettingFullCacheKey
+ * @property {boolean} tableSettingLoaded
+ * @property {any} width
+ * @property {any} widths
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTable extends ShapeComponent {
   /**
    * @param {object} props
    */
@@ -127,7 +196,7 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     abilities: PropTypes.object,
     actionsContent: PropTypes.func,
     appHistory: PropTypes.object,
-    card: PropTypes.bool.isRequired,
+    card: PropTypes.bool,
     className: PropTypes.string,
     collection: PropTypes.instanceOf(Collection),
     columns: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
@@ -136,11 +205,11 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     defaultDateFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     defaultDateTimeFormatName: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     defaultParams: PropTypes.object,
-    destroyEnabled: PropTypes.bool.isRequired,
+    destroyEnabled: PropTypes.bool,
     destroyMessage: PropTypes.string,
     draggedHeaderStyle: PropTypes.object,
     editModelPath: PropTypes.func,
-    filterCard: PropTypes.bool.isRequired,
+    filterCard: PropTypes.bool,
     filterContent: PropTypes.func,
     filterSubmitLabel: PropTypes.any,
     groupBy: PropTypes.array,
@@ -152,15 +221,15 @@ export default memo(shapeComponent(class ApiMakerTable extends BaseComponent {
     onModelsLoaded: PropTypes.func,
     paginateContent: PropTypes.func,
     paginationComponent: PropTypes.elementType,
-    preloads: PropTypes.array.isRequired,
+    preloads: PropTypes.array,
     queryMethod: PropTypes.func,
     queryName: PropTypes.string,
     select: PropTypes.object,
     selectColumns: PropTypes.object,
     styles: PropTypes.object,
-    styleUI: PropTypes.bool.isRequired,
+    styleUI: PropTypes.bool,
     viewModelPath: PropTypes.func,
-    workplace: PropTypes.bool.isRequired
+    workplace: PropTypes.bool
   }
 
   draggableSortEvents = new EventEmitter()

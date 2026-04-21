@@ -1,11 +1,10 @@
 /* eslint-disable indent, no-return-assign, sort-imports */
 import React, {useCallback, useRef} from "react"
-import BaseComponent from "../../../base-component"
 import Icon from "../../../utils/icon"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../../utils/text"
 import {Pressable, View} from "react-native"
 import {useBreakpoint} from "responsive-breakpoints"
@@ -44,7 +43,12 @@ export const useHeaderActionButtonStyle = () => {
   }, [mdUp])
 }
 
-export default memo(shapeComponent(class ApiMakerSuperAdminLayoutHeader extends BaseComponent {
+/** @typedef {Record<string, never>} Props */
+/**
+ * @typedef {object} State
+ * @property {boolean} headerActionsActive
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminLayoutHeader extends ShapeComponent {
   static propTypes = PropTypesExact({ // eslint-disable-line new-cap
     actions: PropTypes.any,
     onTriggerMenu: PropTypes.func.isRequired,

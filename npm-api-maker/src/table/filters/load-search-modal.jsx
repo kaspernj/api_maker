@@ -2,11 +2,10 @@
 /* eslint-disable react/jsx-max-depth, react/jsx-no-literals, sort-imports */
 import React, {useMemo} from "react"
 import {Pressable, View} from "react-native"
-import BaseComponent from "../../base-component"
 import classNames from "classnames"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Params from "../../params.js"
 // @ts-expect-error Runtime-resolved module
 import {TableSearch} from "models.js"
@@ -14,7 +13,15 @@ import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import apiMakerConfig from "../../config.js"
 
-const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
+/**
+ * @typedef {object} SearchLinkProps
+ * @property {Function} onClick
+ * @property {Function} onDeleted
+ * @property {Function} onEditPressed
+ * @property {TableSearch} search
+ */
+/** @typedef {Record<string, never>} SearchLinkState */
+const SearchLink = memo(shapeComponent(/** @augments {ShapeComponent<SearchLinkProps, SearchLinkState>} */ class SearchLink extends ShapeComponent {
   render() {
     const {search} = this.props
 
@@ -90,7 +97,20 @@ const SearchLink = memo(shapeComponent(class SearchLink extends BaseComponent {
   onSearchClicked = () => this.props.onClick({search: this.props.search})
 }))
 
-export default memo(shapeComponent(class ApiMakerTableFiltersLoadSearchModal extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {string=} className
+ * @property {object} currentUser
+ * @property {Function} onEditSearchPressed
+ * @property {Function} onRequestClose
+ * @property {string} querySearchName
+ */
+/**
+ * @typedef {object} State
+ * @property {any} editSearch
+ * @property {TableSearch[]|undefined} searches
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFiltersLoadSearchModal extends ShapeComponent {
   state = {
     editSearch: undefined,
     searches: undefined

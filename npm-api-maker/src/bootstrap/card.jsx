@@ -1,12 +1,31 @@
+/* eslint-disable sort-imports */
 import React, {useRef} from "react"
 import {digg, digs} from "diggerize"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "../base-component" // eslint-disable-line sort-imports
-import PropTypes from "prop-types"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import classNames from "classnames" // eslint-disable-line import/no-unresolved
+import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 
-export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {object=} cardRef
+ * @property {any=} children
+ * @property {string=} className
+ * @property {any=} controls
+ * @property {boolean=} defaultExpanded
+ * @property {boolean=} expandable
+ * @property {boolean=} expandableHide
+ * @property {any=} footer
+ * @property {any=} header
+ * @property {boolean=} responsiveTable
+ * @property {boolean=} striped
+ * @property {boolean=} table
+ */
+/**
+ * @typedef {object} State
+ * @property {any} expanded
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapCard extends ShapeComponent {
   static defaultProps = {
     defaultExpanded: true,
     expandable: false,
@@ -20,14 +39,14 @@ export default memo(shapeComponent(class ApiMakerBootstrapCard extends BaseCompo
     children: PropTypes.any,
     className: PropTypes.string,
     controls: PropTypes.any,
-    defaultExpanded: PropTypes.bool.isRequired,
-    expandable: PropTypes.bool.isRequired,
-    expandableHide: PropTypes.bool.isRequired,
+    defaultExpanded: PropTypes.bool,
+    expandable: PropTypes.bool,
+    expandableHide: PropTypes.bool,
     footer: PropTypes.any,
     header: PropTypes.any,
-    responsiveTable: PropTypes.bool.isRequired,
+    responsiveTable: PropTypes.bool,
     striped: PropTypes.bool,
-    table: PropTypes.bool.isRequired
+    table: PropTypes.bool
   }
 
   state = {

@@ -1,17 +1,18 @@
 /* eslint-disable max-len, new-cap, no-return-assign, react/jsx-one-expression-per-line, sort-imports */
 import {Pressable, View} from "react-native"
-import BaseComponent from "../../base-component"
 import Icon from "../../utils/icon"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ApiMakerTableFilter extends BaseComponent {
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFilter extends ShapeComponent {
   static defaultProps = {
     a: null,
     pre: null

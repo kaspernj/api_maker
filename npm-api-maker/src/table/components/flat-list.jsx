@@ -1,11 +1,12 @@
 /* eslint-disable sort-imports */
-import BaseComponent from "../../base-component"
 import {FlatList} from "react-native"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 
-export default memo(shapeComponent(class SharedTagble extends BaseComponent {
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class SharedTagble extends ShapeComponent {
   render() {
     const {style, ...restProps} = this.props
     const actualStyle = Object.assign( // eslint-disable-line prefer-object-spread

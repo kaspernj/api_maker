@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign, react/jsx-closing-bracket-location, sort-imports */
 import React, {useMemo} from "react"
 import {View} from "react-native"
-import BaseComponent from "../../base-component"
 import CommandsPool from "../../commands-pool.js"
 // @ts-expect-error Runtime-resolved module
 import config from "super-admin/config" // eslint-disable-line import/no-unresolved
@@ -10,7 +9,7 @@ import memo from "set-state-compare/build/memo.js"
 import Menu from "./menu/index"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {useBreakpoint} from "responsive-breakpoints"
 import useCurrentUser from "../../use-current-user.js"
@@ -56,7 +55,23 @@ const styles = {
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ApiMakerSuperAdminLayout extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {any=} actions
+ * @property {string=} active
+ * @property {any=} children
+ * @property {string=} className
+ * @property {object=} currentCustomer
+ * @property {string=} currentCustomerId
+ * @property {object=} currentUser
+ * @property {string=} headTitle
+ * @property {string=} headerTitle
+ */
+/**
+ * @typedef {object} State
+ * @property {boolean} menuTriggered
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminLayout extends ShapeComponent {
   static propTypes = PropTypesExact({ // eslint-disable-line new-cap
     actions: PropTypes.any,
     active: PropTypes.string,

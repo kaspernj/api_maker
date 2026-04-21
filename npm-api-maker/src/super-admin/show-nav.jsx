@@ -1,19 +1,20 @@
 /* eslint-disable implicit-arrow-linebreak, new-cap, react/jsx-max-depth, sort-imports */
-import BaseComponent from "../base-component"
 import Link from "../link"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import memo from "set-state-compare/build/memo.js"
 import Params from "../params.js"
 import React, {useMemo} from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import ShowReflectionLink from "./show-reflection-link"
 import Text from "../utils/text"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import {View} from "react-native"
 
-export default memo(shapeComponent(class ApiMakerSuperAdminShowNav extends BaseComponent {
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminShowNav extends ShapeComponent {
   static propTypes = PropTypesExact({
     model: PropTypes.object.isRequired,
     modelClass: PropTypes.func.isRequired

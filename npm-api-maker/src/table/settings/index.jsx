@@ -1,6 +1,5 @@
 /* eslint-disable implicit-arrow-linebreak, max-len, react/jsx-max-depth, sort-imports */
 import React, {useRef} from "react"
-import BaseComponent from "../../base-component"
 import columnIdentifier from "../column-identifier.js"
 import ColumnRow from "./column-row"
 import DownloadAction from "./download-action"
@@ -8,12 +7,18 @@ import memo from "set-state-compare/build/memo.js"
 import Modal from "../../modal"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {View} from "react-native"
 import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
-export default memo(shapeComponent(class ApiMakerTableSettings extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {Function} onRequestClose
+ * @property {object} table
+ */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableSettings extends ShapeComponent {
   static propTypes = propTypesExact({
     onRequestClose: PropTypes.func.isRequired,
     table: PropTypes.object.isRequired

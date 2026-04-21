@@ -9,7 +9,21 @@ import propTypesExact from "prop-types-exact"
 import {useForm} from "../form"
 import useInput from "../use-input.js"
 
-const OptionElement = memo(shapeComponent(class OptionElement extends ShapeComponent {
+/**
+ * @typedef {object} OptionElementProps
+ * @property {string} generatedId
+ * @property {string} inputCheckboxClassName
+ * @property {boolean} isDefaultSelected
+ * @property {string} inputName
+ * @property {Function=} onChange
+ * @property {Function} onOptionChecked
+ * @property {any[]} option
+ * @property {number} optionIndex
+ * @property {any[][]} options
+ * @property {object} wrapperOpts
+ */
+/** @typedef {Record<string, never>} OptionElementState */
+const OptionElement = memo(shapeComponent(/** @augments {ShapeComponent<OptionElementProps, OptionElementState>} */ class OptionElement extends ShapeComponent {
   render() {
     const {generatedId, inputCheckboxClassName, isDefaultSelected, inputName, option, optionIndex, options, wrapperOpts} = this.p
     const {errors} = digs(wrapperOpts, "errors")
@@ -46,7 +60,22 @@ const OptionElement = memo(shapeComponent(class OptionElement extends ShapeCompo
   }
 }))
 
-export default memo(shapeComponent(class ApiMakerBootstrapCheckboxes extends ShapeComponent {
+/**
+ * @typedef {object} Props
+ * @property {string=} attribute
+ * @property {any[]=} defaultValue
+ * @property {string=} label
+ * @property {string=} labelClassName
+ * @property {object=} model
+ * @property {string=} name
+ * @property {Function=} onChange
+ * @property {any[][]} options
+ */
+/**
+ * @typedef {object} State
+ * @property {any} checkedOptions
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapCheckboxes extends ShapeComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,

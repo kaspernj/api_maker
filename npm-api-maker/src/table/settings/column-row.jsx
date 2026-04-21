@@ -1,15 +1,21 @@
 /* eslint-disable max-len, sort-imports */
 import React, {useEffect, useRef} from "react"
-import BaseComponent from "../../base-component"
 import columnIdentifier from "../column-identifier.js"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {View} from "react-native"
 
-export default memo(shapeComponent(class ColumnRow extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {object} column
+ * @property {object} table
+ * @property {object} tableSettingColumn
+ */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ColumnRow extends ShapeComponent {
   static propTypes = propTypesExact({
     column: PropTypes.object.isRequired,
     table: PropTypes.object.isRequired,

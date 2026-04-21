@@ -1,5 +1,4 @@
 /* eslint-disable sort-imports */
-import BaseComponent from "../../base-component"
 import {digg} from "diggerize"
 import EditAttributeCheckbox from "./edit-attribute-checkbox"
 import EditAttributeContent from "./edit-attribute-content"
@@ -12,9 +11,16 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import {View} from "react-native"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 
-export default memo(shapeComponent(class EditAttribute extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {object} attribute
+ * @property {object=} model
+ * @property {Function=} modelClass
+ */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class EditAttribute extends ShapeComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.object.isRequired,
     model: PropTypes.object,

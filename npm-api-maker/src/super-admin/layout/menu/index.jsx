@@ -1,6 +1,5 @@
 /* eslint-disable new-cap, no-return-assign, react/jsx-max-depth, react/jsx-no-literals, sort-imports */
 import {View} from "react-native"
-import BaseComponent from "../../../base-component"
 import Devise from "../../../devise.js"
 import {FlashNotifications} from "flash-notifications"
 import Icon from "../../../utils/icon"
@@ -12,7 +11,7 @@ import Params from "../../../params.js"
 import PropTypes from "prop-types"
 import PropTypesExact from "prop-types-exact"
 import React from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../../utils/text"
 import {useBreakpoint} from "responsive-breakpoints"
 import useCurrentUser from "../../../use-current-user.js"
@@ -22,7 +21,9 @@ import {WithDefaultStyle} from "../../../utils/default-style"
 const dataSets = {}
 const styles = {}
 
-export default memo(shapeComponent(class ComponentsAdminLayoutMenu extends BaseComponent {
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ComponentsAdminLayoutMenu extends ShapeComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.string,
     noAccess: PropTypes.bool.isRequired,

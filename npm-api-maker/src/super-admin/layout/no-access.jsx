@@ -1,16 +1,17 @@
 /* eslint-disable newline-per-chained-call, no-return-assign, react/jsx-one-expression-per-line, sort-imports */
-import BaseComponent from "../../base-component"
 import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import {View} from "react-native"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import useCurrentUser from "../../use-current-user.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 const dataSets = {}
 
-export default memo(shapeComponent(class ComponentsAdminLayoutNoAccess extends BaseComponent {
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ComponentsAdminLayoutNoAccess extends ShapeComponent {
   render() {
     const currentUser = useCurrentUser()
     const {t} = useI18n({namespace: "js.api_maker.super_admin.layout.no_access"})

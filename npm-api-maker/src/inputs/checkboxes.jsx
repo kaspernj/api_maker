@@ -1,8 +1,7 @@
 /* eslint-disable sort-imports */
 import * as inflection from "inflection"
 import {digs} from "diggerize"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "../base-component"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import InvalidFeedback from "../bootstrap/invalid-feedback"
 import PropTypes from "prop-types"
 import React from "react"
@@ -11,7 +10,21 @@ import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 
-const ApiMakerInputsCheckboxes = memo(shapeComponent(class ApiMakerInputsCheckboxes extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {string=} attribute
+ * @property {any[]=} defaultValue
+ * @property {string=} id
+ * @property {object} inputProps
+ * @property {any=} label
+ * @property {object=} model
+ * @property {string=} name
+ * @property {Function=} onChange
+ * @property {any[]} options
+ * @property {object=} wrapperOpts
+ */
+/** @typedef {Record<string, never>} State */
+const ApiMakerInputsCheckboxes = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsCheckboxes extends ShapeComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
     defaultValue: PropTypes.array,

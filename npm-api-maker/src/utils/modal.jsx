@@ -1,14 +1,15 @@
-/* eslint-disable implicit-arrow-linebreak, prefer-object-spread, sort-vars */
-import {Modal, Pressable, View} from "react-native"
+/* eslint-disable implicit-arrow-linebreak, prefer-object-spread, sort-imports, sort-vars */
 import React, {useMemo} from "react"
-import BaseComponent from "../base-component"
+import {Modal, Pressable, View} from "react-native"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
+import {useBreakpoint} from "responsive-breakpoints"
 import Card from "./card"
 import Icon from "../utils/icon"
 import memo from "set-state-compare/build/memo.js"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useBreakpoint} from "responsive-breakpoints"
 
-export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComponent {
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsComponent extends ShapeComponent {
   render() {
     const {smDown} = useBreakpoint()
     const {children, dataSet, ...restProps} = this.props

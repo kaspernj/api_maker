@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 import React, {useMemo} from "react"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
-import BaseComponent from "../base-component" // eslint-disable-line sort-imports
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Link from "../link"
 import PropTypes from "prop-types"
 import Result from "../result.js"
@@ -20,7 +19,12 @@ const NEXT_PAGE_LABEL = "→"
 const LAST_PAGE_LABEL = "⇥"
 const ELLIPSIS_LABEL = "…"
 
-export default memo(shapeComponent(class ApiMakerBootstrapPaginate extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {any|Result} result
+ */
+/** @typedef {Record<string, never>} State */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapPaginate extends ShapeComponent {
   static propTypes = propTypesExact({
     result: PropTypes.oneOfType([
       instanceOfClassName("ApiMakerResult"),

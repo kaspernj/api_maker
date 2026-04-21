@@ -2,14 +2,27 @@
 // @ts-expect-error CheckBox removed from react-native core in newer versions
 import {CheckBox, Pressable, View} from "react-native"
 import React, {useMemo} from "react"
-import BaseComponent from "../base-component"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
-import {shapeComponent} from "set-state-compare/build/shape-component.js"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "./text"
 
-export default memo(shapeComponent(class ApiMakerUtilsCheckbox extends BaseComponent {
+/**
+ * @typedef {object} Props
+ * @property {boolean=} checked
+ * @property {object=} dataSet
+ * @property {boolean=} defaultChecked
+ * @property {string=} label
+ * @property {Function=} onCheckedChange
+ * @property {object=} style
+ * @property {string=} testID
+ */
+/**
+ * @typedef {object} State
+ * @property {any} checked
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsCheckbox extends ShapeComponent {
   static defaultProps = {
     dataSet: null,
     label: undefined,
