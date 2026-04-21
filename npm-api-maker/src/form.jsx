@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import React, {createContext, useContext, useEffect, useMemo} from "react"
 import {Platform} from "react-native"

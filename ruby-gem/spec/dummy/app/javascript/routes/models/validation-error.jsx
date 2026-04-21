@@ -1,3 +1,4 @@
+// @ts-check
 import {Account, Project} from "models.js"
 import {digg, digs} from "diggerize"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"

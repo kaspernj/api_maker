@@ -1,3 +1,4 @@
+// @ts-check
 import {Select} from "../inputs/select"
 import {digs} from "diggerize"
 import InvalidFeedback from "./invalid-feedback" // eslint-disable-line sort-imports

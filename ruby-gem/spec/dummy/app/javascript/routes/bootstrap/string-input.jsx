@@ -1,3 +1,4 @@
+// @ts-check
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
 import React from "react"

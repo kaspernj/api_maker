@@ -1,3 +1,4 @@
+// @ts-check
 /** ApiMakerResult. */
 export default class ApiMakerResult {
   /**

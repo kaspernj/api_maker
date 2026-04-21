@@ -1,3 +1,4 @@
+// @ts-check
 import React from "react"
 import {Task} from "models.js"
 

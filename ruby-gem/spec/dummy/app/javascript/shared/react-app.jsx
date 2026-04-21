@@ -1,3 +1,4 @@
+// @ts-check
 import ApiMakerConfig from "@kaspernj/api-maker/build/config.js"
 import ApplicationHistory from "shared/application-history"
 import {createRoot} from "react-dom/client"

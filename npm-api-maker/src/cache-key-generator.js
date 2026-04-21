@@ -1,3 +1,4 @@
+// @ts-check
 import SparkMD5 from "spark-md5"
 
 /** Generates local/full cache keys for models. */

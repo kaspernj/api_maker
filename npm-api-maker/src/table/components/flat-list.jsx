@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import {FlatList} from "react-native"
 import memo from "set-state-compare/build/memo.js"

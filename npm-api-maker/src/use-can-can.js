@@ -1,3 +1,4 @@
+// @ts-check
 import {ShapeHook, useShapeHook} from "set-state-compare"
 import {useEffect, useMemo} from "react"
 import CanCan from "./can-can.js"

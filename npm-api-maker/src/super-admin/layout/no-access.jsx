@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable newline-per-chained-call, no-return-assign, react/jsx-one-expression-per-line, sort-imports */
 import memo from "set-state-compare/build/memo.js"
 import React from "react"

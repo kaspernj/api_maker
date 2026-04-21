@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection"
 
 /** Convert dataset attributes into normalized params. */

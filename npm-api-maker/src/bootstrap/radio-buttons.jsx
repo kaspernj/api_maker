@@ -1,3 +1,4 @@
+// @ts-check
 import {digs} from "diggerize"
 import InvalidFeedback from "./invalid-feedback" // eslint-disable-line sort-imports
 import PropTypes from "prop-types"

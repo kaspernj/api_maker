@@ -1,3 +1,4 @@
+// @ts-check
 import I18nOnSteroids from "i18n-on-steroids"
 import routeDefinitions from "shared/route-definitions.json"
 import RoutesNative from "@kaspernj/api-maker/build/routes-native.js"

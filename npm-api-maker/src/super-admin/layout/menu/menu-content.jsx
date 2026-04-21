@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable new-cap, newline-per-chained-call, sort-imports */
 import React, {useMemo} from "react"
 import {digg} from "diggerize"

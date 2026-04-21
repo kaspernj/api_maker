@@ -1,3 +1,4 @@
+// @ts-check
 import {Animated} from "react-native"
 import {digg} from "diggerize"
 

@@ -1,3 +1,4 @@
+// @ts-check
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import {digg, digs} from "diggerize"
 import Layout from "components/layout"

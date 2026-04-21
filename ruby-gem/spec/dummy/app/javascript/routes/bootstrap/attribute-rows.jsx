@@ -1,3 +1,4 @@
+// @ts-check
 import AttributeRows from "@kaspernj/api-maker/build/bootstrap/attribute-rows"
 import Card from "@kaspernj/api-maker/build/bootstrap/card"
 import Layout from "components/layout"

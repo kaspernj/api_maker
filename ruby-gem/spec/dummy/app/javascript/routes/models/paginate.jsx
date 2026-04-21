@@ -1,3 +1,4 @@
+// @ts-check
 import memo from "set-state-compare/build/memo.js"
 import Paginate from "@kaspernj/api-maker/build/bootstrap/paginate"
 import React from "react"

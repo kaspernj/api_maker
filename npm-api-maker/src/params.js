@@ -1,3 +1,4 @@
+// @ts-check
 import Incorporator from "incorporator"
 import config from "./config.js"
 import formSerialize from "form-serialize"

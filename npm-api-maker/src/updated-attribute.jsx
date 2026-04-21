@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import {digg} from "diggerize"
 import ModelEvents from "./model-events.js"

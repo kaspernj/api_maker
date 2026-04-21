@@ -1,3 +1,4 @@
+// @ts-check
 import Routes from "@kaspernj/api-maker/build/routes"
 
 export default class Path {

@@ -1,3 +1,4 @@
+// @ts-check
 import shouldRenderLoadingContent from "../src/table/should-render-loading-content.js"
 
 

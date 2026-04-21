@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable no-return-assign */
 import React, {useMemo} from "react"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"

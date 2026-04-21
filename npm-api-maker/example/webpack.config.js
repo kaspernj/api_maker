@@ -1,3 +1,5 @@
+// @ts-check
+/* global __dirname */
 const createConfigAsync = require("@expo/webpack-config")
 const path = require("path")
 

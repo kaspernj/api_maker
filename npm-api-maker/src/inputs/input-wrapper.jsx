@@ -1,3 +1,4 @@
+// @ts-check
 import React from "react"
 import useInput from "../use-input.js"
 

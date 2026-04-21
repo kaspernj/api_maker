@@ -1,3 +1,4 @@
+// @ts-check
 import classNames from "classnames"
 import {digg, digs} from "diggerize"
 import {FlashNotifications} from "flash-notifications"

@@ -1,3 +1,4 @@
+// @ts-check
 import {jest} from "@jest/globals"
 
 const mockUseEffect = jest.fn()

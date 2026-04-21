@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection"
 import {digg} from "diggerize"
 import CommandsPool from "./commands-pool.js" // eslint-disable-line sort-imports

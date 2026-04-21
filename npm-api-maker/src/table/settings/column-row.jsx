@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable max-len, sort-imports */
 import React, {useEffect, useRef} from "react"
 import columnIdentifier from "../column-identifier.js"

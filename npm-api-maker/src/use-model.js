@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import {ShapeHook, useShapeHook} from "set-state-compare"
 import {useEffect} from "react"

@@ -1,3 +1,4 @@
+// @ts-check
 import {digg} from "diggerize"
 import * as inflection from "inflection" // eslint-disable-line sort-imports
 import modelClassRequire from "./model-class-require.js"

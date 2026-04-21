@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable react/jsx-no-literals, react/jsx-no-useless-fragment, sort-imports */
 import {digg} from "diggerize"
 import * as inflection from "inflection"

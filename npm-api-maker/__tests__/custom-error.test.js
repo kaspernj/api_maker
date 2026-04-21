@@ -1,3 +1,4 @@
+// @ts-check
 import CustomError from "../build/custom-error"
 
 describe("CustomError", () => {

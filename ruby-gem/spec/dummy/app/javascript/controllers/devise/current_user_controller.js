@@ -1,3 +1,4 @@
+// @ts-check
 import { Controller } from "stimulus"
 import Devise from "@kaspernj/api-maker/build/devise.js"
 

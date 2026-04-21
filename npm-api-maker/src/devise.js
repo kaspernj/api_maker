@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection" // eslint-disable-line sort-imports
 import CableConnectionPool from "./cable-connection-pool.js"
 import {createContext} from "react"

@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * @typedef {object} ColumnArgType
  * @property {any} [default]

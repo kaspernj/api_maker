@@ -1,3 +1,4 @@
+// @ts-check
 import Routes from "../build/routes"
 
 const testRoutes = {

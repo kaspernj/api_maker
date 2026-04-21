@@ -1,3 +1,4 @@
+// @ts-check
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"

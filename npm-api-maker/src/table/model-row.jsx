@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable implicit-arrow-linebreak, max-len, react/jsx-sort-props, sort-imports */
 import {Pressable} from "react-native"
 import Column from "./components/column"

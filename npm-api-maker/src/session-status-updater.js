@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection"
 import Devise from "./devise.js"
 import Logger from "./logger.js"

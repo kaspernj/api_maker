@@ -1,3 +1,4 @@
+// @ts-check
 import {EventEmitter} from "eventemitter3"
 import Logger from "./logger.js"
 

@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable max-len, new-cap, no-return-assign, react/jsx-one-expression-per-line, sort-imports */
 import {Pressable, View} from "react-native"
 import Icon from "../../utils/icon"

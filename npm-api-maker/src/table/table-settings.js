@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable arrow-body-style, import/no-unresolved, sort-imports */
 import columnIdentifier from "./column-identifier.js"
 import columnVisible from "./column-visible.js"

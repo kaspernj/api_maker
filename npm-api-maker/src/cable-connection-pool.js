@@ -1,3 +1,4 @@
+// @ts-check
 import {dig} from "diggerize"
 import CableSubscription from "./cable-subscription.js" // eslint-disable-line sort-imports
 import CableSubscriptionPool from "./cable-subscription-pool.js"

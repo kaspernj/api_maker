@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable implicit-arrow-linebreak, react/jsx-sort-props, sort-imports */
 import {Pressable, View} from "react-native"
 import Collection from "../collection.js"

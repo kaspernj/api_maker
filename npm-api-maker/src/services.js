@@ -1,3 +1,4 @@
+// @ts-check
 import CommandsPool from "./commands-pool.js"
 
 const shared = {}

@@ -1,3 +1,4 @@
+// @ts-check
 import {Account, Project, Task, User} from "models.js"
 import Checkbox from "@kaspernj/api-maker/build/bootstrap/checkbox"
 import {digg} from "diggerize"

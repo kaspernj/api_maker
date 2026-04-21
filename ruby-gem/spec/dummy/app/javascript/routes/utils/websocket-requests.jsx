@@ -1,3 +1,4 @@
+// @ts-check
 import ApiMakerConfig from "@kaspernj/api-maker/build/config.js"
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import React, {useEffect, useState} from "react"

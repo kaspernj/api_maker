@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable no-unused-vars, no-use-before-define, prefer-object-spread, sort-imports */
 import {ShapeHook, useShapeHook} from "set-state-compare"
 import debounce from "debounce"

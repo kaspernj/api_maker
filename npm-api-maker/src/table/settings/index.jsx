@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable implicit-arrow-linebreak, max-len, react/jsx-max-depth, sort-imports */
 import React, {useRef} from "react"
 import columnIdentifier from "../column-identifier.js"

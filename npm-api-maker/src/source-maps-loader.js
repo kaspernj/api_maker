@@ -1,3 +1,4 @@
+// @ts-check
 import * as stackTraceParser from "stacktrace-parser"
 import Logger from "./logger.js"
 import {SourceMapConsumer} from "source-map"

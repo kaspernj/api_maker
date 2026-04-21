@@ -1,3 +1,4 @@
+// @ts-check
 /** Queues calls and runs only the latest callback after queue drains. */
 export default class RunLast {
   /** @param {() => void} callback */

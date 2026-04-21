@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * @param {object} args
  * @param {Array<any> | undefined} args.models

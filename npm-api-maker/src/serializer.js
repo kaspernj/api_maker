@@ -1,3 +1,4 @@
+// @ts-check
 import {digg} from "diggerize"
 
 /** Serializes API Maker payloads and model references. */

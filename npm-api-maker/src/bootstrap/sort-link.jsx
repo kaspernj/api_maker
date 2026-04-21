@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Icon from "../utils/icon"

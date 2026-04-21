@@ -1,3 +1,4 @@
+// @ts-check
 import ApiMakerTable from "@kaspernj/api-maker/build/table/table"
 import ApplicationHistory from "shared/application-history"
 import Devise from "@kaspernj/api-maker/build/devise.js"

@@ -1,3 +1,4 @@
+// @ts-check
 const shared = {}
 
 /** Small logger with global and per-instance debug toggles. */

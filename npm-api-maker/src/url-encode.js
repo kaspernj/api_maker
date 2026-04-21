@@ -1,3 +1,4 @@
+// @ts-check
 import escapeStringRegexp from "escape-string-regexp"
 
 const replaces = {

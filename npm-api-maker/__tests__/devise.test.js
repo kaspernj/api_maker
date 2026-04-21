@@ -1,3 +1,4 @@
+// @ts-check
 import ApiMakerDevise from "../src/devise.js"
 import CableConnectionPool from "../src/cable-connection-pool.js"
 import Services from "../src/services.js"

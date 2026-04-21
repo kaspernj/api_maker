@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable new-cap, no-return-assign, react/jsx-max-depth, react/jsx-no-literals, sort-imports */
 import {View} from "react-native"
 import Devise from "../../../devise.js"

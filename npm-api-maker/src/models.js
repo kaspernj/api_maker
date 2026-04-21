@@ -1,3 +1,4 @@
+// @ts-check
 import ModelRecipesLoader from "./model-recipes-loader.js"
 // @ts-expect-error Runtime-resolved module
 import modelRecipes from "model-recipes.json" // eslint-disable-line import/no-unresolved

@@ -1,3 +1,4 @@
+// @ts-check
 import ApiMakerWebsocketRequestClient from "../src/websocket-request-client.js"
 import {jest} from "@jest/globals"
 

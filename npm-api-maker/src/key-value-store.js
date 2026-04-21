@@ -1,3 +1,4 @@
+// @ts-check
 import Params from "./params.js"
 
 const shared = {}

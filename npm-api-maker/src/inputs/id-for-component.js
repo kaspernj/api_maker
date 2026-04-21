@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection"
 
 /** Build deterministic input id for a component. */

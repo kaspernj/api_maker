@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import React, {useEffect} from "react"
 import memo from "set-state-compare/build/memo.js"

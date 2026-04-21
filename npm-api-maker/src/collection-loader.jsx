@@ -1,3 +1,4 @@
+// @ts-check
 import Collection from "./collection.js"
 import {digg} from "diggerize"
 import memo from "set-state-compare/build/memo.js"

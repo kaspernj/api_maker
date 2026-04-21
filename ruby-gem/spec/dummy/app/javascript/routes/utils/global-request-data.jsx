@@ -1,3 +1,4 @@
+// @ts-check
 import CommandsPool from "@kaspernj/api-maker/build/commands-pool"
 import Layout from "components/layout"
 import React, {useEffect, useState} from "react"

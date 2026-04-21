@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import * as inflection from "inflection"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"

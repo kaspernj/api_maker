@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import {Modal, Pressable, View} from "react-native"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"

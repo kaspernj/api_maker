@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable jest/require-hook, sort-imports */
 import {useContext} from "react"
 import Devise from "./devise.js"

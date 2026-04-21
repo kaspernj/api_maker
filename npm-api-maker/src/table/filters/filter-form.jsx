@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable comma-dangle, implicit-arrow-linebreak, import/no-named-as-default */
 /* eslint-disable complexity, new-cap, newline-per-chained-call, no-await-in-loop, no-return-assign */
 /* eslint-disable no-unused-vars, react/jsx-max-depth, react/jsx-no-literals */

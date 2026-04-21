@@ -1,3 +1,4 @@
+// @ts-check
 /** Compose wrapper HOCs right-to-left. */
 export default function apiMakerCompose(wrappedComponentClass, ...funcs) {
   if (!wrappedComponentClass) throw new Error("No 'wrappedComponentClass' given")

@@ -1,3 +1,4 @@
+// @ts-check
 import Config from "./config.js"
 // @ts-expect-error
 import {createConsumer} from "@rails/actioncable" // eslint-disable-line import/no-unresolved

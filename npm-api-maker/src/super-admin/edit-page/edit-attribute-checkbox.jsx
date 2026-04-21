@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import React, {useEffect, useMemo} from "react"
 import {StyleSheet, View} from "react-native"

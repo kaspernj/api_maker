@@ -1,3 +1,4 @@
+// @ts-check
 import Collection from "../build/collection.js"
 
 class FakeModel {

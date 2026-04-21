@@ -1,3 +1,4 @@
+// @ts-check
 import {Account} from "models.js"
 import {digg} from "diggerize"
 import Hash from "shared/hash"

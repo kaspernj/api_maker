@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable jest/require-hook */
 import {digg, digs} from "diggerize"
 

@@ -1,3 +1,4 @@
+// @ts-check
 import {digg} from "diggerize"
 import Hash from "shared/hash"
 import Layout from "components/layout"

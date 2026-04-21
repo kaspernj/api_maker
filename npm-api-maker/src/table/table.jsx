@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable arrow-body-style, import/no-named-as-default, import/no-unresolved */
 /* eslint-disable no-return-assign, no-unused-vars, react/jsx-max-depth */
 /* eslint-disable react/jsx-one-expression-per-line, react/jsx-sort-props */

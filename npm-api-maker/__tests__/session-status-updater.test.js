@@ -1,3 +1,4 @@
+// @ts-check
 import ApiMakerSessionStatusUpdater from "../src/session-status-updater.js"
 import {jest} from "@jest/globals"
 

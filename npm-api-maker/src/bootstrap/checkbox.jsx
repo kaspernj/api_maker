@@ -1,3 +1,4 @@
+// @ts-check
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {digs} from "diggerize"
 import Checkbox from "../inputs/checkbox" // eslint-disable-line sort-imports

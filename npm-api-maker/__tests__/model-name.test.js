@@ -1,5 +1,6 @@
-import I18nOnSteroids from "i18n-on-steroids"
+// @ts-check
 import Config from "../build/config"
+import I18nOnSteroids from "i18n-on-steroids"
 import ModelName from "../build/model-name"
 
 const i18n = new I18nOnSteroids()

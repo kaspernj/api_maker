@@ -1,3 +1,4 @@
+// @ts-check
 import Attachment from "@kaspernj/api-maker/build/inputs/attachment"
 import Layout from "components/layout"
 import React from "react"

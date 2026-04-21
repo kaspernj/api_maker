@@ -1,3 +1,4 @@
+// @ts-check
 import React, {createContext, useContext, useMemo} from "react"
 import ApiMakerConfig from "./config.js"
 import memo from "set-state-compare/build/memo.js"

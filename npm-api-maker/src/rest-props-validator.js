@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * @param {Record<string, any>} restProps
  * @returns {void}

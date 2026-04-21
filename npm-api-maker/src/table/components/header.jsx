@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import memo from "set-state-compare/build/memo.js"

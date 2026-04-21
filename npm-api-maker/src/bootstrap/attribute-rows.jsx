@@ -1,3 +1,4 @@
+// @ts-check
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import PropTypes from "prop-types" // eslint-disable-line sort-imports
 import React from "react"

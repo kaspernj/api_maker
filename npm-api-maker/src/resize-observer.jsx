@@ -1,3 +1,4 @@
+// @ts-check
 import memo from "set-state-compare/build/memo.js"
 import useResizeObserver from "./use-resize-observer.js"
 

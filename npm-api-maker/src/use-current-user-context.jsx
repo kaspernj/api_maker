@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable jest/require-hook, react/function-component-definition, sort-imports */
 import React, {useCallback, useEffect, useRef} from "react"
 import Devise from "./devise.js"

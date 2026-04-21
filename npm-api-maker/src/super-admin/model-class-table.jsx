@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import ConfigReader from "./config-reader"
 import {digg} from "diggerize"

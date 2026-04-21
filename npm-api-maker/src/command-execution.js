@@ -1,3 +1,4 @@
+// @ts-check
 /** Shared thenable command handle with progress and log subscriptions. */
 export default class ApiMakerCommandExecution {
   /** Constructor. */

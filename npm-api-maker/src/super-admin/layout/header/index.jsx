@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable indent, no-return-assign, sort-imports */
 import React, {useCallback, useRef} from "react"
 import Icon from "../../../utils/icon"

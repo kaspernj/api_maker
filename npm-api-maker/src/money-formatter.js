@@ -1,3 +1,4 @@
+// @ts-check
 import I18nOnSteroids from "i18n-on-steroids"
 import Money from "js-money"
 import formatNumber from "format-number"

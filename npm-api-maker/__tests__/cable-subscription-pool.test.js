@@ -1,3 +1,4 @@
+// @ts-check
 import CableSubscriptionPool from "../src/cable-subscription-pool.js"
 import {jest} from "@jest/globals"
 

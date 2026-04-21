@@ -1,3 +1,4 @@
+// @ts-check
 import React from "react"
 
 // Set global.applicationHistory so that on-location-changed will listen on it

@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable no-continue, sort-imports */
 import {digg, digs} from "diggerize"
 import * as inflection from "inflection"

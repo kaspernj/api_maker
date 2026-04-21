@@ -1,3 +1,4 @@
+// @ts-check
 import useEventEmitter from "ya-use-event-emitter"
 
 const EventEmitterListener = ({event, events, onCalled, ...restProps}) => {

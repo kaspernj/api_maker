@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection"
 import React, {useMemo} from "react"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"

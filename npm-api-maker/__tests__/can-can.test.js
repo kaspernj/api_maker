@@ -1,3 +1,4 @@
+// @ts-check
 import CanCan from "../src/can-can.js"
 import Services from "../src/services.js"
 import {jest} from "@jest/globals"

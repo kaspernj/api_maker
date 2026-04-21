@@ -1,3 +1,4 @@
+// @ts-check
 import {EventEmitter} from "eventemitter3"
 
 /** Shared event bus for API Maker modules. */
