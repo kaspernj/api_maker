@@ -9,6 +9,22 @@ import Logger from "./logger.js" // eslint-disable-line sort-imports
 const logger = new Logger({name: "ApiMaker / CableSubscriptionPool"})
 const AUTH_REFRESH_TIMEOUT_MS = 5000
 
+/** @typedef {import("./base-model.js").default} BaseModel */
+/** @typedef {import("./cable-subscription.js").default} CableSubscription */
+/** @typedef {string | number | boolean | null} EventArgumentPrimitive */
+/** @typedef {EventArgumentPrimitive | EventArgumentPrimitive[]} EventArgumentValue */
+/** @typedef {{model: BaseModel}} ModelMutationPayload */
+/** @typedef {{args: Record<string, EventArgumentValue>, eventName: string, model: BaseModel}} ModelEventPayload */
+/** @typedef {{args: Record<string, EventArgumentValue>, eventName: string}} ModelClassEventPayload */
+/**
+ * @typedef {object} SubscriptionIterationArgs
+ * @property {string} [eventName]
+ * @property {"creates"|"destroys"|"updates"|"model_class_events"} mode
+ * @property {string} [modelId]
+ * @property {string} modelName
+ * @property {CableSubscription} subscription
+ */
+
 /** Subscription pool for sharing channel subscriptions. */
 export default class ApiMakerCableSubscriptionPool {
   /** Constructor. */
@@ -20,8 +36,9 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   /**
-   * connect.
-   * @param {any} subscriptionData
+   * Opens the shared ActionCable subscription for the given subscription tree.
+   * @param {object} subscriptionData
+   * @returns {void}
    */
   connect (subscriptionData) {
     const globalData = CommandsPool.current().globalRequestData
@@ -74,11 +91,12 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   /**
-   * forEachSubscription.
-   * @param {any} callback
-   */
+   * Iterates over every tracked subscription with its stream metadata.
+   * @param {(args: SubscriptionIterationArgs) => void} callback
+   * @returns {void}
+  */
   forEachSubscription (callback) {
-    const modelIdModes = ["destroys", "updates"]
+    const modelIdModes = /** @type {Array<"destroys"|"updates">} */ (["destroys", "updates"])
     const subscriptions = digg(this, "subscriptions")
 
     for (const modelName in subscriptions) {
@@ -123,7 +141,7 @@ export default class ApiMakerCableSubscriptionPool {
   /** @returns {boolean} */
   isConnected = () => digg(this, "connected")
 
-  /** onConnected. */
+  /** Marks the pool connected and notifies each subscriber once the stream is ready. */
   onConnected = () => {
     this.connected = true
 
@@ -132,7 +150,7 @@ export default class ApiMakerCableSubscriptionPool {
     })
   }
 
-  /** onDisconnected. */
+  /** Marks the pool disconnected and fails pending auth refreshes unless teardown is intentional. */
   onDisconnected = () => {
     this.connected = false
 
@@ -144,8 +162,9 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   /**
-   * onReceived.
-   * @param {any} rawData
+   * Routes one ActionCable payload to the matching logical subscriptions.
+   * @param {object} rawData
+   * @returns {void}
    */
   onReceived = (rawData) => {
     if (rawData.type == "api_maker_subscription_auth_refreshed") {
@@ -173,41 +192,41 @@ export default class ApiMakerCableSubscriptionPool {
 
     if (type == "u") {
       for (const subscription of subscriptions[modelName].updates[modelId]) {
-        subscription.events.emit("received", {model})
+        subscription.events.emit("received", /** @type {ModelMutationPayload} */ ({model}))
       }
     } else if (type == "c") {
       for (const subscription of subscriptions[modelName].creates) {
-        subscription.events.emit("received", {model})
+        subscription.events.emit("received", /** @type {ModelMutationPayload} */ ({model}))
       }
     } else if (type == "d") {
       const destroySubscriptions = digg(subscriptions, modelName, "destroys", modelId)
 
       for (const subscription of destroySubscriptions) {
-        subscription.events.emit("received", {model})
+        subscription.events.emit("received", /** @type {ModelMutationPayload} */ ({model}))
       }
     } else if (type == "e") {
       const eventSubscriptions = digg(subscriptions, modelName, "events", eventName, modelId)
 
       for (const subscription of eventSubscriptions) {
-        subscription.events.emit("received", {args, eventName, model})
+        subscription.events.emit("received", /** @type {ModelEventPayload} */ ({args, eventName, model}))
       }
     } else if (type == "mce") {
       const modelClassEventSubscriptions = digg(subscriptions, modelName, "model_class_events", eventName)
 
       for (const subscription of modelClassEventSubscriptions) {
-        subscription.events.emit("received", {args, eventName})
+        subscription.events.emit("received", /** @type {ModelClassEventPayload} */ ({args, eventName}))
       }
     } else {
       throw new Error(`Unknown type: ${data.type}`)
     }
   }
 
-  /** onSubscribed. */
+  /** Logs when ActionCable confirms the shared subscription. */
   onSubscribed = () => {
     logger.debug("onSubscribed")
   }
 
-  /** onRejected. */
+  /** Marks the pool disconnected when ActionCable rejects the shared subscription. */
   onRejected = () => {
     this.connected = false
 
@@ -242,7 +261,7 @@ export default class ApiMakerCableSubscriptionPool {
     this.clearAuthRefreshCallbacks()
   }
 
-  /** onUnsubscribe. */
+  /** Releases one tracked logical subscription and tears down the shared stream when the pool becomes empty. */
   onUnsubscribe () {
     if (this.skipDisconnectHandling) {
       return
@@ -260,8 +279,9 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   /**
-   * registerSubscriptions.
-   * @param {any} subscriptions
+   * Registers the logical subscriptions served by this shared ActionCable stream.
+   * @param {object} subscriptions
+   * @returns {void}
    */
   registerSubscriptions (subscriptions) {
     this.subscriptions = subscriptions
@@ -297,8 +317,9 @@ export default class ApiMakerCableSubscriptionPool {
   }
 
   /**
-   * connectUnsubscriptionForSubscription.
-   * @param {any} subscription
+   * Hooks pool bookkeeping up to a child subscription's unsubscribe event.
+   * @param {CableSubscription} subscription
+   * @returns {void}
    */
   connectUnsubscriptionForSubscription (subscription) {
     logger.debug(() => ["Connecting to unsubscribe on subscription", {subscription}])

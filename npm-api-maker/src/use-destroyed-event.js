@@ -6,10 +6,11 @@ import PropTypes from "prop-types"
 import debounceFunction from "debounce"
 import propTypesExact from "prop-types-exact"
 
-/** @typedef {{active?: boolean, debounce?: boolean|number, onConnected?: (...args: unknown[]) => void}} UseDestroyedEventProps */
+/** @typedef {{active?: boolean, debounce?: boolean|number, onConnected?: () => void}} UseDestroyedEventProps */
 /** @typedef {import("./base-model.js").default} EventModel */
 /** @typedef {EventModel & {id: () => number|string}} EventModelWithId */
-/** @typedef {(...args: unknown[]) => void} EventCallback */
+/** @typedef {{model: EventModel}} DestroyedEventPayload */
+/** @typedef {(payload: DestroyedEventPayload) => void} EventCallback */
 
 /**
  * @param {EventModel | EventModel[] | undefined | null} modelOrModels
@@ -77,7 +78,7 @@ class UseDestroyedEventShapeHook extends ShapeHook {
     useLayoutEffect(() => {
       const currentConnections = this.currentConnections()
       const nextModelsById = modelsByIdFromInput(this.p.model)
-      const callback = (...callbackArgs) => this.onDestroyedCallback(...callbackArgs)
+      const callback = (payload) => this.onDestroyedCallback(payload)
 
       Object.keys(currentConnections).forEach((modelId) => {
         if (!(modelId in nextModelsById)) {
@@ -141,16 +142,20 @@ class UseDestroyedEventShapeHook extends ShapeHook {
     )
   }
 
-  /** @param {unknown[]} callbackArgs */
-  onDestroyedCallback(...callbackArgs) {
+  /**
+   * Forwards a destroyed-model payload to the caller.
+   * @param {DestroyedEventPayload} payload
+   * @returns {void}
+   */
+  onDestroyedCallback(payload) {
     if (!this.p.active) {
       return
     }
 
     if (this.p.debounce) {
-      this.debouncedOnDestroyed()(...callbackArgs)
+      this.debouncedOnDestroyed()(payload)
     } else {
-      this.p.onDestroyed(...callbackArgs)
+      this.p.onDestroyed(payload)
     }
   }
 }

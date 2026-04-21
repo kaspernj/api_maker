@@ -2,12 +2,20 @@
 import CableConnectionPool from "./cable-connection-pool.js"
 import {digg} from "diggerize"
 
+/** @typedef {import("./base-model.js").default} BaseModel */
+/** @typedef {string | number | boolean | null} EventArgumentPrimitive */
+/** @typedef {EventArgumentPrimitive | EventArgumentPrimitive[]} EventArgumentValue */
+/** @typedef {{args: Record<string, EventArgumentValue>, eventName: string, model: BaseModel}} ModelEventPayload */
+/** @typedef {{args: Record<string, EventArgumentValue>, eventName: string}} ModelClassEventPayload */
+/** @typedef {{model: BaseModel}} ModelMutationPayload */
+
 /** Model and model-class ActionCable event connectors. */
 export default class ModelEvents {
   /**
-   * @param {import("./base-model.js").default} model
+   * Connects to a named event on one persisted model instance.
+   * @param {BaseModel} model
    * @param {string} eventName
-   * @param {(...args: any[]) => void} callback
+   * @param {(payload: ModelEventPayload) => void} callback
    * @returns {import("./cable-subscription.js").default}
    */
   static connect (model, eventName, callback) {
@@ -18,9 +26,10 @@ export default class ModelEvents {
   }
 
   /**
+   * Connects to a named model-class event stream.
    * @param {typeof import("./base-model.js").default} modelClass
    * @param {string} eventName
-   * @param {(...args: any[]) => void} callback
+   * @param {(payload: ModelClassEventPayload) => void} callback
    * @returns {import("./cable-subscription.js").default}
    */
   static connectModelClass (modelClass, eventName, callback) {
@@ -31,8 +40,9 @@ export default class ModelEvents {
   }
 
   /**
+   * Connects to created events for a model class.
    * @param {typeof import("./base-model.js").default} modelClass
-   * @param {(...args: any[]) => void} callback
+   * @param {(payload: ModelMutationPayload) => void} callback
    * @returns {import("./cable-subscription.js").default}
    */
   static connectCreated (modelClass, callback) {
@@ -43,8 +53,9 @@ export default class ModelEvents {
   }
 
   /**
-   * @param {import("./base-model.js").default} model
-   * @param {(...args: any[]) => void} callback
+   * Connects to destroy events for one persisted model instance.
+   * @param {BaseModel} model
+   * @param {(payload: ModelMutationPayload) => void} callback
    * @returns {import("./cable-subscription.js").default}
    */
   static connectDestroyed (model, callback) {
@@ -55,8 +66,9 @@ export default class ModelEvents {
   }
 
   /**
-   * @param {import("./base-model.js").default} model
-   * @param {(...args: any[]) => void} callback
+   * Connects to update events for one persisted model instance.
+   * @param {BaseModel} model
+   * @param {(payload: ModelMutationPayload) => void} callback
    * @returns {import("./cable-subscription.js").default}
    */
   static connectUpdated (model, callback) {

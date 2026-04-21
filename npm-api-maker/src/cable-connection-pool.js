@@ -14,8 +14,8 @@ export default class ApiMakerCableConnectionPool {
   upcomingSubscriptions = {}
 
   /**
-   * current.
-   * @returns {any}
+   * Returns the shared connection pool instance.
+   * @returns {ApiMakerCableConnectionPool}
    */
   static current () {
     if (!shared.apiMakerCableConnectionPool) shared.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
@@ -34,7 +34,7 @@ export default class ApiMakerCableConnectionPool {
   }
 
   /**
-   * connectEventToExistingSubscription.
+   * Attaches a logical subscription to an already-open shared ActionCable stream when possible.
    * @param {object} root0
    * @param {any} root0.path
    * @param {any} root0.subscription
@@ -70,7 +70,7 @@ export default class ApiMakerCableConnectionPool {
   }
 
   /**
-   * connectModelEvent.
+   * Registers one logical model subscription, reusing an existing shared connection when available.
    * @param {object} root0
    * @param {any} root0.callback
    * @param {any} root0.path
@@ -134,7 +134,7 @@ export default class ApiMakerCableConnectionPool {
   }
 
   /**
-   * connectCreated.
+   * Subscribes to created events for a model class.
    * @param {any} modelName
    * @param {any} callback
    * @returns {any}
@@ -142,7 +142,7 @@ export default class ApiMakerCableConnectionPool {
   connectCreated = (modelName, callback) => this.connectModelEvent({callback, value: true, path: [modelName, "creates"]})
 
   /**
-   * connectEvent.
+   * Subscribes to a named event for one persisted model instance.
    * @param {any} modelName
    * @param {any} modelId
    * @param {any} eventName
@@ -156,7 +156,7 @@ export default class ApiMakerCableConnectionPool {
   })
 
   /**
-   * connectDestroyed.
+   * Subscribes to destroy events for one persisted model instance.
    * @param {any} modelName
    * @param {any} modelId
    * @param {any} callback
@@ -165,7 +165,7 @@ export default class ApiMakerCableConnectionPool {
   connectDestroyed = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "destroys"]})
 
   /**
-   * connectModelClassEvent.
+   * Subscribes to one named model-class event stream.
    * @param {any} modelName
    * @param {any} eventName
    * @param {any} callback
@@ -174,7 +174,7 @@ export default class ApiMakerCableConnectionPool {
   connectModelClassEvent = (modelName, eventName, callback) => this.connectModelEvent({callback, value: eventName, path: [modelName, "model_class_events"]})
 
   /**
-   * connectUpdate.
+   * Subscribes to update events for one persisted model instance.
    * @param {any} modelName
    * @param {any} modelId
    * @param {any} callback

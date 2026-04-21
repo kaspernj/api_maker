@@ -204,8 +204,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   /**
    * Returns true when a value is neither null nor undefined.
-   * @param {unknown} value
-   * @returns {boolean}
+   * @template T
+   * @param {T | null | undefined} value
+   * @returns {value is T}
    */
   isDefined(value) {
     return value !== null && value !== undefined

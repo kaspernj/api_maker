@@ -5,10 +5,13 @@ import debounceFunction from "debounce"
 import ModelEvents from "./model-events.js"
 import useShape from "./use-shape.js"
 
-/** @typedef {{active?: boolean, debounce?: number, onConnected?: (...args: unknown[]) => void}} UseModelEventProps */
+/** @typedef {string | number | boolean | null} EventArgumentPrimitive */
+/** @typedef {EventArgumentPrimitive | EventArgumentPrimitive[]} EventArgumentValue */
+/** @typedef {{active?: boolean, debounce?: number, onConnected?: () => void}} UseModelEventProps */
 /** @typedef {import("./base-model.js").default} EventModel */
 /** @typedef {EventModel & {id: () => number|string}} EventModelWithId */
-/** @typedef {(...args: unknown[]) => void} EventCallback */
+/** @typedef {{args: Record<string, EventArgumentValue>, eventName: string, model: EventModel}} ModelEventPayload */
+/** @typedef {(payload: ModelEventPayload) => void} EventCallback */
 
 /**
  * @param {EventModel | EventModel[] | undefined | null} modelOrModels
@@ -76,15 +79,15 @@ const apiMakerUseModelEvent = (model, event, onCallback, props) => {
 
   s.updateMeta({debounceCallback})
 
-  const onCallbackCallback = useCallback((...args) => {
+  const onCallbackCallback = useCallback((payload) => {
     if (!s.p.active) {
       return
     }
 
     if (s.p.debounce) {
-      s.m.debounceCallback(...args)
+      s.m.debounceCallback(payload)
     } else {
-      s.p.onCallback(...args)
+      s.p.onCallback(payload)
     }
   }, [])
 

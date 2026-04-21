@@ -36,6 +36,7 @@ Notes:
 - In Selenium/spec helpers, do not assume a `testID` selector points at the editable control itself; React Native Web may put the `testID` on a wrapper, so descend to the real `input`/`textarea`/checkbox element before typing or clearing.
 - In JavaScript class method definitions, use `methodName(args)` (no space before parentheses).
 - Keep single-tag JSDoc blocks on one line (for example `/** @returns {boolean} */`).
+- When tightening JSDoc types, do not mechanically replace `any` with `unknown`; prefer the real runtime contract, and only keep broad types when the value is genuinely opaque after inspection.
 - In ShapeHook classes, keep `setup()` as the first instance method.
 - Keep component props ordered alphabetically.
 - To typecheck a single file, run `npm run typecheck:file --file=src/path/to/file.js` from `npm-api-maker/` (you can also pass `npm-api-maker/src/...` or set `FILE=src/path/to/file.js`).
