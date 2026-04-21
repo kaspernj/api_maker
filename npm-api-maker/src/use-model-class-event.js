@@ -6,6 +6,10 @@ import PropTypes from "prop-types"
 import debounceFunction from "debounce"
 import propTypesExact from "prop-types-exact"
 
+/** @typedef {{active?: boolean, debounce?: boolean|number, onConnected?: Function}} UseModelClassEventArgs */
+/** @typedef {typeof import("./base-model.js").default} ModelClassType */
+/** @typedef {(...args: any[]) => void} EventCallback */
+
 /** Hook state container for model-class event subscriptions. */
 class UseModelClassEventShapeHook extends ShapeHook {
   static defaultProps = {
@@ -78,21 +82,11 @@ class UseModelClassEventShapeHook extends ShapeHook {
 }
 
 /**
- * @param {Function} modelClass
+ * @param {ModelClassType} modelClass
  * @param {string} event
- * @param {Function} onCallback
- * @param {object} [args]
-  * @param {boolean} [args.active]
-  * @param {number} [args.debounce]
-  * @param {Function} [args.onConnected]
-  * @returns {void}
-  */
-/**
- * apiMakerUseModelClassEvent.
- * @param {any} modelClass
- * @param {any} event
- * @param {any} onCallback
- * @param {any} args
+ * @param {EventCallback} onCallback
+ * @param {UseModelClassEventArgs} [args]
+ * @returns {void}
  */
 // eslint-disable-next-line max-params
 const apiMakerUseModelClassEvent = (modelClass, event, onCallback, args = {}) => {

@@ -10,12 +10,29 @@ const shared = {}
 
 // logger.setDebug(true)
 
+/**
+ * @typedef {object} SessionStatusScope
+ * @property {boolean} signed_in
+ */
+
+/**
+ * @typedef {object} SessionStatusResult
+ * @property {string} [csrf_token]
+ * @property {Record<string, SessionStatusScope>} scopes
+ */
+
+/**
+ * @typedef {object} SessionStatusUpdaterArgs
+ * @property {number} [timeout]
+ * @property {boolean} [useMetaElement]
+ */
+
 /** Tracks session and CSRF token freshness. */
 export default class ApiMakerSessionStatusUpdater {
   /**
    * current.
-   * @param {any} args
-   * @returns {any}
+   * @param {SessionStatusUpdaterArgs} [args]
+   * @returns {ApiMakerSessionStatusUpdater}
    */
   static current(args) {
     if (!shared.apiMakerSessionStatusUpdater) {
@@ -27,7 +44,7 @@ export default class ApiMakerSessionStatusUpdater {
 
   /**
    * Constructor.
-   * @param {any} args
+   * @param {SessionStatusUpdaterArgs} [args]
    */
   constructor(args = {}) {
     this.events = {}
@@ -93,7 +110,7 @@ export default class ApiMakerSessionStatusUpdater {
 
   /**
    * sessionStatus.
-   * @returns {any}
+   * @returns {Promise<SessionStatusResult>}
    */
   sessionStatus() {
     return new Promise((resolve) => {
@@ -116,7 +133,7 @@ export default class ApiMakerSessionStatusUpdater {
 
   /**
    * onSignedOut.
-   * @param {any} callback
+   * @param {Function} callback
    */
   onSignedOut(callback) {
     // @ts-expect-error
@@ -155,7 +172,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   /**
-   * @param {Record<string, any>} result
+   * @param {SessionStatusResult} result
    * @returns {void}
    */
   applyResult(result) {
@@ -167,7 +184,7 @@ export default class ApiMakerSessionStatusUpdater {
 
   /**
    * updateMetaElementsFromResult.
-   * @param {any} result
+   * @param {SessionStatusResult} result
    */
   updateMetaElementsFromResult(result) {
     logger.debug("updateMetaElementsFromResult")
@@ -192,7 +209,7 @@ export default class ApiMakerSessionStatusUpdater {
 
   /**
    * updateUserSessionsFromResult.
-   * @param {any} result
+   * @param {SessionStatusResult} result
    */
   updateUserSessionsFromResult(result) {
     for (const scopeName in result.scopes) {
@@ -202,8 +219,8 @@ export default class ApiMakerSessionStatusUpdater {
 
   /**
    * updateUserSessionScopeFromResult.
-   * @param {any} scopeName
-   * @param {any} scope
+   * @param {string} scopeName
+   * @param {SessionStatusScope} scope
    */
   updateUserSessionScopeFromResult(scopeName, scope) {
     const deviseIsSignedInMethodName = `is${inflection.camelize(scopeName)}SignedIn`
