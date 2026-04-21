@@ -7,15 +7,48 @@ import MoneyFormatter from "../money-formatter.js"
 import React from "react"
 import Text from "../utils/text"
 
+/** @typedef {import("../base-model.js").default} BaseModel */
+/** @typedef {import("../money-formatter.js").MoneyLike} MoneyLike */
+/**
+ * @typedef {object} AttributeDefinition
+ * @property {() => import("../base-model/column.js").default | undefined} getColumn
+ * @property {() => string} name
+ */
+/**
+ * @typedef {string | Date | boolean | number | null | undefined | React.ReactNode | MoneyLike} PrimitiveColumnValue
+ */
+/** @typedef {PrimitiveColumnValue | PrimitiveColumnValue[]} ColumnValue */
+/** @typedef {(format: string, value: Date) => string} LocalizeDateTime */
+/** @typedef {(key: string, args?: object) => string} TranslateFn */
+/**
+ * @typedef {object} TableColumn
+ * @property {string} [attribute]
+ * @property {(args: Record<string, BaseModel | string>) => ColumnValue} [content]
+ * @property {string[]} [path]
+ */
+/** @typedef {{defaultDateFormatName?: string | ((args: object) => string), defaultDateTimeFormatName?: string | ((args: object) => string)}} TableProps */
+/** @typedef {{props: TableProps}} TableLike */
+/**
+ * @typedef {BaseModel & {
+ *   constructor: {attributes(): AttributeDefinition[], modelName(): {human(): string}}
+ * } & Record<string, (() => BaseModel | PrimitiveColumnValue | null | undefined) | object>} ContentModel
+ */
+
+/**
+ * @param {PrimitiveColumnValue} value
+ * @returns {value is MoneyLike}
+ */
+const isMoneyValue = (value) => MoneyFormatter.isMoney(value)
+
 export default class ApiMakerTableColumnContent {
   /**
    * @param {object} args
-   * @param {any} args.column
-   * @param {any} args.l
+   * @param {TableColumn} args.column
+   * @param {LocalizeDateTime} args.l
    * @param {string} [args.mode]
-   * @param {any} args.model
-   * @param {Function} [args.t]
-   * @param {any} args.table
+   * @param {ContentModel} args.model
+   * @param {TranslateFn} [args.t]
+   * @param {TableLike} args.table
    */
   constructor({column, l, mode = "react-native", model, t, table}) {
     this.column = column
@@ -27,7 +60,10 @@ export default class ApiMakerTableColumnContent {
   }
 
   columnContentFromContentArg() {
-    const args = modelCallbackArgs(this.table, this.model)
+    const args = modelCallbackArgs(
+      /** @type {{props: {modelClass: {modelClassData(): {name: string}}}}} */ (this.table),
+      this.model
+    )
 
     args.mode = this.mode
 
@@ -36,6 +72,7 @@ export default class ApiMakerTableColumnContent {
     return this.presentColumnValue(value)
   }
 
+  /** @returns {React.ReactNode | undefined} */
   columnsContentFromAttributeAndPath() {
     const {attribute: attributeName} = digs(this.column, "attribute")
     const attributeNameUnderscore = inflection.underscore(attributeName)
@@ -45,7 +82,9 @@ export default class ApiMakerTableColumnContent {
 
     if (path.length > 0) {
       for (const pathPart of path) {
-        currentModel = currentModel[pathPart]()
+        currentModel = /** @type {ContentModel | null | undefined} */ (
+          /** @type {() => BaseModel | null | undefined} */ (currentModel[pathPart])()
+        )
         if (!currentModel) return
       }
     }
@@ -58,11 +97,13 @@ export default class ApiMakerTableColumnContent {
       value = currentModel[attributeName]()
     }
 
-    const attribute = currentModel.constructor.attributes().find((attribute) => attribute.name() == attributeNameUnderscore)
+    const attribute = /** @type {AttributeDefinition | undefined} */ (
+      currentModel.constructor.attributes().find((attribute) => attribute.name() == attributeNameUnderscore)
+    )
     const modelColumn = attribute?.getColumn()
 
     if (modelColumn?.getType() == "date" && value) {
-      const contentText = this.presentDateTime({apiMakerType: "date", value})
+      const contentText = this.presentDateTime({apiMakerType: "date", value: /** @type {Date} */ (value)})
 
       if (this.mode == "html") {
         return contentText
@@ -84,13 +125,19 @@ export default class ApiMakerTableColumnContent {
     }
   }
 
+  /**
+   * @param {ColumnValue} value
+   * @returns {React.ReactNode}
+   */
   presentColumnValue = (value) => {
     let contentText
 
     if (value instanceof Date) {
       contentText = this.presentDateTime({value})
-    } else if (MoneyFormatter.isMoney(value)) {
+    } else if (!Array.isArray(value) && isMoneyValue(value)) {
       contentText = MoneyFormatter.format(value)
+    } else if (typeof value == "number") {
+      contentText = String(value)
     } else if (typeof value == "boolean") {
       if (value) {
         contentText = this.t("js.shared.yes", {defaultValue: "Yes"})
@@ -101,13 +148,14 @@ export default class ApiMakerTableColumnContent {
       contentText = value
         .map((valuePart) => this.presentColumnValue(valuePart))
         .filter((valuePart) => Boolean(valuePart))
+        .map((valuePart) => (typeof valuePart == "string" ? valuePart : ""))
         .join(", ")
 
     } else if (typeof value == "string") {
       contentText = value
     } else {
       // Its a React node - just return it and trust the provider to be HTML compatible.
-      return value
+      return /** @type {React.ReactNode} */ (value)
     }
 
     if (this.mode == "html") {

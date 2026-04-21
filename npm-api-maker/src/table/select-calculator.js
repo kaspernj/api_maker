@@ -4,20 +4,32 @@ import {digg, digs} from "diggerize"
 import * as inflection from "inflection"
 import modelClassRequire from "../model-class-require.js"
 
+/** @typedef {{name: string, resource_name: string}} ModelRelationship */
+/** @typedef {{attribute?: string, path?: string[]}} SelectColumnDefinition */
+/** @typedef {{column: SelectColumnDefinition}} PreparedColumn */
+/** @typedef {Record<string, string[]>} SelectMap */
+/**
+ * @typedef {object} SelectModelClass
+ * @property {(attributeName: string) => boolean} hasAttribute
+ * @property {() => {name: string, relationships: ModelRelationship[]}} modelClassData
+ * @property {() => string} primaryKey
+ */
+/** @typedef {{props: {modelClass: SelectModelClass, select?: SelectMap}, state: {preparedColumns: PreparedColumn[]}}} SelectTable */
+
 /** Computes table select payloads for queries. */
 class SelectCalculator {
   /**
-   * Constructor.
+   * Creates a select calculator for one table instance.
    * @param {object} root0
-   * @param {any} root0.table
+   * @param {SelectTable} root0.table
    */
   constructor({table}) {
     this.table = table
   }
 
   /**
-   * selects.
-   * @returns {any}
+   * Builds the final per-model select map needed for the current table columns.
+   * @returns {SelectMap}
    */
   selects() {
     const {modelClass} = digs(this.table.props, "modelClass")
@@ -73,9 +85,9 @@ class SelectCalculator {
 }
 
 /**
- * selectCalculator.
- * @param {any} props
- * @returns {any}
+ * Calculates the backend select payload for the current table render.
+ * @param {{table: SelectTable}} props
+ * @returns {SelectMap}
  */
 export default function selectCalculator(props) {
   return new SelectCalculator(props).selects()
