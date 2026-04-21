@@ -10,10 +10,38 @@ import useShape from "./use-shape.js"
 import useValidationErrors from "./use-validation-errors.js"
 
 /**
- * @param {object} args
- * @param {Record<string, any>} args.props
- * @param {Record<string, any>} [args.wrapperOptions]
- * @returns {{inputProps: Record<string, any>, wrapperOpts: Record<string, any>, restProps: Record<string, any>}}
+ * @typedef {string | number | boolean | null | undefined | Date | object | Array<object | string | number | boolean | null | undefined>} InputValue
+ * @typedef {{current?: HTMLElement | null}} InputRefLike
+ * @typedef {{type?: string}} InputWrapperOptions
+ * @typedef {object} UseInputProps
+ * @property {string} [attribute]
+ * @property {boolean} [checked]
+ * @property {boolean} [defaultChecked]
+ * @property {InputValue} [defaultValue]
+ * @property {(value: InputValue) => InputValue} [formatValue]
+ * @property {string} [label]
+ * @property {{
+ *   modelClassData: () => {name: string},
+ *   modelClass: () => {humanAttributeName: (attributeName: string) => string}
+ * } & Record<string, Function>} [model]
+ * @property {string} [type]
+ * @property {InputRefLike} [inputRef]
+ * @property {Record<string, InputValue | InputRefLike>} [inputProps]
+ * @property {InputValue} [value]
+ * @property {InputValue[]} [values]
+ * @property {object} [wrapperOpts]
+ * @typedef {object} UseInputArgs
+ * @property {UseInputProps} props
+ * @property {InputWrapperOptions} [wrapperOptions]
+ * @typedef {object} UseInputResult
+ * @property {Record<string, InputValue | InputRefLike>} inputProps
+ * @property {{errors: object, form: HTMLFormElement | undefined, label: InputValue}} wrapperOpts
+ * @property {Record<string, InputValue>} restProps
+ */
+
+/**
+ * @param {UseInputArgs} args
+ * @returns {UseInputResult}
  */
 const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   const useInputRestPropsKeys = Object.keys(useInputRestProps)

@@ -1,12 +1,19 @@
 // @ts-check
 import {digg} from "diggerize"
 
+/**
+ * @typedef {string | number | boolean | null | undefined} SerializablePrimitive
+ * @typedef {object | SerializablePrimitive | Array<object | SerializablePrimitive>} SerializableInputValue
+ * @typedef {object | SerializablePrimitive | Array<object | SerializablePrimitive>} SerializedOutputValue
+ * @typedef {Record<string, SerializedOutputValue>} SerializedObject
+ */
+
 /** Serializes API Maker payloads and model references. */
 export default class Serializer {
   /**
    * Serializes one value without manually instantiating the serializer class.
-   * @param {any} arg
-   * @returns {any}
+   * @param {SerializableInputValue} arg
+   * @returns {SerializedOutputValue}
    */
   static serialize (arg) {
     const serialize = new Serializer(arg)
@@ -16,7 +23,7 @@ export default class Serializer {
 
   /**
    * Creates a serializer bound to one root argument.
-   * @param {any} arg
+   * @param {SerializableInputValue} arg
    */
   constructor (arg) {
     this.arg = arg
@@ -24,7 +31,7 @@ export default class Serializer {
 
   /**
    * Serializes the root argument passed to this serializer instance.
-   * @returns {any}
+   * @returns {SerializedOutputValue}
    */
   serialize () {
     return this.serializeArgument(this.arg)
@@ -32,8 +39,8 @@ export default class Serializer {
 
   /**
    * Serializes one scalar, model, collection, array, or plain object value.
-   * @param {any} arg
-   * @returns {any | object}
+   * @param {SerializableInputValue} arg
+   * @returns {SerializedOutputValue}
    */
   serializeArgument (arg) {
     if (typeof arg == "object" && arg && arg.constructor.apiMakerType == "BaseModel") {
@@ -78,8 +85,8 @@ export default class Serializer {
 
   /**
    * Serializes each element of one array argument.
-   * @param {any} arg
-   * @returns {any}
+   * @param {SerializableInputValue[]} arg
+   * @returns {SerializedOutputValue[]}
    */
   serializeArray (arg) {
     return arg.map((value) => this.serializeArgument(value))
@@ -87,8 +94,8 @@ export default class Serializer {
 
   /**
    * Serializes each key and value in one plain object argument.
-   * @param {any} arg
-   * @returns {any}
+   * @param {Record<string, SerializableInputValue>} arg
+   * @returns {SerializedObject}
    */
   serializeObject (arg) {
     const newObject = {}
