@@ -10,7 +10,7 @@ import {useBreakpoint} from "responsive-breakpoints"
 
 export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComponent {
   render() {
-    const {xs, sm} = useBreakpoint()
+    const {smDown} = useBreakpoint()
     const {children, dataSet, ...restProps} = this.props
 
     const actualDataSet = useMemo(() =>
@@ -22,7 +22,7 @@ export default memo(shapeComponent(class ApiMakerUtilsComponent extends BaseComp
 
     let width, maxWidth
 
-    if (xs || sm) {
+    if (smDown) {
       width = "95%"
     } else {
       width = "80%"
