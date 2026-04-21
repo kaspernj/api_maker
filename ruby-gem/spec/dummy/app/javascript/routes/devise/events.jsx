@@ -11,7 +11,7 @@ import Layout from "components/layout"
 import {Task, User} from "models.js"
 import useEventEmitter from "ya-use-event-emitter"
 
-/** @typedef {object} DeviseEventsProps */
+/** @typedef {Record<string, never>} DeviseEventsProps */
 
 /**
  * @typedef {object} DeviseEventsState

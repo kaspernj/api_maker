@@ -14,8 +14,12 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Pressable} from "react-native"
 import Text from "../../utils/text"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {Function} l
+ * @property {object} table
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableSettingsDownloadAction extends BaseComponent {
   static propTypes = propTypesExact({
     l: PropTypes.func.isRequired,

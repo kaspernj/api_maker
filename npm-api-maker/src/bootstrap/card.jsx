@@ -6,8 +6,25 @@ import PropTypes from "prop-types"
 import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import memo from "set-state-compare/build/memo.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {object=} cardRef
+ * @property {any=} children
+ * @property {string=} className
+ * @property {any=} controls
+ * @property {boolean=} defaultExpanded
+ * @property {boolean=} expandable
+ * @property {boolean=} expandableHide
+ * @property {any=} footer
+ * @property {any=} header
+ * @property {boolean=} responsiveTable
+ * @property {boolean=} striped
+ * @property {boolean=} table
+ */
+/**
+ * @typedef {object} State
+ * @property {any} expanded
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootstrapCard extends BaseComponent {
   static defaultProps = {
     defaultExpanded: true,

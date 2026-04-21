@@ -15,8 +15,22 @@ import Widths from "./widths"
 
 const dataSets = {}
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {boolean} active
+ * @property {any} animatedWidth
+ * @property {any} animatedZIndex
+ * @property {object} column
+ * @property {boolean} resizing
+ * @property {object} table
+ * @property {object} tableSettingColumn
+ * @property {object} touchProps
+ * @property {Widths} widths
+ */
+/**
+ * @typedef {object} State
+ * @property {boolean} resizing
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableHeaderColumn extends BaseComponent {
   static propTypes = propTypesExact({
     active: PropTypes.bool.isRequired,

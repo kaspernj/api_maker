@@ -8,8 +8,18 @@ import propTypesExact from "prop-types-exact"
 
 const CurrentSwitchContext = createContext(/** @type {any} */ ({}))
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {any=} children
+ * @property {string=} name
+ * @property {boolean=} single
+ */
+/**
+ * @typedef {object} State
+ * @property {Date} lastUpdate
+ * @property {any} pathShown
+ * @property {object} pathsMatched
+ */
 const Switch = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class Switch extends BaseComponent {
   static defaultProps = {
     name: "[no name]",

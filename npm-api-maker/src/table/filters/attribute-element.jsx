@@ -11,8 +11,8 @@ import Text from "../../utils/text"
 
 const dataSets = {}
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class AttributeElement extends BaseComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.bool.isRequired,

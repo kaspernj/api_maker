@@ -7,8 +7,17 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../../form"
 import {useEffect, useMemo} from "react"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {object} attribute
+ * @property {string} id
+ * @property {object} model
+ * @property {string} name
+ */
+/**
+ * @typedef {object} State
+ * @property {any} value
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class EditAttributeContent extends BaseComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.object.isRequired,

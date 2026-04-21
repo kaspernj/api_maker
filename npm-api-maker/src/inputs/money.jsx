@@ -11,8 +11,8 @@ import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import idForComponent from "./id-for-component.js"
 import memo from "set-state-compare/build/memo.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsMoney extends ShapeComponent {
   static defaultProps = {
     disabled: false,

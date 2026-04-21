@@ -12,8 +12,11 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Table from "../table/table"
 import useCurrentUser from "../use-current-user.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {Function} modelClass
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminModelClassTable extends BaseComponent {
   static propTypes = {
     modelClass: PropTypes.func.isRequired

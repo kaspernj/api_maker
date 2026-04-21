@@ -9,8 +9,22 @@ import React from "react"
 import Text from "./text"
 import {useForm} from "../form"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {any=} children
+ * @property {boolean=} danger
+ * @property {boolean=} disabled
+ * @property {string=} icon
+ * @property {string=} label
+ * @property {Function=} onPress
+ * @property {object=} pressableProps
+ * @property {boolean=} submit
+ * @property {object=} textProps
+ */
+/**
+ * @typedef {object} State
+ * @property {boolean} hover
+ */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsButton extends ShapeComponent {
   static defaultProps = {
     children: null,

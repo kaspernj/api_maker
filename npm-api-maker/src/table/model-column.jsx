@@ -15,8 +15,20 @@ import Text from "../utils/text"
 import {useBreakpoint} from "responsive-breakpoints"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {any} animatedPosition
+ * @property {any} animatedWidth
+ * @property {any} animatedZIndex
+ * @property {object} column
+ * @property {number} columnIndex
+ * @property {boolean} even
+ * @property {EventEmitter} events
+ * @property {object} model
+ * @property {object} table
+ * @property {object} tableSettingColumn
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableModelColumn extends BaseComponent {
   static propTypes = propTypesExact({
     animatedPosition: PropTypes.instanceOf(Animated.ValueXY).isRequired,

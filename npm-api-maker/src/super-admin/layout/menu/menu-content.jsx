@@ -12,8 +12,8 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useCanCan from "../../../use-can-can.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ComponentsAdminLayoutMenuContent extends BaseComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.string

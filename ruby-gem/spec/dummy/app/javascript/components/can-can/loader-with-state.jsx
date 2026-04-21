@@ -11,8 +11,11 @@ import Text from "@kaspernj/api-maker/build/utils/text"
 import useCanCan from "@kaspernj/api-maker/build/use-can-can.js"
 import useCurrentUser from "@kaspernj/api-maker/build/use-current-user.js"
 
-/** @typedef {object} CanCanWithStateProps */
-/** @typedef {object} CanCanWithStateState */
+/**
+ * @typedef {object} CanCanWithStateProps
+ * @property {string=} className
+ */
+/** @typedef {Record<string, never>} CanCanWithStateState */
 export default memo(shapeComponent(/** @augments {ShapeComponent<CanCanWithStateProps, CanCanWithStateState>} */ class CanCanWithState extends ShapeComponent {
   static propTypes = {
     className: PropTypes.string

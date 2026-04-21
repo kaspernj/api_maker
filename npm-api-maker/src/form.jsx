@@ -62,8 +62,18 @@ class FormInputs {
   }
 }
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {any=} children
+ * @property {FormInputs=} form
+ * @property {object=} formObjectRef
+ * @property {object=} formRef
+ * @property {object=} htmlFormProps
+ * @property {Function=} onSubmit
+ * @property {Function=} setForm
+ * @property {boolean=} useHtmlForm
+ */
+/** @typedef {Record<string, never>} State */
 const Form = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class Form extends BaseComponent {
   static propTypes = propTypesExact({
     children: PropTypes.any,

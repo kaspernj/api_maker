@@ -12,8 +12,17 @@ import urlEncode from "../url-encode.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import useSorting from "../table/use-sorting.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {string} attribute
+ * @property {string=} className
+ * @property {object=} defaultParams
+ * @property {object=} linkComponent
+ * @property {Function=} onChanged
+ * @property {object} query
+ * @property {any=} title
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootstrapSortLink extends BaseComponent {
   static propTypes = {
     attribute: PropTypes.string.isRequired,

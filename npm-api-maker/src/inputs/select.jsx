@@ -7,8 +7,21 @@ import React from "react"
 import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {string=} attribute
+ * @property {any=} children
+ * @property {any[]|number|string=} defaultValue
+ * @property {string=} id
+ * @property {boolean|any=} includeBlank
+ * @property {object} inputProps
+ * @property {object=} model
+ * @property {string=} name
+ * @property {Function=} onChange
+ * @property {any[]=} options
+ * @property {object} wrapperOpts
+ */
+/** @typedef {Record<string, never>} State */
 const ApiMakerInputsSelect = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsSelect extends BaseComponent {
   static propTypes = {
     attribute: PropTypes.string,

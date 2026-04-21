@@ -15,8 +15,18 @@ const styles = StyleSheet.create({
   }
 })
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {string} attributeName
+ * @property {string} id
+ * @property {string} label
+ * @property {object} model
+ * @property {string} name
+ */
+/**
+ * @typedef {object} State
+ * @property {any} checked
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class EditAttributeInput extends BaseComponent {
   static propTypes = propTypesExact({
     attributeName: PropTypes.string.isRequired,

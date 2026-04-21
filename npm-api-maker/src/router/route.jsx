@@ -15,8 +15,24 @@ const RequireComponentContext = createContext(null)
 const RouteContext = createContext(null)
 const useParams = () => useContext(ParamsContext)
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {any=} children
+ * @property {string=} component
+ * @property {string=} componentPath
+ * @property {boolean=} exact
+ * @property {boolean=} fallback
+ * @property {boolean=} includeInPath
+ * @property {Function=} onMatch
+ * @property {string|RegExp=} path
+ */
+/**
+ * @typedef {object} State
+ * @property {any} Component
+ * @property {any} componentNotFound
+ * @property {number} lastMatchUpdate
+ * @property {boolean} matches
+ */
 const Route = memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class Route extends BaseComponent {
   static defaultProps = {
     exact: false,

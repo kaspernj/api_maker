@@ -12,8 +12,12 @@ import useModelEvent from "../use-model-event.js"
 
 const Workplace = modelClassRequire("Workplace")
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/**
+ * @typedef {object} State
+ * @property {boolean} checked
+ * @property {boolean} linkLoaded
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableWorkerPluginsCheckbox extends BaseComponent {
   static propTypes = PropTypesExact({
     currentWorkplace: PropTypes.object,

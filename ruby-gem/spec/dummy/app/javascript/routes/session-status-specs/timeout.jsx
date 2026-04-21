@@ -5,7 +5,7 @@ import Layout from "components/layout"
 import useEventEmitter from "ya-use-event-emitter"
 import SessionStatusUpdater from "@kaspernj/api-maker/build/session-status-updater.js"
 
-/** @typedef {object} SessionStatusSpecsTimeoutProps */
+/** @typedef {Record<string, never>} SessionStatusSpecsTimeoutProps */
 
 /**
  * @typedef {object} SessionStatusSpecsTimeoutState

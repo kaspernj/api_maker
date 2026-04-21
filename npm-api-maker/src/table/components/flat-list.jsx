@@ -5,8 +5,8 @@ import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class SharedTagble extends BaseComponent {
   render() {
     const {style, ...restProps} = this.props

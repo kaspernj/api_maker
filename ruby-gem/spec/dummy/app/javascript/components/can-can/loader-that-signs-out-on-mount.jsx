@@ -2,8 +2,8 @@ import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-comp
 import Devise from "@kaspernj/api-maker/build/devise.js"
 import {memo, useMemo} from "react"
 
-/** @typedef {object} LoaderThatSignsOutOnMountProps */
-/** @typedef {object} LoaderThatSignsOutOnMountState */
+/** @typedef {Record<string, never>} LoaderThatSignsOutOnMountProps */
+/** @typedef {Record<string, never>} LoaderThatSignsOutOnMountState */
 export default memo(shapeComponent(/** @augments {ShapeComponent<LoaderThatSignsOutOnMountProps, LoaderThatSignsOutOnMountState>} */ class LoaderThatSignsOutOnMount extends ShapeComponent {
   setup() {
     useMemo(() => {

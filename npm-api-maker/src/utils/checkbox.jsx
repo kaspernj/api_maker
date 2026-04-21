@@ -9,8 +9,20 @@ import propTypesExact from "prop-types-exact"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "./text"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {boolean=} checked
+ * @property {object=} dataSet
+ * @property {boolean=} defaultChecked
+ * @property {string=} label
+ * @property {Function=} onCheckedChange
+ * @property {object=} style
+ * @property {string=} testID
+ */
+/**
+ * @typedef {object} State
+ * @property {any} checked
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerUtilsCheckbox extends BaseComponent {
   static defaultProps = {
     dataSet: null,

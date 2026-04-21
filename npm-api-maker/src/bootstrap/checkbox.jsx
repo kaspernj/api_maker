@@ -8,8 +8,23 @@ import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import memo from "set-state-compare/build/memo.js"
 import useInput from "../use-input.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {string=} attribute
+ * @property {string=} className
+ * @property {boolean=} defaultChecked
+ * @property {any=} defaultValue
+ * @property {any=} hint
+ * @property {string=} id
+ * @property {any=} label
+ * @property {string=} labelClassName
+ * @property {object=} model
+ * @property {string=} name
+ * @property {Function=} onChange
+ * @property {string=} wrapperClassName
+ * @property {boolean=} zeroInput
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapCheckbox extends ShapeComponent {
   static defaultProps = {
     defaultValue: 1,

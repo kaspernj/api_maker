@@ -9,8 +9,13 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
 import {View} from "react-native"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {object} column
+ * @property {object} table
+ * @property {object} tableSettingColumn
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ColumnRow extends BaseComponent {
   static propTypes = propTypesExact({
     column: PropTypes.object.isRequired,

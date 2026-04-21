@@ -6,8 +6,8 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useBreakpoint} from "responsive-breakpoints"
 import {View} from "react-native"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class SharedTableRow extends BaseComponent {
   render() {
     const {style, ...restProps} = this.props

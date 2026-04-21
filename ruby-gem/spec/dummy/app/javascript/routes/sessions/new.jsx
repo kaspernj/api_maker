@@ -7,7 +7,7 @@ import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"
 import useEventEmitter from "ya-use-event-emitter"
 
-/** @typedef {object} SessionsNewProps */
+/** @typedef {Record<string, never>} SessionsNewProps */
 
 /**
  * @typedef {object} SessionsNewState

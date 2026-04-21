@@ -10,8 +10,17 @@ import Text from "../../../utils/text"
 
 const dataSets = {}
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {boolean|string=} active
+ * @property {string=} className
+ * @property {string} icon
+ * @property {any=} label
+ */
+/**
+ * @typedef {object} State
+ * @property {boolean} hover
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ComponentsAdminLayoutMenuMenuItem extends BaseComponent {
   static propTypes = {
     active: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),

@@ -13,8 +13,12 @@ import {View} from "react-native"
 import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {Function} onRequestClose
+ * @property {object} table
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableSettings extends BaseComponent {
   static propTypes = propTypesExact({
     onRequestClose: PropTypes.func.isRequired,

@@ -12,8 +12,19 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 const dataSets = {}
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {string=} attribute
+ * @property {boolean=} checkIfAttributeLoaded
+ * @property {any=} children
+ * @property {Function|string=} defaultDateFormatName
+ * @property {Function|string=} defaultDateTimeFormatName
+ * @property {string=} identifier
+ * @property {any|string=} label
+ * @property {object=} model
+ * @property {any=} value
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapAttributeRow extends ShapeComponent {
   static defaultProps = {
     checkIfAttributeLoaded: false,

@@ -5,8 +5,11 @@ import React from "react"
 import SuperAdmin from "@kaspernj/api-maker/build/super-admin"
 import useCurrentUser from "@kaspernj/api-maker/build/use-current-user.js"
 
-/** @typedef {object} RoutesSuperAdminProps */
-/** @typedef {object} RoutesSuperAdminState */
+/**
+ * @typedef {object} RoutesSuperAdminProps
+ * @property {object=} currentUser
+ */
+/** @typedef {Record<string, never>} RoutesSuperAdminState */
 export default memo(shapeComponent(/** @augments {ShapeComponent<RoutesSuperAdminProps, RoutesSuperAdminState>} */ class RoutesSuperAdmin extends ShapeComponent {
   static propTypes = {
     currentUser: PropTypes.object

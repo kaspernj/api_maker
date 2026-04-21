@@ -56,8 +56,22 @@ const styles = {
 
 const dataSets = {}
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {any=} actions
+ * @property {string=} active
+ * @property {any=} children
+ * @property {string=} className
+ * @property {object=} currentCustomer
+ * @property {string=} currentCustomerId
+ * @property {object=} currentUser
+ * @property {string=} headTitle
+ * @property {string=} headerTitle
+ */
+/**
+ * @typedef {object} State
+ * @property {boolean} menuTriggered
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminLayout extends BaseComponent {
   static propTypes = PropTypesExact({ // eslint-disable-line new-cap
     actions: PropTypes.any,

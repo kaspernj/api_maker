@@ -31,7 +31,7 @@ const iconMap = {
  * @property {import("react-native").StyleProp<import("react-native").TextStyle>=} style Only `color` is forwarded.
  * @property {("FontAwesome"|"FontAwesome5"|"FontAwesome6"|"MaterialIcons")=} version
  */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerUtilsIcon extends BaseComponent {
   /** @type {Props} */
   static propTypes = {

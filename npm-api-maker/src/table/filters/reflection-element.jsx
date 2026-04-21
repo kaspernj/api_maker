@@ -10,8 +10,8 @@ import Text from "../../utils/text"
 
 const dataSets = {}
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ReflectionElement extends BaseComponent {
   static propTypes = PropTypesExact({
     modelClassName: PropTypes.string.isRequired,

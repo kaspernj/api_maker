@@ -22,8 +22,8 @@ import {WithDefaultStyle} from "../../../utils/default-style"
 const dataSets = {}
 const styles = {}
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ComponentsAdminLayoutMenu extends BaseComponent {
   static propTypes = PropTypesExact({
     active: PropTypes.string,

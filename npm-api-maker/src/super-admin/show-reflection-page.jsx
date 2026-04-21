@@ -12,8 +12,12 @@ import useModel from "../use-model.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import {View} from "react-native"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {Function} modelClass
+ * @property {string} modelId
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminShowReflectionPage extends BaseComponent {
   static propTypes = propTypesExact({
     modelClass: PropTypes.func.isRequired,

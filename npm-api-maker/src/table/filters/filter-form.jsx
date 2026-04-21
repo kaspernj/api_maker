@@ -28,8 +28,22 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 const styles = {}
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/**
+ * @typedef {object} State
+ * @property {object} actualCurrentModelClass
+ * @property {any} associations
+ * @property {any} attribute
+ * @property {number} loading
+ * @property {any} modelClassName
+ * @property {any[]} path
+ * @property {any} predicate
+ * @property {any} predicates
+ * @property {any} ransackableAttributes
+ * @property {any} ransackableScopes
+ * @property {any} scope
+ * @property {any} value
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableFiltersFilterForm extends BaseComponent {
   static propTypes = PropTypesExact({
     filter: PropTypes.object,

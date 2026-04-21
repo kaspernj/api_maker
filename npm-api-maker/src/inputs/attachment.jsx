@@ -11,8 +11,19 @@ import memo from "set-state-compare/build/memo.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useInput from "../use-input.js"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {string=} className
+ * @property {string=} contentType
+ * @property {object=} model
+ * @property {Function=} onPurgeChanged
+ * @property {string=} purgeName
+ * @property {string=} url
+ */
+/**
+ * @typedef {object} State
+ * @property {boolean} purgeChecked
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerInputsAttachment extends BaseComponent {
   static propTypes = {
     className: PropTypes.string,

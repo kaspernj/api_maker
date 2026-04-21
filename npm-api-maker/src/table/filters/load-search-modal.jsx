@@ -14,8 +14,14 @@ import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import apiMakerConfig from "../../config.js"
 
-/** @typedef {object} SearchLinkProps */
-/** @typedef {object} SearchLinkState */
+/**
+ * @typedef {object} SearchLinkProps
+ * @property {Function} onClick
+ * @property {Function} onDeleted
+ * @property {Function} onEditPressed
+ * @property {TableSearch} search
+ */
+/** @typedef {Record<string, never>} SearchLinkState */
 const SearchLink = memo(shapeComponent(/** @augments {BaseComponent<SearchLinkProps, SearchLinkState>} */ class SearchLink extends BaseComponent {
   render() {
     const {search} = this.props
@@ -92,8 +98,19 @@ const SearchLink = memo(shapeComponent(/** @augments {BaseComponent<SearchLinkPr
   onSearchClicked = () => this.props.onClick({search: this.props.search})
 }))
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {string=} className
+ * @property {object} currentUser
+ * @property {Function} onEditSearchPressed
+ * @property {Function} onRequestClose
+ * @property {string} querySearchName
+ */
+/**
+ * @typedef {object} State
+ * @property {any} editSearch
+ * @property {TableSearch[]|undefined} searches
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTableFiltersLoadSearchModal extends BaseComponent {
   state = {
     editSearch: undefined,

@@ -10,8 +10,22 @@ import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "ya-use-event-emitter"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {object=} activeItemStyle
+ * @property {Function=} cacheKeyExtractor
+ * @property {any[]} data
+ * @property {object=} dataSet
+ * @property {EventEmitter=} events
+ * @property {boolean=} horizontal
+ * @property {Function} keyExtractor
+ * @property {Function=} onDragItemEnd
+ * @property {Function=} onDragItemStart
+ * @property {Function=} onItemMoved
+ * @property {Function} onReordered
+ * @property {Function} renderItem
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class DraggableSort extends ShapeComponent {
   /** @type {import("./controller.js").default} */
   controller

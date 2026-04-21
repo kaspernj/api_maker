@@ -8,8 +8,11 @@ import React, {useMemo} from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../utils/text"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/**
+ * @typedef {object} State
+ * @property {any} count
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminShowReflectionLink extends BaseComponent {
   state = {
     count: undefined

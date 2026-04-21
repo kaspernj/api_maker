@@ -8,8 +8,16 @@ import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-comp
 import Text from "./text"
 import {View} from "react-native"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {any=} children
+ * @property {any=} controls
+ * @property {object=} dataSet
+ * @property {string=} header
+ * @property {object=} style
+ * @property {string=} testID
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsCard extends ShapeComponent {
   static propTypes = propTypesExact({
     children: PropTypes.any,

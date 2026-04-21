@@ -4,7 +4,7 @@ import Layout from "components/layout"
 import {Task} from "models.js"
 import useCreatedEvent from "@kaspernj/api-maker/build/use-created-event.js"
 
-/** @typedef {object} ModelsCreatedEventProps */
+/** @typedef {Record<string, never>} ModelsCreatedEventProps */
 
 /**
  * @typedef {object} ModelsCreatedEventState

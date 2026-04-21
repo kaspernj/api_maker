@@ -54,8 +54,11 @@ const paginationOptions = [30, 60, 90, ["All", "all"]]
 const styles = {}
 const TableContext = createContext(undefined)
 
-/** @typedef {object} HeaderProps */
-/** @typedef {object} HeaderState */
+/** @typedef {Record<string, never>} HeaderProps */
+/**
+ * @typedef {object} HeaderState
+ * @property {Date} lastUpdate
+ */
 const ListHeaderComponent = memo(shapeComponent(/** @augments {BaseComponent<HeaderProps, HeaderState>} */ class ListHeaderComponent extends BaseComponent {
   state = {
     lastUpdate: new Date()
@@ -106,8 +109,71 @@ const ListHeaderComponent = memo(shapeComponent(/** @augments {BaseComponent<Hea
   onColumnVisibilityUpdated = () => this.setState({lastUpdate: new Date()})
 }))
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {object=} abilities
+ * @property {Function=} actionsContent
+ * @property {object=} appHistory
+ * @property {boolean=} card
+ * @property {string=} className
+ * @property {Collection=} collection
+ * @property {any[]|Function=} columns
+ * @property {Function=} controls
+ * @property {object=} currentUser
+ * @property {Function|string=} defaultDateFormatName
+ * @property {Function|string=} defaultDateTimeFormatName
+ * @property {object=} defaultParams
+ * @property {boolean=} destroyEnabled
+ * @property {string=} destroyMessage
+ * @property {object=} draggedHeaderStyle
+ * @property {Function=} editModelPath
+ * @property {boolean=} filterCard
+ * @property {Function=} filterContent
+ * @property {any=} filterSubmitLabel
+ * @property {any[]=} groupBy
+ * @property {Function|string=} header
+ * @property {string=} identifier
+ * @property {Function} modelClass
+ * @property {Function=} noRecordsAvailableContent
+ * @property {Function=} noRecordsFoundContent
+ * @property {Function=} onModelsLoaded
+ * @property {Function=} paginateContent
+ * @property {React.ComponentType<any>=} paginationComponent
+ * @property {any[]=} preloads
+ * @property {Function=} queryMethod
+ * @property {string=} queryName
+ * @property {object=} select
+ * @property {object=} selectColumns
+ * @property {object=} styles
+ * @property {boolean=} styleUI
+ * @property {Function=} viewModelPath
+ * @property {boolean=} workplace
+ */
+/**
+ * @typedef {object} State
+ * @property {any[]} columns
+ * @property {any} columnsToShow
+ * @property {object|undefined} currentWorkplace
+ * @property {any} currentWorkplaceCount
+ * @property {any} draggedColumn
+ * @property {any} filterForm
+ * @property {string} identifier
+ * @property {Date} lastUpdate
+ * @property {any} preload
+ * @property {any} preparedColumns
+ * @property {string} queryName
+ * @property {string} queryPageName
+ * @property {string} queryQName
+ * @property {string} querySName
+ * @property {boolean} resizing
+ * @property {boolean} showFilters
+ * @property {boolean} showSettings
+ * @property {any} tableSetting
+ * @property {string|undefined} tableSettingFullCacheKey
+ * @property {boolean} tableSettingLoaded
+ * @property {any} width
+ * @property {any} widths
+ */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerTable extends BaseComponent {
   /**
    * @param {object} props

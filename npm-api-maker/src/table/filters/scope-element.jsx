@@ -9,8 +9,13 @@ import Text from "../../utils/text"
 
 const dataSets = {}
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {boolean=} active
+ * @property {Function} onScopeClicked
+ * @property {string} scope
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ScopeElement extends BaseComponent {
   static defaultProps = {
     active: false

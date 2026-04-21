@@ -4,7 +4,7 @@ import {Task} from "models.js"
 import useDestroyedEvent from "@kaspernj/api-maker/build/use-destroyed-event"
 
 /** @typedef {{task: Task}} TaskRowProps */
-/** @typedef {object} TaskRowState */
+/** @typedef {Record<string, never>} TaskRowState */
 /** @augments {ShapeComponent<TaskRowProps, TaskRowState>} */
 class TaskRow extends ShapeComponent {
   render() {
@@ -20,7 +20,7 @@ class TaskRow extends ShapeComponent {
 
 const MemoizedTaskRow = memo(shapeComponent(TaskRow))
 
-/** @typedef {object} ModelsDestroyEventProps */
+/** @typedef {Record<string, never>} ModelsDestroyEventProps */
 
 /**
  * @typedef {object} ModelsDestroyEventState

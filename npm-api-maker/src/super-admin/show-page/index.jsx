@@ -31,8 +31,11 @@ const AttributePresenter = memo(({attribute, model, modelArgs}) => {
   )
 })
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {Function} modelClass
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerSuperAdminShowPage extends BaseComponent {
   static propTypes = {
     modelClass: PropTypes.func.isRequired

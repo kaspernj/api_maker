@@ -19,8 +19,18 @@ import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import WorkerPluginsCheckbox from "./worker-plugins-checkbox"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {string} cacheKey
+ * @property {any[]=} columns
+ * @property {object} columnWidths
+ * @property {EventEmitter} events
+ * @property {number} index
+ * @property {object} model
+ * @property {object} table
+ * @property {string} tableSettingFullCacheKey
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class ApiMakerBootStrapLiveTableModelRow extends BaseComponent {
   static propTypes = propTypesExact({
     cacheKey: PropTypes.string.isRequired,

@@ -6,8 +6,11 @@ import propTypesExact from "prop-types-exact"
 import React from "react"
 import Text from "./text"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/**
+ * @typedef {object} Props
+ * @property {string} message
+ */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsInvalidFeedback extends ShapeComponent {
   static propTypes = propTypesExact({
     message: PropTypes.string.isRequired

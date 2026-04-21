@@ -5,8 +5,8 @@ import React from "react"
 import {shapeComponent} from "set-state-compare/build/shape-component.js"
 import {Animated} from "react-native"
 
-/** @typedef {object} Props */
-/** @typedef {object} State */
+/** @typedef {Record<string, never>} Props */
+/** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {BaseComponent<Props, State>} */ class SharedTableColumn extends BaseComponent {
   render() {
     const {dataSet, ...restProps} = this.props
