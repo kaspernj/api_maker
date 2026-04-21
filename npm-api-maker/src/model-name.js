@@ -2,9 +2,19 @@
 import * as inflection from "inflection"
 import Config from "./config.js"
 
+/**
+ * @typedef {object} ModelClassDataLike
+ * @property {string} camelizedLower
+ * @property {string} i18nKey
+ * @property {string} name
+ * @property {string} paramKey
+ * @typedef {object} ModelNameData
+ * @property {ModelClassDataLike} modelClassData
+ */
+
 /** Model name helper for i18n lookups and metadata. */
 export default class ModelName {
-  /** @param {{modelClassData: Record<string, any>}} data */
+  /** @param {ModelNameData} data */
   constructor(data) {
     this.data = data
   }

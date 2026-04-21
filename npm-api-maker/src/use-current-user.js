@@ -11,10 +11,28 @@ const logger = new Logger({name: "ApiMaker / useCurrentUser"})
 logger.setDebug(false)
 
 /**
- * @param {object} props
+ * @typedef {import("./base-model.js").default | null} CurrentUserModel
+ * @typedef {object} CurrentUserContextValue
+ * @property {boolean} loaded
+ * @property {CurrentUserModel} model
+ * @typedef {object} UseCurrentUserArgs
  * @param {string} [props.scope]
  * @param {boolean} [props.withData]
- * @returns {import("./base-model.js").default & Record<string, any>}
+ */
+
+/**
+ * @overload
+ * @param {{scope?: string, withData: true}} [props]
+ * @returns {CurrentUserContextValue}
+ */
+/**
+ * @overload
+ * @param {{scope?: string, withData?: false | undefined}} [props]
+ * @returns {CurrentUserModel}
+ */
+/**
+ * @param {UseCurrentUserArgs} [props]
+ * @returns {CurrentUserContextValue | CurrentUserModel}
  */
 const useCurrentUser = (props = {}) => {
   const {scope = "user", withData, ...restProps} = props

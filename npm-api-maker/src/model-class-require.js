@@ -4,9 +4,11 @@ import * as inflection from "inflection"
 // @ts-expect-error
 import * as models from "models.js" // eslint-disable-line import/no-unresolved
 
+/** @typedef {typeof import("./base-model.js").default} ModelClassLike */
+
 /**
  * @param {string} modelName
- * @returns {typeof import("./base-model.js").default & Record<string, any>}
+ * @returns {ModelClassLike}
  */
 export default function modelClassRequire(modelName) {
   const requireName = inflection.camelize(modelName)
