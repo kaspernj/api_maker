@@ -20,9 +20,18 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import WorkerPluginsCheckbox from "./worker-plugins-checkbox"
 
 /**
+ * @typedef {object} PreparedColumn
+ * @property {import("react-native").Animated.ValueXY} animatedPosition
+ * @property {import("react-native").Animated.Value} animatedWidth
+ * @property {import("react-native").Animated.Value} animatedZIndex
+ * @property {object} column
+ * @property {object} tableSettingColumn
+ */
+
+/**
  * @typedef {object} Props
  * @property {string} cacheKey
- * @property {any[]} [columns]
+ * @property {PreparedColumn[]} [columns]
  * @property {object} columnWidths
  * @property {EventEmitter} events
  * @property {number} index

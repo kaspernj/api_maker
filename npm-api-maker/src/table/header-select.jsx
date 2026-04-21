@@ -14,10 +14,16 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useSorting from "./use-sorting.js"
 
 /**
+ * @typedef {object} PreparedColumn
+ * @property {object} column
+ * @property {{identifier(): string, sortKey(): string}} tableSettingColumn
+ */
+
+/**
  * @typedef {object} Props
- * @property {any[]} preparedColumns
+ * @property {PreparedColumn[]} preparedColumns
  * @property {Collection} query
- * @property {object} [table]
+ * @property {{headerLabelForColumn(column: object): string}} [table]
  */
 /**
  * @typedef {object} State

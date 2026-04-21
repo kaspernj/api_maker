@@ -1,11 +1,29 @@
 // @ts-check
 import SparkMD5 from "spark-md5"
 
+/** @typedef {import("./base-model.js").default} BaseModel */
+/** @typedef {{append(value: string): void, end(): string}} HashWriter */
+/** @typedef {string | number} ModelIdentifier */
+/** @typedef {string | number | boolean | null | undefined | {toString(): string}} CacheKeyAttributeValue */
+/** @typedef {{name: string}} CacheKeyModelClassData */
+/**
+ * @typedef {object} CacheKeyModel
+ * @property {() => Record<string, CacheKeyAttributeValue>} attributes
+ * @property {() => boolean} markedForDestruction
+ * @property {() => CacheKeyModelClassData} modelClassData
+ * @property {() => {primaryKey(): string}} modelClass
+ * @property {() => ModelIdentifier | null | undefined | ""} primaryKey
+ * @property {(attributeName: string) => CacheKeyAttributeValue} readAttributeUnderscore
+ * @property {(attributeName: string) => boolean} isAttributeLoaded
+ * @property {Record<string, CacheKeyModel | Array<CacheKeyModel> | null | undefined>} relationships
+ * @property {() => ModelIdentifier} uniqueKey
+ */
+
 /** Generates local/full cache keys for models. */
 export default class CacheKeyGenerator {
   /**
    * Creates a cache-key generator rooted at one model instance.
-   * @param {any} model
+   * @param {CacheKeyModel} model
    */
   constructor(model) {
     this.model = model
@@ -18,7 +36,7 @@ export default class CacheKeyGenerator {
 
   /**
    * Builds a cache key from the root model only.
-   * @returns {any}
+   * @returns {string}
    */
   local() {
     const md5 = new SparkMD5()
@@ -30,7 +48,7 @@ export default class CacheKeyGenerator {
 
   /**
    * Ensures one relationship type has a tracking bucket.
-   * @param {any} relationshipType
+   * @param {string} relationshipType
    */
   recordModelType(relationshipType) {
     if (!(relationshipType in this.readModels)) {
@@ -40,8 +58,8 @@ export default class CacheKeyGenerator {
 
   /**
    * Records one related model under its relationship type.
-   * @param {any} relationshipType
-   * @param {any} model
+   * @param {string} relationshipType
+   * @param {CacheKeyModel} model
    */
   recordModel(relationshipType, model) {
     this.allModels.push(model)
@@ -50,8 +68,8 @@ export default class CacheKeyGenerator {
 
   /**
    * Returns true when a related model has already been visited for one relationship type.
-   * @param {any} relationshipType
-   * @param {any} model
+   * @param {string} relationshipType
+   * @param {CacheKeyModel} model
    * @returns {boolean}
    */
   isModelRecorded(relationshipType, model) {
@@ -64,7 +82,7 @@ export default class CacheKeyGenerator {
 
   /**
    * Traverses loaded relationships so they are included in the full cache key.
-   * @param {any} model
+   * @param {CacheKeyModel} model
    */
   fillModels(model) {
     for (const relationshipType in model.relationships) {
@@ -92,7 +110,7 @@ export default class CacheKeyGenerator {
 
   /**
    * Builds a cache key that includes the root model and all loaded related models.
-   * @returns {any}
+   * @returns {string}
    */
   cacheKey() {
     if (!this.filledModels) {
@@ -110,14 +128,14 @@ export default class CacheKeyGenerator {
 
   /**
    * Appends one model's identity and loaded attributes to the running hash.
-   * @param {any} model
-   * @param {any} md5
+   * @param {CacheKeyModel} model
+   * @param {HashWriter} md5
    */
   feedModel(model, md5) {
     md5.append("--model--")
     md5.append(model.modelClassData().name)
     md5.append("--unique-key--")
-    md5.append(this.modelIdentity(model))
+    md5.append(String(this.modelIdentity(model)))
 
     if (model.markedForDestruction()) {
       md5.append("--marked-for-destruction--")
@@ -130,13 +148,14 @@ export default class CacheKeyGenerator {
     for (const attributeName in attributes) {
       md5.append(attributeName)
       md5.append("--attribute--")
-      md5.append(`${model.readAttributeUnderscore(attributeName)}`)
+      md5.append(String(model.readAttributeUnderscore(attributeName)))
     }
   }
 
   /**
-   * @param {any} model
-   * @returns {number | string}
+   * Returns the persisted primary key when available, otherwise the temporary unique key.
+   * @param {CacheKeyModel} model
+   * @returns {ModelIdentifier}
    */
   modelIdentity(model) {
     const primaryKeyName = model.modelClass().primaryKey()

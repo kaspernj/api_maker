@@ -17,18 +17,23 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import {View} from "react-native"
 
+/** @typedef {import("../../base-model.js").default} BaseModel */
+/** @typedef {BaseModel & {id(): number | string, modelClassData(): {name: string}}} CurrentUserModel */
+/** @typedef {BaseModel & {id(): number | string, name(): string, queryParams(): object[], destroy(): Promise<void>}} TableSearchModel */
+/** @typedef {{filterIndex: number} & Record<string, object | string | number | boolean | null | undefined>} TableFilterDraft */
+
 /**
  * @typedef {object} Props
- * @property {object} [currentUser]
- * @property {Function} modelClass
+ * @property {CurrentUserModel} [currentUser]
+ * @property {typeof import("../../base-model.js").default} modelClass
  * @property {string} queryName
  * @property {string} querySName
  */
 /**
  * @typedef {object} State
- * @property {any} filter
- * @property {any} showLoadSearchModal
- * @property {boolean} showSaveSearchModal
+ * @property {TableFilterDraft | undefined} filter
+ * @property {boolean | undefined} showLoadSearchModal
+ * @property {false | TableSearchModel | undefined} showSaveSearchModal
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFilters extends ShapeComponent {
   static propTypes = {

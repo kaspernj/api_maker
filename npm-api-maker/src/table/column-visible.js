@@ -1,8 +1,8 @@
 // @ts-check
 /**
  * Returns whether a table column should be visible.
- * @param {any} column
- * @param {any} tableSettingColumn
+ * @param {{defaultVisible?: boolean} | undefined} column
+ * @param {{visible(): boolean | null}} tableSettingColumn
  * @returns {boolean}
  */
 export default function columnVisible(column, tableSettingColumn) {

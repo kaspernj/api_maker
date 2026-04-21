@@ -1,7 +1,7 @@
 // @ts-check
 /**
  * Resolve a unique column identifier.
- * @param {any} column
+ * @param {{attribute?: string, identifier?: string, path?: string[], sortKey?: string}} column
  * @returns {string}
  */
 export default function columnIdentifier(column) {

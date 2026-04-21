@@ -13,6 +13,8 @@ const AUTH_REFRESH_TIMEOUT_MS = 5000
 /** @typedef {import("./cable-subscription.js").default} CableSubscription */
 /** @typedef {string | number | boolean | null} EventArgumentPrimitive */
 /** @typedef {EventArgumentPrimitive | EventArgumentPrimitive[]} EventArgumentValue */
+/** @typedef {Record<string, EventArgumentValue>} SubscriptionRefreshArgs */
+/** @typedef {{channel: string, global: object, subscription_data: object}} CableSubscriptionCreateArgs */
 /** @typedef {{model: BaseModel}} ModelMutationPayload */
 /** @typedef {{args: Record<string, EventArgumentValue>, eventName: string, model: BaseModel}} ModelEventPayload */
 /** @typedef {{args: Record<string, EventArgumentValue>, eventName: string}} ModelClassEventPayload */
@@ -46,11 +48,11 @@ export default class ApiMakerCableSubscriptionPool {
     logger.debug(() => ["Creating subscription", {subscriptionData}])
 
     this.subscription = getChannelsConsumer().subscriptions.create(
-      {
+      /** @type {CableSubscriptionCreateArgs} */ ({
         channel: "ApiMaker::SubscriptionsChannel",
         global: globalData,
         subscription_data: subscriptionData
-      },
+      }),
       {
         connected: this.onConnected,
         disconnected: this.onDisconnected,
@@ -65,7 +67,7 @@ export default class ApiMakerCableSubscriptionPool {
   /**
    * Refreshes auth for the existing subscription without recreating the pool.
    *
-   * @param {Record<string, any>} args
+   * @param {SubscriptionRefreshArgs} args
    * @returns {Promise<void>}
    */
   refreshAuthentication (args) {

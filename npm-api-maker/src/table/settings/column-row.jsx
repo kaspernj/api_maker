@@ -34,24 +34,18 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   render() {
     const {column, table, tableSettingColumn} = this.p
-    const checkboxProps = /** @type {Record<string, any>} */ ({})
-
-    if (tableSettingColumn.visible() === true) {
-      checkboxProps.checked = "checked"
-    } else if (tableSettingColumn.visible() === null) {
-      checkboxProps.indeterminate = "indeterminate"
-    }
+    const checked = tableSettingColumn.visible() === true
 
     return (
       <View dataSet={this.cache("rootViewDataSet", {component: "api-maker--table--settings--column-row"})} style={this.cache("rootViewStyle", {justifyContent: "center"})}>
         <label style={{whiteSpace: "nowrap"}}>
           <input
+            checked={checked}
             className="api-maker--table--setings--column-checkbox"
             data-identifier={columnIdentifier(column)}
             onChange={this.onCheckboxChange}
             ref={this.checkboxRef}
             type="checkbox"
-            {...checkboxProps}
           />
           <Text>
             {table.headerLabelForColumn(column)}
