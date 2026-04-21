@@ -16,7 +16,7 @@ import useUpdatedEvent from "../use-updated-event.js"
  * @property {boolean} [autoRefresh]
  * @property {boolean} [autoSubmit]
  * @property {boolean} [defaultChecked]
- * @property {any} [defaultValue]
+ * @property {boolean | number | string} [defaultValue]
  * @property {string} [id]
  * @property {object} [inputRef]
  * @property {object} [model]

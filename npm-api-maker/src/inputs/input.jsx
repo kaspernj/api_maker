@@ -20,18 +20,18 @@ import useUpdatedEvent from "../use-updated-event.js"
  * @property {boolean} [autoRefresh]
  * @property {boolean} [autoSubmit]
  * @property {string} [className]
- * @property {Function} [formatValue]
+ * @property {(value: boolean | Date | number | string | null | undefined) => boolean | Date | number | string | null | undefined} [formatValue]
  * @property {string} [id]
  * @property {boolean} [localizedNumber]
- * @property {object} [model]
- * @property {string} [name]
- * @property {Function} [onChange]
- * @property {Function} [onMatchValidationError]
- * @property {string} [type]
+  * @property {object} [model]
+  * @property {string} [name]
+  * @property {Function} [onChange]
+  * @property {Function} [onMatchValidationError]
+  * @property {string} [type]
  */
 /**
  * @typedef {object} State
- * @property {any} blankInputName
+ * @property {boolean} blankInputName
  */
 const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsInput extends ShapeComponent {
   static defaultProps = {

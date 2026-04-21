@@ -3,7 +3,15 @@ import React, {createContext, useContext, useMemo} from "react"
 import {incorporate} from "incorporator"
 import memo from "set-state-compare/build/memo.js"
 
-const DefaultStyleContext = createContext(/** @type {Record<string, any>} */ ({
+/**
+ * @typedef {import("react-native").StyleProp<
+ *   import("react-native").TextStyle | import("react-native").ViewStyle | import("react-native").ImageStyle
+ * >} DefaultStyleValue
+ */
+/** @typedef {Record<string, DefaultStyleValue>} DefaultStyleMap */
+/** @typedef {{children?: React.ReactNode, style: DefaultStyleMap}} WithDefaultStyleProps */
+
+const DefaultStyleContext = createContext(/** @type {DefaultStyleMap} */ ({
   Text: []
 }))
 
@@ -50,7 +58,7 @@ const useMergedStyle = (style, elementType) => {
   return {newDefaultStyle: actualNewDefaultStyle, stylesList}
 }
 
-const WithDefaultStyle = memo(({children, style, ...restProps}) => {
+const WithDefaultStyle = memo((/** @type {WithDefaultStyleProps} */ {children, style, ...restProps}) => {
   if (Object.keys(restProps).length > 0) {
     throw new Error(`Unhandled props: ${Object.keys(restProps).join(", ")}`)
   }
@@ -64,7 +72,7 @@ const WithDefaultStyle = memo(({children, style, ...restProps}) => {
       }
     }
 
-    /** @type {Record<string, any>} */
+    /** @type {DefaultStyleMap} */
     const newDefaultStyle = {}
 
     incorporate(newDefaultStyle, defaultStyle, style)

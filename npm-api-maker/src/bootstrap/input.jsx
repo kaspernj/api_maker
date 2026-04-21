@@ -9,24 +9,25 @@ import React from "react"
 import inputWrapper from "../inputs/input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 
+/** @typedef {[label: string, value: string]} CurrencyOption */
 /**
  * @typedef {object} Props
- * @property {any} [append]
- * @property {any} [appendText]
+ * @property {React.ReactNode} [append]
+ * @property {React.ReactNode} [appendText]
  * @property {string} [attribute]
  * @property {string} [className]
- * @property {any[]} [currenciesCollection]
+ * @property {Array<CurrencyOption>} [currenciesCollection]
  * @property {string} [currencyName]
- * @property {any} [hint]
- * @property {any} [hintBottom]
+ * @property {React.ReactNode} [hint]
+ * @property {React.ReactNode} [hintBottom]
  * @property {string} [id]
- * @property {any} [label]
+ * @property {React.ReactNode} [label]
  * @property {string} [labelClassName]
  * @property {object} [model]
  * @property {string} [name]
- * @property {any} [placeholder]
- * @property {any} [prepend]
- * @property {any} [prependText]
+ * @property {string} [placeholder]
+ * @property {React.ReactNode} [prepend]
+ * @property {React.ReactNode} [prependText]
  * @property {boolean} [small]
  * @property {string} [type]
  * @property {string} [wrapperClassName]

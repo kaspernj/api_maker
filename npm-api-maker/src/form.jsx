@@ -64,7 +64,7 @@ class FormInputs {
 
 /**
  * @typedef {object} Props
- * @property {any} [children]
+ * @property {React.ReactNode} [children]
  * @property {FormInputs} [form]
  * @property {object} [formObjectRef]
  * @property {object} [formRef]

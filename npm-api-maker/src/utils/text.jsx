@@ -5,7 +5,14 @@ import React, {forwardRef} from "react"
 import {Animated} from "react-native"
 import {useMergedStyle, WithDefaultStyle} from "./default-style"
 
-const ApiMakerUtilsText = forwardRef((/** @type {Record<string, any>} */ props, ref) => {
+/**
+ * @typedef {import("react-native").TextProps & {
+ *   children?: React.ReactNode,
+ *   style?: import("react-native").StyleProp<import("react-native").TextStyle>
+ * }} TextProps
+ */
+
+const ApiMakerUtilsText = forwardRef((/** @type {TextProps} */ props, ref) => {
   const {style, ...restProps} = props
   const {newDefaultStyle, stylesList} = useMergedStyle(style, "Text")
 

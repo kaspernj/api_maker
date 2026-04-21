@@ -2,6 +2,14 @@
 import SourceMapsLoader from "./source-maps-loader.js"
 import {digg} from "diggerize"
 
+/** @typedef {string | number | boolean | object | null | undefined} DebugOutput */
+/**
+ * @typedef {object} LoggedError
+ * @property {string} errorClass
+ * @property {string} message
+ * @property {Array<string> | null} backtrace
+ */
+
 /** Captures window errors with source-map support. */
 export default class ErrorLogger {
   /** Initializes error tracking state and prepares source-map loading for bundled scripts. */
@@ -23,7 +31,7 @@ export default class ErrorLogger {
 
   /**
    * Logs diagnostic output when debug mode is enabled.
-   * @param {any} output
+   * @param {...Array<DebugOutput>} output
    */
   debug(...output) {
     if (this.debugging) console.error("ApiMaker ErrorLogger:", ...output)
@@ -36,7 +44,7 @@ export default class ErrorLogger {
     this.connectUnhandledRejection()
   }
 
-  /** @returns {any[]} */
+  /** @returns {Array<LoggedError>} */
   getErrors = () => this.errors
 
   /** @returns {boolean} */

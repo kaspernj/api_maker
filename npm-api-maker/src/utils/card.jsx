@@ -11,8 +11,8 @@ import {View} from "react-native"
 
 /**
  * @typedef {object} Props
- * @property {any} [children]
- * @property {any} [controls]
+ * @property {React.ReactNode} [children]
+ * @property {React.ReactNode} [controls]
  * @property {object} [dataSet]
  * @property {string} [header]
  * @property {object} [style]

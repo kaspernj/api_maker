@@ -14,14 +14,14 @@ import Text from "./text"
  * @property {boolean} [checked]
  * @property {object} [dataSet]
  * @property {boolean} [defaultChecked]
- * @property {string} [label]
- * @property {Function} [onCheckedChange]
- * @property {object} [style]
- * @property {string} [testID]
+  * @property {string} [label]
+  * @property {Function} [onCheckedChange]
+  * @property {object} [style]
+  * @property {string} [testID]
  */
 /**
  * @typedef {object} State
- * @property {any} checked
+ * @property {boolean | undefined} checked
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsCheckbox extends ShapeComponent {
   static defaultProps = {

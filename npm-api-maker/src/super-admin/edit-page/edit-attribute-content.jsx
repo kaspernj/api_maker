@@ -16,7 +16,7 @@ import {useEffect, useMemo} from "react"
  */
 /**
  * @typedef {object} State
- * @property {any} value
+ * @property {boolean | Date | number | string | null | undefined} value
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class EditAttributeContent extends ShapeComponent {
   static propTypes = propTypesExact({

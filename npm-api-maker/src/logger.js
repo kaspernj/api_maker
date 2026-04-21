@@ -1,6 +1,9 @@
 // @ts-check
 const shared = {}
 
+/** @typedef {string | number | boolean | object | null | undefined} LogMessagePart */
+/** @typedef {string | Array<LogMessagePart> | (() => string | Array<LogMessagePart>)} LogMessage */
+
 /** Small logger with global and per-instance debug toggles. */
 export default class ApiMakerLogger {
   /** @returns {boolean | undefined} */
@@ -20,7 +23,7 @@ export default class ApiMakerLogger {
   }
 
   /**
-   * @param {string | (() => string | Array<any>) | Array<any>} message
+   * @param {LogMessage} message
    * @returns {void}
    */
   debug(message) {
@@ -30,7 +33,7 @@ export default class ApiMakerLogger {
   }
 
   /**
-   * @param {any} message
+   * @param {LogMessagePart} message
    * @returns {void}
    */
   error(message) {
@@ -38,7 +41,7 @@ export default class ApiMakerLogger {
   }
 
   /**
-   * @param {string | (() => string | Array<any>) | Array<any>} message
+   * @param {LogMessage} message
    * @returns {void}
    */
   log(message) {

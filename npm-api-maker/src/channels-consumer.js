@@ -9,10 +9,10 @@ import {createConsumer} from "@rails/actioncable" // eslint-disable-line import/
  * @property {(action: string, data: {[key: string]: ActionCablePayloadValue}) => void} perform
  * @property {() => void} unsubscribe
  * @typedef {object} ActionCableChannelCallbacks
- * @property {(() => void)=} connected
- * @property {(() => void)=} disconnected
- * @property {((data: {[key: string]: ActionCablePayloadValue}) => void)=} received
- * @property {(() => void)=} rejected
+ * @property {() => void} [connected]
+ * @property {() => void} [disconnected]
+ * @property {(data: {[key: string]: ActionCablePayloadValue}) => void} [received]
+ * @property {() => void} [rejected]
  * @typedef {object} ActionCableConsumer
  * @property {() => void} disconnect
  * @property {{create: (channel: string | {channel: string}, callbacks?: ActionCableChannelCallbacks) => ActionCableSubscription}} subscriptions

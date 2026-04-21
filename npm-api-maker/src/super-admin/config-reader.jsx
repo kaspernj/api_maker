@@ -2,7 +2,19 @@
 import * as inflection from "inflection"
 import {digg, digs} from "diggerize"
 
-const modelConfigRequireContext = /** @type {any} */ (import.meta).webpackContext("super-admin/model-configs", {
+/** @typedef {(path: string) => {default: object} & Record<string, object>} ModelConfigRequireContext */
+/**
+ * @typedef {{
+ *   webpackContext: (path: string, options: {recursive: boolean, regExp: RegExp}) => ModelConfigRequireContext
+ * }} ImportMetaWithWebpackContext
+ */
+const importMetaWithWebpackContext = /** @type {{webpackContext?: ImportMetaWithWebpackContext["webpackContext"]}} */ (import.meta)
+
+if (!importMetaWithWebpackContext.webpackContext) {
+  throw new Error("Expected import.meta.webpackContext to be available")
+}
+
+const modelConfigRequireContext = importMetaWithWebpackContext.webpackContext("super-admin/model-configs", {
   recursive: true,
   regExp: /\.(jsx|js)$/
 })

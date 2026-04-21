@@ -12,16 +12,7 @@ export default defineConfig([
   ...fixupConfigRules(jest.configs["flat/recommended"]),
   js.configs.recommended,
   {
-    files: [
-      "src/link.jsx",
-      "src/routes-native.js",
-      "src/session-status-updater.js",
-      "src/use-created-event.js",
-      "src/use-destroyed-event.js",
-      "src/use-model-class-event.js",
-      "src/use-model-event.js",
-      "src/use-updated-event.js"
-    ],
+    files: ["src/**/*.{js,jsx}"],
     plugins: {
       jsdoc
     },

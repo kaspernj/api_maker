@@ -7,12 +7,13 @@ import propTypesExact from "prop-types-exact"
 import usePath from "on-location-changed/build/use-path.js"
 import useRouter from "./use-router"
 
+/** @typedef {{params: Record<string, string>, parsedRouteDefinition?: object, matchingRoute?: object}} RouterMatch */
 /**
  * @typedef {object} Props
  * @property {object} [history]
- * @property {any[]} locales
- * @property {React.ComponentType<any>} [notFoundComponent]
- * @property {Function} requireComponent
+ * @property {Array<string>} locales
+ * @property {React.ComponentType<{match: RouterMatch}>} [notFoundComponent]
+ * @property {(args: {routeDefinition: object}) => React.ComponentType<{match: RouterMatch}>} requireComponent
  * @property {object} [routeDefinitions]
  * @property {object} [routes]
  */

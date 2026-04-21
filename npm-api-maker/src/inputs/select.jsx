@@ -7,18 +7,20 @@ import React from "react"
 import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 
+/** @typedef {boolean | number | string} SelectOptionValue */
+/** @typedef {[label: React.ReactNode, value: SelectOptionValue]} SelectOption */
 /**
  * @typedef {object} Props
  * @property {string} [attribute]
- * @property {any} [children]
- * @property {any[]|number|string} [defaultValue]
+ * @property {React.ReactNode} [children]
+ * @property {Array<SelectOptionValue>|number|string} [defaultValue]
  * @property {string} [id]
- * @property {boolean|any} [includeBlank]
+ * @property {boolean|React.ReactNode} [includeBlank]
  * @property {object} inputProps
  * @property {object} [model]
  * @property {string} [name]
- * @property {Function} [onChange]
- * @property {any[]} [options]
+  * @property {Function} [onChange]
+ * @property {Array<SelectOption | SelectOptionValue>} [options]
  * @property {object} wrapperOpts
  */
 /** @typedef {Record<string, never>} State */

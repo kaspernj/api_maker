@@ -3,7 +3,9 @@
 import Text from "./text"
 import React from "react"
 
-export default React.memo(function ApiMakerUtilsHeader(/** @type {Record<string, any>} */ props) {
+/** @typedef {import("react").ComponentProps<typeof Text>} HeaderProps */
+
+export default React.memo(function ApiMakerUtilsHeader(/** @type {HeaderProps} */ props) {
   const {style, ...restProps} = props
 
   const actualStyle = React.useMemo(() => {

@@ -12,12 +12,12 @@ import {useForm} from "../form"
 
 /**
  * @typedef {object} Props
- * @property {any} [children]
+ * @property {React.ReactNode} [children]
  * @property {boolean} [danger]
  * @property {boolean} [disabled]
  * @property {string} [icon]
- * @property {string} [label]
- * @property {Function} [onPress]
+  * @property {string} [label]
+  * @property {Function} [onPress]
  * @property {object} [pressableProps]
  * @property {boolean} [submit]
  * @property {object} [textProps]

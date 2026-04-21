@@ -3,9 +3,12 @@ import {Platform, useWindowDimensions} from "react-native"
 import {useCallback, useMemo, useState} from "react"
 import useEventListener from "ya-use-event-listener"
 
+/** @typedef {"xs" | "sm" | "md" | "lg" | "xl" | "xxl"} ScreenLayout */
+/** @typedef {{screenLayout?: ScreenLayout, width?: number}} SharedScreenLayout */
+
 /**
  * @param {number} width
- * @returns {"xs" | "sm" | "md" | "lg" | "xl" | "xxl" | undefined}
+ * @returns {ScreenLayout | undefined}
  */
 const getWindowLayout = (width) => {
   if (width <= 575) {
@@ -25,10 +28,10 @@ const getWindowLayout = (width) => {
   }
 }
 
-/** @returns {"xs" | "sm" | "md" | "lg" | "xl" | "xxl" | undefined} */
+/** @returns {ScreenLayout | undefined} */
 const useScreenLayout = () => {
   if (Platform.OS == "web") {
-    const shared = useMemo(() => /** @type {any} */ ({}), [])
+    const shared = useMemo(() => /** @type {SharedScreenLayout} */ ({}), [])
 
     shared.width = window.innerWidth
 
@@ -37,7 +40,7 @@ const useScreenLayout = () => {
     const onResize = useCallback(() => {
       const newWindowLayout = getWindowLayout(window.innerWidth)
 
-      if (shared.screenlayout != newWindowLayout) {
+      if (shared.screenLayout != newWindowLayout) {
         setScreenLayout(newWindowLayout)
       }
     }, [])

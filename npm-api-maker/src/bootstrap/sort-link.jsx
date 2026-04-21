@@ -20,7 +20,7 @@ import useSorting from "../table/use-sorting.js"
  * @property {object} [linkComponent]
  * @property {Function} [onChanged]
  * @property {object} query
- * @property {any} [title]
+ * @property {React.ReactNode} [title]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapSortLink extends ShapeComponent {
