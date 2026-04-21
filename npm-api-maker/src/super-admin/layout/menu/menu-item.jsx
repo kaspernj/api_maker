@@ -15,7 +15,7 @@ const dataSets = {}
  * @property {boolean|string} [active]
  * @property {string} [className]
  * @property {string} icon
- * @property {any} [label]
+ * @property {React.ReactNode} [label]
  */
 /**
  * @typedef {object} State

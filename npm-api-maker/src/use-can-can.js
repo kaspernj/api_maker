@@ -7,9 +7,9 @@ import useEventEmitter from "ya-use-event-emitter"
 
 /**
  * @typedef {object} UseCanCanProps
- * @property {() => Array} abilitiesCallback
+ * @property {() => Array<object>} abilitiesCallback
  * @property {boolean} debug
- * @property {any[] | undefined} dependencies
+ * @property {Array<boolean | number | object | string | null | undefined> | undefined} dependencies
  */
 
 /**
@@ -26,7 +26,7 @@ class UseCanCanClass extends ShapeHook {
 
   /**
    * Initializes request bookkeeping and debug state for the hook instance.
-   * @param {any} props
+   * @param {UseCanCanProps} props
    */
   constructor(props) {
     super(props)
@@ -42,7 +42,7 @@ class UseCanCanClass extends ShapeHook {
 
   /**
    * Builds a stable dependency key for one primitive or object reference.
-   * @param {any} value
+   * @param {boolean | number | object | string | null | undefined} value
    * @returns {string}
    */
   dependencyKeyFor(value) {
@@ -65,8 +65,8 @@ class UseCanCanClass extends ShapeHook {
 
   /**
    * Builds one cache key for the whole dependency list.
-   * @param {any} list
-   * @returns {any}
+   * @param {boolean | number | object | string | null | undefined | Array<boolean | number | object | string | null | undefined>} list
+   * @returns {string}
    */
   dependencyListKey(list) {
     if (!Array.isArray(list)) return this.dependencyKeyFor(list)
@@ -76,7 +76,7 @@ class UseCanCanClass extends ShapeHook {
 
   /**
    * Loads or reloads abilities and ignores stale async completions.
-   * @param {any} reloadKey
+   * @param {string | undefined} [reloadKey]
    */
   loadAbilities = async (reloadKey) => {
     // Drop late ability reload completions after dependency changes or unmounts.

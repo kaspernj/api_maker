@@ -47,7 +47,7 @@ const dataSets = {}
 /** @typedef {Record<string, never>} Props */
 /**
  * @typedef {object} State
- * @property {any} model
+ * @property {object | undefined} model
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdmin extends ShapeComponent {
   loadModelRequestId = 0
@@ -68,7 +68,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     this.modelId = this.queryParams.model_id
     this.modelName = this.modelClass?.modelClassData()?.name
     this.pageToShow = this.currentPageToShow()
-    this.currentUser = useCurrentUser()
+    const currentUserData = useCurrentUser({withData: true})
+
+    this.currentUser = currentUserData.model
 
     this.canCan = useCanCan(
       () => {
@@ -78,7 +80,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
         return abilities
       },
-      [this.currentUser?.id(), this.modelClass]
+      [currentUserData.model?.primaryKey?.(), this.modelClass]
     )
 
     useEffect(() => {

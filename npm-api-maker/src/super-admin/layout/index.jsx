@@ -18,7 +18,20 @@ import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
 const NoAccess = React.lazy(() => import("./no-access"))
 
-/** @type {Record<string, any>} */
+/**
+ * @typedef {{
+ *   appLayoutContentContainer: {
+ *     base: Record<string, string | number>,
+ *     mdDown: Record<string, string | number>,
+ *     mdUp: Record<string, string | number>,
+ *     lgUp: Record<string, string | number>
+ *   },
+ *   mb15: Record<string, string | number>,
+ *   rootView: Record<string, string | number>
+ * }} LayoutStyles
+ */
+
+/** @type {LayoutStyles} */
 const styles = {
   appLayoutContentContainer: {
     base: {
@@ -58,9 +71,9 @@ const dataSets = {}
 
 /**
  * @typedef {object} Props
- * @property {any} [actions]
+ * @property {React.ReactNode} [actions]
  * @property {string} [active]
- * @property {any} [children]
+ * @property {React.ReactNode} [children]
  * @property {string} [className]
  * @property {object} [currentCustomer]
  * @property {string} [currentCustomerId]

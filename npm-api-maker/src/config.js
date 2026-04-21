@@ -2,6 +2,18 @@
 import {EventEmitter} from "eventemitter3"
 import * as inflection from "inflection" // eslint-disable-line sort-imports
 
+/** @typedef {[name: string, minWidth: number]} BreakpointDefinition */
+/** @typedef {[label: string, code: string]} CurrencyOption */
+/** @typedef {Record<string, object>} RouteMap */
+/** @typedef {{routes: Array<{name: string, path: string}>}} RouteDefinitions */
+/**
+ * @typedef {{emit: (eventName: string, payload: {oldValue: ConfigValue, newValue: ConfigValue}) => void}} ConfigEvents
+ */
+/**
+ * @typedef {BreakpointDefinition[] | CurrencyOption[] | RouteMap | RouteDefinitions | EventEmitter |
+ *   boolean | number | object | string | undefined} ConfigValue
+ */
+
 const accessors = {
   breakpoints: {
     default: [
@@ -48,7 +60,7 @@ class ApiMakerConfig {
 
   /**
    * Returns the event emitter used for config change notifications.
-   * @returns {any}
+   * @returns {ConfigEvents}
    */
   getEvents() { return this.events }
 
@@ -82,22 +94,22 @@ class ApiMakerConfig {
    */
   setWebsocketRequests(_newValue) { apiMakerConfigNotImplemented("setWebsocketRequests") }
 
-  /** @returns {any} */
+  /** @returns {Array<CurrencyOption>} */
   getCurrenciesCollection() {
     return apiMakerConfigNotImplemented("getCurrenciesCollection")
   }
 
-  /** @returns {any} */
+  /** @returns {object} */
   getModal() {
     return apiMakerConfigNotImplemented("getModal")
   }
 
-  /** @returns {Record<string, any>} */
+  /** @returns {RouteDefinitions} */
   getRouteDefinitions() {
     return apiMakerConfigNotImplemented("getRouteDefinitions")
   }
 
-  /** @returns {Record<string, any>} */
+  /** @returns {RouteMap} */
   getRoutes() {
     return apiMakerConfigNotImplemented("getRoutes")
   }

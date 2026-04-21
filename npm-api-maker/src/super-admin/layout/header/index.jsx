@@ -51,7 +51,7 @@ export const useHeaderActionButtonStyle = () => {
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminLayoutHeader extends ShapeComponent {
   static propTypes = PropTypesExact({ // eslint-disable-line new-cap
-    actions: PropTypes.any,
+    actions: PropTypes.node,
     onTriggerMenu: PropTypes.func.isRequired,
     title: PropTypes.string
   })
@@ -74,7 +74,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const {breakpoint, mdUp} = this.tt
     const {actions, onTriggerMenu, title} = this.props
 
-    /** @type {Record<string, any>} */
+    /** @type {Record<string, string | number>} */
     const headerStyle = {
       display: "flex",
       flexDirection: "row",
@@ -86,8 +86,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       backgroundColor: "#fff"
     }
 
-    const headerActionsContainerStyle = /** @type {Record<string, any>} */ ({})
-    const headerActionsStyle = /** @type {Record<string, any>} */ ({
+    const headerActionsContainerStyle = /** @type {Record<string, string | number>} */ ({})
+    const headerActionsStyle = /** @type {Record<string, string | number>} */ ({
       flexDirection: mdUp ? "row" : "column",
       alignItems: mdUp ? "flex-start" : "stretch",
       gap: mdUp ? 8 : 0
