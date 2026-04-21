@@ -8,25 +8,64 @@ import ModelEvents from "./model-events.js"
 import useQueryParams from "on-location-changed/build/use-query-params.js"
 import useUpdatedEvent from "./use-updated-event.js"
 
+/** @typedef {typeof import("./base-model.js").default} BaseModelClass */
+/** @typedef {import("./base-model.js").default} BaseModelInstance */
+/** @typedef {BaseModelInstance & {id: () => number | string}} BaseModelWithId */
+/** @typedef {import("./collection.js").default} ModelCollection */
+/** @typedef {Record<string, string | number | boolean | object | undefined>} UseModelQueryParams */
+/** @typedef {string | number | boolean | object | null | undefined} UseModelCacheValue */
+/** @typedef {Record<string, string | number | undefined>} UseModelMatchParams */
+/** @typedef {{params: UseModelMatchParams}} UseModelMatch */
+/** @typedef {Record<string, string | number | boolean | object | undefined>} UseModelDefaults */
+/** @typedef {{defaults?: () => UseModelDefaults | Promise<UseModelDefaults>}} UseModelNewIfNoIdConfig */
+/** @typedef {{callback: (args: {queryParams: UseModelQueryParams | undefined}) => BaseModelClass}} UseModelModelClassResolver */
+/** @typedef {{modelClass: BaseModelClass}} UseModelArgsFactoryArgs */
+/** @typedef {{model: BaseModelInstance} & Record<string, BaseModelInstance>} UseModelOnDestroyedArgs */
+/**
+ * @typedef {object} UseModelEvents
+ * @property {(eventName: string, callback: () => void) => void} addListener
+ * @property {(eventName: string, callback: () => void) => void} removeListener
+ */
 /**
  * @typedef {object} useModelArgs
- * @property {(arg: object) => Function} [callback]
- * @property {(arg: object) => object} [args]
- * @property {(args: {queryParams: Record<string, any> | undefined}) => number|string} [loadByQueryParam]
- * @property {any[]} [cacheArgs]
- * @property {{params: object}} [match]
- * @property {(ctx: { model: import("./base-model.js").default }) => void} [onDestroyed]
- * @property {import("./collection.js").default} [query]
+ * @property {boolean} [active]
+ * @property {string[]} [abilities]
+ * @property {UseModelCacheValue[]} [cacheArgs]
+ * @property {boolean} [eventUpdated]
+ * @property {UseModelEvents} [events]
+ * @property {(args: {queryParams: UseModelQueryParams | undefined}) => number | string | undefined} [loadByQueryParam]
+ * @property {UseModelMatch} [match]
+ * @property {UseModelNewIfNoIdConfig | boolean} [newIfNoId]
+ * @property {UseModelDefaults} [newAttributes]
+ * @property {(ctx: UseModelOnDestroyedArgs) => void} [onDestroyed]
+ * @property {boolean} [optional]
+ * @property {string[] | object} [preload]
+ * @property {ModelCollection} [query]
+ * @property {string[] | object} [select]
+ */
+/** @typedef {useModelArgs | ((args: UseModelArgsFactoryArgs) => useModelArgs)} UseModelArgsArg */
+/**
+ * @typedef {object} UseModelShapeHookProps
+ * @property {UseModelArgsArg} [argsArg]
+ * @property {BaseModelClass | UseModelModelClassResolver} modelClassArg
  */
 
 /** Hook state container for useModel. */
 /**
  * @typedef {object} UseModelState
- * @property {any | undefined} model
+ * @property {BaseModelInstance | undefined} model
  * @property {boolean | undefined} notFound
  */
 
-/** @augments {ShapeHook<Record<string, any>, UseModelState>} */
+/**
+ * @typedef {{
+ *   model: BaseModelInstance | undefined,
+ *   modelId: number | string | undefined,
+ *   notFound: boolean | undefined
+ * } & Record<string, BaseModelInstance | number | string | boolean | undefined>} UseModelResult
+ */
+
+/** @augments {ShapeHook<UseModelShapeHookProps, UseModelState>} */
 class UseModelShapeHook extends ShapeHook {
   state = /** @type {UseModelState} */ ({
     model: undefined,
@@ -37,7 +76,7 @@ class UseModelShapeHook extends ShapeHook {
 
   /**
    * Constructor.
-   * @param {any} props
+   * @param {UseModelShapeHookProps} props
    */
   constructor(props) {
     super(props)
@@ -53,7 +92,7 @@ class UseModelShapeHook extends ShapeHook {
     return !("active" in this.args()) || Boolean(this.args().active)
   }
 
-  /** @returns {useModelArgs & Record<string, any>} */
+  /** @returns {useModelArgs} */
   args() {
     if (typeof this.p.argsArg == "function") {
       return this.p.argsArg({modelClass: this.modelClass()})
@@ -62,7 +101,7 @@ class UseModelShapeHook extends ShapeHook {
     return this.p.argsArg || {}
   }
 
-  /** @returns {typeof import("./base-model.js").default} */
+  /** @returns {BaseModelClass} */
   modelClass() {
     if (typeof this.p.modelClassArg == "object") {
       return this.p.modelClassArg.callback({queryParams: this.queryParams})
@@ -95,7 +134,7 @@ class UseModelShapeHook extends ShapeHook {
     return inflection.camelize(this.modelClass().modelClassData().name, true)
   }
 
-  /** @returns {any[]} */
+  /** @returns {UseModelCacheValue[]} */
   cacheArgs() {
     return [this.modelId()].concat(this.args().cacheArgs || [], this.queryParams)
   }
@@ -105,10 +144,14 @@ class UseModelShapeHook extends ShapeHook {
     return Boolean(this.args().eventUpdated && this.modelId() && !this.s.model)
   }
 
-  /** @returns {object} */
+  /** @returns {UseModelDefaults} */
   newModelDataFromParams() {
-    return this.queryParams?.[this.modelClass().modelName()
-      .paramKey()] || {}
+    const modelDataFromParams = this.queryParams?.[
+      this.modelClass().modelName()
+        .paramKey()
+    ]
+
+    return typeof modelDataFromParams == "object" && modelDataFromParams ? modelDataFromParams : {}
   }
 
   /** @returns {boolean} */
@@ -116,16 +159,29 @@ class UseModelShapeHook extends ShapeHook {
     return Boolean(this.newIfNoIdDefaultsResult && typeof this.newIfNoIdDefaultsResult.then == "function")
   }
 
-  /** @returns {object | null} */
+  /** @returns {UseModelNewIfNoIdConfig | null} */
+  newIfNoIdConfig() {
+    const {newIfNoId} = this.args()
+
+    if (!newIfNoId || newIfNoId === true) {
+      return null
+    }
+
+    return newIfNoId
+  }
+
+  /** @returns {UseModelDefaults | null} */
   syncDefaultsForNewModel() {
-    if (!this.args().newIfNoId?.defaults) {
+    const newIfNoIdConfig = this.newIfNoIdConfig()
+
+    if (!newIfNoIdConfig?.defaults) {
       return {}
     } else if (this.hasAsyncDefaults()) {
       return null
     }
 
     if (this.newIfNoIdDefaultsResult === null) {
-      const defaultsResult = this.args().newIfNoId.defaults()
+      const defaultsResult = newIfNoIdConfig.defaults()
 
       if (defaultsResult && typeof defaultsResult.then == "function") {
         this.newIfNoIdDefaultsResult = defaultsResult.catch((error) => {
@@ -141,7 +197,7 @@ class UseModelShapeHook extends ShapeHook {
     return this.newIfNoIdDefaultsResult || {}
   }
 
-  /** @returns {import("./base-model.js").default | undefined} */
+  /** @returns {BaseModelInstance | undefined} */
   syncNewModel() {
     if (!this.active() || !this.args().newIfNoId || this.modelId()) {
       return undefined
@@ -159,7 +215,7 @@ class UseModelShapeHook extends ShapeHook {
     })
   }
 
-  /** @returns {import("./base-model.js").default | undefined} */
+  /** @returns {BaseModelInstance | undefined} */
   subscriptionModel() {
     if (!this.args().eventUpdated) {
       return undefined
@@ -213,12 +269,13 @@ class UseModelShapeHook extends ShapeHook {
   /** @param {number} loadModelGeneration */
   loadNewModel = async (loadModelGeneration) => {
     let defaults = {}
+    const newIfNoIdConfig = this.newIfNoIdConfig()
 
-    if (this.args().newIfNoId?.defaults) {
+    if (newIfNoIdConfig?.defaults) {
       let defaultsResult = this.newIfNoIdDefaultsResult
 
       if (defaultsResult === null) {
-        defaultsResult = this.args().newIfNoId.defaults()
+        defaultsResult = newIfNoIdConfig.defaults()
       }
 
       this.newIfNoIdDefaultsResult = null
@@ -271,7 +328,7 @@ class UseModelShapeHook extends ShapeHook {
     }, 1000)
   }
 
-  /** @param {{model: import("./base-model.js").default}} args */
+  /** @param {{model: BaseModelInstance}} args */
   onDestroyed = (args) => {
     const forwardArgs = {model: args.model}
 
@@ -300,7 +357,7 @@ class UseModelShapeHook extends ShapeHook {
     }
   }
 
-  /** @returns {import("./base-model.js").default | undefined} */
+  /** @returns {BaseModelInstance | undefined} */
   visibleModel() {
     let model = this.s.model
 
@@ -310,7 +367,7 @@ class UseModelShapeHook extends ShapeHook {
 
     if (!this.active()) {
       return undefined
-    } else if (this.modelId() && model && model.id() != this.modelId()) {
+    } else if (this.modelId() && model && /** @type {BaseModelWithId} */ (model).id() != this.modelId()) {
       return undefined
     } else if (!this.modelId() && !this.args().query && !this.args().newIfNoId) {
       return undefined
@@ -393,15 +450,15 @@ class UseModelShapeHook extends ShapeHook {
       return () => {
         connectDestroyed.unsubscribe()
       }
-    }, [this.args().onDestroyed, this.s.model ? this.s.model.id() : undefined])
+    }, [this.args().onDestroyed, this.s.model ? /** @type {BaseModelWithId} */ (this.s.model).id() : undefined])
   }
 }
 
 /**
  * useModel.
- * @param {Function|object} modelClassArg
- * @param {object | ((args: {modelClass: typeof import("./base-model.js").default}) => useModelArgs)} [argsArg]
- * @returns {Record<string, any>}
+ * @param {BaseModelClass | UseModelModelClassResolver} modelClassArg
+ * @param {UseModelArgsArg} [argsArg]
+ * @returns {UseModelResult}
  */
 const useModel = (modelClassArg, argsArg = {}) => {
   const shapeHook = useShapeHook(UseModelShapeHook, {argsArg, modelClassArg})
