@@ -1,3 +1,4 @@
+// @ts-check
 import ModelEvents from "./model-events.js"
 import PropTypes from "prop-types"
 import React from "react"

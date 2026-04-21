@@ -1,3 +1,4 @@
+// @ts-check
 import {digg} from "diggerize"
 import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
 

@@ -1,3 +1,4 @@
+// @ts-check
 import parse from "url-parse"
 import qs from "qs"
 

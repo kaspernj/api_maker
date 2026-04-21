@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import React, {useMemo} from "react"
 import {digg} from "diggerize"

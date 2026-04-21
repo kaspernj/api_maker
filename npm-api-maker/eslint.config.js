@@ -1,3 +1,4 @@
+// @ts-check
 import {fixupConfigRules} from "@eslint/compat"
 import {defineConfig} from "eslint/config"
 import expoConfig from "eslint-config-expo/flat.js"

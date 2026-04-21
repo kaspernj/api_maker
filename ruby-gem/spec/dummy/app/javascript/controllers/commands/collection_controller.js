@@ -1,3 +1,4 @@
+// @ts-check
 import {Controller} from "stimulus"
 import {Task} from "models.js"
 

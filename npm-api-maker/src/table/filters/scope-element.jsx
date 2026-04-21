@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable no-return-assign, sort-imports */
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"

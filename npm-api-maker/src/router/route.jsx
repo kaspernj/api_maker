@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable react/jsx-max-depth, sort-imports */
 import React, {createContext, useContext, useEffect, useLayoutEffect, useMemo} from "react"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"

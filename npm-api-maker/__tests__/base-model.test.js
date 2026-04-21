@@ -1,3 +1,4 @@
+// @ts-check
 import BaseModel from "../build/base-model.js"
 import {JSDOM} from "jsdom"
 import User from "./support/user"

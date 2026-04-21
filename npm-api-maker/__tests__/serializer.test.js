@@ -1,3 +1,4 @@
+// @ts-check
 import Serializer from "../build/serializer"
 import User from "./support/user"
 

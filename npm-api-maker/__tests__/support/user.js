@@ -1,3 +1,4 @@
+// @ts-check
 import BaseModel from "../../build/base-model.js"
 
 export default class User extends BaseModel {

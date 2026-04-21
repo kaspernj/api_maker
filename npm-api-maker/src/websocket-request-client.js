@@ -1,3 +1,4 @@
+// @ts-check
 import CustomError from "./custom-error.js"
 import Logger from "./logger.js"
 import channelsConsumer from "./channels-consumer.js"

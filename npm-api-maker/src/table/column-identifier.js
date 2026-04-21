@@ -1,3 +1,4 @@
+// @ts-check
 /** Resolve a unique column identifier. */
 export default function columnIdentifier(column) {
   if ("identifier" in column) return column.identifier

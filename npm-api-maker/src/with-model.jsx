@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable prefer-object-spread, react/function-component-definition, sort-imports */
 import memo from "set-state-compare/build/memo.js"
 import React from "react"

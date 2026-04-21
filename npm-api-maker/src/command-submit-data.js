@@ -1,3 +1,4 @@
+// @ts-check
 import objectToFormData from "object-to-formdata"
 
 /** ApiMakerCommandSubmitData. */

@@ -1,3 +1,4 @@
+// @ts-check
 import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
 import {Task} from "models.js"

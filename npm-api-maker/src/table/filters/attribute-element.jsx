@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable new-cap, no-return-assign, sort-imports */
 import {digg} from "diggerize"
 import PropTypes from "prop-types"

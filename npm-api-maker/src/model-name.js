@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection"
 import Config from "./config.js"
 

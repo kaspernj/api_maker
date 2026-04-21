@@ -1,3 +1,4 @@
+// @ts-check
 import Deserializer from "../build/deserializer"
 
 describe("Deserializer", () => {

@@ -1,3 +1,4 @@
+// @ts-check
 import resetRealtimeRuntimeState, {waitForRealtimeRuntimeIdleAndReset} from "../src/reset-realtime-runtime-state.js"
 import ApiMakerCableConnectionPool from "../src/cable-connection-pool.js"
 import ApiMakerWebsocketRequestClient from "../src/websocket-request-client.js"

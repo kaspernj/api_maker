@@ -1,3 +1,4 @@
+// @ts-check
 import {digs} from "diggerize"
 import PropTypes from "prop-types" // eslint-disable-line sort-imports
 import propTypesExact from "prop-types-exact"

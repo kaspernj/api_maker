@@ -1,3 +1,4 @@
+// @ts-check
 import RoutesNative from "../src/routes-native.js"
 
 const testRoutes = () => ({

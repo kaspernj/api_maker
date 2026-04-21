@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable no-return-assign, react/jsx-one-expression-per-line, sort-imports */
 import classNames from "classnames" // eslint-disable-line import/no-unresolved
 import Link from "../../../link"

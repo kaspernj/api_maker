@@ -1,3 +1,4 @@
+// @ts-check
 import {digg, digs} from "diggerize"
 import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"

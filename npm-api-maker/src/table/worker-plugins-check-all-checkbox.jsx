@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable import/no-unresolved, sort-imports */
 import React, {useEffect, useMemo, useRef} from "react"
 import classNames from "classnames"

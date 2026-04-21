@@ -1,3 +1,4 @@
+// @ts-check
 import Hash from "shared/hash"
 import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"

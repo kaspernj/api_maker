@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable react/jsx-no-literals */
 // eslint-disable-next-line import/no-unresolved
 import {Text, TextInput, View} from "react-native"

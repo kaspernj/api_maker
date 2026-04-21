@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import config from "./config.js"
 import {digg} from "diggerize"

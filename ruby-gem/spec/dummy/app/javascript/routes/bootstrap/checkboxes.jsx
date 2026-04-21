@@ -1,3 +1,4 @@
+// @ts-check
 import {Account, Task} from "models.js"
 import Checkboxes from "@kaspernj/api-maker/build/bootstrap/checkboxes"
 import Layout from "components/layout"

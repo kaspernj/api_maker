@@ -1,3 +1,4 @@
+// @ts-check
 export default class Hash {
   static fetch(key, object) {
     if (!(key in object))

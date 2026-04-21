@@ -1,3 +1,4 @@
+// @ts-check
 import {useCallback, useLayoutEffect, useMemo} from "react"
 import useShape from "./use-shape.js"
 

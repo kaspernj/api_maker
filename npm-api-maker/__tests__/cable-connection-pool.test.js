@@ -1,3 +1,4 @@
+// @ts-check
 import CableConnectionPool from "../src/cable-connection-pool.js"
 import CableSubscriptionPool from "../src/cable-subscription-pool.js"
 import {digg} from "diggerize"

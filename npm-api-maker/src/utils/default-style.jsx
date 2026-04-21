@@ -1,3 +1,4 @@
+// @ts-check
 import React, {createContext, useContext, useMemo} from "react"
 import {incorporate} from "incorporator"
 import memo from "set-state-compare/build/memo.js"

@@ -1,3 +1,4 @@
+// @ts-check
 import React, {memo} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import Devise from "@kaspernj/api-maker/build/devise.js"

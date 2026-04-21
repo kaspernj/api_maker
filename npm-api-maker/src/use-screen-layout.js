@@ -1,3 +1,4 @@
+// @ts-check
 import {Platform, useWindowDimensions} from "react-native"
 import {useCallback, useMemo, useState} from "react"
 import useEventListener from "ya-use-event-listener"

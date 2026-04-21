@@ -1,3 +1,4 @@
+// @ts-check
 import events from "./events.js"
 import {useCallback} from "react"
 import useEventEmitter from "ya-use-event-emitter"

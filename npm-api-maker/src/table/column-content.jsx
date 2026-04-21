@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable padded-blocks, react/jsx-one-expression-per-line, sort-imports */
 import {digs} from "diggerize"
 import * as inflection from "inflection"

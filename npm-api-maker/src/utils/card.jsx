@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable implicit-arrow-linebreak, import/no-unresolved, prefer-object-spread, sort-imports */
 import React, {useMemo} from "react"
 import classNames from "classnames"

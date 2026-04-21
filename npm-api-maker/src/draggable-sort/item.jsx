@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import {Animated, Easing, PanResponder} from "react-native"
 import {EventEmitter} from "eventemitter3"

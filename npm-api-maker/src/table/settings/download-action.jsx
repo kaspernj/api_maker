@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable implicit-arrow-linebreak, react/jsx-no-literals, sort-imports */
 import ColumnContent from "../column-content"
 import columnIdentifier from "../column-identifier.js"

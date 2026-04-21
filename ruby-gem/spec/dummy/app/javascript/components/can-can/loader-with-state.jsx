@@ -1,3 +1,4 @@
+// @ts-check
 import React, {memo, useEffect} from "react"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import {Account} from "models.js"

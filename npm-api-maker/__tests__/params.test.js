@@ -1,3 +1,4 @@
+// @ts-check
 import Params from "../build/params.js"
 
 describe("Params", () => {

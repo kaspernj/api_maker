@@ -1,3 +1,4 @@
+// @ts-check
 import {StyleSheet} from "react-native"
 
 /** Merge style inputs into a flat style object. */

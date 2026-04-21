@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable implicit-arrow-linebreak, no-use-before-define, prefer-object-spread */
 import {dig, digg} from "diggerize"
 import {useCallback, useEffect, useMemo, useRef} from "react"

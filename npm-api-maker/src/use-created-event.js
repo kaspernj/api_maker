@@ -1,3 +1,4 @@
+// @ts-check
 import useModelClassEvent from "./use-model-class-event.js"
 
 /**

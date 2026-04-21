@@ -1,3 +1,4 @@
+// @ts-check
 import CustomError from "./custom-error.js"
 
 /** Destroy command error. */

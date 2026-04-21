@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable no-return-assign, react/jsx-no-literals, react/jsx-no-useless-fragment, react/jsx-one-expression-per-line, sort-imports */
 import React, {useEffect, useMemo} from "react"
 import {Pressable, StyleSheet, View} from "react-native"

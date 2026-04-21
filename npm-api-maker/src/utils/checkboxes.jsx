@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable implicit-arrow-linebreak, newline-per-chained-call, no-throw-literal, sort-imports */
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import React, {useMemo} from "react"

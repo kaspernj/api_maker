@@ -1,3 +1,4 @@
+// @ts-check
 import AccountMarkedTask from "models/account-marked-task.js"
 import Account from "models/account.js"
 import Activity from "models/activity.js"

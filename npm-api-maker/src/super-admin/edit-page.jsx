@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable react/jsx-max-depth, react/jsx-no-literals, react/jsx-one-expression-per-line, sort-imports */
 import * as inflection from "inflection"
 import {FlashNotifications} from "flash-notifications"

@@ -1,3 +1,4 @@
+// @ts-check
 import BaseError from "./base-error.js"
 
 /** Custom API Maker error. */

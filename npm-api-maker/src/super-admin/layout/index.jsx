@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable no-return-assign, react/jsx-closing-bracket-location, sort-imports */
 import React, {useMemo} from "react"
 import {View} from "react-native"

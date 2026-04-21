@@ -1,3 +1,4 @@
+// @ts-check
 import {digg, digs} from "diggerize"
 import ModelRecipesModelLoader from "./model-recipes-model-loader.js"
 

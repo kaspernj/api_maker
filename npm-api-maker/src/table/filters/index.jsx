@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable implicit-arrow-linebreak, import/no-unresolved, max-len, react/button-has-type, react/jsx-sort-props, react/no-array-index-key, sort-imports */
 import {digg, digs} from "diggerize"
 import Filter from "./filter"

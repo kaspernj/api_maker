@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable react/jsx-curly-brace-presence, sort-imports */
 import {digg} from "diggerize"
 import Link from "../link"

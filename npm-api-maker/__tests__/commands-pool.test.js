@@ -1,3 +1,4 @@
+// @ts-check
 import ApiMakerCommandsPool from "../src/commands-pool.js"
 import Config from "../src/config.js"
 import Devise from "../src/devise.js"

@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable arrow-body-style, prefer-arrow-callback, prefer-object-spread, sort-imports */
 import Text from "./text"
 import React from "react"

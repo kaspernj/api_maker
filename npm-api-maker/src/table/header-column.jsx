@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable import/no-unresolved, no-return-assign, sort-imports */
 import React, {useMemo} from "react"
 import classNames from "classnames"

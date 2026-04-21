@@ -1,3 +1,4 @@
+// @ts-check
 import {digs} from "diggerize"
 import EventModelClass from "@kaspernj/api-maker/build/event-model-class"
 import Layout from "components/layout"

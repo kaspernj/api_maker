@@ -1,3 +1,4 @@
+// @ts-check
 import Checkbox from "@kaspernj/api-maker/build/utils/checkbox"
 import Layout from "components/layout"
 import React from "react"

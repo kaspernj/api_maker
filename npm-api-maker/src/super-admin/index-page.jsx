@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import memo from "set-state-compare/build/memo.js"
 import ModelClassTable from "./model-class-table"

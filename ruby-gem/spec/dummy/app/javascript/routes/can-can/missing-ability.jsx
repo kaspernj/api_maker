@@ -1,3 +1,4 @@
+// @ts-check
 import React, {memo, useEffect, useState} from "react"
 import {Account} from "models.js"
 import CanCan from "@kaspernj/api-maker/build/can-can.js"

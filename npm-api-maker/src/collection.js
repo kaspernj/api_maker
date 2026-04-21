@@ -1,3 +1,4 @@
+// @ts-check
 import cloneDeep from "clone-deep"
 import CommandsPool from "./commands-pool.js" // eslint-disable-line sort-imports
 import {digg} from "diggerize"

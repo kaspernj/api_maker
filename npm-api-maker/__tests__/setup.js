@@ -1,3 +1,4 @@
+// @ts-check
 import {TextDecoder, TextEncoder} from "util"
 
 if (!global.TextEncoder) {

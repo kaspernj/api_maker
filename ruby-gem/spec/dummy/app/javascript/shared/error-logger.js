@@ -1,3 +1,4 @@
+// @ts-check
 import ErrorLogger from "@kaspernj/api-maker/build/error-logger"
 
 globalThis.errorLogger = new ErrorLogger()

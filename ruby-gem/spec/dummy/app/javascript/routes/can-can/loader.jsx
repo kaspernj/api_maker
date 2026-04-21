@@ -1,3 +1,4 @@
+// @ts-check
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"
 import CanCan from "@kaspernj/api-maker/build/can-can.js"
 import Devise from "@kaspernj/api-maker/build/devise.js"

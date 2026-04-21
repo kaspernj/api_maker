@@ -1,3 +1,4 @@
+// @ts-check
 import ConfigReader from "./config-reader"
 
 /**

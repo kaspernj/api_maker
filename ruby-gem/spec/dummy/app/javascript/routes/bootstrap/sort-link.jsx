@@ -1,3 +1,4 @@
+// @ts-check
 import Card from "@kaspernj/api-maker/build/bootstrap/card"
 import Layout from "components/layout"
 import memo from "set-state-compare/build/memo.js"

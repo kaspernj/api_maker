@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import {useForm} from "../form"

@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection"
 import {ValidationErrors} from "./validation-errors.js"
 import {digg} from "diggerize"

@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable no-multi-spaces, prefer-object-spread, sort-imports */
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome.js"
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5.js"

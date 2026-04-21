@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable no-return-assign */
 import * as inflection from "inflection"
 import React, {useMemo} from "react"

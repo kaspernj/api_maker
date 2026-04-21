@@ -1,3 +1,4 @@
+// @ts-check
 const babelAllowlistedPackages = [
   "@kaspernj/api-maker",
   "flash-notifications",

@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import AttributeRow from "../../bootstrap/attribute-row"
 import * as inflection from "inflection"

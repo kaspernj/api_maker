@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable implicit-arrow-linebreak, prefer-object-spread, sort-imports, sort-vars */
 import React, {useMemo} from "react"
 import {Modal, Pressable, View} from "react-native"

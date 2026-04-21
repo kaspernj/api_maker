@@ -1,3 +1,4 @@
+// @ts-check
 import {ShapeHook, useShapeHook} from "set-state-compare"
 import {useLayoutEffect} from "react"
 import ModelEvents from "./model-events.js" // eslint-disable-line sort-imports

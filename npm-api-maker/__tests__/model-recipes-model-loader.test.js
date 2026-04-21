@@ -1,3 +1,4 @@
+// @ts-check
 import ApiMakerModelRecipesModelLoader from "../src/model-recipes-model-loader.js"
 import {jest} from "@jest/globals"
 

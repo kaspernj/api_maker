@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import {useCallback, useLayoutEffect, useMemo, useRef} from "react"
 import debounceFunction from "debounce"

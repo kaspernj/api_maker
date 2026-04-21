@@ -1,3 +1,4 @@
+// @ts-check
 import React, {memo} from "react"
 import {Pressable, Text, View} from "react-native"
 import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-component.js"

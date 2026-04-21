@@ -1,3 +1,4 @@
+// @ts-check
 import * as inflection from "inflection"
 import {dig, digg, digs} from "diggerize"
 import qs from "qs"

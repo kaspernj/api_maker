@@ -1,3 +1,4 @@
+// @ts-check
 import {digs} from "diggerize"
 import Form from "components/tasks/form"
 import Layout from "components/layout"

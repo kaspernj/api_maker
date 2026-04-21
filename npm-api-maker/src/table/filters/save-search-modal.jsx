@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable react/button-has-type, sort-imports */
 import Checkbox from "../../bootstrap/checkbox"
 import {digg} from "diggerize"

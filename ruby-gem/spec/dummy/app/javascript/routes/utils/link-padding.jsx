@@ -1,3 +1,4 @@
+// @ts-check
 import Link from "@kaspernj/api-maker/build/link"
 import Text from "@kaspernj/api-maker/build/utils/text"
 import Layout from "components/layout"

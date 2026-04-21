@@ -1,3 +1,4 @@
+// @ts-check
 import {EventEmitter} from "eventemitter3"
 import * as inflection from "inflection" // eslint-disable-line sort-imports
 

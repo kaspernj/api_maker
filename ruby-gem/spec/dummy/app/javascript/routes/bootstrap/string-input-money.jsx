@@ -1,3 +1,4 @@
+// @ts-check
 import {digg} from "diggerize"
 import Input from "@kaspernj/api-maker/build/bootstrap/input"
 import Layout from "components/layout"

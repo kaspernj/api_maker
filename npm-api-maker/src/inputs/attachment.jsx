@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import ApiMakerInput from "./input"
 import {digg} from "diggerize"

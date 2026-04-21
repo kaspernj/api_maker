@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable sort-imports */
 import React, {useRef} from "react"
 import {digg, digs} from "diggerize"

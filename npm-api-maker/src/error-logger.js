@@ -1,3 +1,4 @@
+// @ts-check
 import SourceMapsLoader from "./source-maps-loader.js"
 import {digg} from "diggerize"
 

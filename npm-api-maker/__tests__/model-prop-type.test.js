@@ -1,3 +1,4 @@
+// @ts-check
 import ModelPropType from "../build/model-prop-type"
 import Task from "./support/task"
 import User from "./support/user"

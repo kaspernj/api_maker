@@ -1,3 +1,4 @@
+// @ts-check
 /* eslint-disable max-depth */
 import * as inflection from "inflection"
 import {digg} from "diggerize"
