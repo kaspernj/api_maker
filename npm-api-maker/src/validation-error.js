@@ -37,7 +37,7 @@ export default class ValidationError extends BaseError {
   }
 
   /**
-   * @param {any} attributeName
+   * @param {string} attributeName
    * @returns {boolean}
    */
   hasValidationErrorForAttribute = (attributeName) => {

@@ -3,6 +3,17 @@ import CommandsPool from "./commands-pool.js"
 
 const shared = {}
 
+/** @typedef {object | string | number | boolean | null | undefined | Array<object | string | number | boolean | null | undefined>} ServiceValue */
+/** @typedef {Record<string, ServiceValue>} ServiceArgs */
+/**
+ * @typedef {object} ServiceRequestOptions
+ * @property {boolean} [cacheResponse]
+ * @property {ServiceArgs} [global]
+ * @property {(value: string) => void} [onLog]
+ * @property {(value: {count?: number, progress?: number, total?: number}) => void} [onProgress]
+ * @property {(value: ServiceArgs) => void} [onReceived]
+ */
+
 /** API service command proxy. */
 export default class ApiMakerServices {
   /** @returns {ApiMakerServices} */
@@ -14,9 +25,9 @@ export default class ApiMakerServices {
 
   /**
    * @param {string} serviceName
-   * @param {Record<string, any>} [args]
-   * @param {Record<string, any>} [options]
-   * @returns {Promise<any>}
+   * @param {ServiceArgs} [args]
+   * @param {ServiceRequestOptions} [options]
+   * @returns {Promise<ServiceArgs>}
    */
   sendRequest (serviceName, args, options = {}) {
     return CommandsPool.addCommand({
