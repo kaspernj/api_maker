@@ -93,7 +93,7 @@ export default class SourceMapsLoader {
     const sources = []
 
     for (const trace of stack) {
-      const file = trace.file
+      const file = this.normalizeTraceFile(trace.file)
 
       if (file != "\u003Canonymous>") {
         const sourceMapUrl = this.getMapURL({src: file})
@@ -137,7 +137,8 @@ export default class SourceMapsLoader {
    * @returns {string | undefined}
    */
   getMapURL(args = /** @type {MapUrlArgs} */ ({src: ""})) {
-    const {script, src} = args
+    const {script} = args
+    const src = this.normalizeTraceFile(args.src)
     const url = this.loadUrl(src)
     const originalUrl = `${url.origin}${url.pathname}`
 
@@ -194,6 +195,21 @@ export default class SourceMapsLoader {
   }
 
   /**
+   * Strips stack-frame prefixes from absolute bundle URLs before URL parsing.
+   * @param {string} traceFile
+   * @returns {string}
+   */
+  normalizeTraceFile(traceFile) {
+    const absoluteUrlMatch = traceFile.match(/((?:https?|file):\/\/.+)$/)
+
+    if (absoluteUrlMatch) {
+      return absoluteUrlMatch[1]
+    }
+
+    return traceFile
+  }
+
+  /**
    * Resolves when one XHR finishes successfully or rejects on HTTP failure.
    * @param {XMLHttpRequest} xhr
    * @param {string} url
@@ -231,7 +247,8 @@ export default class SourceMapsLoader {
     const newSourceMap = []
 
     for (const trace of stack) {
-      const sourceMapData = this.sourceMaps.find((sourceMapData) => sourceMapData.originalUrl == trace.file)
+      const traceFile = this.normalizeTraceFile(trace.file)
+      const sourceMapData = this.sourceMaps.find((sourceMapData) => sourceMapData.originalUrl == traceFile)
 
       let filePath, fileString, original
 
@@ -250,7 +267,7 @@ export default class SourceMapsLoader {
           fileString += `:${original.column}`
         }
       } else {
-        filePath = trace.file
+        filePath = traceFile
         fileString = `${filePath}:${trace.lineNumber}`
 
         if (trace.column) {
