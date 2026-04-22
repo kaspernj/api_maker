@@ -4,6 +4,13 @@ import Logger from "./logger.js"
 import {SourceMapConsumer} from "source-map"
 import uniqunize from "uniqunize"
 
+/** @typedef {{originalUrl: string, sourceMapUrl: string}} SourceMapTarget */
+/** @typedef {{consumer: SourceMapConsumer, originalUrl: string}} LoadedSourceMap */
+/** @typedef {(script: HTMLScriptElement) => string | undefined} ScriptSourceSelector */
+/** @typedef {(args: {originalUrl: string, script?: HTMLScriptElement, src: string, url: HTMLAnchorElement}) => string | undefined} SourceMapResolver */
+/** @typedef {{script?: HTMLScriptElement, src: string}} MapUrlArgs */
+/** @typedef {{filePath: string | null, fileString: string, methodName: string}} ParsedTraceData */
+
 // Sometimes this needs to be called and sometimes not
 // @ts-expect-error
 if (SourceMapConsumer.initialize) {
@@ -17,19 +24,25 @@ const logger = new Logger({name: "ApiMaker / SourceMapsLoader"})
 
 /** Loads and resolves source maps for stack traces. */
 export default class SourceMapsLoader {
-  /** Constructor. */
+  /** Initializes source-map caches and loading state for stack-trace resolution. */
   constructor() {
     this.isLoadingSourceMaps = false
-    this.sourceMaps = []
+    this.sourceMaps = /** @type {LoadedSourceMap[]} */ ([])
     this.srcLoaded = {}
   }
 
-  /** loadSourceMapsForScriptTags. */
+  /**
+   * Registers a callback that selects which script tags should have source maps loaded.
+   * @param {ScriptSourceSelector} callback
+   */
   loadSourceMapsForScriptTags(callback) {
     this.loadSourceMapsForScriptTagsCallback = callback
   }
 
-  /** sourceMapForSource. */
+  /**
+   * Registers a callback that resolves the source-map URL for one script source.
+   * @param {SourceMapResolver} callback
+   */
   sourceMapForSource(callback) {
     this.sourceMapForSourceCallback = callback
   }
@@ -58,7 +71,11 @@ export default class SourceMapsLoader {
     }
   }
 
-  /** getSources. */
+  /**
+   * Collects unique source/script entries that may need source maps for one error.
+   * @param {Error | undefined} error
+   * @returns {SourceMapTarget[]}
+   */
   getSources(error) {
     let sources = this.getSourcesFromScripts()
 
@@ -76,7 +93,7 @@ export default class SourceMapsLoader {
     const sources = []
 
     for (const trace of stack) {
-      const file = trace.file
+      const file = this.normalizeTraceFile(trace.file)
 
       if (file != "\u003Canonymous>") {
         const sourceMapUrl = this.getMapURL({src: file})
@@ -94,7 +111,10 @@ export default class SourceMapsLoader {
     return sources
   }
 
-  /** getSourcesFromScripts. */
+  /**
+   * Collects source-map candidates from currently loaded script tags.
+   * @returns {SourceMapTarget[]}
+   */
   getSourcesFromScripts() {
     const scripts = document.querySelectorAll("script")
     const sources = []
@@ -111,9 +131,14 @@ export default class SourceMapsLoader {
     return sources
   }
 
-  /** getMapURL. */
-  getMapURL(args = {}) {
-    const {script, src} = /** @type {any} */ (args)
+  /**
+   * Resolves the source-map URL for one script source.
+   * @param {MapUrlArgs} [args]
+   * @returns {string | undefined}
+   */
+  getMapURL(args = /** @type {MapUrlArgs} */ ({src: ""})) {
+    const {script} = args
+    const src = this.normalizeTraceFile(args.src)
     const url = this.loadUrl(src)
     const originalUrl = `${url.origin}${url.pathname}`
 
@@ -124,9 +149,15 @@ export default class SourceMapsLoader {
       // Default to original URL with '.map' appended
       return `${originalUrl}.map`
     }
+
+    return undefined
   }
 
-  /** includeMapURL. */
+  /**
+   * Returns true when a script source should use the default `.map` lookup behavior.
+   * @param {string} src
+   * @returns {boolean}
+   */
   includeMapURL = (src) => src.includes("/packs/")
 
   async loadSourceMapForSource({originalUrl, sourceMapUrl}) {
@@ -150,7 +181,11 @@ export default class SourceMapsLoader {
     }
   }
 
-  /** loadUrl. */
+  /**
+   * Parses one URL string with an anchor element so its parts can be inspected.
+   * @param {string} url
+   * @returns {HTMLAnchorElement}
+   */
   loadUrl(url) {
     const parser = document.createElement("a")
 
@@ -159,7 +194,27 @@ export default class SourceMapsLoader {
     return parser
   }
 
-  /** loadXhr. */
+  /**
+   * Strips stack-frame prefixes from absolute bundle URLs before URL parsing.
+   * @param {string} traceFile
+   * @returns {string}
+   */
+  normalizeTraceFile(traceFile) {
+    const absoluteUrlMatch = traceFile.match(/((?:https?|file):\/\/.+)$/)
+
+    if (absoluteUrlMatch) {
+      return absoluteUrlMatch[1]
+    }
+
+    return traceFile
+  }
+
+  /**
+   * Resolves when one XHR finishes successfully or rejects on HTTP failure.
+   * @param {XMLHttpRequest} xhr
+   * @param {string} url
+   * @returns {Promise<void>}
+   */
   loadXhr(xhr, url) {
     return new Promise((resolve, reject) => {
       xhr.onload = () => {
@@ -173,7 +228,11 @@ export default class SourceMapsLoader {
     })
   }
 
-  /** parseStackTrace. */
+  /**
+   * Formats one raw stack trace into source-mapped display lines.
+   * @param {string} stackTrace
+   * @returns {string[]}
+   */
   parseStackTrace(stackTrace) {
     return this.getStackTraceData(stackTrace)
       .map((traceData) => `at ${traceData.methodName} (${traceData.fileString})`)
@@ -181,14 +240,15 @@ export default class SourceMapsLoader {
 
   /**
    * @param {string} stackTrace - Raw stack trace string.
-   * @returns {Array<{filePath: string | null, fileString: string, methodName: string}>} Parsed trace data.
+   * @returns {ParsedTraceData[]} Parsed trace data.
    */
   getStackTraceData(stackTrace) {
     const stack = stackTraceParser.parse(stackTrace)
     const newSourceMap = []
 
     for (const trace of stack) {
-      const sourceMapData = this.sourceMaps.find((sourceMapData) => sourceMapData.originalUrl == trace.file)
+      const traceFile = this.normalizeTraceFile(trace.file)
+      const sourceMapData = this.sourceMaps.find((sourceMapData) => sourceMapData.originalUrl == traceFile)
 
       let filePath, fileString, original
 
@@ -207,7 +267,7 @@ export default class SourceMapsLoader {
           fileString += `:${original.column}`
         }
       } else {
-        filePath = trace.file
+        filePath = traceFile
         fileString = `${filePath}:${trace.lineNumber}`
 
         if (trace.column) {

@@ -15,18 +15,28 @@ import Text from "../utils/text"
 import {useBreakpoint} from "responsive-breakpoints"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
+/** @typedef {import("../base-model.js").default} BaseModel */
+/** @typedef {{attribute?: string, columnProps?: {className?: string, style?: object}, commonProps?: {className?: string}}} TableColumnDefinition */
+/** @typedef {{identifier(): string}} TableSettingColumn */
+/**
+ * @typedef {object} TableLike
+ * @property {(column: TableColumnDefinition) => {style?: object}} columnProps
+ * @property {(column: TableColumnDefinition) => string} headerLabelForColumn
+ * @property {(args: object) => object} styleForColumn
+ */
+
 /**
  * @typedef {object} Props
- * @property {any} animatedPosition
- * @property {any} animatedWidth
- * @property {any} animatedZIndex
- * @property {object} column
+ * @property {Animated.ValueXY} animatedPosition
+ * @property {Animated.Value} animatedWidth
+ * @property {Animated.Value} animatedZIndex
+ * @property {TableColumnDefinition} column
  * @property {number} columnIndex
  * @property {boolean} even
  * @property {EventEmitter} events
- * @property {object} model
- * @property {object} table
- * @property {object} tableSettingColumn
+ * @property {BaseModel} model
+ * @property {TableLike} table
+ * @property {TableSettingColumn} tableSettingColumn
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableModelColumn extends ShapeComponent {

@@ -12,11 +12,11 @@ import useModelEvent from "../use-model-event.js"
 
 /**
  * @typedef {object} CheckboxProps
- * @property {boolean=} checked
- * @property {string=} className
+ * @property {boolean} [checked]
+ * @property {string} [className]
  * @property {boolean} indeterminate
- * @property {Function=} onChange
- * @property {object=} style
+ * @property {Function} [onChange]
+ * @property {object} [style]
  */
 /** @typedef {Record<string, never>} CheckboxState */
 const Checkbox = memo(shapeComponent(/** @augments {ShapeComponent<CheckboxProps, CheckboxState>} */ class Checkbox extends ShapeComponent {
@@ -36,9 +36,9 @@ const Checkbox = memo(shapeComponent(/** @augments {ShapeComponent<CheckboxProps
 
 /**
  * @typedef {object} Props
- * @property {object=} currentWorkplace
- * @property {Collection=} query
- * @property {object=} style
+ * @property {object} [currentWorkplace]
+ * @property {Collection} [query]
+ * @property {object} [style]
  */
 /**
  * @typedef {object} State

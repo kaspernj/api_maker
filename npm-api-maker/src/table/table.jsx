@@ -54,6 +54,72 @@ const paginationOptions = [30, 60, 90, ["All", "all"]]
 const styles = {}
 const TableContext = createContext(undefined)
 
+/** @typedef {import("../base-model.js").default} BaseModel */
+/** @typedef {import("../result.js").default} TableResult */
+/** @typedef {import("../collection.js").QueryParamValueMap} TableQueryParams */
+/** @typedef {import("../use-collection.js").UseCollectionQueryMethod} TableQueryMethod */
+/** @typedef {import("./widths").default} TableWidths */
+/**
+ * @typedef {BaseModel & {
+ *   id(): number | string,
+ *   modelClassData(): {name: string},
+ *   cacheKey(): string,
+ *   can(name: string): boolean,
+ *   destroy(): Promise<void>
+ * }} TableModel
+ */
+/** @typedef {{name: string, resource_name: string}} TableRelationship */
+/** @typedef {{collectionKey: string, name: string, paramKey: string, relationships: TableRelationship[]}} TableModelClassData */
+/** @typedef {{human(args: {count: number}): string}} HumanModelName */
+/**
+ * @typedef {{
+ *   hasAttribute(name: string): boolean,
+ *   humanAttributeName(name: string): string,
+ *   modelClassData(): TableModelClassData,
+ *   modelName(): HumanModelName,
+ *   primaryKey(): string
+ * }} TableModelClass
+ */
+/** @typedef {BaseModel & {id(): number | string}} CurrentUserModel */
+/** @typedef {BaseModel & {id(): number | string}} WorkplaceModel */
+/**
+ * @typedef {{
+ *   attribute?: string,
+ *   className?: string,
+ *   defaultVisible?: boolean,
+ *   identifier?: string,
+ *   label?: string,
+ *   path?: string[],
+ *   sortKey?: string
+ * }} TableColumnDefinition
+ */
+/**
+ * @typedef {{
+ *   fullCacheKey(): string,
+ *   identifier(): string,
+ *   position(): number,
+ *   sortKey(): string,
+ *   visible(): boolean | null,
+ *   update(args: {visible?: boolean, width?: number}): Promise<void>
+ * }} TableSettingColumn
+ */
+/** @typedef {{fullCacheKey(): string}} TableSettingRecord */
+/**
+ * @typedef {{
+ *   animatedPosition?: import("react-native").Animated.ValueXY,
+ *   animatedWidth?: import("react-native").Animated.Value,
+ *   animatedZIndex?: import("react-native").Animated.Value,
+ *   column: TableColumnDefinition,
+ *   tableSettingColumn: TableSettingColumn,
+ *   width?: number
+ * }} PreparedColumn
+ */
+/** @typedef {{asObject(): TableQueryParams}} TableFilterFormState */
+/** @typedef {Record<string, BaseModel | string>} TableModelCallbackArgs */
+/** @typedef {{models?: TableModel[], qParams?: TableQueryParams, query?: Collection, result?: TableResult}} TableRenderArgs */
+/** @typedef {{onFilterChanged: () => void, onFilterChangedWithDelay: () => void, qParams: TableQueryParams, queryQName: string}} FilterContentArgs */
+/** @typedef {{models: TableModel[], qParams: TableQueryParams, query: Collection, result: TableResult}} OnModelsLoadedArgs */
+
 /** @typedef {Record<string, never>} HeaderProps */
 /**
  * @typedef {object} HeaderState
@@ -111,68 +177,68 @@ const ListHeaderComponent = memo(shapeComponent(/** @augments {ShapeComponent<He
 
 /**
  * @typedef {object} Props
- * @property {object=} abilities
- * @property {Function=} actionsContent
- * @property {object=} appHistory
- * @property {boolean=} card
- * @property {string=} className
- * @property {Collection=} collection
- * @property {any[]|Function=} columns
- * @property {Function=} controls
- * @property {object=} currentUser
- * @property {Function|string=} defaultDateFormatName
- * @property {Function|string=} defaultDateTimeFormatName
- * @property {object=} defaultParams
- * @property {boolean=} destroyEnabled
- * @property {string=} destroyMessage
- * @property {object=} draggedHeaderStyle
- * @property {Function=} editModelPath
- * @property {boolean=} filterCard
- * @property {Function=} filterContent
- * @property {any=} filterSubmitLabel
- * @property {any[]=} groupBy
- * @property {Function|string=} header
- * @property {string=} identifier
- * @property {Function} modelClass
- * @property {Function=} noRecordsAvailableContent
- * @property {Function=} noRecordsFoundContent
- * @property {Function=} onModelsLoaded
- * @property {Function=} paginateContent
- * @property {React.ComponentType<any>=} paginationComponent
- * @property {any[]=} preloads
- * @property {Function=} queryMethod
- * @property {string=} queryName
- * @property {object=} select
- * @property {object=} selectColumns
- * @property {object=} styles
- * @property {boolean=} styleUI
- * @property {Function=} viewModelPath
- * @property {boolean=} workplace
+ * @property {Record<string, string[]>} [abilities]
+ * @property {(args: TableModelCallbackArgs) => import("react").ReactNode} [actionsContent]
+ * @property {{push?: (path: string) => void}} [appHistory]
+ * @property {boolean} [card]
+ * @property {string} [className]
+ * @property {Collection} [collection]
+ * @property {TableColumnDefinition[] | (() => TableColumnDefinition[])} [columns]
+ * @property {(args: TableRenderArgs) => import("react").ReactNode} [controls]
+ * @property {CurrentUserModel | null} [currentUser]
+ * @property {((value: Date | number | string) => string) | string} [defaultDateFormatName]
+ * @property {((value: Date | number | string) => string) | string} [defaultDateTimeFormatName]
+ * @property {TableQueryParams} [defaultParams]
+ * @property {boolean} [destroyEnabled]
+ * @property {string} [destroyMessage]
+ * @property {import("react-native").StyleProp<import("react-native").ViewStyle>} [draggedHeaderStyle]
+ * @property {(args: TableModelCallbackArgs) => string} [editModelPath]
+ * @property {boolean} [filterCard]
+ * @property {(args: FilterContentArgs) => import("react").ReactNode} [filterContent]
+ * @property {number | string | string[]} [filterSubmitLabel]
+ * @property {string[]} [groupBy]
+ * @property {((args: TableRenderArgs) => import("react").ReactNode) | string} [header]
+ * @property {string} [identifier]
+ * @property {TableModelClass} modelClass
+ * @property {(args: TableRenderArgs) => import("react").ReactNode} [noRecordsAvailableContent]
+ * @property {(args: TableRenderArgs) => import("react").ReactNode} [noRecordsFoundContent]
+ * @property {(args: OnModelsLoadedArgs) => void} [onModelsLoaded]
+ * @property {(args: {result: TableResult}) => import("react").ReactNode} [paginateContent]
+ * @property {import("react").ComponentType<{result: TableResult}>} [paginationComponent]
+ * @property {string[]} [preloads]
+ * @property {TableQueryMethod} [queryMethod]
+ * @property {string} [queryName]
+ * @property {Record<string, string[]>} [select]
+ * @property {Record<string, string[]>} [selectColumns]
+ * @property {{container?: import("react-native").StyleProp<import("react-native").ViewStyle>}} [styles]
+ * @property {boolean} [styleUI]
+ * @property {(args: TableModelCallbackArgs) => string} [viewModelPath]
+ * @property {boolean} [workplace]
  */
 /**
  * @typedef {object} State
- * @property {any[]} columns
- * @property {any} columnsToShow
- * @property {object|undefined} currentWorkplace
- * @property {any} currentWorkplaceCount
- * @property {any} draggedColumn
- * @property {any} filterForm
+ * @property {PreparedColumn[]} columns
+ * @property {PreparedColumn[] | null} columnsToShow
+ * @property {WorkplaceModel | undefined} currentWorkplace
+ * @property {number | null} currentWorkplaceCount
+ * @property {PreparedColumn | null} draggedColumn
+ * @property {TableFilterFormState | null} filterForm
  * @property {string} identifier
  * @property {Date} lastUpdate
- * @property {any} preload
- * @property {any} preparedColumns
+ * @property {string[] | undefined} preload
+ * @property {PreparedColumn[] | undefined} preparedColumns
  * @property {string} queryName
  * @property {string} queryPageName
  * @property {string} queryQName
- * @property {string} querySName
- * @property {boolean} resizing
- * @property {boolean} showFilters
- * @property {boolean} showSettings
- * @property {any} tableSetting
- * @property {string|undefined} tableSettingFullCacheKey
+  * @property {string} querySName
+  * @property {boolean} resizing
+  * @property {boolean} showFilters
+  * @property {boolean} showSettings
+ * @property {TableSettingRecord | undefined} tableSetting
+ * @property {string | undefined} tableSettingFullCacheKey
  * @property {boolean} tableSettingLoaded
- * @property {any} width
- * @property {any} widths
+ * @property {number | undefined} width
+ * @property {TableWidths | null} widths
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTable extends ShapeComponent {
   /**
@@ -332,7 +398,17 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }
 
     if (collectionReady) {
-      select = selectCalculator({table: this})
+      select = selectCalculator({
+        table: {
+          props: {
+            modelClass: this.p.modelClass,
+            select: this.p.select
+          },
+          state: {
+            preparedColumns: this.s.preparedColumns || []
+          }
+        }
+      })
     }
 
     this.collection = useCollection({
@@ -409,7 +485,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const requestId = this.tableSettingLoadRequestId + 1
 
     this.tableSettingLoadRequestId = requestId
-    this.tableSettings = new TableSettings({table: this})
+    this.tableSettings = new TableSettings({
+      table: /** @type {{props: {currentUser?: CurrentUserModel | null}, state: {identifier: string}, columnsAsArray(): TableColumnDefinition[]}} */ (this)
+    })
     const tableSetting = await this.tableSettings.loadExistingOrCreateTableSettings()
 
     if (!tableSetting) throw new Error("No tableSetting returned by tableSettings.loadExistingOrCreateTableSettings()")
@@ -604,8 +682,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
+  /** @returns {Record<string, string[]>} */
   abilitiesToLoad () {
-    const abilitiesToLoad = {}
+    const abilitiesToLoad = /** @type {Record<string, string[]>} */ ({})
     const {abilities, modelClass} = this.props
     const ownAbilities = []
 
@@ -801,7 +880,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
         formRef={filterFormRef}
         htmlFormProps={styles.filterFormHtmlProps ||= {className: "live-table--filter-form"}}
         onSubmit={this.tt.onFilterFormSubmit}
-        setForm={/** @type {Record<string, any>} */ (this.setStates).filterForm}
+        setForm={/** @type {{filterForm(value: TableFilterFormState): void}} */ (this.setStates).filterForm}
         useHtmlForm
       >
         {"s" in actualQParams &&
@@ -989,7 +1068,10 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
-  /** @param {Record<string, any>} [args] */
+  /**
+   * @param {TableRenderArgs} [args]
+   * @returns {import("react").ReactNode}
+   */
   tableControls({models, qParams, query, result} = {}) {
     const {controls} = this.props
     const {showSettings} = this.s

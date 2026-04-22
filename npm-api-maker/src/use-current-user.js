@@ -11,10 +11,32 @@ const logger = new Logger({name: "ApiMaker / useCurrentUser"})
 logger.setDebug(false)
 
 /**
- * @param {object} props
- * @param {string} [props.scope]
- * @param {boolean} [props.withData]
- * @returns {import("./base-model.js").default & Record<string, any>}
+ * @typedef {(import("./base-model.js").default & {
+ *   name?: () => string,
+ *   primaryKey?: () => number | string,
+ *   userRoles?: () => {loaded(): Array<{role(): {identifier(): string} | null}>}
+ * }) | null} CurrentUserModel
+ * @typedef {object} CurrentUserContextValue
+ * @property {boolean} loaded
+ * @property {CurrentUserModel} model
+ * @typedef {object} UseCurrentUserArgs
+ * @property {string} [scope]
+ * @property {boolean} [withData]
+ */
+
+/**
+ * @overload
+ * @param {{scope?: string, withData: true}} [props]
+ * @returns {CurrentUserContextValue}
+ */
+/**
+ * @overload
+ * @param {{scope?: string, withData?: false | undefined}} [props]
+ * @returns {CurrentUserModel}
+ */
+/**
+ * @param {UseCurrentUserArgs} [props]
+ * @returns {CurrentUserContextValue | CurrentUserModel}
  */
 const useCurrentUser = (props = {}) => {
   const {scope = "user", withData, ...restProps} = props
@@ -27,15 +49,23 @@ const useCurrentUser = (props = {}) => {
   if (!scopeInstance || !scopeInstance.getContext) {
     throw new Error(`useCurrentUser: Devise scope "${scope}" is not available. Did you initialize the Devise scope provider?`)
   }
-  const currentUserContext = useContext(scopeInstance.getContext())
+  const currentUserContext = /** @type {CurrentUserContextValue | CurrentUserModel} */ (useContext(scopeInstance.getContext()))
   if (!currentUserContext) {
     throw new Error(`useCurrentUser: no context for Devise scope "${scope}". Ensure the provider is mounted before calling useCurrentUser.`)
   }
 
   if (withData) {
-    return currentUserContext
+    if (typeof currentUserContext == "object" && "model" in currentUserContext) {
+      return currentUserContext
+    }
+
+    throw new Error(`useCurrentUser: expected context data wrapper for scope "${scope}"`)
   } else {
-    return currentUserContext.model
+    if (typeof currentUserContext == "object" && "model" in currentUserContext) {
+      return currentUserContext.model
+    }
+
+    return currentUserContext
   }
 }
 

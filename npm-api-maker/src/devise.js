@@ -8,26 +8,48 @@ import modelClassRequire from "./model-class-require.js"
 import SessionStatusUpdater from "./session-status-updater.js" // eslint-disable-line sort-imports
 import Services from "./services.js" // eslint-disable-line sort-imports
 
+/** @typedef {{scopes?: Record<string, boolean>, currentApiMakerDevise?: ApiMakerDevise}} ApiMakerDeviseShared */
+/** @typedef {{signed_in: boolean}} DeviseSessionStatusScope */
+/**
+ * @typedef {object} DeviseSessionStatusResult
+ * @property {string} [csrf_token]
+ * @property {Record<string, DeviseSessionStatusScope>} scopes
+ * @property {string} [shadow_session_token]
+ * @property {DeviseSessionStatusResult} [session_status]
+ */
+/** @typedef {{rememberMe?: boolean, scope?: string, signedIn?: boolean, skipSignInEvent?: boolean}} DeviseScopeArgs */
+/** @typedef {DeviseSessionStatusResult & {model?: import("./base-model.js").default | import("./base-model.js").default[]}} DeviseSignInResponse */
+/** @typedef {{httpResponse: DeviseSessionStatusResult, scope: string, websocketArgs: DeviseScopeArgs}} SyncSessionArgs */
+/** @typedef {import("./base-model.js").default | null} DeviseCurrentScope */
+
 if (!globalThis.ApiMakerDevise) globalThis.ApiMakerDevise = {scopes: {}}
 
-const shared = globalThis.ApiMakerDevise
+const shared = /** @type {ApiMakerDeviseShared} */ (globalThis.ApiMakerDevise)
 
 /** DeviseScope. */
 class DeviseScope {
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {string} scope
+   * @param {DeviseScopeArgs} args
+   */
   constructor(scope, args) {
     this.args = args
     this.context = createContext(undefined)
     this.scope = scope
   }
 
-  /** getContext. */
+  /** @returns {import("react").Context<DeviseCurrentScope | undefined>} */
   getContext = () => this.context
 }
 
 /** ApiMakerDevise. */
 export default class ApiMakerDevise {
-  /** callSignOutEvent. */
+  /**
+   * Emits the shared sign-out event payload for one scope.
+   * @param {DeviseScopeArgs} args
+   * @returns {void}
+   */
   static callSignOutEvent(args) {
     events.emit("onDeviseSignOut", {args})
   }
@@ -41,12 +63,19 @@ export default class ApiMakerDevise {
     return shared.currentApiMakerDevise
   }
 
-  /** events. */
+  /**
+   * Returns the shared event emitter used for Devise lifecycle events.
+   * @returns {typeof events}
+   */
   static events() {
     return events
   }
 
-  /** addUserScope. */
+  /**
+   * Registers one Devise scope and its helper accessors.
+   * @param {string} scope
+   * @param {DeviseScopeArgs} args
+   */
   static addUserScope(scope, args = {}) {
     const scopeCamelized = inflection.camelize(scope)
     const currentMethodName = `current${scopeCamelized}`
@@ -62,7 +91,11 @@ export default class ApiMakerDevise {
     ApiMakerDevise[getScopeName] = () => scopeInstance
   }
 
-  /** getScope. */
+  /**
+   * Returns the registered scope helper for one scope name.
+   * @param {string} scope
+   * @returns {DeviseScope}
+   */
   static getScope(scope) {
     const scopeCamelized = inflection.camelize(scope)
     const getScopeName = `get${scopeCamelized}Scope`
@@ -75,6 +108,13 @@ export default class ApiMakerDevise {
     return Object.keys(shared.scopes)
   }
 
+  /**
+   * Signs in one scope over HTTP and refreshes websocket auth state.
+   * @param {string} username
+   * @param {string} password
+   * @param {DeviseScopeArgs} args
+   * @returns {Promise<{model: import("./base-model.js").default | undefined, response: DeviseSignInResponse}>}
+   */
   static async signIn(username, password, args = {}) {
     if (!args.scope) args.scope = "user"
 
@@ -82,7 +122,9 @@ export default class ApiMakerDevise {
 
     // Sign in over HTTP first so Devise can write the real session cookie and
     // remember-me token in the HTTP response.
-    const response = await Services.current().sendRequest("Devise::SignIn", postData, {forceHttp: true})
+    const response = /** @type {DeviseSignInResponse} */ (
+      await Services.current().sendRequest("Devise::SignIn", postData, {forceHttp: true})
+    )
 
     let model = response.model
 
@@ -110,13 +152,15 @@ export default class ApiMakerDevise {
   /**
    * Synchronizes the current backend auth state into real HTTP response cookies.
    *
-   * @param {Record<string, any>} [args]
-   * @returns {Promise<any>}
+   * @param {DeviseScopeArgs} [args]
+   * @returns {Promise<DeviseSessionStatusResult>}
    */
   static async persistSession(args = {}) {
     if (!args.scope) args.scope = "user"
 
-    const response = await Services.current().sendRequest("Devise::PersistSession", args, {forceHttp: true})
+    const response = /** @type {DeviseSessionStatusResult} */ (
+      await Services.current().sendRequest("Devise::PersistSession", args, {forceHttp: true})
+    )
 
     const sessionStatusUpdater = SessionStatusUpdater.current()
 
@@ -129,7 +173,11 @@ export default class ApiMakerDevise {
     return response
   }
 
-  /** updateSession. */
+  /**
+   * Updates the locally cached current model for one scope.
+   * @param {DeviseCurrentScope} model
+   * @param {DeviseScopeArgs} args
+   */
   static updateSession(model, args = {}) {
     if (!args.scope) args.scope = "user"
 
@@ -138,24 +186,38 @@ export default class ApiMakerDevise {
     ApiMakerDevise.current().currents[camelizedScopeName] = model
   }
 
-  /** hasCurrentScope. */
+  /**
+   * Returns whether the current scope cache has been initialized locally.
+   * @param {string} scope
+   * @returns {boolean}
+   */
   hasCurrentScope(scope) {
     const camelizedScopeName = inflection.camelize(scope, true)
 
     return camelizedScopeName in ApiMakerDevise.current().currents
   }
 
-  /** setSignedOut. */
+  /**
+   * Marks one scope as signed out in the local current-model cache.
+   * @param {DeviseScopeArgs} args
+   */
   static setSignedOut(args) {
     ApiMakerDevise.current().currents[inflection.camelize(args.scope, true)] = null
   }
 
+  /**
+   * Signs out one scope over HTTP and refreshes websocket auth state.
+   * @param {DeviseScopeArgs} args
+   * @returns {Promise<DeviseSessionStatusResult>}
+   */
   static async signOut(args = {}) {
     if (!args.scope) {
       args.scope = "user"
     }
 
-    const response = await Services.current().sendRequest("Devise::SignOut", {args}, {forceHttp: true})
+    const response = /** @type {DeviseSessionStatusResult} */ (
+      await Services.current().sendRequest("Devise::SignOut", {args}, {forceHttp: true})
+    )
     const sessionStatus = await ApiMakerDevise.syncSessionStatusAndRefreshWebsocket({
       httpResponse: response,
       scope: args.scope,
@@ -177,8 +239,8 @@ export default class ApiMakerDevise {
    * Applies the latest HTTP session status locally, then refreshes the
    * existing websocket connection so ApiMaker commands use the same auth.
    *
-   * @param {Record<string, any>} args
-   * @returns {Promise<Record<string, any>>}
+   * @param {SyncSessionArgs} args
+   * @returns {Promise<DeviseSessionStatusResult>}
    */
   static async syncSessionStatusAndRefreshWebsocket(args) {
     const sessionStatus = await ApiMakerDevise.syncSessionStatusFromHttpResponse(args.httpResponse)
@@ -194,8 +256,9 @@ export default class ApiMakerDevise {
   }
 
   /**
-   * @param {Record<string, any>} httpResponse
-   * @returns {Promise<Record<string, any>>}
+   * Updates local session status from one HTTP response payload.
+   * @param {DeviseSessionStatusResult} httpResponse
+   * @returns {Promise<DeviseSessionStatusResult>}
    */
   static async syncSessionStatusFromHttpResponse(httpResponse) {
     const sessionStatusUpdater = SessionStatusUpdater.current()
@@ -209,17 +272,17 @@ export default class ApiMakerDevise {
   /**
    * Refreshes ApiMaker auth inside the existing websocket connection.
    *
-   * @param {Record<string, any>} args
-   * @returns {Promise<any>}
+   * @param {DeviseScopeArgs & {shadowSessionToken?: string}} args
+   * @returns {Promise<DeviseSessionStatusResult>}
    */
   static async refreshWebsocketSession(args) {
-    return Services.current().sendRequest("Devise::PersistSession", args)
+    return /** @type {DeviseSessionStatusResult} */ (await Services.current().sendRequest("Devise::PersistSession", args))
   }
 
   /**
    * Refreshes auth on the existing subscriptions channel pools.
    *
-   * @param {Record<string, any>} args
+   * @param {DeviseScopeArgs & {shadowSessionToken?: string}} args
    * @returns {Promise<void>}
    */
   static async refreshSubscriptionAuthentication(args) {
@@ -228,10 +291,14 @@ export default class ApiMakerDevise {
 
   /** Constructor. */
   constructor() {
-    this.currents = {}
+    this.currents = /** @type {Record<string, DeviseCurrentScope>} */ ({})
   }
 
-  /** getCurrentScope. */
+  /**
+   * Returns the current model cached for one scope.
+   * @param {string} scope
+   * @returns {DeviseCurrentScope}
+   */
   getCurrentScope(scope) {
     if (!(scope in this.currents)) {
       this.currents[scope] = this.loadCurrentScope(scope)
@@ -240,7 +307,11 @@ export default class ApiMakerDevise {
     return this.currents[scope]
   }
 
-  /** hasGlobalCurrentScope. */
+  /**
+   * Returns whether the server rendered current-scope payload for one scope.
+   * @param {string} scope
+   * @returns {boolean}
+   */
   hasGlobalCurrentScope(scope) {
     if (globalThis.apiMakerDeviseCurrent && scope in globalThis.apiMakerDeviseCurrent) {
       return true
@@ -249,7 +320,11 @@ export default class ApiMakerDevise {
     return false
   }
 
-  /** loadCurrentScope. */
+  /**
+   * Hydrates the current scope model from the server rendered payload.
+   * @param {string} scope
+   * @returns {DeviseCurrentScope}
+   */
   loadCurrentScope(scope) {
     if (!this.hasGlobalCurrentScope(scope)) {
       return null

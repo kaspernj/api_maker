@@ -35,7 +35,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   setup() {
     const {lgUp, mdDown, mdUp} = useBreakpoint()
     const {t} = useI18n({namespace: "js.api_maker.super_admin.layout.menu"})
-    const currentUser = useCurrentUser()
+    const currentUser = useCurrentUser({withData: true}).model
 
     this.currentUser = currentUser
     this.lgUp = lgUp
@@ -131,12 +131,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
                   <Icon name="user" size={12} />
                 </View>
                 <View className="menu-user-name" style={styles.userName ||= {flexShrink: 1, marginLeft: 8}}>
-                  <Text
-                    dataSet={dataSets.menuUserNameContainer ||= {class: "menu-user-name-container"}}
-                    style={styles.userNameContainer ||= {overflow: "hidden", maxWidth: 140}}
-                  >
-                    {currentUser.name()}
-                  </Text>
+                  <View dataSet={dataSets.menuUserNameContainer ||= {class: "menu-user-name-container"}}>
+                    <Text style={styles.userNameContainer ||= {overflow: "hidden", maxWidth: 140}}>
+                      {currentUser.name()}
+                    </Text>
+                  </View>
                 </View>
               </View>
             }

@@ -15,15 +15,15 @@ const dataSets = {}
 
 /**
  * @typedef {object} Props
- * @property {string=} attribute
- * @property {boolean=} checkIfAttributeLoaded
- * @property {any=} children
- * @property {Function|string=} defaultDateFormatName
- * @property {Function|string=} defaultDateTimeFormatName
- * @property {string=} identifier
- * @property {any|string=} label
- * @property {object=} model
- * @property {any=} value
+ * @property {string} [attribute]
+ * @property {boolean} [checkIfAttributeLoaded]
+ * @property {React.ReactNode} [children]
+ * @property {Function|string} [defaultDateFormatName]
+ * @property {Function|string} [defaultDateTimeFormatName]
+ * @property {string} [identifier]
+ * @property {React.ReactNode | string} [label]
+ * @property {object} [model]
+ * @property {React.ReactNode | boolean | Date | number | string | null | undefined} [value]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapAttributeRow extends ShapeComponent {
@@ -78,9 +78,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
         style={actualStyle}
         {...restProps}
       >
-        <Text dataSet={this.cache("labelTextDataSet", {class: "attribute-row-label"})} style={this.cache("labelTextStyle", {fontWeight: "bold"})}>
-          {this.label()}
-        </Text>
+        <View dataSet={this.cache("labelTextDataSet", {class: "attribute-row-label"})}>
+          <Text style={this.cache("labelTextStyle", {fontWeight: "bold"})}>
+            {this.label()}
+          </Text>
+        </View>
         <View dataSet={this.cache("valueViewDataSet", {class: "attribute-row-value"})} style={this.cache("valueViewStyle", {marginTop: 3})}>
           {this.value()}
         </View>
@@ -115,10 +117,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
       return this.valueContent(value)
     }
+
+    return null
   }
 
   /**
-   * @param {any} value
+   * @param {React.ReactNode | boolean | Date | number | string | null | undefined} value
    * @returns {React.ReactNode}
    */
   valueContent(value) {
@@ -126,6 +130,10 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const columnType = this.attribute?.getColumn()?.getType()
 
     if (columnType == "date") {
+      if (!(value instanceof Date)) {
+        return value
+      }
+
       const content = this.presentDateTime({apiMakerType: "date", value})
 
       return (

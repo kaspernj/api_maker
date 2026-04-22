@@ -1,5 +1,5 @@
 // @ts-check
-/** ApiMakerResult. */
+/** Wraps one paginated collection response with convenience accessors. */
 export default class ApiMakerResult {
   /**
    * @param {object} data

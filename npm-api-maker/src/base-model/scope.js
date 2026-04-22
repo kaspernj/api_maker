@@ -2,7 +2,7 @@
 import * as inflection from "inflection"
 import {digg} from "diggerize"
 
-/** ApiMakerBaseModelScope. */
+/** Wraps one model scope definition from the backend recipe metadata. */
 export default class ApiMakerBaseModelScope {
   /**
    * @param {object} scopeData

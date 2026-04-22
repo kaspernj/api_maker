@@ -47,10 +47,12 @@ export default class BaseError extends Error {
     return errorMessages(this.args)
   }
 
-  /** @returns {string[]} */
+  /** @returns {string[] | undefined} */
   errorTypes() {
     if (typeof this.args.response == "object") {
       return digg(this, "args", "response", "errors").map((error) => digg(error, "type"))
     }
+
+    return undefined
   }
 }

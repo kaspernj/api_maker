@@ -2,6 +2,18 @@
 import {EventEmitter} from "eventemitter3"
 import * as inflection from "inflection" // eslint-disable-line sort-imports
 
+/** @typedef {[name: string, minWidth: number]} BreakpointDefinition */
+/** @typedef {[label: string, code: string]} CurrencyOption */
+/** @typedef {Record<string, object>} RouteMap */
+/** @typedef {{routes: Array<{name: string, path: string}>}} RouteDefinitions */
+/**
+ * @typedef {{emit: (eventName: string, payload: {oldValue: ConfigValue, newValue: ConfigValue}) => void}} ConfigEvents
+ */
+/**
+ * @typedef {BreakpointDefinition[] | CurrencyOption[] | RouteMap | RouteDefinitions | EventEmitter |
+ *   boolean | number | object | string | undefined} ConfigValue
+ */
+
 const accessors = {
   breakpoints: {
     default: [
@@ -28,9 +40,17 @@ const accessors = {
   websocketRequests: {required: false}
 }
 
-/** ApiMakerConfig. */
+/**
+ * @param {string} methodName
+ * @returns {never}
+ */
+const apiMakerConfigNotImplemented = (methodName) => {
+  throw new Error(`'${methodName}' not implemented`)
+}
+
+/** Stores globally configured Api Maker integration hooks and runtime dependencies. */
 class ApiMakerConfig {
-  /** Constructor. */
+  /** Initializes the shared config state and change emitter. */
   constructor() {
     if (!globalThis.apiMakerConfigGlobal) globalThis.apiMakerConfigGlobal = {}
 
@@ -38,53 +58,71 @@ class ApiMakerConfig {
     this.events = new EventEmitter()
   }
 
-  /** getEvents. */
+  /**
+   * Returns the event emitter used for config change notifications.
+   * @returns {ConfigEvents}
+   */
   getEvents() { return this.events }
 
   /** @returns {import("history").BrowserHistory} */
-  getHistory() { throw new Error("'getHistory' not implemented") }
+  getHistory() {
+    return apiMakerConfigNotImplemented("getHistory")
+  }
 
   /** @returns {string} */
-  getHost() { throw new Error("'getHost' not implemented") }
+  getHost() {
+    return apiMakerConfigNotImplemented("getHost")
+  }
 
   /** @returns {string | undefined} */
-  getCableUrl() { throw new Error("'getCableUrl' not implemented") }
+  getCableUrl() {
+    return apiMakerConfigNotImplemented("getCableUrl")
+  }
 
   /**
    * @param {string | undefined} _newValue
-   * @returns {void}
    */
-  setCableUrl(_newValue) { throw new Error("'setCableUrl' not implemented") }
+  setCableUrl(_newValue) { apiMakerConfigNotImplemented("setCableUrl") }
 
   /** @returns {boolean | undefined} */
-  getWebsocketRequests() { throw new Error("'getWebsocketRequests' not implemented") }
+  getWebsocketRequests() {
+    return apiMakerConfigNotImplemented("getWebsocketRequests")
+  }
 
   /**
    * @param {boolean | undefined} _newValue
-   * @returns {void}
    */
-  setWebsocketRequests(_newValue) { throw new Error("'setWebsocketRequests' not implemented") }
+  setWebsocketRequests(_newValue) { apiMakerConfigNotImplemented("setWebsocketRequests") }
 
-  /** @returns {any} */
-  getCurrenciesCollection() { throw new Error("'getCurrenciesCollection' not implemented") }
+  /** @returns {Array<CurrencyOption>} */
+  getCurrenciesCollection() {
+    return apiMakerConfigNotImplemented("getCurrenciesCollection")
+  }
 
-  /** @returns {any} */
-  getModal() { throw new Error("'getModal' not implemented") }
+  /** @returns {object} */
+  getModal() {
+    return apiMakerConfigNotImplemented("getModal")
+  }
 
-  /** @returns {Record<string, any>} */
-  getRouteDefinitions() { throw new Error("'getRouteDefinitions' not implemented") }
+  /** @returns {RouteDefinitions} */
+  getRouteDefinitions() {
+    return apiMakerConfigNotImplemented("getRouteDefinitions")
+  }
 
-  /** @returns {Record<string, any>} */
-  getRoutes() { throw new Error("'getRoutes' not implemented") }
+  /** @returns {RouteMap} */
+  getRoutes() {
+    return apiMakerConfigNotImplemented("getRoutes")
+  }
 
   /** @returns {boolean} */
-  getUseHtmlForm() { throw new Error("'getUseHtmlForm' not implemented") }
+  getUseHtmlForm() {
+    return apiMakerConfigNotImplemented("getUseHtmlForm")
+  }
 
   /**
    * @param {boolean} _newValue
-   * @returns {void}
    */
-  setUseHtmlForm(_newValue) { throw new Error("'setUseHtmlForm' not implemented") }
+  setUseHtmlForm(_newValue) { apiMakerConfigNotImplemented("setUseHtmlForm") }
 }
 
 for (const accessorName in accessors) {

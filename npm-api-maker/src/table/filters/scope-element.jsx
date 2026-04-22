@@ -11,7 +11,7 @@ const dataSets = {}
 
 /**
  * @typedef {object} Props
- * @property {boolean=} active
+ * @property {boolean} [active]
  * @property {Function} onScopeClicked
  * @property {string} scope
  */
@@ -29,9 +29,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   render() {
     const {active, scope} = this.p
-    const style = {}
-
-    if (active) style.fontWeight = "bold"
+    const style = active ? /** @type {import("react-native").TextStyle} */ ({fontWeight: "bold"}) : undefined
 
     return (
       <Pressable

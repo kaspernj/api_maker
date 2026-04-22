@@ -2,7 +2,27 @@
 import {Animated} from "react-native"
 import {digg} from "diggerize"
 
+/**
+ * @typedef {object} WidthTableSettingColumn
+ * @property {() => boolean} hasWidth
+ * @property {() => string} identifier
+ * @property {() => string | number} id
+ * @property {() => number} width
+ */
+/**
+ * @typedef {object} WidthColumn
+ * @property {Animated.ValueXY} [animatedPosition]
+ * @property {Animated.Value} [animatedWidth]
+ * @property {Animated.Value} [animatedZIndex]
+ * @property {{className?: string}} [column]
+ * @property {WidthTableSettingColumn} tableSettingColumn
+ * @property {number} [width]
+ */
+
 export default class TableWidths {
+  /**
+   * @param {{columns: WidthColumn[], table: {p: {workplace?: boolean}}, width: number | undefined}} args
+   */
   constructor({columns, table, width}) {
     this.columns = columns
     this.tableWidth = width
@@ -78,7 +98,10 @@ export default class TableWidths {
     }
   }
 
-  /** Apply the measured table width after an initial fallback-width bootstrap. */
+  /**
+   * Apply the measured table width after an initial fallback-width bootstrap.
+   * @param {number} width
+   */
   updateTableWidth(width) {
     this.tableWidth = width
     this.usedFallbackWidth = false

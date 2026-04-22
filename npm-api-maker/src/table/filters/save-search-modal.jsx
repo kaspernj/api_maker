@@ -14,10 +14,36 @@ import apiMakerConfig from "../../config.js"
 
 const TableSearch = modelClassRequire("TableSearch")
 
-/** @typedef {Record<string, never>} Props */
+/** @typedef {import("../../base-model.js").default} BaseModel */
+/** @typedef {BaseModel & {id(): number | string, modelClassData(): {className: string}}} CurrentUserModel */
+/**
+ * @typedef {BaseModel & {
+ *   isNewRecord(): boolean,
+ *   name(): string,
+ *   public(): boolean,
+ *   saveRaw(data: SearchFormData): Promise<void>
+ * }} TableSearchModel
+ */
+/**
+ * @typedef {{table_search: {
+ *   name?: string,
+ *   public?: boolean | string | number,
+ *   query_params?: string,
+ *   user_id?: number | string,
+ *   user_type?: string
+ * }}} SearchFormData
+ */
+/** @typedef {{asObject(): SearchFormData}} SearchForm */
+/**
+ * @typedef {object} Props
+ * @property {() => object[]} currentFilters
+ * @property {CurrentUserModel} currentUser
+ * @property {() => void} onRequestClose
+ * @property {TableSearchModel} search
+ */
 /**
  * @typedef {object} State
- * @property {any} form
+ * @property {SearchForm | null} form
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFiltersSaveSearchModal extends ShapeComponent {
   state = {
@@ -36,7 +62,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     return (
       <Modal onRequestClose={onRequestClose} {...restProps}>
-        <Form onSubmit={this.tt.onSaveSearchSubmit} setForm={/** @type {Record<string, any>} */ (this.setStates).form} useHtmlForm>
+        <Form onSubmit={this.tt.onSaveSearchSubmit} setForm={/** @type {(form: SearchForm | null) => void} */ (this.setStates.form)} useHtmlForm>
           <Input
             defaultValue={search.name()}
             id="table_search_name"

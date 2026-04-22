@@ -1,13 +1,16 @@
 // @ts-check
 import useModelClassEvent from "./use-model-class-event.js"
 
+/** @typedef {typeof import("./base-model.js").default} ModelClassType */
+/** @typedef {import("./base-model.js").default} BaseModel */
+/** @typedef {{model: BaseModel}} CreatedEventPayload */
+/** @typedef {{active?: boolean, debounce?: boolean|number, onConnected?: () => void}} UseCreatedEventArgs */
+/** @typedef {(payload: CreatedEventPayload) => void} EventCallback */
+
 /**
- * @param {Function} modelClass
- * @param {Function} onCreated
- * @param {object} [args]
- * @param {boolean} [args.active]
- * @param {number} [args.debounce]
- * @param {Function} [args.onConnected]
+ * @param {ModelClassType} modelClass
+ * @param {EventCallback} onCreated
+ * @param {UseCreatedEventArgs} [args]
  * @returns {void}
  */
 const ApiMakerUseCreatedEvent = (

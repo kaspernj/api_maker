@@ -15,21 +15,26 @@ const RequireComponentContext = createContext(null)
 const RouteContext = createContext(null)
 const useParams = () => useContext(ParamsContext)
 
+/** @typedef {{params: Record<string, string>}} RouteMatch */
+/** @typedef {React.ComponentType<{match: RouteMatch}>} RouteComponent */
+/** @typedef {{routeDefinition: {component: string}}} RequireComponentArgs */
+/** @typedef {(args: RequireComponentArgs) => RouteComponent | Promise<RouteComponent | null> | null} RequireComponent */
+
 /**
  * @typedef {object} Props
- * @property {any=} children
- * @property {string=} component
- * @property {string=} componentPath
- * @property {boolean=} exact
- * @property {boolean=} fallback
- * @property {boolean=} includeInPath
- * @property {Function=} onMatch
- * @property {string|RegExp=} path
+ * @property {React.ReactNode} [children]
+ * @property {string} [component]
+ * @property {string} [componentPath]
+ * @property {boolean} [exact]
+ * @property {boolean} [fallback]
+ * @property {boolean} [includeInPath]
+ * @property {Function} [onMatch]
+ * @property {string|RegExp} [path]
  */
 /**
  * @typedef {object} State
- * @property {any} Component
- * @property {any} componentNotFound
+ * @property {RouteComponent | null} Component
+ * @property {boolean | null} componentNotFound
  * @property {number} lastMatchUpdate
  * @property {boolean} matches
  */
@@ -51,11 +56,20 @@ const Route = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} *
     path: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(RegExp)])
   })
 
+  /** @type {RouteMatch | null} */
   match = null
+
   loadComponentRequestId = 0
+
+  /** @type {Array<string>} */
   componentPathParts = []
+
   lastMatchUpdate = 0
+
+  /** @type {Record<string, string> | null} */
   newParams = null
+
+  /** @type {Array<string> | null} */
   pathParts = null
   state = {
     Component: null,
@@ -75,9 +89,9 @@ const Route = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} *
     this.log(() => ({givenRoute}))
     this.t = t
 
-    this.requireComponent = useContext(RequireComponentContext)
-    this.currentParams = useContext(ParamsContext)
-    this.currentPath = useContext(CurrentPathContext)
+    this.requireComponent = /** @type {RequireComponent | null} */ (useContext(RequireComponentContext))
+    this.currentParams = /** @type {Record<string, string>} */ (useContext(ParamsContext))
+    this.currentPath = /** @type {Array<string>} */ (useContext(CurrentPathContext))
     this.switchGroup = switchGroup
     this.routeParts = useMemo(() => givenRoute?.split("/"), [path, givenRoute])
     this.pathParts = useMemo(() => path?.split("/"), [path])
@@ -249,9 +263,12 @@ const Route = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} *
 
     this.loadComponentRequestId = requestId
     const actualComponentPath = this.props.componentPath || this.tt.componentPathParts.join("/")
+
+    /** @type {RouteComponent | null} */
     let Component
 
     this.log(() => ["loadComponent", {componentPath: this.props.componentPath, componentPathParts: this.componentPathParts, actualComponentPath}])
+    if (!this.tt.requireComponent) throw new Error("No 'requireComponent' available in route context")
 
     try {
       const componentImport = await this.tt.requireComponent({routeDefinition: {component: actualComponentPath}})

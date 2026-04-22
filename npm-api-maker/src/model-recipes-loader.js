@@ -2,9 +2,11 @@
 import {digg, digs} from "diggerize"
 import ModelRecipesModelLoader from "./model-recipes-model-loader.js"
 
+/** @typedef {{models: Record<string, object>}} ModelRecipesData */
+
 /** Loader that builds model classes from model recipes. */
 export default class ModelRecipesLoader {
-  /** @param {{recipes: Record<string, any>}} args */
+  /** @param {{recipes: ModelRecipesData}} args */
   constructor ({recipes}) {
     this.modelClasses = {}
     this.recipes = recipes

@@ -11,9 +11,9 @@ import Text from "../../utils/text"
 
 /**
  * @typedef {object} Props
- * @property {any} model
- * @property {any} modelClass
- * @property {any} reflection
+ * @property {{[key: string]: Function, modelClassData: () => {name: string}, primaryKey: () => string | number}} model
+ * @property {{humanAttributeName: (attributeName: string) => string}} modelClass
+ * @property {{name: () => string}} reflection
  */
 /** @typedef {Record<string, never>} State */
 /** @augments {ShapeComponent<Props, State>} */

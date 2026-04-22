@@ -14,12 +14,68 @@ import {v4 as uuidv4} from "uuid"
 
 const logger = new Logger({name: "ApiMaker / TableSettings"})
 
+/** @typedef {import("../base-model.js").default & {id(): number | string, modelClassData(): {name: string}}} CurrentUserModel */
+/** @typedef {{attribute?: string, defaultVisible?: boolean, identifier?: string, label?: string, path?: string[], sortKey?: string}} TableColumnDefinition */
+/**
+ * @typedef {object} TableSettingColumnRecord
+ * @property {() => number | string} id
+ * @property {() => string} identifier
+ * @property {() => string | null} path
+ * @property {() => number} position
+ * @property {() => string | undefined} sortKey
+ * @property {() => boolean | null} visible
+ * @property {() => string | undefined} attributeName
+ */
+/**
+ * @typedef {object} TableSettingRecord
+ * @property {() => {loaded(): TableSettingColumnRecord[]}} columns
+ * @property {(data: FormData) => Promise<void>} saveRaw
+ */
+/**
+ * @typedef {object} TableSettingRansackQuery
+ * @property {(name: string) => TableSettingRansackQuery} preload
+ * @property {() => Promise<TableSettingRecord | undefined>} first
+ */
+/** @typedef {new () => TableSettingRecord} TableSettingConstructor */
+/**
+ * @typedef {TableSettingConstructor & {
+ *   ransack(args: {identifier_eq: string, user_id_eq: number | string, user_type_eq: string | null}): TableSettingRansackQuery
+ * }} TableSettingStatic
+ */
+/**
+ * @typedef {object} TableSettingsTableLike
+ * @property {{currentUser?: CurrentUserModel | null}} props
+ * @property {{identifier: string}} state
+ * @property {() => TableColumnDefinition[]} columnsAsArray
+ */
+/**
+ * @typedef {object} PreparedColumnsResult
+ * @property {Array<{column: TableColumnDefinition | undefined, tableSettingColumn: TableSettingColumnRecord}>} columns
+ * @property {string[]} preload
+ */
+/**
+ * @typedef {object} TableColumnSaveData
+ * @property {string | undefined} attribute_name
+ * @property {number | string | undefined} [id]
+ * @property {string} identifier
+ * @property {string[] | undefined} path
+ * @property {number} [position]
+ * @property {string | undefined} sort_key
+ * @property {boolean | null} [visible]
+ * @property {true} [_destroy]
+ */
+const TableSettingModel = /** @type {TableSettingStatic} */ (TableSetting)
+
 // Have a lock for each unique table identifier
-const tableSettingsLocks = {}
+const tableSettingsLocks = /** @type {Record<string, ReadersWriterLock>} */ ({})
 
 /** Persistent table settings manager. */
 export default class ApiMakerTableSettings {
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {object} root0
+   * @param {TableSettingsTableLike} root0.table
+   */
   constructor({table}) {
     this.table = table
     this.setTableSettingsLock()
@@ -36,23 +92,27 @@ export default class ApiMakerTableSettings {
     this.tableSettingsLock = digg(tableSettingsLocks, identifier)
   }
 
-  /** columns. */
+  /** @returns {TableColumnDefinition[]} */
   columns = () => this.table.columnsAsArray()
 
-  /** columnsWithPositions. */
+  /** @returns {Array<{column: TableColumnDefinition, identifier: string, position: number}>} */
   columnsWithPositions = () => {
     return this
       .columns()
       .map((column, columnIndex) => ({column, identifier: columnIdentifier(column), position: columnIndex + 1}))
   }
 
-  /** currentUser. */
+  /** @returns {CurrentUserModel | null} */
   currentUser = () => digg(this, "table", "props", "currentUser")
 
-  /** identifier. */
+  /** @returns {string} */
   identifier = () => digg(this, "table", "state", "identifier")
 
-  /** preparedColumns. */
+  /**
+   * preparedColumns.
+   * @param {TableSettingRecord} tableSetting
+   * @returns {PreparedColumnsResult | undefined}
+   */
   preparedColumns = (tableSetting) => {
     const columns = this.table.columnsAsArray()
     const ordered = this.orderedTableSettingColumns(tableSetting)
@@ -81,7 +141,11 @@ export default class ApiMakerTableSettings {
     return result
   }
 
-  /** orderedTableSettingColumns. */
+  /**
+   * orderedTableSettingColumns.
+   * @param {TableSettingRecord} tableSetting
+   * @returns {TableSettingColumnRecord[]}
+   */
   orderedTableSettingColumns = (tableSetting) => {
     return tableSetting
       .columns()
@@ -89,7 +153,7 @@ export default class ApiMakerTableSettings {
       .sort((tableSettingColumn1, tableSettingColumn2) => tableSettingColumn1.position() - tableSettingColumn2.position())
   }
 
-  /** loadExistingOrCreateTableSettings. */
+  /** @returns {Promise<TableSettingRecord>} */
   loadExistingOrCreateTableSettings = async () => {
     return await this.tableSettingsLock.write(async () => {
       let tableSetting = await this.loadTableSetting()
@@ -106,11 +170,11 @@ export default class ApiMakerTableSettings {
     })
   }
 
-  /** loadTableSetting. */
+  /** @returns {Promise<TableSettingRecord | undefined>} */
   loadTableSetting = async () => {
-    if (!TableSetting) throw new Error("TableSetting model isn't globally available")
+    if (!TableSettingModel) throw new Error("TableSetting model isn't globally available")
 
-    const tableSetting = await TableSetting
+    const tableSetting = await TableSettingModel
       .ransack({
         identifier_eq: this.identifier(),
         user_id_eq: this.currentUserIdOrFallback(),
@@ -122,7 +186,10 @@ export default class ApiMakerTableSettings {
     return tableSetting
   }
 
-  /** currentUserIdOrFallback. */
+  /**
+   * currentUserIdOrFallback.
+   * @returns {number | string}
+   */
   currentUserIdOrFallback() {
     const currentUser = this.currentUser()
 
@@ -131,7 +198,10 @@ export default class ApiMakerTableSettings {
     return this.anonymouseUserId()
   }
 
-  /** currentUserTypeOrFallback. */
+  /**
+   * currentUserTypeOrFallback.
+   * @returns {string | null}
+   */
   currentUserTypeOrFallback() {
     const currentUser = this.currentUser()
 
@@ -140,7 +210,10 @@ export default class ApiMakerTableSettings {
     return null
   }
 
-  /** anonymouseUserId. */
+  /**
+   * anonymouseUserId.
+   * @returns {string}
+   */
   anonymouseUserId() {
     const variableName = `ApiMakerTableAnonymousUserId-${this.identifier()}`
 
@@ -153,7 +226,7 @@ export default class ApiMakerTableSettings {
     return digg(localStorage, variableName)
   }
 
-  /** createInitialTableSetting. */
+  /** @returns {Promise<TableSettingRecord>} */
   createInitialTableSetting = async () => {
     const tableSettingData = {
       identifier: this.identifier(),
@@ -166,7 +239,7 @@ export default class ApiMakerTableSettings {
       tableSettingData.columns_attributes[columnKey] = this.columnSaveData(column, {identifier, position})
     }
 
-    const tableSetting = new TableSetting()
+    const tableSetting = new TableSettingModel()
     const tableSettingFormData = objectToFormData({table_setting: tableSettingData})
 
     await tableSetting.saveRaw(tableSettingFormData)
@@ -178,7 +251,14 @@ export default class ApiMakerTableSettings {
     return reloadedTableSetting
   }
 
-  /** columnSaveData. */
+  /**
+   * columnSaveData.
+   * @param {TableColumnDefinition} column
+   * @param {object} root0
+   * @param {string} root0.identifier
+   * @param {number} root0.position
+   * @returns {TableColumnSaveData}
+   */
   columnSaveData(column, {identifier, position}) {
     return {
       attribute_name: column.attribute,
@@ -190,7 +270,11 @@ export default class ApiMakerTableSettings {
     }
   }
 
-  /** updateTableSetting. */
+  /**
+   * updateTableSetting.
+   * @param {TableSettingRecord} tableSetting
+   * @returns {Promise<TableSettingRecord>}
+   */
   updateTableSetting = async (tableSetting) => {
     const changedAttributesList = ["attributeName", "sortKey"]
     const columnsWithPositions = this.columnsWithPositions()

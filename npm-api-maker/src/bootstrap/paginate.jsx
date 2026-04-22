@@ -22,7 +22,7 @@ const ELLIPSIS_LABEL = "…"
 
 /**
  * @typedef {object} Props
- * @property {any|Result} result
+ * @property {Result} result
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapPaginate extends ShapeComponent {

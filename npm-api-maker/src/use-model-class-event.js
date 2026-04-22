@@ -6,6 +6,16 @@ import PropTypes from "prop-types"
 import debounceFunction from "debounce"
 import propTypesExact from "prop-types-exact"
 
+/** @typedef {import("./base-model.js").default} BaseModel */
+/** @typedef {string | number | boolean | null} EventArgumentPrimitive */
+/** @typedef {EventArgumentPrimitive | EventArgumentPrimitive[]} EventArgumentValue */
+/** @typedef {{args: Record<string, EventArgumentValue>, eventName: string}} ModelClassEventPayload */
+/** @typedef {{model: BaseModel}} CreatedEventPayload */
+/** @typedef {CreatedEventPayload | ModelClassEventPayload} ModelClassSubscriptionPayload */
+/** @typedef {{active?: boolean, debounce?: boolean|number, onConnected?: () => void}} UseModelClassEventArgs */
+/** @typedef {typeof import("./base-model.js").default} ModelClassType */
+/** @typedef {(payload: ModelClassSubscriptionPayload) => void} EventCallback */
+
 /** Hook state container for model-class event subscriptions. */
 class UseModelClassEventShapeHook extends ShapeHook {
   static defaultProps = {
@@ -41,23 +51,27 @@ class UseModelClassEventShapeHook extends ShapeHook {
     )
   }
 
-  /** @param {any[]} callbackArgs */
-  onModelClassEventCallback(...callbackArgs) {
+  /**
+   * Forwards a model-class subscription payload to the caller.
+   * @param {ModelClassSubscriptionPayload} payload
+   * @returns {void}
+   */
+  onModelClassEventCallback(payload) {
     if (!this.p.active) {
       return
     }
 
     if (this.p.debounce) {
-      this.debouncedOnCallback()(...callbackArgs)
+      this.debouncedOnCallback()(payload)
     } else {
-      this.p.onCallback(...callbackArgs)
+      this.p.onCallback(payload)
     }
   }
 
   /** @returns {void} */
   setup() {
     useEffect(() => {
-      const callback = (...callbackArgs) => this.onModelClassEventCallback(...callbackArgs)
+      const callback = (payload) => this.onModelClassEventCallback(payload)
       const modelClassConnection = this.p.event == "creates"
         ? ModelEvents.connectCreated(this.p.modelClass, callback)
         : ModelEvents.connectModelClass(this.p.modelClass, this.p.event, callback)
@@ -78,16 +92,12 @@ class UseModelClassEventShapeHook extends ShapeHook {
 }
 
 /**
- * @param {Function} modelClass
+ * @param {ModelClassType} modelClass
  * @param {string} event
- * @param {Function} onCallback
- * @param {object} [args]
-  * @param {boolean} [args.active]
-  * @param {number} [args.debounce]
-  * @param {Function} [args.onConnected]
-  * @returns {void}
-  */
-/** apiMakerUseModelClassEvent. */
+ * @param {EventCallback} onCallback
+ * @param {UseModelClassEventArgs} [args]
+ * @returns {void}
+ */
 // eslint-disable-next-line max-params
 const apiMakerUseModelClassEvent = (modelClass, event, onCallback, args = {}) => {
   const {active = true, debounce = 0, onConnected, ...restProps} = args

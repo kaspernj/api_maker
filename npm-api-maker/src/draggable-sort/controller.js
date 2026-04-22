@@ -2,64 +2,117 @@
 import {digg} from "diggerize"
 import {EventEmitter} from "eventemitter3" // eslint-disable-line sort-imports
 
+/** @typedef {import("eventemitter3").EventEmitter} DraggableSortEventEmitter */
+/** @typedef {import("react-native").LayoutRectangle} DraggableSortLayout */
+/** @typedef {import("react-native").PanResponderGestureState} DraggableSortGestureState */
+/** @typedef {{x: number, y: number}} DraggableSortPosition */
+/** @typedef {(item: object) => string} DraggableSortKeyExtractor */
+/**
+ * @typedef {object} DraggableSortItemData
+ * @property {number} index
+ * @property {object} item
+ * @property {number} position
+ * @property {number} [baseX]
+ * @property {DraggableSortEventEmitter} [events]
+ * @property {DraggableSortLayout} [initialLayout]
+ * @property {string} [key]
+ * @property {DraggableSortLayout} [layout]
+ */
+/**
+ * @typedef {object} DraggableSortDragEndArgs
+ * @property {number} fromIndex
+ * @property {object} fromItem
+ * @property {number} fromPosition
+ * @property {object} item
+ * @property {DraggableSortItemData} itemData
+ * @property {object|null} toItem
+ * @property {number|null} toPosition
+ */
+
 /** Controller for drag-sort row state and events. */
 export default class DraggableSortController {
-  /** Constructor. */
+  /**
+   * Set up drag-sort state for a list of draggable items.
+   * @param {object} root0
+   * @param {object[]} root0.data
+   * @param {DraggableSortEventEmitter} [root0.events]
+   * @param {DraggableSortKeyExtractor} root0.keyExtractor
+   */
   constructor({data, events, keyExtractor}) {
-    this.data = data
-    this.currentOrder = [...data]
-    this.events = events || new EventEmitter()
-    this.keyExtractor = keyExtractor
+    this.data = /** @type {object[]} */ (data)
+    this.currentOrder = /** @type {object[]} */ ([...data])
+    this.events = /** @type {DraggableSortEventEmitter} */ (events || new EventEmitter())
+    this.keyExtractor = /** @type {DraggableSortKeyExtractor} */ (keyExtractor)
+    this.draggedItem = /** @type {object|null} */ (null)
+    this.draggedItemData = /** @type {DraggableSortItemData|null} */ (null)
+    this.draggedItemNewPosition = /** @type {number|null} */ (null)
+    this.draggedOverItem = /** @type {object|null} */ (null)
+    this.draggedOverItemData = /** @type {DraggableSortItemData|null} */ (null)
+    this.itemData = /** @type {Record<number, DraggableSortItemData>} */ ({})
 
-    this.draggedItem = null
-    this.draggedItemData = null
-    this.draggedItemNewPosition = null
-
-    this.draggedOverItem = null
-    this.draggedOverItemData = null
-
-    this.itemData = {}
-
-    for (const itemIndex in data) {
+    for (const [itemIndex, item] of data.entries()) {
       this.itemData[itemIndex] = {
         index: itemIndex,
-        item: data[itemIndex],
+        item,
         position: itemIndex
       }
     }
   }
 
-  /** getEvents. */
+  /** @returns {DraggableSortEventEmitter} */
   getEvents = () => this.events
 
-  /** getItemDataForItem. */
+  /**
+   * Return the tracked drag metadata for the given item instance.
+   * @param {object} item
+   * @returns {DraggableSortItemData|undefined}
+   */
   getItemDataForItem = (item) => this.getItemDataForIndex(this.data.indexOf(item))
 
-  /** getItemDataForKey. */
-  getItemDataForKey = (key) => this.itemData.find((itemDataI) => digg(itemDataI, "key") == key)
+  /**
+   * Look up item metadata by its extracted stable key.
+   * @param {string} key
+   * @returns {DraggableSortItemData|undefined}
+   */
+  getItemDataForKey = (key) => Object.values(this.itemData).find((itemDataI) => digg(itemDataI, "key") == key)
 
-  /** getItemDataForIndex. */
+  /**
+   * Return the tracked drag metadata stored for a list index.
+   * @param {number} index
+   * @returns {DraggableSortItemData|undefined}
+   */
   getItemDataForIndex = (index) => digg(this, "itemData", index)
 
-  /** onDragStart. */
+  /**
+   * Mark an item as the active dragged row and publish the drag-start event.
+   * @param {object} root0
+   * @param {object} root0.item
+   * @param {number} root0.itemIndex
+   */
   onDragStart = ({item, itemIndex}) => {
     if (item) {
       this.draggedItem = item
       this.draggedItemData = this.getItemDataForIndex(itemIndex)
+      if (!this.draggedItemData) throw new Error(`Item data not found for index ${itemIndex}`)
+
       this.draggedItemIndex = itemIndex
       this.draggedItemPosition = this.draggedItemData.position
       this.events.emit("onDragStart", {item, itemData: this.draggedItemData})
     }
   }
 
-  /** onDragEnd. */
+  /** Finish the current drag and notify listeners about the final ordering. */
   onDragEnd = () => {
+    if (!this.draggedItemData || !this.draggedItem) throw new Error("Cannot end drag without an active dragged item")
+
     const itemData = this.draggedItemData
     const fromIndex = itemData.index
     const fromPosition = digg(this, "draggedItemPosition")
     const toPosition = this.draggedItemNewPosition
     const fromItem = this.draggedItem
     const toItem = this.draggedOverItem
+
+    /** @type {DraggableSortDragEndArgs} */
     const callbackArgs = {item: itemData.item, itemData, fromIndex, fromItem, fromPosition, toItem, toPosition}
 
     this.draggedItemData.events.emit("resetPosition", {
@@ -78,7 +131,14 @@ export default class DraggableSortController {
     this.events.emit("onDragEnd", callbackArgs)
   }
 
-  /** onItemLayout. */
+  /**
+   * Store layout data and event bindings for a rendered draggable item.
+   * @param {object} root0
+   * @param {DraggableSortEventEmitter} root0.events
+   * @param {number} root0.index
+   * @param {object} root0.item
+   * @param {DraggableSortLayout} root0.layout
+   */
   onItemLayout = ({events, index, item, layout}) => {
     if (!(index in this.itemData)) throw new Error(`Item not found for index ${index}`)
 
@@ -94,21 +154,26 @@ export default class DraggableSortController {
     }
   }
 
-  /** onMove. */
+  /**
+   * Update ordering as the active dragged item crosses other item positions.
+   * @param {object} root0
+   * @param {DraggableSortGestureState} root0.gestate
+   */
   onMove = ({gestate}) => {
+    if (!this.draggedItemData || !this.initialDragPosition) return
+
     // Send move-event to the item being dragged so it will actually move around
     this.draggedItemData?.events?.emit("move", {gestate})
 
     const moveX = gestate.dx + this.initialDragPosition.x
 
-    for (const itemIndex in this.itemData) {
-      const itemData = this.getItemDataForIndex(itemIndex)
+    for (const itemData of Object.values(this.itemData)) {
       const baseX = digg(itemData, "baseX")
       let smallestWidth = this.draggedItemData.layout.width
 
       if (itemData.layout.width < smallestWidth) smallestWidth = itemData.layout.width
 
-      if (moveX > baseX && moveX < baseX + smallestWidth && itemIndex != this.draggedItemData.index) {
+      if (moveX > baseX && moveX < baseX + smallestWidth && itemData.index != this.draggedItemData.index) {
         this.draggedOverItem = itemData.item
         this.draggedOverItemData = itemData
 
@@ -127,17 +192,22 @@ export default class DraggableSortController {
     }
   }
 
-  /** setInitialDragPosition. */
+  /**
+   * Store the touch position where the current drag gesture started.
+   * @param {DraggableSortPosition} initialDragPosition
+   */
   setInitialDragPosition = (initialDragPosition) => {
     this.initialDragPosition = initialDragPosition
   }
 
-  /** updatePositionOfItems. */
+  /** Animate non-dragged items into their current ordered positions. */
   updatePositionOfItems() {
     let currentPosition = 0
 
     for (const item of this.currentOrder) {
       const itemData = this.getItemDataForItem(item)
+
+      if (!itemData) throw new Error("Could not find item data while updating positions")
 
       if (digg(itemData, "index") != digg(this, "draggedItemData", "index")) {
         // Dont animate dragged element to a new position because it is currently being dragged

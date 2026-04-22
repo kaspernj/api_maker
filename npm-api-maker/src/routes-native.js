@@ -5,9 +5,26 @@ import qs from "qs"
 import urlEncode from "./url-encode.js"
 
 /** @typedef {{type: "pathPart", name: string} | {type: "variable", count: number}} PathPart */
-/** @typedef {{args: Array<unknown>, localizedRoutes?: Record<string, PathPart[]>, pathParts?: PathPart[], url?: boolean}} TranslateRouteArgs */
+/** @typedef {string | number | boolean} RoutePathArgument */
+/** @typedef {string | number | boolean | null | undefined} RouteQueryPrimitive */
+/** @typedef {RouteQueryPrimitive | RouteQueryPrimitive[] | object} RouteQueryValue */
+/** @typedef {Record<string, RouteQueryValue>} RouteQueryParams */
 /** @typedef {{host?: string, port?: number|string, protocol?: string, translatedRoute: string}} HostRouteArgs */
-/** @typedef {{locale?: string, host?: string, port?: number|string, protocol?: string} & Record<string, unknown>} RouteOptions */
+/** @typedef {{locale?: string, host?: string, port?: number|string, protocol?: string} & RouteQueryParams} RouteOptions */
+/**
+ * @typedef {object} TranslateRouteArgs
+ * @property {Array<RoutePathArgument | RouteOptions>} args
+ * @property {Record<string, PathPart[]>} [localizedRoutes]
+ * @property {PathPart[]} [pathParts]
+ * @property {boolean} [url]
+ */
+
+/**
+ * Returns true when a value is a trailing route-options object instead of a path argument.
+ * @param {RoutePathArgument | RouteOptions | undefined} value
+ * @returns {value is RouteOptions}
+ */
+const isRouteOptions = (value) => Boolean(value) && typeof value == "object" && !Array.isArray(value)
 
 /**
  * Builds paths and URLs from route definitions for native usage.
@@ -22,7 +39,7 @@ export default class ApiMakerRoutesNative {
 
   /**
    * @param {object} routeDefinitions
-   * @param {{localized?: boolean}=} routeDefinitionArgs
+   * @param {{localized?: boolean}} [routeDefinitionArgs]
    * @returns {void}
    */
   loadRouteDefinitions (routeDefinitions, routeDefinitionArgs) {
@@ -108,16 +125,10 @@ export default class ApiMakerRoutesNative {
    * @returns {string}
    */
   translateRoute ({args, localizedRoutes, pathParts, url}) {
-    let options = /** @type {RouteOptions} */ {}
-
     // Extract options from args if any
     const lastArg = args[args.length - 1]
-
-    if (lastArg && typeof lastArg == "object") {
-      options = /** @type {RouteOptions} */ args.pop()
-    } else {
-      options = {}
-    }
+    const poppedArg = isRouteOptions(lastArg) ? args.pop() : undefined
+    const options = isRouteOptions(poppedArg) ? poppedArg : /** @type {RouteOptions} */ ({})
 
     // Take locale from options if given or fall back to fallback
     const {locale, host, port, protocol, ...restOptions} = options

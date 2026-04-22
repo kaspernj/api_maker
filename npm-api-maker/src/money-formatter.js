@@ -4,10 +4,13 @@ import Money from "js-money"
 import formatNumber from "format-number"
 import replaceall from "replaceall"
 
+/** @typedef {{id?: string, iso_code?: string, code?: string}} MoneyCurrencyLike */
+/** @typedef {{amount?: number | string, fractional?: number | string, currency: string | MoneyCurrencyLike}} MoneyLike */
+
 /** Money formatter and converter utilities. */
 export default class MoneyFormatter {
   /**
-   * @param {Money | {amount?: number | string, fractional?: number | string, currency: any}} money
+   * @param {Money | MoneyLike} money
    * @param {{decimals?: number | null, excludeCurrency?: boolean}} [args]
    * @returns {MoneyFormatter}
    */
@@ -16,7 +19,7 @@ export default class MoneyFormatter {
   }
 
   /**
-   * @param {Money | {amount?: number | string, fractional?: number | string, currency: any}} money
+   * @param {Money | MoneyLike} money
    * @param {{decimals?: number | null, excludeCurrency?: boolean}} [args]
    * @returns {string}
    */
@@ -38,7 +41,7 @@ export default class MoneyFormatter {
   }
 
   /**
-   * @param {Money | {amount?: number | string, fractional?: number | string, currency: any}} money
+   * @param {Money | MoneyLike} money
    * @returns {number}
    */
   static amountFromMoney (money) {
@@ -52,8 +55,8 @@ export default class MoneyFormatter {
   }
 
   /**
-   * @param {Money | {currency: any}} money
-   * @returns {any}
+   * @param {Money | Pick<MoneyLike, "currency">} money
+   * @returns {typeof Money.USD}
    */
   static currencyFromMoney (money) {
     let currencyString
@@ -80,7 +83,7 @@ export default class MoneyFormatter {
   }
 
   /**
-   * @param {any} value
+   * @param {unknown} value
    * @returns {boolean}
    */
   static isMoney(value) {
@@ -93,7 +96,7 @@ export default class MoneyFormatter {
   }
 
   /**
-   * @param {Money | {amount?: number | string, fractional?: number | string, currency: any}} money
+   * @param {Money | MoneyLike} money
    * @param {{decimals?: number | null, excludeCurrency?: boolean}} [args]
    */
   constructor (money, args = {}) {

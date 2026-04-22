@@ -1,7 +1,14 @@
 // @ts-check
 import * as inflection from "inflection"
 
-/** Build deterministic input name for a component. */
+/** @typedef {{modelClassData: () => {paramKey: string}}} InputModelLike */
+/** @typedef {{props: {attribute?: string, model?: InputModelLike, name?: string, type?: string}}} InputComponentLike */
+
+/**
+ * Build deterministic input name for a component.
+ * @param {InputComponentLike} component
+ * @returns {string | undefined}
+ */
 export default function apiMakerNameForComponent (component) {
   if ("name" in component.props) {
     return component.props.name

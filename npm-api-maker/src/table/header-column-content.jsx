@@ -13,7 +13,7 @@ import Text from "../utils/text"
 /**
  * @typedef {object} Props
  * @property {object} column
- * @property {object=} sortLinkProps
+ * @property {object} [sortLinkProps]
  * @property {object} table
  * @property {object} tableSettingColumn
  */

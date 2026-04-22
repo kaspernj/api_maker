@@ -12,9 +12,46 @@ import uniqunize from "uniqunize"
  * @typedef {InstanceType<MC>} ModelOf
  */
 
-/** @typedef {Record<string, any>} PreloadMap */
-
-/** @typedef {string | Array<string | PreloadMap> | PreloadMap} PreloadValue */
+/** @typedef {Record<string, string | string[] | Record<string, string | string[]>>} PreloadMap */
+/** @typedef {string | string[] | PreloadMap} PreloadValue */
+/** @typedef {Record<string, string | number | boolean | null | Array<string | number | boolean | null>>} CollectionSearchParamMap */
+/** @typedef {CollectionSearchParamMap | string[]} CollectionSearchParams */
+/** @typedef {Record<string, string | number | boolean | null>} CollectionRansackParams */
+/**
+ * @typedef {(
+ *   string |
+ *   number |
+ *   boolean |
+ *   null |
+ *   Array<string | [string, string]> |
+ *   PreloadValue |
+ *   CollectionRansackParams |
+ *   CollectionSearchParams |
+ *   Record<string, string[]>
+ * )} QueryParamValue
+ */
+/** @typedef {Record<string, QueryParamValue>} QueryParamValueMap */
+/**
+ * @typedef {object} CollectionResponseMeta
+ * @property {number} count
+ * @property {number} currentPage
+ * @property {number} perPage
+ * @property {number} totalCount
+ * @property {number} totalPages
+ */
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ * @typedef {object} CollectionResponse
+ * @property {Array<ModelOf<MC>>} collection
+ * @property {CollectionResponseMeta} meta
+ */
+/**
+ * @template {typeof import("./base-model.js").default} MC
+ * @typedef {object} ResultArgs
+ * @property {ApiMakerCollection<MC>} collection
+ * @property {Array<ModelOf<MC>>} models
+ * @property {CollectionResponse<MC>} response
+ */
 
 /**
  * @template {typeof import("./base-model.js").default} MC
@@ -34,12 +71,12 @@ import uniqunize from "uniqunize"
  * @property {number} [limit]
  * @property {number} [page]
  * @property {string} [pageKey]
- * @property {Record<string, any>} [params]
+ * @property {QueryParamValueMap} [params]
  * @property {number} [per]
  * @property {string} [perKey]
  * @property {PreloadValue} [preload]
- * @property {Record<string, any>} [ransack]
- * @property {Record<string, any>} [search]
+ * @property {CollectionRansackParams} [ransack]
+ * @property {CollectionSearchParams} [search]
  * @property {string} [searchKey]
  * @property {Record<string, string[]>} [select]
  * @property {Record<string, string[]>} [selectColumns]
@@ -200,7 +237,7 @@ export default class ApiMakerCollection {
       throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
     }
 
-    return this.args.model.relationshipsCache[this.args.reflectionName]
+    return /** @type {Array<ModelOf<MC>>} */ (this.args.model.relationshipsCache[this.args.reflectionName])
   }
 
   /** @returns {ModelOf<MC> | Array<ModelOf<MC>>} */
@@ -208,9 +245,9 @@ export default class ApiMakerCollection {
     const {model, reflectionName} = this.args
 
     if (reflectionName in model.relationships) {
-      return model.relationships[reflectionName]
+      return /** @type {ModelOf<MC> | Array<ModelOf<MC>>} */ (model.relationships[reflectionName])
     } else if (reflectionName in model.relationshipsCache) {
-      return model.relationshipsCache[reflectionName]
+      return /** @type {ModelOf<MC> | Array<ModelOf<MC>>} */ (model.relationshipsCache[reflectionName])
     } else if (model.isNewRecord()) {
       const reflectionNameUnderscore = inflection.underscore(reflectionName)
 
@@ -257,8 +294,10 @@ export default class ApiMakerCollection {
       model.relationships[reflectionName] = []
     }
 
-    if (!model.relationships[reflectionName].includes(newModel)) {
-      model.relationships[reflectionName].push(newModel)
+    const relationshipModels = /** @type {Array<ModelOf<MC>>} */ (model.relationships[reflectionName])
+
+    if (!relationshipModels.includes(newModel)) {
+      relationshipModels.push(newModel)
     }
   }
 
@@ -277,7 +316,7 @@ export default class ApiMakerCollection {
 
   /**
    * @param {function(import("./base-model.js").default): void} callback
-   * @returns {any[]}
+   * @returns {Array<unknown>}
    */
   map(callback) { return this.loadedArray().map(callback) }
 
@@ -327,9 +366,9 @@ export default class ApiMakerCollection {
     return false
   }
 
-  /** @returns {Record<string, any>} */
+  /** @returns {QueryParamValueMap} */
   params() {
-    let params = {}
+    let params = /** @type {QueryParamValueMap} */ ({})
 
     if (this.queryArgs.params) params = incorporate(params, this.queryArgs.params)
     if (this.queryArgs.abilities) params.abilities = this.queryArgs.abilities
@@ -366,7 +405,7 @@ export default class ApiMakerCollection {
   }
 
   /**
-   * @param {Record<string, any>} params
+   * @param {CollectionRansackParams} params
    * @returns {this}
    */
   ransack(params) {
@@ -376,18 +415,18 @@ export default class ApiMakerCollection {
 
   /** @returns {Promise<Result>} */
   async result() {
-    const response = await this._response()
+    const response = /** @type {CollectionResponse<MC>} */ (await this._response())
     const models = digg(response, "collection")
 
     this._addQueryToModels(models)
 
-    const result = new Result(/** @type {any} */ ({collection: this, models, response}))
+    const result = new Result({collection: this, models, response})
 
     return result
   }
 
   /**
-   * @param {Record<string, any>} params
+   * @param {CollectionSearchParams} params
    * @returns {this}
    */
   search(params) {
@@ -504,7 +543,7 @@ export default class ApiMakerCollection {
     return this
   }
 
-  /** @returns {Promise<{collection: Array<ModelOf<MC>>}>} */
+  /** @returns {import("./command-execution.js").default} */
   _response() {
     if (!this.args) throw new Error("No args?")
     if (!this.args.modelClass) throw new Error("No modelClass in args")

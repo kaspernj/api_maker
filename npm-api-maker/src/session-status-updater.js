@@ -10,9 +10,30 @@ const shared = {}
 
 // logger.setDebug(true)
 
+/**
+ * @typedef {object} SessionStatusScope
+ * @property {boolean} signed_in
+ */
+
+/**
+ * @typedef {object} SessionStatusResult
+ * @property {string} [csrf_token]
+ * @property {Record<string, SessionStatusScope>} scopes
+ */
+
+/**
+ * @typedef {object} SessionStatusUpdaterArgs
+ * @property {number} [timeout]
+ * @property {boolean} [useMetaElement]
+ */
+
 /** Tracks session and CSRF token freshness. */
 export default class ApiMakerSessionStatusUpdater {
-  /** current. */
+  /**
+   * Returns the shared session-status updater instance.
+   * @param {SessionStatusUpdaterArgs} [args]
+   * @returns {ApiMakerSessionStatusUpdater}
+   */
   static current(args) {
     if (!shared.apiMakerSessionStatusUpdater) {
       shared.apiMakerSessionStatusUpdater = new ApiMakerSessionStatusUpdater(args)
@@ -21,7 +42,10 @@ export default class ApiMakerSessionStatusUpdater {
     return shared.apiMakerSessionStatusUpdater
   }
 
-  /** Constructor. */
+  /**
+   * Sets up session-status polling and browser wake/online listeners.
+   * @param {SessionStatusUpdaterArgs} [args]
+   */
   constructor(args = {}) {
     this.events = {}
     this.timeout = args.timeout || 600000
@@ -41,12 +65,12 @@ export default class ApiMakerSessionStatusUpdater {
     this.connectWakeEvent()
   }
 
-  /** connectOnlineEvent. */
+  /** Re-checks session state when the browser comes back online. */
   connectOnlineEvent() {
     window.addEventListener("online", this.updateSessionStatus, false)
   }
 
-  /** connectWakeEvent. */
+  /** Re-checks session state when the device wakes from sleep. */
   connectWakeEvent() {
     wakeEvent(this.updateSessionStatus)
   }
@@ -84,7 +108,10 @@ export default class ApiMakerSessionStatusUpdater {
     return undefined
   }
 
-  /** sessionStatus. */
+  /**
+   * Requests the latest backend session-status payload.
+   * @returns {Promise<SessionStatusResult>}
+   */
   sessionStatus() {
     return new Promise((resolve) => {
       const host = config.getHost()
@@ -104,13 +131,16 @@ export default class ApiMakerSessionStatusUpdater {
     })
   }
 
-  /** onSignedOut. */
+  /**
+   * Registers a callback for frontend sign-out detection.
+   * @param {Function} callback
+   */
   onSignedOut(callback) {
     // @ts-expect-error
     this.addEvent("onSignedOut", callback)
   }
 
-  /** startTimeout. */
+  /** Starts or refreshes the periodic session-status timer. */
   startTimeout() {
     logger.debug("startTimeout")
 
@@ -126,13 +156,13 @@ export default class ApiMakerSessionStatusUpdater {
     )
   }
 
-  /** stopTimeout. */
+  /** Stops the periodic session-status timer if it is running. */
   stopTimeout() {
     if (this.updateTimeout)
       clearTimeout(this.updateTimeout)
   }
 
-  /** updateSessionStatus. */
+  /** Fetches the latest session status and applies it locally. */
   updateSessionStatus = async () => {
     logger.debug("updateSessionStatus")
 
@@ -142,7 +172,7 @@ export default class ApiMakerSessionStatusUpdater {
   }
 
   /**
-   * @param {Record<string, any>} result
+   * @param {SessionStatusResult} result
    * @returns {void}
    */
   applyResult(result) {
@@ -152,7 +182,10 @@ export default class ApiMakerSessionStatusUpdater {
     this.updateUserSessionsFromResult(result)
   }
 
-  /** updateMetaElementsFromResult. */
+  /**
+   * Updates the cached and DOM CSRF token from one session-status response.
+   * @param {SessionStatusResult} result
+   */
   updateMetaElementsFromResult(result) {
     logger.debug("updateMetaElementsFromResult")
 
@@ -174,14 +207,21 @@ export default class ApiMakerSessionStatusUpdater {
     }
   }
 
-  /** updateUserSessionsFromResult. */
+  /**
+   * Applies each returned scope status to the frontend Devise cache.
+   * @param {SessionStatusResult} result
+   */
   updateUserSessionsFromResult(result) {
     for (const scopeName in result.scopes) {
       this.updateUserSessionScopeFromResult(scopeName, result.scopes[scopeName])
     }
   }
 
-  /** updateUserSessionScopeFromResult. */
+  /**
+   * Applies one scope's signed-in state to the frontend Devise cache.
+   * @param {string} scopeName
+   * @param {SessionStatusScope} scope
+   */
   updateUserSessionScopeFromResult(scopeName, scope) {
     const deviseIsSignedInMethodName = `is${inflection.camelize(scopeName)}SignedIn`
 

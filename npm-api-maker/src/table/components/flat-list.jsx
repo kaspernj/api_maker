@@ -5,7 +5,7 @@ import memo from "set-state-compare/build/memo.js"
 import React from "react"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 
-/** @typedef {Record<string, never>} Props */
+/** @typedef {import("react-native").FlatListProps<object>} Props */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class SharedTagble extends ShapeComponent {
   render() {
@@ -16,7 +16,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
 
     return (
-      <FlatList style={actualStyle} {.../** @type {any} */ (restProps)} />
+      <FlatList style={actualStyle} {.../** @type {Props} */ (restProps)} />
     )
   }
 }))

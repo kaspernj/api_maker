@@ -4,9 +4,51 @@ import {digg, digs} from "diggerize"
 import BaseModel from "./base-model.js"
 import Collection from "./collection.js"
 
+/** @typedef {import("./model-recipes-loader.js").default} ModelRecipesLoaderLike */
+/** @typedef {typeof import("./base-model.js").default} ModelClassLike */
+/** @typedef {ModelClassLike & {modelClassData: () => ModelRecipeClassData}} ModelClassWithData */
+/** @typedef {Record<string, {name: string}>} ModelRecipeAttributes */
+/** @typedef {Record<string, {args?: Record<string, object | string | number | boolean | null | undefined>}>} ModelRecipeCommands */
+/**
+ * @typedef {object} ModelRecipeClassData
+ * @property {string} className
+ * @property {string} collectionName
+ * @property {string} name
+ * @property {string} primaryKey
+ */
+/**
+ * @typedef {object} RelationshipOptions
+ * @property {string} [as]
+ * @property {string} [primary_key]
+ * @property {string} [through]
+ */
+/**
+ * @typedef {object} RelationshipDefinition
+ * @property {{name: string, primary_key: string}} active_record
+ * @property {string} class_name
+ * @property {string} foreign_key
+ * @property {{primary_key: string}} klass
+ * @property {RelationshipOptions} options
+ * @property {string} resource_name
+ * @property {"belongs_to" | "has_many" | "has_one"} type
+ */
+/**
+ * @typedef {object} ModelRecipe
+ * @property {ModelRecipeAttributes} attributes
+ * @property {ModelRecipeCommands} collection_commands
+ * @property {ModelRecipeCommands} member_commands
+ * @property {ModelRecipeClassData} model_class_data
+ * @property {Record<string, RelationshipDefinition>} relationships
+ */
+
 /** Builds runtime model classes from recipe definitions. */
 export default class ApiMakerModelRecipesModelLoader {
-  /** Constructor. */
+  /**
+   * Constructor.
+   * @param {object} root0
+   * @param {ModelRecipe} root0.modelRecipe
+   * @param {ModelRecipesLoaderLike} root0.modelRecipesLoader
+   */
   constructor ({modelRecipe, modelRecipesLoader}) {
     if (!modelRecipe) throw new Error("No 'modelRecipe' was given")
 
@@ -14,7 +56,10 @@ export default class ApiMakerModelRecipesModelLoader {
     this.modelRecipe = modelRecipe
   }
 
-  /** createClass. */
+  /**
+   * createClass.
+   * @returns {ModelClassLike}
+   */
   createClass () {
     const {modelRecipe} = digs(this, "modelRecipe")
     const {
@@ -40,7 +85,7 @@ export default class ApiMakerModelRecipesModelLoader {
       {writable: false, value: modelClassName}
     )
 
-    const modelClassConstructor = /** @type {any} */ (ModelClass.prototype.constructor)
+    const modelClassConstructor = /** @type {ModelClassWithData} */ (ModelClass.prototype.constructor)
     modelClassConstructor.modelClassData = () => modelClassData
 
     this.addAttributeMethodsToModelClass(ModelClass, attributes)
@@ -51,7 +96,11 @@ export default class ApiMakerModelRecipesModelLoader {
     return ModelClass
   }
 
-  /** addAttributeMethodsToModelClass. */
+  /**
+   * addAttributeMethodsToModelClass.
+   * @param {ModelClassLike} ModelClass
+   * @param {ModelRecipeAttributes} attributes
+   */
   addAttributeMethodsToModelClass (ModelClass, attributes) {
     for (const attributeName in attributes) {
       const attribute = attributes[attributeName]
@@ -71,7 +120,11 @@ export default class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  /** addQueryCommandsToModelClass. */
+  /**
+   * addQueryCommandsToModelClass.
+   * @param {ModelClassLike} ModelClass
+   * @param {ModelRecipeCommands} collectionCommands
+   */
   addQueryCommandsToModelClass (ModelClass, collectionCommands) {
     for (const collectionCommandName in collectionCommands) {
       const methodName = inflection.camelize(collectionCommandName, true)
@@ -91,7 +144,11 @@ export default class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  /** addMemberCommandsToModelClass. */
+  /**
+   * addMemberCommandsToModelClass.
+   * @param {ModelClassLike} ModelClass
+   * @param {ModelRecipeCommands} memberCommands
+   */
   addMemberCommandsToModelClass (ModelClass, memberCommands) {
     for (const memberCommandName in memberCommands) {
       const methodName = inflection.camelize(memberCommandName, true)
@@ -112,7 +169,12 @@ export default class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  /** addRelationshipsToModelClass. */
+  /**
+   * addRelationshipsToModelClass.
+   * @param {ModelClassLike} ModelClass
+   * @param {ModelRecipeClassData} modelClassData
+   * @param {Record<string, RelationshipDefinition>} relationships
+   */
   addRelationshipsToModelClass (ModelClass, modelClassData, relationships) {
     const {modelRecipesLoader} = digs(this, "modelRecipesLoader")
 
@@ -201,21 +263,44 @@ export default class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  /** defineEnsureAssociationLoadedMethod. */
+  /**
+   * defineEnsureAssociationLoadedMethod.
+   * @param {object} root0
+   * @param {string} root0.ensureMethodName
+   * @param {ModelClassLike} root0.ModelClass
+   * @param {string} root0.relationshipName
+   */
   defineEnsureAssociationLoadedMethod ({ensureMethodName, ModelClass, relationshipName}) {
     ModelClass.prototype[ensureMethodName] = function () {
       return this.ensureAssociationLoaded(relationshipName)
     }
   }
 
-  /** defineBelongsToGetMethod. */
+  /**
+   * defineBelongsToGetMethod.
+   * @param {object} root0
+   * @param {ModelClassLike} root0.ModelClass
+   * @param {string} root0.modelMethodName
+   * @param {string} root0.relationshipName
+   */
   defineBelongsToGetMethod ({ModelClass, modelMethodName, relationshipName}) {
     ModelClass.prototype[modelMethodName] = function () {
       return this._readBelongsToReflection({reflectionName: relationshipName})
     }
   }
 
-  /** defineBelongsToLoadMethod. */
+  /**
+   * defineBelongsToLoadMethod.
+   * @param {object} root0
+   * @param {string} root0.foreignKey
+   * @param {string} root0.klassPrimaryKey
+   * @param {ModelClassLike} root0.ModelClass
+   * @param {ModelRecipesLoaderLike} root0.modelRecipesLoader
+   * @param {string} root0.loadMethodName
+   * @param {string | undefined} root0.optionsPrimaryKey
+   * @param {string} root0.relationshipName
+   * @param {string} root0.resourceName
+   */
   defineBelongsToLoadMethod ({foreignKey, klassPrimaryKey, ModelClass, modelRecipesLoader, loadMethodName, optionsPrimaryKey, relationshipName, resourceName}) {
     ModelClass.prototype[loadMethodName] = function () {
       const foreignKeyMethodName = inflection.camelize(foreignKey, true)
@@ -224,7 +309,7 @@ export default class ApiMakerModelRecipesModelLoader {
 
       const id = this[foreignKeyMethodName]()
       const modelClass = modelRecipesLoader.getModelClass(resourceName)
-      const ransack = {}
+      const ransack = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
       const ransackIdSearchKey = `${optionsPrimaryKey || klassPrimaryKey}_eq`
 
       ransack[ransackIdSearchKey] = id
@@ -276,7 +361,7 @@ export default class ApiMakerModelRecipesModelLoader {
           }
         }
       } else {
-        const ransack = {}
+        const ransack = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
         const primaryKeyColumnName = optionsPrimaryKey || digg(ModelClass.modelClassData(), "primaryKey")
         const primaryKeyMethodName = inflection.camelize(primaryKeyColumnName, true)
 
@@ -295,7 +380,18 @@ export default class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  /** defineHasManyLoadMethod. */
+  /**
+   * defineHasManyLoadMethod.
+   * @param {object} root0
+   * @param {string} root0.foreignKey
+   * @param {string} root0.loadMethodName
+   * @param {ModelClassLike} root0.ModelClass
+   * @param {ModelRecipeClassData} root0.modelClassData
+   * @param {ModelRecipesLoaderLike} root0.modelRecipesLoader
+   * @param {string | undefined} root0.optionsThrough
+   * @param {string} root0.relationshipName
+   * @param {string} root0.resourceName
+   */
   defineHasManyLoadMethod ({foreignKey, loadMethodName, ModelClass, modelClassData, modelRecipesLoader, optionsThrough, relationshipName, resourceName}) {
     ModelClass.prototype[loadMethodName] = function () {
       const id = this.primaryKey()
@@ -321,7 +417,7 @@ export default class ApiMakerModelRecipesModelLoader {
           }
         )
       } else {
-        const ransack = {}
+        const ransack = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
 
         ransack[`${foreignKey}_eq`] = id
 
@@ -337,7 +433,13 @@ export default class ApiMakerModelRecipesModelLoader {
     }
   }
 
-  /** defineHasOneGetMethd. */
+  /**
+   * defineHasOneGetMethd.
+   * @param {object} root0
+   * @param {ModelClassLike} root0.ModelClass
+   * @param {string} root0.modelMethodName
+   * @param {string} root0.relationshipName
+   */
   defineHasOneGetMethd ({ModelClass, modelMethodName, relationshipName}) {
     ModelClass.prototype[modelMethodName] = function () {
       return this._readHasOneReflection({reflectionName: relationshipName})
@@ -371,7 +473,7 @@ export default class ApiMakerModelRecipesModelLoader {
           {params: {through: {model: modelClassName, id, reflection: relationshipName}}}
         )
       } else {
-        const ransack = {}
+        const ransack = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
 
         ransack[`${foreignKey}_eq`] = id
 

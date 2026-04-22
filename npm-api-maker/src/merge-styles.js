@@ -1,9 +1,16 @@
 // @ts-check
 import {StyleSheet} from "react-native"
 
-/** Merge style inputs into a flat style object. */
+/** @typedef {import("react-native").ImageStyle | import("react-native").TextStyle | import("react-native").ViewStyle} MergeableStyle */
+/** @typedef {false | null | undefined | MergeableStyle | MergeableStyle[]} MergeableStyleEntry */
+
+/**
+ * Merge style inputs into a flat style object.
+ * @param {MergeableStyleEntry[]} stylesList
+ * @returns {MergeableStyle}
+ */
 export default function mergeStyles(stylesList) {
-  const mergedStyle = {}
+  const mergedStyle = /** @type {MergeableStyle} */ ({})
 
   for (const style of stylesList) {
     if (typeof style == "object") {

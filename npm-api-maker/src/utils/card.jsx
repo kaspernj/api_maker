@@ -11,12 +11,12 @@ import {View} from "react-native"
 
 /**
  * @typedef {object} Props
- * @property {any=} children
- * @property {any=} controls
- * @property {object=} dataSet
- * @property {string=} header
- * @property {object=} style
- * @property {string=} testID
+ * @property {React.ReactNode} [children]
+ * @property {React.ReactNode} [controls]
+ * @property {object} [dataSet]
+ * @property {string} [header]
+ * @property {object} [style]
+ * @property {string} [testID]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsCard extends ShapeComponent {

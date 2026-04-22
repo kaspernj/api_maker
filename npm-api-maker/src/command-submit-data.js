@@ -1,12 +1,19 @@
 // @ts-check
 import objectToFormData from "object-to-formdata"
 
-/** ApiMakerCommandSubmitData. */
+/** @typedef {object | string | number | boolean | null | undefined} CommandSubmitScalarOrObject */
+/** @typedef {CommandSubmitScalarOrObject | File | CommandSubmitScalarOrObject[]} CommandSubmitValue */
+/** @typedef {"json" | "raw"} SubmitTraversalType */
+/**
+ * @typedef {object} CommandSubmitPayload
+ * @property {Record<string, CommandSubmitValue>} [global]
+ * @property {import("./commands-pool.js").PoolDataType} pool
+ */
+
+/** Prepares command payloads for JSON or multipart submission. */
 export default class ApiMakerCommandSubmitData {
   /**
-   * @param {object} data
-   * @param {Record<string, any>} [data.global]
-   * @param {import("./commands-pool.js").PoolDataType} data.pool
+   * @param {CommandSubmitPayload} data
    */
   constructor (data) {
     this.data = data
@@ -17,10 +24,13 @@ export default class ApiMakerCommandSubmitData {
   /** @returns {number} */
   getFilesCount = () => this.filesCount
 
-  /** @returns {Record<string, object>} */
+  /** @returns {Record<string, CommandSubmitValue>} */
   getJsonData = () => this.jsonData
 
-  /** getRawData. */
+  /**
+   * Returns the raw multipart-friendly payload, generating it lazily on first access.
+   * @returns {Record<string, CommandSubmitValue>}
+   */
   getRawData () {
     if (!this.rawData) {
       this.rawData = this.traverseObject(this.data, "raw")
@@ -29,7 +39,10 @@ export default class ApiMakerCommandSubmitData {
     return this.rawData
   }
 
-  /** getFormData. */
+  /**
+   * Builds a FormData payload that includes both files and serialized JSON metadata.
+   * @returns {FormData}
+   */
   getFormData () {
     const objectForFormData = this.getRawData() || {}
 
@@ -41,23 +54,23 @@ export default class ApiMakerCommandSubmitData {
   }
 
   /**
-   * @param {any} value
-   * @param {string} type
-   * @returns
+   * @param {CommandSubmitValue} value
+   * @param {SubmitTraversalType} type
+   * @returns {CommandSubmitValue}
    */
   convertDynamic(value, type) {
     if (Array.isArray(value)) {
       return this.traverseArray(value, type)
     } else if (typeof value == "object" && value !== null && value.constructor.name == "Object") {
-      return this.traverseObject(value, type)
+      return this.traverseObject(/** @type {Record<string, CommandSubmitValue>} */ (value), type)
     } else {
       return value
     }
   }
 
   /**
-   * @param {any} object
-   * @param {string} type
+   * @param {CommandSubmitValue} object
+   * @param {SubmitTraversalType} type
    * @returns {boolean}
    */
   shouldSkip(object, type) {
@@ -74,7 +87,7 @@ export default class ApiMakerCommandSubmitData {
   }
 
   /**
-   * @param {any} value
+   * @param {CommandSubmitValue} value
    * @returns {boolean}
    */
   isObject(value) {
@@ -86,9 +99,9 @@ export default class ApiMakerCommandSubmitData {
   }
 
   /**
-   * @param {Array<any>} array
-   * @param {string} type
-   * @returns {Array<any>}
+   * @param {CommandSubmitValue[]} array
+   * @param {SubmitTraversalType} type
+   * @returns {CommandSubmitValue[]}
    */
   traverseArray(array, type) {
     const newArray = []
@@ -109,12 +122,12 @@ export default class ApiMakerCommandSubmitData {
   }
 
   /**
-   * @param {Record<any, any>} object
-   * @param {string} type
-   * @returns {Record<any, any>}
+   * @param {Record<string, CommandSubmitValue>} object
+   * @param {SubmitTraversalType} type
+   * @returns {Record<string, CommandSubmitValue>}
    */
   traverseObject(object, type) {
-    const newObject = {}
+    const newObject = /** @type {Record<string, CommandSubmitValue>} */ ({})
 
     for (const key in object) {
       const value = object[key]

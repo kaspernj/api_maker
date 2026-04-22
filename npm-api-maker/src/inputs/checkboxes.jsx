@@ -11,18 +11,20 @@ import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 
+/** @typedef {boolean | number | string} CheckboxOptionValue */
+/** @typedef {[label: React.ReactNode, value: CheckboxOptionValue]} CheckboxOption */
 /**
  * @typedef {object} Props
- * @property {string=} attribute
- * @property {any[]=} defaultValue
- * @property {string=} id
+ * @property {string} [attribute]
+ * @property {Array<CheckboxOptionValue>} [defaultValue]
+ * @property {string} [id]
  * @property {object} inputProps
- * @property {any=} label
- * @property {object=} model
- * @property {string=} name
- * @property {Function=} onChange
- * @property {any[]} options
- * @property {object=} wrapperOpts
+ * @property {React.ReactNode} [label]
+ * @property {object} [model]
+ * @property {string} [name]
+ * @property {Function} [onChange]
+ * @property {Array<CheckboxOption>} options
+ * @property {object} [wrapperOpts]
  */
 /** @typedef {Record<string, never>} State */
 const ApiMakerInputsCheckboxes = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerInputsCheckboxes extends ShapeComponent {

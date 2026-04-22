@@ -11,7 +11,7 @@ import Text from "../utils/text"
 /** @typedef {Record<string, never>} Props */
 /**
  * @typedef {object} State
- * @property {any} count
+ * @property {number | undefined} count
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminShowReflectionLink extends ShapeComponent {
   state = {

@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
  */
 /**
  * @typedef {object} State
- * @property {any} checked
+ * @property {boolean} checked
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class EditAttributeInput extends ShapeComponent {
   static propTypes = propTypesExact({

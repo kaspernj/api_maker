@@ -1,5 +1,9 @@
 // @ts-check
-/** Resolve a unique column identifier. */
+/**
+ * Resolve a unique column identifier.
+ * @param {{attribute?: string, identifier?: string, path?: string[], sortKey?: string}} column
+ * @returns {string}
+ */
 export default function columnIdentifier(column) {
   if ("identifier" in column) return column.identifier
 

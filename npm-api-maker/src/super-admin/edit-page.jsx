@@ -24,7 +24,7 @@ import useModel from "../use-model.js"
 /**
  * @typedef {object} Props
  * @property {Function} modelClass
- * @property {number|string=} modelId
+ * @property {number|string} [modelId]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerSuperAdminEditPage extends ShapeComponent {
@@ -38,7 +38,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const modelClassName = modelClass.modelClassData().name
     const availableLocales = Locales.availableLocales()
     this.configReader = ConfigReader.forModel(modelClass)
-    const currentUser = useCurrentUser()
+    const currentUser = useCurrentUser({withData: true}).model
     const selectedModelAttributes = ["id"]
     const selectedAttributes = {}
     this.attributes = this.configReader.modelConfig?.edit?.attributes

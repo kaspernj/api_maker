@@ -1,5 +1,10 @@
 // @ts-check
-/** Build translated attribute names per locale. */
+/**
+ * Build translated attribute names per locale.
+ * @param {string[]} attributeNames
+ * @param {string[]} availableLocales
+ * @returns {string[]}
+ */
 export default function apiMakerTranslatedAttributes(attributeNames, availableLocales) {
   const translatedAttributes = []
 

@@ -5,9 +5,15 @@ import debounceFunction from "debounce"
 import ModelEvents from "./model-events.js"
 import useShape from "./use-shape.js"
 
+/** @typedef {{active?: boolean, debounce?: number, onConnected?: () => void}} UseUpdatedEventProps */
+/** @typedef {import("./base-model.js").default} EventModel */
+/** @typedef {EventModel & {id: () => number|string}} EventModelWithId */
+/** @typedef {{model: EventModel}} UpdatedEventPayload */
+/** @typedef {(payload: UpdatedEventPayload) => void} EventCallback */
+
 /**
- * @param {object|object[]|undefined|null} modelOrModels
- * @returns {object[]}
+ * @param {EventModel | EventModel[] | undefined | null} modelOrModels
+ * @returns {EventModel[]}
  */
 const modelsFromInput = (modelOrModels) => {
   if (!modelOrModels) {
@@ -20,34 +26,33 @@ const modelsFromInput = (modelOrModels) => {
 }
 
 /**
- * @param {object|object[]|undefined|null} modelOrModels
+ * @param {EventModel | EventModel[] | undefined | null} modelOrModels
  * @returns {string}
  */
 const modelsDependencyKey = (modelOrModels) => JSON.stringify(
-  modelsFromInput(modelOrModels).map((model) => model.id())
+  modelsFromInput(modelOrModels).map((model) => /** @type {EventModelWithId} */ (model).id())
 )
 
 /**
- * @param {object|object[]|undefined|null} modelOrModels
- * @returns {Record<string, object>}
+ * @param {EventModel | EventModel[] | undefined | null} modelOrModels
+ * @returns {Record<string, EventModelWithId>}
  */
 const modelsByIdFromInput = (modelOrModels) => {
-  const modelsById = {}
+  const modelsById = /** @type {Record<string, EventModelWithId>} */ ({})
 
   modelsFromInput(modelOrModels).forEach((model) => {
-    modelsById[model.id()] = model
+    const modelWithId = /** @type {EventModelWithId} */ (model)
+
+    modelsById[modelWithId.id()] = modelWithId
   })
 
   return modelsById
 }
 
 /**
- * @param {import("./base-model.js").default|import("./base-model.js").default[]} model
- * @param {Function} onUpdated
- * @param {object} [props]
- * @param {boolean} [props.active]
- * @param {number} [props.debounce]
- * @param {(...args: any[]) => void} [props.onConnected]
+ * @param {EventModel | EventModel[]} model
+ * @param {EventCallback} onUpdated
+ * @param {UseUpdatedEventProps} [props]
  * @returns {void}
  */
 const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
@@ -70,15 +75,15 @@ const apiMakerUseUpdatedEvent = (model, onUpdated, props = {}) => {
 
   s.updateMeta({debounceCallback})
 
-  const onUpdatedCallback = useCallback((...args) => {
+  const onUpdatedCallback = useCallback((payload) => {
     if (!s.p.active) {
       return
     }
 
     if (s.p.debounce) {
-      s.m.debounceCallback(...args)
+      s.m.debounceCallback(payload)
     } else {
-      s.p.onUpdated(...args)
+      s.p.onUpdated(payload)
     }
   }, [])
 

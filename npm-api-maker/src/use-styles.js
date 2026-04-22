@@ -6,11 +6,18 @@ import * as inflection from "inflection"
 import {useBreakpoint} from "responsive-breakpoints"
 import {useMemo} from "react"
 
+/** @typedef {boolean | string | ((args: object) => object)} BreakpointValue */
+/** @typedef {Record<string, BreakpointValue>} BreakpointState */
+/** @typedef {import("react-native").ImageStyle | import("react-native").TextStyle | import("react-native").ViewStyle} NamedStyle */
+/** @typedef {Record<string, NamedStyle>} StyleDictionary */
+/** @typedef {Record<string, boolean>} StyleFlags */
+/** @typedef {Array<[string, BreakpointValue]>} ReverseBreakpoints */
+
 /**
- * @param {Record<string, any>} styles
- * @param {Array<Record<string, any>>} listOfStyles
- * @param {Record<string, any>} breakpoint
- * @param {Array<[string, any]>} breakpointsReverse
+ * @param {StyleDictionary} styles
+ * @param {Array<NamedStyle>} listOfStyles
+ * @param {BreakpointState} breakpoint
+ * @param {ReverseBreakpoints} breakpointsReverse
  * @param {string} arg
  * @returns {void}
  */
@@ -39,10 +46,10 @@ function handleStringStyle(styles, listOfStyles, breakpoint, breakpointsReverse,
 }
 
 /**
- * @param {Record<string, any>} styles
- * @param {string | Array<string | Record<string, any>> | Record<string, any>} args
- * @param {Array<any>} [dependencies]
- * @returns {Array<Record<string, any>>}
+ * @param {StyleDictionary} styles
+ * @param {string | Array<string | StyleFlags> | StyleFlags} args
+ * @param {Array<boolean | number | string | null | undefined>} [dependencies]
+ * @returns {Array<NamedStyle>}
  */
 export default function useStyles(styles, args, dependencies = []) {
   const breakpoint = useBreakpoint()

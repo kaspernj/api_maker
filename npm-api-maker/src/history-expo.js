@@ -2,11 +2,14 @@
 import parse from "url-parse"
 import qs from "qs"
 
+/** @typedef {string | number | boolean | null | undefined} HistoryParamValue */
+/** @typedef {Record<string, HistoryParamValue>} HistoryParams */
+
 /** Expo router history adapter. */
 class HistoryExpo {
   /**
    * @param {string} path
-   * @param {...Record<string, any>} params
+   * @param {...HistoryParams} params
    * @returns {void}
    */
   push(path, ...params) {

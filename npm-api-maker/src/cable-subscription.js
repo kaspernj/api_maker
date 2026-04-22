@@ -6,7 +6,7 @@ const logger = new Logger({name: "ApiMaker / CableSubscription"})
 
 /** Cable subscription wrapper with unsubscribe events. */
 export default class ApiMakerCableSubscription {
-  /** Constructor. */
+  /** Creates one logical subscription wrapper around an EventEmitter. */
   constructor () {
     this.events = new EventEmitter()
     this.subscribed = true

@@ -8,11 +8,22 @@ import dataSetToAttributes from "./data-set-to-attributes.js"
 import memo from "set-state-compare/build/memo.js"
 import {useApiMaker} from "./with-api-maker"
 
+/** @typedef {{pressed?: boolean, focused?: boolean, hovered?: boolean}} LinkStyleState */
+/**
+ * @typedef {Partial<import("react-native").ViewStyle & import("react").CSSProperties> &
+ *   {paddingHorizontal?: number|string, paddingVertical?: number|string}} ResolvedStyle
+ */
+/** @typedef {import("react-native").StyleProp<import("react-native").ViewStyle>} NativeLinkStyle */
+/** @typedef {NativeLinkStyle | ((state: LinkStyleState) => NativeLinkStyle)} PressableLinkStyle */
+/** @typedef {import("react").CSSProperties | PressableLinkStyle} LinkStyle */
+/** @typedef {{paddingHorizontal?: number|string, paddingVertical?: number|string, style?: LinkStyle, usePressable?: boolean}} LinkStyleArgs */
+/** @typedef {{paddingBottom?: number|string, paddingLeft?: number|string, paddingRight?: number|string, paddingTop?: number|string}} PaddingOverrides */
+
 /**
  * @typedef {object} Props
- * @property {number|string=} paddingHorizontal
- * @property {number|string=} paddingVertical
- * @property {boolean=} usePressable
+ * @property {number|string} [paddingHorizontal]
+ * @property {number|string} [paddingVertical]
+ * @property {boolean} [usePressable]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerLink extends ShapeComponent {
@@ -36,18 +47,28 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
           {...dataSetToAttributes(Object.assign({testid: testID}, dataSet))} // eslint-disable-line prefer-object-spread
           href={to || "#"}
           onClick={this.tt.onLinkClicked}
-          style={linkStyle}
+          style={/** @type {import("react").CSSProperties} */ (linkStyle)}
           {...restProps}
         />
       )
     }
 
     return (
-      <Pressable dataSet={dataSet} onPress={this.tt.onPress} style={linkStyle} testID={testID} {...restProps} />
+      <Pressable
+        dataSet={dataSet}
+        onPress={this.tt.onPress}
+        style={/** @type {PressableLinkStyle} */ (linkStyle)}
+        testID={testID}
+        {...restProps}
+      />
     )
   }
 
-  /** Returns a cached style with padding props applied. */
+  /**
+   * Returns a cached style with padding props applied.
+   * @param {LinkStyleArgs} root0
+   * @returns {LinkStyle}
+   */
   linkStyle({paddingHorizontal, paddingVertical, style, usePressable}) {
     if (Platform.OS == "web" && !usePressable) {
       return this.linkStyleForAnchor({paddingHorizontal, paddingVertical, style})
@@ -56,7 +77,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     return this.linkStyleForPressable({paddingHorizontal, paddingVertical, style})
   }
 
-  /** Returns the anchor style with padding props applied. */
+  /**
+   * Returns the anchor style with padding props applied.
+   * @param {LinkStyleArgs} root0
+   * @returns {import("react").CSSProperties}
+   */
   linkStyleForAnchor({paddingHorizontal, paddingVertical, style}) {
     return this.cache("linkStyleForAnchor", () => {
       const resolvedStyle = this.resolveStyleForAnchor(style)
@@ -73,24 +98,28 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }, [paddingHorizontal, paddingVertical, style])
   }
 
-  /** Returns a Pressable-compatible style with padding props applied. */
+  /**
+   * Returns a Pressable-compatible style with padding props applied.
+  * @param {LinkStyleArgs} root0
+  * @returns {PressableLinkStyle}
+  */
   linkStyleForPressable({paddingHorizontal, paddingVertical, style}) {
-    return this.cache("linkStyleForPressable", () => {
+    return /** @type {PressableLinkStyle} */ (this.cache("linkStyleForPressable", () => {
       if (typeof style == "function") {
-        return (state) => {
+        return /** @type {PressableLinkStyle} */ ((/** @type {LinkStyleState} */ state) => {
           const resolvedStyle = style(state)
           const overrides = this.paddingOverridesFromStyle({paddingHorizontal, paddingVertical, style: resolvedStyle})
 
           if (!overrides) return resolvedStyle
 
-          if (Array.isArray(resolvedStyle)) return [...resolvedStyle, overrides]
+          if (Array.isArray(resolvedStyle)) return /** @type {NativeLinkStyle} */ ([...resolvedStyle, overrides])
 
           if (resolvedStyle && typeof resolvedStyle == "object") {
-            return {...this.stripPaddingShorthand(resolvedStyle), ...overrides}
+            return /** @type {NativeLinkStyle} */ ({...this.stripPaddingShorthand(resolvedStyle), ...overrides})
           }
 
-          return [resolvedStyle, overrides]
-        }
+          return /** @type {NativeLinkStyle} */ ([resolvedStyle, overrides])
+        })
       }
 
       const overrides = this.paddingOverridesFromStyle({paddingHorizontal, paddingVertical, style})
@@ -99,32 +128,40 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
       if (!style) return overrides
 
-      if (Array.isArray(style)) return [...style, overrides]
+      if (Array.isArray(style)) return /** @type {NativeLinkStyle} */ ([...style, overrides])
 
       if (typeof style == "object") {
-        return {...this.stripPaddingShorthand(style), ...overrides}
+        return /** @type {NativeLinkStyle} */ ({...this.stripPaddingShorthand(style), ...overrides})
       }
 
-      return [style, overrides]
-    }, [paddingHorizontal, paddingVertical, style])
+      return /** @type {NativeLinkStyle} */ ([style, overrides])
+    }, [paddingHorizontal, paddingVertical, style]))
   }
 
-  /** Resolves a style object for anchor rendering. */
+  /**
+   * Resolves a style object for anchor rendering.
+   * @param {LinkStyle | undefined} style
+   * @returns {ResolvedStyle}
+   */
   resolveStyleForAnchor(style) {
     if (typeof style == "function") {
-      return StyleSheet.flatten(style({pressed: false, focused: false, hovered: false})) || {}
+      return /** @type {ResolvedStyle} */ (StyleSheet.flatten(style({pressed: false, focused: false, hovered: false})) || {})
     }
 
-    if (Array.isArray(style)) return StyleSheet.flatten(style) || {}
+    if (Array.isArray(style)) return /** @type {ResolvedStyle} */ (StyleSheet.flatten(style) || {})
 
-    return style || {}
+    return /** @type {ResolvedStyle} */ (style || {})
   }
 
-  /** Returns padding overrides based on the resolved style. */
+  /**
+   * Returns padding overrides based on the resolved style.
+   * @param {LinkStyleArgs} root0
+   * @returns {PaddingOverrides | null}
+   */
   paddingOverridesFromStyle({paddingHorizontal, paddingVertical, style}) {
-    const styleObject = StyleSheet.flatten(style) || {}
-    const stylePaddingHorizontal = styleObject.paddingHorizontal
-    const stylePaddingVertical = styleObject.paddingVertical
+    const styleObject = /** @type {ResolvedStyle} */ (StyleSheet.flatten(style) || {})
+    const stylePaddingHorizontal = /** @type {number | string | undefined} */ (styleObject.paddingHorizontal)
+    const stylePaddingVertical = /** @type {number | string | undefined} */ (styleObject.paddingVertical)
     const paddingHorizontalDefined = this.isDefined(paddingHorizontal)
     const paddingVerticalDefined = this.isDefined(paddingVertical)
     const stylePaddingHorizontalDefined = this.isDefined(stylePaddingHorizontal)
@@ -151,9 +188,13 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     return overrides
   }
 
-  /** Removes padding shorthand values from a style object. */
+  /**
+   * Removes padding shorthand values from a style object.
+   * @param {ResolvedStyle | import("react-native").ViewStyle | import("react").CSSProperties} style
+  * @returns {ResolvedStyle}
+   */
   stripPaddingShorthand(style) {
-    const nextStyle = {...style}
+    const nextStyle = /** @type {ResolvedStyle} */ ({...style})
 
     delete nextStyle.paddingHorizontal
     delete nextStyle.paddingVertical
@@ -161,7 +202,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     return nextStyle
   }
 
-  /** Returns true when a value is neither null nor undefined. */
+  /**
+   * Returns true when a value is neither null nor undefined.
+   * @template T
+   * @param {T | null | undefined} value
+   * @returns {value is T}
+   */
   isDefined(value) {
     return value !== null && value !== undefined
   }

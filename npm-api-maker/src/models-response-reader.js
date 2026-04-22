@@ -3,10 +3,18 @@ import * as inflection from "inflection"
 import Preloaded from "./preloaded.js"
 import modelClassRequire from "./model-class-require.js"
 
+/** @typedef {Record<string, string[]>} ResponseDataMap */
+/** @typedef {Record<string, Record<string, object>>} ResponsePreloadedMap */
+/**
+ * @typedef {object} ModelsResponse
+ * @property {ResponseDataMap} data
+ * @property {ResponsePreloadedMap} preloaded
+ */
+
 /** Builds model instances from backend model collections. */
 export default class ModelsResponseReader {
   /**
-   * @param {{data: Record<string, any>, preloaded: Record<string, any>}} response
+   * @param {ModelsResponse} response
    * @returns {import("./base-model.js").default | undefined}
    */
   static first (response) {
@@ -14,7 +22,7 @@ export default class ModelsResponseReader {
   }
 
   /**
-   * @param {{data: Record<string, any>, preloaded: Record<string, any>}} response
+   * @param {ModelsResponse} response
    * @returns {Array<import("./base-model.js").default>}
    */
   static collection (response) {
@@ -22,7 +30,7 @@ export default class ModelsResponseReader {
     return reader.models()
   }
 
-  /** @param {{collection?: import("./collection.js").default<any>, response: {data: Record<string, any>, preloaded: Record<string, any>}}} args */
+  /** @param {{collection?: import("./collection.js").default<typeof import("./base-model.js").default>, response: ModelsResponse}} args */
   constructor (args) {
     this.collection = args.collection
     this.response = args.response

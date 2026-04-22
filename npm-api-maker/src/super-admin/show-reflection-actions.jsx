@@ -13,9 +13,9 @@ import useCanCan from "../use-can-can.js"
 
 /**
  * @typedef {object} Props
- * @property {object=} model
- * @property {Function=} modelClass
- * @property {string=} reflectionName
+ * @property {object} [model]
+ * @property {Function} [modelClass]
+ * @property {string} [reflectionName]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class SuperAdminShowReflectionActions extends ShapeComponent {

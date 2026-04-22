@@ -1,7 +1,7 @@
 // @ts-check
 /**
  * @typedef {object} ColumnArgType
- * @property {any} [default]
+ * @property {boolean | number | string | null} [default]
  * @property {string} [name]
  * @property {boolean} [null]
  * @property {string | null} type

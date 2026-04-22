@@ -3,6 +3,12 @@ import Params from "./params.js"
 
 const shared = {}
 
+/** @typedef {string | number | boolean | null} StoredScalar */
+/** @typedef {Record<string, StoredScalar>} StoredScalarRecord */
+/** @typedef {Array<StoredScalar | StoredScalarRecord>} StoredArray */
+/** @typedef {Record<string, StoredScalar | StoredArray | StoredScalarRecord>} KeyValueStoreParams */
+/** @typedef {StoredScalar | StoredArray | KeyValueStoreParams} KeyValueStoreValue */
+
 /** Small IndexedDB-backed key/value store. */
 export default class KeyValueStore {
   /** @returns {KeyValueStore} */
@@ -14,7 +20,7 @@ export default class KeyValueStore {
 
   /**
    * @param {string} key
-   * @returns {Promise<any>}
+   * @returns {Promise<KeyValueStoreValue | undefined>}
    */
   static get (key) {
     return KeyValueStore.current().get(key)
@@ -22,7 +28,7 @@ export default class KeyValueStore {
 
   /**
    * @param {string} key
-   * @param {any} value
+   * @param {KeyValueStoreValue} value
    * @returns {Promise<boolean>}
    */
   static set (key, value) {
@@ -31,32 +37,38 @@ export default class KeyValueStore {
 
   /**
    * @param {string} paramName
-   * @param {{default?: Record<string, any>}} [args]
-   * @returns {Promise<Record<string, any>>}
+   * @param {{default?: KeyValueStoreParams}} [args]
+   * @returns {Promise<KeyValueStoreParams>}
    */
   static async getCachedParams (paramName, args = {}) {
     const oldQuery = await KeyValueStore.get(paramName)
     const params = Params.parse()
 
     if (params && paramName in params) {
-      return params[paramName]
-    } else if (oldQuery) {
-      return oldQuery
+      const currentQuery = params[paramName]
+
+      if (currentQuery && typeof currentQuery == "object" && !Array.isArray(currentQuery)) {
+        return /** @type {KeyValueStoreParams} */ (currentQuery)
+      }
+    } else if (oldQuery && typeof oldQuery == "object" && !Array.isArray(oldQuery)) {
+      return /** @type {KeyValueStoreParams} */ (oldQuery)
     } else {
       return args.default || {}
     }
+
+    return args.default || {}
   }
 
   /**
    * @param {string} paramName
-   * @param {Record<string, any>} qParams
+   * @param {KeyValueStoreParams} qParams
    * @returns {Promise<boolean>}
    */
   static setCachedParams (paramName, qParams) {
     return KeyValueStore.set(paramName, qParams)
   }
 
-  /** Constructor. */
+  /** Opens the IndexedDB database used by the shared key/value store. */
   constructor () {
     // @ts-expect-error
     this.database = new Dexie("KeyValueStoreDatabase") // eslint-disable-line no-undef
@@ -67,7 +79,7 @@ export default class KeyValueStore {
 
   /**
    * @param {string} key
-   * @returns {Promise<any>}
+   * @returns {Promise<KeyValueStoreValue | undefined>}
    */
   async get (key) {
     const row = await this.database.keyValues
@@ -81,7 +93,7 @@ export default class KeyValueStore {
 
   /**
    * @param {string} key
-   * @param {any} value
+   * @param {KeyValueStoreValue} value
    * @returns {Promise<boolean>}
    */
   async set (key, value) {

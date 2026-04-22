@@ -1,10 +1,22 @@
 // @ts-check
 import {dig} from "diggerize"
-import CableSubscription from "./cable-subscription.js" // eslint-disable-line sort-imports
+import CableSubscriptionClass from "./cable-subscription.js" // eslint-disable-line sort-imports
 import CableSubscriptionPool from "./cable-subscription-pool.js"
 import RunLast from "./run-last.js"
 
 const shared = {}
+
+/** @typedef {import("./cable-subscription.js").default} CableSubscription */
+/** @typedef {import("./base-model.js").default} BaseModel */
+/** @typedef {object | string | number | boolean | null | Array<object | string | number | boolean | null>} CableRequestValue */
+/** @typedef {Record<string, CableRequestValue>} CableRefreshArgs */
+/** @typedef {string | number | boolean} ConnectionEventValue */
+/** @typedef {string[]} ModelSubscriptionPath */
+/** @typedef {{model: BaseModel}} ModelMutationPayload */
+/** @typedef {Record<string, string | number | boolean | null | Array<string | number | boolean | null>>} CableEventArgs */
+/** @typedef {{args: CableEventArgs, eventName: string, model: BaseModel}} ModelEventPayload */
+/** @typedef {{args: CableEventArgs, eventName: string}} ModelClassEventPayload */
+/** @typedef {(payload: ModelMutationPayload | ModelEventPayload | ModelClassEventPayload) => void} ModelEventCallback */
 
 /** ActionCable connection pool keyed by stream identifiers. */
 export default class ApiMakerCableConnectionPool {
@@ -13,7 +25,10 @@ export default class ApiMakerCableConnectionPool {
   upcomingSubscriptionData = {}
   upcomingSubscriptions = {}
 
-  /** current. */
+  /**
+   * Returns the shared connection pool instance.
+   * @returns {ApiMakerCableConnectionPool}
+   */
   static current () {
     if (!shared.apiMakerCableConnectionPool) shared.apiMakerCableConnectionPool = new ApiMakerCableConnectionPool()
 
@@ -30,7 +45,14 @@ export default class ApiMakerCableConnectionPool {
     delete shared.apiMakerCableConnectionPool
   }
 
-  /** connectEventToExistingSubscription. */
+  /**
+   * Attaches a logical subscription to an already-open shared ActionCable stream when possible.
+   * @param {object} root0
+   * @param {ModelSubscriptionPath} root0.path
+   * @param {CableSubscription} root0.subscription
+   * @param {ConnectionEventValue} root0.value
+   * @returns {boolean}
+   */
   connectEventToExistingSubscription ({path, subscription, value}) {
     for (const cableSubscriptionPool of this.cableSubscriptionPools) {
       if (cableSubscriptionPool.isConnected()) {
@@ -59,9 +81,16 @@ export default class ApiMakerCableConnectionPool {
     return false
   }
 
-  /** connectModelEvent. */
+  /**
+   * Registers one logical model subscription, reusing an existing shared connection when available.
+   * @param {object} root0
+   * @param {ModelEventCallback} root0.callback
+   * @param {ModelSubscriptionPath} root0.path
+   * @param {ConnectionEventValue} root0.value
+   * @returns {CableSubscription}
+   */
   connectModelEvent ({callback, path, value}) {
-    const subscription = new CableSubscription()
+    const subscription = new CableSubscriptionClass()
 
     subscription.events.addListener("received", callback)
 
@@ -104,11 +133,13 @@ export default class ApiMakerCableConnectionPool {
     if (value === true) {
       currentSubscription.push(subscription)
     } else {
-      if (!(value in currentSubscription)) {
-        currentSubscription[value] = []
+      const subscriptionKey = String(value)
+
+      if (!(subscriptionKey in currentSubscription)) {
+        currentSubscription[subscriptionKey] = []
       }
 
-      currentSubscription[value].push(subscription)
+      currentSubscription[subscriptionKey].push(subscription)
     }
 
     this.scheduleConnectUpcomingRunLast.queue()
@@ -116,26 +147,56 @@ export default class ApiMakerCableConnectionPool {
     return subscription
   }
 
-  /** connectCreated. */
+  /**
+   * Subscribes to created events for a model class.
+   * @param {string} modelName
+   * @param {(payload: ModelMutationPayload) => void} callback
+   * @returns {CableSubscription}
+   */
   connectCreated = (modelName, callback) => this.connectModelEvent({callback, value: true, path: [modelName, "creates"]})
 
-  /** connectEvent. */
+  /**
+   * Subscribes to a named event for one persisted model instance.
+   * @param {string} modelName
+   * @param {string | number} modelId
+   * @param {string} eventName
+   * @param {(payload: ModelEventPayload) => void} callback
+   * @returns {CableSubscription}
+   */
   connectEvent = (modelName, modelId, eventName, callback) => this.connectModelEvent({ // eslint-disable-line max-params
     callback,
     value: modelId,
     path: [modelName, "events", eventName]
   })
 
-  /** connectDestroyed. */
+  /**
+   * Subscribes to destroy events for one persisted model instance.
+   * @param {string} modelName
+   * @param {string | number} modelId
+   * @param {(payload: ModelMutationPayload) => void} callback
+   * @returns {CableSubscription}
+   */
   connectDestroyed = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "destroys"]})
 
-  /** connectModelClassEvent. */
+  /**
+   * Subscribes to one named model-class event stream.
+   * @param {string} modelName
+   * @param {string} eventName
+   * @param {(payload: ModelClassEventPayload) => void} callback
+   * @returns {CableSubscription}
+   */
   connectModelClassEvent = (modelName, eventName, callback) => this.connectModelEvent({callback, value: eventName, path: [modelName, "model_class_events"]})
 
-  /** connectUpdate. */
+  /**
+   * Subscribes to update events for one persisted model instance.
+   * @param {string} modelName
+   * @param {string | number} modelId
+   * @param {(payload: ModelMutationPayload) => void} callback
+   * @returns {CableSubscription}
+   */
   connectUpdate = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})
 
-  /** connectUpcoming. */
+  /** Opens one shared ActionCable subscription for all queued logical subscriptions. */
   connectUpcoming = () => {
     const subscriptionData = this.upcomingSubscriptionData
     const subscriptions = this.upcomingSubscriptions
@@ -154,7 +215,7 @@ export default class ApiMakerCableConnectionPool {
   /**
    * Refreshes auth across the existing subscription pools.
    *
-   * @param {Record<string, any>} args
+   * @param {CableRefreshArgs} args
    * @returns {Promise<void>}
    */
   async refreshAuthentication (args) {

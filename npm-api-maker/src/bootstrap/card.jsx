@@ -9,22 +9,22 @@ import memo from "set-state-compare/build/memo.js"
 
 /**
  * @typedef {object} Props
- * @property {object=} cardRef
- * @property {any=} children
- * @property {string=} className
- * @property {any=} controls
- * @property {boolean=} defaultExpanded
- * @property {boolean=} expandable
- * @property {boolean=} expandableHide
- * @property {any=} footer
- * @property {any=} header
- * @property {boolean=} responsiveTable
- * @property {boolean=} striped
- * @property {boolean=} table
+ * @property {React.RefObject<HTMLDivElement | null>} [cardRef]
+ * @property {React.ReactNode} [children]
+ * @property {string} [className]
+ * @property {React.ReactNode} [controls]
+ * @property {boolean} [defaultExpanded]
+ * @property {boolean} [expandable]
+ * @property {boolean} [expandableHide]
+ * @property {React.ReactNode} [footer]
+ * @property {React.ReactNode} [header]
+ * @property {boolean} [responsiveTable]
+ * @property {boolean} [striped]
+ * @property {boolean} [table]
  */
 /**
  * @typedef {object} State
- * @property {any} expanded
+ * @property {boolean} expanded
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapCard extends ShapeComponent {
   static defaultProps = {

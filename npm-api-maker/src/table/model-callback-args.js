@@ -1,10 +1,17 @@
 // @ts-check
 import * as inflection from "inflection"
 
-/** Build callback args for table model actions. */
+/** @typedef {import("../base-model.js").default} BaseModel */
+
+/**
+ * Build callback args for table model actions.
+ * @param {{props: {modelClass: {modelClassData(): {name: string}}}}} table
+ * @param {BaseModel} model
+ * @returns {Record<string, BaseModel | string>}
+ */
 export default function modelCallbackArgs(table, model) {
   const modelArgName = inflection.camelize(table.props.modelClass.modelClassData().name, true)
-  const modelCallbackArgs = {model}
+  const modelCallbackArgs = /** @type {Record<string, BaseModel | string>} */ ({model})
 
   modelCallbackArgs[modelArgName] = model
 

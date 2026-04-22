@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * @param {Record<string, any>} restProps
+ * @param {Record<string, object | string | number | boolean | null | undefined>} restProps
  * @returns {void}
  */
 const restPropsValidator = (restProps) => {

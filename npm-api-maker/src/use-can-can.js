@@ -7,9 +7,9 @@ import useEventEmitter from "ya-use-event-emitter"
 
 /**
  * @typedef {object} UseCanCanProps
- * @property {() => Array} abilitiesCallback
+ * @property {() => Array<object>} abilitiesCallback
  * @property {boolean} debug
- * @property {any[] | undefined} dependencies
+ * @property {Array<boolean | number | object | string | null | undefined> | undefined} dependencies
  */
 
 /**
@@ -17,14 +17,17 @@ import useEventEmitter from "ya-use-event-emitter"
  * @property {Date} lastUpdate
  */
 
-/** UseCanCanClass. */
+/** Shape hook that keeps ability state synchronized with Devise and dependency changes. */
 /** @augments {ShapeHook<UseCanCanProps, UseCanCanState>} */
 class UseCanCanClass extends ShapeHook {
   state = /** @type {UseCanCanState} */ ({
     lastUpdate: new Date()
   })
 
-  /** Constructor. */
+  /**
+   * Initializes request bookkeeping and debug state for the hook instance.
+   * @param {UseCanCanProps} props
+   */
   constructor(props) {
     super(props)
     this.abilitiesRequestId = 0
@@ -37,7 +40,11 @@ class UseCanCanClass extends ShapeHook {
     this.dependencyKeyNextId = 1
   }
 
-  /** dependencyKeyFor. */
+  /**
+   * Builds a stable dependency key for one primitive or object reference.
+   * @param {boolean | number | object | string | null | undefined} value
+   * @returns {string}
+   */
   dependencyKeyFor(value) {
     if (value === null) return "null"
     if (value === undefined) return "undefined"
@@ -56,14 +63,21 @@ class UseCanCanClass extends ShapeHook {
     return `${valueType}:ref:${this.dependencyKeyMap.get(value)}`
   }
 
-  /** dependencyListKey. */
+  /**
+   * Builds one cache key for the whole dependency list.
+   * @param {boolean | number | object | string | null | undefined | Array<boolean | number | object | string | null | undefined>} list
+   * @returns {string}
+   */
   dependencyListKey(list) {
     if (!Array.isArray(list)) return this.dependencyKeyFor(list)
 
     return list.map((value) => this.dependencyKeyFor(value)).join("|")
   }
 
-  /** loadAbilities. */
+  /**
+   * Loads or reloads abilities and ignores stale async completions.
+   * @param {string | undefined} [reloadKey]
+   */
   loadAbilities = async (reloadKey) => {
     // Drop late ability reload completions after dependency changes or unmounts.
     const requestId = this.abilitiesRequestId + 1
@@ -82,7 +96,7 @@ class UseCanCanClass extends ShapeHook {
     this.setState({lastUpdate: new Date()})
   }
 
-  /** onDeviseChange. */
+  /** Reloads abilities after Devise sign-in or sign-out events. */
   onDeviseChange = () => {
     this.deviseReloadKey += 1
 
@@ -93,7 +107,7 @@ class UseCanCanClass extends ShapeHook {
     this.loadAbilities(`devise:${this.deviseReloadKey}`)
   }
 
-  /** onResetAbilities. */
+  /** Reloads abilities after the global ability cache is reset. */
   onResetAbilities = () => {
     if (this.p.debug) {
       console.log("[useCanCan] onResetAbilities -> loadAbilities()")
@@ -102,7 +116,7 @@ class UseCanCanClass extends ShapeHook {
     this.loadAbilities()
   }
 
-  /** onAbilitiesLoaded. */
+  /** Updates hook state after abilities finish loading elsewhere. */
   onAbilitiesLoaded = () => {
     if (this.p.debug) {
       console.log("[useCanCan] onAbilitiesLoaded")
@@ -113,7 +127,7 @@ class UseCanCanClass extends ShapeHook {
     this.setState({lastUpdate: new Date()})
   }
 
-  /** setup. */
+  /** Wires ability loading, debug state, and event subscriptions for the hook. */
   setup() {
     const {debug, dependencies} = this.p
     const dependencyList = dependencies ?? []

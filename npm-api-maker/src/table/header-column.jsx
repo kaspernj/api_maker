@@ -15,16 +15,28 @@ import Widths from "./widths"
 
 const dataSets = {}
 
+/** @typedef {{className?: string}} DataSetLike */
+/** @typedef {{attribute?: string}} TableColumnDefinition */
+/** @typedef {{identifier(): string, sortKey(): string, update(args: {width: number}): Promise<void>}} TableSettingColumn */
+/**
+ * @typedef {object} HeaderTableLike
+ * @property {(column: TableColumnDefinition) => string[]} headerClassNameForColumn
+ * @property {(column: TableColumnDefinition) => {style?: object}} headerProps
+ * @property {(args: object) => void} setState
+ * @property {{styleForHeader(args: {style: object}): object}} tt
+ */
+/** @typedef {{cursor?: "col-resize", height?: "100%", position: "absolute", right: number, top: number, width: number, zIndex: number}} ResizeHandleStyle */
+
 /**
  * @typedef {object} Props
  * @property {boolean} active
- * @property {any} animatedWidth
- * @property {any} animatedZIndex
- * @property {object} column
+ * @property {Animated.Value} animatedWidth
+ * @property {Animated.Value} animatedZIndex
+ * @property {TableColumnDefinition} column
  * @property {boolean} resizing
- * @property {object} table
- * @property {object} tableSettingColumn
- * @property {object} touchProps
+ * @property {HeaderTableLike} table
+ * @property {TableSettingColumn} tableSettingColumn
+ * @property {DataSetLike} touchProps
  * @property {Widths} widths
  */
 /**
@@ -129,7 +141,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
         <HeaderColumnContent column={column} table={table} tableSettingColumn={tableSettingColumn} />
         {mdUp &&
           <Animated.View
-            style={/** @type {any} */ (this.cache("resizeColumnViewStyle", {
+            style={/** @type {object} */ (this.cache("resizeColumnViewStyle", {
               position: "absolute",
               top: 0,
               right: 0,

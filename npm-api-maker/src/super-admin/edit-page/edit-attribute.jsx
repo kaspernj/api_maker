@@ -17,8 +17,8 @@ import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-comp
 /**
  * @typedef {object} Props
  * @property {object} attribute
- * @property {object=} model
- * @property {Function=} modelClass
+ * @property {object} [model]
+ * @property {Function} [modelClass]
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class EditAttribute extends ShapeComponent {

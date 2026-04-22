@@ -1,4 +1,13 @@
 // @ts-check
+/** @typedef {object | string | number | boolean | null | undefined | Array<object | string | number | boolean | null | undefined>} CommandValue */
+/** @typedef {Record<string, CommandValue>} CommandData */
+/**
+ * @typedef {object} ProgressData
+ * @property {number | undefined} count
+ * @property {number | undefined} progress
+ * @property {number | undefined} total
+ */
+
 /** Shared thenable command handle with progress and log subscriptions. */
 export default class ApiMakerCommandExecution {
   /** Constructor. */
@@ -21,7 +30,7 @@ export default class ApiMakerCommandExecution {
   }
 
   /**
-   * @param {(value: Record<string, any>) => void} callback
+   * @param {(value: CommandData) => void} callback
    * @returns {() => void}
    */
   onReceived (callback) {
@@ -37,7 +46,7 @@ export default class ApiMakerCommandExecution {
   }
 
   /**
-   * @param {(value: Record<string, any> | undefined) => void} callback
+   * @param {(value: ProgressData | undefined) => void} callback
    * @returns {() => void}
    */
   onProgress (callback) {
@@ -68,12 +77,12 @@ export default class ApiMakerCommandExecution {
     }
   }
 
-  /** @returns {Promise<Record<string, any> | undefined>} */
+  /** @returns {Promise<ProgressData | undefined>} */
   progress () {
     return this.progressData ? Promise.resolve(this.progressData) : this.progressPromise
   }
 
-  /** @returns {Promise<Record<string, any> | undefined>} */
+  /** @returns {Promise<CommandData | undefined>} */
   received () {
     return this.receivedData ? Promise.resolve(this.receivedData) : this.receivedPromise
   }
@@ -83,28 +92,37 @@ export default class ApiMakerCommandExecution {
     return [...this.logsData]
   }
 
-  /** @returns {Promise<any>} */
+  /** @returns {Promise<CommandData>} */
   result () {
     return this.resultPromise
   }
 
-  /** @returns {Promise<any>} */
+  /**
+   * @param {Parameters<Promise<CommandData>["then"]>} args
+   * @returns {ReturnType<Promise<CommandData>["then"]>}
+   */
   then (...args) {
     return this.resultPromise.then(...args)
   }
 
-  /** @returns {Promise<any>} */
+  /**
+   * @param {Parameters<Promise<CommandData>["catch"]>} args
+   * @returns {ReturnType<Promise<CommandData>["catch"]>}
+   */
   catch (...args) {
     return this.resultPromise.catch(...args)
   }
 
-  /** @returns {Promise<any>} */
+  /**
+   * @param {Parameters<Promise<CommandData>["finally"]>} args
+   * @returns {ReturnType<Promise<CommandData>["finally"]>}
+   */
   finally (...args) {
     return this.resultPromise.finally(...args)
   }
 
   /**
-   * @param {Record<string, any>} data
+   * @param {CommandData} data
    * @returns {void}
    */
   setReceived (data) {
@@ -117,7 +135,7 @@ export default class ApiMakerCommandExecution {
   }
 
   /**
-   * @param {Record<string, any>} data
+   * @param {ProgressData} data
    * @returns {void}
    */
   setProgress (data) {
@@ -142,7 +160,7 @@ export default class ApiMakerCommandExecution {
   }
 
   /**
-   * @param {any} value
+   * @param {CommandData} value
    * @returns {void}
    */
   resolve (value) {
@@ -152,7 +170,7 @@ export default class ApiMakerCommandExecution {
   }
 
   /**
-   * @param {any} error
+   * @param {Error} error
    * @returns {void}
    */
   reject (error) {

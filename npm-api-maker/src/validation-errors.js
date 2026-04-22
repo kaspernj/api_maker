@@ -4,7 +4,24 @@ import * as inflection from "inflection"
 import {digg, digs} from "diggerize"
 import modelClassRequire from "./model-class-require.js"
 
-/** ValidationError. */
+/**
+ * @typedef {object} ValidationErrorEntryArgs
+ * @property {string} attribute_name
+ * @property {string} attribute_type
+ * @property {string[]} error_messages
+ * @property {string[]} error_types
+ * @property {string} input_name
+ * @property {string} model_name
+ * @typedef {object} ValidationErrorsArgs
+ * @property {object} model
+ * @property {ValidationErrorEntryArgs[]} validationErrors
+ * @typedef {object} ValidationInputMatchArgs
+ * @property {string} [attribute]
+ * @property {string} [inputName]
+ * @property {(validationError: ValidationError) => boolean} [onMatchValidationError]
+ */
+
+/** Wraps one backend validation error entry with matching helpers for inputs. */
 class ValidationError { // eslint-disable-line padded-blocks
 
   /**
@@ -90,15 +107,21 @@ class ValidationError { // eslint-disable-line padded-blocks
   }
 }
 
-/** ValidationErrors. */
+/** Wraps a backend validation-error response and exposes grouped helper methods. */
 class ValidationErrors {
-  /** Constructor. */
+  /**
+   * Creates a validation-error collection from one backend command response.
+   * @param {ValidationErrorsArgs} args
+   */
   constructor(args) {
     this.rootModel = digg(args, "model")
     this.validationErrors = digg(args, "validationErrors").map((validationError) => new ValidationError(validationError))
   }
 
-  /** getErrorMessage. */
+  /**
+   * Returns one combined error message string for every validation error.
+   * @returns {string}
+   */
   getErrorMessage() {
     const fullErrorMessages = []
 
@@ -111,10 +134,14 @@ class ValidationErrors {
     return fullErrorMessages.join(". ")
   }
 
-  /** getValidationErrors. */
+  /** @returns {ValidationError[]} */
   getValidationErrors = () => this.validationErrors
 
-  /** getValidationErrorsForInput. */
+  /**
+   * Returns and marks the validation errors that match one input or custom matcher.
+   * @param {ValidationInputMatchArgs} root0
+   * @returns {ValidationError[]}
+   */
   getValidationErrorsForInput({attribute, inputName, onMatchValidationError}) {
     const validationErrors = this.validationErrors.filter((validationError) => {
       if (onMatchValidationError) {
@@ -129,7 +156,10 @@ class ValidationErrors {
     return validationErrors
   }
 
-  /** getUnhandledErrorMessage. */
+  /**
+   * Returns one combined message for validation errors that were never matched to an input.
+   * @returns {string | undefined}
+   */
   getUnhandledErrorMessage() {
     const unhandledValidationErrors = this.validationErrors.filter((validationError) => !validationError.getHandled())
 

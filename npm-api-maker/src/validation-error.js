@@ -36,7 +36,10 @@ export default class ValidationError extends BaseError {
     return Boolean(unhandledError)
   }
 
-  /** @returns {boolean} */
+  /**
+   * @param {string} attributeName
+   * @returns {boolean}
+   */
   hasValidationErrorForAttribute = (attributeName) => {
     const underscoredAttributeName = inflection.underscore(attributeName)
     const foundAttribute = this.validationErrors.getValidationErrors().find((validationError) => validationError.getAttributeName() == underscoredAttributeName)

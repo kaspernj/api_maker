@@ -10,20 +10,22 @@ import propTypesExact from "prop-types-exact"
 import {useForm} from "../form"
 import useInput from "../use-input.js"
 
+/** @typedef {boolean | number | string} CheckboxOptionValue */
 /**
  * @typedef {object} OptionElementProps
  * @property {string} generatedId
  * @property {string} inputCheckboxClassName
  * @property {boolean} isDefaultSelected
  * @property {string} inputName
- * @property {Function=} onChange
- * @property {Function} onOptionChecked
- * @property {any[]} option
+ * @property {((event: Event, ...restArgs: Array<unknown>) => void)} [onChange]
+ * @property {(args: {event: Event, option: CheckboxOption}) => void} onOptionChecked
+ * @property {CheckboxOption} option
  * @property {number} optionIndex
- * @property {any[][]} options
+ * @property {Array<CheckboxOption>} options
  * @property {object} wrapperOpts
  */
 /** @typedef {Record<string, never>} OptionElementState */
+/** @typedef {[label: React.ReactNode, value: CheckboxOptionValue]} CheckboxOption */
 const OptionElement = memo(shapeComponent(/** @augments {ShapeComponent<OptionElementProps, OptionElementState>} */ class OptionElement extends ShapeComponent {
   render() {
     const {generatedId, inputCheckboxClassName, isDefaultSelected, inputName, option, optionIndex, options, wrapperOpts} = this.p
@@ -63,18 +65,18 @@ const OptionElement = memo(shapeComponent(/** @augments {ShapeComponent<OptionEl
 
 /**
  * @typedef {object} Props
- * @property {string=} attribute
- * @property {any[]=} defaultValue
- * @property {string=} label
- * @property {string=} labelClassName
- * @property {object=} model
- * @property {string=} name
- * @property {Function=} onChange
- * @property {any[][]} options
+ * @property {string} [attribute]
+ * @property {Array<CheckboxOptionValue>} [defaultValue]
+ * @property {string} [label]
+ * @property {string} [labelClassName]
+ * @property {object} [model]
+ * @property {string} [name]
+ * @property {((event: Event, ...restArgs: Array<unknown>) => void)} [onChange]
+ * @property {Array<CheckboxOption>} options
  */
 /**
  * @typedef {object} State
- * @property {any} checkedOptions
+ * @property {Array<CheckboxOptionValue>} checkedOptions
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerBootstrapCheckboxes extends ShapeComponent {
   static propTypes = propTypesExact({

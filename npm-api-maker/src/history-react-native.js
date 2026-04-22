@@ -3,11 +3,14 @@ import Config from "./config.js"
 import parse from "url-parse"
 import qs from "qs"
 
+/** @typedef {string | number | boolean | null | undefined} HistoryParamValue */
+/** @typedef {Record<string, HistoryParamValue>} HistoryParams */
+
 /** React Native history adapter. */
 class HistoryReactNative {
   /**
    * @param {string} path
-   * @param {...Record<string, any>} params
+   * @param {...HistoryParams} params
    * @returns {void}
    */
   push(path, ...params) {

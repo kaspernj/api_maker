@@ -14,6 +14,10 @@ import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 import apiMakerConfig from "../../config.js"
 
+/** @typedef {import("../../base-model.js").default} BaseModel */
+/** @typedef {BaseModel & {id(): number | string, modelClassData(): {name: string}}} CurrentUserModel */
+/** @typedef {BaseModel & {destroy(): Promise<void>, id(): number | string, name(): string, queryParams(): object[]}} TableSearchModel */
+
 /**
  * @typedef {object} SearchLinkProps
  * @property {Function} onClick
@@ -100,20 +104,18 @@ const SearchLink = memo(shapeComponent(/** @augments {ShapeComponent<SearchLinkP
 
 /**
  * @typedef {object} Props
- * @property {string=} className
- * @property {object} currentUser
+ * @property {string} [className]
+ * @property {CurrentUserModel} currentUser
  * @property {Function} onEditSearchPressed
  * @property {Function} onRequestClose
  * @property {string} querySearchName
  */
 /**
  * @typedef {object} State
- * @property {any} editSearch
  * @property {TableSearch[]|undefined} searches
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableFiltersLoadSearchModal extends ShapeComponent {
   state = {
-    editSearch: undefined,
     searches: undefined
   }
 

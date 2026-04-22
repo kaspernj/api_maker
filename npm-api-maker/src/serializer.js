@@ -1,26 +1,47 @@
 // @ts-check
 import {digg} from "diggerize"
 
+/**
+ * @typedef {string | number | boolean | null | undefined} SerializablePrimitive
+ * @typedef {object | SerializablePrimitive | Array<object | SerializablePrimitive>} SerializableInputValue
+ * @typedef {object | SerializablePrimitive | Array<object | SerializablePrimitive>} SerializedOutputValue
+ * @typedef {Record<string, SerializedOutputValue>} SerializedObject
+ */
+
 /** Serializes API Maker payloads and model references. */
 export default class Serializer {
-  /** serialize. */
+  /**
+   * Serializes one value without manually instantiating the serializer class.
+   * @param {SerializableInputValue} arg
+   * @returns {SerializedOutputValue}
+   */
   static serialize (arg) {
     const serialize = new Serializer(arg)
 
     return serialize.serialize()
   }
 
-  /** Constructor. */
+  /**
+   * Creates a serializer bound to one root argument.
+   * @param {SerializableInputValue} arg
+   */
   constructor (arg) {
     this.arg = arg
   }
 
-  /** serialize. */
+  /**
+   * Serializes the root argument passed to this serializer instance.
+   * @returns {SerializedOutputValue}
+   */
   serialize () {
     return this.serializeArgument(this.arg)
   }
 
-  /** serializeArgument. */
+  /**
+   * Serializes one scalar, model, collection, array, or plain object value.
+   * @param {SerializableInputValue} arg
+   * @returns {SerializedOutputValue}
+   */
   serializeArgument (arg) {
     if (typeof arg == "object" && arg && arg.constructor.apiMakerType == "BaseModel") {
       return {
@@ -62,12 +83,20 @@ export default class Serializer {
     }
   }
 
-  /** serializeArray. */
+  /**
+   * Serializes each element of one array argument.
+   * @param {SerializableInputValue[]} arg
+   * @returns {SerializedOutputValue[]}
+   */
   serializeArray (arg) {
     return arg.map((value) => this.serializeArgument(value))
   }
 
-  /** serializeObject. */
+  /**
+   * Serializes each key and value in one plain object argument.
+   * @param {Record<string, SerializableInputValue>} arg
+   * @returns {SerializedObject}
+   */
   serializeObject (arg) {
     const newObject = {}
 

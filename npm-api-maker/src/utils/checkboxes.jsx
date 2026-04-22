@@ -14,12 +14,14 @@ import Text from "./text"
 import useInput from "../use-input.js"
 import {View} from "react-native"
 
+/** @typedef {boolean | number | string} CheckboxOptionValue */
+/** @typedef {[label: string, value: CheckboxOptionValue]} CheckboxOption */
 /**
  * @typedef {object} OptionElementProps
  * @property {boolean} checked
  * @property {string} inputName
- * @property {Function} onChange
- * @property {any[]} option
+ * @property {(args: {checked: boolean, option: CheckboxOption}) => void} onChange
+ * @property {CheckboxOption} option
  */
 /** @typedef {Record<string, never>} OptionElementState */
 const OptionElement = memo(shapeComponent(/** @augments {ShapeComponent<OptionElementProps, OptionElementState>} */ class OptionElement extends ShapeComponent {
@@ -55,18 +57,18 @@ const OptionElement = memo(shapeComponent(/** @augments {ShapeComponent<OptionEl
 
 /**
  * @typedef {object} Props
- * @property {string=} attribute
- * @property {any[]=} defaultValue
- * @property {string=} label
- * @property {string=} labelClassName
- * @property {object=} model
- * @property {string=} name
- * @property {Function=} onChange
- * @property {any[]} options
+ * @property {string} [attribute]
+ * @property {Array<CheckboxOptionValue>} [defaultValue]
+ * @property {string} [label]
+ * @property {string} [labelClassName]
+ * @property {object} [model]
+  * @property {string} [name]
+  * @property {Function} [onChange]
+ * @property {Array<CheckboxOption>} options
  */
 /**
  * @typedef {object} State
- * @property {any} checkedOptions
+ * @property {Array<CheckboxOptionValue>} checkedOptions
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsCheckboxes extends ShapeComponent {
   static propTypes = propTypesExact({

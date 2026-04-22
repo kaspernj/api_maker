@@ -5,9 +5,20 @@ import modelClassRequire from "./model-class-require.js"
 import ModelsResponseReader from "./models-response-reader.js" // eslint-disable-line sort-imports
 import Money from "js-money"
 
+/**
+ * @typedef {string | number | boolean | null | undefined} DeserializablePrimitive
+ * @typedef {object | DeserializablePrimitive | Array<object | DeserializablePrimitive>} DeserializableValue
+ * @typedef {typeof import("./base-model.js").default} DeserializedModelClass
+ * @typedef {import("./base-model.js").default} DeserializedModelInstance
+ */
+
 /** Deserializes API Maker encoded payloads. */
 export default class ApiMakerDeserializer {
-  /** parse. */
+  /**
+   * Recursively deserializes one API Maker encoded payload tree.
+   * @param {DeserializableValue} object
+   * @returns {DeserializableValue | Date | DeserializedModelClass | DeserializedModelInstance}
+   */
   static parse(object) {
     if (Array.isArray(object)) {
       return object.map((value) => ApiMakerDeserializer.parse(value))

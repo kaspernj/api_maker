@@ -3,7 +3,9 @@ import * as inflection from "inflection"
 import {digg} from "diggerize"
 import modelClassRequire from "../model-class-require.js"
 
-/** ApiMakerBaseModelReflection. */
+/** @typedef {"belongs_to" | "has_many" | "has_one"} ReflectionMacro */
+
+/** Describes one relationship declared on a model class. */
 export default class ApiMakerBaseModelReflection {
   /**
    * @param {object} reflectionData
@@ -20,7 +22,10 @@ export default class ApiMakerBaseModelReflection {
   /** @returns {string} */
   foreignKey() { return digg(this, "reflectionData", "foreignKey") }
 
-  /** macro. */
+  /**
+   * Returns the relationship macro for this reflection.
+   * @returns {ReflectionMacro}
+   */
   macro() { return digg(this, "reflectionData", "macro") }
 
   /** @returns {typeof import("../base-model.js").default} */

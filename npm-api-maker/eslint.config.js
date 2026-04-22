@@ -1,18 +1,53 @@
 // @ts-check
-import {fixupConfigRules} from "@eslint/compat"
+/* eslint sort-imports: off */
 import {defineConfig} from "eslint/config"
+import {fixupConfigRules} from "@eslint/compat"
+import js from "@eslint/js"
 import expoConfig from "eslint-config-expo/flat.js"
 import globals from "globals"
 import jest from "eslint-plugin-jest"
-import js from "@eslint/js"
 import jsdoc from "eslint-plugin-jsdoc"
 
+
 export default defineConfig([
+  {
+    ignores: ["build/**", "dist/**", "example/**", "node_modules/**"]
+  },
   ...fixupConfigRules(expoConfig),
   ...fixupConfigRules(jest.configs["flat/recommended"]),
   js.configs.recommended,
   {
-    ignores: ["dist/*"],
+    files: ["src/**/*.{js,jsx}"],
+    plugins: {
+      jsdoc
+    },
+    rules: {
+      "jsdoc/check-syntax": "error",
+      "jsdoc/check-param-names": "error",
+      "jsdoc/check-property-names": "error",
+      "jsdoc/check-tag-names": "error",
+      "jsdoc/check-template-names": "error",
+      "jsdoc/check-types": "error",
+      "jsdoc/check-values": "error",
+      "jsdoc/empty-tags": "error",
+      "jsdoc/escape-inline-tags": "error",
+      "jsdoc/no-bad-blocks": "error",
+      "jsdoc/no-defaults": "error",
+      "jsdoc/no-undefined-types": "error",
+      "jsdoc/reject-any-type": "error",
+      "jsdoc/require-param": "error",
+      "jsdoc/require-param-name": "error",
+      "jsdoc/require-param-type": "error",
+      "jsdoc/require-property": "error",
+      "jsdoc/require-property-name": "error",
+      "jsdoc/require-property-type": "error",
+      "jsdoc/require-returns": "error",
+      "jsdoc/require-returns-check": "error",
+      "jsdoc/require-returns-type": "error",
+      "jsdoc/valid-types": "error"
+    }
+  },
+  {
     linterOptions: {
       reportUnusedDisableDirectives: "off"
     },
@@ -20,9 +55,6 @@ export default defineConfig([
       globals: {
         ...globals.jest
       }
-    },
-    plugins: {
-      jsdoc
     },
     rules: {
       "accessor-pairs": "error",
@@ -90,9 +122,6 @@ export default defineConfig([
       "jest/require-hook": "error",
       "jest/require-to-throw-message": "error",
       "jest/require-top-level-describe": "error",
-      "jsdoc/check-tag-names": "error",
-      "jsdoc/check-types": "error",
-      "jsdoc/no-undefined-types": "error",
       "jsx-quotes": "error",
       "key-spacing": "error",
       "keyword-spacing": "off",

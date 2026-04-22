@@ -6,19 +6,30 @@ import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 
-const CurrentSwitchContext = createContext(/** @type {any} */ ({}))
+/**
+ * @typedef {object} CurrentSwitchContextValue
+ * @property {string | undefined} pathShown
+ * @property {Record<string, boolean>} pathsMatched
+ * @property {{s: State, setPathMatched: (path: string, matched: boolean) => void} | null} switchGroup
+ */
+
+const CurrentSwitchContext = createContext(/** @type {CurrentSwitchContextValue} */ ({
+  pathShown: undefined,
+  pathsMatched: {},
+  switchGroup: null
+}))
 
 /**
  * @typedef {object} Props
- * @property {any=} children
- * @property {string=} name
- * @property {boolean=} single
+ * @property {React.ReactNode} [children]
+ * @property {string} [name]
+ * @property {boolean} [single]
  */
 /**
  * @typedef {object} State
- * @property {Date} lastUpdate
- * @property {any} pathShown
- * @property {object} pathsMatched
+ * @property {number} lastUpdate
+ * @property {string | undefined} pathShown
+ * @property {Record<string, boolean>} pathsMatched
  */
 const Switch = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class Switch extends ShapeComponent {
   static defaultProps = {
@@ -34,7 +45,7 @@ const Switch = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   pathsMatchedKeys = []
   state = {
-    lastUpdate: new Date(),
+    lastUpdate: Date.now(),
     pathShown: undefined,
     pathsMatched: {}
   }
@@ -45,7 +56,7 @@ const Switch = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const {pathShown, pathsMatched} = this.s
 
     return (
-      <CurrentSwitchContext.Provider value={{pathShown, pathsMatched, switchGroup: this}}>
+      <CurrentSwitchContext.Provider value={/** @type {CurrentSwitchContextValue} */ ({pathShown, pathsMatched, switchGroup: this})}>
         {this.props.children}
       </CurrentSwitchContext.Provider>
     )
