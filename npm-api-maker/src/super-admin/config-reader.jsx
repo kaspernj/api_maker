@@ -1,38 +1,19 @@
 // @ts-check
 import * as inflection from "inflection"
 import {digg, digs} from "diggerize"
-
-/** @typedef {(path: string) => {default: object} & Record<string, object>} ModelConfigRequireContext */
-/**
- * @typedef {{
- *   webpackContext: (path: string, options: {recursive: boolean, regExp: RegExp}) => ModelConfigRequireContext
- * }} ImportMetaWithWebpackContext
- */
-const importMetaWithWebpackContext = /** @type {{webpackContext?: ImportMetaWithWebpackContext["webpackContext"]}} */ (import.meta)
-
-if (!importMetaWithWebpackContext.webpackContext) {
-  throw new Error("Expected import.meta.webpackContext to be available")
-}
-
-const modelConfigRequireContext = importMetaWithWebpackContext.webpackContext("super-admin/model-configs", {
-  recursive: true,
-  regExp: /\.(jsx|js)$/
-})
+// @ts-expect-error Runtime-resolved module
+import config from "super-admin/config" // eslint-disable-line import/no-unresolved
 
 export default class ApiMakerSuperAdminConfigReader {
   static forModel(modelClass) {
-    const modelNameCamelized = digg(modelClass.modelClassData(), "nameDasherized")
+    const modelNameDasherized = digg(modelClass.modelClassData(), "nameDasherized")
+    const modelConfigs = config.modelConfigs
     let modelConfig
 
-    for (const configPath of [`./${modelNameCamelized}.jsx`, `./${modelNameCamelized}.js`]) {
-      try {
-        modelConfig = modelConfigRequireContext(configPath).default
-        break
-      } catch (error) {
-        if (!error.message.includes("Cannot find module")) {
-          throw error
-        }
-      }
+    if (typeof modelConfigs == "function") {
+      modelConfig = modelConfigs(modelNameDasherized)
+    } else {
+      modelConfig = modelConfigs?.[modelNameDasherized]
     }
 
     if (!modelConfig) {

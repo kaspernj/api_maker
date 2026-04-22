@@ -44,6 +44,7 @@ Notes:
 - In `npm-api-maker`, keep the checked-in `.npmrc` with `legacy-peer-deps=true` while the package targets ESLint 10 and `eslint-plugin-react` has not yet published an ESLint 10 peer range; remove that workaround only after the upstream peer support lands.
 - In `npm-api-maker`, keep peer-facing runtime imports that are needed by linked local/CI builds, lint, or tests (for example `react-native-vector-icons`, `flash-notifications`, `history`, and `i18n-on-steroids`) installed in `devDependencies` as well when tooling resolves modules from the package directory itself.
 - In `npm-api-maker` source-map handling, normalize `stacktrace-parser` `trace.file` values before URL parsing or source-map lookup; Firefox/webpack async frames can arrive as `webpackAsyncContext@http://.../packs/js/react.js`, and using that raw string produces broken `.map` requests.
+- In `npm-api-maker` published `build/` code, avoid webpack-only module-discovery APIs like `import.meta.webpackContext` or `require.context`; consumer webpack builds may leave those as invalid runtime syntax in lazy chunks. Route package-level discovery through consumer config/import hooks instead.
 - In `on-location-changed`, `WithLocationPath` initializes `queryParams` synchronously from `globalThis.location.search` via `useState(params())`; `useQueryParams()` being `undefined` indicates a missing/explicitly-undefined provider, not a normal first-render hydration phase.
 
 ## API Maker Usage in Consuming Projects
