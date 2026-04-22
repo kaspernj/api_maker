@@ -12,7 +12,7 @@ const shared = {}
  * @typedef {{debug?: boolean}} CanOptions
  */
 /**
- * @typedef {typeof import("./base-model.js").default | {
+ * @typedef {import("./base-model.js").BaseModelClassType | {
  *   modelClassData?: () => {name?: string},
  *   name?: string,
  *   resourceData?: () => {name?: string}
@@ -168,7 +168,7 @@ export default class ApiMakerCanCan {
 
   /**
    * Enables or disables debug logging for one caller token.
-   * @param {string} token
+   * @param {string | symbol} token
    * @param {boolean} enabled
    */
   setDebug (token, enabled) {

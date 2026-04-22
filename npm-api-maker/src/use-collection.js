@@ -322,7 +322,7 @@ class UseCollectionShapeHook extends ShapeHook {
     if (this.p.groupBy) query = query.groupBy(...this.p.groupBy)
 
     query = query
-      .ransack(qParams)
+      .ransack(/** @type {import("./collection.js").CollectionRansackParams} */ (qParams))
       .search(searchParams)
       .searchKey(this.queryQName())
       .pageKey(this.queryPageName())

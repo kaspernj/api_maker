@@ -38,7 +38,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const modelClassName = modelClass.modelClassData().name
     const availableLocales = Locales.availableLocales()
     this.configReader = ConfigReader.forModel(modelClass)
-    const currentUser = useCurrentUser()
+    const currentUser = useCurrentUser({withData: true}).model
     const selectedModelAttributes = ["id"]
     const selectedAttributes = {}
     this.attributes = this.configReader.modelConfig?.edit?.attributes

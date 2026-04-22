@@ -309,7 +309,7 @@ export default class ApiMakerModelRecipesModelLoader {
 
       const id = this[foreignKeyMethodName]()
       const modelClass = modelRecipesLoader.getModelClass(resourceName)
-      const ransack = {}
+      const ransack = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
       const ransackIdSearchKey = `${optionsPrimaryKey || klassPrimaryKey}_eq`
 
       ransack[ransackIdSearchKey] = id
@@ -361,7 +361,7 @@ export default class ApiMakerModelRecipesModelLoader {
           }
         }
       } else {
-        const ransack = {}
+        const ransack = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
         const primaryKeyColumnName = optionsPrimaryKey || digg(ModelClass.modelClassData(), "primaryKey")
         const primaryKeyMethodName = inflection.camelize(primaryKeyColumnName, true)
 
@@ -417,7 +417,7 @@ export default class ApiMakerModelRecipesModelLoader {
           }
         )
       } else {
-        const ransack = {}
+        const ransack = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
 
         ransack[`${foreignKey}_eq`] = id
 
@@ -473,7 +473,7 @@ export default class ApiMakerModelRecipesModelLoader {
           {params: {through: {model: modelClassName, id, reflection: relationshipName}}}
         )
       } else {
-        const ransack = {}
+        const ransack = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
 
         ransack[`${foreignKey}_eq`] = id
 

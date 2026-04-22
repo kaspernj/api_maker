@@ -29,9 +29,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   render() {
     const {active, scope} = this.p
-    const style = {}
-
-    if (active) style.fontWeight = "bold"
+    const style = active ? /** @type {import("react-native").TextStyle} */ ({fontWeight: "bold"}) : undefined
 
     return (
       <Pressable

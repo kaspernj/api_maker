@@ -29,7 +29,7 @@ import useUpdatedEvent from "./use-updated-event.js"
 /**
  * @typedef {object} useModelArgs
  * @property {boolean} [active]
- * @property {string[]} [abilities]
+ * @property {Record<string, string[]>} [abilities]
  * @property {UseModelCacheValue[]} [cacheArgs]
  * @property {boolean} [eventUpdated]
  * @property {UseModelEvents} [events]

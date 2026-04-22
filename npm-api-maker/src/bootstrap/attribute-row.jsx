@@ -78,9 +78,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
         style={actualStyle}
         {...restProps}
       >
-        <Text dataSet={this.cache("labelTextDataSet", {class: "attribute-row-label"})} style={this.cache("labelTextStyle", {fontWeight: "bold"})}>
-          {this.label()}
-        </Text>
+        <View dataSet={this.cache("labelTextDataSet", {class: "attribute-row-label"})}>
+          <Text style={this.cache("labelTextStyle", {fontWeight: "bold"})}>
+            {this.label()}
+          </Text>
+        </View>
         <View dataSet={this.cache("valueViewDataSet", {class: "attribute-row-value"})} style={this.cache("valueViewStyle", {marginTop: 3})}>
           {this.value()}
         </View>

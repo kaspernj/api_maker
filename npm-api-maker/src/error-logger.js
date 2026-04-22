@@ -31,7 +31,7 @@ export default class ErrorLogger {
 
   /**
    * Logs diagnostic output when debug mode is enabled.
-   * @param {...Array<DebugOutput>} output
+   * @param {...DebugOutput} output
    */
   debug(...output) {
     if (this.debugging) console.error("ApiMaker ErrorLogger:", ...output)

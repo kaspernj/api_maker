@@ -4,7 +4,7 @@ import * as inflection from "inflection"
 // @ts-expect-error
 import * as models from "models.js" // eslint-disable-line import/no-unresolved
 
-/** @typedef {typeof import("./base-model.js").default} ModelClassLike */
+/** @typedef {import("./base-model.js").BaseModelClassType} ModelClassLike */
 
 /**
  * @param {string} modelName

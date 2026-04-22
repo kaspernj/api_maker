@@ -237,7 +237,7 @@ export default class ApiMakerCollection {
       throw new Error(`${this.args.reflectionName} hasnt been loaded yet`)
     }
 
-    return this.args.model.relationshipsCache[this.args.reflectionName]
+    return /** @type {Array<ModelOf<MC>>} */ (this.args.model.relationshipsCache[this.args.reflectionName])
   }
 
   /** @returns {ModelOf<MC> | Array<ModelOf<MC>>} */
@@ -245,9 +245,9 @@ export default class ApiMakerCollection {
     const {model, reflectionName} = this.args
 
     if (reflectionName in model.relationships) {
-      return model.relationships[reflectionName]
+      return /** @type {ModelOf<MC> | Array<ModelOf<MC>>} */ (model.relationships[reflectionName])
     } else if (reflectionName in model.relationshipsCache) {
-      return model.relationshipsCache[reflectionName]
+      return /** @type {ModelOf<MC> | Array<ModelOf<MC>>} */ (model.relationshipsCache[reflectionName])
     } else if (model.isNewRecord()) {
       const reflectionNameUnderscore = inflection.underscore(reflectionName)
 
@@ -294,8 +294,10 @@ export default class ApiMakerCollection {
       model.relationships[reflectionName] = []
     }
 
-    if (!model.relationships[reflectionName].includes(newModel)) {
-      model.relationships[reflectionName].push(newModel)
+    const relationshipModels = /** @type {Array<ModelOf<MC>>} */ (model.relationships[reflectionName])
+
+    if (!relationshipModels.includes(newModel)) {
+      relationshipModels.push(newModel)
     }
   }
 

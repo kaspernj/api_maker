@@ -14,7 +14,7 @@ const dataSets = {}
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ComponentsAdminLayoutNoAccess extends ShapeComponent {
   render() {
-    const currentUser = useCurrentUser()
+    const currentUser = useCurrentUser({withData: true}).model
     const {t} = useI18n({namespace: "js.api_maker.super_admin.layout.no_access"})
     const userRoles = currentUser?.userRoles()?.loaded()?.map((userRole) => userRole.role()?.identifier()).join(", ")
 
