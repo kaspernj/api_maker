@@ -1,31 +1,19 @@
 // @ts-check
 import * as inflection from "inflection"
 import {digg, digs} from "diggerize"
-
-// Webpack replaces this call at consumer build time with a require-context
-// module. No bare `import.meta` reference outside the call — otherwise the raw
-// `import.meta` keyword leaks into classic-script lazy chunks and throws
-// `Cannot use 'import.meta' outside a module` at runtime.
-// @ts-expect-error webpack-specific API not in the standard import.meta typing.
-const modelConfigRequireContext = import.meta.webpackContext("super-admin/model-configs", {
-  recursive: true,
-  regExp: /\.(jsx|js)$/
-})
+// @ts-expect-error Runtime-resolved module
+import config from "super-admin/config" // eslint-disable-line import/no-unresolved
 
 export default class ApiMakerSuperAdminConfigReader {
   static forModel(modelClass) {
-    const modelNameCamelized = digg(modelClass.modelClassData(), "nameDasherized")
+    const modelNameDasherized = digg(modelClass.modelClassData(), "nameDasherized")
+    const modelConfigs = config.modelConfigs
     let modelConfig
 
-    for (const configPath of [`./${modelNameCamelized}.jsx`, `./${modelNameCamelized}.js`]) {
-      try {
-        modelConfig = modelConfigRequireContext(configPath).default
-        break
-      } catch (error) {
-        if (!error.message.includes("Cannot find module")) {
-          throw error
-        }
-      }
+    if (typeof modelConfigs == "function") {
+      modelConfig = modelConfigs(modelNameDasherized)
+    } else {
+      modelConfig = modelConfigs?.[modelNameDasherized]
     }
 
     if (!modelConfig) {
