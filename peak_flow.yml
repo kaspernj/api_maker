@@ -10,9 +10,8 @@ builds:
     script:
       - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
 
-      - cd npm-api-maker && npm install
+      - cd npm-api-maker && npm ci
       - cd npm-api-maker && yarn link
-      - cd npm-api-maker && npm run build
 
       - cd ruby-gem/spec/dummy && yarn install --network-timeout 120000
       - cd ruby-gem/spec/dummy && yarn link @kaspernj/api-maker
@@ -65,7 +64,6 @@ builds:
       build_13:
         name: ESLint
         script:
-          - cd npm-api-maker && npm ci
           - cd npm-api-maker && npm run lint:eslint
       build_14:
         name: Expo Doctor
