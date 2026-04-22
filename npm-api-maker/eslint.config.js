@@ -1,13 +1,18 @@
 // @ts-check
-import {fixupConfigRules} from "@eslint/compat"
+/* eslint sort-imports: off */
 import {defineConfig} from "eslint/config"
+import {fixupConfigRules} from "@eslint/compat"
+import js from "@eslint/js"
 import expoConfig from "eslint-config-expo/flat.js"
 import globals from "globals"
 import jest from "eslint-plugin-jest"
-import js from "@eslint/js"
 import jsdoc from "eslint-plugin-jsdoc"
 
+
 export default defineConfig([
+  {
+    ignores: ["build/**", "dist/**", "example/**", "node_modules/**"]
+  },
   ...fixupConfigRules(expoConfig),
   ...fixupConfigRules(jest.configs["flat/recommended"]),
   js.configs.recommended,
@@ -43,7 +48,6 @@ export default defineConfig([
     }
   },
   {
-    ignores: ["dist/*"],
     linterOptions: {
       reportUnusedDisableDirectives: "off"
     },
