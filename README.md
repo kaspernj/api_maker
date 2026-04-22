@@ -236,7 +236,12 @@ If you prefer controlled inputs, use the `value` argument instead of `defaultVal
 
 ### ActionCable
 
-Your `connection.rb` should look something like this:
+ApiMaker can run commands, services, and model subscriptions over your app's existing ActionCable connection. The setup has three parts: your `Connection` identifies the current user, your `Channel` inherits from `ApiMaker::Channel` so `current_user` / `current_ability` / `api_maker_args` stay in sync with the user on the connection, and the frontend opts into websocket-transported requests.
+
+#### Connection
+
+`ApplicationCable::Connection` authenticates the websocket upgrade and exposes `current_user` via `identified_by`. Because the websocket handshake only happens once per connection, `find_verified_user` is typically fed from the same signed cookies your HTTP sign-in flow writes (see the "Sign-in across HTTP and websocket" section below):
+
 ```rb
 class ApplicationCable::Connection < ActionCable::Connection::Base
   identified_by :current_user
@@ -259,22 +264,32 @@ private
 end
 ```
 
-Your `channel.rb` should look something like this:
+#### Channel
+
+Inherit from `ApiMaker::Channel`. It wires up `current_user`, `current_ability`, `api_maker_args`, and the session-shadow store for you — don't reimplement them, just extend. Adding per-request state (time zones, SQL session variables, audit context) goes through an optional `with_request_context` hook that ApiMaker calls once per command:
+
 ```rb
-class ApplicationCable::Channel < ActionCable::Channel::Base
-private # rubocop:disable Layout/IndentationWidth
+class ApplicationCable::Channel < ApiMaker::Channel
+  def with_request_context(api_maker_args:, &)
+    # Force the channel to re-read the current user from the connection's
+    # in-memory warden proxy before each command. Critical when a user signs in
+    # mid-connection over HTTP — `Devise::PersistSession` running on this
+    # cable updates `warden.user(:user)` but not the session store captured at
+    # upgrade, so reading `warden.session_serializer` would clobber a valid
+    # signed-in user with nil. `sync_api_maker_current_user!` does the right
+    # read for you.
+    sync_api_maker_current_user!
 
-  def current_ability
-    @current_ability ||= ApiMakerAbility.for_user(current_user)
-  end
-
-  def current_user
-    @current_user ||= env["warden"].user
+    yield
   end
 end
 ```
 
-To send ApiMaker commands and services over ActionCable instead of the HTTP commands endpoint, enable websocket requests in the frontend config:
+If your resource abilities rely on `current_user` being set inside `api_maker_args` (via `resource.current_user`), the inherited `ApiMaker::Channel#current_ability` already passes it through correctly. You only need a custom `with_request_context` when you have additional per-command state (SQL vars, time zone, audit trail, etc.) to set up around each command.
+
+#### Sending commands over the websocket
+
+To route ApiMaker model queries, services, and commands through the cable instead of the HTTP `/api_maker/commands` endpoint, enable websocket requests in the frontend config once during app bootstrap:
 
 ```js
 import ApiMakerConfig from "@kaspernj/api-maker/build/config.js"
@@ -282,7 +297,26 @@ import ApiMakerConfig from "@kaspernj/api-maker/build/config.js"
 ApiMakerConfig.setWebsocketRequests(true)
 ```
 
-ApiMaker automatically installs its session-shadow middleware so websocket-side session changes can be observed by later HTTP requests. Your ActionCable channel still needs to expose the same request context that your normal controllers provide. In practice that means `current_user`, the CanCan ability, and any `api_maker_args` data needed by serializers and commands.
+From that point onward, any `Model.ransack(...).toArray()`, `Model.ransack(...).first()`, `useCollection(...)`, `useModel(...)`, and `Services.current().sendRequest(...)` call will go over ActionCable and be handled by `ApiMaker::RequestsChannel`. Requests that must set a cookie — sign-in, sign-out, session persistence — still force HTTP internally (`{forceHttp: true}`) because ActionCable has no response headers to carry `Set-Cookie` on.
+
+Model event subscriptions (`useCollection`, `useModel`, create/update/destroy listeners) always go through `ApiMaker::SubscriptionsChannel`, regardless of `setWebsocketRequests`.
+
+#### Sign-in across HTTP and websocket
+
+The non-obvious case is signing in while an ActionCable connection is already open. The flow:
+
+1. The frontend calls `Devise.signIn`. This POSTs over HTTP (the server needs `Set-Cookie` headers), and Devise sets the session cookie plus any signed cookies your `Warden::Manager.after_set_user` hook writes.
+2. `Devise.signIn` then sends `Devise::PersistSession` over the **existing** cable so the backend can sync the connection's identity to the new user. On the server, that command resolves the new user from the shadow session token and calls `controller.sign_in(user)` inside `ApiMaker::ActionCableRequestContext`, which invokes `warden.set_user` and `update_api_maker_current_user!` — updating warden's in-memory proxy, the channel's cached `@current_user`, and `connection.current_user` (the `identified_by` slot).
+3. The next websocket command runs with `current_user` set to the signed-in user.
+
+What can trip this up in your channel:
+
+- Overriding `current_user` to re-read from `warden.session_serializer.fetch(:user)` or `env["rack.session"]`. The rack session captured at cable upgrade is not refreshed when the HTTP sign-in happens later, so you'll read nil and wipe a valid signed-in user. Always read from `warden.user(:user)` (the in-memory proxy) if you must read from warden directly — or, better, just call `sync_api_maker_current_user!` and let ApiMaker do it.
+- Forgetting to send `Devise.signIn`'s second-half `PersistSession` and instead doing your own HTTP sign-in endpoint. Use `Devise.signIn` (or, for impersonation, `Devise.persistSession` followed by `resetRealtimeRuntimeState()` to tear down and reopen the cable with the new cookies).
+
+#### Session shadow middleware
+
+ApiMaker automatically installs `ApiMaker::SessionShadowMiddleware` so websocket-side session changes become visible to later HTTP requests and vice versa. You don't need to mount it yourself — the railtie does it during Rails boot.
 
 ## Usage
 
