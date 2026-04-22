@@ -9,7 +9,7 @@ import Modal from "../../modal"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
-import {View} from "react-native"
+import {Pressable, View} from "react-native"
 import Text from "../../utils/text"
 import useI18n from "i18n-on-steroids/build/src/use-i18n.js"
 
@@ -63,11 +63,34 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
               {t(".columns", {defaultValue: "Columns"})}
             </Text>
           </View>
+          <Pressable
+            dataSet={this.cache("deselectAllPressableDataSet", {component: "api-maker/table/settings/deselect-all-action"})}
+            onPress={this.tt.onDeselectAllPress}
+            style={this.cache("deselectAllPressableStyle", {marginBottom: 10})}
+            testID="table-settings-deselect-all-button"
+          >
+            <Text>
+              {t(".deselect_all", {defaultValue: "Deselect all"})}
+            </Text>
+          </Pressable>
           {preparedColumns?.map(({column, tableSettingColumn}) =>
             <ColumnRow column={column} key={columnIdentifier(column)} table={table} tableSettingColumn={tableSettingColumn} />
           )}
         </View>
       </Modal>
     )
+  }
+
+  onDeselectAllPress = async () => {
+    const {table} = this.p
+    const {preparedColumns} = table.s
+
+    await Promise.all(
+      preparedColumns.map(async ({tableSettingColumn}) => {
+        await tableSettingColumn.update({visible: false})
+      })
+    )
+
+    table.events.emit("columnVisibilityUpdated")
   }
 }))
