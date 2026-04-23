@@ -6,7 +6,7 @@ class Commands::Workplaces::CreateLink < Commands::ApplicationCommand
 
     if model
       current_workplace.workplace_links.create(resource: model)
-      current_workplace.api_maker_event("workplace_links_created", created: {model_class => [model_id]})
+      current_workplace.api_maker_event("workplace_links_created", resource_types: [model_class])
       succeed!(success: true)
     else
       fail!(errors: ["Model not found or not accessible"])

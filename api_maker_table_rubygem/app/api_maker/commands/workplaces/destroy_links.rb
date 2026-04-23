@@ -1,6 +1,6 @@
 class Commands::Workplaces::DestroyLinks < Commands::ApplicationCommand
   def execute!
-    destroyed = {}
+    resource_types = []
 
     args.fetch(:models).each do |model_name, ids|
       # Convert from string to integer. API maker stringifies all arguments because of FormData usage
@@ -9,10 +9,10 @@ class Commands::Workplaces::DestroyLinks < Commands::ApplicationCommand
       model_class_name = resource.model_class.name
 
       current_workplace.workplace_links.where(resource_id: ids, resource_type: model_class_name).delete_all
-      destroyed[model_name] ||= ids
+      resource_types << model_class_name
     end
 
-    current_workplace.api_maker_event("workplace_links_destroyed", destroyed: destroyed)
+    current_workplace.api_maker_event("workplace_links_destroyed", resource_types: resource_types.uniq)
     succeed!(success: true)
   end
 end

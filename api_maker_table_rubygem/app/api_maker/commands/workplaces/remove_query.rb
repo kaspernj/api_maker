@@ -2,12 +2,8 @@ class Commands::Workplaces::RemoveQuery < Commands::ApplicationCommand
   alias workplace model
 
   def execute!
-    result = WorkerPlugins::RemoveQuery.execute!(
-      query: query,
-      workplace: workplace
-    )
-    destroyed = result.fetch(:destroyed)
-    workplace.api_maker_event("workplace_links_destroyed", destroyed: {model_class.name => destroyed})
+    WorkerPlugins::RemoveQuery.execute!(query: query, workplace: workplace)
+    workplace.api_maker_event("workplace_links_destroyed", resource_types: [model_class.name])
     succeed!(success: true)
   end
 
