@@ -141,7 +141,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   onDestroyClicked = async () => {
     const {t} = this.tt
-    const {destroyMessage} = this.p.table.props
+    const {table} = this.p
+    const {destroyMessage} = table.props
     const {model} = this.p
 
     // eslint-disable-next-line no-alert
@@ -150,7 +151,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }
 
     try {
-      await model.destroy()
+      await table.withBlocking(() => model.destroy())
 
       if (destroyMessage) {
         FlashNotifications.success(destroyMessage)
