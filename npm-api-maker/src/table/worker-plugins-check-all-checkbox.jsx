@@ -57,6 +57,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     indeterminate: false
   }
 
+  updateAllCheckedRequestId = 0
+
   setup() {
     useMemo(() => {
       this.updateAllChecked()
@@ -76,8 +78,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   async updateAllChecked() {
+    const requestId = ++this.updateAllCheckedRequestId
     const {query, currentWorkplace} = this.props
     const queryLinksStatusResult = await currentWorkplace.queryLinksStatus({query})
+
+    if (requestId !== this.updateAllCheckedRequestId) return
+
     const allChecked = queryLinksStatusResult.all_checked
     const someChecked = queryLinksStatusResult.some_checked
 

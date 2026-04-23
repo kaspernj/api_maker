@@ -30,6 +30,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     linkLoaded: false
   }
 
+  loadCurrentLinkRequestId = 0
+
   setup() {
     useMemo(() => {
       this.loadCurrentLink()
@@ -40,8 +42,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   async loadCurrentLink() {
+    const requestId = ++this.loadCurrentLinkRequestId
     const {model} = this.props
     const response = await Workplace.linkFor({model_class: model.modelClassData().name, model_id: model.id()})
+
+    if (requestId !== this.loadCurrentLinkRequestId) return
+
     const link = digg(response, "link")
 
     this.setState({
