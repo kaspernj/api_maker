@@ -76,6 +76,10 @@ export default class BootstrapLiveTable extends React.PureComponent {
         </Pressable>
     }
 
+    if (params.workplace) {
+      liveTableProps.workplace = true
+    }
+
     return (
       <Layout>
         <ApiMakerTable
