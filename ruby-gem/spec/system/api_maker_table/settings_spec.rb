@@ -49,4 +49,30 @@ describe "table - settings" do
     sleep 1
     expect_no_errors
   end
+
+  it "de-selects all columns" do
+    task1
+    task2
+
+    login_as user_admin
+    visit bootstrap_live_table_path
+    wait_for_selector model_row_selector(task1)
+    wait_for_selector model_row_selector(task2)
+    wait_for_selector "[data-class='table--column'][data-identifier='attribute-id--sort-key-id']"
+    wait_for_selector "[data-class='table--column'][data-identifier='attribute-name--sort-key-name']"
+    wait_for_selector "[data-class='table--column'][data-identifier='project--attribute-name--sort-key-projectName']"
+    wait_for_selector "[data-class='table--column'][data-identifier='attribute-createdAt--sort-key-createdAt']"
+
+    wait_for_and_find("[data-testid='settings-button']").click
+    wait_for_selector "[data-class='api-maker--table--settings']"
+    wait_for_and_find("[data-testid='table-settings-deselect-all-button']").click
+
+    wait_for_no_selector "[data-class='table--column'][data-identifier='attribute-id--sort-key-id']"
+    wait_for_no_selector "[data-class='table--column'][data-identifier='attribute-name--sort-key-name']"
+    wait_for_no_selector "[data-class='table--column'][data-identifier='project--attribute-name--sort-key-projectName']"
+    wait_for_no_selector "[data-class='table--column'][data-identifier='attribute-createdAt--sort-key-createdAt']"
+
+    wait_for_and_find(".api-maker--table--setings--column-checkbox[data-identifier='attribute-id--sort-key-id']").click
+    wait_for_selector "[data-class='table--column'][data-identifier='attribute-id--sort-key-id']"
+  end
 end

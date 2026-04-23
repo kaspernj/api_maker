@@ -24,12 +24,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   })
 
   setup() {
-    this.checked = this.p.tableSettingColumn.visible()
     this.checkboxRef = useRef(undefined)
+    this.visible = this.p.tableSettingColumn.visible()
 
     useEffect(() => {
       this.updateCheckboxChecked()
-    }, [this.checked])
+    }, [this.visible])
   }
 
   render() {
@@ -56,27 +56,26 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onCheckboxChange = () => {
-    const {checked} = this
+    const checked = this.p.tableSettingColumn.visible()
+    let visible
 
     if (checked === true) {
-      this.checked = null
+      visible = null
     } else if (checked === null) {
-      this.checked = false
+      visible = false
     } else {
-      this.checked = true
+      visible = true
     }
 
-    this.updateCheckboxChecked()
-    this.updateTableSettingColumn()
+    this.updateCheckboxChecked(visible)
+    this.updateTableSettingColumn(visible)
   }
 
-  updateCheckboxChecked() {
-    const {checked} = this.tt
-
-    if (checked === true) {
+  updateCheckboxChecked(visible = this.p.tableSettingColumn.visible()) {
+    if (visible === true) {
       this.checkboxRef.current.checked = true
       this.checkboxRef.current.indeterminate = undefined
-    } else if (checked === null) {
+    } else if (visible === null) {
       this.checkboxRef.current.checked = undefined
       this.checkboxRef.current.indeterminate = true
     } else {
@@ -85,10 +84,10 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }
   }
 
-  async updateTableSettingColumn() {
+  async updateTableSettingColumn(visible) {
     const {table, tableSettingColumn} = this.p
 
-    await tableSettingColumn.update({visible: this.checked})
+    await tableSettingColumn.update({visible})
 
     table.events.emit("columnVisibilityUpdated", {tableSettingColumn})
   }
