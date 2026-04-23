@@ -81,8 +81,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   async updateAllChecked() {
     const requestId = ++this.updateAllCheckedRequestId
-    const {query, currentWorkplace} = this.props
-    const queryLinksStatusResult = await currentWorkplace.queryLinksStatus({query})
+    const {query, currentWorkplace, table} = this.props
+    const run = table?.withBlocking ?? ((fn) => fn())
+    const queryLinksStatusResult = await run(() => currentWorkplace.queryLinksStatus({query}))
 
     if (requestId !== this.updateAllCheckedRequestId) return
 

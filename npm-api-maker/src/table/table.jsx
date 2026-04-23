@@ -494,12 +494,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }
 
     const WorkplaceLink = modelClassRequire("WorkplaceLink")
-    const currentWorkplaceCount = await WorkplaceLink
+    const currentWorkplaceCount = await this.withBlocking(() => WorkplaceLink
       .ransack({
         resource_type_eq: this.p.modelClass.modelClassData().name,
         workplace_id_eq: this.s.currentWorkplace.id()
       })
-      .count()
+      .count())
 
     if (requestId !== this.currentWorkplaceCountRequestId) return
 
