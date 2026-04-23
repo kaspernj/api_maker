@@ -97,10 +97,11 @@ describe "bootstrap - live table - worker_plugins workplace" do
     login_as user_admin
     visit bootstrap_live_table_path(workplace: true, delay_query_ms: 400)
 
-    # Overlay element is always mounted; `data-blocking` reflects the current
-    # state so we can assert the overlay is actually covering the table rather
-    # than just sitting in the DOM. `visible: :all` because the overlay sits
-    # at opacity 0 when not blocking and Capybara treats that as invisible.
+    # Overlay element is always mounted; `data-overlay-state` reflects the
+    # current state so we can assert the overlay is actually covering the
+    # table rather than just sitting in the DOM. `visible: :all` because the
+    # overlay sits at opacity 0 when not blocking and Capybara treats that as
+    # invisible.
     expect(page).to have_css(overlay_selector, visible: :all)
     overlay_in_state = lambda do |state|
       expect(page).to have_css("#{overlay_selector}[data-overlay-state='#{state}']", visible: :all)
@@ -118,5 +119,42 @@ describe "bootstrap - live table - worker_plugins workplace" do
     overlay_in_state.call("idle")
     wait_for_selector "#{checkbox_selector(task1)}[data-checked='true']"
     wait_for_selector "#{checkbox_selector(task2)}[data-checked='true']"
+  end
+
+  it "visibly covers the table during a heavy action — opacity fades in and pointer-events intercept clicks" do
+    task1
+    task2
+
+    login_as user_admin
+    visit bootstrap_live_table_path(workplace: true, delay_query_ms: 800)
+
+    wait_for_selector model_row_selector(task1)
+    wait_for_action_cable_to_connect
+
+    # Kick off a heavy action that holds the overlay blocking for ~800 ms
+    # (delayed query plus the auto-refresh probe that follows).
+    wait_for_and_find(check_all_selector).click
+
+    wait_for_selector "#{overlay_selector}[data-overlay-state='blocking']", visible: :all
+    overlay = find(overlay_selector, visible: :all)
+
+    # Opacity animates 0 → 1 over 150 ms; `match_style` reads the live
+    # computed-style via Capybara's driver API and retries until it settles
+    # so we don't read mid-transition.
+    expect(overlay).to match_style({"opacity" => "1"}, wait: 2)
+    expect(overlay).to match_style("pointer-events" => "auto")
+
+    # The overlay must physically cover the table — at minimum not collapse
+    # to a zero-sized node.
+    rect = overlay.rect
+    expect(rect.width).to be > 50
+    expect(rect.height).to be > 50
+
+    # When the action resolves the overlay must actually go away, not just
+    # drop its state flag. Opacity animates back to 0 and pointer-events to
+    # "none" so clicks reach the table again.
+    expect(page).to have_css("#{overlay_selector}[data-overlay-state='idle']", visible: :all)
+    expect(overlay).to match_style({"opacity" => "0"}, wait: 2)
+    expect(overlay).to match_style("pointer-events" => "none")
   end
 end
