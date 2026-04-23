@@ -85,6 +85,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const {table} = this.p
     const {preparedColumns} = table.s
 
+    if (!preparedColumns) return
+
     await Promise.all(
       preparedColumns.map(async ({tableSettingColumn}) => {
         await tableSettingColumn.update({visible: false})

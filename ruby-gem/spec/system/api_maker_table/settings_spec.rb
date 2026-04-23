@@ -71,5 +71,8 @@ describe "table - settings" do
     wait_for_no_selector "[data-class='table--column'][data-identifier='attribute-name--sort-key-name']"
     wait_for_no_selector "[data-class='table--column'][data-identifier='project--attribute-name--sort-key-projectName']"
     wait_for_no_selector "[data-class='table--column'][data-identifier='attribute-createdAt--sort-key-createdAt']"
+
+    wait_for_and_find(".api-maker--table--setings--column-checkbox[data-identifier='attribute-id--sort-key-id']").click
+    wait_for_selector "[data-class='table--column'][data-identifier='attribute-id--sort-key-id']"
   end
 end
