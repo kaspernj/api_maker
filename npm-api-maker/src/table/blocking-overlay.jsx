@@ -35,9 +35,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     // Always mounted — pointerEvents toggles click-capture, opacity drives
     // the fade. Kept out of conditional render so the Animated.Value and
     // emitter subscription don't churn on every block/unblock.
+    const dataSet = {
+      class: "api-maker--table--blocking-overlay",
+      overlayState: this.s.blocking ? "blocking" : "idle"
+    }
+
     return (
       <Animated.View
-        dataSet={this.cache("overlayDataSet", {class: "api-maker--table--blocking-overlay"})}
+        dataSet={dataSet}
         pointerEvents={this.s.blocking ? "auto" : "none"}
         style={this.cache("overlayStyle", {
           position: "absolute",

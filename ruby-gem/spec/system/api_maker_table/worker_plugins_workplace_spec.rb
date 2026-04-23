@@ -6,6 +6,7 @@ describe "bootstrap - live table - worker_plugins workplace" do
   let(:user_admin) { create :user, admin: true }
 
   let(:check_all_selector) { ".api-maker--table--worker-plugins-check-all-checkbox" }
+  let(:overlay_selector) { "[data-class='api-maker--table--blocking-overlay']" }
 
   def checkbox_selector(model)
     ".api-maker--table--worker-plugins-checkbox[data-model-id='#{model.id}']"
@@ -87,5 +88,35 @@ describe "bootstrap - live table - worker_plugins workplace" do
 
     expect(workplace_link_for(task1)).to be_nil
     expect(workplace_link_for(task2)).to be_nil
+  end
+
+  it "shows the blocking overlay while the check-all probe loads and while toggling all" do
+    task1
+    task2
+
+    login_as user_admin
+    visit bootstrap_live_table_path(workplace: true, delay_query_ms: 400)
+
+    # Overlay element is always mounted; `data-blocking` reflects the current
+    # state so we can assert the overlay is actually covering the table rather
+    # than just sitting in the DOM. `visible: :all` because the overlay sits
+    # at opacity 0 when not blocking and Capybara treats that as invisible.
+    expect(page).to have_css(overlay_selector, visible: :all)
+    overlay_in_state = lambda do |state|
+      expect(page).to have_css("#{overlay_selector}[data-overlay-state='#{state}']", visible: :all)
+    end
+
+    # The initial updateAllChecked probe should trigger the overlay; after the
+    # probe resolves, the overlay should drop back to idle.
+    overlay_in_state.call("blocking")
+    overlay_in_state.call("idle")
+
+    # Toggling the header select-all kicks off addQuery — overlay should come
+    # back on, then drop off when the action and the follow-up probe complete.
+    wait_for_and_find(check_all_selector).click
+    overlay_in_state.call("blocking")
+    overlay_in_state.call("idle")
+    wait_for_selector "#{checkbox_selector(task1)}[data-checked='true']"
+    wait_for_selector "#{checkbox_selector(task2)}[data-checked='true']"
   end
 end

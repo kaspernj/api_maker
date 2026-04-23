@@ -317,19 +317,25 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
    * Re-entrant — nested or overlapping calls keep the overlay shown until the
    * outermost call resolves.
    *
+   * Emits the "blocking" events via `queueMicrotask` so the overlay's
+   * subscription has committed before the first event fires — otherwise a
+   * heavy action kicked off from a sibling component's `setup()` (e.g. the
+   * check-all checkbox's initial `updateAllChecked`) can emit before the
+   * overlay mounts, and the initial transition to blocking is lost.
+   *
    * @template T
    * @param {() => Promise<T>} fn
    * @returns {Promise<T>}
    */
   withBlocking = async (fn) => {
     this.blockingCount += 1
-    if (this.blockingCount === 1) this.events.emit("blocking", true)
+    if (this.blockingCount === 1) queueMicrotask(() => this.events.emit("blocking", true))
 
     try {
       return await fn()
     } finally {
       this.blockingCount -= 1
-      if (this.blockingCount === 0) this.events.emit("blocking", false)
+      if (this.blockingCount === 0) queueMicrotask(() => this.events.emit("blocking", false))
     }
   }
   state = {
