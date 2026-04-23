@@ -302,6 +302,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   draggableSortEvents = new EventEmitter()
   events = new EventEmitter()
   currentWorkplaceLoadRequestId = 0
+  currentWorkplaceCountRequestId = 0
   tableSettingLoadRequestId = 0
   tableSettings = null
   state = {
@@ -458,6 +459,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   async loadCurrentWorkplaceCount() {
+    const requestId = ++this.currentWorkplaceCountRequestId
+
     if (!this.s.currentWorkplace) {
       this.setState({currentWorkplaceCount: 0})
       return
@@ -470,6 +473,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
         workplace_id_eq: this.s.currentWorkplace.id()
       })
       .count()
+
+    if (requestId !== this.currentWorkplaceCountRequestId) return
 
     this.setState({currentWorkplaceCount})
   }
@@ -843,26 +848,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onLinksCreated = ({args}) => {
-    const modelClassName = this.p.modelClass.modelClassData().name
-
-    if (args.created[modelClassName]) {
-      const amountCreated = args.created[modelClassName].length
-
-      this.setState((prevState) => ({
-        currentWorkplaceCount: prevState.currentWorkplaceCount + amountCreated
-      }))
+    if (args.resource_types?.includes(this.p.modelClass.modelClassData().name)) {
+      this.loadCurrentWorkplaceCount()
     }
   }
 
   onLinksDestroyed = ({args}) => {
-    const modelClassName = this.p.modelClass.modelClassData().name
-
-    if (args.destroyed[modelClassName]) {
-      const amountDestroyed = args.destroyed[modelClassName].length
-
-      this.setState((prevState) => ({
-        currentWorkplaceCount: prevState.currentWorkplaceCount - amountDestroyed
-      }))
+    if (args.resource_types?.includes(this.p.modelClass.modelClassData().name)) {
+      this.loadCurrentWorkplaceCount()
     }
   }
 

@@ -1,7 +1,7 @@
 {
   "name": "@kaspernj/api-maker",
   "type": "module",
-  "version": "1.0.2162",
+  "version": "1.0.2163",
   "description": "My new module",
   "files": [
     "build/**"
@@ -96,7 +96,7 @@
     "react-native": "0.79.6",
     "react-native-vector-icons": "^10.3.0",
     "typescript": "~5.8.3",
-    "velocious": "^1.0.175"
+    "velocious": "^1.0.343"
   },
   "peerDependencies": {
     "expo": "*",
