@@ -16,16 +16,14 @@ const FADE_DURATION = 150
  */
 /**
  * @typedef {object} State
- * @property {boolean} visible
+ * @property {boolean} blocking
  */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerTableBlockingOverlay extends ShapeComponent {
   static propTypes = propTypesExact({
     events: PropTypes.object.isRequired
   })
 
-  state = {visible: false}
-
-  animationSequence = 0
+  state = {blocking: false}
 
   setup() {
     this.opacity = useRef(new Animated.Value(0)).current
@@ -34,12 +32,13 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   render() {
-    if (!this.s.visible) return null
-
+    // Always mounted — pointerEvents toggles click-capture, opacity drives
+    // the fade. Kept out of conditional render so the Animated.Value and
+    // emitter subscription don't churn on every block/unblock.
     return (
       <Animated.View
         dataSet={this.cache("overlayDataSet", {class: "api-maker--table--blocking-overlay"})}
-        pointerEvents="auto"
+        pointerEvents={this.s.blocking ? "auto" : "none"}
         style={this.cache("overlayStyle", {
           position: "absolute",
           top: 0,
@@ -60,25 +59,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onBlocking = (blocking) => {
-    const sequence = ++this.animationSequence
-
-    if (blocking) {
-      this.setState({visible: true})
-      Animated.timing(this.opacity, {
-        duration: FADE_DURATION,
-        toValue: 1,
-        useNativeDriver: false
-      }).start()
-    } else {
-      Animated.timing(this.opacity, {
-        duration: FADE_DURATION,
-        toValue: 0,
-        useNativeDriver: false
-      }).start(({finished}) => {
-        if (finished && sequence === this.animationSequence) {
-          this.setState({visible: false})
-        }
-      })
-    }
+    this.setState({blocking})
+    Animated.timing(this.opacity, {
+      duration: FADE_DURATION,
+      toValue: blocking ? 1 : 0,
+      useNativeDriver: false
+    }).start()
   }
 }))
