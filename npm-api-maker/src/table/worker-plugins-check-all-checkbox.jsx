@@ -120,13 +120,13 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onLinksCreated = ({args}) => {
-    if (args.created[this.modelClassName()]) {
+    if (args.resource_types?.includes(this.modelClassName())) {
       this.updateAllChecked()
     }
   }
 
   onLinksDestroyed = ({args}) => {
-    if (args.destroyed[this.modelClassName()]) {
+    if (args.resource_types?.includes(this.modelClassName())) {
       this.updateAllChecked()
     }
   }

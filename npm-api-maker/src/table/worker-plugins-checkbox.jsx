@@ -90,22 +90,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onLinksCreated = ({args}) => {
-    const {model} = this.p
-    const id = model.id()
-    const modelClassName = model.modelClassData().name
-
-    if (args.created[modelClassName] && args.created[modelClassName].includes(id)) {
-      this.setState({checked: true})
+    if (args.resource_types?.includes(this.p.model.modelClassData().name)) {
+      this.loadCurrentLink()
     }
   }
 
   onLinksDestroyed = ({args}) => {
-    const {model} = this.p
-    const id = model.id()
-    const modelClassName = model.modelClassData().name
-
-    if (args.destroyed[modelClassName] && args.destroyed[modelClassName].includes(id)) {
-      this.setState({checked: false})
+    if (args.resource_types?.includes(this.p.model.modelClassData().name)) {
+      this.loadCurrentLink()
     }
   }
 }))
