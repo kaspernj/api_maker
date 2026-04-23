@@ -39,6 +39,7 @@ const Checkbox = memo(shapeComponent(/** @augments {ShapeComponent<CheckboxProps
  * @property {object} [currentWorkplace]
  * @property {Collection} [query]
  * @property {object} [style]
+ * @property {object} [table]
  */
 /**
  * @typedef {object} State
@@ -49,7 +50,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   static propTypes = propTypesExact({
     currentWorkplace: PropTypes.object,
     query: PropTypes.instanceOf(Collection),
-    style: PropTypes.object
+    style: PropTypes.object,
+    table: PropTypes.object
   })
 
   state = {
@@ -113,14 +115,15 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   onCheckedChanged = async (e) => {
     e.preventDefault()
 
-    const {currentWorkplace, query} = this.props
+    const {currentWorkplace, query, table} = this.props
     const checkbox = e.target
+    const run = table?.withBlocking ?? ((fn) => fn())
 
     if (checkbox.checked) {
-      await currentWorkplace.addQuery({query})
+      await run(() => currentWorkplace.addQuery({query}))
       this.setState({checked: true, indeterminate: false})
     } else {
-      await currentWorkplace.removeQuery({query})
+      await run(() => currentWorkplace.removeQuery({query}))
       this.setState({checked: false, indeterminate: false})
     }
   }

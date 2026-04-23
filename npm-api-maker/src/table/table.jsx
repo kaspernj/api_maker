@@ -6,6 +6,7 @@
 import {dig, digg, digs} from "diggerize"
 import React, {createContext, useContext, useEffect, useMemo, useRef} from "react"
 import {Animated, Platform, Pressable, View} from "react-native"
+import BlockingOverlay from "./blocking-overlay"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
 import Collection from "../collection.js"
@@ -149,6 +150,7 @@ const ListHeaderComponent = memo(shapeComponent(/** @augments {ShapeComponent<He
               currentWorkplace={table.s.currentWorkplace}
               query={queryWithoutPagination}
               style={styles.workerPlguinsCheckAllCheckboxStyle ||= {marginHorizontal: "auto"}}
+              table={table}
             />
             {!mdUp &&
               <Text style={styles.selectAllFoundTextStyle ||= {marginLeft: 3}}>
@@ -305,6 +307,31 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   currentWorkplaceCountRequestId = 0
   tableSettingLoadRequestId = 0
   tableSettings = null
+  blockingCount = 0
+
+  /**
+   * Runs the given async function while showing the table's blocking overlay,
+   * preventing the user from starting a second heavy action (select all,
+   * deselect all, per-row destroy, ...) while the first is in flight.
+   *
+   * Re-entrant — nested or overlapping calls keep the overlay shown until the
+   * outermost call resolves.
+   *
+   * @template T
+   * @param {() => Promise<T>} fn
+   * @returns {Promise<T>}
+   */
+  withBlocking = async (fn) => {
+    this.blockingCount += 1
+    if (this.blockingCount === 1) this.events.emit("blocking", true)
+
+    try {
+      return await fn()
+    } finally {
+      this.blockingCount -= 1
+      if (this.blockingCount === 0) this.events.emit("blocking", false)
+    }
+  }
   state = {
     columns: this.columnsAsArray(),
     currentWorkplace: undefined,
@@ -778,25 +805,31 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     const flatList = (
       <TableContext.Provider value={this.tt.tableContextValue}>
-        <FlatList
-          data={models}
-          dataSet={dataSets[`flatList-${className}-${this.s.tableSettingFullCacheKey}`] ||= {
-            class: classNames("api-maker--table", className),
-            cacheKey: this.s.tableSettingFullCacheKey,
-            lastUpdate: this.s.lastUpdate
-          }}
-          extraData={this.s.lastUpdate}
-          keyExtractor={this.tt.keyExtrator}
-          ListHeaderComponent={ListHeaderComponent}
-          renderItem={this.tt.renderItem}
-          showsHorizontalScrollIndicator
-          style={styles[`flatList-${styleUI}`] ||= {
-            overflowX: "auto",
-            border: styleUI ? "1px solid #dbdbdb" : undefined,
-            borderRadius: styleUI ? 5 : undefined
-          }}
-          {...restProps}
-        />
+        <View
+          dataSet={dataSets.flatListWrapper ||= {class: "api-maker--table--flat-list-wrapper"}}
+          style={styles.flatListWrapper ||= {position: "relative"}}
+        >
+          <FlatList
+            data={models}
+            dataSet={dataSets[`flatList-${className}-${this.s.tableSettingFullCacheKey}`] ||= {
+              class: classNames("api-maker--table", className),
+              cacheKey: this.s.tableSettingFullCacheKey,
+              lastUpdate: this.s.lastUpdate
+            }}
+            extraData={this.s.lastUpdate}
+            keyExtractor={this.tt.keyExtrator}
+            ListHeaderComponent={ListHeaderComponent}
+            renderItem={this.tt.renderItem}
+            showsHorizontalScrollIndicator
+            style={styles[`flatList-${styleUI}`] ||= {
+              overflowX: "auto",
+              border: styleUI ? "1px solid #dbdbdb" : undefined,
+              borderRadius: styleUI ? 5 : undefined
+            }}
+            {...restProps}
+          />
+          <BlockingOverlay events={this.events} />
+        </View>
       </TableContext.Provider>
     )
 
