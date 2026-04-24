@@ -1,132 +1,155 @@
 // @ts-check
-/* eslint-disable jest/require-hook, react/function-component-definition, sort-imports */
-import React, {useCallback, useEffect, useRef} from "react"
+import * as inflection from "inflection"
+import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Devise from "./devise.js"
+import Logger from "./logger.js"
+import PropTypes from "prop-types"
+import React from "react"
+import Services from "./services.js"
 import {digg} from "diggerize"
 import {events} from "./use-current-user.js"
-import * as inflection from "inflection"
-import Logger from "./logger.js"
-import Services from "./services.js"
+import memo from "set-state-compare/build/memo.js"
+import propTypesExact from "prop-types-exact"
 import useEventEmitter from "ya-use-event-emitter"
-import useShape from "./use-shape.js"
 
 const logger = new Logger({name: "ApiMaker / UseCurrentUserContext"})
 
-logger.setDebug(false)
-
 /**
- * @param {object} props
- * @param {import("react").ReactNode} props.children
- * @param {string} [props.scope]
- * @returns {import("react").ReactNode}
+ * @typedef {import("./use-current-user.js").CurrentUserModel} CurrentUserModel
  */
-const UseCurrentUserContext = (props) => {
-  const {children, scope = "user", ...restProps} = props
+/**
+ * @typedef {object} Result
+ * @property {boolean} loaded
+ * @property {CurrentUserModel | undefined} model
+ */
+/**
+ * @typedef {object} Props
+ * @property {import("react").ReactNode} children
+ * @property {string} [scope]
+ */
+/**
+ * @typedef {object} State
+ * @property {Result} result
+ */
+export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUseCurrentUserContext extends ShapeComponent {
+  static propTypes = propTypesExact({
+    children: PropTypes.node,
+    scope: PropTypes.string
+  })
 
-  if (Object.keys(restProps).length > 0) {
-    throw new Error(`Unknown props given to UseCurrentUserContext: ${Object.keys(restProps).join(", ")}`)
+  static defaultProps = {
+    scope: "user"
   }
 
-  const s = useShape(props)
-  const scopeName = `current${inflection.camelize(scope)}`
-  const scopeInstance = Devise.getScope(scope)
-  const ScopeContext = scopeInstance.getContext()
-  const loadCurrentUserRequestIdRef = useRef(0)
+  state = {
+    result: /** @type {Result} */ ({
+      loaded: false,
+      model: undefined
+    })
+  }
 
-  s.meta.scope = scope
-  s.meta.scopeName = scopeName
+  loadCurrentUserRequestId = 0
 
-  const loadCurrentUserFromRequest = useCallback(async () => {
-    // Ignore late current-user responses from discarded mounts so the live provider controls the session state.
-    const requestId = loadCurrentUserRequestIdRef.current + 1
+  setup() {
+    const scope = this.p.scope ?? "user"
+    const scopeName = `current${inflection.camelize(scope)}`
+    const scopeInstance = Devise.getScope(scope)
 
-    loadCurrentUserRequestIdRef.current = requestId
-    const {scope} = s.m
-    const getArgsMethodName = `get${inflection.camelize(scope)}Args`
+    this.scope = scope
+    this.scopeName = scopeName
+    this.ScopeContext = scopeInstance.getContext()
+
+    React.useMemo(() => {
+      const seeded = this.defaultCurrentUser()
+
+      if (seeded) {
+        this.setState({result: {loaded: false, model: seeded}})
+      }
+    }, [])
+
+    React.useEffect(() => {
+      if (!Devise.current().hasGlobalCurrentScope(this.scope) && !Devise.current().hasCurrentScope(this.scope)) {
+        logger.debug(() => `Devise hasn't got current scope ${this.scope} so loading from request`)
+        this.loadCurrentUserFromRequest()
+      }
+
+      // Discard any in-flight current-user load when this instance tears down.
+      return () => {
+        this.loadCurrentUserRequestId += 1
+      }
+    }, [])
+
+    useEventEmitter(Devise.events(), "onDeviseSignIn", this.tt.onDeviseSignIn)
+    useEventEmitter(Devise.events(), "onDeviseSignOut", this.tt.onDeviseSignOut)
+  }
+
+  render() {
+    const {ScopeContext} = this
+
+    return (
+      <ScopeContext.Provider value={this.s.result}>
+        {this.p.children}
+      </ScopeContext.Provider>
+    )
+  }
+
+  loadCurrentUserFromRequest = async () => {
+    // Ignore late current-user responses so the live provider controls session state.
+    const requestId = this.loadCurrentUserRequestId + 1
+
+    this.loadCurrentUserRequestId = requestId
+
+    const getArgsMethodName = `get${inflection.camelize(this.scope)}Args`
     const args = Devise[getArgsMethodName]()
 
-    logger.debug(() => `Loading ${scope} with request`)
+    logger.debug(() => `Loading ${this.scope} with request`)
 
-    const result = await Services.current().sendRequest("Devise::Current", {query: args.query, scope})
+    const result = await Services.current().sendRequest("Devise::Current", {query: args.query, scope: this.scope})
     const current = digg(result, "current")[0]
 
-    if (requestId != loadCurrentUserRequestIdRef.current) return
+    if (requestId != this.loadCurrentUserRequestId) return
 
     if (current) Devise.updateSession(current)
 
-    s.set({
-      result: {
-        loaded: true,
-        model: current
-      }
-    })
+    this.setState({result: {loaded: true, model: current}})
 
     events.emit("currentUserLoaded", {current})
-  }, [])
+  }
 
-  const defaultCurrentUser = useCallback(() => {
-    const {scope, scopeName} = s.m
+  defaultCurrentUser = () => {
     let current
 
-    if (Devise.current().hasCurrentScope(s.m.scope)) {
-      current = Devise.current().getCurrentScope(scope)
-
-      logger.debug(() => `Setting ${scope} from current scope: ${current?.id()}`)
-    } else if (Devise.current().hasGlobalCurrentScope(scope)) {
-      current = Devise[scopeName]()
-
-      logger.debug(() => `Setting ${scope} from global current scope: ${current?.id()}`)
+    if (Devise.current().hasCurrentScope(this.scope)) {
+      current = Devise.current().getCurrentScope(this.scope)
+      logger.debug(() => `Setting ${this.scope} from current scope: ${current?.id()}`)
+    } else if (Devise.current().hasGlobalCurrentScope(this.scope)) {
+      current = Devise[this.scopeName]()
+      logger.debug(() => `Setting ${this.scope} from global current scope: ${current?.id()}`)
     }
 
-    if (current) {
-      events.emit("currentUserLoaded", {current})
-    }
+    if (current) events.emit("currentUserLoaded", {current})
 
     return current
-  }, [])
+  }
 
-  s.useStates({
-    result: () => ({
-      loaded: false,
-      model: defaultCurrentUser()
-    })
-  })
+  updateCurrentUser = () => {
+    this.setState({result: {loaded: true, model: Devise[this.scopeName]()}})
+  }
 
-  const updateCurrentUser = useCallback(() => {
-    s.set({
-      result: {
-        loaded: true,
-        model: Devise[s.m.scopeName]()
-      }
-    })
-  }, [])
+  onDeviseSignIn = () => {
+    // Invalidate any in-flight loadCurrentUserFromRequest — it was dispatched
+    // against the pre-sign-in session and will resolve with current: null,
+    // flipping the context back to signed-out and re-mounting the sign-in
+    // component after we've already applied the signed-in state here.
+    this.loadCurrentUserRequestId += 1
+    this.updateCurrentUser()
+  }
 
-  useEffect(() => {
-    if (!Devise.current().hasGlobalCurrentScope(s.m.scope) && !Devise.current().hasCurrentScope(s.m.scope)) {
-      logger.debug(() => `Devise hasn't got current scope ${s.m.scope} so loading from request`)
-      loadCurrentUserFromRequest()
-    }
-    return () => {
-      loadCurrentUserRequestIdRef.current += 1
-    }
-  }, [])
-
-  const onDeviseSignIn = useCallback(() => {
-    updateCurrentUser()
-  }, [])
-
-  const onDeviseSignOut = useCallback(() => {
-    updateCurrentUser()
-  }, [])
-
-  useEventEmitter(Devise.events(), "onDeviseSignIn", onDeviseSignIn)
-  useEventEmitter(Devise.events(), "onDeviseSignOut", onDeviseSignOut)
-
-  return (
-    <ScopeContext.Provider value={s.s.result}>
-      {children}
-    </ScopeContext.Provider>
-  )
-}
-
-export default UseCurrentUserContext
+  onDeviseSignOut = () => {
+    // Symmetric to onDeviseSignIn: a late response from a request dispatched
+    // before sign-out could otherwise overwrite the signed-out state with a
+    // stale signed-in model.
+    this.loadCurrentUserRequestId += 1
+    this.updateCurrentUser()
+  }
+}))
