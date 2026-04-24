@@ -39,7 +39,13 @@ class DeviseScope {
     this.scope = scope
   }
 
-  /** @returns {import("react").Context<DeviseCurrentScope | undefined>} */
+  /**
+   * The Provider writes a `{loaded, model}` wrapper (see
+   * `UseCurrentUserContext`); `useCurrentUser` unwraps it on read. The
+   * context type is the wrapper, not the raw model.
+   *
+   * @returns {import("react").Context<import("./use-current-user.js").CurrentUserContextValue | undefined>}
+   */
   getContext = () => this.context
 }
 
