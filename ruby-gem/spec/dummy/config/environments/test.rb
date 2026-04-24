@@ -22,6 +22,11 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
 
+  # ApiMaker::SessionShadowStore refuses :memory_store / :null_store since they
+  # cannot carry shadow-session data between Puma workers. :file_store is fine
+  # for test so the boot-time check passes.
+  config.cache_store = :file_store, Rails.root.join("tmp/cache")
+
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 
