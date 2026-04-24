@@ -5,6 +5,8 @@ import Services from "../src/services.js"
 import SessionStatusUpdater from "../src/session-status-updater.js"
 import {jest} from "@jest/globals"
 
+const signInModel = {id: () => 1}
+
 describe("ApiMakerDevise", () => {
   afterEach(() => {
     jest.restoreAllMocks()
@@ -20,7 +22,7 @@ describe("ApiMakerDevise", () => {
     })
     const refreshAuthentication = jest.fn().mockResolvedValue(undefined)
     const sendRequest = jest.spyOn(Services.current(), "sendRequest")
-      .mockResolvedValueOnce({model: null})
+      .mockResolvedValueOnce({model: signInModel})
       .mockResolvedValueOnce({success: true})
     jest.spyOn(SessionStatusUpdater, "current").mockReturnValue({applyResult, sessionStatus, updateSessionStatus})
     jest.spyOn(CableConnectionPool, "current").mockReturnValue({refreshAuthentication})
@@ -55,7 +57,7 @@ describe("ApiMakerDevise", () => {
   it("signs in over HTTP and refreshes websocket auth in place", async() => {
     const sendRequest = jest.spyOn(Services.current(), "sendRequest")
       .mockResolvedValueOnce({
-        model: null,
+        model: signInModel,
         session_status: {
           csrf_token: "token-1",
           scopes: {user: {signed_in: true}},
@@ -153,7 +155,7 @@ describe("ApiMakerDevise", () => {
 
   it("loads session status over HTTP before refreshing websocket auth when sign-in does not return it inline", async() => {
     const sendRequest = jest.spyOn(Services.current(), "sendRequest")
-      .mockResolvedValueOnce({model: null})
+      .mockResolvedValueOnce({model: signInModel})
       .mockResolvedValueOnce({success: true})
     const applyResult = jest.fn()
     const sessionStatus = jest.fn().mockResolvedValue({
@@ -190,5 +192,16 @@ describe("ApiMakerDevise", () => {
       shadowSessionToken: "shadow-token-3",
       signedIn: true
     })
+  })
+
+  it("throws when updateSession is called with a falsy model instead of silently flipping to signed-out", () => {
+    expect(() => ApiMakerDevise.updateSession(null)).toThrow(/Devise\.updateSession .* falsy model for scope "user"/)
+    expect(() => ApiMakerDevise.updateSession(undefined, {scope: "admin_user"})).toThrow(/scope "admin_user"/)
+  })
+
+  it("throws when the sign-in response does not include a model", async() => {
+    jest.spyOn(Services.current(), "sendRequest").mockResolvedValueOnce({model: null})
+
+    await expect(ApiMakerDevise.signIn("teacher@example.com", "secret")).rejects.toThrow(/did not include a model/)
   })
 })

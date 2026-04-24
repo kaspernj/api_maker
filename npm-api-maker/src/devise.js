@@ -119,7 +119,7 @@ export default class ApiMakerDevise {
    * @param {string} username
    * @param {string} password
    * @param {DeviseScopeArgs} args
-   * @returns {Promise<{model: import("./base-model.js").default | undefined, response: DeviseSignInResponse}>}
+   * @returns {Promise<{model: import("./base-model.js").default, response: DeviseSignInResponse}>}
    */
   static async signIn(username, password, args = {}) {
     if (!args.scope) args.scope = "user"
@@ -135,6 +135,10 @@ export default class ApiMakerDevise {
     let model = response.model
 
     if (Array.isArray(model)) model = model[0]
+
+    if (!model) {
+      throw new Error(`Devise.signIn: Devise::SignIn response for scope "${args.scope}" did not include a model`)
+    }
 
     await ApiMakerDevise.syncSessionStatusAndRefreshWebsocket({
       httpResponse: response,
@@ -181,11 +185,26 @@ export default class ApiMakerDevise {
 
   /**
    * Updates the locally cached current model for one scope.
-   * @param {DeviseCurrentScope} model
+   *
+   * Always requires a real model instance. Writing a falsy value here used to
+   * be a silent foot-gun: when a caller awaited a query that returned
+   * `undefined` (for example `Collection#first()` on an empty result) and
+   * passed the value through, the scope cache flipped to "signed out" without
+   * any indication, dropping the user back on the sign-in screen right after
+   * a successful sign-in. Use `Devise.setSignedOut({scope})` to sign out.
+   *
+   * @param {NonNullable<DeviseCurrentScope>} model
    * @param {DeviseScopeArgs} args
    */
   static updateSession(model, args = {}) {
     if (!args.scope) args.scope = "user"
+
+    if (!model) {
+      throw new Error(
+        `Devise.updateSession was called with a falsy model for scope "${args.scope}". ` +
+        "Use Devise.setSignedOut({scope}) to sign out instead."
+      )
+    }
 
     const camelizedScopeName = inflection.camelize(args.scope, true)
 
