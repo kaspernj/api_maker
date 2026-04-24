@@ -60,10 +60,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     this.ScopeContext = scopeInstance.getContext()
 
     React.useMemo(() => {
-      const seeded = this.defaultCurrentUser()
-
-      if (seeded) {
-        this.setState({result: {loaded: false, model: seeded}})
+      if (Devise.current().hasCurrentScope(this.scope) || Devise.current().hasGlobalCurrentScope(this.scope)) {
+        this.s.result = {loaded: false, model: this.defaultCurrentUser() ?? null}
       }
     }, [])
 
