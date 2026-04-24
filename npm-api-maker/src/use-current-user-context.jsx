@@ -21,7 +21,7 @@ const logger = new Logger({name: "ApiMaker / UseCurrentUserContext"})
 /**
  * @typedef {object} Result
  * @property {boolean} loaded
- * @property {CurrentUserModel | undefined} model
+ * @property {CurrentUserModel} model
  */
 /**
  * @typedef {object} Props
@@ -45,11 +45,20 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   state = {
     result: /** @type {Result} */ ({
       loaded: false,
-      model: undefined
+      model: null
     })
   }
 
   loadCurrentUserRequestId = 0
+
+  /** @type {import("react").Context<import("./use-current-user.js").CurrentUserContextValue | undefined>} */
+  ScopeContext
+
+  /** @type {string} */
+  scope
+
+  /** @type {string} */
+  scopeName
 
   setup() {
     const scope = this.p.scope ?? "user"
