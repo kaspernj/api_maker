@@ -33,7 +33,6 @@ const iconMap = {
  */
 /** @typedef {Record<string, never>} State */
 export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} */ class ApiMakerUtilsIcon extends ShapeComponent {
-  /** @type {Props} */
   static propTypes = {
     color: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     dataSet: PropTypes.object,

@@ -73,11 +73,12 @@
     "ya-use-event-listener": ">= 0.1.1"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.26.3",
     "@eslint/compat": "^2.0.3",
+    "@eslint/js": "^10.0.1",
     "@jest/globals": "~30.3.0",
+    "@types/prop-types": "^15.7.15",
     "@types/react": "~19.0.10",
     "babel-jest": "~30.3.0",
     "eslint": "^10.2.1",
