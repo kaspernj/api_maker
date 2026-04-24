@@ -11,6 +11,7 @@ import {events} from "./use-current-user.js"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
 import useEventEmitter from "ya-use-event-emitter"
+import useNow from "set-state-compare/build/use-now.js"
 
 const logger = new Logger({name: "ApiMaker / UseCurrentUserContext"})
 
@@ -59,7 +60,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     this.scopeName = scopeName
     this.ScopeContext = scopeInstance.getContext()
 
-    React.useMemo(() => {
+    useNow(() => {
       if (Devise.current().hasCurrentScope(this.scope) || Devise.current().hasGlobalCurrentScope(this.scope)) {
         this.s.result = {loaded: false, model: this.defaultCurrentUser() ?? null}
       }
