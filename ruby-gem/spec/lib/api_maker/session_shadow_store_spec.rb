@@ -20,6 +20,7 @@ describe ApiMaker::SessionShadowStore do
 
   before do
     Rails.cache.clear
+    described_class.reset_shared_cache_store_check!
   end
 
   it "persists the current session data in the cache" do
@@ -77,5 +78,32 @@ describe ApiMaker::SessionShadowStore do
     expect(
       Rails.cache.read(described_class.cache_key("new-session-id"))
     ).to include("warden.user.user.key" => ["User", "123"])
+  end
+
+  describe "unsupported cache stores" do
+    it "raises when Rails.cache is a per-process memory store because shadow-session data cannot cross Puma workers" do
+      expect(Rails).to receive(:cache).at_least(:once).and_return(ActiveSupport::Cache::MemoryStore.new)
+
+      expect { described_class.persist!(request:) }
+        .to raise_error(ApiMaker::SessionShadowStore::UnsupportedCacheStoreError, /ActiveSupport::Cache::MemoryStore/)
+    end
+
+    it "raises when Rails.cache is a null store because nothing is actually persisted" do
+      expect(Rails).to receive(:cache).at_least(:once).and_return(ActiveSupport::Cache::NullStore.new)
+
+      expect { described_class.load!(request:) }
+        .to raise_error(ApiMaker::SessionShadowStore::UnsupportedCacheStoreError, /ActiveSupport::Cache::NullStore/)
+    end
+
+    it "re-checks and passes after the memoized unsupported result is reset with a shared store in place" do
+      expect(Rails).to receive(:cache).at_least(:once).and_return(ActiveSupport::Cache::MemoryStore.new)
+      expect { described_class.persist!(request:) }
+        .to raise_error(ApiMaker::SessionShadowStore::UnsupportedCacheStoreError)
+
+      described_class.reset_shared_cache_store_check!
+      RSpec::Mocks.space.proxy_for(Rails).reset
+
+      expect { described_class.persist!(request:) }.not_to raise_error
+    end
   end
 end
