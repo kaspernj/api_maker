@@ -21,9 +21,11 @@ import memo from "set-state-compare/build/memo.js"
  * ```
  *
  * @template {object} P
- * @param {React.ComponentType<P>} Component Underlying component to wrap.
+ * @template T
+ * @param {React.ComponentType<P> | React.ForwardRefExoticComponent<P & React.RefAttributes<T>>} Component
+ *   Underlying component to wrap.
  * @param {string} slotKey Slot name to register defaults under.
- * @returns {React.NamedExoticComponent<P>}
+ * @returns {React.MemoExoticComponent<React.ForwardRefExoticComponent<P & React.RefAttributes<T>>>}
  */
 const withDefaultStyleSlot = (Component, slotKey) => {
   const RenderComponent = /** @type {React.ComponentType<Record<string, unknown>>} */ (
@@ -44,7 +46,9 @@ const withDefaultStyleSlot = (Component, slotKey) => {
 
   Wrapped.displayName = displayName
 
-  const Memoized = /** @type {React.NamedExoticComponent<P>} */ (memo(Wrapped))
+  const Memoized = /** @type {React.MemoExoticComponent<React.ForwardRefExoticComponent<P & React.RefAttributes<T>>>} */ (
+    /** @type {unknown} */ (memo(Wrapped))
+  )
 
   Memoized.displayName = displayName
 

@@ -23,9 +23,11 @@ import withDefaultStyleSlot from "./with-default-style-slot"
  * </WithDefaultStyle>
  * ```
  */
-const ApiMakerUtilsTextInput = withDefaultStyleSlot(
-  /** @type {React.ComponentType<TextInputProps>} */ (RnTextInput),
-  "TextInput"
+const ApiMakerUtilsTextInput = /** @type {React.MemoExoticComponent<React.ForwardRefExoticComponent<TextInputProps & React.RefAttributes<RnTextInput>>>} */ (
+  withDefaultStyleSlot(
+    /** @type {React.ComponentType<TextInputProps>} */ (RnTextInput),
+    "TextInput"
+  )
 )
 
 export default ApiMakerUtilsTextInput
