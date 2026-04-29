@@ -1,5 +1,4 @@
 // @ts-check
-/* eslint-disable sort-imports */
 import React from "react"
 import {TextInput as RnTextInput} from "react-native"
 import withDefaultStyleSlot from "./with-default-style-slot"

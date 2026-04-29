@@ -1,8 +1,7 @@
 // @ts-check
-/* eslint-disable sort-imports */
-import memo from "set-state-compare/build/memo.js"
 import React, {forwardRef} from "react"
-import {useMergedStyle, WithDefaultStyle} from "./default-style"
+import {WithDefaultStyle, useMergedStyle} from "./default-style"
+import memo from "set-state-compare/build/memo.js"
 
 /**
  * Wires `Component` into the api-maker default-style context as a slot.

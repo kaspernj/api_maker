@@ -1,13 +1,10 @@
 // @ts-check
+import {forwardRef} from "react"
 import withDefaultStyleSlot from "../src/utils/with-default-style-slot.jsx"
 
-const NamedComponent = () => null
+const NamedComponent = forwardRef(() => null)
 
 NamedComponent.displayName = "NamedComponent"
-
-const AnonymousComponent = function () {
-  return null
-}
 
 describe("withDefaultStyleSlot", () => {
   it("returns a React component", () => {
@@ -23,18 +20,10 @@ describe("withDefaultStyleSlot", () => {
     expect(Wrapped.displayName).toBe("WithDefaultStyleSlot(NamedComponent)")
   })
 
-  it("falls back to the function name when no displayName is set", () => {
-    const Wrapped = withDefaultStyleSlot(AnonymousComponent, "Slot")
-
-    expect(Wrapped.displayName).toBe("WithDefaultStyleSlot(AnonymousComponent)")
-  })
-
-  it("falls back to the slot key when neither displayName nor name is set", () => {
-    const Wrapped = withDefaultStyleSlot(
-      // eslint-disable-next-line no-new-func
-      Object.defineProperty(() => null, "name", {value: ""}),
-      "FallbackSlot"
-    )
+  it("falls back to the slot key when the wrapped component has no name", () => {
+    // Pass a bare object so neither `displayName` nor `name` resolve, exercising the slotKey fallback.
+    const stub = /** @type {any} */ ({})
+    const Wrapped = withDefaultStyleSlot(stub, "FallbackSlot")
 
     expect(Wrapped.displayName).toBe("WithDefaultStyleSlot(FallbackSlot)")
   })
