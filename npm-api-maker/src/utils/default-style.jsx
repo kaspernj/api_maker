@@ -11,9 +11,7 @@ import memo from "set-state-compare/build/memo.js"
 /** @typedef {Record<string, DefaultStyleValue>} DefaultStyleMap */
 /** @typedef {{children?: React.ReactNode, style: DefaultStyleMap}} WithDefaultStyleProps */
 
-const DefaultStyleContext = createContext(/** @type {DefaultStyleMap} */ ({
-  Text: []
-}))
+const DefaultStyleContext = createContext(/** @type {DefaultStyleMap} */ ({}))
 
 const useDefaultStyle = () => {
   const defaultStyle = useContext(DefaultStyleContext)
@@ -21,31 +19,42 @@ const useDefaultStyle = () => {
   return defaultStyle
 }
 
+/**
+ * Pure helper: collapse the inherited default for a slot plus the caller's
+ * style into a flat list ready to pass to the underlying RN element.
+ * @param {DefaultStyleValue | undefined} defaultElementStyle
+ * @param {DefaultStyleValue | undefined} style
+ * @returns {DefaultStyleValue[]}
+ */
+const computeSlotStylesList = (defaultElementStyle, style) => {
+  let stylesList
+
+  if (defaultElementStyle === undefined || defaultElementStyle === null) {
+    stylesList = []
+  } else if (Array.isArray(defaultElementStyle)) {
+    stylesList = [...defaultElementStyle]
+  } else {
+    stylesList = [defaultElementStyle]
+  }
+
+  if (style && Array.isArray(style)) {
+    for (const styleI of style) {
+      stylesList.push(styleI)
+    }
+  } else if (style) {
+    stylesList.push(style)
+  }
+
+  return stylesList
+}
+
 const useMergedStyle = (style, elementType) => {
   const defaultStyle = useDefaultStyle()
 
-  const stylesList = useMemo(() => {
-    const defaultElementStyle = defaultStyle[elementType]
-    let stylesList
-
-    if (Array.isArray(defaultElementStyle)) {
-      stylesList = [...defaultElementStyle]
-    } else if (typeof defaultElementStyle == "object") {
-      stylesList = [defaultElementStyle]
-    } else {
-      throw new Error(`Unknown type for default element type: ${typeof defaultElementStyle}`)
-    }
-
-    if (style && Array.isArray(style)) {
-      for (const styleI of style) {
-        stylesList.push(styleI)
-      }
-    } else if (style) {
-      stylesList.push(style)
-    }
-
-    return stylesList
-  }, [defaultStyle, elementType, style])
+  const stylesList = useMemo(
+    () => computeSlotStylesList(defaultStyle[elementType], style),
+    [defaultStyle, elementType, style]
+  )
 
   const actualNewDefaultStyle = useMemo(() => {
     const actualNewDefaultStyle = {...defaultStyle}
@@ -66,14 +75,7 @@ const WithDefaultStyle = memo((/** @type {WithDefaultStyleProps} */ {children, s
   const defaultStyle = useContext(DefaultStyleContext)
 
   const newDefaultStyle = useMemo(() => {
-    for (const key in style) {
-      if (!(key in defaultStyle)) {
-        throw new Error(`Invalid element type given: ${key}`)
-      }
-    }
-
-    /** @type {DefaultStyleMap} */
-    const newDefaultStyle = {}
+    const newDefaultStyle = /** @type {DefaultStyleMap} */ ({})
 
     incorporate(newDefaultStyle, defaultStyle, style)
 
@@ -87,4 +89,4 @@ const WithDefaultStyle = memo((/** @type {WithDefaultStyleProps} */ {children, s
   )
 })
 
-export {useDefaultStyle, useMergedStyle, WithDefaultStyle}
+export {computeSlotStylesList, useDefaultStyle, useMergedStyle, WithDefaultStyle}
