@@ -223,10 +223,8 @@ const Route = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} *
     this.match = match
     this.newParams = newParams
     if (routeDataChanged || this.s.matches != matches) {
-      this.setState({
-        lastMatchUpdate: routeDataChanged ? this.lastMatchUpdate += 1 : this.s.lastMatchUpdate,
-        matches
-      })
+      this.s.lastMatchUpdate = routeDataChanged ? this.lastMatchUpdate += 1 : this.s.lastMatchUpdate
+      this.s.matches = matches
     }
   }
 
@@ -282,7 +280,8 @@ const Route = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} *
 
     if (requestId != this.loadComponentRequestId) return
 
-    this.setState({Component, componentNotFound: !Component})
+    this.s.Component = Component
+    this.s.componentNotFound = !Component
   }
 
   log(callbackArgs) {

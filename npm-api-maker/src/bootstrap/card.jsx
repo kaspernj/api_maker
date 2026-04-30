@@ -150,12 +150,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   onCollapseClicked = (e) => {
     e.preventDefault()
-    this.setState({expanded: false})
+    this.s.expanded = false
   }
 
   onExpandClicked = (e) => {
     e.preventDefault()
-    this.setState({expanded: true})
+    this.s.expanded = true
   }
 
   tableClassNames () {

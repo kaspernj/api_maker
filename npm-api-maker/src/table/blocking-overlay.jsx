@@ -64,7 +64,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onBlocking = (blocking) => {
-    this.setState({blocking})
+    this.s.blocking = blocking
     Animated.timing(this.opacity, {
       duration: FADE_DURATION,
       toValue: blocking ? 1 : 0,

@@ -139,7 +139,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onPurgeChanged = (e) => {
-    this.setState({purgeChecked: digg(e, "target", "checked")})
+    this.s.purgeChecked = digg(e, "target", "checked")
 
     if (this.props.onPurgeChanged) this.props.onPurgeChanged(e)
   }

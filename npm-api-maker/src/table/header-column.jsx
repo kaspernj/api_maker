@@ -22,7 +22,7 @@ const dataSets = {}
  * @typedef {object} HeaderTableLike
  * @property {(column: TableColumnDefinition) => string[]} headerClassNameForColumn
  * @property {(column: TableColumnDefinition) => {style?: object}} headerProps
- * @property {(args: object) => void} setState
+ * @property {{lastUpdate: Date, resizing: boolean}} s
  * @property {{styleForHeader(args: {style: object}): object}} tt
  */
 /** @typedef {{cursor?: "col-resize", height?: "100%", position: "absolute", right: number, top: number, width: number, zIndex: number}} ResizeHandleStyle */
@@ -71,8 +71,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       () => PanResponder.create({
         onStartShouldSetPanResponder: (_e) => {
           this.originalWidth = this.currentWidth
-          this.setState({resizing: true})
-          this.p.table.setState({resizing: true})
+          this.s.resizing = true
+          this.p.table.s.resizing = true
 
           return true
         },
@@ -93,8 +93,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onResizeEnd = async () => {
-    this.p.table.setState({lastUpdate: new Date(), resizing: false})
-    this.setState({resizing: false})
+    this.p.table.s.lastUpdate = new Date()
+    this.p.table.s.resizing = false
+    this.s.resizing = false
 
     const width = this.p.widths.getWidthOfColumn(this.p.tableSettingColumn.identifier())
 

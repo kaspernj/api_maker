@@ -93,7 +93,7 @@ class UseCanCanClass extends ShapeHook {
 
     if (!this.isHookMounted || requestId != this.abilitiesRequestId) return
 
-    this.setState({lastUpdate: new Date()})
+    this.s.lastUpdate = new Date()
   }
 
   /** Reloads abilities after Devise sign-in or sign-out events. */
@@ -124,7 +124,7 @@ class UseCanCanClass extends ShapeHook {
 
     if (!this.isHookMounted) return
 
-    this.setState({lastUpdate: new Date()})
+    this.s.lastUpdate = new Date()
   }
 
   /** Wires ability loading, debug state, and event subscriptions for the hook. */

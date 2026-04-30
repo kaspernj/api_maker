@@ -87,11 +87,9 @@ const Switch = memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     newPathsMatched[path] = matched
 
-    this.setState({
-      lastUpdate: Math.random() + new Date().getTime(),
-      pathShown: this.pathShown(newPathsMatched),
-      pathsMatched: newPathsMatched
-    })
+    this.s.lastUpdate = Math.random() + new Date().getTime()
+    this.s.pathShown = this.pathShown(newPathsMatched)
+    this.s.pathsMatched = newPathsMatched
   }
 }))
 

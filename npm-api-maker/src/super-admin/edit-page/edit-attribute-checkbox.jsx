@@ -96,6 +96,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       this.form.setValue(this.p.name, newChecked)
     }
 
-    this.setState({checked: newChecked})
+    this.s.checked = newChecked
   }
 }))

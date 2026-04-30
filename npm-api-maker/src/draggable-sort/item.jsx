@@ -25,6 +25,7 @@ import useEventEmitter from "ya-use-event-emitter"
 /**
  * @typedef {object} DraggableSortOnItemMovedArgs
  * @property {DraggableSortAnimationArgs} [animationArgs]
+ * @property {object} item
  * @property {number} itemIndex
  * @property {number} x
  * @property {number} y
@@ -102,7 +103,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     this.position ||= new Animated.ValueXY()
     this.panResponder ||= PanResponder.create({
       onStartShouldSetPanResponder: (_event) => {
-        this.setState({dragging: true})
+        this.s.dragging = true
         this.p.controller.onDragStart({item: this.p.item, itemIndex: this.p.itemIndex})
 
         return false
@@ -161,17 +162,18 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
    * @param {{itemData: DraggableSortItemData}} root0
    */
   onDragStart = ({itemData}) => {
-    const newState = {dragging: true}
+    this.s.dragging = true
 
     if (itemData.index == this.p.itemIndex) {
-      newState.active = true
+      this.s.active = true
       this.baseXAtStartedDragging = this.getBaseX()
     }
-
-    this.setState(newState)
   }
 
-  onDragEndAnimation = () => this.setState({active: false, dragging: false})
+  onDragEndAnimation = () => {
+    this.s.active = false
+    this.s.dragging = false
+  }
 
   /** @param {{nativeEvent: {layout: DraggableSortLayout}}} e */
   onLayout = (e) => {
@@ -197,7 +199,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     this.tt.position.setValue({x, y})
 
     if (this.props.onItemMoved) {
-      this.p.onItemMoved({itemIndex: this.p.itemIndex, x, y})
+      this.p.onItemMoved({item: this.p.item, itemIndex: this.p.itemIndex, x, y})
     }
   }
 
@@ -233,6 +235,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     if (this.props.onItemMoved) {
       this.p.onItemMoved({
         animationArgs,
+        item: this.p.item,
         itemIndex: this.p.itemIndex,
         x: calculatedXFromStartingPosition,
         y
@@ -275,6 +278,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     if (this.props.onItemMoved) {
       this.p.onItemMoved({
         animationArgs,
+        item: this.p.item,
         itemIndex: this.p.itemIndex,
         x: baseX,
         y: 0

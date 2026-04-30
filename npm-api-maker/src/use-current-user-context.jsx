@@ -119,7 +119,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     if (current) Devise.updateSession(current)
 
-    this.setState({result: {loaded: true, model: current}})
+    this.s.result = {loaded: true, model: current}
 
     events.emit("currentUserLoaded", {current})
   }
@@ -141,7 +141,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   updateCurrentUser = () => {
-    this.setState({result: {loaded: true, model: Devise[this.scopeName]()}})
+    this.s.result = {loaded: true, model: Devise[this.scopeName]()}
   }
 
   onDeviseSignIn = () => {

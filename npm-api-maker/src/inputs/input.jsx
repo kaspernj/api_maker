@@ -250,7 +250,7 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
     if (localizedNumber) this.inputReference().current.value = this.actualValue(digg(e, "target"))
 
     if (attribute && autoSubmit && model) this.delayAutoSubmit()
-    if (digg(inputProps, "type") == "file") this.setState({blankInputName: this.getBlankInputName()})
+    if (digg(inputProps, "type") == "file") this.s.blankInputName = this.getBlankInputName()
 
     if (form && name) {
       form.setValue(name, e.target.value)

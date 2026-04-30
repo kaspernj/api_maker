@@ -95,6 +95,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
-  onModalRequestClose = () => this.setState({modalOpen: false})
-  onSortedByPress = () => this.setState({modalOpen: true})
+  onModalRequestClose = () => {
+    this.s.modalOpen = false
+  }
+
+  onSortedByPress = () => {
+    this.s.modalOpen = true
+  }
 }))

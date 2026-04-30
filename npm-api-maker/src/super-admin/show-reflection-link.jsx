@@ -29,7 +29,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const query = model[reflection.name()]()
     const count = await query.ransack().count()
 
-    this.setState({count})
+    this.s.count = count
   }
 
   render() {

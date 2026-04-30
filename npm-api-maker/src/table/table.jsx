@@ -26,6 +26,7 @@ import * as inflection from "inflection"
 import memo from "set-state-compare/build/memo.js"
 import modelClassRequire from "../model-class-require.js"
 import ModelRow from "./model-row"
+import moveDraggedColumnPosition from "./move-dragged-column-position.js"
 import Paginate from "../bootstrap/paginate"
 import Params from "../params.js"
 import PropTypes from "prop-types"
@@ -174,7 +175,9 @@ const ListHeaderComponent = memo(shapeComponent(/** @augments {ShapeComponent<He
     )
   }
 
-  onColumnVisibilityUpdated = () => this.setState({lastUpdate: new Date()})
+  onColumnVisibilityUpdated = () => {
+    this.s.lastUpdate = new Date()
+  }
 }))
 
 /**
@@ -381,13 +384,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const querySName = `${queryName}_s`
 
     if (this.s.queryName != queryName || this.s.querySName != querySName) {
-      this.setState({
-        queryName,
-        queryQName: `${queryName}_q`,
-        queryPageName: `${queryName}_page`,
-        querySName,
-        showFilters: Boolean(queryParams[querySName])
-      })
+      this.s.queryName = queryName
+      this.s.queryQName = `${queryName}_q`
+      this.s.queryPageName = `${queryName}_page`
+      this.s.querySName = querySName
+      this.s.showFilters = Boolean(queryParams[querySName])
     }
 
     this.tableContextValue = useMemo(
@@ -472,7 +473,10 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     useEventEmitter(this.tt.events, "columnVisibilityUpdated", this.tt.onColumnVisibilityUpdated)
   }
 
-  onColumnVisibilityUpdated = () => this.setState({columnsToShow: this.getColumnsToShow(this.s.columns), lastUpdate: new Date()})
+  onColumnVisibilityUpdated = () => {
+    this.s.columnsToShow = this.getColumnsToShow(this.s.columns)
+    this.s.lastUpdate = new Date()
+  }
   onDragStart = ({item}) => item.animatedZIndex.setValue(9999)
   onDragEndAnimation = ({item}) => item.animatedZIndex.setValue(0)
 
@@ -487,7 +491,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     if (requestId != this.currentWorkplaceLoadRequestId) return
 
-    this.setState({currentWorkplace})
+    this.s.currentWorkplace = currentWorkplace
     this.loadCurrentWorkplaceCount()
   }
 
@@ -495,7 +499,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const requestId = ++this.currentWorkplaceCountRequestId
 
     if (!this.s.currentWorkplace) {
-      this.setState({currentWorkplaceCount: 0})
+      this.s.currentWorkplaceCount = 0
       return
     }
 
@@ -509,7 +513,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     if (requestId !== this.currentWorkplaceCountRequestId) return
 
-    this.setState({currentWorkplaceCount})
+    this.s.currentWorkplaceCount = currentWorkplaceCount
   }
 
   getColumnsToShow(columns) {
@@ -537,19 +541,19 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const widths = new Widths({columns, table: this, width})
     const columnsToShow = this.getColumnsToShow(columns)
 
-    this.setState({
-      columns,
-      columnsToShow,
-      preparedColumns: columns,
-      preload: this.mergedPreloads(preload),
-      tableSetting,
-      tableSettingLoaded: true,
-      tableSettingFullCacheKey: tableSetting.fullCacheKey(),
-      widths
-    })
+    this.s.columns = columns
+    this.s.columnsToShow = columnsToShow
+    this.s.preparedColumns = columns
+    this.s.preload = this.mergedPreloads(preload)
+    this.s.tableSetting = tableSetting
+    this.s.tableSettingLoaded = true
+    this.s.tableSettingFullCacheKey = tableSetting.fullCacheKey()
+    this.s.widths = widths
   }
 
-  updateSettingsFullCacheKey = () => this.setState({tableSettingFullCacheKey: this.s.tableSetting.fullCacheKey()})
+  updateSettingsFullCacheKey = () => {
+    this.s.tableSettingFullCacheKey = this.s.tableSetting.fullCacheKey()
+  }
 
   columnsAsArray() {
     if (typeof this.props.columns == "function") {
@@ -878,11 +882,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     // If table settings loaded before RN-web produced a layout width, recompute once with the real width.
     if (widths?.usedFallbackWidth) {
       widths.updateTableWidth(width)
-      this.setState({lastUpdate: new Date(), width})
+      this.s.lastUpdate = new Date()
+      this.s.width = width
       return
     }
 
-    this.setState({width})
+    this.s.width = width
     if (widths) widths.tableWidth = width
   }
 
@@ -938,7 +943,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   onFilterClicked = (e) => {
     e.preventDefault()
-    this.setState({showFilters: !this.s.showFilters})
+    this.s.showFilters = !this.s.showFilters
   }
 
   onPerPageChanged = (e) => {
@@ -1282,14 +1287,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   dragListCacheKeyExtractor = (item) => `${item.tableSettingColumn.identifier()}-${this.s.resizing}`
   dragListkeyExtractor = (item) => item.tableSettingColumn.identifier()
 
-  onItemMoved = ({animationArgs, itemIndex, x, y}) => {
-    const animatedPosition = digg(this, "s", "columnsToShow", itemIndex, "animatedPosition")
-
-    if (animationArgs) {
-      Animated.timing(animatedPosition, animationArgs).start()
-    } else {
-      animatedPosition.setValue({x, y})
-    }
+  onItemMoved = ({animationArgs, item, x, y}) => {
+    moveDraggedColumnPosition({animationArgs, item, timing: Animated.timing, x, y})
   }
 
   /**
@@ -1378,12 +1377,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onFilterFormSubmit = () => this.submitFilter()
-  onRequestCloseSettings = () => this.setState({showSettings: false})
+  onRequestCloseSettings = () => {
+    this.s.showSettings = false
+  }
 
   onSettingsClicked = (e) => {
     e.preventDefault()
 
-    this.setState({showSettings: !this.s.showSettings})
+    this.s.showSettings = !this.s.showSettings
   }
 
   submitFilter = () => {

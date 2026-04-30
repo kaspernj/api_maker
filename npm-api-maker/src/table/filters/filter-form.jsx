@@ -160,14 +160,21 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       )
       const {associations, ransackableAttributes, ransackableScopes} = this.parseAssociationData(result)
 
-      this.setState({associations, ransackableAttributes, ransackableScopes})
+      this.s.associations = associations
+      this.s.ransackableAttributes = ransackableAttributes
+      this.s.ransackableScopes = ransackableScopes
     } finally {
       this.decreaseLoading()
     }
   }
 
-  decreaseLoading = () => this.setState((prevState) => ({loading: prevState.loading - 1}))
-  increaseLoading = () => this.setState((prevState) => ({loading: prevState.loading + 1}))
+  decreaseLoading = () => {
+    this.s.loading -= 1
+  }
+
+  increaseLoading = () => {
+    this.s.loading += 1
+  }
 
   async loadInitialValuesWithLoadingIndicator() {
     try {
@@ -213,7 +220,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const attribute = this.p.filter.a
     const ransackableAttribute = ransackableAttributes.find((ransackableAttribute) => digg(ransackableAttribute, "attributeName") == attribute)
 
-    this.setState({attribute: ransackableAttribute, modelClassName, path})
+    this.s.attribute = ransackableAttribute
+    this.s.modelClassName = modelClassName
+    this.s.path = path
   }
 
   async loadRansackPredicates() {
@@ -228,10 +237,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
         currentPredicate = predicates.find((predicate) => predicate.name == this.props.filter.pre)
       }
 
-      this.setState({
-        predicate: currentPredicate,
-        predicates
-      })
+      this.s.predicate = currentPredicate
+      this.s.predicates = predicates
     } finally {
       this.decreaseLoading()
     }
@@ -418,40 +425,34 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   /** @param {{attribute: FilterAttribute}} root0 */
   onAttributeClicked = ({attribute}) => {
-    this.setState({
-      attribute,
-      scope: undefined
-    })
+    this.s.attribute = attribute
+    this.s.scope = undefined
   }
 
   onPredicateChanged = (e) => {
     const chosenPredicateName = digg(e, "target", "value")
     const predicate = this.s.predicates.find((predicate) => predicate.name == chosenPredicateName)
 
-    this.setState({predicate})
+    this.s.predicate = predicate
   }
 
   /** @param {{reflection: FilterReflection}} root0 */
   onReflectionClicked = ({reflection}) => {
     const newPath = this.s.path.concat([reflection])
 
-    this.setState({
-      associations: null,
-      attribute: undefined,
-      actualCurrentModelClass: {modelClass: digg(reflection, "resource")},
-      modelClassName: digg(reflection, "modelClassName"),
-      path: newPath,
-      predicate: undefined
-    })
+    this.s.associations = null
+    this.s.attribute = undefined
+    this.s.actualCurrentModelClass = {modelClass: digg(reflection, "resource")}
+    this.s.modelClassName = digg(reflection, "modelClassName")
+    this.s.path = newPath
+    this.s.predicate = undefined
   }
 
   /** @param {{scope: string}} root0 */
   onScopeClicked = ({scope}) => {
-    this.setState({
-      attribute: undefined,
-      predicate: undefined,
-      scope
-    })
+    this.s.attribute = undefined
+    this.s.predicate = undefined
+    this.s.scope = scope
   }
 
   onSubmit = () => {

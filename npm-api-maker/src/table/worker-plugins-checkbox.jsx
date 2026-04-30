@@ -50,10 +50,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     const link = digg(response, "link")
 
-    this.setState({
-      checked: Boolean(link),
-      linkLoaded: true
-    })
+    this.s.checked = Boolean(link)
+    this.s.linkLoaded = true
   }
 
   render() {

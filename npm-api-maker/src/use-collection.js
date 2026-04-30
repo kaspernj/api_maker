@@ -244,11 +244,9 @@ class UseCollectionShapeHook extends ShapeHook {
 
     if (loadOverallCountGeneration != this.loadOverallCountGeneration) return
 
-    this.setState({
-      overallCount,
-      showNoRecordsAvailableContent: this.showNoRecordsAvailableContent({overallCount}),
-      showNoRecordsFoundContent: this.showNoRecordsFoundContent({overallCount})
-    })
+    this.s.overallCount = overallCount
+    this.s.showNoRecordsAvailableContent = this.showNoRecordsAvailableContent({overallCount})
+    this.s.showNoRecordsFoundContent = this.showNoRecordsFoundContent({overallCount})
   }
 
   /** @returns {{qParams: UseCollectionDefaultParams, searchParams: string[]}} */
@@ -268,10 +266,8 @@ class UseCollectionShapeHook extends ShapeHook {
       }
     }
 
-    this.setState({
-      qParams: qParamsToSet,
-      searchParams
-    })
+    this.s.qParams = qParamsToSet
+    this.s.searchParams = searchParams
 
     return {
       qParams: qParamsToSet,
@@ -356,22 +352,18 @@ class UseCollectionShapeHook extends ShapeHook {
       })
     }
 
-    this.setState({
-      models,
-      query,
-      result,
-      showNoRecordsAvailableContent: this.showNoRecordsAvailableContent({models}),
-      showNoRecordsFoundContent: this.showNoRecordsFoundContent({models})
-    })
+    this.s.models = models
+    this.s.query = query
+    this.s.result = result
+    this.s.showNoRecordsAvailableContent = this.showNoRecordsAvailableContent({models})
+    this.s.showNoRecordsFoundContent = this.showNoRecordsFoundContent({models})
   }
 
   /** @param {{model: BaseModelInstance}} args */
   onModelDestroyed(args) {
     const destroyedModel = digg(args, "model")
 
-    this.setState({
-      models: this.s.models.filter((model) => /** @type {BaseModelWithId} */ (model).id() != /** @type {BaseModelWithId} */ (destroyedModel).id())
-    })
+    this.s.models = this.s.models.filter((model) => /** @type {BaseModelWithId} */ (model).id() != /** @type {BaseModelWithId} */ (destroyedModel).id())
   }
 
   /** @param {{model: BaseModelInstance}} args */
@@ -389,7 +381,7 @@ class UseCollectionShapeHook extends ShapeHook {
 
   /** @returns {void} */
   componentDidMount() {
-    this.setState({readyToLoad: true})
+    this.s.readyToLoad = true
   }
 
   /** @returns {void} */

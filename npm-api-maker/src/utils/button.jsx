@@ -129,8 +129,13 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
-  onPointerEnter = () => this.setState({hover: true})
-  onPointerLeave = () => this.setState({hover: false})
+  onPointerEnter = () => {
+    this.s.hover = true
+  }
+
+  onPointerLeave = () => {
+    this.s.hover = false
+  }
 
   onPress = () => {
     if (this.p.disabled) {

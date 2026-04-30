@@ -87,7 +87,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       if (this.tt.pageNeedsLoadedModel()) {
         this.loadModel()
       } else {
-        this.setState({model: undefined})
+        this.s.model = undefined
       }
 
       return () => {
@@ -120,11 +120,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
       if (requestId != this.loadModelRequestId) return
 
-      this.setState({model})
+      this.s.model = model
     } else {
       if (requestId != this.loadModelRequestId) return
 
-      this.setState({model: undefined})
+      this.s.model = undefined
     }
   }
 
