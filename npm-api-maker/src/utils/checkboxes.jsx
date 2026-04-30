@@ -172,11 +172,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     if (checked) {
       newOptions = this.s.checkedOptions.concat([option[1]])
 
-      this.setState({checkedOptions: newOptions})
+      this.s.checkedOptions = newOptions
     } else {
       newOptions = this.s.checkedOptions.filter((value) => value != option[1])
 
-      this.setState({checkedOptions: newOptions})
+      this.s.checkedOptions = newOptions
     }
 
     if (this.props.onChange) {

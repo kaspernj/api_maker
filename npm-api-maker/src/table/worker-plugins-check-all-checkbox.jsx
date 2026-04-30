@@ -90,10 +90,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const allChecked = queryLinksStatusResult.all_checked
     const someChecked = queryLinksStatusResult.some_checked
 
-    this.setState({
-      checked: allChecked,
-      indeterminate: someChecked
-    })
+    this.s.checked = allChecked
+    this.s.indeterminate = someChecked
   }
 
   render() {
@@ -122,10 +120,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     if (checkbox.checked) {
       await run(() => currentWorkplace.addQuery({query}))
-      this.setState({checked: true, indeterminate: false})
+      this.s.checked = true
+      this.s.indeterminate = false
     } else {
       await run(() => currentWorkplace.removeQuery({query}))
-      this.setState({checked: false, indeterminate: false})
+      this.s.checked = false
+      this.s.indeterminate = false
     }
   }
 

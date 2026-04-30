@@ -621,15 +621,15 @@ useUpdatedEvent(user, this.onUserUpdated)
 
 ```js
 onUserCreated = (args) => {
-  this.setState({user: args.model})
+  this.s.user = args.model
 }
 
 onUserDestroyed = (args) => {
-  this.setState({user: args.model})
+  this.s.user = args.model
 }
 
 onUserUpdated = (args) => {
-  this.setState({user: args.model})
+  this.s.user = args.model
 }
 ```
 

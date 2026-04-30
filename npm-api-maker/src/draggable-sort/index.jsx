@@ -24,6 +24,7 @@ import useEventEmitter from "ya-use-event-emitter"
 /**
  * @typedef {object} DraggableSortOnItemMovedArgs
  * @property {DraggableSortAnimationArgs} [animationArgs]
+ * @property {object} item
  * @property {number} itemIndex
  * @property {number} x
  * @property {number} y

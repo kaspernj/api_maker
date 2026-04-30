@@ -184,12 +184,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
-  onGearsClicked = () => this.setState({headerActionsActive: !this.s.headerActionsActive})
+  onGearsClicked = () => {
+    this.s.headerActionsActive = !this.s.headerActionsActive
+  }
 
   onWindowMouseUp = (e) => {
     // Close the header actions menu if clicked happened outside
     if (this.s.headerActionsActive && this.tt.headerActionsRef.current && !this.tt.headerActionsRef.current.contains(e.target)) {
-      this.setState({headerActionsActive: false})
+      this.s.headerActionsActive = false
     }
   }
 }))

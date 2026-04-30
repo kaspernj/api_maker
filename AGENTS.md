@@ -69,6 +69,6 @@ Notes:
 - For Link rows that render text, keep visual text styles (for example `color` and underline decoration) on the inner `Text` element rather than the `Link` wrapper.
 - Use `useQueryParams` when building filterable routes in React UI.
 - Layout `controls` props must be callbacks; do not pass React nodes directly.
-- In ShapeComponent routes, pass `controls={this.tt.controls}` and set `controls` on `this.setInstance(...)`.
+- In ShapeComponent routes, pass `controls={this.tt.controls}` and assign route-local instance fields directly.
 - Prefer passing `navbarControls` as a callback and let `Layout` resolve it, rather than pre-rendering.
 - When layout controls depend on a model, pass `cacheKey` (like `model?.id()`) to force re-renders.

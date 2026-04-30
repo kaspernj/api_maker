@@ -77,7 +77,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onChangeValue = (newValue) => {
-    this.setState({value: newValue})
+    this.s.value = newValue
     this.tt.form.setValue(this.p.name, newValue)
   }
 }))

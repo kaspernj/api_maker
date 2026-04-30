@@ -131,31 +131,32 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     const newFilterIndex = this.currentFilters().length
 
-    this.setState({
-      filter: {
-        filterIndex: newFilterIndex
-      }
-    })
+    this.s.filter = {
+      filterIndex: newFilterIndex
+    }
   }
 
-  onApplyClicked = () => this.setState({filter: undefined})
+  onApplyClicked = () => {
+    this.s.filter = undefined
+  }
 
   onEditSearchPressed = ({search}) => {
     this.onRequestCloseLoadSearchModal()
-    this.setState({
-      showSaveSearchModal: search
-    })
+    this.s.showSaveSearchModal = search
   }
 
-  onFilterClicked = (filter) => this.setState({filter})
-  onFilterFormRequestClose = () => this.setState({filter: undefined})
+  onFilterClicked = (filter) => {
+    this.s.filter = filter
+  }
+
+  onFilterFormRequestClose = () => {
+    this.s.filter = undefined
+  }
 
   onLoadSearchClicked = (e) => {
     e.preventDefault()
 
-    this.setState({
-      showLoadSearchModal: true
-    })
+    this.s.showLoadSearchModal = true
   }
 
   onRemoveClicked = ({filterIndex}) => {
@@ -170,19 +171,22 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     Params.changeParams(newParams)
 
-    this.setState({
-      filter: undefined
-    })
+    this.s.filter = undefined
   }
 
-  onRequestCloseLoadSearchModal = () => this.setState({showLoadSearchModal: false})
-  onRequestCloseSaveSearchModal = () => this.setState({showSaveSearchModal: undefined})
+  onRequestCloseLoadSearchModal = () => {
+    this.s.showLoadSearchModal = false
+  }
+
+  onRequestCloseSaveSearchModal = () => {
+    this.s.showSaveSearchModal = undefined
+  }
 
   onSaveSearchClicked = (e) => {
     e.preventDefault()
 
     if (this.hasAnyFilters()) {
-      this.setState({showSaveSearchModal: new TableSearch()})
+      this.s.showSaveSearchModal = new TableSearch()
     } else {
       FlashNotifications.alert(this.t(".no_filters_has_been_set", {defaultValue: "No filters has been set"}))
     }

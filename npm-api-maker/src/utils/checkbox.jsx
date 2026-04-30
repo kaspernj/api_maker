@@ -85,7 +85,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }
 
     if (!("checked" in this.props)) {
-      this.setState({checked: newChecked})
+      this.s.checked = newChecked
     }
   }
 
@@ -95,7 +95,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     }
 
     if (!("checked" in this.props)) {
-      this.setState({checked: newChecked})
+      this.s.checked = newChecked
     }
   }
 }))

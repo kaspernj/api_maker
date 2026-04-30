@@ -136,7 +136,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       .ransack({user_id_eq: currentUser.id(), user_type_eq: userType})
       .toArray()
 
-    this.setState({searches})
+    this.s.searches = searches
   }
 
   render() {
@@ -177,8 +177,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onSearchDeleted = ({search}) => {
-    this.setState({
-      searches: this.s.searches.filter((existingSearch) => existingSearch.id() != search.id())
-    })
+    this.s.searches = this.s.searches.filter((existingSearch) => existingSearch.id() != search.id())
   }
 }))

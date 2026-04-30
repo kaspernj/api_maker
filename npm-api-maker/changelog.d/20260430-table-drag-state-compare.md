@@ -1,0 +1,1 @@
+Fixed table header drag reset handling so movement is applied to the dragged item's current animated position instead of looking it up through table state, and updated ShapeComponent state writes for `set-state-compare` 1.0.86.

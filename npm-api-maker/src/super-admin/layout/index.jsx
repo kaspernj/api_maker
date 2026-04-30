@@ -189,9 +189,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     )
   }
 
-  onRequestMenuClose = () => this.setState({menuTriggered: false})
+  onRequestMenuClose = () => {
+    this.s.menuTriggered = false
+  }
   onTriggerMenu = (e) => {
     e.preventDefault()
-    this.setState({menuTriggered: !this.s.menuTriggered})
+    this.s.menuTriggered = !this.s.menuTriggered
   }
 }))

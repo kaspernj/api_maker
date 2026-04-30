@@ -263,7 +263,8 @@ class UseModelShapeHook extends ShapeHook {
       return
     }
 
-    this.setState({model, notFound: !model})
+    this.s.model = model
+    this.s.notFound = !model
   }
 
   /** @param {number} loadModelGeneration */
@@ -289,7 +290,8 @@ class UseModelShapeHook extends ShapeHook {
 
     if (loadModelGeneration != this.loadModelGeneration) return
 
-    this.setState({model, notFound: false})
+    this.s.model = model
+    this.s.notFound = false
   }
 
   /** @returns {Promise<void>} */
@@ -399,7 +401,8 @@ class UseModelShapeHook extends ShapeHook {
           const syncNewModel = this.syncNewModel()
 
           if (syncNewModel) {
-            this.setState({model: syncNewModel, notFound: false})
+            this.s.model = syncNewModel
+            this.s.notFound = false
           }
         }
 
