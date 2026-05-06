@@ -996,7 +996,7 @@
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
 "@kaspernj/api-maker@file:../../../npm-api-maker":
-  version "1.0.2167"
+  version "1.0.2169"
   dependencies:
     classnames "^2.5.1"
     clone-deep ">= 4.0.1"
@@ -1019,7 +1019,7 @@
     qs ">= 6.9.3"
     replaceall ">= 0.1.6"
     responsive-breakpoints ">= 0.1.3"
-    set-state-compare "^1.0.84"
+    set-state-compare "^1.0.86"
     spark-md5 "^3.0.2"
     stacktrace-parser "^0.1.10"
     strftime ">= 0.10.0"
@@ -4178,6 +4178,14 @@ set-function-length@^1.2.2:
   version "1.0.84"
   resolved "https://registry.npmjs.org/set-state-compare/-/set-state-compare-1.0.84.tgz"
   integrity sha512-9n3zn0gbMaq+NJpAgc54zQXRQ8lV7b8TmDWJUIns9QS9MSij/mtaGAr5rCbLB+W1+tQ60KvDbgZyrWtDtXoDHg==
+  dependencies:
+    diggerize "^1.0.5"
+    fetching-object "^1.0.7"
+
+set-state-compare@^1.0.86:
+  version "1.0.86"
+  resolved "https://registry.yarnpkg.com/set-state-compare/-/set-state-compare-1.0.86.tgz#12b35151456866079247a209ab4ed75eddd2d3fa"
+  integrity sha512-0Gl2qXougZnPCC36d5n/OyRCiKowlhSlGr23Weo1TSyrsb6Iiak5roUAY6CuHII4u5FQtczsh0EFANHgvw1jhg==
   dependencies:
     diggerize "^1.0.5"
     fetching-object "^1.0.7"
