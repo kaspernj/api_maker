@@ -32,6 +32,7 @@ Notes:
 - In ApiMaker table workplace helpers and commands, `current_user` may legitimately be `nil` for websocket/content-parser requests; return `nil`/empty results for current-workplace lookups instead of dereferencing the user.
 - Before adding fallback logic for hook/context timing, inspect the provider source first; do not assume first-render hydration gaps without source confirmation.
 - Do not add helper methods for simple values or expressions that are only used in one place; inline them at the usage site instead.
+- Cache JSX object-literal props such as `dataSet` and `pressableProps` with typed module-level cache maps (`dataSets.name ||= {...}`) instead of recreating objects in render.
 - Keep `testID` values unique within a rendered screen/component so selectors stay unambiguous.
 - In Selenium/spec helpers, do not assume a `testID` selector points at the editable control itself; React Native Web may put the `testID` on a wrapper, so descend to the real `input`/`textarea`/checkbox element before typing or clearing.
 - In JavaScript class method definitions, use `methodName(args)` (no space before parentheses).
