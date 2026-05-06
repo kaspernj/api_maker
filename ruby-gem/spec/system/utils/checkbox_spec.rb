@@ -46,4 +46,17 @@ describe "utils - checkbox" do
     wait_for_selector "[data-testid='utils-checkbox-saved-form-value']", text: "true"
     expect(task.reload).to be_finished
   end
+
+  it "removes the form value when unmounted" do
+    task.update!(finished: true)
+
+    login_as user
+    visit utils_checkbox_path(task_id: task.id)
+
+    wait_for_selector "[data-testid='utils-checkbox-form'][data-checked='true']"
+    wait_for_and_find("[data-testid='utils-checkbox-hide']").click
+    wait_for_and_find("[data-testid='utils-checkbox-submit']").click
+    wait_for_selector "[data-testid='utils-checkbox-saved-form-value']", text: "unset"
+    expect(task.reload).to be_finished
+  end
 end

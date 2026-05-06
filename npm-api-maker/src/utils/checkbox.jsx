@@ -58,18 +58,26 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   setup() {
     const {inputProps, restProps: useInputRestProps, wrapperOpts} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
+    const form = useForm()
+    const inputName = inputProps.name
     const isChecked = this.calculateChecked()
 
-    this.form = useForm()
+    this.form = form
     this.inputProps = inputProps
     this.useInputRestProps = useInputRestProps
     this.wrapperOpts = wrapperOpts
 
     useEffect(() => {
-      if (this.tt.form && inputProps.name) {
-        this.tt.form.setValue(inputProps.name, isChecked)
+      if (form && inputName) {
+        form.setValue(inputName, isChecked)
       }
-    }, [inputProps.name, isChecked])
+    }, [form, inputName, isChecked])
+
+    useEffect(() => () => {
+      if (form && inputName) {
+        form.unsetValue(inputName)
+      }
+    }, [form, inputName])
   }
 
   calculateChecked() {

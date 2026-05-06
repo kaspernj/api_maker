@@ -9,15 +9,17 @@ import Params from "@kaspernj/api-maker/build/params.js"
 import React from "react"
 import Text from "@kaspernj/api-maker/build/utils/text"
 
-const formCheckboxDataSet = {testid: "utils-checkbox-form"}
-const submitPressableProps = {testID: "utils-checkbox-submit"}
-const uncontrolledDataSet = {testid: "utils-checkbox-uncontrolled"}
+/** @type {Record<string, object>} */
+const dataSets = {}
+/** @type {Record<string, object>} */
+const pressableProps = {}
 
 export default class RoutesUtilsCheckbox extends React.PureComponent {
   form = new FormInputs({})
 
   state = {
     savedFormValue: "",
+    showFormCheckbox: true,
     task: undefined
   }
 
@@ -26,27 +28,34 @@ export default class RoutesUtilsCheckbox extends React.PureComponent {
   }
 
   render() {
-    const {savedFormValue, task} = this.state
+    const {savedFormValue, showFormCheckbox, task} = this.state
 
     return (
       <Layout>
-        <View dataSet={{testid: "utils-checkbox-wrapper"}}>
+        <View dataSet={dataSets.wrapper ||= {testid: "utils-checkbox-wrapper"}}>
           <Checkbox
-            dataSet={uncontrolledDataSet}
+            dataSet={dataSets.uncontrolledCheckbox ||= {testid: "utils-checkbox-uncontrolled"}}
             defaultChecked={false}
             label="Uncontrolled checkbox"
           />
           {task &&
             <View testID="utils-checkbox-form-wrapper">
               <Form form={this.form} onSubmit={this.onSubmit}>
-                <Checkbox
-                  attribute="finished"
-                  dataSet={formCheckboxDataSet}
-                  model={task}
+                {showFormCheckbox &&
+                  <Checkbox
+                    attribute="finished"
+                    dataSet={dataSets.formCheckbox ||= {testid: "utils-checkbox-form"}}
+                    model={task}
+                  />
+                }
+                <Button
+                  label="Hide"
+                  onPress={this.onHideFormCheckbox}
+                  pressableProps={pressableProps.hide ||= {testID: "utils-checkbox-hide"}}
                 />
                 <Button
                   label="Save"
-                  pressableProps={submitPressableProps}
+                  pressableProps={pressableProps.submit ||= {testID: "utils-checkbox-submit"}}
                   submit
                 />
               </Form>
@@ -70,12 +79,18 @@ export default class RoutesUtilsCheckbox extends React.PureComponent {
     }
   }
 
+  onHideFormCheckbox = () => this.setState({showFormCheckbox: false})
+
   onSubmit = async () => {
     const {task} = this.state
+    const formParams = this.form.asObject()
     const formValue = this.form.getValue("task[finished]")
+    const savedFormValue = typeof formValue == "undefined" ? "unset" : String(formValue)
 
-    await task.saveRaw(this.form.asObject())
+    if (formParams.task) {
+      await task.saveRaw(formParams)
+    }
 
-    this.setState({savedFormValue: String(formValue)})
+    this.setState({savedFormValue})
   }
 }
