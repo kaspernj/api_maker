@@ -105,9 +105,10 @@ describe ApiMaker::CommandTimeoutGuard do
         reported_errors << {command:, controller:, error:, response:}
       end
 
-      allow(ApiMaker::Configuration.current).to receive(:command_timeout).and_return(5)
-      allow(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).and_return(:postgres)
-      allow(connection).to receive(:raw_connection).and_return(nil)
+      expect(ApiMaker::Configuration.current).to receive(:command_timeout).and_return(5)
+      expect(ActiveRecord::Base).to receive(:connection).and_return(connection)
+      expect(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).twice.and_return(:postgres)
+      expect(connection).to receive(:raw_connection).and_return(nil)
       expect(connection).to receive(:execute).with("SET statement_timeout = 5000").ordered
       expect(connection).to receive(:execute).with("RESET statement_timeout").ordered.and_raise(reset_error)
 
