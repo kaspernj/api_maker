@@ -3,6 +3,15 @@ require "rails_helper"
 describe ApiMaker::CommandTimeoutGuard do
   let(:connection) { instance_double(ActiveRecord::ConnectionAdapters::AbstractAdapter) }
 
+  around do |example|
+    config = ApiMaker::Configuration.current
+    original_on_error = config.instance_variable_get(:@on_error).dup
+
+    example.run
+  ensure
+    config.instance_variable_set(:@on_error, original_on_error)
+  end
+
   before do
     allow(ActiveRecord::Base).to receive(:connection).and_return(connection)
     allow(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).and_return(:other)
@@ -86,6 +95,31 @@ describe ApiMaker::CommandTimeoutGuard do
       expect do
         described_class.wrap { raise "boom" }
       end.to raise_error("boom")
+    end
+
+    it "reports statement timeout reset failures with the standard keyword payload" do
+      reset_error = StandardError.new("reset failed")
+      reported_errors = []
+
+      ApiMaker::Configuration.current.on_error do |command:, controller:, error:, response:|
+        reported_errors << {command:, controller:, error:, response:}
+      end
+
+      allow(ApiMaker::Configuration.current).to receive(:command_timeout).and_return(5)
+      allow(ApiMaker::ConnectionDatabaseKind).to receive(:for).with(connection).and_return(:postgres)
+      allow(connection).to receive(:raw_connection).and_return(nil)
+      expect(connection).to receive(:execute).with("SET statement_timeout = 5000").ordered
+      expect(connection).to receive(:execute).with("RESET statement_timeout").ordered.and_raise(reset_error)
+
+      expect(described_class.wrap { :ok }).to eq(:ok)
+      expect(reported_errors).to eq [
+        {
+          command: nil,
+          controller: nil,
+          error: reset_error,
+          response: nil
+        }
+      ]
     end
   end
 end
