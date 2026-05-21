@@ -117,11 +117,6 @@ private
   end
 
   def report_error(error)
-    ApiMaker::Configuration.current.report_error(
-      command: nil,
-      controller: nil,
-      error:,
-      response: nil
-    )
+    ApiMaker::Configuration.current.report_error(error:)
   end
 end
