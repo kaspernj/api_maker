@@ -11,6 +11,7 @@ Notes:
 - Avoid unrelated changes (for example, adding placeholder modules in specs) unless they are necessary for the requested change.
 - Before committing, review the current diff and propose commit message(s) grouped by logical change sets.
 - Prefer `describe` over `RSpec.describe` in specs.
+- Prefer `expect(...).to receive(...)` over `allow(...)` in specs whenever the call is part of the behavior under test; reserve `allow` for background setup where call verification is intentionally irrelevant.
 - Do not add `# frozen_string_literal: true` to files.
 - Before adding RuboCop disable directives, check the existing repo RuboCop config first and prefer code that passes under that config without new disables; avoid review-only style churn.
 - Prefer multiple small, individually working commits when possible.

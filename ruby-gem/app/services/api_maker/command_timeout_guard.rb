@@ -49,7 +49,7 @@ private
       begin
         @connection.execute(reset_sql)
       rescue StandardError => e
-        ApiMaker::Configuration.current.report_error(e)
+        report_error(e)
       end
     end
   end
@@ -87,7 +87,7 @@ private
         worker.raise(ApiMaker::CommandTimeoutError.new("Command exceeded timeout of #{@timeout_seconds}s"))
       end
     rescue StandardError => e
-      ApiMaker::Configuration.current.report_error(e)
+      report_error(e)
     end
 
     begin
@@ -113,6 +113,10 @@ private
 
     raw_connection.cancel
   rescue StandardError => e
-    ApiMaker::Configuration.current.report_error(e)
+    report_error(e)
+  end
+
+  def report_error(error)
+    ApiMaker::Configuration.current.report_error(error:)
   end
 end

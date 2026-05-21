@@ -65,9 +65,9 @@ class ApiMaker::Configuration
     @on_thread_callbacks << blk
   end
 
-  def report_error(...)
+  def report_error(command: nil, controller: nil, error:, response: nil)
     @on_error.each do |on_error|
-      on_error.call(...)
+      on_error.call(command:, controller:, error:, response:)
     end
   end
 end
