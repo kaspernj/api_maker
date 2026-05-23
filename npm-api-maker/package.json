@@ -18,7 +18,7 @@
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
     "lint:eslint": "eslint --max-warnings 0 --ext .js,.jsx",
-    "release:patch": "node scripts/release-patch.js",
+    "release:patch": "release-patch",
     "release:patch-master": "node scripts/release-patch.js --require-master",
     "typecheck": "tsc --noEmit",
     "typecheck:file": "sh -c 'file=\"${npm_config_file:-${FILE:-}}\"; if [ -z \"$file\" ] && [ \"${0#--file=}\" != \"$0\" ]; then file=\"${0#--file=}\"; fi; if [ -z \"$file\" ] && [ \"${1#--file=}\" != \"$1\" ]; then file=\"${1#--file=}\"; fi; file=\"${file#npm-api-maker/}\"; file=\"${file#./}\"; if [ -z \"$file\" ]; then echo \"Missing --file=src/path/to/file.js\"; exit 2; fi; tmp=$(mktemp); tsc --noEmit -p tsconfig.json --pretty false >\"$tmp\" 2>&1; if rg --fixed-strings \"$file\" \"$tmp\" >/dev/null; then rg --fixed-strings \"$file\" \"$tmp\"; rm -f \"$tmp\"; exit 1; else rm -f \"$tmp\"; exit 0; fi'",
@@ -96,6 +96,7 @@
     "react-dom": "19.0.0",
     "react-native": "0.79.6",
     "react-native-vector-icons": "^10.3.0",
+    "release-patch": "^1.0.0",
     "typescript": "~5.8.3",
     "velocious": "^1.0.343"
   },
