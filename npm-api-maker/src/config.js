@@ -134,6 +134,34 @@ class ApiMakerConfig {
    * @param {boolean} _newValue
    */
   setUseHtmlForm(_newValue) { apiMakerConfigNotImplemented("setUseHtmlForm") }
+
+  // Table export hooks. These hold functions that should be returned as-is (not invoked), so they use
+  // explicit accessors instead of the generic accessor loop below (which would call function values).
+
+  /**
+   * Opens a streaming file sink for table exports on platforms without a web default (e.g. React
+   * Native/Expo). Receives `{fileName, mimeType, format}` and returns a sink
+   * `{write(chunk), close(), abort()}`.
+   * @returns {((args: object) => Promise<object>) | undefined}
+   */
+  getExportFileSinkOpener() { return this.global.exportFileSinkOpener }
+
+  /**
+   * @param {((args: object) => Promise<object>) | undefined} opener
+   */
+  setExportFileSinkOpener(opener) { this.global.exportFileSinkOpener = opener }
+
+  /**
+   * Serializes an array-of-arrays (header + rows) into xlsx bytes, enabling the optional Excel export format
+   * without api_maker depending on a spreadsheet library. Returns a `Uint8Array` (or a promise of one).
+   * @returns {((rows: Array<Array<unknown>>) => Uint8Array | Promise<Uint8Array>) | undefined}
+   */
+  getExportXlsxSerializer() { return this.global.exportXlsxSerializer }
+
+  /**
+   * @param {((rows: Array<Array<unknown>>) => Uint8Array | Promise<Uint8Array>) | undefined} serializer
+   */
+  setExportXlsxSerializer(serializer) { this.global.exportXlsxSerializer = serializer }
 }
 
 for (const accessorName in accessors) {
