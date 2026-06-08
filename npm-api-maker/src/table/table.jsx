@@ -6,7 +6,9 @@
 import {dig, digg, digs} from "diggerize"
 import React, {createContext, useContext, useEffect, useMemo, useRef} from "react"
 import {Animated, Platform, Pressable, View} from "react-native"
+import apiMakerConfig from "../config.js"
 import BlockingOverlay from "./blocking-overlay"
+import LargePerPageWarningModal from "./large-per-page-warning-modal"
 import Card from "../bootstrap/card"
 import classNames from "classnames"
 import Collection from "../collection.js"
@@ -350,6 +352,8 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     draggedColumn: null,
     identifier: this.props.identifier || `${digg(this.p.modelClass.modelClassData(), "collectionKey")}-default`,
     lastUpdate: new Date(),
+    pendingPerPageValue: null,
+    perPageSelectNonce: 0,
     preload: undefined,
     preparedColumns: undefined,
     queryName: this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey"),
@@ -358,6 +362,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     querySName: `${this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey")}_s`,
     resizing: false,
     showFilters: Boolean(Params.parse()[`${this.props.queryName || digg(this.p.modelClass.modelClassData(), "collectionKey")}_s`]),
+    showLargePerPageWarning: false,
     showSettings: false,
     tableSetting: undefined,
     tableSettingLoaded: false,
@@ -947,14 +952,39 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onPerPageChanged = (e) => {
-    const {queryName} = this.s
     const newPerPageValue = digg(e, "target", "value")
-    const perKey = `${queryName}_per`
-    const paramsChange = {}
+    const totalCount = this.collection?.result?.totalCount?.()
+    const wouldLoadCount = newPerPageValue == "all" ? totalCount : Math.min(Number(newPerPageValue), totalCount ?? Infinity)
 
-    paramsChange[perKey] = newPerPageValue
+    if (typeof totalCount == "number" && wouldLoadCount > apiMakerConfig.getDangerousRowCountThreshold()) {
+      this.s.pendingPerPageValue = newPerPageValue
+      this.s.showLargePerPageWarning = true
 
-    Params.changeParams(paramsChange)
+      return
+    }
+
+    this.applyPerPageChange(newPerPageValue)
+  }
+
+  applyPerPageChange = (newPerPageValue) => {
+    const {queryName} = this.s
+
+    Params.changeParams({[`${queryName}_per`]: newPerPageValue})
+  }
+
+  onConfirmLargePerPage = () => {
+    const {pendingPerPageValue} = this.s
+
+    this.s.pendingPerPageValue = null
+    this.s.showLargePerPageWarning = false
+    this.applyPerPageChange(pendingPerPageValue)
+  }
+
+  onCancelLargePerPage = () => {
+    this.s.pendingPerPageValue = null
+    this.s.showLargePerPageWarning = false
+    // Remount the uncontrolled per-page <Select> so it snaps back to the actual per-page value.
+    this.s.perPageSelectNonce += 1
   }
 
   renderItem = ({index, item: model}) => {
@@ -1167,10 +1197,18 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
           <Select
             className="per-page-select"
             defaultValue={perPage}
+            key={`per-page-select-${this.s.perPageSelectNonce}`}
             onChange={this.tt.onPerPageChanged}
             options={paginationOptions}
           />
         </View>
+        {this.s.showLargePerPageWarning &&
+          <LargePerPageWarningModal
+            count={totalCount}
+            onConfirm={this.tt.onConfirmLargePerPage}
+            onRequestClose={this.tt.onCancelLargePerPage}
+          />
+        }
       </View>
     )
   }
