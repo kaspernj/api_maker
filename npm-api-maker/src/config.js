@@ -28,6 +28,7 @@ const accessors = {
   },
   cableUrl: {require: false},
   currenciesCollection: {required: true},
+  dangerousRowCountThreshold: {default: 1000, required: false},
   history: {required: true},
   host: {required: false},
   i18n: {required: false},
@@ -78,6 +79,16 @@ class ApiMakerConfig {
   getCableUrl() {
     return apiMakerConfigNotImplemented("getCableUrl")
   }
+
+  /** @returns {number} */
+  getDangerousRowCountThreshold() {
+    return apiMakerConfigNotImplemented("getDangerousRowCountThreshold")
+  }
+
+  /**
+   * @param {number} _newValue
+   */
+  setDangerousRowCountThreshold(_newValue) { apiMakerConfigNotImplemented("setDangerousRowCountThreshold") }
 
   /**
    * @param {string | undefined} _newValue
