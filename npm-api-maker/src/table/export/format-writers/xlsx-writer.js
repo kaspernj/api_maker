@@ -1,5 +1,7 @@
 // @ts-check
+/* eslint-disable sort-imports */
 import apiMakerConfig from "../../../config.js"
+import {cellToText} from "../cell-value.js"
 
 /**
  * Excel (.xlsx) writer. xlsx is a zipped binary that can't be appended chunk-by-chunk, so this buffers the
@@ -28,7 +30,7 @@ export default class ApiMakerTableExportXlsxWriter {
    * @returns {null}
    */
   row(values) {
-    this.rows.push(values)
+    this.rows.push(values.map((value) => cellToText(value)))
 
     return null
   }

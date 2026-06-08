@@ -1,4 +1,5 @@
 // @ts-check
+import {cellToText} from "../cell-value.js"
 
 const UTF8_BOM = "﻿"
 
@@ -42,7 +43,7 @@ export default class ApiMakerTableExportCsvWriter {
    * @returns {string}
    */
   escape(value) {
-    const text = value === null || value === undefined ? "" : String(value)
+    const text = cellToText(value)
 
     if ((/["\r\n,]/).test(text)) {
       return `"${text.replace(/"/g, "\"\"")}"`
