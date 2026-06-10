@@ -2,6 +2,7 @@
 import ApiMakerCommandsPool from "../src/commands-pool.js"
 import Config from "../src/config.js"
 import Devise from "../src/devise.js"
+import SessionExpiredError from "../src/session-expired-error.js"
 import SessionStatusUpdater from "../src/session-status-updater.js"
 import WebsocketRequestClient from "../src/websocket-request-client.js"
 import {jest} from "@jest/globals"
@@ -87,6 +88,78 @@ describe("ApiMakerCommandsPool", () => {
 
     expect(refreshSessionStatus).not.toHaveBeenCalled()
     expect(commandExecution.reject).toHaveBeenCalledTimes(1)
+  })
+
+  describe("believed signed-in identity", () => {
+    it("includes believed_devise_user_ids in the request global when signed in", () => {
+      const pool = new ApiMakerCommandsPool()
+
+      jest.spyOn(Devise, "registeredScopes").mockReturnValue(["user"])
+      jest.spyOn(Devise.current(), "getCurrentScope").mockReturnValue({id: () => 42})
+
+      expect(pool.globalDataForRequest()).toEqual({believed_devise_user_ids: {user: 42}})
+    })
+
+    it("omits believed_devise_user_ids when nothing is signed in", () => {
+      const pool = new ApiMakerCommandsPool()
+
+      jest.spyOn(Devise, "registeredScopes").mockReturnValue(["user"])
+      jest.spyOn(Devise.current(), "getCurrentScope").mockReturnValue(null)
+
+      expect(pool.globalDataForRequest()).toEqual({})
+    })
+  })
+
+  describe("authentication divergence recovery", () => {
+    it("retries after recovering from authentication_changed and returns the retried response", async() => {
+      const pool = new ApiMakerCommandsPool()
+      const performRequest = jest.spyOn(pool, "performRequest")
+        .mockResolvedValueOnce({success: false, type: "authentication_changed"})
+        .mockResolvedValueOnce({responses: {}})
+      const recover = jest.spyOn(pool, "recoverAuthentication").mockResolvedValue(true)
+
+      const response = await pool.sendRequest({commandSubmitData: {}, url: "/api_maker/commands"})
+
+      expect(recover).toHaveBeenCalledTimes(1)
+      expect(performRequest).toHaveBeenCalledTimes(2)
+      expect(response).toEqual({responses: {}})
+    })
+
+    it("throws SessionExpiredError when authentication_changed cannot be recovered", async() => {
+      const pool = new ApiMakerCommandsPool()
+
+      jest.spyOn(pool, "performRequest").mockResolvedValue({success: false, type: "authentication_changed"})
+      const recover = jest.spyOn(pool, "recoverAuthentication").mockResolvedValue(false)
+
+      await expect(pool.sendRequest({commandSubmitData: {}, url: "/api_maker/commands"})).rejects.toBeInstanceOf(SessionExpiredError)
+      expect(recover).toHaveBeenCalledTimes(1)
+    })
+
+    it("recoverAuthentication refreshes the websocket session and reports a still-signed-in user", async() => {
+      const pool = new ApiMakerCommandsPool()
+
+      jest.spyOn(Devise, "registeredScopes").mockReturnValue(["user"])
+      jest.spyOn(SessionStatusUpdater.current(), "sessionStatus").mockResolvedValue({scopes: {user: {signed_in: true}}, shadow_session_token: "tok"})
+      const applyResult = jest.spyOn(SessionStatusUpdater.current(), "applyResult").mockReturnValue(undefined)
+      const refresh = jest.spyOn(Devise, "refreshWebsocketSession").mockResolvedValue({})
+
+      const recovered = await pool.recoverAuthentication()
+
+      expect(refresh).toHaveBeenCalledWith({scope: "user", shadowSessionToken: "tok"})
+      expect(applyResult).toHaveBeenCalledTimes(1)
+      expect(recovered).toBe(true)
+    })
+
+    it("recoverAuthentication reports signed-out when the backend no longer has the user", async() => {
+      const pool = new ApiMakerCommandsPool()
+
+      jest.spyOn(Devise, "registeredScopes").mockReturnValue(["user"])
+      jest.spyOn(SessionStatusUpdater.current(), "sessionStatus").mockResolvedValue({scopes: {user: {signed_in: false}}})
+      jest.spyOn(SessionStatusUpdater.current(), "applyResult").mockReturnValue(undefined)
+      jest.spyOn(Devise, "refreshWebsocketSession").mockResolvedValue({})
+
+      expect(await pool.recoverAuthentication()).toBe(false)
+    })
   })
 
   describe("rejectWithCallerStack", () => {
