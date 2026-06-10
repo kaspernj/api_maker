@@ -13,6 +13,7 @@ import events from "./events.js"
 import FormDataObjectizer from "form-data-objectizer" // eslint-disable-line sort-imports
 import RunLast from "./run-last.js"
 import Serializer from "./serializer.js"
+import SessionExpiredError from "./session-expired-error.js"
 import SessionStatusUpdater from "./session-status-updater.js"
 import ValidationError from "./validation-error.js"
 import {ValidationErrors} from "./validation-errors.js"
@@ -61,6 +62,7 @@ import WebsocketRequestClient from "./websocket-request-client.js"
  */
 
 /** @typedef {{[key: string]: {[key: string]: {[key: string]: {[key: number]: {args: object, primary_key: number | string, id: number}}}}}} PoolDataType */
+/** @typedef {import("./base-model.js").default & {id: () => number | string}} BaseModelWithId */
 
 const shared = {}
 
@@ -183,10 +185,42 @@ export default class ApiMakerCommandsPool {
    * @returns {Promise<CommandsRequestResponse>}
    */
   async sendRequest({commandExecution, commandSubmitData, url}) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const response = await this.performRequest({commandExecution, commandSubmitData, url}) // eslint-disable-line no-await-in-loop
+
+      if (response?.success === false && response.type == "invalid_authenticity_token") {
+        console.log("Invalid authenticity token - try again")
+        await SessionStatusUpdater.current().updateSessionStatus() // eslint-disable-line no-await-in-loop
+        continue // eslint-disable-line no-continue
+      }
+
+      if (response?.success === false && response.type == "authentication_changed") {
+        const recovered = await this.recoverAuthentication() // eslint-disable-line no-await-in-loop
+
+        if (recovered) continue // eslint-disable-line no-continue
+
+        throw new SessionExpiredError()
+      }
+
+      return /** @type {CommandsRequestResponse} */ (response)
+    }
+
+    throw new Error("Couldnt successfully execute request")
+  }
+
+  /**
+   * Performs a single command request over websocket or HTTP.
+   * @param {object} args
+   * @param {string} args.url
+   * @param {CommandSubmitData} args.commandSubmitData
+   * @param {ApiMakerCommandExecution} [args.commandExecution]
+   * @returns {Promise<CommandsRequestResponse>}
+   */
+  async performRequest({commandExecution, commandSubmitData, url}) {
     if (Config.getWebsocketRequests() && !this.requestOptions.forceHttp && commandSubmitData.getFilesCount() == 0) {
       return /** @type {Promise<CommandsRequestResponse>} */ (WebsocketRequestClient.current().perform({
         cacheResponse: this.requestOptions.cacheResponse,
-        global: this.globalRequestData,
+        global: this.globalDataForRequest(),
         onLog: (message) => commandExecution?.addLog(message),
         onProgress: (progressData) => commandExecution?.setProgress(progressData),
         onReceived: (receivedData) => commandExecution?.setReceived(receivedData),
@@ -194,25 +228,65 @@ export default class ApiMakerCommandsPool {
       }))
     }
 
-    let response
-
-    for (let i = 0; i < 3; i++) {
-      if (commandSubmitData.getFilesCount() > 0) {
-        response = await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()}) // eslint-disable-line no-await-in-loop
-      } else {
-        response = await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()}) // eslint-disable-line no-await-in-loop
-      }
-
-      if (response.success === false && response.type == "invalid_authenticity_token") {
-        console.log("Invalid authenticity token - try again")
-        await SessionStatusUpdater.current().updateSessionStatus() // eslint-disable-line no-await-in-loop
-        continue // eslint-disable-line no-continue
-      }
-
-      return /** @type {CommandsRequestResponse} */ (response)
+    if (commandSubmitData.getFilesCount() > 0) {
+      return /** @type {CommandsRequestResponse} */ (await Api.requestLocal({path: url, method: "POST", rawData: commandSubmitData.getFormData()}))
     }
 
-    throw new Error("Couldnt successfully execute request")
+    return /** @type {CommandsRequestResponse} */ (await Api.requestLocal({path: url, method: "POST", data: commandSubmitData.getJsonData()}))
+  }
+
+  /**
+   * The user ids the frontend believes it is signed in as, keyed by Devise
+   * scope. Sent with each request so the backend can detect (and let the
+   * frontend recover from) a stale session before running commands. Undefined
+   * when nothing is signed in, so genuinely anonymous requests send no belief.
+   * @returns {Record<string, number | string> | undefined}
+   */
+  believedDeviseUserIds() {
+    const believed = /** @type {Record<string, number | string>} */ ({})
+
+    for (const scope of Devise.registeredScopes()) {
+      const model = Devise.current().getCurrentScope(scope)
+
+      if (model) believed[scope] = /** @type {BaseModelWithId} */ (model).id()
+    }
+
+    return Object.keys(believed).length > 0 ? believed : undefined
+  }
+
+  /**
+   * The global request data merged with the believed signed-in identity.
+   * @returns {Record<string, unknown>}
+   */
+  globalDataForRequest() {
+    const believed = this.believedDeviseUserIds()
+
+    if (!believed) return this.globalRequestData
+
+    return {...this.globalRequestData, believed_devise_user_ids: believed}
+  }
+
+  /**
+   * Recovers from an `authentication_changed` response: refreshes the existing
+   * websocket connection's auth in-place from the current server session (no
+   * reconnect, no password) and reconciles the local session cache. Returns
+   * whether a previously signed-in scope is still authenticated, so the request
+   * can be retried; false means the user is genuinely signed out (the sign-in
+   * form is shown centrally via the Devise sign-out event).
+   * @returns {Promise<boolean>}
+   */
+  async recoverAuthentication() {
+    const sessionStatusUpdater = SessionStatusUpdater.current()
+    const sessionStatus = await sessionStatusUpdater.sessionStatus()
+    const scopes = Devise.registeredScopes()
+
+    await Promise.all(
+      scopes.map((scope) => Devise.refreshWebsocketSession({scope, shadowSessionToken: sessionStatus?.shadow_session_token}))
+    )
+
+    sessionStatusUpdater.applyResult(sessionStatus)
+
+    return scopes.some((scope) => Boolean(sessionStatus?.scopes?.[scope]?.signed_in))
   }
 
   /** Sends the currently queued commands and resolves or rejects their executions. */
@@ -230,9 +304,10 @@ export default class ApiMakerCommandsPool {
 
     try {
       const submitData = {pool: currentPoolData}
+      const globalData = this.globalDataForRequest()
 
-      if (Object.keys(this.globalRequestData).length > 0)
-        submitData.global = this.globalRequestData
+      if (Object.keys(globalData).length > 0)
+        submitData.global = globalData
 
       const commandSubmitData = new CommandSubmitData(submitData)
       const url = "/api_maker/commands"
@@ -263,6 +338,14 @@ export default class ApiMakerCommandsPool {
           throw new Error(`Unhandled response type: ${responseType}`)
         }
       }))
+    } catch (error) {
+      // sendRequest (e.g. an unrecoverable SessionExpiredError) or response
+      // handling can throw before the per-command promises are settled. Reject
+      // every queued command so callers awaiting their execution don't hang
+      // forever. Already-settled executions ignore the extra reject.
+      for (const commandData of Object.values(currentPool)) {
+        commandData.commandExecution.reject(/** @type {Error} */ (error))
+      }
     } finally {
       this.flushCount--
     }

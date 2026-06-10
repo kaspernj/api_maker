@@ -19,6 +19,7 @@ const shared = {}
  * @typedef {object} SessionStatusResult
  * @property {string} [csrf_token]
  * @property {Record<string, SessionStatusScope>} scopes
+ * @property {string} [shadow_session_token]
  */
 
 /**
@@ -62,6 +63,10 @@ export default class ApiMakerSessionStatusUpdater {
       this.connectOnlineEvent()
     }
 
+    if (typeof document != "undefined") {
+      this.connectVisibilityEvents()
+    }
+
     this.connectWakeEvent()
   }
 
@@ -73,6 +78,39 @@ export default class ApiMakerSessionStatusUpdater {
   /** Re-checks session state when the device wakes from sleep. */
   connectWakeEvent() {
     wakeEvent(this.updateSessionStatus)
+  }
+
+  /**
+   * Re-checks session state when the user returns to a backgrounded tab/app.
+   * The `wake-event` package only fires on multi-second device-sleep drift, so
+   * it misses iOS Safari tab suspension; visibilitychange/focus/pageshow cover
+   * that, surfacing an expired session the moment the user returns.
+   */
+  connectVisibilityEvents() {
+    document.addEventListener("visibilitychange", this.refreshOnReturnToForeground, false)
+
+    if (typeof window != "undefined") {
+      window.addEventListener("focus", this.refreshOnReturnToForeground, false)
+      window.addEventListener("pageshow", this.refreshOnReturnToForeground, false)
+    }
+  }
+
+  /**
+   * Schedules a debounced session-status refresh when the page becomes visible
+   * again. visibilitychange, focus and pageshow can fire together on return, so
+   * the refresh is collapsed into a single request.
+   */
+  refreshOnReturnToForeground = () => {
+    if (typeof document != "undefined" && document.visibilityState && document.visibilityState != "visible") {
+      return
+    }
+
+    if (this.returnRefreshTimeout) return
+
+    this.returnRefreshTimeout = setTimeout(() => {
+      this.returnRefreshTimeout = undefined
+      this.updateSessionStatus()
+    }, 50)
   }
 
   async getCsrfToken() {

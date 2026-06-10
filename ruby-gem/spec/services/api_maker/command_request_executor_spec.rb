@@ -124,6 +124,57 @@ describe ApiMaker::CommandRequestExecutor do
     )
   end
 
+  it "short-circuits with authentication_changed when the believed user diverges from the actual user" do
+    expect(controller).to receive(:with_request_context).and_yield
+
+    response = described_class.execute!(
+      controller:,
+      payload: {
+        "global" => {"believed_devise_user_ids" => {"user" => "does-not-match"}},
+        "pool" => {
+          "collection" => {
+            "tasks" => {
+              "test_collection" => {
+                "1" => {
+                  "args" => {},
+                  "id" => 1
+                }
+              }
+            }
+          }
+        }
+      }
+    )
+
+    expect(response).to eq(success: false, type: :authentication_changed)
+  end
+
+  it "runs commands normally when the believed user matches the actual user" do
+    expect(controller).to receive(:with_request_context).and_yield
+
+    response = described_class.execute!(
+      controller:,
+      payload: {
+        "global" => {"believed_devise_user_ids" => {"user" => current_user.id}},
+        "pool" => {
+          "collection" => {
+            "tasks" => {
+              "test_collection" => {
+                "1" => {
+                  "args" => {},
+                  "id" => 1
+                }
+              }
+            }
+          }
+        }
+      }
+    )
+
+    expect(response).to include(:responses)
+    expect(response.fetch(:responses).fetch("1")).to include(type: :success)
+  end
+
   it "transmits command progress and log events through current_command" do
     expect(controller).to receive(:with_request_context).and_yield
     expect(controller).to receive(:transmit_command_event).with(
