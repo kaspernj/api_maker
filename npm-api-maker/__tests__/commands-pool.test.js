@@ -150,6 +150,23 @@ describe("ApiMakerCommandsPool", () => {
       expect(recovered).toBe(true)
     })
 
+    it("rejects queued command promises when a flush fails unrecoverably", async() => {
+      const pool = new ApiMakerCommandsPool()
+      const reject = jest.fn()
+
+      pool.pool = {1: {commandExecution: {reject, resolve: jest.fn()}}}
+      pool.poolData = {collection: {tasks: {test: {1: {args: {}, id: 1}}}}}
+
+      jest.spyOn(Devise, "registeredScopes").mockReturnValue([])
+      jest.spyOn(pool, "performRequest").mockResolvedValue({success: false, type: "authentication_changed"})
+      jest.spyOn(pool, "recoverAuthentication").mockResolvedValue(false)
+
+      await pool.flush()
+
+      expect(reject).toHaveBeenCalledTimes(1)
+      expect(reject.mock.calls[0][0]).toBeInstanceOf(SessionExpiredError)
+    })
+
     it("recoverAuthentication reports signed-out when the backend no longer has the user", async() => {
       const pool = new ApiMakerCommandsPool()
 

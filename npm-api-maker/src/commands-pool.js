@@ -338,6 +338,14 @@ export default class ApiMakerCommandsPool {
           throw new Error(`Unhandled response type: ${responseType}`)
         }
       }))
+    } catch (error) {
+      // sendRequest (e.g. an unrecoverable SessionExpiredError) or response
+      // handling can throw before the per-command promises are settled. Reject
+      // every queued command so callers awaiting their execution don't hang
+      // forever. Already-settled executions ignore the extra reject.
+      for (const commandData of Object.values(currentPool)) {
+        commandData.commandExecution.reject(/** @type {Error} */ (error))
+      }
     } finally {
       this.flushCount--
     }
