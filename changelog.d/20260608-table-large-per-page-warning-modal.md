@@ -1,0 +1,1 @@
+Added a confirmation modal in the live table that warns before loading a dangerous number of rows (e.g. the "All" per-page option on a large collection). It advises filtering and points to the existing Download export, and lets the user proceed or cancel. The threshold is configurable via `apiMakerConfig.setDangerousRowCountThreshold` (default 1000).

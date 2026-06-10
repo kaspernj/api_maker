@@ -44,7 +44,14 @@ describe "table - settings" do
     wait_for_selector model_row_selector(task1)
     wait_for_selector model_row_selector(task2)
     wait_for_and_find("[data-testid='settings-button']").click
-    wait_for_and_find("[data-component='api-maker/table/settings/download-action']").click
+
+    # It offers the streaming export formats (Excel is hidden unless a host xlsx serializer is configured).
+    wait_for_selector "[data-testid='download-action-csv']"
+    wait_for_selector "[data-testid='download-action-html']"
+    wait_for_no_selector "[data-testid='download-action-xlsx']"
+
+    # Streaming the whole result set to a CSV file completes without errors.
+    wait_for_and_find("[data-testid='download-action-csv']").click
 
     sleep 1
     expect_no_errors

@@ -21,4 +21,34 @@ describe "bootstrap - live table - per page" do
     wait_for_and_find(".per-page-select").select("All")
     wait_for_expect { expect(all("[data-class='task-row']").length).to eq 100 }
   end
+
+  it "warns before loading a dangerous number of rows and lets the user proceed or cancel" do
+    project = create(:project)
+    now = Time.current
+    rows = Array.new(1001) do |index|
+      {name: "bulk-task-#{index}", project_id: project.id, state: "open", finished: false, created_at: now, updated_at: now}
+    end
+    Task.insert_all(rows) # rubocop:disable Rails/SkipsModelValidations
+
+    login_as user_admin
+    visit bootstrap_live_table_path
+    wait_for_expect { expect(all("[data-class='task-row']").length).to eq 30 }
+
+    # Selecting "All" above the threshold (default 1000) warns instead of loading everything.
+    wait_for_and_find(".per-page-select").select("All")
+    wait_for_selector "[data-testid='large-per-page-warning-modal']"
+    expect(all("[data-class='task-row']").length).to eq 30
+
+    # Cancelling keeps the current per-page.
+    wait_for_and_find("[data-testid='large-per-page-cancel-button']").click
+    wait_for_no_selector "[data-testid='large-per-page-warning-modal']"
+    expect(all("[data-class='task-row']").length).to eq 30
+
+    # Proceeding loads all the rows.
+    wait_for_and_find(".per-page-select").select("All")
+    wait_for_selector "[data-testid='large-per-page-warning-modal']"
+    wait_for_and_find("[data-testid='large-per-page-proceed-button']").click
+    wait_for_no_selector "[data-testid='large-per-page-warning-modal']"
+    wait_for_expect { expect(all("[data-class='task-row']").length).to eq 1001 }
+  end
 end
