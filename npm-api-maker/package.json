@@ -74,7 +74,7 @@
     "ya-use-event-listener": ">= 0.1.1"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-env": "^8.0.2",
     "@babel/preset-react": "^7.26.3",
     "@eslint/compat": "^2.0.3",
     "@eslint/js": "^10.0.1",
