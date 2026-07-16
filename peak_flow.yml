@@ -8,7 +8,10 @@ builds:
   setup:
     name: Setup build container
     script:
-      - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
+      - cd ruby-gem && bundle install --jobs 4 --without production staging
+      # Replace checked-in developer paths before installing the appraisal bundles.
+      - cd ruby-gem && bundle exec appraisal generate
+      - cd ruby-gem && bundle exec appraisal install
 
       - cd npm-api-maker && npm ci
       - cd npm-api-maker && yarn link
