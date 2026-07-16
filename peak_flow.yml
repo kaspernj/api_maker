@@ -8,7 +8,7 @@ builds:
   setup:
     name: Setup build container
     script:
-      - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal generate && bundle exec appraisal install && bundle exec appraisal bundle
+      - cd ruby-gem && bundle install --jobs 4 --without production staging && bundle exec appraisal install && bundle exec appraisal bundle
 
       - cd npm-api-maker && npm ci
       - cd npm-api-maker && yarn link
@@ -24,31 +24,31 @@ builds:
       build_2:
         name: RSpec Rails 6 Ruby 3.3.5
         script:
-          - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services spec/api_helpers
+          - cd ruby-gem && bundle exec appraisal generate && bundle exec appraisal install && bundle exec appraisal "rails 6" rspec --format documentation spec/api_maker spec/services spec/api_helpers
       build_3:
         name: RSpec Rails 7 Ruby 3.3.5
         script:
-          - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services spec/api_helpers
+          - cd ruby-gem && bundle exec appraisal generate && bundle exec appraisal install && bundle exec appraisal "rails 7" rspec --format documentation spec/api_maker spec/services spec/api_helpers
       rails_6_chrome:
         name: Chrome Rails 6 Ruby 3.3.5
         script:
-          - cd ruby-gem && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
+          - cd ruby-gem && bundle exec appraisal generate && bundle exec appraisal install && xvfb-run bundle exec appraisal "rails 6" rspec --format documentation spec/system
       rails_6_firefox:
         name: Firefox Rails 6 Ruby 3.3.5
         environment:
           SELENIUM_DRIVER: firefox
         script:
-          - cd ruby-gem && bundle exec appraisal "rails 6" rspec --format documentation spec/system
+          - cd ruby-gem && bundle exec appraisal generate && bundle exec appraisal install && bundle exec appraisal "rails 6" rspec --format documentation spec/system
       rails_7_chrome:
         name: Chrome Rails 7 Ruby 3.3.5
         script:
-          - cd ruby-gem && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
+          - cd ruby-gem && bundle exec appraisal generate && bundle exec appraisal install && xvfb-run bundle exec appraisal "rails 7" rspec --format documentation spec/system
       rails_7_firefox:
         name: Firefox Rails 7 Ruby 3.3.5
         environment:
           SELENIUM_DRIVER: firefox
         script:
-          - cd ruby-gem && bundle exec appraisal "rails 7" rspec --format documentation spec/system
+          - cd ruby-gem && bundle exec appraisal generate && bundle exec appraisal install && bundle exec appraisal "rails 7" rspec --format documentation spec/system
       build_10:
         name: Jest
         script:
