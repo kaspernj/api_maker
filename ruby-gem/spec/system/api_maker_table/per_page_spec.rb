@@ -31,7 +31,8 @@ describe "bootstrap - live table - per page" do
     Task.insert_all(rows) # rubocop:disable Rails/SkipsModelValidations
 
     login_as user_admin
-    visit bootstrap_live_table_path
+    live_table_props = {initialNumToRender: rows.length, maxToRenderPerBatch: rows.length}
+    visit bootstrap_live_table_path(live_table_props: JSON.generate(live_table_props))
     wait_for_expect { expect(all("[data-class='task-row']").length).to eq 30 }
 
     # Selecting "All" above the threshold (default 1000) warns instead of loading everything.
