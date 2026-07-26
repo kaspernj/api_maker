@@ -16,6 +16,7 @@ jest.unstable_mockModule("i18n-on-steroids/build/src/use-i18n.js", () => ({
 let Input
 let InputsCheckbox
 let BootstrapCheckbox
+let BootstrapRadioButtons
 let Select
 
 global.IS_REACT_ACT_ENVIRONMENT = true
@@ -26,6 +27,7 @@ beforeAll(async() => {
   Input = (await import("../src/inputs/input.jsx")).default
   InputsCheckbox = (await import("../src/inputs/checkbox.jsx")).default
   BootstrapCheckbox = (await import("../src/bootstrap/checkbox.jsx")).default
+  BootstrapRadioButtons = (await import("../src/bootstrap/radio-buttons.jsx")).default
   Select = (await import("../src/inputs/select.jsx")).default
 })
 
@@ -453,5 +455,64 @@ describe("Formmeld input integration", () => {
     mountedRoots.pop().container.remove()
     act(() => form.setValue("enabled", true))
     expect(form.getValue("enabled")).toBe(true)
+  })
+
+  it("submits Bootstrap radio user selections through FormInputs", () => {
+    const form = new FormInputs()
+    const rendered = render(
+      <Form form={form}>
+        <BootstrapRadioButtons
+          collection={[["Draft", "draft"], ["Published", "published"]]}
+          defaultValue="draft"
+          name="status"
+        />
+      </Form>
+    )
+    const radios = rendered.container.querySelectorAll("input[type=radio]")
+
+    expect(form.asObject()).toEqual({status: "draft"})
+    change(radios[1], undefined, true)
+    expect(form.asObject()).toEqual({status: "published"})
+  })
+
+  it("applies programmatic FormInputs values to the visible Bootstrap radio", () => {
+    const form = new FormInputs()
+    const registerField = jest.spyOn(form, "registerField")
+    const rendered = render(
+      <Form form={form}>
+        <BootstrapRadioButtons
+          collection={[["Draft", "draft"], ["Published", "published"]]}
+          defaultValue="draft"
+          name="status"
+        />
+      </Form>
+    )
+    const radios = rendered.container.querySelectorAll("input[type=radio]")
+
+    expect(registerField).toHaveBeenCalledTimes(1)
+    act(() => form.setValue("status", "published"))
+    expect(Array.from(radios, (radio) => radio.checked)).toEqual([false, true])
+  })
+
+  it("preserves controlled Bootstrap radio UI ownership while updating FormInputs", () => {
+    const form = new FormInputs()
+    const rendered = render(
+      <Form form={form}>
+        <BootstrapRadioButtons
+          collection={[["Draft", "draft"], ["Published", "published"]]}
+          name="status"
+          onChange={() => {}}
+          value="draft"
+        />
+      </Form>
+    )
+    const radios = rendered.container.querySelectorAll("input[type=radio]")
+
+    expect(Array.from(radios, (radio) => radio.checked)).toEqual([true, false])
+    change(radios[1], undefined, true)
+    expect(form.getValue("status")).toBe("published")
+    expect(Array.from(radios, (radio) => radio.checked)).toEqual([true, false])
+    act(() => form.setValue("status", "published"))
+    expect(Array.from(radios, (radio) => radio.checked)).toEqual([true, false])
   })
 })
