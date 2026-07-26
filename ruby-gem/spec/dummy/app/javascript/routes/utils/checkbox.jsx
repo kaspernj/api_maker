@@ -1,5 +1,5 @@
 // @ts-check
-import {Form, FormInputs} from "@kaspernj/api-maker/build/form"
+import {Form, FormInputs} from "formmeld"
 import {Task} from "models.js"
 import {View} from "react-native"
 import Button from "@kaspernj/api-maker/build/utils/button"
