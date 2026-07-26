@@ -50,7 +50,7 @@
     "epic-locks": ">= 1.0.6",
     "eventemitter3": "^5.0.1",
     "file-saver": "^2.0.5",
-    "formmeld": "^0.1.1",
+    "formmeld": "^0.1.2",
     "form-data-objectizer": ">= 1.0.0",
     "form-serialize": ">= 0.7.2",
     "format-number": ">= 3.0.0",
