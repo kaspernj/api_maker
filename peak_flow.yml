@@ -12,6 +12,7 @@ builds:
       # Replace checked-in developer paths before installing the appraisal bundles.
       - cd ruby-gem && bundle exec appraisal generate
       - cd ruby-gem && bundle exec appraisal install
+      - cd ruby-gem && bundle exec ruby scripts/provision_geckodriver.rb
 
       - cd npm-api-maker && npm ci
       - cd npm-api-maker && yarn link
