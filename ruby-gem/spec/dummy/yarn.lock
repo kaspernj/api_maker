@@ -1012,6 +1012,7 @@
     incorporator ">= 1.0.5"
     inflection ">= 1.12.0"
     js-money ">= 0.6.3"
+    nanoid "^5.1.16"
     numberable ">= 1.0.0"
     object-to-formdata ">= 4.1.0"
     on-location-changed ">= 1.0.18"
@@ -1025,7 +1026,6 @@
     strftime ">= 0.10.0"
     uniqunize "^1.0.3"
     url-parse "^1.5.10"
-    uuid "^14.0.1"
     wake-event ">= 0.0.1"
     ya-use-event-emitter "^0.1.2"
     ya-use-event-listener ">= 0.1.1"
@@ -4029,9 +4029,9 @@ set-function-length@^1.2.2:
     has-property-descriptors "^1.0.2"
 
 set-state-compare@^1.0.84, "set-state-compare@>= 1.0.69":
-  version "1.0.84"
-  resolved "https://registry.npmjs.org/set-state-compare/-/set-state-compare-1.0.84.tgz"
-  integrity sha512-9n3zn0gbMaq+NJpAgc54zQXRQ8lV7b8TmDWJUIns9QS9MSij/mtaGAr5rCbLB+W1+tQ60KvDbgZyrWtDtXoDHg==
+  version "1.0.86"
+  resolved "https://registry.npmjs.org/set-state-compare/-/set-state-compare-1.0.86.tgz"
+  integrity sha512-0Gl2qXougZnPCC36d5n/OyRCiKowlhSlGr23Weo1TSyrsb6Iiak5roUAY6CuHII4u5FQtczsh0EFANHgvw1jhg==
   dependencies:
     diggerize "^1.0.5"
     fetching-object "^1.0.7"

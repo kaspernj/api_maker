@@ -1,2 +1,2 @@
 // @ts-check
-export {}
+export class TableSetting {}

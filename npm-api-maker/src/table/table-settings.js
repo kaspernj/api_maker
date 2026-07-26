@@ -9,7 +9,7 @@ import {ReadersWriterLock} from "epic-locks"
 import {serialize as objectToFormData} from "object-to-formdata"
 // @ts-expect-error
 import {TableSetting} from "models.js"
-import {v4 as uuidv4} from "uuid"
+import {nanoid} from "nanoid/non-secure"
 
 const logger = new Logger({name: "ApiMaker / TableSettings"})
 
@@ -217,7 +217,7 @@ export default class ApiMakerTableSettings {
     const variableName = `ApiMakerTableAnonymousUserId-${this.identifier()}`
 
     if (!(variableName in localStorage)) {
-      const generatedId = uuidv4()
+      const generatedId = nanoid()
 
       localStorage[variableName] = generatedId
     }
