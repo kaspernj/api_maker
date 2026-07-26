@@ -27,6 +27,7 @@ Notes:
 - If `ruby-gem/scripts/run-system-spec.sh` fails, run the README system spec command manually from `ruby-gem/`.
 - In `ApiMaker::ModelContentGeneratorService`, handle Ransack allowlist runtime errors (`"Ransack needs ..."`) for associations/attributes/scopes by returning `[]` so frontend model generation does not crash on third-party models.
 - Do not “fix” flaky specs by only increasing waits/timeouts. First determine whether behavior regressed (for example, element never rendered) and collect/inspect CI artifacts before adjusting timing.
+- When waiting for a large incrementally rendered element count in system specs, wait for the final expected element with a single-result selector, then assert one browser-side `querySelectorAll(...).length` scalar; repeatedly transferring, serializing, or polling large node collections can starve browser rendering.
 - Avoid unnecessary defensive conditions for guaranteed contracts. Prefer failing fast over silently accepting impossible states.
 - In ApiMaker table workplace helpers and commands, `current_user` may legitimately be `nil` for websocket/content-parser requests; return `nil`/empty results for current-workplace lookups instead of dereferencing the user.
 - Before adding fallback logic for hook/context timing, inspect the provider source first; do not assume first-render hydration gaps without source confirmation.
