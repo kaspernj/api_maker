@@ -1,5 +1,5 @@
 // @ts-check
-import {Form, FormInputs} from "@kaspernj/api-maker/build/form"
+import {Form, FormInputs} from "formmeld"
 import Layout from "components/layout"
 import React, {useCallback, useRef, useState} from "react"
 import Text from "@kaspernj/api-maker/build/utils/text"

@@ -1,12 +1,12 @@
 // @ts-check
 /* eslint-disable sort-imports */
-import React, {useEffect} from "react"
+import React, {useRef} from "react"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "../../utils/text"
-import {useForm} from "../../form"
+import {useFieldRegistration} from "formmeld"
 import {TextInput, View} from "react-native"
 
 /**
@@ -30,14 +30,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   setup() {
     const {name} = this.p
 
-    this.form = useForm()
     this.initialValue = this.defaultValue()
-
-    useEffect(() => {
-      if (this.form) {
-        this.form.setValue(name, this.initialValue)
-      }
-    }, [])
+    this.inputRef = useRef(null)
+    this.fieldRegistration = useFieldRegistration(name, {
+      applyValue: (value) => this.inputRef.current?.setNativeProps({
+        text: value === null || value === undefined ? "" : String(value)
+      }),
+      initialValue: this.initialValue
+    })
   }
 
   defaultValue = () => this.p.model[this.p.attributeName]() || ""
@@ -63,6 +63,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
             }, [attributeName, id, name])}
             defaultValue={this.initialValue}
             onChangeText={this.tt.onChangeText}
+            ref={this.tt.inputRef}
             style={this.cache("textInputStyle", {
               paddingTop: 9,
               paddingRight: 13,
@@ -80,9 +81,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onChangeText = (newValue) => {
-    if (this.form) {
-      const {name} = this.p
-      this.form.setValue(name, newValue)
-    }
+    this.fieldRegistration.setValue(newValue)
   }
 }))

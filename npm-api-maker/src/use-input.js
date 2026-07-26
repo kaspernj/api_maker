@@ -1,11 +1,12 @@
 // @ts-check
 /* eslint-disable implicit-arrow-linebreak, no-use-before-define, prefer-object-spread */
 import {dig, digg} from "diggerize"
-import {useCallback, useEffect, useMemo, useRef} from "react"
+import {useCallback, useEffect, useLayoutEffect, useMemo, useRef} from "react"
+import {useOptionalFieldRegistration, useOptionalForm} from "formmeld"
+import applyFormFieldValue from "./inputs/apply-form-field-value.js"
 import idForComponent from "./inputs/id-for-component.js"
 import nameForComponent from "./inputs/name-for-component.js"
 import strftime from "strftime"
-import {useForm} from "./form"
 import useShape from "./use-shape.js"
 import useValidationErrors from "./use-validation-errors.js"
 
@@ -33,17 +34,45 @@ import useValidationErrors from "./use-validation-errors.js"
  * @typedef {object} UseInputArgs
  * @property {UseInputProps} props
  * @property {InputWrapperOptions} [wrapperOptions]
+ * @property {(value: unknown, input: InputRefLike) => void} [applyValue]
+ * @property {boolean} [registerField]
  * @typedef {object} UseInputResult
  * @property {Record<string, InputValue | InputRefLike>} inputProps
+ * @property {{setValue: (value: unknown) => void}} fieldRegistration
+ * @property {import("formmeld").FormInputs | null} form
  * @property {{errors: object, form: HTMLFormElement | undefined, label: InputValue}} wrapperOpts
  * @property {Record<string, InputValue>} restProps
  */
 
 /**
+ * Applies Formmeld ownership after a mounted field changes logical identity.
+ *
+ * @param {{
+ *   applyValue: (value: unknown) => void,
+ *   form: import("formmeld").FormInputs | null,
+ *   name: string | undefined
+ * }} args
+ * @returns {void}
+ */
+const useRetargetedFieldValue = ({applyValue, form, name}) => {
+  const previousFieldIdentityRef = useRef(undefined)
+
+  useLayoutEffect(() => {
+    const previousIdentity = previousFieldIdentityRef.current
+    const currentIdentity = {form, name}
+
+    previousFieldIdentityRef.current = currentIdentity
+    if (previousIdentity && (previousIdentity.form != form || previousIdentity.name != name) && form && name) {
+      applyValue(form.getValue(name))
+    }
+  }, [form, name])
+}
+
+/**
  * @param {UseInputArgs} args
  * @returns {UseInputResult}
  */
-const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
+const useInput = ({applyValue, props, registerField, wrapperOptions, ...useInputRestProps}) => {
   const useInputRestPropsKeys = Object.keys(useInputRestProps)
 
   if (useInputRestPropsKeys.length > 0) {
@@ -52,6 +81,7 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
 
   const s = useShape(props)
   const backupRef = useRef(undefined)
+  const form = useOptionalForm()
 
   s.useStates({
     form: undefined
@@ -136,8 +166,6 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
 
   const getId = useCallback(() => idForComponent(s.m.fakeComponent), [])
   const getName = useCallback(() => nameForComponent(s.m.fakeComponent), [])
-  const formFromContext = useForm()
-
   const getInputProps = useCallback(() => {
     const givenInputProps = s.props.inputProps || {}
     const inputProps = Object.assign(
@@ -206,14 +234,36 @@ const useInput = ({props, wrapperOptions, ...useInputRestProps}) => {
   }
 
   const inputName = s.m.inputProps.name
+  let initialValue
 
-  useEffect(() => () => {
-    if (formFromContext && inputName) {
-      formFromContext.unsetValue(inputName)
+  if (s.m.isCheckbox) {
+    initialValue = "checked" in s.props ? Boolean(s.props.checked) : Boolean(inputDefaultChecked())
+  } else {
+    initialValue = "value" in s.props ? s.props.value : inputDefaultValue()
+  }
+  const applyRegisteredValue = useCallback((value) => {
+    if ((s.m.isCheckbox && "checked" in s.props) || (!s.m.isCheckbox && "value" in s.props)) return
+
+    if (applyValue) {
+      applyValue(value, inputRef())
+    } else {
+      const input = inputRef().current
+
+      if (!input) return
+      applyFormFieldValue(input, value, {checkbox: s.m.isCheckbox})
     }
-  }, [formFromContext, inputName])
+  }, [])
+  const registrationName = registerField === false ? undefined : inputName
+  const fieldRegistration = useOptionalFieldRegistration(registrationName, {
+    applyValue: applyRegisteredValue,
+    initialValue
+  })
+
+  useRetargetedFieldValue({applyValue: applyRegisteredValue, form, name: registrationName})
 
   return {
+    fieldRegistration,
+    form,
     inputProps: s.m.inputProps,
     wrapperOpts,
     restProps

@@ -49,7 +49,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   setup() {
-    const {inputProps, restProps: useInputRestProps, wrapperOpts} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
+    const {inputProps, restProps: useInputRestProps, wrapperOpts} = useInput({
+      props: this.props,
+      registerField: false,
+      wrapperOptions: {type: "checkbox"}
+    })
 
     this.inputProps = inputProps
     this.useInputRestProps = useInputRestProps

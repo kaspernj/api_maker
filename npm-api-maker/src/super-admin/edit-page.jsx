@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-max-depth, react/jsx-no-literals, react/jsx-one-expression-per-line, sort-imports */
 import * as inflection from "inflection"
 import {FlashNotifications} from "flash-notifications"
-import {Form} from "../form"
+import {Form} from "formmeld"
 import FormDataObjectizer from "form-data-objectizer"
 import {incorporate} from "incorporator"
 import {Pressable, View} from "react-native"

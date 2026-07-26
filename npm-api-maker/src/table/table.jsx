@@ -18,7 +18,7 @@ import DraggableSort from "../draggable-sort/index"
 import {EventEmitter} from "eventemitter3"
 import Filters from "./filters/index"
 import FlatList from "./components/flat-list"
-import {Form} from "../form"
+import {Form} from "formmeld"
 import Header from "./components/header"
 import HeaderColumn from "./header-column"
 import HeaderSelect from "./header-select"
@@ -910,6 +910,10 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   keyExtrator = (model) => `${this.s.tableSettingFullCacheKey}-${model.id()}`
 
+  setFilterForm = (form) => {
+    this.setStates.filterForm(/** @type {TableFilterFormState} */ (/** @type {unknown} */ (form)))
+  }
+
   filterForm = () => {
     const {filterFormRef, submitFilter, submitFilterDebounce} = this.tt
     const {filterContent, filterSubmitButton} = this.p
@@ -922,7 +926,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
         formRef={filterFormRef}
         htmlFormProps={styles.filterFormHtmlProps ||= {className: "live-table--filter-form"}}
         onSubmit={this.tt.onFilterFormSubmit}
-        setForm={/** @type {{filterForm(value: TableFilterFormState): void}} */ (this.setStates).filterForm}
+        setForm={this.tt.setFilterForm}
         useHtmlForm
       >
         {"s" in actualQParams &&

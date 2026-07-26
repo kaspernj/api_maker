@@ -2,13 +2,12 @@
 /* eslint-disable prefer-object-spread, sort-imports */
 // @ts-expect-error CheckBox removed from react-native core in newer versions
 import {CheckBox, Pressable, View} from "react-native"
-import React, {useEffect, useMemo} from "react"
+import React, {useMemo} from "react"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import Text from "./text"
-import {useForm} from "../form"
 import useInput from "../use-input.js"
 
 /**
@@ -57,21 +56,17 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   setup() {
-    const {inputProps, restProps: useInputRestProps, wrapperOpts} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
-    const form = useForm()
-    const inputName = inputProps.name
-    const initialChecked = this.calculateChecked()
-
-    this.form = form
+    const {fieldRegistration, inputProps, restProps: useInputRestProps, wrapperOpts} = useInput({
+      applyValue: (value) => {
+        if (!("checked" in this.props)) this.s.checked = Boolean(value)
+      },
+      props: this.props,
+      wrapperOptions: {type: "checkbox"}
+    })
+    this.fieldRegistration = fieldRegistration
     this.inputProps = inputProps
     this.useInputRestProps = useInputRestProps
     this.wrapperOpts = wrapperOpts
-
-    useEffect(() => {
-      if (form && inputName) {
-        form.setValue(inputName, initialChecked)
-      }
-    }, [form, inputName])
   }
 
   calculateChecked() {
@@ -153,11 +148,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   setChecked(newChecked) {
-    const {form, inputProps} = this.tt
+    const {fieldRegistration, inputProps} = this.tt
 
-    if (form && inputProps.name) {
-      form.setValue(inputProps.name, newChecked)
-    }
+    if (inputProps.name) fieldRegistration.setValue(newChecked)
 
     if (this.props.onCheckedChange) {
       this.p.onCheckedChange(newChecked)

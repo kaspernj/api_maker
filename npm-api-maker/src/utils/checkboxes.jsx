@@ -4,7 +4,6 @@ import {shapeComponent, ShapeComponent} from "set-state-compare/build/shape-comp
 import React, {useMemo} from "react"
 import Checkbox from "./checkbox"
 import {digs} from "diggerize"
-import {useForm} from "../form"
 import * as inflection from "inflection"
 import InvalidFeedback from "./invalid-feedback"
 import memo from "set-state-compare/build/memo.js"
@@ -87,22 +86,21 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   setup() {
-    const {inputProps, wrapperOpts} = useInput({props: this.props})
+    const {fieldRegistration, inputProps, wrapperOpts} = useInput({
+      applyValue: (value) => {
+        this.s.checkedOptions = Array.isArray(value) ? value : []
+      },
+      props: this.props
+    })
 
     this.generatedId = useMemo(
       () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
       []
     )
 
-    this.form = useForm()
+    this.fieldRegistration = fieldRegistration
     this.inputProps = inputProps
     this.wrapperOpts = wrapperOpts
-
-    useMemo(() => {
-      if (this.tt.form && inputProps.name) {
-        this.tt.form.setValue(inputProps.name, this.s.checkedOptions)
-      }
-    }, [])
   }
 
   render () {
@@ -151,12 +149,14 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   defaultCheckedOptions() {
-    if (Array.isArray(this.props.defaultValue)) {
-      return this.props.defaultValue
+    const defaultValue = this.inputDefaultValue()
+
+    if (Array.isArray(defaultValue)) {
+      return defaultValue
     }
 
-    if (this.props.defaultValue) {
-      return [this.props.defaultValue]
+    if (defaultValue) {
+      return [defaultValue]
     }
 
     return []
@@ -165,7 +165,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   isChecked = (option) => this.s.checkedOptions.includes(option[1])
 
   onOptionChecked = ({checked, option}) => {
-    const {inputProps, form} = this.tt
+    const {fieldRegistration, inputProps} = this.tt
     const {name} = inputProps
     let newOptions
 
@@ -183,8 +183,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       this.p.onChange({checked, option})
     }
 
-    if (form && name) {
-      form.setValue(name, newOptions)
-    }
+    if (name) fieldRegistration.setValue(newOptions)
   }
 }))

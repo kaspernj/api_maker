@@ -1,11 +1,11 @@
 // @ts-check
 /* eslint-disable sort-imports */
-import React, {useMemo} from "react"
+import React from "react"
 import {digg} from "diggerize"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useForm} from "../form"
 import AutoSubmit from "./auto-submit.js"
 import PropTypes from "prop-types"
+import applyFormFieldValue from "./apply-form-field-value.js"
 import memo from "set-state-compare/build/memo.js"
 import useInput from "../use-input.js"
 import useUpdatedEvent from "../use-updated-event.js"
@@ -52,18 +52,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   setup() {
     const {autoRefresh, model} = this.p
-    const {inputProps, restProps: useInputRestProps} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
-    const {defaultValue, name} = inputProps
+    const {fieldRegistration, form, inputProps, restProps: useInputRestProps} = useInput({props: this.props, wrapperOptions: {type: "checkbox"}})
 
-    this.form = useForm()
+    this.fieldRegistration = fieldRegistration
+    this.form = form
     this.inputProps = inputProps
     this.useInputRestProps = useInputRestProps
-
-    useMemo(() => {
-      if (name) {
-        this.tt.form?.setValue(name, defaultValue)
-      }
-    }, [])
 
     useUpdatedEvent(model, this.tt.onModelUpdated, {active: Boolean(autoRefresh && model)})
   }
@@ -105,36 +99,30 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onChanged = (...args) => {
-    const {form, inputProps} = this.tt
+    const {fieldRegistration, inputProps} = this.tt
     const {attribute, autoSubmit, model, onChange} = this.props
     const {name} = inputProps
 
     if (attribute && autoSubmit && model) new AutoSubmit({component: this}).autoSubmit()
 
-    if (form && name) {
-      const checked = args[0].target.checked
-
-      form.setValue(name, checked)
-    }
+    if (name) fieldRegistration.setValue(args[0].target.checked)
 
     if (onChange) onChange(...args)
   }
 
   onModelUpdated = (args) => {
-    const inputRef = digg(this.tt.inputProps, "ref")
-
-    if (!inputRef.current) {
-      // This can happen if the component is being unmounted
-      return
-    }
-
     const {attribute} = this.p
     const newModel = digg(args, "model")
-    const currentChecked = digg(inputRef, "current", "checked")
     const newValue = newModel.readAttribute(attribute)
 
-    if (currentChecked != newValue) {
-      inputRef.current.checked = newValue
+    const {form, inputProps} = this
+
+    if (form && inputProps.name) {
+      form.setValue(inputProps.name, Boolean(newValue))
+    } else {
+      const input = digg(inputProps, "ref", "current")
+
+      if (input) applyFormFieldValue(input, newValue, {checkbox: true})
     }
   }
 }))

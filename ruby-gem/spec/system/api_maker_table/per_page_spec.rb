@@ -49,6 +49,8 @@ describe "bootstrap - live table - per page" do
     wait_for_selector "[data-testid='large-per-page-warning-modal']"
     wait_for_and_find("[data-testid='large-per-page-proceed-button']").click
     wait_for_no_selector "[data-testid='large-per-page-warning-modal']"
-    wait_for_expect { expect(all("[data-class='task-row']").length).to eq 1001 }
+    wait_for_selector :xpath, "(//*[@data-class='task-row'])[1001]"
+    row_count = page.evaluate_script("document.querySelectorAll(\"[data-class='task-row']\").length")
+    expect(row_count).to eq 1001
   end
 end

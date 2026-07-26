@@ -27,6 +27,7 @@ Notes:
 - If `ruby-gem/scripts/run-system-spec.sh` fails, run the README system spec command manually from `ruby-gem/`.
 - In `ApiMaker::ModelContentGeneratorService`, handle Ransack allowlist runtime errors (`"Ransack needs ..."`) for associations/attributes/scopes by returning `[]` so frontend model generation does not crash on third-party models.
 - Do not “fix” flaky specs by only increasing waits/timeouts. First determine whether behavior regressed (for example, element never rendered) and collect/inspect CI artifacts before adjusting timing.
+- When waiting for a large incrementally rendered element count in system specs, wait for the final expected element with a single-result selector, then assert one browser-side `querySelectorAll(...).length` scalar; repeatedly transferring, serializing, or polling large node collections can starve browser rendering.
 - Avoid unnecessary defensive conditions for guaranteed contracts. Prefer failing fast over silently accepting impossible states.
 - In ApiMaker table workplace helpers and commands, `current_user` may legitimately be `nil` for websocket/content-parser requests; return `nil`/empty results for current-workplace lookups instead of dereferencing the user.
 - Before adding fallback logic for hook/context timing, inspect the provider source first; do not assume first-render hydration gaps without source confirmation.
@@ -42,6 +43,7 @@ Notes:
 - Do not "fix" render/update bugs by replacing `useMemo()` with `useEffect()` as a blanket change; preserve hook semantics and debug the underlying state flow first.
 - In `npm-api-maker`, keep the checked-in `.npmrc` with `legacy-peer-deps=true` while the package targets ESLint 10 and `eslint-plugin-react` has not yet published an ESLint 10 peer range; remove that workaround only after the upstream peer support lands.
 - In `npm-api-maker`, keep peer-facing runtime imports that are needed by linked local/CI builds, lint, or tests (for example `react-native-vector-icons`, `flash-notifications`, `history`, and `i18n-on-steroids`) installed in `devDependencies` as well when tooling resolves modules from the package directory itself.
+- When regenerating `ruby-gem/spec/dummy/yarn.lock`, keep the linked `npm-api-maker` package in place and verify that every linked runtime dependency selector has a lock entry; Yarn can retain the linked package metadata while dropping its dependency graph if the lock is generated from an incomplete workspace.
 - In `npm-api-maker` source-map handling, normalize `stacktrace-parser` `trace.file` values before URL parsing or source-map lookup; Firefox/webpack async frames can arrive as `webpackAsyncContext@http://.../packs/js/react.js`, and using that raw string produces broken `.map` requests.
 - In `npm-api-maker` published `build/` code, `import.meta.webpackContext(...)` is safe to use as long as the call is invoked directly; webpack replaces the whole call with its context module at consumer build time. Do NOT reference bare `import.meta` in any other form (e.g. assigning `(import.meta)` to a local for a runtime guard) — raw `import.meta` survives into classic-script lazy chunks and throws `Cannot use 'import.meta' outside a module` at runtime.
 - In `on-location-changed`, `WithLocationPath` initializes `queryParams` synchronously from `globalThis.location.search` via `useState(params())`; `useQueryParams()` being `undefined` indicates a missing/explicitly-undefined provider, not a normal first-render hydration phase.
@@ -56,10 +58,12 @@ Notes:
 - Use `Text` from `@kaspernj/api-maker/build/utils/text` for default styles.
 - Prefer `useBreakpoint()` (responsive-breakpoints via Api Maker dependencies) over `useWindowDimensions()` for responsive logic.
 - When using API Maker `Link` on web (renders as an `<a>`), center content with an inner `View` instead of relying on flex alignment on the anchor itself.
-- Prefer `Form` from `@kaspernj/api-maker/build/form` with uncontrolled inputs to avoid state-driven re-renders.
+- Import Formmeld directly with `import {Form, FormInputs, useForm} from "formmeld"`; API Maker no longer exports these APIs. Keep inputs uncontrolled to avoid state-driven re-renders.
+- Reusable inputs that can render outside `Form` must use Formmeld's `useOptionalFieldRegistration`; one logical field owns one registration, while duplicate names synchronize through Formmeld.
+- Give controls explicit Formmeld apply adapters: DOM/RN text normalizes null to `""` and other values to strings, checkboxes normalize to booleans, and composite controls update every visible/canonical ref from one adapter.
 - When multiple screens repeat the same label + input form markup, extract a shared form input component (for example a screen-specific base text input) instead of duplicating blocks.
-- Use Api Maker `Form` and `formObjectRef` to track uncontrolled input values instead of manual instance fields.
-- In ShapeComponents using Api Maker `Form`, pass both `formObjectRef` and `setForm`, then read values via `this.formObjectRef.current || this.form` to avoid mount-timing races.
+- Use Formmeld `Form` and `formObjectRef` to track uncontrolled input values instead of manual instance fields.
+- In ShapeComponents using Formmeld `Form`, pass both `formObjectRef` and `setForm`, then read values via `this.formObjectRef.current || this.form` to avoid mount-timing races.
 - Use Api Maker `Icon` for icons instead of raw `<i>` tags or FontAwesome class names on `Text`.
 - In app code, prefer importing frontend models from individual files (for example `models/project.js`) instead of aggregating through `models`.
 - In app code, avoid `import {...} from "models"`; import each frontend model from its dedicated model file path.

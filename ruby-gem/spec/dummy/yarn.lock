@@ -1009,9 +1009,11 @@
     form-data-objectizer ">= 1.0.0"
     form-serialize ">= 0.7.2"
     format-number ">= 3.0.0"
+    formmeld "^0.1.2"
     incorporator ">= 1.0.5"
     inflection ">= 1.12.0"
     js-money ">= 0.6.3"
+    nanoid "^5.1.16"
     numberable ">= 1.0.0"
     object-to-formdata ">= 4.1.0"
     on-location-changed ">= 1.0.18"
@@ -2623,10 +2625,10 @@ follow-redirects@^1.0.0:
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.6.tgz"
   integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
 
-"form-data-objectizer@>= 1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/form-data-objectizer/-/form-data-objectizer-1.0.0.tgz#6f47630fa368d8548738bd304ad815dc0d7201fe"
-  integrity sha512-kXj3ud4KQ4AZNBP/eq2TOBHXINMdLu4IzcxBFhguFH/AQ8rjQs3UUlhu94eKUG+vAt8a4LHOdNGH/6CKKro1Mg==
+"form-data-objectizer@>= 1.0.0", form-data-objectizer@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/form-data-objectizer/-/form-data-objectizer-1.0.2.tgz#98e7cdb24bcf25b8b5e5753d226ff9d8bd4a007d"
+  integrity sha512-BLCBwUV9RGeubwUBQZqB9m6HpLsBgMI/Mk4k8yWfSGKB9ghQPqqV7pj8sVv3ZsArliiBWrXMier/hvA+iMnx0Q==
 
 "form-serialize@>= 0.7.2":
   version "0.7.2"
@@ -2637,6 +2639,13 @@ follow-redirects@^1.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/format-number/-/format-number-3.0.0.tgz#92bbf34ce5e04eb637a9a3a4f65980d5af137393"
   integrity sha512-RWcbtINcRZ2DWCo4EcJgOJUYIwtsY5LKlTtL5OX1vfGsxEEK5mKaGxZC0p4Mgy63vXR12rut3lnjwCQ8YIlRMw==
+
+formmeld@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/formmeld/-/formmeld-0.1.2.tgz#3ede68269cb197639a3ca7892cee6b0c00604631"
+  integrity sha512-cnKzl7hBqFNL9Ldm1gHYX3M7YMpP4zKnsIbr9FzFTN3bL4h1+tGntQfaxrCycH0yufjJJtUsgeQjjBnxUbFH7w==
+  dependencies:
+    form-data-objectizer "^1.0.2"
 
 forwarded@0.2.0:
   version "0.2.0"
@@ -3389,6 +3398,11 @@ nanoid@^3.3.11:
   version "3.3.11"
   resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz"
   integrity sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==
+
+nanoid@^5.1.16:
+  version "5.1.16"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.1.16.tgz#fe345c0a1f9007c32fbb5c139e1208bfd3f41ef7"
+  integrity sha512-kVrnsrJqMR8+oLJnGEmSWw9BivK5mt7H3FZatVRjrc5wGqFYuBxX1yG7+A7Gi5AefkX6t/oCkizcQgpu0cY1dQ==
 
 negotiator@0.6.3:
   version "0.6.3"

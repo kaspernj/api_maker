@@ -6,6 +6,16 @@ import React from "react"
 import inputWrapper from "../inputs/input-wrapper"
 import propTypesExact from "prop-types-exact"
 
+const applyRadioValue = (value, inputRef) => {
+  const wrapper = inputRef.current?.parentElement
+
+  if (!wrapper) return
+
+  for (const radio of wrapper.querySelectorAll("input[type=radio]")) {
+    radio.checked = radio.dataset.optionValue == value
+  }
+}
+
 class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   static propTypes = propTypesExact({
     attribute: PropTypes.string,
@@ -14,12 +24,17 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
       PropTypes.number,
       PropTypes.string
     ]),
+    fieldRegistration: PropTypes.object.isRequired,
     id: PropTypes.string,
     inputProps: PropTypes.object.isRequired,
     name: PropTypes.string,
     model: PropTypes.object,
     onChange: PropTypes.func,
     onMatchValidationError: PropTypes.func,
+    value: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
+    ]),
     wrapperClassName: PropTypes.string,
     wrapperOpts: PropTypes.object.isRequired
   })
@@ -27,7 +42,7 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   render () {
     return (
       <div className={this.wrapperClassName()}>
-        <input {...this.props.inputProps} type="hidden" value="" />
+        <input {...this.props.inputProps} defaultValue={undefined} type="hidden" value="" />
         {this.props.collection.map((option, index) => this.optionElement(option, index))}
       </div>
     )
@@ -52,18 +67,18 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
 
   optionElement (option, index) {
     const {collection} = digs(this.props, "collection")
-    const {onChange} = this.props
     const id = this.generatedId()
 
     return (
       <div className="form-check" key={`option-${option[1]}`}>
         <input
+          checked={"value" in this.props.inputProps ? option[1] == this.props.inputProps.value : undefined}
           className={this.inputRadioClassName()}
           data-option-value={option[1]}
-          defaultChecked={option[1] == this.props.inputProps.defaultValue}
+          defaultChecked={"value" in this.props.inputProps ? undefined : option[1] == this.props.inputProps.defaultValue}
           id={id}
           name={this.props.inputProps.name}
-          onChange={onChange}
+          onChange={this.onChanged}
           type="radio"
           value={option[1]}
         />
@@ -79,6 +94,13 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
     )
   }
 
+  onChanged = (...args) => {
+    const {fieldRegistration, inputProps, onChange} = this.props
+
+    if (inputProps.name) fieldRegistration.setValue(args[0].target.value)
+    if (onChange) onChange(...args)
+  }
+
   wrapperClassName () {
     const classNames = ["component-bootstrap-radio-buttons"]
 
@@ -89,4 +111,4 @@ class ApiMakerBootstrapRadioButtons extends React.PureComponent {
   }
 }
 
-export default inputWrapper(ApiMakerBootstrapRadioButtons)
+export default inputWrapper(ApiMakerBootstrapRadioButtons, {applyValue: applyRadioValue})
