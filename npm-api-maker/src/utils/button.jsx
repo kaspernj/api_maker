@@ -8,7 +8,7 @@ import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import React from "react"
 import Text from "./text"
-import {useForm} from "../form"
+import {FormContext} from "formmeld"
 
 /**
  * @typedef {object} Props
@@ -56,7 +56,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   setup() {
-    this.form = useForm()
+    this.form = React.useContext(FormContext)
   }
 
   render() {

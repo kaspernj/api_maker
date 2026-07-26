@@ -1,13 +1,12 @@
 // @ts-check
 /* eslint-disable sort-imports */
-import React, {useEffect, useMemo} from "react"
+import React, {useMemo} from "react"
 import {StyleSheet, View} from "react-native"
 import Checkbox from "../../utils/checkbox"
 import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useForm} from "../../form"
 
 const styles = StyleSheet.create({
   checkbox: {
@@ -43,8 +42,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   setup() {
     const {attributeName, id, name} = this.p
 
-    this.form = useForm()
-
     this.dataSet = useMemo(
       () => ({
         attribute: attributeName,
@@ -53,12 +50,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       }),
       [attributeName, id, name]
     )
-
-    useEffect(() => {
-      if (this.form) {
-        this.form.setValue(name, this.s.checked)
-      }
-    }, [])
   }
 
   defaultChecked() {
@@ -68,8 +59,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   render() {
     const {dataSet} = this.tt
     const {attributeName, label, model} = this.p
-    const {checked} = this.s
-
     if (!(attributeName in model)) {
       throw new Error(`${attributeName} isn't set on the resource ${model.modelClassData().name}`)
     }
@@ -80,9 +69,10 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
         style={this.cache("rootViewStyle", {flexDirection: "row", alignItems: "center"})}
       >
         <Checkbox
-          checked={checked}
           dataSet={dataSet}
+          defaultChecked={this.s.checked}
           label={label}
+          name={this.p.name}
           onCheckedChange={this.tt.onCheckedChange}
           style={styles.checkbox}
           testID={`api-maker/super-admin/edit-page/input-${this.p.id}`}
@@ -92,10 +82,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   onCheckedChange = (newChecked) => {
-    if (this.form) {
-      this.form.setValue(this.p.name, newChecked)
-    }
-
     this.s.checked = newChecked
   }
 }))

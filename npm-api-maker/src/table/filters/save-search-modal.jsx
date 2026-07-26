@@ -3,7 +3,7 @@
 import Checkbox from "../../bootstrap/checkbox"
 import {digg} from "diggerize"
 import {FlashNotifications} from "flash-notifications"
-import {Form} from "../../form"
+import {Form} from "formmeld"
 import Input from "../../bootstrap/input"
 import modelClassRequire from "../../model-class-require.js"
 import React from "react"
@@ -62,7 +62,11 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
     return (
       <Modal onRequestClose={onRequestClose} {...restProps}>
-        <Form onSubmit={this.tt.onSaveSearchSubmit} setForm={/** @type {(form: SearchForm | null) => void} */ (this.setStates.form)} useHtmlForm>
+        <Form
+          onSubmit={this.tt.onSaveSearchSubmit}
+          setForm={this.tt.setForm}
+          useHtmlForm
+        >
           <Input
             defaultValue={search.name()}
             id="table_search_name"
@@ -105,5 +109,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     } catch (error) {
       FlashNotifications.errorResponse(error)
     }
+  }
+
+  setForm = (form) => {
+    this.setStates.form(/** @type {SearchForm} */ (/** @type {unknown} */ (form)))
   }
 }))

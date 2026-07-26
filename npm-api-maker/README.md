@@ -12,6 +12,25 @@ When working on this package locally, `npm install` uses the checked-in [`.npmrc
 
 Peer-provided runtime packages that `npm-api-maker` imports in its own source, tests, or linked local/CI builds stay installed in this repo's `devDependencies` as well. For example, `react-native-vector-icons`, `flash-notifications`, `history`, and `i18n-on-steroids` are still peer-facing for consumers, but they must also exist locally when webpack, ESLint, or Jest resolves modules from the package directory itself.
 
+## Forms
+
+Generic form ownership lives in Formmeld. Import it directly:
+
+```js
+import {Form, FormInputs, useForm} from "formmeld"
+```
+
+API Maker no longer exports `Form`, `FormInputs`, `FormContext`, `useForm`, or
+`useFieldRegistration`, and there is no `build/form` compatibility path.
+
+Checkboxes now intentionally store booleans in `FormInputs`: unchecked is
+`false` and checked is `true`, including model-backed and numeric
+`defaultValue` inputs. This is a breaking normalization from the former
+numeric/undefined behavior. HTML submission remains unchanged: the hidden
+zero input submits `"0"` when enabled, and a checked checkbox submits its
+configured value (default `"1"`). Consumers that read `FormInputs#getValue` or
+`asObject()` must use boolean checks rather than comparing with `0` or `1`.
+
 ## Quick start
 
 ApiMaker models are generated from `model-recipes.json` (usually emitted by the Rails gem). Import the models and set up the shared config before making requests.

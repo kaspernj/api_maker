@@ -1,12 +1,12 @@
 // @ts-check
 /* eslint-disable sort-imports */
-import React, {useMemo, useRef} from "react"
+import React, {useRef} from "react"
 import {dig, digg, digs} from "diggerize"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useForm} from "../form"
 import AutoSubmit from "./auto-submit.js"
 import Money from "./money"
 import PropTypes from "prop-types"
+import applyFormFieldValue from "./apply-form-field-value.js"
 import inputWrapper from "./input-wrapper"
 import memo from "set-state-compare/build/memo.js"
 import replaceall from "replaceall"
@@ -62,18 +62,10 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
 
   setup() {
     const {t} = useI18n({namespace: "js.api_maker.inputs.input"})
-    const {autoRefresh, inputProps, model} = this.p
-    const {defaultValue, name} = inputProps
-
-    this.form = useForm()
+    const {autoRefresh, model} = this.p
+    this.fieldRegistration = this.props.fieldRegistration
     this.visibleInputRef = useRef(undefined)
     this.t = t
-
-    useMemo(() => {
-      if (name) {
-        this.tt.form?.setValue(name, defaultValue)
-      }
-    }, [])
 
     useUpdatedEvent(model, this.tt.onModelUpdated, {active: Boolean(autoRefresh && model)})
   }
@@ -84,6 +76,7 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
       autoRefresh,
       autoSubmit,
       defaultValue,
+      fieldRegistration,
       formatValue,
       id,
       inputProps,
@@ -104,16 +97,19 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
       name: localizedNumber ? null : inputProps.name
     }
     const ref = localizedNumber ? this.visibleInputRef : this.inputReference()
-    const {ref: inputPropsRef, ...inputPropsWithoutRef} = inputProps
+    const inputPropsWithoutRef = {...inputProps}
+
+    delete inputPropsWithoutRef.defaultValue
+    delete inputPropsWithoutRef.ref
 
     return (
       <>
         {localizedNumber &&
           <input
-            defaultValue={defaultValue}
+            defaultValue={inputProps.defaultValue}
             id={inputProps.id}
             name={this.inputName()}
-            ref={this.inputReference()}
+            ref={this.tt.setCanonicalInput}
             type="hidden"
           />
         }
@@ -194,7 +190,7 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
 
   inputDefaultValueLocalized () {
     const {t} = this.tt
-    const {defaultValue} = this.props
+    const {defaultValue} = this.props.inputProps
     const {localizedNumber} = digs(this.props, "localizedNumber")
 
     if (localizedNumber && defaultValue !== null && defaultValue !== undefined) {
@@ -222,39 +218,69 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
 
   inputReference = () => digg(this, "props", "inputProps", "ref")
 
-  onModelUpdated = (args) => {
+  setCanonicalInput = (input) => {
     const inputRef = this.inputReference()
 
-    if (!inputRef.current) {
-      // This can happen if the component is being unmounted
-      return
-    }
+    inputRef.current = input
+    if (input) input.applyFormFieldValue = this.tt.applyLocalizedValue
+  }
 
+  applyLocalizedValue = (value) => {
+    const canonicalInput = this.inputReference().current
+    const visibleInput = this.visibleInputRef.current
+    const canonicalValue = value === null || value === undefined ? "" : String(value)
+
+    if (canonicalInput) canonicalInput.value = canonicalValue
+    if (visibleInput) visibleInput.value = this.localizeNumber(canonicalValue)
+  }
+
+  localizeNumber(value) {
+    if (value === "") return ""
+
+    const {t} = this.tt
+    const separator = t("number.currency.format.separator")
+    const delimiter = t("number.currency.format.delimiter")
+    let formatted = String(value)
+
+    formatted = replaceall(".", "{{separator}}", formatted)
+    formatted = replaceall(",", "{{delimiter}}", formatted)
+    formatted = replaceall("{{separator}}", separator, formatted)
+    formatted = replaceall("{{delimiter}}", delimiter, formatted)
+
+    return formatted
+  }
+
+  onModelUpdated = (args) => {
     const {attribute} = digs(this.props, "attribute")
     const newModel = digg(args, "model")
-    const currentValue = digg(inputRef, "current", "value")
     const newValue = newModel.readAttribute(attribute)
     const newFormattedValue = this.formatValue(newValue)
 
-    if (currentValue != newFormattedValue) {
-      inputRef.current.value = newFormattedValue
+    const {form, inputProps} = this.p
+
+    if (form && inputProps.name) {
+      form.setValue(inputProps.name, newFormattedValue)
+    } else {
+      const input = this.inputReference().current
+
+      if (input) applyFormFieldValue(input, newFormattedValue)
     }
   }
 
   onInputChanged = (e) => {
-    const {form} = this.tt
+    const {fieldRegistration} = this.tt
     const {attribute, autoSubmit, inputProps, model, onChange} = this.props
     const {localizedNumber} = digs(this.props, "localizedNumber")
     const {name} = inputProps
 
-    if (localizedNumber) this.inputReference().current.value = this.actualValue(digg(e, "target"))
+    const changedValue = localizedNumber ? this.actualValue(digg(e, "target")) : e.target.value
+
+    if (localizedNumber) this.inputReference().current.value = changedValue
 
     if (attribute && autoSubmit && model) this.delayAutoSubmit()
     if (digg(inputProps, "type") == "file") this.s.blankInputName = this.getBlankInputName()
 
-    if (form && name) {
-      form.setValue(name, e.target.value)
-    }
+    if (name) fieldRegistration.setValue(changedValue)
 
     if (onChange) onChange(e)
   }

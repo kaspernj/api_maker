@@ -7,7 +7,6 @@ import InvalidFeedback from "./invalid-feedback" // eslint-disable-line sort-imp
 import PropTypes from "prop-types"
 import memo from "set-state-compare/build/memo.js"
 import propTypesExact from "prop-types-exact"
-import {useForm} from "../form"
 import useInput from "../use-input.js"
 
 /** @typedef {boolean | number | string} CheckboxOptionValue */
@@ -15,7 +14,7 @@ import useInput from "../use-input.js"
  * @typedef {object} OptionElementProps
  * @property {string} generatedId
  * @property {string} inputCheckboxClassName
- * @property {boolean} isDefaultSelected
+ * @property {boolean} checked
  * @property {string} inputName
  * @property {((event: Event, ...restArgs: Array<unknown>) => void)} [onChange]
  * @property {(args: {event: Event, option: CheckboxOption}) => void} onOptionChecked
@@ -28,16 +27,16 @@ import useInput from "../use-input.js"
 /** @typedef {[label: React.ReactNode, value: CheckboxOptionValue]} CheckboxOption */
 const OptionElement = memo(shapeComponent(/** @augments {ShapeComponent<OptionElementProps, OptionElementState>} */ class OptionElement extends ShapeComponent {
   render() {
-    const {generatedId, inputCheckboxClassName, isDefaultSelected, inputName, option, optionIndex, options, wrapperOpts} = this.p
+    const {checked, generatedId, inputCheckboxClassName, inputName, option, optionIndex, options, wrapperOpts} = this.p
     const {errors} = digs(wrapperOpts, "errors")
     const id = `${generatedId}-${optionIndex}`
 
     return (
       <div className="checkboxes-option" key={`option-${option[1]}`}>
         <input
+          checked={checked}
           className={inputCheckboxClassName}
           data-option-value={option[1]}
-          defaultChecked={isDefaultSelected}
           id={id}
           name={inputName}
           onChange={this.tt.onChange}
@@ -95,7 +94,12 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   setup() {
-    const {inputProps, wrapperOpts} = useInput({props: this.props})
+    const {fieldRegistration, inputProps, wrapperOpts} = useInput({
+      applyValue: (value) => {
+        this.s.checkedOptions = Array.isArray(value) ? value : []
+      },
+      props: this.props
+    })
 
     this.generatedId = useMemo(
       () => Math.random()
@@ -106,15 +110,9 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       []
     )
 
-    this.form = useForm()
+    this.fieldRegistration = fieldRegistration
     this.inputProps = inputProps
     this.wrapperOpts = wrapperOpts
-
-    useMemo(() => {
-      if (this.tt.form && inputProps.name) {
-        this.tt.form.setValue(inputProps.name, this.s.checkedOptions)
-      }
-    }, [])
   }
 
   render () {
@@ -128,10 +126,10 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
         {this.props.options.map((option, index) => { // eslint-disable-line arrow-body-style
           return (
             <OptionElement
+              checked={this.s.checkedOptions.includes(option[1])}
               generatedId={this.tt.generatedId}
               inputCheckboxClassName={this.tt.inputCheckboxClassName()}
               inputName={this.inputName()}
-              isDefaultSelected={this.isDefaultSelected(option[1])}
               key={option[1]}
               onChange={this.props.onChange}
               onOptionChecked={this.tt.onOptionChecked}
@@ -195,19 +193,21 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   defaultCheckedOptions() {
-    if (Array.isArray(this.props.defaultValue)) {
-      return this.props.defaultValue
+    const defaultValue = this.inputDefaultValue()
+
+    if (Array.isArray(defaultValue)) {
+      return defaultValue
     }
 
-    if (this.props.defaultValue) {
-      return [this.props.defaultValue]
+    if (defaultValue) {
+      return [defaultValue]
     }
 
     return []
   }
 
   onOptionChecked = ({event, option}) => {
-    const {inputProps, form} = this.tt
+    const {fieldRegistration, inputProps} = this.tt
     const {name} = inputProps
     const checked = event.target.checked
     let newOptions
@@ -222,8 +222,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
       this.s.checkedOptions = newOptions
     }
 
-    if (form && name) {
-      form.setValue(name, newOptions)
-    }
+    if (name) fieldRegistration.setValue(newOptions)
   }
 }))

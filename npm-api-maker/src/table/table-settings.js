@@ -9,7 +9,6 @@ import {ReadersWriterLock} from "epic-locks"
 import {serialize as objectToFormData} from "object-to-formdata"
 // @ts-expect-error
 import {TableSetting} from "models.js"
-// @ts-expect-error
 import {v4 as uuidv4} from "uuid"
 
 const logger = new Logger({name: "ApiMaker / TableSettings"})

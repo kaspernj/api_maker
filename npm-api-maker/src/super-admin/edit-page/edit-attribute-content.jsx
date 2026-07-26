@@ -4,8 +4,8 @@ import memo from "set-state-compare/build/memo.js"
 import PropTypes from "prop-types"
 import propTypesExact from "prop-types-exact"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useForm} from "../../form"
-import {useEffect, useMemo} from "react"
+import {useFieldRegistration} from "formmeld"
+import {useMemo} from "react"
 
 /**
  * @typedef {object} Props
@@ -31,16 +31,15 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
   }
 
   setup() {
-    this.form = useForm()
     const rawValue = this.rawValue()
     this.initialValue = rawValue === null || rawValue === undefined ? "" : rawValue
     this.hasInitialValue = rawValue !== null && rawValue !== undefined
-
-    useEffect(() => {
-      if (this.form && this.hasInitialValue) {
-        this.form.setValue(this.p.name, this.initialValue)
-      }
-    }, [])
+    this.fieldRegistration = useFieldRegistration(this.p.name, {
+      applyValue: (value) => {
+        this.s.value = /** @type {boolean | Date | number | string | null | undefined} */ (value)
+      },
+      initialValue: this.hasInitialValue ? this.initialValue : undefined
+    })
   }
 
   render() {
@@ -78,6 +77,6 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   onChangeValue = (newValue) => {
     this.s.value = newValue
-    this.tt.form.setValue(this.p.name, newValue)
+    this.tt.fieldRegistration.setValue(newValue)
   }
 }))

@@ -1,7 +1,6 @@
 // @ts-check
 /* eslint-disable sort-imports */
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
-import {useForm} from "../form"
 import PropTypes from "prop-types"
 import React from "react"
 import inputWrapper from "./input-wrapper"
@@ -40,7 +39,7 @@ const ApiMakerInputsSelect = memo(shapeComponent(/** @augments {ShapeComponent<P
   }
 
   setup() {
-    this.form = useForm()
+    this.fieldRegistration = this.props.fieldRegistration
   }
 
   render () {
@@ -48,6 +47,7 @@ const ApiMakerInputsSelect = memo(shapeComponent(/** @augments {ShapeComponent<P
       attribute,
       children,
       defaultValue,
+      fieldRegistration,
       id,
       includeBlank,
       inputProps,
@@ -78,10 +78,11 @@ const ApiMakerInputsSelect = memo(shapeComponent(/** @augments {ShapeComponent<P
   }
 
   onChange = (e) => {
-    const {form} = this.tt
-    const {name, onChange} = this.props
+    const {fieldRegistration} = this.tt
+    const {onChange} = this.props
+    const {name} = this.props.inputProps
 
-    if (form && name) form.setValue(name, e.target.value)
+    if (name) fieldRegistration.setValue(e.target.value)
     if (onChange) onChange(e)
   }
 

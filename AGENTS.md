@@ -56,10 +56,12 @@ Notes:
 - Use `Text` from `@kaspernj/api-maker/build/utils/text` for default styles.
 - Prefer `useBreakpoint()` (responsive-breakpoints via Api Maker dependencies) over `useWindowDimensions()` for responsive logic.
 - When using API Maker `Link` on web (renders as an `<a>`), center content with an inner `View` instead of relying on flex alignment on the anchor itself.
-- Prefer `Form` from `@kaspernj/api-maker/build/form` with uncontrolled inputs to avoid state-driven re-renders.
+- Import Formmeld directly with `import {Form, FormInputs, useForm} from "formmeld"`; API Maker no longer exports these APIs. Keep inputs uncontrolled to avoid state-driven re-renders.
+- Reusable inputs that can render outside `Form` must use Formmeld's `useOptionalFieldRegistration`; one logical field owns one registration, while duplicate names synchronize through Formmeld.
+- Give controls explicit Formmeld apply adapters: DOM/RN text normalizes null to `""` and other values to strings, checkboxes normalize to booleans, and composite controls update every visible/canonical ref from one adapter.
 - When multiple screens repeat the same label + input form markup, extract a shared form input component (for example a screen-specific base text input) instead of duplicating blocks.
-- Use Api Maker `Form` and `formObjectRef` to track uncontrolled input values instead of manual instance fields.
-- In ShapeComponents using Api Maker `Form`, pass both `formObjectRef` and `setForm`, then read values via `this.formObjectRef.current || this.form` to avoid mount-timing races.
+- Use Formmeld `Form` and `formObjectRef` to track uncontrolled input values instead of manual instance fields.
+- In ShapeComponents using Formmeld `Form`, pass both `formObjectRef` and `setForm`, then read values via `this.formObjectRef.current || this.form` to avoid mount-timing races.
 - Use Api Maker `Icon` for icons instead of raw `<i>` tags or FontAwesome class names on `Text`.
 - In app code, prefer importing frontend models from individual files (for example `models/project.js`) instead of aggregating through `models`.
 - In app code, avoid `import {...} from "models"`; import each frontend model from its dedicated model file path.

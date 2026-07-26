@@ -37,7 +37,6 @@ const accessors = {
   navigation: {required: true},
   routes: {required: false},
   routeDefinitions: {required: false},
-  useHtmlForm: {default: false, required: false},
   websocketRequests: {required: false}
 }
 
@@ -124,16 +123,6 @@ class ApiMakerConfig {
   getRoutes() {
     return apiMakerConfigNotImplemented("getRoutes")
   }
-
-  /** @returns {boolean} */
-  getUseHtmlForm() {
-    return apiMakerConfigNotImplemented("getUseHtmlForm")
-  }
-
-  /**
-   * @param {boolean} _newValue
-   */
-  setUseHtmlForm(_newValue) { apiMakerConfigNotImplemented("setUseHtmlForm") }
 
   // Table export hooks. These hold functions that should be returned as-is (not invoked), so they use
   // explicit accessors instead of the generic accessor loop below (which would call function values).
