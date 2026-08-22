@@ -125,9 +125,9 @@ class ApiMaker::ActionCableRequestContext
 
 private
 
-  # Set current_#{param_key} in api_maker_args for every registered Devise
-  # scope so resource abilities can read them the same way they do on HTTP
-  # requests (where Devise controller helpers define the methods).
+  # Load current_#{param_key} from persisted state for every registered Devise
+  # scope so long-lived websocket connections do not build abilities from
+  # cached model state.
   def set_current_devise_scope_models!
     warden_proxy = channel.connection.env["warden"]
     return unless warden_proxy
@@ -139,7 +139,9 @@ private
       param_key = model_class.model_name.param_key
       key = :"current_#{param_key}"
 
-      @api_maker_args[key] ||= warden_proxy.user(mapping.name)
+      authenticated_model = @api_maker_args[key] || warden_proxy.user(mapping.name)
+
+      @api_maker_args[key] = model_class.find(authenticated_model.id) if authenticated_model
     end
   end
 

@@ -126,6 +126,23 @@ describe ApiMaker::ActionCableRequestContext do
     expect(context.api_maker_args[:current_user]).to eq(user)
   end
 
+  it "loads current Devise models from persisted state for each request" do
+    user.update!(first_name: "Before")
+    User.find(user.id).update!(first_name: "After")
+    allow(warden).to receive(:user).with(:user).and_return(user)
+
+    context = ApiMaker::ActionCableRequestContext.new(
+      api_maker_args: {current_user: user},
+      channel:,
+      request_fingerprint: "fingerprint-1",
+      request_uid: "request-1"
+    )
+
+    expect(context.api_maker_args[:current_user]).not_to equal(user)
+    expect(context.api_maker_args[:current_user].first_name).to eq("After")
+    expect(user.first_name).to eq("Before")
+  end
+
   it "stores itself as the controller in api_maker_args" do
     expect(request_context.api_maker_args[:controller]).to eq(request_context)
   end
