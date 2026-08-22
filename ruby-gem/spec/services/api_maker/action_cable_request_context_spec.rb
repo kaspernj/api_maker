@@ -90,7 +90,7 @@ describe ApiMaker::ActionCableRequestContext do
   end
 
   it "returns session status for the current websocket state" do
-    expect(warden).to receive(:user).with(:user).and_return(user).twice
+    expect(warden).to receive(:user).with(:user).and_return(user)
     expect(warden).to receive(:authenticated?).with(:user).and_return(true)
 
     context = ApiMaker::ActionCableRequestContext.new(
@@ -122,13 +122,22 @@ describe ApiMaker::ActionCableRequestContext do
       request_fingerprint: "fingerprint-1",
       request_uid: "request-1"
     )
+    current_user = nil
 
-    expect(context.api_maker_args[:current_user]).to eq(user)
+    run_in_request_context(context) do
+      current_user = context.api_maker_args[:current_user]
+    end
+
+    expect(current_user).to eq(user)
   end
 
-  it "loads current Devise models from persisted state for each request" do
+  it "loads current Devise models from persisted state inside the channel request context" do
     user.update!(first_name: "Before")
-    User.find(user.id).update!(first_name: "After")
+    user_id = user.id
+    channel.define_singleton_method(:with_request_context) do |**_args, &block|
+      User.find(user_id).update!(first_name: "After")
+      block.call
+    end
     allow(warden).to receive(:user).with(:user).and_return(user)
 
     context = ApiMaker::ActionCableRequestContext.new(
@@ -137,10 +146,34 @@ describe ApiMaker::ActionCableRequestContext do
       request_fingerprint: "fingerprint-1",
       request_uid: "request-1"
     )
+    current_user = nil
 
-    expect(context.api_maker_args[:current_user]).not_to equal(user)
-    expect(context.api_maker_args[:current_user].first_name).to eq("After")
+    run_in_request_context(context) do
+      current_user = context.api_maker_args[:current_user]
+    end
+
+    expect(current_user).not_to equal(user)
+    expect(current_user.first_name).to eq("After")
     expect(user.first_name).to eq("Before")
+  end
+
+  it "clears the authenticated scope when its persisted model no longer exists" do
+    allow(warden).to receive(:user).with(:user).and_return(user)
+    user.delete
+
+    expect(warden).to receive(:logout).with(:user)
+    expect(channel).to receive(:update_api_maker_current_user!).with(nil)
+
+    context = ApiMaker::ActionCableRequestContext.new(
+      api_maker_args: {current_user: user},
+      channel:,
+      request_fingerprint: "fingerprint-1",
+      request_uid: "request-1"
+    )
+
+    run_in_request_context(context) { nil }
+
+    expect(context.api_maker_args[:current_user]).to be_nil
   end
 
   it "stores itself as the controller in api_maker_args" do
@@ -171,5 +204,14 @@ describe ApiMaker::ActionCableRequestContext do
 
     expect(channel.instance_variable_get(:@load_session_state_args)).to be_nil
     expect(channel.instance_variable_get(:@persist_session_state_args)).to be_nil
+  end
+
+  def run_in_request_context(context, &)
+    request = instance_double(ActionDispatch::Request)
+    allow(context).to receive_messages(cookies: {}, request:, session: {})
+    allow(ApiMaker::SessionShadowStore).to receive(:load!).with(request:)
+    allow(ApiMaker::SessionShadowStore).to receive(:persist!).with(request:)
+
+    context.with_request_context(&)
   end
 end
