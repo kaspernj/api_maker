@@ -9,7 +9,6 @@ class ApiMaker::ActionCableRequestContext
       controller: self,
       current_session_id: api_maker_args[:current_session_id].presence || channel.current_session_id
     )
-    set_current_devise_scope_models!
     @api_maker_locals = channel.api_maker_locals
     @request_fingerprint = request_fingerprint
     @request_uid = request_uid
@@ -125,9 +124,9 @@ class ApiMaker::ActionCableRequestContext
 
 private
 
-  # Set current_#{param_key} in api_maker_args for every registered Devise
-  # scope so resource abilities can read them the same way they do on HTTP
-  # requests (where Devise controller helpers define the methods).
+  # Load current_#{param_key} from persisted state for every registered Devise
+  # scope so long-lived websocket connections do not build abilities from
+  # cached model state.
   def set_current_devise_scope_models!
     warden_proxy = channel.connection.env["warden"]
     return unless warden_proxy
@@ -139,8 +138,23 @@ private
       param_key = model_class.model_name.param_key
       key = :"current_#{param_key}"
 
-      @api_maker_args[key] ||= warden_proxy.user(mapping.name)
+      authenticated_model = @api_maker_args[key] || warden_proxy.user(mapping.name)
+      unless authenticated_model
+        @api_maker_args[key] = nil
+        next
+      end
+
+      persisted_model = model_class.find_by(model_class.primary_key => authenticated_model.id)
+      if persisted_model
+        @api_maker_args[key] = persisted_model
+      else
+        @api_maker_args[key] = nil
+        warden_proxy.logout(mapping.name)
+        update_connection_current_user(nil, mapping.name)
+      end
     end
+
+    reset_current_ability
   end
 
   def warden
@@ -153,10 +167,14 @@ private
     Time.use_zone(time_zone, &)
   end
 
-  def with_channel_request_context(&)
+  def with_channel_request_context
     if channel.respond_to?(:with_request_context)
-      channel.with_request_context(api_maker_args:, &)
+      channel.with_request_context(api_maker_args:) do
+        set_current_devise_scope_models!
+        yield
+      end
     else
+      set_current_devise_scope_models!
       yield
     end
   end

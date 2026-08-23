@@ -56,6 +56,8 @@ describe ApiMaker::RequestsChannel do
   describe "#request_context" do
     it "passes locale and time zone offset from global request data" do
       channel = described_class.allocate
+      connection = instance_double(ApplicationCable::Connection, env: {})
+      channel.define_singleton_method(:connection) { connection }
       channel.define_singleton_method(:current_user) { nil }
       channel.define_singleton_method(:current_session_id) { "session-1" }
 
