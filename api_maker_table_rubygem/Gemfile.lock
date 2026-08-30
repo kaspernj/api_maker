@@ -202,7 +202,7 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    worker_plugins (0.0.13)
+    worker_plugins (0.0.17)
     zeitwerk (2.7.5)
 
 PLATFORMS
