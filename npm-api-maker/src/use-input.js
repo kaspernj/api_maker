@@ -202,6 +202,13 @@ const useInput = ({applyValue, props, registerField, wrapperOptions, ...useInput
 
   const {inputProps: oldInputProps, wrapperOpts: oldWrapperOpts, ...restProps} = props
 
+  // onErrors and onMatchValidationError are consumed by this hook (validation
+  // error matching and the onErrors callback), not DOM/forwarding props. Keep
+  // them out of restProps so a wrapper that forwards restProps to another
+  // useInput-based input does not fire the callbacks a second time.
+  delete restProps.onErrors
+  delete restProps.onMatchValidationError
+
   if ("values" in restProps && typeof restProps.values == "undefined") {
     delete restProps.values
   }
