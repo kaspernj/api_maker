@@ -25,6 +25,8 @@ import useValidationErrors from "./use-validation-errors.js"
  *   modelClassData: () => {name: string},
  *   modelClass: () => {humanAttributeName: (attributeName: string) => string}
  * } & Record<string, Function>} [model]
+ * @property {(errors: import("./validation-errors.js").ValidationError[]) => void} [onErrors]
+ * @property {(validationError: import("./validation-errors.js").ValidationError) => boolean} [onMatchValidationError]
  * @property {string} [type]
  * @property {InputRefLike} [inputRef]
  * @property {Record<string, InputValue | InputRefLike>} [inputProps]
@@ -221,11 +223,25 @@ const useInput = ({applyValue, props, registerField, wrapperOptions, ...useInput
   if (!s.m.inputProps.ref) throw new Error("No input ref?")
   if (!s.m.isSelect) s.m.inputProps.type = type
 
-  const {validationErrors} = useValidationErrors((validationError) =>
-    validationError.inputName &&
+  // A consumer-provided matcher overrides the default name matching. This is
+  // needed when the form input name differs from the server-generated input
+  // name of a validation error (for example nested-attributes forms where the
+  // error lands on a parent association).
+  const {validationErrors} = useValidationErrors((validationError) => {
+    const {onMatchValidationError} = s.props
+
+    if (onMatchValidationError) return onMatchValidationError(validationError)
+
+    return validationError.inputName &&
       s.m.inputProps.name &&
       (validationError.inputName == s.m.inputProps.name || validationError.inputName == s.m.inputNameWithoutId)
-  )
+  })
+
+  useEffect(() => {
+    const {onErrors} = s.props
+
+    if (onErrors) onErrors(validationErrors)
+  }, [validationErrors])
 
   const wrapperOpts = {
     errors: validationErrors,
