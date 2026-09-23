@@ -62,15 +62,18 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
   render () {
     const {inputProps, useInputRestProps, wrapperOpts} = this.tt
-    const {className, hint, id, inputRef, label, labelClassName, wrapperClassName, ...restProps} = useInputRestProps
+    const {className, hint, inputRef, label, labelClassName, wrapperClassName, ...restProps} = useInputRestProps
     const {errors} = digs(wrapperOpts, "errors")
 
     return (
       <div className={this.wrapperClassName()}>
         <div className="form-check">
+          {/* The inner Checkbox runs its own useInput and generates its own
+              id when none is given, so the outer generated id must be passed
+              down or the label's htmlFor would never match the input's id. */}
           <Checkbox
             className={classNames("form-check-input", className, {"is-invalid": errors.length > 0})}
-            id={id}
+            id={inputProps.id}
             inputRef={inputRef}
             {...restProps}
           />
