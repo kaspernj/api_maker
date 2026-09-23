@@ -5,7 +5,7 @@ import columnVisible from "./column-visible.js"
 import {digg} from "diggerize"
 import * as inflection from "inflection"
 import Logger from "../logger.js"
-import {ReadersWriterLock} from "epic-locks"
+import ReadersWriterLock from "epic-locks/build/readers-writer-lock.js"
 import {serialize as objectToFormData} from "object-to-formdata"
 // @ts-expect-error
 import {TableSetting} from "models.js"

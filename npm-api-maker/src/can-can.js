@@ -2,7 +2,7 @@
 /* eslint-disable sort-imports */
 import * as inflection from "inflection"
 import {EventEmitter} from "eventemitter3"
-import {ReadersWriterLock} from "epic-locks"
+import ReadersWriterLock from "epic-locks/build/readers-writer-lock.js"
 import {digg} from "diggerize"
 import Services from "./services.js"
 
