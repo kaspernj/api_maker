@@ -141,6 +141,11 @@
   resolved "https://registry.npmjs.org/@babel/helper-plugin-utils/-/helper-plugin-utils-7.28.6.tgz"
   integrity sha512-S9gzZ/bz83GRysI7gAD4wPT/AI3uCnY+9xn+Mx/KPs2JwHJIz1W8PZkg2cqyt3RNOBM8ejcXhV6y8Og7ly/Dug==
 
+"@babel/helper-plugin-utils@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-8.0.1.tgz#d1c9d8ae225902c597deac8c79ace4227feac8af"
+  integrity sha512-3PKFgjTyPlhFhorfP+SjKQxLViIL++zWjFOO4hGriYU+Bsm983DxEM1JmDRJVWXV0O9npu+xXRqz7Pbd3mh70g==
+
 "@babel/helper-remap-async-to-generator@^7.27.1":
   version "7.27.1"
   resolved "https://registry.npmjs.org/@babel/helper-remap-async-to-generator/-/helper-remap-async-to-generator-7.27.1.tgz"
@@ -394,6 +399,13 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.27.1"
     "@babel/traverse" "^7.28.5"
+
+"@babel/plugin-transform-destructuring@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-destructuring/-/plugin-transform-destructuring-8.0.1.tgz#09fbb2b299eda95082672078891a7ca5d7c1f808"
+  integrity sha512-RtR8uLDl0QcCmqMNIkM8gmDeYZ3rS0ZH+sa+I6sfc09yFoqfp9AEPgBstq9KyfVb0lFCVSRFfJXCI70FIl5ccw==
+  dependencies:
+    "@babel/helper-plugin-utils" "^8.0.1"
 
 "@babel/plugin-transform-dotall-regex@^7.28.6":
   version "7.28.6"
