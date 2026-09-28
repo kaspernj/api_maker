@@ -200,13 +200,40 @@ export default class ApiMakerSessionStatusUpdater {
       clearTimeout(this.updateTimeout)
   }
 
-  /** Fetches the latest session status and applies it locally. */
+  /**
+   * Fetches the latest session status and applies it locally.
+   *
+   * A sign-in rotates the CSRF token. A sessionStatus() that started before the
+   * rotation returns the pre-rotation token, so if the token changed while we
+   * were in flight, applying the stale result would clobber the fresh token.
+   * Skip in that case, and log it: a silent skip is exactly what made this
+   * failure mode invisible in bug reports.
+   */
   updateSessionStatus = async () => {
     logger.debug("updateSessionStatus")
 
+    const csrfTokenAtRequestStart = this.currentMetaCsrfToken()
     const result = await this.sessionStatus()
+    const csrfTokenAfterRequest = this.currentMetaCsrfToken()
+
+    if (csrfTokenAtRequestStart != csrfTokenAfterRequest) {
+      console.warn(`Skipping stale session-status result: csrf token changed during the request (${csrfTokenAtRequestStart} -> ${csrfTokenAfterRequest})`)
+
+      return
+    }
 
     this.applyResult(result)
+  }
+
+  /**
+   * Reads the CSRF token from the meta element, or undefined when there is no
+   * meta element (React Native / Expo) or it has not been rendered yet.
+   * @returns {string | undefined}
+   */
+  currentMetaCsrfToken() {
+    if (!this.useMetaElement) return undefined
+
+    return document.querySelector("meta[name='csrf-token']")?.getAttribute("content")
   }
 
   /**

@@ -1,6 +1,7 @@
 // @ts-check
 import ApiMakerCommandsPool from "../src/commands-pool.js"
 import Config from "../src/config.js"
+import CustomError from "../src/custom-error.js"
 import Devise from "../src/devise.js"
 import SessionExpiredError from "../src/session-expired-error.js"
 import SessionStatusUpdater from "../src/session-status-updater.js"
@@ -176,6 +177,22 @@ describe("ApiMakerCommandsPool", () => {
       jest.spyOn(Devise, "refreshWebsocketSession").mockResolvedValue({})
 
       expect(await pool.recoverAuthentication()).toBe(false)
+    })
+  })
+
+  describe("sendRequest retry exhaustion", () => {
+    it("surfaces the last response as a CustomError when every retry is an invalid authenticity token", async() => {
+      const pool = new ApiMakerCommandsPool()
+      const performRequest = jest.spyOn(pool, "performRequest").mockResolvedValue({success: false, type: "invalid_authenticity_token"})
+      const refresh = jest.spyOn(SessionStatusUpdater.current(), "updateSessionStatus").mockResolvedValue(undefined)
+
+      const error = await pool.sendRequest({commandSubmitData: {}, url: "/api_maker/commands"}).catch((e) => e)
+
+      expect(error).toBeInstanceOf(CustomError)
+      expect(error.message).toContain("invalid_authenticity_token")
+      expect(error.args?.response).toEqual({success: false, type: "invalid_authenticity_token"})
+      expect(performRequest).toHaveBeenCalledTimes(3)
+      expect(refresh).toHaveBeenCalledTimes(3)
     })
   })
 
