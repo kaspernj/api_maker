@@ -5,7 +5,7 @@ rvm: true
 environment:
   RUBY_VERSION: 3.3.5
 dependency_roots:
-  - npm-api-maker/package.json
+  - path: npm-api-maker
 builds:
   setup:
     name: Setup build container
