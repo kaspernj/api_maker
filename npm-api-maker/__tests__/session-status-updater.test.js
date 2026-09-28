@@ -2,9 +2,23 @@
 import ApiMakerSessionStatusUpdater from "../src/session-status-updater.js"
 import {jest} from "@jest/globals"
 
+const setMetaCsrfToken = (value) => {
+  let metaElement = document.querySelector("meta[name='csrf-token']")
+
+  if (!metaElement) {
+    metaElement = document.createElement("meta")
+    metaElement.setAttribute("name", "csrf-token")
+    document.head.appendChild(metaElement)
+  }
+
+  metaElement.setAttribute("content", value)
+}
+
 describe("ApiMakerSessionStatusUpdater", () => {
   afterEach(() => {
     jest.restoreAllMocks()
+
+    document.querySelector("meta[name='csrf-token']")?.remove()
   })
 
   it("returns undefined when session status does not provide a csrf token", async() => {
@@ -53,5 +67,48 @@ describe("ApiMakerSessionStatusUpdater", () => {
     } finally {
       jest.useRealTimers()
     }
+  })
+
+  describe("updateSessionStatus rotation guard", () => {
+    it("applies the result when the csrf token did not change during the request", async() => {
+      const updater = new ApiMakerSessionStatusUpdater({useMetaElement: true})
+      const applyResult = jest.spyOn(updater, "applyResult").mockReturnValue(undefined)
+      jest.spyOn(updater, "sessionStatus").mockResolvedValue({csrf_token: "fresh", scopes: {}})
+
+      setMetaCsrfToken("stable")
+
+      await updater.updateSessionStatus()
+
+      expect(applyResult).toHaveBeenCalledTimes(1)
+    })
+
+    it("skips and logs when the csrf token rotated while the request was in flight", async() => {
+      const updater = new ApiMakerSessionStatusUpdater({useMetaElement: true})
+      const applyResult = jest.spyOn(updater, "applyResult").mockReturnValue(undefined)
+      const warn = jest.spyOn(console, "warn").mockImplementation(() => {})
+
+      // A sign-in rotates the token while sessionStatus() is still in flight.
+      jest.spyOn(updater, "sessionStatus").mockImplementation(async() => {
+        setMetaCsrfToken("rotated-by-signin")
+        return {csrf_token: "stale", scopes: {}}
+      })
+
+      setMetaCsrfToken("original")
+
+      await updater.updateSessionStatus()
+
+      expect(applyResult).not.toHaveBeenCalled()
+      expect(warn).toHaveBeenCalledTimes(1)
+    })
+
+    it("applies the result when there is no meta element (React Native)", async() => {
+      const updater = new ApiMakerSessionStatusUpdater({useMetaElement: false})
+      const applyResult = jest.spyOn(updater, "applyResult").mockReturnValue(undefined)
+      jest.spyOn(updater, "sessionStatus").mockResolvedValue({csrf_token: "fresh", scopes: {}})
+
+      await updater.updateSessionStatus()
+
+      expect(applyResult).toHaveBeenCalledTimes(1)
+    })
   })
 })
