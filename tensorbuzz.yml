@@ -4,6 +4,8 @@ artifact_dirs:
 rvm: true
 environment:
   RUBY_VERSION: 3.3.5
+dependency_roots:
+  - npm-api-maker/package.json
 builds:
   setup:
     name: Setup build container
@@ -14,7 +16,6 @@ builds:
       - cd ruby-gem && bundle exec appraisal install
       - cd ruby-gem && bundle exec ruby scripts/provision_geckodriver.rb
 
-      - cd npm-api-maker && npm ci
       - cd npm-api-maker && yarn link
 
       - cd ruby-gem/spec/dummy && yarn install --network-timeout 120000
