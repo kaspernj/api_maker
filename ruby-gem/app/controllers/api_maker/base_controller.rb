@@ -21,6 +21,11 @@ private
 
   def render_error(error)
     if error.is_a?(ActionController::InvalidAuthenticityToken)
+      logger.warn(
+        "invalid_authenticity_token path=#{request.path} method=#{request.request_method} " \
+        "session=#{session_cookie_fingerprint}"
+      )
+
       render json: {
         message: error.message,
         success: false,
@@ -44,5 +49,14 @@ private
     locale_exists = I18n.available_locales.map(&:to_s).include?(locale)
 
     I18n.locale = locale if locale_exists
+  end
+
+  # Short non-reversible fingerprint of the session cookie so repeated
+  # invalid_authenticity_token events can be correlated to one browser session
+  # without logging the (sensitive) cookie value itself.
+  def session_cookie_fingerprint
+    value = request.cookies[Rails.application.config.session_options[:key]]
+
+    value.present? ? Digest::SHA256.hexdigest(value)[0, 16] : "missing"
   end
 end
