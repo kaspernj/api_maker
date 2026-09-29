@@ -170,7 +170,7 @@ export default class ApiMakerCollection {
     return this
   }
 
-  /** @returns {Promise<ModelOf<MC>>} */
+  /** @returns {Promise<ModelOf<MC> | undefined>} */
   async first() {
     const models = await this.toArray()
     return models[0]
