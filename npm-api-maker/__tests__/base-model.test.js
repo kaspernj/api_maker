@@ -1,5 +1,6 @@
 // @ts-check
 import BaseModel from "../build/base-model.js"
+import CustomError from "../build/custom-error.js"
 import {JSDOM} from "jsdom"
 import User from "./support/user"
 import ValidationError from "../build/validation-error.js"
@@ -141,6 +142,99 @@ describe("BaseModel", () => {
       BaseModel.parseValidationErrors({error, model, options: {throwValidationError: false}})
       expect(dispatchEventSpy).not.toHaveBeenCalled()
       expect(newCustomEventSpy).not.toHaveBeenCalled()
+    })
+  })
+
+  describe("reload", () => {
+    const requeryReturning = (model) => ({
+      first: async() => model,
+      queryArgs: {}
+    })
+
+    it("throws a descriptive CustomError when the requery finds no record", async() => {
+      const model = new User({a: {id: 7}})
+      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning(undefined))
+
+      try {
+        await expect(model.reload()).rejects.toThrow(CustomError)
+        await expect(model.reload()).rejects.toThrow("Record not found while reloading User#7")
+      } finally {
+        ransackSpy.mockRestore()
+      }
+    })
+
+    it("leaves the model data untouched when the requery finds no record", async() => {
+      const model = new User({a: {id: 7, email: "old@example.com"}})
+      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning(null))
+
+      try {
+        await expect(model.reload()).rejects.toThrow(CustomError)
+      } finally {
+        ransackSpy.mockRestore()
+      }
+
+      expect(model.modelData).toEqual({id: 7, email: "old@example.com"})
+    })
+
+    it("keeps the triggering caller in the error stack across the async requery", async() => {
+      const model = new User({a: {id: 7}})
+      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning(undefined))
+
+      try {
+        const reloadTrigger = async() => model.reload()
+
+        let thrownError
+
+        try {
+          await reloadTrigger()
+        } catch (error) {
+          thrownError = error
+        }
+
+        expect(thrownError).toBeInstanceOf(CustomError)
+        expect(thrownError.stack).toContain("reloadTrigger")
+      } finally {
+        ransackSpy.mockRestore()
+      }
+    })
+
+    it("refreshes the model data from the requery result when found", async() => {
+      const model = new User({a: {id: 7, email: "old@example.com"}})
+      model.changes = {email: "unsaved@example.com"}
+      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning(new User({a: {id: 7, email: "new@example.com"}})))
+
+      try {
+        await model.reload()
+      } finally {
+        ransackSpy.mockRestore()
+      }
+
+      expect(model.modelData.email).toEqual("new@example.com")
+      expect(model.changes).toEqual({})
+    })
+  })
+
+  describe("setNewModelData", () => {
+    it("throws a descriptive CustomError for a null model", () => {
+      const model = new User({a: {id: 7}})
+
+      expect(() => model.setNewModelData(null)).toThrow(CustomError)
+      expect(() => model.setNewModelData(null)).toThrow("No modelData in model: null")
+    })
+
+    it("throws a descriptive CustomError for an undefined model", () => {
+      const model = new User({a: {id: 7}})
+
+      expect(() => model.setNewModelData(undefined)).toThrow(CustomError)
+    })
+
+    it("copies the model data from a valid model", () => {
+      const model = new User({a: {id: 7}})
+      const nextModel = new User({a: {id: 7, email: "new@example.com"}})
+
+      model.setNewModel(nextModel)
+
+      expect(model.modelData.email).toEqual("new@example.com")
     })
   })
 })

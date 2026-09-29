@@ -25,13 +25,11 @@ export default class BaseError extends Error {
 
     if (args && "addResponseErrorsToErrorMessage" in args && !args.addResponseErrorsToErrorMessage) {
       messageToUse = message
-    } else {
-      if (typeof args.response == "object" && dig(args, "response", "errors")) {
-        if (message) {
-          messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
-        } else {
-          messageToUse = errorMessages(args).join(". ")
-        }
+    } else if (args && typeof args.response == "object" && dig(args, "response", "errors")) {
+      if (message) {
+        messageToUse = `${messageToUse}: ${errorMessages(args).join(". ")}`
+      } else {
+        messageToUse = errorMessages(args).join(". ")
       }
     }
 
@@ -44,12 +42,12 @@ export default class BaseError extends Error {
 
   /** @returns {string[]} */
   errorMessages() {
-    return errorMessages(this.args)
+    return this.args ? errorMessages(this.args) : []
   }
 
   /** @returns {string[] | undefined} */
   errorTypes() {
-    if (typeof this.args.response == "object") {
+    if (this.args && typeof this.args.response == "object") {
       return digg(this, "args", "response", "errors").map((error) => digg(error, "type"))
     }
 

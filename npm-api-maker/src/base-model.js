@@ -895,7 +895,7 @@ const BaseModel = class BaseModel {
    * @returns {void}
    */
   setNewModelData(model) {
-    if (!("modelData" in model)) throw new Error(`No modelData in model: ${JSON.stringify(model)}`)
+    if (model === null || model === undefined || !("modelData" in model)) throw new CustomError(`No modelData in model: ${JSON.stringify(model)}`)
 
     this.previousModelData = {...digg(this, "modelData")}
 
@@ -940,8 +940,16 @@ const BaseModel = class BaseModel {
   /** @returns {ModelClassDataType} */
   modelClassData() { return this.modelClass().modelClassData() }
 
-  /** @returns {Promise<void>} */
+  /**
+   * @returns {Promise<void>}
+   * @throws {CustomError} when the record can no longer be found
+   */
   async reload() {
+    // The not-found throw below happens after an await, where the synchronous
+    // stack no longer contains the caller. Capture the stack up front so the
+    // error still shows who triggered the reload (same approach as
+    // CommandsPool's caller-stack splice for rejected commands).
+    const callerStack = Error().stack
     const params = this.collection && this.collection.params()
     const ransackParams = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
     ransackParams[`${this.modelClass().primaryKey()}_eq`] = this.primaryKey()
@@ -963,6 +971,25 @@ const BaseModel = class BaseModel {
     }
 
     const model = await query.first()
+
+    if (!model) {
+      const error = new CustomError(`Record not found while reloading ${this.modelClassData().name}#${this.primaryKey()}`)
+
+      // V8 prefixes "Error\n" as a header; JSC/SpiderMonkey stacks start directly with a frame.
+      const callerFrames = callerStack.startsWith("Error")
+        ? callerStack
+          .split("\n")
+          .slice(1)
+          .join("\n")
+        : callerStack
+
+      if (callerFrames) {
+        error.stack = `${error.stack ?? ""}\n${callerFrames}`
+      }
+
+      throw error
+    }
+
     this.setNewModel(model)
     this.changes = {}
   }
