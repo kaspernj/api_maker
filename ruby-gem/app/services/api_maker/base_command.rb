@@ -1,6 +1,10 @@
 class ApiMaker::BaseCommand
   ApiMaker::IncludeHelpers.execute!(klass: self)
 
+  class << self
+    include ApiMaker::CommandError
+  end
+
   attr_reader :api_maker_args, :collection, :collection_instance, :command, :commands, :command_response, :controller, :current_ability
   attr_accessor :execute_service_or_fail_response
 
@@ -28,22 +32,6 @@ class ApiMaker::BaseCommand
     execute!
   rescue ApiMaker::CommandFailedError => e
     command.fail(*e.api_maker_args, &e.api_maker_block)
-  end
-
-  def self.command_error_message(error)
-    if Rails.application.config.consider_all_requests_local
-      "#{error.class.name}: #{error.message}"
-    else
-      "Internal server error"
-    end
-  end
-
-  def self.command_error_type(error)
-    if error.is_a?(ApiMaker::IndividualCommand::NotFoundOrNoAccessError)
-      :not_found_or_no_access
-    else
-      :runtime_error
-    end
   end
 
   def self.execute_in_thread!(ability:, api_maker_args:, collection:, commands:, command_response:, controller:)

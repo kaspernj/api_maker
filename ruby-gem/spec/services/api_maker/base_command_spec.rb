@@ -147,4 +147,19 @@ describe ApiMaker::BaseCommand do
 
     expect(described_class.command_error_type(error)).to eq(:not_found_or_no_access)
   end
+
+  it "classifies unpermitted parameters as a dedicated, non-runtime error type" do
+    error = ActionController::UnpermittedParameters.new(["state"])
+
+    expect(described_class.command_error_type(error)).to eq(:unpermitted_parameter)
+  end
+
+  it "does not surface unpermitted parameters as an internal server error in non-local requests" do
+    allow(Rails.application.config).to receive(:consider_all_requests_local).and_return(false)
+    error = ActionController::UnpermittedParameters.new(["state"])
+
+    expect(described_class.command_error_message(error)).to eq(
+      "This request included a parameter that is not allowed for this operation."
+    )
+  end
 end
