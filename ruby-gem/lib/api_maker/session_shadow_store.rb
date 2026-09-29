@@ -15,8 +15,20 @@ class ApiMaker::SessionShadowStore
     session_data = read(request:)
     return if session_data.nil?
 
+    # The shadow store mirrors the session so ActionCable / cross-worker auth
+    # can be restored, but the CSRF token is bound to the browser's session
+    # cookie: it is what the meta tag and every signed form were rendered
+    # against. Replacing the live `"_csrf_token"` with the cached copy
+    # desyncs the session from the token the client already holds, so every
+    # subsequent request (and the CSRF-exempt session_statuses re-fetch) is
+    # validated against a stale value and fails with invalid_authenticity_token.
+    # Preserve the request's own CSRF token across the clobber.
+    live_csrf_token = request.session["_csrf_token"]
+
     request.session.clear
     request.session.update(session_data)
+
+    request.session["_csrf_token"] = live_csrf_token if live_csrf_token.present?
   end
 
   def self.persist!(request:)
