@@ -21,10 +21,7 @@ private
 
   def render_error(error)
     if error.is_a?(ActionController::InvalidAuthenticityToken)
-      logger.warn(
-        "invalid_authenticity_token path=#{request.path} method=#{request.request_method} " \
-        "session=#{session_cookie_fingerprint}"
-      )
+      log_invalid_authenticity_token(error)
 
       render json: {
         message: error.message,
@@ -49,6 +46,18 @@ private
     locale_exists = I18n.available_locales.map(&:to_s).include?(locale)
 
     I18n.locale = locale if locale_exists
+  end
+
+  # Logs an invalid_authenticity_token event at warn level (message + cleaned
+  # backtrace) so production incidents are visible in the app log. The session
+  # fingerprint correlates repeated events to one browser session without
+  # logging the sensitive cookie value.
+  def log_invalid_authenticity_token(error)
+    logger.warn(
+      "invalid_authenticity_token path=#{request.path} method=#{request.request_method} " \
+      "session=#{session_cookie_fingerprint} message=#{error.message}"
+    )
+    logger.warn(Rails.backtrace_cleaner.clean(error.backtrace).join("\n"))
   end
 
   # Short non-reversible fingerprint of the session cookie so repeated
