@@ -354,7 +354,7 @@ export default class ApiMakerCommandsPool {
       // every queued command so callers awaiting their execution don't hang
       // forever. Already-settled executions ignore the extra reject.
       for (const commandData of Object.values(currentPool)) {
-        commandData.commandExecution.reject(/** @type {Error} */ (error))
+        this.rejectWithCallerStack(commandData, /** @type {Error} */ (error))
       }
     } finally {
       this.flushCount--

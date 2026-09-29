@@ -168,6 +168,27 @@ describe("ApiMakerCommandsPool", () => {
       expect(reject.mock.calls[0][0]).toBeInstanceOf(SessionExpiredError)
     })
 
+    it("preserves caller stack when flush fails with a transport error", async() => {
+      const pool = new ApiMakerCommandsPool()
+      const reject = jest.fn()
+      const callerStack = "Error\n    at someCaller (app.js:42:13)\n    at outerFrame (outer.js:7:1)"
+
+      pool.pool = {1: {commandExecution: {reject, resolve: jest.fn()}, stack: callerStack}}
+      pool.poolData = {collection: {tasks: {test: {1: {args: {}, id: 1}}}}}
+
+      jest.spyOn(Devise, "registeredScopes").mockReturnValue([])
+      jest.spyOn(pool, "performRequest").mockResolvedValue({success: false, type: "invalid_authenticity_token"})
+      jest.spyOn(SessionStatusUpdater.current(), "updateSessionStatus").mockResolvedValue(undefined)
+
+      await pool.flush()
+
+      expect(reject).toHaveBeenCalledTimes(1)
+      const rejectedError = reject.mock.calls[0][0]
+      expect(rejectedError.message).toContain("Couldnt successfully execute request")
+      expect(rejectedError.stack).toContain("at someCaller (app.js:42:13)")
+      expect(rejectedError.stack).toContain("at outerFrame (outer.js:7:1)")
+    })
+
     it("recoverAuthentication reports signed-out when the backend no longer has the user", async() => {
       const pool = new ApiMakerCommandsPool()
 
