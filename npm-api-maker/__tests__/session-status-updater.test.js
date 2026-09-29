@@ -1,5 +1,6 @@
 // @ts-check
 import ApiMakerSessionStatusUpdater from "../src/session-status-updater.js"
+import Devise from "../src/devise.js"
 import {jest} from "@jest/globals"
 
 const setMetaCsrfToken = (value) => {
@@ -151,6 +152,19 @@ describe("ApiMakerSessionStatusUpdater", () => {
       expect(updater.csrfToken).toBe("fresh")
 
       updater.clearCsrfToken()
+      expect(updater.csrfToken).toBeUndefined()
+    })
+  })
+
+  describe("csrf token cache on devise sign-in", () => {
+    it("clears the cached csrf token when a scope signs in", () => {
+      const updater = new ApiMakerSessionStatusUpdater({useMetaElement: false})
+
+      // A pre-sign-in cached token is stale once the session rotates on sign-in.
+      updater.csrfToken = "stale"
+
+      Devise.events().emit("onDeviseSignIn", {scope: "user"})
+
       expect(updater.csrfToken).toBeUndefined()
     })
   })

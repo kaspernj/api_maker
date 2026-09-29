@@ -68,6 +68,7 @@ export default class ApiMakerSessionStatusUpdater {
     }
 
     this.connectWakeEvent()
+    this.connectDeviseEvents()
   }
 
   /** Re-checks session state when the browser comes back online. */
@@ -111,6 +112,16 @@ export default class ApiMakerSessionStatusUpdater {
       this.returnRefreshTimeout = undefined
       this.updateSessionStatus()
     }, 50)
+  }
+
+  /**
+   * Sign-in rotates the CSRF token server-side, so any cached pre-sign-in token
+   * is now invalid. Clear it so the next request re-reads the fresh token from
+   * the meta element instead of reusing a stale value (a popup sign-in refreshes
+   * the meta but not this cache).
+   */
+  connectDeviseEvents() {
+    Devise.events().on("onDeviseSignIn", () => this.clearCsrfToken())
   }
 
   async getCsrfToken() {
