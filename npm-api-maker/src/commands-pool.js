@@ -185,8 +185,12 @@ export default class ApiMakerCommandsPool {
    * @returns {Promise<CommandsRequestResponse>}
    */
   async sendRequest({commandExecution, commandSubmitData, url}) {
+    let lastResponse
+
     for (let attempt = 0; attempt < 3; attempt++) {
       const response = await this.performRequest({commandExecution, commandSubmitData, url}) // eslint-disable-line no-await-in-loop
+
+      lastResponse = response
 
       if (response?.success === false && response.type == "invalid_authenticity_token") {
         console.log("Invalid authenticity token - try again")
@@ -205,7 +209,13 @@ export default class ApiMakerCommandsPool {
       return /** @type {CommandsRequestResponse} */ (response)
     }
 
-    throw new Error("Couldnt successfully execute request")
+    // Every attempt was swallowed by a retry (e.g. a persistently invalid
+    // authenticity token). Surface the last real response instead of a generic
+    // message so callers and bug reports see the actual cause.
+    const lastResponseType = lastResponse?.type ?? "unknown"
+    const errorMessage = `Couldnt successfully execute request after 3 attempts (last response type: ${lastResponseType})`
+
+    throw new CustomError(errorMessage, {response: /** @type {object} */ (lastResponse)})
   }
 
   /**
