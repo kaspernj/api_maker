@@ -194,7 +194,12 @@ export default class ApiMakerCommandsPool {
 
       if (response?.success === false && response.type == "invalid_authenticity_token") {
         console.log("Invalid authenticity token - try again")
-        await SessionStatusUpdater.current().updateSessionStatus() // eslint-disable-line no-await-in-loop
+        const sessionStatusUpdater = SessionStatusUpdater.current()
+        // The cached token just proved invalid for this session, so drop it
+        // before refreshing: reusing a stale cache would mask a fresh token
+        // and guarantee the same failure on the retry.
+        sessionStatusUpdater.clearCsrfToken() // eslint-disable-line no-await-in-loop
+        await sessionStatusUpdater.updateSessionStatus() // eslint-disable-line no-await-in-loop
         continue // eslint-disable-line no-continue
       }
 
@@ -287,7 +292,17 @@ export default class ApiMakerCommandsPool {
    */
   async recoverAuthentication() {
     const sessionStatusUpdater = SessionStatusUpdater.current()
-    const sessionStatus = await sessionStatusUpdater.sessionStatus()
+
+    let sessionStatus
+
+    try {
+      sessionStatus = await sessionStatusUpdater.sessionStatus()
+    } catch (error) {
+      console.warn(`Session status recovery failed: ${error}`)
+
+      return false
+    }
+
     const scopes = Devise.registeredScopes()
 
     await Promise.all(
