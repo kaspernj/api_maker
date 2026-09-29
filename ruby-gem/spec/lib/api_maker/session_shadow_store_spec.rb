@@ -58,6 +58,45 @@ describe ApiMaker::SessionShadowStore do
     expect(session).not_to have_key("warden.user.user.key")
   end
 
+  it "preserves the live session CSRF token instead of clobbering it with the cached copy" do
+    session["_csrf_token"] = "live-token"
+
+    Rails.cache.write(
+      described_class.cache_key(session_id),
+      {"locale" => "da", "_csrf_token" => "stale-cached-token"},
+      expires_in: described_class::EXPIRES_IN
+    )
+
+    described_class.load!(request:)
+
+    expect(session["_csrf_token"]).to eq("live-token")
+    expect(session["locale"]).to eq("da")
+  end
+
+  it "still syncs the warden session keys from the cache on load" do
+    Rails.cache.write(
+      described_class.cache_key(session_id),
+      {"warden.user.user.key" => ["User", "123"]},
+      expires_in: described_class::EXPIRES_IN
+    )
+
+    described_class.load!(request:)
+
+    expect(session["warden.user.user.key"]).to eq(["User", "123"])
+  end
+
+  it "uses the cached CSRF token when the live session has none" do
+    Rails.cache.write(
+      described_class.cache_key(session_id),
+      {"_csrf_token" => "cached-token"},
+      expires_in: described_class::EXPIRES_IN
+    )
+
+    described_class.load!(request:)
+
+    expect(session["_csrf_token"]).to eq("cached-token")
+  end
+
   it "persists under both the loaded session id and the current session id when the session rotates" do
     Rails.cache.write(
       described_class.cache_key("old-session-id"),
