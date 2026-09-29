@@ -1008,7 +1008,7 @@
   integrity sha512-4B8B+3vFsY4eo33DMKyJPlQ3sBMpPFUZK2dr3O3rXrOGKKbYG44J0XSFkDo1VOQiri5HFEhIeVvItjR2xcazmg==
 
 "@kaspernj/api-maker@file:../../../npm-api-maker":
-  version "1.0.2174"
+  version "1.0.2177"
   dependencies:
     classnames "^2.5.1"
     clone-deep ">= 4.0.1"
@@ -1259,10 +1259,10 @@
     tslib "^2.8.1"
     tsyringe "^4.10.0"
 
-"@rails/actioncable@^8.1.300":
-  version "8.1.300"
-  resolved "https://registry.npmjs.org/@rails/actioncable/-/actioncable-8.1.300.tgz"
-  integrity sha512-zOENQsq3NM2jyBY6Z2qtZa3V/R/6OEqA+LGKixQbBMl7kk/J3FXDRcszPe74LsHNgB01jCl/DXu/xA8sHt4I/g==
+"@rails/actioncable@^8.1.400":
+  version "8.1.400"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-8.1.400.tgz#af41a431614e4abb007e65429197d1c5dbf43741"
+  integrity sha512-Qffc3/I9xcpeaal12hmi9EPRV3hz9FvakUHBR7kL0jpZviWwO9dyaG8F1ltcjkHIdFxQ5QqzRyequAWHMq17xQ==
 
 "@react-native/normalize-colors@^0.74.1":
   version "0.74.81"
