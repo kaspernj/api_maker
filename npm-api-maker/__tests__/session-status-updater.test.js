@@ -111,4 +111,47 @@ describe("ApiMakerSessionStatusUpdater", () => {
       expect(applyResult).toHaveBeenCalledTimes(1)
     })
   })
+
+  describe("session status failure handling", () => {
+    it("rejects when the session status response is not 2xx", async() => {
+      const xhrInstance = {
+        status: 500,
+        responseText: "{}",
+        open: jest.fn(),
+        send: jest.fn(() => xhrInstance.onload())
+      }
+
+      jest.spyOn(global, "XMLHttpRequest").mockImplementation(() => xhrInstance)
+
+      const updater = new ApiMakerSessionStatusUpdater({useMetaElement: false})
+
+      await expect(updater.sessionStatus()).rejects.toThrow("Session status request failed with code: 500")
+    })
+
+    it("does not apply and logs when the session status request fails", async() => {
+      const updater = new ApiMakerSessionStatusUpdater({useMetaElement: true})
+      const applyResult = jest.spyOn(updater, "applyResult").mockReturnValue(undefined)
+      const warn = jest.spyOn(console, "warn").mockImplementation(() => {})
+
+      jest.spyOn(updater, "sessionStatus").mockRejectedValue(new Error("Session status request failed with code: 500"))
+
+      setMetaCsrfToken("stable")
+
+      await updater.updateSessionStatus()
+
+      expect(applyResult).not.toHaveBeenCalled()
+      expect(warn).toHaveBeenCalledTimes(1)
+    })
+
+    it("clears the cached csrf token", async() => {
+      const updater = new ApiMakerSessionStatusUpdater({useMetaElement: false})
+      jest.spyOn(updater, "sessionStatus").mockResolvedValue({csrf_token: "fresh", scopes: {}})
+
+      await updater.updateSessionStatus()
+      expect(updater.csrfToken).toBe("fresh")
+
+      updater.clearCsrfToken()
+      expect(updater.csrfToken).toBeUndefined()
+    })
+  })
 })

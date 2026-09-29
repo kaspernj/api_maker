@@ -215,6 +215,18 @@ describe("ApiMakerCommandsPool", () => {
       expect(performRequest).toHaveBeenCalledTimes(3)
       expect(refresh).toHaveBeenCalledTimes(3)
     })
+
+    it("clears the stale csrf token before refreshing on each invalid authenticity token retry", async() => {
+      const pool = new ApiMakerCommandsPool()
+      jest.spyOn(pool, "performRequest").mockResolvedValue({success: false, type: "invalid_authenticity_token"})
+      const clearCsrfToken = jest.spyOn(SessionStatusUpdater.current(), "clearCsrfToken").mockReturnValue(undefined)
+      const refresh = jest.spyOn(SessionStatusUpdater.current(), "updateSessionStatus").mockResolvedValue(undefined)
+
+      await pool.sendRequest({commandSubmitData: {}, url: "/api_maker/commands"}).catch((e) => e)
+
+      expect(clearCsrfToken).toHaveBeenCalledTimes(3)
+      expect(refresh).toHaveBeenCalledTimes(3)
+    })
   })
 
   describe("rejectWithCallerStack", () => {

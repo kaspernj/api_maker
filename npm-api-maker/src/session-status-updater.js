@@ -151,7 +151,7 @@ export default class ApiMakerSessionStatusUpdater {
    * @returns {Promise<SessionStatusResult>}
    */
   sessionStatus() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const host = config.getHost()
       let requestPath = ""
 
@@ -162,11 +162,32 @@ export default class ApiMakerSessionStatusUpdater {
       const xhr = new XMLHttpRequest()
       xhr.open("POST", requestPath, true)
       xhr.onload = () => {
-        const response = JSON.parse(xhr.responseText)
-        resolve(response)
+        if (xhr.status < 200 || xhr.status >= 300) {
+          reject(new Error(`Session status request failed with code: ${xhr.status}`))
+
+          return
+        }
+
+        try {
+          resolve(JSON.parse(xhr.responseText))
+        } catch (error) {
+          reject(error)
+        }
+      }
+      xhr.onerror = () => {
+        reject(new Error("Session status request failed"))
       }
       xhr.send()
     })
+  }
+
+  /**
+   * Clears the cached CSRF token so the next request re-fetches a fresh one
+   * instead of reusing a value a prior `invalid_authenticity_token` response
+   * has already proven to be invalid for the current session.
+   */
+  clearCsrfToken() {
+    this.csrfToken = undefined
   }
 
   /**
@@ -213,7 +234,20 @@ export default class ApiMakerSessionStatusUpdater {
     logger.debug("updateSessionStatus")
 
     const csrfTokenAtRequestStart = this.currentMetaCsrfToken()
-    const result = await this.sessionStatus()
+
+    let result
+
+    try {
+      result = await this.sessionStatus()
+    } catch (error) {
+      // A failed refresh must not silently keep a token that is already known
+      // to be invalid. Surface it (a silent no-op here is exactly what made
+      // the invalid_authenticity_token retry loop invisible in bug reports).
+      console.warn(`Session status update failed: ${error}`)
+
+      return
+    }
+
     const csrfTokenAfterRequest = this.currentMetaCsrfToken()
 
     if (csrfTokenAtRequestStart != csrfTokenAfterRequest) {
