@@ -160,6 +160,26 @@ const objectToUnderscore = (object) => {
   return newObject
 }
 
+/**
+ * Parses one stack frame line (e.g. `at t.reload (https://a.example/chunk.js:2:73779)`)
+ * into a function name and source location. The position is stripped so the
+ * same frame compares equal whether it was recorded synchronously or attached
+ * by the engine as an `at async` frame.
+ * @param {string} line
+ * @returns {{name: string, key: string} | null}
+ */
+const parseStackFrame = (line) => {
+  const match = line.match(/^\s*at (?:async )?(?:new )?(\S+) \(([^()]*)\)/)
+
+  if (!match) return null
+
+  const name = match[1]
+  const parts = match[2].split(":")
+  const location = parts.length >= 3 ? parts.slice(0, -2).join(":") : match[2]
+
+  return {name, key: `${name}@${location}`}
+}
+
 /** BaseModel. */
 const BaseModel = class BaseModel {
   static apiMakerType = "BaseModel"
@@ -942,12 +962,12 @@ const BaseModel = class BaseModel {
 
   /**
    * @returns {Promise<void>}
-   * @throws {CustomError} when the record can no longer be found
+   * @throws {Error} when the requery fails or the record can no longer be found
    */
   async reload() {
-    // The not-found throw below happens after an await, where the synchronous
-    // stack no longer contains the caller. Capture the stack up front so the
-    // error still shows who triggered the reload (same approach as
+    // Every throw below happens after an await, where the synchronous stack
+    // no longer contains the caller. Capture the stack up front so errors
+    // still show who triggered the reload (same approach as
     // CommandsPool's caller-stack splice for rejected commands).
     const callerStack = Error().stack
     const params = this.collection && this.collection.params()
@@ -970,28 +990,67 @@ const BaseModel = class BaseModel {
       }
     }
 
-    const model = await query.first()
+    try {
+      const model = await query.first()
 
-    if (!model) {
-      const error = new CustomError(`Record not found while reloading ${this.modelClassData().name}#${this.primaryKey()}`)
-
-      // V8 prefixes "Error\n" as a header; JSC/SpiderMonkey stacks start directly with a frame.
-      const callerFrames = callerStack.startsWith("Error")
-        ? callerStack
-          .split("\n")
-          .slice(1)
-          .join("\n")
-        : callerStack
-
-      if (callerFrames) {
-        error.stack = `${error.stack ?? ""}\n${callerFrames}`
+      if (!model) {
+        throw new CustomError(`Record not found while reloading ${this.modelClassData().name}#${this.primaryKey()}`)
       }
 
+      this.setNewModel(model)
+      this.changes = {}
+    } catch (error) {
+      this._spliceCallerFrames(error, callerStack)
       throw error
     }
+  }
 
-    this.setNewModel(model)
-    this.changes = {}
+  /**
+   * Appends the frames captured before reload's first await to an error that
+   * escaped its async region, so the report still shows who triggered the
+   * reload. Engines attach `at async` caller frames only best-effort; frames
+   * the stack already carries are matched by function name and source (not
+   * position, which differs between attached async frames and synchronous
+   * frames) and are not repeated.
+   * @param {unknown} error
+   * @param {string} callerStack
+   * @returns {void}
+   */
+  _spliceCallerFrames(error, callerStack) {
+    if (!(error instanceof Error) || !error.stack || !callerStack) return
+
+    // V8 prefixes "Error\n" as a header; JSC/SpiderMonkey stacks start directly with a frame.
+    const lines = callerStack.startsWith("Error")
+      ? callerStack
+        .split("\n")
+        .slice(1)
+      : callerStack.split("\n")
+
+    // Some test environments insert an extra `at Error` frame at the capture
+    // site; the method's own frame is the one right below it.
+    if ((/^\s*at Error \(/).test(lines[0] ?? "")) lines.shift()
+
+    // The first remaining frame is reload's own frame; the rest is the caller chain.
+    const callerFrames = lines.slice(1)
+
+    if (!callerFrames.length) return
+
+    const presentFrames = /** @type {Set<string>} */ (new Set())
+    for (const line of error.stack.split("\n")) {
+      const frame = parseStackFrame(line)
+
+      if (frame) presentFrames.add(frame.key)
+    }
+
+    const missingFrames = callerFrames.filter((line) => {
+      const frame = parseStackFrame(line)
+
+      return !frame || !presentFrames.has(frame.key)
+    })
+
+    if (!missingFrames.length) return
+
+    error.stack = `${error.stack}\n${missingFrames.join("\n")}`
   }
 
   /** @returns {Promise<{model: BaseModel, response?: object}>} */
