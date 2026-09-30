@@ -135,7 +135,12 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
   end
 
   def query_count
-    count = @query.except(:select, :limit, :offset).count
+    # A count must not carry the collection's ORDER BY: on a grouped relation
+    # Postgres rejects ordering by a column that is neither grouped nor
+    # aggregated (PG::GroupingError). The main collection query is safe because
+    # active_record_query_fixer adds the ordered columns to the GROUP BY; the
+    # count path does not run that fix, so drop the order here.
+    count = @query.except(:select, :limit, :offset, :order).count
     count = count.length if count.is_a?(Hash)
     count
   end
