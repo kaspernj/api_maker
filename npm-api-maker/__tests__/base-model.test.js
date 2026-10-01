@@ -355,4 +355,66 @@ describe("BaseModel", () => {
       expect(model.modelData.email).toEqual("new@example.com")
     })
   })
+
+  describe("find", () => {
+    const requeryReturning = (model) => ({
+      first: async() => model,
+      queryArgs: {}
+    })
+
+    const captureCallerFrame = () => {
+      const stack = new Error().stack
+
+      return stack ? stack.split("\n").find((line) => line.includes("findTrigger")) : undefined
+    }
+
+    it("throws a descriptive CustomError when the record is not found", async() => {
+      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning(undefined))
+
+      try {
+        await expect(User.find(7)).rejects.toThrow(CustomError)
+        await expect(User.find(7)).rejects.toThrow("Record not found")
+      } finally {
+        ransackSpy.mockRestore()
+      }
+    })
+
+    it("returns the found record", async() => {
+      const found = new User({a: {id: 7}})
+      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning(found))
+
+      try {
+        await expect(User.find(7)).resolves.toEqual(found)
+      } finally {
+        ransackSpy.mockRestore()
+      }
+    })
+
+    it("keeps the triggering caller in the error stack across the async lookup", async() => {
+      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning(undefined))
+      let callerFrame
+
+      try {
+        const findTrigger = async() => {
+          callerFrame = captureCallerFrame()
+
+          return User.find(7)
+        }
+
+        let thrownError
+
+        try {
+          await findTrigger()
+        } catch (error) {
+          thrownError = error
+        }
+
+        expect(thrownError).toBeInstanceOf(CustomError)
+        expect(thrownError.message).toBe("Record not found")
+        expect(thrownError.stack).toContain(callerFrame.trim())
+      } finally {
+        ransackSpy.mockRestore()
+      }
+    })
+  })
 })

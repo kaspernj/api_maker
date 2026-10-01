@@ -17,6 +17,7 @@ import Scope from "./base-model/scope.js"
 import Services from "./services.js"
 import ValidationError from "./validation-error.js"
 import objectToFormData from "object-to-formdata"
+import spliceCallerFrames from "./splice-caller-frames.js"
 
 /** @typedef {string | number} ModelIdentifier */
 /** @typedef {string | number | boolean | null | undefined | Date | File | Blob} ModelScalarValue */
@@ -160,26 +161,6 @@ const objectToUnderscore = (object) => {
   return newObject
 }
 
-/**
- * Parses one stack frame line (e.g. `at t.reload (https://a.example/chunk.js:2:73779)`)
- * into a function name and source location. The position is stripped so the
- * same frame compares equal whether it was recorded synchronously or attached
- * by the engine as an `at async` frame.
- * @param {string} line
- * @returns {{name: string, key: string} | null}
- */
-const parseStackFrame = (line) => {
-  const match = line.match(/^\s*at (?:async )?(?:new )?(\S+) \(([^()]*)\)/)
-
-  if (!match) return null
-
-  const name = match[1]
-  const parts = match[2].split(":")
-  const location = parts.length >= 3 ? parts.slice(0, -2).join(":") : match[2]
-
-  return {name, key: `${name}@${location}`}
-}
-
 /** BaseModel. */
 const BaseModel = class BaseModel {
   static apiMakerType = "BaseModel"
@@ -244,18 +225,28 @@ const BaseModel = class BaseModel {
   /**
    * @param {number | string} id
    * @returns {Promise<BaseModel>}
+   * @throws {Error} when the record can no longer be found
    */
   static async find(id) {
+    // The "Record not found" throw below happens after an await, where the
+    // synchronous stack no longer contains the caller. Capture the stack up
+    // front so the error still shows who looked the record up.
+    const callerStack = Error().stack
     const query = /** @type {import("./collection.js").CollectionRansackParams} */ ({})
 
     query[`${this.primaryKey()}_eq`] = id
 
-    const model = await this.ransack(query).first()
+    try {
+      const model = await this.ransack(query).first()
 
-    if (model) {
-      return model
-    } else {
-      throw new CustomError("Record not found")
+      if (model) {
+        return model
+      } else {
+        throw new CustomError("Record not found")
+      }
+    } catch (error) {
+      spliceCallerFrames(error, callerStack)
+      throw error
     }
   }
 
@@ -644,6 +635,10 @@ const BaseModel = class BaseModel {
    * @returns {Promise<void>}
    */
   async ensureAbilities(listOfAbilities) {
+    // The "could not look up" throw below happens after an await, where the
+    // synchronous stack no longer contains the caller. Capture the stack up
+    // front so the error still shows who requested the abilities.
+    const callerStack = Error().stack
     const abilitiesToLoad = []
 
     for (const abilityInList of listOfAbilities) {
@@ -660,18 +655,23 @@ const BaseModel = class BaseModel {
       const abilitiesParams = /** @type {Record<string, string[]>} */ ({})
       abilitiesParams[digg(this.modelClassData(), "name")] = abilitiesToLoad
 
-      const anotherModel = await this.modelClass()
-        .ransack(ransackParams)
-        .abilities(abilitiesParams)
-        .first()
+      try {
+        const anotherModel = await this.modelClass()
+          .ransack(ransackParams)
+          .abilities(abilitiesParams)
+          .first()
 
-      if (!anotherModel) {
-        throw new Error(`Could not look up the same model ${this.primaryKey()} with abilities: ${abilitiesToLoad.join(", ")}`)
-      }
+        if (!anotherModel) {
+          throw new Error(`Could not look up the same model ${this.primaryKey()} with abilities: ${abilitiesToLoad.join(", ")}`)
+        }
 
-      const newAbilities = anotherModel.abilities
-      for (const newAbility in newAbilities) {
-        this.abilities[newAbility] = newAbilities[newAbility]
+        const newAbilities = anotherModel.abilities
+        for (const newAbility in newAbilities) {
+          this.abilities[newAbility] = newAbilities[newAbility]
+        }
+      } catch (error) {
+        spliceCallerFrames(error, callerStack)
+        throw error
       }
     }
   }
@@ -1000,57 +1000,9 @@ const BaseModel = class BaseModel {
       this.setNewModel(model)
       this.changes = {}
     } catch (error) {
-      this._spliceCallerFrames(error, callerStack)
+      spliceCallerFrames(error, callerStack)
       throw error
     }
-  }
-
-  /**
-   * Appends the frames captured before reload's first await to an error that
-   * escaped its async region, so the report still shows who triggered the
-   * reload. Engines attach `at async` caller frames only best-effort; frames
-   * the stack already carries are matched by function name and source (not
-   * position, which differs between attached async frames and synchronous
-   * frames) and are not repeated.
-   * @param {unknown} error
-   * @param {string} callerStack
-   * @returns {void}
-   */
-  _spliceCallerFrames(error, callerStack) {
-    if (!(error instanceof Error) || !error.stack || !callerStack) return
-
-    // V8 prefixes "Error\n" as a header; JSC/SpiderMonkey stacks start directly with a frame.
-    const lines = callerStack.startsWith("Error")
-      ? callerStack
-        .split("\n")
-        .slice(1)
-      : callerStack.split("\n")
-
-    // Some test environments insert an extra `at Error` frame at the capture
-    // site; the method's own frame is the one right below it.
-    if ((/^\s*at Error \(/).test(lines[0] ?? "")) lines.shift()
-
-    // The first remaining frame is reload's own frame; the rest is the caller chain.
-    const callerFrames = lines.slice(1)
-
-    if (!callerFrames.length) return
-
-    const presentFrames = /** @type {Set<string>} */ (new Set())
-    for (const line of error.stack.split("\n")) {
-      const frame = parseStackFrame(line)
-
-      if (frame) presentFrames.add(frame.key)
-    }
-
-    const missingFrames = callerFrames.filter((line) => {
-      const frame = parseStackFrame(line)
-
-      return !frame || !presentFrames.has(frame.key)
-    })
-
-    if (!missingFrames.length) return
-
-    error.stack = `${error.stack}\n${missingFrames.join("\n")}`
   }
 
   /** @returns {Promise<{model: BaseModel, response?: object}>} */
