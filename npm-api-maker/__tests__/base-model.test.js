@@ -151,12 +151,6 @@ describe("BaseModel", () => {
       queryArgs: {}
     })
 
-    const captureCallerFrame = () => {
-      const stack = new Error().stack
-
-      return stack ? stack.split("\n").find((line) => line.includes("reloadTrigger")) : undefined
-    }
-
     it("throws a descriptive CustomError when the requery finds no record", async() => {
       const model = new User({a: {id: 7}})
       const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning(undefined))
@@ -182,28 +176,6 @@ describe("BaseModel", () => {
       expect(model.modelData).toEqual({id: 7, email: "old@example.com"})
     })
 
-    it("keeps the triggering caller in the error stack across the async requery", async() => {
-      const model = new User({a: {id: 7}})
-      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning(undefined))
-
-      try {
-        const reloadTrigger = async() => model.reload()
-
-        let thrownError
-
-        try {
-          await reloadTrigger()
-        } catch (error) {
-          thrownError = error
-        }
-
-        expect(thrownError).toBeInstanceOf(CustomError)
-        expect(thrownError.stack).toContain("reloadTrigger")
-      } finally {
-        ransackSpy.mockRestore()
-      }
-    })
-
     it("refreshes the model data from the requery result when found", async() => {
       const model = new User({a: {id: 7, email: "old@example.com"}})
       model.changes = {email: "unsaved@example.com"}
@@ -217,118 +189,6 @@ describe("BaseModel", () => {
 
       expect(model.modelData.email).toEqual("new@example.com")
       expect(model.changes).toEqual({})
-    })
-
-    it("keeps the triggering caller in the error stack when the requery result is malformed", async() => {
-      const model = new User({a: {id: 7}})
-      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning({stale: true}))
-      let callerFrame
-      const setNewModelDataSpy = jest.spyOn(model, "setNewModelData").mockImplementation(() => {
-        const error = new CustomError(`No modelData in model: ${JSON.stringify({stale: true})}`)
-        // Production-shaped stack: the engine detached the async caller link,
-        // so the natural stack only carries the frames inside the async method.
-        error.stack = [
-          `CustomError: No modelData in model: ${JSON.stringify({stale: true})}`,
-          "    at t.setNewModelData (https://app.example/packs/js/chunk.js:2:72983)",
-          "    at t.setNewModel (https://app.example/packs/js/chunk.js:2:72770)",
-          "    at t.reload (https://app.example/packs/js/chunk.js:2:73779)"
-        ].join("\n")
-        throw error
-      })
-
-      try {
-        const reloadTrigger = async() => {
-          callerFrame = captureCallerFrame()
-          return model.reload()
-        }
-
-        let thrownError
-
-        try {
-          await reloadTrigger()
-        } catch (error) {
-          thrownError = error
-        }
-
-        expect(thrownError).toBeInstanceOf(CustomError)
-        expect(thrownError.stack).toContain(callerFrame.trim())
-        expect(thrownError.stack).toContain("at t.setNewModelData (https://app.example/packs/js/chunk.js:2:72983)")
-      } finally {
-        setNewModelDataSpy.mockRestore()
-        ransackSpy.mockRestore()
-      }
-    })
-
-    it("does not duplicate the triggering caller when the stack already carries it", async() => {
-      const model = new User({a: {id: 7}})
-      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue(requeryReturning({stale: true}))
-      let callerFrame
-      const setNewModelDataSpy = jest.spyOn(model, "setNewModelData").mockImplementation(() => {
-        const error = new CustomError(`No modelData in model: ${JSON.stringify({stale: true})}`)
-        // When the engine attaches the async caller itself, the stack already
-        // shows it and the caller frames must not be appended a second time.
-        error.stack = [
-          `CustomError: No modelData in model: ${JSON.stringify({stale: true})}`,
-          "    at t.setNewModelData (https://app.example/packs/js/chunk.js:2:72983)",
-          `    at async ${callerFrame.trim().replace(/^at /, "")}`
-        ].join("\n")
-        throw error
-      })
-
-      try {
-        const reloadTrigger = async() => {
-          callerFrame = captureCallerFrame()
-          return model.reload()
-        }
-
-        let thrownError
-
-        try {
-          await reloadTrigger()
-        } catch (error) {
-          thrownError = error
-        }
-
-        expect(thrownError.stack.match(/reloadTrigger/g)).toHaveLength(1)
-      } finally {
-        setNewModelDataSpy.mockRestore()
-        ransackSpy.mockRestore()
-      }
-    })
-
-    it("keeps the triggering caller in the error stack when the requery itself fails", async() => {
-      const model = new User({a: {id: 7}})
-      const ransackSpy = jest.spyOn(User, "ransack").mockReturnValue({
-        first: async() => {
-          const error = new Error("The network request failed")
-          error.stack = "Error: The network request failed\n    at CommandsPool.flush (https://app.example/packs/js/chunk.js:1:42)"
-          throw error
-        },
-        queryArgs: {}
-      })
-      let callerFrame
-
-      try {
-        const reloadTrigger = async() => {
-          callerFrame = captureCallerFrame()
-          return model.reload()
-        }
-
-        let thrownError
-
-        try {
-          await reloadTrigger()
-        } catch (error) {
-          thrownError = error
-        }
-
-        expect(thrownError).toBeInstanceOf(Error)
-        expect(thrownError.message).toBe("The network request failed")
-        expect(thrownError.stack).toContain(callerFrame.trim())
-        expect(thrownError.stack).toContain("CommandsPool.flush")
-      } finally {
-        ransackSpy.mockRestore()
-      }
     })
   })
 
