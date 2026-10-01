@@ -18,5 +18,7 @@ const regexp = new RegExp(`(${Object.keys(replaces).map(escapeStringRegexp).join
  * @returns {string}
  */
 export default function urlEncode(string) {
-  return String(string).replaceAll(regexp, (character) => replaces[character])
+  // `replace` with the global `regexp` replaces every occurrence, same as `replaceAll`
+  // but ES2020-compatible with the project's `lib` target.
+  return String(string).replace(regexp, (character) => replaces[character])
 }
