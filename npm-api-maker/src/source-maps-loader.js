@@ -1,5 +1,4 @@
 // @ts-check
-import * as stackTraceParser from "stacktrace-parser"
 import Logger from "./logger.js"
 import {SourceMapConsumer} from "source-map"
 import uniqunize from "uniqunize"
@@ -10,6 +9,92 @@ import uniqunize from "uniqunize"
 /** @typedef {(args: {originalUrl: string, script?: HTMLScriptElement, src: string, url: HTMLAnchorElement}) => string | undefined} SourceMapResolver */
 /** @typedef {{script?: HTMLScriptElement, src: string}} MapUrlArgs */
 /** @typedef {{filePath: string | null, fileString: string, methodName: string}} ParsedTraceData */
+/** @typedef {{methodName: string, file: string, lineNumber: number, column: number | null}} RawStackFrame */
+
+/**
+ * Parses one raw stack-trace line into frame data. Handles the V8
+ * (`at fn (file:1:2)`), WebKit/Firefox (`fn@file:1:2`), and newer paren
+ * (`fn (file:1:2)`) styles, with or without the `at` prefix. Returns `null`
+ * for lines that carry no `file:line` location (the error message, location-less
+ * native frames, or noise). Unlike a fixed set of regexes, this never drops a
+ * line that has a location, so no frame is silently lost to an unrecognized format.
+ * @param {string} line
+ * @returns {RawStackFrame | null}
+ */
+const parseStackLine = (line) => {
+  const trimmed = line.trim()
+
+  if (!trimmed) return null
+
+  // The trailing location is the last `:LINE` or `:LINE:COL` (optionally inside a
+  // closing paren). The file part may itself contain `:` (https:, node:, file:),
+  // so the location is anchored to the end of the line.
+  let match = trimmed.match(/^(.*):(\d+):(\d+)\)?\s*$/)
+  let prefix
+  let lineNumber
+  let column
+
+  if (match) {
+    prefix = match[1]
+    lineNumber = Number(match[2])
+    column = Number(match[3])
+  } else if ((match = trimmed.match(/^(.*):(\d+)\)?\s*$/))) {
+    prefix = match[1]
+    lineNumber = Number(match[2])
+    column = null
+  } else {
+    return null
+  }
+
+  // A leading V8 `at ` is a keyword, not part of the method name or the file.
+  const rest = prefix.replace(/^\s*at\s+/, "")
+
+  // The file begins at the last `@` or `(` in the remainder; the method name is
+  // whatever precedes it.
+  const atIdx = rest.lastIndexOf("@")
+  const parenIdx = rest.lastIndexOf("(")
+  const splitIdx = Math.max(atIdx, parenIdx)
+
+  let file
+  let namePart
+
+  if (splitIdx >= 0) {
+    file = rest.slice(splitIdx + 1)
+    namePart = rest.slice(0, splitIdx)
+  } else {
+    const lastSpace = rest.lastIndexOf(" ")
+
+    if (lastSpace >= 0) {
+      file = rest.slice(lastSpace + 1)
+      namePart = rest.slice(0, lastSpace)
+    } else {
+      file = rest
+      namePart = ""
+    }
+  }
+
+  const methodName = namePart.replace(/\s*at\s+/, "").trim() || "<unknown>"
+
+  return {methodName, file: file.trim(), lineNumber, column}
+}
+
+/**
+ * Parses a full stack-trace string into frames, preserving line order and never
+ * dropping a line that carries a `file:line` location.
+ * @param {string} stack
+ * @returns {RawStackFrame[]}
+ */
+const parseStackLines = (stack) => {
+  const frames = []
+
+  for (const line of String(stack ?? "").split("\n")) {
+    const frame = parseStackLine(line)
+
+    if (frame) frames.push(frame)
+  }
+
+  return frames
+}
 
 // Sometimes this needs to be called and sometimes not
 // @ts-expect-error
@@ -89,7 +174,7 @@ export default class SourceMapsLoader {
    * @returns {Array<{originalUrl: string, sourceMapUrl: string}>} Sources from error stack.
    */
   getSourcesFromError(error) {
-    const stack = stackTraceParser.parse(error.stack)
+    const stack = parseStackLines(error.stack)
     const sources = []
 
     for (const trace of stack) {
@@ -243,7 +328,7 @@ export default class SourceMapsLoader {
    * @returns {ParsedTraceData[]} Parsed trace data.
    */
   getStackTraceData(stackTrace) {
-    const stack = stackTraceParser.parse(stackTrace)
+    const stack = parseStackLines(stackTrace)
     const newSourceMap = []
 
     for (const trace of stack) {
