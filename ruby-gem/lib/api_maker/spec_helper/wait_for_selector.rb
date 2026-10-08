@@ -22,10 +22,10 @@ module ApiMaker::SpecHelper::WaitForSelector
   # on success, and — importantly — it is called FIRST on timeout, so a JS error
   # that prevented the value from settling is surfaced with its stack trace
   # rather than a bare SelectorNotFoundError.
-  def wait_for_field(field, with:, **options)
-    expect(page).to have_field(field, with:, **options)
+  def wait_for_field(field, with:, **)
+    expect(page).to have_field(field, with:, **)
     expect_no_browser_errors
-    find_field(field, **options)
+    find_field(field, **)
   rescue ::RSpec::Expectations::ExpectationNotMetError => e
     expect_no_browser_errors
     raise ::ApiMaker::SpecHelper::SelectorNotFoundError, e.message
