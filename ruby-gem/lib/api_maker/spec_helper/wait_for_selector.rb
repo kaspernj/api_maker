@@ -7,6 +7,30 @@ module ApiMaker::SpecHelper::WaitForSelector
     raise ::ApiMaker::SpecHelper::SelectorNotFoundError, e.message
   end
 
+  # Waits for a form field's value to settle to +with+, then returns the field.
+  #
+  # +field+ is a Capybara field locator — name, id, label, or placeholder (the
+  # same locators find_field accepts), not a CSS selector. For a field that can
+  # only be located by CSS, locate it with find and use wait_for_expect on its
+  # value instead.
+  #
+  # Guards against editing a field before its rendered value has settled (e.g. a
+  # controlled input that fills in asynchronously): calling fill_in / .set too
+  # early appends to the stale value instead of replacing it.
+  #
+  # Error reporting mirrors wait_for_selector: expect_no_browser_errors is called
+  # on success, and — importantly — it is called FIRST on timeout, so a JS error
+  # that prevented the value from settling is surfaced with its stack trace
+  # rather than a bare SelectorNotFoundError.
+  def wait_for_field(field, with:, **)
+    expect(page).to have_field(field, with:, **)
+    expect_no_browser_errors
+    find_field(field, **)
+  rescue ::RSpec::Expectations::ExpectationNotMetError => e
+    expect_no_browser_errors
+    raise ::ApiMaker::SpecHelper::SelectorNotFoundError, e.message
+  end
+
   def wait_for_selectors(*selectors)
     selectors.each do |selector|
       wait_for_selector(selector)
