@@ -1,6 +1,6 @@
 // @ts-check
 /* eslint-disable sort-imports */
-import React from "react"
+import React, {useRef} from "react"
 import {digg} from "diggerize"
 import {ShapeComponent, shapeComponent} from "set-state-compare/build/shape-component.js"
 import AutoSubmit from "./auto-submit.js"
@@ -57,9 +57,16 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     this.fieldRegistration = fieldRegistration
     this.form = form
     this.inputProps = inputProps
+    this.lastSyncedValueRef = useRef(undefined)
     this.useInputRestProps = useInputRestProps
 
     useUpdatedEvent(model, this.tt.onModelUpdated, {active: Boolean(autoRefresh && model)})
+  }
+
+  componentDidMount() {
+    // Track the value in the same representation as the checkbox (its checked
+    // state) so the edited-field guard in onModelUpdated compares like with like.
+    this.lastSyncedValueRef.current = Boolean(this.inputProps.defaultChecked)
   }
 
   render () {
@@ -116,6 +123,23 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
     const newValue = newModel.readAttribute(attribute)
 
     const {form, inputProps} = this
+    const lastSynced = this.lastSyncedValueRef.current
+    const lastSyncedBool = lastSynced === undefined || lastSynced === null ? false : Boolean(lastSynced)
+
+    let currentBool
+    if (form && inputProps.name) {
+      const currentValue = form.getValue(inputProps.name)
+      currentBool = Boolean(currentValue)
+    } else {
+      const input = digg(inputProps, "ref", "current")
+      currentBool = input ? Boolean(input.checked) : false
+    }
+
+    // A re-sync that lands after the checkbox has already been toggled would
+    // reset the user's choice; keep the user's value.
+    if (currentBool !== lastSyncedBool) {
+      return
+    }
 
     if (form && inputProps.name) {
       form.setValue(inputProps.name, Boolean(newValue))
@@ -124,5 +148,7 @@ export default memo(shapeComponent(/** @augments {ShapeComponent<Props, State>} 
 
       if (input) applyFormFieldValue(input, newValue, {checkbox: true})
     }
+
+    this.lastSyncedValueRef.current = Boolean(newValue)
   }
 }))

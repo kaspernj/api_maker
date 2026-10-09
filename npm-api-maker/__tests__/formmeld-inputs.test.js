@@ -367,6 +367,20 @@ describe("Formmeld input integration", () => {
     expect(rendered.container.querySelector("input[type=checkbox]").checked).toBe(true)
   })
 
+  it("preserves a user-toggled checkbox when a model refresh arrives", () => {
+    const event = captureUpdatedEvent()
+    const initialModel = autoRefreshModel(false)
+    const rendered = render(
+      <InputsCheckbox attribute="status" autoRefresh model={initialModel} />
+    )
+    const checkbox = rendered.container.querySelector("input[type=checkbox]")
+
+    change(checkbox, undefined, true)
+    event.emit(autoRefreshModel(false))
+
+    expect(checkbox.checked).toBe(true)
+  })
+
   it("routes computed-name text model refreshes through FormInputs ownership", () => {
     const event = captureUpdatedEvent()
     const form = new FormInputs()
