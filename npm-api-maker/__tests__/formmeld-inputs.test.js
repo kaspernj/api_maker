@@ -297,6 +297,53 @@ describe("Formmeld input integration", () => {
     expect(rendered.container.querySelector("input").value).toBe("after")
   })
 
+  it("preserves a user-edited field when a model refresh arrives", () => {
+    const event = captureUpdatedEvent()
+    const initialModel = autoRefreshModel("before")
+    const rendered = render(
+      <Input attribute="status" autoRefresh model={initialModel} />
+    )
+    const input = rendered.container.querySelector("input")
+
+    change(input, "user-typed")
+    event.emit(autoRefreshModel("after"))
+
+    expect(input.value).toBe("user-typed")
+  })
+
+  it("applies model refreshes to a Form field the user has not edited", () => {
+    const event = captureUpdatedEvent()
+    const form = new FormInputs()
+    const initialModel = autoRefreshModel("before")
+    render(
+      <Form form={form}>
+        <Input attribute="status" autoRefresh model={initialModel} />
+      </Form>
+    )
+
+    event.emit(autoRefreshModel("after"))
+
+    expect(form.getValue("project[status]")).toBe("after")
+  })
+
+  it("preserves a user-edited Form field when a model refresh arrives", () => {
+    const event = captureUpdatedEvent()
+    const form = new FormInputs()
+    const initialModel = autoRefreshModel("before")
+    const rendered = render(
+      <Form form={form}>
+        <Input attribute="status" autoRefresh model={initialModel} />
+      </Form>
+    )
+    const input = rendered.container.querySelector("input")
+
+    change(input, "user-typed")
+    event.emit(autoRefreshModel("after"))
+
+    expect(input.value).toBe("user-typed")
+    expect(form.getValue("project[status]")).toBe("user-typed")
+  })
+
   it("applies lone outside-Form localized refreshes to canonical and visible inputs", () => {
     const event = captureUpdatedEvent()
     const initialModel = autoRefreshModel("1.5")

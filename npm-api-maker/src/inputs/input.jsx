@@ -65,9 +65,17 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
     const {autoRefresh, model} = this.p
     this.fieldRegistration = this.props.fieldRegistration
     this.visibleInputRef = useRef(undefined)
+    this.lastSyncedValueRef = useRef(undefined)
     this.t = t
 
     useUpdatedEvent(model, this.tt.onModelUpdated, {active: Boolean(autoRefresh && model)})
+  }
+
+  componentDidMount() {
+    // Track the value in the same representation as the canonical input (the
+    // raw model value, before number localization) so the edited-field guard
+    // in onModelUpdated compares like with like.
+    this.lastSyncedValueRef.current = this.props.inputProps.defaultValue
   }
 
   render () {
@@ -257,6 +265,23 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
     const newFormattedValue = this.formatValue(newValue)
 
     const {form, inputProps} = this.p
+    const lastSynced = this.lastSyncedValueRef.current
+    const lastSyncedStr = lastSynced === null || lastSynced === undefined ? "" : String(lastSynced)
+
+    let currentStr
+    if (form && inputProps.name) {
+      const currentValue = form.getValue(inputProps.name)
+      currentStr = currentValue === null || currentValue === undefined ? "" : String(currentValue)
+    } else {
+      const value = digg(this.inputReference(), "current", "value")
+      currentStr = value === null || value === undefined ? "" : String(value)
+    }
+
+    // A re-sync that lands after the field has already been edited would
+    // concatenate the stale model value onto the new one; keep the user's value.
+    if (currentStr !== lastSyncedStr) {
+      return
+    }
 
     if (form && inputProps.name) {
       form.setValue(inputProps.name, newFormattedValue)
@@ -265,6 +290,8 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
 
       if (input) applyFormFieldValue(input, newFormattedValue)
     }
+
+    this.lastSyncedValueRef.current = newFormattedValue
   }
 
   onInputChanged = (e) => {
