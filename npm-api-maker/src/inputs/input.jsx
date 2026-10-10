@@ -273,7 +273,8 @@ const ApiMakerInputsInput = memo(shapeComponent(/** @augments {ShapeComponent<Pr
       const currentValue = form.getValue(inputProps.name)
       currentStr = currentValue === null || currentValue === undefined ? "" : String(currentValue)
     } else {
-      const value = digg(this.inputReference(), "current", "value")
+      const input = this.inputReference().current
+      const value = input ? input.value : undefined
       currentStr = value === null || value === undefined ? "" : String(value)
     }
 
