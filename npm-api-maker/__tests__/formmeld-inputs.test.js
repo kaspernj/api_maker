@@ -297,6 +297,19 @@ describe("Formmeld input integration", () => {
     expect(rendered.container.querySelector("input").value).toBe("after")
   })
 
+  it("does not crash when a model refresh arrives after a lone outside-Form input unmounts", () => {
+    const event = captureUpdatedEvent()
+    const initialModel = autoRefreshModel("before")
+    render(
+      <Input attribute="status" autoRefresh model={initialModel} />
+    )
+
+    act(() => mountedRoots.at(-1).root.unmount())
+    mountedRoots.pop().container.remove()
+
+    expect(() => event.emit(autoRefreshModel("after"))).not.toThrow()
+  })
+
   it("preserves a user-edited field when a model refresh arrives", () => {
     const event = captureUpdatedEvent()
     const initialModel = autoRefreshModel("before")
