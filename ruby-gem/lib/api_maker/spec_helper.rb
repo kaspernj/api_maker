@@ -6,6 +6,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
 
   require_relative "spec_helper/action_cable_cleanup"
   require_relative "spec_helper/attribute_row_helpers"
+  require_relative "spec_helper/browser_errors"
   require_relative "spec_helper/browser_logs"
   require_relative "spec_helper/expect_no_browser_errors"
   require_relative "spec_helper/query_params"
@@ -16,6 +17,7 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
   require_relative "spec_helper/wait_for_selector"
   require_relative "spec_helper/worker_plugins_helpers"
   include ActionCableCleanup
+  include BrowserErrors
   include BrowserLogs
   include ApiMaker::ExpectToBeAbleToHelper
   include AttributeRowHelpers
@@ -56,38 +58,6 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
 
   def error_logger_present?
     execute_script("return Boolean(window.errorLogger)")
-  end
-
-  def expect_no_browser_window_errors
-    unless error_logger_present?
-      Rails.logger.error "API maker: Error logger hasn't been set up on window, so we can't delegate JS errors to Ruby"
-      return
-    end
-
-    # Wait until error logger has finished loading source maps and parsed errors
-    Timeout.timeout(3) do
-      loop do
-        is_working_on_error = execute_script("return window.errorLogger.isWorkingOnError()")
-        break unless is_working_on_error
-
-        sleep 0.1
-      end
-    end
-
-    errors = execute_script("return window.errorLogger.getErrors()")
-
-    return if errors.empty?
-
-    last_error = errors.last
-
-    custom_trace = []
-    custom_trace += last_error.fetch("backtrace") if last_error["backtrace"].is_a?(Array)
-    custom_trace += caller
-
-    error = JavaScriptError.new("#{last_error["errorClass"]}: #{last_error["message"]}")
-    error.set_backtrace(custom_trace)
-
-    raise error
   end
 
   def expect_no_errors
