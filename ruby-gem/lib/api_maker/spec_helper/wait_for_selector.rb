@@ -31,6 +31,30 @@ module ApiMaker::SpecHelper::WaitForSelector
     raise ::ApiMaker::SpecHelper::SelectorNotFoundError, e.message
   end
 
+  # Waits for +field+ (a Capybara field locator) to settle to +with+ when given,
+  # then replaces the field's value with +value+, self-healing against a
+  # re-render that re-applies the field's stale value and concatenates it onto
+  # the new one.
+  #
+  # The api_maker inputs are uncontrolled React inputs, so Capybara's #set
+  # (clear then type) can lose that race and leave e.g. "AdminDonald" instead of
+  # "Donald". Like the other wait helpers, browser JS errors are surfaced: they
+  # are checked on success and throughout the retries, so a JS error that
+  # prevented the value from taking is raised with its stack trace instead of a
+  # bare mismatch.
+  def wait_for_field_value(field, value, with: nil, max_attempts: 5)
+    wait_for_field(field, with:) if with
+
+    value = value.to_s
+
+    max_attempts.times do |attempt|
+      type_into_field(field, value)
+
+      return find_field(field) if field_value_settled?(field, value)
+      raise if attempt == max_attempts - 1
+    end
+  end
+
   def wait_for_selectors(*selectors)
     selectors.each do |selector|
       wait_for_selector(selector)
@@ -50,5 +74,38 @@ module ApiMaker::SpecHelper::WaitForSelector
       order = all(selector).map { |element| callback.call(element) }
       expect(order).to eq expected_order
     end
+  end
+
+private
+
+  # Focuses +field+, selects and deletes its current content, then types +value+
+  # with raw Selenium actions (Capybara's #set clear can be undone by a re-render
+  # that re-applies the stale value).
+  def type_into_field(field, value)
+    element = find_field(field)
+    # The raw move_to below does not auto-scroll, so bring the field into view
+    # first (it can be below the fold in a narrow CI browser).
+    page.execute_script("arguments[0].scrollIntoView({ block: 'center' })", element)
+
+    action = page.driver.browser.action
+      .move_to(element.native, 5, 5)
+      .click
+      .key_down(:left_control)
+      .send_keys("a")
+      .key_up(:left_control)
+      .send_keys(:backspace)
+
+    value.each_char { |char| action = action.send_keys(char) }
+    action.perform
+
+    element
+  end
+
+  # True once +field+'s value has settled to +value+.
+  def field_value_settled?(field, value)
+    wait_for_expect(timeout_sec: 3) { expect(find_field(field).value).to eq value }
+    true
+  rescue ::RSpec::Expectations::ExpectationNotMetError
+    false
   end
 end
