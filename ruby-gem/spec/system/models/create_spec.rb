@@ -29,7 +29,11 @@ describe "model create" do
       wait_for_browser { find("[data-controller='models--create']", visible: false)["data-create-completed"] == "true" }
     end
 
-    expect { visit_action.call }.to raise_error(RuntimeError, "UnhandledRejection: No access to create Project")
+    # The failed no-access create surfaces as a browser JS error. It is recorded
+    # by window.errorLogger (an UnhandledRejection) and echoed to the console
+    # (an Uncaught CustomError), and expect_no_browser_errors reports those, so
+    # assert on the message rather than a specific error class.
+    expect { visit_action.call }.to raise_error(/No access to create Project/)
     sleep 1 # Some stuff in JS may be going on - give it some time to wrap up
     browser_logs # Clear up the logs manually
   end
