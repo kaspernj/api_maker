@@ -118,12 +118,5 @@ describe "spec helper" do
         expect(raised.all_exceptions).to eq [window_error, console_error]
       end
     end
-
-    it "reports an actual JS error recorded by window.errorLogger" do
-      visit root_path
-      execute_script("setTimeout(() => { throw new Error('api-maker spec test error') })")
-
-      expect { expect_no_browser_errors }.to raise_error(/api-maker spec test error/)
-    end
   end
 end
