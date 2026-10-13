@@ -227,10 +227,11 @@ export default class ApiMakerCommandsPool {
    * Validates that a resolved response matches the CommandsRequestResponse
    * contract before callers read `response.responses`.
    *
-   * The HTTP layer resolves any HTTP 200 regardless of content-type, so a
-   * session-expired redirect to the sign-in page, an HTML error page from a
-   * proxy, an empty body, or a JSON body without `responses` would otherwise
-   * reach flush as a string or null and crash with a generic
+   * The HTTP transport already rejects non-JSON bodies, but a request can
+   * still resolve with valid JSON that is not a command envelope (`null`,
+   * `{}`, a proxy error object) and the websocket path resolves whatever
+   * payload the frame carried. Without this check flush crashes on
+   * `Object.keys(response.responses)` with a generic
    * "Cannot convert undefined or null to object" that hides the real cause.
    * The server only renders `responses`-less JSON for the two special types
    * handled by sendRequest, so anything else is not a command envelope.

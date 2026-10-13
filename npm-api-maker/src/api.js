@@ -100,7 +100,22 @@ export default class Api { // eslint-disable-line padded-blocks
   static executeXhr(xhr, data) {
     return new Promise((resolve, reject) => {
       xhr.onload = () => {
-        const response = this._parseResponse(xhr)
+        let response
+
+        try {
+          response = this._parseResponse(xhr)
+        } catch {
+          // The content-type says JSON but the body is not valid JSON — a
+          // broken server response. Reject with a descriptive error instead of
+          // letting the parse error escape xhr.onload and leave the promise
+          // unsettled forever.
+          const contentType = xhr.getResponseHeader("content-type")
+          const message = `Invalid JSON in response body (content-type: ${contentType}): ${Api._preview(xhr.responseText)}`
+          const errorResponse = /** @type {object} */ (/** @type {unknown} */ (xhr.responseText))
+
+          reject(new CustomError(message, {response: errorResponse}))
+          return
+        }
 
         if (xhr.status == 200) {
           resolve(response)
@@ -162,7 +177,20 @@ export default class Api { // eslint-disable-line padded-blocks
       requestBody = args.rawData
     }
 
-    return this.request({...args, data: requestBody, headers})
+    const response = await this.request({...args, data: requestBody, headers})
+
+    // These endpoints always answer with a JSON object. A successful request
+    // that returned a string (e.g. an HTML sign-in page after a
+    // session-expired redirect) or null is a broken response, so fail with the
+    // actual body in the error instead of resolving a value callers would
+    // crash on.
+    if (typeof response != "object" || response === null) {
+      const message = `Expected JSON response from ${args.path} but received ${typeof response}: ${Api._preview(String(response))}`
+
+      throw new CustomError(message, {response: /** @type {object} */ (response)})
+    }
+
+    return response
   }
 
   /**
@@ -187,17 +215,18 @@ export default class Api { // eslint-disable-line padded-blocks
     const responseType = xhr.getResponseHeader("content-type")
 
     if (responseType && responseType.startsWith("application/json")) {
-      try {
-        return JSON.parse(xhr.responseText)
-      } catch {
-        // A JSON content-type with an unparseable body (HTML error page, empty
-        // body) would throw inside xhr.onload, leaving the promise unsettled
-        // and the queued commands hanging forever. Fall back to the raw body so
-        // callers can report it as an invalid response instead.
-        return xhr.responseText
-      }
+      return JSON.parse(xhr.responseText)
     } else {
       return xhr.responseText
     }
+  }
+
+  /**
+   * Truncated body preview for error messages.
+   * @param {string} body
+   * @returns {string}
+   */
+  static _preview(body) {
+    return JSON.stringify(String(body).slice(0, 120))
   }
 }
