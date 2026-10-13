@@ -211,7 +211,7 @@ export default class ApiMakerCommandsPool {
         throw new SessionExpiredError()
       }
 
-      return /** @type {CommandsRequestResponse} */ (response)
+      return this.validateCommandResponse(response)
     }
 
     // Every attempt was swallowed by a retry (e.g. a persistently invalid
@@ -221,6 +221,42 @@ export default class ApiMakerCommandsPool {
     const errorMessage = `Couldnt successfully execute request after 3 attempts (last response type: ${lastResponseType})`
 
     throw new CustomError(errorMessage, {response: /** @type {object} */ (lastResponse)})
+  }
+
+  /**
+   * Validates that a resolved response matches the CommandsRequestResponse
+   * contract before callers read `response.responses`.
+   *
+   * The HTTP layer resolves any HTTP 200 regardless of content-type, so a
+   * session-expired redirect to the sign-in page, an HTML error page from a
+   * proxy, an empty body, or a JSON body without `responses` would otherwise
+   * reach flush as a string or null and crash with a generic
+   * "Cannot convert undefined or null to object" that hides the real cause.
+   * The server only renders `responses`-less JSON for the two special types
+   * handled by sendRequest, so anything else is not a command envelope.
+   * @param {unknown} response
+   * @returns {CommandsRequestResponse}
+   */
+  validateCommandResponse(response) {
+    const envelope = /** @type {CommandsRequestResponse | null | undefined} */ (response)
+
+    if (typeof envelope == "object" && envelope !== null && envelope.responses !== null && typeof envelope.responses == "object") {
+      return envelope
+    }
+
+    let received
+
+    if (response === null || response === undefined) {
+      received = String(response)
+    } else if (typeof response == "object") {
+      received = `object without 'responses' (keys: ${Object.keys(response).join(", ")})`
+    } else {
+      received = `${typeof response} ${JSON.stringify(String(response).slice(0, 120))}`
+    }
+
+    const message = `Invalid command response: expected an object with a 'responses' object, but received ${received}`
+
+    throw new CustomError(message, {response: /** @type {object} */ (response)})
   }
 
   /**

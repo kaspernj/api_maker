@@ -17,7 +17,7 @@ describe("ApiMakerCommandsPool", () => {
 
   it("uses websocket requests whenever they are enabled and no files are present", async() => {
     const pool = new ApiMakerCommandsPool()
-    const perform = jest.spyOn(WebsocketRequestClient.current(), "perform").mockResolvedValue({via: "websocket"})
+    const perform = jest.spyOn(WebsocketRequestClient.current(), "perform").mockResolvedValue({responses: {via: "websocket"}})
 
     jest.spyOn(Config, "getWebsocketRequests").mockReturnValue(true)
 
@@ -43,7 +43,7 @@ describe("ApiMakerCommandsPool", () => {
       onReceived: expect.any(Function),
       request: {pool: {}}
     })
-    expect(response).toEqual({via: "websocket"})
+    expect(response).toEqual({responses: {via: "websocket"}})
   })
 
   it("refreshes session status when a failed command reports not_found_or_no_access while signed in", async() => {
@@ -335,6 +335,73 @@ describe("ApiMakerCommandsPool", () => {
       const rejected = commandExecution.reject.mock.calls[0][0]
 
       expect(rejected.stack).toContain("at someCaller (app.js:42:13)")
+    })
+  })
+
+  describe("malformed response envelope", () => {
+    it("throws a descriptive CustomError when the HTTP 200 body is HTML instead of the command envelope", async() => {
+      const pool = new ApiMakerCommandsPool()
+
+      jest.spyOn(pool, "performRequest").mockResolvedValue("<!DOCTYPE html><html><body>Sign in</body></html>")
+
+      const error = await pool.sendRequest({commandSubmitData: {}, url: "/api_maker/commands"}).catch((e) => e)
+
+      expect(error).toBeInstanceOf(CustomError)
+      expect(error.message).toContain("responses")
+      expect(error.args?.response).toContain("<!DOCTYPE html>")
+    })
+
+    it("rejects every queued command with the typed error instead of the generic TypeError when a batched response lacks 'responses'", async() => {
+      const pool = new ApiMakerCommandsPool()
+      const rejects = [jest.fn(), jest.fn()]
+
+      pool.pool = {
+        1: {commandExecution: {reject: rejects[0], resolve: jest.fn()}},
+        2: {commandExecution: {reject: rejects[1], resolve: jest.fn()}}
+      }
+      pool.poolData = {
+        collection: {notifications: {ransack: {1: {args: {}, id: 1}}}},
+        service: {calls: {services: {2: {args: {}, id: 2}}}}
+      }
+
+      jest.spyOn(Devise, "registeredScopes").mockReturnValue([])
+      jest.spyOn(pool, "performRequest").mockResolvedValue("<!DOCTYPE html>")
+
+      await pool.flush()
+
+      for (const reject of rejects) {
+        expect(reject).toHaveBeenCalledTimes(1)
+        const error = reject.mock.calls[0][0]
+
+        expect(error).toBeInstanceOf(CustomError)
+        expect(error.message).toContain("responses")
+      }
+    })
+
+    it("throws when the JSON response is an object without 'responses'", async() => {
+      const pool = new ApiMakerCommandsPool()
+
+      jest.spyOn(pool, "performRequest").mockResolvedValue({success: true})
+
+      const error = await pool.sendRequest({commandSubmitData: {}, url: "/api_maker/commands"}).catch((e) => e)
+
+      expect(error).toBeInstanceOf(CustomError)
+      expect(error.message).toContain("responses")
+    })
+
+    it("throws when the websocket path resolves with no response payload", async() => {
+      const pool = new ApiMakerCommandsPool()
+
+      jest.spyOn(Config, "getWebsocketRequests").mockReturnValue(true)
+      jest.spyOn(WebsocketRequestClient.current(), "perform").mockResolvedValue(undefined)
+
+      const error = await pool.sendRequest({
+        commandSubmitData: {getFilesCount: () => 0, getJsonData: () => ({pool: {}})},
+        url: "/api_maker/commands"
+      }).catch((e) => e)
+
+      expect(error).toBeInstanceOf(CustomError)
+      expect(error.message).toContain("responses")
     })
   })
 })

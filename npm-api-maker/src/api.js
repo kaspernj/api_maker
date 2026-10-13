@@ -187,7 +187,15 @@ export default class Api { // eslint-disable-line padded-blocks
     const responseType = xhr.getResponseHeader("content-type")
 
     if (responseType && responseType.startsWith("application/json")) {
-      return JSON.parse(xhr.responseText)
+      try {
+        return JSON.parse(xhr.responseText)
+      } catch {
+        // A JSON content-type with an unparseable body (HTML error page, empty
+        // body) would throw inside xhr.onload, leaving the promise unsettled
+        // and the queued commands hanging forever. Fall back to the raw body so
+        // callers can report it as an invalid response instead.
+        return xhr.responseText
+      }
     } else {
       return xhr.responseText
     }
