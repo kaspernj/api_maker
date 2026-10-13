@@ -104,16 +104,21 @@ export default class Api { // eslint-disable-line padded-blocks
 
         try {
           response = this._parseResponse(xhr)
-        } catch {
+        } catch (error) {
           // The content-type says JSON but the body is not valid JSON — a
           // broken server response. Reject with a descriptive error instead of
           // letting the parse error escape xhr.onload and leave the promise
-          // unsettled forever.
+          // unsettled forever, while keeping the original parse error as the
+          // cause so nothing about the failure is lost.
           const contentType = xhr.getResponseHeader("content-type")
-          const message = `Invalid JSON in response body (content-type: ${contentType}): ${Api._preview(xhr.responseText)}`
+          const message = `Invalid JSON in response body (content-type: ${contentType}): ${Api._preview(xhr.responseText)}: ${error}`
           const errorResponse = /** @type {object} */ (/** @type {unknown} */ (xhr.responseText))
+          const customError = new CustomError(message, {response: errorResponse})
 
-          reject(new CustomError(message, {response: errorResponse}))
+          // @ts-ignore Error.cause is not in the ES2020 lib types
+          customError.cause = error
+
+          reject(customError)
           return
         }
 

@@ -36,6 +36,7 @@ describe("Api", () => {
       expect(error).toBeInstanceOf(CustomError)
       expect(error.message).toContain("Invalid JSON in response body")
       expect(error.message).toContain("<!DOCTYPE html>")
+      expect(error.cause).toBeInstanceOf(SyntaxError)
     })
 
     it("resolves with the raw body for a non-JSON content-type so error pages stay inspectable", async() => {
