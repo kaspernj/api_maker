@@ -116,6 +116,9 @@ export default class ApiMakerCommandsPool {
   constructor() {
     this.flushCount = 0
 
+    /** @type {Promise<void> | null} */
+    this.flushPromise = null
+
     /** @type {Record<number, CommandDataType>} */
     this.pool = {}
 
@@ -351,12 +354,37 @@ export default class ApiMakerCommandsPool {
     return scopes.some((scope) => Boolean(sessionStatus?.scopes?.[scope]?.signed_in))
   }
 
-  /** Sends the currently queued commands and resolves or rejects their executions. */
+  /**
+   * Sends the currently queued commands and resolves or rejects their executions.
+   * @returns {Promise<void>}
+   */
   flush = async () => {
     if (this.commandsCount() == 0) {
       return
     }
 
+    // Serialize flushes. Every command request loads the session at request
+    // start and commits it at request end, so two overlapping requests from this
+    // pool can commit stale session state over each other's writes: a slow batch
+    // that started before a session-mutating command (e.g. setting the current
+    // team) finishes later and clobbers that command's session write.
+    if (this.flushPromise) {
+      await this.flushPromise
+
+      return this.flush()
+    }
+
+    this.flushPromise = this.performFlush()
+
+    try {
+      await this.flushPromise
+    } finally {
+      this.flushPromise = null
+    }
+  }
+
+  /** @returns {Promise<void>} */
+  async performFlush() {
     const currentPool = this.pool
     const currentPoolData = this.poolData
 

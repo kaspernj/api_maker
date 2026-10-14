@@ -404,4 +404,42 @@ describe("ApiMakerCommandsPool", () => {
       expect(error.message).toContain("responses")
     })
   })
+
+  describe("flush serialization", () => {
+    it("does not start a second request while one is in flight; queued commands ride the next flush", async() => {
+      const pool = new ApiMakerCommandsPool()
+      let resolveFirstRequest
+      const firstRequest = new Promise((resolve) => {
+        resolveFirstRequest = resolve
+      })
+      const performRequest = jest.spyOn(pool, "performRequest")
+        .mockImplementationOnce(() => firstRequest)
+        .mockResolvedValueOnce({responses: {}})
+
+      jest.spyOn(Devise, "registeredScopes").mockReturnValue([])
+
+      pool.pool = {1: {commandExecution: {reject: jest.fn(), resolve: jest.fn()}}}
+      pool.poolData = {collection: {notifications: {ransack: {1: {args: {}, id: 1}}}}}
+
+      const firstFlush = pool.flush()
+
+      // A command queued while the first request is in flight must not trigger a
+      // second overlapping request: each request commits the session it loaded at
+      // request start, so the overlapping pair could clobber session writes.
+      pool.pool = {2: {commandExecution: {reject: jest.fn(), resolve: jest.fn()}}}
+      pool.poolData = {service: {calls: {services: {2: {args: {}, id: 2}}}}}
+      const secondFlush = pool.flush()
+
+      expect(performRequest).toHaveBeenCalledTimes(1)
+
+      resolveFirstRequest({responses: {}})
+      await Promise.all([firstFlush, secondFlush])
+
+      expect(performRequest).toHaveBeenCalledTimes(2)
+      const secondCallData = performRequest.mock.calls[1][0].commandSubmitData.getJsonData()
+
+      expect(secondCallData.pool.service.calls.services[2]).toBeDefined()
+      expect(secondCallData.pool.collection).toBeUndefined()
+    })
+  })
 })
