@@ -100,7 +100,27 @@ export default class Api { // eslint-disable-line padded-blocks
   static executeXhr(xhr, data) {
     return new Promise((resolve, reject) => {
       xhr.onload = () => {
-        const response = this._parseResponse(xhr)
+        let response
+
+        try {
+          response = this._parseResponse(xhr)
+        } catch (error) {
+          // The content-type says JSON but the body is not valid JSON — a
+          // broken server response. Reject with a descriptive error instead of
+          // letting the parse error escape xhr.onload and leave the promise
+          // unsettled forever, while keeping the original parse error as the
+          // cause so nothing about the failure is lost.
+          const contentType = xhr.getResponseHeader("content-type")
+          const message = `Invalid JSON in response body (content-type: ${contentType}): ${Api._preview(xhr.responseText)}: ${error}`
+          const errorResponse = /** @type {object} */ (/** @type {unknown} */ (xhr.responseText))
+          const customError = new CustomError(message, {response: errorResponse})
+
+          // @ts-ignore Error.cause is not in the ES2020 lib types
+          customError.cause = error
+
+          reject(customError)
+          return
+        }
 
         if (xhr.status == 200) {
           resolve(response)
@@ -162,7 +182,20 @@ export default class Api { // eslint-disable-line padded-blocks
       requestBody = args.rawData
     }
 
-    return this.request({...args, data: requestBody, headers})
+    const response = await this.request({...args, data: requestBody, headers})
+
+    // These endpoints always answer with a JSON object. A successful request
+    // that returned a string (e.g. an HTML sign-in page after a
+    // session-expired redirect) or null is a broken response, so fail with the
+    // actual body in the error instead of resolving a value callers would
+    // crash on.
+    if (typeof response != "object" || response === null) {
+      const message = `Expected JSON response from ${args.path} but received ${typeof response}: ${Api._preview(String(response))}`
+
+      throw new CustomError(message, {response: /** @type {object} */ (response)})
+    }
+
+    return response
   }
 
   /**
@@ -191,5 +224,14 @@ export default class Api { // eslint-disable-line padded-blocks
     } else {
       return xhr.responseText
     }
+  }
+
+  /**
+   * Truncated body preview for error messages.
+   * @param {string} body
+   * @returns {string}
+   */
+  static _preview(body) {
+    return JSON.stringify(String(body).slice(0, 120))
   }
 }

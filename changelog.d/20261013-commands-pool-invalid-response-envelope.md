@@ -1,0 +1,1 @@
+Fixed command pool flush crashing with a generic "Cannot convert undefined or null to object" when /api_maker/commands returns a 200 that is not the JSON command envelope: requestLocal now rejects non-JSON bodies with a descriptive error, a JSON content-type with an unparseable body rejects instead of hanging the request, and sendRequest validates the responses envelope.
