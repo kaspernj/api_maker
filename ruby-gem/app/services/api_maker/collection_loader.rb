@@ -140,8 +140,19 @@ class ApiMaker::CollectionLoader < ApiMaker::ApplicationService
     # aggregated (PG::GroupingError). The main collection query is safe because
     # active_record_query_fixer adds the ordered columns to the GROUP BY; the
     # count path does not run that fix, so drop the order here.
-    count = @query.except(:select, :limit, :offset, :order).count
-    count = count.length if count.is_a?(Hash)
-    count
+    count_query = @query.except(:select, :limit, :offset, :order)
+
+    # A grouped (or distinct) relation must be counted through a subquery:
+    # calling `count` directly on it returns a Hash with one entry per group, so
+    # Postgres returns one row per matching record and Ruby materialises them all
+    # just to call `length` - O(records) rows transferred for a single number,
+    # which is very slow on large tables.
+    if count_query.values[:group].present? || count_query.values[:distinct].present?
+      model_class.connection.select_value("SELECT COUNT(*) FROM (#{count_query.to_sql}) AS api_maker_count_query").to_i
+    else
+      count = count_query.count
+      count = count.length if count.is_a?(Hash)
+      count
+    end
   end
 end

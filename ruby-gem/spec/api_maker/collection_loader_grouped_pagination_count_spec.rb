@@ -63,5 +63,10 @@ describe "ApiMaker::CollectionLoader grouped pagination count" do
     grouped_count_queries.each do |sql|
       expect(sql).not_to include("ORDER BY")
     end
+
+    # The grouped count is computed in SQL through a subquery - not by returning
+    # one row per group to Ruby (which was O(records) rows transferred just to
+    # call `length`, and very slow on large tables).
+    expect(grouped_count_queries).to include(a_string_matching(/COUNT\(\*\) FROM \(/i))
   end
 end
