@@ -64,8 +64,19 @@ const useRetargetedFieldValue = ({applyValue, form, name}) => {
     const currentIdentity = {form, name}
 
     previousFieldIdentityRef.current = currentIdentity
-    if (previousIdentity && (previousIdentity.form != form || previousIdentity.name != name) && form && name) {
-      applyValue(form.getValue(name))
+    if (previousIdentity && form && name) {
+      const nameChanged = previousIdentity.name != name
+      const formChanged = previousIdentity.form != form
+
+      // Only adopt Formmeld's value on a genuine re-target: the field moved to a
+      // different name, or between two existing forms. The initial binding of an
+      // already-mounted field to a Formmeld form that only became available
+      // after mount must NOT overwrite the field - its value is already correct
+      // from its defaultValue, and the user may already be typing into it
+      // (re-applying Formmeld's value here concatenates onto the typed value).
+      if (nameChanged || (formChanged && previousIdentity.form)) {
+        applyValue(form.getValue(name))
+      }
     }
   }, [form, name])
 }
