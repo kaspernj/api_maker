@@ -159,4 +159,10 @@ module ApiMaker::SpecHelper # rubocop:disable Metrics/ModuleLength
     expect_no_browser_errors
     raise e
   end
+
+  # Asserts the current URL including its query string, so a dropped parameter
+  # (for example team_id) fails the spec instead of being ignored.
+  def wait_for_url(expected_url, **)
+    wait_for_path(expected_url, ignore_query: false, **)
+  end
 end
