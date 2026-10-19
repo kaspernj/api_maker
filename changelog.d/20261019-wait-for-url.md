@@ -1,0 +1,1 @@
+Added the `wait_for_url` system-spec helper. It asserts the current URL including its query string, so a dropped parameter (for example `team_id`) fails the spec instead of being ignored; `wait_for_path` keeps its query-insensitive default.
