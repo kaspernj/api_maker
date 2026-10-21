@@ -1,0 +1,1 @@
+Unknown member/collection commands now answer 400 with the command name instead of crashing with a 500 `NameError` and filing a server-side bug report. The executor rejects the request before any command runs, logs the rejection with a process-wide counter, and the websocket channel reports it as a failed request without dropping the connection.
