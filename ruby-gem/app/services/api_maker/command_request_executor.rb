@@ -2,6 +2,8 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
   arguments :controller, :payload
 
   def perform
+    validate_select_payloads!
+
     with_request_context do
       # The frontend's believed user is reconciled against the real one only
       # after the request context has synced the authoritative current user.
@@ -78,6 +80,79 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
 
   def pool_data
     @pool_data ||= merged_payload[:pool] || merged_payload.fetch("pool")
+  end
+
+  # A select payload naming an attribute the resource does not expose is a
+  # client contract error: the payload is well-formed but the client and the
+  # API disagree about the resource surface. Validate every pool select before
+  # any command runs, so an unknown attribute rejects the whole request with a
+  # 400 naming the resource and the attribute instead of crashing mid-command
+  # with a 500 RuntimeError that files a server-side bug report. The parser
+  # itself still raises for select paths outside the command pool.
+  def validate_select_payloads!
+    unknown_select = unknown_select_attribute_in_pool
+    return unless unknown_select
+
+    # Keep the rejection observable (log + counter) without creating a bug
+    # report: the request details come from the controller because the
+    # executor itself is a plain service.
+    request = controller.respond_to?(:request) ? controller.request : nil
+
+    Rails.logger.warn(
+      "api_maker_unknown_select_attribute count=#{ApiMaker::SelectParser.unknown_select_attribute_count} " \
+      "path=#{request&.path.inspect} method=#{request&.request_method.inspect} " \
+      "user_agent=#{request&.user_agent.to_s[0, 100].inspect} message=#{unknown_select.message.inspect}"
+    )
+
+    raise unknown_select
+  end
+
+  # Pool shape: type => resource plural => command name => id => entry. Walk
+  # every well-formed command entry and return the first parser rejection.
+  def unknown_select_attribute_in_pool
+    return unless pool_data.is_a?(Hash)
+
+    each_command_entry do |command_entry|
+      error = unknown_select_error_for_entry(command_entry)
+      return error if error
+    end
+
+    nil
+  end
+
+  def each_command_entry(&)
+    pool_data.each_value do |command_type_data|
+      next unless command_type_data.is_a?(Hash)
+
+      command_type_data.each_value do |command_model_data|
+        next unless command_model_data.is_a?(Hash)
+
+        command_model_data.each_value do |commands_by_id|
+          next unless commands_by_id.is_a?(Hash)
+
+          commands_by_id.each_value do |command_entry|
+            yield command_entry if command_entry.is_a?(Hash)
+          end
+        end
+      end
+    end
+  end
+
+  def unknown_select_error_for_entry(command_entry)
+    # The frontend sends select inside the command args (index queries).
+    args = command_entry[:args] || command_entry["args"]
+    return unless args.is_a?(Hash)
+
+    select_payload = args[:select] || args["select"]
+    return unless select_payload.is_a?(Hash)
+
+    # Reuse the parser itself so validation and execution accept exactly the
+    # same select contract.
+    ApiMaker::SelectParser.execute!(select: select_payload)
+
+    nil
+  rescue ApiMaker::UnknownSelectAttributeError => e
+    e
   end
 
   def normalize_commands(command_data)

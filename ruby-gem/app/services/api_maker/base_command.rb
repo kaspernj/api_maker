@@ -145,12 +145,17 @@ class ApiMaker::BaseCommand
         Rails.logger.error e.message
         Rails.logger.error Rails.backtrace_cleaner.clean(e.backtrace).join("\n")
 
-        ApiMaker::Configuration.current.report_error(
-          command:,
-          controller:,
-          error: e,
-          response: error_response
-        )
+        # Client contract errors stay loud for the caller (the command response
+        # above names the resource and the attribute) but are not server
+        # faults: reporting them would file a bug report for every client typo.
+        unless client_contract_error?(e)
+          ApiMaker::Configuration.current.report_error(
+            command:,
+            controller:,
+            error: e,
+            response: error_response
+          )
+        end
       end
 
       command.error(error_response)
