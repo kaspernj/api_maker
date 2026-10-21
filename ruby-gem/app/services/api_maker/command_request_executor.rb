@@ -123,7 +123,7 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
   end
 
   def each_pool_level(node, path:, levels:)
-    raise ApiMaker::MalformedCommandRequestError, malformed_level_message(node, path: path, level: levels.first) unless node.is_a?(Hash)
+    raise ApiMaker::MalformedCommandRequestError, malformed_level_message(node, path:, level: levels.first) unless node.is_a?(Hash)
 
     return if levels.length == 1
 

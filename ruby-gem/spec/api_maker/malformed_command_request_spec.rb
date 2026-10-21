@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "api maker - malformed command requests" do
+describe "api maker - malformed command requests", type: :request do
   include Devise::Test::IntegrationHelpers
 
   let(:user) { create(:user) }
@@ -16,7 +16,7 @@ describe "api maker - malformed command requests" do
   end
 
   def post_commands(pool)
-    post "/api_maker/commands", params: {pool: pool}, headers: {"X-CSRF-Token" => csrf_token}
+    post "/api_maker/commands", params: {pool:}, headers: {"X-CSRF-Token" => csrf_token}
   end
 
   it "answers 400 naming the path and class when a command name is a String" do
