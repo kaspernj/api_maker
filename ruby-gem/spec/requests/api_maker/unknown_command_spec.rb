@@ -16,7 +16,7 @@ describe "api maker - unknown commands" do
   end
 
   def post_commands(pool)
-    post "/api_maker/commands", params: {pool: pool}, headers: {"X-CSRF-Token" => csrf_token}
+    post "/api_maker/commands", params: {pool:}, headers: {"X-CSRF-Token" => csrf_token}
   end
 
   it "answers 400 naming the command when a member command constant does not exist" do
