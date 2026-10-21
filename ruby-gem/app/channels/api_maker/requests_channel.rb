@@ -48,6 +48,18 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
 
     ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
     transmit_request_payloads(request_uid:, response_payload:) if request_uid
+  rescue ApiMaker::MalformedCommandRequestError => e
+    # Client-side payload error: report it to the client without re-raising,
+    # so a malformed websocket payload neither kills the connection nor
+    # creates a server-side bug report. The executor already logged the
+    # redacted snippet and bumped the rejection counter.
+    response_payload = {
+      response: {errors: [{message: e.message, type: :malformed_command_request}], success: false},
+      type: "api_maker_request_error"
+    }
+
+    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
+    transmit_request_payloads(request_uid:, response_payload:) if request_uid
   rescue => e # rubocop:disable Style/RescueStandardError
     response_payload = {
       response: {errors: [{message: e.message, type: :runtime_error}], success: false},
