@@ -131,6 +131,7 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
 
       command_type_data.each do |resource_plural_name, command_model_data|
         next unless command_model_data.is_a?(Hash)
+
         resource = resource_constant(resource_plural_name)
         # An unknown resource stays the service's own contract (it raises its
         # explicit error); only a resolvable resource with a missing command

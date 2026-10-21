@@ -7,7 +7,7 @@ describe ApiMaker::MemberCommandService do
   let(:controller) { instance_double(ApplicationController, api_maker_args: {}, current_ability: ability) }
 
   it "raises UnknownCommandError when the command constant does not exist" do
-    expect {
+    expect do
       ApiMaker::MemberCommandService.execute!(
         ability:,
         api_maker_args: {},
@@ -23,6 +23,6 @@ describe ApiMaker::MemberCommandService do
         controller:,
         resource_name: "Tasks"
       )
-    }.to raise_error(ApiMaker::UnknownCommandError, /Commands::Tasks::NonexistentMember/)
+    end.to raise_error(ApiMaker::UnknownCommandError, /Commands::Tasks::NonexistentMember/)
   end
 end
