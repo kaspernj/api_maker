@@ -48,6 +48,18 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
 
     ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
     transmit_request_payloads(request_uid:, response_payload:) if request_uid
+  rescue ApiMaker::UnknownCommandError => e
+    # Client-side contract error: report it to the client without re-raising,
+    # so an unknown command neither kills the connection nor creates a
+    # server-side bug report. The executor already logged the rejection and
+    # bumped the counter.
+    response_payload = {
+      response: {errors: [{message: e.message, type: :unknown_command}], success: false},
+      type: "api_maker_request_error"
+    }
+
+    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
+    transmit_request_payloads(request_uid:, response_payload:) if request_uid
   rescue => e # rubocop:disable Style/RescueStandardError
     response_payload = {
       response: {errors: [{message: e.message, type: :runtime_error}], success: false},
