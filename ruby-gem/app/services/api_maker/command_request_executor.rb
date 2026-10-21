@@ -8,7 +8,7 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
 
   # Process-wide counter so repeated unknown-command rejections stay visible
   # in the logs even though each request only sees its own occurrence.
-  UNKNOWN_COMMAND_COUNTER = {count: 0}.freeze
+  UNKNOWN_COMMAND_COUNTER = {count: 0}
   UNKNOWN_COMMAND_COUNTER_MUTEX = Mutex.new
 
   def self.unknown_command_count

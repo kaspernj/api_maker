@@ -64,7 +64,7 @@ describe "api maker - unknown commands", type: :request do
     expect(response).to have_http_status(:ok)
 
     responses = response.parsed_body.fetch("responses")
-    expect(responses.fetch("1")).to include(type: "success")
-    expect(responses.fetch("2")).to include(type: "success")
+    expect(responses.fetch("1").fetch("type")).to eq("success")
+    expect(responses.fetch("2").fetch("type")).to eq("success")
   end
 end
