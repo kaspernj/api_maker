@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "api maker - unknown commands" do
+describe "api maker - unknown commands", type: :request do
   include Devise::Test::IntegrationHelpers
 
   let(:user) { create(:user) }
