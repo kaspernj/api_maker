@@ -38,7 +38,8 @@ describe "api maker - malformed command requests", type: :request do
     body = response.parsed_body.fetch("errors").fetch(0)
     expect(body.fetch("type")).to eq("malformed_command_request")
     expect(body.fetch("message")).to include("command entry at 'pool -> collection -> tasks -> test_collection -> 1'")
-    expect(body.fetch("message")).to include("must be a Hash, got Integer")
+    # HTTP params arrive as strings, so the Integer shape reaches the validator as
+    expect(body.fetch("message")).to include("must be a Hash, got String")
   end
 
   it "answers 400 when a deeper pool level is not a Hash" do

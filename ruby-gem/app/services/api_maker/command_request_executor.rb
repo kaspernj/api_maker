@@ -94,7 +94,11 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
   end
 
   def actual_user_id_for(scope)
-    controller.__send__(:api_maker_args)["current_#{scope}"]&.id
+    # Symbol-key access is the contract for api_maker_args (HashWithIndifferentAccess
+    # in the app, a plain symbol-keyed Hash in specs). String indexing here silently
+    # returned nil for symbol-keyed hashes and made every believed user look
+    # diverged (CI failure at head f963b713).
+    controller.__send__(:api_maker_args)[:"current_#{scope}"]&.id
   end
 
   def command_response
