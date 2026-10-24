@@ -8,11 +8,13 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
 
   # Process-wide counter so repeated unknown-command rejections stay visible
   # in the logs even though each request only sees its own occurrence.
-  UNKNOWN_COMMAND_COUNTER = {count: 0}
+  # Hash.new(0) instead of a mutable literal (RuboCop Style/MutableConstant):
+  # the counter itself must stay mutable for the mutex-guarded increments.
+  UNKNOWN_COMMAND_COUNTER = Hash.new(0)
   UNKNOWN_COMMAND_COUNTER_MUTEX = Mutex.new
 
   def self.unknown_command_count
-    UNKNOWN_COMMAND_COUNTER[:count]
+    UNKNOWN_COMMAND_COUNTER[:unknown_commands]
   end
 
   def perform
@@ -104,7 +106,7 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
     unknown = unknown_command_in_pool
     return unless unknown
 
-    UNKNOWN_COMMAND_COUNTER_MUTEX.synchronize { UNKNOWN_COMMAND_COUNTER[:count] += 1 }
+    UNKNOWN_COMMAND_COUNTER_MUTEX.synchronize { UNKNOWN_COMMAND_COUNTER[:unknown_commands] += 1 }
 
     # Keep the rejection observable (log + counter) without creating a bug
     # report: the request details come from the controller because the
@@ -112,7 +114,7 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
     request = controller.respond_to?(:request) ? controller.request : nil
 
     Rails.logger.warn(
-      "api_maker_unknown_command count=#{UNKNOWN_COMMAND_COUNTER[:count]} " \
+      "api_maker_unknown_command count=#{UNKNOWN_COMMAND_COUNTER[:unknown_commands]} " \
       "path=#{request&.path.inspect} method=#{request&.request_method.inspect} " \
       "user_agent=#{request&.user_agent.to_s[0, 100].inspect} #{unknown.fetch(:message)}"
     )
