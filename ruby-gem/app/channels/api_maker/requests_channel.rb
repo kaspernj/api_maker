@@ -48,6 +48,8 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
 
     ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
     transmit_request_payloads(request_uid:, response_payload:) if request_uid
+  rescue ApiMaker::UnknownSelectAttributeError => e
+    report_unknown_select_attribute(e, request_uid:)
   rescue => e # rubocop:disable Style/RescueStandardError
     response_payload = {
       response: {errors: [{message: e.message, type: :runtime_error}], success: false},
@@ -83,6 +85,25 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
   end
 
 private
+
+  # Client-side contract error: report it to the client without re-raising,
+  # so an unknown select attribute neither kills the connection nor creates a
+  # server-side bug report. The parser already bumped the counter; this log
+  # adds the caller details so the client can be identified.
+  def report_unknown_select_attribute(error, request_uid:)
+    response_payload = {
+      response: {errors: [{message: error.message, type: :unknown_select_attribute}], success: false},
+      type: "api_maker_request_error"
+    }
+
+    Rails.logger.warn(
+      "api_maker_unknown_select_attribute count=#{ApiMaker::SelectParser.unknown_select_attribute_count} " \
+      "user_agent=#{connection.env["HTTP_USER_AGENT"].to_s[0, 100].inspect} message=#{error.message.inspect}"
+    )
+
+    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
+    transmit_request_payloads(request_uid:, response_payload:) if request_uid
+  end
 
   def execute_command(data, fingerprint:, request_uid:)
     case resolved_concurrency_mode
