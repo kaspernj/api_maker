@@ -133,15 +133,25 @@ class ApiMaker::BaseCommand
         errors: [{message: command_error_message(e), type: error_type}]
       }
 
-      Rails.logger.error e.message
-      Rails.logger.error Rails.backtrace_cleaner.clean(e.backtrace).join("\n")
+      if missing_parameter?(e)
+        # A required parameter was absent from the client payload: this is a
+        # client-input error, not a server bug. Log it with attribution and a
+        # counter instead of reporting it as an application error, so a
+        # malformed payload neither escapes as a production bug report nor
+        # gets silently dropped — the command still answers with a named
+        # per-command error and the rest of the batch runs normally.
+        log_missing_parameter_error(e, controller:)
+      else
+        Rails.logger.error e.message
+        Rails.logger.error Rails.backtrace_cleaner.clean(e.backtrace).join("\n")
 
-      ApiMaker::Configuration.current.report_error(
-        command:,
-        controller:,
-        error: e,
-        response: error_response
-      )
+        ApiMaker::Configuration.current.report_error(
+          command:,
+          controller:,
+          error: e,
+          response: error_response
+        )
+      end
 
       command.error(error_response)
     end
