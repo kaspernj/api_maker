@@ -48,6 +48,12 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
 
     ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
     transmit_request_payloads(request_uid:, response_payload:) if request_uid
+  rescue ApiMaker::MalformedCommandRequestError, ApiMaker::UnknownCommandError => e
+    # Client-side contract/payload error: report it to the client without
+    # re-raising, so a bad websocket request neither kills the connection nor
+    # creates a server-side bug report. The executor already logged the
+    # rejection and bumped the counter.
+    transmit_client_error(request_uid:, error: e)
   rescue => e # rubocop:disable Style/RescueStandardError
     response_payload = {
       response: {errors: [{message: e.message, type: :runtime_error}], success: false},
@@ -61,6 +67,19 @@ class ApiMaker::RequestsChannel < ApplicationCable::Channel
 
   def unsubscribed
     ApiMaker::RequestsRegistry.unregister_channel(self)
+  end
+
+  # Shared response for client-side command contract errors (malformed
+  # payload, unknown command): a failed request response naming the error
+  # type, without dropping the connection.
+  def transmit_client_error(request_uid:, error:)
+    response_payload = {
+      response: {errors: [{message: error.message, type: error.class.name.demodulize.sub(/Error$/, "").underscore.to_sym}], success: false},
+      type: "api_maker_request_error"
+    }
+
+    ApiMaker::RequestsRegistry.complete_request(request_uid:, response_payload:, status: :failed) if request_uid
+    transmit_request_payloads(request_uid:, response_payload:) if request_uid
   end
 
   def last_command_event_sequence_for_request_id(request_id)
