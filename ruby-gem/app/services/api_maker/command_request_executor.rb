@@ -1,7 +1,43 @@
 class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
   arguments :controller, :payload
 
+  # Contract: pool -> command type -> resource -> command name -> command id
+  # -> command entry. Every level, including each command entry, must be a
+  # Hash. Validating the shape here (instead of letting String/Integer/Array
+  # payloads crash mid-iteration) keeps malformed client input a 400 and
+  # keeps the offending payload observable. The first level checks pool_data
+  # itself, so a missing (nil) pool is named too.
+  POOL_LEVELS = ["pool", "command type", "resource", "command name", "command entry"].freeze
+  MALFORMED_SNIPPET_MAX_LENGTH = 200
+
+  # Only member/collection commands resolve an application command constant
+  # ("Commands::<Resource>::<Name>"). The other command types are built into
+  # the gem and have no per-app constant to verify.
+  APP_COMMAND_TYPES = %w[member collection].freeze
+
+  # Process-wide counters so repeated rejections stay visible in the logs even
+  # though each request only sees its own occurrence. They cannot be frozen:
+  # the mutex-guarded increment writes to them (a frozen hash raised
+  # FrozenError at request time in CI).
+  # rubocop:disable Style/MutableConstant
+  MALFORMED_REQUEST_COUNTER = {count: 0}
+  MALFORMED_REQUEST_COUNTER_MUTEX = Mutex.new
+  UNKNOWN_COMMAND_COUNTER = {count: 0}
+  UNKNOWN_COMMAND_COUNTER_MUTEX = Mutex.new
+  # rubocop:enable Style/MutableConstant
+
+  def self.malformed_request_count
+    MALFORMED_REQUEST_COUNTER[:count]
+  end
+
+  def self.unknown_command_count
+    UNKNOWN_COMMAND_COUNTER[:count]
+  end
+
   def perform
+    validate_command_pool!
+    validate_command_constants!
+
     with_request_context do
       # The frontend's believed user is reconciled against the real one only
       # after the request context has synced the authoritative current user.
@@ -58,6 +94,10 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
   end
 
   def actual_user_id_for(scope)
+    # Symbol-key access is the contract for api_maker_args (HashWithIndifferentAccess
+    # in the app, a plain symbol-keyed Hash in specs). String indexing here silently
+    # returned nil for symbol-keyed hashes and made every believed user look
+    # diverged (CI failure at head f963b713).
     controller.__send__(:api_maker_args)[:"current_#{scope}"]&.id
   end
 
@@ -77,7 +117,109 @@ class ApiMaker::CommandRequestExecutor < ApiMaker::ApplicationService
   end
 
   def pool_data
-    @pool_data ||= merged_payload[:pool] || merged_payload.fetch("pool")
+    @pool_data ||= merged_payload[:pool] || merged_payload["pool"]
+  end
+
+  # Walks the whole command pool before any command runs. Each level must be
+  # a Hash; anything else (String, Integer, Array, nil, ...) is rejected with
+  # a MalformedCommandRequestError naming the path and the received class.
+  def validate_command_pool!
+    each_pool_level(pool_data, path: ["pool"], levels: POOL_LEVELS)
+  rescue ApiMaker::MalformedCommandRequestError => e
+    MALFORMED_REQUEST_COUNTER_MUTEX.synchronize { MALFORMED_REQUEST_COUNTER[:count] += 1 }
+
+    # Keep the rejection observable (log + counter) without creating a bug
+    # report: the request details come from the controller because the
+    # executor itself is a plain service.
+    request = controller.respond_to?(:request) ? controller.request : nil
+
+    Rails.logger.warn(
+      "api_maker_malformed_command_request count=#{MALFORMED_REQUEST_COUNTER[:count]} " \
+      "path=#{request&.path.inspect} method=#{request&.request_method.inspect} " \
+      "user_agent=#{request&.user_agent.to_s[0, 100].inspect} #{e.message}"
+    )
+
+    raise e
+  end
+
+  def each_pool_level(node, path:, levels:)
+    raise ApiMaker::MalformedCommandRequestError, malformed_level_message(node, path:, level: levels.first) unless node.is_a?(Hash)
+
+    return if levels.length == 1
+
+    node.each do |key, child|
+      each_pool_level(child, path: path + [key.to_s], levels: levels[1..])
+    end
+  end
+
+  # Redacted snippet: class plus a short truncated inspect, so the caller can
+  # be identified without logging full request bodies (payloads may contain
+  # personal data).
+  def malformed_level_message(node, path:, level:)
+    snippet = node.inspect
+    snippet = "#{snippet[0, MALFORMED_SNIPPET_MAX_LENGTH]}..." if snippet.length > MALFORMED_SNIPPET_MAX_LENGTH
+
+    "Malformed command request: #{level} at '#{path.join(" -> ")}' must be a Hash, got #{node.class} (#{snippet})"
+  end
+
+  # A member/collection command name that resolves to no application constant
+  # is a client contract error. Reject the whole request before any command
+  # runs, so an unknown command answers 400 instead of crashing with a 500
+  # NameError and filing a server-side bug report.
+  def validate_command_constants!
+    unknown = unknown_command_in_pool
+    return unless unknown
+
+    UNKNOWN_COMMAND_COUNTER_MUTEX.synchronize { UNKNOWN_COMMAND_COUNTER[:count] += 1 }
+
+    # Keep the rejection observable (log + counter) without creating a bug
+    # report: the request details come from the controller because the
+    # executor itself is a plain service.
+    request = controller.respond_to?(:request) ? controller.request : nil
+
+    Rails.logger.warn(
+      "api_maker_unknown_command count=#{UNKNOWN_COMMAND_COUNTER[:count]} " \
+      "path=#{request&.path.inspect} method=#{request&.request_method.inspect} " \
+      "user_agent=#{request&.user_agent.to_s[0, 100].inspect} #{unknown.fetch(:message)}"
+    )
+
+    raise ApiMaker::UnknownCommandError, unknown.fetch(:message)
+  end
+
+  def unknown_command_in_pool
+    # Malformed (non-Hash) pool shapes are rejected by validate_command_pool!
+    # before this runs; here we only inspect well-formed pools.
+    return unless pool_data.is_a?(Hash)
+
+    pool_data.each do |command_type, command_type_data|
+      next unless APP_COMMAND_TYPES.include?(command_type.to_s)
+      next unless command_type_data.is_a?(Hash)
+
+      command_type_data.each do |resource_plural_name, command_model_data|
+        next unless command_model_data.is_a?(Hash)
+
+        resource = resource_constant(resource_plural_name)
+        # An unknown resource stays the service's own contract (it raises its
+        # explicit error); only a resolvable resource with a missing command
+        # constant counts as an unknown command here.
+        next unless resource&.model_class
+
+        command_model_data.each_key do |command_name|
+          constant_name = "Commands::#{resource_plural_name.to_s.underscore.camelize}::#{command_name.to_s.camelize}"
+          next if constant_name.safe_constantize
+
+          return {constant_name:, message: "Unknown command: #{constant_name}"}
+        end
+      end
+    end
+
+    nil
+  end
+
+  # Mirrors ApiMaker::CommandService#resource so validation and execution
+  # resolve exactly the same resource.
+  def resource_constant(resource_plural_name)
+    "Resources::#{resource_plural_name.to_s.underscore.singularize.camelize}Resource".safe_constantize
   end
 
   def normalize_commands(command_data)

@@ -19,6 +19,13 @@ class ApiMaker::MemberCommandService < ApiMaker::CommandService
 
   def constant
     @constant ||= "Commands::#{namespace}::#{command_name.camelize}".constantize
+  rescue NameError
+    # The requested command does not exist in the application. This is a
+    # client contract error, not a server bug: raise the dedicated error so
+    # the request answers 400 instead of a 500 NameError bug report. The
+    # executor normally rejects this before the service runs; this keeps the
+    # contract intact for direct service callers too.
+    raise ApiMaker::UnknownCommandError, "Unknown command: Commands::#{namespace}::#{command_name.camelize}"
   end
 
   def ids
