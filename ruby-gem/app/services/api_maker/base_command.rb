@@ -141,6 +141,14 @@ class ApiMaker::BaseCommand
         # gets silently dropped — the command still answers with a named
         # per-command error and the rest of the batch runs normally.
         log_missing_parameter_error(e, controller:)
+      elsif invalid_search_term?(e)
+        # The same boundary one level deeper: Ransack rejected a search term the
+        # client built (STOE-199: q[:accessible_from_lte] on a competitions
+        # index, where Ransack only knows lteq). The key is the client's, not
+        # something the server got wrong, so it gets the same named-error-plus-
+        # log treatment instead of a bug report — while still being rejected
+        # loudly rather than silently skipped.
+        log_invalid_search_term_error(e, controller:)
       else
         Rails.logger.error e.message
         Rails.logger.error Rails.backtrace_cleaner.clean(e.backtrace).join("\n")
