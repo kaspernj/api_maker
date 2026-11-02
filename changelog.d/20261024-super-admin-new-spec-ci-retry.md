@@ -1,0 +1,1 @@
+Hardened the super-admin "new record" system spec with the repo's CI retry mechanism: under load the create-redirect poll can hit the example-level timeout on the Rails 7 Chrome leg, and the spec now retries with fresh sessions instead of flaking the build.

@@ -100,7 +100,7 @@ private
     lines << "  static modelClassData() {"
     lines << "    return modelClassData"
     lines << "  }"
-    lines.concat(attribute_method_lines(attributes))
+    lines.concat(attribute_method_lines(attributes, resource:))
     lines.concat(collection_command_lines(collection_commands, model_content))
     lines.concat(member_command_lines(member_commands, model_content))
     lines.concat(relationship_method_lines(relationships:, model_content:, model_class_name:))
@@ -114,12 +114,12 @@ private
     @resource_by_short_name ||= resources.index_by(&:short_name)
   end
 
-  def attribute_method_lines(attributes)
+  def attribute_method_lines(attributes, resource:)
     attributes.values.flat_map do |attribute_data|
       attribute_name = attribute_data.fetch(:name).to_s
       method_name = js_method_name(attribute_name)
       has_method_name = js_method_name("has_#{attribute_name}")
-      attribute_type = attribute_jsdoc_type(attribute_data)
+      attribute_type = attribute_jsdoc_type(attribute_data, resource:)
 
       [
         "",
@@ -540,7 +540,12 @@ private
     relationship_resource_name
   end
 
-  def attribute_jsdoc_type(attribute_data)
+  # An attribute that isn't a model column has nothing to derive a type from, so a resource can
+  # declare the JavaScript type itself: attributes :seconds_left, jsdoc_type: "number | null".
+  def attribute_jsdoc_type(attribute_data, resource:)
+    declared_type = declared_jsdoc_type(attribute_data, resource)
+    return declared_type if declared_type
+
     column_data = attribute_data[:column]
     return "string | null" if !column_data && attribute_data[:translated]
     return "any" unless column_data
@@ -549,6 +554,10 @@ private
     return "#{base_type} | null" if column_data[:null]
 
     base_type
+  end
+
+  def declared_jsdoc_type(attribute_data, resource)
+    resource._attributes.dig(attribute_data.fetch(:name), :args, :jsdoc_type)
   end
 
   def jsdoc_type_for_db_column(type)

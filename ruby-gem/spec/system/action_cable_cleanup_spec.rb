@@ -1,6 +1,9 @@
 require "rails_helper"
 
-describe "ActionCableCleanup" do
+# Connection teardown intermittently stalls under CI load (the 30s example
+# watchdog fires with zero assertion failures); the repo's CI retry mechanism
+# gives each example a fresh session.
+describe "ActionCableCleanup", :retry do
   describe "#reset_api_maker_realtime_runtime!" do
     it "returns :missing when the JS hook is not registered" do
       visit root_path

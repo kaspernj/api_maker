@@ -366,7 +366,7 @@ export default class Task extends BaseModel {
     return modelClassData
   }
 
-  /** @returns {any} */
+  /** @returns {string} */
   customId() {
     return this.readAttributeUnderscore("custom_id")
   }

@@ -22,7 +22,10 @@ describe "bootstrap - live table - per page" do
     wait_for_expect { expect(all("[data-class='task-row']").length).to eq 100 }
   end
 
-  it "warns before loading a dangerous number of rows and lets the user proceed or cancel" do
+  # Incrementally rendering 1001 rows is the slowest render in the suite and
+  # intermittently exceeds the Capybara wait under CI load; the repo's CI
+  # retry mechanism gives it fresh sessions on retry.
+  it "warns before loading a dangerous number of rows and lets the user proceed or cancel", :retry do
     project = create(:project)
     now = Time.current
     rows = Array.new(1001) do |index|
