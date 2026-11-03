@@ -1229,7 +1229,7 @@
     "@jsonjoy.com/codegen" "^1.0.0"
 
 "@kaspernj/api-maker@file:../../../npm-api-maker":
-  version "1.0.2187"
+  version "1.0.2189"
   dependencies:
     classnames "^2.5.1"
     clone-deep ">= 4.0.1"
@@ -2075,9 +2075,9 @@ binary-extensions@^2.0.0:
   integrity sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==
 
 body-parser@~1.20.3:
-  version "1.20.4"
-  resolved "https://registry.npmjs.org/body-parser/-/body-parser-1.20.4.tgz"
-  integrity sha512-ZTgYYLMOXY9qKU/57FAo8F+HA2dGX7bqGc71txDRC1rS4frdFI5R7NhluHxH6M0YItAP0sHB4uqAOcYKxO6uGA==
+  version "1.20.9"
+  resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.20.9.tgz#b64358a113b4d200d7484752cd154b66933e2009"
+  integrity sha512-FISIQxV5u91Y9gvuFq3q/tA/qTqLJn3AhRcEvyozyhJTh5OBFFtv827AdHU7Rbyct4r+Ba1/99oFa1Y3yuFsdw==
   dependencies:
     bytes "~3.1.2"
     content-type "~1.0.5"
@@ -2087,7 +2087,7 @@ body-parser@~1.20.3:
     http-errors "~2.0.1"
     iconv-lite "~0.4.24"
     on-finished "~2.4.1"
-    qs "~6.14.0"
+    qs "~6.16.0"
     raw-body "~2.5.3"
     type-is "~1.6.18"
     unpipe "~1.0.0"
@@ -3680,7 +3680,7 @@ object-assign@^4.1.0, object-assign@^4.1.1:
   resolved "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
   integrity sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==
 
-object-inspect@^1.13.3:
+object-inspect@^1.13.3, object-inspect@^1.13.4:
   version "1.13.4"
   resolved "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.4.tgz"
   integrity sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==
@@ -4029,6 +4029,14 @@ qs@^6.10.5, qs@~6.14.0:
   integrity sha512-V/yCWTTF7VJ9hIh18Ugr2zhJMP01MY7c5kh4J870L7imm6/DIzBsNLTXzMwUA3yZ5b/KBqLx8Kp3uRvd7xSe3Q==
   dependencies:
     side-channel "^1.1.0"
+
+qs@~6.16.0:
+  version "6.16.1"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.16.1.tgz#0643e17993e551759c85078e1f0bc4b9fe908020"
+  integrity sha512-5Px6J7rfHBAGUhNQ3es4YzcOdBBw0SDcVtThJml4RdnKw4tKs2epA0kPZ+K8X+WiHktT93RHVcQ/3ym5aTCgtg==
+  dependencies:
+    es-define-property "^1.0.1"
+    side-channel "^1.1.1"
 
 querystringify@^2.1.1:
   version "2.2.0"
@@ -4483,6 +4491,14 @@ side-channel-list@^1.0.0:
     es-errors "^1.3.0"
     object-inspect "^1.13.3"
 
+side-channel-list@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/side-channel-list/-/side-channel-list-1.0.1.tgz#c2e0b5a14a540aebee3bbc6c3f8666cc9b509127"
+  integrity sha512-mjn/0bi/oUURjc5Xl7IaWi/OJJJumuoJFQJfDDyO46+hBWsfaVM65TBHq2eoZBhzl9EchxOijpkbRC8SVBQU0w==
+  dependencies:
+    es-errors "^1.3.0"
+    object-inspect "^1.13.4"
+
 side-channel-map@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/side-channel-map/-/side-channel-map-1.0.1.tgz"
@@ -4512,6 +4528,17 @@ side-channel@^1.1.0:
     es-errors "^1.3.0"
     object-inspect "^1.13.3"
     side-channel-list "^1.0.0"
+    side-channel-map "^1.0.1"
+    side-channel-weakmap "^1.0.2"
+
+side-channel@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/side-channel/-/side-channel-1.1.1.tgz#ea02c62e05dc4bea67d4442f0fb71ee192f8e0ab"
+  integrity sha512-6x6dK6zJdpTzF4sQeNYxwtvBzf6Eg4GtlesS94HOvTudUeyK2WXAaIfmDgsyslYrRBeFIlsi54AYsFGUuhmvrQ==
+  dependencies:
+    es-errors "^1.3.0"
+    object-inspect "^1.13.4"
+    side-channel-list "^1.0.1"
     side-channel-map "^1.0.1"
     side-channel-weakmap "^1.0.2"
 
