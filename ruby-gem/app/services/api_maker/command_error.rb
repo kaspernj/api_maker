@@ -69,6 +69,13 @@ module ApiMaker::CommandError
   # resource deliberately rejected a parameter. Surface them as a dedicated,
   # non-500 error type with a human-readable message instead of lumping them
   # in as "Internal server error" (:runtime_error).
+  # Client contract errors: the request itself disagrees with the API
+  # contract. They must stay loud for the caller but must not be reported as
+  # server faults (no "Internal server error", no bug report).
+  def client_contract_error?(error)
+    error.is_a?(ApiMaker::UnknownSelectAttributeError) || unpermitted_parameters?(error) || invalid_search_term?(error)
+  end
+
   def command_error_type(error)
     if error.is_a?(ApiMaker::IndividualCommand::NotFoundOrNoAccessError)
       :not_found_or_no_access
@@ -76,6 +83,8 @@ module ApiMaker::CommandError
       :unpermitted_parameter
     elsif missing_parameter?(error)
       :missing_parameter
+    elsif error.is_a?(ApiMaker::UnknownSelectAttributeError)
+      :unknown_select_attribute
     elsif invalid_search_term?(error)
       :invalid_search_term
     else
@@ -90,6 +99,10 @@ module ApiMaker::CommandError
       "This request included a parameter that is not allowed for this operation."
     elsif missing_parameter?(error)
       "This request was missing a required parameter: #{error.param}"
+    elsif error.is_a?(ApiMaker::UnknownSelectAttributeError)
+      # The resource + attribute name is the actionable signal for the
+      # caller - keep it in the response instead of a generic message.
+      error.message
     elsif invalid_search_term?(error)
       "This request used a search term that is not valid for this collection: #{invalid_search_term_name(error) || error.message}"
     else

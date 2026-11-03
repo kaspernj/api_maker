@@ -91,6 +91,7 @@ class Resources::UserResources < Resources::ApplicationResource
   attributes :id, :email, :custom_attribute
   attributes :calculated_attribute, selected_by_default: false
   attributes :secret_attribute, if: :signed_in_as_admin?
+  attributes :seconds_left, jsdoc_type: "number | null"
   collection_commands :count_users
   member_commands :calculate_age
   relationships :account, :tasks

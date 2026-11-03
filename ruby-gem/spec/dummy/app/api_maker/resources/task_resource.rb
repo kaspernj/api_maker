@@ -1,5 +1,6 @@
 class Resources::TaskResource < Resources::ApplicationResource
-  attributes :custom_id, :finished, :id, :name, :priority, :project_id, :state, :translated_state, :user_id
+  attributes :custom_id, jsdoc_type: "string"
+  attributes :finished, :id, :name, :priority, :project_id, :state, :translated_state, :user_id
   attributes :created_at, if: proc { signed_in? }
   collection_commands :command_serialize, {test_collection: {cache_response: true}}
   member_commands({test_member: {cache_response: true}})
