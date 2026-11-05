@@ -3,22 +3,39 @@ import {jest} from "@jest/globals"
 
 const mockCreate = jest.fn()
 const effects = []
-const mockRef = {current: undefined}
-let refCreated
+let shapeHookInstance
 
 jest.unstable_mockModule("react", () => ({
   useLayoutEffect: (callback) => {
     effects.push(callback)
-  },
-  useRef: (initialValue) => {
-    if (!refCreated) {
-      mockRef.current = initialValue
-      refCreated = true
-    }
-
-    return mockRef
   }
 }))
+
+jest.unstable_mockModule("set-state-compare", () => ({
+  ShapeHook: class MockShapeHook {
+    constructor(props) {
+      this.props = props
+      this.p = props
+      this.state = {}
+    }
+  },
+  // One instance per component, like the real useShapeHook: props are replaced
+  // each render while the instance the subscription closure holds stays.
+  useShapeHook: (ShapeHookClass, props) => {
+    if (shapeHookInstance) {
+      shapeHookInstance.props = props
+      shapeHookInstance.p = props
+    } else {
+      shapeHookInstance = new ShapeHookClass(props)
+    }
+
+    shapeHookInstance.setup()
+
+    return shapeHookInstance
+  }
+}))
+
+jest.unstable_mockModule("prop-types-exact", () => ({default: (propTypes) => propTypes}))
 
 jest.unstable_mockModule("../src/channels-consumer.js", () => ({
   __esModule: true,
@@ -37,7 +54,7 @@ describe("useSubscription", () => {
   beforeEach(() => {
     mockCreate.mockClear()
     effects.length = 0
-    refCreated = false
+    shapeHookInstance = undefined
   })
 
   it("creates a subscription for the given channel args", async () => {
