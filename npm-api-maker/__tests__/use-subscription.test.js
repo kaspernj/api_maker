@@ -21,12 +21,18 @@ jest.unstable_mockModule("set-state-compare", () => ({
   },
   // One instance per component, like the real useShapeHook: props are replaced
   // each render while the instance the subscription closure holds stays.
+  // defaultProps are merged the same way, so the class-level defaults are what
+  // the hook actually sees.
   useShapeHook: (ShapeHookClass, props) => {
+    const actualProps = ShapeHookClass.defaultProps
+      ? {...ShapeHookClass.defaultProps, ...props}
+      : props
+
     if (shapeHookInstance) {
-      shapeHookInstance.props = props
-      shapeHookInstance.p = props
+      shapeHookInstance.props = actualProps
+      shapeHookInstance.p = actualProps
     } else {
-      shapeHookInstance = new ShapeHookClass(props)
+      shapeHookInstance = new ShapeHookClass(actualProps)
     }
 
     shapeHookInstance.setup()

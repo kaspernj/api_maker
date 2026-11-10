@@ -10,8 +10,14 @@ import {useLayoutEffect} from "react"
 /** @typedef {Record<string, unknown>} SubscriptionPayload */
 /** @typedef {(payload: SubscriptionPayload) => void} SubscriptionHandler */
 /** @typedef {{active?: boolean, args: SubscriptionArgs, onReceive: SubscriptionHandler}} UseSubscriptionProps */
+/** @typedef {Record<string, never>} UseSubscriptionState */
 
-/** Hook state container for ActionCable channel subscriptions. */
+/**
+ * Hook state container for ActionCable channel subscriptions.
+ * The subscription lives in the effect closure, so this hook keeps no React state.
+ *
+ * @augments {ShapeHook<UseSubscriptionProps, UseSubscriptionState>}
+ */
 class UseSubscriptionShapeHook extends ShapeHook {
   static defaultProps = {
     active: true
@@ -61,13 +67,7 @@ class UseSubscriptionShapeHook extends ShapeHook {
  * @returns {void}
  */
 const apiMakerUseSubscription = (props) => {
-  const {active = true, args, onReceive, ...restProps} = props
-
-  if (Object.keys(restProps).length > 0) {
-    throw new Error(`Unknown props given to apiMakerUseSubscription: ${Object.keys(restProps).join(", ")}`)
-  }
-
-  useShapeHook(UseSubscriptionShapeHook, {active, args, onReceive})
+  useShapeHook(UseSubscriptionShapeHook, props)
 }
 
 export default apiMakerUseSubscription
