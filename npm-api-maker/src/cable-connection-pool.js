@@ -2,12 +2,14 @@
 import {dig} from "diggerize"
 import CableSubscriptionClass from "./cable-subscription.js" // eslint-disable-line sort-imports
 import CableSubscriptionPool from "./cable-subscription-pool.js"
+import LocalMutations from "./local-mutations.js"
 import RunLast from "./run-last.js"
 
 const shared = {}
 
 /** @typedef {import("./cable-subscription.js").default} CableSubscription */
 /** @typedef {import("./base-model.js").default} BaseModel */
+/** @typedef {import("./local-mutations.js").MutationKind} MutationKind */
 /** @typedef {object | string | number | boolean | null | Array<object | string | number | boolean | null>} CableRequestValue */
 /** @typedef {Record<string, CableRequestValue>} CableRefreshArgs */
 /** @typedef {string | number | boolean} ConnectionEventValue */
@@ -195,6 +197,67 @@ export default class ApiMakerCableConnectionPool {
    * @returns {CableSubscription}
    */
   connectUpdate = (modelName, modelId, callback) => this.connectModelEvent({callback, value: modelId, path: [modelName, "updates"]})
+
+  /**
+   * Delivers a mutation this client performed to its own subscriptions instead of waiting for the
+   * server to broadcast it back.
+   *
+   * The broadcast still arrives, so the mutation is recorded as well and the subscription pool drops
+   * that one echo rather than delivering the same change twice.
+   * @param {BaseModel} model
+   * @param {MutationKind} kind
+   * @returns {void}
+   */
+  dispatchLocalMutation(model, kind) {
+    const modelName = model.modelClassData().name
+    const primaryKeyName = model.modelClassData().primaryKey
+
+    // A command response carries the attributes the resource selected, which is not guaranteed to
+    // include the primary key - and reading an unloaded attribute throws.
+    if (!primaryKeyName || !model.isAttributeLoaded(primaryKeyName)) {
+      return
+    }
+
+    const modelId = model.primaryKey()
+
+    if (modelId === undefined || modelId === null) {
+      return
+    }
+
+    LocalMutations.current().record(modelName, modelId, kind)
+
+    const payload = /** @type {ModelMutationPayload} */ ({model})
+
+    this.cableSubscriptionPools.forEach((cableSubscriptionPool) => {
+      this.subscriptionsForLocalMutation({kind, modelId, modelName, subscriptions: cableSubscriptionPool.subscriptions})
+        .forEach((subscription) => subscription.events.emit("received", payload))
+    })
+
+    this.subscriptionsForLocalMutation({kind, modelId, modelName, subscriptions: this.upcomingSubscriptions})
+      .forEach((subscription) => subscription.events.emit("received", payload))
+  }
+
+  /**
+   * @param {object} root0
+   * @param {MutationKind} root0.kind
+   * @param {string | number} root0.modelId
+   * @param {string} root0.modelName
+   * @param {object} [root0.subscriptions]
+   * @returns {CableSubscription[]}
+   */
+  subscriptionsForLocalMutation({kind, modelId, modelName, subscriptions}) {
+    const modelSubscriptions = subscriptions?.[modelName]
+
+    if (!modelSubscriptions) {
+      return []
+    }
+
+    if (kind == "creates") {
+      return modelSubscriptions.creates || []
+    }
+
+    return modelSubscriptions[kind]?.[modelId] || []
+  }
 
   /** Opens one shared ActionCable subscription for all queued logical subscriptions. */
   connectUpcoming = () => {
