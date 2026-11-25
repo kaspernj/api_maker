@@ -4,6 +4,7 @@ import {ValidationErrors} from "./validation-errors.js"
 import {digg} from "diggerize"
 import Attribute from "./base-model/attribute.js" // eslint-disable-line sort-imports
 import AttributeNotLoadedError from "./attribute-not-loaded-error.js"
+import CableConnectionPool from "./cable-connection-pool.js"
 import CacheKeyGenerator from "./cache-key-generator.js"
 import Collection from "./collection.js"
 import CommandsPool from "./commands-pool.js"
@@ -552,6 +553,7 @@ const BaseModel = class BaseModel {
     if (response.model) {
       this._refreshModelFromResponse(response)
       this.changes = {}
+      CableConnectionPool.current().dispatchLocalMutation(this, "creates")
     }
 
     return {model: this, response}
@@ -589,6 +591,7 @@ const BaseModel = class BaseModel {
     if (response.model) {
       this._refreshModelDataFromResponse(response)
       this.changes = {}
+      CableConnectionPool.current().dispatchLocalMutation(this, "creates")
     }
 
     return {model: this, response}
@@ -612,6 +615,8 @@ const BaseModel = class BaseModel {
         this._refreshModelDataFromResponse(response)
         this.changes = {}
       }
+
+      CableConnectionPool.current().dispatchLocalMutation(this, "destroys")
 
       return {model: this, response}
     } else {
@@ -1045,6 +1050,8 @@ const BaseModel = class BaseModel {
         this.changes = {}
       }
 
+      CableConnectionPool.current().dispatchLocalMutation(this, "updates")
+
       return {response, model: this}
     } else {
       this.handleResponseError(response)
@@ -1130,6 +1137,7 @@ const BaseModel = class BaseModel {
     if (response.model) {
       this._refreshModelFromResponse(response)
       this.changes = {}
+      CableConnectionPool.current().dispatchLocalMutation(this, "updates")
     }
 
     return {response, model: this}

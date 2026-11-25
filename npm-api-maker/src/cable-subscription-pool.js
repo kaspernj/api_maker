@@ -4,6 +4,7 @@ import {digg} from "diggerize"
 import CommandsPool from "./commands-pool.js" // eslint-disable-line sort-imports
 import Deserializer from "./deserializer.js"
 import getChannelsConsumer from "./channels-consumer.js"
+import LocalMutations from "./local-mutations.js" // eslint-disable-line sort-imports
 import Logger from "./logger.js" // eslint-disable-line sort-imports
 
 const logger = new Logger({name: "ApiMaker / CableSubscriptionPool"})
@@ -193,14 +194,26 @@ export default class ApiMakerCableSubscriptionPool {
     }
 
     if (type == "u") {
+      if (LocalMutations.current().consume(modelName, modelId, "updates")) {
+        return
+      }
+
       for (const subscription of subscriptions[modelName].updates[modelId]) {
         subscription.events.emit("received", /** @type {ModelMutationPayload} */ ({model}))
       }
     } else if (type == "c") {
+      if (LocalMutations.current().consume(modelName, modelId, "creates")) {
+        return
+      }
+
       for (const subscription of subscriptions[modelName].creates) {
         subscription.events.emit("received", /** @type {ModelMutationPayload} */ ({model}))
       }
     } else if (type == "d") {
+      if (LocalMutations.current().consume(modelName, modelId, "destroys")) {
+        return
+      }
+
       const destroySubscriptions = digg(subscriptions, modelName, "destroys", modelId)
 
       for (const subscription of destroySubscriptions) {

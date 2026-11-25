@@ -1,12 +1,14 @@
 // @ts-check
 import ApiMakerCableConnectionPool from "./cable-connection-pool.js"
 import ApiMakerWebsocketRequestClient from "./websocket-request-client.js"
+import LocalMutations from "./local-mutations.js"
 import {resetChannelsConsumer} from "./channels-consumer.js"
 
 /** @returns {void} */
 const resetRealtimeRuntimeState = () => {
   ApiMakerWebsocketRequestClient.resetCurrent()
   ApiMakerCableConnectionPool.resetCurrent()
+  LocalMutations.resetCurrent()
   resetChannelsConsumer()
 }
 

@@ -1,6 +1,9 @@
 // @ts-check
 import CableConnectionPool from "../src/cable-connection-pool.js"
+import CableSubscription from "../src/cable-subscription.js"
 import CableSubscriptionPool from "../src/cable-subscription-pool.js"
+import LocalMutations from "../src/local-mutations.js"
+import User from "./support/user"
 import {digg} from "diggerize"
 import {jest} from "@jest/globals"
 
@@ -219,6 +222,96 @@ describe("CableConnectionPool", () => {
 
       expect(subscriptions.length).toEqual(1)
       expect(connectedUnsubscribeEvent).toEqual(true)
+    })
+  })
+
+  describe("dispatchLocalMutation", () => {
+    afterEach(() => {
+      LocalMutations.resetCurrent()
+    })
+
+    it("delivers the mutation to the subscriptions registered for that model", () => {
+      const cableConnectionPool = new CableConnectionPool()
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+      const user = new User({a: {id: 5}})
+
+      subscription.events.addListener("received", received)
+      cableConnectionPool.cableSubscriptionPools = [cableSubscriptionPool]
+      cableSubscriptionPool.subscriptions = {User: {updates: {5: [subscription]}}}
+
+      cableConnectionPool.dispatchLocalMutation(user, "updates")
+
+      expect(received).toHaveBeenCalledTimes(1)
+      expect(received.mock.calls[0][0]).toEqual({model: user})
+    })
+
+    it("delivers the mutation to subscriptions that have not been connected yet", () => {
+      const cableConnectionPool = new CableConnectionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+      const user = new User({a: {id: 5}})
+
+      subscription.events.addListener("received", received)
+      cableConnectionPool.upcomingSubscriptions = {User: {destroys: {5: [subscription]}}}
+
+      cableConnectionPool.dispatchLocalMutation(user, "destroys")
+
+      expect(received).toHaveBeenCalledTimes(1)
+    })
+
+    it("delivers create mutations to the model class subscriptions", () => {
+      const cableConnectionPool = new CableConnectionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+      const user = new User({a: {id: 5}})
+
+      subscription.events.addListener("received", received)
+      cableConnectionPool.upcomingSubscriptions = {User: {creates: [subscription]}}
+
+      cableConnectionPool.dispatchLocalMutation(user, "creates")
+
+      expect(received).toHaveBeenCalledTimes(1)
+    })
+
+    it("records the mutation so the server echo of it can be dropped", () => {
+      const cableConnectionPool = new CableConnectionPool()
+      const user = new User({a: {id: 5}})
+
+      cableConnectionPool.dispatchLocalMutation(user, "updates")
+
+      expect(LocalMutations.current().consume("User", 5, "updates")).toEqual(true)
+    })
+
+    it("delivers nothing for a model without a primary key", () => {
+      const cableConnectionPool = new CableConnectionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+      const user = new User({a: {id: null}, isNewRecord: true})
+
+      subscription.events.addListener("received", received)
+      cableConnectionPool.upcomingSubscriptions = {User: {updates: {5: [subscription]}}}
+
+      cableConnectionPool.dispatchLocalMutation(user, "updates")
+
+      expect(received).not.toHaveBeenCalled()
+      expect(Object.keys(LocalMutations.current().pendingMutations)).toEqual([])
+    })
+
+    it("delivers nothing for a model whose primary key was not loaded, without throwing on it", () => {
+      const cableConnectionPool = new CableConnectionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+      const user = new User({a: {email: "teacher@example.com"}})
+
+      user.newRecord = false
+      subscription.events.addListener("received", received)
+      cableConnectionPool.upcomingSubscriptions = {User: {updates: {5: [subscription]}}}
+
+      expect(() => cableConnectionPool.dispatchLocalMutation(user, "updates")).not.toThrow()
+      expect(received).not.toHaveBeenCalled()
+      expect(Object.keys(LocalMutations.current().pendingMutations)).toEqual([])
     })
   })
 
