@@ -49,7 +49,7 @@
     "prop-types": "^15.8.1",
     "prop-types-exact": "^1.2.7",
     "rails-erb-loader": "^5.5.2",
-    "react": "19.2.4",
+    "react": "19.3.1",
     "react-dom": "19.2.4",
     "react-native-vector-icons": "^10.3.0",
     "react-native-safe-area-context": "^5.8.1",
