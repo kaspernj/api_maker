@@ -1,5 +1,7 @@
 // @ts-check
+import CableSubscription from "../src/cable-subscription.js"
 import CableSubscriptionPool from "../src/cable-subscription-pool.js"
+import LocalMutations from "../src/local-mutations.js"
 import {jest} from "@jest/globals"
 
 describe("CableSubscriptionPool", () => {
@@ -24,6 +26,82 @@ describe("CableSubscriptionPool", () => {
       expect(unsubscribeCalled).toEqual(true)
       expect(cableSubscriptionPool.activeSubscriptions).toEqual(0)
       expect(cableSubscriptionPool.isConnected()).toEqual(false)
+    })
+  })
+
+  describe("onReceived", () => {
+    afterEach(() => {
+      LocalMutations.resetCurrent()
+    })
+
+    it("drops the update broadcast that echoes a mutation this client already delivered", () => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+
+      cableSubscriptionPool.subscriptions = {Contact: {updates: {1: [subscription]}}}
+      subscription.events.addListener("received", received)
+      LocalMutations.current().record("Contact", 1, "updates")
+
+      cableSubscriptionPool.onReceived({mi: 1, mt: "contacts", t: "u"})
+
+      expect(received).not.toHaveBeenCalled()
+    })
+
+    it("delivers an update broadcast that this client did not perform", () => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+
+      cableSubscriptionPool.subscriptions = {Contact: {updates: {1: [subscription]}}}
+      subscription.events.addListener("received", received)
+
+      cableSubscriptionPool.onReceived({mi: 1, mt: "contacts", t: "u"})
+
+      expect(received).toHaveBeenCalledTimes(1)
+    })
+
+    it("delivers the update broadcast that follows the echo of this client's own mutation", () => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+
+      cableSubscriptionPool.subscriptions = {Contact: {updates: {1: [subscription]}}}
+      subscription.events.addListener("received", received)
+      LocalMutations.current().record("Contact", 1, "updates")
+
+      cableSubscriptionPool.onReceived({mi: 1, mt: "contacts", t: "u"})
+      cableSubscriptionPool.onReceived({mi: 1, mt: "contacts", t: "u"})
+
+      expect(received).toHaveBeenCalledTimes(1)
+    })
+
+    it("drops the destroy broadcast that echoes a mutation this client already delivered", () => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+
+      cableSubscriptionPool.subscriptions = {Contact: {destroys: {1: [subscription]}}}
+      subscription.events.addListener("received", received)
+      LocalMutations.current().record("Contact", 1, "destroys")
+
+      cableSubscriptionPool.onReceived({mi: 1, mt: "contacts", t: "d"})
+
+      expect(received).not.toHaveBeenCalled()
+    })
+
+    it("drops the create broadcast that echoes a create this client already delivered", () => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+
+      cableSubscriptionPool.subscriptions = {Contact: {creates: [subscription]}}
+      subscription.events.addListener("received", received)
+      LocalMutations.current().record("Contact", 1, "creates")
+
+      cableSubscriptionPool.onReceived({mi: 1, mt: "contacts", t: "c"})
+
+      expect(received).not.toHaveBeenCalled()
     })
   })
 
