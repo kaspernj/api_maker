@@ -24,6 +24,7 @@ describe ApiMaker::GenerateFrontendModels do
         expect(task_content).to include("@returns {typeof modelClassData}")
         expect(task_content).to include("return modelClassData")
         expect(task_content).to include("\"default\": false,\n        \"name\": \"finished\"")
+        expect(task_content).to include("\"default\": \"2000-01-01 12:34:56\"")
         expect(task_content).not_to include("@type {unknown} */ (modelClassData)")
         expect(task_content).not_to include("static ransack(query = {})")
         expect(task_content).not_to include("return super.ransack(query)")
