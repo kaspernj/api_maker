@@ -65,10 +65,32 @@ describe ApiMaker::ModelContentGeneratorService do
 
     it "casts defaults for ransackable attributes as well" do
       content_user = ApiMaker::ModelContentGeneratorService.new(resource: Resources::UserResource).execute!
-      ransackable_attributes = content_user.fetch(:model_class_data).fetch(:ransackable_attributes)
-      sign_in_count = ransackable_attributes.find { |item| item.fetch(:name).to_s == "sign_in_count" }
 
-      expect(sign_in_count.fetch(:column).fetch(:default)).to eq(0)
+      expect(ransackable_column_for(content_user, "sign_in_count").fetch(:default)).to eq(0)
     end
+
+    it "casts a float default to a float instead of the database literal" do
+      column = ransackable_column_for(content_task, "weight")
+
+      expect(column.fetch(:type)).to eq(:float)
+      expect(column.fetch(:default)).to eq(0.0)
+    end
+
+    it "leaves a datetime default as the database literal instead of adding a timezone it does not have" do
+      column = ransackable_column_for(content_task, "scheduled_at")
+
+      expect(column.fetch(:type)).to eq(:datetime)
+      expect(column.fetch(:default)).to be_a(String)
+      expect(column.fetch(:default)).to eq("2000-01-01 12:34:56")
+    end
+  end
+
+  def ransackable_column_for(content, attribute_name)
+    ransackable_attributes = content.fetch(:model_class_data).fetch(:ransackable_attributes)
+    attribute = ransackable_attributes.find { |item| item.fetch(:name).to_s == attribute_name }
+
+    raise "Couldnt find ransackable attribute: #{attribute_name}" unless attribute
+
+    attribute.fetch(:column)
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_03_22_195540) do
+ActiveRecord::Schema[7.0].define(version: 2026_11_25_000000) do
   create_table "account_marked_tasks", force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "task_id", null: false
@@ -171,6 +171,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_22_195540) do
     t.string "state", default: "open", null: false
     t.integer "priority"
     t.string "support_email"
+    t.datetime "scheduled_at", precision: nil, default: "2000-01-01 12:34:56"
+    t.float "weight", default: 0.0
     t.index ["project_id"], name: "index_tasks_on_project_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end

@@ -1,4 +1,8 @@
 class ApiMaker::ModelContentGeneratorService < ApiMaker::ApplicationService
+  # Column types where the database literal is not the value: Postgres reports a boolean default
+  # as "false" and a numeric one as "0", and SQLite reports both as "0".
+  CASTABLE_COLUMN_TYPES = %i[boolean integer float].freeze
+
   attr_reader :resource
 
   delegate :model_class, to: :resource
@@ -66,11 +70,17 @@ private
   end
 
   # ActiveRecord reports a column default as the database literal, so a boolean default arrives
-  # as the string "false" on Postgres and "0" on SQLite. Those strings are truthy in JavaScript
-  # and contradict the column type reported in the same payload, so the default is cast back to
-  # the type the column actually has.
+  # as the string "false" on Postgres and "0" on SQLite, and a numeric default as "0". Those
+  # strings are truthy in JavaScript and contradict the column type reported in the same payload,
+  # so they are cast back to the type the column actually has.
+  #
+  # Every other type keeps its literal, because the literal is already the right shape and casting
+  # would make it worse: a time-only default gains an invented date ("00:03:00" becomes
+  # "2000-01-01 00:03:00 +0100"), a timestamp default gains a timezone the column does not have,
+  # and a decimal default serialises as a string either way.
   def _column_default(column)
     return column.default if column.default.nil?
+    return column.default unless CASTABLE_COLUMN_TYPES.include?(column.type)
 
     model_class.type_for_attribute(column.name).deserialize(column.default)
   end
