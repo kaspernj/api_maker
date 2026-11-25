@@ -35,7 +35,7 @@
     "classnames": "^2.5.1",
     "compression-webpack-plugin": "12",
     "css-loader": "^7.1.5",
-    "debounce": "^3.0.0",
+    "debounce": "^4.0.0",
     "diggerize": "^1.0.10",
     "file-loader": "^6.2.0",
     "flash-notifications": "0.0.45",
