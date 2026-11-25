@@ -1,7 +1,12 @@
 // @ts-check
 import BaseModel from "../build/base-model.js"
+import CableConnectionPool from "../build/cable-connection-pool.js"
+import CableSubscription from "../build/cable-subscription.js"
+import CableSubscriptionPool from "../build/cable-subscription-pool.js"
+import CommandsPool from "../build/commands-pool.js"
 import CustomError from "../build/custom-error.js"
 import {JSDOM} from "jsdom"
+import LocalMutations from "../build/local-mutations.js"
 import User from "./support/user"
 import ValidationError from "../build/validation-error.js"
 import {jest} from "@jest/globals"
@@ -55,6 +60,90 @@ describe("BaseModel", () => {
 
       // There will be extra objects in the hash if it actually calls the backend.
       expect(response).toEqual({model})
+    })
+  })
+
+  describe("local mutation events", () => {
+    let addCommand
+
+    beforeEach(() => {
+      addCommand = jest.spyOn(CommandsPool, "addCommand")
+    })
+
+    // Restoring only the spy this block creates. jest.restoreAllMocks() would also restore the
+    // spies other describes create at definition time, which breaks the tests running after this block.
+    afterEach(() => {
+      addCommand.mockRestore()
+      CableConnectionPool.resetCurrent()
+      LocalMutations.resetCurrent()
+    })
+
+    it("delivers the update to the local subscriptions when the server accepts it", async() => {
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+      const user = new User({a: {id: 5}})
+
+      CableConnectionPool.current().cableSubscriptionPools = [new CableSubscriptionPool()]
+      CableConnectionPool.current().cableSubscriptionPools[0].subscriptions = {User: {updates: {5: [subscription]}}}
+      subscription.events.addListener("received", received)
+      addCommand.mockResolvedValue({model: new User({a: {id: 5}}), success: true})
+      user.changes = {email: "teacher@example.com"}
+
+      await user.update()
+
+      expect(received).toHaveBeenCalledTimes(1)
+    })
+
+    it("does not deliver an update the server rejected", async() => {
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+      const user = new User({a: {id: 5}})
+
+      CableConnectionPool.current().cableSubscriptionPools = [new CableSubscriptionPool()]
+      CableConnectionPool.current().cableSubscriptionPools[0].subscriptions = {User: {updates: {5: [subscription]}}}
+      subscription.events.addListener("received", received)
+      addCommand.mockResolvedValue({success: false})
+      user.changes = {email: "teacher@example.com"}
+
+      await expect(user.update()).rejects.toThrow(CustomError)
+
+      expect(received).not.toHaveBeenCalled()
+    })
+
+    it("delivers the destroy to the local subscriptions when the server accepts it", async() => {
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+      const user = new User({a: {id: 5}})
+
+      CableConnectionPool.current().cableSubscriptionPools = [new CableSubscriptionPool()]
+      CableConnectionPool.current().cableSubscriptionPools[0].subscriptions = {User: {destroys: {5: [subscription]}}}
+      subscription.events.addListener("received", received)
+      addCommand.mockResolvedValue({model: new User({a: {id: 5}}), success: true})
+
+      await user.destroy()
+
+      expect(received).toHaveBeenCalledTimes(1)
+    })
+
+    it("notifies the acting client once for its own mutation, not once more for the server echo", async() => {
+      const cableSubscriptionPool = new CableSubscriptionPool()
+      const received = jest.fn()
+      const subscription = new CableSubscription()
+      const user = new User({a: {id: 5}})
+
+      CableConnectionPool.current().cableSubscriptionPools = [cableSubscriptionPool]
+      cableSubscriptionPool.subscriptions = {User: {updates: {5: [subscription]}}}
+      addCommand.mockResolvedValue({model: new User({a: {id: 5}}), success: true})
+      subscription.events.addListener("received", received)
+      user.changes = {email: "teacher@example.com"}
+
+      await user.update()
+
+      expect(received).toHaveBeenCalledTimes(1)
+
+      cableSubscriptionPool.onReceived({mi: 5, mt: "users", t: "u"})
+
+      expect(received).toHaveBeenCalledTimes(1)
     })
   })
 
