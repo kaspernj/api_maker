@@ -58,11 +58,21 @@ private
 
   def _column_data(column)
     {
-      default: column.default,
+      default: _column_default(column),
       name: column.name,
       null: column.null,
       type: column.type
     }
+  end
+
+  # ActiveRecord reports a column default as the database literal, so a boolean default arrives
+  # as the string "false" on Postgres and "0" on SQLite. Those strings are truthy in JavaScript
+  # and contradict the column type reported in the same payload, so the default is cast back to
+  # the type the column actually has.
+  def _column_default(column)
+    return column.default if column.default.nil?
+
+    model_class.type_for_attribute(column.name).deserialize(column.default)
   end
 
   def columns

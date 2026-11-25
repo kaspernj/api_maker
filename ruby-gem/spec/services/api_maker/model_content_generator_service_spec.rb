@@ -42,4 +42,33 @@ describe ApiMaker::ModelContentGeneratorService do
       )
     end
   end
+
+  describe "column defaults" do
+    it "casts a boolean default to a boolean instead of the database literal" do
+      column = content_task.fetch(:attributes).fetch(:finished).fetch(:column)
+
+      expect(column.fetch(:default)).to be(false)
+      expect(column.fetch(:type)).to eq(:boolean)
+    end
+
+    it "keeps a string default as a string" do
+      column = content_task.fetch(:attributes).fetch(:state).fetch(:column)
+
+      expect(column.fetch(:default)).to eq("open")
+    end
+
+    it "leaves a column without a default as nil" do
+      column = content_task.fetch(:attributes).fetch(:priority).fetch(:column)
+
+      expect(column.fetch(:default)).to be_nil
+    end
+
+    it "casts defaults for ransackable attributes as well" do
+      content_user = ApiMaker::ModelContentGeneratorService.new(resource: Resources::UserResource).execute!
+      ransackable_attributes = content_user.fetch(:model_class_data).fetch(:ransackable_attributes)
+      sign_in_count = ransackable_attributes.find { |item| item.fetch(:name).to_s == "sign_in_count" }
+
+      expect(sign_in_count.fetch(:column).fetch(:default)).to eq(0)
+    end
+  end
 end
