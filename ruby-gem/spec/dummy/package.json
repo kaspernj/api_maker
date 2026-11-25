@@ -68,7 +68,7 @@
     "webpack": "5",
     "webpack-assets-manifest": "6",
     "webpack-cli": "7",
-    "webpack-dev-server": "5",
+    "webpack-dev-server": "6",
     "webpack-merge": "6",
     "ya-use-event-emitter": "0.1.2",
     "ya-use-event-listener": ">= 0.1.1"
