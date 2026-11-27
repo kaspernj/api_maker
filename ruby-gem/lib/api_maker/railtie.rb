@@ -1,4 +1,11 @@
 class ApiMaker::Railtie < Rails::Railtie
+  # Inserted at the front of the stack so the format is pinned before the
+  # session store and before Devise/Warden, which is what decides whether an
+  # auth failure answers JSON or the HTML sign-in redirect.
+  initializer "api_maker.force_json_accept_middleware" do |app|
+    app.config.middleware.insert_before 0, ApiMaker::ForceJsonAcceptMiddleware
+  end
+
   initializer "api_maker.session_shadow_middleware" do |app|
     session_middleware = self.class.session_middleware_class(app.config.session_store)
 
