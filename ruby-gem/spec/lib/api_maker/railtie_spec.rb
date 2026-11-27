@@ -1,6 +1,15 @@
 require "rails_helper"
 
 describe ApiMaker::Railtie do
+  it "adds the JSON Accept middleware before the session store so it runs before Devise" do
+    middleware_classes = Rails.application.middleware.map(&:klass)
+    json_accept_index = middleware_classes.index(ApiMaker::ForceJsonAcceptMiddleware)
+    cookie_store_index = middleware_classes.index(ActionDispatch::Session::CookieStore)
+
+    expect(json_accept_index).to be_present
+    expect(json_accept_index).to be < cookie_store_index
+  end
+
   it "adds the session shadow middleware after the cookie store" do
     middleware_classes = Rails.application.middleware.map(&:klass)
     cookie_store_index = middleware_classes.index(ActionDispatch::Session::CookieStore)
