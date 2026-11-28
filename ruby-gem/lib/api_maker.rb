@@ -24,6 +24,7 @@ module ApiMaker
   autoload :Current, "#{dir}/current"
   autoload :CurrentCommand, "#{dir}/current_command"
   autoload :ExpectToBeAbleToHelper, "#{dir}/expect_to_able_to_helper"
+  autoload :ForceJsonAcceptMiddleware, "#{dir}/force_json_accept_middleware"
   autoload :IndividualCommand, "#{dir}/individual_command"
   autoload :Loader, "#{dir}/loader"
   autoload :MemoryStorage, "#{dir}/memory_storage"
